@@ -34,11 +34,8 @@ asks:
   soggetti_cambiati: {type: yes_no, question: 'Will the works'' direttore or firm change with the new holder?', propose: 'false'}
   nuovo_dl: {type: text, question: The new direttore dei lavori's name}
   nuovo_esecutore: {type: text, question: The new firm's name}
-  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', default: 'false'}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
-supports:
-- when: '{{ask.bollo_marche|not}}'
-  else: 'So far only with the bollo paid on pagoPA: the marche route isn''t run yet.'
+supports: []
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
 wizard:

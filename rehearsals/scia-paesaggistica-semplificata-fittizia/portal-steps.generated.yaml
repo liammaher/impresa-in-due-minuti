@@ -120,9 +120,11 @@ asks:
   paes_b40: {type: yes_no, group: allegato_b, item: 'B.40 Systematic natural-engineering works for water, soil or landslide protection'}
   paes_b41: {type: yes_no, group: allegato_b, item: 'B.41 Demolition and rebuilding with the same volume, shape and footprint'}
   paes_b42: {type: yes_no, group: allegato_b, item: 'B.42 Beach nourishment, artificial dunes, restoring coastal works'}
-  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', default: 'false'}
-  bollo_seriale: {type: text, question: The marca da bollo's serial number (14 digits)}
-  bollo_data: {type: date, question: The marca da bollo's date}
+  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', propose: 'false'}
+  bollo_seriale: {type: text, question: 'The marca da bollo for the application: its serial number (14 digits)'}
+  bollo_data: {type: date, question: Its date}
+  bollo_seriale_2: {type: text, question: 'The marca da bollo for the authorization the Comune issues: its serial number (14 digits)'}
+  bollo_data_2: {type: date, question: Its date}
   impianti: {type: yes_no, question: 'Did the works touch the building''s systems (impianti)?'}
   impianto_elettrico: {type: yes_no, question: 'The electrical system (with its dichiarazione di conformità)?', when: '{{ask.impianti}}'}
   impianto_idrico: {type: yes_no, question: 'Water and sanitary systems?', when: '{{ask.impianti}}'}
@@ -1222,8 +1224,10 @@ sections:
   - {id: 'r5c2p7reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche|not}}', label: 'Due marche da €16,00 ciascuna'}
   - {id: 'r8c1p14reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche}}', label: Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo}
   - {id: 'r13c2p30reg:radio:2_clone', kind: radio, when: '{{ask.bollo_marche}}', label: 'Marca da €16,00 per l''autorizzazione'}
-  - {id: 'r15c2p34reg:txt', kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1)}
-  - {id: 'r15c3p36reg:calendar_input', kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}}', label: data}
+  - {kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1)}
+  - {kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}}', label: data}
+  - {kind: text, label: numero seriale (2), value: '{{ask.bollo_seriale_2}}', when: '{{ask.bollo_marche}}'}
+  - {kind: date, label: data, nth: 2, value: '{{ask.bollo_data_2|date_it}}', when: '{{ask.bollo_marche}}'}
 - section: Pagamento degli oneri
   go: Prosegui
   save: false

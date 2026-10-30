@@ -18,13 +18,13 @@ asks:
   paes_scadenza: {type: date, question: The date it was to stop being valid}
   paes_ente: {type: text, question: The ente that issued the landscape authorization, default: Comune di Napoli}
   paes_rinnovo_di: {type: choice, question: 'What is being renewed: a semplificata (DPR 31/2017) or an ordinaria (art. 146 D.Lgs. 42/2004)?', options: [semplificata, ordinaria]}
-  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', default: 'false'}
-  bollo_seriale: {type: text, question: The marca da bollo's serial number (14 digits)}
-  bollo_data: {type: date, question: The marca da bollo's date}
+  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', propose: 'false'}
+  bollo_seriale: {type: text, question: 'The marca da bollo for the application: its serial number (14 digits)'}
+  bollo_data: {type: date, question: Its date}
+  bollo_seriale_2: {type: text, question: 'The marca da bollo for the authorization the Comune issues: its serial number (14 digits)'}
+  bollo_data_2: {type: date, question: Its date}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
-supports:
-- when: '{{ask.bollo_marche|not}}'
-  else: 'So far only with the bollo paid on pagoPA: the marche route isn''t run yet.'
+supports: []
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
 wizard:
@@ -141,5 +141,7 @@ sections:
   - {id: 'r5c2p7reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche|not}}', label: 'Due marche da €16,00 ciascuna'}
   - {id: 'r8c1p14reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche}}', label: Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo}
   - {id: 'r13c2p30reg:radio:2_clone', kind: radio, when: '{{ask.bollo_marche}}', label: 'Marca da €16,00 per l''autorizzazione'}
-  - {id: 'r15c2p34reg:txt', kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1)}
-  - {id: 'r15c3p36reg:calendar_input', kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}}', label: data}
+  - {kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1)}
+  - {kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}}', label: data}
+  - {kind: text, label: numero seriale (2), value: '{{ask.bollo_seriale_2}}', when: '{{ask.bollo_marche}}'}
+  - {kind: date, label: data, nth: 2, value: '{{ask.bollo_data_2|date_it}}', when: '{{ask.bollo_marche}}'}
