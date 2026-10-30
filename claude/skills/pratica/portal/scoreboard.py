@@ -85,12 +85,11 @@ def build():
 
 # The wedge: what a Napoli architect or pratiche agency files again and again. The SUE side is
 # every pratica of the building chain (CILA, SCIA, permesso, inizio and fine lavori, agibilità,
-# proroghe, voltura, the DL and contractor changes, the landscape authorizations): all of them
-# but the two rare landscape ones (SUE_RARE). The SUAP side is a grid of the sectors small Napoli
+# proroghe, voltura, the DL and contractor changes, the landscape authorizations): all of them,
+# since the SUE is to be mapped 100% for the technician (SUE_RARE would leave some out). The SUAP side is a grid of the sectors small Napoli
 # businesses are in (indices into suap-wizard.json's `sectors`, which crawl names use) and the
 # operations a business repeats through its life. Change the lists to move the wedge.
-SUE_RARE = ("sue-accertamento-di-compatibilita-paesaggistica",
-            "sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesag")
+SUE_RARE = ()
 WEDGE_SECTORS = [4, 5, 11, 16, 17, 18, 56, 60, 61]
 WEDGE_OPS = [("aprire-l-attivita", "open"), ("subentrare-nell-esercizio-dell-attivita", "take over"),
              ("cessare-l-attivita", "close"), ("sospendere-l-attivita", "suspend"),
@@ -162,8 +161,7 @@ def wedge_text(status, ran):
     out = ["## The wedge", "",
            "What a Napoli architect or pratiche agency files again and again, so what has to be perfect first.", "",
            "**SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, "
-           "extensions, voltura, DL and contractor changes, the landscape authorizations), except the two rare "
-           "landscape ones.", ""]
+           "extensions, voltura, DL and contractor changes, the landscape authorizations), all of them.", ""]
     sue = {k: v for k, v in status.items() if v["sportello"] == "sue" and not k.startswith(SUE_RARE)}
     ok = [k for k, v in sue.items() if not v["missing"]]
     out += [f"- {len(ok)} of {len(sue)} fillable, {sum(1 for k in ok if k in ran)} run on the portal.", "",

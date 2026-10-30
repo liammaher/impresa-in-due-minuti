@@ -111,9 +111,9 @@ Open items no recipe shows:
 
 What a Napoli architect or pratiche agency files again and again, so what has to be perfect first.
 
-**SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, extensions, voltura, DL and contractor changes, the landscape authorizations), except the two rare landscape ones.
+**SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, extensions, voltura, DL and contractor changes, the landscape authorizations), all of them.
 
-- 28 of 28 fillable, 28 run on the portal.
+- 29 of 30 fillable, 29 run on the portal.
 
 **SUAP: nine sectors × seven operations.** Each cell is one pratica on the portal:
 
