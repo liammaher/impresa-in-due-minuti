@@ -8,12 +8,12 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 821 | Claude takes it when the case does |
-| answer | 56 | a dropdown filled from an answer (options reached not counted) |
+| ticked | 827 | Claude takes it when the case does |
+| answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 1 | left empty on purpose |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 266 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 258 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -95,16 +95,9 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### G2) Altri tecnici incaricati / H2) Altri tecnici incaricati / g2) Altri tecnici incaricati
 
-7 pratiche; 8 of 8 choices to map.
+7 pratiche; 1 of 8 choices to map.
 
 - checkbox: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori
-- checkbox: di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezione seguente
-- select: Sesso = Femmina (under: di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezion)
-- select: Sesso = Maschio (under: di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezion)
-- radio: si (under: di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezion)
-- radio: no (under: di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezion)
-- radio: si (under: di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezion)
-- radio: no (under: di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezion)
 
 ### dati relativi al nome del tecnico
 
@@ -202,10 +195,9 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### G1) Tecnici incaricati
 
-2 pratiche; 2 of 8 choices to map.
+2 pratiche; 1 of 8 choices to map.
 
 - radio: tecnico incaricato
-- checkbox: se il direttore dei lavori delle opere architettoniche è diverso dal progettista delle opere architettoniche
 
 ### Relazione Tecnica di Asseverazione C.I.L.A.
 

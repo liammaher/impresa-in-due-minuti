@@ -22,7 +22,8 @@
 #
 # Roles (answers.json "people"): no prefix and `t:` are the studio's own (the business and its
 # titolare, the architect), `c:` the client, `o:` the owner company, `r:` its legale
-# rappresentante, `f1:`/`f2:` the firms.
+# rappresentante, `f1:`/`f2:` the firms, `s:` the structural designer, `d:` a direttore dei
+# lavori who isn't the architect, `a:` another technician appointed for the works.
 
 # Yes/no asks with a `group` are asked as one checklist (`item`), the answer the list of
 # items that apply.
@@ -101,6 +102,9 @@ asks:
     type: yes_no
     question: "Are other technicians (structures, systems, acoustics, safety) already appointed for these works?"
     propose: "false"
+  altri_tecnici_uno: {type: yes_no, question: "Is it one other technician (`a:` in the job's people)?", propose: "true"}
+  altro_tecnico_incarico: {type: text, question: "What is the other technician appointed for (the form's \"Incaricato della\", e.g. progettazione strutturale)?"}
+  altro_tecnico_dipendente: {type: yes_no, question: "Does the other technician work as an employee of a firm or studio (the form's \"alle dipendenze di\")?", propose: "false"}
   lavori_in_proprio:
     type: yes_no
     question: "Are the works so minor that the client does them without a firm (opere di modesta entità, eseguite in proprio)?"
@@ -154,8 +158,21 @@ asks:
     when: "{{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}}"
   altri_atti:
     type: yes_no
-    question: "Do the works need other filings or assents that this pratica doesn't file (the Soprintendenza, ASL, fire brigade, a landscape authorization not in this pratica)?"
+    question: "Do the works need other filings or assents not yet made or obtained, that this pratica doesn't file (the Soprintendenza, ASL, fire brigade, a landscape authorization not in this pratica)?"
     propose: "false"
+  # The CILA relazione's two lists: filings already made, assents already obtained (two rows each).
+  comunicazioni_presentate: {type: yes_no, question: "Were other filings already made for these works (a comunicazione or segnalazione to another office)?", propose: "false"}
+  comunicazioni_quante: {type: choice, question: "How many?", options: [una, due, piu di due]}
+  comunicazione_1: {type: text, question: "The first: what was filed (e.g. notifica preliminare ASL)?"}
+  comunicazione_1_autorita: {type: text, question: "Its authority (e.g. ASL Napoli 1 Centro)"}
+  comunicazione_2: {type: text, question: "The second: what was filed?"}
+  comunicazione_2_autorita: {type: text, question: "Its authority"}
+  atti_acquisiti: {type: yes_no, question: "Were other assents already obtained for these works (a nulla osta, an authorization)?", propose: "false"}
+  atti_quanti: {type: choice, question: "How many?", options: [uno, due, piu di due]}
+  atto_1: {type: text, question: "The first: which act (e.g. autorizzazione della Soprintendenza, art. 21 D.Lgs. 42/2004)?"}
+  atto_1_autorita: {type: text, question: "Who issued it (e.g. Soprintendenza ABAP per il Comune di Napoli)?"}
+  atto_2: {type: text, question: "The second: which act?"}
+  atto_2_autorita: {type: text, question: "Who issued it?"}
   oggetto:
     type: text
     question: "The works in one sentence (300 characters)"
@@ -1108,7 +1125,8 @@ sections:
 
   # The architect presents the pratica and is the progettista (her name comes from the
   # procuratore's section), and the direttore dei lavori too unless none is named. Another
-  # technician as direttore isn't mapped (the recipe refuses it).
+  # technician as direttore (`d:`) is in the block "diverso dal progettista" opens below hers:
+  # the SCIA's structural designer's labels (birth, residence, studio), by label from its Cognome.
   - section: G1) Tecnici incaricati
     leave: [fax]
     fields:
@@ -1125,9 +1143,77 @@ sections:
       - {kind: text, label: Telefono, value: "{{business.telefono|phone_it}}"}
       - {kind: text, label: cell., value: "{{t:identity.phone|phone_it}}"}
       - {kind: text, label: posta elettronica certificata, value: "{{t:identity.pec}}"}
+      - {kind: checkbox, label: se il direttore dei lavori delle opere architettoniche è diverso, when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: "{{d:identity.last_name|upper}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Nome, anchor: Cognome, block: 1, value: "{{d:identity.first_name|upper}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.F., anchor: Cognome, block: 1, value: "{{d:identity.codice_fiscale}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: date, label: Data di nascita, anchor: Cognome, block: 1, value: "{{d:identity.date_of_birth|date_it}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Cittadinanza, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Sesso, anchor: Cognome, block: 1, value: "{{d:identity.sex|sesso}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, anchor: Cognome, block: 1, value: "{{d:identity.birth_province}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, anchor: Cognome, block: 1, value: "{{d:identity.birth_comune|upper}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, nth: 2, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, nth: 2, anchor: Cognome, block: 1, value: "{{d:residenza.provincia}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, nth: 2, anchor: Cognome, block: 1, value: "{{d:residenza.comune|upper}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "Via, Piazza", anchor: Cognome, block: 1, value: "{{d:residenza.indirizzo|upper}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "N.", anchor: Cognome, block: 1, value: "{{d:residenza.civico}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.A.P., anchor: Cognome, block: 1, value: "{{d:residenza.cap}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, nth: 3, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, nth: 3, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_provincia}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, nth: 3, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_comune|upper}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "Via, Piazza", nth: 2, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_indirizzo|upper}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "N.", nth: 2, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_civico}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.A.P., nth: 2, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_cap}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, anchor: Cognome, block: 1, value: "{{d:albo.ordine}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: di, anchor: Cognome, block: 1, value: "{{d:albo.provincia|provincia_nome}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: al n., anchor: Cognome, block: 1, value: "{{d:albo.numero}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Telefono, anchor: Cognome, block: 1, value: "{{d:identity.phone|phone_it}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: cell., anchor: Cognome, block: 1, value: "{{d:identity.phone|phone_it}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: "{{d:identity.pec}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
 
+  # One other technician (`a:`), registered with an order, not a firm's employee: the block "di
+  # aver incaricato" opens, the G1 block's labels after "Incaricato della", then two si/no
+  # (registered: the order's boxes; a firm's employee: the firm's) and the abilitazione, left
+  # empty for a registered technician. More than one, or an employee, the recipe refuses. With
+  # none appointed nothing is ticked, as before: "saranno individuati" says some will be.
   - section: G2) Altri tecnici incaricati
-    fields: []
+    leave: [fax, "Estremi dell'abilitazione"]
+    supports:
+      - {if: "{{ask.altri_tecnici}}", value: "{{ask.altri_tecnici_uno}}", in: ["true"], else: "More than one other technician isn't mapped yet: the quadro's block repeats."}
+      - {if: "{{ask.altri_tecnici}}", value: "{{ask.altro_tecnico_dipendente}}", in: ["false"], else: "Another technician employed by a firm (the quadro's \"alle dipendenze di\") isn't mapped yet."}
+    fields:
+      - {kind: checkbox, label: di aver incaricato in qualità di altri tecnici, when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: Cognome, anchor: Incaricato della, block: 1, value: "{{a:identity.last_name|upper}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: Nome, anchor: Incaricato della, block: 1, value: "{{a:identity.first_name|upper}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: C.F., anchor: Incaricato della, block: 1, value: "{{a:identity.codice_fiscale}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: date, label: Data di nascita, anchor: Incaricato della, block: 1, value: "{{a:identity.date_of_birth|date_it}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: select, label: Cittadinanza, anchor: Incaricato della, block: 1, value: ITALIA, when: "{{ask.altri_tecnici}}"}
+      - {kind: select, label: Sesso, anchor: Incaricato della, block: 1, value: "{{a:identity.sex|sesso}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: select, label: Stato, anchor: Incaricato della, block: 1, value: ITALIA, when: "{{ask.altri_tecnici}}"}
+      - {kind: select, label: Provincia, anchor: Incaricato della, block: 1, value: "{{a:identity.birth_province}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: Comune italiano, anchor: Incaricato della, block: 1, value: "{{a:identity.birth_comune|upper}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: select, label: Stato, nth: 2, anchor: Incaricato della, block: 1, value: ITALIA, when: "{{ask.altri_tecnici}}"}
+      - {kind: select, label: Provincia, nth: 2, anchor: Incaricato della, block: 1, value: "{{a:residenza.provincia}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: Comune italiano, nth: 2, anchor: Incaricato della, block: 1, value: "{{a:residenza.comune|upper}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: "Via, Piazza", anchor: Incaricato della, block: 1, value: "{{a:residenza.indirizzo|upper}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: "N.", anchor: Incaricato della, block: 1, value: "{{a:residenza.civico}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: C.A.P., anchor: Incaricato della, block: 1, value: "{{a:residenza.cap}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: select, label: Stato, nth: 3, anchor: Incaricato della, block: 1, value: ITALIA, when: "{{ask.altri_tecnici}}"}
+      - {kind: select, label: Provincia, nth: 3, anchor: Incaricato della, block: 1, value: "{{a:business.sede_legale_provincia}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: Comune italiano, nth: 3, anchor: Incaricato della, block: 1, value: "{{a:business.sede_legale_comune|upper}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: "Via, Piazza", nth: 2, anchor: Incaricato della, block: 1, value: "{{a:business.sede_legale_indirizzo|upper}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: "N.", nth: 2, anchor: Incaricato della, block: 1, value: "{{a:business.sede_legale_civico}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: C.A.P., nth: 2, anchor: Incaricato della, block: 1, value: "{{a:business.sede_legale_cap}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: Telefono, anchor: Incaricato della, block: 1, value: "{{a:identity.phone|phone_it}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: cell., anchor: Incaricato della, block: 1, value: "{{a:identity.phone|phone_it}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: posta elettronica certificata, anchor: Incaricato della, block: 1, value: "{{a:identity.pec}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: Incaricato della, anchor: Incaricato della, block: 1, value: "{{ask.altro_tecnico_incarico}}", when: "{{ask.altri_tecnici}}"}
+      - {kind: radio, label: si, anchor: Incaricato della, block: 1, when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, anchor: Incaricato della, block: 1, value: "{{a:albo.ordine}}", on_page: true, when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: di, anchor: Incaricato della, block: 1, value: "{{a:albo.provincia|provincia_nome}}", on_page: true, when: "{{ask.altri_tecnici}}"}
+      - {kind: text, label: al n., anchor: Incaricato della, block: 1, value: "{{a:albo.numero}}", on_page: true, when: "{{ask.altri_tecnici}}"}
+      - {kind: radio, label: "no", nth: 2, anchor: Incaricato della, block: 1, when: "{{ask.altri_tecnici}}"}
 
   # The firms on site (`f1:`, and `f2:` when the job has one: its block comes from "+"), or
   # minor works the client does without one. Fields by label inside the block-th repeat that
@@ -1190,6 +1276,8 @@ sections:
   - section: Relazione Tecnica di Asseverazione
     leave: [specificare il tipo di intervento, Comunicazioni, Autorità competente, Tipologia di atto, Note]
     supports:
+      - {if: "{{ask.comunicazioni_presentate}}", value: "{{ask.comunicazioni_quante}}", in: [una, due], else: "More than two filings already made aren't mapped yet: the relazione has two rows."}
+      - {if: "{{ask.atti_acquisiti}}", value: "{{ask.atti_quanti}}", in: [uno, due], else: "More than two assents already obtained aren't mapped yet: the relazione has two rows."}
       - {if: "{{ask.tolleranze}}", value: "{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}", in: ["true"], else: "Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4)."}
       - {if: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}", value: "{{ask.toll_sismica}}", in: [autorizzazione, silenzio assenso], else: "A structural tolerance relevant for public safety (art. 94-bis c. 1 a) can be declared only with the Genio Civile's seismic authorization (art. 94 c. 2) or its silenzio assenso (c. 2-bis): art. 34-bis c. 3-bis DPR 380/2001."}
       - {if: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}}", value: "{{ask.toll_decorso}}", in: ["true"], else: "A structural tolerance of minor or no relevance for public safety can be declared only once the regional control term has run out, with no open requests and no negative outcome: art. 34-bis c. 3-bis DPR 380/2001."}
@@ -1209,6 +1297,17 @@ sections:
       - {kind: checkbox, label: Altri interventi non riconducibili, when: "{{ask.cila_altri}}"}
       - {kind: text, label: specificare il tipo di intervento, value: "{{ask.cila_altri_tipo}}", when: "{{ask.cila_altri}}"}
       - {kind: textarea, label: e che consistono in, value: "{{ask.dettaglio_intervento}}"}
+      # Filings already made and assents already obtained, two rows each (the national form's
+      # altre_comunicazioni and atti_di_assenso). "Autorità competente" also starts the assents'
+      # "… al rilascio": the filings' are its first two.
+      - {kind: text, label: "Comunicazioni, segnalazioni", value: "{{ask.comunicazione_1}}", when: "{{ask.comunicazioni_presentate}}"}
+      - {kind: text, label: Autorità competente, value: "{{ask.comunicazione_1_autorita}}", when: "{{ask.comunicazioni_presentate}}"}
+      - {kind: text, label: "Comunicazioni, segnalazioni", nth: 2, value: "{{ask.comunicazione_2}}", when: "{{ask.comunicazioni_presentate}} {{ask.comunicazioni_quante|is_due}}"}
+      - {kind: text, label: Autorità competente, nth: 2, value: "{{ask.comunicazione_2_autorita}}", when: "{{ask.comunicazioni_presentate}} {{ask.comunicazioni_quante|is_due}}"}
+      - {kind: text, label: Tipologia di atto, value: "{{ask.atto_1}}", when: "{{ask.atti_acquisiti}}"}
+      - {kind: text, label: Autorità competente al rilascio, value: "{{ask.atto_1_autorita}}", when: "{{ask.atti_acquisiti}}"}
+      - {kind: text, label: Tipologia di atto, nth: 2, value: "{{ask.atto_2}}", when: "{{ask.atti_acquisiti}} {{ask.atti_quanti|is_due}}"}
+      - {kind: text, label: Autorità competente al rilascio, nth: 2, value: "{{ask.atto_2_autorita}}", when: "{{ask.atti_acquisiti}} {{ask.atti_quanti|is_due}}"}
       # Tolerances (art. 34-bis/34-ter): each declared, the 1-bis one's percentage by the unit's
       # floor area. Napoli is in seismic zone 2 (Campania, DGR 5447/2002), so a tolerance there
       # says whether it is structurally relevant; a relevant one opens its art. 94-bis class.
