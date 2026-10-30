@@ -545,8 +545,10 @@ asks:
   prec_altro: {type: yes_no, group: precedenti, item: "Another title or pratica"}
   prec_titolo_unico_numero: {type: text, question: "The titolo unico (SUAP): its number", when: "{{ask.prec_titolo_unico}}"}
   prec_titolo_unico_data: {type: date, question: "Its date", when: "{{ask.prec_titolo_unico}}"}
-  precedente_numero: {type: text, question: "The permesso di costruire / licenza / concessione edilizia: its number", when: "{{ask.prec_permesso}}"}
-  precedente_data: {type: date, question: "Its date", when: "{{ask.prec_permesso}}"}
+  prec_permesso_numero: {type: text, question: "The permesso di costruire / licenza / concessione edilizia: its number", when: "{{ask.prec_permesso}}"}
+  prec_permesso_data: {type: date, question: "Its date", when: "{{ask.prec_permesso}}"}
+  precedente_numero: {type: text, question: "The building's own title (licenza / concessione / permesso di costruire): its number"}
+  precedente_data: {type: date, question: "Its date"}
   prec_autorizzazione_numero: {type: text, question: "The autorizzazione edilizia: its number", when: "{{ask.prec_autorizzazione}}"}
   prec_autorizzazione_data: {type: date, question: "Its date", when: "{{ask.prec_autorizzazione}}"}
   prec_comunicazione_numero: {type: text, question: "The comunicazione edilizia (art. 26 L. 47/1985): its number", when: "{{ask.prec_comunicazione}}"}
@@ -1918,8 +1920,8 @@ sections:
       - {kind: text, label: titolo unico (SUAP), value: "{{ask.prec_titolo_unico_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_titolo_unico}}"}
       - {kind: date, label: del, nth: 1, value: "{{ask.prec_titolo_unico_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_titolo_unico}}"}
       - {kind: checkbox, label: permesso di costruire / licenza edil., when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}"}
-      - {kind: text, label: permesso di costruire / licenza edil., value: "{{ask.precedente_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}"}
-      - {kind: date, label: del, nth: 2, value: "{{ask.precedente_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}"}
+      - {kind: text, label: permesso di costruire / licenza edil., value: "{{ask.prec_permesso_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}"}
+      - {kind: date, label: del, nth: 2, value: "{{ask.prec_permesso_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}"}
       - {kind: checkbox, label: autorizzazione edilizia, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}"}
       - {kind: text, label: autorizzazione edilizia, value: "{{ask.prec_autorizzazione_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}"}
       - {kind: date, label: del, nth: 3, value: "{{ask.prec_autorizzazione_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}"}

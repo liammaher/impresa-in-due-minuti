@@ -66,9 +66,12 @@ def _():
     assert one("Qualifica e dati del procuratore", "Qualifica del procuratore", "NOTAIO")["state"] == "fixed"
 
 
-@case("a section with no dictionary entry is no entry (the esonero's titolo)")
+@case("a section with no dictionary entry is no entry")
 def _():
-    assert one("titolo del richiedente", "")["state"] == "no entry"
+    # Made up: every crawled SUE section has an entry since the esonero's (2026-10-30).
+    n = {"id": "r1c1p1reg:radio:0", "kind": "radio", "choice": "una scelta"}
+    f = {"id": n["id"], "kind": "radio", "label": "una scelta"}
+    assert branches.state(n, f, "Una sezione nuova", []) == "no entry"
 
 
 @case("only the dictionary says what's the person's: an asseverazione stays the case's")

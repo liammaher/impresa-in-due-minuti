@@ -20,18 +20,19 @@ branch no rehearsal took.
 
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
-| SUE (building works) | 30 | 29 | 29 | 0 checked, 0 changed |
+| SUE (building works) | 30 | 30 | 29 | 0 checked, 0 changed |
 | SUAP (businesses) | 278 | 112 | 13 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
-- SUE: 30 pratiche, 128 distinct sections, 121 in the dictionary; 468 of 472 uses (99%)
+- SUE: 30 pratiche, 128 distinct sections, 125 in the dictionary; 472 of 472 uses (100%)
 - SUAP: 278 pratiche, 477 distinct sections, 77 in the dictionary; 2432 of 3365 uses (72%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
 
 - `dehors-fittizio`
 - `negozio-insegna-fittizio`
+- `parere-esonero-fittizio`
 - `ristorante-alcolici-fittizio`
 - `ristorante-centro-storico-fittizio`
 - `sospensione-srl-fittizia`
@@ -43,7 +44,7 @@ SUAP pratiche one or two sections short of fillable (the cheapest gaps):
 
 SUE pratiche not yet fillable:
 
-- `sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic`: titolo del richiedente, dichiarazione della legittimita' dell'intervento, Interventi ed opere in aree vincolate esclusi dall'autorizzazione  paesaggistica, indicazione dell'Ente al quale è inviata la richiesta di parere preventivo
+- none
 
 ## SUE completeness
 
@@ -57,8 +58,8 @@ SUE pratiche not yet fillable:
 
 Measured today:
 
-- Level 1: 29 of 30 pratiche fully in the dictionary (`sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic` not).
-- Level 2: **66 refusals across 12 recipes**, 23 distinct messages.
+- Level 1: 30 of 30 pratiche fully in the dictionary.
+- Level 2: **68 refusals across 13 recipes**, 25 distinct messages.
 - Levels 3 to 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
@@ -72,6 +73,7 @@ Measured today:
 | `cila-fittizia` | 3 |
 | `cila-paesaggistica-fittizia` | 3 |
 | `scia-fittizia` | 3 |
+| `parere-esonero-fittizio` | 2 |
 | `agibilita-fittizia` | 1 |
 | `cil-fittizia` | 1 |
 | `fine-lavori-fittizia` | 1 |
@@ -97,9 +99,11 @@ Refusals, by how many recipes carry them (the most shared are the cheapest to cl
 - 2×: Other filings or assents with the CILA (Soprintendenza, ASL, fire brigade) aren't mapped yet; a landscape authorization goes in the same pratica (the CILA with its sempli
 - 2×: Other technicians already appointed (structures, systems, acoustics) aren't mapped yet (quadro G2's rows).
 - 2×: Systems needing a project (DM 37/2008 art. 5) aren't mapped yet.
+- 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione mak
 - 1×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
 - 1×: Systems certified by a collaudo, an atto notorio or a document already filed with the Comune aren't mapped yet.
+- 1×: The form takes one item of Allegato A: works under several items aren't mapped.
 - 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
 
 Open items no recipe shows:
@@ -116,7 +120,7 @@ What a Napoli architect or pratiche agency files again and again, so what has to
 
 **SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, extensions, voltura, DL and contractor changes, the landscape authorizations), all of them.
 
-- 29 of 30 fillable, 29 run on the portal.
+- 30 of 30 fillable, 29 run on the portal.
 
 **SUAP: nine sectors × seven operations.** Each cell is one pratica on the portal:
 

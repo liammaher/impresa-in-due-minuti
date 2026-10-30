@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/parere-esonero-autorizzazione-paesaggistica
 title: Domanda di parere per esonero dall'autorizzazione paesaggistica, SUE Napoli (tecnico con procura)
-generated: gen.py from sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic (2026-10-30) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali'

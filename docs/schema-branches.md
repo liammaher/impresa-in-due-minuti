@@ -8,7 +8,7 @@ that means it on Napoli's SUE, and whether one of our cases takes it. A row with
 branch no rehearsal has taken: the next cases to write.
 
 - **a case takes it**: a pre-flight-ready answers file of a SUE rehearsal ticks that box
-  (68 such cases; nearly all have a filled run on the portal).
+  (72 such cases; nearly all have a filled run on the portal).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -26,19 +26,25 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | A case takes it | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 27 | 0 | 4 | 12 | 35 |
+| CILA | 43 | 27 | 0 | 4 | 12 | 38 |
 | Fine lavori | 2 | 1 | 1 | 0 | 0 | 15 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 16 | 9 |
-| Permesso di costruire | 153 | 82 | 5 | 28 | 38 | 183 |
-| SCIA | 150 | 104 | 2 | 22 | 22 | 94 |
-| SCIA alternativa | 128 | 81 | 10 | 17 | 20 | 120 |
-| Agibilità (SCA) | 36 | 29 | 0 | 2 | 5 | 25 |
+| Permesso di costruire | 153 | 83 | 11 | 21 | 38 | 224 |
+| SCIA | 150 | 108 | 4 | 16 | 22 | 85 |
+| SCIA alternativa | 128 | 85 | 12 | 11 | 20 | 112 |
+| Agibilità (SCA) | 36 | 29 | 0 | 2 | 5 | 28 |
 
 ## Next cases
 
 Mapped, no case yet (an answers file away):
 
 - Fine lavori: `comunicazioni/fine_lavori` → `stato_lavori_parziale` (in forma parziale come da planimetria allegata)
+- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `nuova_costruzione_area_libera_check` (che le opere riguardano un intervento di nuova costruzione su area li…)
+- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `immobile_non_obbligatorio` (si tratta di immobile realizzato in un’epoca in cui non era obbligato…)
+- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `non_disponibile_titolo` (non sono disponibili la copia o gli estremi del titolo abilitativo, m…)
+- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `tolleranza_costruttiva` (che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/…)
+- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]/sanzioni_pecuniarie` → `allega_ricevuta` (si allega la relativa ricevuta)
+- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]/sanzioni_pecuniarie` → `estremi_pagamenti` (si forniscono gli estremi del pagamento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita` → `disciplina_urbanistica` (che risulta conforme alla disciplina urbanistica vigente al momento d…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita` → `disciplina_urbanistica_edilizia` (che risulta conforme alla disciplina urbanistica e edilizia vigente s…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/tutela_inquinamento_acustico/[tutela_inquinamento_acustico_ctype]` → `rientra_art_8` (Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1…)
@@ -46,6 +52,10 @@ Mapped, no case yet (an answers file away):
 - Permesso di costruire: `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispetto_cimiteriale_ctype]` → `ricade_non_consentito` (l'intervento ricade in fascia di rispetto cimiteriale e non è consent…)
 - SCIA: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/mutamento_destinazione_uso_intero_immobile` → `con_opere` (con opere riconducibili agli interventi di cui di cui all'articolo 6-…)
 - SCIA: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/mutamento_destinazione_uso_intero_immobile` → `senza_opere` (senza opere (o con opere riconducibili agli interventi di cui all'art…)
+- SCIA: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `immobile_non_obbligatorio` (si tratta di immobile realizzato in un’epoca in cui non era obbligato…)
+- SCIA: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `non_disponibile_titolo` (non sono disponibili la copia o gli estremi del titolo abilitativo, m…)
+- SCIA alternativa: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `immobile_non_obbligatorio` (si tratta di immobile realizzato in un’epoca in cui non era obbligato…)
+- SCIA alternativa: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `non_disponibile_titolo` (non sono disponibili la copia o gli estremi del titolo abilitativo, m…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/sicurezza_impianti/comporta_impianti/altro/[comporta_impianti_altro_ctype]` → `soggetto` (è soggetto agli obblighi di presentazione del progetto e pertanto)
 - SCIA alternativa: `relazione_tecnica_asseverazione/tutela_inquinamento_acustico/[tutela_inquinamento_acustico_ctype]` → `rientra_art_8` (Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/prevenzione_incendi` → `soggetto_valutazione_progetto` (è soggetto alla valutazione del progetto da parte del Comando Provinc…)
@@ -68,13 +78,6 @@ On the portal, not mapped (dictionary work first):
 - Permesso di costruire: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/variazione_sostanziale` → `titolo_unico` (titolo unico)
 - Permesso di costruire: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/variazione_sostanziale` → `segnalazione_certificata` (segnalazione certificata/denuncia di inizio attività alternativa al p…)
 - Permesso di costruire: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `nuova_costruzione_area_libera_check` (che le opere riguardano un intervento di nuova costruzione su area li…)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `immobile_non_obbligatorio` (si tratta di immobile realizzato in un’epoca in cui non era obbligato…)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `non_disponibile_titolo` (non sono disponibili la copia o gli estremi del titolo abilitativo, m…)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `tolleranza_costruttiva` (che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/…)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]/sanzioni_pecuniarie` → `allega_ricevuta` (si allega la relativa ricevuta)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]/sanzioni_pecuniarie` → `estremi_pagamenti` (si forniscono gli estremi del pagamento)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `conforme_documentazione` (conforme alla documentazione dello stato legittimo o di fatto legitti…)
 - Permesso di costruire: `dichiarazioni/imprese_esecutrici` → `prima_inizio_lavori` (l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_alta` (trattandosi di immobile ubicato in zona sismica a media o alta sismic…)
@@ -95,12 +98,6 @@ On the portal, not mapped (dictionary work first):
 - SCIA: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/sanatoria_soggetto` → `importo_ricevuta_pagamento` (si allega la ricevuta del pagamento)
 - SCIA: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/sanatoria_soggetto_fino_dieci_mila` → `importo_ricevuta_pagamento` (si allega la ricevuta del pagamento)
 - SCIA: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
-- SCIA: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `immobile_non_obbligatorio` (si tratta di immobile realizzato in un’epoca in cui non era obbligato…)
-- SCIA: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `non_disponibile_titolo` (non sono disponibili la copia o gli estremi del titolo abilitativo, m…)
-- SCIA: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `tolleranza_costruttiva` (che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/…)
-- SCIA: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]/sanzioni_pecuniarie` → `allega_ricevuta` (si allega la relativa ricevuta)
-- SCIA: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]/sanzioni_pecuniarie` → `estremi_pagamenti` (si forniscono gli estremi del pagamento)
-- SCIA: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `conforme_documentazione` (conforme alla documentazione dello stato legittimo o di fatto legitti…)
 - SCIA: `dichiarazioni/imprese_esecutrici` → `(nothing)` (l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp…)
 - SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_oltre_500_mq` (TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
 - SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_500_a_300_mq` (TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
@@ -114,12 +111,6 @@ On the portal, not mapped (dictionary work first):
 - SCIA: `relazione_tecnica_asseverazione/prevenzione_incendi` → `variante_progetto` (costituisce variante e il sottoscritto assevera che le modifiche non…)
 - SCIA: `relazione_tecnica_asseverazione/autorizzazione_paesaggistica/ricade_in_zona_tutelata` → `procedimento_accertamento` (è assoggettato al procedimento di accertamento della compatibilità pa…)
 - SCIA alternativa: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
-- SCIA alternativa: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `immobile_non_obbligatorio` (si tratta di immobile realizzato in un’epoca in cui non era obbligato…)
-- SCIA alternativa: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `non_disponibile_titolo` (non sono disponibili la copia o gli estremi del titolo abilitativo, m…)
-- SCIA alternativa: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `tolleranza_costruttiva` (che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/…)
-- SCIA alternativa: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]/sanzioni_pecuniarie` → `allega_ricevuta` (si allega la relativa ricevuta)
-- SCIA alternativa: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]/sanzioni_pecuniarie` → `estremi_pagamenti` (si forniscono gli estremi del pagamento)
-- SCIA alternativa: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]` → `conforme_documentazione` (conforme alla documentazione dello stato legittimo o di fatto legitti…)
 - SCIA alternativa: `dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_dei_lavori_ctype]` → `(nothing)` (l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_alta` (trattandosi di immobile ubicato in zona sismica a media o alta sismic…)
@@ -218,6 +209,9 @@ Portal boxes of the CILA no schema alternative matched and no case ticks:
 - Relazione Tecnica di Asseverazione C.I.…: 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; (mapped)
 - Relazione Tecnica di Asseverazione C.I.…: 6%, per le U.I. < 60 mq di superficie utile; (mapped)
 - Relazione Tecnica di Asseverazione C.I.…: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al moment… (mapped)
+- Relazione Tecnica di Asseverazione C.I.…: intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a)… (not mapped)
+- Relazione Tecnica di Asseverazione C.I.…: intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1,… (not mapped)
+- Relazione Tecnica di Asseverazione C.I.…: intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, l… (not mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
 - Qualifica e dati del procuratore: all'Estero (not mapped)
 
@@ -305,16 +299,16 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `dichiarazioni/opere_previste` | `parti_comuni_condominio` | riguardano le parti comuni di un fabbricato condominiale (1) | h | a case takes it | 1 |
 | `dichiarazioni/opere_previste` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | a case takes it | 1 |
 | `dichiarazioni/opere_previste` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | a case takes it | 1 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `nuova_costruzione_area_libera_check` | che le opere riguardano un intervento di nuova costruzione su area li… | h | on the portal, not mapped |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `nuova_costruzione_area_libera_check` | che le opere riguardano un intervento di nuova costruzione su area li… | h | mapped, no case yet |  |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `(nothing)` | absence: leave P037 unticked | h | no portal box |  |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `oggetto_titolo_pratiche_edilizie` | che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o prati… | h | a case takes it | 2 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `pienamente_conforme` | pienamente conforme alla documentazione dello stato legittimo o di fa… | h | a case takes it | 2 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `conforme_documentazione` | conforme alla documentazione dello stato legittimo o di fatto legitti… | h | on the portal, not mapped |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | mapped, no case yet |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | mapped, no case yet |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | mapped, no case yet |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | mapped, no case yet |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | mapped, no case yet |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `pienamente_conforme` | pienamente conforme alla documentazione dello stato legittimo o di fa… | h | a case takes it | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `conforme_documentazione` | conforme alla documentazione dello stato legittimo o di fatto legitti… | h | a case takes it | 1 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_gratuito` | è a titolo gratuito | h | a case takes it | 1 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_oneroso` | è a titolo oneroso e pertanto | h | a case takes it | 2 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `calcolo_sportello` | chiede allo Sportello Unico di effettuare il calcolo del contributo d… | h | a case takes it | 2 |
@@ -459,24 +453,33 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - a) Qualificazione pratica dell'interven…: interventi di demolizione e ricostruzione (articolo 5) (not mapped)
 - a) Qualificazione pratica dell'interven…: interventi edilizi in zona agricola ( art. 6-bis) (not mapped)
 - a) Qualificazione pratica dell'interven…: riqualificazione di aree urbane degradate (articolo 7) (not mapped)
-- e) Regolarità urbanistica e precedenti…: titolo unico (SUAP) (not mapped)
-- e) Regolarità urbanistica e precedenti…: autorizzazione edilizia (not mapped)
-- e) Regolarità urbanistica e precedenti…: comunicazione edilizia (art. 26 l. n. 47/1985) (not mapped)
-- e) Regolarità urbanistica e precedenti…: denuncia di inizio attività (not mapped)
-- e) Regolarità urbanistica e precedenti…: DIA/SCIA alternativa al permesso di costruire (not mapped)
-- e) Regolarità urbanistica e precedenti…: segnalazione certificata di inizio attività (not mapped)
-- e) Regolarità urbanistica e precedenti…: comunicazione edilizia libera (not mapped)
-- e) Regolarità urbanistica e precedenti…: titolo edilizio in sanatoria con il pagamento della relativa oblazione ed in particolare: (not mapped)
-- e) Regolarità urbanistica e precedenti…: condono edilizio (not mapped)
-- e) Regolarità urbanistica e precedenti…: permesso di costruire in sanatoria di cui agli artt. 36 o 36-bis del d.P.R. n. 380/2001 (not mapped)
-- e) Regolarità urbanistica e precedenti…: SCIA in sanatoria di cui all’art. 36-bis d.P.R. n. 380/2001 (not mapped)
-- e) Regolarità urbanistica e precedenti…: SCIA in sanatoria per variante in corso d’opera realizzata costituente parziale difformit… (not mapped)
-- e) Regolarità urbanistica e precedenti…: altro (not mapped)
-- e) Regolarità urbanistica e precedenti…: copia accatastamento di primo impianto o si forniscono i relativi estremi (not mapped)
-- e) Regolarità urbanistica e precedenti…: altri documenti probanti (riprese fotografiche, estratti cartografici, documenti di archi… (not mapped)
-- e) Regolarità urbanistica e precedenti…: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni pecuniarie, previste dag… (not mapped)
-- e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata nella… (not mapped)
-- e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata agli at… (not mapped)
+- b) Titolarità dell'intervento: proprietario (mapped)
+- b) Titolarità dell'intervento: comproprietario (mapped)
+- b) Titolarità dell'intervento: usufruttuario (mapped)
+- b) Titolarità dell'intervento: amministratore di condominio (mapped)
+- b) Titolarità dell'intervento: avere titolarità esclusiva all'esecuzione dell'intervento (mapped)
+- b) Titolarità dell'intervento: Maschio (not mapped)
+- c) Destinazione d'uso dell'immobile: industriale (mapped)
+- c) Destinazione d'uso dell'immobile: commerciale (mapped)
+- c) Destinazione d'uso dell'immobile: altro (mapped)
+- e) Regolarità urbanistica e precedenti…: titolo unico (SUAP) (mapped)
+- e) Regolarità urbanistica e precedenti…: autorizzazione edilizia (mapped)
+- e) Regolarità urbanistica e precedenti…: comunicazione edilizia (art. 26 l. n. 47/1985) (mapped)
+- e) Regolarità urbanistica e precedenti…: denuncia di inizio attività (mapped)
+- e) Regolarità urbanistica e precedenti…: DIA/SCIA alternativa al permesso di costruire (mapped)
+- e) Regolarità urbanistica e precedenti…: segnalazione certificata di inizio attività (mapped)
+- e) Regolarità urbanistica e precedenti…: comunicazione edilizia libera (mapped)
+- e) Regolarità urbanistica e precedenti…: titolo edilizio in sanatoria con il pagamento della relativa oblazione ed in particolare: (mapped)
+- e) Regolarità urbanistica e precedenti…: condono edilizio (mapped)
+- e) Regolarità urbanistica e precedenti…: permesso di costruire in sanatoria di cui agli artt. 36 o 36-bis del d.P.R. n. 380/2001 (mapped)
+- e) Regolarità urbanistica e precedenti…: SCIA in sanatoria di cui all’art. 36-bis d.P.R. n. 380/2001 (mapped)
+- e) Regolarità urbanistica e precedenti…: SCIA in sanatoria per variante in corso d’opera realizzata costituente parziale difformit… (mapped)
+- e) Regolarità urbanistica e precedenti…: altro (mapped)
+- e) Regolarità urbanistica e precedenti…: copia accatastamento di primo impianto o si forniscono i relativi estremi (mapped)
+- e) Regolarità urbanistica e precedenti…: altri documenti probanti (riprese fotografiche, estratti cartografici, documenti di archi… (mapped)
+- e) Regolarità urbanistica e precedenti…: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni pecuniarie, previste dag… (mapped)
+- e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata nella… (mapped)
+- e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata agli at… (mapped)
 - f) Calcolo del contributo di costruzione: si impegna a corrispondere il costo di costruzione in corso di esecuzione delle opere, co… (mapped)
 - f) Calcolo del contributo di costruzione: SI (not mapped)
 - g1) Tecnici incaricati: di aver incaricato, in qualità di progettista delle opere strutturali, di direttori dei l… (not mapped)
@@ -492,6 +495,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - g2) Altri tecnici incaricati: no (not mapped)
 - h) Impresa esecutrice dei lavori: Cassa edile (not mapped)
 - i) Rispetto degli obblighi in materia d…: ricade nell'ambito di applicazione del d.lgs. n. 81/2008 ma si riserva di presentare le d… (not mapped)
+- i) Rispetto degli obblighi in materia d…: allega la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cant… (not mapped)
 - j) Diritti di terzi: dichiara di essere consapevole che il permesso di costruire non comporta limitazione dei… (not mapped)
 - Asseverazione PdC - Dati progettista e…: Interventi di ristrutturazione urbanistica articolo 3, comma 1, lettera f) del d.P.R. n.… (mapped)
 - Asseverazione PdC - Dati progettista e…: Permesso di costruire convenzionato (articolo 28-bis, d.P.R. n. 380/2001) (not mapped)
@@ -501,6 +505,30 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - Dati progettista e…: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001 (not mapped)
 - Asseverazione PdC - Dati progettista e…: altro non indicato nei punti precedenti (not mapped)
 - Asseverazione PdC - Dati progettista e…: Varianti a permessi di costruire comportanti modifica della sagoma nel centro storico (At… (not mapped)
+- Asseverazione PdC - Dati progettista e…: urbanizzazione primaria e secondaria realizzati da soggetti diversi dal Comune (mapped)
+- Asseverazione PdC - Dati progettista e…: realizzazione di infrastrutture e di impianti, anche per pubblici servizi, che comporti l… (mapped)
+- Asseverazione PdC - Dati progettista e…: installazione di torri e tralicci per impianti radio-ricetrasmittenti e di ripetitori per… (mapped)
+- Asseverazione PdC - Dati progettista e…: installazione di manufatti leggeri, anche prefabbricati, e di strutture di qualsiasi gene… (mapped)
+- Asseverazione PdC - Dati progettista e…: interventi pertinenziali che le norme tecniche degli strumenti urbanistici, in relazione… (mapped)
+- Asseverazione PdC - Dati progettista e…: realizzazione di depositi di merci o di materiali, la realizzazione di impianti per attiv… (mapped)
+- Asseverazione PdC - Dati progettista e…: interventi straordinari di ampliamento (articolo 4) e in particolare: (not mapped)
+- Asseverazione PdC - Dati progettista e…: interventi straordinari di demolizione e ricostruzione (articolo 5) e in particolare: (not mapped)
+- Asseverazione PdC - Dati progettista e…: interventi edilizi in zona agricola (articolo 6-bis) e in particolare: (not mapped)
+- Asseverazione PdC - Dati progettista e…: riqualificazione di aree urbane degradate (articolo 7) e in particolare: (not mapped)
+- Asseverazione PdC - Dati progettista e…: ampliamento fino al venti per cento della volumetria esistente per edifici residenziali u… (not mapped)
+- Asseverazione PdC - Dati progettista e…: modifica della destinazione d'uso da volumetria esistente non residenziale a volumetria r… (not mapped)
+- Asseverazione PdC - Dati progettista e…: realizzazione di opere interne finalizzate all'utilizzo dei volumi esistenti nell'ambito… (not mapped)
+- Asseverazione PdC - Dati progettista e…: aumento entro il limite del trentacinque per cento della volumetria esistente degli edifi… (not mapped)
+- Asseverazione PdC - Dati progettista e…: ricostruzione a parità di volume dell'edificio esistente mantenendo le distanze da edific… (not mapped)
+- Asseverazione PdC - Dati progettista e…: mutamento di destinazione d'uso di immobili o loro parti per uso residenziale del nucleo… (not mapped)
+- Asseverazione PdC - Dati progettista e…: ampliamento fino al venti per cento della volumetria esistente o demolizione e ricostruzi… (not mapped)
+- Asseverazione PdC - Dati progettista e…: realizzazione di nuove costruzioni ad uso produttivo nella misura massima di 0,03 mc/mq d… (not mapped)
+- Asseverazione PdC - Dati progettista e…: mutamento di destinazione d'uso ai fini abitativi di un edificio non superiore a 10.000 m… (not mapped)
+- Asseverazione PdC - Dati progettista e…: mutamento di destinazione d'uso ai fini abitativi per singoli edifici non superiori a die… (not mapped)
+- Asseverazione PdC - Dati progettista e…: ricostruzione in sito di edifici diruti e ruderi con l'obbligo destinazione del manufatto… (not mapped)
+- Asseverazione PdC - Dati progettista e…: con opere che determinino un aumento plano volumetrico, che risulti compatibile con le ca… (not mapped)
+- Asseverazione PdC - Dati progettista e…: con opere che incidano sulla sagoma, sui volumi e sulle superfici, con passaggio di categ… (not mapped)
+- Asseverazione PdC - Dati progettista e…: nelle zone agricole – zone E, ai sensi dell'art. 2 comma 8 della l.r. n. 19/2001 e suo re… (not mapped)
 - Asseverazione PdC - stato legittimo, di…: dalle tolleranze di cui all’articolo 34-bis accertate con la presente Relazione tecnica d… (not mapped)
 - Asseverazione PdC - stato legittimo, di…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (not mapped)
 - Asseverazione PdC - stato legittimo, di…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: (not mapped)
@@ -514,6 +542,9 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - stato legittimo, di…: 6%, per le U.I. < 60 mq di superficie utile; (not mapped)
 - Asseverazione PdC - stato legittimo, di…: non ha rilevanza strutturale; (not mapped)
 - Asseverazione PdC - stato legittimo, di…: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al moment… (not mapped)
+- Asseverazione PdC - stato legittimo, di…: intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a)… (not mapped)
+- Asseverazione PdC - stato legittimo, di…: intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1,… (not mapped)
+- Asseverazione PdC - stato legittimo, di…: intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, l… (not mapped)
 - Asseverazione PdC - stato legittimo, di…: un intervento soggetto a SCIA in corso di esecuzione (mapped)
 - Asseverazione PdC - stato legittimo, di…: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della… (not mapped)
 - Asseverazione PdC - stato legittimo, di…: un intervento soggetto a SCIA (mapped)
@@ -524,6 +555,10 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - stato legittimo, di…: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguag… (mapped)
 - Asseverazione PdC - stato legittimo, di…: ai fini della sanatoria, la presente SCIA: (not mapped)
 - Asseverazione PdC - stato legittimo, di…: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla S… (not mapped)
+- Asseverazione PdC - stato legittimo, di…: non prevede interventi; (not mapped)
+- Asseverazione PdC - stato legittimo, di…: propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezz… (not mapped)
+- Asseverazione PdC - stato legittimo, di…: dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sism… (not mapped)
+- Asseverazione PdC - stato legittimo, di…: trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di… (not mapped)
 - Asseverazione PdC - Dati immobile, stru…: PIANO PARTICOLAREGGIATO (not mapped)
 - Asseverazione PdC - Dati immobile, stru…: PIANO DI LOTIZZAZIONE (not mapped)
 - Asseverazione PdC - Dati immobile, stru…: PIANO DI RECUPERO (not mapped)
@@ -670,13 +705,13 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/opere_previste` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | a case takes it | 1 |
 | `dichiarazioni/opere_previste` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | a case takes it | 1 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `oggetto_titolo_pratiche_edilizie` | che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o prati… | h | a case takes it | 5 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `pienamente_conforme` | pienamente conforme alla documentazione dello stato legittimo o di fa… | h | a case takes it | 5 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `conforme_documentazione` | conforme alla documentazione dello stato legittimo o di fatto legitti… | h | on the portal, not mapped |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | mapped, no case yet |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | mapped, no case yet |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | a case takes it | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | a case takes it | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | a case takes it | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `pienamente_conforme` | pienamente conforme alla documentazione dello stato legittimo o di fa… | h | a case takes it | 4 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `conforme_documentazione` | conforme alla documentazione dello stato legittimo o di fatto legitti… | h | a case takes it | 1 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_gratuito` | l'intervento da realizzare è a titolo gratuito | h | a case takes it | 2 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `(nothing)` | l'intervento da realizzare è a titolo oneroso e pertanto | l | a case takes it | 4 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `calcolos_portello` | chiede allo Sportello unico di effettuare il calcolo del contributo d… | h | a case takes it | 2 |
@@ -794,24 +829,8 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - d) Destinazione d'uso dell'immobile: industriale (mapped)
 - d) Destinazione d'uso dell'immobile: commerciale (mapped)
 - d) Destinazione d'uso dell'immobile: altro (mapped)
-- f) Regolarità urbanistica e precedenti…: titolo unico (SUAP) (not mapped)
-- f) Regolarità urbanistica e precedenti…: autorizzazione edilizia (not mapped)
-- f) Regolarità urbanistica e precedenti…: comunicazione edilizia (art. 26 l. n. 47/1985) (not mapped)
-- f) Regolarità urbanistica e precedenti…: denuncia di inizio attività (not mapped)
-- f) Regolarità urbanistica e precedenti…: DIA/SCIA alternativa al permesso di costruire (not mapped)
-- f) Regolarità urbanistica e precedenti…: segnalazione certificata di inizio attività (not mapped)
-- f) Regolarità urbanistica e precedenti…: comunicazione edilizia libera (not mapped)
-- f) Regolarità urbanistica e precedenti…: titolo edilizio in sanatoria con il pagamento della relativa oblazione ed in particolare: (not mapped)
-- f) Regolarità urbanistica e precedenti…: condono edilizio (not mapped)
-- f) Regolarità urbanistica e precedenti…: permesso di costruire in sanatoria di cui agli artt. 36 o 36-bis del d.P.R. n. 380/2001 (not mapped)
-- f) Regolarità urbanistica e precedenti…: SCIA in sanatoria di cui all’art. 36-bis d.P.R. n. 380/2001 (not mapped)
-- f) Regolarità urbanistica e precedenti…: SCIA in sanatoria per variante in corso d’opera realizzata costituente parziale difformit… (not mapped)
-- f) Regolarità urbanistica e precedenti…: altro (not mapped)
-- f) Regolarità urbanistica e precedenti…: copia accatastamento di primo impianto o si forniscono i relativi estremi (not mapped)
-- f) Regolarità urbanistica e precedenti…: altri documenti probanti (riprese fotografiche, estratti cartografici, documenti di archi… (not mapped)
-- f) Regolarità urbanistica e precedenti…: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni pecuniarie, previste dag… (not mapped)
-- f) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata nella… (not mapped)
-- f) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata agli at… (not mapped)
+- f) Regolarità urbanistica e precedenti…: copia accatastamento di primo impianto o si forniscono i relativi estremi (mapped)
+- f) Regolarità urbanistica e precedenti…: altri documenti probanti (riprese fotografiche, estratti cartografici, documenti di archi… (mapped)
 - h1) Tecnici incaricati: di aver incaricato, in qualità di direttore/i dei lavori, i soggetti indicati nella sezio… (not mapped)
 - h1) Tecnici incaricati: Direttore dei lavori delle opere architettoniche (not mapped)
 - h1) Tecnici incaricati: Direttore dei lavori delle opere strutturali (not mapped)
@@ -839,12 +858,19 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Asseverazione SCIA - Stato legittimo, D…: 6%, per le U.I. < 60 mq di superficie utile; (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: non ha rilevanza strutturale; (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al moment… (not mapped)
+- Asseverazione SCIA - Stato legittimo, D…: intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a)… (not mapped)
+- Asseverazione SCIA - Stato legittimo, D…: intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1,… (not mapped)
+- Asseverazione SCIA - Stato legittimo, D…: intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, l… (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della… (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: si impegna a presentare la dichiarazione per l’iscrizione al catasto successivamente all’… (mapped)
 - Asseverazione SCIA - Stato legittimo, D…: dà atto che la data/epoca di realizzazione dell’intervento (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: attesta che la data/epoca di realizzazione dell’intervento (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: ai fini della sanatoria, la presente SCIA: (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla S… (not mapped)
+- Asseverazione SCIA - Stato legittimo, D…: non prevede interventi; (not mapped)
+- Asseverazione SCIA - Stato legittimo, D…: propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezz… (not mapped)
+- Asseverazione SCIA - Stato legittimo, D…: dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sism… (not mapped)
+- Asseverazione SCIA - Stato legittimo, D…: trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di… (not mapped)
 - Asseverazione SCIA - Dati immobile, str…: PUC (not mapped)
 - Asseverazione SCIA - Dati immobile, str…: PUA (not mapped)
 - Asseverazione SCIA - Dati immobile, str…: PIANO PARTICOLAREGGIATO (not mapped)
@@ -897,13 +923,13 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `dichiarazioni/opere_previste` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | a case takes it | 1 |
 | `dichiarazioni/opere_previste` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | a case takes it | 1 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `oggetto_titolo_pratiche_edilizie` | che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o prati… | h | a case takes it | 5 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | on the portal, not mapped |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `pienamente_conforme` | pienamente conforme alla documentazione dello stato legittimo o di fa… | h | a case takes it | 5 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `conforme_documentazione` | conforme alla documentazione dello stato legittimo o di fatto legitti… | h | on the portal, not mapped |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | mapped, no case yet |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | mapped, no case yet |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | a case takes it | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | a case takes it | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | a case takes it | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `pienamente_conforme` | pienamente conforme alla documentazione dello stato legittimo o di fa… | h | a case takes it | 4 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `conforme_documentazione` | conforme alla documentazione dello stato legittimo o di fatto legitti… | h | a case takes it | 1 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_gratuito` | L'intervento da realizzare è a titolo gratuito | h | a case takes it | 2 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_oneroso` | L'intervento da realizzare è a titolo oneroso e pertanto | h | a case takes it | 4 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `calcolo_sportello` | chiede allo Sportello Unico di effettuare il calcolo del contributo d… | h | a case takes it | 2 |
@@ -1017,25 +1043,14 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Scheda anagrafica: Se cittadino non UE (not mapped)
 - DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005): (not mapped)
 - DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) : (not mapped)
+- a) Titolarità dell'intervento: comproprietario (mapped)
+- a) Titolarità dell'intervento: amministratore di condominio (mapped)
 - b) Presentazione della SCIA Alternativa…: PER PRESA VISIONE (not mapped)
-- f) Regolarità urbanistica e precedenti…: titolo unico (SUAP) (not mapped)
-- f) Regolarità urbanistica e precedenti…: autorizzazione edilizia (not mapped)
-- f) Regolarità urbanistica e precedenti…: comunicazione edilizia (art. 26 l. n. 47/1985) (not mapped)
-- f) Regolarità urbanistica e precedenti…: denuncia di inizio attività (not mapped)
-- f) Regolarità urbanistica e precedenti…: DIA/SCIA alternativa al permesso di costruire (not mapped)
-- f) Regolarità urbanistica e precedenti…: segnalazione certificata di inizio attività (not mapped)
-- f) Regolarità urbanistica e precedenti…: comunicazione edilizia libera (not mapped)
-- f) Regolarità urbanistica e precedenti…: titolo edilizio in sanatoria con il pagamento della relativa oblazione ed in particolare: (not mapped)
-- f) Regolarità urbanistica e precedenti…: condono edilizio (not mapped)
-- f) Regolarità urbanistica e precedenti…: permesso di costruire in sanatoria di cui agli artt. 36 o 36-bis del d.P.R. n. 380/2001 (not mapped)
-- f) Regolarità urbanistica e precedenti…: SCIA in sanatoria di cui all’art. 36-bis d.P.R. n. 380/2001 (not mapped)
-- f) Regolarità urbanistica e precedenti…: SCIA in sanatoria per variante in corso d’opera realizzata costituente parziale difformit… (not mapped)
-- f) Regolarità urbanistica e precedenti…: altro (not mapped)
-- f) Regolarità urbanistica e precedenti…: copia accatastamento di primo impianto o si forniscono i relativi estremi (not mapped)
-- f) Regolarità urbanistica e precedenti…: altri documenti probanti (riprese fotografiche, estratti cartografici, documenti di archi… (not mapped)
-- f) Regolarità urbanistica e precedenti…: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni pecuniarie, previste dag… (not mapped)
-- f) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata nella… (not mapped)
-- f) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata agli at… (not mapped)
+- d) Destinazione d'uso dell'immobile: industriale (mapped)
+- d) Destinazione d'uso dell'immobile: commerciale (mapped)
+- d) Destinazione d'uso dell'immobile: altro (mapped)
+- f) Regolarità urbanistica e precedenti…: copia accatastamento di primo impianto o si forniscono i relativi estremi (mapped)
+- f) Regolarità urbanistica e precedenti…: altri documenti probanti (riprese fotografiche, estratti cartografici, documenti di archi… (mapped)
 - g) Calcolo del contributo di costruzione: Chiede di eseguire direttamente, a scomputo di quanto dovuto, le opere di urbanizzazione… (not mapped)
 - h1) Tecnici incaricati: di aver incaricato, in qualità di direttore/i dei lavori, i soggetti indicati nella sezio… (not mapped)
 - h1) Tecnici incaricati: Direttore dei lavori delle opere architettoniche (not mapped)
@@ -1066,6 +1081,9 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Asseverazione SCIA Alternativa - stato…: 6%, per le U.I. < 60 mq di superficie utile; (not mapped)
 - Asseverazione SCIA Alternativa - stato…: non ha rilevanza strutturale; (not mapped)
 - Asseverazione SCIA Alternativa - stato…: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al moment… (not mapped)
+- Asseverazione SCIA Alternativa - stato…: intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a)… (not mapped)
+- Asseverazione SCIA Alternativa - stato…: intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1,… (not mapped)
+- Asseverazione SCIA Alternativa - stato…: intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, l… (not mapped)
 - Asseverazione SCIA Alternativa - Dati i…: PUC (not mapped)
 - Asseverazione SCIA Alternativa - Dati i…: PUA (not mapped)
 - Asseverazione SCIA Alternativa - Dati i…: PIANO PARTICOLAREGGIATO (not mapped)
@@ -1197,5 +1215,8 @@ Portal boxes of the Agibilità (SCA) no schema alternative matched and no case t
 - Attestazione tecnica - Agibilità: inferiore a 38 metri quadrati, fino al limite massimo di 28 metri quadrati, per due perso… (not mapped)
 - Attestazione tecnica - Agibilità: i locali sono situati in edifici che sono stati sottoposti, nell’ambito dell’intervento e… (not mapped)
 - Attestazione tecnica - Agibilità: è stata realizzata una ristrutturazione con soluzioni alternative atte a garantire, in re… (not mapped)
+- Attestazione tecnica - Sicurezza degli…: Documento già depositato in Comune (not mapped)
+- Attestazione tecnica - Sicurezza degli…: Collaudo (ove richiesto) (not mapped)
+- Attestazione tecnica - Sicurezza degli…: Atto notorio (art. 6 DPR n. 392/1994) (not mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
 - Qualifica e dati del procuratore: all'Estero (not mapped)

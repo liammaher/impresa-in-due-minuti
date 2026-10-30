@@ -150,7 +150,7 @@ def _():
     r = run.preflight(steps, values(steps, a))
     asked = json.dumps(r["questions"])
     assert "sanzione_importo" in asked, asked
-    assert "precedente_numero" not in asked and "precedenti" not in asked, asked
+    assert "prec_permesso_numero" not in asked and "precedenti" not in asked, asked
 
 
 @case("the SCIA offers no free-land option; the permesso does")
