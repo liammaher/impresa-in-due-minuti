@@ -355,6 +355,10 @@ asks:
     options: [sca, presentata, nessuna]
   ascensore_protocollo: {type: text, question: "The lift communication's protocol number", when: "{{ask.ascensore_comunicazione|is_presentata}}"}
   ascensore_data: {type: date, question: "The lift communication's date", when: "{{ask.ascensore_comunicazione|is_presentata}}"}
+  # The accertamento di compatibilità paesaggistica (art. 167 c. 4-5 D.Lgs. 42/2004).
+  accertamento_descrizione: {type: text, question: "The works already done, in a few lines (350 characters)"}
+  accertamento_effetti: {type: text, question: "What the works changed in the place and the building's look (200 characters)"}
+  accertamento_data: {type: date, question: "When the works were done"}
   # The SCIA in sanatoria (art. 37 c. 5, art. 36-bis DPR 380/2001): the wizard's sanatoria scelta
   # answered Sì, set by the sanatoria's recipe (rehearsals/scia-sanatoria-fittizia).
   scia_sanatoria: {type: yes_no, question: "Is this SCIA filed in sanatoria (the wizard's sanatoria question answered Sì)?", default: "false"}
@@ -1175,6 +1179,28 @@ sections:
       - {kind: text, label: ordine/collegio/albo, value: "{{t:albo.ordine}}"}
       - {kind: text, label: provincia (sigla), value: "{{t:albo.provincia}}"}
       - {kind: text, label: numero iscrizione, value: "{{t:albo.numero}}"}
+
+  # The accertamento di compatibilità paesaggistica: the works and what they changed, the
+  # technician (the architect; more are "+" blocks, not mapped), art. 181 (the dichiarante's
+  # presa visione) and when the works were done.
+  - section: dichiarazione relativa alla descrizione delle opere
+    fields:
+      - {kind: textarea, label: sintetica descrizione delle opere, value: "{{ask.accertamento_descrizione}}"}
+      - {kind: textarea, label: effetti conseguenti alla realizzazione delle opere, value: "{{ask.accertamento_effetti}}"}
+
+  - section: dichiarazione relativa ai dati identificativi del/dei professionista/i
+    fields:
+      - {kind: text, label: Cognome, value: "{{t:identity.last_name|upper}}"}
+      - {kind: text, label: Nome, value: "{{t:identity.first_name|upper}}"}
+      - {kind: text, label: codice fiscale, value: "{{t:identity.codice_fiscale}}"}
+
+  - section: dichiarazione riferita all'art. 181
+    theirs: [PER PRESA VISIONE]
+    fields: []
+
+  - section: dichiarazione relativa alla datazione dell'abuso
+    fields:
+      - {kind: date, label: indicare la data dell'abuso, value: "{{ask.accertamento_data|date_it}}"}
 
   # The 30-month extension of art. 10-septies L. 51/2022 where the title may be a landscape
   # authorization too.
