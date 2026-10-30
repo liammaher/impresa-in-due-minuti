@@ -644,5 +644,22 @@ def _():
     assert "bollo_marche" not in generated("nomina-impresa-fittizia").get("asks", {})
 
 
+@case("systems needing a project: the permesso's every kind, and each project's slot, in the five pratiche that refused them")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    for name in ("pdc-fittizio", "pdc-sanatoria-fittizio", "scia-alternativa-fittizia",
+                 "scia-paesaggistica-ordinaria-fittizia", "scia-paesaggistica-semplificata-fittizia"):
+        steps = generated(name)
+        assert not any("Systems needing a project" in c.get("else", "") for c in steps["supports"]), name
+        v = run.Values(json.loads((REH / name / "answers-impianti.json").read_text()), fields=fields, asks=steps.get("asks"))
+        assert run.preflight(steps, v)["ready"], name
+        labels = [p["label"] or "" for p in run.plan(steps, v)]
+        assert any(l.startswith("è soggetto agli obblighi di presentazione del progetto") for l in labels), name
+        assert any(l.startswith("Progetto degli impianti radiotelevisivi") for l in labels), name
+        assert "radiotelevisivi" in labels and "di protezione antincendio" in labels, name
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

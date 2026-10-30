@@ -8,12 +8,12 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 815 | Claude takes it when the case does |
+| ticked | 821 | Claude takes it when the case does |
 | answer | 56 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 1 | left empty on purpose |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 272 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 266 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -349,20 +349,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - checkbox: interessa un edificio privato aperto al pubblico e che le opere previste sono conformi all'articolo 82 del d.P.R. n. 380/2001 come da relazione e schemi dimostr
 - checkbox: pur essendo soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/2001 e del d.m. n. 236/1989 non rispetta la normativa in materia di barrie
 
-### Asseverazione PdC - sicurezza impianti e consumi energetici
-
-1 pratiche; 9 of 30 choices to map.
-
-- checkbox: radiotelevisivi, antenne ed elettronici in genere (under: Comporta l'installazione, la trasformazione o l'ampliamento dei seguenti impiant)
-- checkbox: impianti di sollevamento di persone o di cose per mezzo di ascensori, di montacarichi, di scale mobili e simili (under: Comporta l'installazione, la trasformazione o l'ampliamento dei seguenti impiant)
-- checkbox: di protezione antincendio (under: Comporta l'installazione, la trasformazione o l'ampliamento dei seguenti impiant)
-- checkbox: altre tipologie di impianti, anche definite dalla corrispondente normativa regionale (under: Comporta l'installazione, la trasformazione o l'ampliamento dei seguenti impiant)
-- radio: è soggetto agli obblighi di presentazione del progetto e pertanto (under: Comporta l'installazione, la trasformazione o l'ampliamento dei seguenti impiant)
-- checkbox: allega i relativi elaborati (under: è soggetto agli obblighi di presentazione del progetto e pertanto)
-- checkbox: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è evidenziata nella relazione tecnica dovuta ai sensi dell'articolo 125 del (under: è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto:)
-- radio: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto:
-- checkbox: si allega la valutazione della sostenibilità energetico-ambientale degli edifici redatta secondo le Linee Guida per la valutazione della sostenibilità energetic (under: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto:)
-
 ### SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione
 
 1 pratiche; 9 of 14 choices to map.
@@ -442,6 +428,14 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: è assoggettato al procedimento ordinario di autorizzazione paesaggistica (under: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspe)
 - radio: è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all’articolo 36-bis del DPR 380/2001 e (under: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspe)
 - checkbox: si allega documentazione necessaria ai fini del rilascio del parere vincolante (vedi quadro della documentazione allegata - art. 36-bis comma 4 DPR 380/2001)” (under: è assoggettato al procedimento di accertamento della compatibilità paesaggistica)
+
+### Asseverazione PdC - sicurezza impianti e consumi energetici
+
+1 pratiche; 3 of 30 choices to map.
+
+- checkbox: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è evidenziata nella relazione tecnica dovuta ai sensi dell'articolo 125 del (under: è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto:)
+- radio: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto:
+- checkbox: si allega la valutazione della sostenibilità energetico-ambientale degli edifici redatta secondo le Linee Guida per la valutazione della sostenibilità energetic (under: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto:)
 
 ### Riferimenti titolo edilizio e/o paesaggistico e data prevista della fine dei lavori
 

@@ -19,6 +19,16 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 attachments:
   Gestione degli allegati:
+    # The asseverazione's "allega i relativi elaborati" adds a required slot per system's
+    # project, as on the SCIA (read there 2026-10-29): plain PDFs.
+    - {kind: file, label: "Progetto dell'impianto di produzione, trasformazione", value: "{{ask.progetto_elettrico_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_elettrico}}", on_page: true}
+    - {kind: file, label: Progetto degli impianti radiotelevisivi, value: "{{ask.progetto_radiotv_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_radiotv}}", on_page: true}
+    - {kind: file, label: "Progetto dell'impianto di riscaldamento", value: "{{ask.progetto_termico_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_termico}}", on_page: true}
+    - {kind: file, label: Progetto degli impianti idrici e sanitari, value: "{{ask.progetto_idrico_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_idrico}}", on_page: true}
+    - {kind: file, label: "Progetto dell'impianto per la distribuzione e l'utilizzazione di gas", value: "{{ask.progetto_gas_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_gas}}", on_page: true}
+    - {kind: file, label: "Progetto dell'impianto di sollevamento", value: "{{ask.progetto_ascensore_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_ascensore}}", on_page: true}
+    - {kind: file, label: "Progetto dell'impianto di protezione antincendio", value: "{{ask.progetto_antincendio_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_antincendio}}", on_page: true}
+    - {kind: file, label: Progetto di altre tipologie di impianti, value: "{{ask.progetto_altro_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_altro}}", on_page: true}
     # The asseverazione's "allega l’autorizzazione sismica" (a structural tolerance relevant for
     # public safety) adds this required slot; plain PDFs are taken (seen on the SCIA 2026-10-30).
     - {kind: file, label: Autorizzazione sismica, value: "{{ask.toll_sismica_doc}}", when: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}", on_page: true}
@@ -85,7 +95,6 @@ supports:
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_5bis_caso}}", in: ["altezza", "monostanza uno", "monostanza due"], else: "More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions."}
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}
   - {value: "{{ask.barriere}}", in: ["false"], else: "The barriers rules (artt. 77-82) aren't mapped yet."}
-  - {value: "{{ask.progetto_impianti}}", in: ["false"], else: "Systems needing a project aren't mapped yet."}
   - {value: "{{ask.indagini_ambientali}}", in: ["false"], else: "Soil needing environmental investigations (or already remediated) isn't mapped yet."}
   - {value: "{{ask.urbanizzazione}}", in: ["true"], else: "An area without its primary urbanisation works isn't mapped yet."}
   - {if: "{{ask.scia_onerosa}}", value: "{{ask.contributo_pagamento}}", in: ["prima dei lavori", "rateizzazione", "in corso d'opera"], else: "A SCIA alternativa's contributo is paid within 30 days of filing, in instalments or during the works: its form has no box for a receipt already paid."}

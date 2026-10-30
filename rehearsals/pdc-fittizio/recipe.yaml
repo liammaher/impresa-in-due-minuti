@@ -20,6 +20,16 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 attachments:
   Gestione degli allegati:
+    # The asseverazione's "allega i relativi elaborati" adds a required slot per system's
+    # project, as on the SCIA (read there 2026-10-29): plain PDFs.
+    - {kind: file, label: "Progetto dell'impianto di produzione, trasformazione", value: "{{ask.progetto_elettrico_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_elettrico}}", on_page: true}
+    - {kind: file, label: Progetto degli impianti radiotelevisivi, value: "{{ask.progetto_radiotv_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_radiotv}}", on_page: true}
+    - {kind: file, label: "Progetto dell'impianto di riscaldamento", value: "{{ask.progetto_termico_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_termico}}", on_page: true}
+    - {kind: file, label: Progetto degli impianti idrici e sanitari, value: "{{ask.progetto_idrico_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_idrico}}", on_page: true}
+    - {kind: file, label: "Progetto dell'impianto per la distribuzione e l'utilizzazione di gas", value: "{{ask.progetto_gas_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_gas}}", on_page: true}
+    - {kind: file, label: "Progetto dell'impianto di sollevamento", value: "{{ask.progetto_ascensore_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_ascensore}}", on_page: true}
+    - {kind: file, label: "Progetto dell'impianto di protezione antincendio", value: "{{ask.progetto_antincendio_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_antincendio}}", on_page: true}
+    - {kind: file, label: Progetto di altre tipologie di impianti, value: "{{ask.progetto_altro_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_altro}}", on_page: true}
     # The asseverazione's "allega l’autorizzazione sismica" (a structural tolerance relevant for
     # public safety) adds this required slot; plain PDFs are taken (seen on the SCIA 2026-10-30).
     - {kind: file, label: Autorizzazione sismica, value: "{{ask.toll_sismica_doc}}", when: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}", on_page: true}
@@ -81,7 +91,6 @@ supports:
   - {value: "{{ask.acustica}}", in: ["false"], else: "An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet."}
   - {value: "{{ask.vvf_valutazione}}", in: ["false"], else: "A project for the Vigili del Fuoco's assessment isn't mapped yet."}
   - {value: "{{ask.igienico_conforme}}", in: ["true"], else: "A hygiene derogation isn't mapped yet."}
-  - {value: "{{ask.progetto_impianti}}", in: ["false"], else: "Systems needing a project (DM 37/2008 art. 5) aren't mapped yet."}
   - {value: "{{ask.indagini_ambientali}}", in: ["false"], else: "Soil needing environmental investigations (or already remediated) isn't mapped yet."}
   - {value: "{{ask.urbanizzazione}}", in: ["true"], else: "An area without its primary urbanisation works isn't mapped yet."}
   # The portal requires one energy incentive claimed on every permesso, even with no energy

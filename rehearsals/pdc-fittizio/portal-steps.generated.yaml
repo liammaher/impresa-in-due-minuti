@@ -225,6 +225,19 @@ asks:
   prg_zona: {type: text, question: The PRG zone of the property}
   prg_articolo: {type: text, question: The article of the PRG's rules for that zone}
   progetto_impianti: {type: yes_no, question: 'Do the systems need a project (DM 37/2008 art. 5)?', when: '{{ask.impianti}}'}
+  progetto_elettrico_doc: {type: file, question: The electrical system's project (PDF)}
+  progetto_radiotv_doc: {type: file, question: The radio and TV systems' project (PDF)}
+  progetto_termico_doc: {type: file, question: The heating or air-conditioning system's project (PDF)}
+  progetto_idrico_doc: {type: file, question: The water and sanitary systems' project (PDF)}
+  progetto_gas_doc: {type: file, question: The gas system's project (PDF)}
+  progetto_ascensore_doc: {type: file, question: The lift's project (PDF)}
+  progetto_antincendio_doc: {type: file, question: The fire-protection system's project (PDF)}
+  progetto_altro_doc: {type: file, question: The other system's project (PDF)}
+  impianto_radiotv: {type: yes_no, question: 'Radio and TV systems, aerials, electronics?', when: '{{ask.impianti}}'}
+  impianto_ascensore: {type: yes_no, question: 'Lifts, goods lifts, escalators?', when: '{{ask.impianti}}'}
+  impianto_antincendio: {type: yes_no, question: 'Fire-protection systems?', when: '{{ask.impianti}}'}
+  impianto_altro: {type: yes_no, question: 'Any other kind of system (as regional rules define them)?', when: '{{ask.impianti}}'}
+  impianto_altro_quale: {type: text, question: 'Which other system, in a few words (100 characters)'}
   demolizioni: {type: yes_no, question: 'Do the works demolish anything (partitions, finishes) and produce waste?'}
   acustica: {type: yes_no, question: 'Does art. 8 of L. 447/1995 apply (an acoustic impact or clima acustico report: e.g. homes next to a main road, a railway or an airport)?', propose: 'false'}
   acustica_impatto: {type: yes_no, group: acustica_documenti, item: Documentazione di impatto acustico (art. 8 cc. 2 and 4 L. 447/1995)}
@@ -344,10 +357,6 @@ supports:
   in:
   - 'true'
   else: A hygiene derogation isn't mapped yet.
-- value: '{{ask.progetto_impianti}}'
-  in:
-  - 'false'
-  else: Systems needing a project (DM 37/2008 art. 5) aren't mapped yet.
 - value: '{{ask.indagini_ambientali}}'
   in:
   - 'false'
@@ -879,7 +888,14 @@ sections:
   - {id: 'r8c1p8reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_termico}}', label: 'di riscaldamento, di climatizzazione'}
   - {id: 'r9c1p9reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_idrico}}', label: idrici e sanitari}
   - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_gas}}', label: per la distribuzione e l'utilizzazione di gas}
+  - {id: 'r7c1p7reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_radiotv}}', label: radiotelevisivi}
+  - {id: 'r11c1p11reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_ascensore}}', label: impianti di sollevamento di persone o di cose}
+  - {id: 'r12c1p12reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_antincendio}}', label: di protezione antincendio}
+  - {id: 'r13c1p13reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_altro}}', label: altre tipologie di impianti}
+  - {id: 'r15c1p15reg:txt', kind: text, value: '{{ask.impianto_altro_quale}}', on_page: true, when: '{{ask.impianti}} {{ask.impianto_altro}}', max: 100, label: specificare}
   - {kind: radio, when: '{{ask.impianti}} {{ask.progetto_impianti|not}}', label: non è soggetto agli obblighi di presentazione del progetto}
+  - {kind: radio, when: '{{ask.impianti}} {{ask.progetto_impianti}}', label: è soggetto agli obblighi di presentazione del progetto}
+  - {kind: checkbox, when: '{{ask.impianti}} {{ask.progetto_impianti}}', label: allega i relativi elaborati}
   - {kind: radio, when: '{{ask.prestazione_energetica|not}}', label: non è soggetto al deposito del progetto e della relazione tecnica}
   - {kind: radio, when: '{{ask.prestazione_energetica}}', label: è soggetto all'applicazione dell'articolo 125}
   - {kind: checkbox, when: '{{ask.prestazione_energetica}} {{ask.sanatoria_titolo|is_permesso|not}}', label: saranno presentate in allegato alla comunicazione di inizio lavori}
@@ -1044,6 +1060,14 @@ sections:
   - {kind: file, label: Dichiarazione di assenso dei terzi titolari, value: '{{ask.assenso_proprietario}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: 'Elaborati grafici dello stato di fatto, di progetto e comparativi', value: '{{ask.elaborati_grafici}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Documentazione fotografica dello stato di fatto, value: '{{ask.documentazione_fotografica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: 'Progetto dell''impianto di produzione, trasformazione', value: '{{ask.progetto_elettrico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_elettrico}}'}
+  - {kind: file, label: Progetto degli impianti radiotelevisivi, value: '{{ask.progetto_radiotv_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_radiotv}}'}
+  - {kind: file, label: Progetto dell'impianto di riscaldamento, value: '{{ask.progetto_termico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_termico}}'}
+  - {kind: file, label: Progetto degli impianti idrici e sanitari, value: '{{ask.progetto_idrico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_idrico}}'}
+  - {kind: file, label: Progetto dell'impianto per la distribuzione e l'utilizzazione di gas, value: '{{ask.progetto_gas_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_gas}}'}
+  - {kind: file, label: Progetto dell'impianto di sollevamento, value: '{{ask.progetto_ascensore_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_ascensore}}'}
+  - {kind: file, label: Progetto dell'impianto di protezione antincendio, value: '{{ask.progetto_antincendio_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_antincendio}}'}
+  - {kind: file, label: Progetto di altre tipologie di impianti, value: '{{ask.progetto_altro_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_altro}}'}
   - {kind: file, label: Autorizzazione sismica, value: '{{ask.toll_sismica_doc}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
   - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: '{{ask.sanzione_ricevuta}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}'}
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}

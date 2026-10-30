@@ -8,7 +8,7 @@ that means it on Napoli's SUE, and whether one of our cases takes it. A row with
 branch no rehearsal has taken: the next cases to write.
 
 - **a case takes it**: a pre-flight-ready answers file of a SUE rehearsal ticks that box
-  (90 such cases; nearly all have a filled run on the portal).
+  (95 such cases; nearly all have a filled run on the portal).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -29,9 +29,9 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 | CILA | 43 | 31 | 1 | 4 | 7 | 34 |
 | Fine lavori | 2 | 1 | 1 | 0 | 0 | 15 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 16 | 9 |
-| Permesso di costruire | 153 | 92 | 17 | 30 | 14 | 201 |
+| Permesso di costruire | 153 | 93 | 17 | 29 | 14 | 196 |
 | SCIA | 150 | 123 | 4 | 13 | 10 | 70 |
-| SCIA alternativa | 128 | 95 | 15 | 10 | 8 | 96 |
+| SCIA alternativa | 128 | 96 | 14 | 10 | 8 | 91 |
 | Agibilità (SCA) | 36 | 29 | 0 | 2 | 5 | 28 |
 
 ## Next cases
@@ -66,7 +66,6 @@ Mapped, no case yet (an answers file away):
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_300_a_100_mq` (4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_100_a_60_mq` (5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
-- SCIA alternativa: `relazione_tecnica_asseverazione/sicurezza_impianti/comporta_impianti/altro/[comporta_impianti_altro_ctype]` → `soggetto` (è soggetto agli obblighi di presentazione del progetto e pertanto)
 - SCIA alternativa: `relazione_tecnica_asseverazione/tutela_inquinamento_acustico/[tutela_inquinamento_acustico_ctype]` → `rientra_art_8` (Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/prevenzione_incendi` → `soggetto_valutazione_progetto` (è soggetto alla valutazione del progetto da parte del Comando Provinc…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/amianto` → `(nothing)` (interessano parti di edifici con presenza di fibre di amianto e che è…)
@@ -100,7 +99,6 @@ On the portal, not mapped (dictionary work first):
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `realizzazione_intervento_attesta` (attesta che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `permesso_costruire_in_sanatoria` (ai fini della sanatoria, la presente SCIA:)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia/rilevanza_sismica` → `bassa_sismicita` (dà atto che l’immobile interessato dall’intervento è ubicato in zona…)
-- Permesso di costruire: `relazione_tecnica_asseverazione/sicurezza_impianti/comporta_impianti/altro/[comporta_impianti_altro_ctype]` → `soggetto` (è soggetto agli obblighi di presentazione del progetto e pertanto)
 - Permesso di costruire: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_inf_ugu_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/prevenzione_incendi` → `variante_progetto` (costituisce variante e il sottoscritto assevera che le modifiche non…)
@@ -376,9 +374,9 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `comunica` | comunica gli estremi della dichiarazione per l’iscrizione al catasto | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `si_impegna` | si impegna a presentare la dichiarazione per l’iscrizione al catasto… | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti` | `non_comporta_impianti` | Non comporta l'installazione, la trasformazione o l'ampliamento di im… | h | a case takes it | 1 |
-| `relazione_tecnica_asseverazione/sicurezza_impianti` | `comporta_impianti` | Comporta l'installazione, la trasformazione o l'ampliamento dei segue… | h | a case takes it | 1 |
+| `relazione_tecnica_asseverazione/sicurezza_impianti` | `comporta_impianti` | Comporta l'installazione, la trasformazione o l'ampliamento dei segue… | h | a case takes it | 2 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `non_soggetto` | non è soggetto agli obblighi di presentazione del progetto | m | a case takes it | 1 |
-| `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `soggetto` | è soggetto agli obblighi di presentazione del progetto e pertanto | m | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `soggetto` | è soggetto agli obblighi di presentazione del progetto e pertanto | m | a case takes it | 2 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_risparmio_energetico` | non è soggetto al deposito del progetto e della relazione tecnica di… | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_risparmio_energetico` | è soggetto all'applicazione dell'articolo 125 del d.P.R. n. 380/2001… | h | a case takes it | 2 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_fonti_rinnovabili` | non è soggetto all'applicazione del d.lgs. n. 28/2011, in quanto non… | h | a case takes it | 1 |
@@ -566,13 +564,8 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - Dati immobile, stru…: interessa un edificio privato aperto al pubblico e che le opere previste sono conformi al… (not mapped)
 - Asseverazione PdC - Dati immobile, stru…: accessibilità (mapped)
 - Asseverazione PdC - Dati immobile, stru…: pur essendo soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/200… (not mapped)
-- Asseverazione PdC - sicurezza impianti…: radiotelevisivi, antenne ed elettronici in genere (not mapped)
-- Asseverazione PdC - sicurezza impianti…: di riscaldamento, di climatizzazione, di condizionamento e di refrigerazione di qualsiasi… (mapped)
 - Asseverazione PdC - sicurezza impianti…: per la distribuzione e l'utilizzazione di gas di qualsiasi tipo, comprese le opere di eva… (mapped)
-- Asseverazione PdC - sicurezza impianti…: impianti di sollevamento di persone o di cose per mezzo di ascensori, di montacarichi, di… (not mapped)
-- Asseverazione PdC - sicurezza impianti…: di protezione antincendio (not mapped)
-- Asseverazione PdC - sicurezza impianti…: altre tipologie di impianti, anche definite dalla corrispondente normativa regionale (not mapped)
-- Asseverazione PdC - sicurezza impianti…: allega i relativi elaborati (not mapped)
+- Asseverazione PdC - sicurezza impianti…: altre tipologie di impianti, anche definite dalla corrispondente normativa regionale (mapped)
 - Asseverazione PdC - sicurezza impianti…: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è ev… (not mapped)
 - Asseverazione PdC - sicurezza impianti…: ricade nell'articolo 12, comma 1, del d.lgs. n. 28/2011 in merito al bonus volumetrico de… (mapped)
 - Asseverazione PdC - sicurezza impianti…: si certifica nella relazione tecnica una copertura dei consumi di calore, di elettricità… (mapped)
@@ -745,9 +738,9 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/sicurezza_impianti` | `non_comporta_impianti` | Non comporta l'installazione, la trasformazione o l'ampliamento di im… | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti` | `comporta_impianti` | Comporta l'installazione, la trasformazione o l'ampliamento dei segue… | h | a case takes it | 4 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `non_soggetto` | non è soggetto agli obblighi di presentazione del progetto | m | a case takes it | 4 |
-| `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `soggetto` | è soggetto agli obblighi di presentazione del progetto e pertanto | m | a case takes it | 1 |
+| `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `soggetto` | è soggetto agli obblighi di presentazione del progetto e pertanto | m | a case takes it | 3 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_risparmio_energetico` | non è soggetto al deposito del progetto e della relazione tecnica di… | h | a case takes it | 4 |
-| `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_risparmio_energetico` | è soggetto al deposito del progetto e della relazione tecnica di cui… | h | a case takes it | 1 |
+| `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_risparmio_energetico` | è soggetto al deposito del progetto e della relazione tecnica di cui… | h | a case takes it | 3 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_fonti_rinnovabili` | non è soggetto all'applicazione del d.lgs. n. 28/2011, in quanto non… | h | a case takes it | 4 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_fonti_rinnovabili` | è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto: | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_art_8` | Non rientra nell'ambito di applicazione dell'articolo 8 della l. n. 4… | h | a case takes it | 4 |
@@ -943,7 +936,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/sicurezza_impianti` | `non_comporta_impianti` | Non comporta l'installazione, la trasformazione o l'ampliamento di im… | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti` | `comporta_impianti` | Comporta l'installazione, la trasformazione o l'ampliamento dei segue… | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `non_soggetto` | non è soggetto agli obblighi di presentazione del progetto | m | a case takes it | 1 |
-| `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `soggetto` | è soggetto agli obblighi di presentazione del progetto e pertanto | m | mapped, no case yet |  |
+| `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `soggetto` | è soggetto agli obblighi di presentazione del progetto e pertanto | m | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_risparmio_energetico` | non è soggetto al deposito del progetto e della relazione tecnica di… | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_risparmio_energetico` | è soggetto al deposito del progetto e della relazione tecnica di cui… | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_fonti_rinnovabili` | non è soggetto all'applicazione del d.lgs. n. 28/2011, in quanto non… | h | a case takes it | 1 |
@@ -1055,13 +1048,8 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Asseverazione SCIA Alternativa - Dati i…: adattabilità (mapped)
 - Asseverazione SCIA Alternativa - Dati i…: pur essendo soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/200… (mapped)
 - Asseverazione SCIA Alternativa - Dati i…: presenta contestualmente alla SCIA condizionata, la documentazione per la richiesta di de… (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: radiotelevisivi, antenne ed elettronici in genere (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: di riscaldamento, di climatizzazione, di condizionamento e di refrigerazione di qualsiasi… (mapped)
 - Asseverazione SCIA Alternativa - Sicure…: per la distribuzione e l'utilizzazione di gas di qualsiasi tipo, comprese le opere di eva… (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: impianti di sollevamento di persone o di cose per mezzo di ascensori, di montacarichi, di… (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: di protezione antincendio (mapped)
 - Asseverazione SCIA Alternativa - Sicure…: altre tipologie di impianti, anche definite dalla corrispondente normativa regionale (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: allega i relativi elaborati (mapped)
 - Asseverazione SCIA Alternativa - Sicure…: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è ev… (not mapped)
 - Asseverazione SCIA Alternativa - Sicure…: ricade nell'articolo 14, comma 6, del d.lgs. n. 102/2014 in merito al computo degli spess… (mapped)
 - Asseverazione SCIA Alternativa - Sicure…: si certifica nella relazione tecnica una riduzione minima del 20 per cento dell'indice di… (mapped)

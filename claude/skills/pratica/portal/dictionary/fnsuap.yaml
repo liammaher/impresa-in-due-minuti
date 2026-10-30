@@ -2744,8 +2744,16 @@ sections:
       - {kind: checkbox, label: "di riscaldamento, di climatizzazione", when: "{{ask.impianti}} {{ask.impianto_termico}}"}
       - {kind: checkbox, label: idrici e sanitari, when: "{{ask.impianti}} {{ask.impianto_idrico}}"}
       - {kind: checkbox, label: per la distribuzione e l'utilizzazione di gas, when: "{{ask.impianti}} {{ask.impianto_gas}}"}
+      # The SCIA's other system kinds, and its project with the drawings attached (the same boxes).
+      - {kind: checkbox, label: radiotelevisivi, when: "{{ask.impianti}} {{ask.impianto_radiotv}}"}
+      - {kind: checkbox, label: impianti di sollevamento di persone o di cose, when: "{{ask.impianti}} {{ask.impianto_ascensore}}"}
+      - {kind: checkbox, label: di protezione antincendio, when: "{{ask.impianti}} {{ask.impianto_antincendio}}"}
+      - {kind: checkbox, label: altre tipologie di impianti, when: "{{ask.impianti}} {{ask.impianto_altro}}"}
+      - {kind: text, label: specificare, value: "{{ask.impianto_altro_quale}}", on_page: true, when: "{{ask.impianti}} {{ask.impianto_altro}}"}
       # Only with systems: with none the portal disables it (seen 2026-10-30).
       - {kind: radio, label: non è soggetto agli obblighi di presentazione del progetto, by_label: true, when: "{{ask.impianti}} {{ask.progetto_impianti|not}}"}
+      - {kind: radio, label: è soggetto agli obblighi di presentazione del progetto, by_label: true, when: "{{ask.impianti}} {{ask.progetto_impianti}}"}
+      - {kind: checkbox, label: allega i relativi elaborati, by_label: true, when: "{{ask.impianti}} {{ask.progetto_impianti}}"}
       - {kind: radio, label: non è soggetto al deposito del progetto e della relazione tecnica, when: "{{ask.prestazione_energetica|not}}"}
       - {kind: radio, label: è soggetto all'applicazione dell'articolo 125, when: "{{ask.prestazione_energetica}}"}
       # For works to do, the energy report goes with the comunicazione di inizio lavori; in
