@@ -107,7 +107,9 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      sections); it writes nothing if a field is unaccounted for. Adding a pratica,
                      the portal's quirks and clean batch reruns (`bench/rerun.py`): portal/README.md.
                      draft.py drafts dictionary entries for a new section from the national
-                     schema (`schema/`, InfoCamere's forms flattened), for a person to check
+                     schema (`schema/`, InfoCamere's forms flattened), for a person to check;
+                     branches.py sets the 7 SUE forms' choices against the rehearsals' cases
+                     (docs/schema-branches.md: the branches no case takes yet)
   pratica/review.py  the page the person reviews: what's left for them, the checks, every value
 plugin/              the Portali plugin for Cowork (docs/design/packaging.md): build.py copies the
                      runner, the rehearsals' steps files (as JSON: no packages in Cowork) and the
@@ -452,7 +454,7 @@ The portal runner has offline tests on a fake portal: `claude/skills/pratica/por
 run with the pratica venv's Python (`~/.cache/pratica-portal/venv`, Playwright's Chromium, headless; no
 network, vault or model); `bench/test_preflight.py` tests pre-flight on the SCIA rehearsal's files, `bench/test_gen.py`
 gen.py on the crawls in `catalogue/F839/sections`, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
-the same bytes as the library's). On the real portal, `bench/rerun.py` reruns the rehearsals
+the same bytes as the library's), `bench/test_branches.py` branches.py and its table. On the real portal, `bench/rerun.py` reruns the rehearsals
 in the pane after a runner, dictionary or gen.py change (portal/README.md).
 
 ```go

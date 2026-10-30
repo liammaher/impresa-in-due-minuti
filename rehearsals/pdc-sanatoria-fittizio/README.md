@@ -45,6 +45,14 @@ can't be stated in full, so pre-flight refuses it; `answers-parziale.json` is ke
 Left to the person: the Elaborati richiesti per la sanatoria (signed .p7m only), the portal's
 documents, the declarations, signing and sending, then the oblazione the SUE determines.
 
+## Cases from the schema table (2026-10-30)
+
+Written from `docs/schema-branches.md`, one answers file per group of options of the national
+form no case took. Each passes pre-flight offline; **none has been run on the portal yet**.
+
+- `answers-catasto-invariato.json`: the works to legalize need no change to the catasto.
+- `answers-catasto-presentata.json`: the DOCFA already filed (its protocol and date).
+
 ## Runs
 
 | Date | Browser | Answers | Result |

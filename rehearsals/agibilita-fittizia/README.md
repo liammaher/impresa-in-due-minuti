@@ -35,6 +35,16 @@ aggiornamento di numerazione civica, SCIA ai sensi dell'art. 4 comma 1 del d.P.R
 and for a partial agibilità the Copia di elaborato planimetrico (the plan marking the works
 completed). The recipe fills them (`on_page`).
 
+## Cases from the schema table (2026-10-30)
+
+Written from `docs/schema-branches.md`, one answers file per group of options of the national
+form no case took. Each passes pre-flight offline; **none has been run on the portal yet**.
+
+- `answers-vale-fine-lavori.json`: no fine lavori filed: the segnalazione counts as it, works finished completely.
+- `answers-parziale-vale-fine.json`: the same for a partial agibilità, works finished in part.
+- `answers-regolare-esecuzione.json`: no systems; the DL's dichiarazione di regolare esecuzione attached instead of the collaudo.
+- `answers-non-soggetto-collaudo.json`: works on structures not subject to the collaudo statico.
+
 ## Runs
 
 | Date | Browser | Login → draft | Result |

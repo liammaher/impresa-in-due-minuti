@@ -36,6 +36,16 @@ project for the Vigili del Fuoco; asbestos; a hygiene derogation; the barriers r
 needing a project; soil needing investigations; an area without its urbanisation; a contributo
 already paid (its form has no receipt box). Not offered: the 4th tipologia (regional works).
 
+## Cases from the schema table (2026-10-30)
+
+Written from `docs/schema-branches.md`, one answers file per group of options of the national
+form no case took. Each passes pre-flight offline; **none has been run on the portal yet**.
+
+- `answers-condominio-strutture.json`: parti comuni of a condominio; the contributo within 30 days; 200 man-days or more; a unit's change of use within its category; renewables; DPCM 5/12/1997; fire rules; concrete structures (art. 65) with a seismic deposito; a sewer connection to request; protected landscape, works needing no authorization.
+- `answers-vincoli.json`: a building of several owners; outside D.Lgs. 81/2008; no systems; no energy filing; art. 24 c. 5-bis (heights, recupero); no structures; a bene culturale; a park's nulla osta; idrogeologico authorization; idraulico, VINCA, an allowed cemetery fascia, a RIR activity with no area di danno.
+- `answers-variante-sismica.json`: art. 1102 c.c.; no notifica preliminare; a fire-rules deroga; a seismic variant; a protected area (no alteration); idrogeologico without authorization; inside a RIR area di danno.
+- `answers-rir-fuori-area.json`: a RIR activity, outside its area di danno.
+
 ## Runs
 
 | Date | Browser | Case | Result |

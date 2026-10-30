@@ -47,6 +47,19 @@ rules or the renewables, no incentive (the portal's form can't say none); a cont
 paid before filing. Not offered: the sanatoria (art. 36), a deroga (art. 14), the permesso
 convenzionato, the piano casa, the titolo unico, a SUAP procedure.
 
+## Cases from the schema table (2026-10-30)
+
+Written from `docs/schema-branches.md`, one answers file per group of options of the national
+form no case took. Each passes pre-flight offline; **none has been run on the portal yet**.
+
+- `answers-cambio-stessa.json`: a unit's change of use within its category; parti comuni of a condominio; the contributo by prospetto, in instalments; a site of 200 man-days or more; outside the DPCM 5/12/1997.
+- `answers-cambio-tra.json`: a unit's change of use between categories; a building of several owners; fire rules apply; asbestos; seismic authorization; a sewer connection to request; protected landscape, works needing no authorization.
+- `answers-intero-vincoli.json`: a whole building's change of use; art. 1102 c.c.; a bene culturale; a protected area (no alteration); idrogeologico without authorization; idraulico, VINCA, a cemetery fascia where it's allowed, a RIR activity with no area di danno.
+- `answers-per-scelta.json`: SCIA works asked as a permesso by choice (art. 22 c. 7); free of the contributo; no energy filing; a park's nulla osta; idrogeologico authorization; a seismic variant.
+- `answers-variante-essenziale.json`: an essential variant to a permesso.
+- `answers-rir-deroga-antincendio.json`: a fire-rules deroga; inside a RIR area di danno.
+- `answers-rir-fuori-area.json`: a RIR activity, outside its area di danno.
+
 ## Runs
 
 | Date | Browser | Case | Result |

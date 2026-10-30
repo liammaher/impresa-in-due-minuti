@@ -18,6 +18,13 @@ sending.
   no marche da bollo).
 - No Allega documenti step yet: the combination's attachments screen isn't read (`slots`).
 
+## Cases from the schema table (2026-10-30)
+
+Written from `docs/schema-branches.md`, one answers file per group of options of the national
+form no case took. Each passes pre-flight offline; **none has been run on the portal yet**.
+
+- `answers-dopo-assensi.json`: works not started, to start once the SUE says the landscape authorization is in.
+
 ## Runs
 
 | Date | Browser | Result |
