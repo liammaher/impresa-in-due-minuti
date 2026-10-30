@@ -20,12 +20,12 @@ branch no rehearsal took.
 
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
-| SUE (building works) | 30 | 28 | 28 | 6 checked, 0 changed |
+| SUE (building works) | 30 | 29 | 29 | 6 checked, 0 changed |
 | SUAP (businesses) | 278 | 112 | 13 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
-- SUE: 30 pratiche, 128 distinct sections, 117 in the dictionary; 463 of 472 uses (98%)
+- SUE: 30 pratiche, 128 distinct sections, 120 in the dictionary; 467 of 472 uses (98%)
 - SUAP: 278 pratiche, 477 distinct sections, 77 in the dictionary; 2432 of 3365 uses (72%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
@@ -43,7 +43,6 @@ SUAP pratiche one or two sections short of fillable (the cheapest gaps):
 
 SUE pratiche not yet fillable:
 
-- `sue-accertamento-di-compatibilita-paesaggistica`: dichiarazione relativa alla descrizione delle opere, dichiarazione relativa ai dati identificativi del/dei professionista/i incaricato/i, dichiarazione riferita all'art. 181 del D.Lgs. 42/2004, dichiarazione relativa alla datazione dell'abuso
 - `sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic`: titolo del richiedente, dichiarazione della legittimita' dell'intervento, Interventi ed opere in aree vincolate esclusi dall'autorizzazione  paesaggistica, indicazione dell'Ente al quale è inviata la richiesta di parere preventivo
 
 ## SUE completeness
@@ -58,7 +57,7 @@ SUE pratiche not yet fillable:
 
 Measured today:
 
-- Level 1: 28 of 30 pratiche fully in the dictionary (`sue-accertamento-di-compatibilita-paesaggistica`, `sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic` not).
+- Level 1: 29 of 30 pratiche fully in the dictionary (`sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic` not).
 - Level 2: **45 refusals across 11 recipes**, 21 distinct messages.
 - Levels 3 to 5: not measured yet (see the open items).
 
