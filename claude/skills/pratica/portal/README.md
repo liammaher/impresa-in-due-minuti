@@ -174,7 +174,11 @@ several steps files), don't copy them through the conversation: a long script ca
 (2026-10-30). Pass `--bundle <file in Downloads>`, run `pick.js` in the pane, and the person picks
 that file once in the box it shows; it is checked by sha256, loaded once, and starts the batch.
 One batch per tab: `loop.js` refuses a second while one runs (two would drive one runner and
-file each other's results), and `pick.js` refuses to clear the page during one.
+file each other's results), and `pick.js` refuses to clear the page during one. A bundle clears
+the tab's earlier results first: `loop.js` skips a name it finds there, to resume after a reload.
+`results.js` lists each run's `moved` ids and `loose` labels, what a gen.py change is checked by.
+A run that stops in ~20 s on "the portal stayed busy" with no section opened is most likely a
+sign-in that expired: the runner's frame lands on the login page (2026-10-30).
 
 ## Attachments screens
 

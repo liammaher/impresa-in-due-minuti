@@ -56,9 +56,12 @@ def write_bundle(out, path):
     the person picks that file. Copying a big script into the pane through the conversation can
     garble it (2026-10-30: 24,770 characters arrived for 24,000); a picked file arrives as it is.
     The box clears leftover frames that would cover it (a crawl's), checks the file by sha256,
-    and loads it once: a second pick would start a second batch (loop.js refuses that too)."""
+    and loads it once: a second pick would start a second batch (loop.js refuses that too). A
+    bundle is a new batch: it clears the tab's results first (fresh.js), or loop.js skips a run
+    whose name an earlier batch left there (2026-10-30: a permesso run skipped, unreported)."""
     import hashlib
-    parts = [out / "runner.js"] + sorted((out / "steps").glob("*.js")) + sorted(out.glob("queue-*.js")) + [out / "loop.js"]
+    parts = [out / "runner.js"] + sorted((out / "steps").glob("*.js")) + sorted(out.glob("queue-*.js")) + \
+        [out / "fresh.js", out / "loop.js"]
     text = "\n;\n".join(p.read_text() for p in parts)
     path.write_text(text)
     sha = hashlib.sha256(text.encode()).hexdigest()
@@ -172,19 +175,24 @@ if (!pvAlready) window.pvBatchRun = (async () => {
     if (done.some((d) => d.name === name)) continue;
     __pv.start(proc, values);
     let r; do { r = await __pv.wait(30000); } while (r.result === "running");
+    // moved and loose: the ids that named another box, the labels worth a look (what a gen.py
+    // change is checked by).
     done.push({ name, result: r.result, error: r.error || null, at: r.at, sections: r.sections.length,
-      verify_seconds: r.verify_seconds ?? null, total_seconds: r.total_seconds, url: r.url });
+      verify_seconds: r.verify_seconds ?? null, total_seconds: r.total_seconds, url: r.url,
+      moved: r.moved || [], loose: r.loose || [], retries: (r.retries || []).length });
     sessionStorage.setItem("pv-batch", JSON.stringify(done));
   }
   return "done";
 })().finally(() => { window.pvBatchBusy = false; });
 pvAlready ? "a batch is already running in this tab: nothing started" : `started: ${(window.pvBatch || []).length} queued`
 """)
-    (a.out / "results.js").write_text("""await new Promise((r) => setTimeout(r, 40000));
+    (a.out / "results.js").write_text("""await new Promise((r) => setTimeout(r, 35000));  // the pane cuts a call at 45 s
 const done = JSON.parse(sessionStorage.getItem("pv-batch") || "[]");
-JSON.stringify({ done: done.length, of: (window.pvBatch || []).length,
+JSON.stringify({ done: done.length, of: (window.pvBatch || []).length, running: !!window.pvBatchBusy,
   filled: done.filter((d) => d.result === "filled").length,
-  stopped: done.filter((d) => d.result !== "filled").map((d) => [d.name, d.error, d.at && d.at.section]) })
+  stopped: done.filter((d) => d.result !== "filled").map((d) => [d.name, d.error, d.at && d.at.section]),
+  moved: done.filter((d) => (d.moved || []).length).map((d) => [d.name, d.moved]),
+  loose: done.filter((d) => (d.loose || []).length).map((d) => [d.name, d.loose]) })
 """)
     (a.out / "fresh.js").write_text('sessionStorage.removeItem("pv-batch"); "cleared"\n')
     if a.bundle:
