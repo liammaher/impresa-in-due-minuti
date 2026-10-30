@@ -239,10 +239,10 @@ def sue_completeness(reh, status):
                 per[name] = per.get(name, 0) + 1
     sue = {k: v for k, v in status.items() if v["sportello"] == "sue"}
     fill = [k for k, v in sue.items() if not v["missing"]]
+    short = ", ".join("`" + k + "`" for k, v in sue.items() if v["missing"])
     out = ["## SUE completeness", ""] + DEFINITION + [
         "", "Measured today:", "",
-        f"- Level 1: {len(fill)} of {len(sue)} pratiche fully in the dictionary "
-        f"({', '.join('`' + k + '`' for k, v in sue.items() if v['missing']) or 'none missing'} not).",
+        f"- Level 1: {len(fill)} of {len(sue)} pratiche fully in the dictionary" + (f" ({short} not)." if short else "."),
         f"- Level 2: **{sum(per.values())} refusals across {len(per)} recipes**, {len(refusals)} distinct messages.",
         "- Levels 3 to 5: not measured yet (see the open items).", "",
         "| Recipe | Refusals left |", "|---|---:|"]
