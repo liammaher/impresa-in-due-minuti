@@ -722,13 +722,13 @@ sections:
   - {id: 'r8c2p12reg:txt', kind: text, value: '{{t:albo.numero}}', max: 20, label: al n.}
   - {id: 'r12c1p18reg:radio:1_clone', kind: radio, label: che le opere in progetto sono subordinate a rilascio}
   - {id: 'r13c1p19reg:chk', kind: checkbox, when: '{{ask.pdc_tipo|is_nuova_costruzione}}', label: Intervento di nuova costruzione}
-  - {kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e1}}', label: costruzione di manufatti edilizi fuori terra o interrati}
-  - {kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e2}}', label: urbanizzazione primaria e secondaria realizzati}
-  - {kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e3}}', label: realizzazione di infrastrutture e di impianti}
-  - {kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e4}}', label: installazione di torri e tralicci}
-  - {kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e5}}', label: installazione di manufatti leggeri}
-  - {kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e6}}', label: interventi pertinenziali che le norme tecniche}
-  - {kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e7}}', label: realizzazione di depositi di merci}
+  - {id: 'r14c2p21reg:chk', kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e1}}', label: costruzione di manufatti edilizi fuori terra o interrati}
+  - {id: 'r15c2p24reg:chk', kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e2}}', label: urbanizzazione primaria e secondaria realizzati}
+  - {id: 'r16c2p26reg:chk', kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e3}}', label: realizzazione di infrastrutture e di impianti}
+  - {id: 'r17c2p28reg:chk', kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e4}}', label: installazione di torri e tralicci}
+  - {id: 'r18c2p31reg:chk', kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e5}}', label: installazione di manufatti leggeri}
+  - {id: 'r19c2p34reg:chk', kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e6}}', label: interventi pertinenziali che le norme tecniche}
+  - {id: 'r20c2p37reg:chk', kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e7}}', label: realizzazione di depositi di merci}
   - {kind: checkbox, when: '{{ask.pdc_tipo|is_ristrutturazione_urbanistica}}', label: Interventi di ristrutturazione urbanistica}
   - {kind: checkbox, when: '{{ask.pdc_tipo|is_ristrutturazione_edilizia}}', label: Interventi di ristrutturazione edilizia che portino}
   - {kind: checkbox, when: '{{ask.pdc_tipo|is_facolta_scia}}', label: interventi assoggettati a Segnalazione Certificata di Inizio Attività}
@@ -935,7 +935,7 @@ sections:
   - {kind: checkbox, when: '{{ask.fasce|is_no|not}} {{ask.fascia_aeroportuale}}', label: aeroportuale}
   - {kind: checkbox, when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}}', label: Altro}
   - {kind: text, value: '{{ask.fascia_altro_quale}}', when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}} {{ask.fascia_stradale|not}}', max: 9999, label: 'Specificare:'}
-  - {id: 'r16c1p16reg:txt', kind: text, value: '{{ask.fascia_altro_quale}}', when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}} {{ask.fascia_stradale}}', max: 9999, label: 'Specificare:', nth: 2}
+  - {id: 'r14c1p14reg:txt', kind: text, value: '{{ask.fascia_altro_quale}}', when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}} {{ask.fascia_stradale}}', max: 9999, label: 'Specificare:', nth: 2}
   - {kind: checkbox, when: '{{ask.fasce|is_autocertificazione}}', label: si allegano le autocertificazioni}
   - {kind: checkbox, when: '{{ask.fasce|is_assenso}}', label: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso}
 - section: Dichiarazione relativa ai diritti

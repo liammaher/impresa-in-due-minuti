@@ -241,9 +241,11 @@ class Section:
         self.exact = False
         self.fields = [x for x in self.fields if x.get("base_id", x["id"]) not in hides]
         # Its reveals sit at its point (or, adding rows at the end, where they are): earlier
-        # choices' offsets before there move them too.
+        # choices' offsets before there move them too, not its own: the crawl's ids of its
+        # reveals already have it.
+        before = list(self.applied)
         def moved_by_earlier(at):
-            earlier = [(dr, dp) for p, dr, dp in self.applied if at and p <= at]
+            earlier = [(dr, dp) for p, dr, dp in before if at and p <= at]
             return sum(d[0] for d in earlier), sum(d[1] for d in earlier)
         if off:
             point, dr, dp = off
