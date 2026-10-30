@@ -371,6 +371,7 @@ asks:
     type: choice
     question: "Does the place as it is today match its lawful state? conforme (nothing changed since the last title); non conforme (works differing from it, their date asked next); altro (another case, in a few words)"
     options: [conforme, non conforme, altro]
+    when: "{{ask.esonero_lotto|is_precedente}}"
   esonero_difformi_data: {type: date, question: "When the differing works were done"}
   esonero_conformita_altro: {type: text, question: "The other case, in a few words (100 characters)"}
   esonero_prova:
@@ -1255,7 +1256,9 @@ sections:
   # The domanda di parere per esonero dall'autorizzazione paesaggistica. The crawl kept none of
   # the legittimità section's text: its eight radios are read as three choices by row order
   # (lot / conformity / other proof), unconfirmed on the page; a wrong grouping unticks one on
-  # Salva and the read-back stops. One previous title only (its "+" rows aren't mapped).
+  # Salva and the read-back stops. The conformity radios stay greyed until "esiste un precedente
+  # edilizio" is ticked (the 2026-10-30 recrawl): asked only then. One previous title only (its
+  # "+" rows aren't mapped).
   - section: titolo del richiedente
     fields:
       - {kind: radio, label: proprietà, when: "{{ask.titolo|is_proprietario}}"}
@@ -1269,11 +1272,11 @@ sections:
       - {kind: text, label: titolo (1), value: "{{ask.precedente_tipo}}", when: "{{ask.esonero_lotto|is_precedente}}"}
       - {kind: text, label: p.g. numero, value: "{{ask.precedente_numero}}", when: "{{ask.esonero_lotto|is_precedente}}"}
       - {kind: date, label: del, value: "{{ask.precedente_data|date_it}}", when: "{{ask.esonero_lotto|is_precedente}}"}
-      - {kind: radio, label: lo stato di fatto è conforme, when: "{{ask.esonero_conformita|is_conforme}}"}
-      - {kind: radio, label: lo stato di fatto non è conforme, when: "{{ask.esonero_conformita|is_non_conforme}}"}
-      - {kind: date, label: le opere difformi sono state realizzate in data, value: "{{ask.esonero_difformi_data|date_it}}", when: "{{ask.esonero_conformita|is_non_conforme}}"}
-      - {kind: radio, label: altro, when: "{{ask.esonero_conformita|is_altro}}"}
-      - {kind: text, label: specificare, value: "{{ask.esonero_conformita_altro}}", when: "{{ask.esonero_conformita|is_altro}}"}
+      - {kind: radio, label: lo stato di fatto è conforme, when: "{{ask.esonero_lotto|is_precedente}} {{ask.esonero_conformita|is_conforme}}"}
+      - {kind: radio, label: lo stato di fatto non è conforme, when: "{{ask.esonero_lotto|is_precedente}} {{ask.esonero_conformita|is_non_conforme}}"}
+      - {kind: date, label: le opere difformi sono state realizzate in data, value: "{{ask.esonero_difformi_data|date_it}}", when: "{{ask.esonero_lotto|is_precedente}} {{ask.esonero_conformita|is_non_conforme}}"}
+      - {kind: radio, label: altro, when: "{{ask.esonero_lotto|is_precedente}} {{ask.esonero_conformita|is_altro}}"}
+      - {kind: text, label: specificare, value: "{{ask.esonero_conformita_altro}}", when: "{{ask.esonero_lotto|is_precedente}} {{ask.esonero_conformita|is_altro}}"}
       - {kind: radio, label: altra documentazione probatoria, when: "{{ask.esonero_prova|is_documentazione}}"}
       - {kind: textarea, label: indicare la documentazione allegata alla presente, value: "{{ask.esonero_prova_elenco}}", when: "{{ask.esonero_prova|is_documentazione}}"}
       - {kind: radio, label: documentazione catastale di primo impianto, when: "{{ask.esonero_prova|is_catasto}}"}
