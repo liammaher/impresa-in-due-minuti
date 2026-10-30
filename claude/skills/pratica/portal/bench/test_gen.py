@@ -212,8 +212,12 @@ def _():
         t = Path(t)
         (t / "values.json").write_text(json.dumps(dict(fixture["fields"])))
         names = ["dau-fittizia", "paesaggistica-semplificata-fittizia"]
-        subprocess.run([sys.executable, str(HERE / "rerun.py"), "--values", str(t / "values.json"), "--out", str(t / "out"), *names],
-                       check=True, capture_output=True)
+        subprocess.run([sys.executable, str(HERE / "rerun.py"), "--values", str(t / "values.json"), "--out", str(t / "out"),
+                        "--bundle", str(t / "bundle.js"), *names], check=True, capture_output=True)
+        # A bundle is a new batch: an earlier batch's result under the same name would skip a run.
+        bundle = (t / "bundle.js").read_text()
+        assert bundle.index('sessionStorage.removeItem("pv-batch")') < bundle.index("window.pvBatchRun = ")
+        assert "moved: r.moved || []" in (t / "out" / "loop.js").read_text()
         queue = (t / "out" / "queue-0.js").read_text()
         check = (t / "out" / "check.js").read_text()
         assert all(f'"steps/{n}.js"' in check for n in names) and '"runner.js"' in check
