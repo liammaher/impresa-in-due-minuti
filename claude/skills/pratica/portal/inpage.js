@@ -56,6 +56,13 @@
   const sleep = async (ms) => { const end = performance.now() + ms; do await yieldTask(); while (performance.now() < end); };
   const norm = (s) => (s || "").normalize("NFKD").replace(/[^\x00-\x7f]/g, "")
     .replace(/\s+/g, " ").trim().toLowerCase();
+  // A label starts a text; a yes or a no only as a whole word: "no" isn't "non ha rilevanza
+  // strutturale" (2026-10-30, the SCIA's sanatoria "no" below declared tolerances). Other short
+  // labels stay prefixes on purpose ("Tel" is "Telefono"). gen.py's starts_label is the same rule.
+  const startsLabel = (t, label) => {
+    const a = norm(t), b = norm(label);
+    return a.startsWith(b) && (!["si", "no"].includes(b) || a.length === b.length || !/[a-z0-9]/.test(a[b.length]));
+  };
 
   let steps, frame, report, kept, secrets = [], details = [], declared = [], sealedRun = null, previewBlob = null;
 
@@ -553,7 +560,7 @@
     while (texts.length && MESSAGE.test(norm(texts[0]))) texts.shift();
     // A text said twice (the title "mq" and its cell "mq") counts once, so the third is the
     // label beside it ("Superficie di somministrazione").
-    return texts.filter((t, i) => !t || texts.indexOf(t) === i).slice(0, 3).findIndex((t) => norm(t).startsWith(norm(label)));
+    return texts.filter((t, i) => !t || texts.indexOf(t) === i).slice(0, 3).findIndex((t) => startsLabel(t, label));
   }
   const labelled = (e, label) => labelRank(e, label) >= 0;
   // A steps file's id is the row the crawl saw; a choice made earlier in the section can
@@ -593,7 +600,7 @@
     // "Si" whose nearby texts include the "No" before it is not a "No" (three Si/No pairs in a
     // row); the beds total under a shared header is not the rooms total.
     const ownLabel = (e) => [e.title, ...win().eval(`(${steps.label_js})`)(e)].find((t) => norm(t) && !MESSAGE.test(norm(t)));
-    const own = hits.filter((e) => norm(ownLabel(e)).startsWith(norm(f.label)));
+    const own = hits.filter((e) => startsLabel(ownLabel(e), f.label));
     if (own.length >= (f.nth || 1)) hits = own; // else a box labelled from above ("Provincia" of birth) counts too
     else if (hits.length > 1) {
       // Else the boxes that have the label first among their texts, and nth counts those: in a

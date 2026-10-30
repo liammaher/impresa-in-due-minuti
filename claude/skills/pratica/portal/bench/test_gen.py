@@ -614,5 +614,14 @@ def _():
     assert s.find("checkbox", "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER")[0]["id"] == "r8c1p13reg:chk"
 
 
+@case("a yes or a no is a whole word, other short labels stay prefixes (the sanatoria's no below the tolerances)")
+def _():
+    assert gen.starts_label("no", "no") and gen.starts_label("No (barrare)", "no") and gen.starts_label("sì", "si")
+    assert not gen.starts_label("non ha rilevanza strutturale;", "no") and not gen.starts_label("sistema di", "si")
+    assert gen.starts_label("Telefono", "tel") and gen.starts_label("dell'immobile", "del")
+    assert not gen.matches({"kind": "radio", "label": "non ha rilevanza strutturale;"}, "radio", "no")
+    assert gen.matches({"kind": "radio", "label": "no"}, "radio", "no")
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

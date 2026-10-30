@@ -131,6 +131,14 @@ def shift(fid, dr, dp):
     return f"r{int(m[1]) + dr}c{m[2]}p{int(m[3]) + dp}reg{m[4]}" if m else fid
 
 
+def starts_label(t, want):
+    """A label (normalized) starts a text; a yes or a no only as a whole word: "no" isn't "non ha
+    rilevanza strutturale". Other short labels stay prefixes ("Tel" is "Telefono"). inpage.js's
+    startsLabel is the same rule."""
+    a = norm(t)
+    return a.startswith(want) and (want not in ("si", "no") or len(a) == len(want) or not a[len(want)].isalnum())
+
+
 def matches(f, kind, label, inside=False):
     a, b = PAGE_KIND.get(f["kind"], f["kind"]), PAGE_KIND.get(kind, kind)
     if b == "tick":  # the same choice is a radio in one pratica, a checkbox in another
@@ -142,7 +150,7 @@ def matches(f, kind, label, inside=False):
     # `inside`: a long label inside the text, for a section where none starts with it (the
     # same choice worded "che i lavori ..." in one pratica, "i lavori ..." in another);
     # inpage.js checks an id's label the same way. Never first: "ricade" is inside "non ricade".
-    return any(norm(t).startswith(want) or inside and len(want) >= 15 and want in norm(t)
+    return any(starts_label(t, want) or inside and len(want) >= 15 and want in norm(t)
                for t in (f.get("label"), f.get("context")) if t)
 
 

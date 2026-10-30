@@ -68,3 +68,5 @@ form no case took. Each passes pre-flight offline; **none has been run on the po
 | 2026-10-29 | pane | P6 (plain), from scratch, in a batch with the SCIA alternativa | **filled** in 213 s with 7 attachments; fresh load 33 s, every value read back; no retry |
 | 2026-10-29 | pane | P6, from scratch after the shared acoustic/fire and ecological quadri changed | **filled** in 141 s; fresh load 23 s, every value read back; no retry |
 | 2026-10-30 | pane | P6, from scratch after the sanatoria choice and the project radios went by label (one batch with the SCIA P6 and sanatoria) | **filled** in 156 s; fresh load 26 s, every value read back; no retry |
+| 2026-10-30 | pane | asseverazione tolerances (`answers-tolleranze`), `bench/rerun.py` bundle | stopped on "Asseverazione PdC - stato legittimo" as the SCIA's: the sanatoria's si/no left empty ("no" matched "non ha rilevanza strutturale") |
+| 2026-10-30 | pane | the same, rerun with a yes or a no read as a whole word | **filled** in 161 s, read back on a fresh load (27 s), nothing moved or loose |
