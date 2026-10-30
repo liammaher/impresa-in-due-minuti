@@ -80,6 +80,12 @@ def _():
     assert r["state"] != "theirs", r["state"]
 
 
+@case("a box a choice opened but the crawl never tried counts, marked not_tried (art. 94-bis's class)")
+def _():
+    r = one("Relazione Tecnica di Asseverazione C.I.L.A.", "intervento rilevante nei riguardi della pubblica")
+    assert r.get("not_tried") and r["state"] == "unmapped" and r["under"].startswith("ha rilevanza strutturale"), r
+
+
 @case("the weakest title decides: ticked under one title, not the other, is unmapped")
 def _():
     n = {"id": "r1c1p1reg:chk", "kind": "checkbox", "choice": "una scelta"}

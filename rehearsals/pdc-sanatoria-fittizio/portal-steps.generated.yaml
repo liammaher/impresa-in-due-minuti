@@ -14,6 +14,8 @@ yours:
 - 'Once the SUE answers (within 60 days for art. 36, else it is refused): pay the oblazione it determines (twice the contributo di costruzione, art. 36 c. 2; art. 36-bis c. 5) and collect the permesso in
   sanatoria'
 groups:
+  tolleranze_tipi:
+    question: Which construction tolerances does the relazione declare? Tick every one that applies.
   fasce_funzionali:
     question: Which fasce di rispetto is the property in? Tick every one that applies.
   barriere_requisiti:
@@ -38,6 +40,15 @@ asks:
       with their approval); art 1102 (common parts used at the client''s expense without changing their purpose, art. 1102 c.c.: no assent needed)', options: [nessuna, condominio, comproprieta, art 1102],
     propose: nessuna}
   lavori_in_proprio: {type: yes_no, question: 'Are the works so minor that the client does them without a firm (opere di modesta entità, eseguite in proprio)?', propose: 'false'}
+  tolleranze: {type: yes_no, question: 'Does the relazione declare construction tolerances (art. 34-bis / 34-ter DPR 380/2001) on the property?', propose: 'false'}
+  toll_34bis_1: {type: yes_no, group: tolleranze_tipi, item: 'Art. 34-bis c. 1 and 1-ter, second period (2% of the measures)'}
+  toll_34bis_1bis: {type: yes_no, group: tolleranze_tipi, item: 'Art. 34-bis c. 1-bis and 1-ter, first period (2–6% by the unit''s floor area, works before 24 May 2024)'}
+  toll_34bis_2: {type: yes_no, group: tolleranze_tipi, item: Art. 34-bis c. 2 (geometric and execution irregularities)}
+  toll_34bis_2bis: {type: yes_no, group: tolleranze_tipi, item: 'Art. 34-bis c. 2-bis (works before 24 May 2024: minor execution irregularities)'}
+  toll_34ter_4: {type: yes_no, group: tolleranze_tipi, item: Art. 34-ter c. 4 (variants made during works before 1977)}
+  toll_superficie: {type: choice, question: 'The unit''s superficie utile, for the art. 34-bis c. 1-bis tolerance: oltre 500 (over 500 m², 2%); 300-500 (3%); 100-300 (4%); 60-100 (5%); sotto 60 (under 60
+      m², 6%)', options: [oltre 500, 300-500, 100-300, 60-100, sotto 60]}
+  toll_strutturale: {type: yes_no, question: 'Is the tolerance structurally relevant (it then complies with the technical rules for construction)?'}
   oggetto: {type: text, question: The works in one sentence (300 characters)}
   dettaglio_intervento: {type: text, question: The works for the relazione tecnica (500 characters)}
   dlgs81: {type: yes_no, question: 'Do the D.Lgs. 81/2008 site-safety rules apply (works by a firm, not a self-builder)?', propose: 'true'}
@@ -359,6 +370,16 @@ supports:
   in:
   - 'true'
   else: A stato legittimo from tolerance declarations needs where they were made.
+- if: '{{ask.tolleranze}}'
+  value: '{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}'
+  in:
+  - 'true'
+  else: Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4).
+- if: '{{ask.tolleranze}}'
+  value: '{{ask.toll_strutturale}}'
+  in:
+  - 'false'
+  else: 'A structurally relevant tolerance isn''t mapped yet: the form then asks its class under art. 94-bis DPR 380/2001 (relevant, minor or none for public safety), and what each class opens wasn''t crawled.'
 rules:
   table: sue-napoli
   main: napoli/comune/permesso-in-sanatoria
@@ -729,8 +750,22 @@ sections:
   - {id: 'r3c2p5reg:radio:0_clone', kind: radio, label: si}
   - {id: 'r4c1p7reg:chk', kind: checkbox, label: corrisponde allo stato legittimo come risultante}
   - {id: 'r5c1p8reg:chk', kind: checkbox, label: dal/i titolo/i o dalla/e pratica/che edilizia/e}
+  - {id: 'r6c1p9reg:chk', kind: checkbox, when: '{{ask.tolleranze}}', label: dalle tolleranze di cui all’articolo 34-bis}
   - {id: 'r7c1p10reg:chk', kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}}', label: dalla sanatoria di cui al successivo quadro}
-  - {id: 'r5c3p10reg:radio:3_clone', kind: radio, label: 'no', nth: 2}
+  - {id: 'r5c3p10reg:radio:3_clone', kind: radio, when: '{{ask.tolleranze|not}}', label: 'no', nth: 2}
+  - {id: 'r5c2p9reg:radio:2_clone', kind: radio, when: '{{ask.tolleranze}}', label: si, nth: 2}
+  - {kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34bis_1}}', label: 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER'}
+  - {kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}}', label: 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_oltre_500}}', label: '2%, per le U.I.'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_300_500}}', label: '3%, per le U.I.'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_100_300}}', label: '4%, per le U.I.'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_60_100}}', label: '5%, per le U.I.'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_sotto_60}}', label: '6%, per le U.I.'}
+  - {kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34bis_2}}', label: 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2:'}
+  - {kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34bis_2bis}}', label: 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2-BIS'}
+  - {kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34ter_4}}', label: TOLLERANZA DI CUI ALL’ART. 34-TER}
+  - {kind: radio, when: '{{ask.tolleranze}}', label: trattandosi di immobile ubicato in zona sismica a media o alta}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale|not}}', label: non ha rilevanza strutturale}
   - {id: 'r12c3p19reg:radio:5_clone', kind: radio, when: '{{ask.sanatoria_titolo|is_nessuna}}', label: 'no', nth: 3}
   - {id: 'r12c2p18reg:radio:4_clone', kind: radio, when: '{{ask.sanatoria_titolo|in_scia__permesso}}', label: si, nth: 3}
   - {id: 'r14c1p21reg:chk', kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_in_corso}}', label: un intervento soggetto a SCIA in

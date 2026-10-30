@@ -78,6 +78,7 @@
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
  "stato_legittimo": "sanzioni",
+ "tolleranze": false,
  "sanzione_prova": "estremi",
  "sanzione_importo": "1032",
  "sanzione_irrogata": "2019-06-04",

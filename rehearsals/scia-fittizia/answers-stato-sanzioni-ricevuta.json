@@ -78,6 +78,7 @@
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
  "stato_legittimo": "sanzioni",
+ "tolleranze": false,
  "sanzione_prova": "ricevuta",
  "sanzione_ricevuta": "rehearsals/scia-fittizia/files/ricevuta-sanzione.pdf"
 }
