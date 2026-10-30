@@ -92,11 +92,40 @@ def _():
         assert not has(rs, other), other
 
 
-@case("built before titles, a title lost: refused until the primo impianto sub-choice is mapped")
+@case("built before titles, a title lost: the primo impianto's details or its copy, by its own boxes")
 def _():
-    # The portal (2026-10-30): its details or its copy, by two boxes with no text the crawl didn't see.
-    refused(answers("stato-epoca"), "isn't mapped yet")
-    refused(answers("stato-prova"), "isn't mapped yet")
+    # Each line's box, then one of its two boxes with no text (read as the line's label): the
+    # epoca line's are nth 2 and 3, the prova line's nth 3 and 4 (the epoca line's are hidden).
+    for name, radio, line in (("stato-epoca", "si tratta di immobile", 1), ("stato-prova", "non sono disponibili", 2)):
+        rs = rows(answers(name))
+        assert has(rs, radio) and has(rs, "altri documenti probanti"), rs
+        boxes = [r for r in rs if gen.norm(r[0]).startswith(gen.norm("copia accatastamento"))]
+        assert len(boxes) == 2, boxes
+        assert {"5678", "01/03/1939"} <= {v for _, v in rs if v}, rs
+        rs = rows(answers(name + "-copia"))
+        assert len(has(rs, "copia accatastamento")) == 3 and not has(rs, "n."), rs  # line, copy, its upload
+        assert any(v and v.endswith("accatastamento-primo-impianto.pdf") for _, v in rs), rs
+    steps = STEPS["scia-fittizia"]
+    nths = {(f.get("nth"), f["kind"]) for s in steps["sections"] if "precedenti edilizi" in s["section"].lower()
+            for f in s["fields"] if (f.get("label") or "").startswith("copia accatastamento")}
+    assert nths == {(None, "checkbox"), (2, "checkbox"), (3, "checkbox"), (4, "checkbox"), (None, "file")}, nths
+    # Never an id: the crawl has the two boxes only as choices under the line's box.
+    assert not [f for s in steps["sections"] for f in s["fields"]
+                if (f.get("label") or "").startswith("copia accatastamento") and "id" in f]
+
+
+@case("two titles of one kind: the second on an altro line, \"+\" for each line after the first")
+def _():
+    a = answers("stato-titoli-ripetuti")
+    rs = rows(a)
+    assert ("specificare", "denuncia di inizio attività") in rs and ("specificare", "condono edilizio") in rs, rs
+    assert {"2004/88", "2009/412", "95/1207", "PG/2017/5531", "20/11/2017"} <= {v for _, v in rs if v}, rs
+    steps = STEPS["scia-fittizia"]
+    plan = [p for p in run.plan(steps, values(steps, a)) if "precedenti edilizi" in p["section"].lower()]
+    adds = [p for p in plan if p["kind"] == "add"]
+    assert len(adds) == 2, adds
+    # The fourth line isn't added: its question said no.
+    assert not [p for p in plan if p.get("value") == "{{ask.prec_altro_4_quale}}"]
 
 
 @case("sanctions: the receipt alone, or the payment's four details")
@@ -137,9 +166,12 @@ def _():
     assert list(b) == ["r1c1p1reg:radio:0_clone"], b
 
 
-@case("refused: two titles of one kind, titles with none named, no document, no declaration")
+@case("refused: more than five altro lines, titles with none named, no document, no declaration")
 def _():
-    refused(answers("stato-titoli", precedenti_ripetuti="true"), "same kind")
+    refused(answers("stato-titoli-ripetuti", prec_altro_4="true", prec_altro_4_quale="x", prec_altro_4_numero="1",
+                    prec_altro_4_data="2018-01-01", prec_altro_5="true", prec_altro_5_quale="y",
+                    prec_altro_5_numero="2", prec_altro_5_data="2019-01-01", prec_altro_6="true"), "More than five")
+    refused(answers("stato-epoca", prova_documenti=[]), "catasto primo impianto or other documents")
     refused(answers("stato-titoli", precedenti=[]), "at least one title")
     refused(answers("stato-tolleranze", tolleranze_precedenti=[]), "where they were made")
 
@@ -153,6 +185,16 @@ def _():
     asked = json.dumps(r["questions"])
     assert "sanzione_importo" in asked, asked
     assert "prec_permesso_numero" not in asked and "precedenti" not in asked, asked
+    # The titles case is asked about a further altro line only once "altro" is ticked, and
+    # about a third only once the second is.
+    r = run.preflight(steps, values(steps, answers("stato-titoli", prec_altro_2=None)))
+    keys = {q["key"]: q.get("only_if") for q in r["questions"]}
+    assert "prec_altro_2" in keys and not keys["prec_altro_2"], keys
+    assert keys.get("prec_altro_3") == ["prec_altro_2"], keys
+    # A refusal's `if` stops at its first false word, as a `when` does: a building with no title
+    # runs without the altro lines' answers, and a fourth line's "no" ends the questions there.
+    for name in ("stato-epoca", "stato-titoli-ripetuti"):
+        run.require_supported(steps, values(steps, answers(name)))
 
 
 @case("the SCIA offers no free-land option; the permesso does")

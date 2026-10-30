@@ -619,11 +619,19 @@ def supported(steps, values):
             out.append(f"The rules need {f}, read from {tmpl}: empty in the vault.")
     for c in steps.get("supports", []):
         if "if" in c:
-            unknown = [r for r, f in refs_in(c["if"]) if r.startswith("ask.") and values.field(r) is None]
-            if unknown:
-                need += unknown
-                continue
-            if not truthy(values.render(c["if"])):
+            # Its words in order, as a field's `when`: a false one ends it, so a later word's
+            # asks aren't needed ("altro" ticked, and then a second altro line?).
+            holds = True
+            for word in re.findall(r"\{\{.+?\}\}", c["if"]):
+                unknown = [r for r, f in refs_in(word) if r.startswith("ask.") and values.field(r) is None]
+                if unknown:
+                    need += unknown
+                    holds = False
+                    break
+                if not truthy(values.render(word)):
+                    holds = False
+                    break
+            if not holds:
                 continue
         tmpl = c.get("when", c.get("value"))
         unknown = [r for r, f in refs_in(tmpl) if r.startswith("ask.") and values.field(r) is None]

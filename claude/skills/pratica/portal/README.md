@@ -88,6 +88,10 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
 - **Assents asked with a pratica.** On Napoli's SUE a SCIA condizionata (the Soprintendenza,
   a park, a vincolo) gives no start date, and an assent that is its own operation (a landscape
   authorization) is selected with the pratica in the wizard, not attached to it.
+- **A box with no text of its own** reads as the cell above it: the primo impianto line's two
+  boxes (its details, its copy) are "copia accatastamento di primo impianto" like the line's
+  own, hidden until their radio is picked, and in the crawl only as choices under that box. They
+  go by label and `nth`, never by id (2026-10-30).
 - **A block a tick opens may repeat the labels above it** (h1's structural designer under
   the architect's): fill it by label from its first box (`anchor`, `block: 1`).
 - **Suggestion lists fade out.** A street's list, hidden by its widget, lies over the next
