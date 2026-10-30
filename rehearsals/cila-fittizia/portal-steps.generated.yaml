@@ -138,6 +138,7 @@ rules:
     paesaggio: '{{ask.paesaggio}}'
     paesaggio_eseguiti: '{{ask.paesaggio_eseguiti}}'
     paesaggio_volumi: '{{ask.paesaggio_volumi}}'
+    parere_esonero: 'false'
     bene_culturale: '{{ask.bene_culturale}}'
     demolizione_zona_a: '{{ask.demolizione_zona_a}}'
     piano_planovolumetrico: '{{ask.piano_planovolumetrico}}'

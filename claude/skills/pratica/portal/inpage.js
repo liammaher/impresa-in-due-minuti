@@ -396,7 +396,10 @@
     const sel = el(f.id + ":combo_input") || fail(`${f.id}: no dropdown`);
     checkLabel(el(f.id + ":combo_label"), f.label);
     const opts = [...sel.options];
-    const i = opts.findIndex((o) => o.value === value || o.text.trim().toUpperCase() === value.toUpperCase());
+    let i = opts.findIndex((o) => o.value === value || o.text.trim().toUpperCase() === value.toUpperCase());
+    // A list item named by its number ("A.2.", an annex's long items): the one option that starts with it.
+    const numbered = /\.$/.test(value) ? opts.filter((o) => o.text.trim().startsWith(value + " ")) : [];
+    if (i < 0 && numbered.length === 1) i = opts.indexOf(numbered[0]);
     if (i < 0) fail(`${f.id}: none of its ${opts.length} options is the value`);
     if (sel.value !== opts[i].value) {
       const w = widgetOf(sel) || fail(`${f.id}: no dropdown widget`);

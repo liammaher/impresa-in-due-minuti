@@ -25,7 +25,7 @@ yours:
 rules:
   table: sue-napoli
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
-  facts: {permesso_per_scelta: "false"}
+  facts: {permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
   - when: "{{ask.vincolo|is_art_134|not}}"
     else: "The ordinaria's form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose."
