@@ -23,5 +23,3 @@ yours:
 supports:
   - when: "{{ask.titolo_tipo|is_permesso_di_costruire}}"
     else: "So far only for a permesso di costruire: the DIA branch isn't run yet."
-  - when: "{{ask.bollo_marche|not}}"
-    else: "So far only with the bollo paid on pagoPA: the marche route isn't run yet."

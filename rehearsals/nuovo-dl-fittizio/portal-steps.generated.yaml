@@ -17,11 +17,8 @@ asks:
   titolo_tipo: {type: choice, question: 'The works'' title: what was filed or issued', options: [permesso di costruire, SCIA, DIA, CILA, variante, autorizzazione paesaggistica], propose: permesso di costruire}
   titolo_id_pratica: {type: text, question: The title's pratica number on the SUAP/SUE (ID pratica)}
   data_nomina: {type: date, question: From when the new direttore dei lavori takes over}
-  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', default: 'false'}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
-supports:
-- when: '{{ask.bollo_marche|not}}'
-  else: 'So far only with the bollo paid on pagoPA: the marche route isn''t run yet.'
+supports: []
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
 wizard:

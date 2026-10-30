@@ -39,5 +39,3 @@ supports:
     else: "Other filings or assents with the CILA (Soprintendenza, ASL, fire brigade) aren't mapped yet; a landscape authorization goes in the same pratica (the CILA with its semplificata)."
   - when: "{{ask.paes_variante|not}}"
     else: "So far only for a new authorization: the variant of one already issued isn't run yet."
-  - when: "{{ask.bollo_marche|not}}"
-    else: "So far only with the bollo paid on pagoPA: the marche route isn't run yet."

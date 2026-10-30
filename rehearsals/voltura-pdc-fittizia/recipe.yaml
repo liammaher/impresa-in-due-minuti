@@ -18,6 +18,3 @@ yours:
   - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
   - "Pay the imposta di bollo (two marche da 16 €) and any diritti on pagoPA after sending"
   - "Sign and send (Firma e invio); keep the receipt"
-supports:
-  - when: "{{ask.bollo_marche|not}}"
-    else: "So far only with the bollo paid on pagoPA: the marche route isn't run yet."

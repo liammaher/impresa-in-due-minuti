@@ -31,5 +31,3 @@ supports:
     else: "The ordinaria's form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose."
   - when: "{{ask.titolo|is_locatario|not}}"
     else: "The ordinaria's form offers only ownership, co-ownership, the condominio's administrator or another real right: a tenant isn't one."
-  - when: "{{ask.bollo_marche|not}}"
-    else: "So far only with the bollo paid on pagoPA: the marche route isn't run yet."

@@ -29,5 +29,3 @@ rules:
 supports:
   - when: "{{ask.paes_variante|not}}"
     else: "So far only for a new authorization: the variant of one already issued isn't run yet."
-  - when: "{{ask.bollo_marche|not}}"
-    else: "So far only with the bollo paid on pagoPA: the marche route isn't run yet."

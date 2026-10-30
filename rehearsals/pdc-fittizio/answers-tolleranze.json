@@ -13,6 +13,7 @@
  "sotto_200": "true",
  "notifica_dovuta": "true",
  "descrizione": "PROVA NON INVIARE - PdC tolleranze",
+ "bollo_marche": false,
  "prec_permesso_numero": "1234",
  "prec_permesso_data": "1965-05-12",
  "stato_legittimo": "titoli",

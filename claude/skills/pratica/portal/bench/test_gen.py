@@ -623,5 +623,25 @@ def _():
     assert gen.matches({"kind": "radio", "label": "no"}, "radio", "no")
 
 
+@case("the bollo: pagoPA proposed, never assumed; with marche, two serials and dates by label; no section, no question")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    steps = generated("paesaggistica-semplificata-fittizia")
+    a = json.loads((REH / "paesaggistica-semplificata-fittizia" / "answers-p6.json").read_text())
+    del a["bollo_marche"]
+    r = run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")))
+    assert [p["proposal"] for p in r["proposals"] if p["key"] == "bollo_marche"] == ["false"], r["proposals"]
+    m = json.loads((REH / "paesaggistica-semplificata-fittizia" / "answers-marche.json").read_text())
+    plan = run.plan(steps, run.Values(m, fields=fields, asks=steps.get("asks")))
+    bollo = [(p["label"], p.get("value")) for p in plan if "bollo" in p["section"].lower()]
+    assert ("numero seriale (1)", "01234567890123") in bollo and ("numero seriale (2)", "01234567890124") in bollo, bollo
+    assert [l for l, _ in bollo].index("Marca da €16,00 per l'autorizzazione") < [l for l, _ in bollo].index("numero seriale (1)")
+    sec = section(steps, "Dichiarazione relativa all'assolvimento")
+    assert all("id" not in f for f in sec["fields"] if (f.get("label") or "").startswith(("numero seriale", "data")))
+    assert "bollo_marche" not in generated("nomina-impresa-fittizia").get("asks", {})
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

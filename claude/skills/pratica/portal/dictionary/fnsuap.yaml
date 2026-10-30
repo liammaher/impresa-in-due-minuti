@@ -284,9 +284,12 @@ asks:
   proroga_tipo_lavori: {type: text, question: "The works still to finish, in a few words (30 characters)"}
   proroga_data_prevista: {type: date, question: "The new date the works are now expected to start (or end)"}
   fine_termine: {type: date, question: "The date the permit said the works must end by"}
-  bollo_marche: {type: yes_no, question: "Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?", default: "false"}
-  bollo_seriale: {type: text, question: "The marca da bollo's serial number (14 digits)"}
-  bollo_data: {type: date, question: "The marca da bollo's date"}
+  # Proposed, never assumed: the declaration says how the person pays.
+  bollo_marche: {type: yes_no, question: "Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?", propose: "false"}
+  bollo_seriale: {type: text, question: "The marca da bollo for the application: its serial number (14 digits)"}
+  bollo_data: {type: date, question: "Its date"}
+  bollo_seriale_2: {type: text, question: "The marca da bollo for the authorization the Comune issues: its serial number (14 digits)"}
+  bollo_data_2: {type: date, question: "Its date"}
   insegna: {type: text, question: "What name goes on the sign?"}
   stagionale: {type: yes_no, question: "Will it open only for part of the year (a season)?", propose: "false"}
   stagione_dal: {type: text, question: "The season's first day (gg/mm)"}
@@ -1732,18 +1735,23 @@ sections:
       - {kind: text, label: tipo lavori, value: "{{ask.proroga_tipo_lavori}}"}
 
   # Imposta di bollo, 16 € on the application and 16 € on the provvedimento the Comune issues:
-  # paid on pagoPA (the payment is the person's, after sending) or with marche whose serial
-  # numbers go here (that route isn't run yet). Exemptions are a case of their own: not mapped.
+  # paid on pagoPA (the payment is the person's, after sending) or with two marche, each its
+  # serial number and date (the marche are then cancelled and kept by the person). The second
+  # marca's line, which "per l'autorizzazione" opens above the first's, isn't in the crawl
+  # (crawl.js paired its boxes with the first's): found on the page, by label. Exemptions are a
+  # case of their own: not mapped.
   - section: Dichiarazione relativa all'assolvimento dell'imposta di bollo
     aliases: [dichiarazione relativa all'imposta di bollo]
     fields:
       - {kind: radio, label: "Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digitale pagoPA", when: "{{ask.bollo_marche|not}}"}
       - {kind: radio, label: "Due marche da €16,00 ciascuna", when: "{{ask.bollo_marche|not}}"}
       - {kind: radio, label: "Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo", when: "{{ask.bollo_marche}}"}
-      # Ticked before the serial and date: it moves them down.
+      # Ticked before the serials and dates: it moves them down.
       - {kind: radio, label: "Marca da €16,00 per l'autorizzazione", when: "{{ask.bollo_marche}}"}
-      - {kind: text, label: numero seriale (1), value: "{{ask.bollo_seriale}}", when: "{{ask.bollo_marche}}"}
-      - {kind: date, label: data, value: "{{ask.bollo_data|date_it}}", when: "{{ask.bollo_marche}}"}
+      - {kind: text, label: numero seriale (1), value: "{{ask.bollo_seriale}}", by_label: true, when: "{{ask.bollo_marche}}"}
+      - {kind: date, label: data, nth: 1, value: "{{ask.bollo_data|date_it}}", by_label: true, when: "{{ask.bollo_marche}}"}
+      - {kind: text, label: numero seriale (2), value: "{{ask.bollo_seriale_2}}", on_page: true, when: "{{ask.bollo_marche}}"}
+      - {kind: date, label: data, nth: 2, value: "{{ask.bollo_data_2|date_it}}", on_page: true, when: "{{ask.bollo_marche}}"}
 
   # Agibilità (SCA): the title the works ran under, the fine lavori, what the segnalazione is
   # for, and the direttore dei lavori's attestations (the architect: `t:`, the studio's address).

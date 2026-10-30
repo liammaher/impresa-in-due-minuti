@@ -34,5 +34,3 @@ supports:
     else: "Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet."
   - when: "{{ask.allegato_a_uno}}"
     else: "The form takes one item of Allegato A: works under several items aren't mapped."
-  - when: "{{ask.bollo_marche|not}}"
-    else: "So far only with the bollo paid on pagoPA: the marche route isn't run yet."
