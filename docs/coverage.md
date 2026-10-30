@@ -25,7 +25,7 @@ branch no rehearsal took.
 
 By section use (how much of what pratiche show the dictionary fills):
 
-- SUE: 30 pratiche, 128 distinct sections, 120 in the dictionary; 467 of 472 uses (98%)
+- SUE: 30 pratiche, 128 distinct sections, 121 in the dictionary; 468 of 472 uses (99%)
 - SUAP: 278 pratiche, 477 distinct sections, 77 in the dictionary; 2432 of 3365 uses (72%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
@@ -58,7 +58,7 @@ SUE pratiche not yet fillable:
 Measured today:
 
 - Level 1: 29 of 30 pratiche fully in the dictionary (`sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic` not).
-- Level 2: **45 refusals across 11 recipes**, 21 distinct messages.
+- Level 2: **52 refusals across 12 recipes**, 21 distinct messages.
 - Levels 3 to 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
@@ -67,6 +67,7 @@ Measured today:
 | `scia-paesaggistica-ordinaria-fittizia` | 8 |
 | `scia-paesaggistica-semplificata-fittizia` | 8 |
 | `pdc-fittizio` | 7 |
+| `pdc-sanatoria-fittizio` | 7 |
 | `cila-fittizia` | 3 |
 | `cila-paesaggistica-fittizia` | 3 |
 | `scia-sanatoria-fittizia` | 2 |
@@ -77,31 +78,31 @@ Measured today:
 
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
-- 4×: A hygiene derogation isn't mapped yet.
-- 4×: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
+- 5×: A hygiene derogation isn't mapped yet.
+- 5×: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
+- 3×: A project for the Vigili del Fuoco's assessment isn't mapped yet.
+- 3×: An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet.
+- 3×: An area without its primary urbanisation works isn't mapped yet.
 - 3×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions.
+- 3×: Soil needing environmental investigations (or already remediated) isn't mapped yet.
 - 3×: Systems needing a project aren't mapped yet.
 - 3×: The barriers rules (artt. 77-82) aren't mapped yet.
 - 3×: Works on parts with asbestos aren't mapped yet.
-- 2×: A project for the Vigili del Fuoco's assessment isn't mapped yet.
 - 2×: Acoustic obligations aren't mapped yet.
-- 2×: An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet.
-- 2×: An area without its primary urbanisation works isn't mapped yet.
 - 2×: Another technician as direttore dei lavori isn't mapped yet (quadro G1's second block).
 - 2×: Energy-performance filings aren't mapped yet.
 - 2×: Fire-prevention obligations aren't mapped yet.
 - 2×: Other filings or assents with the CILA (Soprintendenza, ASL, fire brigade) aren't mapped yet; a landscape authorization goes in the same pratica (the CILA with its sempli
 - 2×: Other technicians already appointed (structures, systems, acoustics) aren't mapped yet (quadro G2's rows).
-- 2×: Soil needing environmental investigations (or already remediated) isn't mapped yet.
+- 2×: Systems needing a project (DM 37/2008 art. 5) aren't mapped yet.
 - 1×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione mak
 - 1×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
 - 1×: Systems certified by a collaudo, an atto notorio or a document already filed with the Comune aren't mapped yet.
-- 1×: Systems needing a project (DM 37/2008 art. 5) aren't mapped yet.
 - 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
 
 Open items no recipe shows:
 
-- Not mapped: PdC in sanatoria; PdC and SCIA alternativa with a landscape authorization; any combination of two pratiche other than CILA+semplificata and SCIA+semplificata/ordinaria.
+- Not mapped: PdC in sanatoria under art. 36-bis (refused: the portal makes two acknowledgment checkboxes a radio pair; art. 36 is filled); sanatoria in protected areas (building works plus landscape works); PdC and SCIA alternativa with a landscape authorization; any combination of two pratiche other than CILA+semplificata and SCIA+semplificata/ordinaria.
 - SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal's dating, oblazione and works-proposal radios behave as one group.
 - The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.
 - Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots may be missing (the catalogue notes this for the pratiche read on an empty draft); the diritti amount per pratica is unknown.
