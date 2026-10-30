@@ -661,5 +661,32 @@ def _():
         assert "radiotelevisivi" in labels and "di protezione antincendio" in labels, name
 
 
+@case("the CILA's technicians: another direttore dei lavori, another technician (G2, the SCIA's H2 too), filings and assents already made")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    def check(name, answers, **change):
+        steps = generated(name)
+        a = json.loads((REH / name / answers).read_text()); a.update(change)
+        v = run.Values(a, fields=fields, asks=steps.get("asks"))
+        return steps, v, run.preflight(steps, v)
+    steps, v, r = check("cila-fittizia", "answers-direttore-atti.json")
+    assert r["ready"], r
+    plan = [(p["label"] or "", str(p.get("value") or "")) for p in run.plan(steps, v)]
+    assert ("Cognome", "ESEMPIO") in plan and ("Tipologia di atto", "Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004)") in plan
+    assert [x for l, x in plan if l == "Autorità competente"] == ["ASL Napoli 1 Centro", "Comune di Napoli"], plan
+    for name in ("cila-fittizia", "scia-fittizia"):
+        steps, v, r = check(name, "answers-altri-tecnici.json")
+        assert r["ready"], (name, r)
+        labels = [p["label"] for p in run.plan(steps, v)]
+        assert "Incaricato della" in labels and "Iscritto all'ordine/collegio" in labels, name
+        assert not any((l or "").startswith("che gli altri tecnici incaricati saranno") for l in labels), name
+        assert any("More than one other technician" in u for u in check(name, "answers-altri-tecnici.json", altri_tecnici_uno=False)[2]["unsupported"])
+        assert any("employed by a firm" in u for u in check(name, "answers-altri-tecnici.json", altro_tecnico_dipendente=True)[2]["unsupported"])
+    r = check("cila-fittizia", "answers-direttore-atti.json", atti_quanti="piu di due")[2]
+    assert any("More than two assents" in u for u in r["unsupported"]), r["unsupported"]
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

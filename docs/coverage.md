@@ -59,27 +59,29 @@ SUE pratiche not yet fillable:
 Measured today:
 
 - Level 1: 30 of 30 pratiche fully in the dictionary.
-- Level 2: **54 refusals across 13 recipes**, 21 distinct messages.
+- Level 2: **72 refusals across 13 recipes**, 23 distinct messages.
 - Levels 3 to 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
-| `scia-alternativa-fittizia` | 10 |
-| `pdc-fittizio` | 7 |
-| `pdc-sanatoria-fittizio` | 7 |
-| `scia-paesaggistica-ordinaria-fittizia` | 7 |
-| `scia-paesaggistica-semplificata-fittizia` | 7 |
-| `cila-fittizia` | 3 |
-| `cila-paesaggistica-fittizia` | 3 |
-| `scia-sanatoria-fittizia` | 3 |
+| `scia-alternativa-fittizia` | 12 |
+| `pdc-fittizio` | 9 |
+| `pdc-sanatoria-fittizio` | 9 |
+| `scia-paesaggistica-ordinaria-fittizia` | 9 |
+| `scia-paesaggistica-semplificata-fittizia` | 9 |
+| `cila-fittizia` | 5 |
+| `cila-paesaggistica-fittizia` | 5 |
+| `scia-sanatoria-fittizia` | 5 |
+| `scia-fittizia` | 4 |
 | `parere-esonero-fittizio` | 2 |
-| `scia-fittizia` | 2 |
 | `agibilita-fittizia` | 1 |
 | `cil-fittizia` | 1 |
 | `fine-lavori-fittizia` | 1 |
 
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
+- 9×: Another technician employed by a firm (the quadro's "alle dipendenze di") isn't mapped yet.
+- 9×: More than one other technician isn't mapped yet: the quadro's block repeats.
 - 7×: More than five "altro" lines (titles past one per kind, or of kinds not listed) aren't mapped yet: each takes a "+" on the portal, and five have been prepared.
 - 5×: A hygiene derogation isn't mapped yet.
 - 5×: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
@@ -91,10 +93,10 @@ Refusals, by how many recipes carry them (the most shared are the cheapest to cl
 - 3×: The barriers rules (artt. 77-82) aren't mapped yet.
 - 3×: Works on parts with asbestos aren't mapped yet.
 - 2×: Acoustic obligations aren't mapped yet.
-- 2×: Another technician as direttore dei lavori isn't mapped yet (quadro G1's second block).
+- 2×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
 - 2×: Fire-prevention obligations aren't mapped yet.
-- 2×: Other filings or assents with the CILA (Soprintendenza, ASL, fire brigade) aren't mapped yet; a landscape authorization goes in the same pratica (the CILA with its sempli
-- 2×: Other technicians already appointed (structures, systems, acoustics) aren't mapped yet (quadro G2's rows).
+- 2×: More than two assents already obtained aren't mapped yet: the relazione has two rows.
+- 2×: More than two filings already made aren't mapped yet: the relazione has two rows.
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione mak
 - 1×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.

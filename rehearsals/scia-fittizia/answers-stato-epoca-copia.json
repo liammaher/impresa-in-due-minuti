@@ -13,6 +13,7 @@
  "sotto_200": "true",
  "notifica_dovuta": "true",
  "descrizione": "PROVA NON INVIARE - SCIA stato epoca copia",
+ "altri_tecnici": false,
  "data_inizio_lavori": "2026-11-23",
  "contributo_normativa": "art. 17, comma 3, d.P.R. 380/2001 (inventato per la prova)",
  "superficie_mq": "85",

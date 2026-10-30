@@ -8,7 +8,7 @@ that means it on Napoli's SUE, and whether one of our cases takes it. A row with
 branch no rehearsal has taken: the next cases to write.
 
 - **a case takes it**: a pre-flight-ready answers file of a SUE rehearsal ticks that box
-  (95 such cases; nearly all have a filled run on the portal).
+  (98 such cases; nearly all have a filled run on the portal).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -26,12 +26,12 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | A case takes it | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 31 | 1 | 4 | 7 | 34 |
+| CILA | 43 | 31 | 1 | 4 | 7 | 30 |
 | Fine lavori | 2 | 1 | 1 | 0 | 0 | 15 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 16 | 9 |
-| Permesso di costruire | 153 | 93 | 17 | 29 | 14 | 196 |
-| SCIA | 150 | 123 | 4 | 13 | 10 | 70 |
-| SCIA alternativa | 128 | 96 | 14 | 10 | 8 | 91 |
+| Permesso di costruire | 153 | 93 | 17 | 29 | 14 | 193 |
+| SCIA | 150 | 123 | 4 | 13 | 10 | 67 |
+| SCIA alternativa | 128 | 96 | 14 | 10 | 8 | 88 |
 | Agibilità (SCA) | 36 | 29 | 0 | 2 | 5 | 28 |
 
 ## Next cases
@@ -203,11 +203,7 @@ Portal boxes of the CILA no schema alternative matched and no case ticks:
 - e) Destinazione d'uso: commerciale (mapped)
 - e) Destinazione d'uso: altro (mapped)
 - G1) Tecnici incaricati: tecnico incaricato (not mapped)
-- G1) Tecnici incaricati: se il direttore dei lavori delle opere architettoniche è diverso dal progettista delle op… (not mapped)
 - G2) Altri tecnici incaricati: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori (not mapped)
-- G2) Altri tecnici incaricati: di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezione seguente (not mapped)
-- G2) Altri tecnici incaricati: si (not mapped)
-- G2) Altri tecnici incaricati: no (not mapped)
 - h) Impresa esecutrice dei lavori: Cassa edile (not mapped)
 - i) Rispetto degli obblighi in materia d…: ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dich… (not mapped)
 - Relazione Tecnica di Asseverazione C.I.…: Interventi di eliminazione delle barriere architettoniche che comportino la realizzazione… (mapped)
@@ -498,9 +494,6 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - g1) Tecnici incaricati: si (not mapped)
 - g1) Tecnici incaricati: no (not mapped)
 - g2) Altri tecnici incaricati: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori (not mapped)
-- g2) Altri tecnici incaricati: di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezione seguente (not mapped)
-- g2) Altri tecnici incaricati: si (not mapped)
-- g2) Altri tecnici incaricati: no (not mapped)
 - h) Impresa esecutrice dei lavori: Cassa edile (not mapped)
 - i) Rispetto degli obblighi in materia d…: ricade nell'ambito di applicazione del d.lgs. n. 81/2008 ma si riserva di presentare le d… (not mapped)
 - i) Rispetto degli obblighi in materia d…: allega la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cant… (not mapped)
@@ -817,9 +810,6 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - h1) Tecnici incaricati: no (not mapped)
 - h1) Tecnici incaricati: tecnico incaricato (not mapped)
 - H2) Altri tecnici incaricati: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori (not mapped)
-- H2) Altri tecnici incaricati: di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezione seguente (not mapped)
-- H2) Altri tecnici incaricati: si (not mapped)
-- H2) Altri tecnici incaricati: no (not mapped)
 - i) Impresa esecutrice dei lavori: Cassa edile (not mapped)
 - l) Rispetto degli obblighi in materia d…: ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza sul luogo… (not mapped)
 - m) Diritti di terzi: dichiara di essere consapevole che la presente segnalazione non può comportare limitazion… (not mapped)
@@ -1023,9 +1013,6 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - h1) Tecnici incaricati: no (not mapped)
 - h1) Tecnici incaricati: tecnico incaricato (not mapped)
 - H2) Altri tecnici incaricati: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori (not mapped)
-- H2) Altri tecnici incaricati: di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezione seguente (not mapped)
-- H2) Altri tecnici incaricati: si (not mapped)
-- H2) Altri tecnici incaricati: no (not mapped)
 - i) Impresa esecutrice dei lavori: Cassa edile (not mapped)
 - l) Rispetto degli obblighi in materia d…: ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza sul luogo… (not mapped)
 - m) Diritti di terzi: dichiara di essere consapevole che la presente segnalazione non può comportare limitazion… (not mapped)
