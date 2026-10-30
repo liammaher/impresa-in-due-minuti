@@ -8,12 +8,12 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 805 | Claude takes it when the case does |
+| ticked | 804 | Claude takes it when the case does |
 | answer | 56 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 1 | left empty on purpose |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 282 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 283 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -114,7 +114,7 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria / Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione
 
-4 pratiche; 16 of 47 choices to map.
+4 pratiche; 17 of 47 choices to map.
 
 - radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
 - radio: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost (under: trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1)
@@ -129,6 +129,7 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: attesta che la data/epoca di realizzazione dell’intervento (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
 - radio: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguaglio a seguito di quantificazione da parte del responsabile del procedim (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
 - radio: ai fini della sanatoria, la presente SCIA: (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
+- radio: non prevede interventi; (under: ai fini della sanatoria, la presente SCIA:)
 - radio: propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezza e/o la rimozione di opere che non possono essere sanate, a cui lo Spo (under: ai fini della sanatoria, la presente SCIA:)
 - checkbox: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla SCIA, ai sensi dell’art. 36-bis, comma 3-bis: (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
 - radio: dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformit)
