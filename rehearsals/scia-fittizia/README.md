@@ -101,3 +101,4 @@ signing and sending.
 | 2026-10-29 | pane | the technical quadri, from scratch | stopped on art. 24 c. 5-ter's conditions, which each 5-bis case opens below it (read; mapped, one case per pratica) |
 | 2026-10-29 | pane | the technical quadri, from scratch, with the 5-ter conditions | **filled** in 149 s with 20 attachments; fresh load 23 s, every value read back |
 | 2026-10-29 | pane | P6, structures and every protection, from scratch after the technical quadri's dictionary change (one batch) | **filled**: 186 s / 147 s / 161 s, every value read back; no retry |
+| 2026-10-30 | pane | P6, from scratch after the sanatoria choice (`sanatoria_titolo`) replaced `scia_sanatoria` (one batch with the PdC P6 and the SCIA sanatoria) | **filled** in 138 s; fresh load 24 s, every value read back |

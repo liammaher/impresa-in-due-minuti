@@ -162,15 +162,17 @@ def sue_every_case_decided_once():
 def sue_rehearsals_ready():
     names = ["cil-fittizia", "cila-fittizia", "cila-paesaggistica-fittizia", "scia-fittizia", "scia-paesaggistica-semplificata-fittizia",
              "scia-paesaggistica-ordinaria-fittizia", "pdc-fittizio", "scia-alternativa-fittizia",
-             "paesaggistica-semplificata-fittizia", "paesaggistica-ordinaria-fittizia", "scia-sanatoria-fittizia", "accertamento-paesaggistico-fittizio"]
+             "paesaggistica-semplificata-fittizia", "paesaggistica-ordinaria-fittizia", "scia-sanatoria-fittizia", "accertamento-paesaggistico-fittizio", "pdc-sanatoria-fittizio"]
     # A whole building's change of use with CILA works: the national SCIA form has a box for it,
     # but in Campania it is a SCIA alternativa (art. 2 c. 6 L.R. 13/2022).
-    refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "napoli/comune/scia-alternativa-pdc"}
+    refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "This case is another pratica: napoli/comune/scia-alternativa-pdc",
+               # The portal's art. 36-bis asseverazione is one radio group (the library's discrepancies).
+               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Only art. 36 "}
     for name in names:
         for f in sorted((REHEARSALS / name).glob("answers*.json")):
             r = sue(name, f.name)
             if (name, f.name) in refused:
-                assert r["unsupported"][0].startswith("This case is another pratica: " + refused[name, f.name]), r
+                assert r["unsupported"][0].startswith(refused[name, f.name]), r
             else:
                 assert r["ready"], (name, f.name, r)
 
@@ -224,6 +226,14 @@ def sue_another_pratica():
     assert sue("paesaggistica-ordinaria-fittizia", fatti=["paesaggio_eseguiti"])["unsupported"][0].startswith(other + accertamento)
     assert sue("accertamento-paesaggistico-fittizio", fatti=[])["unsupported"][0].startswith(other + ordinaria)
     assert "167 c. 4" in sue("accertamento-paesaggistico-fittizio", fatti=["paesaggio_eseguiti", "paesaggio_volumi"])["unsupported"][0]
+    # Works that needed the permesso, already done: the permesso in sanatoria; not on structures.
+    pdcs = "napoli/comune/permesso-in-sanatoria"
+    assert sue("pdc-fittizio", intervento="nuova_costruzione", strutture="false", fatti=["sanatoria"])["unsupported"][0].startswith(other + pdcs)
+    assert sue("pdc-sanatoria-fittizio", intervento="variante_essenziale_pdc")["ready"]
+    assert "sanatoria sismica" in sue("pdc-sanatoria-fittizio", strutture="true", sismica="deposito")["unsupported"][0]
+    # The portal's permesso wants an energy incentive claimed even with no energy works.
+    assert "energy incentive" in sue("pdc-sanatoria-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
+    assert "energy incentive" in sue("pdc-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
     assert sue("scia-fittizia", "answers-variante-pdc.json", fatti=["demolizione_zona_a"])["unsupported"][0].startswith(
         other + "napoli/comune/permesso-di-costruire")
     assert "DGC 454/2014" in sue("scia-alternativa-fittizia", fatti=["demolizione_zona_a"])["unsupported"][0]

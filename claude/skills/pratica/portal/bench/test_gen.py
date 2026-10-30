@@ -276,7 +276,7 @@ def _():
     scia, alt = generated("scia-fittizia"), generated("scia-alternativa-fittizia")
     for s in (scia, alt):
         imp = next(x for x in s["sections"] if "Sicurezza impianti" in x["section"])
-        assert field(imp, "allega i relativi elaborati")["when"] == "{{ask.progetto_impianti}}"
+        assert field(imp, "allega i relativi elaborati")["when"] == "{{ask.impianti}} {{ask.progetto_impianti}}"
     am = section(scia, "Asseverazione SCIA - Amianto")
     assert field(am, "alloggio monostanza per due persone").get("on_page")
     assert field(section(scia, "Asseverazione SCIA - Sicurezza impianti"), "specificare")["value"] == "{{ask.impianto_altro_quale}}"

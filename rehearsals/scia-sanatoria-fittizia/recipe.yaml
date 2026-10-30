@@ -75,7 +75,7 @@ attachments:
     - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: "{{ask.cimiteriale_doc}}", when: "{{ask.fascia_cimiteriale|is_non_consentito}}", on_page: true}
 asks:
   descrizione: {default: "PROVA NON INVIARE - SCIA in sanatoria {{c:identity.last_name}}"}
-  scia_sanatoria: {default: "true"}
+  sanatoria_titolo: {default: scia}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"

@@ -48,6 +48,7 @@ paper; DD 501/2026 makes the portal the only channel from 1/7/2026, and the port
 |---|---|---|---|
 | 2026-10-30 | pane | `answers-p6.json` (doppia conformità) | First try stopped on Tipologia: "presentata in sanatoria" ticked before the intervention type, whose id then landed on it (now ticked last, by label). Rerun from a blank draft: every section filled and read back on a fresh load (150.6 s, fresh load 24.7 s); then the sanatoria drawings slot turned out to take only .p7m (moved to the person's steps) and the attachments resumed on the same draft (7.9 s): **filled**, 7 files kept |
 | 2026-10-30 | pane | `answers-in-corso.json` (art. 37 c. 5) | **Filled** from a blank draft in 143.4 s, read back on a fresh load (24.2 s), 7 files kept |
+| 2026-10-30 | pane | `answers-p6.json`, after the sanatoria choice became `sanatoria_titolo` (shared with the permesso) | **Filled** from a blank draft in 149.2 s, read back on a fresh load (25.0 s), nothing moved or loose |
 
 Exploring by hand first (a blank draft with only the wizard, then ticking each case) showed the
 four cases' rows and the case-3 radio group. Opening the sanatoria quadro right after saving an
