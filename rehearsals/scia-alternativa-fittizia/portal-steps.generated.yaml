@@ -933,7 +933,7 @@ sections:
   - {kind: checkbox, when: '{{ask.fasce|is_no|not}} {{ask.fascia_aeroportuale}}', label: aeroportuale}
   - {kind: checkbox, when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}}', label: Altro}
   - {kind: text, value: '{{ask.fascia_altro_quale}}', when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}} {{ask.fascia_stradale|not}}', max: 9999, label: 'Specificare:'}
-  - {id: 'r16c1p16reg:txt', kind: text, value: '{{ask.fascia_altro_quale}}', when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}} {{ask.fascia_stradale}}', max: 9999, label: 'Specificare:', nth: 2}
+  - {id: 'r14c1p14reg:txt', kind: text, value: '{{ask.fascia_altro_quale}}', when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}} {{ask.fascia_stradale}}', max: 9999, label: 'Specificare:', nth: 2}
   - {kind: checkbox, when: '{{ask.fasce|is_autocertificazione}}', label: si allegano le autocertificazioni}
   - {kind: checkbox, when: '{{ask.fasce|is_assenso}}', label: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso}
 - section: Asseverazione SCIA Alternativa - NOTE

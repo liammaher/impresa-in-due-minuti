@@ -600,5 +600,15 @@ def _():
     assert f and "id" not in f[0], f
 
 
+@case("a choice the crawl tried apart moves its reveals by the earlier choices' offsets, not by its own (SCIA tolerances)")
+def _():
+    crawl = gen.json.loads((HERE.parent / "catalogue" / "F839" / "sections" / "scia.json").read_text())
+    s = gen.Section(next(x for x in crawl["sections"] if x["section"].startswith("Asseverazione SCIA - Stato legittimo")))
+    s.choose(s.find("radio", "si")[0])     # the state: one row more from r7c13
+    s.choose(s.find("radio", "si", 2)[0])  # the tolerances, crawled apart: 20 rows more from r7c13
+    # The crawl's r7c1p12 already has the 20 rows; only the first choice's one is added.
+    assert s.find("checkbox", "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER")[0]["id"] == "r8c1p13reg:chk"
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)
