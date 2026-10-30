@@ -45,3 +45,113 @@ SUE pratiche not yet fillable:
 
 - `sue-accertamento-di-compatibilita-paesaggistica`: dichiarazione relativa alla descrizione delle opere, dichiarazione relativa ai dati identificativi del/dei professionista/i incaricato/i, dichiarazione riferita all'art. 181 del D.Lgs. 42/2004, dichiarazione relativa alla datazione dell'abuso
 - `sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic`: titolo del richiedente, dichiarazione della legittimita' dell'intervento, Interventi ed opere in aree vincolate esclusi dall'autorizzazione  paesaggistica, indicazione dell'Ente al quale è inviata la richiesta di parere preventivo
+
+## SUE completeness
+
+**100% for the SUE means all of these**, for the 27 operations Napoli's SUE offers (and the combinations of two it allows):
+
+1. Every operation is crawled, and every section of it is in the dictionary.
+2. Every box of every screen is filled at every answer a real case can give: no refusal left in a recipe except one the law itself makes (a case that needs a human, said as such).
+3. The attachments screen is read for every answer that changes it, and every slot is mapped or named as the person's (a signed `.p7m`, a drawing).
+4. A drift check of the live portal against the crawls finds nothing new, and is repeated.
+5. Each pratica has been filled on the portal from a blank draft, and a real case has been checked by someone who files that pratica.
+
+Measured today:
+
+- Level 1: 28 of 30 pratiche fully in the dictionary (`sue-accertamento-di-compatibilita-paesaggistica`, `sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic` not).
+- Level 2: **45 refusals across 11 recipes**, 21 distinct messages.
+- Levels 3 to 5: not measured yet (see the open items).
+
+| Recipe | Refusals left |
+|---|---:|
+| `scia-alternativa-fittizia` | 10 |
+| `scia-paesaggistica-ordinaria-fittizia` | 8 |
+| `scia-paesaggistica-semplificata-fittizia` | 8 |
+| `pdc-fittizio` | 7 |
+| `cila-fittizia` | 3 |
+| `cila-paesaggistica-fittizia` | 3 |
+| `scia-sanatoria-fittizia` | 2 |
+| `agibilita-fittizia` | 1 |
+| `cil-fittizia` | 1 |
+| `fine-lavori-fittizia` | 1 |
+| `scia-fittizia` | 1 |
+
+Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
+
+- 4×: A hygiene derogation isn't mapped yet.
+- 4×: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
+- 3×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions.
+- 3×: Systems needing a project aren't mapped yet.
+- 3×: The barriers rules (artt. 77-82) aren't mapped yet.
+- 3×: Works on parts with asbestos aren't mapped yet.
+- 2×: A project for the Vigili del Fuoco's assessment isn't mapped yet.
+- 2×: Acoustic obligations aren't mapped yet.
+- 2×: An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet.
+- 2×: An area without its primary urbanisation works isn't mapped yet.
+- 2×: Another technician as direttore dei lavori isn't mapped yet (quadro G1's second block).
+- 2×: Energy-performance filings aren't mapped yet.
+- 2×: Fire-prevention obligations aren't mapped yet.
+- 2×: Other filings or assents with the CILA (Soprintendenza, ASL, fire brigade) aren't mapped yet; a landscape authorization goes in the same pratica (the CILA with its sempli
+- 2×: Other technicians already appointed (structures, systems, acoustics) aren't mapped yet (quadro G2's rows).
+- 2×: Soil needing environmental investigations (or already remediated) isn't mapped yet.
+- 1×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione mak
+- 1×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
+- 1×: Systems certified by a collaudo, an atto notorio or a document already filed with the Comune aren't mapped yet.
+- 1×: Systems needing a project (DM 37/2008 art. 5) aren't mapped yet.
+- 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
+
+Open items no recipe shows:
+
+- Not mapped: PdC in sanatoria; PdC and SCIA alternativa with a landscape authorization; any combination of two pratiche other than CILA+semplificata and SCIA+semplificata/ordinaria.
+- SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal's dating, oblazione and works-proposal radios behave as one group.
+- The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.
+- Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots may be missing (the catalogue notes this for the pratiche read on an empty draft); the diritti amount per pratica is unknown.
+- The screens after the attachments (the declarations' signing, the sending) and everything after filing (integration requests, the receipt, the status): nothing in the repo maps them.
+
+## The wedge
+
+What a Napoli architect or pratiche agency files again and again, so what has to be perfect first.
+
+**SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, extensions, voltura, DL and contractor changes, the landscape authorizations), except the two rare landscape ones.
+
+- 28 of 28 fillable, 28 run on the portal.
+
+**SUAP: nine sectors × seven operations.** Each cell is one pratica on the portal:
+
+| Sector | open | take over | close | suspend | move | change people | change premises |
+|---|---|---|---|---|---|---|---|
+| Bakery (panificio) | run | map | map | fill | map | map | map |
+| Food workshop (pizza al taglio, gelateria) | fill | fill | fill | - | fill | - | - |
+| Hairdresser (acconciatore) | fill | fill | fill | fill | map | fill | map |
+| Beautician (estetista) | fill | fill | fill | fill | map | fill | map |
+| Shop, non-food | run | run | fill | run | map | fill | run |
+| Shop, food or mixed | fill | fill | fill | fill | map | fill | fill |
+| Shop, food eaten on the spot (protected zones) | fill | fill | fill | - | map | fill | fill |
+| B&B, affittacamere (extralberghiere) | run | - | fill | fill | - | - | - |
+| Bar / restaurant, normal zones | run | run | run | run | map | run | - |
+| Bar / restaurant, protected zones (centro storico) | fill | fill | fill | - | map | fill | fill |
+
+`run` = run on the portal; `fill` = fillable, never run; `map` = crawled, sections missing from the dictionary; `crawl` = not crawled; `-` = the sector doesn't offer it.
+
+Of 60 cells: **11 run, 35 fillable but not run, 14 need dictionary work, 0 not crawled yet.**
+
+Also in the wedge: the dehors (fillable, never run), the outside sign and the alcohol notice as ticks inside an opening (their rehearsals have no recorded run), and the sectors' own notices (food safety, sanitary).
+
+### What each gap needs
+
+- **35 cells to run**: run it in the pane with made-up people (40-150 s; needs Liam logged in).
+- **14 cells to map**: add the missing sections to the dictionary (draft.py drafts them; a person checks).
+- **0 cells to crawl**: crawl it in the pane on the scratch draft (20-60 s each; needs Liam logged in).
+- **Every cell**: the legal choice of which pratica a case needs (the library's rules table covers shops, bars and restaurants, hairdressers and beauticians and B&Bs; the bakery, the food workshop and moving premises have no entry in it), and a real case run past someone who knows the pratica.
+
+Sections that block the most wedge cells (the cheapest way to turn `map` into `fill`):
+
+- 5 cells: dichiarazione del rispetto dei Regolamenti del Comune
+- 5 cells: precedente ubicazione dell'esercizio
+- 4 cells: dichiarazione antimafia D.LGS. 159/2011
+- 3 cells: dichiarazione di titolarità autorizzazione/DIA/SCIA
+- 2 cells: Dati sull'attività
+- 2 cells: Dichiarazioni
+- 2 cells: dichiarazione della data di inizio dell'attività
+- 2 cells: dichiarazione di conformità alle norme in materia edilizia, urbanistica, igienico sanitaria e accessibilità
+
