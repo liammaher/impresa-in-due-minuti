@@ -25,7 +25,7 @@ asks:
   precedente_tipo: {type: text, question: 'The building''s own title: its kind (licenza edilizia, concessione, permesso di costruire, ...)'}
   esonero_altri_titoli: {type: yes_no, question: 'Does the building have more than one previous title?', propose: 'false'}
   esonero_conformita: {type: choice, question: 'Does the place as it is today match its lawful state? conforme (nothing changed since the last title); non conforme (works differing from it, their date asked
-      next); altro (another case, in a few words)', options: [conforme, non conforme, altro]}
+      next); altro (another case, in a few words)', options: [conforme, non conforme, altro], when: '{{ask.esonero_lotto|is_precedente}}'}
   esonero_difformi_data: {type: date, question: When the differing works were done}
   esonero_conformita_altro: {type: text, question: 'The other case, in a few words (100 characters)'}
   esonero_prova: {type: choice, question: 'What else shows the lawful state? titoli (nothing: no other building title exists); documentazione (other probative documents, attached and listed next); catasto
@@ -212,11 +212,12 @@ sections:
   - {id: 'r4c1p4reg:txt', kind: text, value: '{{ask.precedente_tipo}}', when: '{{ask.esonero_lotto|is_precedente}}', max: 150, label: titolo (1)}
   - {id: 'r4c2p6reg:txt', kind: text, value: '{{ask.precedente_numero}}', when: '{{ask.esonero_lotto|is_precedente}}', max: 30, label: p.g. numero}
   - {id: 'r4c3p8reg:calendar_input', kind: date, value: '{{ask.precedente_data|date_it}}', when: '{{ask.esonero_lotto|is_precedente}}', label: del}
-  - {id: 'r6c1p11reg:radio:2_clone', kind: radio, when: '{{ask.esonero_conformita|is_conforme}}', label: lo stato di fatto è conforme}
-  - {id: 'r8c1p13reg:radio:3_clone', kind: radio, when: '{{ask.esonero_conformita|is_non_conforme}}', label: lo stato di fatto non è conforme}
-  - {id: 'r8c2p15reg:calendar_input', kind: date, value: '{{ask.esonero_difformi_data|date_it}}', when: '{{ask.esonero_conformita|is_non_conforme}}', label: le opere difformi sono state realizzate in data}
-  - {id: 'r10c1p17reg:radio:4_clone', kind: radio, when: '{{ask.esonero_conformita|is_altro}}', label: altro}
-  - {id: 'r10c2p19reg:txt', kind: text, value: '{{ask.esonero_conformita_altro}}', when: '{{ask.esonero_conformita|is_altro}}', max: 100, label: specificare}
+  - {id: 'r6c1p11reg:radio:2_clone', kind: radio, when: '{{ask.esonero_lotto|is_precedente}} {{ask.esonero_conformita|is_conforme}}', label: lo stato di fatto è conforme}
+  - {id: 'r8c1p13reg:radio:3_clone', kind: radio, when: '{{ask.esonero_lotto|is_precedente}} {{ask.esonero_conformita|is_non_conforme}}', label: lo stato di fatto non è conforme}
+  - {id: 'r8c2p15reg:calendar_input', kind: date, value: '{{ask.esonero_difformi_data|date_it}}', when: '{{ask.esonero_lotto|is_precedente}} {{ask.esonero_conformita|is_non_conforme}}', label: le opere
+      difformi sono state realizzate in data}
+  - {id: 'r10c1p17reg:radio:4_clone', kind: radio, when: '{{ask.esonero_lotto|is_precedente}} {{ask.esonero_conformita|is_altro}}', label: altro}
+  - {id: 'r10c2p19reg:txt', kind: text, value: '{{ask.esonero_conformita_altro}}', when: '{{ask.esonero_lotto|is_precedente}} {{ask.esonero_conformita|is_altro}}', max: 100, label: specificare}
   - {id: 'r12c1p21reg:radio:5_clone', kind: radio, when: '{{ask.esonero_prova|is_documentazione}}', label: altra documentazione probatoria}
   - {id: 'r12c2p23reg:txta', kind: text, value: '{{ask.esonero_prova_elenco}}', when: '{{ask.esonero_prova|is_documentazione}}', max: 350, label: indicare la documentazione allegata alla presente}
   - {id: 'r14c1p25reg:radio:6_clone', kind: radio, when: '{{ask.esonero_prova|is_catasto}}', label: documentazione catastale di primo impianto}

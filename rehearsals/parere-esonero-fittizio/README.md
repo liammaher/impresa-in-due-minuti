@@ -28,7 +28,9 @@ a comune whose office does answer it).
 
 - The legittimità section's eight radios are read as three choices by row order (the lot; whether
   the place matches its lawful state; what else proves it). The crawl kept none of its text. A
-  wrong grouping unticks a radio on Salva and the read-back stops the run.
+  wrong grouping unticks a radio on Salva and the read-back stops the run. A depth-3 recrawl of
+  2026-10-30 (not yet in the catalogue) shows the three conformity radios greyed until "esiste un precedente
+  edilizio" is ticked, so they are asked only then; the rest of the grouping is still unconfirmed.
 - The Allegato A dropdown is chosen by the item's number ("A.2."): `inpage.js` takes the one option
   that starts with it. Not run on the portal.
 - Refused besides: more than one previous building title (the section's "+" rows), works under
