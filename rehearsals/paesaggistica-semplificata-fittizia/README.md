@@ -33,3 +33,5 @@ drawings and photos, the signed procura, the bollo and diritti, signing and send
 | 2026-10-29 | pane | Stopped at Ambito: the art. 136 tick renumbered itself, which gen.py didn't yet send by label (fixed: `Section.moves_itself`). |
 | 2026-10-29 | pane | **Filled**, a new draft: 12 sections in 54 s (wizard 9 s), every value read back on a fresh load of the draft (8 s). Run with art. 136 and 142 together; 136 alone and 134 alone not run. |
 | 2026-10-29 | pane | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 53.3 s; second, with the runner waiting for a section to open, **filled** in 59 s, read back on a fresh load. |
+| 2026-10-30 | pane | the bollo with two marche (`answers-marche`), `bench/rerun.py` bundle | stopped on the bollo: no box labelled "numero seriale (2)". Read on the page: the authorization's marca line copies the first's, its serial box titled "numero seriale (1)" too |
+| 2026-10-30 | pane | the same, the second marca as the second "numero seriale (1)" and "data" | **filled** in 51 s, read back on a fresh load (9 s), nothing moved or loose |

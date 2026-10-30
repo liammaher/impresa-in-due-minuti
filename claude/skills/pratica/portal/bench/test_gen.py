@@ -636,7 +636,8 @@ def _():
     m = json.loads((REH / "paesaggistica-semplificata-fittizia" / "answers-marche.json").read_text())
     plan = run.plan(steps, run.Values(m, fields=fields, asks=steps.get("asks")))
     bollo = [(p["label"], p.get("value")) for p in plan if "bollo" in p["section"].lower()]
-    assert ("numero seriale (1)", "01234567890123") in bollo and ("numero seriale (2)", "01234567890124") in bollo, bollo
+    # Both serial boxes are titled "numero seriale (1)" on the portal: the first, then the second.
+    assert [v for l, v in bollo if l == "numero seriale (1)"] == ["01234567890123", "01234567890124"], bollo
     assert [l for l, _ in bollo].index("Marca da €16,00 per l'autorizzazione") < [l for l, _ in bollo].index("numero seriale (1)")
     sec = section(steps, "Dichiarazione relativa all'assolvimento")
     assert all("id" not in f for f in sec["fields"] if (f.get("label") or "").startswith(("numero seriale", "data")))

@@ -569,5 +569,5 @@ sections:
   - {id: 'r13c2p30reg:radio:2_clone', kind: radio, when: '{{ask.bollo_marche}}', label: 'Marca da €16,00 per l''autorizzazione'}
   - {kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1)}
   - {kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}}', label: data}
-  - {kind: text, label: numero seriale (2), value: '{{ask.bollo_seriale_2}}', when: '{{ask.bollo_marche}}'}
+  - {kind: text, label: numero seriale (1), nth: 2, value: '{{ask.bollo_seriale_2}}', when: '{{ask.bollo_marche}}'}
   - {kind: date, label: data, nth: 2, value: '{{ask.bollo_data_2|date_it}}', when: '{{ask.bollo_marche}}'}
