@@ -331,6 +331,7 @@ contributo to pay, in proprio, "altri interventi").
 | 2026-10-29 | proprietario, clean | pane | 110.7 s | **Filled** from scratch, 20 sections, fresh load 22.2 s |
 | 2026-10-29 | comodatario, clean | pane | 85.6 s | **Filled** from scratch, 20 sections, fresh load 12.8 s |
 | 2026-10-29 | proprietario, 5 MB drawing by link | pane | 86.5 s (attachments 10.7 s) | **Filled**: the elaborati grafici a 5,195,674-byte FAC-SIMILE PDF, fetched in the portal's page from a public test gist pinned to its commit (`run.py page --file-urls`), sha256 checked; run.js 6.9 KB. Still there, 4.95 MB, on a fresh reopen of the draft |
+| 2026-10-30 | proprietario, structural tolerance: minor relevance (`answers-tolleranze-minore`), then relevant with the Genio Civile's authorization (`answers-tolleranze-autorizzazione`) | pane | 125 s, 91 s | **Filled** both, the authorization in its "Autorizzazione sismica" slot; one loose box, the firm section's "lavori sono/saranno eseguiti dall" (`r2c1p2reg:radio:1_clone`), from the proprietario case, not the tolerances |
 
 Not run on the portal: a destinazione other than residenziale (the fixture's flat is
 residenziale; pre-flight and the generator cover it), a terzo titolare company other than P6's,

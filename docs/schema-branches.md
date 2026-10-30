@@ -8,7 +8,7 @@ that means it on Napoli's SUE, and whether one of our cases takes it. A row with
 branch no rehearsal has taken: the next cases to write.
 
 - **a case takes it**: a pre-flight-ready answers file of a SUE rehearsal ticks that box
-  (80 such cases; nearly all have a filled run on the portal).
+  (88 such cases; nearly all have a filled run on the portal).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -26,19 +26,19 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | A case takes it | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 28 | 1 | 7 | 7 | 34 |
+| CILA | 43 | 31 | 1 | 4 | 7 | 34 |
 | Fine lavori | 2 | 1 | 1 | 0 | 0 | 15 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 16 | 9 |
-| Permesso di costruire | 153 | 89 | 16 | 34 | 14 | 203 |
-| SCIA | 150 | 121 | 2 | 17 | 10 | 70 |
-| SCIA alternativa | 128 | 92 | 14 | 14 | 8 | 96 |
+| Permesso di costruire | 153 | 92 | 17 | 30 | 14 | 203 |
+| SCIA | 150 | 123 | 4 | 13 | 10 | 70 |
+| SCIA alternativa | 128 | 95 | 15 | 10 | 8 | 96 |
 | Agibilità (SCA) | 36 | 29 | 0 | 2 | 5 | 28 |
 
 ## Next cases
 
 Mapped, no case yet (an answers file away):
 
-- CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta` → `tolleranza_strutturale` (ha rilevanza strutturale, rispetta le norme tecniche per le costruzio…)
+- CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
 - Fine lavori: `comunicazioni/fine_lavori` → `stato_lavori_parziale` (in forma parziale come da planimetria allegata)
 - Permesso di costruire: `dichiarazioni/titolo_possesso` → `titolare_esclusivo` (avere titolarità esclusiva all'esecuzione dell'intervento)
 - Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `nuova_costruzione_area_libera_check` (che le opere riguardano un intervento di nuova costruzione su area li…)
@@ -51,6 +51,7 @@ Mapped, no case yet (an answers file away):
 - Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_500_a_300_mq` (3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile;)
 - Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_300_a_100_mq` (4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;)
 - Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_100_a_60_mq` (5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;)
+- Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_minore_rilevanza` (intervento di minore rilevanza nei riguardi della pubblica incolumità…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita` → `disciplina_urbanistica` (che risulta conforme alla disciplina urbanistica vigente al momento d…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita` → `disciplina_urbanistica_edilizia` (che risulta conforme alla disciplina urbanistica e edilizia vigente s…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/tutela_inquinamento_acustico/[tutela_inquinamento_acustico_ctype]` → `rientra_art_8` (Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1…)
@@ -58,10 +59,13 @@ Mapped, no case yet (an answers file away):
 - Permesso di costruire: `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispetto_cimiteriale_ctype]` → `ricade_non_consentito` (l'intervento ricade in fascia di rispetto cimiteriale e non è consent…)
 - SCIA: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/mutamento_destinazione_uso_intero_immobile` → `con_opere` (con opere riconducibili agli interventi di cui di cui all'articolo 6-…)
 - SCIA: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/mutamento_destinazione_uso_intero_immobile` → `senza_opere` (senza opere (o con opere riconducibili agli interventi di cui all'art…)
+- SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_minore_rilevanza` (intervento di minore rilevanza nei riguardi della pubblica incolumità…)
+- SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_oltre_500_mq` (2%, per le U.I. > 500 mq di superficie utile ;)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_500_a_300_mq` (3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile;)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_300_a_100_mq` (4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_100_a_60_mq` (5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;)
+- SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/sicurezza_impianti/comporta_impianti/altro/[comporta_impianti_altro_ctype]` → `soggetto` (è soggetto agli obblighi di presentazione del progetto e pertanto)
 - SCIA alternativa: `relazione_tecnica_asseverazione/tutela_inquinamento_acustico/[tutela_inquinamento_acustico_ctype]` → `rientra_art_8` (Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/prevenzione_incendi` → `soggetto_valutazione_progetto` (è soggetto alla valutazione del progetto da parte del Comando Provinc…)
@@ -79,9 +83,6 @@ On the portal, not mapped (dictionary work first):
 - CILA: `comunicazioni/imprese_esecutrici` → `da_soggetti_coinvolti` (che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla se…)
 - CILA: `comunicazioni/imprese_esecutrici` → `(nothing)` (che, in quanto opere di modesta entità che non interessano le specifi…)
 - CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
-- CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_pubblica_incolumita` (intervento rilevante nei riguardi della pubblica incolumità di cui al…)
-- CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_minore_rilevanza` (intervento di minore rilevanza nei riguardi della pubblica incolumità…)
-- CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
 - Permesso di costruire: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]` → `conforme_disciplina_urbanistica` (intervento realizzato, ai sensi dell'articolo 36, comma 1 del d.P.R.…)
 - Permesso di costruire: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]` → `deroga_pianificazione_urbanistica` (intervento in deroga alle previsioni degli strumenti di pianificazion…)
 - Permesso di costruire: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/variazione_sostanziale` → `titolo_unico` (titolo unico)
@@ -91,10 +92,6 @@ On the portal, not mapped (dictionary work first):
 - Permesso di costruire: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - Permesso di costruire: `dichiarazioni/imprese_esecutrici` → `prima_inizio_lavori` (l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
-- Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta` → `tolleranza_strutturale` (ha rilevanza strutturale, rispetta le norme tecniche per le costruzio…)
-- Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_pubblica_incolumita` (intervento rilevante nei riguardi della pubblica incolumità di cui al…)
-- Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_minore_rilevanza` (intervento di minore rilevanza nei riguardi della pubblica incolumità…)
-- Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_atto` (dà atto che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_attesta` (attesta che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `permesso_costruire_in_sanatoria` (ai fini della sanatoria, la presente SCIA:)
@@ -122,10 +119,6 @@ On the portal, not mapped (dictionary work first):
 - SCIA: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - SCIA: `dichiarazioni/imprese_esecutrici` → `(nothing)` (l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp…)
 - SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
-- SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta` → `tolleranza_strutturale` (ha rilevanza strutturale, rispetta le norme tecniche per le costruzio…)
-- SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_pubblica_incolumita` (intervento rilevante nei riguardi della pubblica incolumità di cui al…)
-- SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_minore_rilevanza` (intervento di minore rilevanza nei riguardi della pubblica incolumità…)
-- SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
 - SCIA: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_assenza_scia_fino_dieci_mila/ai_fini_della_sanatoria` → `no_interventi` (non prevede interventi;)
 - SCIA: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_assenza_scia_fino_dieci_mila/ai_fini_della_sanatoria` → `propone_interventi` (propone la realizzazione di interventi anche strutturali necessari re…)
 - SCIA: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_assenza_scia_fino_dieci_mila/rilevanza_sismica_interventi` → `zona_sismica_bassa` (dà atto che l’immobile interessato dall’intervento è ubicato in zona…)
@@ -136,10 +129,6 @@ On the portal, not mapped (dictionary work first):
 - SCIA alternativa: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - SCIA alternativa: `dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_dei_lavori_ctype]` → `(nothing)` (l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
-- SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta` → `tolleranza_strutturale` (ha rilevanza strutturale, rispetta le norme tecniche per le costruzio…)
-- SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_pubblica_incolumita` (intervento rilevante nei riguardi della pubblica incolumità di cui al…)
-- SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_minore_rilevanza` (intervento di minore rilevanza nei riguardi della pubblica incolumità…)
-- SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_inf_ugu_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/prevenzione_incendi` → `variante_progetto` (costituisce variante e il sottoscritto assevera che le modifiche non…)
@@ -193,10 +182,10 @@ On the portal, not mapped (dictionary work first):
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | on the portal, not mapped |  |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | a case takes it | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | a case takes it | 1 |
-| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | mapped, no case yet |  |
-| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | on the portal, not mapped |  |
-| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | on the portal, not mapped |  |
-| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | on the portal, not mapped |  |
+| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | a case takes it | 1 |
+| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | a case takes it | 1 |
+| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | a case takes it | 1 |
+| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `allega_autorizzazione_sismica` | no box in worksheet | h | no portal box |  |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `silenzio_assenso_autorizzazione` | no box in worksheet | h | no portal box |  |
 
@@ -357,10 +346,10 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | a case takes it | 1 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | a case takes it | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | a case takes it | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `allega_autorizzazione_sismica` | no box in worksheet | h | no portal box |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `silenzio_assenso_autorizzazione` | no box in worksheet | h | no portal box |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `disciplina_urbanistica` | che risulta conforme alla disciplina urbanistica vigente al momento d… | m | mapped, no case yet |  |
@@ -743,10 +732,10 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | a case takes it | 1 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | a case takes it | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | a case takes it | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `allega_autorizzazione_sismica` | sub-option inside P127 text; no separate box in worksheet | l | no portal box |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `silenzio_assenso_autorizzazione` | sub-option inside P127 text; no separate box in worksheet | l | no portal box |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `no_interventi` | non prevede interventi; | h | on the portal, not mapped |  |
@@ -947,10 +936,10 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | a case takes it | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | a case takes it | 1 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | a case takes it | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | a case takes it | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | a case takes it | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `allega_autorizzazione_sismica` | no such box in the worksheet | l | no portal box |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `silenzio_assenso_autorizzazione` | no such box in the worksheet | l | no portal box |  |
 | `relazione_tecnica_asseverazione/sicurezza_impianti` | `non_comporta_impianti` | Non comporta l'installazione, la trasformazione o l'ampliamento di im… | h | a case takes it | 1 |

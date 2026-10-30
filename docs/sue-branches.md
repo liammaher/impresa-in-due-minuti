@@ -8,12 +8,12 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 804 | Claude takes it when the case does |
+| ticked | 815 | Claude takes it when the case does |
 | answer | 56 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 1 | left empty on purpose |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 283 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 272 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -114,13 +114,9 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria / Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione
 
-4 pratiche; 17 of 47 choices to map.
+4 pratiche; 13 of 47 choices to map.
 
 - radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
-- radio: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost (under: trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1)
-- radio: intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto : (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
-- radio: intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
-- radio: intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
 - checkbox: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della data di entrata in vigore della legge 28 gennaio 1977, n. 10 (articolo  (under: si)
 - radio: dà atto che la data/epoca di realizzazione dell’intervento (under: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato pri)
 - radio: attesta che la data/epoca di realizzazione dell’intervento (under: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato pri)
@@ -196,15 +192,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - checkbox: In caso di intervento in VARIANTE :
 
-### Relazione Tecnica di Asseverazione C.I.L.A.
-
-2 pratiche; 4 of 27 choices to map.
-
-- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
-- radio: intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto : (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
-- radio: intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
-- radio: intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
-
 ### h) Impresa esecutrice dei lavori
 
 2 pratiche; 3 of 5 choices to map.
@@ -219,6 +206,12 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: tecnico incaricato
 - checkbox: se il direttore dei lavori delle opere architettoniche è diverso dal progettista delle opere architettoniche
+
+### Relazione Tecnica di Asseverazione C.I.L.A.
+
+2 pratiche; 1 of 27 choices to map.
+
+- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
 
 ### i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
 
@@ -450,16 +443,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all’articolo 36-bis del DPR 380/2001 e (under: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspe)
 - checkbox: si allega documentazione necessaria ai fini del rilascio del parere vincolante (vedi quadro della documentazione allegata - art. 36-bis comma 4 DPR 380/2001)” (under: è assoggettato al procedimento di accertamento della compatibilità paesaggistica)
 
-### Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze
-
-1 pratiche; 5 of 24 choices to map.
-
-- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
-- radio: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost (under: trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1)
-- radio: intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto : (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
-- radio: intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
-- radio: intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
-
 ### Riferimenti titolo edilizio e/o paesaggistico e data prevista della fine dei lavori
 
 1 pratiche; 2 of 5 choices to map.
@@ -512,6 +495,12 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 1 pratiche; 1 of 12 choices to map.
 
 - checkbox: 4. Altri interventi individuati dalla legislazione regionale (1)
+
+### Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze
+
+1 pratiche; 1 of 24 choices to map.
+
+- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
 
 ### Attestazione tecnica - Dati del Direttore Lavori/Professionista Abilitato
 
