@@ -7,6 +7,7 @@ cases. No browser, vault or network.
 """
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -19,6 +20,7 @@ sys.dont_write_bytecode = True
 import gen  # noqa: E402
 import run  # noqa: E402
 
+os.chdir(ROOT)  # the answers name their files from the repo's root
 SCIA = ROOT / "rehearsals" / "scia-fittizia"
 FIELDS = dict(json.loads((ROOT / "rehearsals" / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
 STEPS = {r: gen.generate(yaml.safe_load((ROOT / "rehearsals" / r / "recipe.yaml").read_text()))

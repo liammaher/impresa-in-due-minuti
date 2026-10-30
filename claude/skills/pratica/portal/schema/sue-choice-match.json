@@ -339,29 +339,54 @@
     "note": "medium/high seismicity zones 1 and 2"
    },
    "015/tolleranza_non_strutturale": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "portal label is cut before the structural wording; no separate box seen"
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "non ha rilevanza strutturale;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: radio \"non ha rilevanza strutturale\" after zone 1-2 box"
    },
    "015/tolleranza_strutturale": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "no separate box seen in worksheet"
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: radio \"ha rilevanza strutturale, rispetta le norme tecniche...\""
    },
    "016/tolleranza_pubblica_incolumita": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :"
+     }
+    ],
     "confidence": "high",
-    "note": "no box in worksheet"
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. a) rilevante"
    },
    "016/tolleranza_minore_rilevanza": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:"
+     }
+    ],
     "confidence": "high",
-    "note": "no box in worksheet"
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. b) minore rilevanza"
    },
    "016/tolleranza_priva_rilevanza": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:"
+     }
+    ],
     "confidence": "high",
-    "note": "no box in worksheet"
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. c) priva di rilevanza"
    },
    "017/allega_autorizzazione_sismica": {
     "boxes": [],
@@ -590,9 +615,14 @@
     "note": "single oblazione box shared with 004; cannot tell parziale vs totale"
    },
    "003/condizione_sicurezza_rimozione": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezza e/o la rimozione di opere che non possono essere sanate, a cui lo Spo"
+     }
+    ],
     "confidence": "low",
-    "note": "no portal box for the safety/removal condition"
+    "note": "rematched on the depth-3 recrawl: P201 states the same safety/removal condition (36-bis) but sits in the technician's sanatoria chain, shared with si_interventi"
    },
    "004/oblazione_doppio_contributo_totale": {
     "boxes": [
@@ -605,19 +635,34 @@
     "note": "single oblazione box shared with 003"
    },
    "004/condizione_sicurezza_rimozione_doppia": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezza e/o la rimozione di opere che non possono essere sanate, a cui lo Spo"
+     }
+    ],
     "confidence": "low",
-    "note": "no portal box for the safety/removal condition"
+    "note": "rematched on the depth-3 recrawl: same single portal box as 003; portal does not split by branch"
    },
    "005/titolare_esclusivo": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "b) Titolarità dell'intervento",
+      "label": "avere titolarità esclusiva all'esecuzione dell'intervento"
+     }
+    ],
     "confidence": "high",
-    "note": "no radio/checkbox in worksheet (probably a dropdown with long options)"
+    "note": "rematched on the depth-3 recrawl: exact radio: titolarita esclusiva"
    },
    "005/non_titolare_esclusivo": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "b) Titolarità dell'intervento",
+      "label": "non avere titolarità esclusiva all'esecuzione dell'intervento, ma di disporre comunque della dichiarazione di assenso dei terzi titolari di altri diritti reali "
+     }
+    ],
     "confidence": "high",
-    "note": "no radio/checkbox in worksheet"
+    "note": "rematched on the depth-3 recrawl: exact radio: no exclusive title, third-party consent"
    },
    "006/fabbricati": {
     "boxes": [
@@ -950,29 +995,54 @@
     "note": ""
    },
    "020/tolleranza_oltre_500_mq": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "2%, per le U.I. > 500 mq di superficie utile ;"
+     }
+    ],
     "confidence": "high",
-    "note": "size band is a data pick; no own box (parent is P121, art. 34-bis c.1-bis)"
+    "note": "rematched on the depth-3 recrawl: 2% for U.I. > 500 mq matches the art. 34-bis size band"
    },
    "020/tolleranza_da_500_a_300_mq": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile;"
+     }
+    ],
     "confidence": "high",
-    "note": "size band is a data pick; no own box (parent is P121, art. 34-bis c.1-bis)"
+    "note": "rematched on the depth-3 recrawl: 3% for 500-300 mq matches the art. 34-bis size band"
    },
    "020/tolleranza_da_300_a_100_mq": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;"
+     }
+    ],
     "confidence": "high",
-    "note": "size band is a data pick; no own box (parent is P121, art. 34-bis c.1-bis)"
+    "note": "rematched on the depth-3 recrawl: 4% for 300-100 mq matches the art. 34-bis size band"
    },
    "020/tolleranza_da_100_a_60_mq": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;"
+     }
+    ],
     "confidence": "high",
-    "note": "size band is a data pick; no own box (parent is P121, art. 34-bis c.1-bis)"
+    "note": "rematched on the depth-3 recrawl: 5% for 100-60 mq matches the art. 34-bis size band"
    },
    "020/tolleranza_sotto_60_mq": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "6%, per le U.I. < 60 mq di superficie utile;"
+     }
+    ],
     "confidence": "high",
-    "note": "size band is a data pick; no own box (parent is P121, art. 34-bis c.1-bis)"
+    "note": "rematched on the depth-3 recrawl: 6% for U.I. < 60 mq matches the art. 34-bis size band"
    },
    "021/tolleranza_zona_sismica_bassa": {
     "boxes": [
@@ -995,29 +1065,54 @@
     "note": ""
    },
    "022/tolleranza_non_strutturale": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "non ha rilevanza strutturale;"
+     }
+    ],
     "confidence": "high",
-    "note": "no separate box (inside P126 wording or not offered)"
+    "note": "rematched on the depth-3 recrawl: non ha rilevanza strutturale, after P176 (zones 1-2)"
    },
    "022/tolleranza_strutturale": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost"
+     }
+    ],
     "confidence": "high",
-    "note": "no separate box (inside P126 wording or not offered)"
+    "note": "rematched on the depth-3 recrawl: ha rilevanza strutturale, after P176 (zones 1-2)"
    },
    "023/tolleranza_pubblica_incolumita": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :"
+     }
+    ],
     "confidence": "high",
-    "note": "no separate box in worksheet"
+    "note": "rematched on the depth-3 recrawl: rilevante, art. 94-bis c.1 a"
    },
    "023/tolleranza_minore_rilevanza": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:"
+     }
+    ],
     "confidence": "high",
-    "note": "no separate box in worksheet"
+    "note": "rematched on the depth-3 recrawl: minore rilevanza, art. 94-bis c.1 b"
    },
    "023/tolleranza_priva_rilevanza": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:"
+     }
+    ],
     "confidence": "high",
-    "note": "no separate box in worksheet"
+    "note": "rematched on the depth-3 recrawl: priva di rilevanza, art. 94-bis c.1 c"
    },
    "024/allega_autorizzazione_sismica": {
     "boxes": [],
@@ -1055,29 +1150,54 @@
     "note": "no portal box in worksheet"
    },
    "026/realizzazione_intervento_atto": {
-    "boxes": [],
-    "confidence": "high",
-    "note": "no portal box in worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "dà atto che la data/epoca di realizzazione dell’intervento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: 'da atto che la data/epoca di realizzazione'; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
    },
    "026/realizzazione_intervento_attesta": {
-    "boxes": [],
-    "confidence": "high",
-    "note": "no portal box in worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "attesta che la data/epoca di realizzazione dell’intervento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: 'attesta che la data/epoca di realizzazione'; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
    },
    "026/permesso_costruire_in_sanatoria": {
-    "boxes": [],
-    "confidence": "high",
-    "note": "no portal box in worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "ai fini della sanatoria, la presente SCIA:"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: lead-in of no/si interventi ('la presente SCIA' wording); portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
    },
    "027/bassa_sismicita": {
-    "boxes": [],
-    "confidence": "high",
-    "note": "no portal box (P125 belongs to tolleranze, not sanatoria)"
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sismicità (zone 3 e 4)"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: zone 3 e 4, intervento; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
    },
    "027/media_alta_sismicita": {
-    "boxes": [],
-    "confidence": "high",
-    "note": "no portal box"
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che l’intervento sopra indicato :"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: zone 1 e 2, intervento; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
    },
    "028/no_rilevanza_strutturale": {
     "boxes": [],
@@ -1095,29 +1215,54 @@
     "note": "no portal box in worksheet"
    },
    "029/realizzazione_intervento_atto": {
-    "boxes": [],
-    "confidence": "high",
-    "note": "no portal box in worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "dà atto che la data/epoca di realizzazione dell’intervento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: 'da atto che la data/epoca di realizzazione'; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
    },
    "029/realizzazione_intervento_attesta": {
-    "boxes": [],
-    "confidence": "high",
-    "note": "no portal box in worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "attesta che la data/epoca di realizzazione dell’intervento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: 'attesta che la data/epoca di realizzazione'; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
    },
    "029/permesso_costruire_in_sanatoria": {
-    "boxes": [],
-    "confidence": "high",
-    "note": "no portal box in worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "ai fini della sanatoria, la presente SCIA:"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: lead-in of no/si interventi ('la presente SCIA' wording); portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
    },
    "030/bassa_sismicita": {
-    "boxes": [],
-    "confidence": "high",
-    "note": "no portal box (P125 belongs to tolleranze, not sanatoria)"
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sismicità (zone 3 e 4)"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: zone 3 e 4, intervento; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
    },
    "030/media_alta_sismicita": {
-    "boxes": [],
-    "confidence": "high",
-    "note": "no portal box"
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che l’intervento sopra indicato :"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: zone 1 e 2, intervento; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
    },
    "031/no_rilevanza_strutturale": {
     "boxes": [],
@@ -2461,9 +2606,14 @@
     "note": "absence means the \"notifica\" sibling is used: P106 (P107 reserves filing until start of works)"
    },
    "024/no_mutamento_destinazione_uso_straordinaria": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tipologia di intervento, descrizione opere",
+      "label": "Si specifica che l’intervento non comporta mutamento di destinazione d’uso"
+     }
+    ],
     "confidence": "medium",
-    "note": "absence: no mutamento box ticked; portal has no sub-radio here"
+    "note": "rematched on the depth-3 recrawl: portal has one shared \"non comporta mutamento\" radio in the tipologia block; assumed to serve this intervention"
    },
    "024/si_mutamento_destinazione_uso_straordinaria": {
     "boxes": [
@@ -2476,9 +2626,14 @@
     "note": "only the generic mutamento di destinazione d'uso type checkbox"
    },
    "025/no_mutamento_destinazione_uso_restauro": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tipologia di intervento, descrizione opere",
+      "label": "Si specifica che l’intervento non comporta mutamento di destinazione d’uso"
+     }
+    ],
     "confidence": "medium",
-    "note": "absence: no mutamento box ticked; portal has no sub-radio here"
+    "note": "rematched on the depth-3 recrawl: same shared \"non comporta mutamento\" radio"
    },
    "025/si_mutamento_destinazione_uso_restauro": {
     "boxes": [
@@ -2491,9 +2646,14 @@
     "note": "only the generic mutamento di destinazione d'uso type checkbox"
    },
    "026/no_mutamento_destinazione_uso_ristrutturazione": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tipologia di intervento, descrizione opere",
+      "label": "Si specifica che l’intervento non comporta mutamento di destinazione d’uso"
+     }
+    ],
     "confidence": "medium",
-    "note": "absence: no mutamento box ticked; portal has no sub-radio here"
+    "note": "rematched on the depth-3 recrawl: same shared \"non comporta mutamento\" radio"
    },
    "026/si_mutamento_destinazione_uso_ristrutturazione": {
     "boxes": [
@@ -2576,29 +2736,54 @@
     "note": "zones 1 and 2"
    },
    "029/tolleranza_non_strutturale": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "sub-option inside P127 text; no separate box in worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "non ha rilevanza strutturale;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"non ha rilevanza strutturale\" in tolleranze block"
    },
    "029/tolleranza_strutturale": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "sub-option inside P127 text; no separate box in worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"ha rilevanza strutturale, rispetta le norme tecniche...\""
    },
    "030/tolleranza_pubblica_incolumita": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "sub-option inside P127 text; no separate box in worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. a)"
    },
    "030/tolleranza_minore_rilevanza": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "sub-option inside P127 text; no separate box in worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. b)"
    },
    "030/tolleranza_priva_rilevanza": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "sub-option inside P127 text; no separate box in worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. c)"
    },
    "031/allega_autorizzazione_sismica": {
     "boxes": [],
@@ -2611,24 +2796,44 @@
     "note": "sub-option inside P127 text; no separate box in worksheet"
    },
    "032/no_interventi": {
-    "boxes": [],
-    "confidence": "medium",
-    "note": "portal has no such option"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "non prevede interventi;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"non prevede interventi\" under \"ai fini della sanatoria, la presente SCIA\""
    },
    "032/propone_interventi": {
-    "boxes": [],
-    "confidence": "medium",
-    "note": "portal has no such option"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezza e/o la rimozione di opere che non possono essere sanate, a cui lo Spo"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"propone la realizzazione di interventi anche strutturali...\""
    },
    "033/zona_sismica_bassa": {
-    "boxes": [],
-    "confidence": "medium",
-    "note": "portal has no such option in sanatoria section"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sismicità (zone 3 e 4)"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: sanatoria: zona sismica bassa (zone 3 e 4)"
    },
    "033/zona_sismica_media_alta": {
-    "boxes": [],
-    "confidence": "medium",
-    "note": "portal has no such option in sanatoria section"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che l’intervento sopra indicato :"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: sanatoria: zone 1 e 2, attesta che l'intervento..."
    },
    "034/no_rilevanza_strutturale": {
     "boxes": [],
@@ -3222,14 +3427,24 @@
   },
   "scia_alternativa": {
    "000/titolare_esclusivo": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "a) Titolarità dell'intervento",
+      "label": "avere titolarità esclusiva all'esecuzione dell'intervento"
+     }
+    ],
     "confidence": "high",
-    "note": "portal has no titolo di possesso option"
+    "note": "rematched on the depth-3 recrawl: \"avere titolarità esclusiva all'esecuzione dell'intervento\""
    },
    "000/non_titolare_esclusivo": {
-    "boxes": [],
+    "boxes": [
+     {
+      "section": "a) Titolarità dell'intervento",
+      "label": "non avere titolarità esclusiva all'esecuzione dell'intervento, ma di disporre comunque della dichiarazione di assenso dei terzi titolari di altri diritti reali "
+     }
+    ],
     "confidence": "high",
-    "note": "portal has no titolo di possesso option"
+    "note": "rematched on the depth-3 recrawl: \"non avere titolarità esclusiva ... ma di disporre dell'assenso dei terzi\""
    },
    "001/scia_alternativa": {
     "boxes": [],
@@ -3671,29 +3886,54 @@
     "note": "portal has one shared no/yes pair (P086/P087) for all four intervention kinds (P082-P085)"
    },
    "020/tolleranza_oltre_500_mq": {
-    "boxes": [],
-    "confidence": "medium",
-    "note": "portal tolerance boxes (P091-P095) are by article/comma, not by surface band"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "2%, per le U.I. > 500 mq di superficie utile ;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 2%, U.I. > 500 mq"
    },
    "020/tolleranza_da_500_a_300_mq": {
-    "boxes": [],
-    "confidence": "medium",
-    "note": "portal tolerance boxes (P091-P095) are by article/comma, not by surface band"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 3%, 500-300 mq"
    },
    "020/tolleranza_da_300_a_100_mq": {
-    "boxes": [],
-    "confidence": "medium",
-    "note": "portal tolerance boxes (P091-P095) are by article/comma, not by surface band"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 4%, 300-100 mq"
    },
    "020/tolleranza_da_100_a_60_mq": {
-    "boxes": [],
-    "confidence": "medium",
-    "note": "portal tolerance boxes (P091-P095) are by article/comma, not by surface band"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 5%, 100-60 mq"
    },
    "020/tolleranza_sotto_60_mq": {
-    "boxes": [],
-    "confidence": "medium",
-    "note": "portal tolerance boxes (P091-P095) are by article/comma, not by surface band"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "6%, per le U.I. < 60 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 6%, < 60 mq"
    },
    "021/tolleranza_zona_sismica_bassa": {
     "boxes": [
@@ -3716,29 +3956,54 @@
     "note": ""
    },
    "022/tolleranza_non_strutturale": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "sub-option not among the boxes (P097 text cut off)"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "non ha rilevanza strutturale;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"non ha rilevanza strutturale\""
    },
    "022/tolleranza_strutturale": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "sub-option not among the boxes (P097 text cut off)"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"ha rilevanza strutturale, rispetta le norme tecniche...\""
    },
    "023/tolleranza_pubblica_incolumita": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "no such box in the worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. a)"
    },
    "023/tolleranza_minore_rilevanza": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "no such box in the worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. b)"
    },
    "023/tolleranza_priva_rilevanza": {
-    "boxes": [],
-    "confidence": "low",
-    "note": "no such box in the worksheet"
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. c)"
    },
    "024/allega_autorizzazione_sismica": {
     "boxes": [],
@@ -4747,5 +5012,6 @@
     "note": "fire-safety change"
    }
   }
- }
+ },
+ "rematched": "2026-10-30: the alternatives with no box, against the depth-3 recrawl, by two Claude subagents (Sonnet)"
 }
