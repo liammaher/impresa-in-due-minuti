@@ -453,7 +453,8 @@ CI runs `regress.py` against the library's main (`fill.yml`); the library runs i
 The portal runner has offline tests on a fake portal: `claude/skills/pratica/portal/bench/test_inpage.py`,
 run with the pratica venv's Python (`~/.cache/pratica-portal/venv`, Playwright's Chromium, headless; no
 network, vault or model); `bench/test_preflight.py` tests pre-flight on the SCIA rehearsal's files, `bench/test_gen.py`
-gen.py on the crawls in `catalogue/F839/sections`, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
+gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the SUE choice count
+(`branches.py --write` writes `docs/sue-branches.md`), `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
 the same bytes as the library's), `bench/test_schema_branches.py` schema_branches.py and its table. On the real portal, `bench/rerun.py` reruns the rehearsals
 in the pane after a runner, dictionary or gen.py change (portal/README.md).
 

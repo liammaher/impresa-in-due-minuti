@@ -47,6 +47,12 @@ groups:
     question: "Which of the barriers rules' requirements does the project meet (D.M. 236/1989)? Tick every one that applies."
   acustica_documenti:
     question: "Which acoustic documents are attached (art. 8 L. 447/1995, art. 4 DPR 227/2011)? Tick every one that applies."
+  precedenti:
+    question: "Which building titles or pratiche make the building's stato legittimo (art. 9-bis c. 1-bis DPR 380/2001: the one that built it or last covered all of it, and the partial ones after)? Tick every one; the form has one line for each kind."
+  prova_documenti:
+    question: "What shows the building's original state? Tick every one that applies."
+  tolleranze_precedenti:
+    question: "Where were the construction tolerance declarations (art. 34-bis or 34-ter c. 4) made? Tick every one that applies."
 
 asks:
   descrizione:
@@ -509,8 +515,83 @@ asks:
     question: "Who works the contributo out: prospetto (the progettista's prospetto di calcolo preventivo, attached); sportello (the SUE, from the technical documents attached)"
     options: [prospetto, sportello]
   documentazione_calcolo_contributo: {type: file, question: "The technical documents the SUE needs to work out the contributo (PDF)"}
-  precedente_numero: {type: text, question: "The building's own title (licenza / concessione / permesso di costruire): its number"}
-  precedente_data: {type: date, question: "Its date"}
+  # The SCIA's f), the SCIA alternativa's f) and the permesso's e): how the stato legittimo is
+  # shown. The national form (ent_regolarita_urbanistica_scia/pdc) takes one of the five, then
+  # "pienamente conforme" or "conforme ... unitamente alla sanatoria" (quadro c's sanatoria and
+  # this pratica's tolerances). The permesso adds a sixth: a new construction on free land (its
+  # recipes add the option).
+  stato_legittimo:
+    type: choice
+    question: "How does quadro f) (e) for the permesso) show the building's stato legittimo? The form takes one: titoli (from its building titles or pratiche: you'll list them); epoca (built when no title was required: the catasto's primo impianto or other documents); prova (its title is lost or unknown, but there is documentary proof of it); sanzioni (pecuniary sanctions under artt. 33, 34, 37 or 38 DPR 380/2001 were imposed and fully paid); tolleranze (construction tolerance declarations, art. 34-bis or 34-ter c. 4)"
+    options: [titoli, epoca, prova, sanzioni, tolleranze]
+    propose: "titoli"
+  precedenti_ripetuti:
+    type: yes_no
+    question: "Does the building have two or more titles of the same kind (two DIAs, two SCIAs)? The form has one line per kind"
+    propose: "false"
+    when: "{{ask.stato_legittimo|is_titoli}}"
+  prec_titolo_unico: {type: yes_no, group: precedenti, item: "Titolo unico (SUAP)"}
+  prec_permesso: {type: yes_no, group: precedenti, item: "Permesso di costruire, licenza edilizia or concessione edilizia"}
+  prec_autorizzazione: {type: yes_no, group: precedenti, item: "Autorizzazione edilizia"}
+  prec_comunicazione: {type: yes_no, group: precedenti, item: "Comunicazione edilizia (art. 26 L. 47/1985)"}
+  prec_dia: {type: yes_no, group: precedenti, item: "Denuncia di inizio attività (DIA)"}
+  prec_dia_alternativa: {type: yes_no, group: precedenti, item: "DIA or SCIA alternativa al permesso di costruire"}
+  prec_scia: {type: yes_no, group: precedenti, item: "SCIA (segnalazione certificata di inizio attività)"}
+  prec_cel: {type: yes_no, group: precedenti, item: "Comunicazione edilizia libera"}
+  prec_condono: {type: yes_no, group: precedenti, item: "Condono edilizio (a title in sanatoria, its oblazione paid)"}
+  prec_pdc_sanatoria: {type: yes_no, group: precedenti, item: "Permesso di costruire in sanatoria (artt. 36 or 36-bis DPR 380/2001)"}
+  prec_scia_sanatoria: {type: yes_no, group: precedenti, item: "SCIA in sanatoria (art. 36-bis)"}
+  prec_scia_sanatoria_variante: {type: yes_no, group: precedenti, item: "SCIA in sanatoria for a variant in corso d'opera in partial difformity from a title issued before L. 10/1977"}
+  prec_altro: {type: yes_no, group: precedenti, item: "Another title or pratica"}
+  prec_titolo_unico_numero: {type: text, question: "The titolo unico (SUAP): its number", when: "{{ask.prec_titolo_unico}}"}
+  prec_titolo_unico_data: {type: date, question: "Its date", when: "{{ask.prec_titolo_unico}}"}
+  precedente_numero: {type: text, question: "The permesso di costruire / licenza / concessione edilizia: its number", when: "{{ask.prec_permesso}}"}
+  precedente_data: {type: date, question: "Its date", when: "{{ask.prec_permesso}}"}
+  prec_autorizzazione_numero: {type: text, question: "The autorizzazione edilizia: its number", when: "{{ask.prec_autorizzazione}}"}
+  prec_autorizzazione_data: {type: date, question: "Its date", when: "{{ask.prec_autorizzazione}}"}
+  prec_comunicazione_numero: {type: text, question: "The comunicazione edilizia (art. 26 L. 47/1985): its number", when: "{{ask.prec_comunicazione}}"}
+  prec_comunicazione_data: {type: date, question: "Its date", when: "{{ask.prec_comunicazione}}"}
+  prec_dia_numero: {type: text, question: "The DIA: its number", when: "{{ask.prec_dia}}"}
+  prec_dia_data: {type: date, question: "Its date", when: "{{ask.prec_dia}}"}
+  prec_dia_alternativa_numero: {type: text, question: "The DIA / SCIA alternativa al permesso: its number", when: "{{ask.prec_dia_alternativa}}"}
+  prec_dia_alternativa_data: {type: date, question: "Its date", when: "{{ask.prec_dia_alternativa}}"}
+  prec_scia_numero: {type: text, question: "The SCIA: its number", when: "{{ask.prec_scia}}"}
+  prec_scia_data: {type: date, question: "Its date", when: "{{ask.prec_scia}}"}
+  prec_cel_numero: {type: text, question: "The comunicazione edilizia libera: its number", when: "{{ask.prec_cel}}"}
+  prec_cel_data: {type: date, question: "Its date", when: "{{ask.prec_cel}}"}
+  prec_condono_numero: {type: text, question: "The condono: its number", when: "{{ask.prec_condono}}"}
+  prec_condono_data: {type: date, question: "Its date", when: "{{ask.prec_condono}}"}
+  prec_pdc_sanatoria_numero: {type: text, question: "The permesso di costruire in sanatoria: its number", when: "{{ask.prec_pdc_sanatoria}}"}
+  prec_pdc_sanatoria_data: {type: date, question: "Its date", when: "{{ask.prec_pdc_sanatoria}}"}
+  prec_scia_sanatoria_numero: {type: text, question: "The SCIA in sanatoria: its number", when: "{{ask.prec_scia_sanatoria}}"}
+  prec_scia_sanatoria_data: {type: date, question: "Its date", when: "{{ask.prec_scia_sanatoria}}"}
+  prec_scia_sanatoria_variante_numero: {type: text, question: "The SCIA in sanatoria for the variant: its number", when: "{{ask.prec_scia_sanatoria_variante}}"}
+  prec_scia_sanatoria_variante_data: {type: date, question: "Its date", when: "{{ask.prec_scia_sanatoria_variante}}"}
+  prec_altro_quale: {type: text, question: "Which other title or pratica (the form's \"specificare\")", when: "{{ask.prec_altro}}"}
+  prec_altro_numero: {type: text, question: "Its number", when: "{{ask.prec_altro}}"}
+  prec_altro_data: {type: date, question: "Its date", when: "{{ask.prec_altro}}"}
+  # Built before a title was required, or a title lost with proof of it (art. 9-bis c. 1-bis):
+  # the same two documents.
+  prova_catasto: {type: yes_no, group: prova_documenti, item: "The catasto's primo impianto registration (its copy, or its details)"}
+  prova_altri: {type: yes_no, group: prova_documenti, item: "Other documents: photos, maps, archive records (art. 9-bis c. 1-bis, fourth and fifth periods)"}
+  prova_catasto_numero: {type: text, question: "The primo impianto registration: its number", when: "{{ask.prova_catasto}}"}
+  prova_catasto_data: {type: date, question: "Its date", when: "{{ask.prova_catasto}}"}
+  sanzione_prova:
+    type: choice
+    question: "How does quadro f) show the sanctions were paid? ricevuta (their receipt is attached); estremi (you give the payment's details)"
+    options: [ricevuta, estremi]
+    when: "{{ask.stato_legittimo|is_sanzioni}}"
+  sanzione_ricevuta: {type: file, question: "The sanctions' payment receipt (PDF)", when: "{{ask.sanzione_prova|is_ricevuta}}"}
+  sanzione_importo: {type: number, question: "The sanction's amount in euro", when: "{{ask.sanzione_prova|is_estremi}}"}
+  sanzione_irrogata: {type: date, question: "When it was imposed", when: "{{ask.sanzione_prova|is_estremi}}"}
+  sanzione_protocollo: {type: text, question: "The payment details' \"Prot. n.\", as the form asks it", when: "{{ask.sanzione_prova|is_estremi}}"}
+  sanzione_protocollo_data: {type: date, question: "Its date", when: "{{ask.sanzione_prova|is_estremi}}"}
+  toll_prec_pratica: {type: yes_no, group: tolleranze_precedenti, item: "In an earlier pratica edilizia's forms"}
+  toll_prec_atto: {type: yes_no, group: tolleranze_precedenti, item: "Attached to a deed that transferred, set up or ended rights on the building"}
+  toll_prec_pratica_protocollo: {type: text, question: "That pratica's protocol number", when: "{{ask.toll_prec_pratica}}"}
+  toll_prec_pratica_data: {type: date, question: "Its date", when: "{{ask.toll_prec_pratica}}"}
+  toll_prec_atto_numero: {type: text, question: "The deed's registration number", when: "{{ask.toll_prec_atto}}"}
+  toll_prec_atto_data: {type: date, question: "Its registration date", when: "{{ask.toll_prec_atto}}"}
   superficie_mq: {type: number, question: "The unit's surface in m²"}
   volume_mc: {type: number, question: "Its volume in m³"}
   piani_n: {type: number, question: "The building's number of storeys"}
@@ -1812,14 +1893,103 @@ sections:
       - {kind: radio, label: "mutamento di destinazione d'uso, di un intero immobile", when: "{{ask.scia_tipo|is_cambio_uso}} {{ask.cambio_uso_tipo|is_immobile_opere_6bis}}"}
       - {kind: radio, label: "con opere riconducibili agli interventi di cui di cui all'articolo 6-bis", when: "{{ask.scia_tipo|is_cambio_uso}} {{ask.cambio_uso_tipo|is_immobile_opere_6bis}}"}
 
+  # The SCIA's and the SCIA alternativa's f), the permesso's e): every box always shown, each
+  # radio its own group, though the national form takes one of the five ways (asks.stato_legittimo).
+  # A title's line is its kind's box, its "n." (named by the kind, its cell's context) and the
+  # nth "del" (one per line, in order: 1-13 the titles and "altro", 14 and 15 the two primo
+  # impianto lines, 16 the sanction's, 17 the tolerances' pratica). The two document blocks
+  # (built before titles, a title lost) repeat their labels: nth 1 and 2.
   - section: Regolarità urbanistica e precedenti edilizi
     leave: [n., del, specificare, di Euro, a titolo di sanzione, Prot. n., atto di registrazione, in data]
+    supports:
+      # Seen on the portal 2026-10-30: under "copia accatastamento di primo impianto" two boxes with
+      # no text of their own choose its details (they switch the n. and del on) or its copy, uploaded
+      # inside the quadro; the crawl saw neither (the block is switched off until its radio is picked).
+      - {value: "{{ask.stato_legittimo}}", in: [titoli, sanzioni, tolleranze, area libera], else: "A building with no title on file (built before titles were required, or its title lost) isn't mapped yet: the quadro's primo impianto line asks its details or its copy, by boxes the crawl didn't see."}
+      - {if: "{{ask.stato_legittimo|is_titoli}}", value: "{{ask.precedenti_ripetuti}}", in: ["false"], else: "Two or more building titles of the same kind aren't mapped yet: the quadro has one line per kind."}
+      - {if: "{{ask.stato_legittimo|is_titoli}}", value: "{{ask.prec_titolo_unico,ask.prec_permesso,ask.prec_autorizzazione,ask.prec_comunicazione,ask.prec_dia,ask.prec_dia_alternativa,ask.prec_scia,ask.prec_cel,ask.prec_condono,ask.prec_pdc_sanatoria,ask.prec_scia_sanatoria,ask.prec_scia_sanatoria_variante,ask.prec_altro|any}}", in: ["true"], else: "A stato legittimo from the building's titles needs at least one title."}
+      - {if: "{{ask.stato_legittimo|in_epoca__prova}}", value: "{{ask.prova_catasto,ask.prova_altri|any}}", in: ["true"], else: "A building with no title on file needs its catasto primo impianto or other documents."}
+      - {if: "{{ask.stato_legittimo|is_tolleranze}}", value: "{{ask.toll_prec_pratica,ask.toll_prec_atto|any}}", in: ["true"], else: "A stato legittimo from tolerance declarations needs where they were made."}
     fields:
-      - {kind: radio, label: che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i}
-      - {kind: checkbox, label: permesso di costruire / licenza edil.}
-      - {kind: text, label: permesso di costruire / licenza edil., value: "{{ask.precedente_numero}}"}
-      - {kind: date, label: del, nth: 2, value: "{{ask.precedente_data|date_it}}"}
-      - {kind: radio, label: pienamente conforme alla documentazione dello stato legittimo}
+      # Only the permesso's e): a new construction on free land (its recipes offer it).
+      - {kind: radio, label: che le opere riguardano un intervento di nuova costruzione su area libera, if_present: true, when: "{{ask.stato_legittimo|is_area_libera}}"}
+      - {kind: radio, label: che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i, when: "{{ask.stato_legittimo|is_titoli}}"}
+      - {kind: checkbox, label: titolo unico (SUAP), when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_titolo_unico}}"}
+      - {kind: text, label: titolo unico (SUAP), value: "{{ask.prec_titolo_unico_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_titolo_unico}}"}
+      - {kind: date, label: del, nth: 1, value: "{{ask.prec_titolo_unico_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_titolo_unico}}"}
+      - {kind: checkbox, label: permesso di costruire / licenza edil., when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}"}
+      - {kind: text, label: permesso di costruire / licenza edil., value: "{{ask.precedente_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}"}
+      - {kind: date, label: del, nth: 2, value: "{{ask.precedente_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}"}
+      - {kind: checkbox, label: autorizzazione edilizia, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}"}
+      - {kind: text, label: autorizzazione edilizia, value: "{{ask.prec_autorizzazione_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}"}
+      - {kind: date, label: del, nth: 3, value: "{{ask.prec_autorizzazione_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}"}
+      - {kind: checkbox, label: comunicazione edilizia (art. 26, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_comunicazione}}"}
+      - {kind: text, label: comunicazione edilizia (art. 26, value: "{{ask.prec_comunicazione_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_comunicazione}}"}
+      - {kind: date, label: del, nth: 4, value: "{{ask.prec_comunicazione_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_comunicazione}}"}
+      - {kind: checkbox, label: denuncia di inizio attività, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia}}"}
+      - {kind: text, label: denuncia di inizio attività, value: "{{ask.prec_dia_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia}}"}
+      - {kind: date, label: del, nth: 5, value: "{{ask.prec_dia_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia}}"}
+      - {kind: checkbox, label: DIA/SCIA alternativa al permesso di costruire, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia_alternativa}}"}
+      - {kind: text, label: DIA/SCIA alternativa al permesso di costruire, value: "{{ask.prec_dia_alternativa_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia_alternativa}}"}
+      - {kind: date, label: del, nth: 6, value: "{{ask.prec_dia_alternativa_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia_alternativa}}"}
+      - {kind: checkbox, label: segnalazione certificata di inizio attività, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia}}"}
+      - {kind: text, label: segnalazione certificata di inizio attività, value: "{{ask.prec_scia_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia}}"}
+      - {kind: date, label: del, nth: 7, value: "{{ask.prec_scia_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia}}"}
+      - {kind: checkbox, label: comunicazione edilizia libera, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_cel}}"}
+      - {kind: text, label: comunicazione edilizia libera, value: "{{ask.prec_cel_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_cel}}"}
+      - {kind: date, label: del, nth: 8, value: "{{ask.prec_cel_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_cel}}"}
+      # The heading of the four titles in sanatoria, ticked with any of them.
+      - {kind: checkbox, label: titolo edilizio in sanatoria, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono,ask.prec_pdc_sanatoria,ask.prec_scia_sanatoria,ask.prec_scia_sanatoria_variante|any}}"}
+      - {kind: checkbox, label: condono edilizio, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono}}"}
+      - {kind: text, label: condono edilizio, value: "{{ask.prec_condono_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono}}"}
+      - {kind: date, label: del, nth: 9, value: "{{ask.prec_condono_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono}}"}
+      - {kind: checkbox, label: permesso di costruire in sanatoria, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_pdc_sanatoria}}"}
+      - {kind: text, label: permesso di costruire in sanatoria, value: "{{ask.prec_pdc_sanatoria_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_pdc_sanatoria}}"}
+      - {kind: date, label: del, nth: 10, value: "{{ask.prec_pdc_sanatoria_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_pdc_sanatoria}}"}
+      - {kind: checkbox, label: SCIA in sanatoria di cui all’art. 36-bis, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria}}"}
+      - {kind: text, label: SCIA in sanatoria di cui all’art. 36-bis, value: "{{ask.prec_scia_sanatoria_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria}}"}
+      - {kind: date, label: del, nth: 11, value: "{{ask.prec_scia_sanatoria_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria}}"}
+      - {kind: checkbox, label: SCIA in sanatoria per variante, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria_variante}}"}
+      - {kind: text, label: SCIA in sanatoria per variante, value: "{{ask.prec_scia_sanatoria_variante_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria_variante}}"}
+      - {kind: date, label: del, nth: 12, value: "{{ask.prec_scia_sanatoria_variante_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria_variante}}"}
+      # "altro": its own specificare, then the 13th "n." and "del" (no kind in their cells).
+      - {kind: checkbox, label: altro, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}"}
+      - {kind: text, label: specificare, value: "{{ask.prec_altro_quale}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}"}
+      - {kind: text, label: n., nth: 13, value: "{{ask.prec_altro_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}"}
+      - {kind: date, label: del, nth: 13, value: "{{ask.prec_altro_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}"}
+      # Built when no title was required.
+      - {kind: radio, label: si tratta di immobile realizzato in un’epoca, when: "{{ask.stato_legittimo|is_epoca}}"}
+      - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 1, when: "{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}"}
+      - {kind: text, label: n., nth: 14, value: "{{ask.prova_catasto_numero}}", when: "{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}"}
+      - {kind: date, label: del, nth: 14, value: "{{ask.prova_catasto_data|date_it}}", when: "{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}"}
+      - {kind: checkbox, label: altri documenti probanti, nth: 1, when: "{{ask.stato_legittimo|is_epoca}} {{ask.prova_altri}}"}
+      # A title lost, with documentary proof of it.
+      - {kind: radio, label: non sono disponibili la copia o gli estremi del titolo abilitativo, when: "{{ask.stato_legittimo|is_prova}}"}
+      - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 2, when: "{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}"}
+      - {kind: text, label: n., nth: 15, value: "{{ask.prova_catasto_numero}}", when: "{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}"}
+      - {kind: date, label: del, nth: 15, value: "{{ask.prova_catasto_data|date_it}}", when: "{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}"}
+      - {kind: checkbox, label: altri documenti probanti, nth: 2, when: "{{ask.stato_legittimo|is_prova}} {{ask.prova_altri}}"}
+      # Sanctions imposed and paid: the receipt attached, or the payment's details.
+      - {kind: radio, label: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni, when: "{{ask.stato_legittimo|is_sanzioni}}"}
+      - {kind: radio, label: si allega la relativa ricevuta, when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}"}
+      - {kind: radio, label: si forniscono gli estremi del pagamento, when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}"}
+      - {kind: text, label: di Euro, value: "{{ask.sanzione_importo}}", when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}"}
+      - {kind: date, label: "a titolo di sanzione pecuniaria, irrogata in data", value: "{{ask.sanzione_irrogata|date_it}}", when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}"}
+      - {kind: text, label: Prot. n., nth: 1, value: "{{ask.sanzione_protocollo}}", when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}"}
+      - {kind: date, label: del, nth: 16, value: "{{ask.sanzione_protocollo_data|date_it}}", when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}"}
+      # Construction tolerances declared earlier: in a pratica's forms, or attached to a deed.
+      - {kind: radio, label: che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione, when: "{{ask.stato_legittimo|is_tolleranze}}"}
+      - {kind: checkbox, label: "dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata", when: "{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_pratica}}"}
+      - {kind: text, label: Prot. n., nth: 2, value: "{{ask.toll_prec_pratica_protocollo}}", when: "{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_pratica}}"}
+      - {kind: date, label: del, nth: 17, value: "{{ask.toll_prec_pratica_data|date_it}}", when: "{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_pratica}}"}
+      - {kind: checkbox, label: "dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata", when: "{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_atto}}"}
+      - {kind: text, label: atto di registrazione n., value: "{{ask.toll_prec_atto_numero}}", when: "{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_atto}}"}
+      - {kind: date, label: in data, value: "{{ask.toll_prec_atto_data|date_it}}", when: "{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_atto}}"}
+      # The state today: as the legitimate one, or with this pratica's sanatoria (its quadro c's
+      # "presentata in sanatoria"). This pratica's own tolerances aren't mapped (the asseverazione
+      # answers "no"). A new construction on free land has no building to compare: left.
+      - {kind: radio, label: pienamente conforme alla documentazione dello stato legittimo, when: "{{ask.stato_legittimo|is_area_libera|not}} {{ask.sanatoria_titolo|is_nessuna}}"}
+      - {kind: radio, label: "conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata, unitamente", when: "{{ask.stato_legittimo|is_area_libera|not}} {{ask.sanatoria_titolo|in_scia__permesso}}"}
 
   - section: Calcolo del contributo di costruzione
     leave: [ai sensi della seguente normativa]
@@ -2373,6 +2543,9 @@ sections:
       - {kind: checkbox, label: Interventi di ristrutturazione urbanistica, when: "{{ask.pdc_tipo|is_ristrutturazione_urbanistica}}"}
       - {kind: checkbox, label: Interventi di ristrutturazione edilizia che portino, when: "{{ask.pdc_tipo|is_ristrutturazione_edilizia}}"}
       - {kind: checkbox, label: interventi assoggettati a Segnalazione Certificata di Inizio Attività, when: "{{ask.pdc_tipo|is_facolta_scia}}"}
+      # The box this tick opens (seen by the 2026-10-30 crawl, which tries a box once it's switched
+      # on): which SCIA works, as quadro a)'s specificare.
+      - {kind: text, label: specificare tipo intervento, value: "{{ask.intervento_tipo}}", when: "{{ask.pdc_tipo|is_facolta_scia}}"}
       - {kind: checkbox, label: Varianti in corso d'opera a permessi di costruire, when: "{{ask.pdc_tipo|is_variante_essenziale}}"}
       - {kind: radio, label: non comportano mutamento di destinazione d’uso, when: "{{ask.scia_cambio_uso|is_no}}"}
       - {kind: radio, label: comportano mutamento di destinazione d’uso di una singola unità immobiliare all’interno, when: "{{ask.scia_cambio_uso|is_stessa_categoria}}"}

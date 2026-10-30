@@ -8,7 +8,8 @@
      over everything; ?rename=1 renames the second section's label, as a portal update would;
      ?fade=1 opens a suggestion list over Impresa esecutrice as Dati tecnici opens, whose
      widget's hide() fades it out slowly, as PrimeFaces 11's does; ?slot=signed (or =plain) adds
-     an attachments slot the portal says is required, taking only signed files (or plain ones). -->
+     an attachments slot the portal says is required, taking only signed files (or plain ones);
+     ?off=1 switches Impresa esecutrice off, greyed until a choice the steps don't make. -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -41,6 +42,8 @@
 </div>
 <script>
 if (location.search.includes("banner=1")) document.getElementById("consenso").hidden = false;
+// By its label's row: the server's ?flaky=1 cut checks that box's id is gone from the whole page.
+if (location.search.includes("off=1")) document.getElementById("impresa-label").closest("tr").querySelector("input").disabled = true;
 if (location.search.includes("rename=1")) document.getElementById("impresa-label").textContent = "Ditta esecutrice";
 const slot = new URLSearchParams(location.search).get("slot");
 if (slot) {

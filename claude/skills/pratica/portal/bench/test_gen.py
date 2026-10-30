@@ -217,7 +217,8 @@ def _():
         queue = (t / "out" / "queue-0.js").read_text()
         check = (t / "out" / "check.js").read_text()
         assert all(f'"steps/{n}.js"' in check for n in names) and '"runner.js"' in check
-        assert '["dau-fittizia","napoli/comune/dichiarazione-avvenuto-utilizzo-terre",{"wizard":["PROVA NON INVIARE - DAU P6 generato"' in queue
+        # Each procedure's first run whole ({"base": ...}); a later one is what differs from it.
+        assert '["dau-fittizia","napoli/comune/dichiarazione-avvenuto-utilizzo-terre",{"base":{"wizard":["PROVA NON INVIARE - DAU P6 generato"' in queue
         assert (t / "out" / "steps" / "dau-fittizia.js").read_text().startswith('localStorage.setItem("pv-steps:napoli/comune/dichiarazione-avvenuto-utilizzo-terre"')
 
 
@@ -578,6 +579,26 @@ def _():
     assert "IUV 0000000000000000 (inventato)" in corso[gen.norm("SANATORIA e regolarizzazioni per interventi già realizzati")]
     plain = filled(gen.generate(gen.load_yaml(ROOT / "rehearsals" / "scia-fittizia" / "recipe.yaml")), p6_values("scia-fittizia"))
     assert plain[gen.norm("Presentazione della SCIA/SCIA Unica/SCIA Condizionata")] == ["23/11/2026"]
+
+
+@case("an unquoted label with a comma, which YAML splits into a label and an empty key, is refused")
+def _():
+    d = {"sections": [{"section": "X", "fields": gen.yaml.safe_load("[{kind: checkbox, label: a, comma 4, allegata, when: x}]")}]}
+    try:
+        gen.split_by_yaml(d, {})
+    except gen.GenError as e:
+        assert "comma 4" in str(e), e
+    else:
+        raise AssertionError("not refused")
+    gen.split_by_yaml({"sections": [{"section": "X", "fields": [{"kind": "checkbox", "label": "a, comma 4"}]}]}, {})
+
+
+@case("an id from a choice seen only nested under another isn't guessed: the permesso's specificare goes by label")
+def _():
+    st = gen.generate(gen.load_yaml(REH / "pdc-fittizio" / "recipe.yaml"))
+    f = [f for s in st["sections"] for f in s["fields"] if (f.get("label") or "").startswith("specificare tipo intervento")]
+    assert f and "id" not in f[0], f
+
 
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T16:46:55.227Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-30T14:20:51.366Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Beni Paesaggistici › Domanda di parere per esonero dall’obbligo di autorizzazione paesaggistica (sector Edilizia e pianificazione urbana)",
- "seconds": 32.9,
+ "seconds": 30.6,
  "generated": {
   "interventi": "Domanda di parere per esonero dall’obbligo di autorizzazione paesaggistica",
   "adempimenti": [
@@ -69,26 +69,26 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
+   "same_as": "cil#Oggetto della pratica",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
-   "seconds": 0.6
+   "same_as": "cil#DOMICILIO DIGITALE",
+   "seconds": 0.7
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.6
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.7
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -101,14 +101,14 @@
   {
    "section": "Localizzazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
-   "seconds": 0.6
+   "same_as": "cil#Localizzazione dell'intervento",
+   "seconds": 0.7
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
-   "seconds": 0.8
+   "same_as": "cil#Dati catastali",
+   "seconds": 0.7
   },
   {
    "section": "titolo del richiedente",
@@ -129,10 +129,12 @@
      "id": "r5c1p5reg:txt",
      "kind": "text",
      "label": "(specificare)",
-     "max": 100
+     "max": 100,
+     "disabled": true
     }
    ],
    "fingerprint": "52e77284dc66f42a",
+   "text": "titolo del richiedente titolo che legittima il richiedente: proprietà altro (specificare)",
    "branches": [
     {
      "choice": "proprietà",
@@ -142,10 +144,13 @@
     {
      "choice": "altro",
      "id": "r3c1p3reg:radio:1_clone",
-     "kind": "radio"
+     "kind": "radio",
+     "enables": [
+      "r5c1p5reg:txt"
+     ]
     }
    ],
-   "seconds": 2
+   "seconds": 2.2
   },
   {
    "section": "dichiarazione della legittimita' dell'intervento",
@@ -166,48 +171,56 @@
      "id": "r4c1p4reg:txt",
      "kind": "text",
      "label": "titolo (1)",
-     "max": 150
+     "max": 150,
+     "disabled": true
     },
     {
      "id": "r4c2p6reg:txt",
      "kind": "text",
      "label": "p.g. numero",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r4c3p8reg:calendar_input",
      "kind": "date",
-     "label": "del"
+     "label": "del",
+     "disabled": true
     },
     {
      "id": "r6c1p11reg:radio:2_clone",
      "kind": "radio",
      "label": "lo stato di fatto è conforme allo stato legittimo, poichè nulla è mutato alla data odierna rispetto all'ultiimo titolo abilitativo",
-     "group": "r6c1p11reg:radio"
+     "group": "r6c1p11reg:radio",
+     "disabled": true
     },
     {
      "id": "r8c1p13reg:radio:3_clone",
      "kind": "radio",
      "label": "lo stato di fatto non è conforme allo stato legittimo",
-     "group": "r8c1p13reg:radio"
+     "group": "r8c1p13reg:radio",
+     "disabled": true
     },
     {
      "id": "r8c2p15reg:calendar_input",
      "kind": "date",
-     "label": "le opere difformi sono state realizzate in data"
+     "label": "le opere difformi sono state realizzate in data",
+     "disabled": true
     },
     {
      "id": "r10c1p17reg:radio:4_clone",
      "kind": "radio",
      "label": "altro",
-     "group": "r10c1p17reg:radio"
+     "group": "r10c1p17reg:radio",
+     "disabled": true
     },
     {
      "id": "r10c2p19reg:txt",
      "kind": "text",
      "label": "specificare",
      "context": "altro",
-     "max": 100
+     "max": 100,
+     "disabled": true
     },
     {
      "id": "r12c1p21reg:radio:5_clone",
@@ -220,7 +233,8 @@
      "kind": "textarea",
      "label": "350 Caratteri restanti",
      "context": "indicare la documentazione allegata alla presente",
-     "max": 350
+     "max": 350,
+     "disabled": true
     },
     {
      "id": "r14c1p25reg:radio:6_clone",
@@ -233,7 +247,8 @@
      "kind": "textarea",
      "label": "350 Caratteri restanti",
      "context": "indicare la documentazione allegata alla presente",
-     "max": 350
+     "max": 350,
+     "disabled": true
     },
     {
      "id": "r15c1p28reg:radio:7_clone",
@@ -243,6 +258,7 @@
     }
    ],
    "fingerprint": "e07eb7e66a06f7dd",
+   "text": "dichiarazione della legittimita' dell'intervento il lotto è libero esiste un precedente edilizio: titolo (1) p.g. numero del lo stato di fatto è conforme allo stato legittimo, poichè nulla è mutato alla data odierna rispetto all'ultiimo titolo abilitativo le opere difformi sono state realizzate in data lo stato di fatto non è conforme allo stato legittimo specificare altro indicare la documentazione allegata alla presente altra documentazione probatoria 350 Caratteri restanti indicare la documentazione allegata alla presente documentazione catastale di primo impianto 350 Caratteri restanti non esiste altro titolo abilitativo (1) indicare se Licenza/Nulla Osta/Concessione/Permesso/Provvedimento Unico, Autorizzazione, Scia/Dia/Comunicazione, Condono",
    "branches": [
     {
      "choice": "il lotto è libero",
@@ -269,55 +285,68 @@
        "r12c2p23reg:txta"
       ]
      ],
-     "plus": {
-      "anchor": "titolo (1)",
-      "adds": 6
-     }
-    },
-    {
-     "choice": "lo stato di fatto è conforme allo stato legittimo, poichè nulla è mutato alla data odierna rispetto all'ultiimo titolo abilitativo",
-     "id": "r6c1p11reg:radio:2_clone",
-     "kind": "radio",
-     "moved": [
-      [
-       "r14c2p27reg:txta",
-       "r12c2p23reg:txta"
-      ]
+     "enables": [
+      "r6c1p11reg:radio:2_clone",
+      "r8c1p13reg:radio:3_clone",
+      "r10c1p17reg:radio:4_clone"
      ],
      "plus": {
       "anchor": "titolo (1)",
       "adds": 6
-     }
-    },
-    {
-     "choice": "lo stato di fatto non è conforme allo stato legittimo",
-     "id": "r8c1p13reg:radio:3_clone",
-     "kind": "radio",
-     "moved": [
-      [
-       "r14c2p27reg:txta",
-       "r12c2p23reg:txta"
-      ]
-     ],
-     "plus": {
-      "anchor": "titolo (1)",
-      "adds": 6
-     }
-    },
-    {
-     "choice": "altro",
-     "id": "r10c1p17reg:radio:4_clone",
-     "kind": "radio",
-     "moved": [
-      [
-       "r14c2p27reg:txta",
-       "r12c2p23reg:txta"
-      ]
-     ],
-     "plus": {
-      "anchor": "titolo (1)",
-      "adds": 6
-     }
+     },
+     "then": [
+      {
+       "choice": "lo stato di fatto è conforme allo stato legittimo, poichè nulla è mutato alla data odierna rispetto all'ultiimo titolo abilitativo",
+       "id": "r6c1p11reg:radio:2_clone",
+       "kind": "radio",
+       "moved": [
+        [
+         "r14c2p27reg:txta",
+         "r12c2p23reg:txta"
+        ]
+       ],
+       "plus": {
+        "anchor": "titolo (1)",
+        "adds": 6
+       }
+      },
+      {
+       "choice": "lo stato di fatto non è conforme allo stato legittimo",
+       "id": "r8c1p13reg:radio:3_clone",
+       "kind": "radio",
+       "moved": [
+        [
+         "r14c2p27reg:txta",
+         "r12c2p23reg:txta"
+        ]
+       ],
+       "enables": [
+        "r8c2p15reg:calendar_input"
+       ],
+       "plus": {
+        "anchor": "titolo (1)",
+        "adds": 6
+       }
+      },
+      {
+       "choice": "altro",
+       "id": "r10c1p17reg:radio:4_clone",
+       "kind": "radio",
+       "moved": [
+        [
+         "r14c2p27reg:txta",
+         "r12c2p23reg:txta"
+        ]
+       ],
+       "enables": [
+        "r10c2p19reg:txt"
+       ],
+       "plus": {
+        "anchor": "titolo (1)",
+        "adds": 6
+       }
+      }
+     ]
     },
     {
      "choice": "altra documentazione probatoria",
@@ -328,6 +357,9 @@
        "r14c2p27reg:txta",
        "r12c2p23reg:txta"
       ]
+     ],
+     "enables": [
+      "r12c2p23reg:txta"
      ],
      "plus": {
       "anchor": "titolo (1)",
@@ -343,6 +375,9 @@
        "r14c2p27reg:txta",
        "r12c2p23reg:txta"
       ]
+     ],
+     "enables": [
+      "r14c2p27reg:txta"
      ],
      "plus": {
       "anchor": "titolo (1)",
@@ -365,7 +400,7 @@
      }
     }
    ],
-   "seconds": 10
+   "seconds": 11.5
   },
   {
    "section": "Interventi ed opere in aree vincolate esclusi dall'autorizzazione  paesaggistica",
@@ -410,6 +445,7 @@
     }
    ],
    "fingerprint": "779f848db9ddd512",
+   "text": "Interventi ed opere in aree vincolate esclusi dall'autorizzazione paesaggistica Indicare la casistica di esclusione dall'autorizzazione paesaggistica",
    "branches": [],
    "seconds": 0.6
   },
@@ -450,8 +486,9 @@
     }
    ],
    "fingerprint": "81cdf4ae3bdfb1e1",
+   "text": "indicazione dell'Ente al quale è inviata la richiesta di parere preventivo indicare l'Ente a cui è indirizzata la richiesta con sede a eventuali note aggiuntive 800 Caratteri restanti riportare la Pec dell'Ente a cui è indirizzata la richiesta allegare la relazione illustrativa dell'intervento oggetto della pratica in cui deve essere precisato: la tipologia di intervento per il quale si chiede il parere; l'ente interessato e l'ufficio dell'ente a cui deve essere inviato Tipologie ammesse: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m Allega Max: 9,77 MB",
    "branches": [],
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -460,19 +497,19 @@
   {
    "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
-   "seconds": 0.7
+   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.6
   },
   {
    "section": "dichiarazione relativa all'imposta di bollo",
    "fingerprint": "869752d2cea5aef3",
    "same_as": "sue-permesso-di-costruire-art-10-d-p-r-380-2001#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
-   "seconds": 0.8
+   "seconds": 0.6
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
+   "same_as": "cil#Qualifica e dati del procuratore",
    "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
@@ -522,6 +559,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft (an empty draft: slots that the sections' answers add are missing)"
+ }
 }

@@ -41,6 +41,14 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
 6. **Tests:** `bench/test_gen.py` (add a case for what the pratica taught), `test_preflight.py`,
    `test_inpage.py` when inpage.js changed.
 
+## Every choice: `branches.py`
+
+gen.py passes a radio or tick box the dictionary doesn't name (the run leaves it unticked), so a
+section counts as filled with choices no case can take yet. `branches.py --write` lists every SUE
+choice the crawls saw, once per section, in `docs/sue-branches.md`: ticked under some answer,
+from an answer (a dropdown), the person's, or unmapped, most shared sections first. It flags what
+the crawl couldn't see: choices it didn't try deeper (depth 2), a section at the 30-choice limit.
+
 ## What the portal does that bit us
 
 - **A bare `/fnsuap/` that says Forbidden.** On 2026-10-29 it answered a 403 after every SPID
@@ -158,6 +166,14 @@ and `steps/<name>.js` the pane lacks: send only those), the `queue-N.js` files, 
 then `results.js` until `done` equals `of`. A stopped one: rerun it alone, unchanged, before
 calling it a bug (the portal is sometimes slow); twice the same is a bug. 2026-10-29: 20 of
 23 on the first pass, 23 of 23 once the runner waited for each section to open.
+
+A rehearsal can be named `NAME:ANSWERS.json` (one pratica, several cases), and a procedure's
+later runs travel as what differs from its first. When the pane lacks big files (a new runner,
+several steps files), don't copy them through the conversation: a long script can arrive garbled
+(2026-10-30). Pass `--bundle <file in Downloads>`, run `pick.js` in the pane, and the person picks
+that file once in the box it shows; it is checked by sha256, loaded once, and starts the batch.
+One batch per tab: `loop.js` refuses a second while one runs (two would drive one runner and
+file each other's results), and `pick.js` refuses to clear the page during one.
 
 ## Attachments screens
 

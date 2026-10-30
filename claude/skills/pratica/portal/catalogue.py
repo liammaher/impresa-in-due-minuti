@@ -6,6 +6,8 @@
     catalogue.py import EXPORT.json                        a batch's results into sections/
     catalogue.py count                                     distinct sections and their uses
     catalogue.py drift EXPORT.json                         a check batch against the stored crawls
+    catalogue.py pane DIR                                  the pane's scripts: install.js stores wizard.js
+                                                           and crawl.js in localStorage, load.js runs them
                                                            (an op with `like`: against that pratica, into same.json)
 
 A section's fingerprint is what it shows before any choice (ids, kinds, labels, lengths,
@@ -149,7 +151,8 @@ def cmd_import(args):
         private = os.environ.get("CATALOGUE_PRIVATE")
         if private and re.search(private, json.dumps(r, ensure_ascii=False), re.I):
             sys.exit(f"{r['name']}: holds the login's name or CF, not imported")
-        doc = {"crawled": r["crawled"], "by": "crawl.js batch, depth 2",
+        depth = r.get("depth") or args.depth or 2
+        doc = {"crawled": r["crawled"], "by": f"crawl.js batch, depth {depth}",
                "pratica": f"{sportello(r['name']).upper()}: {r['operation']}"
                           + (f" (sector {r['sector']})" if r.get("sector") else ""),
                "seconds": r.get("seconds")}
@@ -301,6 +304,36 @@ def drifted(name):
     return json.loads(path.read_text())["pratiche"].get(name, {}).get("differences", [])
 
 
+def cmd_pane(args):
+    """wizard.js and crawl.js for the pane, kept in its localStorage (pv-wizard, pv-crawl) so a
+    page that navigates doesn't lose them: install.js (gzip, base64: a third of the size) checks
+    each by sha256 before storing it, load.js runs the stored copies, and says if they're stale."""
+    import base64, gzip
+    out = Path(args.dir)
+    out.mkdir(parents=True, exist_ok=True)
+    srcs = {k: (HERE / f).read_text() for k, f in (("pv-wizard", "wizard.js"), ("pv-crawl", "crawl.js"))}
+    sha = {k: hashlib.sha256(v.encode()).hexdigest() for k, v in srcs.items()}
+    gz = {k: base64.b64encode(gzip.compress(v.encode(), 9, mtime=0)).decode() for k, v in srcs.items()}
+    common = ("const sha = async (s) => Array.from(new Uint8Array(await crypto.subtle.digest(\"SHA-256\", "
+              "new TextEncoder().encode(s)))).map((b) => b.toString(16).padStart(2, \"0\")).join(\"\");\n"
+              f"const want = {json.dumps(sha)};\n")
+    (out / "install.js").write_text(
+        "const gunzip = async (b) => new Response(new Blob([Uint8Array.from(atob(b), (c) => c.charCodeAt(0))])"
+        ".stream().pipeThrough(new DecompressionStream(\"gzip\"))).text();\n" + common +
+        f"const gz = {json.dumps(gz)};\nconst done = [];\n"
+        "for (const [k, b] of Object.entries(gz)) { const s = await gunzip(b);\n"
+        "  if (await sha(s) !== want[k]) throw new Error(k + \": not the file sent\");\n"
+        "  localStorage.setItem(k, s); done.push(k); }\n"
+        "(0, eval)(localStorage.getItem(\"pv-wizard\")); (0, eval)(localStorage.getItem(\"pv-crawl\"));\n"
+        "`installed ${done.join(\", \")}`\n")
+    (out / "load.js").write_text(common +
+        "const stale = []; for (const k of Object.keys(want)) if (await sha(localStorage.getItem(k) || \"\") !== want[k]) stale.push(k);\n"
+        "if (!stale.length) { (0, eval)(localStorage.getItem(\"pv-wizard\")); (0, eval)(localStorage.getItem(\"pv-crawl\")); }\n"
+        "stale.length ? `stale: ${stale.join(\", \")}: run install.js` : \"loaded\"\n")
+    return [f"{out}/install.js ({(out / 'install.js').stat().st_size // 1024} KB), {out}/load.js: "
+            "on the portal's origin, load.js first; install.js only if it says stale"]
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -312,10 +345,13 @@ def main():
     sub.add_parser("known")
     p = sub.add_parser("import")
     p.add_argument("export")
+    p.add_argument("--depth", type=int, help="the batch's depth, for one that didn't record it (before 2026-10-30: 2)")
     p = sub.add_parser("count")
     p.add_argument("--summary", action="store_true")
     p = sub.add_parser("drift")
     p.add_argument("export")
+    p = sub.add_parser("pane")
+    p.add_argument("dir")
     args = ap.parse_args()
     res = globals()["cmd_" + args.cmd](args)
     if isinstance(res, list) and res and isinstance(res[0], str):

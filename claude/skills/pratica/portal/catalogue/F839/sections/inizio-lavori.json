@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T17:31:09.509Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-30T14:11:56.579Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Comunicazione inizio lavori (sector Edilizia e pianificazione urbana)",
- "seconds": 16,
+ "seconds": 15.3,
  "generated": {
   "interventi": "Inizio dei lavori",
   "adempimenti": [
@@ -66,25 +66,25 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
+   "same_as": "cil#Oggetto della pratica",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
+   "same_as": "cil#DOMICILIO DIGITALE",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "seconds": 0.6
   },
   {
@@ -129,6 +129,7 @@
     }
    ],
    "fingerprint": "509c79eb7d2746f2",
+   "text": "dichiarazione riferimenti permesso di costruire numero permesso data rilascio numero protocollo generale anno protocollo generale per interventi di",
    "branches": [],
    "seconds": 0.6
   },
@@ -142,8 +143,9 @@
     }
    ],
    "fingerprint": "ad0d9b2e39dd5fa9",
+   "text": "dichiarazione relativa alla comunicazione di inizio lavori in data",
    "branches": [],
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "dichiarazione dell'intestatario del permesso di costruire",
@@ -186,8 +188,9 @@
     }
    ],
    "fingerprint": "f3ecf394b7e03bbb",
+   "text": "dichiarazione dell'intestatario del permesso di costruire intestatario in qualità di residente in CAP via numero civico",
    "branches": [],
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "dichiarazione dell'ubicazione dei lavori",
@@ -212,6 +215,7 @@
     }
    ],
    "fingerprint": "f633850a0710b0bb",
+   "text": "dichiarazione dell'ubicazione dei lavori comune via, viale, piazza numero civico",
    "branches": [],
    "seconds": 0.6
   },
@@ -222,13 +226,13 @@
   {
    "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
    "seconds": 0.6
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
+   "same_as": "cil#Qualifica e dati del procuratore",
    "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }

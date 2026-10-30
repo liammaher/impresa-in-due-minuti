@@ -266,6 +266,8 @@ FILTERS = Filters({
     "forma": lambda v: FORMA[v],
     "categoria": lambda v: re.sub(r"^([A-F])/?(\d)$", r"\g<1>0\2", v.replace(" ", "").upper()),
     "empty": lambda v: "true" if not v else "false",
+    # Several yes/no answers at once ({{ask.a,ask.b|any}}): true when one is (a `when` has no "or").
+    "any": lambda v: "true" if any(truthy(x) for x in str(v).split("/")) else "false",
     "not": lambda v: "false" if truthy(v) else "true",
     "positive": lambda v: "true" if float(str(v or 0).replace(",", ".")) > 0 else "false",
     # The SUE rules table's facts as the forms' own boxes (an ask's `propose`).

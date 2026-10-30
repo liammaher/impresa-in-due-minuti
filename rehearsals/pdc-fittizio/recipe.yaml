@@ -20,6 +20,8 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 attachments:
   Gestione degli allegati:
+    # Quadro f)/e)'s "si allega la relativa ricevuta" adds this required slot (seen on the SCIA 2026-10-30).
+    - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: "{{ask.sanzione_ricevuta}}", when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
     # Under the barriers rules, their drawings (a slot read on the P6 run's screen).
     - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: "{{ask.elaborati_barriere}}", when: "{{ask.barriere}}"}
@@ -49,6 +51,10 @@ attachments:
     - {kind: file, label: "Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (altro)", value: "{{ask.fascia_altro_doc}}", when: "{{ask.fasce|is_assenso}} {{ask.fascia_altro}}", on_page: true}
 asks:
   descrizione: {default: "PROVA NON INVIARE - PdC {{c:identity.last_name}}"}
+  # The permesso's quadro e) also takes a new construction on free land.
+  stato_legittimo:
+    question: "How does quadro e) show the building's stato legittimo? The form takes one: titoli (from its building titles or pratiche: you'll list them); epoca (built when no title was required: the catasto's primo impianto or other documents); prova (its title is lost or unknown, but there is documentary proof of it); sanzioni (pecuniary sanctions under artt. 33, 34, 37 or 38 DPR 380/2001 were imposed and fully paid); tolleranze (construction tolerance declarations, art. 34-bis or 34-ter c. 4); area libera (a new construction on free land: no building yet)"
+    options: [titoli, epoca, prova, sanzioni, tolleranze, area libera]
   elaborati_barriere: {type: file, question: "The drawings showing how the project meets the barriers rules (artt. 77-82 DPR 380/2001) (PDF)"}
   superficie_mq: {question: "The building's superficie lorda di pavimento (s.l.p.) in m²"}
   volume_mc: {question: "The building's volume in m³"}
