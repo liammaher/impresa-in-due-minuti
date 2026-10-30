@@ -59,16 +59,16 @@ SUE pratiche not yet fillable:
 Measured today:
 
 - Level 1: 30 of 30 pratiche fully in the dictionary.
-- Level 2: **61 refusals across 13 recipes**, 24 distinct messages.
+- Level 2: **54 refusals across 13 recipes**, 21 distinct messages.
 - Levels 3 to 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
-| `scia-alternativa-fittizia` | 11 |
-| `scia-paesaggistica-ordinaria-fittizia` | 9 |
-| `scia-paesaggistica-semplificata-fittizia` | 9 |
-| `pdc-fittizio` | 8 |
-| `pdc-sanatoria-fittizio` | 8 |
+| `scia-alternativa-fittizia` | 10 |
+| `pdc-fittizio` | 7 |
+| `pdc-sanatoria-fittizio` | 7 |
+| `scia-paesaggistica-ordinaria-fittizia` | 7 |
+| `scia-paesaggistica-semplificata-fittizia` | 7 |
 | `cila-fittizia` | 3 |
 | `cila-paesaggistica-fittizia` | 3 |
 | `scia-sanatoria-fittizia` | 3 |
@@ -88,16 +88,13 @@ Refusals, by how many recipes carry them (the most shared are the cheapest to cl
 - 3×: An area without its primary urbanisation works isn't mapped yet.
 - 3×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions.
 - 3×: Soil needing environmental investigations (or already remediated) isn't mapped yet.
-- 3×: Systems needing a project aren't mapped yet.
 - 3×: The barriers rules (artt. 77-82) aren't mapped yet.
 - 3×: Works on parts with asbestos aren't mapped yet.
 - 2×: Acoustic obligations aren't mapped yet.
 - 2×: Another technician as direttore dei lavori isn't mapped yet (quadro G1's second block).
-- 2×: Energy-performance filings aren't mapped yet.
 - 2×: Fire-prevention obligations aren't mapped yet.
 - 2×: Other filings or assents with the CILA (Soprintendenza, ASL, fire brigade) aren't mapped yet; a landscape authorization goes in the same pratica (the CILA with its sempli
 - 2×: Other technicians already appointed (structures, systems, acoustics) aren't mapped yet (quadro G2's rows).
-- 2×: Systems needing a project (DM 37/2008 art. 5) aren't mapped yet.
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione mak
 - 1×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.

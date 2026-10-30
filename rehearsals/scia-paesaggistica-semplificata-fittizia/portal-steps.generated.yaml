@@ -272,6 +272,14 @@ asks:
   prg_zona: {type: text, question: The PRG zone of the property}
   prg_articolo: {type: text, question: The article of the PRG's rules for that zone}
   progetto_impianti: {type: yes_no, question: 'Do the systems need a project (DM 37/2008 art. 5)?', when: '{{ask.impianti}}'}
+  progetto_elettrico_doc: {type: file, question: The electrical system's project (PDF)}
+  progetto_radiotv_doc: {type: file, question: The radio and TV systems' project (PDF)}
+  progetto_termico_doc: {type: file, question: The heating or air-conditioning system's project (PDF)}
+  progetto_idrico_doc: {type: file, question: The water and sanitary systems' project (PDF)}
+  progetto_gas_doc: {type: file, question: The gas system's project (PDF)}
+  progetto_ascensore_doc: {type: file, question: The lift's project (PDF)}
+  progetto_antincendio_doc: {type: file, question: The fire-protection system's project (PDF)}
+  progetto_altro_doc: {type: file, question: The other system's project (PDF)}
   impianto_radiotv: {type: yes_no, question: 'Radio and TV systems, aerials, electronics?', when: '{{ask.impianti}}'}
   impianto_ascensore: {type: yes_no, question: 'Lifts, goods lifts, escalators?', when: '{{ask.impianti}}'}
   impianto_antincendio: {type: yes_no, question: 'Fire-protection systems?', when: '{{ask.impianti}}'}
@@ -287,6 +295,7 @@ asks:
   antincendio_deroga: {type: yes_no, question: 'Does the building have features that don''t allow the fire-prevention technical rules to be followed in full, so a deroga is asked (its documents attached)?',
     propose: 'false'}
   amianto: {type: yes_no, question: 'Do the works touch parts with asbestos (so a piano di lavoro under art. 256 D.Lgs. 81/2008 is needed)?', propose: 'false'}
+  relazione_energetica: {type: file, question: 'The relazione tecnica on energy use (art. 125 DPR 380/2001, D.Lgs. 192/2005) (PDF)'}
   igienico_conforme: {type: yes_no, question: 'Does the unit meet the hygiene and health requirements (no derogation)?', propose: 'true'}
   igienico_24_5bis: {type: yes_no, question: 'Does it meet them under art. 24 c. 5-bis DPR 380/2001 (rooms 2.40 to 2.70 m high, or a one-room flat of 20 to 28 m² for one person or 28 to 38 m² for two)?',
     propose: 'false'}
@@ -414,14 +423,6 @@ supports:
   in:
   - 'false'
   else: The barriers rules (artt. 77-82) aren't mapped yet.
-- value: '{{ask.progetto_impianti}}'
-  in:
-  - 'false'
-  else: Systems needing a project aren't mapped yet.
-- value: '{{ask.prestazione_energetica}}'
-  in:
-  - 'false'
-  else: Energy-performance filings aren't mapped yet.
 - when: '{{ask.paes_variante|not}}'
   else: 'So far only for a new authorization: the variant of one already issued isn''t run yet.'
 - if: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}}'
@@ -1249,6 +1250,15 @@ sections:
   - {kind: file, label: Notifica preliminare, value: '{{ask.notifica_preliminare}}', when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
   - {kind: file, label: 'Elaborati grafici dello stato di fatto, di progetto e comparativi', value: '{{ask.elaborati_grafici}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Documentazione fotografica dello stato di fatto, value: '{{ask.documentazione_fotografica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: 'Progetto dell''impianto di produzione, trasformazione', value: '{{ask.progetto_elettrico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_elettrico}}'}
+  - {kind: file, label: Progetto degli impianti radiotelevisivi, value: '{{ask.progetto_radiotv_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_radiotv}}'}
+  - {kind: file, label: Progetto dell'impianto di riscaldamento, value: '{{ask.progetto_termico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_termico}}'}
+  - {kind: file, label: Progetto degli impianti idrici e sanitari, value: '{{ask.progetto_idrico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_idrico}}'}
+  - {kind: file, label: Progetto dell'impianto per la distribuzione e l'utilizzazione di gas, value: '{{ask.progetto_gas_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_gas}}'}
+  - {kind: file, label: Progetto dell'impianto di sollevamento, value: '{{ask.progetto_ascensore_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_ascensore}}'}
+  - {kind: file, label: Progetto dell'impianto di protezione antincendio, value: '{{ask.progetto_antincendio_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_antincendio}}'}
+  - {kind: file, label: Progetto di altre tipologie di impianti, value: '{{ask.progetto_altro_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_altro}}'}
+  - {kind: file, label: Relazione tecnica sui consumi energetici, value: '{{ask.relazione_energetica}}', when: '{{ask.prestazione_energetica}}'}
   - {kind: file, label: Autorizzazione sismica, value: '{{ask.toll_sismica_doc}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
   - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: '{{ask.sanzione_ricevuta}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}'}
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
