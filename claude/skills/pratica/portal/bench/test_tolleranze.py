@@ -106,13 +106,47 @@ def _():
         assert kinds and all(i.get("only_if") == ["tolleranze"] for i in kinds[0]["items"]), (recipe, kinds)
 
 
-@case("refused: a structurally relevant tolerance (what its art. 94-bis class opens isn't crawled), the CILA's too")
+@case("structurally relevant: its art. 94-bis class, then the authorization, the silenzio assenso or the term run out")
+def _():
+    # One case per branch, over the SCIA, the CILA, the permesso and the SCIA alternativa.
+    want = {("scia-fittizia", "answers-tolleranze-autorizzazione.json"):
+                ["intervento rilevante", "allega lautorizzazione sismica", "rilasciata in data", "prot. n."],
+            ("scia-fittizia", "answers-tolleranze-silenzio.json"):
+                ["intervento rilevante", "attesta che sulla istanza", "in data", "prot. n."],
+            ("cila-fittizia", "answers-tolleranze-minore.json"):
+                ["intervento di minore rilevanza", "dichiara il decorso del termine"],
+            ("pdc-fittizio", "answers-tolleranze-privo.json"):
+                ["intervento privo di rilevanza", "dichiara il decorso del termine"],
+            ("scia-alternativa-fittizia", "answers-tolleranze-minore.json"):
+                ["intervento di minore rilevanza", "dichiara il decorso del termine"]}
+    others = ["intervento rilevante", "intervento di minore", "intervento privo", "allega lautorizzazione",
+              "attesta che sulla istanza", "dichiara il decorso"]
+    for (recipe, name), labels_ in want.items():
+        steps = STEPS.get(recipe) or gen.generate(yaml.safe_load((REHEARSALS / recipe / "recipe.yaml").read_text()))
+        a = answers(recipe, name)
+        r = run.preflight(steps, values(steps, a))
+        assert r["ready"], (name, {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]})
+        ls = [gen.norm(p["label"] or "") for p in run.plan(steps, values(steps, a))]
+        assert has(ls, "ha rilevanza strutturale") and not has(ls, "non ha rilevanza strutturale"), (name, ls)
+        for x in labels_:
+            assert has(ls, x), (name, x)
+        for x in others:
+            assert has(ls, x) == any(gen.norm(x) == gen.norm(y) or gen.norm(y).startswith(gen.norm(x)) for y in labels_), (name, x)
+
+
+@case("refused: a relevant one with neither authorization nor silenzio assenso, the others before the term runs out")
 def _():
     for recipe in CASES:
-        r = preflight(recipe, answers(recipe, toll_strutturale=True))
-        assert any("structurally relevant tolerance" in u for u in r["unsupported"]), (recipe, r["unsupported"])
-    r = preflight("cila-fittizia", answers("cila-fittizia", "answers-proprietario.json", toll_strutturale=True))
-    assert any("structurally relevant tolerance" in u for u in r["unsupported"]), r["unsupported"]
+        r = preflight(recipe, answers(recipe, toll_strutturale=True, toll_classe="rilevante", toll_sismica="nessuno"))
+        assert any("seismic authorization" in u for u in r["unsupported"]), (recipe, r["unsupported"])
+        for classe in ("minore rilevanza", "privo di rilevanza"):
+            r = preflight(recipe, answers(recipe, toll_strutturale=True, toll_classe=classe, toll_decorso="false"))
+            assert any("control term has run out" in u for u in r["unsupported"]), (recipe, classe, r["unsupported"])
+    # Asked in order: the class only once structurally relevant, then its proof.
+    r = preflight("scia-fittizia", answers("scia-fittizia", toll_strutturale=True))
+    keys = {q["key"]: q.get("only_if") for q in r["questions"]}
+    assert "toll_classe" in keys and "toll_sismica" in keys and keys["toll_sismica"] == ["toll_classe"], keys
+    assert not preflight("scia-fittizia", answers("scia-fittizia"))["questions"]  # not structural: nothing asked
 
 
 @case("refused: tolerances declared with no kind")
@@ -134,7 +168,7 @@ def _():
         for sec in STEPS[recipe]["sections"]:
             if sec["section"].lower().startswith("asseverazione") and "stato legittimo" in sec["section"].lower():
                 block = [f for f in sec["fields"] if "{{ask.tolleranze}} {{ask.toll" in f.get("when", "")
-                         or f.get("label", "").startswith(("trattandosi", "non ha rilevanza"))]
+                         or f.get("label", "").startswith(("trattandosi", "non ha rilevanza", "ha rilevanza"))]
                 assert block and all("id" not in f for f in block), (recipe, [f for f in block if "id" in f])
 
 

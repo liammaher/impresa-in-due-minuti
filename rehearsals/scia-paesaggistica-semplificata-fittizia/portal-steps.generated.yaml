@@ -53,6 +53,17 @@ asks:
   toll_superficie: {type: choice, question: 'The unit''s superficie utile, for the art. 34-bis c. 1-bis tolerance: oltre 500 (over 500 m², 2%); 300-500 (3%); 100-300 (4%); 60-100 (5%); sotto 60 (under 60
       m², 6%)', options: [oltre 500, 300-500, 100-300, 60-100, sotto 60]}
   toll_strutturale: {type: yes_no, question: 'Is the tolerance structurally relevant (it then complies with the technical rules for construction)?'}
+  toll_classe: {type: choice, question: 'Its class under art. 94-bis c. 1 DPR 380/2001: rilevante (a: relevant for public safety, needs the Genio Civile''s authorization); minore rilevanza (b); privo di
+      rilevanza (c)', options: [rilevante, minore rilevanza, privo di rilevanza], when: '{{ask.toll_strutturale}}'}
+  toll_sismica: {type: choice, question: 'What proves the seismic check of a relevant tolerance: autorizzazione (the Genio Civile''s authorization, art. 94 c. 2, attached); silenzio assenso (formed on the
+      authorization request, art. 94 c. 2-bis); nessuno (neither yet: the tolerance can''t be declared until one exists)', options: [autorizzazione, silenzio assenso, nessuno], when: '{{ask.toll_classe|is_rilevante}}'}
+  toll_sismica_data: {type: date, question: 'The authorization: issued on (the form''s "rilasciata in data")', when: '{{ask.toll_sismica|is_autorizzazione}}'}
+  toll_sismica_protocollo: {type: text, question: Its prot. n., when: '{{ask.toll_sismica|is_autorizzazione}}'}
+  toll_sismica_doc: {type: file, question: 'The Genio Civile''s seismic authorization (PDF): Allega documenti''s "Autorizzazione sismica"', when: '{{ask.toll_sismica|is_autorizzazione}}'}
+  toll_silenzio_data: {type: date, question: 'The silenzio assenso: the date the form asks ("in data")', when: '{{ask.toll_sismica|is_silenzio_assenso}}'}
+  toll_silenzio_protocollo: {type: text, question: Its prot. n., when: '{{ask.toll_sismica|is_silenzio_assenso}}'}
+  toll_decorso: {type: yes_no, question: 'Has the regional control term for this tolerance run out, with no request for more documents left unanswered and no negative outcome of the checks (the form''s
+      declaration)?', when: '{{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}}'}
   oggetto: {type: text, question: The works in one sentence (300 characters)}
   data_inizio_lavori: {type: date, question: 'When the works start, or started'}
   dettaglio_intervento: {type: text, question: The works for the relazione tecnica (500 characters)}
@@ -436,11 +447,19 @@ supports:
   in:
   - 'true'
   else: Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4).
-- if: '{{ask.tolleranze}}'
-  value: '{{ask.toll_strutturale}}'
+- if: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}'
+  value: '{{ask.toll_sismica}}'
   in:
-  - 'false'
-  else: 'A structurally relevant tolerance isn''t mapped yet: the form then asks its class under art. 94-bis DPR 380/2001 (relevant, minor or none for public safety), and what each class opens wasn''t crawled.'
+  - autorizzazione
+  - silenzio assenso
+  else: 'A structural tolerance relevant for public safety (art. 94-bis c. 1 a) can be declared only with the Genio Civile''s seismic authorization (art. 94 c. 2) or its silenzio assenso (c. 2-bis): art.
+    34-bis c. 3-bis DPR 380/2001.'
+- if: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}}'
+  value: '{{ask.toll_decorso}}'
+  in:
+  - 'true'
+  else: 'A structural tolerance of minor or no relevance for public safety can be declared only once the regional control term has run out, with no open requests and no negative outcome: art. 34-bis c.
+    3-bis DPR 380/2001.'
 rules:
   table: sue-napoli
   main: napoli/comune/scia-edilizia
@@ -996,6 +1015,17 @@ sections:
   - {kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34ter_4}}', label: TOLLERANZA DI CUI ALL’ART. 34-TER}
   - {kind: radio, when: '{{ask.tolleranze}}', label: trattandosi di immobile ubicato in zona sismica a media o alta}
   - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale|not}}', label: non ha rilevanza strutturale}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}}', label: ha rilevanza strutturale}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}', label: intervento rilevante nei riguardi della pubblica incolumità}
+  - {kind: radio, label: allega l’autorizzazione sismica, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
+  - {kind: date, label: rilasciata in data, value: '{{ask.toll_sismica_data|date_it}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
+  - {kind: text, label: prot. n., value: '{{ask.toll_sismica_protocollo}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
+  - {kind: radio, label: attesta che sulla istanza di autorizzazione, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
+  - {kind: date, label: in data, value: '{{ask.toll_silenzio_data|date_it}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
+  - {kind: text, label: prot. n., value: '{{ask.toll_silenzio_protocollo}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_minore_rilevanza}}', label: intervento di minore rilevanza nei riguardi}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_privo_di_rilevanza}}', label: intervento privo di rilevanza nei riguardi}
+  - {kind: checkbox, label: dichiara il decorso del termine del procedimento, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}} {{ask.toll_decorso}}'}
   - {id: 'r12c3p19reg:radio:5_clone', kind: radio, when: '{{ask.sanatoria_titolo|is_nessuna}}', label: 'no', nth: 3}
   - {id: 'r12c2p18reg:radio:4_clone', kind: radio, when: '{{ask.sanatoria_titolo|in_scia__permesso}}', label: si, nth: 3}
   - {id: 'r14c1p21reg:chk', kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_in_corso}}', label: un intervento soggetto a SCIA in
@@ -1215,6 +1245,7 @@ sections:
   - {kind: file, label: Notifica preliminare, value: '{{ask.notifica_preliminare}}', when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
   - {kind: file, label: 'Elaborati grafici dello stato di fatto, di progetto e comparativi', value: '{{ask.elaborati_grafici}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Documentazione fotografica dello stato di fatto, value: '{{ask.documentazione_fotografica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Autorizzazione sismica, value: '{{ask.toll_sismica_doc}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
   - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: '{{ask.sanzione_ricevuta}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}'}
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
   - {kind: file, label: Prospetto di calcolo preventivo del contributo di costruzione, value: '{{ask.prospetto_contributo}}', when: '{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}'}

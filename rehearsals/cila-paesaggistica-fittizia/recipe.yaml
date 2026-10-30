@@ -19,7 +19,7 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "Pay the diritti (and the CILA's late-filing penalty if due) and the bollo; upload the receipts"
-  - "On Allega documenti: the CILA's documents (procura, CILA DSC summary, IDs, the owner's assent, drawings, relazione tecnica) and the landscape ones (relazione paesaggistica semplificata, Allegato D, with its drawings and photos), signed digitally"
+  - "On Allega documenti: the CILA's documents (procura, CILA DSC summary, IDs, the owner's assent, drawings, relazione tecnica) and the landscape ones (relazione paesaggistica semplificata, Allegato D, with its drawings and photos), signed digitally, and for a structural tolerance relevant for public safety the Genio Civile's seismic authorization (Autorizzazione sismica)"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.

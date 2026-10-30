@@ -13,6 +13,9 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 attachments:
   Gestione degli allegati:
+    # The asseverazione's "allega l’autorizzazione sismica" (a structural tolerance relevant for
+    # public safety) adds this required slot; plain PDFs are taken (seen on the SCIA 2026-10-30).
+    - {kind: file, label: Autorizzazione sismica, value: "{{ask.toll_sismica_doc}}", when: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
     # An onerosa CILA's screen adds two slots: the contributo's prospetto di calcolo, and its
     # receipt once paid (quadro f's "allega la ricevuta di versamento").

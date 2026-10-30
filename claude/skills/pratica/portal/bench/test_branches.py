@@ -82,8 +82,9 @@ def _():
 
 @case("a box a choice opened but the crawl never tried counts, marked not_tried (art. 94-bis's class)")
 def _():
+    # Mapped since from the page (what it opens was read there), so ticked, and still not_tried.
     r = one("Relazione Tecnica di Asseverazione C.I.L.A.", "intervento rilevante nei riguardi della pubblica")
-    assert r.get("not_tried") and r["state"] == "unmapped" and r["under"].startswith("ha rilevanza strutturale"), r
+    assert r.get("not_tried") and r["state"] == "ticked" and r["under"].startswith("ha rilevanza strutturale"), r
 
 
 @case("the weakest title decides: ticked under one title, not the other, is unmapped")
