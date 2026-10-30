@@ -1737,9 +1737,10 @@ sections:
   # Imposta di bollo, 16 € on the application and 16 € on the provvedimento the Comune issues:
   # paid on pagoPA (the payment is the person's, after sending) or with two marche, each its
   # serial number and date (the marche are then cancelled and kept by the person). The second
-  # marca's line, which "per l'autorizzazione" opens above the first's, isn't in the crawl
-  # (crawl.js paired its boxes with the first's): found on the page, by label. Exemptions are a
-  # case of their own: not mapped.
+  # marca's line, which "per l'autorizzazione" opens below it, copies the first's: its serial
+  # box is titled "numero seriale (1)" too (read on the portal 2026-10-30), so crawl.js took it
+  # for the first's, moved. Both lines go by label, the first then the second (nth). Exemptions
+  # are a case of their own: not mapped.
   - section: Dichiarazione relativa all'assolvimento dell'imposta di bollo
     aliases: [dichiarazione relativa all'imposta di bollo]
     fields:
@@ -1748,9 +1749,9 @@ sections:
       - {kind: radio, label: "Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo", when: "{{ask.bollo_marche}}"}
       # Ticked before the serials and dates: it moves them down.
       - {kind: radio, label: "Marca da €16,00 per l'autorizzazione", when: "{{ask.bollo_marche}}"}
-      - {kind: text, label: numero seriale (1), value: "{{ask.bollo_seriale}}", by_label: true, when: "{{ask.bollo_marche}}"}
+      - {kind: text, label: numero seriale (1), nth: 1, value: "{{ask.bollo_seriale}}", by_label: true, when: "{{ask.bollo_marche}}"}
       - {kind: date, label: data, nth: 1, value: "{{ask.bollo_data|date_it}}", by_label: true, when: "{{ask.bollo_marche}}"}
-      - {kind: text, label: numero seriale (2), value: "{{ask.bollo_seriale_2}}", on_page: true, when: "{{ask.bollo_marche}}"}
+      - {kind: text, label: numero seriale (1), nth: 2, value: "{{ask.bollo_seriale_2}}", on_page: true, when: "{{ask.bollo_marche}}"}
       - {kind: date, label: data, nth: 2, value: "{{ask.bollo_data_2|date_it}}", on_page: true, when: "{{ask.bollo_marche}}"}
 
   # Agibilità (SCA): the title the works ran under, the fine lavori, what the segnalazione is
