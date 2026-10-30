@@ -66,7 +66,7 @@ yours:
 rules:
   table: sue-napoli
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
-  facts: {permesso_per_scelta: "true"}
+  facts: {permesso_per_scelta: "true", parere_esonero: "false"}
 supports:
   - {value: "{{ask.fascia_cimiteriale}}", in: ["no", "consentito"], else: "Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet."}
   - {value: "{{ask.acustica}}", in: ["false"], else: "An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet."}

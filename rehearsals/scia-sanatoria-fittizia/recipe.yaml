@@ -91,7 +91,7 @@ rules:
   table: sue-napoli
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   main: napoli/comune/scia-in-sanatoria
-  facts: {permesso_per_scelta: "false", sanatoria: "true"}
+  facts: {permesso_per_scelta: "false", sanatoria: "true", parere_esonero: "false"}
 supports:
   - value: "{{ask.sanatoria_caso}}"
     in: [in corso, doppia conformita]

@@ -25,7 +25,7 @@ yours:
 rules:
   table: sue-napoli
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
-  facts: {permesso_per_scelta: "false"}
+  facts: {permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
   - when: "{{ask.paes_variante|not}}"
     else: "So far only for a new authorization: the variant of one already issued isn't run yet."

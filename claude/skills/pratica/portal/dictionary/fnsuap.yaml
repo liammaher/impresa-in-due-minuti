@@ -359,6 +359,35 @@ asks:
   accertamento_descrizione: {type: text, question: "The works already done, in a few lines (350 characters)"}
   accertamento_effetti: {type: text, question: "What the works changed in the place and the building's look (200 characters)"}
   accertamento_data: {type: date, question: "When the works were done"}
+  # The domanda di parere per esonero dall'autorizzazione paesaggistica (Allegato A of DPR
+  # 31/2017): the building's lawful state, the item the works fall under, the ente asked.
+  esonero_lotto:
+    type: choice
+    question: "Is the lot free (nothing built on it), or is there a previous building title? libero; precedente (its kind, P.G. number and date asked next)"
+    options: [libero, precedente]
+  precedente_tipo: {type: text, question: "The building's own title: its kind (licenza edilizia, concessione, permesso di costruire, ...)"}
+  esonero_altri_titoli: {type: yes_no, question: "Does the building have more than one previous title?", propose: "false"}
+  esonero_conformita:
+    type: choice
+    question: "Does the place as it is today match its lawful state? conforme (nothing changed since the last title); non conforme (works differing from it, their date asked next); altro (another case, in a few words)"
+    options: [conforme, non conforme, altro]
+  esonero_difformi_data: {type: date, question: "When the differing works were done"}
+  esonero_conformita_altro: {type: text, question: "The other case, in a few words (100 characters)"}
+  esonero_prova:
+    type: choice
+    question: "What else shows the lawful state? titoli (nothing: no other building title exists); documentazione (other probative documents, attached and listed next); catasto (the catasto's first-registration records, attached and listed next)"
+    options: [titoli, documentazione, catasto]
+  esonero_prova_elenco: {type: text, question: "The documents attached, listed (350 characters)"}
+  allegato_a:
+    type: choice
+    question: "Which item of DPR 31/2017's Allegato A do the works fall under (A.1 to A.31)?"
+    options: [A.1, A.2, A.3, A.4, A.5, A.6, A.7, A.8, A.9, A.10, A.11, A.12, A.13, A.14, A.15, A.16, A.17, A.18, A.19, A.20, A.21, A.22, A.23, A.24, A.25, A.26, A.27, A.28, A.29, A.30, A.31]
+  allegato_a_uno: {type: yes_no, question: "Do the works fall under that one item only (not several items of Allegato A)?", propose: "true"}
+  esonero_ente: {type: text, question: "The ente the request is addressed to (100 characters)"}
+  esonero_ente_sede: {type: text, question: "The town it is based in"}
+  esonero_ente_pec: {type: text, question: "Its PEC address"}
+  esonero_note: {type: text, question: "Any notes for the ente (800 characters; none is fine)", default: ""}
+  relazione_illustrativa: {type: file, question: "The relazione illustrativa of the works: what they are, where, and why they fall under the Allegato A item (PDF)"}
   # The SCIA or permesso in sanatoria (artt. 36, 36-bis, 37 c. 5 DPR 380/2001): the wizard's
   # sanatoria question answered Sì, set by the sanatoria recipes (rehearsals/scia-sanatoria-fittizia,
   # rehearsals/pdc-sanatoria-fittizio).
@@ -1222,6 +1251,48 @@ sections:
   - section: dichiarazione relativa alla datazione dell'abuso
     fields:
       - {kind: date, label: indicare la data dell'abuso, value: "{{ask.accertamento_data|date_it}}"}
+
+  # The domanda di parere per esonero dall'autorizzazione paesaggistica. The crawl kept none of
+  # the legittimità section's text: its eight radios are read as three choices by row order
+  # (lot / conformity / other proof), unconfirmed on the page; a wrong grouping unticks one on
+  # Salva and the read-back stops. One previous title only (its "+" rows aren't mapped).
+  - section: titolo del richiedente
+    fields:
+      - {kind: radio, label: proprietà, when: "{{ask.titolo|is_proprietario}}"}
+      - {kind: radio, label: altro, when: "{{ask.titolo|is_proprietario|not}}"}
+      - {kind: text, label: (specificare), value: "{{ask.titolo}}", when: "{{ask.titolo|is_proprietario|not}}"}
+
+  - section: dichiarazione della legittimita' dell'intervento
+    fields:
+      - {kind: radio, label: il lotto è libero, when: "{{ask.esonero_lotto|is_libero}}"}
+      - {kind: radio, label: esiste un precedente edilizio, when: "{{ask.esonero_lotto|is_precedente}}"}
+      - {kind: text, label: titolo (1), value: "{{ask.precedente_tipo}}", when: "{{ask.esonero_lotto|is_precedente}}"}
+      - {kind: text, label: p.g. numero, value: "{{ask.precedente_numero}}", when: "{{ask.esonero_lotto|is_precedente}}"}
+      - {kind: date, label: del, value: "{{ask.precedente_data|date_it}}", when: "{{ask.esonero_lotto|is_precedente}}"}
+      - {kind: radio, label: lo stato di fatto è conforme, when: "{{ask.esonero_conformita|is_conforme}}"}
+      - {kind: radio, label: lo stato di fatto non è conforme, when: "{{ask.esonero_conformita|is_non_conforme}}"}
+      - {kind: date, label: le opere difformi sono state realizzate in data, value: "{{ask.esonero_difformi_data|date_it}}", when: "{{ask.esonero_conformita|is_non_conforme}}"}
+      - {kind: radio, label: altro, when: "{{ask.esonero_conformita|is_altro}}"}
+      - {kind: text, label: specificare, value: "{{ask.esonero_conformita_altro}}", when: "{{ask.esonero_conformita|is_altro}}"}
+      - {kind: radio, label: altra documentazione probatoria, when: "{{ask.esonero_prova|is_documentazione}}"}
+      - {kind: textarea, label: indicare la documentazione allegata alla presente, value: "{{ask.esonero_prova_elenco}}", when: "{{ask.esonero_prova|is_documentazione}}"}
+      - {kind: radio, label: documentazione catastale di primo impianto, when: "{{ask.esonero_prova|is_catasto}}"}
+      - {kind: textarea, label: indicare la documentazione allegata alla presente, nth: 2, value: "{{ask.esonero_prova_elenco}}", when: "{{ask.esonero_prova|is_catasto}}"}
+      - {kind: radio, label: non esiste altro titolo abilitativo, when: "{{ask.esonero_prova|is_titoli}}"}
+
+  # One item of Allegato A, chosen by its number ("A.2."): the runner takes the one option
+  # that starts with it.
+  - section: "Interventi ed opere in aree vincolate esclusi dall'autorizzazione  paesaggistica"
+    fields:
+      - {kind: select, label: Indicare la casistica di esclusione, value: "{{ask.allegato_a}}."}
+
+  - section: indicazione dell'Ente al quale è inviata la richiesta di parere preventivo
+    fields:
+      - {kind: text, label: indicare l'Ente a cui è indirizzata la richiesta, value: "{{ask.esonero_ente}}"}
+      - {kind: text, label: con sede a, value: "{{ask.esonero_ente_sede}}"}
+      - {kind: textarea, label: eventuali note aggiuntive, value: "{{ask.esonero_note}}"}
+      - {kind: text, label: riportare la Pec dell'Ente, value: "{{ask.esonero_ente_pec}}"}
+      - {kind: file, label: allegare la relazione illustrativa, value: "{{ask.relazione_illustrativa}}"}
 
   # The 30-month extension of art. 10-septies L. 51/2022 where the title may be a landscape
   # authorization too.

@@ -162,12 +162,15 @@ def sue_every_case_decided_once():
 def sue_rehearsals_ready():
     names = ["cil-fittizia", "cila-fittizia", "cila-paesaggistica-fittizia", "scia-fittizia", "scia-paesaggistica-semplificata-fittizia",
              "scia-paesaggistica-ordinaria-fittizia", "pdc-fittizio", "scia-alternativa-fittizia",
-             "paesaggistica-semplificata-fittizia", "paesaggistica-ordinaria-fittizia", "scia-sanatoria-fittizia", "accertamento-paesaggistico-fittizio", "pdc-sanatoria-fittizio"]
+             "paesaggistica-semplificata-fittizia", "paesaggistica-ordinaria-fittizia", "scia-sanatoria-fittizia", "accertamento-paesaggistico-fittizio", "pdc-sanatoria-fittizio",
+             "parere-esonero-fittizio"]
     # A whole building's change of use with CILA works: the national SCIA form has a box for it,
     # but in Campania it is a SCIA alternativa (art. 2 c. 6 L.R. 13/2022).
     refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "This case is another pratica: napoli/comune/scia-alternativa-pdc",
                # The portal's art. 36-bis asseverazione is one radio group (the library's discrepancies).
-               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Only art. 36 "}
+               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Only art. 36 ",
+               # The Comune gives no attestation of the exclusion (its landscape directive, § 3.2).
+               ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia"}
     for name in names:
         for f in sorted((REHEARSALS / name).glob("answers*.json")):
             r = sue(name, f.name)
@@ -234,6 +237,14 @@ def sue_another_pratica():
     # The portal's permesso wants an energy incentive claimed even with no energy works.
     assert "energy incentive" in sue("pdc-sanatoria-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
     assert "energy incentive" in sue("pdc-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
+    # The parere di esonero: refused in Napoli; works needing an authorization are that pratica,
+    # and a property under no protection needs nothing.
+    esonero = sue("parere-esonero-fittizio")["unsupported"]
+    assert "D.D. 1072I/2024/154" in esonero[0], esonero
+    assert sue("parere-esonero-fittizio", paesaggio="semplificata")["unsupported"][0].startswith(other + semplificata)
+    assert sue("parere-esonero-fittizio", paesaggio="no")["unsupported"][0].startswith("This case needs no pratica: ")
+    # The other recipes never ask for it: a CILA in a protected area with works of Allegato A.
+    assert sue("cila-fittizia", later, paesaggio="senza_autorizzazione")["ready"]
     assert sue("scia-fittizia", "answers-variante-pdc.json", fatti=["demolizione_zona_a"])["unsupported"][0].startswith(
         other + "napoli/comune/permesso-di-costruire")
     assert "DGC 454/2014" in sue("scia-alternativa-fittizia", fatti=["demolizione_zona_a"])["unsupported"][0]

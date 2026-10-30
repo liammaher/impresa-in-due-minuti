@@ -33,7 +33,7 @@ yours:
 rules:
   table: sue-napoli
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
-  facts: {sanatoria: "{{ask.cila_stato|in_in_corso__realizzato}}", permesso_per_scelta: "false"}
+  facts: {sanatoria: "{{ask.cila_stato|in_in_corso__realizzato}}", permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
   - value: "{{ask.direttore_lavori}}"
     in: [progettista, da nominare]

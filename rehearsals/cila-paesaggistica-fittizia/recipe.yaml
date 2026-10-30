@@ -27,7 +27,7 @@ rules:
   table: sue-napoli
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   main: napoli/comune/cila-lavori-edilizi
-  facts: {sanatoria: "{{ask.cila_stato|in_in_corso__realizzato}}", permesso_per_scelta: "false"}
+  facts: {sanatoria: "{{ask.cila_stato|in_in_corso__realizzato}}", permesso_per_scelta: "false", parere_esonero: "false"}
   handles: [napoli/comune/autorizzazione-paesaggistica-semplificata]
 supports:
   - value: "{{ask.direttore_lavori}}"
