@@ -209,8 +209,10 @@ DEFINITION = [
 # Open items the recipes can't show (a recipe has no line for what was never tried), from the working
 # notes of 2026-10-28 to 10-30. Edit when one closes.
 OPEN_BEYOND = [
-    "Not mapped: PdC in sanatoria; PdC and SCIA alternativa with a landscape authorization; any combination "
-    "of two pratiche other than CILA+semplificata and SCIA+semplificata/ordinaria.",
+    "Not mapped: PdC in sanatoria under art. 36-bis (refused: the portal makes two acknowledgment checkboxes "
+    "a radio pair; art. 36 is filled); sanatoria in protected areas (building works plus landscape works); "
+    "PdC and SCIA alternativa with a landscape authorization; any combination of two pratiche other than "
+    "CILA+semplificata and SCIA+semplificata/ordinaria.",
     "SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal's dating, oblazione "
     "and works-proposal radios behave as one group.",
     "The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.",
