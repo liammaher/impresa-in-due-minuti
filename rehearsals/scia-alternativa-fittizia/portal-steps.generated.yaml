@@ -195,6 +195,7 @@ asks:
       è quella della tavola 7a "centro storico, area di salvaguardia dell''offerta abitativa ordinaria".'}
   cambio_uso_sagoma: {group: fatti, type: yes_no, item: 'Le opere che accompagnano il cambio d''uso dell''immobile incidono sulla sagoma o ne aumentano i volumi?'}
   paesaggio_eseguiti: {group: fatti, type: yes_no, item: 'Le opere che chiedono l''autorizzazione paesaggistica sono già state eseguite, anche in parte?'}
+  paesaggio_volumi: {group: fatti, type: yes_no, item: 'Le opere già eseguite hanno creato superfici utili o volumi, o aumentato quelli legittimamente realizzati?'}
   demolizione_zona_a: {group: fatti, type: yes_no, item: 'I lavori demoliscono e ricostruiscono un edificio, o la variante cambia la sagoma, in zona A della Variante generale al PRG o della Variante occidentale?',
     how: La zona si legge nella tavola di zonizzazione del PRG di Napoli.}
   piano_planovolumetrico: {group: fatti, type: yes_no, item: 'La nuova costruzione o la ristrutturazione urbanistica è disciplinata da un piano attuativo con precise disposizioni plano-volumetriche dichiarate
@@ -270,6 +271,7 @@ rules:
     cambio_uso_sagoma: '{{ask.cambio_uso_sagoma}}'
     paesaggio: '{{ask.paesaggio}}'
     paesaggio_eseguiti: '{{ask.paesaggio_eseguiti}}'
+    paesaggio_volumi: '{{ask.paesaggio_volumi}}'
     bene_culturale: '{{ask.bene_culturale}}'
     demolizione_zona_a: '{{ask.demolizione_zona_a}}'
     piano_planovolumetrico: '{{ask.piano_planovolumetrico}}'

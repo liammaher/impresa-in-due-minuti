@@ -162,7 +162,7 @@ def sue_every_case_decided_once():
 def sue_rehearsals_ready():
     names = ["cil-fittizia", "cila-fittizia", "cila-paesaggistica-fittizia", "scia-fittizia", "scia-paesaggistica-semplificata-fittizia",
              "scia-paesaggistica-ordinaria-fittizia", "pdc-fittizio", "scia-alternativa-fittizia",
-             "paesaggistica-semplificata-fittizia", "paesaggistica-ordinaria-fittizia", "scia-sanatoria-fittizia"]
+             "paesaggistica-semplificata-fittizia", "paesaggistica-ordinaria-fittizia", "scia-sanatoria-fittizia", "accertamento-paesaggistico-fittizio"]
     # A whole building's change of use with CILA works: the national SCIA form has a box for it,
     # but in Campania it is a SCIA alternativa (art. 2 c. 6 L.R. 13/2022).
     refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "napoli/comune/scia-alternativa-pdc"}
@@ -218,6 +218,12 @@ def sue_another_pratica():
     assert "paesaggistico" in sue("scia-sanatoria-fittizia", paesaggio="semplificata", fatti=["prospetti"])["unsupported"][0]
     assert sue("scia-sanatoria-fittizia", intervento="ristrutturazione", fatti=[])["ready"]
     assert "accertamento di compatibilità" in sue("cila-paesaggistica-fittizia", fatti=["paesaggio_eseguiti"])["unsupported"][0]
+    # Works with no building title, already done in a protected area: the accertamento (art. 167
+    # c. 4-5 D.Lgs. 42/2004); not with new surfaces or volumes.
+    accertamento = "napoli/comune/accertamento-compatibilita-paesaggistica"
+    assert sue("paesaggistica-ordinaria-fittizia", fatti=["paesaggio_eseguiti"])["unsupported"][0].startswith(other + accertamento)
+    assert sue("accertamento-paesaggistico-fittizio", fatti=[])["unsupported"][0].startswith(other + ordinaria)
+    assert "167 c. 4" in sue("accertamento-paesaggistico-fittizio", fatti=["paesaggio_eseguiti", "paesaggio_volumi"])["unsupported"][0]
     assert sue("scia-fittizia", "answers-variante-pdc.json", fatti=["demolizione_zona_a"])["unsupported"][0].startswith(
         other + "napoli/comune/permesso-di-costruire")
     assert "DGC 454/2014" in sue("scia-alternativa-fittizia", fatti=["demolizione_zona_a"])["unsupported"][0]
