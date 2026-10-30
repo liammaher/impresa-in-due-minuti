@@ -8,13 +8,13 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 769 | Claude takes it when the case does |
+| ticked | 779 | Claude takes it when the case does |
 | answer | 56 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 1 | left empty on purpose |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
 | unmapped | 282 | in a mapped section, not taken: a case that needs it is refused or not asked |
-| no entry | 10 | its section isn't in the dictionary yet |
+| no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
 
@@ -395,19 +395,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: si forniscono gli estremi di versamento (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
 - radio: si allega la ricevuta di versamento (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
 
-### dichiarazione della legittimita' dell'intervento
-
-1 pratiche; 8 of 8 choices to map (its section isn't in the dictionary).
-
-- radio: il lotto è libero
-- radio: esiste un precedente edilizio:
-- radio: lo stato di fatto è conforme allo stato legittimo, poichè nulla è mutato alla data odierna rispetto all'ultiimo titolo abilitativo (under: esiste un precedente edilizio:)
-- radio: lo stato di fatto non è conforme allo stato legittimo (under: esiste un precedente edilizio:)
-- radio: altro (under: esiste un precedente edilizio:)
-- radio: altra documentazione probatoria
-- radio: documentazione catastale di primo impianto
-- radio: non esiste altro titolo abilitativo
-
 ### g1) Tecnici incaricati
 
 1 pratiche; 8 of 15 choices to map.
@@ -501,13 +488,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: ricade nell'ambito di applicazione del d.lgs. n. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché
 - radio: allega la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in luogo visibile dall'esterno (under: dichiara che l'intervento è soggetto all'invio della notifica)
-
-### titolo del richiedente
-
-1 pratiche; 2 of 2 choices to map (its section isn't in the dictionary).
-
-- radio: proprietà
-- radio: altro
 
 ### Asseverazione PdC - aree a rischio e altri vincoli di tutela ecologica
 
