@@ -48,18 +48,28 @@ asks:
   strutture: {type: yes_no, question: 'Did the works touch the building''s structure?'}
   prestazione_energetica: {type: yes_no, question: 'Are the works subject to the minimum energy-performance requirements?'}
   barriere: {type: yes_no, question: 'Are the works subject to the barriers rules of artt. 77 ff. DPR 380/2001 and DM 236/1989 (private buildings)?'}
-  scia_sanatoria: {type: yes_no, question: 'Is this SCIA filed in sanatoria (the wizard''s sanatoria question answered Sì)?', default: 'false'}
+  sanatoria_titolo: {type: choice, question: 'Is this pratica filed in sanatoria? nessuna (no); scia (a SCIA in sanatoria); permesso (a permesso di costruire in sanatoria)', options: [nessuna, scia, permesso],
+    default: nessuna}
+  nuova_costruzione_tipo: {type: choice, question: 'Which new construction (art. 3 c. 1 e DPR 380/2001)? e1 (new buildings above or below ground, or an existing one extended outside its shape); e2 (urbanization
+      works by others than the Comune); e3 (infrastructure and plants turning unbuilt land); e4 (radio and telecom towers); e5 (light or prefabricated structures used as homes, workplaces or storage, not
+      temporary); e6 (appurtenances the town plan counts as new construction, or over 20% of the main building''s volume); e7 (storage of goods or outdoor production plants turning unbuilt land)', options: [
+      e1, e2, e3, e4, e5, e6, e7], when: '{{ask.pdc_tipo|is_nuova_costruzione}}'}
+  pdc_sanatoria_caso: {type: choice, question: 'Which permesso in sanatoria? assenza (works done without the permesso or SCIA alternativa, or in total difformity, conforming to the planning and building
+      rules both when done and today: art. 36 DPR 380/2001, the oblazione double the contributo di costruzione); parziale (works in partial difformity from the permesso or SCIA alternativa (art. 34) or
+      with essential variations: art. 36-bis)', options: [assenza, parziale], when: '{{ask.sanatoria_titolo|is_permesso}}'}
+  pdc_sanatoria_conformita: {type: choice, question: 'For art. 36-bis, the works conform: urbanistica (to today''s planning rules and the building rules of when they were done) or doppia (to the planning
+      and building rules both then and today)?', options: [urbanistica, doppia], when: '{{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}'}
   sanatoria_caso: {type: choice, question: 'Which case of the SCIA in sanatoria? in corso (works still under way, the SCIA filed of one''s own accord: a €516 sanction, art. 37 c. 5 DPR 380/2001); doppia
       conformita (works done without the SCIA or differing from it, conforming to the planning and building rules both when done and today: an oblazione of €516 to €5,164, art. 36-bis c. 5 b); conformita
       urbanistica (conforming to today''s planning rules and the building rules of the time: €1,032 to €10,328, art. 36-bis c. 1); variante pre 1977 (a variant to a title issued before L. 10/1977, art.
-      34-ter)', options: [in corso, doppia conformita, conformita urbanistica, variante pre 1977], when: '{{ask.scia_sanatoria}}'}
-  sanatoria_data: {type: date, question: 'When the works were done (for works still under way: when they started)', when: '{{ask.scia_sanatoria}}'}
-  sanatoria_oblazione: {type: number, question: 'The oblazione the technician determines and the client paid before filing, in euro (€516 to €5,164 with double conformity); the SUE may adjust it', when: '{{ask.scia_sanatoria}}
+      34-ter)', options: [in corso, doppia conformita, conformita urbanistica, variante pre 1977], when: '{{ask.sanatoria_titolo|is_scia}}'}
+  sanatoria_data: {type: date, question: 'When the works were done (for works still under way: when they started)', when: '{{ask.sanatoria_titolo|in_scia__permesso}}'}
+  sanatoria_oblazione: {type: number, question: 'The oblazione the technician determines and the client paid before filing, in euro (€516 to €5,164 with double conformity); the SUE may adjust it', when: '{{ask.sanatoria_titolo|is_scia}}
       {{ask.sanatoria_caso|is_doppia_conformita}}'}
   sanatoria_catasto: {type: choice, question: 'The catasto for the works to legalize: invariato (no change to the catasto registration); presentata (the DOCFA already filed: its protocol and date); dopo
-      (to be filed once the sanatoria takes effect)', options: [invariato, presentata, dopo], when: '{{ask.scia_sanatoria}}'}
-  sanatoria_catasto_protocollo: {type: text, question: The DOCFA's protocol number, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_presentata}}'}
-  sanatoria_catasto_data: {type: date, question: The DOCFA's date, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_presentata}}'}
+      (to be filed once the sanatoria takes effect)', options: [invariato, presentata, dopo], when: '{{ask.sanatoria_titolo|in_scia__permesso}}'}
+  sanatoria_catasto_protocollo: {type: text, question: The DOCFA's protocol number, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}'}
+  sanatoria_catasto_data: {type: date, question: The DOCFA's date, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}'}
   scia_cambio_uso: {type: choice, question: 'Do the works change the use? no; stessa categoria (one unit, within the same functional category); tra categorie (one unit in a building in zone A, B or C of
       DM 1444/1968, to another category: art. 23-ter c. 1-ter); intero immobile (a whole building, within the same category: art. 23-ter c. 3)', options: ['no', stessa categoria, tra categorie, intero immobile],
     propose: '{{ask.cambio_uso|sue_scia_cambio_uso}}'}
@@ -104,7 +114,7 @@ asks:
   prg_specificare: {type: text, question: The town plan in force, default: Variante generale al PRG}
   prg_zona: {type: text, question: The PRG zone of the property}
   prg_articolo: {type: text, question: The article of the PRG's rules for that zone}
-  progetto_impianti: {type: yes_no, question: 'Do the systems need a project (DM 37/2008 art. 5)?'}
+  progetto_impianti: {type: yes_no, question: 'Do the systems need a project (DM 37/2008 art. 5)?', when: '{{ask.impianti}}'}
   demolizioni: {type: yes_no, question: 'Do the works demolish anything (partitions, finishes) and produce waste?'}
   acustica: {type: yes_no, question: 'Does art. 8 of L. 447/1995 apply (an acoustic impact or clima acustico report: e.g. homes next to a main road, a railway or an airport)?', propose: 'false'}
   acustica_impatto: {type: yes_no, group: acustica_documenti, item: Documentazione di impatto acustico (art. 8 cc. 2 and 4 L. 447/1995)}
@@ -236,20 +246,13 @@ supports:
   in:
   - 'true'
   else: An area without its primary urbanisation works isn't mapped yet.
-- if: '{{ask.prestazione_energetica}}'
-  value: '{{ask.incentivo_energetico}}'
+- value: '{{ask.incentivo_energetico}}'
   in:
   - art 14 c6
   - art 14 c7
   - bonus volumetrico
-  else: 'With the energy filing, the permesso''s form wants one energy incentive claimed (art. 14 D.Lgs. 102/2014 or the 5% bonus): a project with none can''t be filed on it as is; ask the SUE.'
-- if: '{{ask.rinnovabili}}'
-  value: '{{ask.incentivo_energetico}}'
-  in:
-  - art 14 c6
-  - art 14 c7
-  - bonus volumetrico
-  else: 'With the renewables obligation, the permesso''s form wants one energy incentive claimed (art. 14 D.Lgs. 102/2014 or the 5% bonus): a project with none can''t be filed on it as is; ask the SUE.'
+  else: 'The permesso''s form on the portal wants one energy incentive claimed (art. 14 c. 6 or 7 D.Lgs. 102/2014, or the 5% bonus of D.Lgs. 28/2011) even with no energy works: a project with none can''t
+    be filed on it as is; ask the SUE.'
 - if: '{{ask.scia_onerosa}}'
   value: '{{ask.contributo_pagamento}}'
   in:
@@ -532,6 +535,13 @@ sections:
   - {id: 'r8c2p12reg:txt', kind: text, value: '{{t:albo.numero}}', max: 20, label: al n.}
   - {id: 'r12c1p18reg:radio:1_clone', kind: radio, label: che le opere in progetto sono subordinate a rilascio}
   - {id: 'r13c1p19reg:chk', kind: checkbox, when: '{{ask.pdc_tipo|is_nuova_costruzione}}', label: Intervento di nuova costruzione}
+  - {kind: checkbox, label: costruzione di manufatti edilizi fuori terra o interrati, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e1}}'}
+  - {kind: checkbox, label: urbanizzazione primaria e secondaria realizzati, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e2}}'}
+  - {kind: checkbox, label: realizzazione di infrastrutture e di impianti, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e3}}'}
+  - {kind: checkbox, label: installazione di torri e tralicci, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e4}}'}
+  - {kind: checkbox, label: installazione di manufatti leggeri, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e5}}'}
+  - {kind: checkbox, label: interventi pertinenziali che le norme tecniche, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e6}}'}
+  - {kind: checkbox, label: realizzazione di depositi di merci, when: '{{ask.pdc_tipo|is_nuova_costruzione}} {{ask.nuova_costruzione_tipo|is_e7}}'}
   - {id: 'r19c1p35reg:chk', kind: checkbox, when: '{{ask.pdc_tipo|is_ristrutturazione_urbanistica}}', label: Interventi di ristrutturazione urbanistica}
   - {id: 'r20c1p36reg:chk', kind: checkbox, when: '{{ask.pdc_tipo|is_ristrutturazione_edilizia}}', label: Interventi di ristrutturazione edilizia che portino}
   - {id: 'r46c1p111reg:chk', kind: checkbox, when: '{{ask.pdc_tipo|is_facolta_scia}}', label: interventi assoggettati a Segnalazione Certificata di Inizio Attività}
@@ -541,26 +551,39 @@ sections:
   - {id: 'r52c1p118reg:radio:4_clone', kind: radio, when: '{{ask.scia_cambio_uso|is_tra_categorie}}', label: 'comportano mutamento di destinazione d’uso di una singola unità immobiliare, ubicata'}
   - {id: 'r53c1p119reg:radio:5_clone', kind: radio, when: '{{ask.scia_cambio_uso|is_intero_immobile}}', label: comportano mutamento di destinazione d’uso di un intero immobile}
   - {id: 'r55c1p121reg:txta', kind: text, value: '{{ask.dettaglio_intervento}}', max: 1000, label: e che consistono in}
+  - {kind: checkbox, when: '{{ask.sanatoria_titolo|is_permesso}}', label: che la richiesta di permesso di costruire è presentata in sanatoria}
 - section: Asseverazione PdC - stato legittimo
   fields:
   - {id: 'r3c2p5reg:radio:0_clone', kind: radio, label: si}
   - {id: 'r4c1p7reg:chk', kind: checkbox, label: corrisponde allo stato legittimo come risultante}
   - {id: 'r5c1p8reg:chk', kind: checkbox, label: dal/i titolo/i o dalla/e pratica/che edilizia/e}
-  - {id: 'r7c1p10reg:chk', kind: checkbox, when: '{{ask.scia_sanatoria}}', label: dalla sanatoria di cui al successivo quadro}
+  - {id: 'r7c1p10reg:chk', kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}}', label: dalla sanatoria di cui al successivo quadro}
   - {id: 'r5c3p10reg:radio:3_clone', kind: radio, label: 'no', nth: 2}
-  - {id: 'r12c3p19reg:radio:5_clone', kind: radio, when: '{{ask.scia_sanatoria|not}}', label: 'no', nth: 3}
-  - {id: 'r12c2p18reg:radio:4_clone', kind: radio, when: '{{ask.scia_sanatoria}}', label: si, nth: 3}
-  - {id: 'r14c1p21reg:chk', kind: checkbox, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_in_corso}}', label: un intervento soggetto a SCIA in corso di esecuzione}
-  - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_in_corso}}', label: i cui lavori sono stati iniziati in data}
-  - {kind: checkbox, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: un intervento soggetto a SCIA, nth: 2}
-  - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: realizzato in data}
-  - {kind: checkbox, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: determina l’oblazione dovuta}
-  - {kind: text, value: '{{ask.sanatoria_oblazione}}', when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_doppia_conformita}}', max: 9999, label: in euro}
-  - {kind: radio, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_invariato}}', label: dichiara che l’intervento da sanare non richiede}
-  - {kind: radio, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_presentata}}', label: comunica gli estremi della dichiarazione per l’iscrizione}
-  - {kind: text, value: '{{ask.sanatoria_catasto_protocollo}}', when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_presentata}}', max: 9999, label: presentata con prot.}
-  - {kind: date, value: '{{ask.sanatoria_catasto_data|date_it}}', when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_presentata}}', label: in data}
-  - {kind: radio, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_dopo}}', label: si impegna a presentare la dichiarazione}
+  - {id: 'r12c3p19reg:radio:5_clone', kind: radio, when: '{{ask.sanatoria_titolo|is_nessuna}}', label: 'no', nth: 3}
+  - {id: 'r12c2p18reg:radio:4_clone', kind: radio, when: '{{ask.sanatoria_titolo|in_scia__permesso}}', label: si, nth: 3}
+  - {id: 'r14c1p21reg:chk', kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_in_corso}}', label: un intervento soggetto a SCIA in
+      corso di esecuzione}
+  - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_in_corso}}', label: i cui lavori sono
+      stati iniziati in data}
+  - {kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: un intervento soggetto a SCIA, nth: 2}
+  - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: realizzato
+      in data}
+  - {kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: determina l’oblazione dovuta}
+  - {kind: text, value: '{{ask.sanatoria_oblazione}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_doppia_conformita}}', max: 9999, label: in
+      euro}
+  - {kind: checkbox, label: 'un intervento soggetto a permesso di costruire, in assenza', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_assenza}}'}
+  - {kind: checkbox, label: 'un intervento soggetto a permesso di costruire, In parziale', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}'}
+  - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}}', label: realizzato in data}
+  - {kind: checkbox, label: allega la documentazione necessaria indicata nel quadro riepilogativo, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_assenza}}'}
+  - {kind: radio, label: alla disciplina urbanistica vigente al momento della presentazione, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}
+      {{ask.pdc_sanatoria_conformita|is_urbanistica}}'}
+  - {kind: radio, label: alla disciplina urbanistica e edilizia vigente sia al momento, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}
+      {{ask.pdc_sanatoria_conformita|is_doppia}}'}
+  - {kind: radio, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_invariato}}', label: dichiara che l’intervento da sanare non richiede}
+  - {kind: radio, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}', label: comunica gli estremi della dichiarazione per l’iscrizione}
+  - {kind: text, value: '{{ask.sanatoria_catasto_protocollo}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}', max: 9999, label: presentata con prot.}
+  - {kind: date, value: '{{ask.sanatoria_catasto_data|date_it}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}', label: in data}
+  - {kind: radio, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_dopo}}', label: si impegna a presentare la dichiarazione}
 - section: Asseverazione PdC - Dati immobile
   fields:
   - {id: 'r5c2p7reg:real', kind: number, value: '{{ask.superficie_mq}}', max: 8, label: Mq}
@@ -584,10 +607,11 @@ sections:
   - {id: 'r8c1p8reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_termico}}', label: 'di riscaldamento, di climatizzazione'}
   - {id: 'r9c1p9reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_idrico}}', label: idrici e sanitari}
   - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_gas}}', label: per la distribuzione e l'utilizzazione di gas}
-  - {kind: radio, when: '{{ask.progetto_impianti|not}}', label: non è soggetto agli obblighi di presentazione del progetto}
+  - {kind: radio, when: '{{ask.impianti}} {{ask.progetto_impianti|not}}', label: non è soggetto agli obblighi di presentazione del progetto}
   - {kind: radio, when: '{{ask.prestazione_energetica|not}}', label: non è soggetto al deposito del progetto e della relazione tecnica}
   - {kind: radio, when: '{{ask.prestazione_energetica}}', label: è soggetto all'applicazione dell'articolo 125}
-  - {kind: checkbox, when: '{{ask.prestazione_energetica}}', label: saranno presentate in allegato alla comunicazione di inizio lavori}
+  - {kind: checkbox, when: '{{ask.prestazione_energetica}} {{ask.sanatoria_titolo|is_permesso|not}}', label: saranno presentate in allegato alla comunicazione di inizio lavori}
+  - {kind: checkbox, when: '{{ask.prestazione_energetica}} {{ask.sanatoria_titolo|is_permesso}}', label: sono allegate alla presente richiesta di permesso di costruire}
   - {kind: radio, when: '{{ask.rinnovabili|not}}', label: non è soggetto all'applicazione del d.lgs. n. 28/2011}
   - {kind: radio, when: '{{ask.rinnovabili}}', label: è soggetto all'applicazione del d.lgs. n. 28/2011}
   - {kind: checkbox, when: '{{ask.rinnovabili}}', label: il rispetto delle prescrizioni in materia di utilizzo di fonti di energia rinnovabili}

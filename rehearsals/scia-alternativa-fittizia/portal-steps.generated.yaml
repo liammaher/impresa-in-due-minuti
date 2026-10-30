@@ -83,7 +83,7 @@ asks:
   prg_specificare: {type: text, question: The town plan in force, default: Variante generale al PRG}
   prg_zona: {type: text, question: The PRG zone of the property}
   prg_articolo: {type: text, question: The article of the PRG's rules for that zone}
-  progetto_impianti: {type: yes_no, question: 'Do the systems need a project (DM 37/2008 art. 5)?'}
+  progetto_impianti: {type: yes_no, question: 'Do the systems need a project (DM 37/2008 art. 5)?', when: '{{ask.impianti}}'}
   impianto_radiotv: {type: yes_no, question: 'Radio and TV systems, aerials, electronics?', when: '{{ask.impianti}}'}
   impianto_ascensore: {type: yes_no, question: 'Lifts, goods lifts, escalators?', when: '{{ask.impianti}}'}
   impianto_antincendio: {type: yes_no, question: 'Fire-protection systems?', when: '{{ask.impianti}}'}
@@ -597,9 +597,9 @@ sections:
   - {id: 'r12c1p12reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_antincendio}}', label: di protezione antincendio}
   - {id: 'r13c1p13reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_altro}}', label: altre tipologie di impianti}
   - {kind: text, label: specificare, value: '{{ask.impianto_altro_quale}}', when: '{{ask.impianti}} {{ask.impianto_altro}}'}
-  - {kind: radio, when: '{{ask.progetto_impianti|not}}', label: non è soggetto agli obblighi di presentazione del progetto}
-  - {kind: radio, when: '{{ask.progetto_impianti}}', label: è soggetto agli obblighi di presentazione del progetto}
-  - {kind: checkbox, when: '{{ask.progetto_impianti}}', label: allega i relativi elaborati}
+  - {kind: radio, when: '{{ask.impianti}} {{ask.progetto_impianti|not}}', label: non è soggetto agli obblighi di presentazione del progetto}
+  - {kind: radio, when: '{{ask.impianti}} {{ask.progetto_impianti}}', label: è soggetto agli obblighi di presentazione del progetto}
+  - {kind: checkbox, when: '{{ask.impianti}} {{ask.progetto_impianti}}', label: allega i relativi elaborati}
   - {kind: radio, when: '{{ask.prestazione_energetica|not}}', label: non è soggetto al deposito del progetto e della relazione tecnica}
   - {kind: radio, when: '{{ask.prestazione_energetica}}', label: è soggetto al deposito del progetto e della relazione tecnica}
   - {kind: checkbox, when: '{{ask.prestazione_energetica}}', label: si allega la relazione tecnica sul rispetto delle prescrizioni in materia di risparmio energetico}
