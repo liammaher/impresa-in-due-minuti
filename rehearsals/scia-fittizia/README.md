@@ -58,6 +58,13 @@ project the Vigili del Fuoco already approved (the form's last fire option, neve
 the excavated earth as by-products or under a VIA/AIA. The architect as structural designer
 too isn't mapped (her studio is the business's).
 
+## Cases from the schema table (2026-10-30)
+
+Written from `docs/schema-branches.md`, one answers file per group of options of the national
+form no case took. Each passes pre-flight offline; **none has been run on the portal yet**.
+
+- `answers-senza-impianti.json`: the P6 works with no systems touched.
+
 ## Runs
 
 | Date | Browser | Case | Result |
