@@ -15,6 +15,8 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 attachments:
   Gestione degli allegati:
+    # Quadro f)/e)'s "si allega la relativa ricevuta" adds this required slot (seen on the SCIA 2026-10-30).
+    - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: "{{ask.sanzione_ricevuta}}", when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
     # Quadro g)'s answers add their slots: the contributo's prospetto, its receipt once paid, or the
     # technical documents for the SUE to work it out.

@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T17:16:57.640Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-30T14:18:10.925Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Beni Paesaggistici › Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune) (sector Edilizia e pianificazione urbana)",
- "seconds": 61.8,
+ "seconds": 58.7,
  "generated": {
   "interventi": "Autorizzazione paesaggistica ordinaria per interventi ricadenti in aree soggette a vincolo paesaggistico (art.146 D.Lgs. 42/2004)",
   "adempimenti": [
@@ -67,26 +67,26 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
-   "seconds": 1.3
+   "same_as": "cil#Oggetto della pratica",
+   "seconds": 0.8
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
-   "seconds": 4.1
+   "same_as": "cil#DOMICILIO DIGITALE",
+   "seconds": 1.8
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 3.1
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 1.6
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -99,14 +99,14 @@
   {
    "section": "dichiarazione ubicazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
-   "seconds": 0.8
+   "same_as": "cil#Localizzazione dell'intervento",
+   "seconds": 1.9
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
-   "seconds": 2
+   "same_as": "cil#Dati catastali",
+   "seconds": 0.6
   },
   {
    "section": "dati relativi al nome del tecnico",
@@ -143,6 +143,7 @@
     }
    ],
    "fingerprint": "ffddb90f4d2ab273",
+   "text": "dati relativi al nome del tecnico è colui che presenta la pratica non è colui che presenta la pratica ordine/collegio/albo (1) (2) provincia (sigla) (2) numero iscrizione (2) (1) indicare se architetto, geometra, ingegnere, perito o agronomo. (2) La compilazione di questi campi è obbligatoria anche nel caso in cui il tecnico incaricato è colui che presenta la pratica.",
    "branches": [
     {
      "choice": "è colui che presenta la pratica",
@@ -258,7 +259,7 @@
      }
     }
    ],
-   "seconds": 11.9
+   "seconds": 7.2
   },
   {
    "section": "dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento)",
@@ -297,21 +298,24 @@
      "kind": "text",
      "label": "presso il Notaio",
      "context": "atto/contratto a rogito",
-     "max": 100
+     "max": 100,
+     "disabled": true
     },
     {
      "id": "r8c3p16reg:txt",
      "kind": "text",
      "label": "con sede a",
      "context": "atto/contratto a rogito",
-     "max": 100
+     "max": 100,
+     "disabled": true
     },
     {
      "id": "r8c4p18reg:txt",
      "kind": "text",
      "label": "repertorio",
      "context": "atto/contratto a rogito",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r10c1p22reg:chk",
@@ -323,19 +327,22 @@
      "kind": "text",
      "label": "con sede a",
      "context": "atto/contratto registrato all'Agenzia delle Entrate",
-     "max": 100
+     "max": 100,
+     "disabled": true
     },
     {
      "id": "r10c3p26reg:txt",
      "kind": "text",
      "label": "al n. gen.",
      "context": "atto/contratto registrato all'Agenzia delle Entrate",
-     "max": 20
+     "max": 20,
+     "disabled": true
     },
     {
      "id": "r10c4p28reg:calendar_input",
      "kind": "date",
-     "label": "in data"
+     "label": "in data",
+     "disabled": true
     },
     {
      "id": "r12c1p30reg:chk",
@@ -347,19 +354,22 @@
      "kind": "text",
      "label": "con sede a",
      "context": "atto/contratto registrato alla Conservatoria",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r12c3p34reg:txt",
      "kind": "text",
      "label": "al n. gen.",
      "context": "atto/contratto registrato alla Conservatoria",
-     "max": 20
+     "max": 20,
+     "disabled": true
     },
     {
      "id": "r12c4p36reg:calendar_input",
      "kind": "date",
-     "label": "in data"
+     "label": "in data",
+     "disabled": true
     },
     {
      "id": "r16c1p41reg:radio:4_clone",
@@ -418,15 +428,18 @@
     {
      "id": "r25c1p61reg:chk",
      "kind": "checkbox",
-     "label": "art. 136 D.Lgs. 42/2004"
+     "label": "art. 136 D.Lgs. 42/2004",
+     "disabled": true
     },
     {
      "id": "r26c1p63reg:chk",
      "kind": "checkbox",
-     "label": "art. 142 D.Lgs. 42/2004"
+     "label": "art. 142 D.Lgs. 42/2004",
+     "disabled": true
     }
    ],
    "fingerprint": "0dda28ca5077533f",
+   "text": "dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento) 1) il titolo che legittima il richiedente è: proprietà comproprietà (munito del consenso esplicito dei comproprietari) amministratore/delegato dal Condominio altro diritto reale di godimento in forza di: presso il Notaio con sede a repertorio atto/contratto a rogito con sede a al n. gen. in data atto/contratto registrato all'Agenzia delle Entrate con sede a al n. gen. in data atto/contratto registrato alla Conservatoria Il richiedente possiede tale titolo sin dal momento della presentazione della presente pratica edilizia,e conferma che i lavori insisteranno solo in porzioni nelle quali ha sottoscritto il titolo. 2) l'intervento interessa: l'area l'immobile ad uso come da n. NTA del PRG in zona di PRG 3) ATTI PUBBLICI O SCRITTURE PRIVATE CHE INTERESSANO L'IMMOBILE Sull'area/immobile gravano atti registrati di qualsiasi natura (servitù attiva o passiva, atti unilaterali d'obbligo, convenzioni ecc..) sì no 4) VINCOLI l'area/immobile è sottoposta/o a tutela ai sensi del D.lgs 22 gennaio 2004, n. 42 sì no art. 136 D.Lgs. 42/2004 art. 142 D.Lgs. 42/2004",
    "branches": [
     {
      "choice": "proprietà",
@@ -707,6 +720,11 @@
        "r24c3p60reg:radio:9_clone",
        "r22c1p55reg:radio:7_clone"
       ]
+     ],
+     "enables": [
+      "r8c2p14reg:txt",
+      "r8c3p16reg:txt",
+      "r8c4p18reg:txt"
      ]
     },
     {
@@ -726,6 +744,11 @@
        "r24c3p60reg:radio:9_clone",
        "r22c1p55reg:radio:7_clone"
       ]
+     ],
+     "enables": [
+      "r10c2p24reg:txt",
+      "r10c3p26reg:txt",
+      "r10c4p28reg:calendar_input"
      ]
     },
     {
@@ -745,6 +768,11 @@
        "r24c3p60reg:radio:9_clone",
        "r22c1p55reg:radio:7_clone"
       ]
+     ],
+     "enables": [
+      "r12c2p32reg:txt",
+      "r12c3p34reg:txt",
+      "r12c4p36reg:calendar_input"
      ]
     },
     {
@@ -865,6 +893,50 @@
        "r24c3p60reg:radio:9_clone",
        "r22c1p55reg:radio:7_clone"
       ]
+     ],
+     "enables": [
+      "r25c1p61reg:chk",
+      "r26c1p63reg:chk"
+     ],
+     "then": [
+      {
+       "choice": "art. 136 D.Lgs. 42/2004",
+       "id": "r25c1p61reg:chk",
+       "kind": "checkbox",
+       "moved": [
+        [
+         "r12c4p36reg:calendar_input",
+         "r10c4p28reg:calendar_input"
+        ],
+        [
+         "r24c2p59reg:radio:8_clone",
+         "r21c1p52reg:radio:6_clone"
+        ],
+        [
+         "r24c3p60reg:radio:9_clone",
+         "r22c1p55reg:radio:7_clone"
+        ]
+       ]
+      },
+      {
+       "choice": "art. 142 D.Lgs. 42/2004",
+       "id": "r26c1p63reg:chk",
+       "kind": "checkbox",
+       "moved": [
+        [
+         "r12c4p36reg:calendar_input",
+         "r10c4p28reg:calendar_input"
+        ],
+        [
+         "r24c2p59reg:radio:8_clone",
+         "r21c1p52reg:radio:6_clone"
+        ],
+        [
+         "r24c3p60reg:radio:9_clone",
+         "r22c1p55reg:radio:7_clone"
+        ]
+       ]
+      }
      ]
     },
     {
@@ -885,47 +957,9 @@
        "r22c1p55reg:radio:7_clone"
       ]
      ]
-    },
-    {
-     "choice": "art. 136 D.Lgs. 42/2004",
-     "id": "r25c1p61reg:chk",
-     "kind": "checkbox",
-     "moved": [
-      [
-       "r12c4p36reg:calendar_input",
-       "r10c4p28reg:calendar_input"
-      ],
-      [
-       "r24c2p59reg:radio:8_clone",
-       "r21c1p52reg:radio:6_clone"
-      ],
-      [
-       "r24c3p60reg:radio:9_clone",
-       "r22c1p55reg:radio:7_clone"
-      ]
-     ]
-    },
-    {
-     "choice": "art. 142 D.Lgs. 42/2004",
-     "id": "r26c1p63reg:chk",
-     "kind": "checkbox",
-     "moved": [
-      [
-       "r12c4p36reg:calendar_input",
-       "r10c4p28reg:calendar_input"
-      ],
-      [
-       "r24c2p59reg:radio:8_clone",
-       "r21c1p52reg:radio:6_clone"
-      ],
-      [
-       "r24c3p60reg:radio:9_clone",
-       "r22c1p55reg:radio:7_clone"
-      ]
-     ]
     }
    ],
-   "seconds": 20.4
+   "seconds": 29.4
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -934,20 +968,20 @@
   {
    "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
-   "seconds": 0.6
+   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.8
   },
   {
    "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
    "fingerprint": "869752d2cea5aef3",
    "same_as": "sue-permesso-di-costruire-art-10-d-p-r-380-2001#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
-   "seconds": 0.9,
+   "same_as": "cil#Qualifica e dati del procuratore",
+   "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],
@@ -1010,6 +1044,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft"
+ }
 }

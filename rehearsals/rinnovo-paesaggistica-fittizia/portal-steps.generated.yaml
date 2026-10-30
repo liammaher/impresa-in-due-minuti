@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata
 title: Rinnovo dell'autorizzazione paesaggistica semplificata (DPR 31/2017 art. 7), SUE Napoli (tecnico con procura)
-generated: gen.py from sue-rinnovo-autorizzazione-paesaggistica-semplificata (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from sue-rinnovo-autorizzazione-paesaggistica-semplificata (2026-10-30) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and the acknowledgements in the client''s name'

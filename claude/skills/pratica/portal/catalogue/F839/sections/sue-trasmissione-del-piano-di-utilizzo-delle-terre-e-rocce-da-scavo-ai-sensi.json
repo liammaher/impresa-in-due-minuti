@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T16:46:03.951Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-30T14:17:13.721Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Terre e rocce da scavo › Trasmissione del Piano di utilizzo delle terre e rocce da scavo ai sensi dell'art. 9 del DPR n. 120/2017 (da trasmettere almeno novanta giorni prima dell'inizio dei lavori e, in ogni caso, prima della conclusione dell'eventuale procedimento di VIA o AIA) (sector Edilizia e pianificazione urbana)",
- "seconds": 14.3,
+ "seconds": 20.7,
  "generated": {
   "interventi": "Trasmissione del piano di utilizzo delle terre e rocce da scavo ai sensi dell'art. 9 del DPR n.120/2017",
   "adempimenti": [
@@ -67,26 +67,26 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
-   "seconds": 0.6
+   "same_as": "cil#Oggetto della pratica",
+   "seconds": 1.4
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
-   "seconds": 0.6
+   "same_as": "cil#DOMICILIO DIGITALE",
+   "seconds": 0.7
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.6
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 1
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -99,14 +99,14 @@
   {
    "section": "localizzazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
-   "seconds": 0.6
+   "same_as": "cil#Localizzazione dell'intervento",
+   "seconds": 0.9
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
-   "seconds": 0.6
+   "same_as": "cil#Dati catastali",
+   "seconds": 1.8
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -115,8 +115,8 @@
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
-   "seconds": 0.8,
+   "same_as": "cil#Qualifica e dati del procuratore",
+   "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],
@@ -151,6 +151,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft"
+ }
 }

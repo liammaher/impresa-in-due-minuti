@@ -19,6 +19,8 @@
 //       sections need not be complete; an empty "catalogo" draft shows the base slots)
 //
 // A choice's node says what it reveals, hides and moves (old id → new id); gen.py reads them.
+// It also says which shown boxes it switches on and off (`enables`, `disables`): a block
+// greyed until its choice is made is explored under that choice, never tried on its own.
 // Each section carries a fingerprint of what it shows before any choice (ids, kinds, labels):
 // in a batch a section seen before under that fingerprint isn't crawled again (`same_as`), and
 // a later crawl of the same section with another fingerprint means the portal changed it.
@@ -109,6 +111,9 @@
       if (kind === "radio") f.group = (e.name || "").split("dynaForm:")[1] || e.name;
       if (labels[1] && labels[1] !== labels[0]) f.context = labels[1].slice(0, 120);
       if (e.maxLength > 0 && e.maxLength < 100000) f.max = e.maxLength;
+      // Switched off until a choice switches it on (the stato legittimo's blocks, 2026-10-30):
+      // shown, greyed, and nothing a click does. Not in the fingerprint.
+      if (e.disabled) f.disabled = true;
       if (kind === "select") {
         f.options = e.options.length > 40 ? `${e.options.length} options` : [...e.options].filter((o) => o.value).map((o) => o.text.trim());
         if (e.value) f.value = e.options[e.selectedIndex].text.trim();
@@ -128,6 +133,8 @@
   function choices(fields) {
     const out = [];
     for (const f of fields) {
+      // A switched-off box is tried under the choice that switches it on, where it does something.
+      if (f.disabled) continue;
       if (f.kind === "radio" && !f.checked) out.push({ id: f.id, kind: f.kind, label: f.label });
       if (f.kind === "checkbox" && !f.checked && (!PERSONAL.test(f.label) || CHANGE.test(f.label))) out.push({ id: f.id, kind: f.kind, label: f.label });
       if (f.kind === "select" && Array.isArray(f.options) && f.options.length <= 12) {
@@ -198,6 +205,12 @@
     if (reveals.length) node.reveals = reveals;
     if (moved.length) node.moved = moved;
     if (hides.length) node.hides = hides;
+    // What the choice switches on and off: boxes shown before and now, whose state changed.
+    const was = new Map(before.map((f) => [key(f), f]));
+    const enabled = now.filter((f) => was.has(key(f)) && was.get(key(f)).disabled && !f.disabled);
+    const disabled = now.filter((f) => was.has(key(f)) && !was.get(key(f)).disabled && f.disabled);
+    if (enabled.length) node.enables = enabled.map((f) => f.id);
+    if (disabled.length) node.disables = disabled.map((f) => f.id);
     // A "+" open in this state repeats a block: press it once, note what it adds.
     if (depth > 1) {
       const plus = [...doc().querySelectorAll('[id*="dynaForm"] button')].filter((b) => b.offsetParent && b.textContent.trim() === "+");
@@ -212,8 +225,8 @@
     out.push(node);
     report.tried++;
     await undo();
-    if (depth > 1 && reveals.length) {
-      const sub = choices(reveals);
+    if (depth > 1 && (reveals.length || enabled.length)) {
+      const sub = choices([...reveals, ...enabled]);
       if (sub.length) {
         node.then = [];
         for (const c of sub.slice(0, 12)) {
@@ -280,6 +293,7 @@
   async function newFrame(url) {
     if (frame) frame.remove();
     frame = document.createElement("iframe");
+    frame.dataset.pv = "crawl";  // a crawl's frame stays over the page after it: the runner clears it
     frame.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;border:0;z-index:2147483647;background:#fff";
     const loaded = new Promise((r) => frame.addEventListener("load", r, { once: true }));
     frame.src = url || location.href;
@@ -348,7 +362,7 @@
       const stored = JSON.parse(localStorage.getItem((check ? "crawl:check:" : "crawl:op:") + op.name) || "null");
       if (stored && !stored.error) { report.skipped++; continue; }
       const o0 = performance.now();
-      const r = { name: op.name, sector: op.sector, operation: op.path, crawled: new Date().toISOString(), sections: [] };
+      const r = { name: op.name, sector: op.sector, operation: op.path, crawled: new Date().toISOString(), depth: opts.depth || 2, sections: [] };
       if (op.like) r.like = op.like;
       report.current = op.name;
       try {

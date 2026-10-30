@@ -280,6 +280,8 @@
   // so stop there. e must still be in the page and be what's on top at its centre.
   function onTop(e, what) {
     if (!e.isConnected) fail(`${what}: the page changed under it`);
+    // A greyed box ignores the mouse, so its own wrapper reads as "on top" of it: say what it is.
+    if (e.disabled) fail(`${what}: switched off (a choice before it, which the steps file doesn't make, switches it on)`);
     e.scrollIntoView({ block: "center", inline: "nearest" });
     const r = e.getBoundingClientRect();
     if (!r.width || !r.height) fail(`${what}: not visible`);
@@ -1023,8 +1025,8 @@
     start(procedure, values, resume = {}, sealed = null) {
       const raw = localStorage.getItem("pv-steps:" + procedure) || fail(`no steps installed for ${procedure}`);
       // One frame at a time: a run that ended left its own over the page, maybe from a
-      // runner loaded before this one (and its review, drawn over the portal).
-      document.querySelectorAll('iframe[data-pv="runner"], [data-pv="review"]').forEach((f) => f.remove());
+      // runner loaded before this one (and its review, drawn over the portal), or a crawl's.
+      document.querySelectorAll('iframe[data-pv="runner"], iframe[data-pv="crawl"], [data-pv="review"]').forEach((f) => f.remove());
       if (!sealed) sealedRun = null;
       try { sessionStorage.setItem("pv-run", JSON.stringify(sealed ? { procedure, sealed } : { procedure, values })); }
       catch (e) { /* storage off */ }

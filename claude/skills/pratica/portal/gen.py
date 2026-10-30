@@ -25,6 +25,9 @@ its own branch of the section; a field outside it that such a choice moves goes 
 and so does a box whose own tick renumbers it (it opens rows above itself). An attachments
 slot that takes only signed files (.p7m) is left to the person.
 
+A dictionary entry's `supports` (the cases its boxes can't state) joins the recipe's in every
+pratica that shows the section.
+
 A recipe's `operation` may be a list (a CILA with its autorizzazione paesaggistica): the
 pratica is the union of each operation's sections with the recipe's `scelte`, in the order
 of the combination's own crawl, which must hold just those (a section both have under two
@@ -55,6 +58,9 @@ import yaml
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import rules  # noqa: E402
+# The asks a template reads: after "{{", and each term of a sum ("+", "*") or of several fields
+# for one filter (",": {{ask.a,ask.b|any}}).
+ASKED = re.compile(r"(?:\{\{|[+*,])\s*ask\.(\w+)")
 DECLARATIONS = re.compile(
     r"consapevolezza|informativa sulla privacy|requisiti di o|altre dichiarazioni|"
     r"dichiarazioni ai sensi dell'art\. 6|rispetto sulle tasse|art\. ?75", re.I)
@@ -201,6 +207,7 @@ class Section:
         n = self.node(self.avail, f, option)
         if n is None:
             n = self.node(self.branches, {**f, "id": f.get("base_id", f["id"])}, option)
+        nested = False
         if n is None:
             # A choice another one opened, deeper in the crawl than the state reached.
             def every(nodes):
@@ -208,6 +215,7 @@ class Section:
                     yield x
                     yield from every(x.get("then", []))
             n = self.node(list(every(self.branches)), {**f, "id": f.get("base_id", f["id"])}, option)
+            nested = True
         if n is None:
             return
         reveals = [dict(x) for x in n.get("reveals", []) if x["kind"] != "message"]
@@ -244,10 +252,14 @@ class Section:
                 if b and b >= point:
                     x.setdefault("base_id", x["id"])
                     x["id"] = shift(x["id"], dr, dp)
+                    # Moved by a choice the crawl saw only under another one this state hasn't
+                    # made: its offsets are that state's, not this one's.
+                    x["guessed"] = x.get("guessed") or nested
             self.applied.append(off)
         for x in reveals:
             x["base_id"] = x["id"]
             x["id"] = shift(x["id"], *moved_by_earlier(off[0] if off else pos(x["id"])))
+            x["guessed"] = nested and x["id"] != x["base_id"]
         self.fields += reveals
         self.avail = []
 
@@ -367,7 +379,11 @@ def fill(entry, as_name, c, recipe, name):
         filled.update((t["id"], t["label"]) for t in twins if t)
         # `by_label`: rows a choice the crawl tried alone moves in another branch (the SCIA's
         # sanatoria cases): never an id, found on the page as the answers left it.
-        if not look.added and not moved and not d.get("by_label"):
+        # Offsets from choices the crawl tried apart add up (the CILA's a), checked against a hand
+        # walk); from a choice it saw only nested under another this state hasn't made, they are a
+        # guess (2026-10-30: one named a radio for the permesso's "specificare tipo intervento").
+        guessed = bool(f.get("guessed"))
+        if not look.added and not moved and not guessed and not d.get("by_label"):
             g = {"id": f["id"], **g, "label": d["label"], **({"nth": d["nth"]} if d.get("nth", 1) > 1 else {})}
         else:
             g = {**g, "label": d["label"], **({"nth": d["nth"]} if d.get("nth", 1) > 1 else {})}
@@ -409,8 +425,24 @@ def fill(entry, as_name, c, recipe, name):
         out["note"] = entry["note"]
     # The questions this section asks: those its emitted fields read (a field only some
     # pratiche show doesn't bring its question along).
-    asks_used = set(re.findall(r"(?:\{\{|[+*])\s*ask\.(\w+)", json.dumps(fields)))
+    asks_used = set(ASKED.findall(json.dumps(fields)))
     return out, problems, asks_used
+
+
+def split_by_yaml(dictionary, recipe):
+    """A flow mapping's unquoted label with a comma ({label: a, b, when: ...}) loads as the label
+    "a" and a key "b" with no value: the field then matches the wrong box, silently (2026-10-30,
+    the tolerances' "..., comma 4, allegata" found the "presentata" box). Refuse it."""
+    found = []
+    entries = dictionary.get("sections", []) + dictionary.get("after", []) + recipe.get("sections", [])
+    fields = [(e.get("section"), f) for e in entries for f in e.get("fields", []) + e.get("block", [])]
+    fields += [(screen, f) for screen, fs in (recipe.get("attachments") or {}).items() for f in fs]
+    for where, f in fields:
+        empty = [k for k, v in f.items() if v is None]
+        if empty:
+            found.append(f"{where}: {f.get('label')!r} has {', '.join(map(repr, empty))} with no value: quote a label with a comma")
+    if found:
+        raise GenError("\n".join(found))
 
 
 def generate(recipe, base=HERE):
@@ -422,6 +454,7 @@ def generate(recipe, base=HERE):
     if changed:
         raise GenError(f"the portal changed {recipe['crawl']} since its crawl ({'; '.join(changed)}): crawl it again")
     dictionary = load_yaml(base / "dictionary" / f"{recipe.get('dictionary', 'fnsuap')}.yaml")
+    split_by_yaml(dictionary, recipe)
 
     if "operations" not in catalogue:
         # A catalogue of the wizard's tree only (the SUAP's so far): the pratica's sections are
@@ -496,8 +529,8 @@ def generate(recipe, base=HERE):
             crawl["sections"][i] = {**seen, "section": s["section"]}
     crawled = {norm(s["section"]): s for s in crawl["sections"]}
 
-    problems, out_sections, asks_used = [], [], set()
-    first = [next((n for n in names if norm(n).startswith(norm(x))), x) for x in recipe.get("first", [])]
+    problems, out_sections, asks_used, section_supports = [], [], set(), []
+    first =[next((n for n in names if norm(n).startswith(norm(x))), x) for x in recipe.get("first", [])]
     for name in first + [n for n in names if n not in first]:
         if name not in names:
             problems.append(f"{name}: in `first` but not in this pratica")
@@ -532,6 +565,11 @@ def generate(recipe, base=HERE):
             continue
         asks_used |= used
         out_sections.append(out)
+        # A section's own refusals (the cases its boxes can't state) go with it into every
+        # pratica that shows it, after the recipe's.
+        for c in entry.get("supports", []):
+            if c not in section_supports:
+                section_supports.append(c)
 
     for name in recipe.get("after", []):
         entry = next((e for e in dictionary.get("after", []) if e["section"] == name), None)
@@ -551,7 +589,7 @@ def generate(recipe, base=HERE):
                     # A slot only some answers add (an onerosa CILA's contributo receipt): the
                     # crawl's screen hasn't it, the run finds it by label under its `when`.
                     fields.append({k: v for k, v in d.items() if k != "on_page"})
-                    for t in re.findall(r"(?:\{\{|[+*])\s*ask\.(\w+)", json.dumps(d)):
+                    for t in ASKED.findall(json.dumps(d)):
                         asks_used.add(t)
                 continue  # this pratica has no such slot
             if slot.get("accepts") and all(t.endswith(".p7m") for t in slot["accepts"].split(";")):
@@ -560,7 +598,7 @@ def generate(recipe, base=HERE):
                 continue
             # What the slot takes, so pre-flight can refuse a file it wouldn't.
             fields.append(dict(d) | ({"accepts": slot["accepts"]} if slot.get("accepts") else {}))
-            for t in re.findall(r"(?:\{\{|[+*])\s*ask\.(\w+)", json.dumps(d)):
+            for t in ASKED.findall(json.dumps(d)):
                 asks_used.add(t)
         if slots is not None:
             # Every slot that takes only signed files is the person's, named or not.
@@ -584,7 +622,8 @@ def generate(recipe, base=HERE):
         raise GenError("\n".join(problems))
     for t in recipe.get("asks_used", []):
         asks_used.add(t)
-    for t in re.findall(r"(?:\{\{|[+*])\s*ask\.(\w+)", json.dumps([recipe.get("yours"), recipe.get("supports"), recipe.get("rules")])):
+    supports = recipe.get("supports", []) + [c for c in section_supports if c not in recipe.get("supports", [])]
+    for t in ASKED.findall(json.dumps([recipe.get("yours"), supports, recipe.get("rules")])):
         asks_used.add(t)
     # The dictionary's questions, the recipe's wording over them; a question only this pratica
     # asks (one `supports` or `rules` reads) is the recipe's alone.
@@ -629,7 +668,7 @@ def generate(recipe, base=HERE):
     return {
         "procedure": recipe["procedure"], "title": recipe["title"],
         "generated": f"gen.py from {recipe['crawl']} ({crawl.get('crawled', '?')[:10]}) and dictionary/{recipe.get('dictionary', 'fnsuap')}.yaml",
-        "yours": recipe["yours"], **({"groups": groups} if groups else {}), "asks": asks, "supports": recipe.get("supports", []),
+        "yours": recipe["yours"], **({"groups": groups} if groups else {}), "asks": asks, "supports": supports,
         **({"rules": ruled} if ruled else {}),
         "start": recipe.get("start", catalogue["start"]), "logged_in": recipe.get("logged_in", "https://suap.impresainungiorno.gov.it/fnsuap/"),
         "wizard": wizard, "sections": out_sections,

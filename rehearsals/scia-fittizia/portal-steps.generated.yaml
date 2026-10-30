@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/scia-edilizia
 title: SCIA edilizia, SUE Napoli (tecnico con procura)
-generated: gen.py from scia (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from scia (2026-10-30) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
@@ -18,6 +18,13 @@ groups:
     question: Which of the barriers rules' requirements does the project meet (D.M. 236/1989)? Tick every one that applies.
   acustica_documenti:
     question: Which acoustic documents are attached (art. 8 L. 447/1995, art. 4 DPR 227/2011)? Tick every one that applies.
+  precedenti:
+    question: 'Which building titles or pratiche make the building''s stato legittimo (art. 9-bis c. 1-bis DPR 380/2001: the one that built it or last covered all of it, and the partial ones after)? Tick
+      every one; the form has one line for each kind.'
+  prova_documenti:
+    question: What shows the building's original state? Tick every one that applies.
+  tolleranze_precedenti:
+    question: Where were the construction tolerance declarations (art. 34-bis or 34-ter c. 4) made? Tick every one that applies.
   fatti:
     question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
 asks:
@@ -100,8 +107,68 @@ asks:
   contributo_calcolo: {type: choice, question: 'Who works the contributo out: prospetto (the progettista''s prospetto di calcolo preventivo, attached); sportello (the SUE, from the technical documents attached)',
     options: [prospetto, sportello]}
   documentazione_calcolo_contributo: {type: file, question: The technical documents the SUE needs to work out the contributo (PDF)}
-  precedente_numero: {type: text, question: 'The building''s own title (licenza / concessione / permesso di costruire): its number'}
-  precedente_data: {type: date, question: Its date}
+  stato_legittimo: {type: choice, question: 'How does quadro f) (e) for the permesso) show the building''s stato legittimo? The form takes one: titoli (from its building titles or pratiche: you''ll list
+      them); epoca (built when no title was required: the catasto''s primo impianto or other documents); prova (its title is lost or unknown, but there is documentary proof of it); sanzioni (pecuniary sanctions
+      under artt. 33, 34, 37 or 38 DPR 380/2001 were imposed and fully paid); tolleranze (construction tolerance declarations, art. 34-bis or 34-ter c. 4)', options: [titoli, epoca, prova, sanzioni, tolleranze],
+    propose: titoli}
+  precedenti_ripetuti: {type: yes_no, question: 'Does the building have two or more titles of the same kind (two DIAs, two SCIAs)? The form has one line per kind', propose: 'false', when: '{{ask.stato_legittimo|is_titoli}}'}
+  prec_titolo_unico: {type: yes_no, group: precedenti, item: Titolo unico (SUAP)}
+  prec_permesso: {type: yes_no, group: precedenti, item: 'Permesso di costruire, licenza edilizia or concessione edilizia'}
+  prec_autorizzazione: {type: yes_no, group: precedenti, item: Autorizzazione edilizia}
+  prec_comunicazione: {type: yes_no, group: precedenti, item: Comunicazione edilizia (art. 26 L. 47/1985)}
+  prec_dia: {type: yes_no, group: precedenti, item: Denuncia di inizio attività (DIA)}
+  prec_dia_alternativa: {type: yes_no, group: precedenti, item: DIA or SCIA alternativa al permesso di costruire}
+  prec_scia: {type: yes_no, group: precedenti, item: SCIA (segnalazione certificata di inizio attività)}
+  prec_cel: {type: yes_no, group: precedenti, item: Comunicazione edilizia libera}
+  prec_condono: {type: yes_no, group: precedenti, item: 'Condono edilizio (a title in sanatoria, its oblazione paid)'}
+  prec_pdc_sanatoria: {type: yes_no, group: precedenti, item: Permesso di costruire in sanatoria (artt. 36 or 36-bis DPR 380/2001)}
+  prec_scia_sanatoria: {type: yes_no, group: precedenti, item: SCIA in sanatoria (art. 36-bis)}
+  prec_scia_sanatoria_variante: {type: yes_no, group: precedenti, item: SCIA in sanatoria for a variant in corso d'opera in partial difformity from a title issued before L. 10/1977}
+  prec_altro: {type: yes_no, group: precedenti, item: Another title or pratica}
+  prec_titolo_unico_numero: {type: text, question: 'The titolo unico (SUAP): its number', when: '{{ask.prec_titolo_unico}}'}
+  prec_titolo_unico_data: {type: date, question: Its date, when: '{{ask.prec_titolo_unico}}'}
+  precedente_numero: {type: text, question: 'The permesso di costruire / licenza / concessione edilizia: its number', when: '{{ask.prec_permesso}}'}
+  precedente_data: {type: date, question: Its date, when: '{{ask.prec_permesso}}'}
+  prec_autorizzazione_numero: {type: text, question: 'The autorizzazione edilizia: its number', when: '{{ask.prec_autorizzazione}}'}
+  prec_autorizzazione_data: {type: date, question: Its date, when: '{{ask.prec_autorizzazione}}'}
+  prec_comunicazione_numero: {type: text, question: 'The comunicazione edilizia (art. 26 L. 47/1985): its number', when: '{{ask.prec_comunicazione}}'}
+  prec_comunicazione_data: {type: date, question: Its date, when: '{{ask.prec_comunicazione}}'}
+  prec_dia_numero: {type: text, question: 'The DIA: its number', when: '{{ask.prec_dia}}'}
+  prec_dia_data: {type: date, question: Its date, when: '{{ask.prec_dia}}'}
+  prec_dia_alternativa_numero: {type: text, question: 'The DIA / SCIA alternativa al permesso: its number', when: '{{ask.prec_dia_alternativa}}'}
+  prec_dia_alternativa_data: {type: date, question: Its date, when: '{{ask.prec_dia_alternativa}}'}
+  prec_scia_numero: {type: text, question: 'The SCIA: its number', when: '{{ask.prec_scia}}'}
+  prec_scia_data: {type: date, question: Its date, when: '{{ask.prec_scia}}'}
+  prec_cel_numero: {type: text, question: 'The comunicazione edilizia libera: its number', when: '{{ask.prec_cel}}'}
+  prec_cel_data: {type: date, question: Its date, when: '{{ask.prec_cel}}'}
+  prec_condono_numero: {type: text, question: 'The condono: its number', when: '{{ask.prec_condono}}'}
+  prec_condono_data: {type: date, question: Its date, when: '{{ask.prec_condono}}'}
+  prec_pdc_sanatoria_numero: {type: text, question: 'The permesso di costruire in sanatoria: its number', when: '{{ask.prec_pdc_sanatoria}}'}
+  prec_pdc_sanatoria_data: {type: date, question: Its date, when: '{{ask.prec_pdc_sanatoria}}'}
+  prec_scia_sanatoria_numero: {type: text, question: 'The SCIA in sanatoria: its number', when: '{{ask.prec_scia_sanatoria}}'}
+  prec_scia_sanatoria_data: {type: date, question: Its date, when: '{{ask.prec_scia_sanatoria}}'}
+  prec_scia_sanatoria_variante_numero: {type: text, question: 'The SCIA in sanatoria for the variant: its number', when: '{{ask.prec_scia_sanatoria_variante}}'}
+  prec_scia_sanatoria_variante_data: {type: date, question: Its date, when: '{{ask.prec_scia_sanatoria_variante}}'}
+  prec_altro_quale: {type: text, question: Which other title or pratica (the form's "specificare"), when: '{{ask.prec_altro}}'}
+  prec_altro_numero: {type: text, question: Its number, when: '{{ask.prec_altro}}'}
+  prec_altro_data: {type: date, question: Its date, when: '{{ask.prec_altro}}'}
+  prova_catasto: {type: yes_no, group: prova_documenti, item: 'The catasto''s primo impianto registration (its copy, or its details)'}
+  prova_altri: {type: yes_no, group: prova_documenti, item: 'Other documents: photos, maps, archive records (art. 9-bis c. 1-bis, fourth and fifth periods)'}
+  prova_catasto_numero: {type: text, question: 'The primo impianto registration: its number', when: '{{ask.prova_catasto}}'}
+  prova_catasto_data: {type: date, question: Its date, when: '{{ask.prova_catasto}}'}
+  sanzione_prova: {type: choice, question: 'How does quadro f) show the sanctions were paid? ricevuta (their receipt is attached); estremi (you give the payment''s details)', options: [ricevuta, estremi],
+    when: '{{ask.stato_legittimo|is_sanzioni}}'}
+  sanzione_ricevuta: {type: file, question: The sanctions' payment receipt (PDF), when: '{{ask.sanzione_prova|is_ricevuta}}'}
+  sanzione_importo: {type: number, question: The sanction's amount in euro, when: '{{ask.sanzione_prova|is_estremi}}'}
+  sanzione_irrogata: {type: date, question: When it was imposed, when: '{{ask.sanzione_prova|is_estremi}}'}
+  sanzione_protocollo: {type: text, question: 'The payment details'' "Prot. n.", as the form asks it', when: '{{ask.sanzione_prova|is_estremi}}'}
+  sanzione_protocollo_data: {type: date, question: Its date, when: '{{ask.sanzione_prova|is_estremi}}'}
+  toll_prec_pratica: {type: yes_no, group: tolleranze_precedenti, item: In an earlier pratica edilizia's forms}
+  toll_prec_atto: {type: yes_no, group: tolleranze_precedenti, item: 'Attached to a deed that transferred, set up or ended rights on the building'}
+  toll_prec_pratica_protocollo: {type: text, question: That pratica's protocol number, when: '{{ask.toll_prec_pratica}}'}
+  toll_prec_pratica_data: {type: date, question: Its date, when: '{{ask.toll_prec_pratica}}'}
+  toll_prec_atto_numero: {type: text, question: The deed's registration number, when: '{{ask.toll_prec_atto}}'}
+  toll_prec_atto_data: {type: date, question: Its registration date, when: '{{ask.toll_prec_atto}}'}
   superficie_mq: {type: number, question: The unit's surface in m²}
   volume_mc: {type: number, question: Its volume in m³}
   piani_n: {type: number, question: The building's number of storeys}
@@ -256,6 +323,34 @@ supports:
   in:
   - 'true'
   else: 'The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn''t qualify.'
+- value: '{{ask.stato_legittimo}}'
+  in:
+  - titoli
+  - sanzioni
+  - tolleranze
+  - area libera
+  else: 'A building with no title on file (built before titles were required, or its title lost) isn''t mapped yet: the quadro''s primo impianto line asks its details or its copy, by boxes the crawl didn''t
+    see.'
+- if: '{{ask.stato_legittimo|is_titoli}}'
+  value: '{{ask.precedenti_ripetuti}}'
+  in:
+  - 'false'
+  else: 'Two or more building titles of the same kind aren''t mapped yet: the quadro has one line per kind.'
+- if: '{{ask.stato_legittimo|is_titoli}}'
+  value: '{{ask.prec_titolo_unico,ask.prec_permesso,ask.prec_autorizzazione,ask.prec_comunicazione,ask.prec_dia,ask.prec_dia_alternativa,ask.prec_scia,ask.prec_cel,ask.prec_condono,ask.prec_pdc_sanatoria,ask.prec_scia_sanatoria,ask.prec_scia_sanatoria_variante,ask.prec_altro|any}}'
+  in:
+  - 'true'
+  else: A stato legittimo from the building's titles needs at least one title.
+- if: '{{ask.stato_legittimo|in_epoca__prova}}'
+  value: '{{ask.prova_catasto,ask.prova_altri|any}}'
+  in:
+  - 'true'
+  else: A building with no title on file needs its catasto primo impianto or other documents.
+- if: '{{ask.stato_legittimo|is_tolleranze}}'
+  value: '{{ask.toll_prec_pratica,ask.toll_prec_atto|any}}'
+  in:
+  - 'true'
+  else: A stato legittimo from tolerance declarations needs where they were made.
 rules:
   table: sue-napoli
   facts:
@@ -456,11 +551,80 @@ sections:
   - {id: 'r5c1p5reg:radio:3_clone', kind: radio, when: '{{ask.parti_comuni|is_art_1102}}', label: riguardano parti dell'edificio di proprietà comune}
 - section: f) Regolarità urbanistica e precedenti edilizi
   fields:
-  - {id: 'r1c1p1reg:radio:0_clone', kind: radio, label: che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i}
-  - {id: 'r5c1p9reg:chk', kind: checkbox, label: permesso di costruire / licenza edil.}
-  - {id: 'r5c2p11reg:txt', kind: text, value: '{{ask.precedente_numero}}', max: 8, label: permesso di costruire / licenza edil.}
-  - {id: 'r5c3p13reg:calendar_input', kind: date, value: '{{ask.precedente_data|date_it}}', label: del, nth: 2}
-  - {id: 'r63c1p147reg:radio:7_clone', kind: radio, label: pienamente conforme alla documentazione dello stato legittimo}
+  - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.stato_legittimo|is_titoli}}', label: che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i}
+  - {id: 'r3c1p3reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_titolo_unico}}', label: titolo unico (SUAP)}
+  - {id: 'r3c2p5reg:txt', kind: text, value: '{{ask.prec_titolo_unico_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_titolo_unico}}', max: 8, label: titolo unico (SUAP)}
+  - {id: 'r3c3p7reg:calendar_input', kind: date, value: '{{ask.prec_titolo_unico_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_titolo_unico}}', label: del}
+  - {id: 'r5c1p9reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}', label: permesso di costruire / licenza edil.}
+  - {id: 'r5c2p11reg:txt', kind: text, value: '{{ask.precedente_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}', max: 8, label: permesso di costruire / licenza edil.}
+  - {id: 'r5c3p13reg:calendar_input', kind: date, value: '{{ask.precedente_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}', label: del, nth: 2}
+  - {id: 'r7c1p15reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}', label: autorizzazione edilizia}
+  - {id: 'r7c2p17reg:txt', kind: text, value: '{{ask.prec_autorizzazione_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}', max: 8, label: autorizzazione edilizia}
+  - {id: 'r7c3p19reg:calendar_input', kind: date, value: '{{ask.prec_autorizzazione_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}', label: del, nth: 3}
+  - {id: 'r9c1p21reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_comunicazione}}', label: comunicazione edilizia (art. 26}
+  - {id: 'r9c2p23reg:txt', kind: text, value: '{{ask.prec_comunicazione_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_comunicazione}}', max: 8, label: comunicazione edilizia (art. 26}
+  - {id: 'r9c3p25reg:calendar_input', kind: date, value: '{{ask.prec_comunicazione_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_comunicazione}}', label: del, nth: 4}
+  - {id: 'r11c1p27reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia}}', label: denuncia di inizio attività}
+  - {id: 'r11c2p29reg:txt', kind: text, value: '{{ask.prec_dia_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia}}', max: 8, label: denuncia di inizio attività}
+  - {id: 'r11c3p31reg:calendar_input', kind: date, value: '{{ask.prec_dia_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia}}', label: del, nth: 5}
+  - {id: 'r13c1p33reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia_alternativa}}', label: DIA/SCIA alternativa al permesso di costruire}
+  - {id: 'r13c2p35reg:txt', kind: text, value: '{{ask.prec_dia_alternativa_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia_alternativa}}', max: 9999, label: DIA/SCIA alternativa al permesso
+      di costruire}
+  - {id: 'r13c3p37reg:calendar_input', kind: date, value: '{{ask.prec_dia_alternativa_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia_alternativa}}', label: del, nth: 6}
+  - {id: 'r15c1p39reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia}}', label: segnalazione certificata di inizio attività}
+  - {id: 'r15c2p41reg:txt', kind: text, value: '{{ask.prec_scia_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia}}', max: 8, label: segnalazione certificata di inizio attività}
+  - {id: 'r15c3p43reg:calendar_input', kind: date, value: '{{ask.prec_scia_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia}}', label: del, nth: 7}
+  - {id: 'r17c1p45reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_cel}}', label: comunicazione edilizia libera}
+  - {id: 'r17c2p47reg:txt', kind: text, value: '{{ask.prec_cel_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_cel}}', max: 8, label: comunicazione edilizia libera}
+  - {id: 'r17c3p49reg:calendar_input', kind: date, value: '{{ask.prec_cel_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_cel}}', label: del, nth: 8}
+  - {id: 'r18c1p50reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono,ask.prec_pdc_sanatoria,ask.prec_scia_sanatoria,ask.prec_scia_sanatoria_variante|any}}', label: titolo
+      edilizio in sanatoria}
+  - {id: 'r20c1p52reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono}}', label: condono edilizio}
+  - {id: 'r20c2p54reg:txt', kind: text, value: '{{ask.prec_condono_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono}}', max: 9999, label: condono edilizio}
+  - {id: 'r20c3p56reg:calendar_input', kind: date, value: '{{ask.prec_condono_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono}}', label: del, nth: 9}
+  - {id: 'r22c1p58reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_pdc_sanatoria}}', label: permesso di costruire in sanatoria}
+  - {id: 'r22c2p60reg:txt', kind: text, value: '{{ask.prec_pdc_sanatoria_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_pdc_sanatoria}}', max: 9999, label: permesso di costruire in sanatoria}
+  - {id: 'r22c3p62reg:calendar_input', kind: date, value: '{{ask.prec_pdc_sanatoria_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_pdc_sanatoria}}', label: del, nth: 10}
+  - {id: 'r24c1p64reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria}}', label: SCIA in sanatoria di cui all’art. 36-bis}
+  - {id: 'r24c2p66reg:txt', kind: text, value: '{{ask.prec_scia_sanatoria_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria}}', max: 9999, label: SCIA in sanatoria di cui all’art.
+      36-bis}
+  - {id: 'r24c3p68reg:calendar_input', kind: date, value: '{{ask.prec_scia_sanatoria_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria}}', label: del, nth: 11}
+  - {id: 'r26c1p70reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria_variante}}', label: SCIA in sanatoria per variante}
+  - {id: 'r26c2p72reg:txt', kind: text, value: '{{ask.prec_scia_sanatoria_variante_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria_variante}}', max: 9999, label: SCIA in sanatoria
+      per variante}
+  - {id: 'r26c3p74reg:calendar_input', kind: date, value: '{{ask.prec_scia_sanatoria_variante_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria_variante}}', label: del,
+    nth: 12}
+  - {id: 'r27c1p75reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}', label: altro}
+  - {id: 'r29c1p78reg:txt', kind: text, value: '{{ask.prec_altro_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}', max: 9999, label: specificare}
+  - {id: 'r29c2p80reg:txt', kind: text, value: '{{ask.prec_altro_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}', max: 9999, label: n., nth: 13}
+  - {id: 'r29c3p82reg:calendar_input', kind: date, value: '{{ask.prec_altro_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}', label: del, nth: 13}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_epoca}}', label: si tratta di immobile realizzato in un’epoca}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}', label: copia accatastamento di primo impianto}
+  - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}', max: 8, label: n., nth: 14}
+  - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}', label: del, nth: 14}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_altri}}', label: altri documenti probanti}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_prova}}', label: non sono disponibili la copia o gli estremi del titolo abilitativo}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}', label: copia accatastamento di primo impianto, nth: 2}
+  - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}', max: 9999, label: n., nth: 15}
+  - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}', label: del, nth: 15}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_altri}}', label: altri documenti probanti, nth: 2}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}}', label: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}', label: si allega la relativa ricevuta}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}', label: si forniscono gli estremi del pagamento}
+  - {kind: number, value: '{{ask.sanzione_importo}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}', max: 11, label: di Euro}
+  - {kind: date, value: '{{ask.sanzione_irrogata|date_it}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}', label: 'a titolo di sanzione pecuniaria, irrogata in data'}
+  - {kind: text, value: '{{ask.sanzione_protocollo}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}', max: 9999, label: Prot. n.}
+  - {kind: date, value: '{{ask.sanzione_protocollo_data|date_it}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}', label: del, nth: 16}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_tolleranze}}', label: che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_pratica}}', label: 'dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata'}
+  - {kind: text, value: '{{ask.toll_prec_pratica_protocollo}}', when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_pratica}}', max: 9999, label: Prot. n., nth: 2}
+  - {kind: date, value: '{{ask.toll_prec_pratica_data|date_it}}', when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_pratica}}', label: del, nth: 17}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_atto}}', label: 'dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata'}
+  - {kind: text, value: '{{ask.toll_prec_atto_numero}}', when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_atto}}', max: 9999, label: atto di registrazione n.}
+  - {kind: date, value: '{{ask.toll_prec_atto_data|date_it}}', when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_atto}}', label: in data}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_area_libera|not}} {{ask.sanatoria_titolo|is_nessuna}}', label: pienamente conforme alla documentazione dello stato legittimo}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_area_libera|not}} {{ask.sanatoria_titolo|in_scia__permesso}}', label: 'conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata,
+      unitamente'}
 - section: g) Calcolo del contributo di costruzione
   fields:
   - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.scia_onerosa|not}}', label: l'intervento da realizzare è a titolo gratuito}
@@ -579,7 +743,7 @@ sections:
   - {id: 'r6c2p10reg:radio:3_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.sotto_200|not}}', label: dichiara che l'entità presunta del cantiere è pari o superiore}
   - {id: 'r8c2p14reg:radio:4_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.notifica_dovuta|not}}', label: dichiara che l'intervento non è soggetto all'invio}
   - {id: 'r9c2p17reg:radio:5_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}', label: dichiara che l'intervento è soggetto all'invio}
-  - {kind: checkbox, label: e allega alla presente segnalazione la notifica, if_present: true, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
+  - {id: 'r10c3p21reg:chk', kind: checkbox, on_page: true, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}', label: e allega alla presente segnalazione la notifica}
   - {kind: radio, label: invierà la notifica prima dell'inizio dei lavori, if_present: true, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
 - section: m) Diritti di terzi
   theirs:
@@ -687,7 +851,7 @@ sections:
   - {id: 'r11c1p11reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_ascensore}}', label: impianti di sollevamento di persone o di cose}
   - {id: 'r12c1p12reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_antincendio}}', label: di protezione antincendio}
   - {id: 'r13c1p13reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_altro}}', label: altre tipologie di impianti}
-  - {kind: text, label: specificare, value: '{{ask.impianto_altro_quale}}', when: '{{ask.impianti}} {{ask.impianto_altro}}'}
+  - {id: 'r15c1p15reg:txt', kind: text, value: '{{ask.impianto_altro_quale}}', on_page: true, when: '{{ask.impianti}} {{ask.impianto_altro}}', max: 100, label: specificare}
   - {kind: radio, when: '{{ask.impianti}} {{ask.progetto_impianti|not}}', label: non è soggetto agli obblighi di presentazione del progetto}
   - {kind: radio, when: '{{ask.impianti}} {{ask.progetto_impianti}}', label: è soggetto agli obblighi di presentazione del progetto}
   - {kind: checkbox, when: '{{ask.impianti}} {{ask.progetto_impianti}}', label: allega i relativi elaborati}
@@ -841,6 +1005,7 @@ sections:
   - {kind: file, label: Notifica preliminare, value: '{{ask.notifica_preliminare}}', when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
   - {kind: file, label: 'Elaborati grafici dello stato di fatto, di progetto e comparativi', value: '{{ask.elaborati_grafici}}'}
   - {kind: file, label: Documentazione fotografica dello stato di fatto, value: '{{ask.documentazione_fotografica}}'}
+  - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: '{{ask.sanzione_ricevuta}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}'}
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica}
   - {kind: file, label: Prospetto di calcolo preventivo del contributo di costruzione, value: '{{ask.prospetto_contributo}}', when: '{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}'}
   - {kind: file, label: Attestazione del versamento del contributo di costruzione, value: '{{ask.ricevuta_contributo}}', when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_pagato}}'}

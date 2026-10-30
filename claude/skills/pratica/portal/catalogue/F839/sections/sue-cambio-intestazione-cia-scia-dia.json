@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T16:43:33.644Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-30T14:11:18.834Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Cambio intestazione CIA / SCIA / DIA (sector Edilizia e pianificazione urbana)",
- "seconds": 48.5,
+ "seconds": 37.7,
  "generated": {
   "interventi": "Modifica degli aventi titolo ai fini del cambio intestazione C.I.L.A. / S.C.I.A. / D.I.A.",
   "adempimenti": [
@@ -108,25 +108,25 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
+   "same_as": "cil#Oggetto della pratica",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
-   "seconds": 0.7
+   "same_as": "cil#DOMICILIO DIGITALE",
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "seconds": 0.6
   },
   {
@@ -140,20 +140,20 @@
   {
    "section": "ubicazione dell'attività",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
+   "same_as": "cil#Localizzazione dell'intervento",
    "seconds": 0.6
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
-   "seconds": 0.7
+   "same_as": "cil#Dati catastali",
+   "seconds": 0.6
   },
   {
    "section": "dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento)",
    "fingerprint": "ccce02694f7bbdb2",
    "same_as": "sue-voltura-intestazione-permesso-di-costruire#Contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento)",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "dichiarazione relativa agli estremi della CILA / SCIA / DIA e proprietario",
@@ -199,6 +199,7 @@
     }
    ],
    "fingerprint": "d46d7c214157b7e9",
+   "text": "dichiarazione relativa agli estremi della CILA / SCIA / DIA e proprietario seleziona un titolo prot. n° del presentata da: cognome / ragione sociale nome codice fiscale / P. IVA",
    "branches": [
     {
      "choice": "seleziona un titolo = C.I.L.A.",
@@ -231,19 +232,19 @@
      }
     }
    ],
-   "seconds": 6.4
+   "seconds": 4.6
   },
   {
    "section": "dichiarazione relativa al Contributo di Costruzione",
    "fingerprint": "1d3f396f286a63cc",
    "same_as": "sue-voltura-intestazione-permesso-di-costruire#Contributo di Costruzione",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "dichiarazione relativa al domicilio dei nuovi intestatari per comunicazioni o notifiche",
    "fingerprint": "93ee53bc126d46cf",
    "same_as": "sue-voltura-intestazione-permesso-di-costruire#Domicilio dei nuovi intestatari per comunicazioni o notifiche",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "dichiarazione della tipologia di attività svolta",
@@ -256,6 +257,7 @@
     }
    ],
    "fingerprint": "7c94aa095a5b163e",
+   "text": "dichiarazione della tipologia di attività svolta è la seguente",
    "branches": [],
    "seconds": 0.6
   },
@@ -269,6 +271,7 @@
     }
    ],
    "fingerprint": "2bf68ec721e93ba1",
+   "text": "dichiarazione relativa alla conoscenza delle prescrizioni e condizioni da rispettare di essere pertanto a conoscenza di tutte le prescrizioni e condizioni che devono essere rispettate nella realizzazione dell'intervento",
    "branches": [
     {
      "choice": "di essere pertanto a conoscenza di tutte le prescrizioni e condizioni che devono essere rispettate nella realizzazione dell'intervento",
@@ -276,7 +279,7 @@
      "kind": "checkbox"
     }
    ],
-   "seconds": 1.8
+   "seconds": 1.3
   },
   {
    "section": "dichiarazione relativa alla conoscenza dei soggetti che intervengono nella realizzazione dell'intervento",
@@ -297,16 +300,19 @@
      "id": "r4c1p4reg:txt",
      "kind": "text",
      "label": "Direttore dei Lavori",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r6c1p8reg:txt",
      "kind": "text",
      "label": "Esecutore",
-     "max": 30
+     "max": 30,
+     "disabled": true
     }
    ],
    "fingerprint": "757fa4d12f37ec6b",
+   "text": "dichiarazione relativa alla conoscenza dei soggetti che intervengono nella realizzazione dell'intervento di essere a conoscenza dei nominativi del Progettista, del Direttore dei Lavori, dell'Esecutore ed altri soggetti che intervengono a vario titolo nella realizzazione dell'intervento, che con la presente si confermano la direzione e/o l'esecuzione dei lavori saranno assunte dai soggetti indicati di seguito Direttore dei Lavori Esecutore",
    "branches": [
     {
      "choice": "di essere a conoscenza dei nominativi del Progettista, del Direttore dei Lavori, dell'Esecutore ed altri soggetti che intervengono a vario titolo nella realizza",
@@ -316,10 +322,14 @@
     {
      "choice": "la direzione e/o l'esecuzione dei lavori saranno assunte dai soggetti indicati di seguito",
      "id": "r2c1p2reg:radio:1_clone",
-     "kind": "radio"
+     "kind": "radio",
+     "enables": [
+      "r4c1p4reg:txt",
+      "r6c1p8reg:txt"
+     ]
     }
    ],
-   "seconds": 2.5
+   "seconds": 2
   },
   {
    "section": "dichiarazione relativa all'impegno nel rispettare prescrizioni e condizioni relative al titolo abilitativo",
@@ -331,6 +341,7 @@
     }
    ],
    "fingerprint": "2f988e9a963f2c28",
+   "text": "dichiarazione relativa all'impegno nel rispettare prescrizioni e condizioni relative al titolo abilitativo di impegnarsi a rispettare le prescrizioni e condizioni relative al titolo abilitativo oggetto della presente comunicazione",
    "branches": [
     {
      "choice": "di impegnarsi a rispettare le prescrizioni e condizioni relative al titolo abilitativo oggetto della presente comunicazione",
@@ -338,7 +349,7 @@
      "kind": "checkbox"
     }
    ],
-   "seconds": 1.4
+   "seconds": 1.3
   },
   {
    "section": "dichiarazione relativa alla presa visione della CILA / SCIA / DIA, dei relativi allegati e pareri degli enti preposti",
@@ -350,6 +361,7 @@
     }
    ],
    "fingerprint": "db4a3f2c5cf1b2b3",
+   "text": "dichiarazione relativa alla presa visione della CILA / SCIA / DIA, dei relativi allegati e pareri degli enti preposti di aver preso visione della CILA / SCIA / DIA di cui si comunica il cambio intestazione, dei relativi allegati e pareri degli enti preposti",
    "branches": [
     {
      "choice": "di aver preso visione della CILA / SCIA / DIA di cui si comunica il cambio intestazione, dei relativi allegati e pareri degli enti preposti",
@@ -357,7 +369,7 @@
      "kind": "checkbox"
     }
    ],
-   "seconds": 1.8
+   "seconds": 1.3
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -366,21 +378,21 @@
   {
    "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
-   "seconds": 0.6
+   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.7
   },
   {
    "section": "dichiarazione relativa ad eventuali altri aventi titolo",
    "fingerprint": "a360bfc4d6101451",
    "same_as": "sue-voltura-intestazione-permesso-di-costruire#Informazioni su eventuali altri aventi titolo",
-   "seconds": 0.7,
+   "seconds": 0.8,
    "scelta": "ci sono cointestatari"
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
-   "seconds": 0.7,
+   "same_as": "cil#Qualifica e dati del procuratore",
+   "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],
@@ -436,6 +448,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft"
+ }
 }

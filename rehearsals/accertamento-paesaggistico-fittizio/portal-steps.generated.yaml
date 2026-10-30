@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/accertamento-compatibilita-paesaggistica
 title: Accertamento di compatibilità paesaggistica (artt. 167-181 D.Lgs. 42/2004), SUE Napoli (tecnico con procura)
-generated: gen.py from sue-accertamento-di-compatibilita-paesaggistica (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from sue-accertamento-di-compatibilita-paesaggistica (2026-10-30) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali'

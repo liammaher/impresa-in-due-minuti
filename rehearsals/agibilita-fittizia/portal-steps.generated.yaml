@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/agibilita
 title: Segnalazione certificata per l'agibilità, SUE Napoli (tecnico con procura)
-generated: gen.py from agibilita (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from agibilita (2026-10-30) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
@@ -265,16 +265,16 @@ sections:
   - {id: 'r6c1p6reg:chk', kind: checkbox, when: '{{ask.impianto_elettrico}}', label: 'Impianti di produzione, trasformazione, trasporto, distribuzione'}
   - {kind: text, label: Subalt. n., anchor: 'Impianti di produzione, trasformazione, trasporto, distribuzione', block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianto_elettrico}}'}
   - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: 'Impianti di produzione, trasformazione, trasporto, distribuzione', block: 1, when: '{{ask.impianto_elettrico}}'}
-  - {id: 'r8c1p8reg:chk', kind: checkbox, when: '{{ask.impianto_termico}}', label: 'Impianti di riscaldamento, climatizzazione'}
+  - {kind: checkbox, when: '{{ask.impianto_termico}}', label: 'Impianti di riscaldamento, climatizzazione'}
   - {kind: text, label: Subalt. n., anchor: 'Impianti di riscaldamento, climatizzazione', block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianto_termico}}'}
   - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: 'Impianti di riscaldamento, climatizzazione', block: 1, when: '{{ask.impianto_termico}}'}
-  - {id: 'r9c1p9reg:chk', kind: checkbox, when: '{{ask.impianto_idrico}}', label: Impianti idrici e sanitari}
+  - {kind: checkbox, when: '{{ask.impianto_idrico}}', label: Impianti idrici e sanitari}
   - {kind: text, label: Subalt. n., anchor: Impianti idrici e sanitari, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianto_idrico}}'}
   - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti idrici e sanitari, block: 1, when: '{{ask.impianto_idrico}}'}
-  - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.impianto_gas}}', label: Impianti per la distribuzione e l’utilizzazione di gas}
+  - {kind: checkbox, when: '{{ask.impianto_gas}}', label: Impianti per la distribuzione e l’utilizzazione di gas}
   - {kind: text, label: Subalt. n., anchor: Impianti per la distribuzione e l’utilizzazione di gas, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianto_gas}}'}
   - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti per la distribuzione e l’utilizzazione di gas, block: 1, when: '{{ask.impianto_gas}}'}
-  - {id: 'r7c1p7reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_radiotv}}', label: Impianti radiotelevisivi}
+  - {kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_radiotv}}', label: Impianti radiotelevisivi}
   - {kind: text, label: Subalt. n., anchor: Impianti radiotelevisivi, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianti}} {{ask.impianto_radiotv}}'}
   - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti radiotelevisivi, block: 1, when: '{{ask.impianti}} {{ask.impianto_radiotv}}'}
   - {kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_ascensore}}', label: Impianti di sollevamento di persone o di cose}

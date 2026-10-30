@@ -225,6 +225,11 @@ def main():
             stops(fill(browser, base, steps(base, start="/portal.html?banner=1"), answers), "covered by div#consenso")
         case("a consent banner over the form stops the run", banner)
 
+        def switched_off():
+            PORTAL.reset()
+            stops(fill(browser, base, steps(base, start="/portal.html?off=1"), answers), "Impresa esecutrice: switched off")
+        case("a box greyed until an earlier choice stops the run, named as switched off", switched_off)
+
         def fading_list():
             PORTAL.reset()
             r = fill(browser, base, steps(base, start="/portal.html?fade=1"), answers)

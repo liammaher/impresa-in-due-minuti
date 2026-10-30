@@ -225,15 +225,22 @@ OPEN_BEYOND = [
 
 
 def sue_completeness(reh, status):
-    """The refusals the SUE recipes still carry, counted from their `else:` messages."""
+    """The refusals the SUE recipes still carry, counted from their `else:` messages: the
+    recipe's own and those its sections bring from the dictionary (gen.py adds them)."""
     refusals = {}  # message -> recipes
     per = {}
     for name, v in reh.items():
         if v["sportello"] != "sue":
             continue
         text = (REHEARSALS / name / "recipe.yaml").read_text()
-        for m in re.finditer(r'else:\s*"((?:[^"\\]|\\.)*)"', text):
-            msg = m.group(1).strip()
+        msgs = [m.group(1) for m in re.finditer(r'else:\s*"((?:[^"\\]|\\.)*)"', text)]
+        try:
+            msgs += [c["else"] for c in gen.generate(gen.load_yaml(REHEARSALS / name / "recipe.yaml"))["supports"]
+                     if "else" in c and c["else"] not in msgs]
+        except gen.GenError:
+            pass  # not fillable yet: the recipe's own refusals only
+        for msg in msgs:
+            msg = msg.strip()
             if re.search(r"(isn't|aren't|not) (yet )?mapped|not mapped yet|mapped yet", msg):
                 refusals.setdefault(msg, set()).add(name)
                 per[name] = per.get(name, 0) + 1

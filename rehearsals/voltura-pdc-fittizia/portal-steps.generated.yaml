@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/voltura-permesso-di-costruire
 title: Voltura del permesso di costruire, with a co-holder, SUE Napoli (tecnico con procura)
-generated: gen.py from sue-voltura-intestazione-permesso-di-costruire (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from sue-voltura-intestazione-permesso-di-costruire (2026-10-30) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'The co-holder''s section has both sesso boxes ticked: the portal saves it no other way (two required groups); their codice fiscale says which'

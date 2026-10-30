@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/fine-lavori
 title: Comunicazione di fine lavori, SUE Napoli (tecnico con procura)
-generated: gen.py from fine-lavori (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from fine-lavori (2026-10-30) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'

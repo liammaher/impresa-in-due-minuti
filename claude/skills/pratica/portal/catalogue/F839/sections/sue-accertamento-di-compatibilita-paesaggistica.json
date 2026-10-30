@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T17:19:45.329Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-30T14:20:13.634Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Beni Paesaggistici › Accertamento di compatibilità paesaggistica (artt. 167-181 D.Lgs. 42/2004 - Comune) (sector Edilizia e pianificazione urbana)",
- "seconds": 25.5,
+ "seconds": 18.3,
  "generated": {
   "interventi": "Accertamento di compatibilità paesaggistica ai sensi artt. 167 - 181 DLgs 42/2004",
   "adempimenti": [
@@ -70,26 +70,26 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
-   "seconds": 0.8
+   "same_as": "cil#Oggetto della pratica",
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
-   "seconds": 0.8
+   "same_as": "cil#DOMICILIO DIGITALE",
+   "seconds": 0.7
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.7
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -102,14 +102,14 @@
   {
    "section": "dichiarazione ubicazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
-   "seconds": 1
+   "same_as": "cil#Localizzazione dell'intervento",
+   "seconds": 0.6
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
-   "seconds": 0.9
+   "same_as": "cil#Dati catastali",
+   "seconds": 0.6
   },
   {
    "section": "dichiarazione relativa alla descrizione delle opere",
@@ -130,8 +130,9 @@
     }
    ],
    "fingerprint": "dd7faef67a67ee15",
+   "text": "dichiarazione relativa alla descrizione delle opere sintetica descrizione delle opere: 350 Caratteri restanti effetti conseguenti alla realizzazione delle opere 200 Caratteri restanti",
    "branches": [],
-   "seconds": 1.2
+   "seconds": 0.6
   },
   {
    "section": "dichiarazione relativa ai dati identificativi del/dei professionista/i incaricato/i",
@@ -156,8 +157,9 @@
     }
    ],
    "fingerprint": "78bedc717c5a4147",
+   "text": "dichiarazione relativa ai dati identificativi del/dei professionista/i incaricato/i Cognome Nome codice fiscale I dati di dettaglio dei singoli professionisti sono riportati nel relativo documento allegato.",
    "branches": [],
-   "seconds": 1
+   "seconds": 0.7
   },
   {
    "section": "dichiarazione riferita all'art. 181 del D.Lgs. 42/2004",
@@ -169,8 +171,9 @@
     }
    ],
    "fingerprint": "a715a7926a0ab91b",
+   "text": "dichiarazione riferita all'art. 181 del D.Lgs. 42/2004 Qualora l'autorità competente accerti la compatibilità paesaggistica dei lavori secondo le procedure di cui al comma 1-quater, la disposizione di cui al comma 1 dell'art. 181 D.Lgs. 42/2004 non si applica a) per i lavori, realizzati in assenza o difformità dall'autorizzazione paesaggistica, che non abbiano determinato creazione di superfici utili o volumi ovvero aumento di quelli legittimamente realizzati; b) per l'impiego di materiali in difformità dall'autorizzazione paesaggistica; c) per i lavori configurabili quali interventi di manutenzione ordinaria o straordinaria ai sensi dell'articolo 3 del decreto del Presidente della Repubblica 6 giugno 2001, n. 380. PER PRESA VISIONE",
    "branches": [],
-   "seconds": 1.3
+   "seconds": 0.6
   },
   {
    "section": "dichiarazione relativa alla datazione dell'abuso",
@@ -182,14 +185,15 @@
     }
    ],
    "fingerprint": "e4392b043d8474ff",
+   "text": "dichiarazione relativa alla datazione dell'abuso indicare la data dell'abuso",
    "branches": [],
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento)",
    "fingerprint": "0dda28ca5077533f",
    "same_as": "sue-autorizzazione-paesaggistica-ordinaria#dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento)",
-   "seconds": 1.2
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -198,20 +202,20 @@
   {
    "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
-   "seconds": 0.8
+   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
    "fingerprint": "869752d2cea5aef3",
    "same_as": "sue-permesso-di-costruire-art-10-d-p-r-380-2001#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
-   "seconds": 1.1
+   "seconds": 0.7
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
-   "seconds": 1,
+   "same_as": "cil#Qualifica e dati del procuratore",
+   "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],
@@ -274,6 +278,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft (an empty draft: slots that the sections' answers add are missing)"
+ }
 }

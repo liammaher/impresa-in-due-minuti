@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T17:25:38.354Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-30T13:50:30.786Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Eseguire interventi edilizi (anche varianti a precedenti titoli o in sanatoria) › Comunicazione Inizio Lavoro Asseverata (C.I.L.A.) (sector Edilizia e pianificazione urbana)",
- "seconds": 123.7,
+ "seconds": 142.8,
  "generated": {
   "interventi": "Comunicazione Inizio Lavori Asseverata (C.I.L.A.)",
   "adempimenti": [
@@ -76,25 +76,25 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
+   "same_as": "cil#Oggetto della pratica",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
+   "same_as": "cil#DOMICILIO DIGITALE",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "seconds": 0.7
   },
   {
@@ -108,26 +108,26 @@
   {
    "section": "Localizzazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
-   "seconds": 0.6
+   "same_as": "cil#Localizzazione dell'intervento",
+   "seconds": 0.7
   },
   {
    "section": "Dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
-   "seconds": 1.4
+   "same_as": "cil#Dati catastali",
+   "seconds": 0.6
   },
   {
    "section": "a) Titolarità dell'intervento",
    "fingerprint": "3e5d5f463d6964d8",
    "same_as": "cil#a) Titolarità dell'intervento",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "b) Opere su parti comuni o modifiche esterne",
    "fingerprint": "a9ea4400694734ae",
    "same_as": "cil#b) Opere su parti comuni o modifiche esterne",
-   "seconds": 1.2
+   "seconds": 0.6
   },
   {
    "section": "c) Presentazione della comunicazione di inizio dei lavori asseverata",
@@ -139,8 +139,9 @@
     }
    ],
    "fingerprint": "5fd26cd9cfe7490f",
+   "text": "c) Presentazione della comunicazione di inizio dei lavori asseverata Il/La sottoscritto/a è consapevole che: a) in tutti i casi in cui per lo svolgimento di un'attività soggetta a CILA siano necessarie altre comunicazioni, SCIA, attestazioni, asseverazioni e notifiche, l'interessato (selezionando i relativi procedimenti) presenta un'unica istanza allo Sportello Unico e l'attività può essere avviata immediatamente a seguito dell'emissione della ricevuta telematica di consegna; b) nei casi in cui per lo svolgimento di un'attività soggetta a CILA, siano necessari atti di assenso comunque denominati di altri uffici e amministrazioni, l'interessato (selezionando i relativi procedimenti) presenta una unica istanza allo Sportello Unico, e l'attività può essere iniziata solo DOPO la comunicazione da parte dello Sportello Unico dell'avvenuto rilascio dei relativi atti di assenso. PER PRESA VISIONE",
    "branches": [],
-   "seconds": 1
+   "seconds": 0.6
   },
   {
    "section": "d) Qualificazione dell'intervento",
@@ -165,6 +166,7 @@
     }
    ],
    "fingerprint": "832737a495810e11",
+   "text": "d) Qualificazione dell'intervento La presente comunicazione riguarda: intervento descritto di seguito nella dichiarazione del progettista, che rientra tra quelli soggetti alla comunicazione di inizio lavori asseverata (art. 6-bis del d.P.R n. 380/2001 e Sezione II-Edilizia della Tabella A del d.lgs. n. 222/2016) intervento in corso di esecuzione (art. 6-bis, comma 5 del d.P.R. n. 380/2001) con pagamento di sanzione e pertanto si allega la ricevuta di versamento di € 333,00 intervento realizzato (art. 6-bis, comma 5 del d.P.R. n. 380/2001) con pagamento di sanzione e pertanto si allega la ricevuta di versamento di € 1000,00",
    "branches": [
     {
      "choice": "intervento descritto di seguito nella dichiarazione del progettista, che rientra tra quelli soggetti alla comunicazione di inizio lavori asseverata (art. 6-bis ",
@@ -273,13 +275,13 @@
      ]
     }
    ],
-   "seconds": 12.7
+   "seconds": 5.1
   },
   {
    "section": "e) Destinazione d'uso",
    "fingerprint": "167628390a2f0298",
    "same_as": "cil#d) Destinazione d'uso dell'immobile",
-   "seconds": 1
+   "seconds": 0.6
   },
   {
    "section": "f) Calcolo del contributo di costruzione",
@@ -300,16 +302,19 @@
      "id": "r4c2p5reg:radio:2_clone",
      "kind": "radio",
      "label": "allega la ricevuta di versamento",
-     "group": "r4c2p5reg:radio"
+     "group": "r4c2p5reg:radio",
+     "disabled": true
     },
     {
      "id": "r5c2p8reg:radio:3_clone",
      "kind": "radio",
      "label": "effettuerà, prima dell'inizio dei lavori, il pagamento del contributo commisurato all'incidenza delle sole opere di urbanizzazione",
-     "group": "r5c2p8reg:radio"
+     "group": "r5c2p8reg:radio",
+     "disabled": true
     }
    ],
    "fingerprint": "21097c9079919b29",
+   "text": "f) Calcolo del contributo di costruzione l'intervento da realizzare è a titolo gratuito l'intervento da realizzare è a titolo oneroso, in quanto rientra negli interventi di manutenzione straordinaria, che comportano aumento del carico urbanistico e aumento della superficie calpestabile pertanto allega il prospetto di calcolo preventivo del contributo di costruzione, commisurato all'incidenza delle sole opere di urbanizzazione, a firma di tecnico abilitato, e: allega la ricevuta di versamento effettuerà, prima dell'inizio dei lavori, il pagamento del contributo commisurato all'incidenza delle sole opere di urbanizzazione",
    "branches": [
     {
      "choice": "l'intervento da realizzare è a titolo gratuito",
@@ -319,20 +324,26 @@
     {
      "choice": "l'intervento da realizzare è a titolo oneroso, in quanto rientra negli interventi di manutenzione straordinaria, che comportano aumento del carico urbanistico e",
      "id": "r2c1p2reg:radio:1_clone",
-     "kind": "radio"
-    },
-    {
-     "choice": "allega la ricevuta di versamento",
-     "id": "r4c2p5reg:radio:2_clone",
-     "kind": "radio"
-    },
-    {
-     "choice": "effettuerà, prima dell'inizio dei lavori, il pagamento del contributo commisurato all'incidenza delle sole opere di urbanizzazione",
-     "id": "r5c2p8reg:radio:3_clone",
-     "kind": "radio"
+     "kind": "radio",
+     "enables": [
+      "r4c2p5reg:radio:2_clone",
+      "r5c2p8reg:radio:3_clone"
+     ],
+     "then": [
+      {
+       "choice": "allega la ricevuta di versamento",
+       "id": "r4c2p5reg:radio:2_clone",
+       "kind": "radio"
+      },
+      {
+       "choice": "effettuerà, prima dell'inizio dei lavori, il pagamento del contributo commisurato all'incidenza delle sole opere di urbanizzazione",
+       "id": "r5c2p8reg:radio:3_clone",
+       "kind": "radio"
+      }
+     ]
     }
    ],
-   "seconds": 7
+   "seconds": 4.4
   },
   {
    "section": "G1) Tecnici incaricati",
@@ -363,6 +374,7 @@
     }
    ],
    "fingerprint": "1be8307fee60b434",
+   "text": "G1) Tecnici incaricati dichiara di aver incaricato, in qualità di progettista, il tecnico indicato nella sezione seguente PROGETTISTA DELLE OPERE ARCHITETTONICHE non è colui che presenta la pratica colui che presenta la pratica incaricato anche come direttore dei lavori delle opere architettoniche se il direttore dei lavori delle opere architettoniche è diverso dal progettista delle opere architettoniche",
    "branches": [
     {
      "choice": "tecnico incaricato",
@@ -998,7 +1010,7 @@
      ]
     }
    ],
-   "seconds": 25.2
+   "seconds": 15.2
   },
   {
    "section": "G2) Altri tecnici incaricati",
@@ -1015,6 +1027,7 @@
     }
    ],
    "fingerprint": "124292a24c7f627e",
+   "text": "G2) Altri tecnici incaricati dichiara che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezione seguente",
    "branches": [
     {
      "choice": "che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori",
@@ -1274,7 +1287,11 @@
          "r32c3p94reg:radio:3_clone",
          "r30c3p86reg:radio:1_clone"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Incaricato della",
+        "adds": 62
+       }
       },
       {
        "choice": "Sesso = Maschio",
@@ -1326,7 +1343,11 @@
          "r32c3p94reg:radio:3_clone",
          "r30c3p86reg:radio:1_clone"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Incaricato della",
+        "adds": 62
+       }
       },
       {
        "choice": "si",
@@ -1425,7 +1446,11 @@
          "r37c4p109reg:txt",
          "r38c4p113reg:txt"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Incaricato della",
+        "adds": 62
+       }
       },
       {
        "choice": "no",
@@ -1476,7 +1501,11 @@
          "r32c3p94reg:radio:3_clone",
          "r30c3p86reg:radio:1_clone"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Incaricato della",
+        "adds": 62
+       }
       },
       {
        "choice": "si",
@@ -1605,7 +1634,11 @@
          "r37c4p109reg:txt",
          "r48c4p145reg:txt"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Incaricato della",
+        "adds": 70
+       }
       },
       {
        "choice": "no",
@@ -1656,12 +1689,16 @@
          "r32c3p94reg:radio:3_clone",
          "r30c3p86reg:radio:1_clone"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Incaricato della",
+        "adds": 62
+       }
       }
      ]
     }
    ],
-   "seconds": 24.1
+   "seconds": 30.2
   },
   {
    "section": "h) Impresa esecutrice dei lavori",
@@ -1680,6 +1717,7 @@
     }
    ],
    "fingerprint": "87750e169754bf96",
+   "text": "h) Impresa esecutrice dei lavori che, in quanto opere di modesta entità che non interessano le specifiche normative di settore, i lavori saranno eseguiti in prima persona, senza alcun affidamento a ditte esterne che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla seguente sezione",
    "branches": [
     {
      "choice": "che, in quanto opere di modesta entità che non interessano le specifiche normative di settore, i lavori saranno eseguiti in prima persona, senza alcun affidamen",
@@ -1889,7 +1927,11 @@
          "r29c1p78reg:chk",
          "r31c1p84reg:chk"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Ragione sociale",
+        "adds": 48
+       }
       },
       {
        "choice": "INPS",
@@ -1931,7 +1973,11 @@
          "r29c1p78reg:chk",
          "r31c1p83reg:chk"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Ragione sociale",
+        "adds": 48
+       }
       },
       {
        "choice": "INAIL",
@@ -1975,12 +2021,16 @@
          "r29c1p78reg:chk",
          "r30c1p79reg:chk"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Ragione sociale",
+        "adds": 48
+       }
       }
      ]
     }
    ],
-   "seconds": 8
+   "seconds": 13.2
   },
   {
    "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
@@ -2001,30 +2051,35 @@
      "id": "r5c2p8reg:radio:2_clone",
      "kind": "radio",
      "label": "dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-giorno ed i lavori non comportano i rischi particolari di cui all'allegato XI del d.lgs. n.",
-     "group": "r5c2p8reg:radio"
+     "group": "r5c2p8reg:radio",
+     "disabled": true
     },
     {
      "id": "r6c2p11reg:radio:3_clone",
      "kind": "radio",
      "label": "dichiara che l'entità presunta del cantiere è pari o superiore a 200 uomini-giorno o i lavori comportano i rischi particolari di cui all'allegato XI del d.lgs. ",
-     "group": "r6c2p11reg:radio"
+     "group": "r6c2p11reg:radio",
+     "disabled": true
     },
     {
      "id": "r8c2p15reg:radio:4_clone",
      "kind": "radio",
      "label": "dichiara che l'intervento non è soggetto all'invio della notifica",
-     "group": "r8c2p15reg:radio"
+     "group": "r8c2p15reg:radio",
+     "disabled": true
     },
     {
      "id": "r9c2p18reg:radio:5_clone",
      "kind": "radio",
      "label": "dichiara che l'intervento è soggetto all'invio della notifica e pertanto",
-     "group": "r9c2p18reg:radio"
+     "group": "r9c2p18reg:radio",
+     "disabled": true
     },
     {
      "id": "r10c2p21reg:chk",
      "kind": "checkbox",
-     "label": "allega alla presente comunicazione la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in luo"
+     "label": "allega alla presente comunicazione la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in luo",
+     "disabled": true
     },
     {
      "id": "r11c1p22reg:radio:6_clone",
@@ -2034,6 +2089,7 @@
     }
    ],
    "fingerprint": "f78a3b9830a43287",
+   "text": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro che l'intervento non ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008) ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008) e pertanto: relativamente alla documentazione delle imprese esecutrici: dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-giorno ed i lavori non comportano i rischi particolari di cui all'allegato XI del d.lgs. n. 81/2008 e di aver verificato il certificato di iscrizione alla Camera di commercio, il documento unico di regolarità contributiva, corredato da autocertificazione in ordine al possesso degli altri requisiti previsti dall'allegato XVII del d.lgs. n. 81/2008, e l'autocertificazione relativa al contratto collettivo applicato dichiara che l'entità presunta del cantiere è pari o superiore a 200 uomini-giorno o i lavori comportano i rischi particolari di cui all'allegato XI del d.lgs. n. 81/2008 e di aver verificato la documentazione di cui alle lettere a) e b) dell'art. 90 comma 9 prevista dal d.lgs. n. 81/2008 circa l'idoneità tecnico professionale della/e impresa/e esecutrice/i e dei lavoratori autonomi, l'organico medio annuo distinto per qualifica, gli estremi delle denunce dei lavoratori effettuate all'Istituto nazionale della previdenza sociale (INPS), all'Istituto nazionale assicurazione infortuni sul lavoro (INAIL) e alle casse edili, nonché il contratto collettivo applicato ai lavoratori dipendenti, della/e impresa/e esecutrice/i relativamente alla notifica preliminare di cui all'articolo 99 del d.lgs. n. 81/2008 dichiara che l'intervento non è soggetto all'invio della notifica dichiara che l'intervento è soggetto all'invio della notifica e pertanto allega alla presente comunicazione la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in luogo visibile dall'esterno ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché i dati dell'impresa esecutrice saranno forniti prima dell'inizio lavori di essere a conoscenza che l'efficacia della presente CILA è sospesa qualora sia assente il piano di sicurezza e coordinamento di cui all'articolo 100 del d.lgs. n. 81/2008 o il fascicolo di cui all'articolo 91, comma 1, lettera b), quando previsti, oppure in assenza di notifica di cui all'articolo 99, quando prevista, oppure in assenza di documento unico di regolarità contributiva",
    "branches": [
     {
      "choice": "non ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008)",
@@ -2043,32 +2099,45 @@
     {
      "choice": "ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008) e pertanto:",
      "id": "r3c1p4reg:radio:1_clone",
-     "kind": "radio"
-    },
-    {
-     "choice": "dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-giorno ed i lavori non comportano i rischi particolari di cui all'allegato XI del d.lgs. n.",
-     "id": "r5c2p8reg:radio:2_clone",
-     "kind": "radio"
-    },
-    {
-     "choice": "dichiara che l'entità presunta del cantiere è pari o superiore a 200 uomini-giorno o i lavori comportano i rischi particolari di cui all'allegato XI del d.lgs. ",
-     "id": "r6c2p11reg:radio:3_clone",
-     "kind": "radio"
-    },
-    {
-     "choice": "dichiara che l'intervento non è soggetto all'invio della notifica",
-     "id": "r8c2p15reg:radio:4_clone",
-     "kind": "radio"
-    },
-    {
-     "choice": "dichiara che l'intervento è soggetto all'invio della notifica e pertanto",
-     "id": "r9c2p18reg:radio:5_clone",
-     "kind": "radio"
-    },
-    {
-     "choice": "allega alla presente comunicazione la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in luo",
-     "id": "r10c2p21reg:chk",
-     "kind": "checkbox"
+     "kind": "radio",
+     "enables": [
+      "r5c2p8reg:radio:2_clone",
+      "r6c2p11reg:radio:3_clone",
+      "r8c2p15reg:radio:4_clone",
+      "r9c2p18reg:radio:5_clone"
+     ],
+     "then": [
+      {
+       "choice": "dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-giorno ed i lavori non comportano i rischi particolari di cui all'allegato XI del d.lgs. n.",
+       "id": "r5c2p8reg:radio:2_clone",
+       "kind": "radio"
+      },
+      {
+       "choice": "dichiara che l'entità presunta del cantiere è pari o superiore a 200 uomini-giorno o i lavori comportano i rischi particolari di cui all'allegato XI del d.lgs. ",
+       "id": "r6c2p11reg:radio:3_clone",
+       "kind": "radio"
+      },
+      {
+       "choice": "dichiara che l'intervento non è soggetto all'invio della notifica",
+       "id": "r8c2p15reg:radio:4_clone",
+       "kind": "radio"
+      },
+      {
+       "choice": "dichiara che l'intervento è soggetto all'invio della notifica e pertanto",
+       "id": "r9c2p18reg:radio:5_clone",
+       "kind": "radio",
+       "enables": [
+        "r10c2p21reg:chk"
+       ],
+       "then": [
+        {
+         "choice": "allega alla presente comunicazione la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in luo",
+         "id": "r10c2p21reg:chk",
+         "kind": "checkbox"
+        }
+       ]
+      }
+     ]
     },
     {
      "choice": "ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché i ",
@@ -2076,7 +2145,7 @@
      "kind": "radio"
     }
    ],
-   "seconds": 5.8
+   "seconds": 9
   },
   {
    "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
@@ -2155,7 +2224,8 @@
      "id": "r22c1p28reg:txt",
      "kind": "text",
      "label": "specificare il tipo di intervento:",
-     "max": 200
+     "max": 200,
+     "disabled": true
     },
     {
      "id": "r24c1p30reg:txta",
@@ -2233,6 +2303,7 @@
     }
    ],
    "fingerprint": "109f43479fa7d1b8",
+   "text": "Relazione Tecnica di Asseverazione C.I.L.A. Attenzione: I campi compilati all'interno di questa dichiarazione saranno utilizzati per generare automaticamente la \"Relazione Tecnica di Asseverazione C.I.L.A. - Art. 6 bis, comma 1 DPR 380/2001\". Il file prodotto avrà estensione .pdf e verrà reso disponibile per la firma nella pagina che propone il \"Modello di Attività\" DATI DEL PROGETTISTA Cognome Nome Iscritto all'ordine / collegio di al n. DICHIARA 1 - TIPOLOGIA DI INTERVENTO E DESCRIZIONE SINTETICA DELLE OPERE che i lavori riguardano l'immobile individuato nella comunicazione di inizio lavori di cui la presente relazione costituisce parte integrante e sostanziale; che le opere in progetto sono subordinate a comunicazione di inizio lavori in quanto rientrano nella seguente tipologia di intervento ai sensi dell'articolo 6-bis del d.P.R. n. 380/2001: interventi di manutenzione straordinaria di cui all'articolo 3, comma 1, lettera b) del d.P.R. n. 380/2001, sempre che non riguardino le parti strutturali dell'edificio o i prospetti Interventi di restauro e risanamento conservativo di cui all'articolo 3, comma 1, lettera c) del d.P.R. n. 380/2001 qualora non riguardino parti strutturali dell'edificio (Attività n. 5, Tabella A, Sez. II, d.lgs. 25 novembre 2016, n. 222) Interventi di eliminazione delle barriere architettoniche che comportino la realizzazione di ascensori esterni ovvero di manufatti che alterino la sagoma dell'edificio (Attività n. 22, Tabella A, Sez. II, d.lgs. 25 novembre 2016, n. 222) Opere temporanee per attività di ricerca nel sottosuolo che abbiano carattere geognostico (ad esclusione dell'attività di ricerca di idrocarburi) che siano eseguite in aree interne al centro edificato (Attività n. 31, Tabella A, Sez. II, d.lgs. 25 novembre 2016, n. 222) Movimenti di terra non strettamente pertinenti all'esercizio dell'attività agricola e alle pratiche agro-silvo-pastorali (Attività n. 32, Tabella A, Sez. II, d.lgs. 25 novembre 2016, n. 222) Serre mobili stagionali funzionali allo svolgimento dell'attività agricola che presentino strutture in muratura (Attività n. 33, Tabella A, Sez. II, d.lgs. 25 novembre 2016, n. 222) Realizzazione di pertinenze minori che le norme tecniche degli strumenti urbanistici, in relazione alla zonizzazione e al pregio ambientale e paesaggistico delle aree, non qualifichino come interventi di nuova costruzione, ovvero che comportino la realizzazione di un volume inferiore al 20% del volume dell'edificio principale (Attività n. 34, Tabella A, Sez. II, d.lgs. 25 novembre 2016, n. 222; articolo 3, comma 1, lett. e.6 del d.P.R. n. 380/2001) Altri interventi non riconducibili all'elenco di cui agli articoli 6, 10 e 22 del d.P.R. 6 giugno 2001, n. 380 (Attività n. 30, Tabella A, Sez. II, d.lgs. 25 novembre 2016, n. 222) (1) specificare il tipo di intervento: e che consistono in: 500 Caratteri restanti (1) Le regioni completano l'elenco in relazione a quanto previsto dall''art. 6-bis, comma 4 del d.P.R. n. 380/2001 DIC",
    "branches": [
     {
      "choice": "interventi di manutenzione straordinaria di cui all'articolo 3, comma 1, lettera b) del d.P.R. n. 380/2001, sempre che non riguardino le parti strutturali dell'",
@@ -2445,6 +2516,9 @@
        "r38c2p53reg:txt"
       ]
      ],
+     "enables": [
+      "r22c1p28reg:txt"
+     ],
      "plus": {
       "anchor": "Tipologia di atto (2)",
       "adds": 6
@@ -2557,7 +2631,11 @@
          "r60c2p88reg:txt",
          "r58c2p84reg:txt"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Tipologia di atto (2)",
+        "adds": 6
+       }
       },
       {
        "choice": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:",
@@ -2652,6 +2730,127 @@
          "r65c1p94reg:txta",
          "r69c1p98reg:txta"
         ]
+       ],
+       "plus": {
+        "anchor": "Tipologia di atto (2)",
+        "adds": 6
+       },
+       "then": [
+        {
+         "choice": "2%, per le U.I. > 500 mq di superficie utile ;",
+         "id": "r33c1p41reg:radio:2_clone",
+         "kind": "radio",
+         "moved": [
+          [
+           "r57c1p78reg:txt",
+           "r55c1p74reg:txt"
+          ],
+          [
+           "r57c2p80reg:txt",
+           "r55c2p76reg:txt"
+          ],
+          [
+           "r64c1p90reg:txt",
+           "r62c1p86reg:txt"
+          ],
+          [
+           "r64c2p92reg:txt",
+           "r62c2p88reg:txt"
+          ]
+         ]
+        },
+        {
+         "choice": "3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile;",
+         "id": "r34c1p42reg:radio:3_clone",
+         "kind": "radio",
+         "moved": [
+          [
+           "r57c1p78reg:txt",
+           "r55c1p74reg:txt"
+          ],
+          [
+           "r57c2p80reg:txt",
+           "r55c2p76reg:txt"
+          ],
+          [
+           "r64c1p90reg:txt",
+           "r62c1p86reg:txt"
+          ],
+          [
+           "r64c2p92reg:txt",
+           "r62c2p88reg:txt"
+          ]
+         ]
+        },
+        {
+         "choice": "4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;",
+         "id": "r35c1p43reg:radio:4_clone",
+         "kind": "radio",
+         "moved": [
+          [
+           "r57c1p78reg:txt",
+           "r55c1p74reg:txt"
+          ],
+          [
+           "r57c2p80reg:txt",
+           "r55c2p76reg:txt"
+          ],
+          [
+           "r64c1p90reg:txt",
+           "r62c1p86reg:txt"
+          ],
+          [
+           "r64c2p92reg:txt",
+           "r62c2p88reg:txt"
+          ]
+         ]
+        },
+        {
+         "choice": "5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;",
+         "id": "r36c1p45reg:radio:5_clone",
+         "kind": "radio",
+         "moved": [
+          [
+           "r57c1p78reg:txt",
+           "r55c1p74reg:txt"
+          ],
+          [
+           "r57c2p80reg:txt",
+           "r55c2p76reg:txt"
+          ],
+          [
+           "r64c1p90reg:txt",
+           "r62c1p86reg:txt"
+          ],
+          [
+           "r64c2p92reg:txt",
+           "r62c2p88reg:txt"
+          ]
+         ]
+        },
+        {
+         "choice": "6%, per le U.I. < 60 mq di superficie utile;",
+         "id": "r37c1p46reg:radio:6_clone",
+         "kind": "radio",
+         "moved": [
+          [
+           "r57c1p78reg:txt",
+           "r55c1p74reg:txt"
+          ],
+          [
+           "r57c2p80reg:txt",
+           "r55c2p76reg:txt"
+          ],
+          [
+           "r64c1p90reg:txt",
+           "r62c1p86reg:txt"
+          ],
+          [
+           "r64c2p92reg:txt",
+           "r62c2p88reg:txt"
+          ]
+         ]
+        }
        ]
       },
       {
@@ -2675,7 +2874,11 @@
          "r60c2p88reg:txt",
          "r58c2p84reg:txt"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Tipologia di atto (2)",
+        "adds": 6
+       }
       },
       {
        "choice": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2-BIS:",
@@ -2698,7 +2901,11 @@
          "r60c2p88reg:txt",
          "r58c2p84reg:txt"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Tipologia di atto (2)",
+        "adds": 6
+       }
       },
       {
        "choice": "TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4:",
@@ -2721,7 +2928,11 @@
          "r60c2p88reg:txt",
          "r58c2p84reg:txt"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Tipologia di atto (2)",
+        "adds": 6
+       }
       },
       {
        "choice": "dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4)",
@@ -2744,7 +2955,11 @@
          "r60c2p88reg:txt",
          "r58c2p84reg:txt"
         ]
-       ]
+       ],
+       "plus": {
+        "anchor": "Tipologia di atto (2)",
+        "adds": 6
+       }
       },
       {
        "choice": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che la tolleranza costruttiva sopra indic",
@@ -2801,6 +3016,98 @@
          "r65c1p94reg:txta",
          "r67c1p96reg:txta"
         ]
+       ],
+       "plus": {
+        "anchor": "Tipologia di atto (2)",
+        "adds": 6
+       },
+       "then": [
+        {
+         "choice": "non ha rilevanza strutturale;",
+         "id": "r44c1p53reg:radio:4_clone",
+         "kind": "radio",
+         "moved": [
+          [
+           "r55c1p76reg:txt",
+           "r53c1p72reg:txt"
+          ],
+          [
+           "r55c2p78reg:txt",
+           "r53c2p74reg:txt"
+          ],
+          [
+           "r62c1p88reg:txt",
+           "r60c1p84reg:txt"
+          ],
+          [
+           "r62c2p90reg:txt",
+           "r60c2p86reg:txt"
+          ]
+         ]
+        },
+        {
+         "choice": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost",
+         "id": "r45c1p54reg:radio:5_clone",
+         "kind": "radio",
+         "reveals": [
+          {
+           "id": "r46c1p55reg:radio:6_clone",
+           "kind": "radio",
+           "label": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :",
+           "group": "r46c1p55reg:radio"
+          },
+          {
+           "id": "r51c1p70reg:radio:7_clone",
+           "kind": "radio",
+           "label": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:",
+           "group": "r51c1p70reg:radio"
+          },
+          {
+           "id": "r52c1p71reg:radio:8_clone",
+           "kind": "radio",
+           "label": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:",
+           "group": "r52c1p71reg:radio"
+          }
+         ],
+         "moved": [
+          [
+           "r55c1p76reg:txt",
+           "r56c1p75reg:txt"
+          ],
+          [
+           "r55c2p78reg:txt",
+           "r56c2p77reg:txt"
+          ],
+          [
+           "r55c1p76reg:txt",
+           "r58c1p79reg:txt"
+          ],
+          [
+           "r55c2p78reg:txt",
+           "r58c2p81reg:txt"
+          ],
+          [
+           "r62c1p88reg:txt",
+           "r63c1p87reg:txt"
+          ],
+          [
+           "r62c2p90reg:txt",
+           "r63c2p89reg:txt"
+          ],
+          [
+           "r62c1p88reg:txt",
+           "r65c1p91reg:txt"
+          ],
+          [
+           "r62c2p90reg:txt",
+           "r65c2p93reg:txt"
+          ],
+          [
+           "r67c1p96reg:txta",
+           "r70c1p99reg:txta"
+          ]
+         ]
+        }
        ]
       }
      ]
@@ -2833,7 +3140,7 @@
      }
     }
    ],
-   "seconds": 20.9
+   "seconds": 47.4
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -2846,14 +3153,14 @@
   {
    "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
    "seconds": 0.6
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
-   "seconds": 0.8,
+   "same_as": "cil#Qualifica e dati del procuratore",
+   "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

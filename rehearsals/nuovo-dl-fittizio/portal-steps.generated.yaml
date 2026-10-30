@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/nomina-nuovo-direttore-lavori
 title: Comunicazione di nomina del nuovo direttore dei lavori, SUE Napoli (tecnico con procura)
-generated: gen.py from sue-comunicazione-al-comune-di-nomina-del-nuovo-direttore-dei-lavori (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from sue-comunicazione-al-comune-di-nomina-del-nuovo-direttore-dei-lavori (2026-10-30) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client''s name'
