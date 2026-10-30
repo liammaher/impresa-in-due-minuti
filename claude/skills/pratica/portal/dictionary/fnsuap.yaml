@@ -1145,6 +1145,9 @@ sections:
   # The progettista's relazione (her asseverazione and signature are the signed CILA).
   - section: Relazione Tecnica di Asseverazione
     leave: [specificare il tipo di intervento, Comunicazioni, Autorità competente, Tipologia di atto, Note]
+    supports:
+      - {if: "{{ask.tolleranze}}", value: "{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}", in: ["true"], else: "Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4)."}
+      - {if: "{{ask.tolleranze}}", value: "{{ask.toll_strutturale}}", in: ["false"], else: "A structurally relevant tolerance isn't mapped yet: the form then asks its class under art. 94-bis DPR 380/2001 (relevant, minor or none for public safety), and what each class opens wasn't crawled."}
     fields:
       - {kind: text, label: Cognome, value: "{{t:identity.last_name}}"}
       - {kind: text, label: Nome, value: "{{t:identity.first_name}}"}
@@ -1163,7 +1166,8 @@ sections:
       - {kind: textarea, label: e che consistono in, value: "{{ask.dettaglio_intervento}}"}
       # Tolerances (art. 34-bis/34-ter): each declared, the 1-bis one's percentage by the unit's
       # floor area. Napoli is in seismic zone 2 (Campania, DGR 5447/2002), so a tolerance there
-      # says whether it is structurally relevant.
+      # says whether it is structurally relevant; a relevant one opens its art. 94-bis class
+      # (three radios the crawl saw but didn't try: what each opens is unknown), so it is refused.
       - {kind: radio, label: "no", when: "{{ask.tolleranze|not}}"}
       - {kind: radio, label: "si", when: "{{ask.tolleranze}}"}
       - {kind: checkbox, label: "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER", when: "{{ask.tolleranze}} {{ask.toll_34bis_1}}"}
@@ -2104,20 +2108,39 @@ sections:
       - {kind: checkbox, label: la presente SCIA è presentata in sanatoria, if_present: true, by_label: true, when: "{{ask.sanatoria_titolo|is_scia}}"}
       - {kind: textarea, label: e che l’intervento sopra indicato, value: "{{ask.dettaglio_intervento}}"}
 
-  # Three Si/No questions: the state is the legitimate one (from the titles, and in sanatoria from
-  # it), no tolerances, and the sanatoria: the works in progress (art. 37 c. 5) or done with double
-  # conformity (art. 36-bis), and the catasto. Case 3 (art. 36-bis c. 1) isn't mapped: the portal
-  # makes its dating, its oblazione and its works proposal one radio choice. Each case moves the
-  # rows after it, so they go by label.
+  # Three Si/No questions: the state is the legitimate one (from the titles, the tolerances this
+  # relazione declares, and in sanatoria from it), the tolerances (the CILA's block, by label:
+  # crawled apart from the first question, its ids would be offsets), and the sanatoria: the
+  # works in progress (art. 37 c. 5) or done with double conformity (art. 36-bis), and the
+  # catasto. Case 3 (art. 36-bis c. 1) isn't mapped: the portal makes its dating, its oblazione
+  # and its works proposal one radio choice. Each case moves the rows after it, so they go by
+  # label (the tolerances move the sanatoria's radios too: the runner finds them by label).
   - section: Asseverazione SCIA - Stato legittimo
     aliases: ["Asseverazione PdC - stato legittimo"]
     leave: [presentata con prot., in data, i cui lavori sono stati iniziati in data, realizzato in data, in euro]
+    supports:
+      - {if: "{{ask.tolleranze}}", value: "{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}", in: ["true"], else: "Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4)."}
+      - {if: "{{ask.tolleranze}}", value: "{{ask.toll_strutturale}}", in: ["false"], else: "A structurally relevant tolerance isn't mapped yet: the form then asks its class under art. 94-bis DPR 380/2001 (relevant, minor or none for public safety), and what each class opens wasn't crawled."}
     fields:
       - {kind: radio, label: si}
       - {kind: checkbox, label: corrisponde allo stato legittimo come risultante}
       - {kind: checkbox, label: dal/i titolo/i o dalla/e pratica/che edilizia/e}
+      - {kind: checkbox, label: dalle tolleranze di cui all’articolo 34-bis, when: "{{ask.tolleranze}}"}
       - {kind: checkbox, label: dalla sanatoria di cui al successivo quadro, if_present: true, when: "{{ask.sanatoria_titolo|in_scia__permesso}}"}
-      - {kind: radio, label: "no", nth: 2}
+      - {kind: radio, label: "no", nth: 2, when: "{{ask.tolleranze|not}}"}
+      - {kind: radio, label: si, nth: 2, when: "{{ask.tolleranze}}"}
+      - {kind: checkbox, label: "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1}}"}
+      - {kind: checkbox, label: "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}}"}
+      - {kind: radio, label: "2%, per le U.I.", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_oltre_500}}"}
+      - {kind: radio, label: "3%, per le U.I.", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_300_500}}"}
+      - {kind: radio, label: "4%, per le U.I.", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_100_300}}"}
+      - {kind: radio, label: "5%, per le U.I.", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_60_100}}"}
+      - {kind: radio, label: "6%, per le U.I.", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_sotto_60}}"}
+      - {kind: checkbox, label: "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2:", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_2}}"}
+      - {kind: checkbox, label: "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2-BIS", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_2bis}}"}
+      - {kind: checkbox, label: "TOLLERANZA DI CUI ALL’ART. 34-TER", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34ter_4}}"}
+      - {kind: radio, label: trattandosi di immobile ubicato in zona sismica a media o alta, by_label: true, when: "{{ask.tolleranze}}"}
+      - {kind: radio, label: non ha rilevanza strutturale, by_label: true, when: "{{ask.tolleranze}} {{ask.toll_strutturale|not}}"}
       - {kind: radio, label: "no", nth: 3, when: "{{ask.sanatoria_titolo|is_nessuna}}"}
       - {kind: radio, label: si, nth: 3, if_present: true, when: "{{ask.sanatoria_titolo|in_scia__permesso}}"}
       - {kind: checkbox, label: un intervento soggetto a SCIA in corso di esecuzione, if_present: true, when: "{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_in_corso}}"}
@@ -2365,13 +2388,32 @@ sections:
       - {kind: radio, label: comporta mutamento di destinazione d’uso, when: "{{ask.scia_alt_tipo|is_nuova_costruzione_strumento_generale}} {{ask.scia_cambio_uso|is_no|not}}"}
       - {kind: textarea, label: e che consistono in, value: "{{ask.dettaglio_intervento}}"}  # its own text: the counter changes
 
-  # Two Si/No questions: the state is the legitimate one (from the titles), no tolerances.
+  # Two Si/No questions: the state is the legitimate one (from the titles, and the tolerances this
+  # relazione declares), and the tolerances (the CILA's block,
+  # by label: crawled apart from the first question, its ids would be offsets).
   - section: Asseverazione SCIA Alternativa - stato legittimo
+    supports:
+      - {if: "{{ask.tolleranze}}", value: "{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}", in: ["true"], else: "Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4)."}
+      - {if: "{{ask.tolleranze}}", value: "{{ask.toll_strutturale}}", in: ["false"], else: "A structurally relevant tolerance isn't mapped yet: the form then asks its class under art. 94-bis DPR 380/2001 (relevant, minor or none for public safety), and what each class opens wasn't crawled."}
     fields:
       - {kind: radio, label: si}
       - {kind: checkbox, label: corrisponde allo stato legittimo come risultante}
       - {kind: checkbox, label: dal/i titolo/i o dalla/e pratica/che edilizia/e}
-      - {kind: radio, label: "no", nth: 2}
+      - {kind: checkbox, label: dalle tolleranze di cui all’articolo 34-bis, when: "{{ask.tolleranze}}"}
+      - {kind: radio, label: "no", nth: 2, when: "{{ask.tolleranze|not}}"}
+      - {kind: radio, label: si, nth: 2, when: "{{ask.tolleranze}}"}
+      - {kind: checkbox, label: "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1}}"}
+      - {kind: checkbox, label: "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}}"}
+      - {kind: radio, label: "2%, per le U.I.", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_oltre_500}}"}
+      - {kind: radio, label: "3%, per le U.I.", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_300_500}}"}
+      - {kind: radio, label: "4%, per le U.I.", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_100_300}}"}
+      - {kind: radio, label: "5%, per le U.I.", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_60_100}}"}
+      - {kind: radio, label: "6%, per le U.I.", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_sotto_60}}"}
+      - {kind: checkbox, label: "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2:", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_2}}"}
+      - {kind: checkbox, label: "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2-BIS", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34bis_2bis}}"}
+      - {kind: checkbox, label: "TOLLERANZA DI CUI ALL’ART. 34-TER", by_label: true, when: "{{ask.tolleranze}} {{ask.toll_34ter_4}}"}
+      - {kind: radio, label: trattandosi di immobile ubicato in zona sismica a media o alta, by_label: true, when: "{{ask.tolleranze}}"}
+      - {kind: radio, label: non ha rilevanza strutturale, by_label: true, when: "{{ask.tolleranze}} {{ask.toll_strutturale|not}}"}
 
   # The SCIA's systems section, with its energy report attached and the renewables obligation.
   # The SCIA's and the SCIA alternativa's (one crawl fingerprint): the systems (their project

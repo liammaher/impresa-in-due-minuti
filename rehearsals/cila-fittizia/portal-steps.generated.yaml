@@ -123,6 +123,16 @@ supports:
   else: Other technicians already appointed (structures, systems, acoustics) aren't mapped yet (quadro G2's rows).
 - when: '{{ask.altri_atti|not}}'
   else: Other filings or assents with the CILA (Soprintendenza, ASL, fire brigade) aren't mapped yet; a landscape authorization goes in the same pratica (the CILA with its semplificata).
+- if: '{{ask.tolleranze}}'
+  value: '{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}'
+  in:
+  - 'true'
+  else: Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4).
+- if: '{{ask.tolleranze}}'
+  value: '{{ask.toll_strutturale}}'
+  in:
+  - 'false'
+  else: 'A structurally relevant tolerance isn''t mapped yet: the form then asks its class under art. 94-bis DPR 380/2001 (relevant, minor or none for public safety), and what each class opens wasn''t crawled.'
 rules:
   table: sue-napoli
   facts:

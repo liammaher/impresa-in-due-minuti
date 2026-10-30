@@ -4,11 +4,11 @@
 
 Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdown option), each counted once however many pratiche share its section, and what the dictionary does with it. A case that takes an **unmapped** choice can't be filled yet. The scoreboard (`coverage.md`) counts a section as filled even with these left unticked, so they don't show there.
 
-**1131 choices** in 96 sections that have any.
+**1157 choices** in 96 sections that have any.
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 779 | Claude takes it when the case does |
+| ticked | 805 | Claude takes it when the case does |
 | answer | 56 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 1 | left empty on purpose |
@@ -19,7 +19,7 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 What the crawl didn't see (more choices may exist there):
 
 - 0 sections show exactly 30 choices at the top, crawl.js's default limit: none.
-- 15 choices at the crawl's deepest level open further choices that weren't tried.
+- 26 of these choices the crawl saw but never tried: what they open isn't known.
 - Choices only a saved answer shows (attachment slots, sections a scelta adds) aren't here: the crawl never saves.
 
 ## Unmapped, by section
@@ -114,22 +114,13 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria / Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione
 
-4 pratiche; 23 of 40 choices to map.
+4 pratiche; 16 of 47 choices to map.
 
-- checkbox: dalle tolleranze di cui all’articolo 34-bis accertate con la presente Relazione tecnica di asseverazione, di cui al quadro “Dichiarazione di tolleranze di cui a (under: corrisponde allo stato legittimo come risultante)
-- checkbox: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (under: si)
-- checkbox: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: (under: si)
-- radio: 2%, per le U.I. > 500 mq di superficie utile ; (under: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
-- radio: 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; (under: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
-- radio: 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; (under: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
-- radio: 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile; (under: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
-- radio: 6%, per le U.I. < 60 mq di superficie utile; (under: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
-- checkbox: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2: (under: si)
-- checkbox: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2-BIS: (under: si)
-- checkbox: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (under: si)
 - radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
-- radio: trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che la tolleranza costruttiva sopra indic (under: si)
 - radio: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost (under: trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1)
+- radio: intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto : (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
+- radio: intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
+- radio: intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
 - checkbox: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della data di entrata in vigore della legge 28 gennaio 1977, n. 10 (articolo  (under: si)
 - radio: dà atto che la data/epoca di realizzazione dell’intervento (under: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato pri)
 - radio: attesta che la data/epoca di realizzazione dell’intervento (under: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato pri)
@@ -138,7 +129,9 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: attesta che la data/epoca di realizzazione dell’intervento (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
 - radio: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguaglio a seguito di quantificazione da parte del responsabile del procedim (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
 - radio: ai fini della sanatoria, la presente SCIA: (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
+- radio: propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezza e/o la rimozione di opere che non possono essere sanate, a cui lo Spo (under: ai fini della sanatoria, la presente SCIA:)
 - checkbox: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla SCIA, ai sensi dell’art. 36-bis, comma 3-bis: (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
+- radio: dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformit)
 
 ### h1) Tecnici incaricati
 
@@ -202,6 +195,15 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - checkbox: In caso di intervento in VARIANTE :
 
+### Relazione Tecnica di Asseverazione C.I.L.A.
+
+2 pratiche; 4 of 27 choices to map.
+
+- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
+- radio: intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto : (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
+- radio: intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
+- radio: intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
+
 ### h) Impresa esecutrice dei lavori
 
 2 pratiche; 3 of 5 choices to map.
@@ -216,12 +218,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: tecnico incaricato
 - checkbox: se il direttore dei lavori delle opere architettoniche è diverso dal progettista delle opere architettoniche
-
-### Relazione Tecnica di Asseverazione C.I.L.A.
-
-2 pratiche; 1 of 24 choices to map.
-
-- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
 
 ### i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
 
@@ -261,6 +257,36 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - checkbox: Collaudo (ove richiesto) (under: Impianto linee vita)
 - checkbox: Documento già depositato in Comune (under: Altro impianto)
 - checkbox: Collaudo (ove richiesto) (under: Altro impianto)
+
+### Asseverazione PdC - Dati progettista e descrizione opere
+
+1 pratiche; 25 of 44 choices to map.
+
+- checkbox: Permesso di costruire convenzionato (articolo 28-bis, d.P.R. n. 380/2001) (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
+- checkbox: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa) (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
+- checkbox: interventi straordinari di ampliamento (articolo 4) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
+- checkbox: ampliamento fino al venti per cento della volumetria esistente per edifici residenziali uni-bifamiliari, edifici con volumetria non superiore a 1.500 mc o edifi (under: interventi straordinari di ampliamento (articolo 4) e in particolare:)
+- checkbox: modifica della destinazione d'uso da volumetria esistente non residenziale a volumetria residenziale per una quantità massima del venti per cento (articolo 4, c (under: interventi straordinari di ampliamento (articolo 4) e in particolare:)
+- checkbox: realizzazione di opere interne finalizzate all'utilizzo dei volumi esistenti nell'ambito dell'attività autorizzata, anche attraverso il cambio di destinazione d (under: interventi straordinari di ampliamento (articolo 4) e in particolare:)
+- checkbox: interventi straordinari di demolizione e ricostruzione (articolo 5) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
+- checkbox: aumento entro il limite del trentacinque per cento della volumetria esistente degli edifici residenziali per interventi di demolizione e ricostruzione da realiz (under: interventi straordinari di demolizione e ricostruzione (articolo 5) e in partico)
+- checkbox: ricostruzione a parità di volume dell'edificio esistente mantenendo le distanze da edifici fronteggianti (articolo 5, comma 8) (under: interventi straordinari di demolizione e ricostruzione (articolo 5) e in partico)
+- checkbox: interventi edilizi in zona agricola (articolo 6-bis) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
+- checkbox: mutamento di destinazione d'uso di immobili o loro parti per uso residenziale del nucleo familiare del dell'imprenditore agricolo per attività connesse allo svi (under: interventi edilizi in zona agricola (articolo 6-bis) e in particolare:)
+- checkbox: ampliamento fino al venti per cento della volumetria esistente o demolizione e ricostruzione con incremento entro il limite del trentacinque per cento della vol (under: interventi edilizi in zona agricola (articolo 6-bis) e in particolare:)
+- checkbox: realizzazione di nuove costruzioni ad uso produttivo nella misura massima di 0,03 mc/mq di superficie aziendale (articolo 6-bis, comma 5) (under: interventi edilizi in zona agricola (articolo 6-bis) e in particolare:)
+- checkbox: riqualificazione di aree urbane degradate (articolo 7) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
+- checkbox: mutamento di destinazione d'uso ai fini abitativi di un edificio non superiore a 10.000 mc destinato prevalentemente a uffici e residenze o alloggi di servizio, (under: riqualificazione di aree urbane degradate (articolo 7) e in particolare:)
+- checkbox: mutamento di destinazione d'uso ai fini abitativi per singoli edifici non superiori a diecimila metri cubi destinati prevalentemente o anche esclusivamente a re (under: riqualificazione di aree urbane degradate (articolo 7) e in particolare:)
+- checkbox: ricostruzione in sito di edifici diruti e ruderi con l'obbligo destinazione del manufatto ad edilizia residenziale (articolo 7, comma 8-bis) (under: riqualificazione di aree urbane degradate (articolo 7) e in particolare:)
+- checkbox: Interventi di recupero abitativo dei sottotetti, ai sensi della l.r. n. 15/2000, L.R.19/09 (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
+- checkbox: Realizzazione di parcheggi in aree libere, anche non di pertinenza del lotto dove insistono gli edifici, ovvero nel sottosuolo di fabbricati o al pianterreno di (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
+- checkbox: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001 (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
+- checkbox: con opere che determinino un aumento plano volumetrico, che risulti compatibile con le categorie edilizie previste per le singole zone omogenee, ai sensi dell'a (under: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001)
+- checkbox: con opere che incidano sulla sagoma, sui volumi e sulle superfici, con passaggio di categoria edilizia, purché tale passaggio sia consentito dalla norma regiona (under: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001)
+- checkbox: nelle zone agricole – zone E, ai sensi dell'art. 2 comma 8 della l.r. n. 19/2001 e suo regolamento di attuazione (under: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001)
+- checkbox: altro non indicato nei punti precedenti (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
+- checkbox: Varianti a permessi di costruire comportanti modifica della sagoma nel centro storico (Attività n. 38, Tabella A, Sez. II del d.lgs. 222/2016) (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
 
 ### Asseverazione PdC - amianto, conformità igienico sanitaria, sismica
 
@@ -328,44 +354,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - checkbox: ALTRO
 - checkbox: interessa un edificio privato aperto al pubblico e che le opere previste sono conformi all'articolo 82 del d.P.R. n. 380/2001 come da relazione e schemi dimostr
 - checkbox: pur essendo soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/2001 e del d.m. n. 236/1989 non rispetta la normativa in materia di barrie
-
-### Asseverazione PdC - Dati progettista e descrizione opere
-
-1 pratiche; 14 of 33 choices to map.
-
-- checkbox: Permesso di costruire convenzionato (articolo 28-bis, d.P.R. n. 380/2001) (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa) (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: interventi straordinari di ampliamento (articolo 4) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
-- checkbox: interventi straordinari di demolizione e ricostruzione (articolo 5) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
-- checkbox: interventi edilizi in zona agricola (articolo 6-bis) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
-- checkbox: riqualificazione di aree urbane degradate (articolo 7) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
-- checkbox: Interventi di recupero abitativo dei sottotetti, ai sensi della l.r. n. 15/2000, L.R.19/09 (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: Realizzazione di parcheggi in aree libere, anche non di pertinenza del lotto dove insistono gli edifici, ovvero nel sottosuolo di fabbricati o al pianterreno di (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001 (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: con opere che determinino un aumento plano volumetrico, che risulti compatibile con le categorie edilizie previste per le singole zone omogenee, ai sensi dell'a (under: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001)
-- checkbox: con opere che incidano sulla sagoma, sui volumi e sulle superfici, con passaggio di categoria edilizia, purché tale passaggio sia consentito dalla norma regiona (under: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001)
-- checkbox: nelle zone agricole – zone E, ai sensi dell'art. 2 comma 8 della l.r. n. 19/2001 e suo regolamento di attuazione (under: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001)
-- checkbox: altro non indicato nei punti precedenti (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: Varianti a permessi di costruire comportanti modifica della sagoma nel centro storico (Attività n. 38, Tabella A, Sez. II del d.lgs. 222/2016) (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-
-### Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze
-
-1 pratiche; 14 of 21 choices to map.
-
-- checkbox: dalle tolleranze di cui all’articolo 34-bis accertate con la presente Relazione tecnica di asseverazione, di cui al quadro “Dichiarazione di tolleranze di cui a (under: corrisponde allo stato legittimo come risultante)
-- checkbox: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (under: si)
-- checkbox: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: (under: si)
-- radio: 2%, per le U.I. > 500 mq di superficie utile ; (under: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
-- radio: 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; (under: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
-- radio: 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; (under: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
-- radio: 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile; (under: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
-- radio: 6%, per le U.I. < 60 mq di superficie utile; (under: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:)
-- checkbox: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2: (under: si)
-- checkbox: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2-BIS: (under: si)
-- checkbox: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (under: si)
-- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
-- radio: trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che la tolleranza costruttiva sopra indic (under: si)
-- radio: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost (under: trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1)
 
 ### Asseverazione PdC - sicurezza impianti e consumi energetici
 
@@ -460,6 +448,23 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: è assoggettato al procedimento ordinario di autorizzazione paesaggistica (under: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspe)
 - radio: è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all’articolo 36-bis del DPR 380/2001 e (under: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspe)
 - checkbox: si allega documentazione necessaria ai fini del rilascio del parere vincolante (vedi quadro della documentazione allegata - art. 36-bis comma 4 DPR 380/2001)” (under: è assoggettato al procedimento di accertamento della compatibilità paesaggistica)
+
+### Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze
+
+1 pratiche; 5 of 24 choices to map.
+
+- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
+- radio: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost (under: trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1)
+- radio: intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto : (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
+- radio: intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
+- radio: intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto: (under: ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti )
+
+### Riferimenti titolo edilizio e/o paesaggistico e data prevista della fine dei lavori
+
+1 pratiche; 2 of 5 choices to map.
+
+- checkbox: e autorizzazione paesaggistica (under: di cui al Permesso di costruire)
+- checkbox: e autorizzazione paesaggistica (under: di cui alla SCIA)
 
 ### SANATORIA
 

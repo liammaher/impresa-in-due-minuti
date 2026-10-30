@@ -78,6 +78,7 @@
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
  "stato_legittimo": "tolleranze",
+ "tolleranze": false,
  "tolleranze_precedenti": [
   "toll_prec_pratica",
   "toll_prec_atto"

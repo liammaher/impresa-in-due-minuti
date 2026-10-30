@@ -18,6 +18,7 @@
  "stato_legittimo": "titoli",
  "precedenti_ripetuti": "false",
  "precedenti": ["prec_permesso"],
+ "tolleranze": false,
  "superficie_mq": "240",
  "volume_mc": "780",
  "piani_n": "3",

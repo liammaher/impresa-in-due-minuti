@@ -46,8 +46,9 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
 gen.py passes a radio or tick box the dictionary doesn't name (the run leaves it unticked), so a
 section counts as filled with choices no case can take yet. `branches.py --write` lists every SUE
 choice the crawls saw, once per section, in `docs/sue-branches.md`: ticked under some answer,
-from an answer (a dropdown), the person's, or unmapped, most shared sections first. It flags what
-the crawl couldn't see: choices it didn't try deeper (depth 2), a section at the 30-choice limit.
+from an answer (a dropdown), the person's, or unmapped, most shared sections first. A box a choice
+opened that the crawl never tried itself counts too, marked `not_tried` (what it opens is unknown:
+the art. 94-bis class under a structural tolerance). It flags a section at the 30-choice limit.
 
 ## What the portal does that bit us
 
