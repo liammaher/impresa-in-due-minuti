@@ -61,7 +61,10 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   the nearest label before each is the *last* column's, so a label can name several boxes:
   the runner takes those whose own text it is first, and `nth` counts only those. "sì"/"no"
   radios under one another name each other: name them by the question beside them
-  (`on_page` when the crawl labels them only "sì").
+  (`on_page` when the crawl labels them only "sì"). A label "si" or "no" matches only a whole
+  word: as a prefix, "no" was also "non ha rilevanza strutturale", which declared tolerances
+  show above the sanatoria's no, so `nth: 3` missed it (2026-10-30). Other short labels stay
+  prefixes ("Tel" is "Telefono").
 - **Boxes that move.** A tick that opens rows above the box renumbers it (the paesaggistica's
   art. 136): gen.py sends it by label. The crawl's `moved` pairs two same-label boxes wrongly
   at times; a pair whose new id was on the page already is not a move.
