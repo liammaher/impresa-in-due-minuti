@@ -78,7 +78,6 @@
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
  "stato_legittimo": "titoli",
- "precedenti_ripetuti": "false",
  "precedenti": [
   "prec_titolo_unico",
   "prec_permesso",
@@ -121,5 +120,6 @@
  "prec_scia_sanatoria_variante_numero": "111",
  "prec_scia_sanatoria_variante_data": "1981-03-11",
  "prec_altro_numero": "112",
- "prec_altro_data": "1982-04-12"
+ "prec_altro_data": "1982-04-12",
+ "prec_altro_2": "false"
 }

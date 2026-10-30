@@ -83,5 +83,7 @@
   "prova_altri"
  ],
  "prova_catasto_numero": "5678",
- "prova_catasto_data": "1939-03-01"
+ "prova_catasto_data": "1939-03-01",
+ "prova_catasto_modo": "estremi",
+ "tolleranze": false
 }

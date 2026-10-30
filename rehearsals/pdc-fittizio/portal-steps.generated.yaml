@@ -23,7 +23,7 @@ groups:
     question: Which acoustic documents are attached (art. 8 L. 447/1995, art. 4 DPR 227/2011)? Tick every one that applies.
   precedenti:
     question: 'Which building titles or pratiche make the building''s stato legittimo (art. 9-bis c. 1-bis DPR 380/2001: the one that built it or last covered all of it, and the partial ones after)? Tick
-      every one; the form has one line for each kind.'
+      every one. The form has one line for each kind: a second title of a kind already ticked (two DIAs) is "Another title or pratica".'
   prova_documenti:
     question: What shows the building's original state? Tick every one that applies.
   tolleranze_precedenti:
@@ -128,7 +128,6 @@ asks:
       no title was required: the catasto''s primo impianto or other documents); prova (its title is lost or unknown, but there is documentary proof of it); sanzioni (pecuniary sanctions under artt. 33,
       34, 37 or 38 DPR 380/2001 were imposed and fully paid); tolleranze (construction tolerance declarations, art. 34-bis or 34-ter c. 4); area libera (a new construction on free land: no building yet)',
     options: [titoli, epoca, prova, sanzioni, tolleranze, area libera], propose: titoli}
-  precedenti_ripetuti: {type: yes_no, question: 'Does the building have two or more titles of the same kind (two DIAs, two SCIAs)? The form has one line per kind', propose: 'false', when: '{{ask.stato_legittimo|is_titoli}}'}
   prec_titolo_unico: {type: yes_no, group: precedenti, item: Titolo unico (SUAP)}
   prec_permesso: {type: yes_no, group: precedenti, item: 'Permesso di costruire, licenza edilizia or concessione edilizia'}
   prec_autorizzazione: {type: yes_no, group: precedenti, item: Autorizzazione edilizia}
@@ -141,7 +140,7 @@ asks:
   prec_pdc_sanatoria: {type: yes_no, group: precedenti, item: Permesso di costruire in sanatoria (artt. 36 or 36-bis DPR 380/2001)}
   prec_scia_sanatoria: {type: yes_no, group: precedenti, item: SCIA in sanatoria (art. 36-bis)}
   prec_scia_sanatoria_variante: {type: yes_no, group: precedenti, item: SCIA in sanatoria for a variant in corso d'opera in partial difformity from a title issued before L. 10/1977}
-  prec_altro: {type: yes_no, group: precedenti, item: Another title or pratica}
+  prec_altro: {type: yes_no, group: precedenti, item: 'Another title or pratica: of a kind not listed, or a second one of a kind already ticked'}
   prec_titolo_unico_numero: {type: text, question: 'The titolo unico (SUAP): its number', when: '{{ask.prec_titolo_unico}}'}
   prec_titolo_unico_data: {type: date, question: Its date, when: '{{ask.prec_titolo_unico}}'}
   prec_permesso_numero: {type: text, question: 'The permesso di costruire / licenza / concessione edilizia: its number', when: '{{ask.prec_permesso}}'}
@@ -166,13 +165,33 @@ asks:
   prec_scia_sanatoria_data: {type: date, question: Its date, when: '{{ask.prec_scia_sanatoria}}'}
   prec_scia_sanatoria_variante_numero: {type: text, question: 'The SCIA in sanatoria for the variant: its number', when: '{{ask.prec_scia_sanatoria_variante}}'}
   prec_scia_sanatoria_variante_data: {type: date, question: Its date, when: '{{ask.prec_scia_sanatoria_variante}}'}
-  prec_altro_quale: {type: text, question: Which other title or pratica (the form's "specificare"), when: '{{ask.prec_altro}}'}
+  prec_altro_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro}}'}
   prec_altro_numero: {type: text, question: Its number, when: '{{ask.prec_altro}}'}
   prec_altro_data: {type: date, question: Its date, when: '{{ask.prec_altro}}'}
+  prec_altro_2: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro}}'}
+  prec_altro_2_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_2}}'}
+  prec_altro_2_numero: {type: text, question: Its number, when: '{{ask.prec_altro_2}}'}
+  prec_altro_2_data: {type: date, question: Its date, when: '{{ask.prec_altro_2}}'}
+  prec_altro_3: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro_2}}'}
+  prec_altro_3_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_3}}'}
+  prec_altro_3_numero: {type: text, question: Its number, when: '{{ask.prec_altro_3}}'}
+  prec_altro_3_data: {type: date, question: Its date, when: '{{ask.prec_altro_3}}'}
+  prec_altro_4: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro_3}}'}
+  prec_altro_4_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_4}}'}
+  prec_altro_4_numero: {type: text, question: Its number, when: '{{ask.prec_altro_4}}'}
+  prec_altro_4_data: {type: date, question: Its date, when: '{{ask.prec_altro_4}}'}
+  prec_altro_5: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro_4}}'}
+  prec_altro_5_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_5}}'}
+  prec_altro_5_numero: {type: text, question: Its number, when: '{{ask.prec_altro_5}}'}
+  prec_altro_5_data: {type: date, question: Its date, when: '{{ask.prec_altro_5}}'}
+  prec_altro_6: {type: yes_no, question: 'And another, beyond those five?', propose: 'false', when: '{{ask.prec_altro_5}}'}
   prova_catasto: {type: yes_no, group: prova_documenti, item: 'The catasto''s primo impianto registration (its copy, or its details)'}
+  prova_catasto_modo: {type: choice, question: 'The catasto''s primo impianto registration in quadro f): estremi (you give its number and date) or copia (its copy, uploaded in the quadro)', options: [estremi,
+      copia], when: '{{ask.prova_catasto}}'}
+  prova_catasto_copia: {type: file, question: The copy of the primo impianto registration (PDF), when: '{{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
   prova_altri: {type: yes_no, group: prova_documenti, item: 'Other documents: photos, maps, archive records (art. 9-bis c. 1-bis, fourth and fifth periods)'}
-  prova_catasto_numero: {type: text, question: 'The primo impianto registration: its number', when: '{{ask.prova_catasto}}'}
-  prova_catasto_data: {type: date, question: Its date, when: '{{ask.prova_catasto}}'}
+  prova_catasto_numero: {type: text, question: 'The primo impianto registration: its number', when: '{{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}'}
+  prova_catasto_data: {type: date, question: Its date, when: '{{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}'}
   sanzione_prova: {type: choice, question: 'How does quadro f) show the sanctions were paid? ricevuta (their receipt is attached); estremi (you give the payment''s details)', options: [ricevuta, estremi],
     when: '{{ask.stato_legittimo|is_sanzioni}}'}
   sanzione_ricevuta: {type: file, question: The sanctions' payment receipt (PDF), when: '{{ask.sanzione_prova|is_ricevuta}}'}
@@ -338,19 +357,11 @@ supports:
   - rateizzazione
   - in corso d'opera
   else: 'A permesso''s contributo is paid when it''s collected, in instalments or during the works: never before filing.'
-- value: '{{ask.stato_legittimo}}'
-  in:
-  - titoli
-  - sanzioni
-  - tolleranze
-  - area libera
-  else: 'A building with no title on file (built before titles were required, or its title lost) isn''t mapped yet: the quadro''s primo impianto line asks its details or its copy, by boxes the crawl didn''t
-    see.'
-- if: '{{ask.stato_legittimo|is_titoli}}'
-  value: '{{ask.precedenti_ripetuti}}'
+- if: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}}'
+  value: '{{ask.prec_altro_6}}'
   in:
   - 'false'
-  else: 'Two or more building titles of the same kind aren''t mapped yet: the quadro has one line per kind.'
+  else: 'More than five "altro" lines (titles past one per kind, or of kinds not listed) aren''t mapped yet: each takes a "+" on the portal, and five have been prepared.'
 - if: '{{ask.stato_legittimo|is_titoli}}'
   value: '{{ask.prec_titolo_unico,ask.prec_permesso,ask.prec_autorizzazione,ask.prec_comunicazione,ask.prec_dia,ask.prec_dia_alternativa,ask.prec_scia,ask.prec_cel,ask.prec_condono,ask.prec_pdc_sanatoria,ask.prec_scia_sanatoria,ask.prec_scia_sanatoria_variante,ask.prec_altro|any}}'
   in:
@@ -590,15 +601,42 @@ sections:
   - {id: 'r30c1p79reg:txt', kind: text, value: '{{ask.prec_altro_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}', max: 9999, label: specificare}
   - {id: 'r30c2p81reg:txt', kind: text, value: '{{ask.prec_altro_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}', max: 9999, label: n., nth: 13}
   - {id: 'r30c3p83reg:calendar_input', kind: date, value: '{{ask.prec_altro_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}', label: del, nth: 13}
+  - {kind: add, anchor: specificare, block: 2, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 2, value: '{{ask.prec_altro_2_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}'}
+  - {kind: text, label: n., anchor: specificare, block: 2, value: '{{ask.prec_altro_2_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}'}
+  - {kind: date, label: del, anchor: specificare, block: 2, value: '{{ask.prec_altro_2_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}'}
+  - {kind: add, anchor: specificare, block: 3, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 3, value: '{{ask.prec_altro_3_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}'}
+  - {kind: text, label: n., anchor: specificare, block: 3, value: '{{ask.prec_altro_3_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}'}
+  - {kind: date, label: del, anchor: specificare, block: 3, value: '{{ask.prec_altro_3_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}'}
+  - {kind: add, anchor: specificare, block: 4, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 4, value: '{{ask.prec_altro_4_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}}'}
+  - {kind: text, label: n., anchor: specificare, block: 4, value: '{{ask.prec_altro_4_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}'}
+  - {kind: date, label: del, anchor: specificare, block: 4, value: '{{ask.prec_altro_4_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}}'}
+  - {kind: add, anchor: specificare, block: 5, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 5, value: '{{ask.prec_altro_5_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}}'}
+  - {kind: text, label: n., anchor: specificare, block: 5, value: '{{ask.prec_altro_5_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}
+      {{ask.prec_altro_5}}'}
+  - {kind: date, label: del, anchor: specificare, block: 5, value: '{{ask.prec_altro_5_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}}'}
   - {kind: radio, when: '{{ask.stato_legittimo|is_epoca}}', label: si tratta di immobile realizzato in un’epoca}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}', label: copia accatastamento di primo impianto}
-  - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}', max: 8, label: n., nth: 14}
-  - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}', label: del, nth: 14}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: copia accatastamento di primo impianto, nth: 2}
+  - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', max: 8, label: n., nth: 14}
+  - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: del, nth: 14}
+  - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 3, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
+  - {kind: file, label: copia accatastamento di primo impianto, value: '{{ask.prova_catasto_copia}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_altri}}', label: altri documenti probanti}
   - {kind: radio, when: '{{ask.stato_legittimo|is_prova}}', label: non sono disponibili la copia o gli estremi del titolo abilitativo}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}', label: copia accatastamento di primo impianto, nth: 2}
-  - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}', max: 9999, label: n., nth: 15}
-  - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}', label: del, nth: 15}
+  - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 3, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}'}
+  - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', max: 9999, label: n., nth: 15}
+  - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: del, nth: 15}
+  - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 4, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
+  - {kind: file, label: copia accatastamento di primo impianto, value: '{{ask.prova_catasto_copia}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_altri}}', label: altri documenti probanti, nth: 2}
   - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}}', label: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni}
   - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}', label: si allega la relativa ricevuta}

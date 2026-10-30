@@ -59,20 +59,20 @@ SUE pratiche not yet fillable:
 Measured today:
 
 - Level 1: 30 of 30 pratiche fully in the dictionary.
-- Level 2: **77 refusals across 13 recipes**, 26 distinct messages.
+- Level 2: **70 refusals across 13 recipes**, 25 distinct messages.
 - Levels 3 to 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
-| `scia-alternativa-fittizia` | 13 |
-| `scia-paesaggistica-ordinaria-fittizia` | 11 |
-| `scia-paesaggistica-semplificata-fittizia` | 11 |
-| `pdc-fittizio` | 10 |
-| `pdc-sanatoria-fittizio` | 10 |
-| `scia-sanatoria-fittizia` | 5 |
+| `scia-alternativa-fittizia` | 12 |
+| `scia-paesaggistica-ordinaria-fittizia` | 10 |
+| `scia-paesaggistica-semplificata-fittizia` | 10 |
+| `pdc-fittizio` | 9 |
+| `pdc-sanatoria-fittizio` | 9 |
 | `cila-fittizia` | 4 |
 | `cila-paesaggistica-fittizia` | 4 |
-| `scia-fittizia` | 4 |
+| `scia-sanatoria-fittizia` | 4 |
+| `scia-fittizia` | 3 |
 | `parere-esonero-fittizio` | 2 |
 | `agibilita-fittizia` | 1 |
 | `cil-fittizia` | 1 |
@@ -81,8 +81,7 @@ Measured today:
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
 - 9×: A structurally relevant tolerance isn't mapped yet: the form then asks its class under art. 94-bis DPR 380/2001 (relevant, minor or none for public safety), and what each
-- 7×: A building with no title on file (built before titles were required, or its title lost) isn't mapped yet: the quadro's primo impianto line asks its details or its copy, b
-- 7×: Two or more building titles of the same kind aren't mapped yet: the quadro has one line per kind.
+- 7×: More than five "altro" lines (titles past one per kind, or of kinds not listed) aren't mapped yet: each takes a "+" on the portal, and five have been prepared.
 - 5×: A hygiene derogation isn't mapped yet.
 - 5×: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
 - 3×: A project for the Vigili del Fuoco's assessment isn't mapped yet.
