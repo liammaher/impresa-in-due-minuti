@@ -67,6 +67,7 @@
  "fasce": "no",
  "scia_onerosa": "true",
  "pdc_tipo": "ristrutturazione edilizia",
+ "pdc_procedura": "ordinaria",
  "contributo_calcolo": "sportello",
  "contributo_pagamento": "prima dei lavori",
  "documentazione_calcolo_contributo": "rehearsals/scia-fittizia/files/documentazione-calcolo-contributo.pdf",
@@ -92,5 +93,6 @@
  ],
  "cambio_uso": "tra_categorie",
  "antincendio_deroga": "false",
- "sismica_doc": "rehearsals/scia-fittizia/files/autorizzazione-sismica.pdf"
+ "sismica_doc": "rehearsals/scia-fittizia/files/autorizzazione-sismica.pdf",
+ "allaccio_doc": "rehearsals/pdc-fittizio/files/documentazione-allaccio-fognatura.pdf"
 }

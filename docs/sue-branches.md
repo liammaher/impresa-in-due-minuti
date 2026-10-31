@@ -8,12 +8,13 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 870 | Claude takes it when the case does |
+| ticked | 848 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
-| theirs | 5 | the person's own (an acknowledgement, a declaration), never ticked |
+| theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 1 | left empty on purpose |
+| law | 21 | closed by law to new cases (the piano casa): refused as the law's, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 217 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 216 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -136,6 +137,18 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: no (under: Direttore dei lavori delle opere strutturali)
 - radio: tecnico incaricato (under: Progettista delle opere architettoniche)
 
+### Asseverazione SCIA - Dati immobile, strumentazione urbanistica, barriere architettoniche / Asseverazione SCIA Alternativa -  Dati immobile, strumentazione urbanistica, barriere architettoniche
+
+4 pratiche; 7 of 16 choices to map.
+
+- checkbox: PUC
+- checkbox: PUA
+- checkbox: PIANO PARTICOLAREGGIATO
+- checkbox: PIANO DI RECUPERO
+- checkbox: P.I.P.
+- checkbox: P.E.E.P.
+- checkbox: ALTRO
+
 ### Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi / Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi
 
 4 pratiche; 5 of 24 choices to map.
@@ -199,35 +212,38 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché i 
 
-### Asseverazione PdC - Dati progettista e descrizione opere
+### Attestazione tecnica - Sicurezza degli impianti
 
-1 pratiche; 25 of 44 choices to map.
+1 pratiche; 28 of 50 choices to map.
 
-- checkbox: Permesso di costruire convenzionato (articolo 28-bis, d.P.R. n. 380/2001) (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa) (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: interventi straordinari di ampliamento (articolo 4) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
-- checkbox: ampliamento fino al venti per cento della volumetria esistente per edifici residenziali uni-bifamiliari, edifici con volumetria non superiore a 1.500 mc o edifi (under: interventi straordinari di ampliamento (articolo 4) e in particolare:)
-- checkbox: modifica della destinazione d'uso da volumetria esistente non residenziale a volumetria residenziale per una quantità massima del venti per cento (articolo 4, c (under: interventi straordinari di ampliamento (articolo 4) e in particolare:)
-- checkbox: realizzazione di opere interne finalizzate all'utilizzo dei volumi esistenti nell'ambito dell'attività autorizzata, anche attraverso il cambio di destinazione d (under: interventi straordinari di ampliamento (articolo 4) e in particolare:)
-- checkbox: interventi straordinari di demolizione e ricostruzione (articolo 5) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
-- checkbox: aumento entro il limite del trentacinque per cento della volumetria esistente degli edifici residenziali per interventi di demolizione e ricostruzione da realiz (under: interventi straordinari di demolizione e ricostruzione (articolo 5) e in partico)
-- checkbox: ricostruzione a parità di volume dell'edificio esistente mantenendo le distanze da edifici fronteggianti (articolo 5, comma 8) (under: interventi straordinari di demolizione e ricostruzione (articolo 5) e in partico)
-- checkbox: interventi edilizi in zona agricola (articolo 6-bis) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
-- checkbox: mutamento di destinazione d'uso di immobili o loro parti per uso residenziale del nucleo familiare del dell'imprenditore agricolo per attività connesse allo svi (under: interventi edilizi in zona agricola (articolo 6-bis) e in particolare:)
-- checkbox: ampliamento fino al venti per cento della volumetria esistente o demolizione e ricostruzione con incremento entro il limite del trentacinque per cento della vol (under: interventi edilizi in zona agricola (articolo 6-bis) e in particolare:)
-- checkbox: realizzazione di nuove costruzioni ad uso produttivo nella misura massima di 0,03 mc/mq di superficie aziendale (articolo 6-bis, comma 5) (under: interventi edilizi in zona agricola (articolo 6-bis) e in particolare:)
-- checkbox: riqualificazione di aree urbane degradate (articolo 7) e in particolare: (under: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa))
-- checkbox: mutamento di destinazione d'uso ai fini abitativi di un edificio non superiore a 10.000 mc destinato prevalentemente a uffici e residenze o alloggi di servizio, (under: riqualificazione di aree urbane degradate (articolo 7) e in particolare:)
-- checkbox: mutamento di destinazione d'uso ai fini abitativi per singoli edifici non superiori a diecimila metri cubi destinati prevalentemente o anche esclusivamente a re (under: riqualificazione di aree urbane degradate (articolo 7) e in particolare:)
-- checkbox: ricostruzione in sito di edifici diruti e ruderi con l'obbligo destinazione del manufatto ad edilizia residenziale (articolo 7, comma 8-bis) (under: riqualificazione di aree urbane degradate (articolo 7) e in particolare:)
-- checkbox: Interventi di recupero abitativo dei sottotetti, ai sensi della l.r. n. 15/2000, L.R.19/09 (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: Realizzazione di parcheggi in aree libere, anche non di pertinenza del lotto dove insistono gli edifici, ovvero nel sottosuolo di fabbricati o al pianterreno di (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001 (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: con opere che determinino un aumento plano volumetrico, che risulti compatibile con le categorie edilizie previste per le singole zone omogenee, ai sensi dell'a (under: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001)
-- checkbox: con opere che incidano sulla sagoma, sui volumi e sulle superfici, con passaggio di categoria edilizia, purché tale passaggio sia consentito dalla norma regiona (under: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001)
-- checkbox: nelle zone agricole – zone E, ai sensi dell'art. 2 comma 8 della l.r. n. 19/2001 e suo regolamento di attuazione (under: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001)
-- checkbox: altro non indicato nei punti precedenti (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-- checkbox: Varianti a permessi di costruire comportanti modifica della sagoma nel centro storico (Attività n. 38, Tabella A, Sez. II del d.lgs. 222/2016) (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
+- checkbox: Documento già depositato in Comune (under: Impianti di produzione, trasformazione, trasporto, distribuzione, utilizzazione )
+- checkbox: Collaudo (ove richiesto) (under: Impianti di produzione, trasformazione, trasporto, distribuzione, utilizzazione )
+- checkbox: Atto notorio (art. 6 DPR n. 392/1994) (under: Impianti di produzione, trasformazione, trasporto, distribuzione, utilizzazione )
+- checkbox: Documento già depositato in Comune (under: Impianti radiotelevisivi, le antenne, gli impianti elettronici deputati alla ges)
+- checkbox: Collaudo (ove richiesto) (under: Impianti radiotelevisivi, le antenne, gli impianti elettronici deputati alla ges)
+- checkbox: Atto notorio (art. 6 DPR n. 392/1994) (under: Impianti radiotelevisivi, le antenne, gli impianti elettronici deputati alla ges)
+- checkbox: Documento già depositato in Comune (under: Impianti di riscaldamento, climatizzazione, di condizionamento e di refrigerazio)
+- checkbox: Collaudo (ove richiesto) (under: Impianti di riscaldamento, climatizzazione, di condizionamento e di refrigerazio)
+- checkbox: Atto notorio (art. 6 DPR n. 392/1994) (under: Impianti di riscaldamento, climatizzazione, di condizionamento e di refrigerazio)
+- checkbox: Documento già depositato in Comune (under: Impianti idrici e sanitari di qualsiasi natura o specie)
+- checkbox: Collaudo (ove richiesto) (under: Impianti idrici e sanitari di qualsiasi natura o specie)
+- checkbox: Atto notorio (art. 6 DPR n. 392/1994) (under: Impianti idrici e sanitari di qualsiasi natura o specie)
+- checkbox: Documento già depositato in Comune (under: Impianti per la distribuzione e l’utilizzazione di gas di qualsiasi tipo, compre)
+- checkbox: Collaudo (ove richiesto) (under: Impianti per la distribuzione e l’utilizzazione di gas di qualsiasi tipo, compre)
+- checkbox: Atto notorio (art. 6 DPR n. 392/1994) (under: Impianti per la distribuzione e l’utilizzazione di gas di qualsiasi tipo, compre)
+- checkbox: Documento già depositato in Comune (under: Impianti di sollevamento di persone o di cose per mezzo di ascensori, di montaca)
+- checkbox: Collaudo (ove richiesto) (under: Impianti di sollevamento di persone o di cose per mezzo di ascensori, di montaca)
+- checkbox: Atto notorio (art. 6 DPR n. 392/1994) (under: Impianti di sollevamento di persone o di cose per mezzo di ascensori, di montaca)
+- checkbox: Documento già depositato in Comune (under: Impianto protezione antincendio)
+- checkbox: Collaudo (ove richiesto) (under: Impianto protezione antincendio)
+- checkbox: Atto notorio (art. 6 DPR n. 392/1994) (under: Impianto protezione antincendio)
+- checkbox: Documento già depositato in Comune (under: Impianto protezione scariche atmosferiche)
+- checkbox: Collaudo (ove richiesto) (under: Impianto protezione scariche atmosferiche)
+- checkbox: Atto notorio (art. 6 DPR n. 392/1994) (under: Impianto protezione scariche atmosferiche)
+- checkbox: Documento già depositato in Comune (under: Impianto linee vita)
+- checkbox: Collaudo (ove richiesto) (under: Impianto linee vita)
+- checkbox: Documento già depositato in Comune (under: Altro impianto)
+- checkbox: Collaudo (ove richiesto) (under: Altro impianto)
 
 ### Asseverazione PdC - amianto, conformità igienico sanitaria, sismica
 
@@ -251,29 +267,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
 - radio: si allega la documentazione relativa alla denuncia di cui all'articolo 65 del d.P.R. n. 380/2001 (under: prevede la realizzazione di opere di conglomerato cementizio armato, normale e p)
 - radio: si allega la documentazione relativa alla denuncia dei lavori in zona sismica (under: prevede opere in zona sismica da denunciare ai sensi dell'articolo 93 del d.P.R.)
-
-### a) Qualificazione pratica dell'intervento
-
-1 pratiche; 18 of 26 choices to map.
-
-- radio: intervento realizzato, ai sensi dell'articolo 36, comma 1 del d.P.R. n. 380/2001, e conforme alla disciplina urbanistica ed edilizia vigente sia al momento dell
-- radio: intervento in deroga alle previsioni degli strumenti di pianificazione urbanistica vigenti, ai sensi dell'art. 14 del d.P.R. n. 380/2001. In particolare si chie
-- checkbox: alla densità edilizia (under: intervento in deroga alle previsioni degli strumenti di pianificazione urbanisti)
-- checkbox: all'altezza (under: intervento in deroga alle previsioni degli strumenti di pianificazione urbanisti)
-- checkbox: alla distanza tra i fabbricati (under: intervento in deroga alle previsioni degli strumenti di pianificazione urbanisti)
-- checkbox: alla destinazione d'uso (under: intervento in deroga alle previsioni degli strumenti di pianificazione urbanisti)
-- radio: titolo unico (under: variazione essenziale e/o sostanziale al/alla)
-- radio: segnalazione certificata/denuncia di inizio attività alternativa al permesso di costruire (under: variazione essenziale e/o sostanziale al/alla)
-- radio: attività che rientrano nell'ambito del procedimento ordinario ai sensi dell'articolo 7 del d.P.R. n. 160/2010
-- checkbox: permesso di costruire convenzionato, ai sensi dell'articolo 28-bis, d.P.R. n. 380/2011 (under: attività che rientrano nell'ambito del procedimento ordinario ai sensi dell'arti)
-- checkbox: interventi di recupero abitativo dei sottotetti, ai sensi della l.r. n. 15/2000 e l.r. 19/09 (under: attività che rientrano nell'ambito del procedimento ordinario ai sensi dell'arti)
-- checkbox: realizzazione di parcheggi in aree libere, ai sensi della l.r. n. 19/2001 (under: attività che rientrano nell'ambito del procedimento ordinario ai sensi dell'arti)
-- checkbox: mutamento di destinazione d'uso, ai sensi della l.r. 19/2001 (under: attività che rientrano nell'ambito del procedimento ordinario ai sensi dell'arti)
-- checkbox: piano casa, ai sensi della l.r. n. 19/2009 (under: attività che rientrano nell'ambito del procedimento ordinario ai sensi dell'arti)
-- checkbox: interventi di ampliamento (articolo 4) (under: piano casa, ai sensi della l.r. n. 19/2009)
-- checkbox: interventi di demolizione e ricostruzione (articolo 5) (under: piano casa, ai sensi della l.r. n. 19/2009)
-- checkbox: interventi edilizi in zona agricola ( art. 6-bis) (under: piano casa, ai sensi della l.r. n. 19/2009)
-- checkbox: riqualificazione di aree urbane degradate (articolo 7) (under: piano casa, ai sensi della l.r. n. 19/2009)
 
 ### Asseverazione PdC - Dati immobile, strumentazione urbanistica, barriere architettoniche
 
@@ -345,6 +338,17 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
 - checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
 
+### Attestazione tecnica - Agibilità
+
+1 pratiche; 6 of 11 choices to map.
+
+- checkbox: locali con un’altezza minima interna inferiore a 2,70 metri fino al limite massimo di 2,40 metri; (under: nei casi di cui all’articolo 24, comma 5-bis e 5-ter, DPR 380/2001, trattasi di:)
+- checkbox: alloggio mono-stanza, con una superficie minima, comprensiva dei servizi, (under: nei casi di cui all’articolo 24, comma 5-bis e 5-ter, DPR 380/2001, trattasi di:)
+- checkbox: inferiore a 28 metri quadrati, fino al limite massimo di 20 metri quadrati, per una persona (under: alloggio mono-stanza, con una superficie minima, comprensiva dei servizi,)
+- checkbox: inferiore a 38 metri quadrati, fino al limite massimo di 28 metri quadrati, per due persone. (under: alloggio mono-stanza, con una superficie minima, comprensiva dei servizi,)
+- checkbox: i locali sono situati in edifici che sono stati sottoposti, nell’ambito dell’intervento edilizio a cui si riferisce la presente SCIA, a recupero edilizio e migl (under: alloggio mono-stanza, con una superficie minima, comprensiva dei servizi,)
+- checkbox: è stata realizzata una ristrutturazione con soluzioni alternative atte a garantire, in relazione al numero degli occupanti, idonee condizioni igienico-sanitarie (under: alloggio mono-stanza, con una superficie minima, comprensiva dei servizi,)
+
 ### Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi
 
 1 pratiche; 5 of 24 choices to map.
@@ -407,6 +411,12 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: ricade nell'ambito di applicazione del d.lgs. n. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché
 - radio: allega la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in luogo visibile dall'esterno (under: dichiara che l'intervento è soggetto all'invio della notifica)
+
+### Asseverazione PdC - Dati progettista e descrizione opere
+
+1 pratiche; 1 of 44 choices to map.
+
+- checkbox: altro non indicato nei punti precedenti (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
 
 ### Asseverazione PdC - aree a rischio e altri vincoli di tutela ecologica
 

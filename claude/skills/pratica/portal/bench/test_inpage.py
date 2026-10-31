@@ -220,6 +220,22 @@ def main():
             assert "loose" not in r, r.get("loose")
         case("an id that names another box now goes by its label, and the report names the move", moved_id)
 
+        def anchored():
+            # A block's start is a box the anchor is the own label of: the "(specificare)" box
+            # beside a tick box reads it as its cell before, and must not start a block itself.
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?deroga=1")
+            st["sections"][1]["fields"] += [
+                {"kind": "checkbox", "label": "alla densità edilizia"},
+                {"kind": "text", "label": "(specificare)", "anchor": "alla densità edilizia", "value": "{{ask.den}}"},
+                {"kind": "checkbox", "label": "all'altezza"},
+                {"kind": "text", "label": "(specificare)", "anchor": "all'altezza", "value": "{{ask.impresa}}"}]
+            r = fill(browser, base, st, answers)
+            assert r["result"] == "filled", r.get("error")
+            assert PORTAL.fields.get("form:r5c2:dynaForm:dens_txt") == answers["den"], PORTAL.fields
+            assert PORTAL.fields.get("form:r5c2:dynaForm:alt_txt") == answers["impresa"], PORTAL.fields
+        case("a box beside an anchor's tick box, labelled by it from the cell before, doesn't start a block", anchored)
+
         def banner():
             PORTAL.reset()
             stops(fill(browser, base, steps(base, start="/portal.html?banner=1"), answers), "covered by div#consenso")

@@ -83,8 +83,9 @@ asks:
         con cambio d''uso in zona omogenea A, o che cambia sagoma, volume o prospetti di un immobile tutelato, o la demolizione e ricostruzione in un''area tutelata (artt. 136 c. 1 c e d, 142) con modifiche',
       nuova_costruzione: 'Nuova costruzione (art. 3 c. 1 e), compresi gli ampliamenti fuori sagoma', ristrutturazione_urbanistica: Ristrutturazione urbanistica (art. 3 c. 1 f), variante_pdc: Variante in
         corso d'opera a un permesso di costruire che non è una variazione essenziale, variante_essenziale_pdc: Variante in corso d'opera a un permesso di costruire che è una variazione essenziale, variante_scia: Variante
-        in corso d'opera a una SCIA (essenziale o no), altro: 'Altro: permesso in deroga (art. 14), permesso convenzionato (art. 28-bis), sottotetti, parcheggi o Piano casa delle leggi regionali, proroghe
-        e volture'}, how: Lo stabilisce il tecnico dalle definizioni dell'art. 3 e dall'elenco dell'art. 6 DPR 380/2001.}
+        in corso d'opera a una SCIA (essenziale o no), altro: 'Altro: il Piano casa (L.R. 19/2009), proroghe e volture. Il permesso in deroga (art. 14), il permesso convenzionato (art. 28-bis), i sottotetti
+        (L.R. 15/2000), i parcheggi e i cambi d''uso della L.R. 19/2001 sono i lavori che fanno: scegli la loro voce dell''art. 3'}, how: Lo stabilisce il tecnico dalle definizioni dell'art. 3 e dall'elenco
+      dell'art. 6 DPR 380/2001.}
   sanatoria: {group: fatti, type: yes_no, item: 'I lavori sono già iniziati, o già finiti, senza il titolo che serviva?'}
   strutture: {group: fatti, type: yes_no, item: 'I lavori toccano le parti strutturali dell''edificio?'}
   prospetti: {group: fatti, type: yes_no, item: 'La manutenzione straordinaria modifica i prospetti (le facciate) dell''edificio?'}

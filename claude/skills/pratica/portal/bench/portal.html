@@ -9,7 +9,9 @@
      ?fade=1 opens a suggestion list over Impresa esecutrice as Dati tecnici opens, whose
      widget's hide() fades it out slowly, as PrimeFaces 11's does; ?slot=signed (or =plain) adds
      an attachments slot the portal says is required, taking only signed files (or plain ones);
-     ?off=1 switches Impresa esecutrice off, greyed until a choice the steps don't make. -->
+     ?off=1 switches Impresa esecutrice off, greyed until a choice the steps don't make; ?deroga=1
+     adds two tick boxes, each with a box of no text of its own beside it, titled "(specificare)",
+     as the permesso's deroga draws them: the cell before it is the tick box's label. -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -45,6 +47,14 @@ if (location.search.includes("banner=1")) document.getElementById("consenso").hi
 // By its label's row: the server's ?flaky=1 cut checks that box's id is gone from the whole page.
 if (location.search.includes("off=1")) document.getElementById("impresa-label").closest("tr").querySelector("input").disabled = true;
 if (location.search.includes("rename=1")) document.getElementById("impresa-label").textContent = "Ditta esecutrice";
+if (location.search.includes("deroga=1")) {
+  for (const [k, label] of [["dens", "alla densità edilizia"], ["alt", "all'altezza"]]) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td><input type="checkbox" id="form:r5c1:dynaForm:${k}_chk"> ${label}</td>` +
+      `<td><input type="text" title="(specificare)" id="form:r5c2:dynaForm:${k}_txt"></td>`;
+    document.querySelector("#tecnici + table").tBodies[0].append(tr);
+  }
+}
 const slot = new URLSearchParams(location.search).get("slot");
 if (slot) {
   const tr = document.createElement("tr");
@@ -109,6 +119,7 @@ const list = (name) => {
 };
 fetch("/state").then((r) => r.json()).then((st) => {
   for (const t of texts()) t.value = st.fields[t.id] || "";
+  for (const c of document.querySelectorAll("input[type=checkbox]")) c.checked = st.fields[c.id] === "on";
   st.files.forEach(list);
   // As the portal does, a slot's cell names the file in it.
   for (const [id, name] of Object.entries(st.boxes || {})) {
@@ -127,6 +138,7 @@ for (const box of document.querySelectorAll("input[type=file]")) {
 }
 document.getElementById("salva").addEventListener("click", () => {
   const fields = Object.fromEntries(texts().map((t) => [t.id, t.value]));
+  for (const c of document.querySelectorAll("input[type=checkbox]")) if (c.checked) fields[c.id] = "on";
   fetch("/save", { method: "POST", body: JSON.stringify({ fields }) })
     .then(() => { document.getElementById("saved").textContent = "Dati salvati"; });
 });
