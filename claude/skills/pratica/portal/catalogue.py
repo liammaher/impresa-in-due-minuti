@@ -9,6 +9,8 @@
     catalogue.py pane DIR                                  the pane's scripts: install.js stores wizard.js
                                                            and crawl.js in localStorage, load.js runs them
                                                            (an op with `like`: against that pratica, into same.json)
+    catalogue.py pane DIR --bundle FILE --ops OPS.json     a batch as one file the person picks (pick.js),
+        [--draft NAME] [--depth 3] [--fresh]               status.js to poll, export.js to save the results
 
 A section's fingerprint is what it shows before any choice (ids, kinds, labels, lengths,
 short lists), hashed as crawl.js does: the same fingerprint is the same section, whatever
@@ -16,6 +18,7 @@ pratica it sits in, and a different one for a stored section means the portal ch
 """
 import argparse
 import collections
+import datetime
 import hashlib
 import json
 import os
@@ -330,8 +333,69 @@ def cmd_pane(args):
         "const stale = []; for (const k of Object.keys(want)) if (await sha(localStorage.getItem(k) || \"\") !== want[k]) stale.push(k);\n"
         "if (!stale.length) { (0, eval)(localStorage.getItem(\"pv-wizard\")); (0, eval)(localStorage.getItem(\"pv-crawl\")); }\n"
         "stale.length ? `stale: ${stale.join(\", \")}: run install.js` : \"loaded\"\n")
-    return [f"{out}/install.js ({(out / 'install.js').stat().st_size // 1024} KB), {out}/load.js: "
-            "on the portal's origin, load.js first; install.js only if it says stale"]
+    if not args.bundle:
+        return [f"{out}/install.js ({(out / 'install.js').stat().st_size // 1024} KB), {out}/load.js: "
+                "on the portal's origin, load.js first; install.js only if it says stale"]
+    return bundle(out, Path(args.bundle).expanduser(), srcs, json.loads(Path(args.ops).read_text()), args)
+
+
+def bundle(out, path, srcs, ops, args):
+    """A batch as one file the person picks once in the pane (2026-10-31: a big script copied
+    through the conversation can arrive garbled), checked by sha256: it stores and runs wizard.js
+    and crawl.js, with --fresh clears what makes the batch skip a pratica or a section it has
+    seen (the crawls are in the repo; known fingerprints and scelte are backed up), and starts.
+    status.js polls it; export.js saves the results as the export `import` reads, those the
+    pane's storage couldn't keep included."""
+    names = [o["name"] for o in ops]
+    opts = {"draft": args.draft, "depth": args.depth, "variants": True, "ops": ops}
+    stamp = "backup-" + datetime.date.today().strftime("%Y%m%d")
+    text = (f"(() => {{\n  if (window.__crawlBusy) return \"a batch already runs in this tab\";\n"
+            f"  const src = {json.dumps(srcs)};\n"
+            "  for (const [k, v] of Object.entries(src)) localStorage.setItem(k, v);\n"
+            "  (0, eval)(src[\"pv-wizard\"]); (0, eval)(src[\"pv-crawl\"]);\n"
+            f"  const opts = {json.dumps(opts, ensure_ascii=False)};\n"
+            "  localStorage.setItem(\"crawl:batch\", JSON.stringify(opts));\n"
+            + (f"  for (const k of [\"crawl:known\", \"crawl:scelte\"]) {{ const v = localStorage.getItem(k); if (v !== null) localStorage.setItem(k + \":{stamp}\", v); }}\n"
+               "  localStorage.setItem(\"crawl:known\", \"{}\"); localStorage.removeItem(\"crawl:scelte\");\n"
+               "  for (const o of opts.ops) localStorage.removeItem(\"crawl:op:\" + o.name);\n" if args.fresh else "")
+            + "  window.__crawlBusy = true;\n  window.__crawl.batch(opts);\n"
+            f"  return `started: ${{opts.ops.length}} pratiche, depth ${{opts.depth}}{' (fresh)' if args.fresh else ''}`;\n}})()\n")
+    path.write_text(text)
+    sha = hashlib.sha256(text.encode()).hexdigest()
+    (out / "pick.js").write_text(f"""document.querySelectorAll("iframe, #pv-pick").forEach((x) => x.remove());
+const box = document.createElement("div"); box.id = "pv-pick";
+box.style.cssText = "position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#fff;border:3px solid #1a4fd6;padding:16px 20px;font:16px sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3);border-radius:8px;max-width:520px";
+box.innerHTML = '<b>Choose <code>{path.name}</code> (once)</b><br><input type="file" accept=".js" style="margin-top:10px"><div style="margin-top:8px;color:#444"></div>';
+document.body.appendChild(box);
+const [input, msg] = [box.querySelector("input"), box.querySelector("div")];
+input.addEventListener("change", async () => {{
+  const text = await input.files[0].text();
+  const got = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
+  if (got !== "{sha}") {{ msg.textContent = "Not that file (its sha256 differs): nothing loaded."; return; }}
+  input.disabled = true;
+  try {{ window.pvBundle = String((0, eval)(text)); msg.textContent = window.pvBundle; setTimeout(() => box.remove(), 5000); }}
+  catch (e) {{ window.pvBundle = "error " + e.message; msg.textContent = window.pvBundle; }}
+}});
+"box shown: pick the file once, then poll status.js"
+""")
+    (out / "status.js").write_text("""await new Promise((r) => setTimeout(r, 38000));  // the pane cuts a call at 45 s
+const r = window.__crawl ? await window.__crawl.wait(300) : null;
+JSON.stringify(r ? { done: r.done, done_ops: r.done_ops, of: JSON.parse(localStorage.getItem("crawl:batch")).ops.length,
+  current: r.current, tried: r.tried, errors: r.errors, stopped: r.stopped, error: r.error, storage: r.storage } : "no crawl in this tab")
+""")
+    name = "crawl-batch-" + path.stem.removeprefix("pv-") + ".json"
+    (out / "export.js").write_text(f"""// Saves the batch's results to the person's Downloads (ask them first): what `catalogue.py
+// import` reads, with what the pane's storage couldn't keep.
+const opts = JSON.parse(localStorage.getItem("crawl:batch")), unsaved = window.__crawlUnsaved || {{}};
+const out = {{}};
+for (const o of opts.ops) {{ const k = "crawl:op:" + o.name, v = unsaved[k] || localStorage.getItem(k); if (v) out[k] = JSON.parse(v); }}
+const blob = new Blob([JSON.stringify(out)], {{ type: "application/json" }});
+const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = {json.dumps(name)};
+document.body.appendChild(a); a.click(); a.remove();
+({{ file: {json.dumps(name)}, pratiche: Object.keys(out).length, of: opts.ops.length, bytes: blob.size }})
+""")
+    return [f"{path} ({path.stat().st_size // 1024} KB, {len(names)} pratiche) and, in {out}: pick.js (the box "
+            f"where the person picks it), status.js (poll), export.js (saves {name}, once they agree)"]
 
 
 def main():
@@ -352,6 +416,11 @@ def main():
     p.add_argument("export")
     p = sub.add_parser("pane")
     p.add_argument("dir")
+    p.add_argument("--bundle", help="also a batch as one file the person picks (with --ops)")
+    p.add_argument("--ops", help="--bundle: the batch's ops (catalogue.py ops' JSON)")
+    p.add_argument("--draft", default="PROVA NON INVIARE - catalogo sue", help="--bundle: the scratch draft")
+    p.add_argument("--depth", type=int, default=3)
+    p.add_argument("--fresh", action="store_true", help="--bundle: crawl the ops again, though stored")
     args = ap.parse_args()
     res = globals()["cmd_" + args.cmd](args)
     if isinstance(res, list) and res and isinstance(res[0], str):

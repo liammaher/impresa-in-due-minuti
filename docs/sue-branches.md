@@ -19,7 +19,7 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 What the crawl didn't see (more choices may exist there):
 
-- 0 sections show exactly 30 choices at the top, crawl.js's default limit: none.
+- 0 sections cut at crawl.js's limit of choices (`truncated`, or exactly 30 from older crawls): none.
 - 26 of these choices the crawl saw but never tried: what they open isn't known.
 - Choices only a saved answer shows (attachment slots, sections a scelta adds) aren't here: the crawl never saves.
 

@@ -229,13 +229,27 @@ file each other's results), and `pick.js` refuses to clear the page during one. 
 the tab's earlier results first: `loop.js` skips a name it finds there, to resume after a reload.
 `results.js` lists each run's `moved` ids and `loose` labels, what a gen.py change is checked by.
 A run that stops in ~20 s on "the portal stayed busy" with no section opened is most likely a
-sign-in that expired: the runner's frame lands on the login page (2026-10-30).
+sign-in that expired: the runner's frame lands on the login page (2026-10-30). Since 2026-10-31
+the run says "signed out" instead, and isn't retried.
 A stopped run lists its `gaps`: the empty boxes the portal wants, by label, from the runner's
 snapshot (no values), so a stop names them without opening the draft (2026-10-31). `--values`
-takes the fixture as it is. After a batch, run `record.js` in the pane, save what it prints, and
-`rerun.py --record <file>` files each run in its rehearsal's `runs.json`: schema_branches.py
-counts a box as filled on the portal only from there. After the batch, reload the portal's home
-before clicking anything: the runner's review stays drawn over the page.
+takes the fixture as it is. After a batch, run `record.js` in the pane and pipe what it prints (names
+and results, no values) into `rerun.py --record -`: each run goes in its rehearsal's `runs.json`: schema_branches.py
+counts a box as filled on the portal only from there. The batch clears the runner's review from
+the page when it ends.
+
+## Crawling: `catalogue.py pane --bundle`
+
+A crawl batch goes to the pane as one file too: `catalogue.py ops sue --all > ops.json`, then
+`catalogue.py pane <dir> --bundle ~/Downloads/pv-<name>.js --ops ops.json [--fresh]` (`--fresh`
+crawls them again, though stored). In the pane: `pick.js` (the person picks the file once; it
+stores and runs wizard.js and crawl.js and starts the batch on the scratch draft, "PROVA NON
+INVIARE - catalogo sue"), then `status.js` until `done`; then, with the person's yes, `export.js`
+saves the results to Downloads for `catalogue.py import`. The pane's storage also holds the SUAP
+crawls and is near Chrome's limit (2026-10-31: 7.2 of about 10 million characters): a result it
+can't keep stays in the tab, the batch stops saying so, and export.js still saves it. crawl.js
+tries 80 choices a section (the semplificata's Allegato B list has 41); a section with more says
+`truncated`.
 
 ## Attachments screens
 
