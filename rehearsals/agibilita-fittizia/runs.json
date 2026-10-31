@@ -46,5 +46,17 @@
   "answers": "answers-5quater.json",
   "result": "filled",
   "seconds": 86.2
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-impianti-depositati.json",
+  "result": "filled",
+  "seconds": 96
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-impianti-collaudo.json",
+  "result": "filled",
+  "seconds": 98.2
  }
 ]
