@@ -80,6 +80,7 @@ asks:
   notifica_dovuta: {type: yes_no, question: 'Is a notifica preliminare due (more than one firm on site, or over 200 uomini-giorno)?'}
   pdc_numero: {type: text, question: The permesso di costruire's number}
   pdc_data: {type: date, question: Its issue date}
+  domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   impianti: {type: yes_no, question: 'Did the works touch the building''s systems (impianti)?'}
   impianto_elettrico: {type: yes_no, question: 'The electrical system (with its dichiarazione di conformità)?', when: '{{ask.impianti}}'}
   impianto_idrico: {type: yes_no, question: 'Water and sanitary systems?', when: '{{ask.impianti}}'}
@@ -539,7 +540,9 @@ sections:
   fields:
   - {id: 'r2c1p2reg:txta', kind: text, value: '{{ask.oggetto}}', max: 300, label: descrizione sintetica}
 - section: DOMICILIO DIGITALE
-  fields: []
+  fields:
+  - {id: 'r4c1p4reg:chk', kind: checkbox, when: '{{ask.domicilio_inad}}', label: il seguente domicilio digitale inserito in INAD}
+  - {id: 'r6c1p6reg:txt', kind: text, value: '{{c:identity.pec}}', when: '{{ask.domicilio_inad}}', max: 9999, label: il seguente domicilio digitale inserito in INAD}
 - section: DOMICILIO ELETTRONICO
   theirs:
   - Si dichiara di essere consapevoli

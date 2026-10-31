@@ -325,6 +325,9 @@ asks:
   proroga_data_prevista: {type: date, question: "The new date the works are now expected to start (or end)"}
   fine_termine: {type: date, question: "The date the permit said the works must end by"}
   # Proposed, never assumed: the declaration says how the person pays.
+  # Communicating the INAD address is optional: the Comune reads INAD itself (art. 6-quater
+  # CAD), so it is filled only when the person asks for it.
+  domicilio_inad: {type: yes_no, question: "Is the client's PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?", default: "false"}
   bollo_marche: {type: yes_no, question: "Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?", propose: "false"}
   bollo_seriale: {type: text, question: "The marca da bollo for the application: its serial number (14 digits)"}
   bollo_data: {type: date, question: "Its date"}
@@ -1147,10 +1150,12 @@ sections:
     fields:
       - {kind: text, label: descrizione sintetica, value: "{{ask.oggetto}}"}
 
-  # The client's own domicilio digitale: saved empty when they have no PEC. A client with a
-  # PEC (INAD, its address box) isn't mapped yet.
+  # The client's own domicilio digitale: their PEC in INAD when they say so, else saved empty.
+  # A private person's is in INAD; INI-PEC is a business's or a professional's (subject: impresa).
   - section: DOMICILIO DIGITALE
-    fields: []
+    fields:
+      - {kind: checkbox, label: il seguente domicilio digitale inserito in INAD, when: "{{ask.domicilio_inad}}"}
+      - {kind: text, label: il seguente domicilio digitale inserito in INAD, value: "{{c:identity.pec}}", when: "{{ask.domicilio_inad}}"}
 
   # The box under the PEC ("si dichiara di essere consapevoli ...") is required, and the
   # person's: the run leaves it and its "required" to them.
@@ -2002,7 +2007,8 @@ sections:
   # marca's line, which "per l'autorizzazione" opens below it, copies the first's: its serial
   # box is titled "numero seriale (1)" too (read on the portal 2026-10-30), so crawl.js took it
   # for the first's, moved. Both lines go by label, the first then the second (nth). Exemptions
-  # are a case of their own: not mapped.
+  # aren't mapped: every reason the dropdown lists is an entity's (ETS, public bodies, sports
+  # clubs; ONLUS repealed from 1 January 2026), and the SUE files for a private person only.
   - section: Dichiarazione relativa all'assolvimento dell'imposta di bollo
     aliases: [dichiarazione relativa all'imposta di bollo]
     fields:

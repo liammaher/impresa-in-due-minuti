@@ -1,0 +1,24 @@
+{
+ "people": {
+  "c": "luca"
+ },
+ "descrizione": "PROVA NON INVIARE - paesaggistica INAD",
+ "titolo": "proprietario",
+ "oggetto": "Sostituzione degli infissi esterni con modifica del colore e installazione di un'unità esterna di climatizzazione sul balcone.",
+ "allegato_b": [
+  "paes_b3",
+  "paes_b7"
+ ],
+ "vincolo": "art 136 and 142",
+ "vincolo_136_lettera": "c) e d)",
+ "vincolo_136_provvedimento": "D.M. fittizio PROVA NON INVIARE del 01/01/1960",
+ "vincolo_142_lettera": "a)",
+ "paes_variante": false,
+ "bollo_marche": false,
+ "diritti_euro": "0",
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "semplificata",
+ "fatti": [],
+ "domicilio_inad": true
+}

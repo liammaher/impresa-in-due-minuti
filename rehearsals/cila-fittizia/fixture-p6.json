@@ -53,6 +53,7 @@
     ["luca:identity.citizenship", "italiana"],
     ["luca:identity.codice_fiscale", "FTTLCU91L02F839F"],
     ["luca:identity.phone", "+39 333 000 0102"],
+    ["luca:identity.pec", "luca.fittizio@pec.example.it"],
     ["luca:identity.email", "luca.fittizio@example.com"],
     ["luca:residenza.comune", "Napoli"],
     ["luca:residenza.provincia", "NA"],
