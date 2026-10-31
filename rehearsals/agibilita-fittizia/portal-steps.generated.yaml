@@ -334,6 +334,8 @@ sections:
   - {id: 'r31c1p90reg:number', kind: text, value: '{{t:identity.phone|phone_it}}', max: 15, label: cell.}
   - {id: 'r31c2p92reg:txt', kind: text, value: '{{t:identity.pec}}', max: 100, label: posta elettronica certificata}
 - section: Attestazione tecnica - Agibilità
+  theirs:
+  - nei casi di cui all’articolo 24
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.agibilita_parziale|is_immobile}}', label: L'agibilità relativa all'immobile oggetto dell'intervento edilizio}
   - {id: 'r5c1p5reg:radio:1_clone', kind: radio, when: '{{ask.agibilita_parziale|is_edificio}}', label: L' agibilità parziale relativa a singoli edifici}

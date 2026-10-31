@@ -3,7 +3,7 @@
 The CILA rehearsal's P6 job (a tenant's interior works, already started, two firms) with an
 outdoor air-conditioning unit (Allegato B item B.7) on a building under art. 136 and 142: the
 CILA and the landscape authorization in one pratica on Napoli's SUE. Made-up data; the draft is
-"PROVA NON INVIARE" and stops before the declarations, the attachments, payment, signing and
+"PROVA NON INVIARE" and stops before the declarations, payment, signing and
 sending.
 
 - **Two operations** (`operation:` a list). gen.py takes each one's sections from the catalogue
@@ -16,7 +16,9 @@ sending.
   Allegato B, vincolo and bollo.
 - `supports`: the CILA's (a tenant with the owner's assent) and the semplificata's (no variant,
   no marche da bollo).
-- No Allega documenti step yet: the combination's attachments screen isn't read (`slots`).
+- **Attachments**: the combination's screen read with its crawl on 2026-10-31 (`slots`), the
+  CILA's answer-dependent slots from its own recipe; the relazione paesaggistica semplificata and
+  its drawings take only signed files, so they are the person's.
 
 ## Cases from the schema table (2026-10-30)
 

@@ -793,4 +793,3 @@ sections:
   - {kind: file, label: Prospetto di calcolo preventivo del contributo, value: '{{ask.prospetto_contributo}}', when: '{{ask.cila_onerosa}}'}
   - {kind: file, label: Ricevuta di versamento del contributo, value: '{{ask.ricevuta_contributo}}', when: '{{ask.cila_onerosa}} {{ask.contributo_pagato}}'}
   - {kind: file, label: Relazione paesaggistica (redatta ai sensi del D.P.C.M, value: '{{ask.relazione_paesaggistica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
-  - {kind: file, label: Relazione paesaggistica e documentazione per il rilascio, value: '{{ask.relazione_paesaggistica}}'}

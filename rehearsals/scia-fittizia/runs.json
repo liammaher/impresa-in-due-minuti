@@ -58,5 +58,47 @@
   "answers": "answers-p6.json",
   "result": "filled",
   "seconds": 134.5
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-cambio-unita-6bis-stessa.json",
+  "result": "filled",
+  "seconds": 141.1
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-stato-prova.json",
+  "result": "filled",
+  "seconds": 137.5
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-stato-sanzioni-estremi.json",
+  "result": "filled",
+  "seconds": 142.4
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-stato-sanzioni-ricevuta.json",
+  "result": "filled",
+  "seconds": 139.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-stato-tolleranze.json",
+  "result": "filled",
+  "seconds": 142.9
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-strutture.json",
+  "result": "filled",
+  "seconds": 152.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-tecnici.json",
+  "result": "filled",
+  "seconds": 152.7
  }
 ]

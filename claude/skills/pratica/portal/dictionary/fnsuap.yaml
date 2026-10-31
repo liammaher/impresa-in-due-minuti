@@ -2091,6 +2091,9 @@ sections:
   # left to the direttore dei lavori. Only the one-room flat opens c. 5-ter's conditions here
   # (the crawl's); c. 5-ter's adattabilità is pre-flight's check.
   - section: Attestazione tecnica - Agibilità
+    # The portal's "deve essere selezionata almeno un'opzione" under both boxes when neither is
+    # ticked: theirs, not a stop (every case ticking neither stopped on 2026-10-31 without it).
+    theirs: [nei casi di cui all’articolo 24]
     fields:
       - {kind: radio, label: L'agibilità relativa all'immobile oggetto dell'intervento edilizio, when: "{{ask.agibilita_parziale|is_immobile}}"}
       - {kind: radio, label: L' agibilità parziale relativa a singoli edifici, when: "{{ask.agibilita_parziale|is_edificio}}"}

@@ -58,5 +58,29 @@
   "answers": "answers-impianti-collaudo.json",
   "result": "filled",
   "seconds": 98.2
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-non-soggetto-collaudo.json",
+  "result": "stopped",
+  "seconds": 52.3
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-parziale-vale-fine.json",
+  "result": "stopped",
+  "seconds": 52.4
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-regolare-esecuzione.json",
+  "result": "stopped",
+  "seconds": 72.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-vale-fine-lavori.json",
+  "result": "stopped",
+  "seconds": 60
  }
 ]

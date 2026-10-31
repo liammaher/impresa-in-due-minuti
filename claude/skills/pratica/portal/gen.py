@@ -336,7 +336,11 @@ def merge_recipe(out, r):
                 if slots is None:
                     screens.pop(screen, None)
                 else:
-                    screens[screen] = add(screens.get(screen), slots)
+                    # `{label, drop: true}` leaves out a slot a part adds that this pratica's form
+                    # never opens (the ordinaria's "Si allega" slot, which a CILA has no box for).
+                    gone = {s["label"] for s in slots if s.get("drop")}
+                    kept = [s for s in screens.get(screen) or [] if s.get("label") not in gone]
+                    screens[screen] = add(kept, [s for s in slots if not s.get("drop")])
             out[k] = screens
         elif k in ("supports", "sections"):
             out[k] = add(out.get(k), v)
@@ -626,8 +630,10 @@ def generate(recipe, base=HERE):
             missing = [n for n in missing if norm(n) not in seen]
             extra = [h for h in have if not any(norm(h) == norm(n) for n in names)]
             if missing or extra:
+                hint = (" (a section the recipe's si_no adds: crawl the combination with that Si/No too,"
+                        " catalogue.py ops --combo ... --scelta)" if missing and recipe.get("si_no") else "")
                 raise GenError(f"{recipe['crawl']} isn't a crawl of these operations together: "
-                               f"missing {missing}, more {extra}")
+                               f"missing {missing}, more {extra}{hint}")
             # Each crawled section once, under the name the combination shows ("Dati catastali" and
             # "dati catastali" are one).
             names = [h for h in have if any(norm(h) == norm(n) for n in names)]
