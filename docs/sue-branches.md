@@ -29,32 +29,32 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### SCHEDA ANAGRAFICA / Scheda anagrafica
 
-32 pratiche; 2 of 27 choices to map.
+34 pratiche; 2 of 27 choices to map.
 
 - radio: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA
 - checkbox: Se cittadino non UE
 
 ### Qualifica e dati del procuratore
 
-32 pratiche; 1 of 11 choices to map.
+34 pratiche; 1 of 11 choices to map.
 
 - radio: all'Estero
 
 ### Dati catastali / dati catastali
 
-28 pratiche; 1 of 2 choices to map.
+30 pratiche; 1 of 2 choices to map.
 
 - radio: Nuovo Catasto Terreni
 
 ### Dichiarazione relativa ai diritti di segreteria/istruttori / dichiarazione relativa ai diritti di segreteria/istruttori
 
-24 pratiche; 1 of 5 choices to map.
+26 pratiche; 1 of 5 choices to map.
 
 - radio: poiché esentati (under: non sono dovuti oneri quali diritti o spese)
 
 ### Dichiarazione relativa all'assolvimento dell'imposta di bollo / dichiarazione relativa all'imposta di bollo
 
-14 pratiche; 31 of 35 choices to map.
+16 pratiche; 31 of 35 choices to map.
 
 - radio: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo per l'autorizzazione perché il procedimento può concludersi con il silenzio assens (under: Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digit)
 - select: per la seguente motivazione = adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comp → adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comprese nell'A.U.A.) (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
@@ -90,13 +90,13 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### G2) Altri tecnici incaricati / H2) Altri tecnici incaricati / g2) Altri tecnici incaricati
 
-9 pratiche; 1 of 8 choices to map.
+11 pratiche; 1 of 8 choices to map.
 
 - checkbox: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori
 
 ### dati relativi al nome del tecnico
 
-8 pratiche; 1 of 2 choices to map.
+10 pratiche; 1 of 2 choices to map.
 
 - radio: non è colui che presenta la pratica
 
@@ -120,7 +120,7 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### h1) Tecnici incaricati
 
-4 pratiche; 8 of 16 choices to map.
+6 pratiche; 8 of 16 choices to map.
 
 - checkbox: di aver incaricato, in qualità di direttore/i dei lavori, i soggetti indicati nella sezione DIRETTORE/I LAVORI
 - checkbox: Direttore dei lavori delle opere architettoniche (under: di aver incaricato, in qualità di direttore/i dei lavori, i soggetti indicati ne)
@@ -133,7 +133,7 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi / Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi
 
-4 pratiche; 5 of 24 choices to map.
+6 pratiche; 5 of 24 choices to map.
 
 - checkbox: le opere comportano la produzione di materiali da scavo considerati come sottoprodotti sulla base della normativa vigente
 - radio: le opere comportano la produzione di materiali da scavo per un volume inferiore o uguale a quello previsto dalla normativa vigente ovvero (pur superando tale so (under: le opere comportano la produzione di materiali da scavo considerati come sottopr)
@@ -143,23 +143,23 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### i) Impresa esecutrice dei lavori
 
-4 pratiche; 3 of 6 choices to map.
+6 pratiche; 3 of 6 choices to map.
 
 - radio: l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno individuata/e prima dell'inizio dei lavori
 - radio: i lavori, in quanto opere di modesta entità che non interessano le specifiche normative di settore, sono eseguiti/sono stati eseguiti in prima persona, senza al
 - checkbox: Cassa edile (under: i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata/e alla seg)
 
-### Ambito dell'intervento
-
-4 pratiche; 1 of 4 choices to map.
-
-- checkbox: In caso di intervento in VARIANTE :
-
 ### Asseverazione SCIA - Sicurezza impianti, consumi energetici / Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici
 
-4 pratiche; 1 of 27 choices to map.
+6 pratiche; 1 of 27 choices to map.
 
 - checkbox: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è evidenziata nella relazione tecnica dovuta ai sensi dell'articolo 125 del (under: è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto:)
+
+### Ambito dell'intervento
+
+5 pratiche; 1 of 4 choices to map.
+
+- checkbox: In caso di intervento in VARIANTE :
 
 ### Asseverazione PdC - amianto, conformità igienico sanitaria, sismica
 
@@ -229,6 +229,17 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
 - checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
 
+### Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi
+
+3 pratiche; 6 of 12 choices to map.
+
+- radio: a seguito delle preventive analisi ambientali effettuate, non necessita di bonifica, pertanto
+- checkbox: si allegano i risultati delle analisi ambientali dei terreni (under: a seguito delle preventive analisi ambientali effettuate, non necessita di bonif)
+- radio: è stata oggetto di bonifica dei terreni con obiettivi compatibili con la destinazione d'uso del presente intervento, come risulta dalla certificazione conclusiv
+- radio: non è dotata delle opere di urbanizzazione primaria e la loro attuazione è prevista da parte dell'amministrazione comunale nel corso del prossimo triennio ovver
+- checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
+- checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
+
 ### Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi
 
 3 pratiche; 5 of 24 choices to map.
@@ -280,11 +291,41 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - checkbox: fascia di rispetto per pozzi e emergenze idriche (art. 94, commi 1 e 6, d.lgs. n. 152/2006)
 
+### Asseverazione SCIA Alternativa - Altri Vincoli di Tutela Ecologica
+
+3 pratiche; 1 of 12 choices to map.
+
+- checkbox: fascia di rispetto per pozzi e emergenze idriche (art. 94, commi 1 e 6, d.lgs. n. 152/2006)
+
+### Asseverazione SCIA Alternativa - Dati progettista e descrizione opere
+
+3 pratiche; 1 of 12 choices to map.
+
+- checkbox: 4. Altri interventi individuati dalla legislazione regionale (1)
+
+### Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze
+
+3 pratiche; 1 of 24 choices to map.
+
+- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
+
 ### f) Calcolo del contributo di costruzione
 
 3 pratiche; 1 of 9 choices to map.
 
 - radio: SI (under: è a titolo oneroso e pertanto)
+
+### g) Calcolo del contributo di costruzione
+
+3 pratiche; 1 of 8 choices to map.
+
+- checkbox: Chiede di eseguire direttamente, a scomputo di quanto dovuto, le opere di urbanizzazione e a tal fine allega la proposta di progetto per la realizzazione delle  (under: L'intervento da realizzare è a titolo oneroso e pertanto)
+
+### l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
+
+3 pratiche; 1 of 9 choices to map.
+
+- radio: e allega alla presente segnalazione la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in lu (under: dichiara che l'intervento è soggetto all'invio della notifica)
 
 ### h) Impresa esecutrice dei lavori
 
@@ -326,17 +367,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: si forniscono gli estremi di versamento (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
 - radio: si allega la ricevuta di versamento (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
 
-### Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi
-
-1 pratiche; 6 of 12 choices to map.
-
-- radio: a seguito delle preventive analisi ambientali effettuate, non necessita di bonifica, pertanto
-- checkbox: si allegano i risultati delle analisi ambientali dei terreni (under: a seguito delle preventive analisi ambientali effettuate, non necessita di bonif)
-- radio: è stata oggetto di bonifica dei terreni con obiettivi compatibili con la destinazione d'uso del presente intervento, come risulta dalla certificazione conclusiv
-- radio: non è dotata delle opere di urbanizzazione primaria e la loro attuazione è prevista da parte dell'amministrazione comunale nel corso del prossimo triennio ovver
-- checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
-- checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
-
 ### Riferimenti titolo edilizio e/o paesaggistico e data prevista della fine dei lavori
 
 1 pratiche; 2 of 5 choices to map.
@@ -358,24 +388,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: i lavori sono/saranno eseguiti dalla/e impresa/e indicata/e alla seguente sezione
 - checkbox: Cassa edile (under: i lavori sono/saranno eseguiti dalla/e impresa/e indicata/e alla seguente sezion)
 
-### Asseverazione SCIA Alternativa - Altri Vincoli di Tutela Ecologica
-
-1 pratiche; 1 of 12 choices to map.
-
-- checkbox: fascia di rispetto per pozzi e emergenze idriche (art. 94, commi 1 e 6, d.lgs. n. 152/2006)
-
-### Asseverazione SCIA Alternativa - Dati progettista e descrizione opere
-
-1 pratiche; 1 of 12 choices to map.
-
-- checkbox: 4. Altri interventi individuati dalla legislazione regionale (1)
-
-### Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze
-
-1 pratiche; 1 of 24 choices to map.
-
-- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
-
 ### Attestazione tecnica - Dati del Direttore Lavori/Professionista Abilitato
 
 1 pratiche; 1 of 4 choices to map.
@@ -388,20 +400,8 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - checkbox: sono richieste variazioni progettuali e/o sono sopravvenute specifiche prescrizioni di tutela (under: L'istanza di rinnovo riguarda l'Autorizzazione Paesaggistica, rilasciata ai sens)
 
-### g) Calcolo del contributo di costruzione
-
-1 pratiche; 1 of 8 choices to map.
-
-- checkbox: Chiede di eseguire direttamente, a scomputo di quanto dovuto, le opere di urbanizzazione e a tal fine allega la proposta di progetto per la realizzazione delle  (under: L'intervento da realizzare è a titolo oneroso e pertanto)
-
 ### g) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
 
 1 pratiche; 1 of 8 choices to map.
 
 - radio: ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché i 
-
-### l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
-
-1 pratiche; 1 of 9 choices to map.
-
-- radio: e allega alla presente segnalazione la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in lu (under: dichiara che l'intervento è soggetto all'invio della notifica)

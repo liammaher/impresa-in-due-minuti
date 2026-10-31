@@ -20,12 +20,12 @@ branch no rehearsal took.
 
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
-| SUE (building works) | 32 | 32 | 31 | 0 checked, 0 changed |
+| SUE (building works) | 34 | 34 | 33 | 0 checked, 0 changed |
 | SUAP (businesses) | 278 | 112 | 13 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
-- SUE: 32 pratiche, 128 distinct sections, 125 in the dictionary; 541 of 541 uses (100%)
+- SUE: 34 pratiche, 128 distinct sections, 125 in the dictionary; 614 of 614 uses (100%)
 - SUAP: 278 pratiche, 477 distinct sections, 77 in the dictionary; 2432 of 3365 uses (72%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
@@ -58,14 +58,16 @@ SUE pratiche not yet fillable:
 
 Measured today:
 
-- Level 1: 32 of 32 pratiche fully in the dictionary. 5 of them are two operations in one pratica (`sue-combo-*`).
-- Which pratiche a case needs: of the 18176 cases the rules table decides, **1446 reach a steps file**, 16590 are refused with a reason or need no pratica, and **140 have no steps file yet**: 7 combinations of pratiche, listed below (`bench/test_route.py`).
-- Level 2: **73 refusals across 15 recipes**, 21 distinct messages.
+- Level 1: 34 of 34 pratiche fully in the dictionary. 7 of them are two operations in one pratica (`sue-combo-*`).
+- Which pratiche a case needs: of the 18176 cases the rules table decides, **1568 reach a steps file**, 16590 are refused with a reason or need no pratica, and **18 have no steps file yet**: 5 combinations of pratiche, listed below (`bench/test_route.py`).
+- Level 2: **95 refusals across 17 recipes**, 21 distinct messages.
 - Level 3, in part: **21 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot a run would stop on.
 - Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
+| `scia-alt-paesaggistica-ordinaria-fittizia` | 11 |
+| `scia-alt-paesaggistica-semplificata-fittizia` | 11 |
 | `scia-alternativa-fittizia` | 11 |
 | `pdc-fittizio` | 9 |
 | `pdc-paesaggistica-ordinaria-fittizio` | 9 |
@@ -87,13 +89,13 @@ Pratiche filed together, mapped (a steps file each):
 - cila-lavori-edilizi + autorizzazione-paesaggistica-semplificata
 - permesso-di-costruire + autorizzazione-paesaggistica-ordinaria
 - permesso-di-costruire + autorizzazione-paesaggistica-semplificata
+- scia-alternativa-pdc + autorizzazione-paesaggistica-ordinaria
+- scia-alternativa-pdc + autorizzazione-paesaggistica-semplificata
 - scia-edilizia + autorizzazione-paesaggistica-ordinaria
 - scia-edilizia + autorizzazione-paesaggistica-semplificata
 
 Pratiche filed together, not mapped yet (the cases that need them, most first):
 
-- scia-alternativa-pdc + autorizzazione-paesaggistica-ordinaria: 61 cases
-- scia-alternativa-pdc + autorizzazione-paesaggistica-semplificata: 61 cases
 - cila-lavori-edilizi + autorizzazione-paesaggistica-ordinaria: 8 cases
 - scia-in-sanatoria + autorizzazione-paesaggistica-ordinaria: 4 cases
 - scia-in-sanatoria + autorizzazione-paesaggistica-semplificata: 4 cases
@@ -102,16 +104,18 @@ Pratiche filed together, not mapped yet (the cases that need them, most first):
 
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
-- 11×: More than three other technicians aren't mapped yet: each takes a "+" on the portal, and three have been prepared.
-- 9×: More than five "altro" lines (titles past one per kind, or of kinds not listed) aren't mapped yet: each takes a "+" on the portal, and five have been prepared.
-- 5×: A hygiene derogation isn't mapped yet.
-- 5×: A project for the Vigili del Fuoco's assessment isn't mapped yet.
-- 5×: An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet.
-- 5×: An area without its primary urbanisation works isn't mapped yet.
-- 5×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions.
-- 5×: Soil needing environmental investigations (or already remediated) isn't mapped yet.
-- 5×: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
+- 13×: More than three other technicians aren't mapped yet: each takes a "+" on the portal, and three have been prepared.
+- 11×: More than five "altro" lines (titles past one per kind, or of kinds not listed) aren't mapped yet: each takes a "+" on the portal, and five have been prepared.
+- 7×: A hygiene derogation isn't mapped yet.
+- 7×: A project for the Vigili del Fuoco's assessment isn't mapped yet.
+- 7×: An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet.
+- 7×: An area without its primary urbanisation works isn't mapped yet.
+- 7×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions.
+- 7×: Soil needing environmental investigations (or already remediated) isn't mapped yet.
+- 7×: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
 - 4×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
+- 3×: The barriers rules (artt. 77-82) aren't mapped yet.
+- 3×: Works on parts with asbestos aren't mapped yet.
 - 2×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
 - 2×: More than two assents already obtained aren't mapped yet: the relazione has two rows.
 - 2×: More than two filings already made aren't mapped yet: the relazione has two rows.
@@ -119,10 +123,8 @@ Refusals, by how many recipes carry them (the most shared are the cheapest to cl
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione mak
 - 1×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
-- 1×: The barriers rules (artt. 77-82) aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
 - 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
-- 1×: Works on parts with asbestos aren't mapped yet.
 
 Ticked "si allega" boxes with no attachment slot under their condition (gen.py `unslotted`; some only in cases a recipe refuses, some with no slot on the portal: a run tells):
 
@@ -137,12 +139,12 @@ Ticked "si allega" boxes with no attachment slot under their condition (gen.py `
 - 4×: Asseverazione SCIA - Tutela Storico Ambientale: Si allega la relazione paesaggistica semplificata
 - 4×: Asseverazione SCIA - Tutela Storico Ambientale: si allega documentazione necessaria ai fini del rilascio del parere vincolante
 - 4×: f) Calcolo del contributo di costruzione: allega il prospetto di calcolo preventivo
-- 1×: Asseverazione SCIA Alternativa - Amianto: Si allega documentazione per la richiesta di deroga
-- 1×: Asseverazione SCIA Alternativa - Inquinamento acus: si allega documentazione necessaria all'ottenimento della deroga
-- 1×: Asseverazione SCIA Alternativa - Inquinamento acus: si allega la documentazione necessaria alla valutazione del progetto
-- 1×: Asseverazione SCIA Alternativa - Tutela Ecologica: Si allega la documentazione necessaria per la richiesta di deroga
-- 1×: Asseverazione SCIA Alternativa - Tutela Storico Am: Si allega la relazione paesaggistica e la documentazione
-- 1×: Asseverazione SCIA Alternativa - Tutela Storico Am: Si allega la relazione paesaggistica semplificata
+- 3×: Asseverazione SCIA Alternativa - Amianto: Si allega documentazione per la richiesta di deroga
+- 3×: Asseverazione SCIA Alternativa - Inquinamento acus: si allega documentazione necessaria all'ottenimento della deroga
+- 3×: Asseverazione SCIA Alternativa - Inquinamento acus: si allega la documentazione necessaria alla valutazione del progetto
+- 3×: Asseverazione SCIA Alternativa - Tutela Ecologica: Si allega la documentazione necessaria per la richiesta di deroga
+- 3×: Asseverazione SCIA Alternativa - Tutela Storico Am: Si allega la relazione paesaggistica e la documentazione
+- 3×: Asseverazione SCIA Alternativa - Tutela Storico Am: Si allega la relazione paesaggistica semplificata
 - 1×: Relazione Tecnica di Asseverazione: allega l’autorizzazione sismica
 - 1×: f) Calcolo del contributo: allega la ricevuta di versamento
 - 1×: g) Rispetto degli obblighi in materia di salute e : allega alla presente comunicazione la notifica
@@ -162,7 +164,7 @@ What a Napoli architect or pratiche agency files again and again, so what has to
 
 **SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, extensions, voltura, DL and contractor changes, the landscape authorizations), all of them.
 
-- 32 of 32 fillable, 31 run on the portal.
+- 34 of 34 fillable, 33 run on the portal.
 
 **SUAP: nine sectors × seven operations.** Each cell is one pratica on the portal:
 
