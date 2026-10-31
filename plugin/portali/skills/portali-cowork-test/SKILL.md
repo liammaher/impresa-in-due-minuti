@@ -27,8 +27,9 @@ user's folder at the end, even when a test fails.
    cd portali-test
    python3 SKILL/check.py studio.json values.json --out run/values.json
    python3 SKILL/portal/run.py preflight --steps SKILL/pratiche/cila-fittizia.json \
-     --answers answers.json --values run/values.json
+     --answers answers.json --values run/values.json --made-up
    ```
+   (`--made-up`: the test case's files are made up, so Napoli's file rules only warn.)
    Record both outputs. Pre-flight must say `ready`; if not, record why and stop.
 
 ## 1. Does the built-in browser run the runner?

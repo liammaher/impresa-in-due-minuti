@@ -18,7 +18,7 @@ yours:
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
   - "On Allega documenti: the relazione paesaggistica (DPCM 12/12/2005), the drawings and the photos, signed digitally"
   - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
-  - "Pay the imposta di bollo (two marche da 16 €) and any diritti on pagoPA after sending"
+  - "Pay the imposta di bollo (two marche da 16 €) as the portal asks"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.

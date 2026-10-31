@@ -53,7 +53,7 @@ def values(steps, a):
 def boxes(a, recipe="scia-fittizia"):
     """The quadro's boxes this case fills: {id: value}, after a pre-flight that must be ready."""
     steps = STEPS[recipe]
-    r = run.preflight(steps, values(steps, a))
+    r = run.preflight(steps, values(steps, a), made_up=True)
     assert r["ready"], {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]}
     return {p["id"]: p["value"] for p in run.plan(steps, values(steps, a)) if "precedenti edilizi" in p["section"].lower()}
 
@@ -63,7 +63,7 @@ def rows(a, recipe="scia-fittizia"):
     By label: once a choice in the quadro shifts the rows below it (the primo impianto's copy
     opens an upload box), gen.py gives the boxes after it no fixed id."""
     steps = STEPS[recipe]
-    r = run.preflight(steps, values(steps, a))
+    r = run.preflight(steps, values(steps, a), made_up=True)
     assert r["ready"], {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]}
     return [(p["label"] or "", p["value"]) for p in run.plan(steps, values(steps, a)) if "precedenti edilizi" in p["section"].lower()]
 
@@ -74,7 +74,7 @@ def has(rs, start):
 
 def refused(a, words, recipe="scia-fittizia"):
     steps = STEPS[recipe]
-    r = run.preflight(steps, values(steps, a))
+    r = run.preflight(steps, values(steps, a), made_up=True)
     assert any(words in u for u in r["unsupported"]), r["unsupported"]
 
 
@@ -181,13 +181,13 @@ def _():
     steps = STEPS["scia-fittizia"]
     a = answers("stato-sanzioni-estremi")
     del a["sanzione_importo"]
-    r = run.preflight(steps, values(steps, a))
+    r = run.preflight(steps, values(steps, a), made_up=True)
     asked = json.dumps(r["questions"])
     assert "sanzione_importo" in asked, asked
     assert "prec_permesso_numero" not in asked and "precedenti" not in asked, asked
     # The titles case is asked about a further altro line only once "altro" is ticked, and
     # about a third only once the second is.
-    r = run.preflight(steps, values(steps, answers("stato-titoli", prec_altro_2=None)))
+    r = run.preflight(steps, values(steps, answers("stato-titoli", prec_altro_2=None)), made_up=True)
     keys = {q["key"]: q.get("only_if") for q in r["questions"]}
     assert "prec_altro_2" in keys and not keys["prec_altro_2"], keys
     assert keys.get("prec_altro_3") == ["prec_altro_2"], keys

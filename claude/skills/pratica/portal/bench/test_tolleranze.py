@@ -53,7 +53,7 @@ def values(steps, a):
 
 def preflight(recipe, a):
     steps = STEPS[recipe]
-    return run.preflight(steps, values(steps, a))
+    return run.preflight(steps, values(steps, a), made_up=True)
 
 
 def labels(recipe, a):
@@ -124,7 +124,7 @@ def _():
     for (recipe, name), labels_ in want.items():
         steps = STEPS.get(recipe) or gen.generate(yaml.safe_load((REHEARSALS / recipe / "recipe.yaml").read_text()))
         a = answers(recipe, name)
-        r = run.preflight(steps, values(steps, a))
+        r = run.preflight(steps, values(steps, a), made_up=True)
         assert r["ready"], (name, {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]})
         ls = [gen.norm(p["label"] or "") for p in run.plan(steps, values(steps, a))]
         assert has(ls, "ha rilevanza strutturale") and not has(ls, "non ha rilevanza strutturale"), (name, ls)

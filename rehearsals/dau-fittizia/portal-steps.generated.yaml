@@ -7,7 +7,7 @@ yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client''s name'
 - 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it, with the pratica''s other documents'
-- Pay any bollo and diritti on pagoPA after sending
+- Pay any imposta di bollo as the portal asks
 - Sign and send (Firma e invio); keep the receipt
 asks:
   descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'PROVA NON INVIARE - DAU {{c:identity.last_name}}'}

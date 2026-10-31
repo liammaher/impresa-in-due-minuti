@@ -144,7 +144,11 @@ folder.
 - `files`: each attachment. In this version a run carries its files through the
   conversation, so all of them together must fit in 256 KB (`pane_ok`). When they don't,
   stop: tell the architect in one line that files that size can't go in automatically yet.
-- `yours`: tell the architect now what they'll do at the end.
+  A file's `problem` says what the sportello would refuse: at Napoli's SUE (DD 501/2026) a file
+  not in PDF/A, not signed digitally (a .p7m or the PDF's own signature), or named with spaces,
+  accents or other signs makes the pratica irricevibile. Tell the architect which files and why.
+- `yours`: tell the architect now what they'll do at the end (at Napoli's SUE: the same file
+  rules for their own files, and the diritti paid before sending, to its postal account only).
 
 Only when it says `ready` go on. From here the architect hears nothing more from you until
 the review page, except the login.

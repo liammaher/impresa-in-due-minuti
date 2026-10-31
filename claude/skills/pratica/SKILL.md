@@ -324,7 +324,13 @@ fine lavori, a voltura) are found by their entry id, as above.
      that isn't a CAdES file is a `problem` (not ready: the user signs it again); one signed by
      someone other than the dichiarante, or carrying no codice fiscale, is a `warnings` entry
      (tell the user, it may be right: a technician signs their own relazione). It checks whose
-     name is on the signature, not that the signature holds: the portal does that.
+     name is on the signature, not that the signature holds: the portal does that. A PDF signed
+     in itself (PAdES) is read the same way. At Napoli's SUE (DD 501/2026) every file must also
+     be PDF/A, signed and named with letters, digits and underscores only, or the pratica is
+     irricevibile: a file that isn't is a `problem` saying which (have the user export it as
+     PDF/A, sign it, rename it), and `yours` says the same for their own files and how Napoli
+     takes the diritti (before sending, its postal account only). A rehearsal with made-up
+     files passes `--made-up`: then these are only each file's `filing` and a warning.
    - `yours`: tell the user now what they'll do at the end, so nothing surprises them,
      including a pratica the case needs from another office ("File apart, …": the seismic
      filing at the Genio Civile), which they file themselves.

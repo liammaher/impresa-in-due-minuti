@@ -631,7 +631,7 @@ def _():
     steps = generated("paesaggistica-semplificata-fittizia")
     a = json.loads((REH / "paesaggistica-semplificata-fittizia" / "answers-p6.json").read_text())
     del a["bollo_marche"]
-    r = run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")))
+    r = run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")), made_up=True)
     assert [p["proposal"] for p in r["proposals"] if p["key"] == "bollo_marche"] == ["false"], r["proposals"]
     m = json.loads((REH / "paesaggistica-semplificata-fittizia" / "answers-marche.json").read_text())
     plan = run.plan(steps, run.Values(m, fields=fields, asks=steps.get("asks")))
@@ -654,7 +654,7 @@ def _():
         steps = generated(name)
         assert not any("Systems needing a project" in c.get("else", "") for c in steps["supports"]), name
         v = run.Values(json.loads((REH / name / "answers-impianti.json").read_text()), fields=fields, asks=steps.get("asks"))
-        assert run.preflight(steps, v)["ready"], name
+        assert run.preflight(steps, v, made_up=True)["ready"], name
         labels = [p["label"] or "" for p in run.plan(steps, v)]
         assert any(l.startswith("è soggetto agli obblighi di presentazione del progetto") for l in labels), name
         assert any(l.startswith("Progetto degli impianti radiotelevisivi") for l in labels), name
@@ -670,7 +670,7 @@ def _():
         steps = generated(name)
         a = json.loads((REH / name / answers).read_text()); a.update(change)
         v = run.Values(a, fields=fields, asks=steps.get("asks"))
-        return steps, v, run.preflight(steps, v)
+        return steps, v, run.preflight(steps, v, made_up=True)
     steps, v, r = check("cila-fittizia", "answers-direttore-atti.json")
     assert r["ready"], r
     plan = [(p["label"] or "", str(p.get("value") or "")) for p in run.plan(steps, v)]
