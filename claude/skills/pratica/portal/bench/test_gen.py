@@ -682,10 +682,31 @@ def _():
         labels = [p["label"] for p in run.plan(steps, v)]
         assert "Incaricato della" in labels and "Iscritto all'ordine/collegio" in labels, name
         assert not any((l or "").startswith("che gli altri tecnici incaricati saranno") for l in labels), name
-        assert any("More than one other technician" in u for u in check(name, "answers-altri-tecnici.json", altri_tecnici_uno=False)[2]["unsupported"])
-        assert any("employed by a firm" in u for u in check(name, "answers-altri-tecnici.json", altro_tecnico_dipendente=True)[2]["unsupported"])
+        assert any("More than three other technicians" in u for u in check(name, "answers-altri-tecnici.json", altri_tecnici_quanti="piu di tre")[2]["unsupported"])
     r = check("cila-fittizia", "answers-direttore-atti.json", atti_quanti="piu di due")[2]
     assert any("More than two assents" in u for u in r["unsupported"]), r["unsupported"]
+
+
+@case("other technicians repeat by \"+\" (a, a2, a3), each an employee of a firm or not (ad: its seat is the studio)")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    for name, answers, n in (("cila-fittizia", "answers-altri-tecnici-tre.json", 3), ("scia-fittizia", "answers-altri-tecnici-due.json", 2),
+                             ("pdc-fittizio", "answers-altri-tecnici.json", 2), ("cila-fittizia", "answers-altri-tecnici.json", 1)):
+        steps = generated(name)
+        v = run.Values(json.loads((REH / name / answers).read_text()), fields=fields, asks=steps.get("asks"))
+        r = run.preflight(steps, v)
+        assert r["ready"], (name, r)
+        planned = [p for p in run.plan(steps, v) if "Altri tecnici" in p["section"]]
+        assert sum(p["kind"] == "add" for p in planned) == n - 1, name
+        assert sum(p.get("label") == "Incaricato della" for p in planned) == n, name
+        employed = any(p.get("label") == "Ragione sociale" and p.get("value") == "Impianti Fittizi S.n.c." for p in planned)
+        assert employed == (answers != "answers-altri-tecnici.json" or name == "pdc-fittizio"), name
+    # No other technicians: whether one is an employee is never asked, nor their studio read.
+    steps = generated("cila-fittizia")
+    r = run.preflight(steps, run.Values(json.loads((REH / "cila-fittizia" / "answers-p6.json").read_text()), fields=fields, asks=steps.get("asks")))
+    assert r["ready"] and "altro_tecnico_dipendente" not in json.dumps(r), r
 
 
 @case("the permesso's other kinds: Campania's (quadro a's procedimento ordinario), convenzionato, deroga, variants, art. 36; the piano casa closed by law")

@@ -757,8 +757,9 @@ def preflight(steps, values, urls=None):
         if where in ("supports", "rules", "yours") or (f.get("optional") and tmpl == f.get("value")):
             continue
         if f and tmpl == f.get("value") and "when" in f:
-            w = values.render(f["when"])
-            if w is not None and not truthy(w):
+            # One false word is enough, whatever a later one would say (no other technicians:
+            # whether the second is an employee is never asked).
+            if any(w is not None and not truthy(w) for w in map(values.render, re.findall(r"\{\{.+?\}\}", f["when"]))):
                 continue  # this field isn't filled for this case
         for ref, filters in refs_in(tmpl):
             if ref.startswith("ask."):

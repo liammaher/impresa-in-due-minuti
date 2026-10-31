@@ -101,6 +101,11 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   boxes (its details, its copy) are "copia accatastamento di primo impianto" like the line's
   own, hidden until their radio is picked, and in the crawl only as choices under that box. They
   go by label and `nth`, never by id (2026-10-30).
+- **A block of people repeats by "+"** (the other technicians, as the firms): a dictionary entry's
+  `repeat: N` with `block:`, `firm_when` and `repeat_when` (each later block's condition); `#N` in
+  a field is "" in the first block, then "2", "3" (roles `a`, `a2`; asks `altro_tecnico_...`,
+  `altro_tecnico2_...`). "Alle dipendenze di" opens more than the crawl saw: the firm's REA, seat
+  and legale rappresentante (read 2026-10-31).
 - **A block a tick opens may repeat the labels above it** (h1's structural designer under
   the architect's): fill it by label from its first box (`anchor`, `block: 1`).
 - **Suggestion lists fade out.** A street's list, hidden by its widget, lies over the next
