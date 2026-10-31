@@ -287,7 +287,8 @@ def resolved(recipe, seen=()):
     main pratica's recipe plus the other's part, so a slot or a refusal mapped on one reaches the
     other (2026-10-31: the SCIA's combinations had missed eleven of the SCIA's slots). Later ones
     win key by key; `attachments` (per screen), `supports` and `sections` add up; `asks` and
-    `rules` merge by key; a null drops what an earlier one set."""
+    `rules` merge by key; a null drops what an earlier one set. `answers` merge by key, nulls
+    kept (combo_answers)."""
     parents = recipe.get("extends") or []
     if not parents:
         return recipe
@@ -301,6 +302,27 @@ def resolved(recipe, seen=()):
         merge_recipe(out, resolved(load_yaml(path), seen + (name,)))
     merge_recipe(out, {k: v for k, v in recipe.items() if k != "extends"})
     return out
+
+
+def combo_answers(recipe):
+    """A combination's P6 answers: its main pratica's (the rehearsal it `extends`), changed by the
+    `answers` its parts and the recipe itself set (a null drops one), so the case can't drift
+    from the main pratica's (2026-10-31: written by hand from a diff). None without `answers`."""
+    changes = resolved(recipe).get("answers")
+    if not changes:
+        return None
+    parents = recipe.get("extends") or []
+    mains = [n for n in ([parents] if isinstance(parents, str) else parents) if not n.startswith("parts/")]
+    if len(mains) != 1:
+        raise GenError(f"answers: needs one main rehearsal in extends, not {mains}")
+    out = json.loads((REHEARSALS / mains[0] / "answers-p6.json").read_text())
+    for k, v in changes.items():
+        out.pop(k, None) if v is None else out.__setitem__(k, v)
+    return out
+
+
+def dump_answers(answers):
+    return json.dumps(answers, ensure_ascii=False, indent=1) + "\n"
 
 
 def merge_recipe(out, r):
@@ -318,6 +340,9 @@ def merge_recipe(out, r):
             out[k] = screens
         elif k in ("supports", "sections"):
             out[k] = add(out.get(k), v)
+        elif k == "answers":
+            # A null stays: it drops the main pratica's answer (combo_answers).
+            out[k] = {**(out.get(k) or {}), **v}
         elif k in ("asks", "rules"):
             merged = dict(out.get(k) or {})
             for kk, vv in v.items():
@@ -811,11 +836,17 @@ def main():
     ap.add_argument("recipe", type=Path)
     ap.add_argument("--out", type=Path)
     ap.add_argument("--check", type=Path, help="a hand-written steps file to compare with")
+    ap.add_argument("--answers", action="store_true", help="a combination: also write its answers-p6.json, next to the recipe")
     a = ap.parse_args()
     try:
         steps = generate(load_yaml(a.recipe))
+        answers = combo_answers(load_yaml(a.recipe)) if a.answers else None
     except GenError as e:
         sys.exit(f"gen.py: not generated:\n{e}")
+    if a.answers:
+        if answers is None:
+            sys.exit("gen.py --answers: the recipe and its parts set no `answers`")
+        (a.recipe.parent / "answers-p6.json").write_text(dump_answers(answers))
     if a.out:
         a.out.write_text(dump(steps))
     if a.check:

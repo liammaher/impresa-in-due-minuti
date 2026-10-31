@@ -89,14 +89,14 @@
  "impianto_antincendio": "false",
  "impianto_altro": "false",
  "strumenti_altri": "false",
+ "bollo_marche": false,
+ "paes_variante": false,
  "vincolo": "art 136 and 142",
  "vincolo_136_lettera": "c) e d)",
  "vincolo_136_provvedimento": "D.M. fittizio PROVA NON INVIARE del 01/01/1960",
  "vincolo_142_lettera": "a)",
- "bollo_marche": false,
  "allegato_b": [
   "paes_b1",
   "paes_b3"
- ],
- "paes_variante": false
+ ]
 }

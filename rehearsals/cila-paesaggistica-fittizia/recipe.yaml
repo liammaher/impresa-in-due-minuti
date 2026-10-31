@@ -26,3 +26,11 @@ rules:
 # The combination's attachments screen isn't read yet: the run stops before it.
 after: null
 attachments: null
+# The case: the main pratica's P6 answers, the part's, then these (a null drops one);
+# `gen.py --answers` writes answers-p6.json.
+answers:
+  descrizione: PROVA NON INVIARE - CILA e paesaggistica P6 generato
+  oggetto: 'Manutenzione straordinaria non strutturale in appartamento: demolizione e ricostruzione di due tramezzi interni con nuova distribuzione di cucina e bagno, nuovo bagno, rifacimento degli impianti idrico ed elettrico; installazione di un''unità esterna di climatizzazione sul balcone.'
+  allegato_b:
+  - paes_b7
+  paesaggio: semplificata

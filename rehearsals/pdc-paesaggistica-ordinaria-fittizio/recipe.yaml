@@ -28,3 +28,7 @@ yours:
   - "Once the permesso is issued: collect it (paying the contributo, if due, as quadro f) says), name the structural designer and the direttori dei lavori, and file the comunicazione di inizio lavori with the energy report and the structural filings"
 rules:
   main: napoli/comune/permesso-di-costruire
+# The case: the main pratica's P6 answers, the part's, then these (a null drops one);
+# `gen.py --answers` writes answers-p6.json.
+answers:
+  descrizione: PROVA NON INVIARE - PdC ristrutturazione e ordinaria

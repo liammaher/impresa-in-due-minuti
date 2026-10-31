@@ -28,3 +28,12 @@ yours:
   - "The 30 days before the works may start run from the landscape authorization's release, not from filing (art. 23 c. 3 DPR 380/2001); the contributo, if due, is paid as quadro g) says"
 rules:
   main: napoli/comune/scia-alternativa-pdc
+# The case: the main pratica's P6 answers, the part's, then these (a null drops one);
+# `gen.py --answers` writes answers-p6.json.
+answers:
+  oggetto: Ristrutturazione edilizia con modifica dei prospetti e ampliamento entro il 10% del volume e 100 m³ di un edificio residenziale, in area vincolata (dati inventati per la prova).
+  dettaglio_intervento: Ristrutturazione edilizia con modifica dei prospetti e ampliamento sul retro di 25 m³ (meno del 10% del volume originario); consolidamento strutturale, nuovi impianti elettrico e idrico. Dati inventati per la prova.
+  descrizione: PROVA NON INVIARE - SCIA alt ampliamento e semplificata
+  allegato_b:
+  - paes_b1
+  - paes_b3

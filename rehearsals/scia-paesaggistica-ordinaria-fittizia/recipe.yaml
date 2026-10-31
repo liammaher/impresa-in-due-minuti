@@ -30,3 +30,22 @@ yours:
   - "Sign and send (Firma e invio); keep the receipt"
 rules:
   main: napoli/comune/scia-edilizia
+# The case: the main pratica's P6 answers, the part's, then these (a null drops one);
+# `gen.py --answers` writes answers-p6.json.
+answers:
+  data_inizio_lavori: null
+  contributo_normativa: null
+  scia_cambio_uso: null
+  oggetto: Mutamento di destinazione d'uso di una singola unità nella stessa categoria funzionale, senza opere, in area vincolata (dati inventati per la prova).
+  dettaglio_intervento: Mutamento di destinazione d'uso di una singola unità immobiliare all'interno della stessa categoria funzionale, senza opere, con pergola sul terrazzo soggetta ad autorizzazione paesaggistica ordinaria. Dati inventati per la prova.
+  descrizione: PROVA NON INVIARE - SCIA cambio uso e ordinaria
+  scia_tipo: cambio uso
+  cambio_uso_tipo: unita senza opere stessa categoria
+  scia_onerosa: 'true'
+  contributo_pagamento: in corso d'opera
+  contributo_calcolo: sportello
+  documentazione_calcolo_contributo: rehearsals/scia-fittizia/files/documentazione-calcolo-contributo.pdf
+  intervento: nessuna_opera
+  cambio_uso: stessa_categoria
+  fatti:
+  - uso_ammesso_prg

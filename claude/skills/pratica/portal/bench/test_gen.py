@@ -817,8 +817,20 @@ def _():
                                            "Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)"],
                                     check=True, capture_output=True, text=True).stdout)
     assert len(ops) == 1 and ops[0]["slots"] and ops[0]["also"][0].endswith("(DPR 31/2017 - Comune)") and "PROCURA" in ops[0]["scelte"][0], ops
+    two = json.loads(subprocess.run(cat + ["ops", "sue", "--combo", "a", "Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001",
+                                           "Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)",
+                                           "--combo", "b", "Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001",
+                                           "Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)"],
+                                    check=True, capture_output=True, text=True).stdout)
+    assert [o["name"] for o in two] == ["a", "b"] and two[1]["also"][0].endswith("(art.146 del D.Lgs 42/2004 - Comune)"), two
     bad = subprocess.run(cat + ["import", "-"], input="0" * 64 + "\n{}", capture_output=True, text=True)
     assert bad.returncode and "sha256 differs" in bad.stderr, bad.stderr
+    # A copy with the newline a heredoc adds is the same text: hashed without it.
+    import hashlib
+    body = '{"other": 1}'
+    ok = subprocess.run(cat + ["import", "-"], input=hashlib.sha256(body.encode()).hexdigest() + "\n" + body + "\n",
+                        capture_output=True, text=True)
+    assert ok.returncode == 0, ok.stderr
 
 
 @case("extends: later ones win, attachments and supports add up, asks and rules merge, null drops")
@@ -852,6 +864,21 @@ def _():
             assert r["asks"]["paesaggio"]["default"] == kind and r["rules"]["handles"] == [f"napoli/comune/autorizzazione-paesaggistica-{kind}"], c
     ordinaria = gen.resolved(gen.load_yaml(ROOT / "rehearsals" / "pdc-paesaggistica-ordinaria-fittizio" / "recipe.yaml"))
     assert any(s["label"].startswith("Relazione paesaggistica e documentazione") for s in ordinaria["attachments"]["Gestione degli allegati"])
+
+
+@case("a combination's P6 answers are its main pratica's, its part's and its own: none has drifted (gen.py --answers)")
+def _():
+    import json
+    combos = [p.parent for p in sorted(REH.glob("*/recipe.yaml")) if (gen.load_yaml(p) or {}).get("answers")]
+    assert len(combos) >= 7, combos
+    for d in combos:
+        want = gen.combo_answers(gen.load_yaml(d / "recipe.yaml"))
+        assert json.loads((d / "answers-p6.json").read_text()) == want, f"{d.name}: regenerate with gen.py --answers"
+    # A part's null drops the main pratica's answer; the recipe's own win over the part's.
+    o = gen.combo_answers(gen.load_yaml(REH / "pdc-paesaggistica-ordinaria-fittizio" / "recipe.yaml"))
+    assert "paesaggio" not in o and "assenso_proprietario" not in o and o["titolo"] == "proprietario", o
+    c = gen.combo_answers(gen.load_yaml(REH / "cila-paesaggistica-fittizia" / "recipe.yaml"))
+    assert c["paesaggio"] == "semplificata", c.get("paesaggio")
 
 
 @case("the permesso with its landscape authorization: the asseverazione names the procedure")

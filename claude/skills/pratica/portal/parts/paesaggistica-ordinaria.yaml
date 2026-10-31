@@ -18,3 +18,25 @@ supports:
     else: "The ordinaria's form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose."
   - when: "{{ask.titolo|is_locatario|not}}"
     else: "The ordinaria's form offers only ownership, co-ownership, the condominio's administrator or another real right: a tenant isn't one."
+# The case it adds to the main pratica's P6 answers (a null drops one): a property under art. 136
+# and 142, the client as owner by deed (the form takes no tenant), the relazione as a plain PDF.
+# Each combination's recipe adds its own (`gen.py --answers`).
+answers:
+  paesaggio: null
+  bollo_marche: false
+  vincolo: art 136 and 142
+  vincolo_136_lettera: c) e d)
+  vincolo_136_provvedimento: D.M. fittizio PROVA NON INVIARE del 01/01/1960
+  vincolo_142_lettera: a)
+  titolo: proprietario
+  titolo_esclusivo: true
+  assenso_proprietario: null
+  titolo_atto: rogito
+  atto_notaio: Mario Fittizio
+  atto_notaio_sede: Napoli
+  atto_repertorio: '12345'
+  atti_gravanti: false
+  zona_prg: zona B
+  prg_nta: art. 33
+  paes_interessa: immobile
+  relazione_paesaggistica: rehearsals/scia-fittizia/files/relazione-paesaggistica.pdf
