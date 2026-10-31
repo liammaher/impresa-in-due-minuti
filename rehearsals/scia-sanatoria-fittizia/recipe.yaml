@@ -99,9 +99,10 @@ rules:
   main: napoli/comune/scia-in-sanatoria
   facts: {permesso_per_scelta: "false", sanatoria: "true", parere_esonero: "false"}
 supports:
-  # Works that needed a landscape authorization: their compatibility goes with the art. 36-bis
-  # sanatoria (c. 4), not with the SCIA of works still under way (art. 37 c. 5).
-  - {if: "{{ask.paesaggio|in_semplificata__ordinaria}}", value: "{{ask.sanatoria_caso}}", in: [doppia conformita], else: "In a protected landscape area only the art. 36-bis sanatoria is mapped: the Sportello asks for the binding parere on the works' landscape compatibility (art. 36-bis c. 4)."}
+  # Works already done that needed a landscape authorization: their compatibility goes with the
+  # art. 36-bis sanatoria (c. 4), not with the SCIA of works still under way (art. 37 c. 5). Landscape
+  # works still to come take the authorization with the sanatoria (rehearsals/scia-sanatoria-paesaggistica-*).
+  - {if: "{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}", value: "{{ask.sanatoria_caso}}", in: [doppia conformita], else: "Works already done that needed the landscape authorization are mapped only in the art. 36-bis sanatoria: the Sportello asks for the binding parere on their landscape compatibility (art. 36-bis c. 4). Works still under way whose landscape works are partly done can't have the authorization any more (art. 146 c. 4 D.Lgs. 42/2004): ask the SUE."}
   - value: "{{ask.sanatoria_caso}}"
     in: [in corso, doppia conformita]
     else: "Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione makes the date of the works, the oblazione and the works proposal one radio choice, so it can't state the case in full: ask the SUE. Variants to pre-1977 titles (art. 34-ter) aren't mapped."

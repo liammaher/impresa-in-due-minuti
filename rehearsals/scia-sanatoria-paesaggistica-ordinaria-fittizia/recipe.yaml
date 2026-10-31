@@ -1,0 +1,55 @@
+# A SCIA in sanatoria of works still under way (art. 37 c. 5 DPR 380/2001) with the autorizzazione
+# paesaggistica ordinaria for the works not yet done, in one pratica on Napoli's SUE: the SCIA and
+# the ordinaria selected together in the wizard, the SCIA's sanatoria scelta answered Sì. The
+# landscape authorization can't be given for works already done (art. 146 c. 4 D.Lgs. 42/2004):
+# those go through the art. 36-bis sanatoria alone (rehearsals/scia-sanatoria-fittizia,
+# answers-paesaggio.json). gen.py takes the sections from the catalogue and the order from the
+# combination's crawl with the sanatoria answered Sì
+# (catalogue/F839/sections/sue-combo-scia-sanatoria-paesaggistica-ordinaria.json).
+# Everything else is scia-sanatoria-fittizia's recipe and what the ordinaria adds (parts/paesaggistica-ordinaria.yaml).
+extends: [scia-sanatoria-fittizia, parts/paesaggistica-ordinaria]
+procedure: napoli/comune/scia-in-sanatoria-con-paesaggistica-ordinaria
+title: "SCIA in sanatoria con autorizzazione paesaggistica ordinaria, SUE Napoli (tecnico con procura)"
+comune: F839
+sportello: sue
+crawl: sue-combo-scia-sanatoria-paesaggistica-ordinaria
+operation:
+  - Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)
+  - Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)
+asks:
+  descrizione: {default: "PROVA NON INVIARE - SCIA in sanatoria e paesaggistica {{c:identity.last_name}}"}
+  # The landscape works are still to come: the asseverazione names the ordinaria procedure.
+  sanatoria_paesaggio: {default: "false"}
+yours:
+  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
+  - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
+  - "Name the direttore dei lavori (and, for works on structures, the direttore dei lavori delle strutture)"
+  - "On Allega documenti: the Elaborati richiesti per la sanatoria (stato legittimo, stato di fatto and the comparison), the portal's procura signed by the client, the ordinaria's drawings and photos (signed files only), then everything signed digitally (.p7m)"
+  - "The works under way stop until the SUE says the landscape authorization is in; the facade works start only then"
+  - "Pay the €516 sanction (art. 37 c. 5), the imposta di bollo and the diritti; upload the receipts"
+  - "Sign and send (Firma e invio); keep the receipt"
+rules:
+  main: napoli/comune/scia-in-sanatoria
+supports:
+  # The authorization is only for works not yet done (art. 146 c. 4): a sanatoria of works all done
+  # (art. 36-bis) has none left, and takes the landscape compatibility on its own.
+  - value: "{{ask.sanatoria_caso}}"
+    in: [in corso]
+    else: "With the landscape authorization only works still under way are mapped (art. 37 c. 5): works already done have no works left to authorize (art. 146 c. 4 D.Lgs. 42/2004); their landscape compatibility goes with the art. 36-bis sanatoria alone (c. 4)."
+# The case: the main pratica's P6 answers, the part's, then these (a null drops one);
+# `gen.py --answers` writes answers-p6.json. Interior works begun without the SCIA, the facade
+# redesigned with new openings still to do (beyond Allegato B: the ordinaria).
+answers:
+  oggetto: "SCIA presentata spontaneamente a lavori in corso (art. 37 c. 5 DPR 380/2001) con autorizzazione paesaggistica ordinaria: tramezzi interni, nuovo bagno, impianti; ridisegno del prospetto su strada con nuove aperture ancora da eseguire (dati inventati per la prova)."
+  dettaglio_intervento: "All'interno, lavori iniziati senza SCIA: demolizione e ricostruzione di due tramezzi con nuova distribuzione di cucina e bagno; nuovo bagno; rifacimento degli impianti idrico ed elettrico. In facciata, da eseguire dopo l'autorizzazione paesaggistica: ridisegno del prospetto su strada con due nuove aperture e nuove persiane e ringhiere. Opere non strutturali. Dati inventati per la prova."
+  descrizione: PROVA NON INVIARE - SCIA sanatoria e ordinaria
+  diritti_euro: '151'
+  sanatoria_caso: in corso
+  sanatoria_data: '2026-10-05'
+  sanatoria_estremi: IUV 0000000000000000 (inventato)
+  sanatoria_oblazione: null
+  sanatoria_catasto: invariato
+  sanatoria_catasto_protocollo: null
+  sanatoria_catasto_data: null
+  paesaggio_eseguiti: 'false'
