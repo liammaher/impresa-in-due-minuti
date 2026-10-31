@@ -249,6 +249,15 @@ def _():
         assert "isn't a crawl of these operations together" in str(e)
 
 
+@case("a recipe drops a slot its part adds that its form never opens (the CILA with the ordinaria)")
+def _():
+    labels = lambda name: [f["label"] for f in section(generated(name), "Gestione degli allegati")["fields"]]
+    cila, scia = labels("cila-paesaggistica-ordinaria-fittizia"), labels("scia-paesaggistica-ordinaria-fittizia")
+    assert "Relazione paesaggistica e documentazione per il rilascio" in scia
+    assert "Relazione paesaggistica e documentazione per il rilascio" not in cila
+    assert "Relazione paesaggistica (redatta ai sensi del D.P.C.M" in cila
+
+
 @case("two scelte both keep the sections they add, and the wizard ticks both (voltura with a co-holder)")
 def _():
     steps = generated("voltura-pdc-fittizia")
@@ -875,9 +884,10 @@ def _():
     for d in combos:
         want = gen.combo_answers(gen.load_yaml(d / "recipe.yaml"))
         assert json.loads((d / "answers-p6.json").read_text()) == want, f"{d.name}: regenerate with gen.py --answers"
-    # A part's null drops the main pratica's answer; the recipe's own win over the part's.
+    # A part's null drops the main pratica's answer, its value replaces one (paesaggio, stated since
+    # the CILA's steps don't take the ask's default); the recipe's own win over the part's.
     o = gen.combo_answers(gen.load_yaml(REH / "pdc-paesaggistica-ordinaria-fittizio" / "recipe.yaml"))
-    assert "paesaggio" not in o and "assenso_proprietario" not in o and o["titolo"] == "proprietario", o
+    assert o["paesaggio"] == "ordinaria" and "assenso_proprietario" not in o and o["titolo"] == "proprietario", o
     c = gen.combo_answers(gen.load_yaml(REH / "cila-paesaggistica-fittizia" / "recipe.yaml"))
     assert c["paesaggio"] == "semplificata", c.get("paesaggio")
 

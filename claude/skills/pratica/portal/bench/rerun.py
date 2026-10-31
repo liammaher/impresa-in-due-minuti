@@ -65,8 +65,10 @@ def write_bundle(out, path):
     bundle is a new batch: it clears the tab's results first (fresh.js), or loop.js skips a run
     whose name an earlier batch left there (2026-10-30: a permesso run skipped, unreported)."""
     import hashlib
-    parts = [out / "runner.js"] + sorted((out / "steps").glob("*.js")) + sorted(out.glob("queue-*.js")) + \
-        [out / "fresh.js", out / "loop.js"]
+    # The queue in its own order, by number: a later run is what differs from its procedure's first,
+    # so queue-10 before queue-2 broke a batch of 14 pieces (2026-10-31).
+    queue = sorted(out.glob("queue-*.js"), key=lambda p: int(p.stem.split("-")[1]))
+    parts = [out / "runner.js"] + sorted((out / "steps").glob("*.js")) + queue + [out / "fresh.js", out / "loop.js"]
     text = "\n;\n".join(p.read_text() for p in parts)
     path.write_text(text)
     sha = hashlib.sha256(text.encode()).hexdigest()
@@ -199,10 +201,21 @@ var pvAlready = !!window.pvBatchBusy;  // var: a second run of this script redec
 if (!pvAlready) window.pvBatchRun = (async () => {
   window.pvBatchBusy = true;
   const done = JSON.parse(sessionStorage.getItem("pv-batch") || "[]");
+  // A run that never reached the portal (no page, a busy portal, signed out) says nothing about
+  // its pratica: kept out of the results. Two in a row halt the batch (`halted`): once the portal
+  // stuck in its wizard, each later run failed in about a minute, a new frame each, until the page
+  // was reloaded (2026-10-31: 6 lost). Then: record.js, reload, and a bundle of what's left.
+  let unreached = 0;
+  window.pvBatchHalted = null;
   for (const [name, proc, values] of window.pvBatch || []) {
     if (done.some((d) => d.name === name)) continue;
     __pv.start(proc, values);
     let r; do { r = await __pv.wait(30000); } while (r.result === "running");
+    if (r.result !== "filled" && /^(the page didn't load|the portal stayed busy|signed out)/.test(r.error || "")) {
+      if (++unreached >= 2) { window.pvBatchHalted = `${name}: ${r.error}`; break; }
+      continue;
+    }
+    unreached = 0;
     // moved and loose: the ids that named another box, the labels worth a look (what a gen.py
     // change is checked by). gaps: a stopped run's empty boxes the portal wants (labels only,
     // from its snapshot, which holds no value), so the stop names them without opening the draft.
@@ -223,6 +236,7 @@ pvAlready ? "a batch is already running in this tab: nothing started" : `started
     (a.out / "results.js").write_text("""await new Promise((r) => setTimeout(r, 35000));  // the pane cuts a call at 45 s
 const done = JSON.parse(sessionStorage.getItem("pv-batch") || "[]");
 JSON.stringify({ done: done.length, of: (window.pvBatch || []).length, running: !!window.pvBatchBusy,
+  halted: window.pvBatchHalted || null,
   filled: done.filter((d) => d.result === "filled").length,
   stopped: done.filter((d) => d.result !== "filled").map((d) => [d.name, d.error, d.at && d.at.section, d.gaps || []]),
   moved: done.filter((d) => (d.moved || []).length).map((d) => [d.name, d.moved]),

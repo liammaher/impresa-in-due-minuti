@@ -54,6 +54,7 @@
  "lavori_in_proprio": false,
  "scia_tipo": "manutenzione straordinaria",
  "scia_cambio_uso": "no",
+ "paesaggio": "ordinaria",
  "bene_culturale": "false",
  "area_protetta": "no",
  "idrogeologico": "no",

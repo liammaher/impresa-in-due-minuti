@@ -13,7 +13,8 @@ supports:
 # The case it adds to the main pratica's P6 answers (a null drops one): a property under art. 136
 # and 142, a new authorization. Each combination's recipe adds its works (`gen.py --answers`).
 answers:
-  paesaggio: null
+  # Stated, not left to the ask's default: the CILA's and CIL's steps ask it from the rules table.
+  paesaggio: semplificata
   bollo_marche: false
   paes_variante: false
   vincolo: art 136 and 142

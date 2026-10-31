@@ -20,8 +20,11 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    recipe `extends: [<main pratica's rehearsal>, parts/<the other's part>]` and states only what is
    its own (procedure, title, crawl, operation list, `descrizione`, `yours`, `rules.main`). Later
    ones win key by key; `attachments`, `supports` and `sections` add up; `asks` and `rules` merge;
-   a null drops what came before (`data_inizio_lavori: null`). Then a slot or a refusal mapped on
-   the main pratica reaches its combinations (2026-10-31: the SCIA's had missed eleven slots).
+   a null drops what came before (`data_inizio_lavori: null`); a slot `{label, drop: true}` drops
+   one a part adds that this form never opens (the ordinaria's second relazione slot comes from the
+   SCIA's and the permesso's "Si allega" box: a CILA or CIL has none, 2026-10-31). Then a slot or a
+   refusal mapped on the main pratica reaches its combinations (2026-10-31: the SCIA's had missed
+   eleven slots).
    Its case is `answers:` too: the main pratica's `answers-p6.json` changed by the part's
    `answers` (the protected property) and the recipe's own (the works, `descrizione`), a null
    dropping one; `gen.py RECIPE --answers` writes its `answers-p6.json`, and `bench/test_gen.py`
@@ -246,6 +249,13 @@ the tab's earlier results first: `loop.js` skips a name it finds there, to resum
 A run that stops in ~20 s on "the portal stayed busy" with no section opened is most likely a
 sign-in that expired: the runner's frame lands on the login page (2026-10-30). Since 2026-10-31
 the run says "signed out" instead, and isn't retried.
+A run that never reaches the portal ("the page didn't load", "the portal stayed busy", "signed
+out") is kept out of the results, and two in a row halt the batch (`halted` in results.js): once
+the portal stuck in its wizard after a 10-minute busy run, and each later run, a new frame each,
+failed in about a minute until the page was reloaded (2026-10-31). Then save `record.js`'s output,
+reload, and bundle what's left: a bundle clears the tab's results.
+The queue goes into the bundle by number: each later run of a procedure is what differs from its
+first, so name order (queue-10 before queue-2) broke a batch of 14 pieces (2026-10-31).
 A stopped run lists its `gaps`: the empty boxes the portal wants, by label, from the runner's
 snapshot (no values), so a stop names them without opening the draft (2026-10-31). `--values`
 takes the fixture as it is. After a batch, run `record.js` in the pane and pipe what it prints (names
@@ -257,7 +267,8 @@ the page when it ends.
 
 A crawl batch goes to the pane as one file too: `catalogue.py ops sue --all > ops.json`, then
 `catalogue.py pane <dir> --bundle ~/Downloads/pv-<name>.js --ops ops.json [--fresh]` (`--fresh`
-crawls them again, though stored). In the pane: `pick.js` (the person picks the file once; it
+crawls them again, though stored, and forgets the known sections' fingerprints, so every section
+is read again: about 8 minutes for a combination, against 2 when its sections are known). In the pane: `pick.js` (the person picks the file once; it
 stores and runs wizard.js and crawl.js and starts the batch on the scratch draft, "PROVA NON
 INVIARE - catalogo sue"), then `status.js` until `done`; then, with the person's yes, `export.js`
 saves the results to Downloads for `catalogue.py import`. The pane's storage also holds the SUAP
@@ -270,6 +281,15 @@ A combination (two operations in one pratica) is one op: `catalogue.py ops sue -
 OTHER` (labels as in `sue-wizard.json`) tries only the procura scelta, as recipes take it, and reads
 the attachments screen on the way (crawl.js `also`, `scelte`, `slots`); repeat `--combo` for
 several in one batch. `import` keeps the operations and adds the main one's answer-dependent slots.
+A main pratica that answers a wizard's Si/No (the SCIA in sanatoria) needs a crawl with that answer
+too: `--scelta "<procura>" --scelta "<the Si/No question>"` (both: it replaces the default), else
+gen.py says the crawl "isn't a crawl of these operations together", missing the section the Sì
+adds (`sue-combo-scia-sanatoria-paesaggistica-*`, 2026-10-31). The slots it reads tick only the
+checkboxes, so a Si/No's own slots come from the main pratica's recipe.
+Once a batch is done and the tab still has wizard.js and crawl.js, a small second one starts from
+the page without a bundle: `crawl:batch` set to its ops, then `__crawl.batch(opts)`, the known
+fingerprints kept (2026-10-31: the two SCIA in sanatoria combinations). Save the first batch's
+results before, or name all of them in export.js: it reads the ops of `crawl:batch`.
 A batch whose sections were all seen before is small: `print.js` prints it with its sha256, and
 `catalogue.py import -` refuses a copy that arrived changed (no download to ask for), trailing
 newlines aside.

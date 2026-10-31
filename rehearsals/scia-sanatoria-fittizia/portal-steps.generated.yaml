@@ -397,11 +397,12 @@ asks:
   piano_planovolumetrico: {group: fatti, type: yes_no, item: 'La nuova costruzione o la ristrutturazione urbanistica è disciplinata da un piano attuativo con precise disposizioni plano-volumetriche dichiarate
       dal Comune, o (per una nuova costruzione) è in diretta esecuzione di uno strumento urbanistico generale che le contiene?'}
 supports:
-- if: '{{ask.paesaggio|in_semplificata__ordinaria}}'
+- if: '{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}'
   value: '{{ask.sanatoria_caso}}'
   in:
   - doppia conformita
-  else: 'In a protected landscape area only the art. 36-bis sanatoria is mapped: the Sportello asks for the binding parere on the works'' landscape compatibility (art. 36-bis c. 4).'
+  else: 'Works already done that needed the landscape authorization are mapped only in the art. 36-bis sanatoria: the Sportello asks for the binding parere on their landscape compatibility (art. 36-bis
+    c. 4). Works still under way whose landscape works are partly done can''t have the authorization any more (art. 146 c. 4 D.Lgs. 42/2004): ask the SUE.'
 - value: '{{ask.sanatoria_caso}}'
   in:
   - in corso

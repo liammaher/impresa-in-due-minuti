@@ -23,6 +23,11 @@ yours:
   - "Pay the {{ask.diritti_euro}} € diritti and the bollo before sending, and attach the receipts"
   - "The works start only once the SUE says the landscape authorization is in: the start date is the earliest"
   - "Sign and send (Firma e invio); keep the receipt"
+attachments:
+  Gestione degli allegati:
+    # The ordinaria's second relazione slot opens from the SCIA's and the permesso's asseverazione
+    # ("Si allega la relazione paesaggistica e la documentazione"): this form has no such box.
+    - {label: Relazione paesaggistica e documentazione per il rilascio, drop: true}
 rules:
   main: napoli/comune/cil-opere-temporanee
 # The case: the main pratica's P6 answers, the part's, then these (a null drops one);
@@ -33,4 +38,3 @@ answers:
   data_inizio_lavori: '2027-02-01'
   data_fine_prevista: '2027-07-20'
   dettaglio_intervento: "Modulo prefabbricato di 60 m² appoggiato su piedini regolabili senza fondazioni nel giardino condominiale, per 170 giorni; rimozione integrale entro il 20/07/2027 con ripristino del prato. Dati inventati per la prova."
-  paesaggio: ordinaria

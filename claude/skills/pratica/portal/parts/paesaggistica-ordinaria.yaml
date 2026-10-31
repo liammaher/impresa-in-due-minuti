@@ -10,7 +10,8 @@ attachments:
   Gestione degli allegati:
     # The relazione paesaggistica (DPCM 12/12/2005) takes a plain PDF, and the asseverazione's
     # "Si allega la relazione paesaggistica e la documentazione" adds a second, required slot
-    # for it (read with the SCIA 2026-10-29 and the permesso 2026-10-31).
+    # for it (read with the SCIA 2026-10-29 and the permesso 2026-10-31). A CILA or a CIL has no
+    # such box, so its recipe drops that slot (`drop: true`).
     - {kind: file, label: Relazione paesaggistica (redatta ai sensi del D.P.C.M, value: "{{ask.relazione_paesaggistica}}"}
     - {kind: file, label: Relazione paesaggistica e documentazione per il rilascio, value: "{{ask.relazione_paesaggistica}}", on_page: true}
 supports:
@@ -22,7 +23,8 @@ supports:
 # and 142, the client as owner by deed (the form takes no tenant), the relazione as a plain PDF.
 # Each combination's recipe adds its own (`gen.py --answers`).
 answers:
-  paesaggio: null
+  # Stated, not left to the ask's default: the CILA's and CIL's steps ask it from the rules table.
+  paesaggio: ordinaria
   bollo_marche: false
   vincolo: art 136 and 142
   vincolo_136_lettera: c) e d)
