@@ -111,6 +111,94 @@ def answers_carry_into_preflight():
                 assert name in r["answers"], (r["pratica"], name)
 
 
+def as_a_conversation():
+    """Each decided case asked as a person would answer it: the works, then one reply to
+    everything the second message shows (the checklist as the items ticked). It ends where
+    the case does, and nothing is handed on that the person wasn't shown."""
+    first = next(iter(T["facts"]))
+    for facts, d in LEAVES:
+        if first not in facts or d["refused"] or not d["main"]:
+            continue
+        second = route.route(TABLE, {first: facts[first]}, REHEARSALS)
+        shown = {first} | {q["key"] for q in second["questions"]} | {i["key"] for q in second["questions"]
+                                                                      for i in q.get("items", [])}
+        assert set(facts) - {first} <= shown, (facts, shown)
+        reply = {first: facts[first], "fatti": [k for k, v in facts.items() if v is True]}
+        reply |= {k: v for k, v in facts.items() if T["facts"][k]["type"] != "yes_no"}
+        r = route.route(TABLE, reply, REHEARSALS)
+        direct = route.route(TABLE, facts, REHEARSALS)
+        assert (r["pratica"], r["unsupported"]) == (direct["pratica"], direct["unsupported"]), (facts, r)
+        gates = {x["key"]: x.get("only_if", []) for q in second["questions"] for x in [q] + q.get("items", [])}
+        for k in r["answers"]:
+            assert k not in T["facts"] or k in shown, (facts, k)
+            # an item under a gate left unticked was never answered: never handed on as a no
+            unticked_gate = any(g not in reply["fatti"] for g in gates.get(k, []))
+            assert not (k in facts and k not in reply["fatti"] and unticked_gate
+                        and T["facts"][k]["type"] == "yes_no" and k not in reply), (facts, k)
+
+
+def wrong_answers():
+    """Asked again with why when the case needs them; malformed ones refused, never a crash."""
+    base = {"intervento": "manutenzione_straordinaria", "cambio_uso": "no", "paesaggio": "no"}
+    r = route.route(TABLE, {**base, "fatti": ["intervento"]}, REHEARSALS)  # not a checklist item
+    assert {q["key"]: q for q in r["questions"]}["fatti"]["error"], r
+    r = route.route(TABLE, {**base, "fatti": [["x"]]}, REHEARSALS)
+    assert {q["key"]: q for q in r["questions"]}["fatti"]["error"], r
+    r = route.route(TABLE, {**base, "fatti": [], "strutture": "boh"}, REHEARSALS)  # needed: asked again
+    items = {i["key"]: i for q in r["questions"] for i in q.get("items", [])}
+    assert not r["routed"] and items["strutture"]["error"], r
+    r = route.route(TABLE, {**base, "fatti": [], "demolizione_zona_a": "boh"}, REHEARSALS)  # not needed: dropped
+    assert r["pratica"] == "cila-fittizia" and "demolizione_zona_a" not in r["answers"], r
+    # Ticked after a wrong answer of its own: the tick is the answer.
+    r = route.route(TABLE, {**base, "fatti": ["sanatoria"], "sanatoria": "forse"}, REHEARSALS)
+    assert r["pratica"] == "cila-fittizia" and r["asked_again"][0]["fits"] == ["in corso", "realizzato"], r
+    r = route.route(TABLE, {"intervento": {"a": 1}}, REHEARSALS)
+    assert r["questions"][0]["error"], r
+    r = route.route(TABLE, {"fatti": ["strutture"]}, REHEARSALS)  # a checklist before the works: read nothing
+    assert [q["key"] for q in r["questions"]] == ["intervento"], r
+    try:
+        route.route(TABLE, [], REHEARSALS)
+    except run.StepError:
+        pass
+    else:
+        raise AssertionError("a list was taken for answers")
+
+
+def gated_items_stay_unknown():
+    """An item shown only under another (the bene culturale, under the sanatoria) is never
+    taken for a no while that one is unticked: the form reads it (the Soprintendenza's
+    tutela), so its pre-flight asks it. Nor an item the checklist didn't show (the sanatoria
+    answered no before it)."""
+    case = {"intervento": "ristrutturazione", "cambio_uso": "no", "paesaggio": "no"}
+    second = route.route(TABLE, {"intervento": "ristrutturazione"}, REHEARSALS)
+    items = {i["key"]: i for q in second["questions"] for i in q.get("items", [])}
+    assert items["bene_culturale"]["only_if"] == ["sanatoria"], items["bene_culturale"]
+    r = route.route(TABLE, {**case, "fatti": []}, REHEARSALS)
+    assert r["pratica"] == "scia-fittizia" and "bene_culturale" not in r["answers"], r
+    r = route.route(TABLE, {**case, "fatti": ["sanatoria"]}, REHEARSALS)
+    assert r["answers"].get("bene_culturale") is False or not r["routed"], r
+    r = route.route(TABLE, {**case, "sanatoria": False, "fatti": []}, REHEARSALS)
+    assert "bene_culturale" not in r["answers"], r
+
+
+def own_words_kept_only_if_they_agree():
+    """cila_stato given by the person is kept when it says what the facts say, else asked
+    again with what was given, never overwritten."""
+    base = {"intervento": "manutenzione_straordinaria", "cambio_uso": "no", "paesaggio": "no"}
+    r = route.route(TABLE, {**base, "fatti": ["sanatoria"], "cila_stato": "in corso"}, REHEARSALS)
+    assert r["answers"]["cila_stato"] == "in corso" and not r["asked_again"], r
+    for given in ("da iniziare", "bogus"):
+        r = route.route(TABLE, {**base, "fatti": ["sanatoria"], "cila_stato": given}, REHEARSALS)
+        assert "cila_stato" not in r["answers"] and r["asked_again"][0]["given"] == given, r
+
+
+def missing_answers_file():
+    import subprocess
+    p = subprocess.run([sys.executable, "-I", str(HERE.parent / "route.py"), "--table", TABLE, "--answers",
+                        "/nonexistent/facts.json"], capture_output=True, text=True)
+    assert p.returncode == 1 and p.stderr.startswith("stopped:"), p.stderr
+
+
 def cila_reads_sanatoria_its_way():
     """The CILA reads `sanatoria` from cila_stato: one option fits "no", two fit "yes"."""
     base = {"intervento": "manutenzione_straordinaria", "cambio_uso": "no", "paesaggio": "no", "fatti": []}
@@ -208,7 +296,9 @@ def plugin_layout():
 
 
 def main():
-    tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, cila_reads_sanatoria_its_way,
+    tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, as_a_conversation,
+             wrong_answers, gated_items_stay_unknown, own_words_kept_only_if_they_agree, missing_answers_file,
+             cila_reads_sanatoria_its_way,
              rehearsal_cases_come_home, asks_as_the_table_asks, refusals_say_why, apart_is_the_persons,
              one_steps_file_per_combination, plugin_layout]
     for t in tests:

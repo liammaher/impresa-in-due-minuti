@@ -86,34 +86,41 @@ def _index(table, root):
     return out
 
 
-def shown(t, answers):
-    """The facts asked so far: the first alone, then those the table needs once it is known."""
-    first = next(iter(t["facts"]))
-    v = rules.fact_value(t["facts"][first], answers[first]) if answers.get(first) is not None else None
-    return {first} | (set(rules.decide(t, {first: v})["ask"]) if v is not None else set())
-
-
 def read_facts(t, answers):
-    """The facts answered, and why an answer doesn't fit. A yes/no asked in the checklist and
-    not answered on its own is ticked or not in answers["fatti"]."""
+    """The facts answered, and why an answer doesn't fit. A yes/no not answered on its own is
+    ticked or not in answers["fatti"]: ticked is yes, and unticked is no only for an item the
+    checklist could have shown, one the table still needs once the other answers are in (it
+    needs no more as answers come: the checklist showed these and maybe others, never fewer),
+    and not one shown only under an item left unticked (`only_if`: never answered). Another
+    unticked item stays unknown, for the steps file to ask if it reads it. If the first
+    answer changes, the checklist is asked again (SKILL.md): it showed another case's items."""
     facts, errors = {}, {}
-    ticked = answers.get(GROUP)
-    if ticked is not None and (not isinstance(ticked, list) or set(ticked) - set(t["facts"])):
-        errors[GROUP] = "answer with a list of the keys of the items that apply ([] for none)"
-        ticked = None
-    asked = shown(t, answers)
     for name, fact in t["facts"].items():
         v = answers.get(name)
-        if v is None and fact["type"] == "yes_no" and isinstance(ticked, list) and name in asked:
-            v = name in ticked
         if v is None:
             continue
-        fv = rules.fact_value(fact, v)
+        fv = rules.fact_value(fact, v) if isinstance(v, (str, bool, int, float)) else None
         if fv is None:
             errors[name] = ("answer with one of: " + ", ".join(fact["values"])) if fact["type"] == "choice" \
                 else f"answer with a {'yes or no' if fact['type'] == 'yes_no' else fact['type']}"
         else:
             facts[name] = fv
+    items = {n for n, f in t["facts"].items() if f["type"] == "yes_no"}
+    ticked = answers.get(GROUP)
+    if ticked is not None and (not isinstance(ticked, list) or not all(isinstance(x, str) for x in ticked)
+                               or set(ticked) - items):
+        errors[GROUP] = "answer with a list of the keys of the items that apply ([] for none)"
+        ticked = None
+    # The checklist comes after the first fact: before it, nothing was shown.
+    if isinstance(ticked, list) and next(iter(t["facts"])) in facts:
+        before = dict(facts)
+        could = set(rules.decide(t, before)["ask"])
+        for name in sorted(items - set(facts)):
+            if name in ticked:
+                facts[name] = True
+                errors.pop(name, None)  # its own answer was wrong; the tick is the answer
+            elif name in could and name not in errors and all(g in ticked for g in hangs(t, before, name, could)):
+                facts[name] = False
     return facts, errors
 
 
@@ -135,10 +142,12 @@ def questions(t, ask, errors, checklist=CHECKLIST, facts=None):
     for name in ask:
         fact = t["facts"][name]
         extra = {"how": fact["how"]} if "how" in fact else {}
-        if facts is not None and hangs(t, facts, name, ask):
-            extra["only_if"] = hangs(t, facts, name, ask)
+        under = hangs(t, facts, name, ask) if facts is not None else []
+        if under:
+            extra["only_if"] = under
         if fact["type"] == "yes_no":
-            items.append({"key": name, "item": fact["question"]} | extra)
+            items.append({"key": name, "item": fact["question"]} | extra
+                         | ({"error": errors[name]} if name in errors else {}))
             continue
         q = {"key": name, "type": fact["type"], "question": fact["question"]} | extra
         if fact["type"] == "choice":
@@ -164,18 +173,24 @@ def carry(t, steps, facts, answers):
             again.append({"fact": name, "reads": refs})
             continue
         k, a = refs[0], asks[refs[0]]
-        if k in answers and k not in t["facts"]:
-            out[k] = answers[k]  # answered in its own words already
+        gives = lambda o: rules.fact_value(fact, run.Values({**out, k: o}, fields={}, asks=asks).render(tmpl) or "")
+        given = answers.get(k) if k not in t["facts"] else None
+        if given is not None:
+            # Answered in its own words already: kept if it fits its ask and says the same,
+            # else asked again, never replaced by what the facts say.
+            if run.check_answer(a, given) is None and gives(given) == want:
+                out[k] = given
+            else:
+                again.append({"fact": name, "ask": k, "given": given,
+                              "why": f"doesn't fit, or says otherwise than the answer to {name}"})
             continue
         if a.get("type") not in ("choice", "yes_no"):
             if tmpl.strip() == "{{ask.%s}}" % name:
-                out[k] = answers[name]
+                out[k] = answers.get(name, want)
             else:
                 again.append({"fact": name, "ask": k, "fits": []})
             continue
-        options = a.get("options") or [True, False]
-        fits = [o for o in options
-                if rules.fact_value(fact, run.Values({**out, k: o}, fields={}, asks=asks).render(tmpl) or "") == want]
+        fits = [o for o in a.get("options") or [True, False] if gives(o) == want]
         if len(fits) == 1:
             out[k] = fits[0]
         else:
@@ -187,8 +202,10 @@ def route(table, answers, root=None):
     t = rules.table(table)
     root = root or default_dir()
     idx = index(table, root)
-    report = {"routed": False, "questions": [], "unsupported": [], "steps": None, "pratica": None,
-              "answers": {}, "asked_again": [], "apart": []}
+    report = {"routed": False, "questions": [], "unsupported": [], "steps": None, "pratica": None, "main": None,
+              "also": [], "answers": {}, "asked_again": [], "apart": []}
+    if not isinstance(answers, dict):
+        raise run.StepError("answers: a JSON object, each fact's answer under its key")
     facts, errors = read_facts(t, answers)
     d = rules.decide(t, facts)
     if d["conflict"]:
@@ -196,14 +213,11 @@ def route(table, answers, root=None):
     if d["refused"]:  # as pre-flight: a refusal ends the case, whatever is still unknown
         report["unsupported"] = [x["reason"] for x in d["refused"]]
         return report
+    # A wrong answer is asked again only if the case needs it: one it doesn't is dropped,
+    # and a checklist answered wrong leaves its items unknown, so they are asked again whole.
     first = next(iter(t["facts"]))
-    if d["ask"] or errors:
-        if first in errors or (d["ask"] and d["ask"][0] == first):
-            ask = {first}  # which of the others matter depends on it
-        else:
-            ask = set(d["ask"]) | set(errors) - {GROUP}
-            if GROUP in errors:  # a checklist answered wrong is asked again whole
-                ask |= {f for f in shown(t, answers) if t["facts"][f]["type"] == "yes_no"}
+    if d["ask"]:
+        ask = {first} if d["ask"][0] == first else set(d["ask"])  # which others matter depends on it
         # The recipes word the checklist (their rules.question, gen.py's groups.fatti).
         group = next((s["groups"][GROUP]["question"] for _, _, s in idx.values() if GROUP in s.get("groups", {})),
                      CHECKLIST)
@@ -244,7 +258,7 @@ def main():
     try:
         answers = json.loads(a.answers.read_text()) if a.answers else {}
         report = route(a.table, answers, a.pratiche)
-    except (run.StepError, ValueError) as e:
+    except (run.StepError, ValueError, OSError) as e:  # bad JSON is a ValueError; no file, an OSError
         print(f"stopped: {e}", file=sys.stderr)
         return 1
     print(json.dumps(report, indent=2, ensure_ascii=False))

@@ -281,9 +281,12 @@ When there is one, follow it instead of exploring the portal.
 
 **Works needing a building title (SUE: CILA, SCIA, permesso, a sanatoria, a landscape
 authorization) are routed first**, because the case's facts decide which of these it is,
-not its name. `route.py --table sue-napoli [--answers <facts.json>]` (portal/) asks the rules
-table's facts as pre-flight asks its questions: the works first, alone, then the rest in one
-message (the yes/no ones as a checklist, `fatti`). Once the table decides, it prints the one
+not its name. `~/.cache/pratica-portal/venv/bin/python -I ~/.claude/skills/pratica/portal/route.py
+--table sue-napoli [--answers <facts.json>]` asks the rules table's facts as pre-flight asks its
+questions (the same format; write the replies into facts.json and run it again): the works
+first, alone, then the rest in one message (the yes/no ones as a checklist, `fatti`). If the
+answer about the works changes, keep only it and run again: the checklist was another case's.
+Once the table decides, it prints the one
 steps file that files the case (`steps`) and the `answers` to start its answers file with,
 so pre-flight doesn't ask them again (`asked_again`: the facts that steps file asks its own
 way). `unsupported` (refused by the table, no pratica needed, or a combination not mapped
