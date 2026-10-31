@@ -37,6 +37,11 @@ def states():
     """A box a run took, one only the dictionary maps, one nothing maps."""
     st, who = state("scia", "c) Qualificazione", "senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di singola unità immobiliare all")
     assert st == "case" and "scia-fittizia" in who, (st, who)
+    # The same box once a run of a case that ticks it is recorded as filled (runs.json).
+    bx = sb.boxes("scia")
+    box = next(b for b in bx if b["section"].startswith("c) Qualificazione") and sb.norm(b["label"]).startswith(sb.norm("senza opere (o con opere")))
+    runs = {who for *_, who in TICKS}
+    assert sb.status(box, TICKS, MAPPED, LEAVES, bx, runs)[0] == "filled"
     # Works finished in part: the fine lavori's recipe refuses it (its planimetria isn't mapped).
     assert state("fine-lavori", "", "in forma parziale")[0] == "mapped"
     assert state("scia", "Dati catastali", "Nuovo Catasto Terreni")[0] == "none"

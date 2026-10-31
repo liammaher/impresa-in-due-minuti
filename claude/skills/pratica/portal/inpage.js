@@ -939,9 +939,11 @@
   // (each visible box, its label, whether it holds anything) without reading what it holds.
   function look() {
     if (!frame || !doc()) return null;
-    const label = (e) => {
-      try { return scrub(norm(win().eval(`(${steps.label_js})`)(e)[0] || "")).slice(0, 80); } catch (x) { return ""; }
-    };
+    // A box the portal says is required reads "Il valore è obbligatorio" first: its label is
+    // the text after that, and it says it's required.
+    const texts = (e) => { try { return win().eval(`(${steps.label_js})`)(e); } catch (x) { return []; } };
+    const label = (e) => scrub(norm(texts(e).find((t) => norm(t) && !MESSAGE.test(norm(t))) || "")).slice(0, 80);
+    const flagged = (e) => [e.title, ...texts(e)].some((t) => MESSAGE.test(norm(t)));
     const boxes = [...doc().querySelectorAll("input, select, textarea")]
       .filter((e) => e.type !== "hidden" && (e.type === "file" || shown(e))).slice(0, 150)
       .map((e) => {
@@ -953,6 +955,7 @@
         const slot = kind === "file" || /file_dropzone/.test(e.id) ? slotOf(e) : null;
         return { id: e.id.replace(/^.*dynaForm:/, ""), label: slot ? scrub(norm(slot.title)).slice(0, 80) : label(e), kind, state,
           ...(kind === "select" ? { options: e.options.length } : {}),
+          ...(!slot && flagged(e) ? { required: true } : {}),
           ...(slot && slot.accepts.length ? { accepts: slot.accepts.join(";"), required: slot.required } : {}) };
       });
     const open = doc().querySelector("li#corrente");

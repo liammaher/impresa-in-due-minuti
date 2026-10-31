@@ -463,7 +463,8 @@ gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the 
 tolerances, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
 the same bytes as the library's), `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
 route.py on every case the SUE table decides (it prints the combinations not mapped yet). On the real portal, `bench/rerun.py` reruns the rehearsals
-in the pane after a runner, dictionary or gen.py change (portal/README.md).
+in the pane after a runner, dictionary or gen.py change (portal/README.md); `--record` files the results in each
+rehearsal's `runs.json`, which schema_branches.py counts as filled on the portal.
 
 ```go
 // Pattern: create temp vault, run test

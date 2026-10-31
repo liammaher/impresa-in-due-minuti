@@ -229,14 +229,17 @@ def sue_completeness(reh, status):
     recipe's own and those its sections bring from the dictionary (gen.py adds them)."""
     refusals = {}  # message -> recipes
     per = {}
+    slots = {}  # (section, label) -> recipes: a ticked "si allega" with no slot under its condition
     for name, v in reh.items():
         if v["sportello"] != "sue":
             continue
         text = (REHEARSALS / name / "recipe.yaml").read_text()
         msgs = [m.group(1) for m in re.finditer(r'else:\s*"((?:[^"\\]|\\.)*)"', text)]
         try:
-            msgs += [c["else"] for c in gen.generate(gen.load_yaml(REHEARSALS / name / "recipe.yaml"))["supports"]
-                     if "else" in c and c["else"] not in msgs]
+            steps = gen.generate(gen.load_yaml(REHEARSALS / name / "recipe.yaml"))
+            msgs += [c["else"] for c in steps["supports"] if "else" in c and c["else"] not in msgs]
+            for sec, label, _ in gen.unslotted(steps):
+                slots.setdefault((sec, label), set()).add(name)
         except gen.GenError:
             pass  # not fillable yet: the recipe's own refusals only
         for msg in msgs:
@@ -251,12 +254,17 @@ def sue_completeness(reh, status):
         "", "Measured today:", "",
         f"- Level 1: {len(fill)} of {len(sue)} pratiche fully in the dictionary" + (f" ({short} not)." if short else "."),
         f"- Level 2: **{sum(per.values())} refusals across {len(per)} recipes**, {len(refusals)} distinct messages.",
-        "- Levels 3 to 5: not measured yet (see the open items).", "",
+        f"- Level 3, in part: **{len(slots)} ticked \"si allega\" boxes with no attachment slot** under their"
+        " condition (listed below): each may add a required slot a run would stop on.",
+        "- Levels 4 and 5: not measured yet (see the open items).", "",
         "| Recipe | Refusals left |", "|---|---:|"]
     out += [f"| `{n}` | {c} |" for n, c in sorted(per.items(), key=lambda kv: (-kv[1], kv[0]))]
     out += ["", "Refusals, by how many recipes carry them (the most shared are the cheapest to close once):", ""]
     for msg, rs in sorted(refusals.items(), key=lambda kv: (-len(kv[1]), kv[0])):
         out.append(f"- {len(rs)}×: {msg[:170]}")
+    out += ["", "Ticked \"si allega\" boxes with no attachment slot under their condition (gen.py `unslotted`; "
+            "some only in cases a recipe refuses, some with no slot on the portal: a run tells):", ""]
+    out += [f"- {len(rs)}×: {sec[:50]}: {label[:100]}" for (sec, label), rs in sorted(slots.items(), key=lambda kv: (-len(kv[1]), kv[0]))] or ["- none"]
     out += ["", "Open items no recipe shows:", ""] + [f"- {x}" for x in OPEN_BEYOND] + [""]
     return out
 

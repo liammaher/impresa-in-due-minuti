@@ -1,0 +1,26 @@
+[
+ {
+  "date": "2026-10-30",
+  "answers": "answers-collaudo.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-estremi.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-parziale.json",
+  "result": "filled",
+  "from": "README"
+ }
+]

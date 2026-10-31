@@ -1,0 +1,38 @@
+[
+ {
+  "date": "2026-10-31",
+  "answers": "answers-altri-tecnici-tre.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-altri-tecnici.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-altri-tecnici.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-direttore-atti.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-tolleranze-autorizzazione.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-tolleranze-minore.json",
+  "result": "filled",
+  "from": "README"
+ }
+]

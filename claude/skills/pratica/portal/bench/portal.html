@@ -11,7 +11,8 @@
      an attachments slot the portal says is required, taking only signed files (or plain ones);
      ?off=1 switches Impresa esecutrice off, greyed until a choice the steps don't make; ?deroga=1
      adds two tick boxes, each with a box of no text of its own beside it, titled "(specificare)",
-     as the permesso's deroga draws them: the cell before it is the tick box's label. -->
+     as the permesso's deroga draws them: the cell before it is the tick box's label; ?req=1 adds
+     an empty box the portal flags, its title and cell "Il valore è obbligatorio". -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -54,6 +55,12 @@ if (location.search.includes("deroga=1")) {
       `<td><input type="text" title="(specificare)" id="form:r5c2:dynaForm:${k}_txt"></td>`;
     document.querySelector("#tecnici + table").tBodies[0].append(tr);
   }
+}
+if (location.search.includes("req=1")) {
+  const tr = document.createElement("tr");
+  tr.innerHTML = '<td><label class="labelDynaFormControl">Ragione sociale</label></td><td><input type="text" ' +
+    'id="form:r6c1:dynaForm:rs_txt" title="Il valore è obbligatorio"><span class="error-message-text">Il valore è obbligatorio</span></td>';
+  document.querySelector("#tecnici + table").tBodies[0].append(tr);
 }
 const slot = new URLSearchParams(location.search).get("slot");
 if (slot) {

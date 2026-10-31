@@ -1,0 +1,14 @@
+[
+ {
+  "date": "2026-10-30",
+  "answers": "answers-in-corso.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "from": "README"
+ }
+]

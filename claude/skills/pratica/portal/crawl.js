@@ -127,6 +127,21 @@
     return out;
   }
   const key = (f) => `${f.kind}|${norm(f.label).slice(0, 90)}|${norm(f.context || "").slice(0, 40)}`;
+  // What `now` shows beyond `before`, counted per key: a revealed block often repeats labels
+  // above it (an employer's "Via, Piazza", "N.", "Cognome"), and those are new boxes too. Of a
+  // key's extra boxes, those with an id `before` didn't have, else the last ones.
+  function revealed(before, now) {
+    const had = new Map(), ids = new Set(before.map((f) => f.id));
+    for (const f of before) had.set(key(f), (had.get(key(f)) || 0) + 1);
+    const pick = new Set();
+    for (const k of new Set(now.map(key))) {
+      const group = now.filter((f) => key(f) === k), extra = group.length - (had.get(k) || 0);
+      if (extra <= 0) continue;
+      const fresh = group.filter((f) => !ids.has(f.id));
+      (fresh.length >= extra ? fresh.slice(-extra) : group.slice(-extra)).forEach((f) => pick.add(f));
+    }
+    return now.filter((f) => pick.has(f));
+  }
 
   // The choices a person makes in this state: radios and checkboxes not yet set, and the
   // options of a short dropdown. Statements in the person's name are left alone.
@@ -191,10 +206,10 @@
   async function explore(path, before, depth, out) {
     for (const c of path) await apply(c);
     const now = snap();
-    const seen = new Set(before.map(key));
-    const reveals = now.filter((f) => !seen.has(key(f)));
+    const reveals = revealed(before, now);
     const keep = new Map(before.map((f) => [key(f), f.id]));
-    const moved = now.filter((f) => keep.has(key(f)) && keep.get(key(f)) !== f.id).map((f) => [keep.get(key(f)), f.id]);
+    const fresh = new Set(reveals);  // a new box repeating a label above isn't that box moved
+    const moved = now.filter((f) => !fresh.has(f) && keep.has(key(f)) && keep.get(key(f)) !== f.id).map((f) => [keep.get(key(f)), f.id]);
     // What the choice hides: fields of `before` with no counterpart now (counted per key).
     const left = new Map();
     for (const f of now) left.set(key(f), (left.get(key(f)) || 0) + 1);
@@ -460,6 +475,7 @@
   }
 
   window.__crawl = {
+    revealed, // for bench/test_inpage.py
     // The frame of the page's own run (or of a run that ended): never one already removed.
     slots: () => { if (!frame || !frame.isConnected) frame = document.querySelector("iframe"); return slots(); },
     slotsOf,

@@ -224,6 +224,18 @@ def ticked():
     return out
 
 
+def filled():
+    """{(rehearsal, answers file)} with a filled run on the portal recorded in its runs.json
+    (bench/rerun.py --record writes them; earlier runs only where a README row names the case)."""
+    out = set()
+    for d, _ in sue_steps():
+        f = d / "runs.json"
+        for r in json.loads(f.read_text()) if f.is_file() else []:
+            if r.get("result") == "filled":
+                out.add((d.name, r["answers"]))
+    return out
+
+
 def entries():
     """[(section, id, kind, label, rehearsal)] for every field any SUE steps file can tick or
     choose, whatever its condition."""
@@ -260,12 +272,13 @@ def left():
     return out
 
 
-def status(box, ticks, mapped, leaves, peers):
-    """("case", rehearsals) when a ready case ticks it; "mapped" when a steps file can, under a
+def status(box, ticks, mapped, leaves, peers, runs=frozenset()):
+    """("filled", rehearsals) when a case with a filled run on the portal ticks it, ("case",
+    rehearsals) when only pre-flight-ready cases do; "mapped" when a steps file can, under a
     condition no case meets; "leave" or "theirs" when the dictionary says so; else "none"."""
     taken = hits(box, ticks, peers)
     if taken:
-        return "case", sorted({r for r, _ in taken})
+        return "filled" if any(t in runs for t in taken) else "case", sorted({r for r, _ in taken})
     if hits(box, mapped, peers):
         return "mapped", []
     sec, lab = norm(box["section"]), norm(box["label"])
@@ -275,7 +288,7 @@ def status(box, ticks, mapped, leaves, peers):
     return "none", []
 
 
-STATES = {"case": "a case takes it", "mapped": "mapped, no case yet", "none": "on the portal, not mapped",
+STATES = {"filled": "filled on the portal", "case": "a case, no recorded run", "mapped": "mapped, no case yet", "none": "on the portal, not mapped",
           "leave": "left empty", "theirs": "the person's", "absent": "no portal box"}
 READ = {"cila": "CILA", "scia": "SCIA", "permesso_di_costruire": "Permesso di costruire",
         "scia_alternativa": "SCIA alternativa", "segnalazione_certificata_agibilita": "Agibilità (SCA)",
@@ -290,7 +303,7 @@ def short(text, n=90):
 def table():
     forms = json.loads(CHOICES.read_text())
     match = json.loads(MATCH.read_text())
-    ticks, mapped, leaves = ticked(), entries(), left()
+    ticks, mapped, leaves, runs = ticked(), entries(), left(), filled()
     cases = sorted({who for *_, who in ticks})
     summary, detail, todo = [], [], []
     for form, rows in forms.items():
@@ -302,9 +315,9 @@ def table():
             for alt in c["alternatives"]:
                 m = match["forms"][form].get(f"{c['id']}/{alt}", {})
                 found = [by_text[k] for k in ((norm(x["section"]), norm(x["label"])) for x in m.get("boxes", [])) if k in by_text]
-                states = [status(b, ticks, mapped, leaves, bx) for b in found]
+                states = [status(b, ticks, mapped, leaves, bx, runs) for b in found]
                 used |= {b["box"] for b in found}
-                order = ["case", "mapped", "none", "leave", "theirs"]
+                order = ["filled", "case", "mapped", "none", "leave", "theirs"]
                 st = min((x[0] for x in states), key=order.index) if states else "absent"
                 who = sorted({r for x in states for r in x[1]})
                 counts[st] += 1
@@ -312,9 +325,9 @@ def table():
                 lines.append(f"| `{short(c['at'], 60)}` | `{alt}` | {where} | {(m.get('confidence') or '?')[0]} | {STATES[st]} | {len(who) or ''} |")
                 if st in ("mapped", "none"):
                     todo.append((st, READ[form], c["at"], alt, where))
-        portal_only = [b for b in bx if b["box"] not in used and status(b, ticks, mapped, leaves, bx)[0] in ("mapped", "none")]
+        portal_only = [b for b in bx if b["box"] not in used and status(b, ticks, mapped, leaves, bx, runs)[0] in ("mapped", "none")]
         total = sum(counts.values())
-        summary.append(f"| {READ[form]} | {total} | {counts['case']} | {counts['mapped']} | {counts['none']} | "
+        summary.append(f"| {READ[form]} | {total} | {counts['filled']} | {counts['case']} | {counts['mapped']} | {counts['none']} | "
                        f"{counts['absent']} | {len(portal_only)} |")
         detail += [f"### {READ[form]}", "", "| Schema choice | Alternative | Portal box | Match | State | Rehearsals |",
                    "|---|---|---|---|---|---:|"] + lines + [""]
@@ -329,8 +342,11 @@ def table():
         "person picks, such as who holds the title or which landscape procedure applies), the portal box",
         "that means it on Napoli's SUE, and whether one of our cases takes it. A row with no case is a",
         "branch no rehearsal has taken: the next cases to write.", "",
-        "- **a case takes it**: a pre-flight-ready answers file of a SUE rehearsal ticks that box",
-        f"  ({len(cases)} such cases; nearly all have a filled run on the portal).",
+        "- **filled on the portal**: a pre-flight-ready answers file of a SUE rehearsal ticks that box,",
+        "  and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).",
+        "- **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,",
+        "  stopped, or run before 2026-10-31 and described in its README in words that don't name the",
+        f"  case ({len(cases)} cases in all, {len(runs & set(cases))} with a recorded filled run).",
         "- **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an",
         "  answers file, then a run.",
         "- **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.",
@@ -343,8 +359,8 @@ def table():
         "checked one by one (Match: h, m, l for the matcher's high, medium, low confidence). A box",
         "several choices reveal is one row here: a combination of choices (this option under that",
         "parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the box.", "",
-        "| Form | Alternatives | A case takes it | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |",
-        "|---|---:|---:|---:|---:|---:|---:|"]
+        "| Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|"]
     nxt = ["", "## Next cases", "", "Mapped, no case yet (an answers file away):", ""]
     nxt += [f"- {f}: `{a}` → `{alt}` ({w})" for st, f, a, alt, w in todo if st == "mapped"] or ["- none"]
     nxt += ["", "On the portal, not mapped (dictionary work first):", ""]
