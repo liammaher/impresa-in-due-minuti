@@ -49,5 +49,7 @@
  "impianto_altro": "true",
  "impianto_altro_quale": "Impianto fotovoltaico",
  "impianti_certificazione": "dichiarazione",
- "ascensore_comunicazione": "sca"
+ "ascensore_comunicazione": "sca",
+ "igienico_24_5bis": "false",
+ "igienico_5quater": "false"
 }
