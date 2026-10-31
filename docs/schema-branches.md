@@ -8,7 +8,7 @@ that means it on Napoli's SUE, and whether one of our cases takes it. A row with
 branch no rehearsal has taken: the next cases to write.
 
 - **a case takes it**: a pre-flight-ready answers file of a SUE rehearsal ticks that box
-  (115 such cases; nearly all have a filled run on the portal).
+  (116 such cases; nearly all have a filled run on the portal).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
