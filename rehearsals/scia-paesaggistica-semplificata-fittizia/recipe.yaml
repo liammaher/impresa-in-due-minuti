@@ -30,3 +30,25 @@ yours:
   - "Sign and send (Firma e invio); keep the receipt"
 rules:
   main: napoli/comune/scia-edilizia
+# The case: the main pratica's P6 answers, the part's, then these (a null drops one);
+# `gen.py --answers` writes answers-p6.json.
+answers:
+  data_inizio_lavori: null
+  contributo_normativa: null
+  scia_cambio_uso: null
+  cambio_uso: null
+  oggetto: 'Variante in corso d''opera alla SCIA: nuova apertura in facciata e unità esterna di climatizzazione sul balcone (dati inventati per la prova).'
+  dettaglio_intervento: 'Variante non essenziale alla SCIA in corso: nuova finestra sul prospetto interno e unità esterna di climatizzazione sul balcone. Dati inventati per la prova.'
+  descrizione: PROVA NON INVIARE - SCIA variante e semplificata
+  scia_tipo: variante scia
+  allegato_b:
+  - paes_b2
+  - paes_b7
+  scia_variata_numero: PG/2026/0888888
+  scia_variata_data: '2026-09-01'
+  scia_onerosa: 'true'
+  contributo_pagamento: rateizzazione
+  contributo_calcolo: prospetto
+  prospetto_contributo: rehearsals/cila-fittizia/files/prospetto-contributo.pdf
+  intervento: variante_scia
+  fatti: []

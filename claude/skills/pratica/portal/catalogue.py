@@ -111,16 +111,19 @@ def ops_of(args):
     if args.sportello == "sue" and args.combo:
         # Two operations in one pratica (a building pratica with its landscape authorization):
         # only the scelte a recipe takes (the procura) are tried, and the attachments screen is
-        # read on the way, so the combination is one batch (2026-10-31: by hand before).
+        # read on the way, so the combination is one batch (2026-10-31: by hand before). --combo
+        # repeats: several combinations in one batch (2026-10-31: two outputs joined by hand).
         w = json.loads((CAT / "sue-wizard.json").read_text())
-        name, *labels = args.combo
         by = {o["label"]: o for o in w["operations"]}
-        missing = [l for l in labels if l not in by]
-        if missing:
-            sys.exit(f"not an operation of the SUE's wizard: {missing}")
         path = lambda l: f"{by[l]['group']} › {l}"
-        return [{"name": name, "sector": w["sector"], "path": path(labels[0]), "also": [path(l) for l in labels[1:]],
-                 "scelte": args.scelta or [PROCURA], "slots": True}]
+        ops = []
+        for name, *labels in args.combo:
+            missing = [l for l in labels if l not in by]
+            if missing or len(labels) < 2:
+                sys.exit(f"--combo {name}: " + (f"not an operation of the SUE's wizard: {missing}" if missing else "give its operations, the main one first"))
+            ops.append({"name": name, "sector": w["sector"], "path": path(labels[0]), "also": [path(l) for l in labels[1:]],
+                        "scelte": args.scelta or [PROCURA], "slots": True})
+        return ops
     if args.sportello == "sue":
         w = json.loads((CAT / "sue-wizard.json").read_text())
         have = {p.stem for p in SECTIONS.glob("*.json")}
@@ -166,8 +169,10 @@ def cmd_known(_):
 def cmd_import(args):
     """Each pratica of an export (localStorage `crawl:op:*`) to sections/<name>.json."""
     text = sys.stdin.read() if args.export == "-" else Path(args.export).read_text()
-    # print.js's text: its sha256 first, so a copy that arrived changed is refused.
+    # print.js's text: its sha256 first, so a copy that arrived changed is refused. Its JSON never
+    # ends in a newline, but a heredoc or a paste adds one (2026-10-31: a good copy refused).
     head, _, rest = text.partition("\n")
+    rest = rest.rstrip("\r\n")
     if re.fullmatch(r"[0-9a-f]{64}", head.strip()):
         if hashlib.sha256(rest.encode()).hexdigest() != head.strip():
             sys.exit("not the text print.js printed (its sha256 differs): nothing imported")
@@ -469,7 +474,8 @@ def main():
     p.add_argument("--sectors", help="SUAP sector indices in suap-wizard.json, comma-separated")
     p.add_argument("--common", action="store_true", help="the common operations, under the first sector")
     p.add_argument("--all", action="store_true", help="also the pratiche already crawled")
-    p.add_argument("--combo", nargs="+", metavar="NAME MAIN OTHER", help="sue: a combination's crawl name, then its operations' labels, the main one first")
+    p.add_argument("--combo", nargs="+", action="append", metavar="NAME MAIN OTHER",
+                   help="sue: a combination's crawl name, then its operations' labels, the main one first; repeat it for several")
     p.add_argument("--scelta", action="append", help="--combo: a scelta to try (default: the procura)")
     sub.add_parser("known")
     p = sub.add_parser("import")

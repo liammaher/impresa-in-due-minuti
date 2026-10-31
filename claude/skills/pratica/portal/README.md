@@ -21,8 +21,11 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    its own (procedure, title, crawl, operation list, `descrizione`, `yours`, `rules.main`). Later
    ones win key by key; `attachments`, `supports` and `sections` add up; `asks` and `rules` merge;
    a null drops what came before (`data_inizio_lavori: null`). Then a slot or a refusal mapped on
-   the main pratica reaches its combinations (2026-10-31: the SCIA's had missed eleven slots). A
-   combination's crawl: below, *Crawling*.
+   the main pratica reaches its combinations (2026-10-31: the SCIA's had missed eleven slots).
+   Its case is `answers:` too: the main pratica's `answers-p6.json` changed by the part's
+   `answers` (the protected property) and the recipe's own (the works, `descrizione`), a null
+   dropping one; `gen.py RECIPE --answers` writes its `answers-p6.json`, and `bench/test_gen.py`
+   fails when one drifts from its main pratica's. A combination's crawl: below, *Crawling*.
    **Which pratica it is** is the library's rules table's (`rules/`, a byte-for-byte copy):
    `rules: {table, facts, handles}`, as the SUAP and SUE recipes have. `facts` fixes what the
    recipe is (`permesso_per_scelta: "true"` for the permesso); a fact it doesn't fix is an ask
@@ -265,10 +268,11 @@ tries 80 choices a section (the semplificata's Allegato B list has 41); a sectio
 
 A combination (two operations in one pratica) is one op: `catalogue.py ops sue --combo NAME MAIN
 OTHER` (labels as in `sue-wizard.json`) tries only the procura scelta, as recipes take it, and reads
-the attachments screen on the way (crawl.js `also`, `scelte`, `slots`). `import` keeps the
-operations and adds the main one's answer-dependent slots. A batch whose sections were all seen
-before is small: `print.js` prints it with its sha256, and `catalogue.py import -` refuses a copy
-that arrived changed (no download to ask for).
+the attachments screen on the way (crawl.js `also`, `scelte`, `slots`); repeat `--combo` for
+several in one batch. `import` keeps the operations and adds the main one's answer-dependent slots.
+A batch whose sections were all seen before is small: `print.js` prints it with its sha256, and
+`catalogue.py import -` refuses a copy that arrived changed (no download to ask for), trailing
+newlines aside.
 
 ## Attachments screens
 

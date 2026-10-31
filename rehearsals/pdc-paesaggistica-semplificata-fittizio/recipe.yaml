@@ -28,3 +28,15 @@ yours:
   - "Once the permesso is issued: collect it (paying the contributo, if due, as quadro f) says), name the structural designer and the direttori dei lavori, and file the comunicazione di inizio lavori with the energy report and the structural filings"
 rules:
   main: napoli/comune/permesso-di-costruire
+# The case: the main pratica's P6 answers, the part's, then these (a null drops one);
+# `gen.py --answers` writes answers-p6.json.
+answers:
+  oggetto: Ampliamento fuori sagoma di un edificio residenziale esistente, entro il 10% del volume e 60 m³, in area vincolata (dati inventati per la prova).
+  dettaglio_intervento: Ampliamento al piano terra sul retro dell'edificio esistente, 60 m³ (meno del 10% del volume originario), struttura in cemento armato, nuovo impianto elettrico e idrico. Dati inventati per la prova.
+  descrizione: PROVA NON INVIARE - PdC ampliamento e semplificata
+  demolizioni: 'false'
+  pdc_tipo: nuova costruzione
+  intervento: nuova_costruzione
+  allegato_b:
+  - paes_b1
+  nuova_costruzione_tipo: e1

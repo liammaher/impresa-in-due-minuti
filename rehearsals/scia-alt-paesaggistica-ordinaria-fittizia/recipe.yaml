@@ -28,3 +28,7 @@ yours:
   - "The 30 days before the works may start run from the landscape authorization's release, not from filing (art. 23 c. 3 DPR 380/2001); the contributo, if due, is paid as quadro g) says"
 rules:
   main: napoli/comune/scia-alternativa-pdc
+# The case: the main pratica's P6 answers, the part's, then these (a null drops one);
+# `gen.py --answers` writes answers-p6.json.
+answers:
+  descrizione: PROVA NON INVIARE - SCIA alt ristrutturazione e ordinaria

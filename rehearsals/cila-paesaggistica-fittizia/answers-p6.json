@@ -22,15 +22,6 @@
  "dlgs81": "true",
  "sotto_200": "true",
  "notifica_dovuta": "true",
- "allegato_b": [
-  "paes_b7"
- ],
- "vincolo": "art 136 and 142",
- "vincolo_136_lettera": "c) e d)",
- "vincolo_136_provvedimento": "D.M. fittizio PROVA NON INVIARE del 01/01/1960",
- "vincolo_142_lettera": "a)",
- "paes_variante": false,
- "bollo_marche": false,
  "titolo_esclusivo": false,
  "parti_comuni": "nessuna",
  "lavori_in_proprio": false,
@@ -46,5 +37,14 @@
  "intervento": "manutenzione_straordinaria",
  "cambio_uso": "no",
  "paesaggio": "semplificata",
- "fatti": []
+ "fatti": [],
+ "bollo_marche": false,
+ "paes_variante": false,
+ "vincolo": "art 136 and 142",
+ "vincolo_136_lettera": "c) e d)",
+ "vincolo_136_provvedimento": "D.M. fittizio PROVA NON INVIARE del 01/01/1960",
+ "vincolo_142_lettera": "a)",
+ "allegato_b": [
+  "paes_b7"
+ ]
 }
