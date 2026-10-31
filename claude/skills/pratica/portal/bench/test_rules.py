@@ -220,7 +220,11 @@ def sue_another_pratica():
     assert sue("scia-sanatoria-fittizia", fatti=[])["unsupported"][0].startswith(other + cila)  # the late CILA
     assert "3-bis" in sue("scia-sanatoria-fittizia", intervento="ristrutturazione", fatti=[],
                           strutture="true", sismica="deposito")["unsupported"][0]
-    assert "paesaggistico" in sue("scia-sanatoria-fittizia", paesaggio="semplificata", fatti=["prospetti"])["unsupported"][0]
+    # In a protected area the art. 36-bis sanatoria carries the landscape compatibility (c. 4),
+    # new volumes too; the SCIA of works still under way doesn't.
+    assert sue("scia-sanatoria-fittizia", paesaggio="semplificata", fatti=["prospetti", "paesaggio_eseguiti", "paesaggio_volumi"])["ready"]
+    assert any("36-bis c. 4" in u for u in sue("scia-sanatoria-fittizia", paesaggio="ordinaria", fatti=["prospetti", "paesaggio_eseguiti"],
+                                                sanatoria_caso="in corso")["unsupported"])
     assert sue("scia-sanatoria-fittizia", intervento="ristrutturazione", fatti=[])["ready"]
     assert "accertamento di compatibilità" in sue("cila-paesaggistica-fittizia", fatti=["paesaggio_eseguiti"])["unsupported"][0]
     # Works with no building title, already done in a protected area: the accertamento (art. 167

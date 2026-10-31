@@ -10,12 +10,11 @@ sending.
 and the wizard's "Le opere ricadono nell'ambito della Sanatoria ...?" answered Sì, which adds the
 quadro "SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione".
 
-## What it covers (2026-10-30)
+## What it covers (2026-10-31)
 
 The SUE rules table (`rules/sue-napoli.yaml`) gives this pratica (`napoli/comune/scia-in-sanatoria`)
 for works already done or under way that a SCIA needed: manutenzione straordinaria on the facades,
-or a ristrutturazione without structures, with no change of use, outside protected areas and
-bene culturale. Interior works only are the late CILA's.
+or a ristrutturazione without structures, with no change of use, outside a bene culturale. Interior works only are the late CILA's.
 
 - **In corso** (art. 37 c. 5 DPR 380/2001): works still under way, the SCIA filed of one's own
   accord with the €516 sanction, paid and given by its reference and date; the asseverazione's
@@ -26,6 +25,13 @@ bene culturale. Interior works only are the late CILA's.
 - The asseverazione: the stato legittimo also from this sanatoria, the SCIA "presentata in
   sanatoria", the catasto (unchanged, DOCFA filed, or to file once it takes effect). Works on
   structures are refused by the table.
+- **In a protected landscape area** (art. 36-bis c. 4 and 5-bis): works that needed a landscape
+  authorization (semplificata or ordinaria), new surfaces or volumes included. The asseverazione
+  says the intervento goes through the accertamento of landscape compatibility of art. 36-bis and
+  attaches the documents for the binding parere the Sportello asks for; the sanction of c. 5-bis
+  follows the assessment, after filing. Only with double conformity: the SCIA of works still
+  under way is refused there. `answers-paesaggio.json`, ready offline, **not yet run on the
+  portal**: the slot "si allega documentazione" adds is the run's to read.
 - The sanatoria's own required slot, "Elaborati richiesti per la sanatoria (stato legittimo, stato
   di fatto e comparativi)", takes only signed files (.p7m): the technician's, in the person's steps.
 
@@ -36,7 +42,7 @@ Refused at pre-flight, with the reason:
   (art. 36-bis c. 2) are one radio group though the form asks for all three: ticking one unticks
   the others (seen 2026-10-30), so the asseverazione can't state the case. Ask the SUE.
 - **Variants to pre-1977 titles** (art. 34-ter): not mapped.
-- Structures, protected areas, bene culturale, changes of use, a permesso's works: the table's.
+- Structures, bene culturale, changes of use, a permesso's works: the table's.
 
 The payment goes by its references: the receipt route has no slot of its own (it would go in the
 fee slot, the person's .p7m). The Comune's SCIA form (23/06/2025) still says cases d.2 to d.4 go on
