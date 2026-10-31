@@ -17,3 +17,4 @@ declarations, payment, signing and sending.
 
 | Date | Browser | Result |
 |---|---|---|
+| 2026-10-31 | pane | P6, from scratch, `bench/rerun.py` bundle: **filled** in 86 s |
