@@ -37,6 +37,7 @@ asks:
   paes_interessa: {type: choice, question: 'Do the works concern a building or an area (land with no building)?', options: [immobile, area], propose: immobile}
   atti_gravanti: {type: yes_no, question: 'Do registered deeds weigh on the property: servitudes, atti unilaterali d''obbligo, convenzioni?', propose: 'false'}
   atti_gravanti_quali: {type: text, question: 'Which deed(s), as the deed names them'}
+  domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', propose: 'false'}
   bollo_seriale: {type: text, question: 'The marca da bollo for the application: its serial number (14 digits)'}
   bollo_data: {type: date, question: Its date}
@@ -181,7 +182,9 @@ sections:
   fields:
   - {id: 'r2c1p2reg:txta', kind: text, value: '{{ask.oggetto}}', max: 300, label: descrizione sintetica}
 - section: DOMICILIO DIGITALE
-  fields: []
+  fields:
+  - {id: 'r4c1p4reg:chk', kind: checkbox, when: '{{ask.domicilio_inad}}', label: il seguente domicilio digitale inserito in INAD}
+  - {id: 'r6c1p6reg:txt', kind: text, value: '{{c:identity.pec}}', when: '{{ask.domicilio_inad}}', max: 9999, label: il seguente domicilio digitale inserito in INAD}
 - section: DOMICILIO ELETTRONICO
   theirs:
   - Si dichiara di essere consapevoli

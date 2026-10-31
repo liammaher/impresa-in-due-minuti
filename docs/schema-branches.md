@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (116 cases in all, 58 with a recorded filled run).
+  case (117 cases in all, 58 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -29,13 +29,13 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 23 | 8 | 1 | 4 | 7 | 30 |
-| Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 15 |
-| Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 9 |
-| Permesso di costruire | 153 | 67 | 30 | 17 | 25 | 14 | 180 |
-| SCIA | 150 | 80 | 44 | 4 | 12 | 10 | 62 |
-| SCIA alternativa | 128 | 67 | 29 | 14 | 10 | 8 | 85 |
-| Agibilità (SCA) | 36 | 23 | 6 | 0 | 2 | 5 | 19 |
+| CILA | 43 | 23 | 8 | 1 | 4 | 7 | 29 |
+| Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 14 |
+| Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 8 |
+| Permesso di costruire | 153 | 67 | 30 | 17 | 25 | 14 | 179 |
+| SCIA | 150 | 80 | 44 | 4 | 12 | 10 | 61 |
+| SCIA alternativa | 128 | 67 | 29 | 14 | 10 | 8 | 84 |
+| Agibilità (SCA) | 36 | 23 | 6 | 0 | 2 | 5 | 18 |
 
 ## Next cases
 
@@ -192,7 +192,6 @@ Portal boxes of the CILA no schema alternative matched and no case ticks:
 - Scheda anagrafica: NON ANCORA ISCRITTA (not mapped)
 - Scheda anagrafica: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA (not mapped)
 - Scheda anagrafica: Se cittadino non UE (not mapped)
-- DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005): (not mapped)
 - DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) : (not mapped)
 - a) Titolarità dell'intervento: comproprietario (mapped)
 - a) Titolarità dell'intervento: amministratore di condominio (mapped)
@@ -232,7 +231,6 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 - Scheda anagrafica: NON ANCORA ISCRITTA (not mapped)
 - Scheda anagrafica: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA (not mapped)
 - Scheda anagrafica: Se cittadino non UE (not mapped)
-- DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005): (not mapped)
 - DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) : (not mapped)
 - Titolarità dell'intervento: proprietario (mapped)
 - Titolarità dell'intervento: comproprietario (mapped)
@@ -271,7 +269,6 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 - Scheda anagrafica: NON ANCORA ISCRITTA (not mapped)
 - Scheda anagrafica: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA (not mapped)
 - Scheda anagrafica: Se cittadino non UE (not mapped)
-- DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005): (not mapped)
 - DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) : (not mapped)
 - dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
 - Qualifica e dati del procuratore: all'Estero (not mapped)
@@ -441,7 +438,6 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Scheda anagrafica: NON ANCORA ISCRITTA (not mapped)
 - Scheda anagrafica: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA (not mapped)
 - Scheda anagrafica: Se cittadino non UE (not mapped)
-- DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005): (not mapped)
 - DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) : (not mapped)
 - a) Qualificazione pratica dell'interven…: alla destinazione d'uso (mapped)
 - a) Qualificazione pratica dell'interven…: piano casa, ai sensi della l.r. n. 19/2009 (not mapped)
@@ -779,7 +775,6 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Scheda anagrafica: NON ANCORA ISCRITTA (not mapped)
 - Scheda anagrafica: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA (not mapped)
 - Scheda anagrafica: Se cittadino non UE (not mapped)
-- DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005): (not mapped)
 - DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) : (not mapped)
 - a) Titolarità dell'intervento: comproprietario (mapped)
 - a) Titolarità dell'intervento: amministratore di condominio (mapped)
@@ -977,7 +972,6 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Scheda anagrafica: NON ANCORA ISCRITTA (not mapped)
 - Scheda anagrafica: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA (not mapped)
 - Scheda anagrafica: Se cittadino non UE (not mapped)
-- DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005): (not mapped)
 - DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) : (not mapped)
 - a) Titolarità dell'intervento: comproprietario (mapped)
 - a) Titolarità dell'intervento: amministratore di condominio (mapped)
@@ -1106,7 +1100,6 @@ Portal boxes of the Agibilità (SCA) no schema alternative matched and no case t
 - Scheda anagrafica: NON ANCORA ISCRITTA (not mapped)
 - Scheda anagrafica: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA (not mapped)
 - Scheda anagrafica: Se cittadino non UE (not mapped)
-- DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005): (not mapped)
 - DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) : (not mapped)
 - destinazione d'uso dell'immobile: industriale (mapped)
 - destinazione d'uso dell'immobile: commerciale (mapped)

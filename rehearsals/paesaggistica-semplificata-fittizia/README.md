@@ -21,6 +21,9 @@ How its steps file was made (`portal-steps.generated.yaml`, by `gen.py`):
     the box itself, so the box renumbers (r2c1p2 → r3c1p3) and goes by label, as does what
     follows it; each case is its own branch.
 - `supports` refuses a variant of an issued authorization and the marche da bollo route.
+- `answers-inad`: the client's PEC communicated as their INAD domicilio digitale (the shared
+  DOMICILIO DIGITALE section, 30 pratiche; `domicilio_inad`, never asked: the Comune reads
+  INAD itself). Mapped from the crawl on 2026-10-31, not yet run on the portal.
 
 What's the architect's, in `yours`: the relazione paesaggistica semplificata (Allegato D), the
 drawings and photos, the signed procura, the bollo and diritti, signing and sending.
