@@ -39,7 +39,16 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    README (`| Date | Browser | Result |`): what stopped it and what fixed it, then the
    filled run.
 6. **Tests:** `bench/test_gen.py` (add a case for what the pratica taught), `test_preflight.py`,
-   `test_inpage.py` when inpage.js changed.
+   `test_inpage.py` when inpage.js changed, `test_route.py` for a recipe with `rules:`.
+
+## From the facts to the steps file: `route.py`
+
+A recipe with `rules:` is routed to by its combination: its main pratica (`main`, else its
+procedure) and its `handles`. `route.py` reads that from every steps file each time, so a new
+recipe is routed once its steps file is generated; two steps files for one combination stop it.
+`bench/test_route.py` walks every case the table decides: each must reach the steps file for its
+combination, read the same way there, or be refused with the reason. It prints the combinations
+no steps file files yet ("to map"), most cases first: the SUE's mapping still to do.
 
 ## Every choice: `branches.py`
 

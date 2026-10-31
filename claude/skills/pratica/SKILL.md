@@ -273,11 +273,22 @@ both when the form asks for files; `read` only shows or downloads something.
 
 ### Filling a portal from a steps file
 
-A portal someone has walked has a steps file: `portal-steps.yaml` in a folder of the vault
-repository's `rehearsals/`, next to its map (`portal-map.yaml`) and a README with the runs.
-Find one for the entry with
-`grep -l "procedure: <entry id>" "$(cd ~/.claude/skills/pratica && pwd -P)"/../../../rehearsals/*/portal-steps.yaml`.
-When there is one, follow it instead of exploring the portal:
+A portal someone has walked has a steps file in a folder of the vault repository's
+`rehearsals/` (`portal-steps.generated.yaml`, else `portal-steps.yaml`; called
+`portal-steps.yaml` below), next to its README with the runs. Find one for the entry with
+`grep -l "procedure: <entry id>" "$(cd ~/.claude/skills/pratica && pwd -P)"/../../../rehearsals/*/portal-steps*.yaml`.
+When there is one, follow it instead of exploring the portal.
+
+**Works needing a building title (SUE: CILA, SCIA, permesso, a sanatoria, a landscape
+authorization) are routed first**, because the case's facts decide which of these it is,
+not its name. `route.py --table sue-napoli [--answers <facts.json>]` (portal/) asks the rules
+table's facts as pre-flight asks its questions: the works first, alone, then the rest in one
+message (the yes/no ones as a checklist, `fatti`). Once the table decides, it prints the one
+steps file that files the case (`steps`) and the `answers` to start its answers file with,
+so pre-flight doesn't ask them again (`asked_again`: the facts that steps file asks its own
+way). `unsupported` (refused by the table, no pratica needed, or a combination not mapped
+yet): tell the user the reason in one line and stop. Pratiche the person names (a proroga,
+fine lavori, a voltura) are found by their entry id, as above.
 
 1. **Pre-flight first, before anything opens.** `run.py preflight --steps <folder>/portal-steps.yaml
    [--answers <answers.json>]` with the same values as step 2 (the `pvault get` piped in,
