@@ -96,5 +96,6 @@
  "impianto_antincendio": "false",
  "impianto_altro": "false",
  "toll_classe": "minore rilevanza",
- "toll_decorso": "true"
+ "toll_decorso": "true",
+ "strumenti_altri": "false"
 }

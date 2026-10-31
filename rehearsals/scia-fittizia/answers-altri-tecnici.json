@@ -88,5 +88,6 @@
  "igienico_24_5bis": "false",
  "altri_tecnici_uno": true,
  "altro_tecnico_dipendente": false,
- "altro_tecnico_incarico": "progettazione degli impianti"
+ "altro_tecnico_incarico": "progettazione degli impianti",
+ "strumenti_altri": "false"
 }

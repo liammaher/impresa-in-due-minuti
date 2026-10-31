@@ -85,5 +85,6 @@
  ],
  "prova_catasto_modo": "copia",
  "prova_catasto_copia": "rehearsals/scia-fittizia/files/accatastamento-primo-impianto.pdf",
- "tolleranze": false
+ "tolleranze": false,
+ "strumenti_altri": "false"
 }

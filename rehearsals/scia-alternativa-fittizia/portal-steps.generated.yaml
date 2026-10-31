@@ -26,6 +26,8 @@ groups:
     question: What shows the building's original state? Tick every one that applies.
   tolleranze_precedenti:
     question: Where were the construction tolerance declarations (art. 34-bis or 34-ter c. 4) made? Tick every one that applies.
+  strumenti:
+    question: Which planning instruments besides the PRG cover the property's area? Tick every one.
   fatti:
     question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
 asks:
@@ -197,6 +199,34 @@ asks:
   prg_specificare: {type: text, question: The town plan in force, default: Variante generale al PRG}
   prg_zona: {type: text, question: The PRG zone of the property}
   prg_articolo: {type: text, question: The article of the PRG's rules for that zone}
+  strumenti_altri: {type: yes_no, question: 'Besides the PRG, is the property in an area another planning instrument in force or in salvaguardia covers (an adopted PUC, a PUA, a piano particolareggiato
+      or di recupero, a P.I.P., a P.E.E.P., another)?', propose: 'false'}
+  strumento_puc: {type: yes_no, group: strumenti, item: A PUC (Piano Urbanistico Comunale) adopted or approved}
+  strumento_pua: {type: yes_no, group: strumenti, item: 'A PUA (piano urbanistico attuativo, L.R. Campania 16/2004 art. 26)'}
+  strumento_particolareggiato: {type: yes_no, group: strumenti, item: A piano particolareggiato}
+  strumento_recupero: {type: yes_no, group: strumenti, item: A piano di recupero (L. 457/1978)}
+  strumento_pip: {type: yes_no, group: strumenti, item: A P.I.P. (piano per gli insediamenti produttivi)}
+  strumento_peep: {type: yes_no, group: strumenti, item: 'A P.E.E.P. (piano per l''edilizia economica e popolare, L. 167/1962)'}
+  strumento_altro: {type: yes_no, group: strumenti, item: Another planning instrument}
+  strumento_puc_zona: {type: text, question: The property's zone in the PUC}
+  strumento_puc_articolo: {type: text, question: The article of the PUC's rules for that zone}
+  strumento_pua_zona: {type: text, question: The property's zone in the PUA}
+  strumento_pua_articolo: {type: text, question: The article of the PUA's rules for that zone}
+  strumento_particolareggiato_nome: {type: text, question: 'Which piano particolareggiato it is (its name, or its approval)'}
+  strumento_particolareggiato_zona: {type: text, question: The property's zone in the piano particolareggiato}
+  strumento_particolareggiato_articolo: {type: text, question: The article of the piano particolareggiato's rules for that zone}
+  strumento_recupero_nome: {type: text, question: 'Which piano di recupero it is (its name, or its approval)'}
+  strumento_recupero_zona: {type: text, question: The property's zone in the piano di recupero}
+  strumento_recupero_articolo: {type: text, question: The article of the piano di recupero's rules for that zone}
+  strumento_pip_nome: {type: text, question: 'Which P.I.P. it is (its name, or its approval)'}
+  strumento_pip_zona: {type: text, question: The property's zone in the P.I.P.}
+  strumento_pip_articolo: {type: text, question: The article of the P.I.P.'s rules for that zone}
+  strumento_peep_nome: {type: text, question: 'Which P.E.E.P. it is (its name, or its approval)'}
+  strumento_peep_zona: {type: text, question: The property's zone in the P.E.E.P.}
+  strumento_peep_articolo: {type: text, question: The article of the P.E.E.P.'s rules for that zone}
+  strumento_altro_nome: {type: text, question: 'Which instrument it is (its name, or its approval)'}
+  strumento_altro_zona: {type: text, question: The property's zone in that instrument}
+  strumento_altro_articolo: {type: text, question: The article of that instrument's rules for that zone}
   progetto_impianti: {type: yes_no, question: 'Do the systems need a project (DM 37/2008 art. 5)?', when: '{{ask.impianti}}'}
   progetto_elettrico_doc: {type: file, question: The electrical system's project (PDF)}
   progetto_radiotv_doc: {type: file, question: The radio and TV systems' project (PDF)}
@@ -891,18 +921,44 @@ sections:
   - {id: 'r5c2p7reg:real', kind: number, value: '{{ask.superficie_mq}}', max: 9, label: Mq}
   - {id: 'r7c2p13reg:real', kind: number, value: '{{ask.volume_mc}}', max: 13, label: Mc}
   - {id: 'r9c2p19reg:number', kind: text, value: '{{ask.piani_n}}', max: 2, label: Numero dei piani}
-  - {id: 'r14c1p26reg:chk', kind: checkbox, label: PRG}
-  - {id: 'r16c1p28reg:txt', kind: text, value: '{{ask.prg_specificare}}', max: 9999, label: Specificare}
-  - {id: 'r18c1p30reg:txt', kind: text, value: '{{ask.prg_zona}}', max: 9999, label: Zona}
-  - {id: 'r18c2p32reg:txt', kind: text, value: '{{ask.prg_articolo}}', max: 9999, label: Art.}
-  - {id: 'r26c1p40reg:chk', kind: checkbox, when: '{{ask.barriere|not}}', label: non è soggetto alle prescrizioni degli articoli 77}
-  - {id: 'r27c1p41reg:chk', kind: checkbox, when: '{{ask.barriere_art82}}', label: interessa un edificio privato aperto al pubblico}
-  - {id: 'r28c1p42reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}}', label: è soggetto alle prescrizioni degli articoli 77}
-  - {id: 'r29c1p43reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_accessibilita}}', label: accessibilità}
-  - {id: 'r29c2p44reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_visitabilita}}', label: visitabilità}
-  - {id: 'r29c3p45reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_adattabilita}}', label: adattabilità}
-  - {id: 'r30c1p46reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga}}', label: pur essendo soggetto alle prescrizioni degli articoli 77}
-  - {id: 'r31c1p47reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga}}', label: presenta contestualmente alla SCIA condizionata}
+  - {id: 'r12c1p24reg:chk', kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_puc}}', label: PUC}
+  - {kind: text, label: Zona, anchor: PUC, block: 1, value: '{{ask.strumento_puc_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_puc}}'}
+  - {kind: text, label: Art., anchor: PUC, block: 1, value: '{{ask.strumento_puc_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_puc}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_pua}}', label: PUA}
+  - {kind: text, label: Zona, anchor: PUA, block: 1, value: '{{ask.strumento_pua_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pua}}'}
+  - {kind: text, label: Art., anchor: PUA, block: 1, value: '{{ask.strumento_pua_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pua}}'}
+  - {kind: checkbox, label: PRG}
+  - {kind: text, label: Specificare, anchor: PRG, block: 1, value: '{{ask.prg_specificare}}'}
+  - {kind: text, label: Zona, anchor: PRG, block: 1, value: '{{ask.prg_zona}}'}
+  - {kind: text, label: Art., anchor: PRG, block: 1, value: '{{ask.prg_articolo}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}', label: PIANO PARTICOLAREGGIATO}
+  - {kind: text, label: Specificare, anchor: PIANO PARTICOLAREGGIATO, block: 1, value: '{{ask.strumento_particolareggiato_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}'}
+  - {kind: text, label: Zona, anchor: PIANO PARTICOLAREGGIATO, block: 1, value: '{{ask.strumento_particolareggiato_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}'}
+  - {kind: text, label: Art., anchor: PIANO PARTICOLAREGGIATO, block: 1, value: '{{ask.strumento_particolareggiato_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}', label: PIANO DI RECUPERO}
+  - {kind: text, label: Specificare, anchor: PIANO DI RECUPERO, block: 1, value: '{{ask.strumento_recupero_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}'}
+  - {kind: text, label: Zona, anchor: PIANO DI RECUPERO, block: 1, value: '{{ask.strumento_recupero_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}'}
+  - {kind: text, label: Art., anchor: PIANO DI RECUPERO, block: 1, value: '{{ask.strumento_recupero_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}', label: P.I.P.}
+  - {kind: text, label: Specificare, anchor: P.I.P., block: 1, value: '{{ask.strumento_pip_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}'}
+  - {kind: text, label: Zona, anchor: P.I.P., block: 1, value: '{{ask.strumento_pip_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}'}
+  - {kind: text, label: Art., anchor: P.I.P., block: 1, value: '{{ask.strumento_pip_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}', label: P.E.E.P.}
+  - {kind: text, label: Specificare, anchor: P.E.E.P., block: 1, value: '{{ask.strumento_peep_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}'}
+  - {kind: text, label: Zona, anchor: P.E.E.P., block: 1, value: '{{ask.strumento_peep_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}'}
+  - {kind: text, label: Art., anchor: P.E.E.P., block: 1, value: '{{ask.strumento_peep_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}', label: ALTRO}
+  - {kind: text, label: Specificare, anchor: ALTRO, block: 1, value: '{{ask.strumento_altro_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}'}
+  - {kind: text, label: Zona, anchor: ALTRO, block: 1, value: '{{ask.strumento_altro_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}'}
+  - {kind: text, label: Art., anchor: ALTRO, block: 1, value: '{{ask.strumento_altro_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}'}
+  - {kind: checkbox, when: '{{ask.barriere|not}}', label: non è soggetto alle prescrizioni degli articoli 77}
+  - {kind: checkbox, when: '{{ask.barriere_art82}}', label: interessa un edificio privato aperto al pubblico}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}}', label: è soggetto alle prescrizioni degli articoli 77}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_accessibilita}}', label: accessibilità}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_visitabilita}}', label: visitabilità}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_adattabilita}}', label: adattabilità}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga}}', label: pur essendo soggetto alle prescrizioni degli articoli 77}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga}}', label: presenta contestualmente alla SCIA condizionata}
 - section: Asseverazione SCIA Alternativa - Sicurezza impianti
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.impianti|not}}', label: Non comporta l'installazione}

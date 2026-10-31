@@ -8,12 +8,12 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 863 | Claude takes it when the case does |
+| ticked | 870 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 5 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 1 | left empty on purpose |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 224 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 217 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -135,18 +135,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: si (under: Direttore dei lavori delle opere strutturali)
 - radio: no (under: Direttore dei lavori delle opere strutturali)
 - radio: tecnico incaricato (under: Progettista delle opere architettoniche)
-
-### Asseverazione SCIA - Dati immobile, strumentazione urbanistica, barriere architettoniche / Asseverazione SCIA Alternativa -  Dati immobile, strumentazione urbanistica, barriere architettoniche
-
-4 pratiche; 7 of 16 choices to map.
-
-- checkbox: PUC
-- checkbox: PUA
-- checkbox: PIANO PARTICOLAREGGIATO
-- checkbox: PIANO DI RECUPERO
-- checkbox: P.I.P.
-- checkbox: P.E.E.P.
-- checkbox: ALTRO
 
 ### Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi / Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi
 
