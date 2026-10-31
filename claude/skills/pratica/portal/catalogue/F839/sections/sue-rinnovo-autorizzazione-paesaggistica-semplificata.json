@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:19:53.097Z",
+ "crawled": "2026-10-31T11:43:06.831Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Beni Paesaggistici › Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune) (sector Edilizia e pianificazione urbana)",
- "seconds": 20.5,
+ "seconds": 20.9,
  "generated": {
   "interventi": "Richiesta di Rinnovo Autorizzazione Paesaggistica Semplificata ai sensi dell'art.7 del DPR 31/2017 (Ente Comune)",
   "adempimenti": [
@@ -74,7 +74,7 @@
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
    "same_as": "cil#Oggetto della pratica",
-   "seconds": 0.8
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
@@ -184,7 +184,7 @@
      ]
     }
    ],
-   "seconds": 3.8
+   "seconds": 3.1
   },
   {
    "section": "dati relativi al nome del tecnico",
@@ -212,7 +212,7 @@
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 0.9,
+   "seconds": 1,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

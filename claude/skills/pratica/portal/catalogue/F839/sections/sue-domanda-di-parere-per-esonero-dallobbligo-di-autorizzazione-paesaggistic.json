@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:20:51.366Z",
+ "crawled": "2026-10-31T11:44:07.615Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Beni Paesaggistici › Domanda di parere per esonero dall’obbligo di autorizzazione paesaggistica (sector Edilizia e pianificazione urbana)",
- "seconds": 30.6,
+ "seconds": 31.8,
  "generated": {
   "interventi": "Domanda di parere per esonero dall’obbligo di autorizzazione paesaggistica",
   "adempimenti": [
@@ -88,7 +88,7 @@
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
    "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -108,7 +108,7 @@
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
    "same_as": "cil#Dati catastali",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "titolo del richiedente",
@@ -400,7 +400,7 @@
      }
     }
    ],
-   "seconds": 11.5
+   "seconds": 11.4
   },
   {
    "section": "Interventi ed opere in aree vincolate esclusi dall'autorizzazione  paesaggistica",
@@ -447,7 +447,7 @@
    "fingerprint": "779f848db9ddd512",
    "text": "Interventi ed opere in aree vincolate esclusi dall'autorizzazione paesaggistica Indicare la casistica di esclusione dall'autorizzazione paesaggistica",
    "branches": [],
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "indicazione dell'Ente al quale è inviata la richiesta di parere preventivo",
@@ -488,7 +488,7 @@
    "fingerprint": "81cdf4ae3bdfb1e1",
    "text": "indicazione dell'Ente al quale è inviata la richiesta di parere preventivo indicare l'Ente a cui è indirizzata la richiesta con sede a eventuali note aggiuntive 800 Caratteri restanti riportare la Pec dell'Ente a cui è indirizzata la richiesta allegare la relazione illustrativa dell'intervento oggetto della pratica in cui deve essere precisato: la tipologia di intervento per il quale si chiede il parere; l'ente interessato e l'ufficio dell'ente a cui deve essere inviato Tipologie ammesse: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m Allega Max: 9,77 MB",
    "branches": [],
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -498,19 +498,19 @@
    "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
    "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "dichiarazione relativa all'imposta di bollo",
    "fingerprint": "869752d2cea5aef3",
    "same_as": "sue-permesso-di-costruire-art-10-d-p-r-380-2001#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 0.9,
+   "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

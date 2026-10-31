@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:09:42.366Z",
+ "crawled": "2026-10-31T11:34:33.669Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Comunicazione al Comune di nomina del nuovo direttore dei lavori (sector Edilizia e pianificazione urbana)",
- "seconds": 27.6,
+ "seconds": 23.9,
  "generated": {
   "interventi": "Comunicazione di nomina nuovo direttore dei lavori",
   "adempimenti": [
@@ -99,13 +99,13 @@
    "section": "ubicazione dell'attività",
    "fingerprint": "1ae79e0eb7308899",
    "same_as": "cil#Localizzazione dell'intervento",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
    "same_as": "cil#Dati catastali",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "nomina nuovo direttore dei lavori",
@@ -258,7 +258,7 @@
      ]
     }
    ],
-   "seconds": 5.1
+   "seconds": 4.9
   },
   {
    "section": "titolo di legittimazione dell'intervento",
@@ -503,7 +503,7 @@
      ]
     }
    ],
-   "seconds": 4.4
+   "seconds": 4.3
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -519,7 +519,7 @@
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 1,
+   "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

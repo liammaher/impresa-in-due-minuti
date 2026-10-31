@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:17:53.425Z",
+ "crawled": "2026-10-31T11:41:29.164Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Terre e rocce da scavo › Dichiarazione di avvenuto utilizzo (D.A.U.) ai sensi dell'art. 7 del DPR n. 120/2017 (sector Edilizia e pianificazione urbana)",
- "seconds": 17.5,
+ "seconds": 14,
  "generated": {
   "interventi": "Dichiarazione di avvenuto utilizzo delle terre e rocce da scavo in conformità al piano di utilizzo o alla dichiarazione di cui all'articolo 21 del DPR n. 120/2017",
   "adempimenti": [
@@ -74,19 +74,19 @@
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
    "same_as": "cil#Oggetto della pratica",
-   "seconds": 0.7
+   "seconds": 0.8
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
    "same_as": "cil#DOMICILIO DIGITALE",
-   "seconds": 1.1
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
    "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.9
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -100,13 +100,13 @@
    "section": "localizzazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
    "same_as": "cil#Localizzazione dell'intervento",
-   "seconds": 1.2
+   "seconds": 0.6
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
    "same_as": "cil#Dati catastali",
-   "seconds": 0.8
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -116,7 +116,7 @@
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 0.6,
+   "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

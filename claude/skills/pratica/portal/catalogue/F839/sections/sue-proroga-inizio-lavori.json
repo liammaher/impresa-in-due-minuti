@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:12:11.853Z",
+ "crawled": "2026-10-31T11:36:59.786Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Proroga inizio lavori (sector Edilizia e pianificazione urbana)",
- "seconds": 17.8,
+ "seconds": 17.7,
  "generated": {
   "interventi": "Proroga del termine di inizio lavori",
   "adempimenti": [
@@ -299,7 +299,7 @@
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 0.9,
+   "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

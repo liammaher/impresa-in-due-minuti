@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/voltura-permesso-di-costruire
 title: Voltura del permesso di costruire, with a co-holder, SUE Napoli (tecnico con procura)
-generated: gen.py from sue-voltura-intestazione-permesso-di-costruire (2026-10-30) and dictionary/fnsuap.yaml
+generated: gen.py from sue-voltura-intestazione-permesso-di-costruire (2026-10-31) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'The co-holder''s section has both sesso boxes ticked: the portal saves it no other way (two required groups); their codice fiscale says which'
@@ -198,8 +198,8 @@ sections:
   - {id: 'r13c2p30reg:radio:2_clone', kind: radio, when: '{{ask.bollo_marche}}', label: 'Marca da €16,00 per l''autorizzazione'}
   - {kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1)}
   - {kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}}', label: data}
-  - {kind: text, label: numero seriale (1), nth: 2, value: '{{ask.bollo_seriale_2}}', when: '{{ask.bollo_marche}}'}
-  - {kind: date, label: data, nth: 2, value: '{{ask.bollo_data_2|date_it}}', when: '{{ask.bollo_marche}}'}
+  - {id: 'r15c2p34reg:txt', kind: text, value: '{{ask.bollo_seriale_2}}', on_page: true, when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1), nth: 2}
+  - {id: 'r15c3p36reg:calendar_input', kind: date, value: '{{ask.bollo_data_2|date_it}}', on_page: true, when: '{{ask.bollo_marche}}', label: data, nth: 2}
 - section: Informazioni su eventuali altri aventi titolo
   fields:
   - {id: 'r2c1p2reg:txt', kind: text, value: '{{a:identity.last_name|upper}}', max: 30, label: cognome}

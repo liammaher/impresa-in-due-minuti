@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:20:13.634Z",
+ "crawled": "2026-10-31T11:43:27.781Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Beni Paesaggistici › Accertamento di compatibilità paesaggistica (artt. 167-181 D.Lgs. 42/2004 - Comune) (sector Edilizia e pianificazione urbana)",
- "seconds": 18.3,
+ "seconds": 18.8,
  "generated": {
   "interventi": "Accertamento di compatibilità paesaggistica ai sensi artt. 167 - 181 DLgs 42/2004",
   "adempimenti": [
@@ -83,7 +83,7 @@
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
    "same_as": "cil#DOMICILIO DIGITALE",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
@@ -132,7 +132,7 @@
    "fingerprint": "dd7faef67a67ee15",
    "text": "dichiarazione relativa alla descrizione delle opere sintetica descrizione delle opere: 350 Caratteri restanti effetti conseguenti alla realizzazione delle opere 200 Caratteri restanti",
    "branches": [],
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "dichiarazione relativa ai dati identificativi del/dei professionista/i incaricato/i",
@@ -193,7 +193,7 @@
    "section": "dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento)",
    "fingerprint": "0dda28ca5077533f",
    "same_as": "sue-autorizzazione-paesaggistica-ordinaria#dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento)",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -209,7 +209,7 @@
    "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
    "fingerprint": "869752d2cea5aef3",
    "same_as": "sue-permesso-di-costruire-art-10-d-p-r-380-2001#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "Qualifica e dati del procuratore",
