@@ -81,6 +81,7 @@ attachments:
 asks:
   descrizione: {default: "PROVA NON INVIARE - SCIA in sanatoria {{c:identity.last_name}}"}
   sanatoria_titolo: {default: scia}
+  sanatoria_paesaggio: {default: "true"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
@@ -98,6 +99,9 @@ rules:
   main: napoli/comune/scia-in-sanatoria
   facts: {permesso_per_scelta: "false", sanatoria: "true", parere_esonero: "false"}
 supports:
+  # Works that needed a landscape authorization: their compatibility goes with the art. 36-bis
+  # sanatoria (c. 4), not with the SCIA of works still under way (art. 37 c. 5).
+  - {if: "{{ask.paesaggio|in_semplificata__ordinaria}}", value: "{{ask.sanatoria_caso}}", in: [doppia conformita], else: "In a protected landscape area only the art. 36-bis sanatoria is mapped: the Sportello asks for the binding parere on the works' landscape compatibility (art. 36-bis c. 4)."}
   - value: "{{ask.sanatoria_caso}}"
     in: [in corso, doppia conformita]
     else: "Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione makes the date of the works, the oblazione and the works proposal one radio choice, so it can't state the case in full: ask the SUE. Variants to pre-1977 titles (art. 34-ter) aren't mapped."

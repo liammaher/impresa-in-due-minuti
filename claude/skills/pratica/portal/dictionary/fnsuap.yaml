@@ -850,6 +850,9 @@ asks:
     question: "Is the property under landscape protection (D.Lgs. 42/2004 parte III: art. 136, art. 142 or the piano paesaggistico), and what do the works need? no (not protected); senza autorizzazione (protected, but the works don't alter the place or the buildings' look, or need no authorization: art. 149, DPR 31/2017 Allegato A); semplificata (DPR 31/2017 Allegato B); ordinaria (art. 146)"
     options: ["no", senza autorizzazione, semplificata, ordinaria]
   relazione_paesaggistica: {type: file, question: "The relazione paesaggistica (DPCM 12/12/2005), for the autorizzazione paesaggistica ordinaria (PDF)"}
+  # In a SCIA in sanatoria (the recipe sets it) works that needed a landscape authorization are
+  # assessed for compatibility by the Sportello's request for a binding parere (art. 36-bis c. 4).
+  sanatoria_paesaggio: {type: yes_no, question: "Is this a sanatoria, so works that needed a landscape authorization go through art. 36-bis c. 4?", default: "false"}
   bene_culturale:
     type: yes_no
     question: "Is the building itself a protected bene culturale (D.Lgs. 42/2004 parte II: listed, so the works need the Soprintendenza's authorization, art. 21)?"
@@ -2674,12 +2677,17 @@ sections:
     fields:
       - {kind: radio, label: NON ricade in zona sottoposta a tutela, when: "{{ask.paesaggio|is_no}}"}
       - {kind: radio, label: "ricade in zona tutelata, ma le opere non comportano alterazione", when: "{{ask.paesaggio|is_senza_autorizzazione}}"}
-      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.paesaggio|is_semplificata}}"}
-      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.paesaggio|is_semplificata}}"}
-      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.paesaggio|is_semplificata}}"}
-      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.paesaggio|is_ordinaria}}"}
-      - {kind: radio, label: è assoggettato al procedimento ordinario, when: "{{ask.paesaggio|is_ordinaria}}"}
-      - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.paesaggio|is_ordinaria}}"}
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
+      - {kind: radio, label: è assoggettato al procedimento ordinario, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
+      # A sanatoria: the compatibility of works already done, the parere's documents attached
+      # (the SCIA's form only: the SCIA alternativa has no sanatoria).
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}"}
+      - {kind: radio, label: è assoggettato al procedimento di accertamento della compatibilità paesaggistica, if_present: true, when: "{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}"}
+      - {kind: checkbox, label: si allega documentazione necessaria ai fini del rilascio del parere vincolante, if_present: true, when: "{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}"}
       - {kind: radio, label: non è sottoposto a tutela, when: "{{ask.bene_culturale|not}}"}
       - {kind: radio, label: è sottoposto a tutela, when: "{{ask.bene_culturale}}"}
       - {kind: checkbox, label: "Si allega la documentazione necessaria ai fini del rilascio del parere/nulla osta", when: "{{ask.bene_culturale}}"}
