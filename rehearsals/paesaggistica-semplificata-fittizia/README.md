@@ -20,10 +20,10 @@ How its steps file was made (`portal-steps.generated.yaml`, by `gen.py`):
     both, or art. 134 alone). Ticking art. 136 opens its letter and the declaring D.M. above
     the box itself, so the box renumbers (r2c1p2 → r3c1p3) and goes by label, as does what
     follows it; each case is its own branch.
-- `supports` refuses a variant of an issued authorization and the marche da bollo route.
+- `supports` refuses a variant of an issued authorization. The bollo goes by pagoPA or by two marche (`answers-marche`).
 - `answers-inad`: the client's PEC communicated as their INAD domicilio digitale (the shared
   DOMICILIO DIGITALE section, 30 pratiche; `domicilio_inad`, never asked: the Comune reads
-  INAD itself). Mapped from the crawl on 2026-10-31, not yet run on the portal.
+  INAD itself). Filled on the portal on 2026-10-31.
 
 What's the architect's, in `yours`: the relazione paesaggistica semplificata (Allegato D), the
 drawings and photos, the signed procura, the bollo and diritti, signing and sending.
@@ -38,3 +38,4 @@ drawings and photos, the signed procura, the bollo and diritti, signing and send
 | 2026-10-29 | pane | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 53.3 s; second, with the runner waiting for a section to open, **filled** in 59 s, read back on a fresh load. |
 | 2026-10-30 | pane | the bollo with two marche (`answers-marche`), `bench/rerun.py` bundle | stopped on the bollo: no box labelled "numero seriale (2)". Read on the page: the authorization's marca line copies the first's, its serial box titled "numero seriale (1)" too |
 | 2026-10-30 | pane | the same, the second marca as the second "numero seriale (1)" and "data" | **filled** in 51 s, read back on a fresh load (9 s), nothing moved or loose |
+| 2026-10-31 | pane | the client's PEC as their INAD domicilio digitale (`answers-inad`), `bench/rerun.py` bundle | **filled** in 51 s, nothing moved or loose |

@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (117 cases in all, 58 with a recorded filled run).
+  case (117 cases in all, 65 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -33,7 +33,7 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 | Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 14 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 8 |
 | Permesso di costruire | 153 | 67 | 30 | 17 | 25 | 14 | 179 |
-| SCIA | 150 | 80 | 44 | 4 | 12 | 10 | 61 |
+| SCIA | 150 | 81 | 43 | 4 | 12 | 10 | 61 |
 | SCIA alternativa | 128 | 67 | 29 | 14 | 10 | 8 | 84 |
 | Agibilità (SCA) | 36 | 23 | 6 | 0 | 2 | 5 | 18 |
 
@@ -746,7 +746,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistica` | `non_soggetto_autorizzazione` | ricade in zona tutelata, ma le opere non comportano alterazione dei l… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_semplificato` | è assoggettato al procedimento semplificato di autorizzazione paesagg… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_ordinario` | è assoggettato al procedimento ordinario di autorizzazione paesaggist… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_accertamento` | è assoggettato al procedimento di accertamento della compatibilità pa… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_accertamento` | è assoggettato al procedimento di accertamento della compatibilità pa… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `non_sottoposto_tutela` | non è sottoposto a tutela | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela` | è sottoposto a tutela | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela_allegato_rilascio_parere` | Si allega la documentazione necessaria ai fini del rilascio del parer… | m | filled on the portal | 1 |
