@@ -8,7 +8,7 @@ that means it on Napoli's SUE, and whether one of our cases takes it. A row with
 branch no rehearsal has taken: the next cases to write.
 
 - **a case takes it**: a pre-flight-ready answers file of a SUE rehearsal ticks that box
-  (98 such cases; nearly all have a filled run on the portal).
+  (102 such cases; nearly all have a filled run on the portal).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -32,7 +32,7 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 | Permesso di costruire | 153 | 93 | 17 | 29 | 14 | 193 |
 | SCIA | 150 | 123 | 4 | 13 | 10 | 67 |
 | SCIA alternativa | 128 | 96 | 14 | 10 | 8 | 88 |
-| Agibilità (SCA) | 36 | 29 | 0 | 2 | 5 | 28 |
+| Agibilità (SCA) | 36 | 29 | 0 | 2 | 5 | 19 |
 
 ## Next cases
 
@@ -1141,14 +1141,5 @@ Portal boxes of the Agibilità (SCA) no schema alternative matched and no case t
 - Titolarità dell'intervento: avere titolarità esclusiva all'esecuzione dell'intervento (mapped)
 - Titolarità dell'intervento: Maschio (not mapped)
 - Attestazione tecnica - Dati del Diretto…: Maschio (mapped)
-- Attestazione tecnica - Agibilità: locali con un’altezza minima interna inferiore a 2,70 metri fino al limite massimo di 2,4… (not mapped)
-- Attestazione tecnica - Agibilità: alloggio mono-stanza, con una superficie minima, comprensiva dei servizi, (not mapped)
-- Attestazione tecnica - Agibilità: inferiore a 28 metri quadrati, fino al limite massimo di 20 metri quadrati, per una perso… (not mapped)
-- Attestazione tecnica - Agibilità: inferiore a 38 metri quadrati, fino al limite massimo di 28 metri quadrati, per due perso… (not mapped)
-- Attestazione tecnica - Agibilità: i locali sono situati in edifici che sono stati sottoposti, nell’ambito dell’intervento e… (not mapped)
-- Attestazione tecnica - Agibilità: è stata realizzata una ristrutturazione con soluzioni alternative atte a garantire, in re… (not mapped)
-- Attestazione tecnica - Sicurezza degli…: Documento già depositato in Comune (not mapped)
-- Attestazione tecnica - Sicurezza degli…: Collaudo (ove richiesto) (not mapped)
-- Attestazione tecnica - Sicurezza degli…: Atto notorio (art. 6 DPR n. 392/1994) (not mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
 - Qualifica e dati del procuratore: all'Estero (not mapped)

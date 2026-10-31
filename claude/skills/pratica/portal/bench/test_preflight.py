@@ -348,8 +348,9 @@ def gated_support():
 
 
 def agibilita_systems():
-    """The agibilità's systems: certified by their dichiarazione di conformità it fills; by a
-    collaudo, an atto notorio or a filed document it refuses, and asks only with systems."""
+    """The agibilità's systems: certified by their dichiarazione di conformità alone it fills; by
+    others it asks system by system, one checklist a certificate (a filed one's P.G. only once
+    ticked), and asks only with systems."""
     agi = HERE.parents[4] / "rehearsals" / "agibilita-fittizia"
     steps = yaml.safe_load((agi / "portal-steps.generated.yaml").read_text())
     fields = dict(json.loads((HERE.parents[4] / "rehearsals" / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
@@ -360,7 +361,11 @@ def agibilita_systems():
         pre = lambda a: run.preflight(steps, values(a, fields, steps))
         assert pre(collaudo)["ready"]
         r = pre(collaudo | {"impianti_certificazione": "altro"})
-        assert any("atto notorio" in u for u in r["unsupported"]), r["unsupported"]
+        lists = {q["key"] for q in r["questions"] if q["type"] == "checklist"}
+        assert not r["unsupported"] and lists == {"impianti_dichiarazione", "impianti_depositato", "impianti_collaudo",
+                                                  "impianti_atto_notorio"}, r
+        assert not any(q["key"].endswith("_pg") and not q.get("only_if") for q in r["questions"]), r["questions"]
+        assert pre(json.loads((agi / "answers-impianti-depositati.json").read_text()))["ready"]
         none = {k: v for k, v in collaudo.items() if k != "impianti_certificazione"} | {"impianti": "false"}
         assert pre(none)["ready"], pre(none)
     finally:
@@ -422,7 +427,7 @@ CASES = [
     ("the imposta di bollo route is listed as a choice made in the person's name", bollo_chosen),
     ("a condition's words gate each other: a later question waits on the earlier answer (CILA contributo)", nested_when),
     ("a supports check with `if` applies, and is asked, only once its gate holds (permesso contributo)", gated_support),
-    ("the agibilità's systems: their dichiarazione is filled, any other certificate refused, asked only with systems", agibilita_systems),
+    ("the agibilità's systems: their dichiarazione is filled, other certificates asked system by system, asked only with systems", agibilita_systems),
     ("the SCIA in sanatoria: in progress and double conformity ready, art. 36-bis c. 1 and pre-1977 variants refused", sanatoria_cases),
 ]
 

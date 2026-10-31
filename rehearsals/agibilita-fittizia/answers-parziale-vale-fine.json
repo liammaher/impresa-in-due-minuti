@@ -47,5 +47,7 @@
  "impianto_linee_vita": "false",
  "impianto_altro": "false",
  "elaborato_parziale_doc": "rehearsals/agibilita-fittizia/files/elaborato-parziale.pdf",
- "data_fine_lavori": "2026-09-30"
+ "data_fine_lavori": "2026-09-30",
+ "igienico_24_5bis": "false",
+ "igienico_5quater": "false"
 }
