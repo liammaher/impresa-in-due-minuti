@@ -17,3 +17,4 @@ the declarations, payment, signing and sending.
 
 | Date | Browser | Result |
 |---|---|---|
+| 2026-10-31 | pane | P6, from scratch: stopped at Allega documenti on the ordinaria's second relazione slot, which only the SCIA's and the permesso's "Si allega" box opens; dropped (`drop: true`) |
