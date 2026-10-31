@@ -90,5 +90,6 @@
  "impianto_antincendio": "false",
  "impianto_altro": "false",
  "antincendio_deroga": "false",
- "denuncia_art65": "rehearsals/scia-fittizia/files/denuncia-art65.pdf"
+ "denuncia_art65": "rehearsals/scia-fittizia/files/denuncia-art65.pdf",
+ "strumenti_altri": "false"
 }

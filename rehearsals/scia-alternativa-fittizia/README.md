@@ -46,6 +46,12 @@ form no case took. Each passes pre-flight offline; **none has been run on the po
 - `answers-variante-sismica.json`: art. 1102 c.c.; no notifica preliminare; a fire-rules deroga; a seismic variant; a protected area (no alteration); idrogeologico without authorization; inside a RIR area di danno.
 - `answers-rir-fuori-area.json`: a RIR activity, outside its area di danno.
 
+Planning instruments (quadro 3, 2026-10-31): the PRG is always ticked; any other instrument
+in force or in salvaguardia is one checklist behind one yes/no, each found by the block its
+box opens. Ready offline, **not yet run on the portal**:
+
+- `answers-strumenti.json`: a P.I.P., a P.E.E.P. and another instrument over the area, each with its name, zone and article, beside the PRG.
+
 ## Runs
 
 | Date | Browser | Case | Result |

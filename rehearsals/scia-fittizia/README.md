@@ -65,6 +65,12 @@ form no case took. Each passes pre-flight offline; **none has been run on the po
 
 - `answers-senza-impianti.json`: the P6 works with no systems touched.
 
+Planning instruments (quadro 3, 2026-10-31): the PRG is always ticked; any other instrument
+in force or in salvaguardia is one checklist behind one yes/no, each found by the block its
+box opens. Ready offline, **not yet run on the portal**:
+
+- `answers-strumenti.json`: a PUC adopted, a PUA, a piano particolareggiato and a piano di recupero over the area, each with its zone and article, beside the PRG.
+
 ## Runs
 
 | Date | Browser | Case | Result |

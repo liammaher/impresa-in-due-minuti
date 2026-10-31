@@ -89,5 +89,6 @@
  "impianto_radiotv": "false",
  "impianto_ascensore": "false",
  "impianto_antincendio": "false",
- "impianto_altro": "false"
+ "impianto_altro": "false",
+ "strumenti_altri": "false"
 }

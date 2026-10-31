@@ -8,7 +8,7 @@ that means it on Napoli's SUE, and whether one of our cases takes it. A row with
 branch no rehearsal has taken: the next cases to write.
 
 - **a case takes it**: a pre-flight-ready answers file of a SUE rehearsal ticks that box
-  (102 such cases; nearly all have a filled run on the portal).
+  (104 such cases; nearly all have a filled run on the portal).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -30,8 +30,8 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 | Fine lavori | 2 | 1 | 1 | 0 | 0 | 15 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 16 | 9 |
 | Permesso di costruire | 153 | 93 | 17 | 29 | 14 | 193 |
-| SCIA | 150 | 123 | 4 | 13 | 10 | 67 |
-| SCIA alternativa | 128 | 96 | 14 | 10 | 8 | 88 |
+| SCIA | 150 | 123 | 4 | 13 | 10 | 63 |
+| SCIA alternativa | 128 | 96 | 14 | 10 | 8 | 85 |
 | Agibilità (SCA) | 36 | 29 | 0 | 2 | 5 | 19 |
 
 ## Next cases
@@ -827,13 +827,9 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Asseverazione SCIA - Stato legittimo, D…: attesta che la data/epoca di realizzazione dell’intervento (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: ai fini della sanatoria, la presente SCIA: (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla S… (not mapped)
-- Asseverazione SCIA - Dati immobile, str…: PUC (not mapped)
-- Asseverazione SCIA - Dati immobile, str…: PUA (not mapped)
-- Asseverazione SCIA - Dati immobile, str…: PIANO PARTICOLAREGGIATO (not mapped)
-- Asseverazione SCIA - Dati immobile, str…: PIANO DI RECUPERO (not mapped)
-- Asseverazione SCIA - Dati immobile, str…: P.I.P. (not mapped)
-- Asseverazione SCIA - Dati immobile, str…: P.E.E.P. (not mapped)
-- Asseverazione SCIA - Dati immobile, str…: ALTRO (not mapped)
+- Asseverazione SCIA - Dati immobile, str…: P.I.P. (mapped)
+- Asseverazione SCIA - Dati immobile, str…: P.E.E.P. (mapped)
+- Asseverazione SCIA - Dati immobile, str…: ALTRO (mapped)
 - Asseverazione SCIA - Dati immobile, str…: adattabilità (mapped)
 - Asseverazione SCIA - Sicurezza impianti…: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è ev… (not mapped)
 - Asseverazione SCIA - Sicurezza impianti…: ricade nell'articolo 14, comma 7, del d.lgs. n. 102/2014 in merito alle deroga alle dista… (mapped)
@@ -1021,13 +1017,10 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Asseverazione SCIA Alternativa - Dati p…: 4. Altri interventi individuati dalla legislazione regionale (1) (not mapped)
 - Asseverazione SCIA Alternativa - stato…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (mapped)
 - Asseverazione SCIA Alternativa - stato…: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PUC (not mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PUA (not mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PIANO PARTICOLAREGGIATO (not mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PIANO DI RECUPERO (not mapped)
-- Asseverazione SCIA Alternativa - Dati i…: P.I.P. (not mapped)
-- Asseverazione SCIA Alternativa - Dati i…: P.E.E.P. (not mapped)
-- Asseverazione SCIA Alternativa - Dati i…: ALTRO (not mapped)
+- Asseverazione SCIA Alternativa - Dati i…: PUC (mapped)
+- Asseverazione SCIA Alternativa - Dati i…: PUA (mapped)
+- Asseverazione SCIA Alternativa - Dati i…: PIANO PARTICOLAREGGIATO (mapped)
+- Asseverazione SCIA Alternativa - Dati i…: PIANO DI RECUPERO (mapped)
 - Asseverazione SCIA Alternativa - Dati i…: interessa un edificio privato aperto al pubblico e che le opere previste sono conformi al… (mapped)
 - Asseverazione SCIA Alternativa - Dati i…: è soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/2001 e del d.… (mapped)
 - Asseverazione SCIA Alternativa - Dati i…: accessibilità (mapped)

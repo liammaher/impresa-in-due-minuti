@@ -87,5 +87,6 @@
  "toll_prec_pratica_protocollo": "PG/2021/654321",
  "toll_prec_pratica_data": "2021-02-15",
  "toll_prec_atto_numero": "4321/1T",
- "toll_prec_atto_data": "2022-09-30"
+ "toll_prec_atto_data": "2022-09-30",
+ "strumenti_altri": "false"
 }

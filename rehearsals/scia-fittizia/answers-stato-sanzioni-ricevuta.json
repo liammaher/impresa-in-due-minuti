@@ -81,5 +81,6 @@
  "stato_legittimo": "sanzioni",
  "tolleranze": false,
  "sanzione_prova": "ricevuta",
- "sanzione_ricevuta": "rehearsals/scia-fittizia/files/ricevuta-sanzione.pdf"
+ "sanzione_ricevuta": "rehearsals/scia-fittizia/files/ricevuta-sanzione.pdf",
+ "strumenti_altri": "false"
 }
