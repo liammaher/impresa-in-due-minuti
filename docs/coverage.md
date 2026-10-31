@@ -60,7 +60,8 @@ Measured today:
 
 - Level 1: 30 of 30 pratiche fully in the dictionary.
 - Level 2: **65 refusals across 13 recipes**, 23 distinct messages.
-- Levels 3 to 5: not measured yet (see the open items).
+- Level 3, in part: **23 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot a run would stop on.
+- Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
@@ -103,6 +104,32 @@ Refusals, by how many recipes carry them (the most shared are the cheapest to cl
 - 1×: Systems certified by a collaudo, an atto notorio or a document already filed with the Comune aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
 - 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
+
+Ticked "si allega" boxes with no attachment slot under their condition (gen.py `unslotted`; some only in cases a recipe refuses, some with no slot on the portal: a run tells):
+
+- 4×: Asseverazione SCIA - Stato legittimo: allega la documentazione necessaria indicata nel quadro riepilogativo
+- 4×: Asseverazione SCIA - Tutela Storico Ambientale: Si allega la relazione paesaggistica e la documentazione
+- 4×: Asseverazione SCIA - Tutela Storico Ambientale: Si allega la relazione paesaggistica semplificata
+- 4×: Asseverazione SCIA - Tutela Storico Ambientale: si allega documentazione necessaria ai fini del rilascio del parere vincolante
+- 2×: Asseverazione PdC - inquinamento acustico: si allega documentazione necessaria all'ottenimento della deroga
+- 2×: Asseverazione PdC - inquinamento acustico: si allega la documentazione necessaria alla valutazione del progetto
+- 2×: Asseverazione PdC - stato legittimo: allega la documentazione necessaria indicata nel quadro riepilogativo
+- 2×: Asseverazione PdC - tutela ecologica ambientale: Si allega la documentazione necessaria per la richiesta di deroga
+- 2×: Asseverazione SCIA - Amianto: Si allega documentazione per la richiesta di deroga
+- 2×: Asseverazione SCIA - Inquinamento acustico: si allega documentazione necessaria all'ottenimento della deroga
+- 2×: Asseverazione SCIA - Inquinamento acustico: si allega la documentazione necessaria alla valutazione del progetto
+- 2×: Asseverazione SCIA - Tutela Ecologica: Si allega la documentazione necessaria per la richiesta di deroga
+- 2×: f) Calcolo del contributo di costruzione: allega il prospetto di calcolo preventivo
+- 1×: Asseverazione SCIA Alternativa - Amianto: Si allega documentazione per la richiesta di deroga
+- 1×: Asseverazione SCIA Alternativa - Inquinamento acus: si allega documentazione necessaria all'ottenimento della deroga
+- 1×: Asseverazione SCIA Alternativa - Inquinamento acus: si allega la documentazione necessaria alla valutazione del progetto
+- 1×: Asseverazione SCIA Alternativa - Tutela Ecologica: Si allega la documentazione necessaria per la richiesta di deroga
+- 1×: Asseverazione SCIA Alternativa - Tutela Storico Am: Si allega la relazione paesaggistica e la documentazione
+- 1×: Asseverazione SCIA Alternativa - Tutela Storico Am: Si allega la relazione paesaggistica semplificata
+- 1×: Relazione Tecnica di Asseverazione: allega l’autorizzazione sismica
+- 1×: f) Calcolo del contributo: allega la ricevuta di versamento
+- 1×: g) Rispetto degli obblighi in materia di salute e : allega alla presente comunicazione la notifica
+- 1×: i) Rispetto degli obblighi: allega alla presente comunicazione la notifica
 
 Open items no recipe shows:
 

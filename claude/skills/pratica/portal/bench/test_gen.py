@@ -217,7 +217,8 @@ def _():
         # A bundle is a new batch: an earlier batch's result under the same name would skip a run.
         bundle = (t / "bundle.js").read_text()
         assert bundle.index('sessionStorage.removeItem("pv-batch")') < bundle.index("window.pvBatchRun = ")
-        assert "moved: r.moved || []" in (t / "out" / "loop.js").read_text()
+        loop = (t / "out" / "loop.js").read_text()
+        assert "moved: r.moved || []" in loop and "r.snapshot.boxes" in loop and "gaps" in loop
         queue = (t / "out" / "queue-0.js").read_text()
         check = (t / "out" / "check.js").read_text()
         assert all(f'"steps/{n}.js"' in check for n in names) and '"runner.js"' in check
@@ -752,6 +753,36 @@ def _():
         assert r["ready"] and has(p, "Documentazione necessaria per la richiesta di autorizzazione all'allaccio"), (name, r)
     law = [x for x in branches.rows() if x["state"] == "law"]
     assert len(law) >= 20 and all("piano casa" in x["choice"].lower() or x.get("depth", 0) > 1 for x in law), len(law)
+
+
+
+@case("a ticked \"si allega\" with no slot under its condition is listed (the sewer's has one now; the prospetto's not)")
+def _():
+    out = gen.unslotted(generated("pdc-fittizio"))
+    labels = [label for _, label, _ in out]
+    assert not any("rilascio dell'autorizzazione" in l for l in labels), labels
+    assert any(l.startswith("allega il prospetto di calcolo") for l in labels), labels
+
+
+
+@case("rerun.py --record files each run in its rehearsal's runs.json, once")
+def _():
+    import json
+    import tempfile
+    sys.path.insert(0, str(HERE))
+    import rerun
+    with tempfile.TemporaryDirectory() as t:
+        before, rerun.REHEARSALS = rerun.REHEARSALS, Path(t)
+        try:
+            (Path(t) / "pdc-fittizio").mkdir()
+            done = [{"name": "pdc-fittizio/answers-deroga", "result": "filled", "total_seconds": 142.4},
+                    {"name": "pdc-fittizio", "result": "stopped"}]
+            rerun.record(done, "answers-p6.json", "2026-10-31")
+            rerun.record(done, "answers-p6.json", "2026-10-31")
+            runs = json.loads((Path(t) / "pdc-fittizio" / "runs.json").read_text())
+        finally:
+            rerun.REHEARSALS = before
+    assert [(r["answers"], r["result"]) for r in runs] == [("answers-deroga.json", "filled"), ("answers-p6.json", "stopped")], runs
 
 
 print(f"{sum(results)}/{len(results)} passed")

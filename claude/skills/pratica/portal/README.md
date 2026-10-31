@@ -107,6 +107,9 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   a field is "" in the first block, then "2", "3" (roles `a`, `a2`; asks `altro_tecnico_...`,
   `altro_tecnico2_...`). "Alle dipendenze di" opens more than the crawl saw: the firm's REA, seat
   and legale rappresentante (read 2026-10-31).
+- **A choice's revealed boxes may repeat labels above them** (an employer's "Via, Piazza", "N.",
+  "Cognome"): crawl.js counts reveals per label since 2026-10-31; crawls before then left those
+  out, so a run can still find required boxes there (recrawl a section to see them).
 - **A block a tick opens may repeat the labels above it** (h1's structural designer under
   the architect's): fill it by label from its first box (`anchor`, `block: 1`).
 - **Suggestion lists fade out.** A street's list, hidden by its widget, lies over the next
@@ -221,6 +224,12 @@ the tab's earlier results first: `loop.js` skips a name it finds there, to resum
 `results.js` lists each run's `moved` ids and `loose` labels, what a gen.py change is checked by.
 A run that stops in ~20 s on "the portal stayed busy" with no section opened is most likely a
 sign-in that expired: the runner's frame lands on the login page (2026-10-30).
+A stopped run lists its `gaps`: the empty boxes the portal wants, by label, from the runner's
+snapshot (no values), so a stop names them without opening the draft (2026-10-31). `--values`
+takes the fixture as it is. After a batch, run `record.js` in the pane, save what it prints, and
+`rerun.py --record <file>` files each run in its rehearsal's `runs.json`: schema_branches.py
+counts a box as filled on the portal only from there. After the batch, reload the portal's home
+before clicking anything: the runner's review stays drawn over the page.
 
 ## Attachments screens
 

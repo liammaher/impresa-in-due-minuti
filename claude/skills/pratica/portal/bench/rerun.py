@@ -18,17 +18,21 @@ and its answers file) goes through run.py's page_files, as `run.py page` would. 
   loop.js       starts the runs in order and returns at once; each result is kept in the tab
                 (sessionStorage pv-batch), so running loop.js again carries on where it stopped
   results.js    the results so far, one line each (`fresh.js` clears them for a new batch)
+  record.js     every run's name and result, as JSON: saved to a file, `rerun.py --record FILE`
+                adds them to each rehearsal's runs.json (what schema_branches.py counts as filled)
   pick.js       with --bundle FILE: everything above in FILE, and a box on the page where the
                 person picks it once (checked by sha256): no big script copied through the conversation
 
 The pane cuts a call off at 45 s: poll results.js. The values file is what `pvault get`
-prints, or a fixture's fields (rehearsals/cila-fittizia/fixture-p6.json "fields" as a dict).
+prints, or a fixture as it is (rehearsals/cila-fittizia/fixture-p6.json: its "fields" are read, so a
+person added to it is in the next batch).
 No rehearsal named: every one with a generated steps file and the answers file. A rehearsal
 named `NAME:ANSWERS.json` runs with that answers file instead (one pratica, several cases: each
 its own run, `NAME/ANSWERS` in the results).
 """
 
 import argparse
+from datetime import date
 import json
 import sys
 from pathlib import Path
@@ -101,18 +105,41 @@ def compact(queue):
     return out
 
 
+def record(done, default, day):
+    """Each run of a batch (record.js: "pdc-fittizio/answers-deroga", or a rehearsal alone for its
+    default answers file) into rehearsals/<name>/runs.json, once per date, case and result."""
+    for d in done:
+        name, _, stem = d["name"].partition("/")
+        f = REHEARSALS / name / "runs.json"
+        runs = json.loads(f.read_text()) if f.is_file() else []
+        entry = {"date": day, "answers": f"{stem}.json" if stem else default, "result": d["result"],
+                 **({"seconds": d["total_seconds"]} if d.get("total_seconds") else {})}
+        if not any(all(r.get(k) == entry[k] for k in ("date", "answers", "result")) for r in runs):
+            runs.append(entry)
+            f.write_text(json.dumps(runs, indent=1) + "\n")
+        print(f"{name}: {entry['answers']} {entry['result']}")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("rehearsals", nargs="*")
-    ap.add_argument("--values", required=True, type=Path)
+    ap.add_argument("--values", type=Path)
     ap.add_argument("--answers", default="answers-p6.json", help="each rehearsal's answers file")
-    ap.add_argument("--out", required=True, type=Path)
+    ap.add_argument("--out", type=Path)
+    ap.add_argument("--record", type=Path, help="record.js's output: add each run to its rehearsal's runs.json, and stop")
+    ap.add_argument("--date", default=date.today().isoformat(), help="--record: the batch's date")
     ap.add_argument("--file-urls", type=Path, help="JSON {path: https URL}: files the page fetches by link")
     ap.add_argument("--bundle", type=Path, help="also write everything the pane needs as one file here (pick.js loads it)")
     a = ap.parse_args()
+    if a.record:
+        return record(json.loads(a.record.read_text()), a.answers, a.date)
+    if not (a.values and a.out):
+        ap.error("--values and --out are required to build a batch")
     names = a.rehearsals or sorted(d.name for d in REHEARSALS.iterdir()
                                    if (d / "portal-steps.generated.yaml").exists() and (d / a.answers).exists())
     fields = json.loads(a.values.read_text())
+    if isinstance(fields, dict) and isinstance(fields.get("fields"), list):
+        fields = dict(fields["fields"])  # a fixture
     urls = json.loads(a.file_urls.read_text()) if a.file_urls else None
     (a.out / "steps").mkdir(parents=True, exist_ok=True)
     stored, sources, origin, queue, failed = {}, {}, None, [], []
@@ -176,10 +203,13 @@ if (!pvAlready) window.pvBatchRun = (async () => {
     __pv.start(proc, values);
     let r; do { r = await __pv.wait(30000); } while (r.result === "running");
     // moved and loose: the ids that named another box, the labels worth a look (what a gen.py
-    // change is checked by).
+    // change is checked by). gaps: a stopped run's empty boxes the portal wants (labels only,
+    // from its snapshot, which holds no value), so the stop names them without opening the draft.
+    const gaps = ((r.snapshot && r.snapshot.boxes) || []).filter((b) => b.required && b.state !== "filled"
+      && b.state !== "checked").map((b) => `${b.kind} ${b.label || b.id}`);
     done.push({ name, result: r.result, error: r.error || null, at: r.at, sections: r.sections.length,
       verify_seconds: r.verify_seconds ?? null, total_seconds: r.total_seconds, url: r.url,
-      moved: r.moved || [], loose: r.loose || [], retries: (r.retries || []).length });
+      moved: r.moved || [], loose: r.loose || [], retries: (r.retries || []).length, ...(gaps.length ? { gaps } : {}) });
     sessionStorage.setItem("pv-batch", JSON.stringify(done));
   }
   return "done";
@@ -190,10 +220,12 @@ pvAlready ? "a batch is already running in this tab: nothing started" : `started
 const done = JSON.parse(sessionStorage.getItem("pv-batch") || "[]");
 JSON.stringify({ done: done.length, of: (window.pvBatch || []).length, running: !!window.pvBatchBusy,
   filled: done.filter((d) => d.result === "filled").length,
-  stopped: done.filter((d) => d.result !== "filled").map((d) => [d.name, d.error, d.at && d.at.section]),
+  stopped: done.filter((d) => d.result !== "filled").map((d) => [d.name, d.error, d.at && d.at.section, d.gaps || []]),
   moved: done.filter((d) => (d.moved || []).length).map((d) => [d.name, d.moved]),
   loose: done.filter((d) => (d.loose || []).length).map((d) => [d.name, d.loose]) })
 """)
+    (a.out / "record.js").write_text('JSON.stringify(JSON.parse(sessionStorage.getItem("pv-batch") || "[]")'
+                                      '.map((d) => ({ name: d.name, result: d.result, total_seconds: d.total_seconds })))\n')
     (a.out / "fresh.js").write_text('sessionStorage.removeItem("pv-batch"); "cleared"\n')
     if a.bundle:
         write_bundle(a.out, a.bundle)
