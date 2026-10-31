@@ -82,7 +82,7 @@ def copy_runner(skill):
     portal.mkdir(parents=True)
     # catalogue.py for its drifted(): pre-flight refuses a pratica the last drift check found
     # changed on the portal, so a plugin update carries the refusal (drift.json, not the crawls).
-    for name in ("run.py", "rules.py", "inpage.js", "catalogue.py"):
+    for name in ("run.py", "rules.py", "route.py", "inpage.js", "catalogue.py"):
         shutil.copy2(PRATICA / "portal" / name, portal / name)
     (portal / "catalogue" / "F839").mkdir(parents=True)
     shutil.copy2(PRATICA / "portal" / "catalogue" / "F839" / "drift.json", portal / "catalogue" / "F839" / "drift.json")

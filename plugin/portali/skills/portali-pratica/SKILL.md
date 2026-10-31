@@ -74,9 +74,18 @@ use `coverage.json` and say its `built` date.
 
 ## 1. Which pratica
 
-Read the request and the job's documents. Find the pratica (`find_pratica` with the case's
-facts, else `catalog.json` and `coverage.json`); a case can need two (a restaurant and its
-dehors). Then, with the connector, call `get_pratica` with its `name` and the
+Read the request and the job's documents. Works needing a building title (a CILA, SCIA,
+permesso, sanatoria or landscape authorization at the SUE) are routed by their facts:
+
+```sh
+python3 SKILL/portal/route.py --table sue-napoli --answers facts.json
+```
+
+It asks the rules table's facts (the works alone first, then the rest in one message, the
+yes/no ones as the checklist `fatti`) and, once they decide, names the one pratica (`pratica`)
+and the `answers` to start `answers.json` with; `unsupported` is the reason none fits. Other
+pratiche: `find_pratica` with the case's facts, else `catalog.json` and `coverage.json`; a case
+can need two (a restaurant and its dehors). Then, with the connector, call `get_pratica` with its `name` and the
 `steps_sha256` from `catalog.json`:
 
 - a status other than `available`: tell the architect in one line what it means and stop.
