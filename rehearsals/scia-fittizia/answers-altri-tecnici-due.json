@@ -92,5 +92,6 @@
  "altro_tecnico_dipendente": true,
  "altro_tecnico_incarico": "coordinamento della sicurezza in fase di progettazione",
  "altro_tecnico2_incarico": "progettazione degli impianti",
- "altro_tecnico2_dipendente": false
+ "altro_tecnico2_dipendente": false,
+ "strumenti_altri": "false"
 }
