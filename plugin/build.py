@@ -232,7 +232,7 @@ def self_check(plugin):
             sys.exit(f"check.py refused the test case:\n{r.stdout}{r.stderr}")
         r = subprocess.run([py, skill / "portal" / "run.py", "preflight", "--steps",
                             skill / "pratiche" / f"{TEST_CASE}.json", "--answers", "answers.json",
-                            "--values", values], cwd=case, capture_output=True, text=True)
+                            "--values", values, "--made-up"], cwd=case, capture_output=True, text=True)
         if r.returncode:
             sys.exit(f"pre-flight of the test case isn't ready:\n{r.stdout}{r.stderr}")
         # Every pratica's JSON must read as its YAML did: pre-flight prints the same, from

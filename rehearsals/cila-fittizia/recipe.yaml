@@ -27,9 +27,9 @@ asks:
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Pay the 151 € diritti by bank transfer to the Comune; upload the receipt on Pagamento oneri (a late CILA's penalty is paid before the run: its receipt is in quadro d)"
+  - "Upload the receipt of the 151 € diritti on Pagamento oneri (how Napoli takes them is below; a late CILA's penalty is paid before the run: its receipt is in quadro d)"
   - "On Allega documenti, once the declarations are ticked (the portal gives the procura only then): download the procura (Scarica il documento), have the client sign it, sign it digitally (.p7m) and attach it"
-  - "Attach the CILA DSC that fill.py filled (form quadro-riepilogativo-dsc: a box per document uploaded) in its slot, as a plain PDF"
+  - "Attach the CILA DSC that fill.py filled (form quadro-riepilogativo-dsc: a box per document uploaded) in its slot, as PDF/A signed digitally"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.

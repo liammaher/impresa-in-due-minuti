@@ -38,7 +38,7 @@ def case(name, fixture, **answers):
             a.pop(k, None)
         else:
             a[k] = v
-    return run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")))
+    return run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")), made_up=True)
 
 
 def shop(**answers):
@@ -144,7 +144,7 @@ def sue(name, answers="answers-p6.json", **changes):
             a.pop(k, None)
         else:
             a[k] = v
-    return run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")))
+    return run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")), made_up=True)
 
 
 def sue_every_case_decided_once():

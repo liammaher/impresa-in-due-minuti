@@ -211,7 +211,7 @@ def ticked():
         for a in sorted(d.glob("answers*.json")):
             values = run.Values(json.loads(a.read_text()), fields=fields, asks=steps.get("asks"))
             try:
-                if not run.preflight(steps, values)["ready"]:
+                if not run.preflight(steps, values, made_up=True)["ready"]:
                     continue
                 planned = run.plan(steps, values)
             except Exception:  # a case pre-flight can't plan offline counts as not taken

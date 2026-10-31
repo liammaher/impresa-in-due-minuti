@@ -95,7 +95,9 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      and `asks:` (questions, asked in one message, or proposed to confirm). Before it, for
                      the SUE's building titles, `route.py` asks the table's facts and names the one steps
                      file whose `rules:` main and `handles` are the case's pratiche, with the answers to
-                     carry (the index is read from the steps files). A stopped run resumes on its draft (`--resume`, `--fix`).
+                     carry (the index is read from the steps files). Pre-flight also holds each file to its
+                     sportello's `FILING` rules (Napoli's SUE, DD 501/2026: PDF/A, signed .p7m or PAdES,
+                     plain names; `--made-up` only warns, for rehearsals). A stopped run resumes on its draft (`--resume`, `--fix`).
                      Both take a draft's values from one `pvault get` (`--values -`, Touch ID).
                      Where a choice or "+" renumbers ids, fields are found by label
                      (`label` + `anchor`/`block`/`nth`; `kind: add` presses "+"); the job's other

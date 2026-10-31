@@ -34,7 +34,8 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    change and look at the diff: an unrelated steps file that changes is a regression until
    shown otherwise.
 4. **Pre-flight** with made-up answers (`answers-p6.json`) and the P6 fixture's values
-   (`rehearsals/cila-fittizia/fixture-p6.json` "fields" as a dict): `run.py preflight`.
+   (`rehearsals/cila-fittizia/fixture-p6.json` "fields" as a dict): `run.py preflight --made-up`
+   (the rehearsal's files are made up: Napoli's file rules only warn, below).
 5. **Run in the pane** (the pratica skill, step 2) and record each run in the rehearsal's
    README (`| Date | Browser | Result |`): what stopped it and what fixed it, then the
    filled run.
@@ -140,6 +141,26 @@ opens: unreadable is `not ready`; no codice fiscale in its certificates, or none
 dichiarante's (`t:identity.codice_fiscale`), is a `warnings` entry. Counts and a yes/no only: Claude
 reads the report, so no codice fiscale is in it. It does not verify the signature or the
 certificate's validity at signing time; the portal does.
+
+## What a sportello refuses before reading: `FILING`
+
+Napoli's SUE declares a pratica irricevibile, without reading it, for a file not in PDF/A or over
+20 MB, a name with spaces, accents or other signs, an unsigned document or procura, or diritti
+paid other than before sending to its postal account (DD 501/2026, Linee Guida §§3, 4, 7, 8; the
+SUE's Costi page). `run.py`'s `FILING`, keyed by the steps file's `start` (`comune=F839&tipoSportello=E`),
+says so; pre-flight checks each file the run attaches:
+- **PDF/A**: the XMP's `pdfaid:part`, which PDF/A keeps unfiltered (a .p7m's content, read with
+  openssl). It says the file declares PDF/A, not that a validator would pass it.
+- **Signed**: a .p7m, or the PDF's own signature (PAdES: a `/ByteRange` and the PKCS#7 in
+  `/Contents`), whose signer is read as a .p7m's is. Neither proves the signature holds.
+- **Names**: letters, digits and underscores, then the extensions.
+
+Each failure is the file's `problem`, and `yours` carries the same rules for the person's own files
+and the payment. The 200 DPI the Linee Guida ask for is advice there and isn't checked. With
+`--made-up` (a rehearsal) they are the file's `filing` and a warning, so rehearsals still run;
+the tests pass `made_up=True` for the rehearsals' files. Seen on 2026-10-31: the Comune's own DD 501
+and DD 603 are PAdES-signed and read as such, and are not PDF/A; the veraPDF corpus's PDF/A-1b and
+2b files declare it both ways (`part="2"`, `<pdfaid:part>2<`).
 
 ## What the person reads before they declare
 
