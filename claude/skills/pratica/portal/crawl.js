@@ -293,8 +293,9 @@
         sec.text = words();
         sec.branches = [];
         const cs = choices(sec.fields);
-        for (const c of cs.slice(0, opts.limit || 30)) await explore([c], sec.fields, opts.depth || 2, sec.branches);
-        if (cs.length > (opts.limit || 30)) sec.truncated = cs.length;
+        // 80 by default: at 30 the semplificata's Allegato B list (41) was cut (2026-10-31).
+        for (const c of cs.slice(0, opts.limit || 80)) await explore([c], sec.fields, opts.depth || 2, sec.branches);
+        if (cs.length > (opts.limit || 80)) sec.truncated = cs.length;
         if (known && !known[sec.fingerprint]) known[sec.fingerprint] = `${where}#${name}`;
       }
     } catch (e) {
@@ -357,8 +358,22 @@
   }
   const loggedOut = () => !/impresainungiorno/.test(doc().location.host) || /login/i.test(doc().location.pathname);
 
+  // The pane's localStorage also holds the SUAP crawls, near Chrome's limit (2026-10-31: 7.2 of
+  // about 10 million characters): what it can't keep stays in this tab (__crawlUnsaved, which
+  // export.js saves) and the batch stops, never crawling on into nothing.
+  function save(k, v) {
+    try { localStorage.setItem(k, v); return true; }
+    catch (e) {
+      (window.__crawlUnsaved = window.__crawlUnsaved || {})[k] = v;
+      if (report) report.stopped = `pane storage full at ${k}: run export.js now, then free space (old crawls)`;
+      return false;
+    }
+  }
+  const storageUsed = () => { let n = 0; for (let i = 0; i < localStorage.length; i++) n += (localStorage.getItem(localStorage.key(i)) || "").length; return n; };
+
   async function batch(opts) {
     const t0 = performance.now();
+    report.storage = storageUsed();
     if (!window.__wizard) throw new Error("load wizard.js first");
     await newFrame();
     const nav = window.__wizard.driver(frame, opts.draft);
@@ -402,7 +417,7 @@
         }, !!opts.interventi);
         for (const k of ["refused", "pratica", "screens", "variants"]) if (w[k]) r[k] = w[k];
         for (const v of w.variants || []) if (!v.error) seen.add(norm(v.option));
-        localStorage.setItem("crawl:scelte", JSON.stringify([...seen]));
+        save("crawl:scelte", JSON.stringify([...seen]));
         const n = await nav.setSelected(findPath(nav.tree(), tag(op.path), op.nth).key, false);
         if (!n) throw new Error("didn't unselect");
       } catch (e) {
@@ -413,10 +428,11 @@
       // A section that failed (its frame gone, the portal busy) makes the pratica one to redo.
       if (!r.error && r.sections.some((x) => x.error)) r.error = `sections failed: ${r.sections.filter((x) => x.error).map((x) => x.section).join("; ").slice(0, 200)}`;
       r.seconds = +((performance.now() - o0) / 1000).toFixed(1);
-      localStorage.setItem((check ? "crawl:check:" : "crawl:op:") + op.name, JSON.stringify(r));
-      if (!check) localStorage.setItem("crawl:known", JSON.stringify(known));
+      save((check ? "crawl:check:" : "crawl:op:") + op.name, JSON.stringify(r));
+      if (!check) save("crawl:known", JSON.stringify(known));
       report.done_ops++;
       if (r.error) report.errors.push(`${op.name}: ${r.error}`);
+      if (report.stopped) break;
     }
     report.seconds = +((performance.now() - t0) / 1000).toFixed(1);
     report.done = true;
@@ -475,7 +491,7 @@
   }
 
   window.__crawl = {
-    revealed, // for bench/test_inpage.py
+    revealed, save, // for bench/test_inpage.py
     // The frame of the page's own run (or of a run that ended): never one already removed.
     slots: () => { if (!frame || !frame.isConnected) frame = document.querySelector("iframe"); return slots(); },
     slotsOf,

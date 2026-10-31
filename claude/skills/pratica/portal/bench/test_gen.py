@@ -219,6 +219,7 @@ def _():
         assert bundle.index('sessionStorage.removeItem("pv-batch")') < bundle.index("window.pvBatchRun = ")
         loop = (t / "out" / "loop.js").read_text()
         assert "moved: r.moved || []" in loop and "r.snapshot.boxes" in loop and "gaps" in loop
+        assert 'querySelectorAll(\'[data-pv="review"]' in loop, "the batch leaves the review over the portal"
         queue = (t / "out" / "queue-0.js").read_text()
         check = (t / "out" / "check.js").read_text()
         assert all(f'"steps/{n}.js"' in check for n in names) and '"runner.js"' in check
@@ -783,6 +784,26 @@ def _():
         finally:
             rerun.REHEARSALS = before
     assert [(r["answers"], r["result"]) for r in runs] == [("answers-deroga.json", "filled"), ("answers-p6.json", "stopped")], runs
+
+
+
+@case("catalogue.py pane --bundle: one picked file installs and starts the crawl; export.js saves what the store couldn't keep")
+def _():
+    import hashlib
+    import json
+    import subprocess
+    import tempfile
+    with tempfile.TemporaryDirectory() as t:
+        t = Path(t)
+        (t / "ops.json").write_text(json.dumps([{"name": "cila", "sector": "S", "path": "P"}]))
+        subprocess.run([sys.executable, str(HERE.parent / "catalogue.py"), "pane", str(t / "out"), "--bundle",
+                        str(t / "pv-prova.js"), "--ops", str(t / "ops.json"), "--fresh"], check=True, capture_output=True)
+        text = (t / "pv-prova.js").read_text()
+        assert hashlib.sha256(text.encode()).hexdigest() in (t / "out" / "pick.js").read_text()
+        assert "window.__crawl.batch(opts)" in text and 'localStorage.removeItem(\"crawl:op:\" + o.name)' in text
+        export = (t / "out" / "export.js").read_text()
+        assert "__crawlUnsaved" in export and "crawl-batch-prova.json" in export
+        assert "crawl:batch" in (t / "out" / "status.js").read_text()
 
 
 print(f"{sum(results)}/{len(results)} passed")

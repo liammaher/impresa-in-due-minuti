@@ -70,6 +70,8 @@ class Handler(BaseHTTPRequestHandler):
                                     b'        <td><input type="text" id="form:r4c1:dynaForm:impresa_txt"></td></tr>', b"")
                 assert b"impresa_txt" not in html, "the bench page changed: update the flaky cut"
             self.send(html, "text/html; charset=utf-8")
+        elif path == "/login":  # where an expired sign-in lands (the portal's identity provider)
+            self.send(b"<!doctype html><title>Accedi</title><p>Entra con SPID", "text/html")
         elif path == "/anteprima.pdf":
             self.send(b"%PDF-1.4\nl'anteprima del portale finto\n", "application/pdf")
         elif path.startswith("/files/") and path[7:] in LINKED:
@@ -220,6 +222,16 @@ def main():
             assert "loose" not in r, r.get("loose")
         case("an id that names another box now goes by its label, and the report names the move", moved_id)
 
+        def signed_out():
+            # The sign-in expired: the frame lands on a login page. The run says so, not "busy".
+            PORTAL.reset()
+            st = steps(base)
+            st["sections"][1]["open"] = False
+            r = fill(browser, base, {**st, "start": base + "/login"}, answers)
+            assert r["result"] == "stopped" and r["error"].startswith("signed out"), r.get("error")
+            assert not r.get("retries"), r.get("retries")
+        case("an expired sign-in stops the run saying so, not as the portal staying busy", signed_out)
+
         def anchored():
             # A block's start is a box the anchor is the own label of: the "(specificare)" box
             # beside a tick box reads it as its cell before, and must not start a block itself.
@@ -254,6 +266,12 @@ def main():
                 got = page.evaluate("([b, n]) => __crawl.revealed(b, n).map((f) => f.id)",
                                     [moved, [box("b1", "N."), box("b2", "N."), box("b3", "N.")]])
                 assert got == ["b3"], got
+                # A full store: the result stays in the tab (export.js saves it), the call says so.
+                kept = page.evaluate("""() => { const real = Storage.prototype.setItem;
+                    Storage.prototype.setItem = () => { throw new DOMException("full", "QuotaExceededError"); };
+                    try { return [__crawl.save("crawl:op:prova", "{}"), window.__crawlUnsaved["crawl:op:prova"]]; }
+                    finally { Storage.prototype.setItem = real; } }""")
+                assert kept == [False, "{}"], kept
             finally:
                 page.close()
         case("the crawl counts a revealed box whose label repeats one above it (an employer's address)", crawl_reveals)

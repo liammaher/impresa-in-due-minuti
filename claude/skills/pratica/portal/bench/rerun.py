@@ -18,8 +18,9 @@ and its answers file) goes through run.py's page_files, as `run.py page` would. 
   loop.js       starts the runs in order and returns at once; each result is kept in the tab
                 (sessionStorage pv-batch), so running loop.js again carries on where it stopped
   results.js    the results so far, one line each (`fresh.js` clears them for a new batch)
-  record.js     every run's name and result, as JSON: saved to a file, `rerun.py --record FILE`
-                adds them to each rehearsal's runs.json (what schema_branches.py counts as filled)
+  record.js     every run's name and result, as JSON (small, no values): `rerun.py --record -` reads
+                it pasted on stdin (or --record FILE) and adds each run to its rehearsal's runs.json
+                (what schema_branches.py counts as filled)
   pick.js       with --bundle FILE: everything above in FILE, and a box on the page where the
                 person picks it once (checked by sha256): no big script copied through the conversation
 
@@ -132,7 +133,7 @@ def main():
     ap.add_argument("--bundle", type=Path, help="also write everything the pane needs as one file here (pick.js loads it)")
     a = ap.parse_args()
     if a.record:
-        return record(json.loads(a.record.read_text()), a.answers, a.date)
+        return record(json.loads(sys.stdin.read() if str(a.record) == "-" else a.record.read_text()), a.answers, a.date)
     if not (a.values and a.out):
         ap.error("--values and --out are required to build a batch")
     names = a.rehearsals or sorted(d.name for d in REHEARSALS.iterdir()
@@ -212,6 +213,9 @@ if (!pvAlready) window.pvBatchRun = (async () => {
       moved: r.moved || [], loose: r.loose || [], retries: (r.retries || []).length, ...(gaps.length ? { gaps } : {}) });
     sessionStorage.setItem("pv-batch", JSON.stringify(done));
   }
+  // Each filled run drew the person's review over the portal: nobody reads it in a batch, and it
+  // covers what the next click needs (2026-10-31).
+  document.querySelectorAll('[data-pv="review"], iframe[data-pv="runner"]').forEach((e) => e.remove());
   return "done";
 })().finally(() => { window.pvBatchBusy = false; });
 pvAlready ? "a batch is already running in this tab: nothing started" : `started: ${(window.pvBatch || []).length} queued`

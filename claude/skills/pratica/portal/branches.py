@@ -43,7 +43,7 @@ import gen
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE.parents[3] / "docs" / "sue-branches.md"
-LIMIT = 30  # crawl.js's default `limit` of choices tried per section
+LIMIT = 30  # crawl.js's default `limit` before 2026-10-31 (80 since; a cut section says `truncated`)
 TICKS = ("radio", "checkbox", "tick")
 STATES = ["ticked", "answer", "theirs", "left", "law", "fixed", "unmapped", "no entry"]
 
@@ -148,7 +148,7 @@ def rows():
                 **({"under": (parent.get("choice") or "")[:80]} if parent else {}),
                 "state": st, "opens": len([x for x in n.get("reveals", []) if x["kind"] != "message"]),
                 **({"not_tried": True} if n.get("not_tried") else {}),
-                **({"section_at_limit": True} if top == LIMIT else {}),
+                **({"section_at_limit": True} if crawl.get("truncated") or top == LIMIT else {}),
             })
     return out
 
@@ -180,7 +180,7 @@ def render(rs):
         f"| unmapped | {count['unmapped']} | in a mapped section, not taken: a case that needs it is refused or not asked |",
         f"| no entry | {count['no entry']} | its section isn't in the dictionary yet |",
         "", "What the crawl didn't see (more choices may exist there):", "",
-        f"- {len(capped)} sections show exactly {LIMIT} choices at the top, crawl.js's default limit: "
+        f"- {len(capped)} sections cut at crawl.js's limit of choices (`truncated`, or exactly {LIMIT} from older crawls): "
         + (", ".join(capped) if capped else "none") + ".",
         f"- {len(untried)} of these choices the crawl saw but never tried: what they open isn't known.",
         "- Choices only a saved answer shows (attachment slots, sections a scelta adds) aren't here: the "

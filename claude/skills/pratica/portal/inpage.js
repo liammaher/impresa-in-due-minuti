@@ -48,7 +48,10 @@
 //   __pv.open()                    loads the frame's page as the top page, for the person
 (() => {
   class StepError extends Error {}
-  const fail = (m) => { throw new StepError(m); };
+  // A stop while the frame sits on a sign-in page is the sign-in, whatever failed first.
+  const fail = (m) => {
+    throw new StepError(frame && !/^signed out/.test(m) && signedOut() ? `signed out: the portal sent the page to its sign-in (${m}); sign in again, then rerun` : m);
+  };
   // The pane slows timers to a few ticks a second; message events aren't slowed.
   const channel = new MessageChannel(), waiting = [];
   channel.port1.onmessage = () => waiting.shift()();
@@ -198,9 +201,14 @@
       !!(w.PrimeFaces && w.PrimeFaces.ajax && !w.PrimeFaces.ajax.Queue.isEmpty());
   };
 
+  // An expired sign-in sends the frame to the identity provider (another origin: no document
+  // to read) or to a login page: it looked like "the portal stayed busy" for 20 s (2026-10-30).
+  const signedOut = () => { try { const d = frame.contentDocument; return !d || /login|spid|idp/i.test(d.location.pathname); } catch (e) { return true; } };
+
   async function idle(ms = 20000) {
-    const end = performance.now() + ms;
+    const start = performance.now(), end = start + ms;
     for (let quiet = 0; quiet < 3;) {
+      if (signedOut() && performance.now() - start > 2000) fail("signed out: the portal sent the page to its sign-in (no document to read); sign in again, then rerun");
       if (performance.now() > end) fail("the portal stayed busy");
       quiet = busy() ? 0 : quiet + 1;
       await sleep(30);
@@ -973,7 +981,9 @@
     for (let n = 0; ; n++) {
       await run(values, resume);
       const prev = report, at = prev.at, onError = /\/cmd\/error/.test(prev.url || "");
-      if (prev.result !== "stopped" || !at || n >= (resume.retries ?? 2) || !(onError || TRANSIENT.test(prev.error || ""))) return;
+      // Signed out is never retried: a reload lands on the same sign-in page.
+      if (prev.result !== "stopped" || !at || n >= (resume.retries ?? 2) || /^signed out/.test(prev.error || "")
+          || !(onError || TRANSIENT.test(prev.error || ""))) return;
       // Still running for wait(): the retry is part of this run.
       const retries = (prev.retries || []).concat([{ error: prev.error, at }]);
       report = { ...prev, result: "running", error: undefined, snapshot: undefined, retries, resumed: true };
