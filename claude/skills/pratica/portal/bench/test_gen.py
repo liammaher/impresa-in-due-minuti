@@ -719,7 +719,7 @@ def _():
         steps = generated(name)
         a = json.loads((REH / name / answers).read_text()); a.update(change)
         v = run.Values(a, fields=fields, asks=steps.get("asks"))
-        r = run.preflight(steps, v)
+        r = run.preflight(steps, v, made_up=True)
         return r, ([(p["label"] or "", str(p.get("value") or "")) for p in run.plan(steps, v)] if r["ready"] else [])
     has = lambda p, label: any(l.startswith(label) for l, _ in p)
     r, p = plan("pdc-fittizio", "answers-sottotetti.json")
