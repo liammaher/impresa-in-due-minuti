@@ -345,7 +345,9 @@ win). A proposal nobody confirmed is never used.
      be PDF/A, signed and named with letters, digits and underscores only, or the pratica is
      irricevibile: a file that isn't is a `problem` saying which (have the user export it as
      PDF/A, sign it, rename it), and `yours` says the same for their own files and how Napoli
-     takes the diritti (before sending, its postal account only). A rehearsal with made-up
+     takes the diritti (before sending, its postal account only); for a building title (CILA,
+     SCIA, SCIA alternativa, permesso) also Napoli's annexes: the Programma 100 and the Modello
+     DP, the Stato Comparativo sheet, and in zona A or for a frazionamento their own. A rehearsal with made-up
      files passes `--made-up`: then these are only each file's `filing` and a warning.
    - `yours`: tell the user now what they'll do at the end, so nothing surprises them,
      including a pratica the case needs from another office ("File apart, …": the seismic

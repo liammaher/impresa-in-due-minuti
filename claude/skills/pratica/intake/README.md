@@ -16,6 +16,7 @@ confirms them in one "ok" (`accept`); pre-flight then asks only what no document
 | Relazione tecnica | the art. 3 category, structures, prospetti, cambio d'uso, vincoli (the router's facts); works started or not and when; parti comuni, contributo, uomini-giorno, firms, tolerances, other assents, technicians, direttore dei lavori; OGGETTO and the description as the form's free text |
 | Notifica preliminare | D.Lgs. 81 applies; how many firms |
 | Receipts | whether the diritti went to Napoli's postal account and a sanzione to its IBAN |
+| Programma 100, Modello DP, tipo edilizio attestation, atto d'obbligo | Napoli's annexes: with `--steps` for a building title, a note names those the dossier lacks (the first two always, the attestation when the relazione says zona A, the atto d'obbligo when it describes a frazionamento) |
 | Assent, drawings, photos, identity document | their file slots |
 
 With no lease, a visura with one owner makes that owner the client (`proprietario` at 1/1, else
@@ -53,7 +54,7 @@ use; a relazione worded otherwise proposes less, never something else.
 ## Tests
 
 `bench/test_intake.py` (the pratica venv's Python; no network, vault or browser): the P6 dossier's
-kinds, its values against `rehearsals/cila-fittizia/fixture-p6.json`, nothing personal in
+kinds (Napoli's annexes too), its values against `rehearsals/cila-fittizia/fixture-p6.json`, nothing personal in
 `intake.json`, both PDF readers alike, the router's facts, the deed's titles, a receipt paid
 elsewhere, a signed .p7m, the owners' cases, and the whole path: scan, accept, route, scan against
 the steps file, accept, pre-flight with both values. On P6, pre-flight asks 20 questions and lacks
