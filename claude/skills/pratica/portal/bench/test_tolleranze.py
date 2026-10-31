@@ -8,6 +8,7 @@ pre-flight and plan with each rehearsal's answers-tolleranze* case. No browser, 
 """
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -15,6 +16,7 @@ import yaml
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[4]
+os.chdir(ROOT)  # the answers name files from the repo's root, wherever this runs from
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True
 import gen  # noqa: E402

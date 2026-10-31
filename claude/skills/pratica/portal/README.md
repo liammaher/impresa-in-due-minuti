@@ -95,6 +95,11 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   An asseverazione's "si allega" adds its own required slot, one per fascia di rispetto
   ("… tutela funzionale (stradale)"): run a new case to Allega documenti first, read the
   slots it adds, then map them (the SCIA, 2026-10-29).
+  It works the other way too: a slot the crawl's screen has can be gone for some answers (the
+  agibilità's dichiarazione di conformità, when every system's certificate is already
+  deposited), so a slot gets the `when` of every box that brings it, and a box that adds a
+  slot (a system's collaudo or atto notorio) is mapped with it: offline mapping doesn't see
+  either, so a new case runs to Allega documenti before it counts (2026-10-31).
 - **Assents asked with a pratica.** On Napoli's SUE a SCIA condizionata (the Soprintendenza,
   a park, a vincolo) gives no start date, and an assent that is its own operation (a landscape
   authorization) is selected with the pratica in the wizard, not attached to it.

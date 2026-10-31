@@ -86,5 +86,7 @@
  "igienico_5bis_caso": "monostanza uno",
  "igienico_adattabilita": "true",
  "igienico_5ter": "recupero",
- "ascensore_comunicazione": "sca"
+ "ascensore_comunicazione": "sca",
+ "impianti_collaudo_doc": "rehearsals/agibilita-fittizia/files/collaudo-impianti.pdf",
+ "impianti_atto_notorio_doc": "rehearsals/agibilita-fittizia/files/atto-notorio-impianti.pdf"
 }

@@ -441,6 +441,31 @@ def agibilita_systems():
         os.chdir(here)
 
 
+def agibilita_slots():
+    """The agibilità's systems decide its attachment slots (read on the portal 2026-10-31): the
+    dichiarazione's slot only while some system has one (none when all are deposited); a
+    collaudo or atto notorio opens its own required slot."""
+    root = HERE.parents[4] / "rehearsals"
+    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+    slots = {"Dichiarazione di conformità degli impianti", "Certificato di collaudo ove previsto, degli impianti installati",
+             "Atto notorio relativo alla conformità degli impianti"}
+
+    def filed(rehearsal, answers):
+        steps = yaml.safe_load((root / rehearsal / "portal-steps.generated.yaml").read_text())
+        a = json.loads((root / rehearsal / answers).read_text())
+        return {f["label"] for f in run.plan(steps, values(a, fields, steps)) if f["kind"] == "file"} & slots
+
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+    try:
+        assert filed("agibilita-fittizia", "answers-collaudo.json") == {"Dichiarazione di conformità degli impianti"}
+        assert filed("agibilita-fittizia", "answers-impianti-depositati.json") == set()
+        assert filed("agibilita-fittizia", "answers-impianti-collaudo.json") >= {
+            "Certificato di collaudo ove previsto, degli impianti installati", "Atto notorio relativo alla conformità degli impianti"}
+    finally:
+        os.chdir(here)
+
+
 def sanatoria_cases():
     """The SCIA in sanatoria: works in progress and double conformity fill; the conformity of art.
     36-bis c. 1 (the portal's asseverazione can't state it) and pre-1977 variants are refused."""
@@ -498,6 +523,7 @@ CASES = [
     ("a condition's words gate each other: a later question waits on the earlier answer (CILA contributo)", nested_when),
     ("a supports check with `if` applies, and is asked, only once its gate holds (permesso contributo)", gated_support),
     ("the agibilità's systems: their dichiarazione is filled, other certificates asked system by system, asked only with systems", agibilita_systems),
+    ("the agibilità's systems decide its slots: the dichiarazione's only with one, collaudo and atto notorio their own", agibilita_slots),
     ("the SCIA in sanatoria: in progress and double conformity ready, art. 36-bis c. 1 and pre-1977 variants refused", sanatoria_cases),
 ]
 

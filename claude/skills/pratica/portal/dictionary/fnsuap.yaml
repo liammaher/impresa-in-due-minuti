@@ -946,6 +946,12 @@ asks:
   documentazione_fotografica: {type: file, question: "Photos of the state of the premises (PDF)"}
   stato_legittimo_doc: {type: file, question: "The documents proving the stato legittimo (the building's titles; for one with no title on file, the other documents: photos, maps, archive records; PDF)"}
   dichiarazione_conformita: {type: file, question: "The installers' dichiarazioni di conformità of the systems touched (PDF)", when: "{{ask.impianti}}"}
+  # Whether any of the agibilità's systems is certified by a dichiarazione: its slot is there
+  # only then (all may be deposited already, read on the portal 2026-10-31). Never asked: the
+  # answers say it, "/"-joined for `any`.
+  impianti_dichiarazioni: {type: yes_no, question: "Is any system certified by a dichiarazione di conformità?", default: "{{ask.impianti_certificazione|is_dichiarazione}}/{{ask.impianto_elettrico_dichiarazione,ask.impianto_radiotv_dichiarazione,ask.impianto_termico_dichiarazione,ask.impianto_idrico_dichiarazione,ask.impianto_gas_dichiarazione,ask.impianto_ascensore_dichiarazione,ask.impianto_antincendio_dichiarazione,ask.impianto_scariche_dichiarazione,ask.impianto_linee_vita_dichiarazione,ask.impianto_altro_dichiarazione}}"}
+  impianti_collaudo_doc: {type: file, question: "The systems' certificati di collaudo (art. 9 D.M. 37/2008), in one PDF"}
+  impianti_atto_notorio_doc: {type: file, question: "The atto notorio on the older systems' conformity (art. 6 DPR 392/1994), PDF"}
 
   solo_distributori: {type: yes_no, question: "Will it sell only through vending machines?", propose: "false"}
   anche_ingrosso: {type: yes_no, question: "Will it also sell wholesale (not only to the public)?", propose: "false"}
@@ -4071,4 +4077,4 @@ after:
       - {kind: file, label: "Elaborati grafici dello stato di fatto, di progetto e comparativi", value: "{{ask.elaborati_grafici}}"}
       - {kind: file, label: Documentazione fotografica dello stato di fatto, value: "{{ask.documentazione_fotografica}}"}
       - {kind: file, label: Documentazione dimostrativa dello stato legittimo, value: "{{ask.stato_legittimo_doc}}"}
-      - {kind: file, label: Dichiarazione di conformità degli impianti, value: "{{ask.dichiarazione_conformita}}", when: "{{ask.impianti}}"}
+      - {kind: file, label: Dichiarazione di conformità degli impianti, value: "{{ask.dichiarazione_conformita}}", when: "{{ask.impianti}} {{ask.impianti_dichiarazioni|any}}"}
