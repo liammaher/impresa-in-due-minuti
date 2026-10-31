@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/inizio-lavori-pdc
 title: Comunicazione di inizio lavori (permesso di costruire), SUE Napoli (tecnico con procura)
-generated: gen.py from inizio-lavori (2026-10-30) and dictionary/fnsuap.yaml
+generated: gen.py from inizio-lavori (2026-10-31) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali'

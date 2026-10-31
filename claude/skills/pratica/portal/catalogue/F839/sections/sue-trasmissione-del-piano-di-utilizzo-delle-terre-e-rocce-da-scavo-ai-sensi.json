@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:17:13.721Z",
+ "crawled": "2026-10-31T11:41:01.275Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Terre e rocce da scavo › Trasmissione del Piano di utilizzo delle terre e rocce da scavo ai sensi dell'art. 9 del DPR n. 120/2017 (da trasmettere almeno novanta giorni prima dell'inizio dei lavori e, in ogni caso, prima della conclusione dell'eventuale procedimento di VIA o AIA) (sector Edilizia e pianificazione urbana)",
- "seconds": 20.7,
+ "seconds": 14.2,
  "generated": {
   "interventi": "Trasmissione del piano di utilizzo delle terre e rocce da scavo ai sensi dell'art. 9 del DPR n.120/2017",
   "adempimenti": [
@@ -74,7 +74,7 @@
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
    "same_as": "cil#Oggetto della pratica",
-   "seconds": 1.4
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
@@ -86,7 +86,7 @@
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
    "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 1
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -100,13 +100,13 @@
    "section": "localizzazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
    "same_as": "cil#Localizzazione dell'intervento",
-   "seconds": 0.9
+   "seconds": 0.6
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
    "same_as": "cil#Dati catastali",
-   "seconds": 1.8
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",

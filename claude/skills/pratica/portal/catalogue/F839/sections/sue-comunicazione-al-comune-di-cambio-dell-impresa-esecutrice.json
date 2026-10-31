@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:10:27.619Z",
+ "crawled": "2026-10-31T11:35:15.190Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Comunicazione al Comune di cambio dell'impresa esecutrice (da utilizzare in caso di cessazione della precedente impresa) (sector Edilizia e pianificazione urbana)",
- "seconds": 20.5,
+ "seconds": 18.5,
  "generated": {
   "interventi": "Comunicazione di cambio impresa esecutrice",
   "adempimenti": [
@@ -83,13 +83,13 @@
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
    "same_as": "cil#Oggetto della pratica",
-   "seconds": 0.8
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
    "same_as": "cil#DOMICILIO DIGITALE",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
@@ -137,7 +137,7 @@
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 0.9,
+   "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

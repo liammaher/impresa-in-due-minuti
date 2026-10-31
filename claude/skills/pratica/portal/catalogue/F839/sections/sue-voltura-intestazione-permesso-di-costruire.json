@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:10:48.131Z",
+ "crawled": "2026-10-31T11:35:33.657Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Voltura intestazione Permesso di costruire (sector Edilizia e pianificazione urbana)",
- "seconds": 30.7,
+ "seconds": 31.2,
  "generated": {
   "interventi": "Voltura intestazione del permesso di costruire",
   "adempimenti": [
@@ -122,7 +122,7 @@
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
    "same_as": "cil#Dati catastali",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "Numero del permesso di costruire e proprietario",
@@ -315,7 +315,7 @@
      }
     }
    ],
-   "seconds": 4.3
+   "seconds": 4.4
   },
   {
    "section": "dichiarazione relativa alla conoscenza delle prescrizioni e condizioni da rispettare",
@@ -335,7 +335,7 @@
      "kind": "checkbox"
     }
    ],
-   "seconds": 1.4
+   "seconds": 1.2
   },
   {
    "section": "dichiarazione relativa alla conoscenza dei soggetti che intervengono nella realizzazione dell'intervento",
@@ -393,7 +393,7 @@
      ]
     }
    ],
-   "seconds": 2.1
+   "seconds": 1.9
   },
   {
    "section": "Contributo di Costruzione",
@@ -413,7 +413,7 @@
      "kind": "checkbox"
     }
    ],
-   "seconds": 1.4
+   "seconds": 1.3
   },
   {
    "section": "Domicilio dei nuovi intestatari per comunicazioni o notifiche",
@@ -603,7 +603,7 @@
      }
     }
    ],
-   "seconds": 3,
+   "seconds": 3.1,
    "scelta": "ci sono cointestatari"
   },
   {

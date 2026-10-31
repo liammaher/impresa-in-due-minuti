@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:10:09.939Z",
+ "crawled": "2026-10-31T11:34:57.575Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Comunicazione al Comune di nomina impresa esecutrice (sector Edilizia e pianificazione urbana)",
- "seconds": 17.7,
+ "seconds": 17.6,
  "generated": {
   "interventi": "Comunicazione di nomina impresa esecutrice",
   "adempimenti": [
@@ -73,7 +73,7 @@
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
    "same_as": "cil#Oggetto della pratica",
-   "seconds": 0.8
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
@@ -85,7 +85,7 @@
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
    "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.6
+   "seconds": 0.8
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -105,7 +105,7 @@
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
    "same_as": "cil#Dati catastali",
-   "seconds": 0.6
+   "seconds": 0.8
   },
   {
    "section": "titolo edilizio posseduto",
@@ -132,7 +132,7 @@
    "fingerprint": "6947e542cf24136a",
    "text": "titolo edilizio posseduto tipologia titolo edilizio n. anno",
    "branches": [],
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Impresa esecutrice dei lavori",
@@ -213,7 +213,7 @@
    "fingerprint": "041486025377e7ad",
    "text": "Impresa esecutrice dei lavori i lavori saranno eseguiti dalla/e impresa/e indicata/e di seguito: denominazione dell'impresa Codice Fiscale/Partita Iva con sede legale a Provincia CAP in via, viale, piazza n.civico telefono fisso cell. PEC iscritta alla Camera di Commercio di n. REA",
    "branches": [],
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "oggetto dell'istanza",
@@ -245,7 +245,7 @@
      "kind": "radio"
     }
    ],
-   "seconds": 2
+   "seconds": 2.2
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -255,7 +255,7 @@
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 0.9,
+   "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

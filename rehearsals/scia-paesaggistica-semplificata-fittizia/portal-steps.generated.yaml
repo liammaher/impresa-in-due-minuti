@@ -843,16 +843,18 @@ sections:
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: copia accatastamento di primo impianto, nth: 2}
   - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', max: 8, label: n., nth: 14}
   - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: del, nth: 14}
-  - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 3, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
-  - {kind: file, label: copia accatastamento di primo impianto, value: '{{ask.prova_catasto_copia}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
+  - {kind: checkbox, on_page: true, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo impianto, nth: 3}
+  - {kind: file, value: '{{ask.prova_catasto_copia}}', on_page: true, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo
+      impianto}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_altri}}', label: altri documenti probanti}
   - {kind: radio, when: '{{ask.stato_legittimo|is_prova}}', label: non sono disponibili la copia o gli estremi del titolo abilitativo}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}', label: copia accatastamento di primo impianto, nth: 2}
-  - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 3, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}'}
+  - {kind: checkbox, on_page: true, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: copia accatastamento di primo impianto, nth: 3}
   - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', max: 9999, label: n., nth: 15}
   - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: del, nth: 15}
-  - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 4, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
-  - {kind: file, label: copia accatastamento di primo impianto, value: '{{ask.prova_catasto_copia}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
+  - {kind: checkbox, on_page: true, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo impianto, nth: 4}
+  - {kind: file, value: '{{ask.prova_catasto_copia}}', on_page: true, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo
+      impianto}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_altri}}', label: altri documenti probanti, nth: 2}
   - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}}', label: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni}
   - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}', label: si allega la relativa ricevuta}

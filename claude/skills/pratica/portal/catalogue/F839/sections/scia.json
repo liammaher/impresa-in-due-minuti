@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T13:52:53.579Z",
+ "crawled": "2026-10-31T11:17:01.299Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Eseguire interventi edilizi (anche varianti a precedenti titoli o in sanatoria) › Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.) (sector Edilizia e pianificazione urbana)",
- "seconds": 350.1,
+ "seconds": 406.5,
  "generated": {
   "interventi": "Segnalazione Certificata di Inizio Attività Edilizia",
   "adempimenti": [
@@ -109,7 +109,7 @@
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
    "same_as": "cil#Oggetto della pratica",
-   "seconds": 0.8
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
@@ -121,7 +121,7 @@
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
    "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -166,7 +166,7 @@
    "fingerprint": "2d296ce3956dc559",
    "text": "b) Presentazione della SCIA/SCIA Unica/SCIA Condizionata Concentrazione dei regimi amministrativi ai sensi dell'art. 19-bis L. 241/1990 Il/La sottoscritto/a è consapevole che: Nel caso in cui per la realizzazione dell'intervento sia necessario presentare oltre alla SCIA, ulteriori segnalazioni o comunicazioni, è possibile presentare un'unica istanza allo Sportello Unico (SCIA UNICA) selezionando contestualmente tutti i relativi procedimenti. Per SCIA/SCIA Unica, il titolare dichiara che i lavori avranno inizio in data: Nel caso in cui per la realizzazione dell'intervento sia necessario presentare oltre alla SCIA, la richiesta per l'acquisizione di atti di assenso comunque denominati di altri uffici e amministrazioni, il titolare può presentare una unica istanza allo Sportello Unico, selezionando contestualmente tutti i relativi procedimenti. In questo caso (SCIA Condizionata da atti di assenso), il titolare è consapevole che l'intervento oggetto della segnalazione può essere iniziato DOPO la comunicazione da parte dello Sportello Unico dell'avvenuto rilascio dei relativi atti di assenso. PER PRESA VISIONE",
    "branches": [],
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "c) Qualificazione dell'intervento",
@@ -664,7 +664,7 @@
      ]
     }
    ],
-   "seconds": 23.9
+   "seconds": 23.7
   },
   {
    "section": "d) Destinazione d'uso dell'immobile",
@@ -2651,6 +2651,18 @@
        "choice": "copia accatastamento di primo impianto o si forniscono i relativi estremi",
        "id": "r31c1p84reg:chk",
        "kind": "checkbox",
+       "reveals": [
+        {
+         "id": "r33c1p87reg:chk",
+         "kind": "checkbox",
+         "label": "copia accatastamento di primo impianto o si forniscono i relativi estremi"
+        },
+        {
+         "id": "r34c1p94reg:chk",
+         "kind": "checkbox",
+         "label": "copia accatastamento di primo impianto o si forniscono i relativi estremi"
+        }
+       ],
        "moved": [
         [
          "r58c2p138reg:calendar_input",
@@ -2713,20 +2725,12 @@
          "r31c1p84reg:chk"
         ],
         [
-         "r40c1p101reg:chk",
-         "r33c1p87reg:chk"
-        ],
-        [
          "r42c2p106reg:txt",
          "r33c2p89reg:txt"
         ],
         [
          "r58c2p138reg:calendar_input",
          "r33c3p91reg:calendar_input"
-        ],
-        [
-         "r40c1p101reg:chk",
-         "r34c1p94reg:chk"
         ],
         [
          "r47c1p116reg:chk",
@@ -2752,6 +2756,299 @@
         "r38c1p99reg:chk"
        ],
        "then": [
+        {
+         "choice": "copia accatastamento di primo impianto o si forniscono i relativi estremi",
+         "id": "r33c1p87reg:chk",
+         "kind": "checkbox",
+         "moved": [
+          [
+           "r58c2p138reg:calendar_input",
+           "r3c3p7reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r5c3p13reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r7c3p19reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r9c3p25reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r11c3p31reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r13c3p37reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r15c3p43reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r17c3p49reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r20c3p56reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r22c3p62reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r24c3p68reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r26c3p74reg:calendar_input"
+          ],
+          [
+           "r42c2p106reg:txt",
+           "r29c2p80reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r29c3p82reg:calendar_input"
+          ],
+          [
+           "r40c1p101reg:chk",
+           "r31c1p84reg:chk"
+          ],
+          [
+           "r40c1p101reg:chk",
+           "r33c1p87reg:chk"
+          ],
+          [
+           "r42c2p106reg:txt",
+           "r33c2p89reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r33c3p91reg:calendar_input"
+          ],
+          [
+           "r40c1p101reg:chk",
+           "r34c1p94reg:chk"
+          ],
+          [
+           "r47c1p116reg:chk",
+           "r38c1p99reg:chk"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r42c3p108reg:calendar_input"
+          ],
+          [
+           "r58c1p136reg:txt",
+           "r54c1p128reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r54c2p130reg:calendar_input"
+          ]
+         ],
+         "enables": [
+          "r31c1p84reg:chk",
+          "r33c1p87reg:chk",
+          "r33c2p89reg:txt",
+          "r33c3p91reg:calendar_input",
+          "r34c1p94reg:chk",
+          "r38c1p99reg:chk"
+         ]
+        },
+        {
+         "choice": "copia accatastamento di primo impianto o si forniscono i relativi estremi",
+         "id": "r34c1p94reg:chk",
+         "kind": "checkbox",
+         "reveals": [
+          {
+           "id": "r36c1p97reg:upload1_input",
+           "kind": "file",
+           "label": "Tipologie ammesse: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m Allega Max: 9,77 MB",
+           "context": "copia accatastamento di primo impianto",
+           "accepts": "Tipologie ammesse: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m"
+          }
+         ],
+         "moved": [
+          [
+           "r58c2p138reg:calendar_input",
+           "r3c3p7reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r5c3p13reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r7c3p19reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r9c3p25reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r11c3p31reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r13c3p37reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r15c3p43reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r17c3p49reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r20c3p56reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r22c3p62reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r24c3p68reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r26c3p74reg:calendar_input"
+          ],
+          [
+           "r42c2p106reg:txt",
+           "r29c2p80reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r29c3p82reg:calendar_input"
+          ],
+          [
+           "r40c1p101reg:chk",
+           "r31c1p84reg:chk"
+          ],
+          [
+           "r40c1p101reg:chk",
+           "r33c1p87reg:chk"
+          ],
+          [
+           "r42c2p106reg:txt",
+           "r33c2p89reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r33c3p91reg:calendar_input"
+          ],
+          [
+           "r40c1p101reg:chk",
+           "r34c1p94reg:chk"
+          ],
+          [
+           "r47c1p116reg:chk",
+           "r39c1p101reg:chk"
+          ],
+          [
+           "r39c1p100reg:radio:2_clone",
+           "r40c1p102reg:radio:2_clone"
+          ],
+          [
+           "r40c1p101reg:chk",
+           "r41c1p103reg:chk"
+          ],
+          [
+           "r42c2p106reg:txt",
+           "r43c2p108reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r43c3p110reg:calendar_input"
+          ],
+          [
+           "r47c1p116reg:chk",
+           "r48c1p118reg:chk"
+          ],
+          [
+           "r48c1p117reg:radio:3_clone",
+           "r49c1p119reg:radio:3_clone"
+          ],
+          [
+           "r49c1p118reg:radio:4_clone",
+           "r50c1p120reg:radio:4_clone"
+          ],
+          [
+           "r50c1p120reg:radio:5_clone",
+           "r51c1p122reg:radio:5_clone"
+          ],
+          [
+           "r52c1p122reg:real",
+           "r53c1p124reg:real"
+          ],
+          [
+           "r52c2p124reg:calendar_input",
+           "r53c2p126reg:calendar_input"
+          ],
+          [
+           "r58c1p136reg:txt",
+           "r55c1p130reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r55c2p132reg:calendar_input"
+          ],
+          [
+           "r55c1p133reg:radio:6_clone",
+           "r56c1p135reg:radio:6_clone"
+          ],
+          [
+           "r56c1p134reg:chk",
+           "r57c1p136reg:chk"
+          ],
+          [
+           "r58c1p136reg:txt",
+           "r59c1p138reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r59c2p140reg:calendar_input"
+          ],
+          [
+           "r59c1p141reg:chk",
+           "r60c1p143reg:chk"
+          ],
+          [
+           "r61c1p143reg:txt",
+           "r62c1p145reg:txt"
+          ],
+          [
+           "r61c2p145reg:calendar_input",
+           "r62c2p147reg:calendar_input"
+          ],
+          [
+           "r63c1p147reg:radio:7_clone",
+           "r64c1p149reg:radio:7_clone"
+          ],
+          [
+           "r64c1p148reg:radio:8_clone",
+           "r65c1p150reg:radio:8_clone"
+          ]
+         ],
+         "enables": [
+          "r31c1p84reg:chk",
+          "r33c1p87reg:chk",
+          "r34c1p94reg:chk",
+          "r39c1p101reg:chk"
+         ]
+        },
         {
          "choice": "copia accatastamento di primo impianto o si forniscono i relativi estremi",
          "id": "r33c1p87reg:chk",
@@ -3251,6 +3548,18 @@
          "choice": "copia accatastamento di primo impianto o si forniscono i relativi estremi",
          "id": "r31c1p84reg:chk",
          "kind": "checkbox",
+         "reveals": [
+          {
+           "id": "r33c1p87reg:chk",
+           "kind": "checkbox",
+           "label": "copia accatastamento di primo impianto o si forniscono i relativi estremi"
+          },
+          {
+           "id": "r34c1p94reg:chk",
+           "kind": "checkbox",
+           "label": "copia accatastamento di primo impianto o si forniscono i relativi estremi"
+          }
+         ],
          "moved": [
           [
            "r58c2p138reg:calendar_input",
@@ -3313,20 +3622,12 @@
            "r31c1p84reg:chk"
           ],
           [
-           "r40c1p101reg:chk",
-           "r33c1p87reg:chk"
-          ],
-          [
            "r42c2p106reg:txt",
            "r33c2p89reg:txt"
           ],
           [
            "r58c2p138reg:calendar_input",
            "r33c3p91reg:calendar_input"
-          ],
-          [
-           "r40c1p101reg:chk",
-           "r34c1p94reg:chk"
           ],
           [
            "r47c1p116reg:chk",
@@ -3455,6 +3756,18 @@
        "choice": "copia accatastamento di primo impianto o si forniscono i relativi estremi",
        "id": "r40c1p101reg:chk",
        "kind": "checkbox",
+       "reveals": [
+        {
+         "id": "r42c1p104reg:chk",
+         "kind": "checkbox",
+         "label": "copia accatastamento di primo impianto o si forniscono i relativi estremi"
+        },
+        {
+         "id": "r43c1p111reg:chk",
+         "kind": "checkbox",
+         "label": "copia accatastamento di primo impianto o si forniscono i relativi estremi"
+        }
+       ],
        "moved": [
         [
          "r58c2p138reg:calendar_input",
@@ -3529,16 +3842,8 @@
          "r38c1p99reg:chk"
         ],
         [
-         "r40c1p101reg:chk",
-         "r42c1p104reg:chk"
-        ],
-        [
          "r58c2p138reg:calendar_input",
          "r42c3p108reg:calendar_input"
-        ],
-        [
-         "r40c1p101reg:chk",
-         "r43c1p111reg:chk"
         ],
         [
          "r58c1p136reg:txt",
@@ -3552,6 +3857,287 @@
        "disables": [
         "r31c1p84reg:chk",
         "r38c1p99reg:chk"
+       ],
+       "then": [
+        {
+         "choice": "copia accatastamento di primo impianto o si forniscono i relativi estremi",
+         "id": "r42c1p104reg:chk",
+         "kind": "checkbox",
+         "moved": [
+          [
+           "r58c2p138reg:calendar_input",
+           "r3c3p7reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r5c3p13reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r7c3p19reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r9c3p25reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r11c3p31reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r13c3p37reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r15c3p43reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r17c3p49reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r20c3p56reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r22c3p62reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r24c3p68reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r26c3p74reg:calendar_input"
+          ],
+          [
+           "r42c2p106reg:txt",
+           "r29c2p80reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r29c3p82reg:calendar_input"
+          ],
+          [
+           "r43c1p111reg:chk",
+           "r31c1p84reg:chk"
+          ],
+          [
+           "r42c2p106reg:txt",
+           "r33c2p89reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r33c3p91reg:calendar_input"
+          ],
+          [
+           "r47c1p116reg:chk",
+           "r38c1p99reg:chk"
+          ],
+          [
+           "r43c1p111reg:chk",
+           "r40c1p101reg:chk"
+          ],
+          [
+           "r43c1p111reg:chk",
+           "r42c1p104reg:chk"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r42c3p108reg:calendar_input"
+          ],
+          [
+           "r58c1p136reg:txt",
+           "r54c1p128reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r54c2p130reg:calendar_input"
+          ]
+         ],
+         "enables": [
+          "r42c2p106reg:txt",
+          "r42c3p108reg:calendar_input"
+         ],
+         "disables": [
+          "r31c1p84reg:chk",
+          "r38c1p99reg:chk"
+         ]
+        },
+        {
+         "choice": "copia accatastamento di primo impianto o si forniscono i relativi estremi",
+         "id": "r43c1p111reg:chk",
+         "kind": "checkbox",
+         "reveals": [
+          {
+           "id": "r45c1p114reg:upload1_input",
+           "kind": "file",
+           "label": "Tipologie ammesse: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m Allega Max: 9,77 MB",
+           "context": "copia accatastamento di primo impianto",
+           "accepts": "Tipologie ammesse: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m"
+          }
+         ],
+         "moved": [
+          [
+           "r58c2p138reg:calendar_input",
+           "r3c3p7reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r5c3p13reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r7c3p19reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r9c3p25reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r11c3p31reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r13c3p37reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r15c3p43reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r17c3p49reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r20c3p56reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r22c3p62reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r24c3p68reg:calendar_input"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r26c3p74reg:calendar_input"
+          ],
+          [
+           "r42c2p106reg:txt",
+           "r29c2p80reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r29c3p82reg:calendar_input"
+          ],
+          [
+           "r43c1p111reg:chk",
+           "r31c1p84reg:chk"
+          ],
+          [
+           "r42c2p106reg:txt",
+           "r33c2p89reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r33c3p91reg:calendar_input"
+          ],
+          [
+           "r47c1p116reg:chk",
+           "r38c1p99reg:chk"
+          ],
+          [
+           "r43c1p111reg:chk",
+           "r40c1p101reg:chk"
+          ],
+          [
+           "r43c1p111reg:chk",
+           "r42c1p104reg:chk"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r42c3p108reg:calendar_input"
+          ],
+          [
+           "r47c1p116reg:chk",
+           "r48c1p118reg:chk"
+          ],
+          [
+           "r48c1p117reg:radio:3_clone",
+           "r49c1p119reg:radio:3_clone"
+          ],
+          [
+           "r49c1p118reg:radio:4_clone",
+           "r50c1p120reg:radio:4_clone"
+          ],
+          [
+           "r50c1p120reg:radio:5_clone",
+           "r51c1p122reg:radio:5_clone"
+          ],
+          [
+           "r52c1p122reg:real",
+           "r53c1p124reg:real"
+          ],
+          [
+           "r52c2p124reg:calendar_input",
+           "r53c2p126reg:calendar_input"
+          ],
+          [
+           "r58c1p136reg:txt",
+           "r55c1p130reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r55c2p132reg:calendar_input"
+          ],
+          [
+           "r55c1p133reg:radio:6_clone",
+           "r56c1p135reg:radio:6_clone"
+          ],
+          [
+           "r56c1p134reg:chk",
+           "r57c1p136reg:chk"
+          ],
+          [
+           "r58c1p136reg:txt",
+           "r59c1p138reg:txt"
+          ],
+          [
+           "r58c2p138reg:calendar_input",
+           "r59c2p140reg:calendar_input"
+          ],
+          [
+           "r59c1p141reg:chk",
+           "r60c1p143reg:chk"
+          ],
+          [
+           "r61c1p143reg:txt",
+           "r62c1p145reg:txt"
+          ],
+          [
+           "r61c2p145reg:calendar_input",
+           "r62c2p147reg:calendar_input"
+          ],
+          [
+           "r63c1p147reg:radio:7_clone",
+           "r64c1p149reg:radio:7_clone"
+          ],
+          [
+           "r64c1p148reg:radio:8_clone",
+           "r65c1p150reg:radio:8_clone"
+          ]
+         ],
+         "disables": [
+          "r31c1p84reg:chk",
+          "r38c1p99reg:chk"
+         ]
+        }
        ]
       },
       {
@@ -4406,7 +4992,7 @@
      ]
     }
    ],
-   "seconds": 43
+   "seconds": 51.2
   },
   {
    "section": "g) Calcolo del contributo di costruzione",
@@ -5643,7 +6229,7 @@
      ]
     }
    ],
-   "seconds": 23.6
+   "seconds": 22.9
   },
   {
    "section": "H2) Altri tecnici incaricati",
@@ -5992,7 +6578,7 @@
      ]
     }
    ],
-   "seconds": 11.5
+   "seconds": 11.3
   },
   {
    "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
@@ -6119,7 +6705,7 @@
    "fingerprint": "6dcffcfdce6f75ea",
    "text": "m) Diritti di terzi dichiara di essere consapevole che la presente segnalazione non può comportare limitazione dei diritti dei terzi, fermo restando quanto previsto dall'articolo 19, comma 6-ter, della l. n. 241/1990",
    "branches": [],
-   "seconds": 0.8
+   "seconds": 0.7
   },
   {
    "section": "Note",
@@ -6135,7 +6721,7 @@
    "fingerprint": "e84721ea696ebe15",
    "text": "Note Note: 5000 Caratteri restanti",
    "branches": [],
-   "seconds": 1
+   "seconds": 0.6
   },
   {
    "section": "Asseverazione SCIA - Tipologia di intervento, descrizione opere",
@@ -6594,7 +7180,7 @@
      "kind": "checkbox"
     }
    ],
-   "seconds": 25
+   "seconds": 24.3
   },
   {
    "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
@@ -8240,7 +8826,7 @@
      ]
     }
    ],
-   "seconds": 43.8
+   "seconds": 43.7
   },
   {
    "section": "Asseverazione SCIA - Dati immobile, strumentazione urbanistica, barriere architettoniche",
@@ -8979,7 +9565,7 @@
      ]
     }
    ],
-   "seconds": 13.2
+   "seconds": 13.3
   },
   {
    "section": "Asseverazione SCIA - Sicurezza impianti, consumi energetici",
@@ -9481,7 +10067,7 @@
      "kind": "radio"
     }
    ],
-   "seconds": 25.5
+   "seconds": 24.8
   },
   {
    "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
@@ -10063,7 +10649,7 @@
      ]
     }
    ],
-   "seconds": 21.5
+   "seconds": 36.1
   },
   {
    "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
@@ -10616,7 +11202,7 @@
      ]
     }
    ],
-   "seconds": 26.6
+   "seconds": 54.5
   },
   {
    "section": "Asseverazione SCIA - Tutela Storico Ambientale",
@@ -10913,7 +11499,7 @@
      ]
     }
    ],
-   "seconds": 12.4
+   "seconds": 12.5
   },
   {
    "section": "Asseverazione SCIA - Tutela Ecologica",
@@ -11482,7 +12068,7 @@
      ]
     }
    ],
-   "seconds": 9.9
+   "seconds": 16.2
   },
   {
    "section": "Asseverazione SCIA - Tutela Funzionale",
@@ -11642,7 +12228,7 @@
      "kind": "checkbox"
     }
    ],
-   "seconds": 7.1
+   "seconds": 7.5
   },
   {
    "section": "Asseverazione SCIA - NOTE",
@@ -11658,7 +12244,7 @@
    "fingerprint": "b6ac34d6d6cc314e",
    "text": "Asseverazione SCIA - NOTE Note: 500 Caratteri restanti",
    "branches": [],
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -12072,14 +12658,14 @@
      ]
     }
    ],
-   "seconds": 13.4,
+   "seconds": 13.5,
    "scelta": "Le opere ricadono nell'ambito della Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione?"
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 0.9,
+   "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

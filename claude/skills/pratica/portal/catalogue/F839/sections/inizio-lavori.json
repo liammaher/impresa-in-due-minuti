@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:11:56.579Z",
+ "crawled": "2026-10-31T11:36:42.797Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Comunicazione inizio lavori (sector Edilizia e pianificazione urbana)",
- "seconds": 15.3,
+ "seconds": 17,
  "generated": {
   "interventi": "Inizio dei lavori",
   "adempimenti": [
@@ -145,7 +145,7 @@
    "fingerprint": "ad0d9b2e39dd5fa9",
    "text": "dichiarazione relativa alla comunicazione di inizio lavori in data",
    "branches": [],
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "dichiarazione dell'intestatario del permesso di costruire",
@@ -233,7 +233,7 @@
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 0.9,
+   "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

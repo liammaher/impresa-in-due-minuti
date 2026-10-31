@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:12:46.044Z",
+ "crawled": "2026-10-31T11:37:33.745Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Proroga fine lavori (sector Edilizia e pianificazione urbana)",
- "seconds": 18.5,
+ "seconds": 18.1,
  "generated": {
   "interventi": "Proroga del termine di ultimazione lavori",
   "adempimenti": [
@@ -75,7 +75,7 @@
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
    "same_as": "cil#Oggetto della pratica",
-   "seconds": 0.8
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
@@ -107,7 +107,7 @@
    "section": "dichiarazione delle motivazioni della richiesta di proroga",
    "fingerprint": "0cd4b48a866a5e24",
    "same_as": "sue-proroga-inizio-lavori#dichiarazione delle motivazioni della richiesta di proroga",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "dichiarazione periodo di proroga",
@@ -302,7 +302,7 @@
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 0.8,
+   "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:13:25.771Z",
+ "crawled": "2026-10-31T11:38:10.281Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Comunicazione integrativa proroga straordinaria trenta mesi inizio lavori (art. 10 septies, Legge 51/2022) (sector Edilizia e pianificazione urbana)",
- "seconds": 18.5,
+ "seconds": 19.2,
  "generated": {
   "interventi": "Comunicazione integrativa proroga straordinaria trenta mesi del termine di inizio lavori (art. 10 septies, Legge 51/2022, come modificato dalla Legge 11/2024)",
   "adempimenti": [
@@ -109,7 +109,7 @@
    "section": "Ubicazione dell'attività",
    "fingerprint": "1ae79e0eb7308899",
    "same_as": "cil#Localizzazione dell'intervento",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Dati catastali",
@@ -234,7 +234,7 @@
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 0.8,
+   "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],

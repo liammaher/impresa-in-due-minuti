@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:13:44.263Z",
+ "crawled": "2026-10-31T11:38:29.485Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Comunicazione integrativa proroga straordinaria trenta mesi ultimazione lavori (art. 10 septies, Legge 51/2022) (sector Edilizia e pianificazione urbana)",
- "seconds": 19.9,
+ "seconds": 20.7,
  "generated": {
   "interventi": "Comunicazione integrativa proroga straordinaria trenta mesi del termine di ultimazione lavori (art. 10 septies, Legge 51/2022, come modificato dalla Legge 11/2024)",
   "adempimenti": [
@@ -84,13 +84,13 @@
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
    "same_as": "cil#Oggetto della pratica",
-   "seconds": 0.6
+   "seconds": 0.8
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
    "same_as": "cil#DOMICILIO DIGITALE",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
@@ -110,7 +110,7 @@
    "section": "Ubicazione dell'attività",
    "fingerprint": "1ae79e0eb7308899",
    "same_as": "cil#Localizzazione dell'intervento",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Dati catastali",
@@ -122,7 +122,7 @@
    "section": "Tipologia lavori",
    "fingerprint": "10395948f398f904",
    "same_as": "sue-proroga-fine-lavori#richiesta della proroga di ultimazione dei lavori",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Riferimenti titolo edilizio e/o paesaggistico e data prevista della fine dei lavori",

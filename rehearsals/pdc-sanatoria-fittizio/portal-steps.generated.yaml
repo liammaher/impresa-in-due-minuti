@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/permesso-in-sanatoria
 title: Permesso di costruire in sanatoria, SUE Napoli (tecnico con procura)
-generated: gen.py from sue-permesso-di-costruire-art-10-d-p-r-380-2001 (2026-10-30) and dictionary/fnsuap.yaml
+generated: gen.py from sue-permesso-di-costruire-art-10-d-p-r-380-2001 (2026-10-31) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
@@ -774,16 +774,18 @@ sections:
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: copia accatastamento di primo impianto, nth: 2}
   - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', max: 8, label: n., nth: 14}
   - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: del, nth: 14}
-  - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 3, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
-  - {kind: file, label: copia accatastamento di primo impianto, value: '{{ask.prova_catasto_copia}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
+  - {kind: checkbox, on_page: true, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo impianto, nth: 3}
+  - {kind: file, value: '{{ask.prova_catasto_copia}}', on_page: true, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo
+      impianto}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_altri}}', label: altri documenti probanti}
   - {kind: radio, when: '{{ask.stato_legittimo|is_prova}}', label: non sono disponibili la copia o gli estremi del titolo abilitativo}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}', label: copia accatastamento di primo impianto, nth: 2}
-  - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 3, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}'}
+  - {kind: checkbox, on_page: true, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: copia accatastamento di primo impianto, nth: 3}
   - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', max: 9999, label: n., nth: 15}
   - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: del, nth: 15}
-  - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 4, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
-  - {kind: file, label: copia accatastamento di primo impianto, value: '{{ask.prova_catasto_copia}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
+  - {kind: checkbox, on_page: true, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo impianto, nth: 4}
+  - {kind: file, value: '{{ask.prova_catasto_copia}}', on_page: true, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo
+      impianto}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_altri}}', label: altri documenti probanti, nth: 2}
   - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}}', label: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni}
   - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}', label: si allega la relativa ricevuta}
@@ -1327,8 +1329,8 @@ sections:
   - {id: 'r13c2p30reg:radio:2_clone', kind: radio, when: '{{ask.bollo_marche}}', label: 'Marca da €16,00 per l''autorizzazione'}
   - {kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1)}
   - {kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}}', label: data}
-  - {kind: text, label: numero seriale (1), nth: 2, value: '{{ask.bollo_seriale_2}}', when: '{{ask.bollo_marche}}'}
-  - {kind: date, label: data, nth: 2, value: '{{ask.bollo_data_2|date_it}}', when: '{{ask.bollo_marche}}'}
+  - {id: 'r15c2p34reg:txt', kind: text, value: '{{ask.bollo_seriale_2}}', on_page: true, when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1), nth: 2}
+  - {id: 'r15c3p36reg:calendar_input', kind: date, value: '{{ask.bollo_data_2|date_it}}', on_page: true, when: '{{ask.bollo_marche}}', label: data, nth: 2}
 - section: SANATORIA
   fields:
   - {kind: checkbox, when: '{{ask.pdc_sanatoria_caso|is_assenza}}', label: 'sanatoria di intervento soggetto a permesso di costruire,'}

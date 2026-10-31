@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T14:20:31.890Z",
+ "crawled": "2026-10-31T11:43:46.626Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Beni Paesaggistici › Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022 - Comune) (sector Edilizia e pianificazione urbana)",
- "seconds": 19.5,
+ "seconds": 21,
  "generated": {
   "interventi": "Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022)",
   "adempimenti": [
@@ -86,7 +86,7 @@
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
    "same_as": "cil#Oggetto della pratica",
-   "seconds": 0.6
+   "seconds": 0.8
   },
   {
    "section": "DOMICILIO DIGITALE",
@@ -98,7 +98,7 @@
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
    "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -112,13 +112,13 @@
    "section": "ubicazione dell'attività",
    "fingerprint": "1ae79e0eb7308899",
    "same_as": "cil#Localizzazione dell'intervento",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
    "same_as": "cil#Dati catastali",
-   "seconds": 0.6
+   "seconds": 0.8
   },
   {
    "section": "PERIODO DI PROROGA",
@@ -132,7 +132,7 @@
    "fingerprint": "086272835dc216c1",
    "text": "PERIODO DI PROROGA Il sottoscritto comunica la proroga di due anni prevista dall'art. art. 10 septies, Legge 51/2022",
    "branches": [],
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "RIFERIMENTI AUTORIZZAZIONE PAESAGGISTICA E DATA SCADENZA EFFICACIA",
@@ -174,13 +174,13 @@
    "fingerprint": "1010675355ff76f7",
    "text": "RIFERIMENTI AUTORIZZAZIONE PAESAGGISTICA E DATA SCADENZA EFFICACIA Autorizzazione paesaggistica P.G. numero del per (specificare l'oggetto dell'intervento) intestato a la cui data di scadenza dell'efficacia dovrebbe essere il ed è invece prevista per il",
    "branches": [],
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "richiesta della proroga di ultimazione dei lavori",
    "fingerprint": "10395948f398f904",
    "same_as": "sue-proroga-fine-lavori#richiesta della proroga di ultimazione dei lavori",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Altre dichiarazioni",
@@ -194,7 +194,7 @@
    "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
    "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "Qualifica e dati del procuratore",

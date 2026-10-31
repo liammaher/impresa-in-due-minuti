@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-30T13:50:30.786Z",
+ "crawled": "2026-10-31T11:15:06.033Z",
  "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Eseguire interventi edilizi (anche varianti a precedenti titoli o in sanatoria) › Comunicazione Inizio Lavoro Asseverata (C.I.L.A.) (sector Edilizia e pianificazione urbana)",
- "seconds": 142.8,
+ "seconds": 115.3,
  "generated": {
   "interventi": "Comunicazione Inizio Lavori Asseverata (C.I.L.A.)",
   "adempimenti": [
@@ -89,13 +89,13 @@
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
    "same_as": "cil#DOMICILIO DIGITALE",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
    "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -109,7 +109,7 @@
    "section": "Localizzazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
    "same_as": "cil#Localizzazione dell'intervento",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "Dati catastali",
@@ -127,7 +127,7 @@
    "section": "b) Opere su parti comuni o modifiche esterne",
    "fingerprint": "a9ea4400694734ae",
    "same_as": "cil#b) Opere su parti comuni o modifiche esterne",
-   "seconds": 0.6
+   "seconds": 0.7
   },
   {
    "section": "c) Presentazione della comunicazione di inizio dei lavori asseverata",
@@ -275,7 +275,7 @@
      ]
     }
    ],
-   "seconds": 5.1
+   "seconds": 5
   },
   {
    "section": "e) Destinazione d'uso",
@@ -343,7 +343,7 @@
      ]
     }
    ],
-   "seconds": 4.4
+   "seconds": 4.2
   },
   {
    "section": "G1) Tecnici incaricati",
@@ -1010,7 +1010,7 @@
      ]
     }
    ],
-   "seconds": 15.2
+   "seconds": 12.3
   },
   {
    "section": "G2) Altri tecnici incaricati",
@@ -1531,10 +1531,59 @@
          "options": "112 options"
         },
         {
+         "id": "r37c2p107reg:txt",
+         "kind": "text",
+         "label": "n.",
+         "max": 20
+        },
+        {
          "id": "r39c1p111reg:txt",
          "kind": "text",
          "label": "con sede in",
          "max": 9999
+        },
+        {
+         "id": "r39c2p113reg",
+         "kind": "select",
+         "label": "provincia",
+         "options": "112 options"
+        },
+        {
+         "id": "r39c3p115reg",
+         "kind": "select",
+         "label": "stato",
+         "options": "251 options",
+         "value": "ITALIA"
+        },
+        {
+         "id": "r41c1p119reg:txt",
+         "kind": "text",
+         "label": "Via, Piazza, ecc.",
+         "max": 100
+        },
+        {
+         "id": "r41c2p121reg:txt",
+         "kind": "text",
+         "label": "N.",
+         "max": 10
+        },
+        {
+         "id": "r41c3p123reg:txt",
+         "kind": "text",
+         "label": "C.A.P.",
+         "max": 5
+        },
+        {
+         "id": "r44c1p129reg:txt",
+         "kind": "text",
+         "label": "Cognome",
+         "max": 50
+        },
+        {
+         "id": "r44c2p131reg:txt",
+         "kind": "text",
+         "label": "Nome",
+         "max": 50
         }
        ],
        "moved": [
@@ -1581,38 +1630,6 @@
         [
          "r32c3p94reg:radio:3_clone",
          "r30c3p86reg:radio:1_clone"
-        ],
-        [
-         "r29c2p79reg:txt",
-         "r37c2p107reg:txt"
-        ],
-        [
-         "r25c3p69reg",
-         "r39c2p113reg"
-        ],
-        [
-         "r25c2p67reg",
-         "r39c3p115reg"
-        ],
-        [
-         "r29c1p77reg:txt",
-         "r41c1p119reg:txt"
-        ],
-        [
-         "r29c2p79reg:txt",
-         "r41c2p121reg:txt"
-        ],
-        [
-         "r29c3p81reg:txt",
-         "r41c3p123reg:txt"
-        ],
-        [
-         "r9c1p15reg:txt",
-         "r44c1p129reg:txt"
-        ],
-        [
-         "r9c2p17reg:txt",
-         "r44c2p131reg:txt"
         ],
         [
          "r35c1p99reg:txt",
@@ -1698,7 +1715,7 @@
      ]
     }
    ],
-   "seconds": 30.2
+   "seconds": 24.1
   },
   {
    "section": "h) Impresa esecutrice dei lavori",
@@ -2030,7 +2047,7 @@
      ]
     }
    ],
-   "seconds": 13.2
+   "seconds": 10.7
   },
   {
    "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
@@ -2145,7 +2162,7 @@
      "kind": "radio"
     }
    ],
-   "seconds": 9
+   "seconds": 7.7
   },
   {
    "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
@@ -3140,7 +3157,7 @@
      }
     }
    ],
-   "seconds": 47.4
+   "seconds": 33.1
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -3160,7 +3177,7 @@
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
    "same_as": "cil#Qualifica e dati del procuratore",
-   "seconds": 0.9,
+   "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],
