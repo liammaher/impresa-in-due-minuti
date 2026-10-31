@@ -124,13 +124,19 @@ def state(n, f, name, entries):
 
 def rows():
     dictionary = gen.load_yaml(HERE / "dictionary" / "fnsuap.yaml")
-    out = []
+    out, seen = [], set()
     for fp, s in sorted(distinct_sections().items()):
         crawl = s["crawl"]
         base = [f for f in crawl.get("fields", []) if f["kind"] != "message"]
         top = len(crawl.get("branches") or [])
         names = sorted(s["names"])
         for n, f, depth, parent in walk(crawl.get("branches"), base):
+            # One box reached by two paths (two same-label parents, the primo impianto line's
+            # under epoca and under prova, both reveal it) is one choice.
+            key = (fp, n["id"], n.get("option"), (parent or {}).get("choice"))
+            if key in seen:
+                continue
+            seen.add(key)
             per = {nm: state(n, f, nm, gen.dictionary_entries(dictionary["sections"], nm)) for nm in names}
             # The weakest title decides: a choice ticked under one title and not another is
             # unmapped where it isn't.

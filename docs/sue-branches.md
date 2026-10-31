@@ -4,23 +4,23 @@
 
 Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdown option), each counted once however many pratiche share its section, and what the dictionary does with it. A case that takes an **unmapped** choice can't be filled yet. The scoreboard (`coverage.md`) counts a section as filled even with these left unticked, so they don't show there.
 
-**1175 choices** in 96 sections that have any.
+**1163 choices** in 96 sections that have any.
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 911 | Claude takes it when the case does |
+| ticked | 900 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 5 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 1 | left empty on purpose |
 | law | 21 | closed by law to new cases (the piano casa): refused as the law's, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 173 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 172 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
 
 - 0 sections show exactly 30 choices at the top, crawl.js's default limit: none.
-- 32 of these choices the crawl saw but never tried: what they open isn't known.
+- 26 of these choices the crawl saw but never tried: what they open isn't known.
 - Choices only a saved answer shows (attachment slots, sections a scelta adds) aren't here: the crawl never saves.
 
 ## Unmapped, by section
@@ -33,12 +33,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA
 - checkbox: Se cittadino non UE
-
-### DOMICILIO DIGITALE
-
-30 pratiche; 1 of 2 choices to map.
-
-- checkbox: il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005):
 
 ### Qualifica e dati del procuratore
 
