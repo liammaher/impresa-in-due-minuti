@@ -30,8 +30,9 @@ start 30 days after filing.
   required once their answers apply) are filled; the stato legittimo documents, the procura, the
   DSC and the receipt are the architect's (signed files only, or portal documents).
 
-Refused at pre-flight (`supports`): a landscape authorization (its own operation: not mapped
-yet); works not allowed in a cemetery's fascia; an acoustic impact or clima acustico report; a
+A landscape authorization is its own operation, filed with this one in one pratica
+(rehearsals/scia-alt-paesaggistica-{semplificata,ordinaria}-fittizia: the rules table sends those
+cases there). Refused at pre-flight (`supports`): works not allowed in a cemetery's fascia; an acoustic impact or clima acustico report; a
 project for the Vigili del Fuoco; asbestos; a hygiene derogation; the barriers rules; systems
 needing a project; soil needing investigations; an area without its urbanisation; a contributo
 already paid (its form has no receipt box). Not offered: the 4th tipologia (regional works).

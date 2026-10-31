@@ -79,7 +79,8 @@ Neither fills a value, saves a section, ticks a declaration, pays or sends.
   (`sue-combo-scia-paesaggistica-*`), every section one already crawled; their attachments
   screens are read on the empty draft, plus the SCIA's answer-dependent slots. Two more (2026-10-31): the
   permesso di costruire with its semplificata and with its ordinaria
-  (`sue-combo-pdc-paesaggistica-*`, `catalogue.py ops --combo`), every section one already crawled.
+  (`sue-combo-pdc-paesaggistica-*`, `catalogue.py ops --combo`), every section one already crawled;
+  and the SCIA alternativa with each (`sue-combo-scia-alt-paesaggistica-*`), the same.
 - **SUAP**: 278 pratiche crawled so far (the batch stands at about half of its 1,028 trips:
   the priority sectors, the common operations, part of the other sectors); **477 distinct
   sections**, 67 filled, 71% of section uses, counted under each title a section has. 107
