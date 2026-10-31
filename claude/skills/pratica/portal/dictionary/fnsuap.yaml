@@ -23,7 +23,8 @@
 # Roles (answers.json "people"): no prefix and `t:` are the studio's own (the business and its
 # titolare, the architect), `c:` the client, `o:` the owner company, `r:` its legale
 # rappresentante, `f1:`/`f2:` the firms, `s:` the structural designer, `d:` a direttore dei
-# lavori who isn't the architect, `a:` another technician appointed for the works.
+# lavori who isn't the architect, `a:`/`a2:`/`a3:` other technicians appointed for the works
+# and `ad:`/`ad2:`/`ad3:` the firm each is employed by.
 
 # Yes/no asks with a `group` are asked as one checklist (`item`), the answer the list of
 # items that apply.
@@ -114,9 +115,19 @@ asks:
     type: yes_no
     question: "Are other technicians (structures, systems, acoustics, safety) already appointed for these works?"
     propose: "false"
-  altri_tecnici_uno: {type: yes_no, question: "Is it one other technician (`a:` in the job's people)?", propose: "true"}
-  altro_tecnico_incarico: {type: text, question: "What is the other technician appointed for (the form's \"Incaricato della\", e.g. progettazione strutturale)?"}
-  altro_tecnico_dipendente: {type: yes_no, question: "Does the other technician work as an employee of a firm or studio (the form's \"alle dipendenze di\")?", propose: "false"}
+  # The other technicians are `a:`, `a2:`, `a3:` in the job's people; an employee's firm is
+  # `ad:`, `ad2:`, `ad3:`.
+  altri_tecnici_quanti:
+    type: choice
+    question: "How many other technicians? uno (`a:` in the job's people); due (`a:` and `a2:`); tre (`a:`, `a2:` and `a3:`); piu di tre"
+    options: [uno, due, tre, piu di tre]
+    propose: uno
+  altro_tecnico_incarico: {type: text, question: "What is the other technician (`a:`) appointed for (the form's \"Incaricato della\", e.g. progettazione strutturale)?"}
+  altro_tecnico_dipendente: {type: yes_no, question: "Does the other technician (`a:`) work as an employee of a firm or studio (the form's \"alle dipendenze di\": the firm is `ad:` in the job's people)?", propose: "false"}
+  altro_tecnico2_incarico: {type: text, question: "What is the second other technician (`a2:`) appointed for?"}
+  altro_tecnico2_dipendente: {type: yes_no, question: "Does the second other technician (`a2:`) work as an employee of a firm or studio (the firm is `ad2:`)?", propose: "false"}
+  altro_tecnico3_incarico: {type: text, question: "What is the third other technician (`a3:`) appointed for?"}
+  altro_tecnico3_dipendente: {type: yes_no, question: "Does the third other technician (`a3:`) work as an employee of a firm or studio (the firm is `ad3:`)?", propose: "false"}
   lavori_in_proprio:
     type: yes_no
     question: "Are the works so minor that the client does them without a firm (opere di modesta entità, eseguite in proprio)?"
@@ -1306,40 +1317,66 @@ sections:
   - section: G2) Altri tecnici incaricati
     leave: [fax, "Estremi dell'abilitazione"]
     supports:
-      - {if: "{{ask.altri_tecnici}}", value: "{{ask.altri_tecnici_uno}}", in: ["true"], else: "More than one other technician isn't mapped yet: the quadro's block repeats."}
-      - {if: "{{ask.altri_tecnici}}", value: "{{ask.altro_tecnico_dipendente}}", in: ["false"], else: "Another technician employed by a firm (the quadro's \"alle dipendenze di\") isn't mapped yet."}
+      - {if: "{{ask.altri_tecnici}}", value: "{{ask.altri_tecnici_quanti}}", in: [uno, due, tre], else: "More than three other technicians aren't mapped yet: each takes a \"+\" on the portal, and three have been prepared."}
     fields:
       - {kind: checkbox, label: di aver incaricato in qualità di altri tecnici, when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: Cognome, anchor: Incaricato della, block: 1, value: "{{a:identity.last_name|upper}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: Nome, anchor: Incaricato della, block: 1, value: "{{a:identity.first_name|upper}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: C.F., anchor: Incaricato della, block: 1, value: "{{a:identity.codice_fiscale}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: date, label: Data di nascita, anchor: Incaricato della, block: 1, value: "{{a:identity.date_of_birth|date_it}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: select, label: Cittadinanza, anchor: Incaricato della, block: 1, value: ITALIA, when: "{{ask.altri_tecnici}}"}
-      - {kind: select, label: Sesso, anchor: Incaricato della, block: 1, value: "{{a:identity.sex|sesso}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: select, label: Stato, anchor: Incaricato della, block: 1, value: ITALIA, when: "{{ask.altri_tecnici}}"}
-      - {kind: select, label: Provincia, anchor: Incaricato della, block: 1, value: "{{a:identity.birth_province}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: Comune italiano, anchor: Incaricato della, block: 1, value: "{{a:identity.birth_comune|upper}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: select, label: Stato, nth: 2, anchor: Incaricato della, block: 1, value: ITALIA, when: "{{ask.altri_tecnici}}"}
-      - {kind: select, label: Provincia, nth: 2, anchor: Incaricato della, block: 1, value: "{{a:residenza.provincia}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: Comune italiano, nth: 2, anchor: Incaricato della, block: 1, value: "{{a:residenza.comune|upper}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: "Via, Piazza", anchor: Incaricato della, block: 1, value: "{{a:residenza.indirizzo|upper}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: "N.", anchor: Incaricato della, block: 1, value: "{{a:residenza.civico}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: C.A.P., anchor: Incaricato della, block: 1, value: "{{a:residenza.cap}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: select, label: Stato, nth: 3, anchor: Incaricato della, block: 1, value: ITALIA, when: "{{ask.altri_tecnici}}"}
-      - {kind: select, label: Provincia, nth: 3, anchor: Incaricato della, block: 1, value: "{{a:business.sede_legale_provincia}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: Comune italiano, nth: 3, anchor: Incaricato della, block: 1, value: "{{a:business.sede_legale_comune|upper}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: "Via, Piazza", nth: 2, anchor: Incaricato della, block: 1, value: "{{a:business.sede_legale_indirizzo|upper}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: "N.", nth: 2, anchor: Incaricato della, block: 1, value: "{{a:business.sede_legale_civico}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: C.A.P., nth: 2, anchor: Incaricato della, block: 1, value: "{{a:business.sede_legale_cap}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: Telefono, anchor: Incaricato della, block: 1, value: "{{a:identity.phone|phone_it}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: cell., anchor: Incaricato della, block: 1, value: "{{a:identity.phone|phone_it}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: posta elettronica certificata, anchor: Incaricato della, block: 1, value: "{{a:identity.pec}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: Incaricato della, anchor: Incaricato della, block: 1, value: "{{ask.altro_tecnico_incarico}}", when: "{{ask.altri_tecnici}}"}
-      - {kind: radio, label: si, anchor: Incaricato della, block: 1, when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: Iscritto all'ordine/collegio, anchor: Incaricato della, block: 1, value: "{{a:albo.ordine}}", on_page: true, when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: di, anchor: Incaricato della, block: 1, value: "{{a:albo.provincia|provincia_nome}}", on_page: true, when: "{{ask.altri_tecnici}}"}
-      - {kind: text, label: al n., anchor: Incaricato della, block: 1, value: "{{a:albo.numero}}", on_page: true, when: "{{ask.altri_tecnici}}"}
-      - {kind: radio, label: "no", nth: 2, anchor: Incaricato della, block: 1, when: "{{ask.altri_tecnici}}"}
+    # One block per technician (a, a2, a3), the second and third by "+". An employee's studio
+    # is the employer's seat (ad, ad2, ad3: the firm of "alle dipendenze di").
+    repeat: 3
+    firm_when: "{{ask.altri_tecnici}}"
+    repeat_when: ["{{ask.altri_tecnici_quanti|in_due__tre}}", "{{ask.altri_tecnici_quanti|is_tre}}"]
+    block:
+      - {kind: text, label: Incaricato della, value: "{{ask.altro_tecnico#N_incarico}}"}
+      - {kind: text, label: Cognome, value: "{{a#N:identity.last_name|upper}}"}
+      - {kind: text, label: Nome, value: "{{a#N:identity.first_name|upper}}"}
+      - {kind: text, label: C.F., value: "{{a#N:identity.codice_fiscale}}"}
+      - {kind: date, label: Data di nascita, value: "{{a#N:identity.date_of_birth|date_it}}"}
+      - {kind: select, label: Cittadinanza, value: ITALIA}
+      - {kind: select, label: Sesso, value: "{{a#N:identity.sex|sesso}}"}
+      - {kind: select, label: Stato, value: ITALIA}
+      - {kind: select, label: Provincia, value: "{{a#N:identity.birth_province}}"}
+      - {kind: text, label: Comune italiano, value: "{{a#N:identity.birth_comune|upper}}"}
+      - {kind: select, label: Stato, nth: 2, value: ITALIA}
+      - {kind: select, label: Provincia, nth: 2, value: "{{a#N:residenza.provincia}}"}
+      - {kind: text, label: Comune italiano, nth: 2, value: "{{a#N:residenza.comune|upper}}"}
+      - {kind: text, label: "Via, Piazza", value: "{{a#N:residenza.indirizzo|upper}}"}
+      - {kind: text, label: "N.", value: "{{a#N:residenza.civico}}"}
+      - {kind: text, label: C.A.P., value: "{{a#N:residenza.cap}}"}
+      - {kind: select, label: Stato, nth: 3, value: ITALIA}
+      - {kind: select, label: Provincia, nth: 3, value: "{{a#N:business.sede_legale_provincia}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+      - {kind: text, label: Comune italiano, nth: 3, value: "{{a#N:business.sede_legale_comune|upper}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+      - {kind: text, label: "Via, Piazza", nth: 2, value: "{{a#N:business.sede_legale_indirizzo|upper}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+      - {kind: text, label: "N.", nth: 2, value: "{{a#N:business.sede_legale_civico}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+      - {kind: text, label: C.A.P., nth: 2, value: "{{a#N:business.sede_legale_cap}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+      - {kind: select, label: Provincia, nth: 3, value: "{{ad#N:business.sede_legale_provincia}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: Comune italiano, nth: 3, value: "{{ad#N:business.sede_legale_comune|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: "Via, Piazza", nth: 2, value: "{{ad#N:business.sede_legale_indirizzo|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: "N.", nth: 2, value: "{{ad#N:business.sede_legale_civico}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: C.A.P., nth: 2, value: "{{ad#N:business.sede_legale_cap}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: Telefono, value: "{{a#N:identity.phone|phone_it}}"}
+      - {kind: text, label: cell., value: "{{a#N:identity.phone|phone_it}}"}
+      - {kind: text, label: posta elettronica certificata, value: "{{a#N:identity.pec}}"}
+      - {kind: radio, label: si}
+      - {kind: text, label: Iscritto all'ordine/collegio, value: "{{a#N:albo.ordine}}", on_page: true}
+      - {kind: text, label: di, value: "{{a#N:albo.provincia|provincia_nome}}", on_page: true}
+      - {kind: text, label: al n., value: "{{a#N:albo.numero}}", on_page: true}
+      - {kind: radio, label: "no", nth: 2, when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+      - {kind: radio, label: si, nth: 2, when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: Ragione sociale, value: "{{ad#N:business.denominazione}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: codice fiscale / p. IVA, value: "{{ad#N:business.partita_iva}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: "{{ad#N:business.cciaa}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: con sede in, value: "{{ad#N:business.sede_legale_comune|upper}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
+      # More than the crawl saw (read on the SCIA 2026-10-31): the REA number, the seat's
+      # address, and "il cui legale rappresentante è". In the block, the REA "n." is the
+      # third "N." (after the home's and the studio's), and so on for the rest.
+      - {kind: text, label: n., nth: 3, value: "{{ad#N:business.rea|rea_num}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: select, label: Provincia, nth: 4, value: "{{ad#N:business.sede_legale_provincia}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: select, label: Stato, nth: 4, value: ITALIA, when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: "Via, Piazza", nth: 3, value: "{{ad#N:business.sede_legale_indirizzo|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: "N.", nth: 4, value: "{{ad#N:business.sede_legale_civico}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: C.A.P., nth: 3, value: "{{ad#N:business.sede_legale_cap}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: Cognome, nth: 2, value: "{{ad#N:identity.last_name|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      - {kind: text, label: Nome, nth: 2, value: "{{ad#N:identity.first_name|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
 
   # The firms on site (`f1:`, and `f2:` when the job has one: its block comes from "+"), or
   # minor works the client does without one. Fields by label inside the block-th repeat that

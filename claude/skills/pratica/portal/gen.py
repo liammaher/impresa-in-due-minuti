@@ -310,7 +310,19 @@ def fill(entry, as_name, c, recipe, name):
         dfields = [g for d in dfields for g in ([d] if "when" in d else
                    [{**d, "when": w} for w in entry["branches"]])]
     branch_terms = {re.match(r"\s*(\{\{[^}]*\}\})", w)[1] for w in entry.get("branches", [])}
-    for i, role in enumerate(recipe.get("firms", entry.get("firms", [])) if "block" in entry else []):
+    # `repeat`: a block of people of the case, each after the first added with "+" under its
+    # `repeat_when`; `#N` in a field is "" in the first block, then "2", "3" (role a, a2, a3;
+    # ask altro_tecnico_..., altro_tecnico2_...). A field keeps its own `when` after the block's.
+    for i in range(entry.get("repeat", 0) if "block" in entry else 0):
+        cond = " ".join(x for x in (entry.get("firm_when", ""), entry["repeat_when"][i - 1] if i else "") if x)
+        anchor = entry["block"][0]["label"]
+        if i:
+            dfields.append({"kind": "add", "anchor": anchor, "block": i + 1, "when": cond})
+        for b in entry["block"]:
+            g = json.loads(json.dumps(b).replace("#N", str(i + 1) if i else ""))
+            when = " ".join(x for x in (cond, g.pop("when", "")) if x)
+            dfields.append({**g, "anchor": anchor, "block": i + 1, **({"when": when} if when else {})})
+    for i, role in enumerate(recipe.get("firms", entry.get("firms", [])) if "block" in entry and "firms" in entry else []):
         # One block per firm, the second and later added with "+", and only when the job has
         # that firm; each also under the entry's `firm_when`.
         when = " ".join(([entry["firm_when"]] if entry.get("firm_when") else [])

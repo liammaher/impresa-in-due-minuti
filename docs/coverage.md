@@ -59,20 +59,20 @@ SUE pratiche not yet fillable:
 Measured today:
 
 - Level 1: 30 of 30 pratiche fully in the dictionary.
-- Level 2: **74 refusals across 13 recipes**, 24 distinct messages.
+- Level 2: **65 refusals across 13 recipes**, 23 distinct messages.
 - Levels 3 to 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
-| `scia-alternativa-fittizia` | 12 |
-| `pdc-fittizio` | 10 |
-| `pdc-sanatoria-fittizio` | 10 |
-| `scia-paesaggistica-ordinaria-fittizia` | 9 |
-| `scia-paesaggistica-semplificata-fittizia` | 9 |
-| `cila-fittizia` | 5 |
-| `cila-paesaggistica-fittizia` | 5 |
-| `scia-sanatoria-fittizia` | 5 |
-| `scia-fittizia` | 4 |
+| `scia-alternativa-fittizia` | 11 |
+| `pdc-fittizio` | 9 |
+| `pdc-sanatoria-fittizio` | 9 |
+| `scia-paesaggistica-ordinaria-fittizia` | 8 |
+| `scia-paesaggistica-semplificata-fittizia` | 8 |
+| `cila-fittizia` | 4 |
+| `cila-paesaggistica-fittizia` | 4 |
+| `scia-sanatoria-fittizia` | 4 |
+| `scia-fittizia` | 3 |
 | `parere-esonero-fittizio` | 2 |
 | `agibilita-fittizia` | 1 |
 | `cil-fittizia` | 1 |
@@ -80,8 +80,7 @@ Measured today:
 
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
-- 9×: Another technician employed by a firm (the quadro's "alle dipendenze di") isn't mapped yet.
-- 9×: More than one other technician isn't mapped yet: the quadro's block repeats.
+- 9×: More than three other technicians aren't mapped yet: each takes a "+" on the portal, and three have been prepared.
 - 7×: More than five "altro" lines (titles past one per kind, or of kinds not listed) aren't mapped yet: each takes a "+" on the portal, and five have been prepared.
 - 5×: A hygiene derogation isn't mapped yet.
 - 5×: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
