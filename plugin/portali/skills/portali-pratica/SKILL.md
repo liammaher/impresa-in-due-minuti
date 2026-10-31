@@ -112,6 +112,18 @@ job's other people are roles, which `answers.json` names under `people` (the ent
 "Mario"`, with their `bianchi:ruolo.tipo` (`cliente`, `impresa_esecutrice`, ...). Slugs are
 lower case, letters, digits and hyphens. `reference/schema.json` says what each field is.
 
+Start from the intake when the job's folder has the documents (`docs/`: the visura, the lease or
+deed, the relazione tecnica, the drawings, the receipts):
+
+```sh
+python3 SKILL/intake/intake.py scan docs --out run/intake --steps SKILL/pratiche/<name>.json
+```
+
+It writes the fields it reads off them to `run/intake/private/values.json` (start `values.json`
+from it, and add what it lacks) and proposes answers in `run/intake/intake.json`, each with its
+document and words. Show them grouped by document; on "ok", `python3 SKILL/intake/intake.py accept
+run/intake --into answers.json`. Don't read the documents or `private/` into the conversation.
+
 Then check and merge, from the job's folder:
 
 ```sh
