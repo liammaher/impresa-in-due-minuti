@@ -82,5 +82,47 @@
   "answers": "answers-variante-titolo-unico.json",
   "result": "filled",
   "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-cambio-stessa.json",
+  "result": "filled",
+  "seconds": 146.5
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-intero-vincoli.json",
+  "result": "stopped",
+  "seconds": 148
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 158.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-per-scelta.json",
+  "result": "stopped",
+  "seconds": 48.9
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-rir-deroga-antincendio.json",
+  "result": "stopped",
+  "seconds": 150.4
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-rir-fuori-area.json",
+  "result": "filled",
+  "seconds": 148
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-variante-essenziale.json",
+  "result": "filled",
+  "seconds": 163.1
  }
 ]

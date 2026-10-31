@@ -19,3 +19,4 @@ before the declarations, payment, signing and sending.
 | Date | Browser | Result |
 |---|---|---|
 | 2026-10-31 | pane | P6, from scratch: stopped at Allega documenti on the ordinaria's second relazione slot, which only the SCIA's and the permesso's "Si allega" box opens; dropped (`drop: true`) |
+| 2026-10-31 | pane | P6 again, on the slot dropped, `bench/rerun.py` bundle: **filled** in 101 s |

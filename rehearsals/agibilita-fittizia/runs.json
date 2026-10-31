@@ -82,5 +82,29 @@
   "answers": "answers-vale-fine-lavori.json",
   "result": "stopped",
   "seconds": 60
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-non-soggetto-collaudo.json",
+  "result": "filled",
+  "seconds": 105.4
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-parziale-vale-fine.json",
+  "result": "filled",
+  "seconds": 87.9
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-regolare-esecuzione.json",
+  "result": "filled",
+  "seconds": 90.6
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-vale-fine-lavori.json",
+  "result": "filled",
+  "seconds": 90.3
  }
 ]
