@@ -81,8 +81,10 @@ permesso, sanatoria or landscape authorization at the SUE) are routed by their f
 python3 SKILL/portal/route.py --table sue-napoli --answers facts.json
 ```
 
-It asks the rules table's facts (the works alone first, then the rest in one message, the
-yes/no ones as the checklist `fatti`) and, once they decide, names the one pratica (`pratica`)
+Start `facts.json` as `{}`. It asks the rules table's facts as pre-flight asks (the works alone
+first, then the rest in one message, the yes/no ones as the checklist `fatti`); write the replies
+into `facts.json` and run it again. If the answer about the works changes, keep only it and run
+again (the checklist was another case's). Once they decide, it names the one pratica (`pratica`)
 and the `answers` to start `answers.json` with; `unsupported` is the reason none fits. Other
 pratiche: `find_pratica` with the case's facts, else `catalog.json` and `coverage.json`; a case
 can need two (a restaurant and its dehors). Then, with the connector, call `get_pratica` with its `name` and the
