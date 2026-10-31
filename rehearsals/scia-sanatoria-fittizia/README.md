@@ -30,8 +30,12 @@ or a ristrutturazione without structures, with no change of use, outside a bene 
   says the intervento goes through the accertamento of landscape compatibility of art. 36-bis and
   attaches the documents for the binding parere the Sportello asks for; the sanction of c. 5-bis
   follows the assessment, after filing. Only with double conformity: the SCIA of works still
-  under way is refused there. `answers-paesaggio.json`, ready offline, **not yet run on the
-  portal**: the slot "si allega documentazione" adds is the run's to read.
+  under way is refused there. `answers-paesaggio.json`, filled on the portal 2026-10-31.
+- **Landscape works still to come** (works under way, art. 37 c. 5): the landscape authorization
+  is asked with the sanatoria, the two operations in one pratica
+  (`rehearsals/scia-sanatoria-paesaggistica-*`); it can't be given for works already done (art.
+  146 c. 4 D.Lgs. 42/2004). `sanatoria_paesaggio` says which: done (the art. 36-bis route) or to
+  come (the authorization).
 - The sanatoria's own required slot, "Elaborati richiesti per la sanatoria (stato legittimo, stato
   di fatto e comparativi)", takes only signed files (.p7m): the technician's, in the person's steps.
 

@@ -23,9 +23,6 @@ yours:
   - "Sign and send (Firma e invio); keep the receipt"
 rules:
   main: napoli/comune/cila-lavori-edilizi
-# The combination's attachments screen isn't read yet: the run stops before it.
-after: null
-attachments: null
 # The case: the main pratica's P6 answers, the part's, then these (a null drops one);
 # `gen.py --answers` writes answers-p6.json.
 answers:

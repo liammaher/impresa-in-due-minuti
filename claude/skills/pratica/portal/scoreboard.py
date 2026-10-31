@@ -211,7 +211,9 @@ DEFINITION = [
 # notes of 2026-10-28 to 10-30. Edit when one closes.
 OPEN_BEYOND = [
     "Not mapped: PdC in sanatoria under art. 36-bis (refused: the portal makes two acknowledgment checkboxes "
-    "a radio pair; art. 36 is filled); sanatoria in protected areas (building works plus landscape works). "
+    "a radio pair; art. 36 is filled). A SCIA in sanatoria in a protected area is mapped two ways: works done "
+    "through the art. 36-bis c. 4 compatibility, works under way (art. 37 c. 5) with the authorization for the "
+    "landscape works still to come; partly done landscape works under way are refused (art. 146 c. 4). "
     "The combinations of pratiche still to map are counted above, from the rules table.",
     "SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal's dating, oblazione "
     "and works-proposal radios behave as one group.",

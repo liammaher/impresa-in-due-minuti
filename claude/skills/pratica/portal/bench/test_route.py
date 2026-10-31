@@ -238,8 +238,11 @@ def refusals_say_why():
     assert not r["routed"] and r["unsupported"][0].startswith("This case needs no pratica"), r
     r = route.route(TABLE, {"intervento": "altro"}, REHEARSALS)
     assert not r["routed"] and "proroghe" in r["unsupported"][0], r
-    r = route.route(TABLE, {"intervento": "manutenzione_straordinaria", "cambio_uso": "no", "paesaggio": "ordinaria",
-                            "fatti": []}, REHEARSALS)
+    # Every combination has a steps file since 2026-10-31: one left out shows the message.
+    with tempfile.TemporaryDirectory() as tmp:
+        shutil.copytree(REHEARSALS / "cila-fittizia", Path(tmp) / "cila-fittizia")
+        r = route.route(TABLE, {"intervento": "manutenzione_straordinaria", "cambio_uso": "no", "paesaggio": "ordinaria",
+                                "fatti": []}, Path(tmp))
     assert r["unsupported"] == ["Not mapped yet: napoli/comune/cila-lavori-edilizi (comunicazione) filed with "
                                 "napoli/comune/autorizzazione-paesaggistica-ordinaria."], r
 

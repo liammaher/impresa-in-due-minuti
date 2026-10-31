@@ -234,7 +234,8 @@ def _():
 def _():
     steps = generated("cila-paesaggistica-fittizia")
     names = [x["section"] for x in steps["sections"]]
-    assert len(names) == len(set(n.lower() for n in names)) == 22
+    # 22 in the form, then Pagamento degli oneri and Gestione degli allegati (read 2026-10-31).
+    assert len(names) == len(set(n.lower() for n in names)) == 24
     assert names.index("a) Titolarità dell'intervento") < names.index("Qualificazione dell'intervento") < names.index("Ambito dell'intervento")
     assert "dichiarazione ubicazione dell'intervento" not in names  # the CILA's Localizzazione, the same section
     assert steps["wizard"][3]["tree"] == ["Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)",
