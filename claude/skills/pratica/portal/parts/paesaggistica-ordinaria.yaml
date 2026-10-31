@@ -1,0 +1,20 @@
+# What the autorizzazione paesaggistica ordinaria (art. 146 D.Lgs. 42/2004 - Comune) adds to the
+# building pratica it's filed with, the two selected together in the wizard: a combination's
+# recipe `extends` its main pratica's rehearsal, then this. The asseverazione names the
+# procedure from `paesaggio`.
+asks:
+  paesaggio: {default: "ordinaria"}
+rules:
+  handles: [napoli/comune/autorizzazione-paesaggistica-ordinaria]
+attachments:
+  Gestione degli allegati:
+    # The relazione paesaggistica (DPCM 12/12/2005) takes a plain PDF, and the asseverazione's
+    # "Si allega la relazione paesaggistica e la documentazione" adds a second, required slot
+    # for it (read with the SCIA 2026-10-29 and the permesso 2026-10-31).
+    - {kind: file, label: Relazione paesaggistica (redatta ai sensi del D.P.C.M, value: "{{ask.relazione_paesaggistica}}"}
+    - {kind: file, label: Relazione paesaggistica e documentazione per il rilascio, value: "{{ask.relazione_paesaggistica}}", on_page: true}
+supports:
+  - when: "{{ask.vincolo|is_art_134|not}}"
+    else: "The ordinaria's form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose."
+  - when: "{{ask.titolo|is_locatario|not}}"
+    else: "The ordinaria's form offers only ownership, co-ownership, the condominio's administrator or another real right: a tenant isn't one."

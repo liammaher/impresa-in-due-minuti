@@ -291,6 +291,7 @@ asks:
   paesaggio: {type: choice, question: 'Is the property under landscape protection (D.Lgs. 42/2004 parte III: art. 136, art. 142 or the piano paesaggistico), and what do the works need? no (not protected);
       senza autorizzazione (protected, but the works don''t alter the place or the buildings'' look, or need no authorization: art. 149, DPR 31/2017 Allegato A); semplificata (DPR 31/2017 Allegato B); ordinaria
       (art. 146)', options: ['no', senza autorizzazione, semplificata, ordinaria]}
+  sanatoria_paesaggio: {type: yes_no, question: 'Is this a sanatoria, so works that needed a landscape authorization go through art. 36-bis c. 4?', default: 'false'}
   bene_culturale: {type: yes_no, question: 'Is the building itself a protected bene culturale (D.Lgs. 42/2004 parte II: listed, so the works need the Soprintendenza''s authorization, art. 21)?'}
   area_protetta: {type: choice, question: 'Is the property in a protected natural area (a park or reserve, L. 394/1991 or regional law)? no; senza alterazione (inside, but the works don''t alter the place
       or the buildings'' look); nulla osta (the park authority''s nulla osta is needed: its documents attached)', options: ['no', senza alterazione, nulla osta], propose: 'no'}
@@ -1254,6 +1255,12 @@ sections:
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.paesaggio|is_no}}', label: NON ricade in zona sottoposta a tutela}
   - {id: 'r5c1p5reg:radio:1_clone', kind: radio, when: '{{ask.paesaggio|is_senza_autorizzazione}}', label: 'ricade in zona tutelata, ma le opere non comportano alterazione'}
+  - {id: 'r6c1p6reg:radio:2_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}', label: ricade in zona tutelata e le opere comportano alterazione}
+  - {id: 'r7c1p7reg:radio:3_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}', label: è assoggettato al procedimento semplificato}
+  - {id: 'r8c1p8reg:chk', kind: checkbox, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}', label: Si allega la relazione paesaggistica semplificata}
+  - {id: 'r6c1p6reg:radio:2_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}', label: ricade in zona tutelata e le opere comportano alterazione}
+  - {id: 'r9c1p9reg:radio:4_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}', label: è assoggettato al procedimento ordinario}
+  - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}', label: Si allega la relazione paesaggistica e la documentazione}
   - {id: 'r15c1p15reg:radio:6_clone', kind: radio, when: '{{ask.bene_culturale|not}}', label: non è sottoposto a tutela}
   - {id: 'r16c1p16reg:radio:7_clone', kind: radio, when: '{{ask.bene_culturale}}', label: è sottoposto a tutela}
   - {id: 'r20c1p20reg:radio:8_clone', kind: radio, when: '{{ask.area_protetta|is_no}}', label: non ricade in area tutelata}

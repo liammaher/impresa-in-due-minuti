@@ -117,6 +117,8 @@ asks:
   barriere: {type: yes_no, question: 'Are the works subject to the barriers rules of artt. 77 ff. DPR 380/2001 and DM 236/1989 (private buildings)?'}
   barriere_art82: {type: yes_no, question: 'Is it a private building open to the public, the works conforming to art. 82 DPR 380/2001 (as the relazione and drawings show)?'}
   barriere_deroga: {type: yes_no, question: 'Are the works subject to the barriers rules but don''t meet them, so the SCIA condizionata asks for a deroga (its documents attached)?', propose: 'false'}
+  barriere_elaborati: {type: file, question: The drawings and relazione showing the barriers rules are met (art. 77 ff. or art. 82 DPR 380/2001) (PDF)}
+  barriere_deroga_doc: {type: file, question: The documents for the barriers deroga (relazione tecnica and drawings) (PDF)}
   sanatoria_titolo: {type: choice, question: 'Is this pratica filed in sanatoria? nessuna (no); scia (a SCIA in sanatoria); permesso (a permesso di costruire in sanatoria)', options: [nessuna, scia, permesso],
     default: nessuna}
   pdc_sanatoria_caso: {type: choice, question: 'Which permesso in sanatoria? assenza (works done without the permesso or SCIA alternativa, or in total difformity, conforming to the planning and building
@@ -301,11 +303,18 @@ asks:
   acustica_clima: {type: yes_no, group: acustica_documenti, item: Valutazione previsionale di clima acustico (art. 8 c. 3 L. 447/1995)}
   acustica_dichiarazione: {type: yes_no, group: acustica_documenti, item: The titolare's dichiarazione sostitutiva that the limits of the acoustic classification are respected}
   acustica_misure: {type: yes_no, group: acustica_documenti, item: Documentazione di previsione di impatto acustico with the measures to reduce the emissions (the limits would be exceeded)}
+  acustica_impatto_doc: {type: file, question: The documentazione di impatto acustico (PDF)}
+  acustica_clima_doc: {type: file, question: The valutazione previsionale di clima acustico (PDF)}
+  acustica_dichiarazione_doc: {type: file, question: The titolare's dichiarazione sostitutiva on the acoustic limits (PDF)}
+  acustica_misure_doc: {type: file, question: The documentazione di previsione di impatto acustico with its measures (PDF)}
   antincendio_soggetto: {type: yes_no, question: 'Is the building subject to fire-prevention rules?', propose: 'false'}
   antincendio_deroga: {type: yes_no, question: 'Does the building have features that don''t allow the fire-prevention technical rules to be followed in full, so a deroga is asked (its documents attached)?',
     propose: 'false'}
+  antincendio_deroga_doc: {type: file, question: The documents for the fire-prevention deroga (PDF)}
+  vvf_doc: {type: file, question: The documents for the Vigili del Fuoco's assessment of the project (art. 3 DPR 151/2011) (PDF)}
   amianto: {type: yes_no, question: 'Do the works touch parts with asbestos (so a piano di lavoro under art. 256 D.Lgs. 81/2008 is needed)?', propose: 'false'}
   relazione_energetica: {type: file, question: 'The relazione tecnica on energy use (art. 125 DPR 380/2001, D.Lgs. 192/2005) (PDF)'}
+  amianto_piano: {type: file, question: The piano di lavoro for the asbestos (art. 256 D.Lgs. 81/2008) (PDF)}
   igienico_conforme: {type: yes_no, question: 'Does the unit meet the hygiene and health requirements (no derogation)?', propose: 'true'}
   igienico_24_5bis: {type: yes_no, question: 'Does it meet them under art. 24 c. 5-bis DPR 380/2001 (rooms 2.40 to 2.70 m high, or a one-room flat of 20 to 28 m² for one person or 28 to 38 m² for two)?',
     propose: 'false'}
@@ -315,6 +324,7 @@ asks:
   igienico_adattabilita: {type: yes_no, question: 'Do the rooms meet the adattabilità requirement of DM 236/1989 (art. 24 c. 5-ter DPR 380/2001)?'}
   igienico_5ter: {type: choice, question: 'Which condition of art. 24 c. 5-ter holds? recupero (the building is under works of recupero edilizio improving its hygiene, lett. a); progetto alternativo (the
       drawings attached include a renovation project with alternative solutions for the occupants: more surface, or better natural ventilation, lett. b)', options: [recupero, progetto alternativo]}
+  igienico_deroga_doc: {type: file, question: The documents for the hygiene derogation request (PDF)}
   cemento_armato: {type: yes_no, question: 'Do the works build reinforced or prestressed concrete, or steel structures (art. 65 DPR 380/2001)?'}
   denuncia_art65: {type: file, question: 'The denuncia of the concrete or steel works (art. 65 DPR 380/2001), as filed (PDF)'}
   sismica: {type: choice, question: 'The works'' seismic filing (art. 93-94 DPR 380/2001, L.R. 9/1983, Reg. 4/2010)? deposito (works to report: the denuncia''s documents attached); autorizzazione (the documents
@@ -341,6 +351,7 @@ asks:
   vinca_doc: {type: file, question: The documents for the Valutazione d'incidenza (PDF)}
   fascia_cimiteriale: {type: choice, question: 'Is the property in a cemetery''s fascia di rispetto? no; consentito (inside, and the works are allowed there); non consentito (inside, and not allowed without
       a deroga)', options: ['no', consentito, non consentito], propose: 'no'}
+  cimiteriale_doc: {type: file, question: The documents for the cemetery fascia's deroga (PDF)}
   rir: {type: choice, question: 'Major-hazard plants (RIR, D.Lgs. 105/2015) in the comune? no (none); fuori area (there are, the comune maps their area di danno, and the property is outside it); in area
       (inside it: the documents for the Comitato Tecnico Regionale attached); non individuata (there are, and the comune hasn''t mapped the area di danno: the documents attached)', options: ['no', fuori
         area, in area, non individuata]}
@@ -411,31 +422,18 @@ asks:
   piano_planovolumetrico: {group: fatti, type: yes_no, item: 'La nuova costruzione o la ristrutturazione urbanistica è disciplinata da un piano attuativo con precise disposizioni plano-volumetriche dichiarate
       dal Comune, o (per una nuova costruzione) è in diretta esecuzione di uno strumento urbanistico generale che le contiene?'}
 supports:
-- value: '{{ask.fascia_cimiteriale}}'
+- if: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}'
+  value: '{{ask.igienico_5bis_caso}}'
   in:
-  - 'no'
-  - consentito
-  else: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
-- value: '{{ask.acustica}}'
-  in:
-  - 'false'
-  else: Acoustic obligations aren't mapped yet.
-- value: '{{ask.antincendio_soggetto}}'
-  in:
-  - 'false'
-  else: Fire-prevention obligations aren't mapped yet.
-- value: '{{ask.amianto}}'
-  in:
-  - 'false'
-  else: Works on parts with asbestos aren't mapped yet.
-- value: '{{ask.igienico_conforme}}'
+  - altezza
+  - monostanza uno
+  - monostanza due
+  else: 'More than one case of art. 24 c. 5-bis isn''t mapped yet: each opens its own conditions.'
+- if: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}'
+  value: '{{ask.igienico_adattabilita}}'
   in:
   - 'true'
-  else: A hygiene derogation isn't mapped yet.
-- value: '{{ask.barriere}}'
-  in:
-  - 'false'
-  else: The barriers rules (artt. 77-82) aren't mapped yet.
+  else: 'The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn''t qualify.'
 - when: '{{ask.vincolo|is_art_134|not}}'
   else: 'The ordinaria''s form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose.'
 - when: '{{ask.titolo|is_locatario|not}}'
@@ -1449,20 +1447,9 @@ sections:
   - {kind: file, label: Notifica preliminare, value: '{{ask.notifica_preliminare}}', when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
   - {kind: file, label: 'Elaborati grafici dello stato di fatto, di progetto e comparativi', value: '{{ask.elaborati_grafici}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Documentazione fotografica dello stato di fatto, value: '{{ask.documentazione_fotografica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
-  - {kind: file, label: 'Progetto dell''impianto di produzione, trasformazione', value: '{{ask.progetto_elettrico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_elettrico}}'}
-  - {kind: file, label: Progetto degli impianti radiotelevisivi, value: '{{ask.progetto_radiotv_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_radiotv}}'}
-  - {kind: file, label: Progetto dell'impianto di riscaldamento, value: '{{ask.progetto_termico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_termico}}'}
-  - {kind: file, label: Progetto degli impianti idrici e sanitari, value: '{{ask.progetto_idrico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_idrico}}'}
-  - {kind: file, label: Progetto dell'impianto per la distribuzione e l'utilizzazione di gas, value: '{{ask.progetto_gas_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_gas}}'}
-  - {kind: file, label: Progetto dell'impianto di sollevamento, value: '{{ask.progetto_ascensore_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_ascensore}}'}
-  - {kind: file, label: Progetto dell'impianto di protezione antincendio, value: '{{ask.progetto_antincendio_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_antincendio}}'}
-  - {kind: file, label: Progetto di altre tipologie di impianti, value: '{{ask.progetto_altro_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_altro}}'}
-  - {kind: file, label: Relazione tecnica sui consumi energetici, value: '{{ask.relazione_energetica}}', when: '{{ask.prestazione_energetica}}'}
   - {kind: file, label: Autorizzazione sismica, value: '{{ask.toll_sismica_doc}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
   - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: '{{ask.sanzione_ricevuta}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}'}
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
-  - {kind: file, label: Relazione paesaggistica (redatta ai sensi del D.P.C.M, value: '{{ask.relazione_paesaggistica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
-  - {kind: file, label: Relazione paesaggistica e documentazione per il rilascio, value: '{{ask.relazione_paesaggistica}}'}
   - {kind: file, label: Prospetto di calcolo preventivo del contributo di costruzione, value: '{{ask.prospetto_contributo}}', when: '{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}'}
   - {kind: file, label: Attestazione del versamento del contributo di costruzione, value: '{{ask.ricevuta_contributo}}', when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_pagato}}'}
   - {kind: file, label: Documentazione tecnica necessaria alla determinazione del contributo, value: '{{ask.documentazione_calcolo_contributo}}', when: '{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_sportello}}'}
@@ -1506,3 +1493,26 @@ sections:
       {{ask.fascia_aeroportuale}}'}
   - {kind: file, label: Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (altro), value: '{{ask.fascia_altro_doc}}', when: '{{ask.fasce|is_assenso}}
       {{ask.fascia_altro}}'}
+  - {kind: file, label: 'Progetto dell''impianto di produzione, trasformazione', value: '{{ask.progetto_elettrico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_elettrico}}'}
+  - {kind: file, label: Progetto degli impianti radiotelevisivi, value: '{{ask.progetto_radiotv_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_radiotv}}'}
+  - {kind: file, label: Progetto dell'impianto di riscaldamento, value: '{{ask.progetto_termico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_termico}}'}
+  - {kind: file, label: Progetto degli impianti idrici e sanitari, value: '{{ask.progetto_idrico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_idrico}}'}
+  - {kind: file, label: Progetto dell'impianto per la distribuzione e l'utilizzazione di gas, value: '{{ask.progetto_gas_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_gas}}'}
+  - {kind: file, label: Progetto dell'impianto di sollevamento, value: '{{ask.progetto_ascensore_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_ascensore}}'}
+  - {kind: file, label: Progetto dell'impianto di protezione antincendio, value: '{{ask.progetto_antincendio_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_antincendio}}'}
+  - {kind: file, label: Progetto di altre tipologie di impianti, value: '{{ask.progetto_altro_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_altro}}'}
+  - {kind: file, label: Relazione tecnica sui consumi energetici, value: '{{ask.relazione_energetica}}', when: '{{ask.prestazione_energetica}}'}
+  - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche (art. 82, value: '{{ask.barriere_elaborati}}', when: '{{ask.barriere_art82}}'}
+  - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche (art. 77, value: '{{ask.barriere_elaborati}}', when: '{{ask.barriere}} {{ask.barriere_deroga|not}}'}
+  - {kind: file, label: Documentazione per la richiesta di deroga alla normativa per l'abbattimento delle barriere, value: '{{ask.barriere_deroga_doc}}', when: '{{ask.barriere}} {{ask.barriere_deroga}}'}
+  - {kind: file, label: Documentazione di impatto acustico, value: '{{ask.acustica_impatto_doc}}', when: '{{ask.acustica}} {{ask.acustica_impatto}}'}
+  - {kind: file, label: Dichiarazione sostitutiva, value: '{{ask.acustica_dichiarazione_doc}}', when: '{{ask.acustica}} {{ask.acustica_dichiarazione}}'}
+  - {kind: file, label: Valutazione previsionale di clima acustico, value: '{{ask.acustica_clima_doc}}', when: '{{ask.acustica}} {{ask.acustica_clima}}'}
+  - {kind: file, label: Documentazione di previsione di impatto acustico, value: '{{ask.acustica_misure_doc}}', when: '{{ask.acustica}} {{ask.acustica_misure}}'}
+  - {kind: file, label: Deroga all'integrale osservanza delle regole tecniche di prevenzione incendi, value: '{{ask.antincendio_deroga_doc}}', when: '{{ask.antincendio_soggetto}} {{ask.antincendio_deroga}}'}
+  - {kind: file, label: Documentazione necessaria al rilascio del parere progetto da parte dei Vigili del Fuoco, value: '{{ask.vvf_doc}}', when: '{{ask.vvf_valutazione}}'}
+  - {kind: file, label: Piano di lavoro di demolizione o rimozione dell'amianto, value: '{{ask.amianto_piano}}', when: '{{ask.amianto}}'}
+  - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: '{{ask.igienico_deroga_doc}}', when: '{{ask.igienico_conforme|not}}'}
+  - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: '{{ask.cimiteriale_doc}}', when: '{{ask.fascia_cimiteriale|is_non_consentito}}'}
+  - {kind: file, label: Relazione paesaggistica (redatta ai sensi del D.P.C.M, value: '{{ask.relazione_paesaggistica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Relazione paesaggistica e documentazione per il rilascio, value: '{{ask.relazione_paesaggistica}}'}

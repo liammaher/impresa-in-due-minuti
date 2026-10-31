@@ -3210,11 +3210,18 @@ sections:
 
   # The permesso's protections: no box to attach for a bene culturale (the SUE asks the
   # Soprintendenza), the park's nulla osta request attached. A landscape authorization is its
-  # own operation on Napoli's SUE (the recipe refuses it).
+  # own operation on Napoli's SUE, selected with the permesso in one pratica: the asseverazione
+  # names its procedure, as the SCIA's does.
   - section: Asseverazione PdC - tutela storico ambientale
     fields:
       - {kind: radio, label: NON ricade in zona sottoposta a tutela, when: "{{ask.paesaggio|is_no}}"}
       - {kind: radio, label: "ricade in zona tutelata, ma le opere non comportano alterazione", when: "{{ask.paesaggio|is_senza_autorizzazione}}"}
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
+      - {kind: radio, label: è assoggettato al procedimento ordinario, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
       - {kind: radio, label: non è sottoposto a tutela, when: "{{ask.bene_culturale|not}}"}
       - {kind: radio, label: è sottoposto a tutela, when: "{{ask.bene_culturale}}"}
       - {kind: radio, label: non ricade in area tutelata, when: "{{ask.area_protetta|is_no}}"}

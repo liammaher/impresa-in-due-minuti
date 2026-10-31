@@ -2,6 +2,9 @@
 # CILA rehearsal's P6 job (rehearsals/cila-fittizia) with an outdoor air-conditioning unit on a
 # protected building. Two operations: gen.py takes each one's sections from the catalogue and
 # the order from the combination's crawl (catalogue/F839/sections/sue-combo-cila-paesaggistica-semplificata.json).
+# Everything else is cila-fittizia's recipe and what the semplificata adds (parts/paesaggistica-semplificata.yaml):
+# a slot or a refusal mapped on either reaches this one.
+extends: [cila-fittizia, parts/paesaggistica-semplificata]
 procedure: napoli/comune/cila-con-paesaggistica-semplificata
 title: "CILA con autorizzazione paesaggistica semplificata, SUE Napoli (tecnico con procura)"
 comune: F839
@@ -10,27 +13,16 @@ crawl: sue-combo-cila-paesaggistica-semplificata
 operation:
   - Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)
   - Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)
-scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
-first: [Scheda anagrafica, Qualifica e dati del procuratore]
 asks:
   descrizione: {default: "PROVA NON INVIARE - CILA e paesaggistica {{c:identity.last_name}}"}
-  diritti_euro: {default: "151"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "Pay the diritti (and the CILA's late-filing penalty if due) and the bollo; upload the receipts"
   - "On Allega documenti: the CILA's documents (procura, CILA DSC summary, IDs, the owner's assent, drawings, relazione tecnica) and the landscape ones (relazione paesaggistica semplificata, Allegato D, with its drawings and photos), signed digitally, and for a structural tolerance relevant for public safety the Genio Civile's seismic authorization (Autorizzazione sismica)"
   - "Sign and send (Firma e invio); keep the receipt"
-# Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
-# refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
 rules:
-  table: sue-napoli
-  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   main: napoli/comune/cila-lavori-edilizi
-  facts: {sanatoria: "{{ask.cila_stato|in_in_corso__realizzato}}", permesso_per_scelta: "false", parere_esonero: "false"}
-  handles: [napoli/comune/autorizzazione-paesaggistica-semplificata]
-supports:
-  - when: "{{ask.altri_atti|not}}"
-    else: "Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its semplificata): those combinations aren't mapped yet. Those already made or obtained go in the relazione."
-  - when: "{{ask.paes_variante|not}}"
-    else: "So far only for a new authorization: the variant of one already issued isn't run yet."
+# The combination's attachments screen isn't read yet: the run stops before it.
+after: null
+attachments: null

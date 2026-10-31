@@ -6,12 +6,13 @@
 // portal's reloads don't end it.
 //
 //   __crawl.start({url, sections: [names] | null, depth: 2})  starts, returns at once
-//   __crawl.batch({draft, ops: [{name, sector, path, check, like}], variants, interventi, check})
+//   __crawl.batch({draft, ops: [{name, sector, path, check, like, also, scelte, slots}], variants, interventi, check})
 //       many pratiche on one draft (variants: true, false, or "new": each scelta label once;
 //       interventi: each "interventi eventuali" tick alone too, as a variant; recrawl: section
 //       names crawled again though seen, with `depth`, for a choice that opens deeper boxes);
 //       `check`: fingerprints only (catalogue.py drift), for the batch or one op (`like`:
-//       the crawled pratica it should match)
+//       the crawled pratica it should match); a combination: `also` the other operations
+//       selected with it, `scelte` the only ones tried, `slots` its attachments screen read too
 //   await __crawl.wait(ms)                               the map so far, once done or after ms
 //   __crawl.slots()                                      the attachments screen's slots
 //   await __crawl.slotsOf(draft)                         a draft's, by its name in Pratiche in bozza:
@@ -376,7 +377,7 @@
     report.storage = storageUsed();
     if (!window.__wizard) throw new Error("load wizard.js first");
     await newFrame();
-    const nav = window.__wizard.driver(frame, opts.draft);
+    let nav = window.__wizard.driver(frame, opts.draft);
     await nav.reopen(true);
     const known = JSON.parse(localStorage.getItem("crawl:known") || "{}");
     // variants: "new" tries a scelta only the first time its label is seen: the same few (the
@@ -384,6 +385,19 @@
     const seen = new Set(JSON.parse(localStorage.getItem("crawl:scelte") || "[]"));
     const variants = opts.variants === "new" ? (label) => !seen.has(norm(label)) : !!opts.variants;
     let sector = null;
+    // The portal's error page can come up as the draft reopens (2026-10-31: a draft left on its
+    // attachments step, and after slotsOf): a fresh frame, the draft opened again, once.
+    const fresh = async (fn) => {
+      try {
+        return await fn();
+      } catch (e) {
+        if (loggedOut()) throw e;
+        await newFrame();
+        nav = window.__wizard.driver(frame, opts.draft);
+        sector = null;
+        return fn();
+      }
+    };
     for (const op of opts.ops) {
       if (report.stop) { report.stopped = "stopped"; break; } // __crawl.stop(): between pratiche
       // An op can be a check of its own (`check`), of the pratica it should match (`like`): the
@@ -394,20 +408,30 @@
       const o0 = performance.now();
       const r = { name: op.name, sector: op.sector, operation: op.path, crawled: new Date().toISOString(), depth: opts.depth || 2, sections: [] };
       if (op.like) r.like = op.like;
+      // A combination (`also`: the other operations selected with it, a PdC with its landscape
+      // authorization) tries only the scelte it names (`scelte`): another would add sections
+      // the combination's recipe doesn't take.
+      if (op.also) r.also = op.also;
+      const opVariants = op.scelte ? (label) => op.scelte.some((s) => norm(s) === norm(label)) : variants;
       report.current = op.name;
       try {
-        if (op.sector) {
-          if (sector !== `${op.sector}#${op.sector_nth || 0}`) {
+        await fresh(async () => {
+          if (op.sector && sector !== `${op.sector}#${op.sector_nth || 0}`) {
             await nav.toScreen("scelta settore");
             await pick(nav, op.sector, op.sector_nth);
             await nav.go(() => nav.button("Conferma").click());
             sector = `${op.sector}#${op.sector_nth || 0}`;
           }
-        }
-        await nav.toScreen("scelta operazioni");
+          await nav.toScreen("scelta operazioni");
+        });
         await pick(nav, op.path, op.nth);
+        for (const a of op.also || []) {
+          const m = findPath(nav.tree(), tag(a));
+          if (!m) throw new Error(`not in the tree: ${a}`);
+          if (!(await nav.setSelected(m.key, true))) throw new Error(`didn't select ${a}`);
+        }
         const w = { label: op.path };
-        await nav.follow(w, variants, async (p, v) => {
+        await nav.follow(w, opVariants, async (p, v) => {
           for (const name of v ? v.adds : p.sections) {
             const sec = await section(name, { ...opts, check }, known, op.name);
             if (v) sec.scelta = v.option;
@@ -418,6 +442,33 @@
         for (const k of ["refused", "pratica", "screens", "variants"]) if (w[k]) r[k] = w[k];
         for (const v of w.variants || []) if (!v.error) seen.add(norm(v.option));
         save("crawl:scelte", JSON.stringify([...seen]));
+        // The attachments screen (`slots`): the base slots of the pratica with the named scelte,
+        // as on an empty draft (slotsOf). slotsOf needs a frame of its own, so the wizard's is made
+        // again after it. A failed read keeps the sections.
+        if (op.slots) {
+          try {
+            await nav.toScreen("scelta operazioni");
+            for (let i = 0; i < 8 && !nav.title().includes("compilazione della domanda"); i++) {
+              if (nav.title().includes("scelte eventuali")) {
+                for (const x of nav.tree().filter((x) => x.type === "CHK")) {
+                  const on = (op.scelte || []).some((s) => norm(s) === norm(x.label));
+                  if (!!x.selected !== on) await nav.setSelected(x.key, on);
+                }
+              }
+              const b = nav.button("Conferma");
+              if (!b) throw new Error(`no Conferma on ${nav.title()}`);
+              await nav.go(() => b.click());
+            }
+            if (!nav.title().includes("compilazione della domanda")) throw new Error(`no pratica, on ${nav.title()}`);
+            r.slots = (await slotsOf(opts.draft)).slots.map(({ id, ...x }) => x);
+          } catch (e) {
+            r.slots_error = String(e.message || e);
+          }
+          await newFrame();
+          nav = window.__wizard.driver(frame, opts.draft);
+          await fresh(() => nav.toScreen("scelta operazioni"));
+        }
+        for (const a of op.also || []) await nav.setSelected(findPath(nav.tree(), tag(a)).key, false);
         const n = await nav.setSelected(findPath(nav.tree(), tag(op.path), op.nth).key, false);
         if (!n) throw new Error("didn't unselect");
       } catch (e) {

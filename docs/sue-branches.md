@@ -8,13 +8,13 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 900 | Claude takes it when the case does |
+| ticked | 903 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 5 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 1 | left empty on purpose |
 | law | 21 | closed by law to new cases (the piano casa): refused as the law's, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 172 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 169 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -29,32 +29,32 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### SCHEDA ANAGRAFICA / Scheda anagrafica
 
-30 pratiche; 2 of 27 choices to map.
+32 pratiche; 2 of 27 choices to map.
 
 - radio: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA
 - checkbox: Se cittadino non UE
 
 ### Qualifica e dati del procuratore
 
-30 pratiche; 1 of 11 choices to map.
+32 pratiche; 1 of 11 choices to map.
 
 - radio: all'Estero
 
 ### Dati catastali / dati catastali
 
-26 pratiche; 1 of 2 choices to map.
+28 pratiche; 1 of 2 choices to map.
 
 - radio: Nuovo Catasto Terreni
 
 ### Dichiarazione relativa ai diritti di segreteria/istruttori / dichiarazione relativa ai diritti di segreteria/istruttori
 
-22 pratiche; 1 of 5 choices to map.
+24 pratiche; 1 of 5 choices to map.
 
 - radio: poiché esentati (under: non sono dovuti oneri quali diritti o spese)
 
 ### Dichiarazione relativa all'assolvimento dell'imposta di bollo / dichiarazione relativa all'imposta di bollo
 
-12 pratiche; 31 of 35 choices to map.
+14 pratiche; 31 of 35 choices to map.
 
 - radio: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo per l'autorizzazione perché il procedimento può concludersi con il silenzio assens (under: Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digit)
 - select: per la seguente motivazione = adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comp → adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comprese nell'A.U.A.) (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
@@ -90,19 +90,19 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### G2) Altri tecnici incaricati / H2) Altri tecnici incaricati / g2) Altri tecnici incaricati
 
-7 pratiche; 1 of 8 choices to map.
+9 pratiche; 1 of 8 choices to map.
 
 - checkbox: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori
 
 ### dati relativi al nome del tecnico
 
-6 pratiche; 1 of 2 choices to map.
+8 pratiche; 1 of 2 choices to map.
 
 - radio: non è colui che presenta la pratica
 
 ### Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria / Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione
 
-4 pratiche; 13 of 47 choices to map.
+6 pratiche; 13 of 47 choices to map.
 
 - radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
 - checkbox: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della data di entrata in vigore della legge 28 gennaio 1977, n. 10 (articolo  (under: si)
@@ -149,17 +149,142 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: i lavori, in quanto opere di modesta entità che non interessano le specifiche normative di settore, sono eseguiti/sono stati eseguiti in prima persona, senza al
 - checkbox: Cassa edile (under: i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata/e alla seg)
 
+### Ambito dell'intervento
+
+4 pratiche; 1 of 4 choices to map.
+
+- checkbox: In caso di intervento in VARIANTE :
+
 ### Asseverazione SCIA - Sicurezza impianti, consumi energetici / Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici
 
 4 pratiche; 1 of 27 choices to map.
 
 - checkbox: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è evidenziata nella relazione tecnica dovuta ai sensi dell'articolo 125 del (under: è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto:)
 
-### Ambito dell'intervento
+### Asseverazione PdC - amianto, conformità igienico sanitaria, sismica
 
-3 pratiche; 1 of 4 choices to map.
+3 pratiche; 18 of 30 choices to map.
 
-- checkbox: In caso di intervento in VARIANTE :
+- checkbox: in allegato alla presente relazione di asseverazione (under: interessano parti di edifici con presenza di fibre di amianto e che è stato pred)
+- radio: non è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste
+- checkbox: Si allega documentazione per la richiesta di deroga (under: non è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste)
+- radio: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ricade nelle ipotesi di cui all’articolo 24, comma 5-bis DPR 380/2001 trattandosi d
+- checkbox: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superiore a 2,40 metri (art. 24, comma 5-bis, lett a) DPR 380/2001); (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
+- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
+- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
+- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
+- checkbox: alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferiore a 28 metri quadrati ma uguale o superiore a 20 metri quadrati (art.  (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
+- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
+- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
+- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
+- checkbox: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferiore a 38 metri quadrati ma uguale o superiore a 28 metri quadrati (art.  (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
+- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
+- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
+- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
+- radio: si allega la documentazione relativa alla denuncia di cui all'articolo 65 del d.P.R. n. 380/2001 (under: prevede la realizzazione di opere di conglomerato cementizio armato, normale e p)
+- radio: si allega la documentazione relativa alla denuncia dei lavori in zona sismica (under: prevede opere in zona sismica da denunciare ai sensi dell'articolo 93 del d.P.R.)
+
+### Asseverazione PdC - Dati immobile, strumentazione urbanistica, barriere architettoniche
+
+3 pratiche; 16 of 22 choices to map.
+
+- checkbox: PIANO PARTICOLAREGGIATO
+- checkbox: PIANO DI LOTIZZAZIONE
+- checkbox: PIANO DI RECUPERO
+- checkbox: P.I.P.
+- checkbox: P.E.E.P.
+- checkbox: Regolamento Edilizio/RUEC
+- checkbox: PIANO URBANISTICO ATTUATIVO
+- checkbox: PIANO DI SETTORE
+- checkbox: PIANO STRALCIO AUTORITA'
+- checkbox: DI BACINO
+- checkbox: P.T.C.P.
+- checkbox: PIANO TERRITORIALE PAESISTICO
+- checkbox: PIANO DELL'ENTE PARCO
+- checkbox: ALTRO
+- checkbox: interessa un edificio privato aperto al pubblico e che le opere previste sono conformi all'articolo 82 del d.P.R. n. 380/2001 come da relazione e schemi dimostr
+- checkbox: pur essendo soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/2001 e del d.m. n. 236/1989 non rispetta la normativa in materia di barrie
+
+### g1) Tecnici incaricati
+
+3 pratiche; 8 of 15 choices to map.
+
+- checkbox: di aver incaricato, in qualità di progettista delle opere strutturali, di direttori dei lavori, i soggetti indicati nella sezione PROGETTISTA DELLE OPERE STRUTT
+- checkbox: Direttore dei lavori delle opere architettoniche (under: di aver incaricato, in qualità di progettista delle opere strutturali, di dirett)
+- radio: si (under: Direttore dei lavori delle opere architettoniche)
+- radio: no (under: Direttore dei lavori delle opere architettoniche)
+- checkbox: Direttore dei lavori delle opere strutturali (under: di aver incaricato, in qualità di progettista delle opere strutturali, di dirett)
+- radio: si (under: Direttore dei lavori delle opere strutturali)
+- radio: no (under: Direttore dei lavori delle opere strutturali)
+- radio: tecnico incaricato
+
+### Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi
+
+3 pratiche; 6 of 12 choices to map.
+
+- radio: a seguito delle preventive analisi ambientali effettuate, non necessita di bonifica, pertanto
+- radio: non interessa aree percorse dal fuoco ai sensi dell'art. 10 della legge 353/2000
+- radio: è stata oggetto di bonifica dei terreni con obiettivi compatibili con la destinazione d'uso del presente intervento, come risulta dalla certificazione conclusiv
+- radio: non è dotata delle opere di urbanizzazione primaria e la loro attuazione è prevista da parte dell'amministrazione comunale nel corso del prossimo triennio ovver
+- checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
+- checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
+
+### Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi
+
+3 pratiche; 5 of 24 choices to map.
+
+- checkbox: le opere comportano la produzione di materiali da scavo considerati come sottoprodotti sulla base della normativa vigente, e inoltre:
+- radio: le opere comportano la produzione di materiali da scavo per un volume inferiore o uguale a quello previsto dalla normativa vigente ovvero (pur superando tale so (under: le opere comportano la produzione di materiali da scavo considerati come sottopr)
+- radio: le opere comportano la produzione di materiali da scavo per un volume superiore a quelle previste dalla vigente normativa e sono soggette a VIA o AIA, e pertant (under: le opere comportano la produzione di materiali da scavo considerati come sottopr)
+- checkbox: si allega / si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo dell'assenso al Piano di Utilizzo dei materiali da scavo, (under: le opere comportano la produzione di materiali da scavo per un volume superiore )
+- radio: costituisce variante e il sottoscritto assevera che le modifiche non costituiscono variazione dei requisiti di sicurezza antincendio già approvati con parere de
+
+### Asseverazione PdC - sicurezza impianti e consumi energetici
+
+3 pratiche; 3 of 30 choices to map.
+
+- checkbox: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è evidenziata nella relazione tecnica dovuta ai sensi dell'articolo 125 del (under: è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto:)
+- radio: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto:
+- checkbox: si allega la valutazione della sostenibilità energetico-ambientale degli edifici redatta secondo le Linee Guida per la valutazione della sostenibilità energetic (under: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto:)
+
+### Asseverazione PdC - tutela storico ambientale
+
+3 pratiche; 2 of 13 choices to map.
+
+- radio: è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all’articolo 36-bis del DPR 380/2001 e (under: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspe)
+- checkbox: si allega documentazione necessaria ai fini del rilascio del parere vincolante (vedi quadro della documentazione allegata - art. 36-bis comma 4 DPR 380/2001)” (under: è assoggettato al procedimento di accertamento della compatibilità paesaggistica)
+
+### h) Impresa esecutrice dei lavori
+
+3 pratiche; 2 of 5 choices to map.
+
+- radio: l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno individuata/e prima dell'inizio dei lavori
+- checkbox: Cassa edile (under: i lavori saranno eseguiti/sono eseguiti dalla/e impresa/e indicata/e alla seguen)
+
+### i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
+
+3 pratiche; 2 of 9 choices to map.
+
+- radio: ricade nell'ambito di applicazione del d.lgs. n. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché
+- radio: allega la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in luogo visibile dall'esterno (under: dichiara che l'intervento è soggetto all'invio della notifica)
+
+### Asseverazione PdC - Dati progettista e descrizione opere
+
+3 pratiche; 1 of 44 choices to map.
+
+- checkbox: altro non indicato nei punti precedenti (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
+
+### Asseverazione PdC - aree a rischio e altri vincoli di tutela ecologica
+
+3 pratiche; 1 of 15 choices to map.
+
+- checkbox: fascia di rispetto per pozzi e emergenze idriche (art. 94, commi 1 e 6, d.lgs. n. 152/2006)
+
+### f) Calcolo del contributo di costruzione
+
+3 pratiche; 1 of 9 choices to map.
+
+- radio: SI (under: è a titolo oneroso e pertanto)
 
 ### h) Impresa esecutrice dei lavori
 
@@ -187,50 +312,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché i 
 
-### Asseverazione PdC - amianto, conformità igienico sanitaria, sismica
-
-1 pratiche; 18 of 30 choices to map.
-
-- checkbox: in allegato alla presente relazione di asseverazione (under: interessano parti di edifici con presenza di fibre di amianto e che è stato pred)
-- radio: non è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste
-- checkbox: Si allega documentazione per la richiesta di deroga (under: non è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste)
-- radio: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ricade nelle ipotesi di cui all’articolo 24, comma 5-bis DPR 380/2001 trattandosi d
-- checkbox: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superiore a 2,40 metri (art. 24, comma 5-bis, lett a) DPR 380/2001); (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
-- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
-- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
-- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
-- checkbox: alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferiore a 28 metri quadrati ma uguale o superiore a 20 metri quadrati (art.  (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
-- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
-- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
-- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
-- checkbox: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferiore a 38 metri quadrati ma uguale o superiore a 28 metri quadrati (art.  (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
-- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
-- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
-- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
-- radio: si allega la documentazione relativa alla denuncia di cui all'articolo 65 del d.P.R. n. 380/2001 (under: prevede la realizzazione di opere di conglomerato cementizio armato, normale e p)
-- radio: si allega la documentazione relativa alla denuncia dei lavori in zona sismica (under: prevede opere in zona sismica da denunciare ai sensi dell'articolo 93 del d.P.R.)
-
-### Asseverazione PdC - Dati immobile, strumentazione urbanistica, barriere architettoniche
-
-1 pratiche; 16 of 22 choices to map.
-
-- checkbox: PIANO PARTICOLAREGGIATO
-- checkbox: PIANO DI LOTIZZAZIONE
-- checkbox: PIANO DI RECUPERO
-- checkbox: P.I.P.
-- checkbox: P.E.E.P.
-- checkbox: Regolamento Edilizio/RUEC
-- checkbox: PIANO URBANISTICO ATTUATIVO
-- checkbox: PIANO DI SETTORE
-- checkbox: PIANO STRALCIO AUTORITA'
-- checkbox: DI BACINO
-- checkbox: P.T.C.P.
-- checkbox: PIANO TERRITORIALE PAESISTICO
-- checkbox: PIANO DELL'ENTE PARCO
-- checkbox: ALTRO
-- checkbox: interessa un edificio privato aperto al pubblico e che le opere previste sono conformi all'articolo 82 del d.P.R. n. 380/2001 come da relazione e schemi dimostr
-- checkbox: pur essendo soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/2001 e del d.m. n. 236/1989 non rispetta la normativa in materia di barrie
-
 ### SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione
 
 1 pratiche; 9 of 14 choices to map.
@@ -245,30 +326,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: si forniscono gli estremi di versamento (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
 - radio: si allega la ricevuta di versamento (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
 
-### g1) Tecnici incaricati
-
-1 pratiche; 8 of 15 choices to map.
-
-- checkbox: di aver incaricato, in qualità di progettista delle opere strutturali, di direttori dei lavori, i soggetti indicati nella sezione PROGETTISTA DELLE OPERE STRUTT
-- checkbox: Direttore dei lavori delle opere architettoniche (under: di aver incaricato, in qualità di progettista delle opere strutturali, di dirett)
-- radio: si (under: Direttore dei lavori delle opere architettoniche)
-- radio: no (under: Direttore dei lavori delle opere architettoniche)
-- checkbox: Direttore dei lavori delle opere strutturali (under: di aver incaricato, in qualità di progettista delle opere strutturali, di dirett)
-- radio: si (under: Direttore dei lavori delle opere strutturali)
-- radio: no (under: Direttore dei lavori delle opere strutturali)
-- radio: tecnico incaricato
-
-### Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi
-
-1 pratiche; 6 of 12 choices to map.
-
-- radio: a seguito delle preventive analisi ambientali effettuate, non necessita di bonifica, pertanto
-- radio: non interessa aree percorse dal fuoco ai sensi dell'art. 10 della legge 353/2000
-- radio: è stata oggetto di bonifica dei terreni con obiettivi compatibili con la destinazione d'uso del presente intervento, come risulta dalla certificazione conclusiv
-- radio: non è dotata delle opere di urbanizzazione primaria e la loro attuazione è prevista da parte dell'amministrazione comunale nel corso del prossimo triennio ovver
-- checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
-- checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
-
 ### Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi
 
 1 pratiche; 6 of 12 choices to map.
@@ -279,34 +336,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: non è dotata delle opere di urbanizzazione primaria e la loro attuazione è prevista da parte dell'amministrazione comunale nel corso del prossimo triennio ovver
 - checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
 - checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
-
-### Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi
-
-1 pratiche; 5 of 24 choices to map.
-
-- checkbox: le opere comportano la produzione di materiali da scavo considerati come sottoprodotti sulla base della normativa vigente, e inoltre:
-- radio: le opere comportano la produzione di materiali da scavo per un volume inferiore o uguale a quello previsto dalla normativa vigente ovvero (pur superando tale so (under: le opere comportano la produzione di materiali da scavo considerati come sottopr)
-- radio: le opere comportano la produzione di materiali da scavo per un volume superiore a quelle previste dalla vigente normativa e sono soggette a VIA o AIA, e pertant (under: le opere comportano la produzione di materiali da scavo considerati come sottopr)
-- checkbox: si allega / si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo dell'assenso al Piano di Utilizzo dei materiali da scavo, (under: le opere comportano la produzione di materiali da scavo per un volume superiore )
-- radio: costituisce variante e il sottoscritto assevera che le modifiche non costituiscono variazione dei requisiti di sicurezza antincendio già approvati con parere de
-
-### Asseverazione PdC - tutela storico ambientale
-
-1 pratiche; 5 of 13 choices to map.
-
-- radio: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspetto esteriore degli edifici
-- radio: è assoggettato al procedimento semplificato di autorizzazione paesaggistica, in quanto di lieve entità, secondo quanto previsto dal d.P.R. n. 31/2017 (under: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspe)
-- radio: è assoggettato al procedimento ordinario di autorizzazione paesaggistica (under: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspe)
-- radio: è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all’articolo 36-bis del DPR 380/2001 e (under: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspe)
-- checkbox: si allega documentazione necessaria ai fini del rilascio del parere vincolante (vedi quadro della documentazione allegata - art. 36-bis comma 4 DPR 380/2001)” (under: è assoggettato al procedimento di accertamento della compatibilità paesaggistica)
-
-### Asseverazione PdC - sicurezza impianti e consumi energetici
-
-1 pratiche; 3 of 30 choices to map.
-
-- checkbox: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è evidenziata nella relazione tecnica dovuta ai sensi dell'articolo 125 del (under: è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto:)
-- radio: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto:
-- checkbox: si allega la valutazione della sostenibilità energetico-ambientale degli edifici redatta secondo le Linee Guida per la valutazione della sostenibilità energetic (under: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto:)
 
 ### Riferimenti titolo edilizio e/o paesaggistico e data prevista della fine dei lavori
 
@@ -328,32 +357,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: i lavori sono/saranno eseguiti dalla/e impresa/e indicata/e alla seguente sezione
 - checkbox: Cassa edile (under: i lavori sono/saranno eseguiti dalla/e impresa/e indicata/e alla seguente sezion)
-
-### h) Impresa esecutrice dei lavori
-
-1 pratiche; 2 of 5 choices to map.
-
-- radio: l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno individuata/e prima dell'inizio dei lavori
-- checkbox: Cassa edile (under: i lavori saranno eseguiti/sono eseguiti dalla/e impresa/e indicata/e alla seguen)
-
-### i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
-
-1 pratiche; 2 of 9 choices to map.
-
-- radio: ricade nell'ambito di applicazione del d.lgs. n. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché
-- radio: allega la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in luogo visibile dall'esterno (under: dichiara che l'intervento è soggetto all'invio della notifica)
-
-### Asseverazione PdC - Dati progettista e descrizione opere
-
-1 pratiche; 1 of 44 choices to map.
-
-- checkbox: altro non indicato nei punti precedenti (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-
-### Asseverazione PdC - aree a rischio e altri vincoli di tutela ecologica
-
-1 pratiche; 1 of 15 choices to map.
-
-- checkbox: fascia di rispetto per pozzi e emergenze idriche (art. 94, commi 1 e 6, d.lgs. n. 152/2006)
 
 ### Asseverazione SCIA Alternativa - Altri Vincoli di Tutela Ecologica
 
@@ -384,12 +387,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 1 pratiche; 1 of 3 choices to map.
 
 - checkbox: sono richieste variazioni progettuali e/o sono sopravvenute specifiche prescrizioni di tutela (under: L'istanza di rinnovo riguarda l'Autorizzazione Paesaggistica, rilasciata ai sens)
-
-### f) Calcolo del contributo di costruzione
-
-1 pratiche; 1 of 9 choices to map.
-
-- radio: SI (under: è a titolo oneroso e pertanto)
 
 ### g) Calcolo del contributo di costruzione
 
