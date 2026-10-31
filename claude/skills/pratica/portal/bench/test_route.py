@@ -31,27 +31,7 @@ TABLE = "sue-napoli"
 T = rules.table(TABLE)
 
 
-def values_of(name):
-    f = T["facts"][name]
-    return [True, False] if f["type"] == "yes_no" else list(f["values"])
-
-
-def leaves():
-    """Every case the table decides, as the facts it asked on the way (first one first)."""
-    out = []
-
-    def walk(facts):
-        d = rules.decide(T, facts)
-        if d["ask"]:
-            for v in values_of(d["ask"][0]):
-                walk({**facts, d["ask"][0]: v})
-        else:
-            out.append((facts, d))
-    walk({})
-    return out
-
-
-LEAVES = leaves()
+LEAVES = route.cases(TABLE)
 
 
 def every_case_routed_or_refused():
@@ -73,6 +53,8 @@ def every_case_routed_or_refused():
         assert r["routed"], (facts, r["unsupported"])
         assert r["pratica"] == idx[k][0]
         routed += 1
+    c = route.coverage(TABLE, REHEARSALS)  # what scoreboard.py prints: the same count
+    assert (c["routed"], dict(c["unmapped"])) == (routed, dict(unmapped)), c
     print(f"  {len(LEAVES)} cases: {routed} routed, {sum(unmapped.values())} not mapped yet")
     for (main, also), n in sorted(unmapped.items(), key=lambda x: -x[1]):
         print(f"    to map: {main}" + (f" + {', '.join(also)}" if also else "") + f" ({n} cases)")

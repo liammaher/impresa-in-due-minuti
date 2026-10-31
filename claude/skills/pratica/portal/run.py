@@ -290,6 +290,15 @@ def truthy(v):
     return bool(words) and all(w in ("true", "1", "yes", "si", "sì") for w in words)
 
 
+def fields_of(text):
+    """--values: `pvault get`'s JSON object, or a rehearsal's fixture (its "fields", a list of
+    [id, value] pairs), as one dict."""
+    given = json.loads(text)
+    if isinstance(given, dict) and isinstance(given.get("fields"), list):
+        given = given["fields"]
+    return dict(given) if isinstance(given, list) else given
+
+
 class StepError(Exception):
     pass
 
@@ -1467,7 +1476,7 @@ def main():
                                     else f"no values in {src_}")
                 # The vault's first (piped), the documents' after: a field the vault holds
                 # isn't replaced by what a document says.
-                for k, v in json.loads(given).items():
+                for k, v in fields_of(given).items():
                     fields.setdefault(k, v)
             values = Values(answers, fields=fields, asks=asks)
         else:

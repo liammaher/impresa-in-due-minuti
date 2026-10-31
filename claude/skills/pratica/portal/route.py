@@ -61,6 +61,43 @@ def key(main, also):
     return main, tuple(sorted(also))
 
 
+def cases(table):
+    """Every case the table decides, as the facts it asked on the way (each fact as it asks
+    it, the first one first): [(facts, decision)]."""
+    t, out = rules.table(table), []
+
+    def walk(facts):
+        d = rules.decide(t, facts)
+        if d["ask"]:
+            f = t["facts"][d["ask"][0]]
+            for v in [True, False] if f["type"] == "yes_no" else list(f["values"]):
+                walk({**facts, d["ask"][0]: v})
+        else:
+            out.append((facts, d))
+    walk({})
+    return out
+
+
+def coverage(table, root):
+    """What the table's cases come to: how many reach a steps file under root (`routed`), how
+    many it refuses or needs no pratica for (`refused`), and the combinations of pratiche no
+    steps file files yet, with their cases, most first (`unmapped`): the mapping still to do.
+    A combination is its main pratica and those filed with it; scoreboard.py prints this."""
+    idx, routed, refused, unmapped = index(table, root), 0, 0, {}
+    for _, d in cases(table):
+        if d["refused"] or d["none"]:
+            refused += 1
+            continue
+        k = key(d["main"]["procedure"], [a["procedure"] for a in d["also"]])
+        if k in idx:
+            routed += 1
+        else:
+            unmapped[k] = unmapped.get(k, 0) + 1
+    return {"cases": routed + refused + sum(unmapped.values()), "routed": routed, "refused": refused,
+            "unmapped": sorted(unmapped.items(), key=lambda kv: (-kv[1], kv[0])),
+            "combinations": sorted({k for k in idx if k[1]})}
+
+
 _indexes = {}
 
 

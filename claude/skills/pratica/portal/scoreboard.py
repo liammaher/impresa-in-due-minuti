@@ -20,6 +20,7 @@ from pathlib import Path
 
 import catalogue as cat
 import gen
+import route
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[3]
@@ -50,7 +51,7 @@ def rehearsal_status():
         recipe = d / "recipe.yaml"
         if not recipe.exists():
             continue
-        r = gen.load_yaml(recipe)
+        r = gen.resolved(gen.load_yaml(recipe))
         readme = d / "README.md"
         text = readme.read_text() if readme.exists() else ""
         # A run is a dated row of the README's table that says the draft was filled: read back
@@ -210,9 +211,8 @@ DEFINITION = [
 # notes of 2026-10-28 to 10-30. Edit when one closes.
 OPEN_BEYOND = [
     "Not mapped: PdC in sanatoria under art. 36-bis (refused: the portal makes two acknowledgment checkboxes "
-    "a radio pair; art. 36 is filled); sanatoria in protected areas (building works plus landscape works); "
-    "PdC and SCIA alternativa with a landscape authorization; any combination of two pratiche other than "
-    "CILA+semplificata and SCIA+semplificata/ordinaria.",
+    "a radio pair; art. 36 is filled); sanatoria in protected areas (building works plus landscape works). "
+    "The combinations of pratiche still to map are counted above, from the rules table.",
     "SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal's dating, oblazione "
     "and works-proposal radios behave as one group.",
     "The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.",
@@ -250,15 +250,31 @@ def sue_completeness(reh, status):
     sue = {k: v for k, v in status.items() if v["sportello"] == "sue"}
     fill = [k for k, v in sue.items() if not v["missing"]]
     short = ", ".join("`" + k + "`" for k, v in sue.items() if v["missing"])
+    # The rules table's cases, walked as bench/test_route.py walks them: a pratica counted alone
+    # can be done while the same works with another pratica filed with it aren't (2026-10-31: the
+    # permesso was, with its landscape authorization it wasn't, and this page didn't say).
+    c = route.coverage("sue-napoli", REHEARSALS)
+    combos = sum(1 for k in sue if k.startswith("sue-combo-"))
+    bare = lambda p: p.removeprefix("napoli/comune/")
+    combo = lambda k: " + ".join(bare(x) for x in [k[0], *k[1]])
+    to_map = sum(n for _, n in c["unmapped"])
     out = ["## SUE completeness", ""] + DEFINITION + [
         "", "Measured today:", "",
-        f"- Level 1: {len(fill)} of {len(sue)} pratiche fully in the dictionary" + (f" ({short} not)." if short else "."),
+        f"- Level 1: {len(fill)} of {len(sue)} pratiche fully in the dictionary" + (f" ({short} not)." if short else ".")
+        + f" {combos} of them are two operations in one pratica (`sue-combo-*`).",
+        f"- Which pratiche a case needs: of the {c['cases']} cases the rules table decides, **{c['routed']} reach a "
+        f"steps file**, {c['refused']} are refused with a reason or need no pratica, and **{to_map} have no steps "
+        f"file yet**: {len(c['unmapped'])} combinations of pratiche, listed below (`bench/test_route.py`).",
         f"- Level 2: **{sum(per.values())} refusals across {len(per)} recipes**, {len(refusals)} distinct messages.",
         f"- Level 3, in part: **{len(slots)} ticked \"si allega\" boxes with no attachment slot** under their"
         " condition (listed below): each may add a required slot a run would stop on.",
         "- Levels 4 and 5: not measured yet (see the open items).", "",
         "| Recipe | Refusals left |", "|---|---:|"]
-    out += [f"| `{n}` | {c} |" for n, c in sorted(per.items(), key=lambda kv: (-kv[1], kv[0]))]
+    out += [f"| `{n}` | {k} |" for n, k in sorted(per.items(), key=lambda kv: (-kv[1], kv[0]))]
+    out += ["", "Pratiche filed together, mapped (a steps file each):", ""]
+    out += [f"- {combo(k)}" for k in c["combinations"]] or ["- none"]
+    out += ["", "Pratiche filed together, not mapped yet (the cases that need them, most first):", ""]
+    out += [f"- {combo(k)}: {n} case{'s' * (n != 1)}" for k, n in c["unmapped"]] or ["- none"]
     out += ["", "Refusals, by how many recipes carry them (the most shared are the cheapest to close once):", ""]
     for msg, rs in sorted(refusals.items(), key=lambda kv: (-len(kv[1]), kv[0])):
         out.append(f"- {len(rs)}×: {msg[:170]}")

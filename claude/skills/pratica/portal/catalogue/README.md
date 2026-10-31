@@ -77,7 +77,9 @@ Neither fills a value, saves a section, ticks a declaration, pays or sends.
   (`rehearsals/cila-paesaggistica-fittizia`), run to the declarations; its attachments screen
   isn't read yet. Two more (2026-10-29): the SCIA with its semplificata, and with its ordinaria
   (`sue-combo-scia-paesaggistica-*`), every section one already crawled; their attachments
-  screens are read on the empty draft, plus the SCIA's answer-dependent slots.
+  screens are read on the empty draft, plus the SCIA's answer-dependent slots. Two more (2026-10-31): the
+  permesso di costruire with its semplificata and with its ordinaria
+  (`sue-combo-pdc-paesaggistica-*`, `catalogue.py ops --combo`), every section one already crawled.
 - **SUAP**: 278 pratiche crawled so far (the batch stands at about half of its 1,028 trips:
   the priority sectors, the common operations, part of the other sectors); **477 distinct
   sections**, 67 filled, 71% of section uses, counted under each title a section has. 107
@@ -119,7 +121,7 @@ by `run.py preflight` until it is crawled again (`import` clears it).
 - The fingerprint is the section before any choice: a change only inside a branch is caught by
   the runner, not by the check.
 - Operations are crawled one at a time; combinations (two operations in one pratica, an
-  intervento eventuale) are only what each adds on its own, except the one checked above.
+  intervento eventuale) are only what each adds on its own, except the five above.
 - Crawls before 2026-10-30 didn't record switched-off boxes: a block greyed until its choice
   is made (quadro f)'s stato legittimo) read as a choice that opens nothing, and its own choices
   were tried while greyed, doing nothing. crawl.js now marks `disabled`, a node's `enables` and

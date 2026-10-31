@@ -20,12 +20,12 @@ branch no rehearsal took.
 
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
-| SUE (building works) | 30 | 30 | 29 | 0 checked, 0 changed |
+| SUE (building works) | 32 | 32 | 31 | 0 checked, 0 changed |
 | SUAP (businesses) | 278 | 112 | 13 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
-- SUE: 30 pratiche, 128 distinct sections, 125 in the dictionary; 472 of 472 uses (100%)
+- SUE: 32 pratiche, 128 distinct sections, 125 in the dictionary; 541 of 541 uses (100%)
 - SUAP: 278 pratiche, 477 distinct sections, 77 in the dictionary; 2432 of 3365 uses (72%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
@@ -58,68 +58,85 @@ SUE pratiche not yet fillable:
 
 Measured today:
 
-- Level 1: 30 of 30 pratiche fully in the dictionary.
-- Level 2: **65 refusals across 13 recipes**, 23 distinct messages.
-- Level 3, in part: **23 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot a run would stop on.
+- Level 1: 32 of 32 pratiche fully in the dictionary. 5 of them are two operations in one pratica (`sue-combo-*`).
+- Which pratiche a case needs: of the 18176 cases the rules table decides, **1446 reach a steps file**, 16590 are refused with a reason or need no pratica, and **140 have no steps file yet**: 7 combinations of pratiche, listed below (`bench/test_route.py`).
+- Level 2: **73 refusals across 15 recipes**, 21 distinct messages.
+- Level 3, in part: **21 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot a run would stop on.
 - Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
 | `scia-alternativa-fittizia` | 11 |
 | `pdc-fittizio` | 9 |
+| `pdc-paesaggistica-ordinaria-fittizio` | 9 |
+| `pdc-paesaggistica-semplificata-fittizio` | 9 |
 | `pdc-sanatoria-fittizio` | 9 |
-| `scia-paesaggistica-ordinaria-fittizia` | 8 |
-| `scia-paesaggistica-semplificata-fittizia` | 8 |
 | `cila-fittizia` | 4 |
 | `cila-paesaggistica-fittizia` | 4 |
 | `scia-sanatoria-fittizia` | 4 |
 | `scia-fittizia` | 3 |
+| `scia-paesaggistica-ordinaria-fittizia` | 3 |
+| `scia-paesaggistica-semplificata-fittizia` | 3 |
 | `parere-esonero-fittizio` | 2 |
 | `agibilita-fittizia` | 1 |
 | `cil-fittizia` | 1 |
 | `fine-lavori-fittizia` | 1 |
 
+Pratiche filed together, mapped (a steps file each):
+
+- cila-lavori-edilizi + autorizzazione-paesaggistica-semplificata
+- permesso-di-costruire + autorizzazione-paesaggistica-ordinaria
+- permesso-di-costruire + autorizzazione-paesaggistica-semplificata
+- scia-edilizia + autorizzazione-paesaggistica-ordinaria
+- scia-edilizia + autorizzazione-paesaggistica-semplificata
+
+Pratiche filed together, not mapped yet (the cases that need them, most first):
+
+- scia-alternativa-pdc + autorizzazione-paesaggistica-ordinaria: 61 cases
+- scia-alternativa-pdc + autorizzazione-paesaggistica-semplificata: 61 cases
+- cila-lavori-edilizi + autorizzazione-paesaggistica-ordinaria: 8 cases
+- scia-in-sanatoria + autorizzazione-paesaggistica-ordinaria: 4 cases
+- scia-in-sanatoria + autorizzazione-paesaggistica-semplificata: 4 cases
+- cil-opere-temporanee + autorizzazione-paesaggistica-ordinaria: 1 case
+- cil-opere-temporanee + autorizzazione-paesaggistica-semplificata: 1 case
+
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
-- 9×: More than three other technicians aren't mapped yet: each takes a "+" on the portal, and three have been prepared.
-- 7×: More than five "altro" lines (titles past one per kind, or of kinds not listed) aren't mapped yet: each takes a "+" on the portal, and five have been prepared.
+- 11×: More than three other technicians aren't mapped yet: each takes a "+" on the portal, and three have been prepared.
+- 9×: More than five "altro" lines (titles past one per kind, or of kinds not listed) aren't mapped yet: each takes a "+" on the portal, and five have been prepared.
 - 5×: A hygiene derogation isn't mapped yet.
+- 5×: A project for the Vigili del Fuoco's assessment isn't mapped yet.
+- 5×: An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet.
+- 5×: An area without its primary urbanisation works isn't mapped yet.
+- 5×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions.
+- 5×: Soil needing environmental investigations (or already remediated) isn't mapped yet.
 - 5×: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
-- 3×: A project for the Vigili del Fuoco's assessment isn't mapped yet.
-- 3×: An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet.
-- 3×: An area without its primary urbanisation works isn't mapped yet.
-- 3×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions.
-- 3×: Soil needing environmental investigations (or already remediated) isn't mapped yet.
-- 3×: The barriers rules (artt. 77-82) aren't mapped yet.
-- 3×: Works on parts with asbestos aren't mapped yet.
-- 2×: Acoustic obligations aren't mapped yet.
+- 4×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
 - 2×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
-- 2×: Fire-prevention obligations aren't mapped yet.
 - 2×: More than two assents already obtained aren't mapped yet: the relazione has two rows.
 - 2×: More than two filings already made aren't mapped yet: the relazione has two rows.
-- 2×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
+- 1×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own boxes.
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione mak
 - 1×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
-- 1×: Systems certified by a collaudo, an atto notorio or a document already filed with the Comune aren't mapped yet.
+- 1×: The barriers rules (artt. 77-82) aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
 - 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
+- 1×: Works on parts with asbestos aren't mapped yet.
 
 Ticked "si allega" boxes with no attachment slot under their condition (gen.py `unslotted`; some only in cases a recipe refuses, some with no slot on the portal: a run tells):
 
+- 4×: Asseverazione PdC - inquinamento acustico: si allega documentazione necessaria all'ottenimento della deroga
+- 4×: Asseverazione PdC - inquinamento acustico: si allega la documentazione necessaria alla valutazione del progetto
+- 4×: Asseverazione PdC - stato legittimo: allega la documentazione necessaria indicata nel quadro riepilogativo
+- 4×: Asseverazione PdC - tutela ecologica ambientale: Si allega la documentazione necessaria per la richiesta di deroga
+- 4×: Asseverazione PdC - tutela storico ambientale: Si allega la relazione paesaggistica e la documentazione
+- 4×: Asseverazione PdC - tutela storico ambientale: Si allega la relazione paesaggistica semplificata
 - 4×: Asseverazione SCIA - Stato legittimo: allega la documentazione necessaria indicata nel quadro riepilogativo
 - 4×: Asseverazione SCIA - Tutela Storico Ambientale: Si allega la relazione paesaggistica e la documentazione
 - 4×: Asseverazione SCIA - Tutela Storico Ambientale: Si allega la relazione paesaggistica semplificata
 - 4×: Asseverazione SCIA - Tutela Storico Ambientale: si allega documentazione necessaria ai fini del rilascio del parere vincolante
-- 2×: Asseverazione PdC - inquinamento acustico: si allega documentazione necessaria all'ottenimento della deroga
-- 2×: Asseverazione PdC - inquinamento acustico: si allega la documentazione necessaria alla valutazione del progetto
-- 2×: Asseverazione PdC - stato legittimo: allega la documentazione necessaria indicata nel quadro riepilogativo
-- 2×: Asseverazione PdC - tutela ecologica ambientale: Si allega la documentazione necessaria per la richiesta di deroga
-- 2×: Asseverazione SCIA - Amianto: Si allega documentazione per la richiesta di deroga
-- 2×: Asseverazione SCIA - Inquinamento acustico: si allega documentazione necessaria all'ottenimento della deroga
-- 2×: Asseverazione SCIA - Inquinamento acustico: si allega la documentazione necessaria alla valutazione del progetto
-- 2×: Asseverazione SCIA - Tutela Ecologica: Si allega la documentazione necessaria per la richiesta di deroga
-- 2×: f) Calcolo del contributo di costruzione: allega il prospetto di calcolo preventivo
+- 4×: f) Calcolo del contributo di costruzione: allega il prospetto di calcolo preventivo
 - 1×: Asseverazione SCIA Alternativa - Amianto: Si allega documentazione per la richiesta di deroga
 - 1×: Asseverazione SCIA Alternativa - Inquinamento acus: si allega documentazione necessaria all'ottenimento della deroga
 - 1×: Asseverazione SCIA Alternativa - Inquinamento acus: si allega la documentazione necessaria alla valutazione del progetto
@@ -133,7 +150,7 @@ Ticked "si allega" boxes with no attachment slot under their condition (gen.py `
 
 Open items no recipe shows:
 
-- Not mapped: PdC in sanatoria under art. 36-bis (refused: the portal makes two acknowledgment checkboxes a radio pair; art. 36 is filled); sanatoria in protected areas (building works plus landscape works); PdC and SCIA alternativa with a landscape authorization; any combination of two pratiche other than CILA+semplificata and SCIA+semplificata/ordinaria.
+- Not mapped: PdC in sanatoria under art. 36-bis (refused: the portal makes two acknowledgment checkboxes a radio pair; art. 36 is filled); sanatoria in protected areas (building works plus landscape works). The combinations of pratiche still to map are counted above, from the rules table.
 - SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal's dating, oblazione and works-proposal radios behave as one group.
 - The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.
 - Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots may be missing (the catalogue notes this for the pratiche read on an empty draft); the diritti amount per pratica is unknown.
@@ -145,7 +162,7 @@ What a Napoli architect or pratiche agency files again and again, so what has to
 
 **SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, extensions, voltura, DL and contractor changes, the landscape authorizations), all of them.
 
-- 30 of 30 fillable, 29 run on the portal.
+- 32 of 32 fillable, 31 run on the portal.
 
 **SUAP: nine sectors × seven operations.** Each cell is one pratica on the portal:
 

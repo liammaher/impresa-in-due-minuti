@@ -78,7 +78,9 @@ box.innerHTML = '<b>Choose <code>{path.name}</code> (once)</b><br><input type="f
 document.body.appendChild(box);
 const [input, msg] = [box.querySelector("input"), box.querySelector("div")];
 input.addEventListener("change", async () => {{
-  if (window.pvBundleLoaded) {{ msg.textContent = "Already loaded: nothing done."; return; }}
+  // Once per batch: a box picked twice would start a second loop, but a batch that ended doesn't
+  // hold the tab (2026-10-31: the next bundle was refused).
+  if (window.pvBundleLoaded && window.pvBatchBusy !== false) {{ msg.textContent = "Already loaded: nothing done."; return; }}
   window.pvBundleLoaded = true; input.disabled = true;
   const text = await input.files[0].text();
   const got = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
@@ -138,9 +140,7 @@ def main():
         ap.error("--values and --out are required to build a batch")
     names = a.rehearsals or sorted(d.name for d in REHEARSALS.iterdir()
                                    if (d / "portal-steps.generated.yaml").exists() and (d / a.answers).exists())
-    fields = json.loads(a.values.read_text())
-    if isinstance(fields, dict) and isinstance(fields.get("fields"), list):
-        fields = dict(fields["fields"])  # a fixture
+    fields = run.fields_of(a.values.read_text())
     urls = json.loads(a.file_urls.read_text()) if a.file_urls else None
     (a.out / "steps").mkdir(parents=True, exist_ok=True)
     stored, sources, origin, queue, failed = {}, {}, None, [], []

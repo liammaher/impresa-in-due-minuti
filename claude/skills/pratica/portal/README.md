@@ -16,6 +16,13 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    person: declarations, attachments, payment, signing), `supports` (the cases refused, with
    why: all or nothing; `if:` checks one only once its gate holds, asking it only then).
    Copy a sibling: `rehearsals/paesaggistica-ordinaria-fittizia`.
+   **Two operations in one pratica** (a building pratica with its landscape authorization): the
+   recipe `extends: [<main pratica's rehearsal>, parts/<the other's part>]` and states only what is
+   its own (procedure, title, crawl, operation list, `descrizione`, `yours`, `rules.main`). Later
+   ones win key by key; `attachments`, `supports` and `sections` add up; `asks` and `rules` merge;
+   a null drops what came before (`data_inizio_lavori: null`). Then a slot or a refusal mapped on
+   the main pratica reaches its combinations (2026-10-31: the SCIA's had missed eleven slots). A
+   combination's crawl: below, *Crawling*.
    **Which pratica it is** is the library's rules table's (`rules/`, a byte-for-byte copy):
    `rules: {table, facts, handles}`, as the SUAP and SUE recipes have. `facts` fixes what the
    recipe is (`permesso_per_scelta: "true"` for the permesso); a fact it doesn't fix is an ask
@@ -34,7 +41,7 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    change and look at the diff: an unrelated steps file that changes is a regression until
    shown otherwise.
 4. **Pre-flight** with made-up answers (`answers-p6.json`) and the P6 fixture's values
-   (`rehearsals/cila-fittizia/fixture-p6.json` "fields" as a dict): `run.py preflight --made-up`
+   (`--values rehearsals/cila-fittizia/fixture-p6.json`, the fixture as it is): `run.py preflight --made-up`
    (the rehearsal's files are made up: Napoli's file rules only warn, below).
 5. **Run in the pane** (the pratica skill, step 2) and record each run in the rehearsal's
    README (`| Date | Browser | Result |`): what stopped it and what fixed it, then the
@@ -255,6 +262,13 @@ crawls and is near Chrome's limit (2026-10-31: 7.2 of about 10 million character
 can't keep stays in the tab, the batch stops saying so, and export.js still saves it. crawl.js
 tries 80 choices a section (the semplificata's Allegato B list has 41); a section with more says
 `truncated`.
+
+A combination (two operations in one pratica) is one op: `catalogue.py ops sue --combo NAME MAIN
+OTHER` (labels as in `sue-wizard.json`) tries only the procura scelta, as recipes take it, and reads
+the attachments screen on the way (crawl.js `also`, `scelte`, `slots`). `import` keeps the
+operations and adds the main one's answer-dependent slots. A batch whose sections were all seen
+before is small: `print.js` prints it with its sha256, and `catalogue.py import -` refuses a copy
+that arrived changed (no download to ask for).
 
 ## Attachments screens
 

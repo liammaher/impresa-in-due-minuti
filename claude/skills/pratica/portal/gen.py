@@ -278,6 +278,58 @@ def load_yaml(p):
     return yaml.safe_load(Path(p).read_text())
 
 
+REHEARSALS = HERE.parents[3] / "rehearsals"
+
+
+def resolved(recipe, seen=()):
+    """A recipe with what it `extends` (a rehearsal's name, or `parts/<name>`: what another pratica
+    adds when filed with it) merged in, in order, the recipe itself last. A combination is its
+    main pratica's recipe plus the other's part, so a slot or a refusal mapped on one reaches the
+    other (2026-10-31: the SCIA's combinations had missed eleven of the SCIA's slots). Later ones
+    win key by key; `attachments` (per screen), `supports` and `sections` add up; `asks` and
+    `rules` merge by key; a null drops what an earlier one set."""
+    parents = recipe.get("extends") or []
+    if not parents:
+        return recipe
+    out = {}
+    for name in [parents] if isinstance(parents, str) else parents:
+        if name in seen:
+            raise GenError(f"{name}: extends goes round")
+        path = HERE / f"{name}.yaml" if name.startswith("parts/") else REHEARSALS / name / "recipe.yaml"
+        if not path.exists():
+            raise GenError(f"extends {name}: no {path}")
+        merge_recipe(out, resolved(load_yaml(path), seen + (name,)))
+    merge_recipe(out, {k: v for k, v in recipe.items() if k != "extends"})
+    return out
+
+
+def merge_recipe(out, r):
+    add = lambda old, new: (old or []) + [x for x in new if x not in (old or [])]
+    for k, v in r.items():
+        if v is None:
+            out.pop(k, None)
+        elif k == "attachments":
+            screens = dict(out.get(k) or {})
+            for screen, slots in v.items():
+                if slots is None:
+                    screens.pop(screen, None)
+                else:
+                    screens[screen] = add(screens.get(screen), slots)
+            out[k] = screens
+        elif k in ("supports", "sections"):
+            out[k] = add(out.get(k), v)
+        elif k in ("asks", "rules"):
+            merged = dict(out.get(k) or {})
+            for kk, vv in v.items():
+                if vv is None:
+                    merged.pop(kk, None)
+                else:
+                    merged[kk] = vv
+            out[k] = merged
+        else:
+            out[k] = v
+
+
 QUADRO = re.compile(r"^[a-z]\d?\)\s*", re.I)
 
 
@@ -482,6 +534,7 @@ def unslotted(steps):
             and not any(terms(f["when"]) <= t for t in files)]
 
 def generate(recipe, base=HERE):
+    recipe = resolved(recipe)
     cat_dir = base / "catalogue" / recipe["comune"]
     catalogue = json.loads((cat_dir / f"{recipe['sportello']}-wizard.json").read_text())
     crawl = json.loads((cat_dir / "sections" / f"{recipe['crawl']}.json").read_text())

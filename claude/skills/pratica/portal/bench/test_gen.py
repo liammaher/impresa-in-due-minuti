@@ -808,5 +808,62 @@ def _():
         assert "crawl:batch" in (t / "out" / "status.js").read_text()
 
 
+@case("catalogue.py: a combination is one op (the procura only, its slots read), and a printed batch that changed is refused")
+def _():
+    import json
+    import subprocess
+    cat = [sys.executable, str(HERE.parent / "catalogue.py")]
+    ops = json.loads(subprocess.run(cat + ["ops", "sue", "--combo", "sue-combo-prova", "Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001",
+                                           "Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)"],
+                                    check=True, capture_output=True, text=True).stdout)
+    assert len(ops) == 1 and ops[0]["slots"] and ops[0]["also"][0].endswith("(DPR 31/2017 - Comune)") and "PROCURA" in ops[0]["scelte"][0], ops
+    bad = subprocess.run(cat + ["import", "-"], input="0" * 64 + "\n{}", capture_output=True, text=True)
+    assert bad.returncode and "sha256 differs" in bad.stderr, bad.stderr
+
+
+@case("extends: later ones win, attachments and supports add up, asks and rules merge, null drops")
+def _():
+    out = {}
+    gen.merge_recipe(out, {"title": "a", "asks": {"x": 1, "y": 2}, "rules": {"table": "t", "facts": {}},
+                           "supports": [{"when": "1"}], "attachments": {"S": [{"label": "A"}]}, "after": ["P"]})
+    gen.merge_recipe(out, {"title": "b", "asks": {"y": None, "z": 3}, "rules": {"main": "m"},
+                           "supports": [{"when": "1"}, {"when": "2"}], "attachments": {"S": [{"label": "B"}]}, "after": None})
+    assert out == {"title": "b", "asks": {"x": 1, "z": 3}, "rules": {"table": "t", "facts": {}, "main": "m"},
+                   "supports": [{"when": "1"}, {"when": "2"}], "attachments": {"S": [{"label": "A"}, {"label": "B"}]}}, out
+    try:
+        gen.resolved({"extends": ["parts/nessuna"]})
+        raise AssertionError("a missing part went unnoticed")
+    except gen.GenError:
+        pass
+
+
+@case("a combination carries its main pratica's slots and refusals, and its part's (2026-10-31: the SCIA's had drifted)")
+def _():
+    for main, part, combos in [("scia-fittizia", None, ["scia-paesaggistica-semplificata-fittizia", "scia-paesaggistica-ordinaria-fittizia"]),
+                               ("pdc-fittizio", None, ["pdc-paesaggistica-semplificata-fittizio", "pdc-paesaggistica-ordinaria-fittizio"])]:
+        base = gen.resolved(gen.load_yaml(ROOT / "rehearsals" / main / "recipe.yaml"))
+        for c in combos:
+            r = gen.resolved(gen.load_yaml(ROOT / "rehearsals" / c / "recipe.yaml"))
+            for screen, slots in base["attachments"].items():
+                missing = [s["label"] for s in slots if s not in r["attachments"][screen]]
+                assert not missing, f"{c} lacks {main}'s slots {missing}"
+            assert all(s in r["supports"] for s in base["supports"]), c
+            kind = c.split("-")[-2]
+            assert r["asks"]["paesaggio"]["default"] == kind and r["rules"]["handles"] == [f"napoli/comune/autorizzazione-paesaggistica-{kind}"], c
+    ordinaria = gen.resolved(gen.load_yaml(ROOT / "rehearsals" / "pdc-paesaggistica-ordinaria-fittizio" / "recipe.yaml"))
+    assert any(s["label"].startswith("Relazione paesaggistica e documentazione") for s in ordinaria["attachments"]["Gestione degli allegati"])
+
+
+@case("the permesso with its landscape authorization: the asseverazione names the procedure")
+def _():
+    for kind, label in [("semplificata", "è assoggettato al procedimento semplificato"), ("ordinaria", "è assoggettato al procedimento ordinario")]:
+        import run
+        steps = gen.generate(gen.load_yaml(ROOT / "rehearsals" / f"pdc-paesaggistica-{kind}-fittizio" / "recipe.yaml"))
+        v = p6_values(f"pdc-paesaggistica-{kind}-fittizio")(steps)
+        sec = section(steps, "Asseverazione PdC - tutela storico")
+        ticked = [f["label"] for f in sec["fields"] if run.truthy(v.render(f.get("when", "true")) or "")]
+        assert label in ticked and "ricade in zona tutelata e le opere comportano alterazione" in ticked, (kind, ticked)
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)
