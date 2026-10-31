@@ -279,6 +279,7 @@ asks:
   antincendio_soggetto: {type: yes_no, question: 'Is the building subject to fire-prevention rules?', propose: 'false'}
   antincendio_deroga: {type: yes_no, question: 'Does the building have features that don''t allow the fire-prevention technical rules to be followed in full, so a deroga is asked (its documents attached)?',
     propose: 'false'}
+  antincendio_deroga_doc: {type: file, question: The documents for the fire-prevention deroga (PDF)}
   amianto: {type: yes_no, question: 'Do the works touch parts with asbestos (so a piano di lavoro under art. 256 D.Lgs. 81/2008 is needed)?', propose: 'false'}
   relazione_energetica: {type: file, question: 'The relazione tecnica on energy use (art. 125 DPR 380/2001, D.Lgs. 192/2005) (PDF)'}
   igienico_conforme: {type: yes_no, question: 'Does the unit meet the hygiene and health requirements (no derogation)?', propose: 'true'}
@@ -293,6 +294,7 @@ asks:
       (art. 146)', options: ['no', senza autorizzazione, semplificata, ordinaria]}
   sanatoria_paesaggio: {type: yes_no, question: 'Is this a sanatoria, so works that needed a landscape authorization go through art. 36-bis c. 4?', default: 'false'}
   bene_culturale: {type: yes_no, question: 'Is the building itself a protected bene culturale (D.Lgs. 42/2004 parte II: listed, so the works need the Soprintendenza''s authorization, art. 21)?'}
+  soprintendenza_doc: {type: file, question: The documents for the Soprintendenza's authorization (art. 21 D.Lgs. 42/2004) (PDF)}
   area_protetta: {type: choice, question: 'Is the property in a protected natural area (a park or reserve, L. 394/1991 or regional law)? no; senza alterazione (inside, but the works don''t alter the place
       or the buildings'' look); nulla osta (the park authority''s nulla osta is needed: its documents attached)', options: ['no', senza alterazione, nulla osta], propose: 'no'}
   area_protetta_doc: {type: file, question: The documents for the park authority's nulla osta (PDF)}
@@ -1382,6 +1384,8 @@ sections:
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
   - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: '{{ask.elaborati_barriere}}', when: '{{ask.barriere}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Documentazione necessaria per il rilascio dell'autorizzazione sismica, value: '{{ask.sismica_doc}}', when: '{{ask.strutture}} {{ask.sismica|is_autorizzazione}}'}
+  - {kind: file, label: Documentazione per il rilascio del parere/nulla osta da parte della Soprintendenza, value: '{{ask.soprintendenza_doc}}', when: '{{ask.bene_culturale}}'}
+  - {kind: file, label: Deroga all'integrale osservanza delle regole tecniche di prevenzione incendi, value: '{{ask.antincendio_deroga_doc}}', when: '{{ask.antincendio_soggetto}} {{ask.antincendio_deroga}}'}
   - {kind: file, label: Documentazione per il rilascio del parere/nulla osta dell'ente competente, value: '{{ask.area_protetta_doc}}', when: '{{ask.area_protetta|is_nulla_osta}}'}
   - {kind: file, label: Documentazione per il rilascio dell'autorizzazione relativa al vincolo idrogeologico, value: '{{ask.idrogeologico_doc}}', when: '{{ask.idrogeologico|is_autorizzazione}}'}
   - {kind: file, label: Documentazione per il rilascio dell'autorizzazione relativa al vincolo idraulico, value: '{{ask.idraulico_doc}}', when: '{{ask.idraulico}}'}

@@ -16,5 +16,17 @@
   "answers": "answers-p6.json",
   "result": "filled",
   "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-catasto-invariato.json",
+  "result": "filled",
+  "seconds": 154.1
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-catasto-presentata.json",
+  "result": "filled",
+  "seconds": 154.1
  }
 ]

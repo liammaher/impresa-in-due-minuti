@@ -34,5 +34,23 @@
   "answers": "answers-tolleranze-minore.json",
   "result": "filled",
   "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-comodatario.json",
+  "result": "filled",
+  "seconds": 82.3
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 101.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-proprietario.json",
+  "result": "filled",
+  "seconds": 83.7
  }
 ]

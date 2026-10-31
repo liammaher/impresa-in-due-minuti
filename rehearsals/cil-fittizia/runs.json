@@ -1,0 +1,14 @@
+[
+ {
+  "date": "2026-10-31",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 77.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-proprietario.json",
+  "result": "filled",
+  "seconds": 62.8
+ }
+]

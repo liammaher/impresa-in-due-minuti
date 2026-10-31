@@ -41,6 +41,12 @@ attachments:
     - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: "{{ask.elaborati_barriere}}", when: "{{ask.barriere}}"}
     # Each "si allega" of the asseverazione adds its own slot, as on the SCIA.
     - {kind: file, label: Documentazione necessaria per il rilascio dell'autorizzazione sismica, value: "{{ask.sismica_doc}}", when: "{{ask.strutture}} {{ask.sismica|is_autorizzazione}}", on_page: true}
+    # A protected building (bene culturale): its "Si allega" adds this required slot, as on the SCIA
+    # (missed here until the permesso's intero-vincoli case stopped on it, 2026-10-31).
+    - {kind: file, label: Documentazione per il rilascio del parere/nulla osta da parte della Soprintendenza, value: "{{ask.soprintendenza_doc}}", when: "{{ask.bene_culturale}}", on_page: true}
+    # A deroga to the fire-prevention rules adds this required slot, as on the SCIA (the
+    # permesso's rir-deroga-antincendio case stopped on it, 2026-10-31).
+    - {kind: file, label: Deroga all'integrale osservanza delle regole tecniche di prevenzione incendi, value: "{{ask.antincendio_deroga_doc}}", when: "{{ask.antincendio_soggetto}} {{ask.antincendio_deroga}}", on_page: true}
     - {kind: file, label: Documentazione per il rilascio del parere/nulla osta dell'ente competente, value: "{{ask.area_protetta_doc}}", when: "{{ask.area_protetta|is_nulla_osta}}", on_page: true}
     - {kind: file, label: Documentazione per il rilascio dell'autorizzazione relativa al vincolo idrogeologico, value: "{{ask.idrogeologico_doc}}", when: "{{ask.idrogeologico|is_autorizzazione}}", on_page: true}
     - {kind: file, label: Documentazione per il rilascio dell'autorizzazione relativa al vincolo idraulico, value: "{{ask.idraulico_doc}}", when: "{{ask.idraulico}}", on_page: true}
