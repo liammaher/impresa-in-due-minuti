@@ -293,6 +293,22 @@ way). `unsupported` (refused by the table, no pratica needed, or a combination n
 yet): tell the user the reason in one line and stop. Pratiche the person names (a proroga,
 fine lavori, a voltura) are found by their entry id, as above.
 
+**When the user hands over the job's documents** (a folder: the visura, the lease or deed, the
+relazione tecnica, the drawings, the receipts), read them with the intake before asking anything:
+`~/.cache/pratica-portal/venv/bin/python -I ~/.claude/skills/pratica/intake/intake.py scan <folder>
+--out <dir>` (`intake/README.md`). Never open the documents or `<dir>/private/` yourself: they
+hold people's data, which goes from the files to `private/values.json` without passing through
+the conversation. Read only `<dir>/intake.json`: each file's kind, the field ids filled, the
+`unread` files (scans: their facts are asked as before), `notes` (the titles the deed names, the
+planimetria's date, a receipt paid to the wrong account), and `proposals`, each with the document
+and words it comes from. Show the proposals in one message, grouped by document ("From the
+relazione tecnica: manutenzione straordinaria, nothing structural, works started 2026-10-19…").
+On "ok": `intake.py accept <dir> --into <facts.json> --part facts`, then route.py. Scan again with
+`--steps <the routed steps file>` and, on "ok", `accept <dir> --into <answers.json>` (it adds the
+client's and the owner's roles to `people`, never replacing an answer). Pre-flight then takes the
+vault's values and the documents': `--values - --values <dir>/private/values.json` (the vault's
+win). A proposal nobody confirmed is never used.
+
 1. **Pre-flight first, before anything opens.** `run.py preflight --steps <folder>/portal-steps.yaml
    [--answers <answers.json>]` with the same values as step 2 (the `pvault get` piped in,
    or `--vault-dir`) prints JSON and exits 0 only when `ready`:

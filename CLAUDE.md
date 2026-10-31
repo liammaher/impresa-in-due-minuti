@@ -115,6 +115,10 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      schema (`schema/`, InfoCamere's forms flattened), for a person to check;
                      schema_branches.py sets the 7 SUE forms' choices against the rehearsals' cases
                      (docs/schema-branches.md: the branches no case takes yet)
+  pratica/intake/    intake.py: a job's documents (visura, lease, deed, relazione, receipts) to a
+                     private values file and proposed facts and answers, each with its source, for
+                     the person to confirm (`accept`); Claude reads only intake.json, never the
+                     documents' values (intake/README.md)
   pratica/review.py  the page the person reviews: what's left for them, the checks, every value
 plugin/              the Portali plugin for Cowork (docs/design/packaging.md): build.py copies the
                      runner, the rehearsals' steps files (as JSON: no packages in Cowork) and the
@@ -462,7 +466,8 @@ gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the 
 (`branches.py --write` writes `docs/sue-branches.md`), `bench/test_tolleranze.py` the asseverazioni's
 tolerances, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
 the same bytes as the library's), `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
-route.py on every case the SUE table decides (it prints the combinations not mapped yet). On the real portal, `bench/rerun.py` reruns the rehearsals
+route.py on every case the SUE table decides (it prints the combinations not mapped yet), and
+`claude/skills/pratica/intake/bench/test_intake.py` the intake on a made-up dossier (`dossier.py`) against fixture-p6.json. On the real portal, `bench/rerun.py` reruns the rehearsals
 in the pane after a runner, dictionary or gen.py change (portal/README.md); `--record` files the results in each
 rehearsal's `runs.json`, which schema_branches.py counts as filled on the portal.
 

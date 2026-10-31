@@ -13,7 +13,7 @@
       files, never sent) reports the sportello's refusals as warnings instead.
 
   run.py plan --steps STEPS.yaml --answers A.json
-              (--values - | --server S.json --token NAME | --vault-dir DIR [--keychain SERVICE])
+              (--values - [--values FILE] | --server S.json --token NAME | --vault-dir DIR [--keychain SERVICE])
       Resolves every value the steps need and prints what goes where. No browser.
 
   run.py page --steps STEPS.yaml --answers A.json VAULT --out DIR [--plain]
@@ -54,7 +54,8 @@ fixes, and the fresh load at the end still checks every section.
 STEPS.yaml is a portal's steps file (rehearsals/*/portal-steps.yaml). Values come from
 the vault, VAULT as for plan. --values - takes what `pvault get` printed for the steps'
 categories (`pvault get 'business.*' 'locale.*' '*:identity.*' ...`, piped in: one Touch ID
-approval, nothing on disk). --server is the pilot vault's JSON ("url" and "tokens") and a
+approval, nothing on disk); a second --values FILE (intake.py's private values.json, read off
+the job's documents) fills what the vault doesn't hold. --server is the pilot vault's JSON ("url" and "tokens") and a
 token's name in it; --vault-dir is a real vault, read over its socket with the token in
 $VAULT_TOKEN or the Keychain (--keychain, default fill.py's), as fill.py reads it. The
 token reads the categories the steps name. Asks come from A.json. --cdp attaches
@@ -1403,7 +1404,8 @@ def main():
     src = ap.add_mutually_exclusive_group(required=True)
     src.add_argument("--server", type=Path)
     src.add_argument("--vault-dir")
-    src.add_argument("--values", help="- or a file: pvault get's JSON of the fields the steps read")
+    src.add_argument("--values", action="append", help="- or a file: pvault get's JSON of the fields the steps read; "
+                     "again for another (intake.py's private values.json): the first to hold a field gives it")
     ap.add_argument("--token", default="prepare", help="--server: which of its tokens")
     ap.add_argument("--keychain", help="--vault-dir: the Keychain service of the token")
     ap.add_argument("--out", type=Path)
@@ -1421,10 +1423,19 @@ def main():
         answers = json.loads(a.answers.read_text()) if a.answers else {}
         asks = steps.get("asks")
         if a.values:
-            given = sys.stdin.read() if a.values == "-" else Path(a.values).read_text()
-            if not given.strip():
-                raise StepError("no values: pvault get printed nothing (its error is above)")
-            values = Values(answers, fields=json.loads(given), asks=asks)
+            if a.values.count("-") > 1:
+                ap.error("--values - only once: there is one stdin")
+            fields = {}
+            for src_ in a.values:
+                given = sys.stdin.read() if src_ == "-" else Path(src_).read_text()
+                if not given.strip():
+                    raise StepError("no values: pvault get printed nothing (its error is above)" if src_ == "-"
+                                    else f"no values in {src_}")
+                # The vault's first (piped), the documents' after: a field the vault holds
+                # isn't replaced by what a document says.
+                for k, v in json.loads(given).items():
+                    fields.setdefault(k, v)
+            values = Values(answers, fields=fields, asks=asks)
         else:
             vaults = fill.connect(argparse.Namespace(server=a.server, vault_dir=a.vault_dir, keychain=a.keychain))
             if a.server and a.token not in vaults:
