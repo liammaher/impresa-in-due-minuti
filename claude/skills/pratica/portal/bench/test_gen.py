@@ -697,7 +697,7 @@ def _():
                              ("pdc-fittizio", "answers-altri-tecnici.json", 2), ("cila-fittizia", "answers-altri-tecnici.json", 1)):
         steps = generated(name)
         v = run.Values(json.loads((REH / name / answers).read_text()), fields=fields, asks=steps.get("asks"))
-        r = run.preflight(steps, v)
+        r = run.preflight(steps, v, made_up=True)
         assert r["ready"], (name, r)
         planned = [p for p in run.plan(steps, v) if "Altri tecnici" in p["section"]]
         assert sum(p["kind"] == "add" for p in planned) == n - 1, name
@@ -706,7 +706,7 @@ def _():
         assert employed == (answers != "answers-altri-tecnici.json" or name == "pdc-fittizio"), name
     # No other technicians: whether one is an employee is never asked, nor their studio read.
     steps = generated("cila-fittizia")
-    r = run.preflight(steps, run.Values(json.loads((REH / "cila-fittizia" / "answers-p6.json").read_text()), fields=fields, asks=steps.get("asks")))
+    r = run.preflight(steps, run.Values(json.loads((REH / "cila-fittizia" / "answers-p6.json").read_text()), fields=fields, asks=steps.get("asks")), made_up=True)
     assert r["ready"] and "altro_tecnico_dipendente" not in json.dumps(r), r
 
 
