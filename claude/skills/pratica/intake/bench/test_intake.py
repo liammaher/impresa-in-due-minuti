@@ -40,7 +40,8 @@ def kinds_and_unread():
                      "Documento_identita_Luca.pdf": "identita", "Elaborati_grafici.pdf": "elaborati",
                      "Notifica_preliminare.pdf": "notifica", "Relazione_tecnica.pdf": "relazione",
                      "Ricevuta_diritti.pdf": "ricevuta_diritti", "Ricevuta_sanzione.pdf": "ricevuta_sanzione",
-                     "Visura_attuale_immobile.pdf": "visura"}, kinds
+                     "Visura_attuale_immobile.pdf": "visura", "Allegato_A_Programma_100.pdf": "programma100",
+                     "Modello_DP.pdf": "modello_dp"}, kinds
     # The identity card is a scan: known by its name, read for nothing.
     assert REPORT["unread"] == ["Documento_identita_Luca.pdf"], REPORT["unread"]
 
@@ -218,6 +219,41 @@ def end_to_end():
     assert rows == {"Piano": "9", "Foglio": "12"}, (p.stdout, p.stderr)
 
 
+def napoli_annexes():
+    """Napoli's annexes to a building title (DD 603/2025, the SUE's CILA notes): pre-flight says
+    them for the titles only; the intake says which the dossier lacks, and what zona A or a
+    frazionamento adds."""
+    import yaml
+    reh = REPO / "rehearsals"
+    cila = yaml.safe_load((reh / "cila-fittizia" / "portal-steps.generated.yaml").read_text())
+    proroga = yaml.safe_load((reh / "proroga-fine-fittizia" / "portal-steps.generated.yaml").read_text())
+    sp = run.filing_rules(cila)
+    lines = run.filing_yours(cila, sp)
+    assert any("Programma 100" in y and "Modello DP" in y for y in lines), lines
+    assert any("Stato Comparativo" in y for y in lines) and any("tipo edilizio" in y for y in lines)
+    assert any("atto d'obbligo" in y for y in lines) and len(run.filing_yours(proroga, sp)) == len(sp["yours"])
+    combined = yaml.safe_load((reh / "scia-paesaggistica-semplificata-fittizia" / "portal-steps.generated.yaml").read_text())
+    assert len(run.filing_yours(combined, sp)) == len(lines), "a title filed with its landscape one is a title"
+    # The P6 dossier has both annexes: nothing lacking. Without them, said; zona A and a
+    # frazionamento in the relazione add theirs.
+    report, _, _ = intake.scan(DOSSIER, cila)
+    assert not [n for n in report["notes"] if n["from"] == "dossier"], report["notes"]
+    d = TMP / "annexes"
+    d.mkdir()
+    rel = [line.replace("zona B - agglomerati urbani di recente formazione", "zona A - insediamenti di interesse storico")
+           for line in dossier.relazione_lines()] + ["Le opere comprendono il frazionamento dell'unita' immobiliare."]
+    (d / "Relazione_tecnica.pdf").write_bytes(dossier.one_page(rel))
+    notes = [n["note"] for n in intake.scan(d, cila)[0]["notes"]]
+    assert any(n.startswith("not in the dossier: the Allegato A Nuovo Programma 100 and the Modello DP") for n in notes), notes
+    assert any(n.startswith("zona A (centro storico)") for n in notes) and any(n.startswith("frazionamento") for n in notes), notes
+    assert not [n for n in intake.scan(d, proroga)[0]["notes"] if n["from"] == "dossier"], "a proroga needs neither"
+    # An atto d'obbligo is a notarial act, and not the deed.
+    (d / "Atto_obbligo.pdf").write_bytes(dossier.one_page([
+        "ATTO D'OBBLIGO UNILATERALE", "innanzi a me notaio Mario Esempio", "si obbliga a non frazionare ulteriormente"]))
+    kinds = {Path(x["file"]).name: x["kind"] for x in intake.scan(d, cila)[0]["documents"]}
+    assert kinds["Atto_obbligo.pdf"] == "atto_obbligo", kinds
+
+
 def accept_never_replaces():
     out = TMP / "out2"
     subprocess.run([PY, "-I", HERE.parent / "intake.py", "scan", DOSSIER, "--out", out], check=True, capture_output=True)
@@ -230,7 +266,7 @@ def accept_never_replaces():
 
 def main():
     tests = [kinds_and_unread, values_match_fixture, nothing_personal_for_claude, both_readers_agree, router_facts, notes,
-             wrong_account_and_signed_files, parsers, end_to_end, accept_never_replaces]
+             wrong_account_and_signed_files, parsers, end_to_end, napoli_annexes, accept_never_replaces]
     try:
         for t in tests:
             t()

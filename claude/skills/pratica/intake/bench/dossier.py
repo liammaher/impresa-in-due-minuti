@@ -157,8 +157,8 @@ def deed():
     ])])
 
 
-def relazione():
-    return pdf([column(60, 790, [
+def relazione_lines():
+    return [
         "Studio Fittizio - arch. Chiara Fittizia",
         "RELAZIONE TECNICA ILLUSTRATIVA",
         "(art. 6-bis, comma 5, D.P.R. 380/2001 - C.I.L.A. presentata a lavori in corso)",
@@ -197,7 +197,11 @@ def relazione():
         "progettista.",
         "",
         "Napoli, 28/10/2026                              Il tecnico, arch. Chiara Fittizia",
-    ])], pdfa=True)
+    ]
+
+
+def relazione():
+    return pdf([column(60, 790, relazione_lines())], pdfa=True)
 
 
 def one_page(lines, pdfa=False):
@@ -246,6 +250,16 @@ DOCUMENTS = {
         "Causale: N1051_SUE - sanzione CILA tardiva art. 6-bis c. 5 - Fittizio Luca - Via Domenico Fontana 40",
         "Data esecuzione: 28/10/2026"]),
     "Documento_identita_Luca.pdf": lambda: pdf([None]),  # a scan: no text
+    # Napoli's annexes (DD 603/2025), as the Comune's own models head them.
+    "Allegato_A_Programma_100.pdf": lambda: one_page([
+        "Allegato A - Nuovo Programma 100", "DICHIARAZIONE SOSTITUTIVA DELL'ATTO DI NOTORIETA'",
+        "(art. 47 D.P.R. 28 dicembre 2000 n. 445)",
+        "Il sottoscritto dichiara di non avere debiti nei confronti del Comune di Napoli per le entrate",
+        "oggetto della verifica tributaria, e che non sono in corso procedure di riscossione coattiva."]),
+    "Modello_DP.pdf": lambda: one_page([
+        "Modello DP - Dichiarazione di pagamento", "ai sensi della Legge regionale Campania n. 59/2018",
+        "Il sottoscritto professionista dichiara di aver ricevuto dal committente il pagamento delle",
+        "spettanze relative agli elaborati progettuali della pratica edilizia."]),
 }
 
 

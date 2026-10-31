@@ -169,9 +169,15 @@ KINDS = [
     ("planimetria", r"planimetria di u\.?\s?i\.?\s?u\.?|catasto dei fabbricati - planimetria", r"planimetri"),
     ("locazione", r"contratto di locazione|denominat[oa] conduttore", r"locazion|affitto"),
     ("comodato", r"contratto di comodato|comodatari", r"comodato"),
+    # A notarial act too, so before the deed: Napoli's undertaking not to split a unit further.
+    ("atto_obbligo", r"atto d'?obbligo", r"atto.?d.?obbligo"),
     ("atto", r"compravendita|menzioni urbanistiche|innanzi a me.*notaio", r"atto|rogito|compravendita"),
     ("notifica", r"^\W*notifica preliminare", r"notifica"),
+    # Napoli's own annexes to the building titles (DD 603/2025; the SUE's CILA notes).
+    ("programma100", r"programma 100", r"programma.?100|\bp100\b"),
+    ("modello_dp", r"modello dp|(legge regionale|l\.\s?r\.) (campania )?(n\. )?59/2018", r"modello.?dp|\bdp\b"),
     ("relazione", r"relazione tecnica", r"relazione"),
+    ("tipo_edilizio", r"(corrispondenza|riconducibil)\w*.{0,80}tipo edilizio", r"tipo.?edilizio"),
     ("assenso", r"prestare il proprio assenso|dichiara(no)? di (prestare|dare) (il proprio )?assenso", r"assenso"),
     ("elaborati", r"stato di fatto|stato di progetto|stato comparativo", r"elaborat|tavol"),
     ("foto", r"documentazione fotografica", r"foto"),
@@ -355,6 +361,8 @@ RELAZIONE = [
     ("altri_atti", False, r"non sono necessari altri (atti di assenso|pareri|nulla osta)"),
     ("altri_tecnici", False, r"non sono (stati )?incaricati altri tecnici"),
     ("direttore_lavori", "progettista", r"direttore dei lavori:? (e )?(il sottoscritto|lo stesso) progettista"),
+    ("frazionamento", False, r"(senza|non comporta\w*|nessun) (alcun )?frazionament"),
+    ("frazionamento", True, r"\bfrazionament\w*|\bfrazionare\b"),
 ]
 # The CILA's checklist of what the works are (its group `cila_interventi`), from the art. 3
 # category the relazione gives.
@@ -571,6 +579,24 @@ def scan(dossier, steps=None, client=None):
             slot = next((s for s in slots if s in asks and s not in proposals["answers"]), None)
             if slot:
                 propose("answers", slot, str(p), f"{p.name} ({kind})")
+    # Napoli's own annexes: what the relazione says the case needs, and, for a building title,
+    # those always required, when the dossier lacks them.
+    relazione = next((read_relazione(t) for _, t in docs.get("relazione", []) if t), {})
+    if relazione.get("zona_prg", ("",))[0] == "A" and "tipo_edilizio" not in docs:
+        report["notes"].append({"from": "relazione tecnica", "note": "zona A (centro storico): attach the attestation, "
+                                "signed under art. 481 c.p., that the unit matches its tipo edilizio (art. 63 c. 4 "
+                                "of the Variante generale); none is in the dossier"})
+    if relazione.get("frazionamento", (False,))[0] and "atto_obbligo" not in docs:
+        report["notes"].append({"from": "relazione tecnica", "note": "frazionamento: the atto d'obbligo not to split "
+                                "the unit further (art. 22 c. 2 of the Variante generale), transcribed, goes with this "
+                                "pratica if the works are done, else with the fine lavori; none is in the dossier"})
+    sportello = run.filing_rules(steps) if steps else None
+    if sportello and len(run.filing_yours(steps, sportello)) > len(sportello["yours"]):
+        lacking = [name for kind, name in (("programma100", "the Allegato A Nuovo Programma 100"),
+                                           ("modello_dp", "the Modello DP")) if kind not in docs]
+        if lacking:
+            report["notes"].append({"from": "dossier", "note": f"not in the dossier: {' and '.join(lacking)}, always "
+                                    "required with this pratica in Napoli (DD 603/2025)"})
     # Only what the router or the steps file asks, and fits there.
     facts = rules.table("sue-napoli")["facts"]
     for key in list(proposals["facts"]):

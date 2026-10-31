@@ -859,7 +859,7 @@ def preflight(steps, values, urls=None, made_up=False):
         report["warnings"].append(f"made-up data: {sum('filing' in x for x in report['files'])} file(s) "
                                   f"{sportello['office']} would refuse (each one's `filing`): never send this draft")
     report["pane_ok"] = sum(x["bytes"] or 0 for x in report["files"] if "link" not in x) <= PAGE_FILES_LIMIT
-    report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + (sportello["yours"] if sportello else [])
+    report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + filing_yours(steps, sportello)
                        + apart(steps, values))
     report["ready"] = not (report["questions"] or report["proposals"] or report["missing"]
                            or any(not x["exists"] or x.get("problem") for x in report["files"] if x["path"]))
@@ -960,6 +960,30 @@ FILING = {
             "IT95X0306903496100000046118, causale N1051_SUE – tipo pratica, identificativo, anno (before it "
             "has one: the titolare's name and the property's address). Paid any other way, it is irricevibile",
         ],
+        # The building titles of DD 603/2025's forms (the CILA, the SCIA, the SCIA alternativa,
+        # the permesso, their sanatorie and landscape combinations), whose attachment tables
+        # mark these "sempre obbligatorio"; the zona A and frazionamento ones are the SUE's CILA
+        # notes (23/06/2025), the Stato Comparativo the Linee Guida's §9 "nuovo obbligo".
+        "titles": {
+            "procedures": ["napoli/comune/cila-lavori-edilizi", "napoli/comune/scia-edilizia",
+                           "napoli/comune/scia-alternativa-pdc", "napoli/comune/permesso-di-costruire",
+                           "napoli/comune/scia-in-sanatoria", "napoli/comune/permesso-in-sanatoria"],
+            "yours": [
+                "Attach Napoli's two declarations, always required with this pratica (DD 603/2025), each signed "
+                "digitally: the Allegato A Nuovo Programma 100 (the titolare's sworn statement on what they owe "
+                "the Comune) and the Modello DP (the professionals' statement that the client paid their fees, "
+                "L.R. Campania 59/2018)",
+                "For works on an existing building, the drawings include a Stato Comparativo sheet: the current "
+                "and the project plans overlaid, demolitions in yellow and new construction in red (green and "
+                "blue for works dropped in progress), black on white elsewhere (DD 501/2026 Linee Guida §9)",
+                "If the building is in the centro storico (zona A of the Variante generale): attach the "
+                "attestation, signed under art. 481 c.p., that the unit matches its tipo edilizio in the Norme "
+                "di attuazione (art. 63 c. 4)",
+                "If the works split the unit (frazionamento, art. 22 c. 2 of the Variante generale): the atto "
+                "d'obbligo not to split it further, transcribed at the Conservatoria, goes with this pratica "
+                "if the works are done, else with the fine lavori",
+            ],
+        },
     },
 }
 
@@ -969,6 +993,16 @@ def filing_rules(steps):
     from urllib.parse import parse_qs, urlparse
     q = parse_qs(urlparse(steps.get("start", "")).query)
     return FILING.get((q.get("comune", [""])[0], q.get("tipoSportello", [""])[0]))
+
+
+def filing_yours(steps, sportello):
+    """The person's steps the sportello asks of every pratica, and of the building titles for one
+    that is one (its procedure, or its `rules:` main for a title filed with its landscape one)."""
+    if not sportello:
+        return []
+    titles = sportello.get("titles", {})
+    procedure = (steps.get("rules") or {}).get("main", steps.get("procedure"))
+    return sportello["yours"] + (titles.get("yours", []) if procedure in titles.get("procedures", []) else [])
 
 
 def filing_problems(p, raw, rules):

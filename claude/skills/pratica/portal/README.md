@@ -159,7 +159,13 @@ says so; pre-flight checks each file the run attaches:
 - **Names**: letters, digits and underscores, then the extensions.
 
 Each failure is the file's `problem`, and `yours` carries the same rules for the person's own files
-and the payment. The 200 DPI the Linee Guida ask for is advice there and isn't checked. With
+and the payment. For a building title (`FILING`'s `titles`: the CILA, SCIA, SCIA alternativa and
+permesso, their sanatorie, and those filed with a landscape authorization, by `rules.main`) `yours`
+adds Napoli's annexes: the Allegato A Nuovo Programma 100 and the Modello DP ("sempre obbligatorio"
+in each of DD 603/2025's forms), the Stato Comparativo sheet (Linee Guida §9), and, when they apply,
+the zona A tipo edilizio attestation and the frazionamento's atto d'obbligo (the SUE's CILA notes of
+23/06/2025). The other SUE pratiche (proroghe, voltura, agibilità) get only the file and payment
+rules: nothing found says they need more. The 200 DPI the Linee Guida ask for is advice there and isn't checked. With
 `--made-up` (a rehearsal) they are the file's `filing` and a warning, so rehearsals still run;
 the tests pass `made_up=True` for the rehearsals' files. Seen on 2026-10-31: the Comune's own DD 501
 and DD 603 are PAdES-signed and read as such, and are not PDF/A; the veraPDF corpus's PDF/A-1b and
