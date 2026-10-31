@@ -18,6 +18,8 @@ see these; here each one is:
              always PROFESSIONISTA INCARICATO): a different kind of case, if it is one at all
   theirs     the person's (the dictionary's `theirs`, `omit`, or a declaration's section), never ticked
   left       a dictionary entry leaves it empty on purpose
+  law        the law closes it to new cases (the dictionary's `law`: the piano casa, closed to new
+             requests since 2022): not a gap, and a case that takes it is refused as the law's
   unmapped   the section has an entry, the choice is in none of it: a case that takes it is
              unmapped (a recipe refuses it, or pre-flight never asks it)
   no entry   the section isn't in the dictionary at all
@@ -43,7 +45,7 @@ HERE = Path(__file__).resolve().parent
 OUT = HERE.parents[3] / "docs" / "sue-branches.md"
 LIMIT = 30  # crawl.js's default `limit` of choices tried per section
 TICKS = ("radio", "checkbox", "tick")
-STATES = ["ticked", "answer", "theirs", "left", "fixed", "unmapped", "no entry"]
+STATES = ["ticked", "answer", "theirs", "left", "law", "fixed", "unmapped", "no entry"]
 
 
 def distinct_sections():
@@ -114,6 +116,9 @@ def state(n, f, name, entries):
         if any(gen.norm(f.get("label")).startswith(gen.norm(x)) or gen.norm(f.get("context")).startswith(gen.norm(x))
                for x in entry.get("leave", [])):
             return "left"
+    for entry, _ in entries:
+        if any(gen.norm(f.get("label")).startswith(gen.norm(x)) for x in entry.get("law", [])):
+            return "law"
     return "fixed" if fixed else "unmapped"
 
 
@@ -164,6 +169,7 @@ def render(rs):
         f"| answer | {count['answer']} | a dropdown filled from an answer (options reached not counted) |",
         f"| theirs | {count['theirs']} | the person's own (an acknowledgement, a declaration), never ticked |",
         f"| left | {count['left']} | left empty on purpose |",
+        f"| law | {count['law']} | closed by law to new cases (the piano casa): refused as the law's, not a gap |",
         f"| fixed | {count['fixed']} | another option of a dropdown the dictionary sets to one value |",
         f"| unmapped | {count['unmapped']} | in a mapped section, not taken: a case that needs it is refused or not asked |",
         f"| no entry | {count['no entry']} | its section isn't in the dictionary yet |",

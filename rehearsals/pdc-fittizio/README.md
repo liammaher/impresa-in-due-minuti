@@ -17,7 +17,12 @@ and `dictionary/fnsuap.yaml`. The wizard's Si/No (sanatoria) is answered No.
 - **What it asks for** (quadro a) and the asseverazione's tipologia): a new building, a
   ristrutturazione urbanistica or an art. 10 c. 1 c ristrutturazione edilizia (each changing the
   use or not, as the SCIA's four cases), works a SCIA could file asked as a permesso (art. 22
-  c. 7), or an essential variant to a permesso (its number and date).
+  c. 7), or an essential variant to a permesso, a SCIA alternativa or a titolo unico (its number
+  and date), or a variant changing the shape in the centro storico (Tab. A n. 38). An art. 10
+  permesso may be convenzionato (art. 28-bis) or in deroga (art. 14: each limit with its own
+  line). Campania's kinds, which Napoli's quadro a) puts under "procedimento ordinario": an attic
+  made habitable (L.R. 15/2000), car parks on free land, a change of use under art. 2 L.R.
+  19/2001 (which of its three).
 - **The contributo** (quadro f): free (the rule why), or due: worked out on the architect's
   prospetto or by the SUE, paid when the permesso is collected, in instalments or during the
   works. No opere a scomputo (its Si/No is No).
@@ -44,8 +49,8 @@ permesso: not mapped yet); works not allowed in a cemetery's fascia; an acoustic
 clima acustico report; a project for the Vigili del Fuoco; a hygiene derogation; systems
 needing a project; soil needing investigations; an area without its urbanisation; with the energy
 rules or the renewables, no incentive (the portal's form can't say none); a contributo already
-paid before filing. Not offered: the sanatoria (art. 36), a deroga (art. 14), the permesso
-convenzionato, the piano casa, the titolo unico, a SUAP procedure.
+paid before filing; the piano casa (L.R. 19/2009: no new requests since 30 September 2022, art.
+28 c. 6 L.R. 31/2021). Not offered: "altro non indicato", a SUAP procedure.
 
 ## Cases from the schema table (2026-10-30)
 
@@ -60,6 +65,13 @@ form no case took. Each passes pre-flight offline; **none has been run on the po
 - `answers-rir-deroga-antincendio.json`: a fire-rules deroga; inside a RIR area di danno.
 - `answers-rir-fuori-area.json`: a RIR activity, outside its area di danno.
 
+The permesso's other kinds (2026-10-31):
+
+- `answers-sottotetti.json`, `answers-parcheggi.json`, `answers-mutamento-lr.json`: Campania's
+  kinds (L.R. 15/2000; L.R. 19/2001, its art. 2 with works adding volume).
+- `answers-convenzionato.json`, `answers-deroga.json` (density, height and distance).
+- `answers-variante-sagoma.json`, `answers-variante-scia-alt.json`, `answers-variante-titolo-unico.json`.
+
 ## Runs
 
 | Date | Browser | Case | Result |
@@ -72,3 +84,8 @@ form no case took. Each passes pre-flight offline; **none has been run on the po
 | 2026-10-30 | pane | the same, rerun with a yes or a no read as a whole word | **filled** in 161 s, read back on a fresh load (27 s), nothing moved or loose |
 | 2026-10-30 | pane | structural tolerance of no relevance for public safety (`answers-tolleranze-privo`: the regional control term run out), then relevant with the Genio Civile's authorization and its "Autorizzazione sismica" slot (`answers-tolleranze-autorizzazione`) | **filled** both (195 s, 169 s), read back on a fresh load, nothing moved or loose |
 | 2026-10-30 | pane | systems needing a project (`answers-impianti`: six systems, each project in its own slot), `bench/rerun.py` bundle | **filled** in 147 s, read back on a fresh load (25 s), nothing moved or loose |
+| 2026-10-31 | pane | Campania's kinds and the other permessi (`bench/rerun.py` bundle of nine): `answers-sottotetti`, `-parcheggi`, `-convenzionato`, `-variante-sagoma`, `-variante-scia-alt`, `-variante-titolo-unico` | **filled** all six (151, 141, 144, 168, 150, 142 s), read back on a fresh load (23-27 s), nothing moved or loose |
+| 2026-10-31 | pane | `answers-deroga` | stopped on quadro a): the "(specificare)" box beside each limit has no text of its own and reads the limit from the cell before, so it started a block of its own; inpage.js now starts a block where the anchor is a box's best label |
+| 2026-10-31 | pane | `answers-mutamento-lr`, built on `answers-cambio-tra` | stopped on the attachments: a required slot empty, from that case's other answers (`answers-cambio-tra` had never run); rebuilt on P6 |
+| 2026-10-31 | pane | after the runner's fix: `answers-deroga`; `answers-mutamento-lr` rebuilt on P6; `answers-cambio-tra` alone (with the CILA's direttore and the SCIA's other technician, anchored blocks, as checks) | **filled** the deroga (142 s: each limit's line by its own box) and the change of use (142 s), read back on a fresh load, nothing moved; `answers-cambio-tra` stopped on the attachments: "Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura", required once the sewer connection is to be requested, was in no recipe: now mapped (plain PDFs) |
+| 2026-10-31 | pane | `answers-cambio-tra` with the sewer slot mapped | **filled** in 140 s, read back on a fresh load (22 s), nothing moved or loose |

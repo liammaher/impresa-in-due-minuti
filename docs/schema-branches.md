@@ -8,7 +8,7 @@ that means it on Napoli's SUE, and whether one of our cases takes it. A row with
 branch no rehearsal has taken: the next cases to write.
 
 - **a case takes it**: a pre-flight-ready answers file of a SUE rehearsal ticks that box
-  (104 such cases; nearly all have a filled run on the portal).
+  (106 such cases; nearly all have a filled run on the portal).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -29,10 +29,10 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 | CILA | 43 | 31 | 1 | 4 | 7 | 30 |
 | Fine lavori | 2 | 1 | 1 | 0 | 0 | 15 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 16 | 9 |
-| Permesso di costruire | 153 | 93 | 17 | 29 | 14 | 193 |
-| SCIA | 150 | 123 | 4 | 13 | 10 | 63 |
-| SCIA alternativa | 128 | 96 | 14 | 10 | 8 | 85 |
-| Agibilità (SCA) | 36 | 29 | 0 | 2 | 5 | 19 |
+| Permesso di costruire | 153 | 97 | 17 | 25 | 14 | 180 |
+| SCIA | 150 | 123 | 4 | 13 | 10 | 67 |
+| SCIA alternativa | 128 | 96 | 14 | 10 | 8 | 88 |
+| Agibilità (SCA) | 36 | 29 | 0 | 2 | 5 | 28 |
 
 ## Next cases
 
@@ -82,10 +82,6 @@ On the portal, not mapped (dictionary work first):
 - CILA: `comunicazioni/imprese_esecutrici` → `da_soggetti_coinvolti` (che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla se…)
 - CILA: `comunicazioni/imprese_esecutrici` → `(nothing)` (che, in quanto opere di modesta entità che non interessano le specifi…)
 - CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
-- Permesso di costruire: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]` → `conforme_disciplina_urbanistica` (intervento realizzato, ai sensi dell'articolo 36, comma 1 del d.P.R.…)
-- Permesso di costruire: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]` → `deroga_pianificazione_urbanistica` (intervento in deroga alle previsioni degli strumenti di pianificazion…)
-- Permesso di costruire: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/variazione_sostanziale` → `titolo_unico` (titolo unico)
-- Permesso di costruire: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/variazione_sostanziale` → `segnalazione_certificata` (segnalazione certificata/denuncia di inizio attività alternativa al p…)
 - Permesso di costruire: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/intervento_permesso_sanatoria/conformita_presentazione_realizzazione` → `condizione_sicurezza_rimozione` (propone la realizzazione di interventi anche strutturali necessari re…)
 - Permesso di costruire: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/intervento_permesso_sanatoria/conformita_urbanistica_edilizia_presentazione_realizzazione` → `condizione_sicurezza_rimozione_doppia` (propone la realizzazione di interventi anche strutturali necessari re…)
 - Permesso di costruire: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
@@ -282,16 +278,16 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 
 | Schema choice | Alternative | Portal box | Match | State | Rehearsals |
 |---|---|---|---|---|---:|
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | h | a case takes it | 2 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | h | a case takes it | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | a case takes it | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | a case takes it | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | h | a case takes it | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `assoggettato_scia` | interventi assoggettati a Segnalazione Certificata di Inizio Attività… | h | a case takes it | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `conforme_disciplina_urbanistica` | intervento realizzato, ai sensi dell'articolo 36, comma 1 del d.P.R.… | m | on the portal, not mapped |  |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `deroga_pianificazione_urbanistica` | intervento in deroga alle previsioni degli strumenti di pianificazion… | h | on the portal, not mapped |  |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `titolo_unico` | titolo unico | h | on the portal, not mapped |  |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `conforme_disciplina_urbanistica` | intervento realizzato, ai sensi dell'articolo 36, comma 1 del d.P.R.… | m | a case takes it | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `deroga_pianificazione_urbanistica` | intervento in deroga alle previsioni degli strumenti di pianificazion… | h | a case takes it | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `titolo_unico` | titolo unico | h | a case takes it | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `permesso_costruire` | permesso di costruire | h | a case takes it | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `segnalazione_certificata` | segnalazione certificata/denuncia di inizio attività alternativa al p… | h | on the portal, not mapped |  |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `segnalazione_certificata` | segnalazione certificata/denuncia di inizio attività alternativa al p… | h | a case takes it | 1 |
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `oblazione_doppio_contributo_parziale` | il rilascio del permesso di costruire in sanatoria è subordinato al p… | l | a case takes it | 1 |
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `condizione_sicurezza_rimozione` | propone la realizzazione di interventi anche strutturali necessari re… | l | on the portal, not mapped |  |
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `oblazione_doppio_contributo_totale` | il rilascio del permesso di costruire in sanatoria è subordinato al p… | l | a case takes it | 1 |
@@ -445,14 +441,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Scheda anagrafica: Se cittadino non UE (not mapped)
 - DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005): (not mapped)
 - DOMICILIO DIGITALE: il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) : (not mapped)
-- a) Qualificazione pratica dell'interven…: alla densità edilizia (not mapped)
-- a) Qualificazione pratica dell'interven…: all'altezza (not mapped)
-- a) Qualificazione pratica dell'interven…: alla distanza tra i fabbricati (not mapped)
-- a) Qualificazione pratica dell'interven…: alla destinazione d'uso (not mapped)
-- a) Qualificazione pratica dell'interven…: attività che rientrano nell'ambito del procedimento ordinario ai sensi dell'articolo 7 de… (not mapped)
-- a) Qualificazione pratica dell'interven…: interventi di recupero abitativo dei sottotetti, ai sensi della l.r. n. 15/2000 e l.r. 19… (not mapped)
-- a) Qualificazione pratica dell'interven…: realizzazione di parcheggi in aree libere, ai sensi della l.r. n. 19/2001 (not mapped)
-- a) Qualificazione pratica dell'interven…: mutamento di destinazione d'uso, ai sensi della l.r. 19/2001 (not mapped)
+- a) Qualificazione pratica dell'interven…: alla destinazione d'uso (mapped)
 - a) Qualificazione pratica dell'interven…: piano casa, ai sensi della l.r. n. 19/2009 (not mapped)
 - a) Qualificazione pratica dell'interven…: interventi di ampliamento (articolo 4) (not mapped)
 - a) Qualificazione pratica dell'interven…: interventi di demolizione e ricostruzione (articolo 5) (not mapped)
@@ -499,13 +488,8 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - i) Rispetto degli obblighi in materia d…: allega la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cant… (not mapped)
 - j) Diritti di terzi: dichiara di essere consapevole che il permesso di costruire non comporta limitazione dei… (not mapped)
 - Asseverazione PdC - Dati progettista e…: Interventi di ristrutturazione urbanistica articolo 3, comma 1, lettera f) del d.P.R. n.… (mapped)
-- Asseverazione PdC - Dati progettista e…: Permesso di costruire convenzionato (articolo 28-bis, d.P.R. n. 380/2001) (not mapped)
 - Asseverazione PdC - Dati progettista e…: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa) (not mapped)
-- Asseverazione PdC - Dati progettista e…: Interventi di recupero abitativo dei sottotetti, ai sensi della l.r. n. 15/2000, L.R.19/09 (not mapped)
-- Asseverazione PdC - Dati progettista e…: Realizzazione di parcheggi in aree libere, anche non di pertinenza del lotto dove insisto… (not mapped)
-- Asseverazione PdC - Dati progettista e…: Mutamento di destinazione d'uso, ai sensi dell'articolo 2, l.r. n. 19/2001 (not mapped)
 - Asseverazione PdC - Dati progettista e…: altro non indicato nei punti precedenti (not mapped)
-- Asseverazione PdC - Dati progettista e…: Varianti a permessi di costruire comportanti modifica della sagoma nel centro storico (At… (not mapped)
 - Asseverazione PdC - Dati progettista e…: urbanizzazione primaria e secondaria realizzati da soggetti diversi dal Comune (mapped)
 - Asseverazione PdC - Dati progettista e…: realizzazione di infrastrutture e di impianti, anche per pubblici servizi, che comporti l… (mapped)
 - Asseverazione PdC - Dati progettista e…: installazione di torri e tralicci per impianti radio-ricetrasmittenti e di ripetitori per… (mapped)
@@ -527,9 +511,8 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - Dati progettista e…: mutamento di destinazione d'uso ai fini abitativi di un edificio non superiore a 10.000 m… (not mapped)
 - Asseverazione PdC - Dati progettista e…: mutamento di destinazione d'uso ai fini abitativi per singoli edifici non superiori a die… (not mapped)
 - Asseverazione PdC - Dati progettista e…: ricostruzione in sito di edifici diruti e ruderi con l'obbligo destinazione del manufatto… (not mapped)
-- Asseverazione PdC - Dati progettista e…: con opere che determinino un aumento plano volumetrico, che risulti compatibile con le ca… (not mapped)
-- Asseverazione PdC - Dati progettista e…: con opere che incidano sulla sagoma, sui volumi e sulle superfici, con passaggio di categ… (not mapped)
-- Asseverazione PdC - Dati progettista e…: nelle zone agricole – zone E, ai sensi dell'art. 2 comma 8 della l.r. n. 19/2001 e suo re… (not mapped)
+- Asseverazione PdC - Dati progettista e…: con opere che incidano sulla sagoma, sui volumi e sulle superfici, con passaggio di categ… (mapped)
+- Asseverazione PdC - Dati progettista e…: nelle zone agricole – zone E, ai sensi dell'art. 2 comma 8 della l.r. n. 19/2001 e suo re… (mapped)
 - Asseverazione PdC - stato legittimo, di…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (mapped)
 - Asseverazione PdC - stato legittimo, di…: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (mapped)
 - Asseverazione PdC - stato legittimo, di…: un intervento soggetto a SCIA in corso di esecuzione (mapped)
@@ -827,9 +810,13 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Asseverazione SCIA - Stato legittimo, D…: attesta che la data/epoca di realizzazione dell’intervento (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: ai fini della sanatoria, la presente SCIA: (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla S… (not mapped)
-- Asseverazione SCIA - Dati immobile, str…: P.I.P. (mapped)
-- Asseverazione SCIA - Dati immobile, str…: P.E.E.P. (mapped)
-- Asseverazione SCIA - Dati immobile, str…: ALTRO (mapped)
+- Asseverazione SCIA - Dati immobile, str…: PUC (not mapped)
+- Asseverazione SCIA - Dati immobile, str…: PUA (not mapped)
+- Asseverazione SCIA - Dati immobile, str…: PIANO PARTICOLAREGGIATO (not mapped)
+- Asseverazione SCIA - Dati immobile, str…: PIANO DI RECUPERO (not mapped)
+- Asseverazione SCIA - Dati immobile, str…: P.I.P. (not mapped)
+- Asseverazione SCIA - Dati immobile, str…: P.E.E.P. (not mapped)
+- Asseverazione SCIA - Dati immobile, str…: ALTRO (not mapped)
 - Asseverazione SCIA - Dati immobile, str…: adattabilità (mapped)
 - Asseverazione SCIA - Sicurezza impianti…: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è ev… (not mapped)
 - Asseverazione SCIA - Sicurezza impianti…: ricade nell'articolo 14, comma 7, del d.lgs. n. 102/2014 in merito alle deroga alle dista… (mapped)
@@ -1017,10 +1004,13 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Asseverazione SCIA Alternativa - Dati p…: 4. Altri interventi individuati dalla legislazione regionale (1) (not mapped)
 - Asseverazione SCIA Alternativa - stato…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (mapped)
 - Asseverazione SCIA Alternativa - stato…: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PUC (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PUA (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PIANO PARTICOLAREGGIATO (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PIANO DI RECUPERO (mapped)
+- Asseverazione SCIA Alternativa - Dati i…: PUC (not mapped)
+- Asseverazione SCIA Alternativa - Dati i…: PUA (not mapped)
+- Asseverazione SCIA Alternativa - Dati i…: PIANO PARTICOLAREGGIATO (not mapped)
+- Asseverazione SCIA Alternativa - Dati i…: PIANO DI RECUPERO (not mapped)
+- Asseverazione SCIA Alternativa - Dati i…: P.I.P. (not mapped)
+- Asseverazione SCIA Alternativa - Dati i…: P.E.E.P. (not mapped)
+- Asseverazione SCIA Alternativa - Dati i…: ALTRO (not mapped)
 - Asseverazione SCIA Alternativa - Dati i…: interessa un edificio privato aperto al pubblico e che le opere previste sono conformi al… (mapped)
 - Asseverazione SCIA Alternativa - Dati i…: è soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/2001 e del d.… (mapped)
 - Asseverazione SCIA Alternativa - Dati i…: accessibilità (mapped)
@@ -1134,5 +1124,14 @@ Portal boxes of the Agibilità (SCA) no schema alternative matched and no case t
 - Titolarità dell'intervento: avere titolarità esclusiva all'esecuzione dell'intervento (mapped)
 - Titolarità dell'intervento: Maschio (not mapped)
 - Attestazione tecnica - Dati del Diretto…: Maschio (mapped)
+- Attestazione tecnica - Agibilità: locali con un’altezza minima interna inferiore a 2,70 metri fino al limite massimo di 2,4… (not mapped)
+- Attestazione tecnica - Agibilità: alloggio mono-stanza, con una superficie minima, comprensiva dei servizi, (not mapped)
+- Attestazione tecnica - Agibilità: inferiore a 28 metri quadrati, fino al limite massimo di 20 metri quadrati, per una perso… (not mapped)
+- Attestazione tecnica - Agibilità: inferiore a 38 metri quadrati, fino al limite massimo di 28 metri quadrati, per due perso… (not mapped)
+- Attestazione tecnica - Agibilità: i locali sono situati in edifici che sono stati sottoposti, nell’ambito dell’intervento e… (not mapped)
+- Attestazione tecnica - Agibilità: è stata realizzata una ristrutturazione con soluzioni alternative atte a garantire, in re… (not mapped)
+- Attestazione tecnica - Sicurezza degli…: Documento già depositato in Comune (not mapped)
+- Attestazione tecnica - Sicurezza degli…: Collaudo (ove richiesto) (not mapped)
+- Attestazione tecnica - Sicurezza degli…: Atto notorio (art. 6 DPR n. 392/1994) (not mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
 - Qualifica e dati del procuratore: all'Estero (not mapped)

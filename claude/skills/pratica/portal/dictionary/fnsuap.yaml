@@ -64,6 +64,8 @@ groups:
     question: "Which systems have a collaudo, where one is required (a lift's, a fire-protection system's, ...)? Tick every one."
   impianti_atto_notorio:
     question: "Which systems are certified by an atto di notorietà (art. 6 DPR 392/1994: older systems brought up to L. 46/1990)? Tick every one."
+  deroga_parametri:
+    question: "Which of the town plan's limits does the permesso derogate from (art. 14 c. 3 DPR 380/2001)? Tick every one that applies."
 
 asks:
   descrizione:
@@ -559,9 +561,38 @@ asks:
   # what they file, in quadro a) / c) and the progettista's asseverazione.
   pdc_tipo:
     type: choice
-    question: "What does the permesso di costruire ask for? nuova costruzione (art. 3 c. 1 e); ristrutturazione urbanistica (f); ristrutturazione edilizia (one of art. 10 c. 1 c: a different building with more volume, a change of use in zone A, or new shape, volume or facades on a protected building); facolta scia (works a SCIA could file, asked as a permesso by choice, art. 22 c. 7); variante essenziale (a variant in corso d'opera to a permesso that is an essential variation)"
-    options: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, facolta scia, variante essenziale]
+    question: "What does the permesso di costruire ask for? nuova costruzione (art. 3 c. 1 e); ristrutturazione urbanistica (f); ristrutturazione edilizia (one of art. 10 c. 1 c: a different building with more volume, a change of use in zone A, or new shape, volume or facades on a protected building); facolta scia (works a SCIA could file, asked as a permesso by choice, art. 22 c. 7); variante essenziale (a variant in corso d'opera to a permesso, SCIA alternativa or titolo unico that is an essential variation); variante sagoma (a variant to a permesso changing the shape in the centro storico, Tab. A n. 38 D.Lgs. 222/2016); sottotetti (an attic made habitable, L.R. Campania 15/2000); parcheggi (car parks on free land, L.R. Campania 19/2001); mutamento uso (a change of use under art. 2 L.R. Campania 19/2001); piano casa (L.R. Campania 19/2009, artt. 4, 5, 6-bis, 7)"
+    options: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, facolta scia, variante essenziale, variante sagoma, sottotetti, parcheggi, mutamento uso, piano casa]
     propose: "{{ask.intervento,ask.cambio_uso,ask.demolizione_zona_a|sue_pdc_tipo}}"
+  # How an art. 10 permesso is asked (quadro a): as such, convenzionato (art. 28-bis: a
+  # convenzione with the Comune), or in deroga to the plan (art. 14: a building of public
+  # interest, with the Consiglio comunale's deliberation).
+  pdc_procedura:
+    type: choice
+    question: "How is the permesso asked? ordinaria (as art. 10 permits); convenzionato (a permesso di costruire convenzionato, art. 28-bis DPR 380/2001); deroga (in deroga to the town plan, art. 14: a building of public interest, the Consiglio comunale having deliberated)"
+    options: [ordinaria, convenzionato, deroga]
+    propose: ordinaria
+    when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}}"
+  deroga_densita: {type: yes_no, group: deroga_parametri, item: "La densità edilizia", when: "{{ask.pdc_procedura|is_deroga}}"}
+  deroga_altezza: {type: yes_no, group: deroga_parametri, item: "L'altezza", when: "{{ask.pdc_procedura|is_deroga}}"}
+  deroga_distanza: {type: yes_no, group: deroga_parametri, item: "La distanza tra i fabbricati", when: "{{ask.pdc_procedura|is_deroga}}"}
+  deroga_destinazione: {type: yes_no, group: deroga_parametri, item: "La destinazione d'uso", when: "{{ask.pdc_procedura|is_deroga}}"}
+  deroga_densita_quale: {type: text, question: "The deroga to the density: what the plan allows and what the project asks (one line)", when: "{{ask.pdc_procedura|is_deroga}} {{ask.deroga_densita}}"}
+  deroga_altezza_quale: {type: text, question: "The deroga to the height: what the plan allows and what the project asks (one line)", when: "{{ask.pdc_procedura|is_deroga}} {{ask.deroga_altezza}}"}
+  deroga_distanza_quale: {type: text, question: "The deroga to the distance between buildings: what the plan allows and what the project asks (one line)", when: "{{ask.pdc_procedura|is_deroga}} {{ask.deroga_distanza}}"}
+  deroga_destinazione_quale: {type: text, question: "The deroga to the use: the plan's use and the project's (one line)", when: "{{ask.pdc_procedura|is_deroga}} {{ask.deroga_destinazione}}"}
+  pdc_variante_di:
+    type: choice
+    question: "The essential variant is to: permesso (a permesso di costruire); scia alternativa (a SCIA or DIA alternativa al permesso); titolo unico (a titolo unico of the SUAP)?"
+    options: [permesso, scia alternativa, titolo unico]
+    propose: permesso
+    when: "{{ask.pdc_tipo|is_variante_essenziale}}"
+  # Art. 2 L.R. Campania 19/2001: the asseverazione asks which.
+  mutamento_lr_tipo:
+    type: choice
+    question: "Which change of use under art. 2 L.R. 19/2001? aumento volumetrico (with works adding plano-volumetric size, compatible with the plan's building categories); sagoma (with works on the shape, volumes and surfaces, changing the building category); zona agricola (in zone E, art. 2 c. 8 and its regulation)"
+    options: [aumento volumetrico, sagoma, zona agricola]
+    when: "{{ask.pdc_tipo|is_mutamento_uso}}"
   scia_alt_tipo:
     type: choice
     question: "Which works does the SCIA alternativa al permesso file (art. 23 c. 1 DPR 380/2001)? ristrutturazione edilizia (one of art. 10 c. 1 c); nuova costruzione piano attuativo (new building or ristrutturazione urbanistica under a piano attuativo with precise plano-volumetric rules); nuova costruzione strumento generale (new building directly under the town plan's precise plano-volumetric rules)"
@@ -2909,21 +2940,58 @@ sections:
       - {kind: checkbox, label: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso, when: "{{ask.altri_vincoli_eco|is_assenso}}"}
 
   # The permesso di costruire (art. 10 DPR 380/2001): one kind of works, each art. 10 one with
-  # whether it changes the use; or a SCIA's works asked as a permesso, or an essential variant.
+  # whether it changes the use; or a SCIA's works asked as a permesso, an art. 36 sanatoria, a
+  # deroga (each limit with its specificare, found from its own box: the boxes it opens shift),
+  # or an essential variant to a title. Napoli's form puts the Campania kinds and the
+  # convenzionato under "procedimento ordinario" (a SUAP article, as the portal words it).
   - section: Qualificazione pratica dell'intervento
     leave: [n., del, (specificare)]
+    # Closed to new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6): only those
+    # pending then are decided, under the old rules (L.R. 13/2022 art. 4 c. 17).
+    law: ["piano casa, ai sensi della l.r. n. 19/2009", interventi di ampliamento (articolo 4), interventi di demolizione e ricostruzione (articolo 5), interventi edilizi in zona agricola, riqualificazione di aree urbane degradate (articolo 7)]
+    supports:
+      - {value: "{{ask.pdc_tipo}}", in: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, facolta scia, variante essenziale, variante sagoma, sottotetti, parcheggi, mutamento uso], else: "The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then). A variant to a permesso issued under it isn't mapped."}
+      - {if: "{{ask.pdc_tipo|is_mutamento_uso}}", value: "{{ask.scia_cambio_uso}}", in: [stessa categoria, tra categorie, intero immobile], else: "A change of use under art. 2 L.R. 19/2001 changes the use: say which (stessa categoria, tra categorie or intero immobile)."}
+      - {if: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}}", value: "{{ask.deroga_densita,ask.deroga_altezza,ask.deroga_distanza,ask.deroga_destinazione|any}}", in: ["true"], else: "A permesso in deroga (art. 14 DPR 380/2001) derogates from at least one limit: density, height, distance or use."}
+      - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_tipo}}", in: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia], else: "A permesso in sanatoria (art. 36 DPR 380/2001) is mapped for art. 10 works: not a Campania kind or a variant."}
+      - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_procedura}}", in: [ordinaria], else: "A permesso in sanatoria (art. 36 DPR 380/2001) is asked as such: not as a convenzionato or in deroga."}
     fields:
-      - {kind: radio, label: interventi di cui all'articolo 10, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}}"}
-      - {kind: radio, label: non comporta mutamento di destinazione d’uso, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.scia_cambio_uso|is_no}}"}
-      - {kind: radio, label: comporta mutamento di destinazione d’uso di una singola unità immobiliare all’interno, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.scia_cambio_uso|is_stessa_categoria}}"}
-      - {kind: radio, label: "comporta mutamento di destinazione d’uso di una singola unità immobiliare, ubicata", when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.scia_cambio_uso|is_tra_categorie}}"}
-      - {kind: radio, label: comporta mutamento di destinazione d’uso di un intero immobile, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.scia_cambio_uso|is_intero_immobile}}"}
+      - {kind: radio, label: interventi di cui all'articolo 10, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}"}
+      - {kind: radio, label: non comporta mutamento di destinazione d’uso, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}} {{ask.scia_cambio_uso|is_no}}"}
+      - {kind: radio, label: comporta mutamento di destinazione d’uso di una singola unità immobiliare all’interno, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}} {{ask.scia_cambio_uso|is_stessa_categoria}}"}
+      - {kind: radio, label: "comporta mutamento di destinazione d’uso di una singola unità immobiliare, ubicata", when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}} {{ask.scia_cambio_uso|is_tra_categorie}}"}
+      - {kind: radio, label: comporta mutamento di destinazione d’uso di un intero immobile, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}} {{ask.scia_cambio_uso|is_intero_immobile}}"}
       - {kind: radio, label: interventi assoggettati a Segnalazione Certificata di Inizio Attività, when: "{{ask.pdc_tipo|is_facolta_scia}}"}
       - {kind: text, label: (specificare), value: "{{ask.intervento_tipo}}", when: "{{ask.pdc_tipo|is_facolta_scia}}"}
-      - {kind: radio, label: variazione essenziale e/o sostanziale, when: "{{ask.pdc_tipo|is_variante_essenziale}}"}
-      - {kind: radio, label: permesso di costruire, when: "{{ask.pdc_tipo|is_variante_essenziale}}"}
-      - {kind: text, label: n., nth: 2, value: "{{ask.pdc_numero}}", when: "{{ask.pdc_tipo|is_variante_essenziale}}"}
-      - {kind: date, label: del, nth: 2, value: "{{ask.pdc_data|date_it}}", when: "{{ask.pdc_tipo|is_variante_essenziale}}"}
+      - {kind: radio, label: "intervento realizzato, ai sensi dell'articolo 36", when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.sanatoria_titolo|is_permesso}}"}
+      - {kind: radio, label: intervento in deroga alle previsioni, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}}"}
+      - {kind: checkbox, label: alla densità edilizia, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}} {{ask.deroga_densita}}"}
+      - {kind: text, label: (specificare), anchor: alla densità edilizia, value: "{{ask.deroga_densita_quale}}", when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}} {{ask.deroga_densita}}"}
+      - {kind: checkbox, label: all'altezza, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}} {{ask.deroga_altezza}}"}
+      - {kind: text, label: (specificare), anchor: all'altezza, value: "{{ask.deroga_altezza_quale}}", when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}} {{ask.deroga_altezza}}"}
+      - {kind: checkbox, label: alla distanza tra i fabbricati, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}} {{ask.deroga_distanza}}"}
+      - {kind: text, label: (specificare), anchor: alla distanza tra i fabbricati, value: "{{ask.deroga_distanza_quale}}", when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}} {{ask.deroga_distanza}}"}
+      - {kind: checkbox, label: alla destinazione d'uso, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}} {{ask.deroga_destinazione}}"}
+      - {kind: text, label: (specificare), anchor: alla destinazione d'uso, value: "{{ask.deroga_destinazione_quale}}", when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}} {{ask.deroga_destinazione}}"}
+      - {kind: radio, label: variazione essenziale e/o sostanziale, when: "{{ask.pdc_tipo|in_variante_essenziale__variante_sagoma}}"}
+      - {kind: radio, label: titolo unico, when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_titolo_unico}}"}
+      - {kind: text, label: n., value: "{{ask.pdc_numero}}", when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_titolo_unico}}"}
+      - {kind: date, label: del, value: "{{ask.pdc_data|date_it}}", when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_titolo_unico}}"}
+      - {kind: radio, label: permesso di costruire, when: "{{ask.pdc_tipo|is_variante_sagoma}}"}
+      - {kind: radio, label: permesso di costruire, when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_permesso}}"}
+      - {kind: text, label: n., nth: 2, value: "{{ask.pdc_numero}}", when: "{{ask.pdc_tipo|is_variante_sagoma}}"}
+      - {kind: date, label: del, nth: 2, value: "{{ask.pdc_data|date_it}}", when: "{{ask.pdc_tipo|is_variante_sagoma}}"}
+      - {kind: text, label: n., nth: 2, value: "{{ask.pdc_numero}}", when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_permesso}}"}
+      - {kind: date, label: del, nth: 2, value: "{{ask.pdc_data|date_it}}", when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_permesso}}"}
+      - {kind: radio, label: segnalazione certificata/denuncia di inizio attività alternativa, when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_scia_alternativa}}"}
+      - {kind: text, label: n., nth: 3, value: "{{ask.pdc_numero}}", when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_scia_alternativa}}"}
+      - {kind: date, label: del, nth: 3, value: "{{ask.pdc_data|date_it}}", when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_scia_alternativa}}"}
+      - {kind: radio, label: attività che rientrano nell'ambito del procedimento ordinario, when: "{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}}"}
+      - {kind: radio, label: attività che rientrano nell'ambito del procedimento ordinario, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_convenzionato}}"}
+      - {kind: checkbox, label: permesso di costruire convenzionato, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_convenzionato}}"}
+      - {kind: checkbox, label: interventi di recupero abitativo dei sottotetti, when: "{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.pdc_tipo|is_sottotetti}}"}
+      - {kind: checkbox, label: realizzazione di parcheggi in aree libere, when: "{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.pdc_tipo|is_parcheggi}}"}
+      - {kind: checkbox, label: "mutamento di destinazione d'uso, ai sensi della l.r.", when: "{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.pdc_tipo|is_mutamento_uso}}"}
 
   # Quadro f): paid when the permesso is collected ("prima dei lavori"), in instalments or
   # during the works; no opere a scomputo.
@@ -2963,6 +3031,8 @@ sections:
 
   - section: Asseverazione PdC - Dati progettista
     leave: [che i lavori riguardano l'immobile individuato]
+    # The piano casa: closed to new requests (quadro a's note).
+    law: ["Opere edilizie straordinarie di cui alla l.r. n. 19/2009", interventi straordinari di ampliamento, ampliamento fino al venti per cento, modifica della destinazione d'uso da volumetria esistente non residenziale, realizzazione di opere interne finalizzate all'utilizzo dei volumi esistenti, interventi straordinari di demolizione e ricostruzione, aumento entro il limite del trentacinque per cento, ricostruzione a parità di volume, interventi edilizi in zona agricola (articolo 6-bis), mutamento di destinazione d'uso di immobili o loro parti per uso residenziale, realizzazione di nuove costruzioni ad uso produttivo, riqualificazione di aree urbane degradate (articolo 7), mutamento di destinazione d'uso ai fini abitativi, ricostruzione in sito di edifici diruti]
     fields:
       - {kind: text, label: Cognome, value: "{{t:identity.last_name}}"}
       - {kind: text, label: Nome, value: "{{t:identity.first_name}}"}
@@ -2986,6 +3056,15 @@ sections:
       # on): which SCIA works, as quadro a)'s specificare.
       - {kind: text, label: specificare tipo intervento, value: "{{ask.intervento_tipo}}", when: "{{ask.pdc_tipo|is_facolta_scia}}"}
       - {kind: checkbox, label: Varianti in corso d'opera a permessi di costruire, when: "{{ask.pdc_tipo|is_variante_essenziale}}"}
+      # The convenzionato goes with its works' kind; a Campania kind stands alone.
+      - {kind: checkbox, label: Permesso di costruire convenzionato, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_convenzionato}}"}
+      - {kind: checkbox, label: Interventi di recupero abitativo dei sottotetti, when: "{{ask.pdc_tipo|is_sottotetti}}"}
+      - {kind: checkbox, label: Realizzazione di parcheggi in aree libere, when: "{{ask.pdc_tipo|is_parcheggi}}"}
+      - {kind: checkbox, label: "Mutamento di destinazione d'uso, ai sensi dell'articolo 2", when: "{{ask.pdc_tipo|is_mutamento_uso}}"}
+      - {kind: checkbox, label: con opere che determinino un aumento plano volumetrico, on_page: true, when: "{{ask.pdc_tipo|is_mutamento_uso}} {{ask.mutamento_lr_tipo|is_aumento_volumetrico}}"}
+      - {kind: checkbox, label: con opere che incidano sulla sagoma, on_page: true, when: "{{ask.pdc_tipo|is_mutamento_uso}} {{ask.mutamento_lr_tipo|is_sagoma}}"}
+      - {kind: checkbox, label: nelle zone agricole, on_page: true, when: "{{ask.pdc_tipo|is_mutamento_uso}} {{ask.mutamento_lr_tipo|is_zona_agricola}}"}
+      - {kind: checkbox, label: Varianti a permessi di costruire comportanti modifica della sagoma, when: "{{ask.pdc_tipo|is_variante_sagoma}}"}
       - {kind: radio, label: non comportano mutamento di destinazione d’uso, when: "{{ask.scia_cambio_uso|is_no}}"}
       - {kind: radio, label: comportano mutamento di destinazione d’uso di una singola unità immobiliare all’interno, when: "{{ask.scia_cambio_uso|is_stessa_categoria}}"}
       - {kind: radio, label: "comportano mutamento di destinazione d’uso di una singola unità immobiliare, ubicata", when: "{{ask.scia_cambio_uso|is_tra_categorie}}"}

@@ -70,6 +70,7 @@
  "fasce": "no",
  "scia_onerosa": "true",
  "pdc_tipo": "ristrutturazione edilizia",
+ "pdc_procedura": "ordinaria",
  "contributo_calcolo": "sportello",
  "contributo_pagamento": "prima dei lavori",
  "documentazione_calcolo_contributo": "rehearsals/scia-fittizia/files/documentazione-calcolo-contributo.pdf",

@@ -33,6 +33,9 @@ attachments:
     - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: "{{ask.sanzione_ricevuta}}", when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}", on_page: true}
     # In sanatoria the energy report goes with the request (a slot seen on the SCIA's screen).
     - {kind: file, label: Relazione tecnica sui consumi energetici, value: "{{ask.relazione_energetica}}", when: "{{ask.prestazione_energetica}}", on_page: true}
+    # The asseverazione's sewer connection to request adds this required slot (read on the
+    # permesso's attachments screen 2026-10-31): plain PDFs.
+    - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura, value: "{{ask.allaccio_doc}}", when: "{{ask.scarichi|is_allaccio_da_richiedere}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
     # Under the barriers rules, their drawings (a slot read on the P6 run's screen).
     - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: "{{ask.elaborati_barriere}}", when: "{{ask.barriere}}"}

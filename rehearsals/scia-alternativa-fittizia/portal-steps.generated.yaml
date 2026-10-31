@@ -104,6 +104,7 @@ asks:
       richiedere (the request''s documents attached)', options: [nessuna autorizzazione, allaccio ottenuto, allaccio da richiedere], propose: nessuna autorizzazione}
   allaccio_protocollo: {type: text, question: 'The sewer connection''s authorisation: its protocol number'}
   allaccio_data: {type: date, question: Its date}
+  allaccio_doc: {type: file, question: The documents for the sewer connection's authorisation (PDF)}
   scia_onerosa: {type: yes_no, question: 'Is a contributo di costruzione due (e.g. a change of use between categories, or works adding urban load)?', propose: 'false'}
   contributo_normativa: {type: text, question: 'Why the works are free of the contributo di costruzione (the rule, e.g. art. 17 c. 3 DPR 380/2001)'}
   contributo_pagamento: {type: choice, question: 'How the contributo is paid: pagato (already: its receipt attached); prima dei lavori (the receipt sent before the works start; for a permesso, paid when
@@ -328,8 +329,9 @@ asks:
         con cambio d''uso in zona omogenea A, o che cambia sagoma, volume o prospetti di un immobile tutelato, o la demolizione e ricostruzione in un''area tutelata (artt. 136 c. 1 c e d, 142) con modifiche',
       nuova_costruzione: 'Nuova costruzione (art. 3 c. 1 e), compresi gli ampliamenti fuori sagoma', ristrutturazione_urbanistica: Ristrutturazione urbanistica (art. 3 c. 1 f), variante_pdc: Variante in
         corso d'opera a un permesso di costruire che non è una variazione essenziale, variante_essenziale_pdc: Variante in corso d'opera a un permesso di costruire che è una variazione essenziale, variante_scia: Variante
-        in corso d'opera a una SCIA (essenziale o no), altro: 'Altro: permesso in deroga (art. 14), permesso convenzionato (art. 28-bis), sottotetti, parcheggi o Piano casa delle leggi regionali, proroghe
-        e volture'}, how: Lo stabilisce il tecnico dalle definizioni dell'art. 3 e dall'elenco dell'art. 6 DPR 380/2001.}
+        in corso d'opera a una SCIA (essenziale o no), altro: 'Altro: il Piano casa (L.R. 19/2009), proroghe e volture. Il permesso in deroga (art. 14), il permesso convenzionato (art. 28-bis), i sottotetti
+        (L.R. 15/2000), i parcheggi e i cambi d''uso della L.R. 19/2001 sono i lavori che fanno: scegli la loro voce dell''art. 3'}, how: Lo stabilisce il tecnico dalle definizioni dell'art. 3 e dall'elenco
+      dell'art. 6 DPR 380/2001.}
   sanatoria: {group: fatti, type: yes_no, item: 'I lavori sono già iniziati, o già finiti, senza il titolo che serviva?'}
   prospetti: {group: fatti, type: yes_no, item: 'La manutenzione straordinaria modifica i prospetti (le facciate) dell''edificio?'}
   cambio_uso: {type: choice, question: 'I lavori cambiano la destinazione d''uso? Si sceglie il primo caso che vale.', options: ['no', zona_agricola, non_rilevante, stessa_categoria, tra_categorie, piano_terra,
@@ -1146,6 +1148,7 @@ sections:
   - {kind: file, label: Progetto di altre tipologie di impianti, value: '{{ask.progetto_altro_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_altro}}'}
   - {kind: file, label: Autorizzazione sismica, value: '{{ask.toll_sismica_doc}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
   - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: '{{ask.sanzione_ricevuta}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}'}
+  - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura, value: '{{ask.allaccio_doc}}', when: '{{ask.scarichi|is_allaccio_da_richiedere}}'}
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
   - {kind: file, label: Relazione tecnica sui consumi energetici, value: '{{ask.relazione_energetica}}', when: '{{ask.prestazione_energetica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Prospetto di calcolo preventivo del contributo di costruzione, value: '{{ask.prospetto_contributo}}', when: '{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}'}

@@ -688,5 +688,50 @@ def _():
     assert any("More than two assents" in u for u in r["unsupported"]), r["unsupported"]
 
 
+@case("the permesso's other kinds: Campania's (quadro a's procedimento ordinario), convenzionato, deroga, variants, art. 36; the piano casa closed by law")
+def _():
+    import json
+    import run
+    import branches
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    def plan(name, answers, **change):
+        steps = generated(name)
+        a = json.loads((REH / name / answers).read_text()); a.update(change)
+        v = run.Values(a, fields=fields, asks=steps.get("asks"))
+        r = run.preflight(steps, v)
+        return r, ([(p["label"] or "", str(p.get("value") or "")) for p in run.plan(steps, v)] if r["ready"] else [])
+    has = lambda p, label: any(l.startswith(label) for l, _ in p)
+    r, p = plan("pdc-fittizio", "answers-sottotetti.json")
+    assert r["ready"] and has(p, "attività che rientrano nell'ambito del procedimento ordinario"), r
+    assert has(p, "interventi di recupero abitativo dei sottotetti") and has(p, "Interventi di recupero abitativo dei sottotetti")
+    assert not has(p, "interventi di cui all'articolo 10") and "pdc_procedura" not in json.dumps(r)
+    r, p = plan("pdc-fittizio", "answers-mutamento-lr.json")
+    assert has(p, "Mutamento di destinazione d'uso, ai sensi dell'articolo 2") and has(p, "con opere che determinino un aumento plano volumetrico")
+    r, p = plan("pdc-fittizio", "answers-convenzionato.json")
+    assert has(p, "permesso di costruire convenzionato") and has(p, "Permesso di costruire convenzionato") and has(p, "Interventi di ristrutturazione edilizia che portino")
+    r, p = plan("pdc-fittizio", "answers-deroga.json")
+    assert [v for l, v in p if l == "(specificare)"] == ["Indice fondiario 3,5 mc/mq invece di 3 (inventato)", "Altezza 14 m invece di 12 m (inventato)", "Distanza 8 m invece di 10 m (inventato)"], p
+    assert has(p, "intervento in deroga alle previsioni") and not has(p, "alla destinazione d'uso")
+    r, p = plan("pdc-fittizio", "answers-deroga.json", deroga_densita="false", deroga_altezza="false", deroga_distanza="false")
+    assert any("derogates from at least one limit" in u for u in r["unsupported"]), r
+    for answers, radio in (("answers-variante-scia-alt.json", "segnalazione certificata/denuncia"), ("answers-variante-titolo-unico.json", "titolo unico"),
+                           ("answers-variante-sagoma.json", "permesso di costruire")):
+        r, p = plan("pdc-fittizio", answers)
+        assert r["ready"] and has(p, "variazione essenziale e/o sostanziale") and has(p, radio) and ("n.", "4321") in p, (answers, p)
+    r, p = plan("pdc-fittizio", "answers-p6.json", pdc_tipo="piano casa")
+    assert any("30 September 2022" in u for u in r["unsupported"]), r
+    # The sanatoria's quadro a) is art. 36's own radio, not art. 10's.
+    r, p = plan("pdc-sanatoria-fittizio", "answers-p6.json")
+    assert r["ready"] and has(p, "intervento realizzato, ai sensi dell'articolo 36") and not has(p, "interventi di cui all'articolo 10"), p
+    r, _ = plan("pdc-sanatoria-fittizio", "answers-p6.json", pdc_procedura="deroga")
+    assert any("asked as such" in u for u in r["unsupported"]), r
+    # A sewer connection to request adds its own required slot (read on the permesso 2026-10-31).
+    for name, answers in (("pdc-fittizio", "answers-cambio-tra.json"), ("scia-alternativa-fittizia", "answers-condominio-strutture.json")):
+        r, p = plan(name, answers)
+        assert r["ready"] and has(p, "Documentazione necessaria per la richiesta di autorizzazione all'allaccio"), (name, r)
+    law = [x for x in branches.rows() if x["state"] == "law"]
+    assert len(law) >= 20 and all("piano casa" in x["choice"].lower() or x.get("depth", 0) > 1 for x in law), len(law)
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

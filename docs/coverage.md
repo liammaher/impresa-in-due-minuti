@@ -59,14 +59,14 @@ SUE pratiche not yet fillable:
 Measured today:
 
 - Level 1: 30 of 30 pratiche fully in the dictionary.
-- Level 2: **72 refusals across 13 recipes**, 23 distinct messages.
+- Level 2: **74 refusals across 13 recipes**, 24 distinct messages.
 - Levels 3 to 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
 | `scia-alternativa-fittizia` | 12 |
-| `pdc-fittizio` | 9 |
-| `pdc-sanatoria-fittizio` | 9 |
+| `pdc-fittizio` | 10 |
+| `pdc-sanatoria-fittizio` | 10 |
 | `scia-paesaggistica-ordinaria-fittizia` | 9 |
 | `scia-paesaggistica-semplificata-fittizia` | 9 |
 | `cila-fittizia` | 5 |
@@ -97,10 +97,11 @@ Refusals, by how many recipes carry them (the most shared are the cheapest to cl
 - 2×: Fire-prevention obligations aren't mapped yet.
 - 2×: More than two assents already obtained aren't mapped yet: the relazione has two rows.
 - 2×: More than two filings already made aren't mapped yet: the relazione has two rows.
-- 1×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own boxes.
+- 2×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione mak
 - 1×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
+- 1×: Systems certified by a collaudo, an atto notorio or a document already filed with the Comune aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
 - 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
 

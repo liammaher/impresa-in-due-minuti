@@ -23,6 +23,8 @@ checked on Normattiva.
   twice the contributo di costruzione.
 - **Parziale** (art. 36-bis): refused at pre-flight, a portal defect (below). The quadro's rows
   (the date, which conformity) are mapped, the asseverazione's aren't.
+- Quadro a): art. 36's own radio ("intervento realizzato, ai sensi dell'articolo 36, comma 1"),
+  not art. 10's (ticked until 2026-10-31).
 - The asseverazione: the request "presentata in sanatoria", the stato legittimo also from this
   sanatoria, the case, the date, its documents, the catasto.
 - The contributo: worked out by the SUE or by the prospetto, paid when the permesso is collected
@@ -61,3 +63,4 @@ form no case took. Each passes pre-flight offline; **none has been run on the po
 | 2026-10-30 | pane | `answers-parziale.json` (art. 36-bis) | Stopped on "Asseverazione PdC - stato legittimo": 7 required rows unmapped. Ticking them by hand showed the four (documents, the two datings, the works proposal) are one radio group: now refused at pre-flight |
 | 2026-10-30 | pane | `answers-p6.json` after gen.py's offset fix (the new-construction lines get ids, `r14c2p21reg:chk` for this case's), `bench/rerun.py` bundle | **Filled** in 156.2 s, read back on a fresh load (27.4 s), nothing moved or loose: the id is the box's |
 | 2026-10-30 | pane | systems needing a project (`answers-impianti`: six systems, each project in its own slot), `bench/rerun.py` bundle | **filled** in 170 s, read back on a fresh load (25 s), nothing moved or loose |
+| 2026-10-31 | pane | `answers-p6.json` with quadro a)'s art. 36 radio, `bench/rerun.py` bundle | **filled** in 149 s, read back on a fresh load (24 s), nothing moved or loose |

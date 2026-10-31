@@ -589,7 +589,11 @@
     if (f.id || f.css) return f;
     let list = inputs();
     if (f.anchor) {
-      const starts = list.map((e, i) => (labelled(e, f.anchor) ? i : -1)).filter((i) => i >= 0);
+      // A block starts at the boxes the anchor names best: a box of no text of its own beside
+      // the anchor (the deroga's "(specificare)") reads it from the cell before, and isn't one.
+      const ranks = list.map((e) => labelRank(e, f.anchor));
+      const best = Math.min(...ranks.filter((r) => r >= 0));
+      const starts = ranks.map((r, i) => (r === best ? i : -1)).filter((i) => i >= 0);
       const b = (f.block || 1) - 1;
       if (b >= starts.length) fail(`${f.label}: no block ${f.block} of ${f.anchor} (found ${starts.length})`);
       list = list.slice(starts[b], starts[b + 1]);
