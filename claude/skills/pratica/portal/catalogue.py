@@ -13,7 +13,8 @@
                                                            and crawl.js in localStorage, load.js runs them
                                                            (an op with `like`: against that pratica, into same.json)
     catalogue.py pane DIR --bundle FILE --ops OPS.json     a batch as one file the person picks (pick.js),
-        [--draft NAME] [--depth 3] [--fresh]               status.js to poll, export.js to save the results
+        [--draft NAME] [--depth 3] [--fresh|--forget-known]
+                                                           status.js to poll, export.js to save the results
                                                            (print.js prints a small batch's, sha256 first)
 
 A section's fingerprint is what it shows before any choice (ids, kinds, labels, lengths,
@@ -117,12 +118,20 @@ def ops_of(args):
         by = {o["label"]: o for o in w["operations"]}
         path = lambda l: f"{by[l]['group']} › {l}"
         ops = []
+        # --combo-scelta NAME LABEL: one more scelta for that combination alone (the SCIA's
+        # sanatoria Si/No), so combinations with different wizards share one batch (2026-10-31:
+        # the SCIA in sanatoria ones needed a second).
+        extra = {}
+        for name, label in args.combo_scelta or []:
+            if name not in {c[0] for c in args.combo}:
+                sys.exit(f"--combo-scelta {name}: no --combo of that name")
+            extra.setdefault(name, []).append(label)
         for name, *labels in args.combo:
             missing = [l for l in labels if l not in by]
             if missing or len(labels) < 2:
                 sys.exit(f"--combo {name}: " + (f"not an operation of the SUE's wizard: {missing}" if missing else "give its operations, the main one first"))
             ops.append({"name": name, "sector": w["sector"], "path": path(labels[0]), "also": [path(l) for l in labels[1:]],
-                        "scelte": args.scelta or [PROCURA], "slots": True})
+                        "scelte": (args.scelta or [PROCURA]) + extra.get(name, []), "slots": True})
         return ops
     if args.sportello == "sue":
         w = json.loads((CAT / "sue-wizard.json").read_text())
@@ -398,7 +407,7 @@ def cmd_pane(args):
 def bundle(out, path, srcs, ops, args):
     """A batch as one file the person picks once in the pane (2026-10-31: a big script copied
     through the conversation can arrive garbled), checked by sha256: it stores and runs wizard.js
-    and crawl.js, with --fresh clears what makes the batch skip a pratica or a section it has
+    and crawl.js, with --fresh clears what makes the batch skip a pratica (--forget-known: or a section) it has
     seen (the crawls are in the repo; known fingerprints and scelte are backed up), and starts.
     status.js polls it; export.js saves the results as the export `import` reads, those the
     pane's storage couldn't keep included."""
@@ -413,11 +422,14 @@ def bundle(out, path, srcs, ops, args):
             "  (0, eval)(src[\"pv-wizard\"]); (0, eval)(src[\"pv-crawl\"]);\n"
             f"  const opts = {json.dumps(opts, ensure_ascii=False)};\n"
             "  localStorage.setItem(\"crawl:batch\", JSON.stringify(opts));\n"
+            # --fresh redoes the ops; the sections it has seen come back as same_as (2026-10-31: a
+            # combination crawled again only for its attachments read every section, 8 minutes for 2).
+            # --forget-known reads them all again too (a deeper crawl, a section changed in place).
             + (f"  for (const k of [\"crawl:known\", \"crawl:scelte\"]) {{ const v = localStorage.getItem(k); if (v !== null) localStorage.setItem(k + \":{stamp}\", v); }}\n"
-               "  localStorage.setItem(\"crawl:known\", \"{}\"); localStorage.removeItem(\"crawl:scelte\");\n"
-               "  for (const o of opts.ops) localStorage.removeItem(\"crawl:op:\" + o.name);\n" if args.fresh else "")
+               "  localStorage.setItem(\"crawl:known\", \"{}\"); localStorage.removeItem(\"crawl:scelte\");\n" if args.forget_known else "")
+            + ("  for (const o of opts.ops) localStorage.removeItem(\"crawl:op:\" + o.name);\n" if args.fresh or args.forget_known else "")
             + "  window.__crawlBusy = true;\n  window.__crawl.batch(opts);\n"
-            f"  return `started: ${{opts.ops.length}} pratiche, depth ${{opts.depth}}{' (fresh)' if args.fresh else ''}`;\n}})()\n")
+            f"  return `started: ${{opts.ops.length}} pratiche, depth ${{opts.depth}}{' (fresh)' if args.fresh or args.forget_known else ''}`;\n}})()\n")
     path.write_text(text)
     sha = hashlib.sha256(text.encode()).hexdigest()
     (out / "pick.js").write_text(f"""document.querySelectorAll("iframe, #pv-pick").forEach((x) => x.remove());
@@ -476,7 +488,9 @@ def main():
     p.add_argument("--all", action="store_true", help="also the pratiche already crawled")
     p.add_argument("--combo", nargs="+", action="append", metavar="NAME MAIN OTHER",
                    help="sue: a combination's crawl name, then its operations' labels, the main one first; repeat it for several")
-    p.add_argument("--scelta", action="append", help="--combo: a scelta to try (default: the procura)")
+    p.add_argument("--scelta", action="append", help="--combo: a scelta to try, for every combination (default: the procura)")
+    p.add_argument("--combo-scelta", nargs=2, action="append", metavar=("NAME", "LABEL"),
+                   help="--combo: one more scelta for that combination alone (a Si/No such as the SCIA's sanatoria)")
     sub.add_parser("known")
     p = sub.add_parser("import")
     p.add_argument("export")
@@ -491,7 +505,8 @@ def main():
     p.add_argument("--ops", help="--bundle: the batch's ops (catalogue.py ops' JSON)")
     p.add_argument("--draft", default="PROVA NON INVIARE - catalogo sue", help="--bundle: the scratch draft")
     p.add_argument("--depth", type=int, default=3)
-    p.add_argument("--fresh", action="store_true", help="--bundle: crawl the ops again, though stored")
+    p.add_argument("--fresh", action="store_true", help="--bundle: crawl the ops again, though stored (known sections as same_as)")
+    p.add_argument("--forget-known", action="store_true", help="--bundle: --fresh, and read every section again")
     args = ap.parse_args()
     res = globals()["cmd_" + args.cmd](args)
     if isinstance(res, list) and res and isinstance(res[0], str):
