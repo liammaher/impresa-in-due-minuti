@@ -704,7 +704,7 @@ def _():
         labels = [p["label"] for p in run.plan(steps, v)]
         assert "Incaricato della" in labels and "Iscritto all'ordine/collegio" in labels, name
         assert not any((l or "").startswith("che gli altri tecnici incaricati saranno") for l in labels), name
-        assert any("More than three other technicians" in u for u in check(name, "answers-altri-tecnici.json", altri_tecnici_quanti="piu di tre")[2]["unsupported"])
+        assert any("More than eight other technicians" in u for u in check(name, "answers-altri-tecnici.json", altri_tecnici_quanti="piu di otto")[2]["unsupported"])
     r = check("cila-fittizia", "answers-direttore-atti.json", atti_quanti="piu di due")[2]
     assert any("More than two assents" in u for u in r["unsupported"]), r["unsupported"]
 
