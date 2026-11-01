@@ -480,6 +480,9 @@ def sanatoria_cases():
         assert pre(p6)["ready"] and pre(json.loads((d / "answers-in-corso.json").read_text()))["ready"]
         r = pre(p6 | {"sanatoria_caso": "conformita urbanistica"})
         assert any("a defect of the portal" in u for u in r["unsupported"]), r["unsupported"]
+        # The known defect comes with it, for the person to choose (defects.yaml through gen.py).
+        assert [d["id"] for d in r["defects"]] == ["scia-36bis-c1"] and len(r["defects"][0]["choices"]) == 3, r.get("defects")
+        assert "defects" not in pre(p6 | {"sanatoria_caso": "variante pre 1977"})
         assert pre(p6 | {"sanatoria_caso": "variante pre 1977"})["unsupported"]
     finally:
         os.chdir(here)

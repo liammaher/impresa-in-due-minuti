@@ -463,9 +463,28 @@ supports:
   in:
   - in corso
   - doppia conformita
-  else: 'Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal''s asseverazione saves the date of the works,
-    the oblazione and the works proposal as one field (one of the three), so it can''t state the case in full: a defect of the portal (docs/portal-defects.md); ask the SUE. Variants to pre-1977 titles (art.
-    34-ter) aren''t mapped.'
+  - variante pre 1977
+  defect:
+    id: scia-36bis-c1
+    title: 'SCIA in sanatoria, art. 36-bis c. 1 (Salva Casa): the portal saves one of three statements'
+    portal: 'Napoli''s SUE on impresainungiorno: the SCIA''s asseverazione, sanatoria quadro'
+    what: 'The case''s four rows (the date of the works proven by documents, the date attested, the oblazione, the works proposal) are one field: the portal keeps only the one ticked last.'
+    law: 'Art. 36-bis DPR 380/2001 and the national form ask for all three together: when the works were done, the oblazione the technician determines (c. 5), and whether works are proposed (c. 2).'
+    checked: 2026-11-01, on a made-up draft
+    choices:
+    - 'Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) how they want this sanatoria filed while the portal can''t take it: by PEC, or on the portal with the date and the oblazione stated in the
+      attached relazione tecnica asseverata.'
+    - 'Report the defect to the portal''s operator (InfoCamere''s impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked.'
+    - 'File it on the portal yourself, by hand, as the SUE tells you: Claude doesn''t fill this case.'
+    report: docs/portal-defects.md
+  else: 'For the conformity of art. 36-bis c. 1 the portal''s asseverazione saves the date of the works, the oblazione and the works proposal as one field (one of the three), so it can''t state the case
+    in full: a defect of the portal (docs/portal-defects.md); ask the SUE.'
+- value: '{{ask.sanatoria_caso}}'
+  in:
+  - in corso
+  - doppia conformita
+  - conformita urbanistica
+  else: Variants to pre-1977 titles (art. 34-ter) aren't mapped yet.
 - if: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}'
   value: '{{ask.igienico_5bis_caso}}'
   in:

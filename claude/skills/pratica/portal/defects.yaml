@@ -1,0 +1,30 @@
+# Known defects of a portal: a case the law allows that the portal can't take as the law asks.
+# A recipe's refusal names one (`supports: - {..., defect: <id>}`); gen.py copies the entry into
+# the steps file, and pre-flight returns it under `defects` beside the refusal, so the person
+# hears what the portal does and chooses what to do. Never filled around (no hidden boxes ticked,
+# no state the page itself can't make). What to report and how each was checked:
+# docs/portal-defects.md.
+
+scia-36bis-c1:
+  title: "SCIA in sanatoria, art. 36-bis c. 1 (Salva Casa): the portal saves one of three statements"
+  portal: "Napoli's SUE on impresainungiorno: the SCIA's asseverazione, sanatoria quadro"
+  what: "The case's four rows (the date of the works proven by documents, the date attested, the oblazione, the works proposal) are one field: the portal keeps only the one ticked last."
+  law: "Art. 36-bis DPR 380/2001 and the national form ask for all three together: when the works were done, the oblazione the technician determines (c. 5), and whether works are proposed (c. 2)."
+  checked: "2026-11-01, on a made-up draft"
+  choices:
+    - "Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) how they want this sanatoria filed while the portal can't take it: by PEC, or on the portal with the date and the oblazione stated in the attached relazione tecnica asseverata."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+    - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
+  report: docs/portal-defects.md
+
+pdc-36bis:
+  title: "Permesso in sanatoria, art. 36-bis: the portal saves one of the statements"
+  portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, sanatoria quadro"
+  what: "The documents attached, the date of the works (documents or attestation) and the works proposal are one radio group: ticking one unticks the others."
+  law: "Art. 36-bis DPR 380/2001 asks for the date of the works, the oblazione and whether works are proposed, together."
+  checked: "2026-10-30, by hand on a made-up draft"
+  choices:
+    - "Ask the SUE how they want this permesso in sanatoria filed while the portal can't take it."
+    - "Report the defect to the portal's operator or the SUE: docs/portal-defects.md says what."
+    - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
+  report: docs/portal-defects.md

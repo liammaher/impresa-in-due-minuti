@@ -431,6 +431,18 @@ supports:
 - value: '{{ask.pdc_sanatoria_caso}}'
   in:
   - assenza
+  defect:
+    id: pdc-36bis
+    title: 'Permesso in sanatoria, art. 36-bis: the portal saves one of the statements'
+    portal: 'Napoli''s SUE on impresainungiorno: the permesso''s asseverazione, sanatoria quadro'
+    what: 'The documents attached, the date of the works (documents or attestation) and the works proposal are one radio group: ticking one unticks the others.'
+    law: Art. 36-bis DPR 380/2001 asks for the date of the works, the oblazione and whether works are proposed, together.
+    checked: 2026-10-30, by hand on a made-up draft
+    choices:
+    - Ask the SUE how they want this permesso in sanatoria filed while the portal can't take it.
+    - 'Report the defect to the portal''s operator or the SUE: docs/portal-defects.md says what.'
+    - 'File it on the portal yourself, by hand, as the SUE tells you: Claude doesn''t fill this case.'
+    report: docs/portal-defects.md
   else: 'Only art. 36 (works without the permesso or in total difformity) is mapped. Under art. 36-bis the portal''s asseverazione makes the documents attached, the date of the works and the works proposal
     one radio choice, so it can''t state the case in full: a defect of the portal (docs/portal-defects.md); ask the SUE.'
 - if: '{{ask.scia_onerosa}}'
