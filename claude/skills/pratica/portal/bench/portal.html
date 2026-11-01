@@ -16,7 +16,8 @@
      a radio drawn as PrimeFaces draws one, greyed (its input disabled, its drawn box ignoring the
      mouse), as the permesso's opere a scomputo until "a titolo oneroso"; ?liste=1 adds two lists
      to Dati tecnici, each with its own "+" after its rows (the CILA relazione's filings, then its
-     assents): a "+" adds a row to its own list, and the rows saved come back on a load. -->
+     assents): a "+" adds a row to its own list, a row after the first has no text of its own,
+     and the rows saved come back on a load. -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -139,10 +140,13 @@ if (location.search.includes("liste=1")) {
   for (const [k, label] of [["com", "Comunicazioni"], ["atto", "Tipologia di atto"]]) {
     const t = document.createElement("table");
     div.append(t);
+    // As the portal draws them: the first row's box is titled by the column, the later rows'
+    // have no text of their own and read the header above.
     liste[k] = () => {
       const tr = t.insertRow();
-      tr.innerHTML = `<td><label class="labelDynaFormControl">${label}</label></td>` +
-        `<td><input type="text" id="form:r6c1:dynaForm:${k}${t.rows.length}_txt"></td>`;
+      const first = t.rows.length === 1;
+      tr.innerHTML = `<td>${first ? `<label class="labelDynaFormControl">${label}</label>` : ""}</td>` +
+        `<td><input type="text"${first ? ` title="${label}"` : ""} id="form:r6c1:dynaForm:${k}${t.rows.length}_txt"></td>`;
     };
     liste[k]();
     const plus = document.createElement("button");

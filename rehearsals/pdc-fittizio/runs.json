@@ -166,5 +166,11 @@
   "answers": "answers-terreni-urbanizzazione.json",
   "result": "filled",
   "seconds": 147.9
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-altri-tecnici.json",
+  "result": "filled",
+  "seconds": 188.3
  }
 ]
