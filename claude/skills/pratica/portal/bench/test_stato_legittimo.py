@@ -166,11 +166,13 @@ def _():
     assert list(b) == ["r1c1p1reg:radio:0_clone"], b
 
 
-@case("refused: more than five altro lines, titles with none named, no document, no declaration")
+@case("refused: more than ten altro lines, titles with none named, no document, no declaration")
 def _():
-    refused(answers("stato-titoli-ripetuti", prec_altro_4="true", prec_altro_4_quale="x", prec_altro_4_numero="1",
-                    prec_altro_4_data="2018-01-01", prec_altro_5="true", prec_altro_5_quale="y",
-                    prec_altro_5_numero="2", prec_altro_5_data="2019-01-01", prec_altro_6="true"), "More than five")
+    more = {}
+    for i in range(4, 11):
+        more |= {f"prec_altro_{i}": "true", f"prec_altro_{i}_quale": f"titolo {i}", f"prec_altro_{i}_numero": str(i),
+                 f"prec_altro_{i}_data": f"20{i + 10}-01-01"}
+    refused(answers("stato-titoli-ripetuti", **more, prec_altro_11="true"), "More than ten")
     refused(answers("stato-epoca", prova_documenti=[]), "catasto primo impianto or other documents")
     refused(answers("stato-titoli", precedenti=[]), "at least one title")
     refused(answers("stato-tolleranze", tolleranze_precedenti=[]), "where they were made")
