@@ -117,7 +117,7 @@ Refusals, by how many recipes carry them (the most shared are the cheapest to cl
 - 3×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
 - 3×: More than two assents already obtained aren't mapped yet: the relazione has two rows.
 - 3×: More than two filings already made aren't mapped yet: the relazione has two rows.
-- 3×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione mak
+- 3×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione sav
 - 3×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
 - 1×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own boxes.
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
@@ -141,7 +141,7 @@ Ticked "si allega" boxes with no attachment slot under their condition (gen.py `
 Open items no recipe shows:
 
 - Not mapped: PdC in sanatoria under art. 36-bis (refused: the portal makes two acknowledgment checkboxes a radio pair; art. 36 is filled). A SCIA in sanatoria in a protected area is mapped two ways: works done through the art. 36-bis c. 4 compatibility, works under way (art. 37 c. 5) with the authorization for the landscape works still to come; partly done landscape works under way are refused (art. 146 c. 4). The combinations of pratiche still to map are counted above, from the rules table.
-- SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal's dating, oblazione and works-proposal radios behave as one group.
+- SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal saves its dating, oblazione and works proposal as one field with four values (checked 2026-11-01): a portal defect (docs/portal-defects.md), as is the permesso's under art. 36-bis.
 - The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.
 - Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots may be missing (the catalogue notes this for the pratiche read on an empty draft); the diritti amount per pratica is unknown.
 - The screens after the attachments (the declarations' signing, the sending) and everything after filing (integration requests, the receipt, the status): nothing in the repo maps them.
