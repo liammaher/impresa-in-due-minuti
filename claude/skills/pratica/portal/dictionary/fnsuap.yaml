@@ -57,6 +57,8 @@ groups:
     question: "Where were the construction tolerance declarations (art. 34-bis or 34-ter c. 4) made? Tick every one that applies."
   strumenti:
     question: "Which planning instruments besides the PRG cover the property's area? Tick every one."
+  deroga_parametri:
+    question: "Which of the town plan's limits does the permesso derogate from (art. 14 c. 3 DPR 380/2001)? Tick every one that applies."
   impianti_dichiarazione:
     question: "Which systems have their dichiarazione di conformità or di rispondenza (DM 37/2008) attached? Tick every one."
   impianti_depositato:
@@ -65,8 +67,6 @@ groups:
     question: "Which systems have a collaudo, where one is required (a lift's, a fire-protection system's, ...)? Tick every one."
   impianti_atto_notorio:
     question: "Which systems are certified by an atto di notorietà (art. 6 DPR 392/1994: older systems brought up to L. 46/1990)? Tick every one."
-  deroga_parametri:
-    question: "Which of the town plan's limits does the permesso derogate from (art. 14 c. 3 DPR 380/2001)? Tick every one that applies."
 
 asks:
   descrizione:
