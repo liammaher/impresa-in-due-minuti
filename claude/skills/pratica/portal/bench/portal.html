@@ -12,7 +12,9 @@
      ?off=1 switches Impresa esecutrice off, greyed until a choice the steps don't make; ?deroga=1
      adds two tick boxes, each with a box of no text of its own beside it, titled "(specificare)",
      as the permesso's deroga draws them: the cell before it is the tick box's label; ?req=1 adds
-     an empty box the portal flags, its title and cell "Il valore è obbligatorio". -->
+     an empty box the portal flags, its title and cell "Il valore è obbligatorio"; ?offradio=1 adds
+     a radio drawn as PrimeFaces draws one, greyed (its input disabled, its drawn box ignoring the
+     mouse), as the permesso's opere a scomputo until "a titolo oneroso". -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -55,6 +57,15 @@ if (location.search.includes("deroga=1")) {
       `<td><input type="text" title="(specificare)" id="form:r5c2:dynaForm:${k}_txt"></td>`;
     document.querySelector("#tecnici + table").tBodies[0].append(tr);
   }
+}
+if (location.search.includes("offradio=1")) {
+  const tr = document.createElement("tr");
+  tr.innerHTML = '<td><div id="form:r7c1:dynaForm:scomputo:opt" title="opt"><div class="ui-radiobutton ui-state-disabled">' +
+    '<div style="position:absolute;width:1px;height:1px;overflow:hidden"><input type="radio" disabled ' +
+    'id="form:r7c1:dynaForm:scomputo:radio:1_clone" name="scomputo"></div><div class="ui-radiobutton-box ui-state-disabled" ' +
+    'style="display:inline-block;width:14px;height:14px;border:1px solid #888;pointer-events:none"></div></div>' +
+    '<label>NO</label></div></td>';
+  document.querySelector("#tecnici + table").tBodies[0].append(tr);
 }
 if (location.search.includes("req=1")) {
   const tr = document.createElement("tr");

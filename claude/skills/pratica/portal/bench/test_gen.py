@@ -258,6 +258,14 @@ def _():
     assert "Relazione paesaggistica (redatta ai sensi del D.P.C.M" in cila
 
 
+@case("the agibilità's art. 24 boxes stay theirs: the portal asks for one even where neither applies")
+def _():
+    # a592b60 mapped the boxes and dropped the section's `theirs`: every case ticking neither stopped
+    # on the portal's "deve essere selezionata almeno un'opzione" (2026-10-31).
+    sec = section(generated("agibilita-fittizia"), "Attestazione tecnica - Agibilità")
+    assert any("articolo 24" in t for t in sec.get("theirs", [])), sec.get("theirs")
+
+
 @case("two scelte both keep the sections they add, and the wizard ticks both (voltura with a co-holder)")
 def _():
     steps = generated("voltura-pdc-fittizia")
