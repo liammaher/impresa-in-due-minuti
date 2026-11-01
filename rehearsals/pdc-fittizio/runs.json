@@ -124,5 +124,23 @@
   "answers": "answers-variante-essenziale.json",
   "result": "filled",
   "seconds": 163.1
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-intero-vincoli.json",
+  "result": "filled",
+  "seconds": 153.8
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-per-scelta.json",
+  "result": "stopped",
+  "seconds": 52.7
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-rir-deroga-antincendio.json",
+  "result": "filled",
+  "seconds": 148
  }
 ]

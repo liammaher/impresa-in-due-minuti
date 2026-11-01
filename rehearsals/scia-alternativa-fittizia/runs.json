@@ -58,5 +58,11 @@
   "answers": "answers-vincoli.json",
   "result": "filled",
   "seconds": 151.3
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-variante-sismica.json",
+  "result": "filled",
+  "seconds": 153.1
  }
 ]
