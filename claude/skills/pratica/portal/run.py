@@ -4,7 +4,8 @@
   run.py preflight --steps STEPS.yaml [--answers A.json] VAULT [--made-up]
       Before anything opens: prints JSON with why this case isn't supported (the steps
       file's `supports:`, and its `rules:` table, which says whether the case is this pratica
-      at all), the answers it proposes for the person to confirm (an ask's
+      at all; a refusal behind a known portal defect also under `defects`, with the person's
+      choices, defects.yaml), the answers it proposes for the person to confirm (an ask's
       `propose:`), the questions still to ask (its `asks:`, branch questions first), the
       vault fields missing or expired, the files to attach (each within the portal's 9.77 MB,
       of a type its slot takes, and as its sportello takes them: Napoli's SUE refuses a file
@@ -622,7 +623,16 @@ def apart(steps, values):
 
 def supported(steps, values):
     """Why this case isn't mapped, and the asks still needed to tell."""
+    out, need, _ = refusals(steps, values)
+    return out, need
+
+
+def refusals(steps, values):
+    """supported(), and the known portal defects behind its refusals (a `supports` entry's
+    `defect`, from defects.yaml through gen.py): the person is told what the portal does and
+    chooses what to do."""
     out, waiting = ruled(steps, values)
+    defects = []
     need = []
     for f in waiting:
         tmpl = steps["rules"]["facts"][f]
@@ -655,7 +665,9 @@ def supported(steps, values):
         ok = v is not None and (truthy(v) if "when" in c else v in [str(x) for x in c["in"]])
         if not ok:
             out.append(values.render(c["else"]) or c["else"])
-    return out, need
+            if isinstance(c.get("defect"), dict) and c["defect"] not in defects:
+                defects.append(c["defect"])
+    return out, need, defects
 
 
 def require_supported(steps, values):
@@ -721,7 +733,9 @@ def preflight(steps, values, urls=None, made_up=False):
         except StepError as e:  # nobody is titolare yet: a missing field like any other
             report["missing"].append({"field": "*:ruolo.tipo", "why": str(e)})
             return report
-    report["unsupported"], _ = supported(steps, values)
+    report["unsupported"], _, defects = refusals(steps, values)
+    if defects:
+        report["defects"] = defects
     report["unsupported"] += portal_changed(steps)
     if report["unsupported"]:
         return report

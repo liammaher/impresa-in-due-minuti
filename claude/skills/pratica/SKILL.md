@@ -315,6 +315,12 @@ win). A proposal nobody confirmed is never used.
    - `unsupported`: this case isn't mapped (the steps file's `supports:`), or the law makes
      it another pratica or adds one this pratica doesn't file (its `rules:`). Tell the user
      the reason in one line and stop: don't open the portal, don't ask anything else.
+     With `defects` beside it, the case is one the law allows but the portal can't take as
+     the law asks (a known defect, `portal/defects.yaml`). Tell the user in a few lines: the
+     `title`, what the portal does (`what`), what the law asks (`law`), when it was `checked`,
+     then its `choices` as a numbered list, and let them choose. Never fill around a defect
+     (no hidden box ticked, no state the page itself can't make), and never contact the SUE
+     or the portal's support for them: the report (`docs/portal-defects.md`) is theirs to send.
    - `questions`: only what this case needs (pre-flight leaves out a question no field of
      this case reads, and one with a default). Ask all of them **in one short message**, in
      that order, numbered, each `question` as written:
