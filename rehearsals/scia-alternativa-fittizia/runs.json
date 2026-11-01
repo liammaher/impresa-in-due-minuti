@@ -64,5 +64,17 @@
   "answers": "answers-variante-sismica.json",
   "result": "filled",
   "seconds": 153.1
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-acustica-vvf-igiene.json",
+  "result": "filled",
+  "seconds": 163.7
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-terreni-urbanizzazione.json",
+  "result": "stopped",
+  "seconds": 108.1
  }
 ]

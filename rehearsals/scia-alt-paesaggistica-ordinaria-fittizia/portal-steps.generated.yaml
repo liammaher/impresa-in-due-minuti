@@ -146,6 +146,7 @@ asks:
   indagini_ambientali: {type: yes_no, question: 'Does the area need environmental investigations of its soil first (past uses that may have polluted it)?', propose: 'false'}
   indagini_esito: {type: choice, question: 'What came of the soil investigations? analisi (the analyses were done and no remediation is needed: their results attached); bonifica (the soil was remediated,
       as the conclusive certificate of remediation says, artt. 248 c. 2 and 242-bis c. 4 D.Lgs. 152/2006)', options: [analisi, bonifica], when: '{{ask.indagini_ambientali}}'}
+  indagini_analisi_doc: {type: file, question: The results of the soil's environmental analyses (PDF), when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}'}
   bonifica_ente: {type: text, question: 'Who issued the conclusive certificate of remediation (the form''s "rilasciata da", e.g. Città Metropolitana di Napoli)?', when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}'}
   bonifica_data: {type: date, question: Its date, when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}'}
   urbanizzazione: {type: yes_no, question: 'Does the area have the primary urbanisation works (roads, sewers, water, power)?', propose: 'true'}
@@ -512,6 +513,11 @@ supports:
   - 'true'
   else: 'A structural tolerance of minor or no relevance for public safety can be declared only once the regional control term has run out, with no open requests and no negative outcome: art. 34-bis c.
     3-bis DPR 380/2001.'
+- if: '{{ask.urbanizzazione|not}}'
+  value: '{{ask.urbanizzazione_attuazione}}'
+  in:
+  - convenzione
+  else: 'Without primary urbanisation works the portal wants the date of a convenzione, even where the Comune plans the works itself within three years: that case can''t be stated on it as is; ask the SUE.'
 rules:
   table: sue-napoli
   main: napoli/comune/scia-alternativa-pdc
@@ -1846,6 +1852,7 @@ sections:
   - {kind: file, label: Documentazione necessaria al rilascio del parere progetto da parte dei Vigili del Fuoco, value: '{{ask.vvf_doc}}', when: '{{ask.vvf_valutazione}}'}
   - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: '{{ask.igienico_deroga_doc}}', when: '{{ask.igienico_conforme|not}}'}
   - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: '{{ask.cimiteriale_doc}}', when: '{{ask.fascia_cimiteriale|is_non_consentito}}'}
+  - {kind: file, label: Risultati delle analisi ambientali sulla qualità dei terreni, value: '{{ask.indagini_analisi_doc}}', when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}'}
   - {kind: file, label: Piano di lavoro di demolizione o rimozione dell'amianto, value: '{{ask.amianto_piano}}', when: '{{ask.amianto}}'}
   - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche (art. 82, value: '{{ask.barriere_elaborati}}', when: '{{ask.barriere_art82}}'}
   - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche (art. 77, value: '{{ask.barriere_elaborati}}', when: '{{ask.barriere}} {{ask.barriere_deroga|not}}'}
