@@ -24,5 +24,6 @@
  "altri_atti": false,
  "intervento": "opere_temporanee",
  "paesaggio": "no",
- "fatti": []
+ "fatti": [],
+ "impresa_dopo": "false"
 }

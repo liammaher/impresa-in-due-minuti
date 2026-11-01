@@ -123,5 +123,8 @@
  "prec_altro_numero": "112",
  "prec_altro_data": "1982-04-12",
  "strumenti_altri": "false",
- "prec_altro_quanti": "1"
+ "prec_altro_quanti": "1",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false"
 }

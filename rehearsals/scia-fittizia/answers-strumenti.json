@@ -98,5 +98,8 @@
  "strumento_particolareggiato_articolo": "8",
  "strumento_recupero_nome": "Piano di recupero fittizio del rione Sanità",
  "strumento_recupero_zona": "Unità minima 4",
- "strumento_recupero_articolo": "3"
+ "strumento_recupero_articolo": "3",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false"
 }

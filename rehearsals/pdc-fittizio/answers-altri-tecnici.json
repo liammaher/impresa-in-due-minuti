@@ -99,5 +99,9 @@
  "altro_tecnico_incarico": "progettazione strutturale",
  "altro_tecnico_dipendente": false,
  "altro_tecnico2_incarico": "coordinamento della sicurezza in fase di progettazione",
- "altro_tecnico2_dipendente": true
+ "altro_tecnico2_dipendente": true,
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false"
 }

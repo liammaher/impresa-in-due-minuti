@@ -141,7 +141,14 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   "Cognome"): crawl.js counts reveals per label since 2026-10-31; crawls before then left those
   out, so a run can still find required boxes there (recrawl a section to see them).
 - **A block a tick opens may repeat the labels above it** (h1's structural designer under
-  the architect's): fill it by label from its first box (`anchor`, `block: 1`).
+  the architect's): fill it by label from its first box (`anchor`, `block: 1`). A block counts
+  as the page finally shows it: the SCIA's other direttore dei lavori opens above the structural
+  designer's, so the director is filled first and the designer is then `block: 2` (2026-11-01).
+- **A firm block's field may carry its own `when`** (the Cassa edile's rows, only for a firm
+  enrolled with one): gen.py puts it after the block's. Its rows come first, so the INPS's and
+  INAIL's "sede di" and "codice impresa" count after them.
+- **A CILA or CIL can't leave its firm to be named later**: the form has no line for it, and
+  the portal requires the firm's details even with the safety quadro's "si riserva" (2026-11-01).
 - **Suggestion lists fade out.** A street's list, hidden by its widget, lies over the next
   boxes while it fades (PrimeFaces 11): the runner takes it off the page at once ("covered by
   li.ui-autocomplete-item" before, 2026-10-29).

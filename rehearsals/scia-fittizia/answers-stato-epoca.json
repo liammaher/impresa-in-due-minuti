@@ -87,5 +87,8 @@
  "prova_catasto_data": "1939-03-01",
  "prova_catasto_modo": "estremi",
  "tolleranze": false,
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false"
 }

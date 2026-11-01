@@ -37,6 +37,8 @@ attachments:
     # The asseverazione's sewer connection to request adds this required slot (read on the
     # permesso's attachments screen 2026-10-31): plain PDFs.
     - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura, value: "{{ask.allaccio_doc}}", when: "{{ask.scarichi|is_allaccio_da_richiedere}}", on_page: true}
+    # The safety quadro's "allega la notifica" (the notifica attached now): its slot, as on the SCIA.
+    - {kind: file, label: Notifica preliminare, value: "{{ask.notifica_preliminare}}", when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}} {{ask.notifica_allegata}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
     # The energy filing's own slot (read on the P6 run's screen).
     - {kind: file, label: Relazione tecnica sui consumi energetici, value: "{{ask.relazione_energetica}}", when: "{{ask.prestazione_energetica}}"}
@@ -98,7 +100,7 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
-  - "Name the direttore dei lavori (and, for works on structures, the direttore dei lavori delle strutture) before the works start"
+  - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
   - "On Allega documenti: the portal's procura signed by the client and the Quadro riepilogativo (SCIA alternativa DSC), then everything signed digitally (.p7m)"
   - "Sign and send (Firma e invio); keep the receipt. The works may start 30 days after filing, once the assents the SCIA asks for (if any) are in; the contributo, if due, is paid as quadro g) says"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight

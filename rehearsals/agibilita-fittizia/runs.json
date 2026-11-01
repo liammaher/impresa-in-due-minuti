@@ -112,5 +112,11 @@
   "answers": "answers-bassa-monostanza.json",
   "result": "filled",
   "seconds": 98.3
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-professionista.json",
+  "result": "filled",
+  "seconds": 230.4
  }
 ]

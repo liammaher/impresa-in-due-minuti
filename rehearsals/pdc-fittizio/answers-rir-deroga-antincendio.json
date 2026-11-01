@@ -92,5 +92,9 @@
  "cambio_uso": "no",
  "antincendio_deroga": "true",
  "antincendio_deroga_doc": "rehearsals/scia-fittizia/files/deroga-antincendio.pdf",
- "rir_doc": "rehearsals/scia-fittizia/files/documentazione-rir.pdf"
+ "rir_doc": "rehearsals/scia-fittizia/files/documentazione-rir.pdf",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false"
 }

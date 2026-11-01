@@ -99,5 +99,9 @@
  "fatti": [],
  "cambio_uso": "no",
  "toll_classe": "privo di rilevanza",
- "toll_decorso": "true"
+ "toll_decorso": "true",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false"
 }

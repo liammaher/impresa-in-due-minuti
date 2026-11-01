@@ -86,10 +86,32 @@ def walk(nodes, fields, depth=1, parent=None):
                 yield {"id": x["id"], "kind": x["kind"], "choice": x.get("label", ""), "not_tried": True}, x, depth + 1, n
 
 
-def state(n, f, name, entries):
-    """What one title's dictionary entries do with one choice. Only the dictionary says what is
-    the person's: crawl.js's own word list also catches the technician's asseverazioni ("il
-    sottoscritto assevera"), which are the case's facts."""
+def fitting(entries, crawl, name):
+    """The entry gen.py fills a section with: the first that fits it ("Tecnici incaricati" is the
+    SCIA's h1 and the permesso's g1, each with its own entry). None fits: all of them, as a
+    recipe's own entries may complete one."""
+    for e, as_name in entries:
+        try:
+            if not gen.fill(e, as_name, crawl, {}, name)[1]:
+                return [(e, as_name)]
+        except Exception:  # a recipe-only key (firms, subject) the empty recipe lacks
+            pass
+    return entries
+
+
+def ticks(f, d, fields):
+    """Whether a dictionary field ticks this choice, as gen.py's find picks the box: a label that
+    starts its text, else, where no box of the section starts with it, one inside it (the CILA's
+    "che i lavori sono/saranno eseguiti dall'impresa" is "lavori sono/saranno eseguiti dall")."""
+    label = d.get("label", "")
+    return gen.matches(f, d["kind"], label) or not any(gen.matches(x, d["kind"], label) for x in fields) \
+        and gen.matches(f, d["kind"], label, inside=True)
+
+
+def state(n, f, name, entries, fields=()):
+    """What one title's dictionary entries do with one choice (`fields`: the section's boxes).
+    Only the dictionary says what is the person's: crawl.js's own word list also catches the
+    technician's asseverazioni ("il sottoscritto assevera"), which are the case's facts."""
     if cat.DECLARATIONS.search(name):
         return "theirs"
     if not entries:
@@ -111,7 +133,7 @@ def state(n, f, name, entries):
                     if gen.norm(v) == gen.norm(n.get("option")):
                         return "ticked"
                     fixed = True
-            elif d.get("kind") in TICKS and gen.matches(f, d["kind"], d.get("label", "")):
+            elif d.get("kind") in TICKS and ticks(f, d, fields):
                 return "ticked"
     for entry, _ in entries:
         if any(gen.norm(f.get("label")).startswith(gen.norm(x)) or gen.norm(f.get("context")).startswith(gen.norm(x))
@@ -131,14 +153,17 @@ def rows():
         base = [f for f in crawl.get("fields", []) if f["kind"] != "message"]
         top = len(crawl.get("branches") or [])
         names = sorted(s["names"])
-        for n, f, depth, parent in walk(crawl.get("branches"), base):
+        entries = {nm: fitting(gen.dictionary_entries(dictionary["sections"], nm), crawl, nm) for nm in names}
+        walked = list(walk(crawl.get("branches"), base))
+        boxes = [f for _, f, _, _ in walked]
+        for n, f, depth, parent in walked:
             # One box reached by two paths (two same-label parents, the primo impianto line's
             # under epoca and under prova, both reveal it) is one choice.
             key = (fp, n["id"], n.get("option"), (parent or {}).get("choice"))
             if key in seen:
                 continue
             seen.add(key)
-            per = {nm: state(n, f, nm, gen.dictionary_entries(dictionary["sections"], nm)) for nm in names}
+            per = {nm: state(n, f, nm, entries[nm], boxes) for nm in names}
             # The weakest title decides: a choice ticked under one title and not another is
             # unmapped where it isn't.
             st = max(per.values(), key=STATES.index)

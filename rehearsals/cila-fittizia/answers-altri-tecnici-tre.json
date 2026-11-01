@@ -48,5 +48,7 @@
  "altro_tecnico2_incarico": "coordinamento della sicurezza in fase di progettazione",
  "altro_tecnico2_dipendente": true,
  "altro_tecnico3_incarico": "certificazione energetica",
- "altro_tecnico3_dipendente": false
+ "altro_tecnico3_dipendente": false,
+ "altri_tecnici_dopo": "false",
+ "impresa_dopo": "false"
 }
