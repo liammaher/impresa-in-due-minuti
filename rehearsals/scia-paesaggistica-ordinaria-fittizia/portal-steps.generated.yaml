@@ -7,7 +7,7 @@ yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
 - 'As progettista, check every asseverazione on this page: they are yours, signed with the pratica'
-- Name the direttore dei lavori (and, for works on structures, the direttore dei lavori delle strutture) before the works start
+- Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina
 - 'On Allega documenti: the portal''s procura signed by the client, the stato legittimo documents (signed files only), the ordinaria''s drawings and photos (signed files only), then everything signed digitally
   (.p7m)'
 - 'No start date: the works start once the SUE says the landscape authorization (and any other assent) is in'
@@ -1014,7 +1014,7 @@ sections:
   - {kind: text, label: Nome, nth: 2, value: '{{ad#N:identity.first_name|upper}}', anchor: Incaricato della, block: '#N', when: '{{ask.altri_tecnici}} {{ask.altro_tecnico#N_dipendente}}'}
 - section: i) Impresa esecutrice dei lavori
   fields:
-  - {id: 'r2c1p2reg:radio:1_clone', kind: radio, when: '{{ask.lavori_in_proprio}}', label: in quanto opere di modesta entità}
+  - {id: 'r2c1p2reg:radio:1_clone', kind: radio, when: '{{ask.lavori_in_proprio}}', label: 'i lavori, in quanto opere di modesta entità'}
   - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo}}', label: l'impresa esecutrice/imprese esecutrici dei lavori sarà}
   - {id: 'r3c1p3reg:radio:2_clone', kind: radio, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}', label: i lavori sono eseguiti/sono stati eseguiti}
   - {kind: text, label: Ragione sociale, value: '{{f1:business.denominazione}}', anchor: Ragione sociale, block: 1, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}'}

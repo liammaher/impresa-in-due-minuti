@@ -259,6 +259,8 @@ the page never copies a rule.
   and normalized (`italy.go`, `dates.go`, `housing.go`, `business.go`). Housing categories
   (`abitazione`, `locazione`, `utenze`, `tari`) describe the home at residenza/domicilio;
   the schema exports them as `kinds: [persona]` (set from `IsHousingCategory`).
+  A new field bumps the schema's `Version` (`make schema`); the library's copy
+  (`contract/vault-schema.json`, `npm run gen:fields`) follows in a PR merged after the vault's.
   New fields the pratiche-napoli library needs are added here, then dropped from its
   `contract/extensions.json`. `schema.json` is `pvault schema --json`, credential words
   included (`Credentials`, the expressions `IsCredentialField` compiles), and `values` for
@@ -466,7 +468,8 @@ network, vault or model); `bench/test_preflight.py` tests pre-flight on the SCIA
 gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the SUE choice count
 (`branches.py --write` writes `docs/sue-branches.md`), `bench/test_tolleranze.py` the asseverazioni's
 tolerances, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
-the same bytes as the library's), `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
+the same bytes as the library's; its every-case walk takes minutes), `bench/plan_diff.py` each case's fill plan
+before and after a change, `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
 route.py on every case the SUE table decides (it prints the combinations not mapped yet), and
 `claude/skills/pratica/intake/bench/test_intake.py` the intake on a made-up dossier (`dossier.py`) against fixture-p6.json. On the real portal, `bench/rerun.py` reruns the rehearsals
 in the pane after a runner, dictionary or gen.py change (portal/README.md); `--record` files the results in each

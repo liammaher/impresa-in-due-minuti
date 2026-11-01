@@ -379,6 +379,13 @@ def dictionary_entries(sections, name):
     return out
 
 
+def revealed(nodes):
+    """Every box a choice of the crawl opens, at any depth."""
+    for n in nodes or []:
+        yield from n.get("reveals", [])
+        yield from revealed(n.get("then"))
+
+
 def fill(entry, as_name, c, recipe, name):
     """One section from one dictionary entry: the steps, what doesn't fit, the asks it uses."""
     problems, asks_used = [], set()
@@ -437,7 +444,7 @@ def fill(entry, as_name, c, recipe, name):
     # `within`: the same, for a choice under a longer condition inside its branch (a tolerance
     # ticked only for some answers): a later field of that branch goes by label unless its own
     # condition includes that choice's.
-    branches, main, changed, within = {}, sec, {}, {}
+    branches, main, changed, within, ticked = {}, sec, {}, {}, set()
     # A "+" renumbers every box after the block it adds to: a box the section shows before any
     # choice, from the block's first box on, goes by label. (One a choice opens keeps the id the
     # crawl saw in that state: the CILA's tolerances, above its filings' "+".)
@@ -474,6 +481,10 @@ def fill(entry, as_name, c, recipe, name):
                 continue
             look.choose(last_select, d["via"])
         f, count = look.find(d["kind"], d["label"], d.get("nth", 1))
+        if f is None and d.get("on_page") and d["kind"] in ("radio", "checkbox") and \
+                look.find({"radio": "checkbox", "checkbox": "radio"}[d["kind"]], d["label"])[0]:
+            continue  # the crawl has the label as the other kind: another entry's box (the SCIA
+            # alternativa's "e allega ... la notifica" is a radio, the SCIA's a checkbox)
         if f is None and d.get("on_page"):
             # Shown only by a combination of choices the crawl didn't try: by label, found on
             # the page (and skipped there too if it isn't, `if_present`).
@@ -482,8 +493,12 @@ def fill(entry, as_name, c, recipe, name):
         if f is None and d.get("if_present"):
             continue  # a choice only some pratiche show
         if f is None:
+            # Shown only once a choice is made: that choice's state is its branch's, keyed by the
+            # first term of its `when` (2026-11-01: h1's si/no under the director's tick).
+            opened = any(matches(x, d["kind"], d["label"]) for x in revealed(c.get("branches")))
             problems.append(f"{name}: no {d['kind']} labelled {d['label']!r}" +
-                            (f" (only {count})" if count else "") + " in the crawl")
+                            (f" (only {count})" if count else "") + " in the crawl" +
+                            (": a choice opens it, so start its `when` with that choice's first term" if opened else ""))
             continue
         filled.add((f["id"], f["label"]))
         g = {k: v for k, v in d.items() if k not in ("label", "nth", "note", "via", "if_present", "by_label")}
@@ -519,6 +534,14 @@ def fill(entry, as_name, c, recipe, name):
             g = {"id": f["id"], **g, "label": d["label"], **({"nth": d["nth"]} if d.get("nth", 1) > 1 else {})}
         else:
             g = {**g, "label": d["label"], **({"nth": d["nth"]} if d.get("nth", 1) > 1 else {})}
+        # One box ticked by two labels under one condition (a form's own wording, and a shorter
+        # label found inside it): once. A second choice of it would move the rows after it again
+        # (the CILA's firm radio, 2026-11-01).
+        if d["kind"] in ("radio", "checkbox", "tick"):
+            key = (f.get("base_id", f["id"]), d.get("when", ""))
+            if key in ticked:
+                continue
+            ticked.add(key)
         fields.append(g)
         # A choice everyone makes happens in every branch too.
         for st in [sec] if term else [main, *branches.values()]:

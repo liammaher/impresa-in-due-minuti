@@ -580,8 +580,8 @@ sections:
   - {kind: text, label: Nome, nth: 2, value: '{{ad#N:identity.first_name|upper}}', anchor: Incaricato della, block: '#N', when: '{{ask.altri_tecnici}} {{ask.altro_tecnico#N_dipendente}}'}
 - section: h) Impresa esecutrice dei lavori
   fields:
-  - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.lavori_in_proprio}}', label: in quanto opere di modesta entità}
-  - {id: 'r2c1p2reg:radio:1_clone', kind: radio, when: '{{ask.lavori_in_proprio|not}}', label: lavori sono/saranno eseguiti dall}
+  - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.lavori_in_proprio}}', label: 'che, in quanto opere di modesta entità'}
+  - {id: 'r2c1p2reg:radio:1_clone', kind: radio, when: '{{ask.lavori_in_proprio|not}}', label: che i lavori sono/saranno eseguiti dall}
   - {kind: text, label: Ragione sociale, value: '{{f1:business.denominazione}}', anchor: Ragione sociale, block: 1, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}'}
   - {kind: text, label: codice fiscale / p. IVA, value: '{{f1:business.partita_iva}}', anchor: Ragione sociale, block: 1, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}'}
   - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{f1:business.cciaa}}', anchor: Ragione sociale, block: 1, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}'}

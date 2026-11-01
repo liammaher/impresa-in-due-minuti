@@ -936,7 +936,7 @@ sections:
   - {kind: text, label: Nome, nth: 2, value: '{{ad#N:identity.first_name|upper}}', anchor: Incaricato della, block: '#N', when: '{{ask.altri_tecnici}} {{ask.altro_tecnico#N_dipendente}}'}
 - section: i) Impresa esecutrice dei lavori
   fields:
-  - {id: 'r2c1p2reg:radio:1_clone', kind: radio, when: '{{ask.lavori_in_proprio}}', label: in quanto opere di modesta entità}
+  - {id: 'r2c1p2reg:radio:1_clone', kind: radio, when: '{{ask.lavori_in_proprio}}', label: 'i lavori, in quanto opere di modesta entità'}
   - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo}}', label: l'impresa esecutrice/imprese esecutrici dei lavori sarà}
   - {id: 'r3c1p3reg:radio:2_clone', kind: radio, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}', label: i lavori sono eseguiti/sono stati eseguiti}
   - {kind: text, label: Ragione sociale, value: '{{f1:business.denominazione}}', anchor: Ragione sociale, block: 1, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}'}
