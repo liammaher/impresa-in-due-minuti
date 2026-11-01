@@ -76,5 +76,11 @@
   "answers": "answers-elenchi-lunghi.json",
   "result": "filled",
   "seconds": 742.3
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-bene-culturale.json",
+  "result": "filled",
+  "seconds": 99.5
  }
 ]
