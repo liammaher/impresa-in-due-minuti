@@ -65,3 +65,4 @@ box opens. Ready offline, **not yet run on the portal**:
 | 2026-10-30 | pane | systems needing a project (`answers-impianti`: six systems, each project in its own slot), `bench/rerun.py` bundle | **filled** in 188 s, read back on a fresh load (28 s), nothing moved or loose |
 | 2026-10-31 | pane | `answers-condominio-strutture` with the sewer connection's slot ("Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura", read on the permesso) mapped | **filled** in 148 s, read back on a fresh load (23 s), nothing moved or loose |
 | 2026-10-31 | pane | the planning instruments (`answers-strumenti`), `bench/rerun.py` bundle | **filled** in 151 s, nothing moved or loose |
+| 2026-10-31, 11-01 | pane | the never-run cases, `bench/rerun.py` bundles: P6, `rir-fuori-area`, `vincoli` **filled**; `variante-sismica` stopped on the fire-deroga slot, mapped, then **filled** (153 s) |

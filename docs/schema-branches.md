@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (126 cases in all, 73 with a recorded filled run).
+  case (126 cases in all, 126 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -29,13 +29,13 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 23 | 8 | 1 | 4 | 7 | 29 |
+| CILA | 43 | 31 | 0 | 1 | 4 | 7 | 29 |
 | Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 14 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 8 |
-| Permesso di costruire | 153 | 70 | 30 | 16 | 23 | 14 | 175 |
-| SCIA | 150 | 81 | 43 | 4 | 12 | 10 | 61 |
-| SCIA alternativa | 128 | 69 | 29 | 12 | 10 | 8 | 81 |
-| Agibilità (SCA) | 36 | 23 | 6 | 0 | 2 | 5 | 18 |
+| Permesso di costruire | 153 | 100 | 0 | 16 | 23 | 14 | 175 |
+| SCIA | 150 | 124 | 0 | 4 | 12 | 10 | 61 |
+| SCIA alternativa | 128 | 98 | 0 | 12 | 10 | 8 | 81 |
+| Agibilità (SCA) | 36 | 29 | 0 | 0 | 2 | 5 | 18 |
 
 ## Next cases
 
@@ -140,15 +140,15 @@ On the portal, not mapped (dictionary work first):
 | `dichiarazioni/titolo_possesso` | `non_titolare_esclusivo` | non avere titolarità esclusiva all'esecuzione dell'intervento, ma di… | h | filled on the portal | 10 |
 | `dichiarazioni/opere_previste/[opere_previste_ctype]` | `no_parti_comuni` | non riguardano parti comuni | h | filled on the portal | 6 |
 | `dichiarazioni/opere_previste/[opere_previste_ctype]` | `parti_comuni_condominio` | riguardano le parti comuni di un fabbricato condominiale (1) | h | filled on the portal | 1 |
-| `dichiarazioni/opere_previste/[opere_previste_ctype]` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | a case, no recorded run | 1 |
-| `dichiarazioni/opere_previste/[opere_previste_ctype]` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | a case, no recorded run | 1 |
+| `dichiarazioni/opere_previste/[opere_previste_ctype]` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | filled on the portal | 1 |
+| `dichiarazioni/opere_previste/[opere_previste_ctype]` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | filled on the portal | 1 |
 | `comunicazioni/presentazione_inizio_lavori/[interventi_sogge…` | `no_altri_atti` | portal section c) has only a 'per presa visione' checkbox, no option | h | no portal box |  |
 | `comunicazioni/presentazione_inizio_lavori/[interventi_sogge…` | `comunicazioni_certificate` | portal section c) has no such option | h | no portal box |  |
 | `comunicazioni/presentazione_inizio_lavori/[interventi_sogge…` | `domanda_contestuale_cila` | portal section c) has no such option | h | no portal box |  |
 | `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `data_inizio_lavori` | i lavori avranno inizio in data | h | filled on the portal | 1 |
-| `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `inizio_lavori_comunicazione_suap` | i lavori avranno inizio dopo la comunicazione, da parte dello sportel… | h | a case, no recorded run | 1 |
+| `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `inizio_lavori_comunicazione_suap` | i lavori avranno inizio dopo la comunicazione, da parte dello sportel… | h | filled on the portal | 1 |
 | `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `intervento_corso_di_esecuzione_data_inizio_lavori` | intervento in corso di esecuzione (art. 6-bis, comma 5 del d.P.R. n.… | h | filled on the portal | 3 |
-| `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `intervento_con_sanzione_data_lavori` | intervento realizzato (art. 6-bis, comma 5 del d.P.R. n. 380/2001) co… | m | a case, no recorded run | 1 |
+| `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `intervento_con_sanzione_data_lavori` | intervento realizzato (art. 6-bis, comma 5 del d.P.R. n. 380/2001) co… | m | filled on the portal | 1 |
 | `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `procedimento_automatizzato` | portal has no automated/ordinary procedure box in the CILA | h | no portal box |  |
 | `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `procedimento_ordinario` | portal has no automated/ordinary procedure box in the CILA | h | no portal box |  |
 | `comunicazioni/localizzazione_intervento/immobile/riferiment…` | `fabbricati` | Nuovo Catasto Edilizio Urbano | h | filled on the portal | 36 |
@@ -156,13 +156,13 @@ On the portal, not mapped (dictionary work first):
 | `comunicazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_gratuito` | l'intervento da realizzare è a titolo gratuito | h | filled on the portal | 3 |
 | `comunicazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `(nothing)` | l'intervento da realizzare è a titolo oneroso, in quanto rientra negl… | m | filled on the portal | 1 |
 | `comunicazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `ric_versamento` | allega la ricevuta di versamento | h | filled on the portal | 1 |
-| `comunicazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `versamento_inizio_lavori` | effettuerà, prima dell'inizio dei lavori, il pagamento del contributo… | h | a case, no recorded run | 1 |
+| `comunicazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `versamento_inizio_lavori` | effettuerà, prima dell'inizio dei lavori, il pagamento del contributo… | h | filled on the portal | 1 |
 | `comunicazioni/imprese_esecutrici` | `da_soggetti_coinvolti` | che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla se… | h | on the portal, not mapped |  |
 | `comunicazioni/imprese_esecutrici` | `(nothing)` | che, in quanto opere di modesta entità che non interessano le specifi… | m | on the portal, not mapped |  |
-| `comunicazioni/obblighi_salute_sicurezza` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | a case, no recorded run | 1 |
+| `comunicazioni/obblighi_salute_sicurezza` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | filled on the portal | 1 |
 | `comunicazioni/obblighi_salute_sicurezza` | `(nothing)` | ricade nell'ambito di applicazione delle norme in materia di salute e… | m | filled on the portal | 7 |
 | `comunicazioni/obblighi_salute_sicurezza/ricade` | `inf200ggUomo` | dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-… | h | filled on the portal | 7 |
-| `comunicazioni/obblighi_salute_sicurezza/ricade` | `pariSup200ggUomo` | dichiara che l'entità presunta del cantiere è pari o superiore a 200… | h | a case, no recorded run | 1 |
+| `comunicazioni/obblighi_salute_sicurezza/ricade` | `pariSup200ggUomo` | dichiara che l'entità presunta del cantiere è pari o superiore a 200… | h | filled on the portal | 1 |
 | `comunicazioni/obblighi_salute_sicurezza/ricade` | `no_notifica` | dichiara che l'intervento non è soggetto all'invio della notifica | h | filled on the portal | 2 |
 | `comunicazioni/obblighi_salute_sicurezza/ricade` | `(nothing)` | dichiara che l'intervento è soggetto all'invio della notifica e perta… | m | filled on the portal | 6 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_oltre_500_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | m | filled on the portal | 1 |
@@ -172,7 +172,7 @@ On the portal, not mapped (dictionary work first):
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_sotto_60_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | m | filled on the portal | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | on the portal, not mapped |  |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | filled on the portal | 1 |
-| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | a case, no recorded run | 1 |
+| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | filled on the portal | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | filled on the portal | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | filled on the portal | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | filled on the portal | 1 |
@@ -273,10 +273,10 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | Schema choice | Alternative | Portal box | Match | State | Rehearsals |
 |---|---|---|---|---|---:|
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | h | filled on the portal | 3 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | a case, no recorded run | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | h | a case, no recorded run | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `assoggettato_scia` | interventi assoggettati a Segnalazione Certificata di Inizio Attività… | h | a case, no recorded run | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | h | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `assoggettato_scia` | interventi assoggettati a Segnalazione Certificata di Inizio Attività… | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `conforme_disciplina_urbanistica` | intervento realizzato, ai sensi dell'articolo 36, comma 1 del d.P.R.… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `deroga_pianificazione_urbanistica` | intervento in deroga alle previsioni degli strumenti di pianificazion… | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `titolo_unico` | titolo unico | h | filled on the portal | 1 |
@@ -291,9 +291,9 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `fabbricati` | Nuovo Catasto Edilizio Urbano | h | filled on the portal | 36 |
 | `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | on the portal, not mapped |  |
 | `dichiarazioni/opere_previste` | `no_parti_comuni` | non riguardano parti comuni | h | filled on the portal | 4 |
-| `dichiarazioni/opere_previste` | `parti_comuni_condominio` | riguardano le parti comuni di un fabbricato condominiale (1) | h | a case, no recorded run | 1 |
+| `dichiarazioni/opere_previste` | `parti_comuni_condominio` | riguardano le parti comuni di un fabbricato condominiale (1) | h | filled on the portal | 1 |
 | `dichiarazioni/opere_previste` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | filled on the portal | 1 |
-| `dichiarazioni/opere_previste` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | a case, no recorded run | 1 |
+| `dichiarazioni/opere_previste` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | filled on the portal | 1 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `nuova_costruzione_area_libera_check` | che le opere riguardano un intervento di nuova costruzione su area li… | h | mapped, no case yet |  |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `(nothing)` | absence: leave P037 unticked | h | no portal box |  |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `oggetto_titolo_pratiche_edilizie` | che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o prati… | h | filled on the portal | 4 |
@@ -304,24 +304,24 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | mapped, no case yet |  |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `pienamente_conforme` | pienamente conforme alla documentazione dello stato legittimo o di fa… | h | filled on the portal | 3 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `conforme_documentazione` | conforme alla documentazione dello stato legittimo o di fatto legitti… | h | filled on the portal | 1 |
-| `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_gratuito` | è a titolo gratuito | h | a case, no recorded run | 1 |
+| `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_gratuito` | è a titolo gratuito | h | filled on the portal | 1 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_oneroso` | è a titolo oneroso e pertanto | h | filled on the portal | 4 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `calcolo_sportello` | chiede allo Sportello Unico di effettuare il calcolo del contributo d… | h | filled on the portal | 4 |
-| `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `calcolo_preventivo` | allega il prospetto di calcolo preventivo del contributo di costruzio… | h | a case, no recorded run | 1 |
+| `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `calcolo_preventivo` | allega il prospetto di calcolo preventivo del contributo di costruzio… | h | filled on the portal | 1 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `momento_ritiro` | dichiara che il versamento del contributo di costruzione sarà effettu… | h | filled on the portal | 4 |
-| `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `chiede_rateizzazione` | chiede la rateizzazione del contributo di costruzione secondo le moda… | h | a case, no recorded run | 1 |
+| `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `chiede_rateizzazione` | chiede la rateizzazione del contributo di costruzione secondo le moda… | h | filled on the portal | 1 |
 | `dichiarazioni/imprese_esecutrici` | `da_soggetti_coinvolti` | i lavori saranno eseguiti/sono eseguiti dalla/e impresa/e indicata/e… | h | filled on the portal | 4 |
 | `dichiarazioni/imprese_esecutrici` | `prima_inizio_lavori` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv… | h | on the portal, not mapped |  |
-| `dichiarazioni/obblighi_salute_sicurezza_pdc` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | a case, no recorded run | 1 |
+| `dichiarazioni/obblighi_salute_sicurezza_pdc` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza_pdc` | `(nothing)` | absence; P091/P092 are other elements | h | no portal box |  |
 | `dichiarazioni/obblighi_salute_sicurezza_pdc/ricade` | `inf200ggUomo` | dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-… | h | filled on the portal | 7 |
-| `dichiarazioni/obblighi_salute_sicurezza_pdc/ricade` | `pariSup200ggUomo` | dichiara che l'entità presunta del cantiere è pari o superiore a 200… | h | a case, no recorded run | 1 |
+| `dichiarazioni/obblighi_salute_sicurezza_pdc/ricade` | `pariSup200ggUomo` | dichiara che l'entità presunta del cantiere è pari o superiore a 200… | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza_pdc/ricade` | `no_notifica` | dichiara che l'intervento non è soggetto all'invio della notifica | h | filled on the portal | 2 |
 | `dichiarazioni/obblighi_salute_sicurezza_pdc/ricade` | `notifica` | dichiara che l'intervento è soggetto all'invio della notifica | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `no_mutamento_destinazione_uso` | non comportano mutamento di destinazione d’uso di una singola unità i… | h | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_stessa_categoria` | comportano mutamento di destinazione d’uso di una singola unità immob… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_stessa_categoria` | comportano mutamento di destinazione d’uso di una singola unità immob… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_tra_categorie` | comportano mutamento di destinazione d’uso di una singola unità immob… | m | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_intero_immobile_stessa_categoria` | comportano mutamento di destinazione d’uso di un intero immobile all’… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_intero_immobile_stessa_categoria` | comportano mutamento di destinazione d’uso di un intero immobile all’… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_oltre_500_mq` | 2%, per le U.I. > 500 mq di superficie utile ; | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_500_a_300_mq` | 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_300_a_100_mq` | 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; | h | mapped, no case yet |  |
@@ -356,26 +356,26 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `ha_rilevanza_strutturale` | no portal box | h | no portal box |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `autorizzazione_sismica` | no portal box | h | no portal box |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `istanza_autorizzazione` | no portal box | h | no portal box |  |
-| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `dichiara` | dichiara che l’intervento da sanare non richiede variazione dell’iscr… | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `comunica` | comunica gli estremi della dichiarazione per l’iscrizione al catasto | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `dichiara` | dichiara che l’intervento da sanare non richiede variazione dell’iscr… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `comunica` | comunica gli estremi della dichiarazione per l’iscrizione al catasto | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `si_impegna` | si impegna a presentare la dichiarazione per l’iscrizione al catasto… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti` | `non_comporta_impianti` | Non comporta l'installazione, la trasformazione o l'ampliamento di im… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti` | `comporta_impianti` | Comporta l'installazione, la trasformazione o l'ampliamento dei segue… | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `non_soggetto` | non è soggetto agli obblighi di presentazione del progetto | m | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `soggetto` | è soggetto agli obblighi di presentazione del progetto e pertanto | m | filled on the portal | 2 |
-| `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_risparmio_energetico` | non è soggetto al deposito del progetto e della relazione tecnica di… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_risparmio_energetico` | non è soggetto al deposito del progetto e della relazione tecnica di… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_risparmio_energetico` | è soggetto all'applicazione dell'articolo 125 del d.P.R. n. 380/2001… | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_fonti_rinnovabili` | non è soggetto all'applicazione del d.lgs. n. 28/2011, in quanto non… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_fonti_rinnovabili` | è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto: | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_art_8` | Non rientra nell'ambito di applicazione dell'articolo 8 della l. n. 4… | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_art_8` | Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1… | h | mapped, no case yet |  |
-| `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_1997_12_05` | non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_1997_12_05` | non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_1997_12_05` | rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_sup_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_prevenzione_incendi` | non è soggetto alle norme di prevenzione incendi | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_prevenzione_incendi` | è soggetto alle norme tecniche di prevenzione incendi e le stesse son… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/prevenzione_incendi` | `parziale_copertura_prevenzione_incendi` | presenta caratteristiche tali da non consentire l'integrale osservanz… | m | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/prevenzione_incendi` | `parziale_copertura_prevenzione_incendi` | presenta caratteristiche tali da non consentire l'integrale osservanz… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_valutazione_progetto` | non è soggetto alla valutazione del progetto da parte del Comando Pro… | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_valutazione_progetto` | è soggetto alla valutazione del progetto da parte del Comando Provinc… | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `variante_progetto` | costituisce variante e il sottoscritto assevera che le modifiche non… | h | on the portal, not mapped |  |
@@ -389,7 +389,7 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere` | non prevede la realizzazione di opere di conglomerato cementizio arma… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere` | prevede la realizzazione di opere di conglomerato cementizio armato,… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere_normativa_regionale` | non prevede opere da denunciare o autorizzare ai sensi degli articoli… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `variante_sostanziale` | costituisce una variante non sostanziale riguardante parti struttural… | l | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `variante_sostanziale` | costituisce una variante non sostanziale riguardante parti struttural… | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_normativa_regionale` | prevede opere in zona sismica da denunciare ai sensi dell'articolo 93… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `non_richiede_indagini` | non richiede indagini ambientali preventive in relazione alle attivit… | h | filled on the portal | 4 |
@@ -406,25 +406,25 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_ordinario` | è assoggettato al procedimento ordinario di autorizzazione paesaggist… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_accertamento` | è assoggettato al procedimento di accertamento della compatibilità pa… | h | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `non_sottoposto_tutela` | non è sottoposto a tutela | h | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela` | è sottoposto a tutela | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela_allegato_rilascio_parere` | è sottoposto a tutela | l | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela` | è sottoposto a tutela | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela_allegato_rilascio_parere` | è sottoposto a tutela | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `non_ricade_tutela` | non ricade in area tutelata | h | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `ricade_tutela` | ricade in area tutelata, ma le opere non comportano alterazione dei l… | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `sottoposto_disposizioni` | è sottoposto alle relative disposizioni e pertanto: | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `ricade_tutela` | ricade in area tutelata, ma le opere non comportano alterazione dei l… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `sottoposto_disposizioni` | è sottoposto alle relative disposizioni e pertanto: | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `non_sottoposto_tutela` | non è sottoposta a tutela | m | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `tutela_senza_autorizzazione` | è sottoposta a tutela e l'intervento rientra nei casi eseguibili senz… | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `sottoposto_tutela` | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `tutela_senza_autorizzazione` | è sottoposta a tutela e l'intervento rientra nei casi eseguibili senz… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `sottoposto_tutela` | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/vincolo_idraulico/[vincolo_…` | `non_sottoposto_tutela` | non è sottoposta a tutela | l | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/vincolo_idraulico/[vincolo_…` | `sottoposto_tutela` | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/vincolo_idraulico/[vincolo_…` | `sottoposto_tutela` | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/natura_2000/[natura_2000_ct…` | `non_soggetto_vinca` | non è soggetto a Valutazione d'incidenza (VINCA) | h | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/natura_2000/[natura_2000_ct…` | `soggetto_vinca` | è soggetto a Valutazione d'incidenza (VINCA) | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/natura_2000/[natura_2000_ct…` | `soggetto_vinca` | è soggetto a Valutazione d'incidenza (VINCA) | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `non_ricade` | l'intervento non ricade nella fascia di rispetto | h | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `ricade_consentito` | l'intervento ricade nella fascia di rispetto ed è consentito | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `ricade_consentito` | l'intervento ricade nella fascia di rispetto ed è consentito | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `ricade_non_consentito` | l'intervento ricade in fascia di rispetto cimiteriale e non è consent… | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/rischio_rilevante/[rischio_…` | `assenza_attivita` | nel comune NON è presente un'attività a rischio d'incidente rilevante | h | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/rischio_rilevante/[rischio_…` | `presenza_attivita_no_area_danno` | nel comune E' presente un'attività a rischio d'incidente rilevante e… | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/rischio_rilevante/[rischio_…` | `non_ricade_area_danno` | l'intervento NON ricade nell'area di danno | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/rischio_rilevante/[rischio_…` | `ricade_area_danno` | l'intervento ricade in area di danno | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/rischio_rilevante/[rischio_…` | `presenza_attivita_no_area_danno` | nel comune E' presente un'attività a rischio d'incidente rilevante e… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/rischio_rilevante/[rischio_…` | `non_ricade_area_danno` | l'intervento NON ricade nell'area di danno | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/rischio_rilevante/[rischio_…` | `ricade_area_danno` | l'intervento ricade in area di danno | h | filled on the portal | 1 |
 
 Portal boxes of the Permesso di costruire no schema alternative matched and no case ticks:
 
@@ -615,25 +615,25 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/presentazione` | `scia_condizionata` | portal section b has only a "per presa visione" checkbox; no choice a… | h | no portal box |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | m | filled on the portal | 7 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | a case, no recorded run | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | a case, no recorded run | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | m | filled on the portal | 7 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | a case, no recorded run | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | a case, no recorded run | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | m | filled on the portal | 7 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | a case, no recorded run | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | a case, no recorded run | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_permesso_di_costruire_nr_protocollo` | variante in corso d'opera a permesso di costruire che non incide sui… | m | a case, no recorded run | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_permesso_di_costruire_data_protocollo` | variante in corso d'opera a permesso di costruire che non incide sui… | m | a case, no recorded run | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_permesso_di_costruire_nr_protocollo` | variante in corso d'opera a permesso di costruire che non incide sui… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_permesso_di_costruire_data_protocollo` | variante in corso d'opera a permesso di costruire che non incide sui… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_scia_nr_protocollo` | variante in corso d’opera a SCIA che non costituisce variazione essen… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_scia_data_protocollo` | variante in corso d’opera a SCIA che non costituisce variazione essen… | m | filled on the portal | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_variazione_essenziale` | variante in corso d’opera a SCIA che si configura come variazione ess… | h | a case, no recorded run | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_variazione_essenziale` | variante in corso d’opera a SCIA che si configura come variazione ess… | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `senza_opere_categoria_singola_unita` | senza opere (o con opere riconducibili agli interventi di cui all'art… | h | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `senza_opere_tra_categorie_singola_unita` | senza opere (o con opere riconducibili agli interventi di cui all'art… | h | a case, no recorded run | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `con_opere_categoria_singola_unita` | con opere riconducibili agli interventi di cui all'articolo 6-bis di… | h | a case, no recorded run | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `con_opere_tra_categorie_singola_unita` | con opere riconducibili agli interventi di cui all'articolo 6-bis di… | h | a case, no recorded run | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `senza_opere_tra_categorie_singola_unita` | senza opere (o con opere riconducibili agli interventi di cui all'art… | h | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `con_opere_categoria_singola_unita` | con opere riconducibili agli interventi di cui all'articolo 6-bis di… | h | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `con_opere_tra_categorie_singola_unita` | con opere riconducibili agli interventi di cui all'articolo 6-bis di… | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `con_opere` | con opere riconducibili agli interventi di cui di cui all'articolo 6-… | h | mapped, no case yet |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `senza_opere` | senza opere (o con opere riconducibili agli interventi di cui all'art… | h | mapped, no case yet |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `procedimento_automatizzato` | portal has no such option | h | no portal box |  |
@@ -648,31 +648,31 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | on the portal, not mapped |  |
 | `dichiarazioni/opere_previste` | `no_parti_comuni` | non riguardano parti comuni | h | filled on the portal | 9 |
 | `dichiarazioni/opere_previste` | `parti_comuni_condominio` | riguardano le parti comuni di un fabbricato condominiale (1) | h | filled on the portal | 1 |
-| `dichiarazioni/opere_previste` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | a case, no recorded run | 1 |
-| `dichiarazioni/opere_previste` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | a case, no recorded run | 1 |
+| `dichiarazioni/opere_previste` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | filled on the portal | 1 |
+| `dichiarazioni/opere_previste` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | filled on the portal | 1 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `oggetto_titolo_pratiche_edilizie` | che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o prati… | h | filled on the portal | 9 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | a case, no recorded run | 1 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | a case, no recorded run | 1 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | a case, no recorded run | 1 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | a case, no recorded run | 1 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | a case, no recorded run | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | filled on the portal | 1 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `pienamente_conforme` | pienamente conforme alla documentazione dello stato legittimo o di fa… | h | filled on the portal | 6 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `conforme_documentazione` | conforme alla documentazione dello stato legittimo o di fatto legitti… | h | filled on the portal | 3 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_gratuito` | l'intervento da realizzare è a titolo gratuito | h | filled on the portal | 4 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `(nothing)` | l'intervento da realizzare è a titolo oneroso e pertanto | l | filled on the portal | 6 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `calcolos_portello` | chiede allo Sportello unico di effettuare il calcolo del contributo d… | h | filled on the portal | 2 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `calcolo_preventivo` | allega il prospetto di calcolo preventivo del contributo di costruzio… | h | filled on the portal | 5 |
-| `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `allega_attestazione` | si allega l'attestazione del completo versamento del contributo dovuto | h | a case, no recorded run | 1 |
-| `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `trasmette_prima_inizio_lavori` | si riserva di trasmettere prima dell'inizio dei lavori l'attestazione… | h | a case, no recorded run | 1 |
+| `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `allega_attestazione` | si allega l'attestazione del completo versamento del contributo dovuto | h | filled on the portal | 1 |
+| `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `trasmette_prima_inizio_lavori` | si riserva di trasmettere prima dell'inizio dei lavori l'attestazione… | h | filled on the portal | 1 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `chiede_rateizzazione` | chiede la rateizzazione del contributo di costruzione secondo le moda… | h | filled on the portal | 4 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `corrisponde_in_corso` | si impegna a corrispondere il costo di costruzione in corso di esecuz… | h | filled on the portal | 1 |
 | `dichiarazioni/imprese_esecutrici` | `da_soggetti_coinvolti` | i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata… | h | filled on the portal | 9 |
 | `dichiarazioni/imprese_esecutrici` | `(nothing)` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp… | l | on the portal, not mapped |  |
-| `dichiarazioni/obblighi_salute_sicurezza` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | a case, no recorded run | 1 |
+| `dichiarazioni/obblighi_salute_sicurezza` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza` | `(nothing)` | ricade nell'ambito di applicazione delle norme in materia di salute e… | l | filled on the portal | 9 |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `inf200ggUomo` | dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-… | h | filled on the portal | 9 |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `pariSup200ggUomo` | dichiara che l'entità presunta del cantiere è pari o superiore a 200… | h | filled on the portal | 1 |
-| `dichiarazioni/obblighi_salute_sicurezza/ricade` | `no_notifica` | dichiara che l'intervento non è soggetto all'invio della notifica | h | a case, no recorded run | 1 |
+| `dichiarazioni/obblighi_salute_sicurezza/ricade` | `no_notifica` | dichiara che l'intervento non è soggetto all'invio della notifica | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `(nothing)` | dichiara che l'intervento è soggetto all'invio della notifica | l | filled on the portal | 9 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `no_mutamento_destinazione_uso_straordinaria` | Si specifica che l’intervento non comporta mutamento di destinazione… | m | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_straordinaria` | mutamento di destinazione d'uso, nel rispetto delle eventuali normati… | l | filled on the portal | 2 |
@@ -687,7 +687,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_sotto_60_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
@@ -700,38 +700,38 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `zona_sismica_media_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `no_rilevanza_strutturale` | portal has no such option in sanatoria section | m | no portal box |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `ha_rilevanza_strutturale` | portal has no such option in sanatoria section | m | no portal box |  |
-| `relazione_tecnica_asseverazione/sicurezza_impianti` | `non_comporta_impianti` | Non comporta l'installazione, la trasformazione o l'ampliamento di im… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/sicurezza_impianti` | `non_comporta_impianti` | Non comporta l'installazione, la trasformazione o l'ampliamento di im… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti` | `comporta_impianti` | Comporta l'installazione, la trasformazione o l'ampliamento dei segue… | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `non_soggetto` | non è soggetto agli obblighi di presentazione del progetto | m | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `soggetto` | è soggetto agli obblighi di presentazione del progetto e pertanto | m | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_risparmio_energetico` | non è soggetto al deposito del progetto e della relazione tecnica di… | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_risparmio_energetico` | è soggetto al deposito del progetto e della relazione tecnica di cui… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_fonti_rinnovabili` | non è soggetto all'applicazione del d.lgs. n. 28/2011, in quanto non… | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_fonti_rinnovabili` | è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto: | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_fonti_rinnovabili` | è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto: | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_art_8` | Non rientra nell'ambito di applicazione dell'articolo 8 della l. n. 4… | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_art_8` | Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_art_8` | Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_1997_12_05` | non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_1997_12_05` | rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_1997_12_05` | rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_sup_6000` | le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo… | l | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_prevenzione_incendi` | non è soggetto alle norme di prevenzione incendi | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_prevenzione_incendi` | è soggetto alle norme tecniche di prevenzione incendi e le stesse son… | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/prevenzione_incendi` | `parziale_copertura_prevenzione_incendi` | presenta caratteristiche tali da non consentire l'integrale osservanz… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_prevenzione_incendi` | è soggetto alle norme tecniche di prevenzione incendi e le stesse son… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/prevenzione_incendi` | `parziale_copertura_prevenzione_incendi` | presenta caratteristiche tali da non consentire l'integrale osservanz… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_valutazione_progetto` | non è soggetto alla valutazione del progetto da parte del Comando Pro… | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_valutazione_progetto` | è soggetto alla valutazione del progetto da parte del Comando Provinc… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_valutazione_progetto` | è soggetto alla valutazione del progetto da parte del Comando Provinc… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `variante_progetto` | costituisce variante e il sottoscritto assevera che le modifiche non… | h | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/amianto` | `non_interessano` | non interessano parti di edifici con presenza di fibre di amianto | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/amianto` | `(nothing)` | interessano parti di edifici con presenza di fibre di amianto e che è… | l | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/amianto` | `(nothing)` | interessano parti di edifici con presenza di fibre di amianto e che è… | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/amianto/interessano` | `piano_di_lavoro_prima_inizio_lavori` | no separate box; P203 is the whole interessano branch | l | no portal box |  |
-| `relazione_tecnica_asseverazione/amianto/interessano` | `(nothing)` | in allegato alla presente relazione di asseverazione | l | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/amianto/interessano` | `(nothing)` | in allegato alla presente relazione di asseverazione | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `conforme` | è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe p… | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `non_conforme` | non è conforme ai requisiti igienico-sanitari e alle ipotesi di derog… | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `conforme_art_24` | è conforme ai requisiti igienico-sanitari previsti dalla normativa vi… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `non_conforme` | non è conforme ai requisiti igienico-sanitari e alle ipotesi di derog… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `conforme_art_24` | è conforme ai requisiti igienico-sanitari previsti dalla normativa vi… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere` | non prevede la realizzazione di opere di conglomerato cementizio arma… | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere` | prevede la realizzazione di opere di conglomerato cementizio armato,… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere` | prevede la realizzazione di opere di conglomerato cementizio armato,… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere_normativa_regionale` | non prevede opere da denunciare o autorizzare ai sensi degli articoli… | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `variante_sostanziale` | costituisce una variante non sostanziale riguardante parti struttural… | m | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_normativa_regionale` | prevede opere in zona sismica da denunciare ai sensi dell'articolo 93… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `variante_sostanziale` | costituisce una variante non sostanziale riguardante parti struttural… | m | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_normativa_regionale` | prevede opere in zona sismica da denunciare ai sensi dell'articolo 93… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistica` | `non_ricade_in_zona_tutelata` | NON ricade in zona sottoposta a tutela | h | filled on the portal | 2 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistica` | `non_soggetto_autorizzazione` | ricade in zona tutelata, ma le opere non comportano alterazione dei l… | h | filled on the portal | 1 |
@@ -742,10 +742,10 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela` | è sottoposto a tutela | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela_allegato_rilascio_parere` | Si allega la documentazione necessaria ai fini del rilascio del parer… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `non_ricade_tutela` | non ricade in area tutelata | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `ricade_tutela` | ricade in area tutelata, ma le opere non comportano alterazione dei l… | m | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `ricade_tutela` | ricade in area tutelata, ma le opere non comportano alterazione dei l… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `sottoposto_disposizioni` | è sottoposto alle relative disposizioni | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `non_sottoposto_tutela` | non è sottoposta a tutela | m | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `tutela_senza_autorizzazione` | è sottoposta a tutela e l'intervento rientra nei casi eseguibili senz… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `tutela_senza_autorizzazione` | è sottoposta a tutela e l'intervento rientra nei casi eseguibili senz… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `sottoposto_tutela` | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/vincolo_idraulico/[vincolo_…` | `non_sottoposto_tutela` | non è sottoposta a tutela | m | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/vincolo_idraulico/[vincolo_…` | `sottoposto_tutela` | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione… | h | filled on the portal | 1 |
@@ -753,10 +753,10 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/natura_2000/[natura_2000_ct…` | `soggetto_vinca` | è soggetto a Valutazione d'incidenza (VINCA) | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `non_ricade` | l'intervento non ricade nella fascia di rispetto | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `ricade_consentito` | l'intervento ricade nella fascia di rispetto ed è consentito | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `ricade_non_consentito` | l'intervento ricade in fascia di rispetto cimiteriale e non è consent… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `ricade_non_consentito` | l'intervento ricade in fascia di rispetto cimiteriale e non è consent… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/rischio_rilevante` | `assenza_attivita` | nel comune NON è presente un'attività a rischio d'incidente rilevante | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/rischio_rilevante` | `presenza_attivita_no_area_danno` | nel comune E' presente un'attività a rischio d'incidente rilevante e… | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/rischio_rilevante/presenza_…` | `non_ricade_area_danno` | l'intervento NON ricade nell'area di danno | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/rischio_rilevante` | `presenza_attivita_no_area_danno` | nel comune E' presente un'attività a rischio d'incidente rilevante e… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/rischio_rilevante/presenza_…` | `non_ricade_area_danno` | l'intervento NON ricade nell'area di danno | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/rischio_rilevante/presenza_…` | `ricade_area_danno` | l'intervento ricade in area di danno | h | filled on the portal | 1 |
 
 Portal boxes of the SCIA no schema alternative matched and no case ticks:
@@ -834,22 +834,22 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `dichiarazioni/presentazione/[presentazione_scia_alternativa…` | `scia_condizionata` | no portal option; P011 is only an acknowledgement | m | no portal box |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `noMutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | h | filled on the portal | 7 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoCategoriaSingolaUnita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoTraCategorieSingolaUnita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | a case, no recorded run | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoCategoriaInteroImmobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | h | a case, no recorded run | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoTraCategorieSingolaUnita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoCategoriaInteroImmobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `procedimentoAutomatizzato` | portal has no such option (P012 only states the SCIA alt. eligibility) | m | no portal box |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `procedimentoOrdinario` | portal has no such option | m | no portal box |  |
 | `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `fabbricati` | Nuovo Catasto Edilizio Urbano | h | filled on the portal | 36 |
 | `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | on the portal, not mapped |  |
 | `dichiarazioni/opere_previste` | `no_parti_comuni` | non riguardano parti comuni | h | filled on the portal | 9 |
 | `dichiarazioni/opere_previste` | `parti_comuni_condominio` | riguardano le parti comuni di un fabbricato condominiale (1) | h | filled on the portal | 1 |
-| `dichiarazioni/opere_previste` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | a case, no recorded run | 1 |
-| `dichiarazioni/opere_previste` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | a case, no recorded run | 1 |
+| `dichiarazioni/opere_previste` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | filled on the portal | 1 |
+| `dichiarazioni/opere_previste` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | filled on the portal | 1 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `oggetto_titolo_pratiche_edilizie` | che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o prati… | h | filled on the portal | 9 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | a case, no recorded run | 1 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | a case, no recorded run | 1 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | a case, no recorded run | 1 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | a case, no recorded run | 1 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | a case, no recorded run | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | filled on the portal | 1 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `pienamente_conforme` | pienamente conforme alla documentazione dello stato legittimo o di fa… | h | filled on the portal | 6 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `conforme_documentazione` | conforme alla documentazione dello stato legittimo o di fatto legitti… | h | filled on the portal | 3 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_gratuito` | L'intervento da realizzare è a titolo gratuito | h | filled on the portal | 4 |
@@ -861,11 +861,11 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `corrisponde_in_corso` | si impegna a corrispondere il costo di costruzione in corso di esecuz… | h | filled on the portal | 1 |
 | `dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_d…` | `da_soggetti_coinvolti` | i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata… | h | filled on the portal | 9 |
 | `dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_d…` | `(nothing)` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp… | l | on the portal, not mapped |  |
-| `dichiarazioni/obblighi_salute_sicurezza` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | a case, no recorded run | 1 |
+| `dichiarazioni/obblighi_salute_sicurezza` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza` | `(nothing)` | ricade nell'ambito di applicazione delle norme in materia di salute e… | l | filled on the portal | 9 |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `inf200ggUomo` | dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-… | h | filled on the portal | 9 |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `pariSup200ggUomo` | dichiara che l'entità presunta del cantiere è pari o superiore a 200… | h | filled on the portal | 1 |
-| `dichiarazioni/obblighi_salute_sicurezza/ricade` | `no_notifica` | dichiara che l'intervento non è soggetto all'invio della notifica | h | a case, no recorded run | 1 |
+| `dichiarazioni/obblighi_salute_sicurezza/ricade` | `no_notifica` | dichiara che l'intervento non è soggetto all'invio della notifica | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `notifica` | dichiara che l'intervento è soggetto all'invio della notifica | h | filled on the portal | 9 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `no_mutamento_destinazione_uso_ristrutturazione_edilizia` | non comporta mutamento di destinazione d’uso | m | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_ristrutturazione_edilizia` | comporta mutamento di destinazione d’uso | m | filled on the portal | 1 |
@@ -889,11 +889,11 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `allega_autorizzazione_sismica` | no such box in the worksheet | l | no portal box |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `silenzio_assenso_autorizzazione` | no such box in the worksheet | l | no portal box |  |
-| `relazione_tecnica_asseverazione/sicurezza_impianti` | `non_comporta_impianti` | Non comporta l'installazione, la trasformazione o l'ampliamento di im… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/sicurezza_impianti` | `non_comporta_impianti` | Non comporta l'installazione, la trasformazione o l'ampliamento di im… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti` | `comporta_impianti` | Comporta l'installazione, la trasformazione o l'ampliamento dei segue… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `non_soggetto` | non è soggetto agli obblighi di presentazione del progetto | m | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/sicurezza_impianti/comporta…` | `soggetto` | è soggetto agli obblighi di presentazione del progetto e pertanto | m | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_risparmio_energetico` | non è soggetto al deposito del progetto e della relazione tecnica di… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_risparmio_energetico` | non è soggetto al deposito del progetto e della relazione tecnica di… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_risparmio_energetico` | è soggetto al deposito del progetto e della relazione tecnica di cui… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `non_soggetto_fonti_rinnovabili` | non è soggetto all'applicazione del d.lgs. n. 28/2011, in quanto non… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/consumi_energetici/[consumi…` | `soggetto_fonti_rinnovabili` | è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto: | h | filled on the portal | 1 |
@@ -905,7 +905,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_sup_6000` | le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo… | l | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_prevenzione_incendi` | non è soggetto alle norme di prevenzione incendi | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_prevenzione_incendi` | è soggetto alle norme tecniche di prevenzione incendi e le stesse son… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/prevenzione_incendi` | `parziale_copertura_prevenzione_incendi` | presenta caratteristiche tali da non consentire l'integrale osservanz… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/prevenzione_incendi` | `parziale_copertura_prevenzione_incendi` | presenta caratteristiche tali da non consentire l'integrale osservanz… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_valutazione_progetto` | non è soggetto alla valutazione del progetto da parte del Comando Pro… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_valutazione_progetto` | è soggetto alla valutazione del progetto da parte del Comando Provinc… | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `variante_progetto` | costituisce variante e il sottoscritto assevera che le modifiche non… | h | on the portal, not mapped |  |
@@ -915,11 +915,11 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/amianto/interessano` | `(nothing)` | in allegato alla presente relazione di asseverazione | l | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `conforme` | è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe p… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `non_conforme` | non è conforme ai requisiti igienico-sanitari e alle ipotesi di derog… | h | mapped, no case yet |  |
-| `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `conforme_art_24` | è conforme ai requisiti igienico-sanitari previsti dalla normativa vi… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `conforme_art_24` | è conforme ai requisiti igienico-sanitari previsti dalla normativa vi… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere` | non prevede la realizzazione di opere di conglomerato cementizio arma… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere` | prevede la realizzazione di opere di conglomerato cementizio armato,… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere_normativa_regionale` | non prevede opere da denunciare o autorizzare ai sensi degli articoli… | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `variante_sostanziale` | costituisce una variante non sostanziale riguardante parti struttural… | l | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere_normativa_regionale` | non prevede opere da denunciare o autorizzare ai sensi degli articoli… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `variante_sostanziale` | costituisce una variante non sostanziale riguardante parti struttural… | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_normativa_regionale` | prevede opere in zona sismica da denunciare ai sensi dell'articolo 93… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `non_richiede_indagini` | non richiede indagini ambientali preventive in relazione alle attivit… | h | filled on the portal | 3 |
@@ -936,25 +936,25 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_ordinario` | è assoggettato al procedimento ordinario di autorizzazione paesaggist… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_accertamento` | portal has no accertamento option | h | no portal box |  |
 | `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `non_sottoposto_tutela` | non è sottoposto a tutela | h | filled on the portal | 3 |
-| `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela` | è sottoposto a tutela | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela_allegato_rilascio_parere` | Si allega la documentazione necessaria ai fini del rilascio del parer… | m | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela` | è sottoposto a tutela | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/autorizzazione_soprintenden…` | `sottoposto_tutela_allegato_rilascio_parere` | Si allega la documentazione necessaria ai fini del rilascio del parer… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `non_ricade_tutela` | non ricade in area tutelata | h | filled on the portal | 3 |
-| `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `ricade_tutela` | ricade in area tutelata, ma le opere non comportano alterazione dei l… | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `sottoposto_disposizioni` | è sottoposto alle relative disposizioni | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `ricade_tutela` | ricade in area tutelata, ma le opere non comportano alterazione dei l… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/area_protetta/[area_protett…` | `sottoposto_disposizioni` | è sottoposto alle relative disposizioni | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `non_sottoposto_tutela` | non è sottoposta a tutela | h | filled on the portal | 3 |
-| `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `tutela_senza_autorizzazione` | è sottoposta a tutela e l'intervento rientra nei casi eseguibili senz… | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `sottoposto_tutela` | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `tutela_senza_autorizzazione` | è sottoposta a tutela e l'intervento rientra nei casi eseguibili senz… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/vincolo_idrogeologico/[vinc…` | `sottoposto_tutela` | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/vincolo_idraulico/[vincolo_…` | `non_sottoposto_tutela` | non è sottoposta a tutela | l | filled on the portal | 3 |
-| `relazione_tecnica_asseverazione/vincolo_idraulico/[vincolo_…` | `sottoposto_tutela` | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione… | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/vincolo_idraulico/[vincolo_…` | `sottoposto_tutela` | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/natura_2000/[natura_2000_ct…` | `non_soggetto_vinca` | non è soggetto a Valutazione d'incidenza (VINCA) | h | filled on the portal | 3 |
-| `relazione_tecnica_asseverazione/natura_2000/[natura_2000_ct…` | `soggetto_vinca` | è soggetto a Valutazione d'incidenza (VINCA) | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/natura_2000/[natura_2000_ct…` | `soggetto_vinca` | è soggetto a Valutazione d'incidenza (VINCA) | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `non_ricade` | l'intervento non ricade nella fascia di rispetto | h | filled on the portal | 3 |
-| `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `ricade_consentito` | l'intervento ricade nella fascia di rispetto ed è consentito | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `ricade_consentito` | l'intervento ricade nella fascia di rispetto ed è consentito | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispe…` | `ricade_non_consentito` | l'intervento ricade in fascia di rispetto cimiteriale e non è consent… | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/rischio_rilevante` | `assenza_attivita` | nel comune NON è presente un'attività a rischio d'incidente rilevante | h | filled on the portal | 3 |
-| `relazione_tecnica_asseverazione/rischio_rilevante` | `presenza_attivita_no_area_danno` | nel comune E' presente un'attività a rischio d'incidente rilevante e… | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/rischio_rilevante/presenza_…` | `non_ricade_area_danno` | l'intervento NON ricade nell'area di danno | h | a case, no recorded run | 1 |
-| `relazione_tecnica_asseverazione/rischio_rilevante/presenza_…` | `ricade_area_danno` | l'intervento ricade in area di danno | h | a case, no recorded run | 1 |
+| `relazione_tecnica_asseverazione/rischio_rilevante` | `presenza_attivita_no_area_danno` | nel comune E' presente un'attività a rischio d'incidente rilevante e… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/rischio_rilevante/presenza_…` | `non_ricade_area_danno` | l'intervento NON ricade nell'area di danno | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/rischio_rilevante/presenza_…` | `ricade_area_danno` | l'intervento ricade in area di danno | h | filled on the portal | 1 |
 
 Portal boxes of the SCIA alternativa no schema alternative matched and no case ticks:
 
@@ -1047,9 +1047,9 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 | `identificativi_immobile/dati_catastali` | `fabbricati` | Nuovo Catasto Edilizio Urbano | h | filled on the portal | 36 |
 | `identificativi_immobile/dati_catastali` | `terreni` | Nuovo Catasto Terreni | h | on the portal, not mapped |  |
 | `dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunica…` | `protocollo_comunicazione_fine_lavori` | che la comunicazione di fine lavori è stata già presentata | m | filled on the portal | 1 |
-| `dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunica…` | `data_fine_lavori` | che la presente segnalazione vale come comunicazione di fine lavori | m | a case, no recorded run | 1 |
-| `dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunica…` | `stato_lavori_completati` | completamente | h | a case, no recorded run | 1 |
-| `dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunica…` | `stato_lavori_parziale` | in forma parziale come da planimetria allegata | h | a case, no recorded run | 1 |
+| `dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunica…` | `data_fine_lavori` | che la presente segnalazione vale come comunicazione di fine lavori | m | filled on the portal | 1 |
+| `dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunica…` | `stato_lavori_completati` | completamente | h | filled on the portal | 1 |
+| `dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunica…` | `stato_lavori_parziale` | in forma parziale come da planimetria allegata | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_a/presentazione_inizio_lavori` | `scia_agibilita_immobile` | l'agibilità relativa all'immobile oggetto dell'intervento edilizio | m | filled on the portal | 1 |
 | `dichiarazioni_sezione_a/presentazione_inizio_lavori` | `scia_agibilita_parziale_edifici` | l'agibilità parziale relativa a singoli edifici o a singole porzioni… | m | filled on the portal | 1 |
 | `dichiarazioni_sezione_a/presentazione_inizio_lavori` | `scia_agibilita_parziale_singoli_immobili` | l'agibilità parziale relativa a singole unità immobiliari (art. 24, c… | m | filled on the portal | 1 |
@@ -1063,15 +1063,15 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 | `dichiarazioni_sezione_b/assevera` | `agibilita_immobile` | L'agibilità relativa all'immobile oggetto dell'intervento edilizio | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/assevera` | `agibilita_parziale_edifici` | L' agibilità parziale relativa a singoli edifici o singole porzioni d… | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/assevera` | `agibilita_parziale_singoli_immobili` | L'agibilità parziale relativa a singole unità immobiliari (U.I.), pur… | h | filled on the portal | 1 |
-| `dichiarazioni_sezione_b/sicurezza_impianti` | `nessun_impianto` | NON HA interessato gli impianti | h | a case, no recorded run | 1 |
+| `dichiarazioni_sezione_b/sicurezza_impianti` | `nessun_impianto` | NON HA interessato gli impianti | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/sicurezza_impianti` | `impianti_con_certificazione` | HA interessato i seguenti impianti dotati della certificazione di seg… | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/sicurezza_statica_sismica/[sicurezz…` | `non_ha_interessato_strutture` | non ha interessato le strutture dell'edificio | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/sicurezza_statica_sismica/[sicurezz…` | `(nothing)` | ha interessato le strutture dell'edificio e pertanto: | m | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/sicurezza_statica_sismica/[sicurezz…` | `certificato_collaudo_statico` | si allega certificato di collaudo statico (previsto dal d.m. 14 sette… | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/sicurezza_statica_sismica/[sicurezz…` | `estremi_collaudo_statico` | si comunicano gli estremi del certificato di collaudo statico | h | filled on the portal | 1 |
-| `dichiarazioni_sezione_b/sicurezza_statica_sismica/[sicurezz…` | `dichiarazione_esecuzione_interventi` | si allega la dichiarazione di regolare esecuzione per gli interventi… | h | a case, no recorded run | 1 |
+| `dichiarazioni_sezione_b/sicurezza_statica_sismica/[sicurezz…` | `dichiarazione_esecuzione_interventi` | si allega la dichiarazione di regolare esecuzione per gli interventi… | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/sicurezza_statica_sismica/[sicurezz…` | `estremi_dichiarazione_esecuzione_interventi` | si comunicano gli estremi della dichiarazione di regolare esecuzione… | h | filled on the portal | 1 |
-| `dichiarazioni_sezione_b/sicurezza_statica_sismica/[sicurezz…` | `no_collaudo_statico` | non si è proceduto al collaudo statico trattandosi di interventi stru… | h | a case, no recorded run | 1 |
+| `dichiarazioni_sezione_b/sicurezza_statica_sismica/[sicurezz…` | `no_collaudo_statico` | non si è proceduto al collaudo statico trattandosi di interventi stru… | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/prestazione_energetica/[prestazione…` | `non_soggetto_requisiti_minimi` | non è soggetto all'osservanza dei requisiti minimi di prestazione ene… | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/prestazione_energetica/[prestazione…` | `soggetto_requisiti_minimi` | è soggetto all'osservanza dei requisiti minimi di prestazione energet… | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/documentazione_catastale` | `non_comporta_variazione_iscrizione` | NON comporta variazione dell'iscrizione catastale | h | filled on the portal | 1 |
