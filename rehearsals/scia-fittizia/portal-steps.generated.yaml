@@ -42,8 +42,8 @@ asks:
   ricevuta_contributo: {type: file, question: The contributo di costruzione's payment receipt (PDF)}
   prospetto_contributo: {type: file, question: The prospetto di calcolo preventivo of the contributo di costruzione (PDF)}
   altri_tecnici: {type: yes_no, question: 'Are other technicians (structures, systems, acoustics, safety) already appointed for these works?', propose: 'false'}
-  altri_tecnici_quanti: {type: choice, question: 'How many other technicians? uno (`a:` in the job''s people); due (`a:` and `a2:`); tre (`a:`, `a2:` and `a3:`); piu di tre', options: [uno, due, tre, piu
-        di tre], propose: uno}
+  altri_tecnici_quanti: {type: choice, question: 'How many other technicians? uno (`a:` in the job''s people); due (`a:` and `a2:`); tre to otto (`a3:` up to `a8:` too); piu di otto', options: [uno, due,
+      tre, quattro, cinque, sei, sette, otto, piu di otto], propose: uno}
   altro_tecnico_incarico: {type: text, question: 'What is the other technician (`a:`) appointed for (the form''s "Incaricato della", e.g. progettazione strutturale)?'}
   altro_tecnico_dipendente: {type: yes_no, question: 'Does the other technician (`a:`) work as an employee of a firm or studio (the form''s "alle dipendenze di": the firm is `ad:` in the job''s people)?',
     propose: 'false'}
@@ -51,6 +51,16 @@ asks:
   altro_tecnico2_dipendente: {type: yes_no, question: 'Does the second other technician (`a2:`) work as an employee of a firm or studio (the firm is `ad2:`)?', propose: 'false'}
   altro_tecnico3_incarico: {type: text, question: 'What is the third other technician (`a3:`) appointed for?'}
   altro_tecnico3_dipendente: {type: yes_no, question: 'Does the third other technician (`a3:`) work as an employee of a firm or studio (the firm is `ad3:`)?', propose: 'false'}
+  altro_tecnico4_incarico: {type: text, question: 'What is the fourth other technician (`a4:`) appointed for?'}
+  altro_tecnico4_dipendente: {type: yes_no, question: 'Does the fourth other technician (`a4:`) work as an employee of a firm or studio (the firm is `ad4:`)?', propose: 'false'}
+  altro_tecnico5_incarico: {type: text, question: 'What is the fifth other technician (`a5:`) appointed for?'}
+  altro_tecnico5_dipendente: {type: yes_no, question: 'Does the fifth other technician (`a5:`) work as an employee of a firm or studio (the firm is `ad5:`)?', propose: 'false'}
+  altro_tecnico6_incarico: {type: text, question: 'What is the sixth other technician (`a6:`) appointed for?'}
+  altro_tecnico6_dipendente: {type: yes_no, question: 'Does the sixth other technician (`a6:`) work as an employee of a firm or studio (the firm is `ad6:`)?', propose: 'false'}
+  altro_tecnico7_incarico: {type: text, question: 'What is the seventh other technician (`a7:`) appointed for?'}
+  altro_tecnico7_dipendente: {type: yes_no, question: 'Does the seventh other technician (`a7:`) work as an employee of a firm or studio (the firm is `ad7:`)?', propose: 'false'}
+  altro_tecnico8_incarico: {type: text, question: 'What is the eighth other technician (`a8:`) appointed for?'}
+  altro_tecnico8_dipendente: {type: yes_no, question: 'Does the eighth other technician (`a8:`) work as an employee of a firm or studio (the firm is `ad8:`)?', propose: 'false'}
   lavori_in_proprio: {type: yes_no, question: 'Are the works so minor that the client does them without a firm (opere di modesta entità, eseguite in proprio)?', propose: 'false'}
   tolleranze: {type: yes_no, question: 'Does the relazione declare construction tolerances (art. 34-bis / 34-ter DPR 380/2001) on the property?', propose: 'false'}
   toll_34bis_1: {type: yes_no, group: tolleranze_tipi, item: 'Art. 34-bis c. 1 and 1-ter, second period (2% of the measures)'}
@@ -202,7 +212,27 @@ asks:
   prec_altro_5_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_5}}'}
   prec_altro_5_numero: {type: text, question: Its number, when: '{{ask.prec_altro_5}}'}
   prec_altro_5_data: {type: date, question: Its date, when: '{{ask.prec_altro_5}}'}
-  prec_altro_6: {type: yes_no, question: 'And another, beyond those five?', propose: 'false', when: '{{ask.prec_altro_5}}'}
+  prec_altro_6: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro_5}}'}
+  prec_altro_6_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_6}}'}
+  prec_altro_6_numero: {type: text, question: Its number, when: '{{ask.prec_altro_6}}'}
+  prec_altro_6_data: {type: date, question: Its date, when: '{{ask.prec_altro_6}}'}
+  prec_altro_7: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro_6}}'}
+  prec_altro_7_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_7}}'}
+  prec_altro_7_numero: {type: text, question: Its number, when: '{{ask.prec_altro_7}}'}
+  prec_altro_7_data: {type: date, question: Its date, when: '{{ask.prec_altro_7}}'}
+  prec_altro_8: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro_7}}'}
+  prec_altro_8_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_8}}'}
+  prec_altro_8_numero: {type: text, question: Its number, when: '{{ask.prec_altro_8}}'}
+  prec_altro_8_data: {type: date, question: Its date, when: '{{ask.prec_altro_8}}'}
+  prec_altro_9: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro_8}}'}
+  prec_altro_9_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_9}}'}
+  prec_altro_9_numero: {type: text, question: Its number, when: '{{ask.prec_altro_9}}'}
+  prec_altro_9_data: {type: date, question: Its date, when: '{{ask.prec_altro_9}}'}
+  prec_altro_10: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro_9}}'}
+  prec_altro_10_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_10}}'}
+  prec_altro_10_numero: {type: text, question: Its number, when: '{{ask.prec_altro_10}}'}
+  prec_altro_10_data: {type: date, question: Its date, when: '{{ask.prec_altro_10}}'}
+  prec_altro_11: {type: yes_no, question: 'And another, beyond those ten?', propose: 'false', when: '{{ask.prec_altro_10}}'}
   prova_catasto: {type: yes_no, group: prova_documenti, item: 'The catasto''s primo impianto registration (its copy, or its details)'}
   prova_catasto_modo: {type: choice, question: 'The catasto''s primo impianto registration in quadro f): estremi (you give its number and date) or copia (its copy, uploaded in the quadro)', options: [estremi,
       copia], when: '{{ask.prova_catasto}}'}
@@ -407,11 +437,12 @@ supports:
   in:
   - 'true'
   else: 'The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn''t qualify.'
-- if: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}}'
-  value: '{{ask.prec_altro_6}}'
+- if: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}}
+    {{ask.prec_altro_9}} {{ask.prec_altro_10}}'
+  value: '{{ask.prec_altro_11}}'
   in:
   - 'false'
-  else: 'More than five "altro" lines (titles past one per kind, or of kinds not listed) aren''t mapped yet: each takes a "+" on the portal, and five have been prepared.'
+  else: 'More than ten "altro" lines (titles past one per kind, or of kinds not listed) aren''t mapped yet: each takes a "+" on the portal, and ten have been prepared.'
 - if: '{{ask.stato_legittimo|is_titoli}}'
   value: '{{ask.prec_titolo_unico,ask.prec_permesso,ask.prec_autorizzazione,ask.prec_comunicazione,ask.prec_dia,ask.prec_dia_alternativa,ask.prec_scia,ask.prec_cel,ask.prec_condono,ask.prec_pdc_sanatoria,ask.prec_scia_sanatoria,ask.prec_scia_sanatoria_variante,ask.prec_altro|any}}'
   in:
@@ -433,7 +464,12 @@ supports:
   - uno
   - due
   - tre
-  else: 'More than three other technicians aren''t mapped yet: each takes a "+" on the portal, and three have been prepared.'
+  - quattro
+  - cinque
+  - sei
+  - sette
+  - otto
+  else: 'More than eight other technicians aren''t mapped yet: each takes a "+" on the portal, and eight have been prepared.'
 - if: '{{ask.tolleranze}}'
   value: '{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}'
   in:
@@ -722,6 +758,45 @@ sections:
       {{ask.prec_altro_5}}'}
   - {kind: date, label: del, anchor: specificare, block: 5, value: '{{ask.prec_altro_5_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
       {{ask.prec_altro_4}} {{ask.prec_altro_5}}'}
+  - {kind: add, anchor: specificare, block: 6, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 6, value: '{{ask.prec_altro_6_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}}'}
+  - {kind: text, label: n., anchor: specificare, block: 6, value: '{{ask.prec_altro_6_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}
+      {{ask.prec_altro_5}} {{ask.prec_altro_6}}'}
+  - {kind: date, label: del, anchor: specificare, block: 6, value: '{{ask.prec_altro_6_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}}'}
+  - {kind: add, anchor: specificare, block: 7, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}}
+      {{ask.prec_altro_7}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 7, value: '{{ask.prec_altro_7_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}}'}
+  - {kind: text, label: n., anchor: specificare, block: 7, value: '{{ask.prec_altro_7_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}
+      {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}}'}
+  - {kind: date, label: del, anchor: specificare, block: 7, value: '{{ask.prec_altro_7_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}}'}
+  - {kind: add, anchor: specificare, block: 8, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}}
+      {{ask.prec_altro_7}} {{ask.prec_altro_8}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 8, value: '{{ask.prec_altro_8_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}}'}
+  - {kind: text, label: n., anchor: specificare, block: 8, value: '{{ask.prec_altro_8_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}
+      {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}}'}
+  - {kind: date, label: del, anchor: specificare, block: 8, value: '{{ask.prec_altro_8_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}}'}
+  - {kind: add, anchor: specificare, block: 9, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}}
+      {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 9, value: '{{ask.prec_altro_9_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}}'}
+  - {kind: text, label: n., anchor: specificare, block: 9, value: '{{ask.prec_altro_9_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}
+      {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}}'}
+  - {kind: date, label: del, anchor: specificare, block: 9, value: '{{ask.prec_altro_9_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}}'}
+  - {kind: add, anchor: specificare, block: 10, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}}
+      {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}} {{ask.prec_altro_10}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 10, value: '{{ask.prec_altro_10_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}} {{ask.prec_altro_10}}'}
+  - {kind: text, label: n., anchor: specificare, block: 10, value: '{{ask.prec_altro_10_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}
+      {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}} {{ask.prec_altro_10}}'}
+  - {kind: date, label: del, anchor: specificare, block: 10, value: '{{ask.prec_altro_10_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}} {{ask.prec_altro_10}}'}
   - {kind: radio, when: '{{ask.stato_legittimo|is_epoca}}', label: si tratta di immobile realizzato in un’epoca}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}', label: copia accatastamento di primo impianto}
   - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: copia accatastamento di primo impianto, nth: 2}
@@ -863,120 +938,464 @@ sections:
   - {kind: text, label: C.A.P., nth: 3, value: '{{ad:business.sede_legale_cap}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
   - {kind: text, label: Cognome, nth: 2, value: '{{ad:identity.last_name|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
   - {kind: text, label: Nome, nth: 2, value: '{{ad:identity.first_name|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
-  - {kind: add, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico2_incarico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: Cognome, value: '{{a2:identity.last_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: Nome, value: '{{a2:identity.first_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: C.F., value: '{{a2:identity.codice_fiscale}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: date, label: Data di nascita, value: '{{a2:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: select, label: Sesso, value: '{{a2:identity.sex|sesso}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: select, label: Provincia, value: '{{a2:identity.birth_province}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: Comune italiano, value: '{{a2:identity.birth_comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: select, label: Provincia, nth: 2, value: '{{a2:residenza.provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: Comune italiano, nth: 2, value: '{{a2:residenza.comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: 'Via, Piazza', value: '{{a2:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: N., value: '{{a2:residenza.civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: C.A.P., value: '{{a2:residenza.cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: select, label: Provincia, nth: 3, value: '{{a2:business.sede_legale_provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente|not}}'}
-  - {kind: text, label: Comune italiano, nth: 3, value: '{{a2:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+  - {kind: add, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico2_incarico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Cognome, value: '{{a2:identity.last_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Nome, value: '{{a2:identity.first_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: C.F., value: '{{a2:identity.codice_fiscale}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: date, label: Data di nascita, value: '{{a2:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Sesso, value: '{{a2:identity.sex|sesso}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, value: '{{a2:identity.birth_province}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Comune italiano, value: '{{a2:identity.birth_comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 2, value: '{{a2:residenza.provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Comune italiano, nth: 2, value: '{{a2:residenza.comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: 'Via, Piazza', value: '{{a2:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: N., value: '{{a2:residenza.civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: C.A.P., value: '{{a2:residenza.cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{a2:business.sede_legale_provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico2_dipendente|not}}'}
-  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a2:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{a2:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico2_dipendente|not}}'}
-  - {kind: text, label: N., nth: 2, value: '{{a2:business.sede_legale_civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente|not}}'}
-  - {kind: text, label: C.A.P., nth: 2, value: '{{a2:business.sede_legale_cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente|not}}'}
-  - {kind: select, label: Provincia, nth: 3, value: '{{ad2:business.sede_legale_provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad2:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a2:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente|not}}'}
+  - {kind: text, label: N., nth: 2, value: '{{a2:business.sede_legale_civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente|not}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{a2:business.sede_legale_cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente|not}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{ad2:business.sede_legale_provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad2:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad2:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: N., nth: 2, value: '{{ad2:business.sede_legale_civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: C.A.P., nth: 2, value: '{{ad2:business.sede_legale_cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: Telefono, value: '{{a2:identity.phone|phone_it}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: cell., value: '{{a2:identity.phone|phone_it}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: posta elettronica certificata, value: '{{a2:identity.pec}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: radio, label: si, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a2:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: di, value: '{{a2:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: text, label: al n., value: '{{a2:albo.numero}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
-  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente|not}}'}
-  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: Ragione sociale, value: '{{ad2:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad2:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad2:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+  - {kind: text, label: N., nth: 2, value: '{{ad2:business.sede_legale_civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad2:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{ad2:business.sede_legale_cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: con sede in, value: '{{ad2:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+  - {kind: text, label: Telefono, value: '{{a2:identity.phone|phone_it}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: cell., value: '{{a2:identity.phone|phone_it}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: posta elettronica certificata, value: '{{a2:identity.pec}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: radio, label: si, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a2:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: di, value: '{{a2:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: al n., value: '{{a2:albo.numero}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}} {{ask.altro_tecnico2_dipendente|not}}'}
+  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: Ragione sociale, value: '{{ad2:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: n., nth: 3, value: '{{ad2:business.rea|rea_num}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: select, label: Provincia, nth: 4, value: '{{ad2:business.sede_legale_provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad2:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad2:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: N., nth: 4, value: '{{ad2:business.sede_legale_civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: C.A.P., nth: 3, value: '{{ad2:business.sede_legale_cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: Cognome, nth: 2, value: '{{ad2:identity.last_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: text, label: Nome, nth: 2, value: '{{ad2:identity.first_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
-  - {kind: add, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico3_incarico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: Cognome, value: '{{a3:identity.last_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: Nome, value: '{{a3:identity.first_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: C.F., value: '{{a3:identity.codice_fiscale}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: date, label: Data di nascita, value: '{{a3:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: select, label: Sesso, value: '{{a3:identity.sex|sesso}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: select, label: Provincia, value: '{{a3:identity.birth_province}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: Comune italiano, value: '{{a3:identity.birth_comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: select, label: Provincia, nth: 2, value: '{{a3:residenza.provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: Comune italiano, nth: 2, value: '{{a3:residenza.comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: 'Via, Piazza', value: '{{a3:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: N., value: '{{a3:residenza.civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: C.A.P., value: '{{a3:residenza.cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: select, label: Provincia, nth: 3, value: '{{a3:business.sede_legale_provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente|not}}'}
-  - {kind: text, label: Comune italiano, nth: 3, value: '{{a3:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente|not}}'}
-  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a3:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad2:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: con sede in, value: '{{ad2:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: n., nth: 3, value: '{{ad2:business.rea|rea_num}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: select, label: Provincia, nth: 4, value: '{{ad2:business.sede_legale_provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad2:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: N., nth: 4, value: '{{ad2:business.sede_legale_civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 3, value: '{{ad2:business.sede_legale_cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: Cognome, nth: 2, value: '{{ad2:identity.last_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: Nome, nth: 2, value: '{{ad2:identity.first_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: add, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico3_incarico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Cognome, value: '{{a3:identity.last_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Nome, value: '{{a3:identity.first_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: C.F., value: '{{a3:identity.codice_fiscale}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: date, label: Data di nascita, value: '{{a3:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Sesso, value: '{{a3:identity.sex|sesso}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, value: '{{a3:identity.birth_province}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Comune italiano, value: '{{a3:identity.birth_comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 2, value: '{{a3:residenza.provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Comune italiano, nth: 2, value: '{{a3:residenza.comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: 'Via, Piazza', value: '{{a3:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: N., value: '{{a3:residenza.civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: C.A.P., value: '{{a3:residenza.cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{a3:business.sede_legale_provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico3_dipendente|not}}'}
-  - {kind: text, label: N., nth: 2, value: '{{a3:business.sede_legale_civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente|not}}'}
-  - {kind: text, label: C.A.P., nth: 2, value: '{{a3:business.sede_legale_cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente|not}}'}
-  - {kind: select, label: Provincia, nth: 3, value: '{{ad3:business.sede_legale_provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad3:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{a3:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente|not}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a3:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente|not}}'}
+  - {kind: text, label: N., nth: 2, value: '{{a3:business.sede_legale_civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente|not}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{a3:business.sede_legale_cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente|not}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{ad3:business.sede_legale_provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad3:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad3:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: N., nth: 2, value: '{{ad3:business.sede_legale_civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: C.A.P., nth: 2, value: '{{ad3:business.sede_legale_cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: Telefono, value: '{{a3:identity.phone|phone_it}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: cell., value: '{{a3:identity.phone|phone_it}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: posta elettronica certificata, value: '{{a3:identity.pec}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: radio, label: si, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a3:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: di, value: '{{a3:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: text, label: al n., value: '{{a3:albo.numero}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
-  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente|not}}'}
-  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: Ragione sociale, value: '{{ad3:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad3:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad3:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad3:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+  - {kind: text, label: N., nth: 2, value: '{{ad3:business.sede_legale_civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: con sede in, value: '{{ad3:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{ad3:business.sede_legale_cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: n., nth: 3, value: '{{ad3:business.rea|rea_num}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: select, label: Provincia, nth: 4, value: '{{ad3:business.sede_legale_provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad3:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+  - {kind: text, label: Telefono, value: '{{a3:identity.phone|phone_it}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: cell., value: '{{a3:identity.phone|phone_it}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: posta elettronica certificata, value: '{{a3:identity.pec}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: radio, label: si, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a3:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: di, value: '{{a3:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: al n., value: '{{a3:albo.numero}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}'}
+  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}} {{ask.altro_tecnico3_dipendente|not}}'}
+  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: Ragione sociale, value: '{{ad3:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
       {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: N., nth: 4, value: '{{ad3:business.sede_legale_civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: C.A.P., nth: 3, value: '{{ad3:business.sede_legale_cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: Cognome, nth: 2, value: '{{ad3:identity.last_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
-  - {kind: text, label: Nome, nth: 2, value: '{{ad3:identity.first_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad3:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad3:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: con sede in, value: '{{ad3:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: n., nth: 3, value: '{{ad3:business.rea|rea_num}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: select, label: Provincia, nth: 4, value: '{{ad3:business.sede_legale_provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad3:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: N., nth: 4, value: '{{ad3:business.sede_legale_civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 3, value: '{{ad3:business.sede_legale_cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: Cognome, nth: 2, value: '{{ad3:identity.last_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: Nome, nth: 2, value: '{{ad3:identity.first_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: add, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico4_incarico}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Cognome, value: '{{a4:identity.last_name|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Nome, value: '{{a4:identity.first_name|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: C.F., value: '{{a4:identity.codice_fiscale}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: date, label: Data di nascita, value: '{{a4:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Sesso, value: '{{a4:identity.sex|sesso}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, value: '{{a4:identity.birth_province}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Comune italiano, value: '{{a4:identity.birth_comune|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 2, value: '{{a4:residenza.provincia}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Comune italiano, nth: 2, value: '{{a4:residenza.comune|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: 'Via, Piazza', value: '{{a4:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: N., value: '{{a4:residenza.civico}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: C.A.P., value: '{{a4:residenza.cap}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{a4:business.sede_legale_provincia}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente|not}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{a4:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente|not}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a4:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente|not}}'}
+  - {kind: text, label: N., nth: 2, value: '{{a4:business.sede_legale_civico}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente|not}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{a4:business.sede_legale_cap}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente|not}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{ad4:business.sede_legale_provincia}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad4:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad4:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: N., nth: 2, value: '{{ad4:business.sede_legale_civico}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{ad4:business.sede_legale_cap}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: Telefono, value: '{{a4:identity.phone|phone_it}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: cell., value: '{{a4:identity.phone|phone_it}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: posta elettronica certificata, value: '{{a4:identity.pec}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: radio, label: si, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a4:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: di, value: '{{a4:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: text, label: al n., value: '{{a4:albo.numero}}', on_page: true, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}'}
+  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}} {{ask.altro_tecnico4_dipendente|not}}'}
+  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}} {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: Ragione sociale, value: '{{ad4:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad4:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad4:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: con sede in, value: '{{ad4:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: n., nth: 3, value: '{{ad4:business.rea|rea_num}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: select, label: Provincia, nth: 4, value: '{{ad4:business.sede_legale_provincia}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}} {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad4:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: N., nth: 4, value: '{{ad4:business.sede_legale_civico}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 3, value: '{{ad4:business.sede_legale_cap}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: Cognome, nth: 2, value: '{{ad4:identity.last_name|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: text, label: Nome, nth: 2, value: '{{ad4:identity.first_name|upper}}', anchor: Incaricato della, block: 4, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}
+      {{ask.altro_tecnico4_dipendente}}'}
+  - {kind: add, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico5_incarico}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: Cognome, value: '{{a5:identity.last_name|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: Nome, value: '{{a5:identity.first_name|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: C.F., value: '{{a5:identity.codice_fiscale}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: date, label: Data di nascita, value: '{{a5:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: select, label: Sesso, value: '{{a5:identity.sex|sesso}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, value: '{{a5:identity.birth_province}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: Comune italiano, value: '{{a5:identity.birth_comune|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 2, value: '{{a5:residenza.provincia}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: Comune italiano, nth: 2, value: '{{a5:residenza.comune|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: 'Via, Piazza', value: '{{a5:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: N., value: '{{a5:residenza.civico}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: C.A.P., value: '{{a5:residenza.cap}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{a5:business.sede_legale_provincia}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente|not}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{a5:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente|not}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a5:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente|not}}'}
+  - {kind: text, label: N., nth: 2, value: '{{a5:business.sede_legale_civico}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente|not}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{a5:business.sede_legale_cap}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente|not}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{ad5:business.sede_legale_provincia}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad5:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad5:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: N., nth: 2, value: '{{ad5:business.sede_legale_civico}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{ad5:business.sede_legale_cap}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: Telefono, value: '{{a5:identity.phone|phone_it}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: cell., value: '{{a5:identity.phone|phone_it}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: posta elettronica certificata, value: '{{a5:identity.pec}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: radio, label: si, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a5:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: di, value: '{{a5:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: text, label: al n., value: '{{a5:albo.numero}}', on_page: true, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}'}
+  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}} {{ask.altro_tecnico5_dipendente|not}}'}
+  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}} {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: Ragione sociale, value: '{{ad5:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad5:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad5:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: con sede in, value: '{{ad5:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: n., nth: 3, value: '{{ad5:business.rea|rea_num}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}} {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: select, label: Provincia, nth: 4, value: '{{ad5:business.sede_legale_provincia}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}} {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad5:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: N., nth: 4, value: '{{ad5:business.sede_legale_civico}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 3, value: '{{ad5:business.sede_legale_cap}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: Cognome, nth: 2, value: '{{ad5:identity.last_name|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: text, label: Nome, nth: 2, value: '{{ad5:identity.first_name|upper}}', anchor: Incaricato della, block: 5, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}
+      {{ask.altro_tecnico5_dipendente}}'}
+  - {kind: add, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico6_incarico}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: Cognome, value: '{{a6:identity.last_name|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: Nome, value: '{{a6:identity.first_name|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: C.F., value: '{{a6:identity.codice_fiscale}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: date, label: Data di nascita, value: '{{a6:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: select, label: Sesso, value: '{{a6:identity.sex|sesso}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: select, label: Provincia, value: '{{a6:identity.birth_province}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: Comune italiano, value: '{{a6:identity.birth_comune|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 2, value: '{{a6:residenza.provincia}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: Comune italiano, nth: 2, value: '{{a6:residenza.comune|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: 'Via, Piazza', value: '{{a6:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: N., value: '{{a6:residenza.civico}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: C.A.P., value: '{{a6:residenza.cap}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{a6:business.sede_legale_provincia}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente|not}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{a6:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente|not}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a6:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente|not}}'}
+  - {kind: text, label: N., nth: 2, value: '{{a6:business.sede_legale_civico}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente|not}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{a6:business.sede_legale_cap}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente|not}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{ad6:business.sede_legale_provincia}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad6:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad6:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: N., nth: 2, value: '{{ad6:business.sede_legale_civico}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{ad6:business.sede_legale_cap}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: Telefono, value: '{{a6:identity.phone|phone_it}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: cell., value: '{{a6:identity.phone|phone_it}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: posta elettronica certificata, value: '{{a6:identity.pec}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: radio, label: si, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a6:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: di, value: '{{a6:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: text, label: al n., value: '{{a6:albo.numero}}', on_page: true, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}'}
+  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente|not}}'}
+  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: Ragione sociale, value: '{{ad6:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad6:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad6:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: con sede in, value: '{{ad6:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: n., nth: 3, value: '{{ad6:business.rea|rea_num}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: select, label: Provincia, nth: 4, value: '{{ad6:business.sede_legale_provincia}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad6:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}}
+      {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: N., nth: 4, value: '{{ad6:business.sede_legale_civico}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 3, value: '{{ad6:business.sede_legale_cap}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: Cognome, nth: 2, value: '{{ad6:identity.last_name|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: text, label: Nome, nth: 2, value: '{{ad6:identity.first_name|upper}}', anchor: Incaricato della, block: 6, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sei__sette__otto}} {{ask.altro_tecnico6_dipendente}}'}
+  - {kind: add, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico7_incarico}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: Cognome, value: '{{a7:identity.last_name|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: Nome, value: '{{a7:identity.first_name|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: C.F., value: '{{a7:identity.codice_fiscale}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: date, label: Data di nascita, value: '{{a7:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: select, label: Sesso, value: '{{a7:identity.sex|sesso}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: select, label: Provincia, value: '{{a7:identity.birth_province}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: Comune italiano, value: '{{a7:identity.birth_comune|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 2, value: '{{a7:residenza.provincia}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: Comune italiano, nth: 2, value: '{{a7:residenza.comune|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: 'Via, Piazza', value: '{{a7:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: N., value: '{{a7:residenza.civico}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: C.A.P., value: '{{a7:residenza.cap}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{a7:business.sede_legale_provincia}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente|not}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{a7:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente|not}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a7:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente|not}}'}
+  - {kind: text, label: N., nth: 2, value: '{{a7:business.sede_legale_civico}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente|not}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{a7:business.sede_legale_cap}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente|not}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{ad7:business.sede_legale_provincia}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad7:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad7:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: N., nth: 2, value: '{{ad7:business.sede_legale_civico}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{ad7:business.sede_legale_cap}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: Telefono, value: '{{a7:identity.phone|phone_it}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: cell., value: '{{a7:identity.phone|phone_it}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: posta elettronica certificata, value: '{{a7:identity.pec}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: radio, label: si, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a7:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: di, value: '{{a7:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: text, label: al n., value: '{{a7:albo.numero}}', on_page: true, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}'}
+  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente|not}}'}
+  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: Ragione sociale, value: '{{ad7:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad7:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad7:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: con sede in, value: '{{ad7:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: n., nth: 3, value: '{{ad7:business.rea|rea_num}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: select, label: Provincia, nth: 4, value: '{{ad7:business.sede_legale_provincia}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad7:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}}
+      {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: N., nth: 4, value: '{{ad7:business.sede_legale_civico}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 3, value: '{{ad7:business.sede_legale_cap}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: Cognome, nth: 2, value: '{{ad7:identity.last_name|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: text, label: Nome, nth: 2, value: '{{ad7:identity.first_name|upper}}', anchor: Incaricato della, block: 7, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_sette__otto}} {{ask.altro_tecnico7_dipendente}}'}
+  - {kind: add, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico8_incarico}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: Cognome, value: '{{a8:identity.last_name|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: Nome, value: '{{a8:identity.first_name|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: C.F., value: '{{a8:identity.codice_fiscale}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: date, label: Data di nascita, value: '{{a8:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: select, label: Sesso, value: '{{a8:identity.sex|sesso}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: select, label: Provincia, value: '{{a8:identity.birth_province}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: Comune italiano, value: '{{a8:identity.birth_comune|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: select, label: Provincia, nth: 2, value: '{{a8:residenza.provincia}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: Comune italiano, nth: 2, value: '{{a8:residenza.comune|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: 'Via, Piazza', value: '{{a8:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: N., value: '{{a8:residenza.civico}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: C.A.P., value: '{{a8:residenza.cap}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{a8:business.sede_legale_provincia}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente|not}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{a8:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}
+      {{ask.altro_tecnico8_dipendente|not}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a8:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}
+      {{ask.altro_tecnico8_dipendente|not}}'}
+  - {kind: text, label: N., nth: 2, value: '{{a8:business.sede_legale_civico}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente|not}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{a8:business.sede_legale_cap}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente|not}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{ad8:business.sede_legale_provincia}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad8:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}
+      {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad8:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}
+      {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: N., nth: 2, value: '{{ad8:business.sede_legale_civico}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{ad8:business.sede_legale_cap}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: Telefono, value: '{{a8:identity.phone|phone_it}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: cell., value: '{{a8:identity.phone|phone_it}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: posta elettronica certificata, value: '{{a8:identity.pec}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: radio, label: si, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a8:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: di, value: '{{a8:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: text, label: al n., value: '{{a8:albo.numero}}', on_page: true, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}'}
+  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente|not}}'}
+  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: Ragione sociale, value: '{{ad8:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad8:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}
+      {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad8:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}
+      {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: con sede in, value: '{{ad8:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}
+      {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: n., nth: 3, value: '{{ad8:business.rea|rea_num}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: select, label: Provincia, nth: 4, value: '{{ad8:business.sede_legale_provincia}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad8:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}}
+      {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: N., nth: 4, value: '{{ad8:business.sede_legale_civico}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 3, value: '{{ad8:business.sede_legale_cap}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: Cognome, nth: 2, value: '{{ad8:identity.last_name|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
+  - {kind: text, label: Nome, nth: 2, value: '{{ad8:identity.first_name|upper}}', anchor: Incaricato della, block: 8, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_otto}} {{ask.altro_tecnico8_dipendente}}'}
 - section: i) Impresa esecutrice dei lavori
   fields:
   - {id: 'r2c1p2reg:radio:1_clone', kind: radio, when: '{{ask.lavori_in_proprio}}', label: in quanto opere di modesta entità}
