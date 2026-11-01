@@ -326,6 +326,27 @@ def _():
         assert w in b, w
 
 
+@case("a low one-room flat: both cases of art. 24 c. 5-bis, each with its own 5-ter conditions under its box (SCIA), both boxes (agibilità)")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    for name, n in (("scia-fittizia", 2), ("agibilita-fittizia", 1)):
+        steps = generated(name)
+        v = run.Values(json.loads((REH / name / "answers-bassa-monostanza.json").read_text()), fields=fields, asks=steps.get("asks"))
+        r = run.preflight(steps, v, made_up=True)
+        assert r["ready"] and not r["unsupported"], (name, r)
+        plan = run.plan(steps, v)
+        labels = [p["label"] or "" for p in plan]
+        assert any(l.startswith("locali con un’altezza minima interna") for l in labels), name
+        assert any(l.startswith(("alloggio monostanza per una persona", "alloggio mono-stanza")) for l in labels), name
+        conds = [p for p in plan if (p["label"] or "").startswith(("che soddisfano il requisito", "i locali sono situati in edifici"))]
+        assert len([p for p in conds if (p["label"] or "").startswith("i locali")]) == n, (name, conds)
+    am = section(generated("scia-fittizia"), "Asseverazione SCIA - Amianto")
+    assert {f.get("anchor") for f in am["fields"] if f["label"].startswith("che soddisfano")} == {
+        "locali con un’altezza minima interna", "alloggio monostanza per una persona", "alloggio monostanza per due persone"}
+
+
 @case("a question only a missing field reads isn't asked (SCIA has no firm-documents check)")
 def _():
     assert "verificato_idoneita" not in generated("scia-fittizia")["asks"]
@@ -718,9 +739,22 @@ def _():
         labels = [p["label"] for p in run.plan(steps, v)]
         assert "Incaricato della" in labels and "Iscritto all'ordine/collegio" in labels, name
         assert not any((l or "").startswith("che gli altri tecnici incaricati saranno") for l in labels), name
-        assert any("More than eight other technicians" in u for u in check(name, "answers-altri-tecnici.json", altri_tecnici_quanti="piu di otto")[2]["unsupported"])
-    r = check("cila-fittizia", "answers-direttore-atti.json", atti_quanti="piu di due")[2]
-    assert any("More than two assents" in u for u in r["unsupported"]), r["unsupported"]
+    # As many as the case has (the national form sets no limit): ten technicians, three filings
+    # and three assents, each past the page's first by "+".
+    for name in ("cila-fittizia", "scia-fittizia"):
+        steps, v, r = check(name, "answers-elenchi-lunghi.json")
+        assert r["ready"] and not r["unsupported"], (name, r)
+        plan = run.plan(steps, v)
+        tecnici = [p for p in plan if "Altri tecnici" in p["section"]]
+        assert sum(p["kind"] == "add" for p in tecnici) == 9 and ("Cognome", "VENTO") in [(p["label"], p["value"]) for p in tecnici], name
+    rel = [(p["kind"], p["label"] or "", p["value"]) for p in run.plan(*check("cila-fittizia", "answers-elenchi-lunghi.json")[:2])
+           if p["section"].startswith("Relazione Tecnica")]
+    c, t = "Comunicazioni, segnalazioni", "Tipologia di atto"
+    assert [l or "+" for k, l, _ in rel if k == "add" or l.startswith((c, t))] == [c, c, "+", c, t, t, "+", t], rel
+    # The count first: before it is answered, the second technician's questions wait on it.
+    steps, v, r = check("cila-fittizia", "answers-altri-tecnici.json", altri_tecnici_quanti=None)
+    assert [p["proposal"] for p in r["proposals"] if p["key"] == "altri_tecnici_quanti"] == ["1"], r
+    assert {q["key"]: q.get("only_if") for q in r["questions"]}.get("altro_tecnico2_incarico") == ["altri_tecnici_quanti"], r["questions"]
 
 
 @case("other technicians repeat by \"+\" (a, a2, a3), each an employee of a firm or not (ad: its seat is the studio)")

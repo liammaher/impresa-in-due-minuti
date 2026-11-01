@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (136 cases in all, 136 with a recorded filled run).
+  case (137 cases in all, 133 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -33,7 +33,7 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 | Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 14 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 8 |
 | Permesso di costruire | 153 | 107 | 0 | 14 | 18 | 14 | 170 |
-| SCIA | 150 | 124 | 0 | 4 | 12 | 10 | 61 |
+| SCIA | 150 | 124 | 0 | 4 | 12 | 10 | 60 |
 | SCIA alternativa | 128 | 107 | 0 | 6 | 7 | 8 | 73 |
 | Agibilità (SCA) | 36 | 29 | 0 | 0 | 2 | 5 | 18 |
 
@@ -375,7 +375,7 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere_normativa_regionale` | non prevede opere da denunciare o autorizzare ai sensi degli articoli… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `variante_sostanziale` | costituisce una variante non sostanziale riguardante parti struttural… | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_normativa_regionale` | prevede opere in zona sismica da denunciare ai sensi dell'articolo 93… | h | filled on the portal | 3 |
-| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 2 |
+| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `non_richiede_indagini` | non richiede indagini ambientali preventive in relazione alle attivit… | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `non_necessita_bonifica` | a seguito delle preventive analisi ambientali effettuate, non necessi… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `avvenuta_bonifica` | è stata oggetto di bonifica dei terreni con obiettivi compatibili con… | h | mapped, no case yet |  |
@@ -711,7 +711,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere_normativa_regionale` | non prevede opere da denunciare o autorizzare ai sensi degli articoli… | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `variante_sostanziale` | costituisce una variante non sostanziale riguardante parti struttural… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_normativa_regionale` | prevede opere in zona sismica da denunciare ai sensi dell'articolo 93… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 2 |
+| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistica` | `non_ricade_in_zona_tutelata` | NON ricade in zona sottoposta a tutela | h | filled on the portal | 2 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistica` | `non_soggetto_autorizzazione` | ricade in zona tutelata, ma le opere non comportano alterazione dei l… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_semplificato` | è assoggettato al procedimento semplificato di autorizzazione paesagg… | h | filled on the portal | 2 |
@@ -790,7 +790,6 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Asseverazione SCIA - Inquinamento acust…: le opere comportano la produzione di materiali da scavo considerati come sottoprodotti su… (not mapped)
 - Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno riutilizzati nello stesso luog… (mapped)
 - Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno gestiti dall'interessato come… (mapped)
-- Asseverazione SCIA - Amianto, conformit…: alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA - Amianto, conformit…: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA - Amianto, conformit…: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di… (mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)

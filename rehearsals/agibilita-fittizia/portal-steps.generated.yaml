@@ -129,8 +129,8 @@ asks:
   igienico_24_5bis: {type: yes_no, question: 'Does it meet them under art. 24 c. 5-bis DPR 380/2001 (rooms 2.40 to 2.70 m high, or a one-room flat of 20 to 28 m² for one person or 28 to 38 m² for two)?',
     propose: 'false'}
   igienico_5bis_caso: {type: choice, question: 'Which case of art. 24 c. 5-bis? altezza (rooms with a minimum inner height under 2.70 m but at least 2.40 m, lett. a); monostanza uno (a one-room flat for
-      one person, 20 m² or more but under 28 m² with its services, lett. b); monostanza due (for two people, 28 m² or more but under 38 m²); piu casi (more than one)', options: [altezza, monostanza uno,
-      monostanza due, piu casi]}
+      one person, 20 m² or more but under 28 m² with its services, lett. b); monostanza due (for two people, 28 m² or more but under 38 m²); altezza e monostanza uno, altezza e monostanza due (both: a low
+      one-room flat)', options: [altezza, monostanza uno, monostanza due, altezza e monostanza uno, altezza e monostanza due]}
   igienico_adattabilita: {type: yes_no, question: 'Do the rooms meet the adattabilità requirement of DM 236/1989 (art. 24 c. 5-ter DPR 380/2001)?'}
   igienico_5ter: {type: choice, question: 'Which condition of art. 24 c. 5-ter holds? recupero (the building is under works of recupero edilizio improving its hygiene, lett. a); progetto alternativo (the
       drawings attached include a renovation project with alternative solutions for the occupants: more surface, or better natural ventilation, lett. b)', options: [recupero, progetto alternativo]}
@@ -150,13 +150,6 @@ asks:
   impianti_collaudo_doc: {type: file, question: 'The systems'' certificati di collaudo (art. 9 D.M. 37/2008), in one PDF'}
   impianti_atto_notorio_doc: {type: file, question: 'The atto notorio on the older systems'' conformity (art. 6 DPR 392/1994), PDF'}
 supports:
-- if: '{{ask.igienico_24_5bis}}'
-  value: '{{ask.igienico_5bis_caso}}'
-  in:
-  - altezza
-  - monostanza uno
-  - monostanza due
-  else: 'More than one case of art. 24 c. 5-bis isn''t mapped yet: each opens its own boxes.'
 - if: '{{ask.igienico_24_5bis}}'
   value: '{{ask.igienico_adattabilita}}'
   in:
@@ -341,14 +334,16 @@ sections:
   - {id: 'r5c1p5reg:radio:1_clone', kind: radio, when: '{{ask.agibilita_parziale|is_edificio}}', label: L' agibilità parziale relativa a singoli edifici}
   - {id: 'r6c1p6reg:radio:2_clone', kind: radio, when: '{{ask.agibilita_parziale|is_unita}}', label: L'agibilità parziale relativa a singole unità immobiliari}
   - {id: 'r8c1p8reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}}', label: 'nei casi di cui all’articolo 24, comma 5-bis e 5-ter'}
-  - {id: 'r9c1p9reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_altezza}}', label: 'locali con un’altezza minima interna inferiore a 2,70 metri'}
-  - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due}}', label: 'alloggio mono-stanza, con una superficie minima'}
-  - {id: 'r11c1p11reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_monostanza_uno}}', label: inferiore a 28 metri quadrati}
-  - {id: 'r12c1p13reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_monostanza_due}}', label: inferiore a 38 metri quadrati}
-  - {id: 'r14c1p15reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due}} {{ask.igienico_5ter|is_recupero}}', label: i locali sono situati
-      in edifici che sono stati sottoposti}
-  - {id: 'r15c1p16reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due}} {{ask.igienico_5ter|is_progetto_alternativo}}', label: è stata realizzata
-      una ristrutturazione con soluzioni alternative}
+  - {id: 'r9c1p9reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_altezza__altezza_e_monostanza_uno__altezza_e_monostanza_due}}', label: 'locali con un’altezza minima
+      interna inferiore a 2,70 metri'}
+  - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due__altezza_e_monostanza_uno__altezza_e_monostanza_due}}', label: 'alloggio
+      mono-stanza, con una superficie minima'}
+  - {id: 'r11c1p11reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__altezza_e_monostanza_uno}}', label: inferiore a 28 metri quadrati}
+  - {id: 'r12c1p13reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_due__altezza_e_monostanza_due}}', label: inferiore a 38 metri quadrati}
+  - {id: 'r14c1p15reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due__altezza_e_monostanza_uno__altezza_e_monostanza_due}} {{ask.igienico_5ter|is_recupero}}',
+    label: i locali sono situati in edifici che sono stati sottoposti}
+  - {id: 'r15c1p16reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due__altezza_e_monostanza_uno__altezza_e_monostanza_due}} {{ask.igienico_5ter|is_progetto_alternativo}}',
+    label: è stata realizzata una ristrutturazione con soluzioni alternative}
   - {kind: checkbox, when: '{{ask.igienico_5quater}}', label: 'nei casi di cui all’articolo 24, comma 5-quater'}
   - {kind: text, value: '{{ask.igienico_5quater_atto}}', when: '{{ask.igienico_5quater}}', max: 9999, label: specificare l’atto normativo o il provvedimento}
 - section: Attestazione tecnica - Sicurezza degli impianti

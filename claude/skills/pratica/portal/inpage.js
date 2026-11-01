@@ -634,7 +634,11 @@
     if (f.block && before >= f.block) return `block ${f.block}`;
     const plus = [...doc().querySelectorAll('[id*="dynaForm"] button')].filter((b) => shown(b) && b.textContent.trim() === "+");
     if (!plus.length) fail(`no + to add a block of ${f.anchor}`);
-    press(plus[plus.length - 1], `+ ${f.anchor}`);
+    // The first "+" after the anchor's last block is its own: a section can have one per list
+    // (the CILA relazione's filings, then its assents).
+    const last = inputs().filter((e) => labelled(e, f.anchor)).pop();
+    const own = last && plus.find((b) => last.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    press(own || plus[plus.length - 1], `+ ${f.anchor}`);
     await idle();
     if (count() !== before + 1) fail(`+ didn't add a block of ${f.anchor}`);
     return `block ${before + 1}`;

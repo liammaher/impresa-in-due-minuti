@@ -120,11 +120,16 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   boxes (its details, its copy) are "copia accatastamento di primo impianto" like the line's
   own, hidden until their radio is picked, and in the crawl only as choices under that box. They
   go by label and `nth`, never by id (2026-10-30).
-- **A block of people repeats by "+"** (the other technicians, as the firms): a dictionary entry's
-  `repeat: N` with `block:`, `firm_when` and `repeat_when` (each later block's condition); `#N` in
-  a field is "" in the first block, then "2", "3" (roles `a`, `a2`; asks `altro_tecnico_...`,
-  `altro_tecnico2_...`). "Alle dipendenze di" opens more than the crawl saw: the firm's REA, seat
-  and legale rappresentante (read 2026-10-31).
+- **A list repeats by "+" as often as the case needs** (the other technicians, the "altro" titles,
+  the CILA relazione's filings and assents: the national forms set no limit, `maxOccurs="unbounded"`).
+  A dictionary field `kind: each` with `count` (a number ask), `when`, `block:`, and `first`/`on_page`
+  when the page already shows some; `#N` in a field is "" in the first block, then "2", "3" (roles
+  `a`, `a2`; asks `altro_tecnico_...`, `altro_tecnico2_...`), `#K` the number always
+  (`comunicazione_3`). gen.py writes the blocks on the page and one template (`block: "#N"` after an
+  `add` with `each`); run.py's `expand` makes as many as the count says, and the pane keeps each
+  count's steps apart (`procedure#hash`). Each "+" is the first after its list's last row (two in
+  one section, 2026-11-01), and the boxes after it go by label. "Alle dipendenze di" opens more
+  than the crawl saw: the firm's REA, seat and legale rappresentante (read 2026-10-31).
 - **A choice's revealed boxes may repeat labels above them** (an employer's "Via, Piazza", "N.",
   "Cognome"): crawl.js counts reveals per label since 2026-10-31; crawls before then left those
   out, so a run can still find required boxes there (recrawl a section to see them).

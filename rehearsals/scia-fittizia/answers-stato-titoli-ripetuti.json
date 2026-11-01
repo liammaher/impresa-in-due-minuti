@@ -95,14 +95,12 @@
  "prec_altro_quale": "denuncia di inizio attività",
  "prec_altro_numero": "2009/412",
  "prec_altro_data": "2009-06-04",
- "prec_altro_2": "true",
  "prec_altro_2_quale": "condono edilizio",
  "prec_altro_2_numero": "95/1207",
  "prec_altro_2_data": "1995-02-28",
- "prec_altro_3": "true",
  "prec_altro_3_quale": "comunicazione di inizio lavori asseverata (CILA)",
  "prec_altro_3_numero": "PG/2017/5531",
  "prec_altro_3_data": "2017-11-20",
- "prec_altro_4": "false",
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "prec_altro_quanti": "3"
 }
