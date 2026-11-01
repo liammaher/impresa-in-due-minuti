@@ -153,6 +153,8 @@ asks:
   barriere: {type: yes_no, question: 'Are the works subject to the barriers rules of artt. 77 ff. DPR 380/2001 and DM 236/1989 (private buildings)?'}
   barriere_art82: {type: yes_no, question: 'Is it a private building open to the public, the works conforming to art. 82 DPR 380/2001 (as the relazione and drawings show)?'}
   barriere_deroga: {type: yes_no, question: 'Are the works subject to the barriers rules but don''t meet them, so the SCIA condizionata asks for a deroga (its documents attached)?', propose: 'false'}
+  barriere_elaborati: {type: file, question: The drawings and relazione showing the barriers rules are met (art. 77 ff. or art. 82 DPR 380/2001) (PDF)}
+  barriere_deroga_doc: {type: file, question: The documents for the barriers deroga (relazione tecnica and drawings) (PDF)}
   sanatoria_titolo: {type: choice, question: 'Is this pratica filed in sanatoria? nessuna (no); scia (a SCIA in sanatoria); permesso (a permesso di costruire in sanatoria)', options: [nessuna, scia, permesso],
     default: nessuna}
   scia_cambio_uso: {type: choice, question: 'Do the works change the use? no; stessa categoria (one unit, within the same functional category); tra categorie (one unit in a building in zone A, B or C of
@@ -173,7 +175,14 @@ asks:
   scavo: {type: choice, question: 'Do the works produce excavated earth? nessuno (no excavation subject to the rules); riutilizzo in sito (reused where it is dug); rifiuti (handled as waste)', options: [
       nessuno, riutilizzo in sito, rifiuti], propose: nessuno}
   indagini_ambientali: {type: yes_no, question: 'Does the area need environmental investigations of its soil first (past uses that may have polluted it)?', propose: 'false'}
+  indagini_esito: {type: choice, question: 'What came of the soil investigations? analisi (the analyses were done and no remediation is needed: their results attached); bonifica (the soil was remediated,
+      as the conclusive certificate of remediation says, artt. 248 c. 2 and 242-bis c. 4 D.Lgs. 152/2006)', options: [analisi, bonifica], when: '{{ask.indagini_ambientali}}'}
+  bonifica_ente: {type: text, question: 'Who issued the conclusive certificate of remediation (the form''s "rilasciata da", e.g. Città Metropolitana di Napoli)?', when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}'}
+  bonifica_data: {type: date, question: Its date, when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}'}
   urbanizzazione: {type: yes_no, question: 'Does the area have the primary urbanisation works (roads, sewers, water, power)?', propose: 'true'}
+  urbanizzazione_attuazione: {type: choice, question: 'Without them, who builds them? comune (the Comune plans them within the next three years); convenzione (an agreement with the Comune provides for them:
+      its date)', options: [comune, convenzione], when: '{{ask.urbanizzazione|not}}'}
+  urbanizzazione_convenzione_data: {type: date, question: The date the convenzione was signed, when: '{{ask.urbanizzazione|not}} {{ask.urbanizzazione_attuazione|is_convenzione}}'}
   scarichi: {type: choice, question: 'The works'' drains: nessuna autorizzazione (they need none); allaccio ottenuto (the connection to the public sewer is authorised: its protocol and date); allaccio da
       richiedere (the request''s documents attached)', options: [nessuna autorizzazione, allaccio ottenuto, allaccio da richiedere], propose: nessuna autorizzazione}
   allaccio_protocollo: {type: text, question: 'The sewer connection''s authorisation: its protocol number'}
@@ -342,12 +351,18 @@ asks:
   acustica_clima: {type: yes_no, group: acustica_documenti, item: Valutazione previsionale di clima acustico (art. 8 c. 3 L. 447/1995)}
   acustica_dichiarazione: {type: yes_no, group: acustica_documenti, item: The titolare's dichiarazione sostitutiva that the limits of the acoustic classification are respected}
   acustica_misure: {type: yes_no, group: acustica_documenti, item: Documentazione di previsione di impatto acustico with the measures to reduce the emissions (the limits would be exceeded)}
+  acustica_impatto_doc: {type: file, question: The documentazione di impatto acustico (PDF)}
+  acustica_clima_doc: {type: file, question: The valutazione previsionale di clima acustico (PDF)}
+  acustica_dichiarazione_doc: {type: file, question: The titolare's dichiarazione sostitutiva on the acoustic limits (PDF)}
+  acustica_misure_doc: {type: file, question: The documentazione di previsione di impatto acustico with its measures (PDF)}
   antincendio_soggetto: {type: yes_no, question: 'Is the building subject to fire-prevention rules?', propose: 'false'}
   antincendio_deroga: {type: yes_no, question: 'Does the building have features that don''t allow the fire-prevention technical rules to be followed in full, so a deroga is asked (its documents attached)?',
     propose: 'false'}
   antincendio_deroga_doc: {type: file, question: The documents for the fire-prevention deroga (PDF)}
+  vvf_doc: {type: file, question: The documents for the Vigili del Fuoco's assessment of the project (art. 3 DPR 151/2011) (PDF)}
   amianto: {type: yes_no, question: 'Do the works touch parts with asbestos (so a piano di lavoro under art. 256 D.Lgs. 81/2008 is needed)?', propose: 'false'}
   relazione_energetica: {type: file, question: 'The relazione tecnica on energy use (art. 125 DPR 380/2001, D.Lgs. 192/2005) (PDF)'}
+  amianto_piano: {type: file, question: The piano di lavoro for the asbestos (art. 256 D.Lgs. 81/2008) (PDF)}
   igienico_conforme: {type: yes_no, question: 'Does the unit meet the hygiene and health requirements (no derogation)?', propose: 'true'}
   igienico_24_5bis: {type: yes_no, question: 'Does it meet them under art. 24 c. 5-bis DPR 380/2001 (rooms 2.40 to 2.70 m high, or a one-room flat of 20 to 28 m² for one person or 28 to 38 m² for two)?',
     propose: 'false'}
@@ -357,6 +372,7 @@ asks:
   igienico_adattabilita: {type: yes_no, question: 'Do the rooms meet the adattabilità requirement of DM 236/1989 (art. 24 c. 5-ter DPR 380/2001)?'}
   igienico_5ter: {type: choice, question: 'Which condition of art. 24 c. 5-ter holds? recupero (the building is under works of recupero edilizio improving its hygiene, lett. a); progetto alternativo (the
       drawings attached include a renovation project with alternative solutions for the occupants: more surface, or better natural ventilation, lett. b)', options: [recupero, progetto alternativo]}
+  igienico_deroga_doc: {type: file, question: The documents for the hygiene derogation request (PDF)}
   cemento_armato: {type: yes_no, question: 'Do the works build reinforced or prestressed concrete, or steel structures (art. 65 DPR 380/2001)?'}
   denuncia_art65: {type: file, question: 'The denuncia of the concrete or steel works (art. 65 DPR 380/2001), as filed (PDF)'}
   sismica: {type: choice, question: 'The works'' seismic filing (art. 93-94 DPR 380/2001, L.R. 9/1983, Reg. 4/2010)? deposito (works to report: the denuncia''s documents attached); autorizzazione (the documents
@@ -382,6 +398,7 @@ asks:
   vinca_doc: {type: file, question: The documents for the Valutazione d'incidenza (PDF)}
   fascia_cimiteriale: {type: choice, question: 'Is the property in a cemetery''s fascia di rispetto? no; consentito (inside, and the works are allowed there); non consentito (inside, and not allowed without
       a deroga)', options: ['no', consentito, non consentito], propose: 'no'}
+  cimiteriale_doc: {type: file, question: The documents for the cemetery fascia's deroga (PDF)}
   rir: {type: choice, question: 'Major-hazard plants (RIR, D.Lgs. 105/2015) in the comune? no (none); fuori area (there are, the comune maps their area di danno, and the property is outside it); in area
       (inside it: the documents for the Comitato Tecnico Regionale attached); non individuata (there are, and the comune hasn''t mapped the area di danno: the documents attached)', options: ['no', fuori
         area, in area, non individuata]}
@@ -451,27 +468,6 @@ asks:
   piano_planovolumetrico: {group: fatti, type: yes_no, item: 'La nuova costruzione o la ristrutturazione urbanistica è disciplinata da un piano attuativo con precise disposizioni plano-volumetriche dichiarate
       dal Comune, o (per una nuova costruzione) è in diretta esecuzione di uno strumento urbanistico generale che le contiene?'}
 supports:
-- value: '{{ask.fascia_cimiteriale}}'
-  in:
-  - 'no'
-  - consentito
-  else: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
-- value: '{{ask.acustica}}'
-  in:
-  - 'false'
-  else: An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet.
-- value: '{{ask.vvf_valutazione}}'
-  in:
-  - 'false'
-  else: A project for the Vigili del Fuoco's assessment isn't mapped yet.
-- value: '{{ask.amianto}}'
-  in:
-  - 'false'
-  else: Works on parts with asbestos aren't mapped yet.
-- value: '{{ask.igienico_conforme}}'
-  in:
-  - 'true'
-  else: A hygiene derogation isn't mapped yet.
 - if: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}'
   value: '{{ask.igienico_5bis_caso}}'
   in:
@@ -484,18 +480,6 @@ supports:
   in:
   - 'true'
   else: 'The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn''t qualify.'
-- value: '{{ask.barriere}}'
-  in:
-  - 'false'
-  else: The barriers rules (artt. 77-82) aren't mapped yet.
-- value: '{{ask.indagini_ambientali}}'
-  in:
-  - 'false'
-  else: Soil needing environmental investigations (or already remediated) isn't mapped yet.
-- value: '{{ask.urbanizzazione}}'
-  in:
-  - 'true'
-  else: An area without its primary urbanisation works isn't mapped yet.
 - if: '{{ask.scia_onerosa}}'
   value: '{{ask.contributo_pagamento}}'
   in:
@@ -1729,7 +1713,15 @@ sections:
 - section: Asseverazione SCIA Alternativa - Qualità terreni
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.indagini_ambientali|not}}', label: non richiede indagini ambientali preventive}
+  - {id: 'r5c1p5reg:radio:1_clone', kind: radio, when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}', label: a seguito delle preventive analisi ambientali effettuate}
+  - {id: 'r6c1p6reg:chk', kind: checkbox, when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}', label: si allegano i risultati delle analisi ambientali}
+  - {id: 'r7c1p7reg:radio:2_clone', kind: radio, when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}', label: è stata oggetto di bonifica dei terreni}
+  - {id: 'r9c1p9reg:txt', kind: text, value: '{{ask.bonifica_ente}}', when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}', max: 9999, label: 'rilasciata da:'}
+  - {kind: date, label: in data, anchor: 'rilasciata da:', block: 1, value: '{{ask.bonifica_data|date_it}}', when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}'}
   - {id: 'r13c1p15reg:radio:3_clone', kind: radio, when: '{{ask.urbanizzazione}}', label: è dotata delle opere di urbanizzazione primaria}
+  - {id: 'r14c1p16reg:radio:4_clone', kind: radio, when: '{{ask.urbanizzazione|not}}', label: non è dotata delle opere di urbanizzazione primaria}
+  - {id: 'r16c1p18reg:calendar_input', kind: date, value: '{{ask.urbanizzazione_convenzione_data|date_it}}', when: '{{ask.urbanizzazione|not}} {{ask.urbanizzazione_attuazione|is_convenzione}}', label: stipulata
+      in data}
   - {id: 'r19c1p21reg:radio:5_clone', kind: radio, when: '{{ask.scarichi|is_nessuna_autorizzazione}}', label: non necessita di autorizzazione allo scarico}
   - {id: 'r21c1p23reg:radio:7_clone', kind: radio, when: '{{ask.scarichi|is_nessuna_autorizzazione|not}}', label: necessita di autorizzazione, nth: 2}
   - {id: 'r32c1p38reg:chk', kind: checkbox, when: '{{ask.scarichi|is_nessuna_autorizzazione|not}}', label: all'allaccio in pubblica fognatura}
@@ -1895,3 +1887,14 @@ sections:
       {{ask.fascia_aeroportuale}}'}
   - {kind: file, label: Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (altro), value: '{{ask.fascia_altro_doc}}', when: '{{ask.fasce|is_assenso}}
       {{ask.fascia_altro}}'}
+  - {kind: file, label: Documentazione di impatto acustico, value: '{{ask.acustica_impatto_doc}}', when: '{{ask.acustica}} {{ask.acustica_impatto}}'}
+  - {kind: file, label: Dichiarazione sostitutiva, value: '{{ask.acustica_dichiarazione_doc}}', when: '{{ask.acustica}} {{ask.acustica_dichiarazione}}'}
+  - {kind: file, label: Valutazione previsionale di clima acustico, value: '{{ask.acustica_clima_doc}}', when: '{{ask.acustica}} {{ask.acustica_clima}}'}
+  - {kind: file, label: Documentazione di previsione di impatto acustico, value: '{{ask.acustica_misure_doc}}', when: '{{ask.acustica}} {{ask.acustica_misure}}'}
+  - {kind: file, label: Documentazione necessaria al rilascio del parere progetto da parte dei Vigili del Fuoco, value: '{{ask.vvf_doc}}', when: '{{ask.vvf_valutazione}}'}
+  - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: '{{ask.igienico_deroga_doc}}', when: '{{ask.igienico_conforme|not}}'}
+  - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: '{{ask.cimiteriale_doc}}', when: '{{ask.fascia_cimiteriale|is_non_consentito}}'}
+  - {kind: file, label: Piano di lavoro di demolizione o rimozione dell'amianto, value: '{{ask.amianto_piano}}', when: '{{ask.amianto}}'}
+  - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche (art. 82, value: '{{ask.barriere_elaborati}}', when: '{{ask.barriere_art82}}'}
+  - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche (art. 77, value: '{{ask.barriere_elaborati}}', when: '{{ask.barriere}} {{ask.barriere_deroga|not}}'}
+  - {kind: file, label: Documentazione per la richiesta di deroga alla normativa per l'abbattimento delle barriere, value: '{{ask.barriere_deroga_doc}}', when: '{{ask.barriere}} {{ask.barriere_deroga}}'}
