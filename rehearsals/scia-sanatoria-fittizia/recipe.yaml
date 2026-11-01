@@ -90,6 +90,7 @@ yours:
   - "Name the direttore dei lavori (and, for works on structures, the direttore dei lavori delle strutture) before the works start"
   - "On Allega documenti: the portal's procura signed by the client, the stato legittimo documents (signed files only), then everything signed digitally (.p7m)"
   - "A SCIA that asks for assents (the Soprintendenza, a park, a vincolo): no start date; the works start once the SUE says the assents are in"
+  - "For works on structures: the autorizzazione sismica in sanatoria from the Genio Civile di Napoli on S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983), with the strutturista's attestation that the works met the technical rules in force when they were done (art. 36-bis c. 3-bis DPR 380/2001); its documents go in this pratica's slot"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -114,3 +115,7 @@ supports:
     else: "Variants to pre-1977 titles (art. 34-ter) aren't mapped yet."
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_5bis_caso}}", in: ["altezza", "monostanza uno", "monostanza due"], else: "More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions."}
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}
+  # Works on structures begun without the seismic filing always need the autorizzazione sismica
+  # in Campania (art. 4 c. 1 e L.R. 9/1983): the asseverazione's sismica row says so, and the
+  # authorization is filed apart with the Genio Civile (the rules table's sismica-sanatoria).
+  - {if: "{{ask.strutture}}", value: "{{ask.sismica}}", in: [autorizzazione], else: "Works on structures begun without the seismic filing always need the autorizzazione sismica in Campania, never the deposito or a variant filing (art. 4 c. 1 e L.R. 9/1983): the sismica answer is autorizzazione, filed with the Genio Civile."}

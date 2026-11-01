@@ -59,7 +59,7 @@ SUE pratiche not yet fillable:
 Measured today:
 
 - Level 1: 39 of 39 pratiche fully in the dictionary. 12 of them are two operations in one pratica (`sue-combo-*`).
-- Which pratiche a case needs: of the 18176 cases the rules table decides, **1586 reach a steps file**, 16590 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
+- Which pratiche a case needs: of the 13997 cases the rules table decides, **1630 reach a steps file**, 12367 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
 - Level 2: **61 refusals across 22 recipes**, 13 distinct messages.
 - Level 3, in part: **11 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot a run would stop on.
 - Levels 4 and 5: not measured yet (see the open items).
