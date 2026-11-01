@@ -339,3 +339,4 @@ contributo to pay, in proprio, "altri interventi").
 Not run on the portal: a destinazione other than residenziale (the fixture's flat is
 residenziale; pre-flight and the generator cover it), a terzo titolare company other than P6's,
 two tolerances other than 1-bis and c. 2.
+| 2026-11-01 | pane | `answers-altri-tecnici-otto` (eight other technicians, the limit raised from three), `bench/rerun.py` bundle | **filled** in 522 s (each "+" from the seventh takes a few seconds), read back on a fresh load |

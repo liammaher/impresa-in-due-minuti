@@ -76,5 +76,11 @@
   "answers": "answers-terreni-urbanizzazione.json",
   "result": "stopped",
   "seconds": 108.1
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-terreni-urbanizzazione.json",
+  "result": "filled",
+  "seconds": 222
  }
 ]
