@@ -80,6 +80,8 @@ attachments:
     - {kind: file, label: Documentazione necessaria al rilascio del parere progetto da parte dei Vigili del Fuoco, value: "{{ask.vvf_doc}}", when: "{{ask.vvf_valutazione}}", on_page: true}
     - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: "{{ask.igienico_deroga_doc}}", when: "{{ask.igienico_conforme|not}}", on_page: true}
     - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: "{{ask.cimiteriale_doc}}", when: "{{ask.fascia_cimiteriale|is_non_consentito}}", on_page: true}
+    # Soil analysed, no remediation: their results' required slot (read on the permesso's screen 2026-11-01).
+    - {kind: file, label: Risultati delle analisi ambientali sulla qualità dei terreni, value: "{{ask.indagini_analisi_doc}}", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}", on_page: true}
 asks:
   descrizione: {default: "PROVA NON INVIARE - PdC {{c:identity.last_name}}"}
   # The permesso's quadro e) also takes a new construction on free land.
