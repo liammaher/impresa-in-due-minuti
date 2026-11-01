@@ -29,6 +29,15 @@ entry says what to report and how it was checked, without personal data.
 - **Checked**: 2026-10-30 by hand; 2026-11-01 on a made-up draft ("PROVA NON INVIARE"): ticking
   each row in turn left only that one ticked, and the four rows' inputs carry the values 1 to 4 of
   one field. Nothing was saved.
+- **Not part of it**: the case's seismic box below the four rows, "Quanto alla rilevanza sismica
+  [...] ai sensi dell'art. 36-bis, comma 3-bis", works. Its choices are fields of their own: the
+  zone (3 and 4, or 1 and 2), then for zones 1 and 2 whether the works have structural relevance,
+  then the art. 94-bis class, and for a relevant one "allega l'autorizzazione sismica" or the
+  silenzio assenso. Ticking them kept the dating row ticked (2026-11-01, same draft, not saved). So
+  works on structures under c. 1 are blocked by this defect only. The box is offered only in this
+  case, as in InfoCamere's SCIA form (`schema/sue-choices.json` 033/034): with double conformity
+  and for works under way, structures go in the asseverazione's sismica quadro (the SCIA in
+  sanatoria maps them there).
 
 ## Permesso in sanatoria, art. 36-bis: the same, on the permesso's asseverazione
 

@@ -16,7 +16,12 @@ The SUE rules table (`rules/sue-napoli.yaml`) gives this pratica (`napoli/comune
 sanatoria`) for works already done that needed the permesso (a new construction or an extension
 like a veranda, a heavy ristrutturazione, a variant to a permesso), without structures, change of
 use, landscape protection, bene culturale or a Zona A demolition. Arts. 36 and 36-bis DPR 380/2001
-checked on Normattiva.
+checked on Normattiva. Works on structures since 2026-11-01: the asseverazione's sismica quadro
+says the works need the autorizzazione sismica, which in Campania works begun without the seismic
+filing always do (art. 4 c. 1 e L.R. 9/1983), its documents attached, and the table adds the
+autorizzazione at the Genio Civile, filed apart; a deposito is refused at pre-flight. Art. 36 has
+no seismic box of its own (art. 36-bis c. 3-bis is for art. 36-bis, refused for its defect).
+`answers-strutture.json`: the roof-terrace room on a timber frame.
 
 - **Assenza** (art. 36): without the permesso or in total difformity, conforming to the rules
   then and now; the date, and the acknowledgment that the release is subordinate to an oblazione
@@ -64,3 +69,4 @@ form no case took. Each passes pre-flight offline; **none has been run on the po
 | 2026-10-30 | pane | `answers-p6.json` after gen.py's offset fix (the new-construction lines get ids, `r14c2p21reg:chk` for this case's), `bench/rerun.py` bundle | **Filled** in 156.2 s, read back on a fresh load (27.4 s), nothing moved or loose: the id is the box's |
 | 2026-10-30 | pane | systems needing a project (`answers-impianti`: six systems, each project in its own slot), `bench/rerun.py` bundle | **filled** in 170 s, read back on a fresh load (25 s), nothing moved or loose |
 | 2026-10-31 | pane | `answers-p6.json` with quadro a)'s art. 36 radio, `bench/rerun.py` bundle | **filled** in 149 s, read back on a fresh load (24 s), nothing moved or loose |
+| 2026-11-01 | pane | `answers-strutture`: the room on a timber frame, the sismica quadro's autorizzazione, `bench/rerun.py` bundle | **filled** from a blank draft in 144 s, read back on a fresh load, nothing moved or loose |
