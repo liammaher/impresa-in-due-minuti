@@ -112,6 +112,9 @@ def rules_block(spec, asks, groups):
         elif a.get("type") != kind or (kind == "choice" and {rules.fact_value(fact, o) for o in a.get("options", [])} - set(fact["values"])):
             raise GenError(f"rules: the fact {name} is also asks.{name}, a {a.get('type')}: give its value in the "
                            "recipe's rules.facts")
+        elif a.get("group") == "fatti":
+            asks[name] = asks.pop(name)  # in the facts checklist at the table's place
+
         out[name] = "{{ask.%s}}" % name
     return {"table": spec["table"], **({"main": spec["main"]} if spec.get("main") else {}), "facts": out,
             **({"handles": spec["handles"]} if spec.get("handles") else {})}
@@ -790,6 +793,13 @@ def generate(recipe, base=HERE):
         if k in asks_used:
             asks[k] = {**v, **recipe.get("asks", {}).get(k, {})}
     missing = (asks_used - set(asks)) | {k for k, a in asks.items() if "type" not in a}
+    if recipe.get("rules"):
+        # A fact of the rules table is asked from the table (rules_block), so a `supports` may
+        # gate on it: what the works are, before whether the building is listed.
+        try:
+            missing -= set(rules.table(recipe["rules"]["table"])["facts"]) - set(asks)
+        except ValueError as e:
+            raise GenError(str(e))
     if missing:
         raise GenError(f"asks with no definition in the dictionary: {sorted(missing)}")
     # Yes/no questions asked as one checklist (run.py preflight's `groups`).

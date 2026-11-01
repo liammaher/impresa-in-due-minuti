@@ -279,7 +279,15 @@ def sue_another_pratica():
         other + cila)
     assert sue("cil-fittizia", paesaggio="semplificata")["unsupported"] == [
         f"This case also needs {semplificata} (autorizzazione), which this pratica doesn't file."]
-    assert "soprintendente" in sue("cil-fittizia", fatti=["bene_culturale"])["unsupported"][0]
+    # On a bene culturale the CIL and the CILA go once the Soprintendenza has authorized the works,
+    # apart and first: Napoli's SUE has no procedure to ask for it with them (art. 21 c. 4).
+    sop = "File apart, with its own office: napoli/soprintendenza/autorizzazione-beni-culturali (autorizzazione)"
+    assert "sabap-na@pec.cultura.gov.it" in sue("cil-fittizia", fatti=["bene_culturale"], soprintendenza_autorizzata="false")["unsupported"][0]
+    for name in ("cil-fittizia", "cila-fittizia"):
+        r = sue(name, "answers-bene-culturale.json")
+        assert r["ready"] and sop in r["yours"], r
+    # Works already under way on a bene culturale: no authorization after the fact (art. 169).
+    assert "art. 169" in sue("cila-fittizia", "answers-bene-culturale.json", cila_stato="in corso")["unsupported"][0]
     assert "sanatoria" in sue("cil-fittizia", fatti=["sanatoria"])["unsupported"][0]
     # Naples: an ordinary home turned B&B or short let in the centro storico's tavola 7a area
     # (D.C.C. 129/2026), whose 70% threshold has no verified checking mechanism yet.

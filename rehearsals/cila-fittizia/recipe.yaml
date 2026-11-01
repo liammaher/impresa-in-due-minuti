@@ -22,6 +22,9 @@ attachments:
     - {kind: file, label: Prospetto di calcolo preventivo del contributo, value: "{{ask.prospetto_contributo}}", when: "{{ask.cila_onerosa}}", on_page: true}
     - {kind: file, label: Ricevuta di versamento del contributo, value: "{{ask.ricevuta_contributo}}", when: "{{ask.cila_onerosa}} {{ask.contributo_pagato}}", on_page: true}
 asks:
+  # In the facts checklist, as the rules table asks it: the supports read it too (the
+  # Soprintendenza's authorization first).
+  bene_culturale: {group: fatti, item: "L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?"}
   descrizione: {default: "PROVA NON INVIARE - CILA {{c:identity.last_name}}"}
   diritti_euro: {default: "151"}
 yours:
@@ -30,6 +33,7 @@ yours:
   - "Upload the receipt of the 151 € diritti on Pagamento oneri (how Napoli takes them is below; a late CILA's penalty is paid before the run: its receipt is in quadro d)"
   - "On Allega documenti, once the declarations are ticked (the portal gives the procura only then): download the procura (Scarica il documento), have the client sign it, sign it digitally (.p7m) and attach it"
   - "Attach the CILA DSC that fill.py filled (form quadro-riepilogativo-dsc: a box per document uploaded) in its slot, as PDF/A signed digitally"
+  - "On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); keep its authorization with the pratica"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -38,5 +42,9 @@ rules:
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {sanatoria: "{{ask.cila_stato|in_in_corso__realizzato}}", permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
+  # A bene culturale: the Soprintendenza's authorization first, obtained apart (rules:
+  # soprintendenza-cila-*), then listed in the relazione among the assents already obtained.
+  - {if: "{{ask.intervento|in_manutenzione_straordinaria__restauro}} {{ask.cila_stato|is_da_iniziare}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "On a bene culturale the works need the Soprintendenza's authorization first (art. 21 c. 4 D.Lgs. 42/2004), and Napoli's SUE portal has no procedure to ask for it with this pratica: request it from the Soprintendenza ABAP per il Comune di Napoli (by PEC to sabap-na@pec.cultura.gov.it, on its form 'Istanza per opere su immobili vincolati', 16 euro bollo; up to 120 days, art. 22), then file this."}
+  - {if: "{{ask.intervento|in_manutenzione_straordinaria__restauro}} {{ask.cila_stato|is_da_iniziare}} {{ask.bene_culturale}} {{ask.soprintendenza_autorizzata}}", value: "{{ask.atti_acquisiti}}", in: ["true"], else: "The CILA's relazione lists the Soprintendenza's authorization among the assents already obtained (Tipologia di atto, Autorità competente al rilascio): answer that assents were obtained, and name it."}
   - when: "{{ask.altri_atti|not}}"
     else: "Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its semplificata): those combinations aren't mapped yet. Those already made or obtained go in the relazione."

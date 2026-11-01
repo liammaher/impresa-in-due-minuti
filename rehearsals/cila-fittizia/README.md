@@ -59,7 +59,7 @@ are clients of the same studio: architetto Chiara Fittizia, Studio Fittizio, Nap
 | P2 | Bar Fittizio s.r.l., works in its own premises in the Arenella (the company is the titolare, its legale rappresentante signs) | A company as titolare, `business.*` data, "in qualità di" | Draft at the stop point |
 | P3 | Luca Fittizio, a tenant, with the landlord's written assent | Non-exclusive title (a.2) and the assenso dei terzi attachment | Draft at the stop point |
 | P4 | Anna and Paolo Fittizi, co-owners | Two titolari in "Soggetti coinvolti" | Draft at the stop point |
-| P5 | A flat in a listed building in the centro storico (zona A, bene culturale) | A branch we don't support: Soprintendenza assent, the zona A attestation | **Refused at pre-flight** with a plain reason; the portal never opens |
+| P5 | A flat in a listed building in the centro storico (zona A, bene culturale) | The Soprintendenza's authorization (art. 21 c. 4 D.Lgs. 42/2004) | Since 2026-11-01: **refused at pre-flight** until the Soprintendenza has authorized the works (Napoli's SUE has no procedure to ask for it with a CILA: it is requested apart, first, by PEC on the Soprintendenza's form), then a draft at the stop point with the authorization in the relazione's assents (`answers-bene-culturale.json`); works already under way on it are refused (no authorization after the fact, art. 169) |
 | P6 | **The hard case** (`dossier-p6.md`): Luca Fittizio, a tenant, renovating a flat in the Arenella owned by Immobiliare Fittizia S.r.l.; works already started (a late CILA, d.2, with the reduced penalty); two firms on site, so the notifica preliminare | Every complication at once: non-exclusive title with the owner company's assent, works in progress, two impresa esecutrici, D.Lgs. 81 | Draft at the stop point, or refused at pre-flight if the first walk shows the late CILA can't be done online |
 
 The fixtures (`fixture-p1.json` … `fixture-p5.json`, the studio's vault plus that client) and
@@ -275,6 +275,13 @@ resumed on the same draft from that section.
 
 ## Changes
 
+- 2026-11-01: a bene culturale. The CILA goes once the Soprintendenza has authorized the works,
+  obtained apart and first (the rules table's `soprintendenza-cila-*`), listed in the relazione
+  among the assents already obtained; `soprintendenza_autorizzata` asks it, and
+  `bene_culturale` stays in the facts checklist. A late CILA on one is refused: the Codice has
+  no authorization after the fact, and the Soprintendenza's form takes only works to come,
+  ripristino or condono.
+
 - 2026-10-28, before any mapping: added P6, the hard case, to put the flow under the most
   strain one CILA can carry. It goes first: `fixture-p6.json` (loaded through every vault
   rule with `TestPraticaPilotVault`), `dossier-p6.md` (what the key, the baseline and the run
@@ -340,3 +347,4 @@ Not run on the portal: a destinazione other than residenziale (the fixture's fla
 residenziale; pre-flight and the generator cover it), a terzo titolare company other than P6's,
 two tolerances other than 1-bis and c. 2.
 | 2026-11-01 | pane | `answers-altri-tecnici-otto` (eight other technicians, the limit raised from three), `bench/rerun.py` bundle | **filled** in 522 s (each "+" from the seventh takes a few seconds), read back on a fresh load |
+| 2026-11-01 | pane | `answers-bene-culturale` (a listed building, works to come, the Soprintendenza's authorization in the relazione's assents), `bench/rerun.py` bundle | **Filled** from a blank draft in 99.5 s, read back on a fresh load, nothing moved; the base case's one `loose` (h)'s "lavori sono/saranno eseguiti dall…") |

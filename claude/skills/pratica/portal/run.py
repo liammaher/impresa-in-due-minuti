@@ -845,6 +845,16 @@ def preflight(steps, values, urls=None, made_up=False):
         report["questions"].append({"key": k, "type": a["type"], "question": a["question"]}
                                    | {x: a[x] for x in ("options", "labels", "how", "why") if x in a} | hangs
                                    | ({"error": why} if v is not None else {}))
+    if steps.get("rules"):
+        # While the table's first fact (what the works are) is asked, it is asked alone: a
+        # question that hangs on it (is the building listed, for a CILA?) waits for its answer.
+        first = next(iter(rules.table(steps["rules"]["table"])["facts"]))
+        if any(q["key"] == first for q in report["questions"]):
+            waits = lambda q: first in q.get("only_if", [])
+            for q in report["questions"]:
+                if "items" in q:
+                    q["items"] = [i for i in q["items"] if not waits(i)]
+            report["questions"] = [q for q in report["questions"] if not waits(q) and q.get("items", True)]
     for g in groups:
         ticked = values.answers.get(g)
         members = [k for k, a in asks.items() if a.get("group") == g]
