@@ -272,6 +272,7 @@
   async function crawl(opts) {
     const t0 = performance.now();
     frame = document.createElement("iframe");
+    frame.dataset.pv = "crawl";  // stays over the page after the crawl: the runner clears it
     frame.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;border:0;z-index:2147483647;background:#fff";
     const loaded = new Promise((r) => frame.addEventListener("load", r, { once: true }));
     frame.src = location.href;

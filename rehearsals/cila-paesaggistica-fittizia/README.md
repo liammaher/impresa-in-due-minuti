@@ -3,7 +3,7 @@
 The CILA rehearsal's P6 job (a tenant's interior works, already started, two firms) with an
 outdoor air-conditioning unit (Allegato B item B.7) on a building under art. 136 and 142: the
 CILA and the landscape authorization in one pratica on Napoli's SUE. Made-up data; the draft is
-"PROVA NON INVIARE" and stops before the declarations, the attachments, payment, signing and
+"PROVA NON INVIARE" and stops before the declarations, payment, signing and
 sending.
 
 - **Two operations** (`operation:` a list). gen.py takes each one's sections from the catalogue
@@ -16,7 +16,16 @@ sending.
   Allegato B, vincolo and bollo.
 - `supports`: the CILA's (a tenant with the owner's assent) and the semplificata's (no variant,
   no marche da bollo).
-- No Allega documenti step yet: the combination's attachments screen isn't read (`slots`).
+- **Attachments**: the combination's screen read with its crawl on 2026-10-31 (`slots`), the
+  CILA's answer-dependent slots from its own recipe; the relazione paesaggistica semplificata and
+  its drawings take only signed files, so they are the person's.
+
+## Cases from the schema table (2026-10-30)
+
+Written from `docs/schema-branches.md`, one answers file per group of options of the national
+form no case took. Each passes pre-flight offline; **none has been run on the portal yet**.
+
+- `answers-dopo-assensi.json`: works not started, to start once the SUE says the landscape authorization is in.
 
 ## Runs
 
@@ -25,3 +34,4 @@ sending.
 | 2026-10-29 | pane | Stopped at the firms (h): with `nth: 2` the runner counted the "Ragione sociale" box as a "codice fiscale" (the next column's label leaks into its texts), so the legale rappresentante's CF went into the firm's partita IVA. Fixed in inpage.js: `nth` counts only the boxes that match at the best place. |
 | 2026-10-29 | pane | **Filled**, resumed on the same draft: all 22 sections read back on a fresh load. The ordinaria was then re-run (both deed registrations: the second and third "con sede a", "al n. gen.", "in data"): filled. |
 | 2026-10-29 | pane | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 172.3 s; second, with the runner waiting for a section to open, **filled** in 123.5 s, read back on a fresh load. |
+| 2026-10-31 | pane | `answers-p6` (now with its attachments screen) and `answers-dopo-assensi`, `bench/rerun.py` bundle | **filled** both (114 s, 113 s) |

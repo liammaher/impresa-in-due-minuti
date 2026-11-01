@@ -1,0 +1,5017 @@
+{
+ "made": "2026-10-30",
+ "by": "four Claude subagents (Sonnet), one per form or group of forms",
+ "forms": {
+  "cila": {
+   "000/titolare_esclusivo": {
+    "boxes": [
+     {
+      "section": "a) Titolarità dell'intervento",
+      "label": "avere titolarità esclusiva all'esecuzione dell'intervento"
+     }
+    ],
+    "confidence": "high",
+    "note": "exclusive title radio"
+   },
+   "000/non_titolare_esclusivo": {
+    "boxes": [
+     {
+      "section": "a) Titolarità dell'intervento",
+      "label": "non avere titolarità esclusiva all'esecuzione dell'intervento, ma di disporre comunque della dichiarazione di assenso dei terzi titolari di altri diritti reali "
+     }
+    ],
+    "confidence": "high",
+    "note": "no exclusive title, third-party assent"
+   },
+   "001/no_parti_comuni": {
+    "boxes": [
+     {
+      "section": "b) Opere su parti comuni o modifiche esterne",
+      "label": "non riguardano parti comuni"
+     }
+    ],
+    "confidence": "high",
+    "note": "does not concern common parts"
+   },
+   "001/parti_comuni_condominio": {
+    "boxes": [
+     {
+      "section": "b) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano le parti comuni di un fabbricato condominiale (1)"
+     }
+    ],
+    "confidence": "high",
+    "note": "common parts of condominium"
+   },
+   "001/parti_comuni_fabbricato_multiprop": {
+    "boxes": [
+     {
+      "section": "b) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano parti comuni di un fabbricato con più proprietà, non costituito in condominio, e dichiara che l'intervento è stato approvato dai comproprietari delle"
+     }
+    ],
+    "confidence": "high",
+    "note": "multi-owner building, not a condominium"
+   },
+   "001/parti_comuni_no_assenso": {
+    "boxes": [
+     {
+      "section": "b) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano parti dell'edificio di proprietà comune ma non necessitano di assenso perché, secondo l'art. 1102 c.c., apportano, a spese del titolare, le modificaz"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 1102 c.c., no assent needed"
+   },
+   "002/no_altri_atti": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal section c) has only a 'per presa visione' checkbox, no option"
+   },
+   "002/comunicazioni_certificate": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal section c) has no such option"
+   },
+   "002/domanda_contestuale_cila": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal section c) has no such option"
+   },
+   "003/data_inizio_lavori": {
+    "boxes": [
+     {
+      "section": "d) Qualificazione dell'intervento",
+      "label": "i lavori avranno inizio in data"
+     }
+    ],
+    "confidence": "high",
+    "note": "works start on date"
+   },
+   "003/inizio_lavori_comunicazione_suap": {
+    "boxes": [
+     {
+      "section": "d) Qualificazione dell'intervento",
+      "label": "i lavori avranno inizio dopo la comunicazione, da parte dello sportello unico, dell'avvenuta acquisizione degli atti di assenso presupposti"
+     }
+    ],
+    "confidence": "high",
+    "note": "works start after SUAP communication of assent acts"
+   },
+   "004/intervento_corso_di_esecuzione_data_inizio_lavori": {
+    "boxes": [
+     {
+      "section": "d) Qualificazione dell'intervento",
+      "label": "intervento in corso di esecuzione (art. 6-bis, comma 5 del d.P.R. n. 380/2001) con pagamento di sanzione e pertanto si allega la ricevuta di versamento di € 333"
+     }
+    ],
+    "confidence": "high",
+    "note": "work in progress, art. 6-bis c.5"
+   },
+   "004/intervento_con_sanzione_data_lavori": {
+    "boxes": [
+     {
+      "section": "d) Qualificazione dell'intervento",
+      "label": "intervento realizzato (art. 6-bis, comma 5 del d.P.R. n. 380/2001) con pagamento di sanzione e pertanto si allega la ricevuta di versamento di € 1000,00"
+     }
+    ],
+    "confidence": "medium",
+    "note": "work already done, art. 6-bis c.5, sanction 1000 EUR; schema name only says 'with sanction'"
+   },
+   "005/procedimento_automatizzato": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal has no automated/ordinary procedure box in the CILA"
+   },
+   "005/procedimento_ordinario": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal has no automated/ordinary procedure box in the CILA"
+   },
+   "006/fabbricati": {
+    "boxes": [
+     {
+      "section": "Dati catastali",
+      "label": "Nuovo Catasto Edilizio Urbano"
+     }
+    ],
+    "confidence": "high",
+    "note": "NCEU"
+   },
+   "006/terreni": {
+    "boxes": [
+     {
+      "section": "Dati catastali",
+      "label": "Nuovo Catasto Terreni"
+     }
+    ],
+    "confidence": "high",
+    "note": "NCT"
+   },
+   "007/titolo_gratuito": {
+    "boxes": [
+     {
+      "section": "f) Calcolo del contributo di costruzione",
+      "label": "l'intervento da realizzare è a titolo gratuito"
+     }
+    ],
+    "confidence": "high",
+    "note": "free of charge"
+   },
+   "007/(nothing)": {
+    "boxes": [
+     {
+      "section": "f) Calcolo del contributo di costruzione",
+      "label": "l'intervento da realizzare è a titolo oneroso, in quanto rientra negli interventi di manutenzione straordinaria, che comportano aumento del carico urbanistico e"
+     }
+    ],
+    "confidence": "medium",
+    "note": "absence of gratuito = onerous branch; P036 is the onerous radio"
+   },
+   "008/ric_versamento": {
+    "boxes": [
+     {
+      "section": "f) Calcolo del contributo di costruzione",
+      "label": "allega la ricevuta di versamento"
+     }
+    ],
+    "confidence": "high",
+    "note": "attaches payment receipt"
+   },
+   "008/versamento_inizio_lavori": {
+    "boxes": [
+     {
+      "section": "f) Calcolo del contributo di costruzione",
+      "label": "effettuerà, prima dell'inizio dei lavori, il pagamento del contributo commisurato all'incidenza delle sole opere di urbanizzazione"
+     }
+    ],
+    "confidence": "high",
+    "note": "will pay urbanisation share before works start"
+   },
+   "009/da_soggetti_coinvolti": {
+    "boxes": [
+     {
+      "section": "h) Impresa esecutrice dei lavori",
+      "label": "che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla seguente sezione"
+     }
+    ],
+    "confidence": "high",
+    "note": "works done by firms listed in next section"
+   },
+   "009/(nothing)": {
+    "boxes": [
+     {
+      "section": "h) Impresa esecutrice dei lavori",
+      "label": "che, in quanto opere di modesta entità che non interessano le specifiche normative di settore, i lavori saranno eseguiti in prima persona, senza alcun affidamen"
+     }
+    ],
+    "confidence": "medium",
+    "note": "the other branch is no_privati_ditte_esterne: works done personally, no outside firm"
+   },
+   "010/non_ricade": {
+    "boxes": [
+     {
+      "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "non ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008)"
+     }
+    ],
+    "confidence": "high",
+    "note": "d.lgs 81/2008 does not apply"
+   },
+   "010/(nothing)": {
+    "boxes": [
+     {
+      "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008) e pertanto:"
+     }
+    ],
+    "confidence": "medium",
+    "note": "absence of non_ricade = 'ricade' branch; P053 is the ricade radio"
+   },
+   "011/inf200ggUomo": {
+    "boxes": [
+     {
+      "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-giorno ed i lavori non comportano i rischi particolari di cui all'allegato XI del d.lgs. n."
+     }
+    ],
+    "confidence": "high",
+    "note": "under 200 man-days"
+   },
+   "011/pariSup200ggUomo": {
+    "boxes": [
+     {
+      "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'entità presunta del cantiere è pari o superiore a 200 uomini-giorno o i lavori comportano i rischi particolari di cui all'allegato XI del d.lgs. "
+     }
+    ],
+    "confidence": "high",
+    "note": "200 man-days or more"
+   },
+   "012/no_notifica": {
+    "boxes": [
+     {
+      "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'intervento non è soggetto all'invio della notifica"
+     }
+    ],
+    "confidence": "high",
+    "note": "not subject to notification"
+   },
+   "012/(nothing)": {
+    "boxes": [
+     {
+      "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'intervento è soggetto all'invio della notifica e pertanto"
+     }
+    ],
+    "confidence": "medium",
+    "note": "absence of no_notifica = subject to notification; P057 is that radio"
+   },
+   "013/tolleranza_oltre_500_mq": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:"
+     }
+    ],
+    "confidence": "medium",
+    "note": "surface-bracket tolerances (2-6%) are art. 34-bis c.1-bis; portal shows only the article-level box, bracket likely a data field"
+   },
+   "013/tolleranza_da_500_a_300_mq": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:"
+     }
+    ],
+    "confidence": "medium",
+    "note": "same: art. 34-bis c.1-bis bracket"
+   },
+   "013/tolleranza_da_300_a_100_mq": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:"
+     }
+    ],
+    "confidence": "medium",
+    "note": "same: art. 34-bis c.1-bis bracket"
+   },
+   "013/tolleranza_da_100_a_60_mq": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:"
+     }
+    ],
+    "confidence": "medium",
+    "note": "same: art. 34-bis c.1-bis bracket"
+   },
+   "013/tolleranza_sotto_60_mq": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:"
+     }
+    ],
+    "confidence": "medium",
+    "note": "same: art. 34-bis c.1-bis bracket"
+   },
+   "014/tolleranza_zona_sismica_bassa": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4)"
+     }
+    ],
+    "confidence": "high",
+    "note": "low seismicity zones 3 and 4"
+   },
+   "014/tolleranza_zona_sismica_alta": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che la tolleranza costruttiva sopra indic"
+     }
+    ],
+    "confidence": "high",
+    "note": "medium/high seismicity zones 1 and 2"
+   },
+   "015/tolleranza_non_strutturale": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "non ha rilevanza strutturale;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: radio \"non ha rilevanza strutturale\" after zone 1-2 box"
+   },
+   "015/tolleranza_strutturale": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: radio \"ha rilevanza strutturale, rispetta le norme tecniche...\""
+   },
+   "016/tolleranza_pubblica_incolumita": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. a) rilevante"
+   },
+   "016/tolleranza_minore_rilevanza": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. b) minore rilevanza"
+   },
+   "016/tolleranza_priva_rilevanza": {
+    "boxes": [
+     {
+      "section": "Relazione Tecnica di Asseverazione C.I.L.A.",
+      "label": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. c) priva di rilevanza"
+   },
+   "017/allega_autorizzazione_sismica": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no box in worksheet"
+   },
+   "017/silenzio_assenso_autorizzazione": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no box in worksheet"
+   }
+  },
+  "comunicazione_fine_lavori": {
+   "000/stato_lavori_completati": {
+    "boxes": [
+     {
+      "section": "comunicazione di fine lavori",
+      "label": "completamente"
+     }
+    ],
+    "confidence": "high",
+    "note": "completely"
+   },
+   "000/stato_lavori_parziale": {
+    "boxes": [
+     {
+      "section": "comunicazione di fine lavori",
+      "label": "in forma parziale come da planimetria allegata"
+     }
+    ],
+    "confidence": "high",
+    "note": "partially, per attached plan"
+   }
+  },
+  "comunicazione_inizio_lavori": {
+   "000/titolare_esclusivo": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "000/non_titolare_esclusivo": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "001/no_parti_comuni": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "001/parti_comuni_condominio": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "001/parti_comuni_fabbricato_multiprop": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "001/parti_comuni_no_assenso": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "002/fabbricati": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "002/terreni": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "003/da_soggetti_coinvolti": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "003/(nothing)": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "004/non_ricade": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "004/(nothing)": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "005/inf200ggUomo": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "005/pariSup200ggUomo": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "006/no_notifica": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   },
+   "006/(nothing)": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "this portal pratica has no such section/box"
+   }
+  },
+  "permesso_di_costruire": {
+   "000/no_mutamento": {
+    "boxes": [
+     {
+      "section": "a) Qualificazione pratica dell'intervento",
+      "label": "non comporta mutamento di destinazione d’uso di una singola unità immobiliare o di un intero immobile"
+     }
+    ],
+    "confidence": "high",
+    "note": "no change of use"
+   },
+   "000/mutamento_categoria_singola_unita": {
+    "boxes": [
+     {
+      "section": "a) Qualificazione pratica dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di una singola unità immobiliare all’interno della stessa categoria funzionale"
+     }
+    ],
+    "confidence": "high",
+    "note": "single unit, same functional category"
+   },
+   "000/mutamento_tra_categorie_singola_unita": {
+    "boxes": [
+     {
+      "section": "a) Qualificazione pratica dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di una singola unità immobiliare, ubicata in immobili ricompresi nelle zone A), B) e C) di cui all'articolo 2 del d,m. "
+     }
+    ],
+    "confidence": "medium",
+    "note": "single unit, zones A/B/C (between categories)"
+   },
+   "000/mutamento_categoria_intero_immobile": {
+    "boxes": [
+     {
+      "section": "a) Qualificazione pratica dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di un intero immobile all’interno della stessa categoria funzionale nelle ipotesi di cui all’art. 23-ter, comma 3"
+     }
+    ],
+    "confidence": "high",
+    "note": "whole building, art. 23-ter c.3"
+   },
+   "001/assoggettato_scia": {
+    "boxes": [
+     {
+      "section": "a) Qualificazione pratica dell'intervento",
+      "label": "interventi assoggettati a Segnalazione Certificata di Inizio Attività per i quali, ai sensi dell'art. 22, comma 7 del d.P.R. n. 380/2001 è facoltà dell'avente t"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 22 c.7 SCIA works asked as PdC"
+   },
+   "001/conforme_disciplina_urbanistica": {
+    "boxes": [
+     {
+      "section": "a) Qualificazione pratica dell'intervento",
+      "label": "intervento realizzato, ai sensi dell'articolo 36, comma 1 del d.P.R. n. 380/2001, e conforme alla disciplina urbanistica ed edilizia vigente sia al momento dell"
+     }
+    ],
+    "confidence": "medium",
+    "note": "art. 36 c.1 sanatoria, conforme"
+   },
+   "001/deroga_pianificazione_urbanistica": {
+    "boxes": [
+     {
+      "section": "a) Qualificazione pratica dell'intervento",
+      "label": "intervento in deroga alle previsioni degli strumenti di pianificazione urbanistica vigenti, ai sensi dell'art. 14 del d.P.R. n. 380/2001. In particolare si chie"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 14 deroga"
+   },
+   "002/titolo_unico": {
+    "boxes": [
+     {
+      "section": "a) Qualificazione pratica dell'intervento",
+      "label": "titolo unico"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "002/permesso_costruire": {
+    "boxes": [
+     {
+      "section": "a) Qualificazione pratica dell'intervento",
+      "label": "permesso di costruire"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "002/segnalazione_certificata": {
+    "boxes": [
+     {
+      "section": "a) Qualificazione pratica dell'intervento",
+      "label": "segnalazione certificata/denuncia di inizio attività alternativa al permesso di costruire"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "003/oblazione_doppio_contributo_parziale": {
+    "boxes": [
+     {
+      "section": "SANATORIA",
+      "label": "il rilascio del permesso di costruire in sanatoria è subordinato al pagamento, a titolo di oblazione, di un importo pari al doppio del contributo di costruzione"
+     }
+    ],
+    "confidence": "low",
+    "note": "single oblazione box shared with 004; cannot tell parziale vs totale"
+   },
+   "003/condizione_sicurezza_rimozione": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezza e/o la rimozione di opere che non possono essere sanate, a cui lo Spo"
+     }
+    ],
+    "confidence": "low",
+    "note": "rematched on the depth-3 recrawl: P201 states the same safety/removal condition (36-bis) but sits in the technician's sanatoria chain, shared with si_interventi"
+   },
+   "004/oblazione_doppio_contributo_totale": {
+    "boxes": [
+     {
+      "section": "SANATORIA",
+      "label": "il rilascio del permesso di costruire in sanatoria è subordinato al pagamento, a titolo di oblazione, di un importo pari al doppio del contributo di costruzione"
+     }
+    ],
+    "confidence": "low",
+    "note": "single oblazione box shared with 003"
+   },
+   "004/condizione_sicurezza_rimozione_doppia": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezza e/o la rimozione di opere che non possono essere sanate, a cui lo Spo"
+     }
+    ],
+    "confidence": "low",
+    "note": "rematched on the depth-3 recrawl: same single portal box as 003; portal does not split by branch"
+   },
+   "005/titolare_esclusivo": {
+    "boxes": [
+     {
+      "section": "b) Titolarità dell'intervento",
+      "label": "avere titolarità esclusiva all'esecuzione dell'intervento"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: exact radio: titolarita esclusiva"
+   },
+   "005/non_titolare_esclusivo": {
+    "boxes": [
+     {
+      "section": "b) Titolarità dell'intervento",
+      "label": "non avere titolarità esclusiva all'esecuzione dell'intervento, ma di disporre comunque della dichiarazione di assenso dei terzi titolari di altri diritti reali "
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: exact radio: no exclusive title, third-party consent"
+   },
+   "006/fabbricati": {
+    "boxes": [
+     {
+      "section": "Dati catastali",
+      "label": "Nuovo Catasto Edilizio Urbano"
+     }
+    ],
+    "confidence": "high",
+    "note": "NCEU"
+   },
+   "006/terreni": {
+    "boxes": [
+     {
+      "section": "Dati catastali",
+      "label": "Nuovo Catasto Terreni"
+     }
+    ],
+    "confidence": "high",
+    "note": "NCT"
+   },
+   "007/no_parti_comuni": {
+    "boxes": [
+     {
+      "section": "d) Opere su parti comuni o modifiche esterne",
+      "label": "non riguardano parti comuni"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "007/parti_comuni_condominio": {
+    "boxes": [
+     {
+      "section": "d) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano le parti comuni di un fabbricato condominiale (1)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "007/parti_comuni_fabbricato_multiprop": {
+    "boxes": [
+     {
+      "section": "d) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano parti comuni di un fabbricato con più proprietà, non costituito in condominio, e dichiara che l'intervento è stato approvato dai comproprietari delle"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "007/parti_comuni_no_assenso": {
+    "boxes": [
+     {
+      "section": "d) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano parti dell'edificio di proprietà comune ma non necessitano di assenso perché, secondo l'art. 1102 c.c., apportano, a spese del titolare, le modificaz"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 1102 c.c."
+   },
+   "008/nuova_costruzione_area_libera_check": {
+    "boxes": [
+     {
+      "section": "e) Regolarità urbanistica e precedenti edilizi",
+      "label": "che le opere riguardano un intervento di nuova costruzione su area libera"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "008/(nothing)": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "absence: leave P037 unticked"
+   },
+   "009/oggetto_titolo_pratiche_edilizie": {
+    "boxes": [
+     {
+      "section": "e) Regolarità urbanistica e precedenti edilizi",
+      "label": "che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o pratica/che edilizia/e ¹"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "009/immobile_non_obbligatorio": {
+    "boxes": [
+     {
+      "section": "e) Regolarità urbanistica e precedenti edilizi",
+      "label": "si tratta di immobile realizzato in un’epoca in cui non era obbligatorio un titolo abilitativo e pertanto si allega:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "009/non_disponibile_titolo": {
+    "boxes": [
+     {
+      "section": "e) Regolarità urbanistica e precedenti edilizi",
+      "label": "non sono disponibili la copia o gli estremi del titolo abilitativo, ma sussiste un principio di prova documentale del medesimo titolo abilitativo e pertanto si "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "009/tolleranza_costruttiva": {
+    "boxes": [
+     {
+      "section": "e) Regolarità urbanistica e precedenti edilizi",
+      "label": "che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/i di tolleranza/e costruttiva/e di cui all'articolo 34-bis o 34-ter, comma 4:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "010/allega_ricevuta": {
+    "boxes": [
+     {
+      "section": "e) Regolarità urbanistica e precedenti edilizi",
+      "label": "si allega la relativa ricevuta"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "010/estremi_pagamenti": {
+    "boxes": [
+     {
+      "section": "e) Regolarità urbanistica e precedenti edilizi",
+      "label": "si forniscono gli estremi del pagamento"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "011/pienamente_conforme": {
+    "boxes": [
+     {
+      "section": "e) Regolarità urbanistica e precedenti edilizi",
+      "label": "pienamente conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "011/conforme_documentazione": {
+    "boxes": [
+     {
+      "section": "e) Regolarità urbanistica e precedenti edilizi",
+      "label": "conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata, unitamente alla/e sanatoria/e di cui al quadro precedente e alla/e dic"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "012/titolo_gratuito": {
+    "boxes": [
+     {
+      "section": "f) Calcolo del contributo di costruzione",
+      "label": "è a titolo gratuito"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "012/titolo_oneroso": {
+    "boxes": [
+     {
+      "section": "f) Calcolo del contributo di costruzione",
+      "label": "è a titolo oneroso e pertanto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "013/calcolo_sportello": {
+    "boxes": [
+     {
+      "section": "f) Calcolo del contributo di costruzione",
+      "label": "chiede allo Sportello Unico di effettuare il calcolo del contributo di costruzione e a tal fine allega la documentazione tecnica necessaria alla sua determinazi"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "013/calcolo_preventivo": {
+    "boxes": [
+     {
+      "section": "f) Calcolo del contributo di costruzione",
+      "label": "allega il prospetto di calcolo preventivo del contributo di costruzione a firma di tecnico abilitato"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "014/momento_ritiro": {
+    "boxes": [
+     {
+      "section": "f) Calcolo del contributo di costruzione",
+      "label": "dichiara che il versamento del contributo di costruzione sarà effettuato al momento del ritiro del titolo abilitativo"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "014/chiede_rateizzazione": {
+    "boxes": [
+     {
+      "section": "f) Calcolo del contributo di costruzione",
+      "label": "chiede la rateizzazione del contributo di costruzione secondo le modalità e le garanzie stabilite dal Comune"
+     }
+    ],
+    "confidence": "high",
+    "note": "P071 (payment during works) has no schema alternative"
+   },
+   "015/da_soggetti_coinvolti": {
+    "boxes": [
+     {
+      "section": "h) Impresa esecutrice dei lavori",
+      "label": "i lavori saranno eseguiti/sono eseguiti dalla/e impresa/e indicata/e alla seguente sezione"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "015/prima_inizio_lavori": {
+    "boxes": [
+     {
+      "section": "h) Impresa esecutrice dei lavori",
+      "label": "l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno individuata/e prima dell'inizio dei lavori"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "016/non_ricade": {
+    "boxes": [
+     {
+      "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "non ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza sul luogo di lavoro ( d.lgs. n. 81/2008)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "016/(nothing)": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "absence; P091/P092 are other elements"
+   },
+   "017/inf200ggUomo": {
+    "boxes": [
+     {
+      "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-giorno ed i lavori non comportano i rischi particolari di cui all'allegato XI del d.lgs. n."
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "017/pariSup200ggUomo": {
+    "boxes": [
+     {
+      "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'entità presunta del cantiere è pari o superiore a 200 uomini-giorno o i lavori comportano i rischi particolari di cui all'allegato XI del d.lgs. "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "018/no_notifica": {
+    "boxes": [
+     {
+      "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'intervento non è soggetto all'invio della notifica"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "018/notifica": {
+    "boxes": [
+     {
+      "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'intervento è soggetto all'invio della notifica"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "019/no_mutamento_destinazione_uso": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - Dati progettista e descrizione opere",
+      "label": "non comportano mutamento di destinazione d’uso di una singola unità immobiliare o di un intero immobile"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "019/si_mutamento_destinazione_uso_stessa_categoria": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - Dati progettista e descrizione opere",
+      "label": "comportano mutamento di destinazione d’uso di una singola unità immobiliare all’interno della stessa categoria funzionale"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "019/si_mutamento_destinazione_uso_tra_categorie": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - Dati progettista e descrizione opere",
+      "label": "comportano mutamento di destinazione d’uso di una singola unità immobiliare, ubicata in immobili ricompresi nelle zone A), B) e C) di cui all'articolo 2 del d,m"
+     }
+    ],
+    "confidence": "medium",
+    "note": "zones A/B/C single unit"
+   },
+   "019/si_mutamento_destinazione_uso_intero_immobile_stessa_categoria": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - Dati progettista e descrizione opere",
+      "label": "comportano mutamento di destinazione d’uso di un intero immobile all’interno della stessa categoria funzionale nelle ipotesi di cui all’art. 23-ter, comma 3"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "020/tolleranza_oltre_500_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "2%, per le U.I. > 500 mq di superficie utile ;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 2% for U.I. > 500 mq matches the art. 34-bis size band"
+   },
+   "020/tolleranza_da_500_a_300_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 3% for 500-300 mq matches the art. 34-bis size band"
+   },
+   "020/tolleranza_da_300_a_100_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 4% for 300-100 mq matches the art. 34-bis size band"
+   },
+   "020/tolleranza_da_100_a_60_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 5% for 100-60 mq matches the art. 34-bis size band"
+   },
+   "020/tolleranza_sotto_60_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "6%, per le U.I. < 60 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 6% for U.I. < 60 mq matches the art. 34-bis size band"
+   },
+   "021/tolleranza_zona_sismica_bassa": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "021/tolleranza_zona_sismica_alta": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che la tolleranza costruttiva sopra indic"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "022/tolleranza_non_strutturale": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "non ha rilevanza strutturale;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: non ha rilevanza strutturale, after P176 (zones 1-2)"
+   },
+   "022/tolleranza_strutturale": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: ha rilevanza strutturale, after P176 (zones 1-2)"
+   },
+   "023/tolleranza_pubblica_incolumita": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: rilevante, art. 94-bis c.1 a"
+   },
+   "023/tolleranza_minore_rilevanza": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: minore rilevanza, art. 94-bis c.1 b"
+   },
+   "023/tolleranza_priva_rilevanza": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: priva di rilevanza, art. 94-bis c.1 c"
+   },
+   "024/allega_autorizzazione_sismica": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no box in worksheet"
+   },
+   "024/silenzio_assenso_autorizzazione": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no box in worksheet"
+   },
+   "025/disciplina_urbanistica": {
+    "boxes": [
+     {
+      "section": "SANATORIA",
+      "label": "che risulta conforme alla disciplina urbanistica vigente al momento della presentazione della richiesta e ai requisiti prescritti dalla disciplina edilizia vige"
+     }
+    ],
+    "confidence": "medium",
+    "note": "urbanistica at presentation, edilizia at realization (art. 36-bis style)"
+   },
+   "025/disciplina_urbanistica_edilizia": {
+    "boxes": [
+     {
+      "section": "SANATORIA",
+      "label": "che risulta conforme alla disciplina urbanistica e edilizia vigente sia al momento della realizzazione, sia al momento della presentazione della richiesta consa"
+     }
+    ],
+    "confidence": "medium",
+    "note": "urbanistica+edilizia at both moments (art. 36 style)"
+   },
+   "026/allega_documentazione_necessaria": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no portal box in worksheet"
+   },
+   "026/realizzazione_intervento_atto": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "dà atto che la data/epoca di realizzazione dell’intervento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: 'da atto che la data/epoca di realizzazione'; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
+   },
+   "026/realizzazione_intervento_attesta": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "attesta che la data/epoca di realizzazione dell’intervento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: 'attesta che la data/epoca di realizzazione'; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
+   },
+   "026/permesso_costruire_in_sanatoria": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "ai fini della sanatoria, la presente SCIA:"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: lead-in of no/si interventi ('la presente SCIA' wording); portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
+   },
+   "027/bassa_sismicita": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sismicità (zone 3 e 4)"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: zone 3 e 4, intervento; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
+   },
+   "027/media_alta_sismicita": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che l’intervento sopra indicato :"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: zone 1 e 2, intervento; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
+   },
+   "028/no_rilevanza_strutturale": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no portal box"
+   },
+   "028/ha_rilevanza_strutturale": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no portal box"
+   },
+   "029/allega_documentazione_necessaria": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no portal box in worksheet"
+   },
+   "029/realizzazione_intervento_atto": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "dà atto che la data/epoca di realizzazione dell’intervento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: 'da atto che la data/epoca di realizzazione'; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
+   },
+   "029/realizzazione_intervento_attesta": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "attesta che la data/epoca di realizzazione dell’intervento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: 'attesta che la data/epoca di realizzazione'; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
+   },
+   "029/permesso_costruire_in_sanatoria": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "ai fini della sanatoria, la presente SCIA:"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: lead-in of no/si interventi ('la presente SCIA' wording); portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
+   },
+   "030/bassa_sismicita": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sismicità (zone 3 e 4)"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: zone 3 e 4, intervento; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
+   },
+   "030/media_alta_sismicita": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che l’intervento sopra indicato :"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: zone 1 e 2, intervento; portal has one shared sanatoria chain; cannot tell X.2.1 from X.2.2"
+   },
+   "031/no_rilevanza_strutturale": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no portal box"
+   },
+   "031/ha_rilevanza_strutturale": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no portal box"
+   },
+   "032/autorizzazione_sismica": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no portal box"
+   },
+   "032/istanza_autorizzazione": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "no portal box"
+   },
+   "033/dichiara": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "dichiara che l’intervento da sanare non richiede variazione dell’iscrizione catastale"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "033/comunica": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "comunica gli estremi della dichiarazione per l’iscrizione al catasto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "033/si_impegna": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+      "label": "si impegna a presentare la dichiarazione per l’iscrizione al catasto successivamente all’efficacia della pratica di sanatoria"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "034/non_comporta_impianti": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - sicurezza impianti e consumi energetici",
+      "label": "Non comporta l'installazione, la trasformazione o l'ampliamento di impianti tecnologici"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "034/comporta_impianti": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - sicurezza impianti e consumi energetici",
+      "label": "Comporta l'installazione, la trasformazione o l'ampliamento dei seguenti impianti tecnologici:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "035/non_soggetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - sicurezza impianti e consumi energetici",
+      "label": "non è soggetto agli obblighi di presentazione del progetto"
+     }
+    ],
+    "confidence": "medium",
+    "note": "project obligation, shown once; could be per plant type"
+   },
+   "035/soggetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - sicurezza impianti e consumi energetici",
+      "label": "è soggetto agli obblighi di presentazione del progetto e pertanto"
+     }
+    ],
+    "confidence": "medium",
+    "note": "project obligation, shown once; could be per plant type"
+   },
+   "036/non_soggetto_risparmio_energetico": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - sicurezza impianti e consumi energetici",
+      "label": "non è soggetto al deposito del progetto e della relazione tecnica di cui all'articolo 125 del d.P.R. n. 380/2001 e del d.lgs. n. 192/2005"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "036/soggetto_risparmio_energetico": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - sicurezza impianti e consumi energetici",
+      "label": "è soggetto all'applicazione dell'articolo 125 del d.P.R. n. 380/2001 e del d.lgs. n. 192/2005, pertanto la relazione tecnica sul rispetto delle prescrizioni in "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "037/non_soggetto_fonti_rinnovabili": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - sicurezza impianti e consumi energetici",
+      "label": "non è soggetto all'applicazione del d.lgs. n. 28/2011, in quanto non riguarda edifici di nuova costruzione o edifici sottoposti ad una ristrutturazione rilevant"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "037/soggetto_fonti_rinnovabili": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - sicurezza impianti e consumi energetici",
+      "label": "è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "038/non_rientra_art_8": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "Non rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1995"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "038/rientra_art_8": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1995, integrato con i contenuti dell'articolo 4 del d.P.R. n. 227/2011 e SI ALLEGA:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "039/non_rientra_1997_12_05": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "039/rientra_1997_12_05": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "040/vol_inf_ugu_6000": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "le opere comportano la produzione di materiali da scavo per un volume inferiore o uguale a quello previsto dalla normativa vigente ovvero (pur superando tale so"
+     }
+    ],
+    "confidence": "medium",
+    "note": "volume at or below legal threshold"
+   },
+   "040/vol_sup_6000": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "le opere comportano la produzione di materiali da scavo per un volume superiore a quelle previste dalla vigente normativa e sono soggette a VIA o AIA, e pertant"
+     }
+    ],
+    "confidence": "medium",
+    "note": "volume above threshold, VIA/AIA"
+   },
+   "041/non_soggetto_prevenzione_incendi": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "non è soggetto alle norme di prevenzione incendi"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "041/soggetto_prevenzione_incendi": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "è soggetto alle norme tecniche di prevenzione incendi e le stesse sono rispettate nel progetto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "041/parziale_copertura_prevenzione_incendi": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "presenta caratteristiche tali da non consentire l'integrale osservanza delle regole tecniche di prevenzione incendi"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rules cannot be fully observed (deroga)"
+   },
+   "042/non_soggetto_valutazione_progetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "non è soggetto alla valutazione del progetto da parte del Comando Provinciale dei Vigili del Fuoco ai sensi del d.P.R. n. 151/2011"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "042/soggetto_valutazione_progetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "è soggetto alla valutazione del progetto da parte del Comando Provinciale dei Vigili del Fuoco, ai sensi dell'articolo 3 del d.P.R. n. 151/2011"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "042/variante_progetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "costituisce variante e il sottoscritto assevera che le modifiche non costituiscono variazione dei requisiti di sicurezza antincendio già approvati con parere de"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "043/non_interessano": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+      "label": "non interessano parti di edifici con presenza di fibre di amianto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "043/(nothing)": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "absence; P211 is the \"interessano\" branch"
+   },
+   "044/piano_di_lavoro_prima_inizio_lavori": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+      "label": "sarà presentato 30 giorni prima dell'inizio dei lavori"
+     }
+    ],
+    "confidence": "high",
+    "note": "presented 30 days before works"
+   },
+   "044/(nothing)": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "absence; P212 (attached) is a different element"
+   },
+   "045/conforme": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+      "label": "è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "045/non_conforme": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+      "label": "non è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "045/conforme_art_24": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+      "label": "è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ricade nelle ipotesi di cui all’articolo 24, comma 5-bis DPR 380/2001 trattandosi d"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 24 c.5-bis"
+   },
+   "046/non_previste_opere": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+      "label": "non prevede la realizzazione di opere di conglomerato cementizio armato, normale e precompresso ed a struttura metallica"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "046/previste_opere": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+      "label": "prevede la realizzazione di opere di conglomerato cementizio armato, normale e precompresso ed a struttura metallica; pertanto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "047/non_previste_opere_normativa_regionale": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+      "label": "non prevede opere da denunciare o autorizzare ai sensi degli articoli 93 e 94 del d.P.R. n. 380/2001 o della corrispondente normativa regionale (l.r. n. 9/1983,"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "047/variante_sostanziale": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+      "label": "costituisce una variante non sostanziale riguardante parti strutturali (art. 12 del regolamento 4/2010) relativa ad un progetto esecutivo delle strutture preced"
+     }
+    ],
+    "confidence": "low",
+    "note": "portal says variante NON sostanziale; schema name unclear"
+   },
+   "047/previste_opere_normativa_regionale": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+      "label": "prevede opere in zona sismica da denunciare ai sensi dell'articolo 93 del d.P.R. n. 380/2001, della l.r. n. 9/1983, del regolamento n. 4/2010 e SS.MM.II. e dell"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "047/previste_opere_strutturali": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+      "label": "prevede opere strutturali soggette ad autorizzazione sismica ai sensi dell'articolo 94 del d.P.R. n. 380/2001, della l.r. n. 9/1983 e del regolamento n. 4/2010 "
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 94 autorizzazione sismica"
+   },
+   "048/non_richiede_indagini": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi",
+      "label": "non richiede indagini ambientali preventive in relazione alle attività finora svolte sull'area interessata dall'intervento"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "048/non_necessita_bonifica": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi",
+      "label": "a seguito delle preventive analisi ambientali effettuate, non necessita di bonifica, pertanto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "048/avvenuta_bonifica": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi",
+      "label": "è stata oggetto di bonifica dei terreni con obiettivi compatibili con la destinazione d'uso del presente intervento, come risulta dalla certificazione conclusiv"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "049/dotata": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi",
+      "label": "è dotata delle opere di urbanizzazione primaria"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "049/non_dotata": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi",
+      "label": "non è dotata delle opere di urbanizzazione primaria e la loro attuazione è prevista da parte dell'amministrazione comunale nel corso del prossimo triennio ovver"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "050/non_necessita_autorizzazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi",
+      "label": "non necessita di autorizzazione allo scarico"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "050/necessita_autorizzazione_scarico": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi",
+      "label": "necessita di autorizzazione allo scarico e la stessa è stata richiesta / ottenuta nell'ambito di altre autorizzazioni o valutazioni ambientali (AUA, AIA, VIA)"
+     }
+    ],
+    "confidence": "medium",
+    "note": "authorisation requested/obtained in other procedures"
+   },
+   "050/necessita_autorizzazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi",
+      "label": "necessita di autorizzazione"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "051/non_ricade_in_zona_tutelata": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela storico ambientale",
+      "label": "NON ricade in zona sottoposta a tutela"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "051/non_soggetto_autorizzazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela storico ambientale",
+      "label": "ricade in zona tutelata, ma le opere non comportano alterazione dei luoghi o dell'aspetto esteriore degli edifici ovvero non sono soggetti ad autorizzazione ai "
+     }
+    ],
+    "confidence": "high",
+    "note": "zone tutelata but no alteration"
+   },
+   "052/procedimento_semplificato": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela storico ambientale",
+      "label": "è assoggettato al procedimento semplificato di autorizzazione paesaggistica, in quanto di lieve entità, secondo quanto previsto dal d.P.R. n. 31/2017"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "052/procedimento_ordinario": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela storico ambientale",
+      "label": "è assoggettato al procedimento ordinario di autorizzazione paesaggistica"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "052/procedimento_accertamento": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela storico ambientale",
+      "label": "è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all’articolo 36-bis del DPR 380/2001 e"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "053/non_sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela storico ambientale",
+      "label": "non è sottoposto a tutela"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "053/sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela storico ambientale",
+      "label": "è sottoposto a tutela"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "053/sottoposto_tutela_allegato_rilascio_parere": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela storico ambientale",
+      "label": "è sottoposto a tutela"
+     }
+    ],
+    "confidence": "low",
+    "note": "attachment variant; no separate box seen (P254 is under accertamento)"
+   },
+   "054/non_ricade_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela storico ambientale",
+      "label": "non ricade in area tutelata"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "054/ricade_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela storico ambientale",
+      "label": "ricade in area tutelata, ma le opere non comportano alterazione dei luoghi o dell'aspetto esteriore degli edifici"
+     }
+    ],
+    "confidence": "high",
+    "note": "ricade but no alteration"
+   },
+   "054/sottoposto_disposizioni": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela storico ambientale",
+      "label": "è sottoposto alle relative disposizioni e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "055/non_sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela ecologica ambientale",
+      "label": "non è sottoposta a tutela"
+     }
+    ],
+    "confidence": "medium",
+    "note": "\"non e sottoposta a tutela\" appears once, may be shared with vincolo idraulico"
+   },
+   "055/tutela_senza_autorizzazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela ecologica ambientale",
+      "label": "è sottoposta a tutela e l'intervento rientra nei casi eseguibili senza autorizzazione di cui al comma 5 dell'articolo 61 del d.lgs. n. 152/2006 e al r.d.l. n. 3"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "055/sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela ecologica ambientale",
+      "label": "è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione di cui al comma 5 dell'articolo 61 del d.lgs. n. 152/2006 e al r.d.l. n. 3267/1923, pertan"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "056/non_sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela ecologica ambientale",
+      "label": "non è sottoposta a tutela"
+     }
+    ],
+    "confidence": "low",
+    "note": "only one \"non e sottoposta\" radio listed; shared with 055"
+   },
+   "056/sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela ecologica ambientale",
+      "label": "è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione di cui al comma 2 dell'articolo 115 del d.lgs. n. 152/2006 e al r.d. n. 523/1904"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 115, r.d. 523/1904"
+   },
+   "057/non_soggetto_vinca": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela ecologica ambientale",
+      "label": "non è soggetto a Valutazione d'incidenza (VINCA)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "057/soggetto_vinca": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela ecologica ambientale",
+      "label": "è soggetto a Valutazione d'incidenza (VINCA)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "058/non_ricade": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela ecologica ambientale",
+      "label": "l'intervento non ricade nella fascia di rispetto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "058/ricade_consentito": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela ecologica ambientale",
+      "label": "l'intervento ricade nella fascia di rispetto ed è consentito"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "058/ricade_non_consentito": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - tutela ecologica ambientale",
+      "label": "l'intervento ricade in fascia di rispetto cimiteriale e non è consentito"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "059/assenza_attivita": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - aree a rischio e altri vincoli di tutela ecologica",
+      "label": "nel comune NON è presente un'attività a rischio d'incidente rilevante"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "059/presenza_attivita_no_area_danno": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - aree a rischio e altri vincoli di tutela ecologica",
+      "label": "nel comune E' presente un'attività a rischio d'incidente rilevante e la relativa “area di danno” non è individuata nella pianificazione comunale"
+     }
+    ],
+    "confidence": "high",
+    "note": "area di danno not identified"
+   },
+   "060/non_ricade_area_danno": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - aree a rischio e altri vincoli di tutela ecologica",
+      "label": "l'intervento NON ricade nell'area di danno"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "060/ricade_area_danno": {
+    "boxes": [
+     {
+      "section": "Asseverazione PdC - aree a rischio e altri vincoli di tutela ecologica",
+      "label": "l'intervento ricade in area di danno"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   }
+  },
+  "scia": {
+   "000/titolare_esclusivo": {
+    "boxes": [
+     {
+      "section": "a) Titolarità dell'intervento",
+      "label": "avere titolarità esclusiva all'esecuzione dell'intervento"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "000/non_titolare_esclusivo": {
+    "boxes": [
+     {
+      "section": "a) Titolarità dell'intervento",
+      "label": "non avere titolarità esclusiva all'esecuzione dell'intervento, ma di disporre comunque della dichiarazione di assenso dei terzi titolari di altri diritti reali "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "001/scia": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal section b has only a \"per presa visione\" checkbox; no choice among SCIA/unica/condizionata"
+   },
+   "001/scia_unica": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal section b has only a \"per presa visione\" checkbox; no choice among SCIA/unica/condizionata"
+   },
+   "001/scia_condizionata": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal section b has only a \"per presa visione\" checkbox; no choice among SCIA/unica/condizionata"
+   },
+   "002/no_mutamento": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "non comporta mutamento di destinazione d’uso di una singola unità immobiliare o di un intero immobile"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "002/mutamento_categoria_singola_unita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di una singola unità immobiliare all’interno della stessa categoria funzionale"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "002/mutamento_tra_categorie_singola_unita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di una singola unità immobiliare, ubicata in immobili ricompresi nelle zone A), B) e C) di cui all'articolo 2 del d,m. "
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "002/mutamento_categoria_intero_immobile": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di un intero immobile all’interno della stessa categoria funzionale nelle ipotesi di cui all’art. 23-ter, comma 3"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "003/no_mutamento": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "non comporta mutamento di destinazione d’uso di una singola unità immobiliare o di un intero immobile"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "003/mutamento_categoria_singola_unita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di una singola unità immobiliare all’interno della stessa categoria funzionale"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "003/mutamento_tra_categorie_singola_unita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di una singola unità immobiliare, ubicata in immobili ricompresi nelle zone A), B) e C) di cui all'articolo 2 del d,m. "
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "003/mutamento_categoria_intero_immobile": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di un intero immobile all’interno della stessa categoria funzionale nelle ipotesi di cui all’art. 23-ter, comma 3"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "004/no_mutamento": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "non comporta mutamento di destinazione d’uso di una singola unità immobiliare o di un intero immobile"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "004/mutamento_categoria_singola_unita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di una singola unità immobiliare all’interno della stessa categoria funzionale"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "004/mutamento_tra_categorie_singola_unita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di una singola unità immobiliare, ubicata in immobili ricompresi nelle zone A), B) e C) di cui all'articolo 2 del d,m. "
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "004/mutamento_categoria_intero_immobile": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di un intero immobile all’interno della stessa categoria funzionale nelle ipotesi di cui all’art. 23-ter, comma 3"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal shows one shared set of mutamento radios (P030-P033) under the intervention radios P022-P024"
+   },
+   "005/variante_in_corso_dopera_permesso_di_costruire_nr_protocollo": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "variante in corso d'opera a permesso di costruire che non incide sui parametri urbanistici e non costituisce variante essenziale (d.P.R. n. 380/2001, art. 22, c"
+     }
+    ],
+    "confidence": "medium",
+    "note": "data field of the variant-to-PdC option; picked by ticking P025"
+   },
+   "005/variante_in_corso_dopera_permesso_di_costruire_data_protocollo": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "variante in corso d'opera a permesso di costruire che non incide sui parametri urbanistici e non costituisce variante essenziale (d.P.R. n. 380/2001, art. 22, c"
+     }
+    ],
+    "confidence": "medium",
+    "note": "data field of the variant-to-PdC option; picked by ticking P025"
+   },
+   "005/variante_in_corso_dopera_scia_nr_protocollo": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "variante in corso d’opera a SCIA che non costituisce variazione essenziale"
+     }
+    ],
+    "confidence": "medium",
+    "note": "data field of the variant-to-SCIA (non essential) option"
+   },
+   "005/variante_in_corso_dopera_scia_data_protocollo": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "variante in corso d’opera a SCIA che non costituisce variazione essenziale"
+     }
+    ],
+    "confidence": "medium",
+    "note": "data field of the variant-to-SCIA (non essential) option"
+   },
+   "005/variante_in_corso_dopera_variazione_essenziale": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "variante in corso d’opera a SCIA che si configura come variazione essenziale ai sensi dell’articolo 32 del d.P.R. n. 380/2001"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "006/senza_opere_categoria_singola_unita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di singola unità immobiliare all’interno della stessa categoria funzionale, nelle "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "006/senza_opere_tra_categorie_singola_unita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di singola unità immobiliare tra le categorie funzionali di cui al comma 1, letter"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "006/con_opere_categoria_singola_unita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "con opere riconducibili agli interventi di cui all'articolo 6-bis di singola unità immobiliare all’interno della stessa categoria funzionale, nelle ipotesi di c"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "006/con_opere_tra_categorie_singola_unita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "con opere riconducibili agli interventi di cui all'articolo 6-bis di singola unità immobiliare tra le categorie funzionali di cui all’articolo 23-ter, comma 1, "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "007/con_opere": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "con opere riconducibili agli interventi di cui di cui all'articolo 6-bis del d.P.R. n. 380/2001"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "007/senza_opere": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "senza opere (o con opere riconducibili agli interventi di cui all'articolo 6 del d.P.R. n. 380/2001)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "008/procedimento_automatizzato": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal has no such option"
+   },
+   "008/procedimento_ordinario": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal has no such option"
+   },
+   "009/estremi_pagamento_sanzione": {
+    "boxes": [
+     {
+      "section": "SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "si forniscono gli estremi del pagamento di € 516,00"
+     }
+    ],
+    "confidence": "high",
+    "note": "EUR 516 payment details (art. 37 c.5)"
+   },
+   "009/ricevuta_pagamento": {
+    "boxes": [
+     {
+      "section": "SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "si allega la ricevuta del pagamento di € 516,00"
+     }
+    ],
+    "confidence": "high",
+    "note": "EUR 516 payment receipt"
+   },
+   "010/estremi_pagamento_sanatoria": {
+    "boxes": [
+     {
+      "section": "SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "si forniscono gli estremi del pagamento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "generic payment-details radio; shared by both sanatoria checkboxes P273/P274"
+   },
+   "010/importo_ricevuta_pagamento": {
+    "boxes": [
+     {
+      "section": "SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "si allega la ricevuta del pagamento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "generic payment-receipt radio; shared by both sanatoria checkboxes P273/P274"
+   },
+   "011/estremi_pagamento_sanatoria": {
+    "boxes": [
+     {
+      "section": "SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "si forniscono gli estremi del pagamento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "generic payment-details radio; shared by both sanatoria checkboxes P273/P274"
+   },
+   "011/importo_ricevuta_pagamento": {
+    "boxes": [
+     {
+      "section": "SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "si allega la ricevuta del pagamento"
+     }
+    ],
+    "confidence": "medium",
+    "note": "generic payment-receipt radio; shared by both sanatoria checkboxes P273/P274"
+   },
+   "012/fabbricati": {
+    "boxes": [
+     {
+      "section": "Dati catastali",
+      "label": "Nuovo Catasto Edilizio Urbano"
+     }
+    ],
+    "confidence": "high",
+    "note": "NCEU"
+   },
+   "012/terreni": {
+    "boxes": [
+     {
+      "section": "Dati catastali",
+      "label": "Nuovo Catasto Terreni"
+     }
+    ],
+    "confidence": "high",
+    "note": "NCT"
+   },
+   "013/no_parti_comuni": {
+    "boxes": [
+     {
+      "section": "e) Opere su parti comuni o modifiche esterne",
+      "label": "non riguardano parti comuni"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "013/parti_comuni_condominio": {
+    "boxes": [
+     {
+      "section": "e) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano le parti comuni di un fabbricato condominiale (1)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "013/parti_comuni_fabbricato_multiprop": {
+    "boxes": [
+     {
+      "section": "e) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano parti comuni di un fabbricato con più proprietà, non costituito in condominio, e dichiara che l'intervento è stato approvato dai comproprietari delle"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "013/parti_comuni_no_assenso": {
+    "boxes": [
+     {
+      "section": "e) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano parti dell'edificio di proprietà comune ma non necessitano di assenso perché, secondo l'art. 1102 c.c., apportano, a spese del titolare, le modificaz"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "014/oggetto_titolo_pratiche_edilizie": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o pratica/che edilizia/e ¹"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "014/immobile_non_obbligatorio": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "si tratta di immobile realizzato in un’epoca in cui non era obbligatorio un titolo abilitativo e pertanto si allega:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "014/non_disponibile_titolo": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "non sono disponibili la copia o gli estremi del titolo abilitativo, ma sussiste un principio di prova documentale del medesimo titolo abilitativo e pertanto si "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "014/tolleranza_costruttiva": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/i di tolleranza/e costruttiva/e di cui all'articolo 34-bis o 34-ter, comma 4:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "015/allega_ricevuta": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "si allega la relativa ricevuta"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "015/estremi_pagamenti": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "si forniscono gli estremi del pagamento"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "016/pienamente_conforme": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "pienamente conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "016/conforme_documentazione": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata, unitamente alla/e sanatoria/e di cui al quadro precedente e alla/e dic"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "017/titolo_gratuito": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "l'intervento da realizzare è a titolo gratuito"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "017/(nothing)": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "l'intervento da realizzare è a titolo oneroso e pertanto"
+     }
+    ],
+    "confidence": "low",
+    "note": "absence here means the onerous sibling element is used: P076 \"titolo oneroso\""
+   },
+   "018/calcolos_portello": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "chiede allo Sportello unico di effettuare il calcolo del contributo di costruzione e a tal fine allega la documentazione tecnica necessaria alla sua determinazi"
+     }
+    ],
+    "confidence": "high",
+    "note": "asks Sportello to calculate"
+   },
+   "018/calcolo_preventivo": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "allega il prospetto di calcolo preventivo del contributo di costruzione a firma del tecnico abilitato"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "019/allega_attestazione": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "si allega l'attestazione del completo versamento del contributo dovuto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "019/trasmette_prima_inizio_lavori": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "si riserva di trasmettere prima dell'inizio dei lavori l'attestazione del completo versamento del contributo dovuto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "019/chiede_rateizzazione": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "chiede la rateizzazione del contributo di costruzione secondo le modalità e garanzie stabilite dal Comune"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "019/corrisponde_in_corso": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "si impegna a corrispondere il costo di costruzione in corso di esecuzione delle opere, con le modalità e le garanzie stabilite dal Comune"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "020/da_soggetti_coinvolti": {
+    "boxes": [
+     {
+      "section": "i) Impresa esecutrice dei lavori",
+      "label": "i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata/e alla seguente sezione"
+     }
+    ],
+    "confidence": "high",
+    "note": "works done by the companies listed in the next section"
+   },
+   "020/(nothing)": {
+    "boxes": [
+     {
+      "section": "i) Impresa esecutrice dei lavori",
+      "label": "l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno individuata/e prima dell'inizio dei lavori"
+     },
+     {
+      "section": "i) Impresa esecutrice dei lavori",
+      "label": "i lavori, in quanto opere di modesta entità che non interessano le specifiche normative di settore, sono eseguiti/sono stati eseguiti in prima persona, senza al"
+     }
+    ],
+    "confidence": "low",
+    "note": "absence: companies not listed; portal options are \"to be named before start\" or \"done in person\""
+   },
+   "021/non_ricade": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "non ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "021/(nothing)": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008) e pertanto:"
+     }
+    ],
+    "confidence": "low",
+    "note": "absence means the \"ricade\" branch is used: P102"
+   },
+   "022/inf200ggUomo": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-giorno ed i lavori non comportano i rischi particolari di cui all'allegato XI del d.lgs. n."
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "022/pariSup200ggUomo": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'entità presunta del cantiere è pari o superiore a 200 uomini-giorno o i lavori comportano i rischi particolari di cui all'allegato XI del d.lgs. "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "023/no_notifica": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'intervento non è soggetto all'invio della notifica"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "023/(nothing)": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'intervento è soggetto all'invio della notifica"
+     }
+    ],
+    "confidence": "low",
+    "note": "absence means the \"notifica\" sibling is used: P106 (P107 reserves filing until start of works)"
+   },
+   "024/no_mutamento_destinazione_uso_straordinaria": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tipologia di intervento, descrizione opere",
+      "label": "Si specifica che l’intervento non comporta mutamento di destinazione d’uso"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: portal has one shared \"non comporta mutamento\" radio in the tipologia block; assumed to serve this intervention"
+   },
+   "024/si_mutamento_destinazione_uso_straordinaria": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tipologia di intervento, descrizione opere",
+      "label": "mutamento di destinazione d'uso, nel rispetto delle eventuali normative di settore e delle specifiche condizioni fissate dagli strumenti urbanistici comunali, d"
+     }
+    ],
+    "confidence": "low",
+    "note": "only the generic mutamento di destinazione d'uso type checkbox"
+   },
+   "025/no_mutamento_destinazione_uso_restauro": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tipologia di intervento, descrizione opere",
+      "label": "Si specifica che l’intervento non comporta mutamento di destinazione d’uso"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: same shared \"non comporta mutamento\" radio"
+   },
+   "025/si_mutamento_destinazione_uso_restauro": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tipologia di intervento, descrizione opere",
+      "label": "mutamento di destinazione d'uso, nel rispetto delle eventuali normative di settore e delle specifiche condizioni fissate dagli strumenti urbanistici comunali, d"
+     }
+    ],
+    "confidence": "low",
+    "note": "only the generic mutamento di destinazione d'uso type checkbox"
+   },
+   "026/no_mutamento_destinazione_uso_ristrutturazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tipologia di intervento, descrizione opere",
+      "label": "Si specifica che l’intervento non comporta mutamento di destinazione d’uso"
+     }
+    ],
+    "confidence": "medium",
+    "note": "rematched on the depth-3 recrawl: same shared \"non comporta mutamento\" radio"
+   },
+   "026/si_mutamento_destinazione_uso_ristrutturazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tipologia di intervento, descrizione opere",
+      "label": "mutamento di destinazione d'uso, nel rispetto delle eventuali normative di settore e delle specifiche condizioni fissate dagli strumenti urbanistici comunali, d"
+     }
+    ],
+    "confidence": "low",
+    "note": "only the generic mutamento di destinazione d'uso type checkbox"
+   },
+   "027/tolleranza_oltre_500_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:"
+     }
+    ],
+    "confidence": "low",
+    "note": "surface bands are the art. 34-bis c.1-bis tiers; no per-band box, band is a sub-field of P122"
+   },
+   "027/tolleranza_da_500_a_300_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:"
+     }
+    ],
+    "confidence": "low",
+    "note": "surface bands are the art. 34-bis c.1-bis tiers; no per-band box, band is a sub-field of P122"
+   },
+   "027/tolleranza_da_300_a_100_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:"
+     }
+    ],
+    "confidence": "low",
+    "note": "surface bands are the art. 34-bis c.1-bis tiers; no per-band box, band is a sub-field of P122"
+   },
+   "027/tolleranza_da_100_a_60_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:"
+     }
+    ],
+    "confidence": "low",
+    "note": "surface bands are the art. 34-bis c.1-bis tiers; no per-band box, band is a sub-field of P122"
+   },
+   "027/tolleranza_sotto_60_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:"
+     }
+    ],
+    "confidence": "low",
+    "note": "surface bands are the art. 34-bis c.1-bis tiers; no per-band box, band is a sub-field of P122"
+   },
+   "028/tolleranza_zona_sismica_bassa": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4)"
+     }
+    ],
+    "confidence": "high",
+    "note": "zones 3 and 4"
+   },
+   "028/tolleranza_zona_sismica_alta": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che la tolleranza costruttiva sopra indic"
+     }
+    ],
+    "confidence": "high",
+    "note": "zones 1 and 2"
+   },
+   "029/tolleranza_non_strutturale": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "non ha rilevanza strutturale;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"non ha rilevanza strutturale\" in tolleranze block"
+   },
+   "029/tolleranza_strutturale": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"ha rilevanza strutturale, rispetta le norme tecniche...\""
+   },
+   "030/tolleranza_pubblica_incolumita": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. a)"
+   },
+   "030/tolleranza_minore_rilevanza": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. b)"
+   },
+   "030/tolleranza_priva_rilevanza": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. c)"
+   },
+   "031/allega_autorizzazione_sismica": {
+    "boxes": [],
+    "confidence": "low",
+    "note": "sub-option inside P127 text; no separate box in worksheet"
+   },
+   "031/silenzio_assenso_autorizzazione": {
+    "boxes": [],
+    "confidence": "low",
+    "note": "sub-option inside P127 text; no separate box in worksheet"
+   },
+   "032/no_interventi": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "non prevede interventi;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"non prevede interventi\" under \"ai fini della sanatoria, la presente SCIA\""
+   },
+   "032/propone_interventi": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezza e/o la rimozione di opere che non possono essere sanate, a cui lo Spo"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"propone la realizzazione di interventi anche strutturali...\""
+   },
+   "033/zona_sismica_bassa": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sismicità (zone 3 e 4)"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: sanatoria: zona sismica bassa (zone 3 e 4)"
+   },
+   "033/zona_sismica_media_alta": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+      "label": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che l’intervento sopra indicato :"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: sanatoria: zone 1 e 2, attesta che l'intervento..."
+   },
+   "034/no_rilevanza_strutturale": {
+    "boxes": [],
+    "confidence": "medium",
+    "note": "portal has no such option in sanatoria section"
+   },
+   "034/ha_rilevanza_strutturale": {
+    "boxes": [],
+    "confidence": "medium",
+    "note": "portal has no such option in sanatoria section"
+   },
+   "035/non_comporta_impianti": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Sicurezza impianti, consumi energetici",
+      "label": "Non comporta l'installazione, la trasformazione o l'ampliamento di impianti tecnologici"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "035/comporta_impianti": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Sicurezza impianti, consumi energetici",
+      "label": "Comporta l'installazione, la trasformazione o l'ampliamento dei seguenti impianti tecnologici:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "036/non_soggetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Sicurezza impianti, consumi energetici",
+      "label": "non è soggetto agli obblighi di presentazione del progetto"
+     }
+    ],
+    "confidence": "medium",
+    "note": "project submission obligation (shared for all plant types)"
+   },
+   "036/soggetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Sicurezza impianti, consumi energetici",
+      "label": "è soggetto agli obblighi di presentazione del progetto e pertanto"
+     }
+    ],
+    "confidence": "medium",
+    "note": "project submission obligation (shared for all plant types)"
+   },
+   "037/non_soggetto_risparmio_energetico": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Sicurezza impianti, consumi energetici",
+      "label": "non è soggetto al deposito del progetto e della relazione tecnica di cui all'articolo 125 del d.P.R. n. 380/2001 e del d.lgs. n. 192/2005"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "037/soggetto_risparmio_energetico": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Sicurezza impianti, consumi energetici",
+      "label": "è soggetto al deposito del progetto e della relazione tecnica di cui all'articolo 125 del d.P.R. n. 380/2001 e del d.lgs. n. 192/2005, pertanto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "038/non_soggetto_fonti_rinnovabili": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Sicurezza impianti, consumi energetici",
+      "label": "non è soggetto all'applicazione del d.lgs. n. 28/2011, in quanto non riguarda edifici di nuova costruzione o edifici sottoposti ad una ristrutturazione rilevant"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "038/soggetto_fonti_rinnovabili": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Sicurezza impianti, consumi energetici",
+      "label": "è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "039/non_rientra_art_8": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "Non rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1995"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "039/rientra_art_8": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1995, integrato con i contenuti dell'articolo 4 del d.P.R. n. 227/2011 e SI ALLEGA:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "040/non_rientra_1997_12_05": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "040/rientra_1997_12_05": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "041/vol_inf_ugu_6000": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "le opere comportano la produzione di materiali da scavo per un volume inferiore o uguale a quello previsto dalla normativa vigente ovvero (pur superando tale so"
+     }
+    ],
+    "confidence": "medium",
+    "note": "volume <= threshold; P189 is the <=6000 mc with VIA/AIA case"
+   },
+   "041/vol_sup_6000": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "le opere comportano la produzione di materiali da scavo per un volume inferiore o uguale a 6000 mc e sono soggette a VIA o AIA, e pertanto, ai sensi dell'art. 1"
+     },
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo dell'assenso al Piano di Utilizzo dei materiali da scavo,"
+     }
+    ],
+    "confidence": "low",
+    "note": "branch with VIA/AIA and provvedimento details; portal text wording is odd"
+   },
+   "042/non_soggetto_prevenzione_incendi": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "non è soggetto alle norme di prevenzione incendi"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "042/soggetto_prevenzione_incendi": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "è soggetto alle norme tecniche di prevenzione incendi e le stesse sono rispettate nel progetto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "042/parziale_copertura_prevenzione_incendi": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "presenta caratteristiche tali da non consentire l'integrale osservanza delle regole tecniche di prevenzione incendi"
+     }
+    ],
+    "confidence": "high",
+    "note": "cannot fully meet technical rules; derogation"
+   },
+   "043/non_soggetto_valutazione_progetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "non è soggetto alla valutazione del progetto da parte del Comando Provinciale dei Vigili del Fuoco ai sensi del d.P.R. n. 151/2011"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "043/soggetto_valutazione_progetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "è soggetto alla valutazione del progetto da parte del Comando Provinciale dei Vigili del Fuoco, ai sensi dell'articolo 3 del d.P.R. n. 151/2011"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "043/variante_progetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "costituisce variante e il sottoscritto assevera che le modifiche non costituiscono variazione dei requisiti di sicurezza antincendio già approvati con parere de"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "044/non_interessano": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "non interessano parti di edifici con presenza di fibre di amianto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "044/(nothing)": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "interessano parti di edifici con presenza di fibre di amianto e che è stato predisposto, ai sensi dei commi 2 e 5 dell'articolo 256 del d.lgs. n. 81/2008, il Pi"
+     }
+    ],
+    "confidence": "low",
+    "note": "absence means \"interessano\" branch is used: P203"
+   },
+   "045/piano_di_lavoro_prima_inizio_lavori": {
+    "boxes": [],
+    "confidence": "low",
+    "note": "no separate box; P203 is the whole interessano branch"
+   },
+   "045/(nothing)": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "in allegato alla presente relazione di asseverazione"
+     }
+    ],
+    "confidence": "low",
+    "note": "sibling is the work plan attached: P204 \"in allegato\""
+   },
+   "046/conforme": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "046/non_conforme": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "non è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "046/conforme_art_24": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ricade nelle ipotesi di cui all’articolo 24, comma 5-bis DPR 380/2001 trattandosi d"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 24 c.5-bis"
+   },
+   "047/non_previste_opere": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "non prevede la realizzazione di opere di conglomerato cementizio armato, normale e precompresso ed a struttura metallica"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "047/previste_opere": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "prevede la realizzazione di opere di conglomerato cementizio armato, normale e precompresso ed a struttura metallica"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "048/non_previste_opere_normativa_regionale": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "non prevede opere da denunciare o autorizzare ai sensi degli articoli 93 e 94 del d.P.R. n. 380/2001 o della corrispondente normativa regionale"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "048/variante_sostanziale": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "costituisce una variante non sostanziale riguardante parti strutturali (art. 12 del Regolamento 4/2010) relativa ad un progetto esecutivo delle strutture preced"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal label says non-substantial variant on structural parts; schema name differs"
+   },
+   "048/previste_opere_normativa_regionale": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "prevede opere in zona sismica da denunciare ai sensi dell'articolo 93 del d.P.R. n. 380/2001 o della corrispondente normativa regionale (L.R. n.9/1983, Regolame"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 93 denuncia"
+   },
+   "048/previste_opere_strutturali": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "prevede opere strutturali soggette ad autorizzazione sismica ai sensi dell'articolo 94 del d.P.R. n. 380/2001 o della corrispondente normativa regionale (L.R. n"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 94 autorizzazione"
+   },
+   "049/non_ricade_in_zona_tutelata": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Storico Ambientale",
+      "label": "NON ricade in zona sottoposta a tutela"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "049/non_soggetto_autorizzazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Storico Ambientale",
+      "label": "ricade in zona tutelata, ma le opere non comportano alterazione dei luoghi o dell'aspetto esteriore degli edifici ovvero non sono soggetti ad autorizzazione ai "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "050/procedimento_semplificato": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Storico Ambientale",
+      "label": "è assoggettato al procedimento semplificato di autorizzazione paesaggistica, in quanto di lieve entità, secondo quanto previsto dal d.P.R. n. 31/2017"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "050/procedimento_ordinario": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Storico Ambientale",
+      "label": "è assoggettato al procedimento ordinario di autorizzazione paesaggistica"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "050/procedimento_accertamento": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Storico Ambientale",
+      "label": "è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all’articolo 36-bis del DPR 380/2001 e"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 36-bis"
+   },
+   "051/non_sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Storico Ambientale",
+      "label": "non è sottoposto a tutela"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "051/sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Storico Ambientale",
+      "label": "è sottoposto a tutela"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "051/sottoposto_tutela_allegato_rilascio_parere": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Storico Ambientale",
+      "label": "Si allega la documentazione necessaria ai fini del rilascio del parere/nulla osta"
+     }
+    ],
+    "confidence": "medium",
+    "note": "checkbox \"si allega documentazione ... parere/nulla osta\" under P231"
+   },
+   "052/non_ricade_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Storico Ambientale",
+      "label": "non ricade in area tutelata"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "052/ricade_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Storico Ambientale",
+      "label": "ricade in area tutelata, ma le opere non comportano alterazione dei luoghi o dell'aspetto esteriore degli edifici"
+     }
+    ],
+    "confidence": "medium",
+    "note": "ricade but no alteration of places"
+   },
+   "052/sottoposto_disposizioni": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Storico Ambientale",
+      "label": "è sottoposto alle relative disposizioni"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "053/non_sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Ecologica",
+      "label": "non è sottoposta a tutela"
+     }
+    ],
+    "confidence": "medium",
+    "note": "\"non e sottoposta a tutela\" label shared with vincolo idraulico"
+   },
+   "053/tutela_senza_autorizzazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Ecologica",
+      "label": "è sottoposta a tutela e l'intervento rientra nei casi eseguibili senza autorizzazione di cui al comma 5 dell'articolo 61 del d.lgs. n. 152/2006 e al r.d.l. n. 3"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "053/sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Ecologica",
+      "label": "è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione di cui al comma 5 dell'articolo 61 del d.lgs. n. 152/2006 e al r.d.l. n. 3267/1923"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 61 c.5 d.lgs. 152/2006, RDL 3267/1923"
+   },
+   "054/non_sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Ecologica",
+      "label": "non è sottoposta a tutela"
+     }
+    ],
+    "confidence": "medium",
+    "note": "\"non e sottoposta a tutela\" label shared with vincolo idrogeologico"
+   },
+   "054/sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Ecologica",
+      "label": "è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione di cui al comma 2 dell'articolo 115 del d.lgs. n. 152/2006 e al r.d. n. 523/1904"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 115 c.2, RD 523/1904"
+   },
+   "055/non_soggetto_vinca": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Ecologica",
+      "label": "non è soggetto a Valutazione d'incidenza (VINCA)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "055/soggetto_vinca": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Ecologica",
+      "label": "è soggetto a Valutazione d'incidenza (VINCA)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "056/non_ricade": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Ecologica",
+      "label": "l'intervento non ricade nella fascia di rispetto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "056/ricade_consentito": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Ecologica",
+      "label": "l'intervento ricade nella fascia di rispetto ed è consentito"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "056/ricade_non_consentito": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Tutela Ecologica",
+      "label": "l'intervento ricade in fascia di rispetto cimiteriale e non è consentito"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "057/assenza_attivita": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Altri Vincoli di Tutela Ecologica",
+      "label": "nel comune NON è presente un'attività a rischio d'incidente rilevante"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "057/presenza_attivita_no_area_danno": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Altri Vincoli di Tutela Ecologica",
+      "label": "nel comune E' presente un'attività a rischio d'incidente rilevante e la relativa “area di danno” non è individuata nella pianificazione comunale"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "058/non_ricade_area_danno": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Altri Vincoli di Tutela Ecologica",
+      "label": "l'intervento NON ricade nell'area di danno"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "058/ricade_area_danno": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA - Altri Vincoli di Tutela Ecologica",
+      "label": "l'intervento ricade in area di danno"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   }
+  },
+  "scia_alternativa": {
+   "000/titolare_esclusivo": {
+    "boxes": [
+     {
+      "section": "a) Titolarità dell'intervento",
+      "label": "avere titolarità esclusiva all'esecuzione dell'intervento"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"avere titolarità esclusiva all'esecuzione dell'intervento\""
+   },
+   "000/non_titolare_esclusivo": {
+    "boxes": [
+     {
+      "section": "a) Titolarità dell'intervento",
+      "label": "non avere titolarità esclusiva all'esecuzione dell'intervento, ma di disporre comunque della dichiarazione di assenso dei terzi titolari di altri diritti reali "
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"non avere titolarità esclusiva ... ma di disporre dell'assenso dei terzi\""
+   },
+   "001/scia_alternativa": {
+    "boxes": [],
+    "confidence": "medium",
+    "note": "P011 is only a \"per presa visione\" acknowledgement, not a choice"
+   },
+   "001/scia_unica": {
+    "boxes": [],
+    "confidence": "medium",
+    "note": "no portal option; P011 is only an acknowledgement"
+   },
+   "001/scia_condizionata": {
+    "boxes": [],
+    "confidence": "medium",
+    "note": "no portal option; P011 is only an acknowledgement"
+   },
+   "002/noMutamento": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "non comporta mutamento di destinazione d’uso di una singola unità immobiliare o di un intero immobile"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "002/mutamentoCategoriaSingolaUnita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di una singola unità immobiliare all’interno della stessa categoria funzionale"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "002/mutamentoTraCategorieSingolaUnita": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di una singola unità immobiliare, ubicata in immobili ricompresi nelle zone A), B) e C) di cui all'articolo 2 del d,m. "
+     }
+    ],
+    "confidence": "high",
+    "note": "zones A/B/C, art. 23-ter"
+   },
+   "002/mutamentoCategoriaInteroImmobile": {
+    "boxes": [
+     {
+      "section": "c) Qualificazione dell'intervento",
+      "label": "comporta mutamento di destinazione d’uso di un intero immobile all’interno della stessa categoria funzionale nelle ipotesi di cui all’art. 23-ter, comma 3"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "003/procedimentoAutomatizzato": {
+    "boxes": [],
+    "confidence": "medium",
+    "note": "portal has no such option (P012 only states the SCIA alt. eligibility)"
+   },
+   "003/procedimentoOrdinario": {
+    "boxes": [],
+    "confidence": "medium",
+    "note": "portal has no such option"
+   },
+   "004/fabbricati": {
+    "boxes": [
+     {
+      "section": "Dati catastali",
+      "label": "Nuovo Catasto Edilizio Urbano"
+     }
+    ],
+    "confidence": "high",
+    "note": "NCEU"
+   },
+   "004/terreni": {
+    "boxes": [
+     {
+      "section": "Dati catastali",
+      "label": "Nuovo Catasto Terreni"
+     }
+    ],
+    "confidence": "high",
+    "note": "NCT"
+   },
+   "005/no_parti_comuni": {
+    "boxes": [
+     {
+      "section": "e) Opere su parti comuni o modifiche esterne",
+      "label": "non riguardano parti comuni"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "005/parti_comuni_condominio": {
+    "boxes": [
+     {
+      "section": "e) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano le parti comuni di un fabbricato condominiale (1)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "005/parti_comuni_fabbricato_multiprop": {
+    "boxes": [
+     {
+      "section": "e) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano parti comuni di un fabbricato con più proprietà, non costituito in condominio, e dichiara che l'intervento è stato approvato dai comproprietari delle"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "005/parti_comuni_no_assenso": {
+    "boxes": [
+     {
+      "section": "e) Opere su parti comuni o modifiche esterne",
+      "label": "riguardano parti dell'edificio di proprietà comune ma non necessitano di assenso perché, secondo l'art. 1102 c.c., apportano, a spese del titolare, le modificaz"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "006/oggetto_titolo_pratiche_edilizie": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o pratica/che edilizia/e ¹"
+     }
+    ],
+    "confidence": "high",
+    "note": "P022-P035 are the sub-checkboxes for the kind of title"
+   },
+   "006/immobile_non_obbligatorio": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "si tratta di immobile realizzato in un’epoca in cui non era obbligatorio un titolo abilitativo e pertanto si allega:"
+     }
+    ],
+    "confidence": "high",
+    "note": "sub-boxes P037, P038"
+   },
+   "006/non_disponibile_titolo": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "non sono disponibili la copia o gli estremi del titolo abilitativo, ma sussiste un principio di prova documentale del medesimo titolo abilitativo e pertanto si "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "006/tolleranza_costruttiva": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/i di tolleranza/e costruttiva/e di cui all'articolo 34-bis o 34-ter, comma 4:"
+     }
+    ],
+    "confidence": "high",
+    "note": "sub-boxes P044, P045"
+   },
+   "007/allega_ricevuta": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "si allega la relativa ricevuta"
+     }
+    ],
+    "confidence": "high",
+    "note": "parent: P040"
+   },
+   "007/estremi_pagamenti": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "si forniscono gli estremi del pagamento"
+     }
+    ],
+    "confidence": "high",
+    "note": "parent: P040"
+   },
+   "008/pienamente_conforme": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "pienamente conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "008/conforme_documentazione": {
+    "boxes": [
+     {
+      "section": "f) Regolarità urbanistica e precedenti edilizi",
+      "label": "conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata, unitamente alla/e dichiarazione/i di tolleranza esecutive di cui alla "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "009/titolo_gratuito": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "L'intervento da realizzare è a titolo gratuito"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "009/titolo_oneroso": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "L'intervento da realizzare è a titolo oneroso e pertanto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "010/calcolo_sportello": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "chiede allo Sportello Unico di effettuare il calcolo del contributo di costruzione e a tal fine allega la documentazione tecnica necessaria alla sua determinazi"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "010/calcolo_preventivo": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "allega il prospetto di calcolo preventivo del contributo di costruzione a firma di tecnico abilitato"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "011/pagamento_entro_30_giorni": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "effettuerà il pagamento del contributo di costruzione, secondo le modalità stabilite dal Comune, entro 30 giorni dalla data di presentazione della segnalazione "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "011/chiede_rateizzazione": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "chiede la rateizzazione del contributo di costruzione secondo le modalità e garanzie stabilite dal Comune"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "011/corrisponde_in_corso": {
+    "boxes": [
+     {
+      "section": "g) Calcolo del contributo di costruzione",
+      "label": "si impegna a corrispondere il costo di costruzione in corso di esecuzione delle opere, con le modalità e le garanzie stabilite dal Comune"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "012/da_soggetti_coinvolti": {
+    "boxes": [
+     {
+      "section": "i) Impresa esecutrice dei lavori",
+      "label": "i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata/e alla seguente sezione"
+     }
+    ],
+    "confidence": "high",
+    "note": "firms listed in the following section"
+   },
+   "012/(nothing)": {
+    "boxes": [
+     {
+      "section": "i) Impresa esecutrice dei lavori",
+      "label": "l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno individuata/e prima dell'inizio dei lavori"
+     },
+     {
+      "section": "i) Impresa esecutrice dei lavori",
+      "label": "i lavori, in quanto opere di modesta entità che non interessano le specifiche normative di settore, sono eseguiti/sono stati eseguiti in prima persona, senza al"
+     }
+    ],
+    "confidence": "low",
+    "note": "absence of the listed firms; portal alternatives: to be named later (P068) or self-executed (P069)"
+   },
+   "013/non_ricade": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "non ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "013/(nothing)": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008) e pertanto:"
+     }
+    ],
+    "confidence": "low",
+    "note": "absent when \"ricade\" is chosen; P075 (also P080) is the ricade option"
+   },
+   "014/inf200ggUomo": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-giorno ed i lavori non comportano i rischi particolari di cui all'allegato XI del d.lgs. n."
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "014/pariSup200ggUomo": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'entità presunta del cantiere è pari o superiore a 200 uomini-giorno o i lavori comportano i rischi particolari di cui all'allegato XI del d.lgs. "
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "015/no_notifica": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'intervento non è soggetto all'invio della notifica"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "015/notifica": {
+    "boxes": [
+     {
+      "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+      "label": "dichiara che l'intervento è soggetto all'invio della notifica"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "016/no_mutamento_destinazione_uso_ristrutturazione_edilizia": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Dati progettista e descrizione opere",
+      "label": "non comporta mutamento di destinazione d’uso"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal has one shared no/yes pair (P086/P087) for all four intervention kinds (P082-P085)"
+   },
+   "016/si_mutamento_destinazione_uso_ristrutturazione_edilizia": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Dati progettista e descrizione opere",
+      "label": "comporta mutamento di destinazione d’uso"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal has one shared no/yes pair (P086/P087) for all four intervention kinds (P082-P085)"
+   },
+   "017/no_mutamento_destinazione_uso_ristrutturazione_urbanistica": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Dati progettista e descrizione opere",
+      "label": "non comporta mutamento di destinazione d’uso"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal has one shared no/yes pair (P086/P087) for all four intervention kinds (P082-P085)"
+   },
+   "017/si_mutamento_destinazione_uso_ristrutturazione_urbanistica": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Dati progettista e descrizione opere",
+      "label": "comporta mutamento di destinazione d’uso"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal has one shared no/yes pair (P086/P087) for all four intervention kinds (P082-P085)"
+   },
+   "018/no_mutamento_destinazione_uso_nuova_costruzione": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Dati progettista e descrizione opere",
+      "label": "non comporta mutamento di destinazione d’uso"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal has one shared no/yes pair (P086/P087) for all four intervention kinds (P082-P085)"
+   },
+   "018/si_mutamento_destinazione_uso_nuova_costruzione": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Dati progettista e descrizione opere",
+      "label": "comporta mutamento di destinazione d’uso"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal has one shared no/yes pair (P086/P087) for all four intervention kinds (P082-P085)"
+   },
+   "019/no_mutamento_destinazione_uso_altri_interventi": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Dati progettista e descrizione opere",
+      "label": "non comporta mutamento di destinazione d’uso"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal has one shared no/yes pair (P086/P087) for all four intervention kinds (P082-P085)"
+   },
+   "019/si_mutamento_destinazione_uso_altri_interventi": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Dati progettista e descrizione opere",
+      "label": "comporta mutamento di destinazione d’uso"
+     }
+    ],
+    "confidence": "medium",
+    "note": "portal has one shared no/yes pair (P086/P087) for all four intervention kinds (P082-P085)"
+   },
+   "020/tolleranza_oltre_500_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "2%, per le U.I. > 500 mq di superficie utile ;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 2%, U.I. > 500 mq"
+   },
+   "020/tolleranza_da_500_a_300_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 3%, 500-300 mq"
+   },
+   "020/tolleranza_da_300_a_100_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 4%, 300-100 mq"
+   },
+   "020/tolleranza_da_100_a_60_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 5%, 100-60 mq"
+   },
+   "020/tolleranza_sotto_60_mq": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "6%, per le U.I. < 60 mq di superficie utile;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: 6%, < 60 mq"
+   },
+   "021/tolleranza_zona_sismica_bassa": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "021/tolleranza_zona_sismica_alta": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che la tolleranza costruttiva sopra indic"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "022/tolleranza_non_strutturale": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "non ha rilevanza strutturale;"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"non ha rilevanza strutturale\""
+   },
+   "022/tolleranza_strutturale": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: \"ha rilevanza strutturale, rispetta le norme tecniche...\""
+   },
+   "023/tolleranza_pubblica_incolumita": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. a)"
+   },
+   "023/tolleranza_minore_rilevanza": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. b)"
+   },
+   "023/tolleranza_priva_rilevanza": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+      "label": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": "rematched on the depth-3 recrawl: art. 94-bis c.1 lett. c)"
+   },
+   "024/allega_autorizzazione_sismica": {
+    "boxes": [],
+    "confidence": "low",
+    "note": "no such box in the worksheet"
+   },
+   "024/silenzio_assenso_autorizzazione": {
+    "boxes": [],
+    "confidence": "low",
+    "note": "no such box in the worksheet"
+   },
+   "025/non_comporta_impianti": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici",
+      "label": "Non comporta l'installazione, la trasformazione o l'ampliamento di impianti tecnologici"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "025/comporta_impianti": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici",
+      "label": "Comporta l'installazione, la trasformazione o l'ampliamento dei seguenti impianti tecnologici:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "026/non_soggetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici",
+      "label": "non è soggetto agli obblighi di presentazione del progetto"
+     }
+    ],
+    "confidence": "medium",
+    "note": "not subject to project filing duty; one pair serves all impianti"
+   },
+   "026/soggetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici",
+      "label": "è soggetto agli obblighi di presentazione del progetto e pertanto"
+     }
+    ],
+    "confidence": "medium",
+    "note": "subject to project filing duty; one pair serves all impianti"
+   },
+   "027/non_soggetto_risparmio_energetico": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici",
+      "label": "non è soggetto al deposito del progetto e della relazione tecnica di cui all'articolo 125 del d.P.R. n. 380/2001 e del d.lgs. n. 192/2005"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "027/soggetto_risparmio_energetico": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici",
+      "label": "è soggetto al deposito del progetto e della relazione tecnica di cui all'articolo 125 del d.P.R. n. 380/2001 e del d.lgs. n. 192/2005, pertanto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "028/non_soggetto_fonti_rinnovabili": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici",
+      "label": "non è soggetto all'applicazione del d.lgs. n. 28/2011, in quanto non riguarda edifici di nuova costruzione o edifici sottoposti ad una ristrutturazione rilevant"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "028/soggetto_fonti_rinnovabili": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici",
+      "label": "è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "029/non_rientra_art_8": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "Non rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1995"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "029/rientra_art_8": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1995, integrato con i contenuti dell'articolo 4 del d.P.R. n. 227/2011 e SI ALLEGA:"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "030/non_rientra_1997_12_05": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "030/rientra_1997_12_05": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "031/vol_inf_ugu_6000": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "le opere comportano la produzione di materiali da scavo per un volume inferiore o uguale a quello previsto dalla normativa vigente ovvero (pur superando tale so"
+     }
+    ],
+    "confidence": "medium",
+    "note": "volume within the legal limit"
+   },
+   "031/vol_sup_6000": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "le opere comportano la produzione di materiali da scavo per un volume inferiore o uguale a 6000 mc e sono soggette a VIA o AIA, e pertanto, ai sensi dell'art. 1"
+     },
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo dell'assenso al Piano di Utilizzo dei materiali da scavo,"
+     }
+    ],
+    "confidence": "low",
+    "note": "VIA/AIA case with provvedimento details; P152 label says <=6000 mc, so unsure"
+   },
+   "032/non_soggetto_prevenzione_incendi": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "non è soggetto alle norme di prevenzione incendi"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "032/soggetto_prevenzione_incendi": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "è soggetto alle norme tecniche di prevenzione incendi e le stesse sono rispettate nel progetto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "032/parziale_copertura_prevenzione_incendi": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "presenta caratteristiche tali da non consentire l'integrale osservanza delle regole tecniche di prevenzione incendi"
+     }
+    ],
+    "confidence": "high",
+    "note": "cannot fully comply; deroga documents P160"
+   },
+   "033/non_soggetto_valutazione_progetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "non è soggetto alla valutazione del progetto da parte del Comando Provinciale dei Vigili del Fuoco ai sensi del d.P.R. n. 151/2011"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "033/soggetto_valutazione_progetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "è soggetto alla valutazione del progetto da parte del Comando Provinciale dei Vigili del Fuoco, ai sensi dell'articolo 3 del d.P.R. n. 151/2011"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "033/variante_progetto": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+      "label": "costituisce variante e il sottoscritto assevera che le modifiche non costituiscono variazione dei requisiti di sicurezza antincendio già approvati con parere de"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "034/non_interessano": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "non interessano parti di edifici con presenza di fibre di amianto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "034/(nothing)": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "interessano parti di edifici con presenza di fibre di amianto e che è stato predisposto, ai sensi dei commi 2 e 5 dell'articolo 256 del d.lgs. n. 81/2008, il Pi"
+     }
+    ],
+    "confidence": "low",
+    "note": "absent when \"interessano\" is chosen; P166 is that option"
+   },
+   "035/piano_di_lavoro_prima_inizio_lavori": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "interessano parti di edifici con presenza di fibre di amianto e che è stato predisposto, ai sensi dei commi 2 e 5 dell'articolo 256 del d.lgs. n. 81/2008, il Pi"
+     }
+    ],
+    "confidence": "low",
+    "note": "plan to be filed before works; P166 text cut off"
+   },
+   "035/(nothing)": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "in allegato alla presente relazione di asseverazione"
+     }
+    ],
+    "confidence": "low",
+    "note": "plan attached instead (P167); guess"
+   },
+   "036/conforme": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "036/non_conforme": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "non è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste"
+     }
+    ],
+    "confidence": "high",
+    "note": "deroga docs P170"
+   },
+   "036/conforme_art_24": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ricade nelle ipotesi di cui all’articolo 24, comma 5-bis DPR 380/2001 trattandosi d"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 24 comma 5-bis; sub-boxes P181-P183"
+   },
+   "037/non_previste_opere": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "non prevede la realizzazione di opere di conglomerato cementizio armato, normale e precompresso ed a struttura metallica"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "037/previste_opere": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "prevede la realizzazione di opere di conglomerato cementizio armato, normale e precompresso ed a struttura metallica"
+     }
+    ],
+    "confidence": "high",
+    "note": "denuncia art. 65: P174"
+   },
+   "038/non_previste_opere_normativa_regionale": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "non prevede opere da denunciare o autorizzare ai sensi degli articoli 93 e 94 del d.P.R. n. 380/2001 o della corrispondente normativa regionale"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "038/variante_sostanziale": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "costituisce una variante non sostanziale riguardante parti strutturali (art. 12 del Regolamento 4/2010) relativa ad un progetto esecutivo delle strutture preced"
+     }
+    ],
+    "confidence": "low",
+    "note": "portal says \"variante non sostanziale\" with a prior executive project; schema name opposite, likely same case"
+   },
+   "038/previste_opere_normativa_regionale": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "prevede opere in zona sismica da denunciare ai sensi dell'articolo 93 del d.P.R. n. 380/2001 o della corrispondente normativa regionale (L.R. n.9/1983, Regolame"
+     }
+    ],
+    "confidence": "high",
+    "note": "denuncia art. 93; docs P178"
+   },
+   "038/previste_opere_strutturali": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+      "label": "prevede opere strutturali soggette ad autorizzazione sismica ai sensi dell'articolo 94 del d.P.R. n. 380/2001 o della corrispondente normativa regionale (L.R. n"
+     }
+    ],
+    "confidence": "high",
+    "note": "autorizzazione art. 94; docs P180"
+   },
+   "039/non_richiede_indagini": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi",
+      "label": "non richiede indagini ambientali preventive in relazione alle attività finora svolte sull'area interessata dall'intervento"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "039/non_necessita_bonifica": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi",
+      "label": "a seguito delle preventive analisi ambientali effettuate, non necessita di bonifica, pertanto"
+     }
+    ],
+    "confidence": "high",
+    "note": "analyses P186"
+   },
+   "039/avvenuta_bonifica": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi",
+      "label": "è stata oggetto di bonifica dei terreni con obiettivi compatibili con la destinazione d'uso del presente intervento, come risulta dalla certificazione conclusiv"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "040/dotata": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi",
+      "label": "è dotata delle opere di urbanizzazione primaria"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "040/non_dotata": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi",
+      "label": "non è dotata delle opere di urbanizzazione primaria e la loro attuazione è prevista da parte dell'amministrazione comunale nel corso del prossimo triennio ovver"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "041/non_necessita_autorizzazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi",
+      "label": "non necessita di autorizzazione allo scarico"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "041/necessita_autorizzazione_scarico": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi",
+      "label": "necessita di autorizzazione allo scarico e la stessa è stata richiesta / ottenuta nell'ambito di altre autorizzazioni o valutazioni ambientali (AUA, AIA, VIA)"
+     }
+    ],
+    "confidence": "high",
+    "note": "obtained within AUA/AIA/VIA"
+   },
+   "041/necessita_autorizzazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi",
+      "label": "necessita di autorizzazione"
+     }
+    ],
+    "confidence": "high",
+    "note": "sub-boxes P193-P197"
+   },
+   "042/non_ricade_in_zona_tutelata": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+      "label": "NON ricade in zona sottoposta a tutela"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "042/non_soggetto_autorizzazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+      "label": "ricade in zona tutelata, ma le opere non comportano alterazione dei luoghi o dell'aspetto esteriore degli edifici ovvero non sono soggetti ad autorizzazione ai "
+     }
+    ],
+    "confidence": "high",
+    "note": "in protected zone but no authorization needed"
+   },
+   "043/procedimento_semplificato": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+      "label": "è assoggettato al procedimento semplificato di autorizzazione paesaggistica, in quanto di lieve entità, secondo quanto previsto dal d.P.R. n. 31/2017"
+     }
+    ],
+    "confidence": "high",
+    "note": "docs P202; parent P200"
+   },
+   "043/procedimento_ordinario": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+      "label": "è assoggettato al procedimento ordinario di autorizzazione paesaggistica"
+     }
+    ],
+    "confidence": "high",
+    "note": "docs P204; parent P200"
+   },
+   "043/procedimento_accertamento": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal has no accertamento option"
+   },
+   "044/non_sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+      "label": "non è sottoposto a tutela"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "044/sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+      "label": "è sottoposto a tutela"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "044/sottoposto_tutela_allegato_rilascio_parere": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+      "label": "Si allega la documentazione necessaria ai fini del rilascio del parere/nulla osta"
+     }
+    ],
+    "confidence": "medium",
+    "note": "P206 plus the checkbox attaching documents for parere/nulla osta"
+   },
+   "045/non_ricade_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+      "label": "non ricade in area tutelata"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "045/ricade_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+      "label": "ricade in area tutelata, ma le opere non comportano alterazione dei luoghi o dell'aspetto esteriore degli edifici"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "045/sottoposto_disposizioni": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+      "label": "è sottoposto alle relative disposizioni"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "046/non_sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Ecologica",
+      "label": "non è sottoposta a tutela"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "046/tutela_senza_autorizzazione": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Ecologica",
+      "label": "è sottoposta a tutela e l'intervento rientra nei casi eseguibili senza autorizzazione di cui al comma 5 dell'articolo 61 del d.lgs. n. 152/2006 e al r.d.l. n. 3"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "046/sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Ecologica",
+      "label": "è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione di cui al comma 5 dell'articolo 61 del d.lgs. n. 152/2006 e al r.d.l. n. 3267/1923"
+     }
+    ],
+    "confidence": "high",
+    "note": "docs P214"
+   },
+   "047/non_sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Ecologica",
+      "label": "non è sottoposta a tutela"
+     }
+    ],
+    "confidence": "low",
+    "note": "no separate \"not subject\" box for vincolo idraulico; shared P211 guess"
+   },
+   "047/sottoposto_tutela": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Ecologica",
+      "label": "è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione di cui al comma 2 dell'articolo 115 del d.lgs. n. 152/2006 e al r.d. n. 523/1904"
+     }
+    ],
+    "confidence": "high",
+    "note": "art. 115 d.lgs. 152/2006, r.d. 523/1904"
+   },
+   "048/non_soggetto_vinca": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Ecologica",
+      "label": "non è soggetto a Valutazione d'incidenza (VINCA)"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "048/soggetto_vinca": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Ecologica",
+      "label": "è soggetto a Valutazione d'incidenza (VINCA)"
+     }
+    ],
+    "confidence": "high",
+    "note": "docs P218"
+   },
+   "049/non_ricade": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Ecologica",
+      "label": "l'intervento non ricade nella fascia di rispetto"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "049/ricade_consentito": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Ecologica",
+      "label": "l'intervento ricade nella fascia di rispetto ed è consentito"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "049/ricade_non_consentito": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Tutela Ecologica",
+      "label": "l'intervento ricade in fascia di rispetto cimiteriale e non è consentito"
+     }
+    ],
+    "confidence": "high",
+    "note": "deroga docs P222"
+   },
+   "050/assenza_attivita": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Altri Vincoli di Tutela Ecologica",
+      "label": "nel comune NON è presente un'attività a rischio d'incidente rilevante"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "050/presenza_attivita_no_area_danno": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Altri Vincoli di Tutela Ecologica",
+      "label": "nel comune E' presente un'attività a rischio d'incidente rilevante e la relativa “area di danno” non è individuata nella pianificazione comunale"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "051/non_ricade_area_danno": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Altri Vincoli di Tutela Ecologica",
+      "label": "l'intervento NON ricade nell'area di danno"
+     }
+    ],
+    "confidence": "high",
+    "note": ""
+   },
+   "051/ricade_area_danno": {
+    "boxes": [
+     {
+      "section": "Asseverazione SCIA Alternativa - Altri Vincoli di Tutela Ecologica",
+      "label": "l'intervento ricade in area di danno"
+     }
+    ],
+    "confidence": "high",
+    "note": "docs P227"
+   }
+  },
+  "segnalazione_certificata_agibilita": {
+   "000/fabbricati": {
+    "boxes": [
+     {
+      "section": "Dati catastali",
+      "label": "Nuovo Catasto Edilizio Urbano"
+     }
+    ],
+    "confidence": "high",
+    "note": "NCEU"
+   },
+   "000/terreni": {
+    "boxes": [
+     {
+      "section": "Dati catastali",
+      "label": "Nuovo Catasto Terreni"
+     }
+    ],
+    "confidence": "high",
+    "note": "NCT"
+   },
+   "001/protocollo_comunicazione_fine_lavori": {
+    "boxes": [
+     {
+      "section": "dichiarazione sulla comunicazione di fine lavori",
+      "label": "che la comunicazione di fine lavori è stata già presentata"
+     }
+    ],
+    "confidence": "medium",
+    "note": "end-of-works communication already filed (protocol given)"
+   },
+   "001/data_fine_lavori": {
+    "boxes": [
+     {
+      "section": "dichiarazione sulla comunicazione di fine lavori",
+      "label": "che la presente segnalazione vale come comunicazione di fine lavori"
+     }
+    ],
+    "confidence": "medium",
+    "note": "this SCA counts as end-of-works communication (date given)"
+   },
+   "002/stato_lavori_completati": {
+    "boxes": [
+     {
+      "section": "dichiarazione sulla comunicazione di fine lavori",
+      "label": "completamente"
+     }
+    ],
+    "confidence": "high",
+    "note": "completely"
+   },
+   "002/stato_lavori_parziale": {
+    "boxes": [
+     {
+      "section": "dichiarazione sulla comunicazione di fine lavori",
+      "label": "in forma parziale come da planimetria allegata"
+     }
+    ],
+    "confidence": "high",
+    "note": "partially, per attached plan"
+   },
+   "003/scia_agibilita_immobile": {
+    "boxes": [
+     {
+      "section": "Presentazione della segnalazione certificata per l'agibilità",
+      "label": "l'agibilità relativa all'immobile oggetto dell'intervento edilizio"
+     }
+    ],
+    "confidence": "medium",
+    "note": "agibilita of the property; portal has no SCIA-unica variant"
+   },
+   "003/scia_agibilita_parziale_edifici": {
+    "boxes": [
+     {
+      "section": "Presentazione della segnalazione certificata per l'agibilità",
+      "label": "l'agibilità parziale relativa a singoli edifici o a singole porzioni della costruzione (art. 24, comma 4, lett. a) del d.P.R. n. 380/2001)"
+     }
+    ],
+    "confidence": "medium",
+    "note": "partial, single buildings (art.24 c.4 a)"
+   },
+   "003/scia_agibilita_parziale_singoli_immobili": {
+    "boxes": [
+     {
+      "section": "Presentazione della segnalazione certificata per l'agibilità",
+      "label": "l'agibilità parziale relativa a singole unità immobiliari (art. 24, comma 4, lett. b) del d.P.R. n. 380/2001)"
+     }
+    ],
+    "confidence": "medium",
+    "note": "partial, single units (art.24 c.4 b)"
+   },
+   "003/scia_unica_agibilita_immobile": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal section has no SCIA-unica option"
+   },
+   "003/scia_unica_agibilita_parziale_edifici": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal section has no SCIA-unica option"
+   },
+   "003/scia_unica_agibilita_parziale_singoli_immobili": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "portal section has no SCIA-unica option"
+   },
+   "004/comune": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "data field (studio's comune), not a choice"
+   },
+   "004/localitaEstera": {
+    "boxes": [],
+    "confidence": "high",
+    "note": "data field, not a choice"
+   },
+   "005/direttore_lavori": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Dati del Direttore Lavori/Professionista Abilitato",
+      "label": "Direttore dei Lavori"
+     }
+    ],
+    "confidence": "high",
+    "note": "Direttore dei Lavori"
+   },
+   "005/professionista_abilitato": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Dati del Direttore Lavori/Professionista Abilitato",
+      "label": "Professionista abilitato"
+     }
+    ],
+    "confidence": "high",
+    "note": "Professionista abilitato"
+   },
+   "006/agibilita_immobile": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Agibilità",
+      "label": "L'agibilità relativa all'immobile oggetto dell'intervento edilizio"
+     }
+    ],
+    "confidence": "high",
+    "note": "agibilita of the property"
+   },
+   "006/agibilita_parziale_edifici": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Agibilità",
+      "label": "L' agibilità parziale relativa a singoli edifici o singole porzioni della costruzione, purché funzionalmente autonomi, qualora siano state realizzate e collauda"
+     }
+    ],
+    "confidence": "high",
+    "note": "partial, buildings/portions"
+   },
+   "006/agibilita_parziale_singoli_immobili": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Agibilità",
+      "label": "L'agibilità parziale relativa a singole unità immobiliari (U.I.), purché siano completate e collaudate le opere strutturali connesse, siano certificati gli impi"
+     }
+    ],
+    "confidence": "high",
+    "note": "partial, single units"
+   },
+   "007/nessun_impianto": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Sicurezza degli impianti",
+      "label": "NON HA interessato gli impianti"
+     }
+    ],
+    "confidence": "high",
+    "note": "did not involve systems"
+   },
+   "007/impianti_con_certificazione": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Sicurezza degli impianti",
+      "label": "HA interessato i seguenti impianti dotati della certificazione di seguito indicata"
+     }
+    ],
+    "confidence": "high",
+    "note": "involved systems with certification"
+   },
+   "008/non_ha_interessato_strutture": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Sicurezza statica e  sismica,  Prestazione energetica",
+      "label": "non ha interessato le strutture dell'edificio"
+     }
+    ],
+    "confidence": "high",
+    "note": "did not involve structures"
+   },
+   "008/(nothing)": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Sicurezza statica e  sismica,  Prestazione energetica",
+      "label": "ha interessato le strutture dell'edificio e pertanto:"
+     }
+    ],
+    "confidence": "medium",
+    "note": "absence = ha_interessato_strutture branch; P058 is that radio"
+   },
+   "009/certificato_collaudo_statico": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Sicurezza statica e  sismica,  Prestazione energetica",
+      "label": "si allega certificato di collaudo statico (previsto dal d.m. 14 settembre 2005, dal d.m. 14 gennaio 2008 e dall'art. 67 del d.P.R. n. 380/2001) e dalla corrispo"
+     }
+    ],
+    "confidence": "high",
+    "note": "attaches static test certificate"
+   },
+   "009/estremi_collaudo_statico": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Sicurezza statica e  sismica,  Prestazione energetica",
+      "label": "si comunicano gli estremi del certificato di collaudo statico"
+     }
+    ],
+    "confidence": "high",
+    "note": "gives details of static test certificate"
+   },
+   "009/dichiarazione_esecuzione_interventi": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Sicurezza statica e  sismica,  Prestazione energetica",
+      "label": "si allega la dichiarazione di regolare esecuzione per gli interventi di riparazione e per gli interventi locali sulle costruzioni esistenti, come definiti dalla"
+     }
+    ],
+    "confidence": "high",
+    "note": "attaches declaration of regular execution"
+   },
+   "009/estremi_dichiarazione_esecuzione_interventi": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Sicurezza statica e  sismica,  Prestazione energetica",
+      "label": "si comunicano gli estremi della dichiarazione di regolare esecuzione per gli interventi di riparazione e per gli interventi locali sulle costruzioni esistenti, "
+     }
+    ],
+    "confidence": "high",
+    "note": "gives details of that declaration"
+   },
+   "009/no_collaudo_statico": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Sicurezza statica e  sismica,  Prestazione energetica",
+      "label": "non si è proceduto al collaudo statico trattandosi di interventi strutturali minori non soggetti ad obbligo di collaudo (p.to 8.4.3 d.m. 14 gennaio 2008)"
+     }
+    ],
+    "confidence": "high",
+    "note": "no static test, minor structural works"
+   },
+   "010/non_soggetto_requisiti_minimi": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Sicurezza statica e  sismica,  Prestazione energetica",
+      "label": "non è soggetto all'osservanza dei requisiti minimi di prestazione energetica"
+     }
+    ],
+    "confidence": "high",
+    "note": "not subject to minimum energy requirements"
+   },
+   "010/soggetto_requisiti_minimi": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Sicurezza statica e  sismica,  Prestazione energetica",
+      "label": "è soggetto all'osservanza dei requisiti minimi di prestazione energetica, e pertanto si allega attestato di qualificazione energetica (AQE) dell'edificio o dell"
+     }
+    ],
+    "confidence": "high",
+    "note": "subject, attaches AQE"
+   },
+   "011/non_comporta_variazione_iscrizione": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Barriere architettoniche, Catasto, Toponomastica",
+      "label": "NON comporta variazione dell'iscrizione catastale"
+     }
+    ],
+    "confidence": "high",
+    "note": "no cadastral variation"
+   },
+   "011/comporta_variazione_iscrizione": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Barriere architettoniche, Catasto, Toponomastica",
+      "label": "comporta variazione dell'iscrizione catastale e si comunicano gli estremi dell'avvenuta Dichiarazione di aggiornamento catastale"
+     }
+    ],
+    "confidence": "high",
+    "note": "cadastral variation"
+   },
+   "012/non_comporta_variazione_civici": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Barriere architettoniche, Catasto, Toponomastica",
+      "label": "non comporta variazione di numerazione civica"
+     }
+    ],
+    "confidence": "high",
+    "note": "no civic number change"
+   },
+   "012/comporta_variazione_civici": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Barriere architettoniche, Catasto, Toponomastica",
+      "label": "comporta variazione di numerazione civica, e:"
+     }
+    ],
+    "confidence": "high",
+    "note": "civic number change"
+   },
+   "013/non_comportato_variazioni_sicurezza": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Prevenzione Incendi, ascensori/montacarichi",
+      "label": "non hanno comportato variazioni alle condizioni di sicurezza antincendio dell'immobile e non è previsto lo svolgimento di attività soggette al controllo dei Vig"
+     }
+    ],
+    "confidence": "high",
+    "note": "no fire-safety change"
+   },
+   "013/comportato_variazioni_sicurezza": {
+    "boxes": [
+     {
+      "section": "Attestazione tecnica - Prevenzione Incendi, ascensori/montacarichi",
+      "label": "hanno comportato variazioni alle condizioni di sicurezza antincendio dell'immobile ed è previsto lo svolgimento di attività soggette al controllo dei Vigili del"
+     }
+    ],
+    "confidence": "high",
+    "note": "fire-safety change"
+   }
+  }
+ },
+ "rematched": "2026-10-30: the alternatives with no box, against the depth-3 recrawl, by two Claude subagents (Sonnet)"
+}

@@ -1,0 +1,49 @@
+{
+ "people": {
+  "c": "luca",
+  "o": "immobiliare",
+  "r": "giulia",
+  "f1": "edil",
+  "f2": "impianti"
+ },
+ "descrizione": "PROVA NON INVIARE - CILA paes. inizio dopo assensi",
+ "comunicazioni_presentate": false,
+ "atti_acquisiti": false,
+ "titolo": "locatario",
+ "oggetto": "Manutenzione straordinaria non strutturale in appartamento: demolizione e ricostruzione di due tramezzi interni con nuova distribuzione di cucina e bagno, nuovo bagno, rifacimento degli impianti idrico ed elettrico; installazione di un'unità esterna di climatizzazione sul balcone.",
+ "dettaglio_intervento": "Demolizione e ricostruzione di due tramezzi interni con nuova distribuzione di cucina e bagno; nuovo bagno; rifacimento degli impianti idrico ed elettrico della cucina e del bagno. Opere interne non strutturali, senza modifiche di volume, superficie o destinazione d'uso.",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "assenso_proprietario": "rehearsals/cila-fittizia/files/assenso-immobiliare-fittizia.pdf",
+ "notifica_preliminare": "rehearsals/cila-fittizia/files/notifica-preliminare.pdf",
+ "elaborati_grafici": "rehearsals/cila-fittizia/files/elaborati-stato-fatto-progetto-comparativo.pdf",
+ "relazione_tecnica": "rehearsals/cila-fittizia/files/relazione-tecnica.pdf",
+ "dlgs81": "true",
+ "sotto_200": "true",
+ "notifica_dovuta": "true",
+ "allegato_b": [
+  "paes_b7"
+ ],
+ "vincolo": "art 136 and 142",
+ "vincolo_136_lettera": "c) e d)",
+ "vincolo_136_provvedimento": "D.M. fittizio PROVA NON INVIARE del 01/01/1960",
+ "vincolo_142_lettera": "a)",
+ "paes_variante": false,
+ "bollo_marche": false,
+ "titolo_esclusivo": false,
+ "parti_comuni": "nessuna",
+ "lavori_in_proprio": false,
+ "cila_stato": "da iniziare",
+ "direttore_lavori": "progettista",
+ "altri_tecnici": false,
+ "altri_atti": false,
+ "cila_onerosa": false,
+ "tolleranze": false,
+ "cila_interventi": [
+  "cila_manutenzione"
+ ],
+ "intervento": "manutenzione_straordinaria",
+ "cambio_uso": "no",
+ "paesaggio": "semplificata",
+ "fatti": [],
+ "inizio_dopo_assensi": "true"
+}

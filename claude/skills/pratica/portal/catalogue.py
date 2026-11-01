@@ -2,11 +2,20 @@
 """The portal catalogue's bookkeeping, around crawl.js's batch (`__crawl.batch`).
 
     catalogue.py ops sue|suap [--sectors N,M] [--common]   the batch's `ops`, as JSON
+    catalogue.py ops sue --combo NAME MAIN OTHER           two operations in one pratica, with the procura
+                                                           scelta and its attachments screen (crawl.js `also`)
     catalogue.py known                                     fingerprints of the stored crawls
-    catalogue.py import EXPORT.json                        a batch's results into sections/
+    catalogue.py import EXPORT.json|-                      a batch's results into sections/ (export.js's
+                                                           file, or print.js's text: its sha256 checked)
     catalogue.py count                                     distinct sections and their uses
     catalogue.py drift EXPORT.json                         a check batch against the stored crawls
+    catalogue.py pane DIR                                  the pane's scripts: install.js stores wizard.js
+                                                           and crawl.js in localStorage, load.js runs them
                                                            (an op with `like`: against that pratica, into same.json)
+    catalogue.py pane DIR --bundle FILE --ops OPS.json     a batch as one file the person picks (pick.js),
+        [--draft NAME] [--depth 3] [--fresh|--forget-known]
+                                                           status.js to poll, export.js to save the results
+                                                           (print.js prints a small batch's, sha256 first)
 
 A section's fingerprint is what it shows before any choice (ids, kinds, labels, lengths,
 short lists), hashed as crawl.js does: the same fingerprint is the same section, whatever
@@ -14,6 +23,7 @@ pratica it sits in, and a different one for a stored section means the portal ch
 """
 import argparse
 import collections
+import datetime
 import hashlib
 import json
 import os
@@ -90,13 +100,45 @@ def cmd_ops(args):
     return ops
 
 
+PROCURA = "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
+
+
+def sue_name(label):
+    """A SUE operation's crawl, by the name recipes use."""
+    return SUE_NAMES.get(label) or "sue-" + slug(label, 72)
+
+
 def ops_of(args):
+    if args.sportello == "sue" and args.combo:
+        # Two operations in one pratica (a building pratica with its landscape authorization):
+        # only the scelte a recipe takes (the procura) are tried, and the attachments screen is
+        # read on the way, so the combination is one batch (2026-10-31: by hand before). --combo
+        # repeats: several combinations in one batch (2026-10-31: two outputs joined by hand).
+        w = json.loads((CAT / "sue-wizard.json").read_text())
+        by = {o["label"]: o for o in w["operations"]}
+        path = lambda l: f"{by[l]['group']} › {l}"
+        ops = []
+        # --combo-scelta NAME LABEL: one more scelta for that combination alone (the SCIA's
+        # sanatoria Si/No), so combinations with different wizards share one batch (2026-10-31:
+        # the SCIA in sanatoria ones needed a second).
+        extra = {}
+        for name, label in args.combo_scelta or []:
+            if name not in {c[0] for c in args.combo}:
+                sys.exit(f"--combo-scelta {name}: no --combo of that name")
+            extra.setdefault(name, []).append(label)
+        for name, *labels in args.combo:
+            missing = [l for l in labels if l not in by]
+            if missing or len(labels) < 2:
+                sys.exit(f"--combo {name}: " + (f"not an operation of the SUE's wizard: {missing}" if missing else "give its operations, the main one first"))
+            ops.append({"name": name, "sector": w["sector"], "path": path(labels[0]), "also": [path(l) for l in labels[1:]],
+                        "scelte": (args.scelta or [PROCURA]) + extra.get(name, []), "slots": True})
+        return ops
     if args.sportello == "sue":
         w = json.loads((CAT / "sue-wizard.json").read_text())
         have = {p.stem for p in SECTIONS.glob("*.json")}
         ops = []
         for o in w["operations"]:
-            name = SUE_NAMES.get(o["label"]) or "sue-" + slug(o["label"], 72)
+            name = sue_name(o["label"])
             if name in have and not args.all:
                 continue
             ops.append({"name": name, "sector": w["sector"], "path": f"{o['group']} › {o['label']}"})
@@ -135,7 +177,16 @@ def cmd_known(_):
 
 def cmd_import(args):
     """Each pratica of an export (localStorage `crawl:op:*`) to sections/<name>.json."""
-    data = json.loads(Path(args.export).read_text())
+    text = sys.stdin.read() if args.export == "-" else Path(args.export).read_text()
+    # print.js's text: its sha256 first, so a copy that arrived changed is refused. Its JSON never
+    # ends in a newline, but a heredoc or a paste adds one (2026-10-31: a good copy refused).
+    head, _, rest = text.partition("\n")
+    rest = rest.rstrip("\r\n")
+    if re.fullmatch(r"[0-9a-f]{64}", head.strip()):
+        if hashlib.sha256(rest.encode()).hexdigest() != head.strip():
+            sys.exit("not the text print.js printed (its sha256 differs): nothing imported")
+        text = rest
+    data = json.loads(text)
     out = []
     for key, r in sorted(data.items()):
         if not key.startswith("crawl:op:"):
@@ -149,14 +200,34 @@ def cmd_import(args):
         private = os.environ.get("CATALOGUE_PRIVATE")
         if private and re.search(private, json.dumps(r, ensure_ascii=False), re.I):
             sys.exit(f"{r['name']}: holds the login's name or CF, not imported")
-        doc = {"crawled": r["crawled"], "by": "crawl.js batch, depth 2",
+        depth = r.get("depth") or args.depth or 2
+        doc = {"crawled": r["crawled"], "by": f"crawl.js batch, depth {depth}",
                "pratica": f"{sportello(r['name']).upper()}: {r['operation']}"
                           + (f" (sector {r['sector']})" if r.get("sector") else ""),
                "seconds": r.get("seconds")}
+        if r.get("also"):
+            ops = [o.split(" › ")[-1] for o in [r["operation"], *r["also"]]]
+            doc["pratica"] = (f"{sportello(r['name']).upper()}: {len(ops)} operations in one pratica: " + " + ".join(ops)
+                              + "".join(f", with the scelta {v['option']}" for v in r.get("variants", [])))
+            doc["note"] = ("Every section is one of the operations' own, the same fingerprint: the combination is "
+                           "their union, in this order. A recipe names every operation and extends the main one's.")
+            doc["also"] = r["also"]
         for k in ("refused", "pratica", "screens", "variants"):
             if k in r:
                 doc["generated" if k == "pratica" else k] = r[k]
         doc["sections"] = r["sections"]
+        if r.get("slots"):
+            # Read on an empty draft: the slots its answers add are missing, so the main
+            # operation's own (read on its filled drafts) are added, as a run would meet them.
+            main = SECTIONS / f"{sue_name(r['operation'].split(' › ')[-1])}.json"
+            own = json.loads(main.read_text()).get("slots", {}).get("Gestione degli allegati", []) if r.get("also") and main.exists() else []
+            have = {x["title"] for x in r["slots"]}
+            added = [{k: v for k, v in x.items() if k != "id"} for x in own if x["title"] not in have]
+            doc["slots"] = {"Gestione degli allegati": r["slots"] + added}
+            doc["slots_note"] = (f"read {r['crawled'][:10]} on the empty draft (crawl.js `slots`)"
+                                 + (f", plus the {len(added)} its answers add from {main.stem}'s own screen" if added else ""))
+        if r.get("slots_error"):
+            out.append(f"{r['name']}: the attachments screen wasn't read ({r['slots_error']}): read it again")
         old = SECTIONS / f"{r['name']}.json"
         if old.exists():  # a crawl again keeps the attachments slots read on their screen
             prev = json.loads(old.read_text())
@@ -301,6 +372,112 @@ def drifted(name):
     return json.loads(path.read_text())["pratiche"].get(name, {}).get("differences", [])
 
 
+def cmd_pane(args):
+    """wizard.js and crawl.js for the pane, kept in its localStorage (pv-wizard, pv-crawl) so a
+    page that navigates doesn't lose them: install.js (gzip, base64: a third of the size) checks
+    each by sha256 before storing it, load.js runs the stored copies, and says if they're stale."""
+    import base64, gzip
+    out = Path(args.dir)
+    out.mkdir(parents=True, exist_ok=True)
+    srcs = {k: (HERE / f).read_text() for k, f in (("pv-wizard", "wizard.js"), ("pv-crawl", "crawl.js"))}
+    sha = {k: hashlib.sha256(v.encode()).hexdigest() for k, v in srcs.items()}
+    gz = {k: base64.b64encode(gzip.compress(v.encode(), 9, mtime=0)).decode() for k, v in srcs.items()}
+    common = ("const sha = async (s) => Array.from(new Uint8Array(await crypto.subtle.digest(\"SHA-256\", "
+              "new TextEncoder().encode(s)))).map((b) => b.toString(16).padStart(2, \"0\")).join(\"\");\n"
+              f"const want = {json.dumps(sha)};\n")
+    (out / "install.js").write_text(
+        "const gunzip = async (b) => new Response(new Blob([Uint8Array.from(atob(b), (c) => c.charCodeAt(0))])"
+        ".stream().pipeThrough(new DecompressionStream(\"gzip\"))).text();\n" + common +
+        f"const gz = {json.dumps(gz)};\nconst done = [];\n"
+        "for (const [k, b] of Object.entries(gz)) { const s = await gunzip(b);\n"
+        "  if (await sha(s) !== want[k]) throw new Error(k + \": not the file sent\");\n"
+        "  localStorage.setItem(k, s); done.push(k); }\n"
+        "(0, eval)(localStorage.getItem(\"pv-wizard\")); (0, eval)(localStorage.getItem(\"pv-crawl\"));\n"
+        "`installed ${done.join(\", \")}`\n")
+    (out / "load.js").write_text(common +
+        "const stale = []; for (const k of Object.keys(want)) if (await sha(localStorage.getItem(k) || \"\") !== want[k]) stale.push(k);\n"
+        "if (!stale.length) { (0, eval)(localStorage.getItem(\"pv-wizard\")); (0, eval)(localStorage.getItem(\"pv-crawl\")); }\n"
+        "stale.length ? `stale: ${stale.join(\", \")}: run install.js` : \"loaded\"\n")
+    if not args.bundle:
+        return [f"{out}/install.js ({(out / 'install.js').stat().st_size // 1024} KB), {out}/load.js: "
+                "on the portal's origin, load.js first; install.js only if it says stale"]
+    return bundle(out, Path(args.bundle).expanduser(), srcs, json.loads(Path(args.ops).read_text()), args)
+
+
+def bundle(out, path, srcs, ops, args):
+    """A batch as one file the person picks once in the pane (2026-10-31: a big script copied
+    through the conversation can arrive garbled), checked by sha256: it stores and runs wizard.js
+    and crawl.js, with --fresh clears what makes the batch skip a pratica (--forget-known: or a section) it has
+    seen (the crawls are in the repo; known fingerprints and scelte are backed up), and starts.
+    status.js polls it; export.js saves the results as the export `import` reads, those the
+    pane's storage couldn't keep included."""
+    names = [o["name"] for o in ops]
+    opts = {"draft": args.draft, "depth": args.depth, "variants": True, "ops": ops}
+    stamp = "backup-" + datetime.date.today().strftime("%Y%m%d")
+    # Busy only while a batch runs: one that ended doesn't hold the tab (2026-10-31: a second
+    # bundle in the tab was refused).
+    text = (f"(() => {{\n  if (window.__crawlBusy && !(window.__crawl && (window.__crawl.report() || {{}}).done)) return \"a batch already runs in this tab\";\n"
+            f"  const src = {json.dumps(srcs)};\n"
+            "  for (const [k, v] of Object.entries(src)) localStorage.setItem(k, v);\n"
+            "  (0, eval)(src[\"pv-wizard\"]); (0, eval)(src[\"pv-crawl\"]);\n"
+            f"  const opts = {json.dumps(opts, ensure_ascii=False)};\n"
+            "  localStorage.setItem(\"crawl:batch\", JSON.stringify(opts));\n"
+            # --fresh redoes the ops; the sections it has seen come back as same_as (2026-10-31: a
+            # combination crawled again only for its attachments read every section, 8 minutes for 2).
+            # --forget-known reads them all again too (a deeper crawl, a section changed in place).
+            + (f"  for (const k of [\"crawl:known\", \"crawl:scelte\"]) {{ const v = localStorage.getItem(k); if (v !== null) localStorage.setItem(k + \":{stamp}\", v); }}\n"
+               "  localStorage.setItem(\"crawl:known\", \"{}\"); localStorage.removeItem(\"crawl:scelte\");\n" if args.forget_known else "")
+            + ("  for (const o of opts.ops) localStorage.removeItem(\"crawl:op:\" + o.name);\n" if args.fresh or args.forget_known else "")
+            + "  window.__crawlBusy = true;\n  window.__crawl.batch(opts);\n"
+            f"  return `started: ${{opts.ops.length}} pratiche, depth ${{opts.depth}}{' (fresh)' if args.fresh or args.forget_known else ''}`;\n}})()\n")
+    path.write_text(text)
+    sha = hashlib.sha256(text.encode()).hexdigest()
+    (out / "pick.js").write_text(f"""document.querySelectorAll("iframe, #pv-pick").forEach((x) => x.remove());
+const box = document.createElement("div"); box.id = "pv-pick";
+box.style.cssText = "position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#fff;border:3px solid #1a4fd6;padding:16px 20px;font:16px sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3);border-radius:8px;max-width:520px";
+box.innerHTML = '<b>Choose <code>{path.name}</code> (once)</b><br><input type="file" accept=".js" style="margin-top:10px"><div style="margin-top:8px;color:#444"></div>';
+document.body.appendChild(box);
+const [input, msg] = [box.querySelector("input"), box.querySelector("div")];
+input.addEventListener("change", async () => {{
+  const text = await input.files[0].text();
+  const got = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
+  if (got !== "{sha}") {{ msg.textContent = "Not that file (its sha256 differs): nothing loaded."; return; }}
+  input.disabled = true;
+  try {{ window.pvBundle = String((0, eval)(text)); msg.textContent = window.pvBundle; setTimeout(() => box.remove(), 5000); }}
+  catch (e) {{ window.pvBundle = "error " + e.message; msg.textContent = window.pvBundle; }}
+}});
+"box shown: pick the file once, then poll status.js"
+""")
+    (out / "status.js").write_text("""await new Promise((r) => setTimeout(r, 38000));  // the pane cuts a call at 45 s
+const r = window.__crawl ? await window.__crawl.wait(300) : null;
+JSON.stringify(r ? { done: r.done, done_ops: r.done_ops, of: JSON.parse(localStorage.getItem("crawl:batch")).ops.length,
+  current: r.current, tried: r.tried, errors: r.errors, stopped: r.stopped, error: r.error, storage: r.storage } : "no crawl in this tab")
+""")
+    name = "crawl-batch-" + path.stem.removeprefix("pv-") + ".json"
+    (out / "export.js").write_text(f"""// Saves the batch's results to the person's Downloads (ask them first): what `catalogue.py
+// import` reads, with what the pane's storage couldn't keep.
+const opts = JSON.parse(localStorage.getItem("crawl:batch")), unsaved = window.__crawlUnsaved || {{}};
+const out = {{}};
+for (const o of opts.ops) {{ const k = "crawl:op:" + o.name, v = unsaved[k] || localStorage.getItem(k); if (v) out[k] = JSON.parse(v); }}
+const blob = new Blob([JSON.stringify(out)], {{ type: "application/json" }});
+const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = {json.dumps(name)};
+document.body.appendChild(a); a.click(); a.remove();
+({{ file: {json.dumps(name)}, pratiche: Object.keys(out).length, of: opts.ops.length, bytes: blob.size }})
+""")
+    (out / "print.js").write_text("""// A small batch's results as text (a combination, its sections all known): sha256 first, for
+// `catalogue.py import -`, which refuses a copy that arrived changed. A big one: export.js.
+const opts = JSON.parse(localStorage.getItem("crawl:batch")), unsaved = window.__crawlUnsaved || {};
+const out = {};
+for (const o of opts.ops) { const k = "crawl:op:" + o.name, v = unsaved[k] || localStorage.getItem(k); if (v) out[k] = JSON.parse(v); }
+const text = JSON.stringify(out);
+const sha = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
+text.length > 40000 ? `${text.length} characters: too big to print, save it with export.js` : sha + "\\n" + text
+""")
+    return [f"{path} ({path.stat().st_size // 1024} KB, {len(names)} pratiche) and, in {out}: pick.js (the box "
+            f"where the person picks it), status.js (poll), export.js (saves {name}, once they agree), "
+            f"print.js (a small batch's results as text)"]
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -309,13 +486,27 @@ def main():
     p.add_argument("--sectors", help="SUAP sector indices in suap-wizard.json, comma-separated")
     p.add_argument("--common", action="store_true", help="the common operations, under the first sector")
     p.add_argument("--all", action="store_true", help="also the pratiche already crawled")
+    p.add_argument("--combo", nargs="+", action="append", metavar="NAME MAIN OTHER",
+                   help="sue: a combination's crawl name, then its operations' labels, the main one first; repeat it for several")
+    p.add_argument("--scelta", action="append", help="--combo: a scelta to try, for every combination (default: the procura)")
+    p.add_argument("--combo-scelta", nargs=2, action="append", metavar=("NAME", "LABEL"),
+                   help="--combo: one more scelta for that combination alone (a Si/No such as the SCIA's sanatoria)")
     sub.add_parser("known")
     p = sub.add_parser("import")
     p.add_argument("export")
+    p.add_argument("--depth", type=int, help="the batch's depth, for one that didn't record it (before 2026-10-30: 2)")
     p = sub.add_parser("count")
     p.add_argument("--summary", action="store_true")
     p = sub.add_parser("drift")
     p.add_argument("export")
+    p = sub.add_parser("pane")
+    p.add_argument("dir")
+    p.add_argument("--bundle", help="also a batch as one file the person picks (with --ops)")
+    p.add_argument("--ops", help="--bundle: the batch's ops (catalogue.py ops' JSON)")
+    p.add_argument("--draft", default="PROVA NON INVIARE - catalogo sue", help="--bundle: the scratch draft")
+    p.add_argument("--depth", type=int, default=3)
+    p.add_argument("--fresh", action="store_true", help="--bundle: crawl the ops again, though stored (known sections as same_as)")
+    p.add_argument("--forget-known", action="store_true", help="--bundle: --fresh, and read every section again")
     args = ap.parse_args()
     res = globals()["cmd_" + args.cmd](args)
     if isinstance(res, list) and res and isinstance(res[0], str):

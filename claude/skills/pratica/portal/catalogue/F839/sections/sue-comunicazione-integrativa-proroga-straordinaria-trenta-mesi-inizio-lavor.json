@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T16:45:21.518Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-31T11:38:10.281Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Comunicazione integrativa proroga straordinaria trenta mesi inizio lavori (art. 10 septies, Legge 51/2022) (sector Edilizia e pianificazione urbana)",
- "seconds": 21,
+ "seconds": 19.2,
  "generated": {
   "interventi": "Comunicazione integrativa proroga straordinaria trenta mesi del termine di inizio lavori (art. 10 septies, Legge 51/2022, come modificato dalla Legge 11/2024)",
   "adempimenti": [
@@ -76,25 +76,25 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
+   "same_as": "cil#Oggetto della pratica",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
+   "same_as": "cil#DOMICILIO DIGITALE",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "seconds": 0.6
   },
   {
@@ -108,14 +108,14 @@
   {
    "section": "Ubicazione dell'attività",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
-   "seconds": 0.8
+   "same_as": "cil#Localizzazione dell'intervento",
+   "seconds": 0.7
   },
   {
    "section": "Dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
-   "seconds": 0.7
+   "same_as": "cil#Dati catastali",
+   "seconds": 0.6
   },
   {
    "section": "Riferimenti titolo edilizio e data prevista dell'inizio lavori",
@@ -131,18 +131,21 @@
      "kind": "text",
      "label": "P.G. numero",
      "context": "di cui al Permesso di costruire",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r2c3p6reg:calendar_input",
      "kind": "date",
-     "label": "del"
+     "label": "del",
+     "disabled": true
     },
     {
      "id": "r2c4p8reg:txt",
      "kind": "text",
      "label": "N.Put",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r4c1p10reg:radio:1_clone",
@@ -155,12 +158,14 @@
      "kind": "text",
      "label": "P.G. numero",
      "context": "di cui alla SCIA",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r4c3p14reg:calendar_input",
      "kind": "date",
-     "label": "del"
+     "label": "del",
+     "disabled": true
     },
     {
      "id": "r6c1p16reg:txt",
@@ -181,6 +186,7 @@
     }
    ],
    "fingerprint": "43f32c7d14ecc9ce",
+   "text": "Riferimenti titolo edilizio e data prevista dell'inizio lavori P.G. numero del N.Put di cui al Permesso di costruire P.G. numero del di cui alla SCIA per (specificare l'oggetto dell'intervento) intestato a la cui data di inizio lavori è prevista per",
    "branches": [
     {
      "choice": "di cui al Permesso di costruire",
@@ -191,6 +197,11 @@
        "r4c3p14reg:calendar_input",
        "r2c3p6reg:calendar_input"
       ]
+     ],
+     "enables": [
+      "r2c2p4reg:txt",
+      "r2c3p6reg:calendar_input",
+      "r2c4p8reg:txt"
      ]
     },
     {
@@ -202,10 +213,14 @@
        "r4c3p14reg:calendar_input",
        "r2c3p6reg:calendar_input"
       ]
+     ],
+     "enables": [
+      "r4c2p12reg:txt",
+      "r4c3p14reg:calendar_input"
      ]
     }
    ],
-   "seconds": 2.2
+   "seconds": 2.1
   },
   {
    "section": "Altre dichiarazioni",
@@ -218,8 +233,8 @@
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
-   "seconds": 0.7,
+   "same_as": "cil#Qualifica e dati del procuratore",
+   "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],
@@ -261,6 +276,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft"
+ }
 }

@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T17:31:25.533Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-31T11:37:17.535Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Comunicazione di fine lavori (sector Edilizia e pianificazione urbana)",
- "seconds": 17,
+ "seconds": 16.2,
  "generated": {
   "interventi": "Comunicazione fine lavori",
   "adempimenti": [
@@ -66,26 +66,26 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
+   "same_as": "cil#Oggetto della pratica",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
+   "same_as": "cil#DOMICILIO DIGITALE",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.6
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.7
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -98,8 +98,8 @@
   {
    "section": "ubicazione dell'immobile",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
-   "seconds": 0.7
+   "same_as": "cil#Localizzazione dell'intervento",
+   "seconds": 0.6
   },
   {
    "section": "Titolarità dell'intervento",
@@ -146,6 +146,7 @@
     }
    ],
    "fingerprint": "68af9962f50fbb74",
+   "text": "comunicazione di fine lavori COMUNICA che in data i lavori sono stati ultimati completamente in forma parziale come da planimetria allegata che il titolo e/o comunicazione che ha legittimato l'intervento è il seguente: prot./n. del",
    "branches": [
     {
      "choice": "completamente",
@@ -158,7 +159,7 @@
      "kind": "radio"
     }
    ],
-   "seconds": 2.2
+   "seconds": 2
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -171,13 +172,13 @@
   {
    "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
    "seconds": 0.6
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
+   "same_as": "cil#Qualifica e dati del procuratore",
    "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }

@@ -2,14 +2,23 @@
 # recipe and generate again.
 procedure: napoli/comune/agibilita
 title: Segnalazione certificata per l'agibilità, SUE Napoli (tecnico con procura)
-generated: gen.py from agibilita (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from agibilita (2026-10-31) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
 - 'As direttore dei lavori, check every attestation on this page: they are yours, signed with the pratica'
-- 'Attestazione tecnica - Agibilità: the portal requires one of the art. 24 c. 5-bis/5-ter or 5-quater boxes; tick the one that applies (if none does, ask the SUE)'
+- 'Attestazione tecnica - Agibilità: the portal requires one of the art. 24 c. 5-bis/5-ter or 5-quater boxes; Claude ticks the one the case is, and none when it is neither (then ask the SUE)'
 - 'On Allega documenti: the portal''s procura signed by the client, then everything signed digitally (.p7m)'
 - Sign and send (Firma e invio); keep the receipt
+groups:
+  impianti_dichiarazione:
+    question: Which systems have their dichiarazione di conformità or di rispondenza (DM 37/2008) attached? Tick every one.
+  impianti_depositato:
+    question: Which systems' certificate (the dichiarazione, or the collaudo) is already filed with the Comune, so the form gives its protocol (P.G.) number instead? Tick every one.
+  impianti_collaudo:
+    question: Which systems have a collaudo, where one is required (a lift's, a fire-protection system's, ...)? Tick every one.
+  impianti_atto_notorio:
+    question: 'Which systems are certified by an atto di notorietà (art. 6 DPR 392/1994: older systems brought up to L. 46/1990)? Tick every one.'
 asks:
   descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'PROVA NON INVIARE - agibilità {{c:identity.last_name}}'}
   titolo: {type: text, question: 'The client''s title to the property, in one word (proprietario, comproprietario, usufruttuario, amministratore di condominio, locatario, comodatario, ...)', propose: '{{c:immobile.titolo}}'}
@@ -17,6 +26,7 @@ asks:
       with `o:` their company if a company owns it', propose: '{{ask.titolo|titolo_solo}}'}
   oggetto: {type: text, question: The works in one sentence (300 characters)}
   fine_presentata: {type: yes_no, question: 'Was the comunicazione di fine lavori already filed?'}
+  domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   fine_protocollo: {type: text, question: Its protocol number, when: '{{ask.fine_presentata}}'}
   fine_data: {type: date, question: Its protocol date, when: '{{ask.fine_presentata}}'}
   impianti: {type: yes_no, question: 'Did the works touch the building''s systems (impianti)?'}
@@ -56,8 +66,57 @@ asks:
       2 L. 241/1990), such as the fire SCIA attached?', propose: '{{ask.antincendio_variazione}}'}
   impianto_scariche: {type: yes_no, question: 'A lightning-protection system (the agibilità''s own box for it)?', when: '{{ask.impianti}}'}
   impianto_linee_vita: {type: yes_no, question: 'Safety lines on the roof (linee vita)?', when: '{{ask.impianti}}'}
-  impianti_certificazione: {type: choice, question: 'What certifies the systems ticked? dichiarazione (each has its dichiarazione di conformità or di rispondenza, DM 37/2008, attached); altro (a collaudo,
-      an atto notorio under art. 6 DPR 392/1994, or a document already filed with the Comune)', options: [dichiarazione, altro], propose: dichiarazione, when: '{{ask.impianti}}'}
+  impianti_certificazione: {type: choice, question: 'What certifies the systems ticked? dichiarazione (each has its dichiarazione di conformità or di rispondenza, DM 37/2008, attached, and nothing else);
+      altro (some system has a collaudo, an atto notorio under art. 6 DPR 392/1994, or a certificate already filed with the Comune, instead or as well: asked system by system)', options: [dichiarazione,
+      altro], propose: dichiarazione, when: '{{ask.impianti}}'}
+  impianto_elettrico_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: The electrical system}
+  impianto_radiotv_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: 'Radio and TV systems, aerials, electronics'}
+  impianto_termico_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: Heating or air conditioning}
+  impianto_idrico_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: Water and sanitary systems}
+  impianto_gas_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: Gas}
+  impianto_ascensore_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: 'Lifts, goods lifts, escalators'}
+  impianto_antincendio_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: Fire protection}
+  impianto_scariche_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: Lightning protection}
+  impianto_linee_vita_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: Safety lines (linee vita)}
+  impianto_altro_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: The other system}
+  impianto_elettrico_depositato: {type: yes_no, group: impianti_depositato, item: The electrical system}
+  impianto_elettrico_pg: {type: text, question: The protocol (P.G.) number of the certificate filed for the electrical system}
+  impianto_radiotv_depositato: {type: yes_no, group: impianti_depositato, item: 'Radio and TV systems, aerials, electronics'}
+  impianto_radiotv_pg: {type: text, question: The protocol (P.G.) number of the certificate filed for the radio and TV systems}
+  impianto_termico_depositato: {type: yes_no, group: impianti_depositato, item: Heating or air conditioning}
+  impianto_termico_pg: {type: text, question: The protocol (P.G.) number of the certificate filed for the heating or air conditioning}
+  impianto_idrico_depositato: {type: yes_no, group: impianti_depositato, item: Water and sanitary systems}
+  impianto_idrico_pg: {type: text, question: The protocol (P.G.) number of the certificate filed for the water and sanitary systems}
+  impianto_gas_depositato: {type: yes_no, group: impianti_depositato, item: Gas}
+  impianto_gas_pg: {type: text, question: The protocol (P.G.) number of the certificate filed for the gas system}
+  impianto_ascensore_depositato: {type: yes_no, group: impianti_depositato, item: 'Lifts, goods lifts, escalators'}
+  impianto_ascensore_pg: {type: text, question: The protocol (P.G.) number of the certificate filed for the lifts}
+  impianto_antincendio_depositato: {type: yes_no, group: impianti_depositato, item: Fire protection}
+  impianto_antincendio_pg: {type: text, question: The protocol (P.G.) number of the certificate filed for the fire protection}
+  impianto_scariche_depositato: {type: yes_no, group: impianti_depositato, item: Lightning protection}
+  impianto_scariche_pg: {type: text, question: The protocol (P.G.) number of the certificate filed for the lightning protection}
+  impianto_linee_vita_depositato: {type: yes_no, group: impianti_depositato, item: Safety lines (linee vita)}
+  impianto_linee_vita_pg: {type: text, question: The protocol (P.G.) number of the certificate filed for the safety lines}
+  impianto_altro_depositato: {type: yes_no, group: impianti_depositato, item: The other system}
+  impianto_altro_pg: {type: text, question: The protocol (P.G.) number of the certificate filed for the other system}
+  impianto_elettrico_collaudo: {type: yes_no, group: impianti_collaudo, item: The electrical system}
+  impianto_radiotv_collaudo: {type: yes_no, group: impianti_collaudo, item: 'Radio and TV systems, aerials, electronics'}
+  impianto_termico_collaudo: {type: yes_no, group: impianti_collaudo, item: Heating or air conditioning}
+  impianto_idrico_collaudo: {type: yes_no, group: impianti_collaudo, item: Water and sanitary systems}
+  impianto_gas_collaudo: {type: yes_no, group: impianti_collaudo, item: Gas}
+  impianto_ascensore_collaudo: {type: yes_no, group: impianti_collaudo, item: 'Lifts, goods lifts, escalators'}
+  impianto_antincendio_collaudo: {type: yes_no, group: impianti_collaudo, item: Fire protection}
+  impianto_scariche_collaudo: {type: yes_no, group: impianti_collaudo, item: Lightning protection}
+  impianto_linee_vita_collaudo: {type: yes_no, group: impianti_collaudo, item: Safety lines (linee vita)}
+  impianto_altro_collaudo: {type: yes_no, group: impianti_collaudo, item: The other system}
+  impianto_elettrico_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: The electrical system}
+  impianto_radiotv_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: 'Radio and TV systems, aerials, electronics'}
+  impianto_termico_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: Heating or air conditioning}
+  impianto_idrico_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: Water and sanitary systems}
+  impianto_gas_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: Gas}
+  impianto_ascensore_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: 'Lifts, goods lifts, escalators'}
+  impianto_antincendio_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: Fire protection}
+  impianto_scariche_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: Lightning protection}
   ascensore_comunicazione: {type: choice, question: 'The lift''s messa in esercizio communication to the Comune (art. 12 DPR 162/1999): sca (this agibilità counts as it, as the form allows); presentata
       (filed before the agibilità: its protocol given); nessuna (no lift put into service by these works)', options: [sca, presentata, nessuna]}
   ascensore_protocollo: {type: text, question: The lift communication's protocol number, when: '{{ask.ascensore_comunicazione|is_presentata}}'}
@@ -67,6 +126,17 @@ asks:
   impianto_antincendio: {type: yes_no, question: 'Fire-protection systems?', when: '{{ask.impianti}}'}
   impianto_altro: {type: yes_no, question: 'Any other kind of system (as regional rules define them)?', when: '{{ask.impianti}}'}
   impianto_altro_quale: {type: text, question: 'Which other system, in a few words (100 characters)'}
+  igienico_24_5bis: {type: yes_no, question: 'Does it meet them under art. 24 c. 5-bis DPR 380/2001 (rooms 2.40 to 2.70 m high, or a one-room flat of 20 to 28 m² for one person or 28 to 38 m² for two)?',
+    propose: 'false'}
+  igienico_5bis_caso: {type: choice, question: 'Which case of art. 24 c. 5-bis? altezza (rooms with a minimum inner height under 2.70 m but at least 2.40 m, lett. a); monostanza uno (a one-room flat for
+      one person, 20 m² or more but under 28 m² with its services, lett. b); monostanza due (for two people, 28 m² or more but under 38 m²); piu casi (more than one)', options: [altezza, monostanza uno,
+      monostanza due, piu casi]}
+  igienico_adattabilita: {type: yes_no, question: 'Do the rooms meet the adattabilità requirement of DM 236/1989 (art. 24 c. 5-ter DPR 380/2001)?'}
+  igienico_5ter: {type: choice, question: 'Which condition of art. 24 c. 5-ter holds? recupero (the building is under works of recupero edilizio improving its hygiene, lett. a); progetto alternativo (the
+      drawings attached include a renovation project with alternative solutions for the occupants: more surface, or better natural ventilation, lett. b)', options: [recupero, progetto alternativo]}
+  igienico_5quater: {type: yes_no, question: 'Does the unit instead meet the hygiene requirements under a derogation another law or measure allows from the minimum heights or surfaces (art. 24 c. 5-quater
+      DPR 380/2001: such as L.R. Campania 15/2000 for attics)?', propose: 'false'}
+  igienico_5quater_atto: {type: text, question: 'That law or measure, as the form names it (the provvedimento whose requirements the works meet)'}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
   data_fine_lavori: {type: date, question: When the works ended}
   fine_completa: {type: yes_no, question: 'Were the works finished completely (not in part)?', propose: 'true'}
@@ -76,12 +146,22 @@ asks:
   documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
   assenso_proprietario: {type: file, question: The owner's signed assent to the works (PDF)}
   dichiarazione_conformita: {type: file, question: The installers' dichiarazioni di conformità of the systems touched (PDF), when: '{{ask.impianti}}'}
+  impianti_dichiarazioni: {type: yes_no, question: 'Is any system certified by a dichiarazione di conformità?', default: '{{ask.impianti_certificazione|is_dichiarazione}}/{{ask.impianto_elettrico_dichiarazione,ask.impianto_radiotv_dichiarazione,ask.impianto_termico_dichiarazione,ask.impianto_idrico_dichiarazione,ask.impianto_gas_dichiarazione,ask.impianto_ascensore_dichiarazione,ask.impianto_antincendio_dichiarazione,ask.impianto_scariche_dichiarazione,ask.impianto_linee_vita_dichiarazione,ask.impianto_altro_dichiarazione}}'}
+  impianti_collaudo_doc: {type: file, question: 'The systems'' certificati di collaudo (art. 9 D.M. 37/2008), in one PDF'}
+  impianti_atto_notorio_doc: {type: file, question: 'The atto notorio on the older systems'' conformity (art. 6 DPR 392/1994), PDF'}
 supports:
-- value: '{{ask.impianti_certificazione}}'
+- if: '{{ask.igienico_24_5bis}}'
+  value: '{{ask.igienico_5bis_caso}}'
   in:
-  - dichiarazione
-  if: '{{ask.impianti}}'
-  else: Systems certified by a collaudo, an atto notorio or a document already filed with the Comune aren't mapped yet.
+  - altezza
+  - monostanza uno
+  - monostanza due
+  else: 'More than one case of art. 24 c. 5-bis isn''t mapped yet: each opens its own boxes.'
+- if: '{{ask.igienico_24_5bis}}'
+  value: '{{ask.igienico_adattabilita}}'
+  in:
+  - 'true'
+  else: 'Art. 24 c. 5-bis applies only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn''t qualify.'
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
 wizard:
@@ -148,7 +228,9 @@ sections:
   fields:
   - {id: 'r2c1p2reg:txta', kind: text, value: '{{ask.oggetto}}', max: 300, label: descrizione sintetica}
 - section: DOMICILIO DIGITALE
-  fields: []
+  fields:
+  - {id: 'r4c1p4reg:chk', kind: checkbox, when: '{{ask.domicilio_inad}}', label: il seguente domicilio digitale inserito in INAD}
+  - {id: 'r6c1p6reg:txt', kind: text, value: '{{c:identity.pec}}', when: '{{ask.domicilio_inad}}', max: 9999, label: il seguente domicilio digitale inserito in INAD}
 - section: DOMICILIO ELETTRONICO
   theirs:
   - Si dichiara di essere consapevoli
@@ -258,41 +340,134 @@ sections:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.agibilita_parziale|is_immobile}}', label: L'agibilità relativa all'immobile oggetto dell'intervento edilizio}
   - {id: 'r5c1p5reg:radio:1_clone', kind: radio, when: '{{ask.agibilita_parziale|is_edificio}}', label: L' agibilità parziale relativa a singoli edifici}
   - {id: 'r6c1p6reg:radio:2_clone', kind: radio, when: '{{ask.agibilita_parziale|is_unita}}', label: L'agibilità parziale relativa a singole unità immobiliari}
+  - {id: 'r8c1p8reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}}', label: 'nei casi di cui all’articolo 24, comma 5-bis e 5-ter'}
+  - {id: 'r9c1p9reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_altezza}}', label: 'locali con un’altezza minima interna inferiore a 2,70 metri'}
+  - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due}}', label: 'alloggio mono-stanza, con una superficie minima'}
+  - {id: 'r11c1p11reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_monostanza_uno}}', label: inferiore a 28 metri quadrati}
+  - {id: 'r12c1p13reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_monostanza_due}}', label: inferiore a 38 metri quadrati}
+  - {id: 'r14c1p15reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due}} {{ask.igienico_5ter|is_recupero}}', label: i locali sono situati
+      in edifici che sono stati sottoposti}
+  - {id: 'r15c1p16reg:chk', kind: checkbox, when: '{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due}} {{ask.igienico_5ter|is_progetto_alternativo}}', label: è stata realizzata
+      una ristrutturazione con soluzioni alternative}
+  - {kind: checkbox, when: '{{ask.igienico_5quater}}', label: 'nei casi di cui all’articolo 24, comma 5-quater'}
+  - {kind: text, value: '{{ask.igienico_5quater_atto}}', when: '{{ask.igienico_5quater}}', max: 9999, label: specificare l’atto normativo o il provvedimento}
 - section: Attestazione tecnica - Sicurezza degli impianti
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.impianti|not}}', label: NON HA interessato gli impianti}
   - {id: 'r5c1p5reg:radio:1_clone', kind: radio, when: '{{ask.impianti}}', label: HA interessato i seguenti impianti}
-  - {id: 'r6c1p6reg:chk', kind: checkbox, when: '{{ask.impianto_elettrico}}', label: 'Impianti di produzione, trasformazione, trasporto, distribuzione'}
-  - {kind: text, label: Subalt. n., anchor: 'Impianti di produzione, trasformazione, trasporto, distribuzione', block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianto_elettrico}}'}
-  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: 'Impianti di produzione, trasformazione, trasporto, distribuzione', block: 1, when: '{{ask.impianto_elettrico}}'}
-  - {id: 'r8c1p8reg:chk', kind: checkbox, when: '{{ask.impianto_termico}}', label: 'Impianti di riscaldamento, climatizzazione'}
-  - {kind: text, label: Subalt. n., anchor: 'Impianti di riscaldamento, climatizzazione', block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianto_termico}}'}
-  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: 'Impianti di riscaldamento, climatizzazione', block: 1, when: '{{ask.impianto_termico}}'}
-  - {id: 'r9c1p9reg:chk', kind: checkbox, when: '{{ask.impianto_idrico}}', label: Impianti idrici e sanitari}
-  - {kind: text, label: Subalt. n., anchor: Impianti idrici e sanitari, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianto_idrico}}'}
-  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti idrici e sanitari, block: 1, when: '{{ask.impianto_idrico}}'}
-  - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.impianto_gas}}', label: Impianti per la distribuzione e l’utilizzazione di gas}
-  - {kind: text, label: Subalt. n., anchor: Impianti per la distribuzione e l’utilizzazione di gas, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianto_gas}}'}
-  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti per la distribuzione e l’utilizzazione di gas, block: 1, when: '{{ask.impianto_gas}}'}
-  - {id: 'r7c1p7reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_radiotv}}', label: Impianti radiotelevisivi}
+  - {id: 'r6c1p6reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_elettrico}}', label: 'Impianti di produzione, trasformazione, trasporto, distribuzione'}
+  - {kind: text, label: Subalt. n., anchor: 'Impianti di produzione, trasformazione, trasporto, distribuzione', block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianti}} {{ask.impianto_elettrico}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: 'Impianti di produzione, trasformazione, trasporto, distribuzione', block: 1, when: '{{ask.impianti}} {{ask.impianto_elettrico}}
+      {{ask.impianti_certificazione|is_dichiarazione}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: 'Impianti di produzione, trasformazione, trasporto, distribuzione', block: 1, when: '{{ask.impianti}} {{ask.impianto_elettrico}}
+      {{ask.impianti_certificazione|is_altro}} {{ask.impianto_elettrico_dichiarazione}}'}
+  - {kind: checkbox, label: Documento già depositato in Comune, anchor: 'Impianti di produzione, trasformazione, trasporto, distribuzione', block: 1, when: '{{ask.impianti}} {{ask.impianto_elettrico}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_elettrico_depositato}}'}
+  - {kind: text, label: pg, anchor: 'Impianti di produzione, trasformazione, trasporto, distribuzione', block: 1, value: '{{ask.impianto_elettrico_pg}}', when: '{{ask.impianti}} {{ask.impianto_elettrico}}
+      {{ask.impianti_certificazione|is_altro}} {{ask.impianto_elettrico_depositato}}'}
+  - {kind: checkbox, label: Collaudo (ove richiesto), anchor: 'Impianti di produzione, trasformazione, trasporto, distribuzione', block: 1, when: '{{ask.impianti}} {{ask.impianto_elettrico}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_elettrico_collaudo}}'}
+  - {kind: checkbox, label: Atto notorio (art. 6 DPR n. 392/1994), anchor: 'Impianti di produzione, trasformazione, trasporto, distribuzione', block: 1, when: '{{ask.impianti}} {{ask.impianto_elettrico}}
+      {{ask.impianti_certificazione|is_altro}} {{ask.impianto_elettrico_atto_notorio}}'}
+  - {kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_radiotv}}', label: Impianti radiotelevisivi}
   - {kind: text, label: Subalt. n., anchor: Impianti radiotelevisivi, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianti}} {{ask.impianto_radiotv}}'}
-  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti radiotelevisivi, block: 1, when: '{{ask.impianti}} {{ask.impianto_radiotv}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti radiotelevisivi, block: 1, when: '{{ask.impianti}} {{ask.impianto_radiotv}} {{ask.impianti_certificazione|is_dichiarazione}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti radiotelevisivi, block: 1, when: '{{ask.impianti}} {{ask.impianto_radiotv}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_radiotv_dichiarazione}}'}
+  - {kind: checkbox, label: Documento già depositato in Comune, anchor: Impianti radiotelevisivi, block: 1, when: '{{ask.impianti}} {{ask.impianto_radiotv}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_radiotv_depositato}}'}
+  - {kind: text, label: pg, anchor: Impianti radiotelevisivi, block: 1, value: '{{ask.impianto_radiotv_pg}}', when: '{{ask.impianti}} {{ask.impianto_radiotv}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_radiotv_depositato}}'}
+  - {kind: checkbox, label: Collaudo (ove richiesto), anchor: Impianti radiotelevisivi, block: 1, when: '{{ask.impianti}} {{ask.impianto_radiotv}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_radiotv_collaudo}}'}
+  - {kind: checkbox, label: Atto notorio (art. 6 DPR n. 392/1994), anchor: Impianti radiotelevisivi, block: 1, when: '{{ask.impianti}} {{ask.impianto_radiotv}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_radiotv_atto_notorio}}'}
+  - {kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_termico}}', label: 'Impianti di riscaldamento, climatizzazione'}
+  - {kind: text, label: Subalt. n., anchor: 'Impianti di riscaldamento, climatizzazione', block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianti}} {{ask.impianto_termico}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: 'Impianti di riscaldamento, climatizzazione', block: 1, when: '{{ask.impianti}} {{ask.impianto_termico}} {{ask.impianti_certificazione|is_dichiarazione}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: 'Impianti di riscaldamento, climatizzazione', block: 1, when: '{{ask.impianti}} {{ask.impianto_termico}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_termico_dichiarazione}}'}
+  - {kind: checkbox, label: Documento già depositato in Comune, anchor: 'Impianti di riscaldamento, climatizzazione', block: 1, when: '{{ask.impianti}} {{ask.impianto_termico}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_termico_depositato}}'}
+  - {kind: text, label: pg, anchor: 'Impianti di riscaldamento, climatizzazione', block: 1, value: '{{ask.impianto_termico_pg}}', when: '{{ask.impianti}} {{ask.impianto_termico}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_termico_depositato}}'}
+  - {kind: checkbox, label: Collaudo (ove richiesto), anchor: 'Impianti di riscaldamento, climatizzazione', block: 1, when: '{{ask.impianti}} {{ask.impianto_termico}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_termico_collaudo}}'}
+  - {kind: checkbox, label: Atto notorio (art. 6 DPR n. 392/1994), anchor: 'Impianti di riscaldamento, climatizzazione', block: 1, when: '{{ask.impianti}} {{ask.impianto_termico}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_termico_atto_notorio}}'}
+  - {kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_idrico}}', label: Impianti idrici e sanitari}
+  - {kind: text, label: Subalt. n., anchor: Impianti idrici e sanitari, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianti}} {{ask.impianto_idrico}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti idrici e sanitari, block: 1, when: '{{ask.impianti}} {{ask.impianto_idrico}} {{ask.impianti_certificazione|is_dichiarazione}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti idrici e sanitari, block: 1, when: '{{ask.impianti}} {{ask.impianto_idrico}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_idrico_dichiarazione}}'}
+  - {kind: checkbox, label: Documento già depositato in Comune, anchor: Impianti idrici e sanitari, block: 1, when: '{{ask.impianti}} {{ask.impianto_idrico}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_idrico_depositato}}'}
+  - {kind: text, label: pg, anchor: Impianti idrici e sanitari, block: 1, value: '{{ask.impianto_idrico_pg}}', when: '{{ask.impianti}} {{ask.impianto_idrico}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_idrico_depositato}}'}
+  - {kind: checkbox, label: Collaudo (ove richiesto), anchor: Impianti idrici e sanitari, block: 1, when: '{{ask.impianti}} {{ask.impianto_idrico}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_idrico_collaudo}}'}
+  - {kind: checkbox, label: Atto notorio (art. 6 DPR n. 392/1994), anchor: Impianti idrici e sanitari, block: 1, when: '{{ask.impianti}} {{ask.impianto_idrico}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_idrico_atto_notorio}}'}
+  - {kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_gas}}', label: Impianti per la distribuzione e l’utilizzazione di gas}
+  - {kind: text, label: Subalt. n., anchor: Impianti per la distribuzione e l’utilizzazione di gas, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianti}} {{ask.impianto_gas}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti per la distribuzione e l’utilizzazione di gas, block: 1, when: '{{ask.impianti}} {{ask.impianto_gas}} {{ask.impianti_certificazione|is_dichiarazione}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti per la distribuzione e l’utilizzazione di gas, block: 1, when: '{{ask.impianti}} {{ask.impianto_gas}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_gas_dichiarazione}}'}
+  - {kind: checkbox, label: Documento già depositato in Comune, anchor: Impianti per la distribuzione e l’utilizzazione di gas, block: 1, when: '{{ask.impianti}} {{ask.impianto_gas}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_gas_depositato}}'}
+  - {kind: text, label: pg, anchor: Impianti per la distribuzione e l’utilizzazione di gas, block: 1, value: '{{ask.impianto_gas_pg}}', when: '{{ask.impianti}} {{ask.impianto_gas}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_gas_depositato}}'}
+  - {kind: checkbox, label: Collaudo (ove richiesto), anchor: Impianti per la distribuzione e l’utilizzazione di gas, block: 1, when: '{{ask.impianti}} {{ask.impianto_gas}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_gas_collaudo}}'}
+  - {kind: checkbox, label: Atto notorio (art. 6 DPR n. 392/1994), anchor: Impianti per la distribuzione e l’utilizzazione di gas, block: 1, when: '{{ask.impianti}} {{ask.impianto_gas}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_gas_atto_notorio}}'}
   - {kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_ascensore}}', label: Impianti di sollevamento di persone o di cose}
   - {kind: text, label: Subalt. n., anchor: Impianti di sollevamento di persone o di cose, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianti}} {{ask.impianto_ascensore}}'}
-  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti di sollevamento di persone o di cose, block: 1, when: '{{ask.impianti}} {{ask.impianto_ascensore}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti di sollevamento di persone o di cose, block: 1, when: '{{ask.impianti}} {{ask.impianto_ascensore}} {{ask.impianti_certificazione|is_dichiarazione}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianti di sollevamento di persone o di cose, block: 1, when: '{{ask.impianti}} {{ask.impianto_ascensore}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_ascensore_dichiarazione}}'}
+  - {kind: checkbox, label: Documento già depositato in Comune, anchor: Impianti di sollevamento di persone o di cose, block: 1, when: '{{ask.impianti}} {{ask.impianto_ascensore}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_ascensore_depositato}}'}
+  - {kind: text, label: pg, anchor: Impianti di sollevamento di persone o di cose, block: 1, value: '{{ask.impianto_ascensore_pg}}', when: '{{ask.impianti}} {{ask.impianto_ascensore}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_ascensore_depositato}}'}
+  - {kind: checkbox, label: Collaudo (ove richiesto), anchor: Impianti di sollevamento di persone o di cose, block: 1, when: '{{ask.impianti}} {{ask.impianto_ascensore}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_ascensore_collaudo}}'}
+  - {kind: checkbox, label: Atto notorio (art. 6 DPR n. 392/1994), anchor: Impianti di sollevamento di persone o di cose, block: 1, when: '{{ask.impianti}} {{ask.impianto_ascensore}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_ascensore_atto_notorio}}'}
   - {kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_antincendio}}', label: Impianto protezione antincendio}
   - {kind: text, label: Subalt. n., anchor: Impianto protezione antincendio, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianti}} {{ask.impianto_antincendio}}'}
-  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianto protezione antincendio, block: 1, when: '{{ask.impianti}} {{ask.impianto_antincendio}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianto protezione antincendio, block: 1, when: '{{ask.impianti}} {{ask.impianto_antincendio}} {{ask.impianti_certificazione|is_dichiarazione}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianto protezione antincendio, block: 1, when: '{{ask.impianti}} {{ask.impianto_antincendio}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_antincendio_dichiarazione}}'}
+  - {kind: checkbox, label: Documento già depositato in Comune, anchor: Impianto protezione antincendio, block: 1, when: '{{ask.impianti}} {{ask.impianto_antincendio}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_antincendio_depositato}}'}
+  - {kind: text, label: pg, anchor: Impianto protezione antincendio, block: 1, value: '{{ask.impianto_antincendio_pg}}', when: '{{ask.impianti}} {{ask.impianto_antincendio}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_antincendio_depositato}}'}
+  - {kind: checkbox, label: Collaudo (ove richiesto), anchor: Impianto protezione antincendio, block: 1, when: '{{ask.impianti}} {{ask.impianto_antincendio}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_antincendio_collaudo}}'}
+  - {kind: checkbox, label: Atto notorio (art. 6 DPR n. 392/1994), anchor: Impianto protezione antincendio, block: 1, when: '{{ask.impianti}} {{ask.impianto_antincendio}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_antincendio_atto_notorio}}'}
   - {kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_scariche}}', label: Impianto protezione scariche atmosferiche}
   - {kind: text, label: Subalt. n., anchor: Impianto protezione scariche atmosferiche, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianti}} {{ask.impianto_scariche}}'}
-  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianto protezione scariche atmosferiche, block: 1, when: '{{ask.impianti}} {{ask.impianto_scariche}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianto protezione scariche atmosferiche, block: 1, when: '{{ask.impianti}} {{ask.impianto_scariche}} {{ask.impianti_certificazione|is_dichiarazione}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianto protezione scariche atmosferiche, block: 1, when: '{{ask.impianti}} {{ask.impianto_scariche}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_scariche_dichiarazione}}'}
+  - {kind: checkbox, label: Documento già depositato in Comune, anchor: Impianto protezione scariche atmosferiche, block: 1, when: '{{ask.impianti}} {{ask.impianto_scariche}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_scariche_depositato}}'}
+  - {kind: text, label: pg, anchor: Impianto protezione scariche atmosferiche, block: 1, value: '{{ask.impianto_scariche_pg}}', when: '{{ask.impianti}} {{ask.impianto_scariche}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_scariche_depositato}}'}
+  - {kind: checkbox, label: Collaudo (ove richiesto), anchor: Impianto protezione scariche atmosferiche, block: 1, when: '{{ask.impianti}} {{ask.impianto_scariche}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_scariche_collaudo}}'}
+  - {kind: checkbox, label: Atto notorio (art. 6 DPR n. 392/1994), anchor: Impianto protezione scariche atmosferiche, block: 1, when: '{{ask.impianti}} {{ask.impianto_scariche}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_scariche_atto_notorio}}'}
   - {kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_linee_vita}}', label: Impianto linee vita}
   - {kind: text, label: Subalt. n., anchor: Impianto linee vita, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianti}} {{ask.impianto_linee_vita}}'}
-  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianto linee vita, block: 1, when: '{{ask.impianti}} {{ask.impianto_linee_vita}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianto linee vita, block: 1, when: '{{ask.impianti}} {{ask.impianto_linee_vita}} {{ask.impianti_certificazione|is_dichiarazione}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Impianto linee vita, block: 1, when: '{{ask.impianti}} {{ask.impianto_linee_vita}} {{ask.impianti_certificazione|is_altro}}
+      {{ask.impianto_linee_vita_dichiarazione}}'}
+  - {kind: checkbox, label: Documento già depositato in Comune, anchor: Impianto linee vita, block: 1, when: '{{ask.impianti}} {{ask.impianto_linee_vita}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_linee_vita_depositato}}'}
+  - {kind: text, label: pg, anchor: Impianto linee vita, block: 1, value: '{{ask.impianto_linee_vita_pg}}', when: '{{ask.impianti}} {{ask.impianto_linee_vita}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_linee_vita_depositato}}'}
+  - {kind: checkbox, label: Collaudo (ove richiesto), anchor: Impianto linee vita, block: 1, when: '{{ask.impianti}} {{ask.impianto_linee_vita}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_linee_vita_collaudo}}'}
   - {kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_altro}}', label: Altro impianto}
   - {kind: text, label: 'specificare:', anchor: Altro impianto, block: 1, value: '{{ask.impianto_altro_quale}}', when: '{{ask.impianti}} {{ask.impianto_altro}}'}
   - {kind: text, label: Subalt. n., anchor: Altro impianto, block: 1, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.impianti}} {{ask.impianto_altro}}'}
-  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Altro impianto, block: 1, when: '{{ask.impianti}} {{ask.impianto_altro}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Altro impianto, block: 1, when: '{{ask.impianti}} {{ask.impianto_altro}} {{ask.impianti_certificazione|is_dichiarazione}}'}
+  - {kind: checkbox, label: Dichiarazione di conformità o di rispondenza, anchor: Altro impianto, block: 1, when: '{{ask.impianti}} {{ask.impianto_altro}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_altro_dichiarazione}}'}
+  - {kind: checkbox, label: Documento già depositato in Comune, anchor: Altro impianto, block: 1, when: '{{ask.impianti}} {{ask.impianto_altro}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_altro_depositato}}'}
+  - {kind: text, label: pg, anchor: Altro impianto, block: 1, value: '{{ask.impianto_altro_pg}}', when: '{{ask.impianti}} {{ask.impianto_altro}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_altro_depositato}}'}
+  - {kind: checkbox, label: Collaudo (ove richiesto), anchor: Altro impianto, block: 1, when: '{{ask.impianti}} {{ask.impianto_altro}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_altro_collaudo}}'}
 - section: Attestazione tecnica - Sicurezza statica
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.strutture|not}}', label: non ha interessato le strutture dell'edificio}
@@ -357,10 +532,12 @@ sections:
   - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}
   - {kind: file, label: Copia dei documenti d'identità del/i titolare/i, value: '{{ask.documento_identita_cliente}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Dichiarazione di assenso dei terzi titolari, value: '{{ask.assenso_proprietario}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
-  - {kind: file, label: Dichiarazione di conformità degli impianti, value: '{{ask.dichiarazione_conformita}}', when: '{{ask.impianti}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Dichiarazione di conformità degli impianti, value: '{{ask.dichiarazione_conformita}}', when: '{{ask.impianti}} {{ask.impianti_dichiarazioni|any}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Certificato di collaudo statico, value: '{{ask.collaudo_doc}}', when: '{{ask.strutture}} {{ask.collaudo|is_certificato_allegato}}'}
   - {kind: file, label: Dichiarazione di regolare esecuzione, value: '{{ask.collaudo_doc}}', when: '{{ask.strutture}} {{ask.collaudo|is_regolare_esecuzione_allegata}}'}
   - {kind: file, label: Attestato di qualificazione energetica (AQE), value: '{{ask.aqe_doc}}', when: '{{ask.prestazione_energetica}}'}
   - {kind: file, label: Documentazione necessaria per l'assegnazione o aggiornamento di numerazione civica, value: '{{ask.civici_doc}}', when: '{{ask.civici_variazione}} {{ask.civici_richiesta|is_allegata}}'}
   - {kind: file, label: SCIA ai sensi dell’art. 4 comma 1 del d.P.R. n. 151/2011, value: '{{ask.antincendio_scia_doc}}', when: '{{ask.antincendio_variazione}}'}
   - {kind: file, label: 'Copia di elaborato planimetrico, del progetto ed eventuali varianti', value: '{{ask.elaborato_parziale_doc}}', when: '{{ask.agibilita_parziale|in_edificio__unita}}'}
+  - {kind: file, label: 'Certificato di collaudo ove previsto, degli impianti installati', value: '{{ask.impianti_collaudo_doc}}', when: '{{ask.impianti}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_elettrico_collaudo,ask.impianto_radiotv_collaudo,ask.impianto_termico_collaudo,ask.impianto_idrico_collaudo,ask.impianto_gas_collaudo,ask.impianto_ascensore_collaudo,ask.impianto_antincendio_collaudo,ask.impianto_scariche_collaudo,ask.impianto_linee_vita_collaudo,ask.impianto_altro_collaudo|any}}'}
+  - {kind: file, label: Atto notorio relativo alla conformità degli impianti, value: '{{ask.impianti_atto_notorio_doc}}', when: '{{ask.impianti}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_elettrico_atto_notorio,ask.impianto_radiotv_atto_notorio,ask.impianto_termico_atto_notorio,ask.impianto_idrico_atto_notorio,ask.impianto_gas_atto_notorio,ask.impianto_ascensore_atto_notorio,ask.impianto_antincendio_atto_notorio,ask.impianto_scariche_atto_notorio|any}}'}

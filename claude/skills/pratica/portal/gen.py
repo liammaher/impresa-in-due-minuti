@@ -25,6 +25,9 @@ its own branch of the section; a field outside it that such a choice moves goes 
 and so does a box whose own tick renumbers it (it opens rows above itself). An attachments
 slot that takes only signed files (.p7m) is left to the person.
 
+A dictionary entry's `supports` (the cases its boxes can't state) joins the recipe's in every
+pratica that shows the section.
+
 A recipe's `operation` may be a list (a CILA with its autorizzazione paesaggistica): the
 pratica is the union of each operation's sections with the recipe's `scelte`, in the order
 of the combination's own crawl, which must hold just those (a section both have under two
@@ -55,6 +58,9 @@ import yaml
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import rules  # noqa: E402
+# The asks a template reads: after "{{", and each term of a sum ("+", "*") or of several fields
+# for one filter (",": {{ask.a,ask.b|any}}).
+ASKED = re.compile(r"(?:\{\{|[+*,])\s*ask\.(\w+)")
 DECLARATIONS = re.compile(
     r"consapevolezza|informativa sulla privacy|requisiti di o|altre dichiarazioni|"
     r"dichiarazioni ai sensi dell'art\. 6|rispetto sulle tasse|art\. ?75", re.I)
@@ -125,6 +131,14 @@ def shift(fid, dr, dp):
     return f"r{int(m[1]) + dr}c{m[2]}p{int(m[3]) + dp}reg{m[4]}" if m else fid
 
 
+def starts_label(t, want):
+    """A label (normalized) starts a text; a yes or a no only as a whole word: "no" isn't "non ha
+    rilevanza strutturale". Other short labels stay prefixes ("Tel" is "Telefono"). inpage.js's
+    startsLabel is the same rule."""
+    a = norm(t)
+    return a.startswith(want) and (want not in ("si", "no") or len(a) == len(want) or not a[len(want)].isalnum())
+
+
 def matches(f, kind, label, inside=False):
     a, b = PAGE_KIND.get(f["kind"], f["kind"]), PAGE_KIND.get(kind, kind)
     if b == "tick":  # the same choice is a radio in one pratica, a checkbox in another
@@ -136,7 +150,7 @@ def matches(f, kind, label, inside=False):
     # `inside`: a long label inside the text, for a section where none starts with it (the
     # same choice worded "che i lavori ..." in one pratica, "i lavori ..." in another);
     # inpage.js checks an id's label the same way. Never first: "ricade" is inside "non ricade".
-    return any(norm(t).startswith(want) or inside and len(want) >= 15 and want in norm(t)
+    return any(starts_label(t, want) or inside and len(want) >= 15 and want in norm(t)
                for t in (f.get("label"), f.get("context")) if t)
 
 
@@ -201,6 +215,7 @@ class Section:
         n = self.node(self.avail, f, option)
         if n is None:
             n = self.node(self.branches, {**f, "id": f.get("base_id", f["id"])}, option)
+        nested = False
         if n is None:
             # A choice another one opened, deeper in the crawl than the state reached.
             def every(nodes):
@@ -208,6 +223,7 @@ class Section:
                     yield x
                     yield from every(x.get("then", []))
             n = self.node(list(every(self.branches)), {**f, "id": f.get("base_id", f["id"])}, option)
+            nested = True
         if n is None:
             return
         reveals = [dict(x) for x in n.get("reveals", []) if x["kind"] != "message"]
@@ -233,9 +249,11 @@ class Section:
         self.exact = False
         self.fields = [x for x in self.fields if x.get("base_id", x["id"]) not in hides]
         # Its reveals sit at its point (or, adding rows at the end, where they are): earlier
-        # choices' offsets before there move them too.
+        # choices' offsets before there move them too, not its own: the crawl's ids of its
+        # reveals already have it.
+        before = list(self.applied)
         def moved_by_earlier(at):
-            earlier = [(dr, dp) for p, dr, dp in self.applied if at and p <= at]
+            earlier = [(dr, dp) for p, dr, dp in before if at and p <= at]
             return sum(d[0] for d in earlier), sum(d[1] for d in earlier)
         if off:
             point, dr, dp = off
@@ -244,16 +262,101 @@ class Section:
                 if b and b >= point:
                     x.setdefault("base_id", x["id"])
                     x["id"] = shift(x["id"], dr, dp)
+                    # Moved by a choice the crawl saw only under another one this state hasn't
+                    # made: its offsets are that state's, not this one's.
+                    x["guessed"] = x.get("guessed") or nested
             self.applied.append(off)
         for x in reveals:
             x["base_id"] = x["id"]
             x["id"] = shift(x["id"], *moved_by_earlier(off[0] if off else pos(x["id"])))
+            x["guessed"] = nested and x["id"] != x["base_id"]
         self.fields += reveals
         self.avail = []
 
 
 def load_yaml(p):
     return yaml.safe_load(Path(p).read_text())
+
+
+REHEARSALS = HERE.parents[3] / "rehearsals"
+
+
+def resolved(recipe, seen=()):
+    """A recipe with what it `extends` (a rehearsal's name, or `parts/<name>`: what another pratica
+    adds when filed with it) merged in, in order, the recipe itself last. A combination is its
+    main pratica's recipe plus the other's part, so a slot or a refusal mapped on one reaches the
+    other (2026-10-31: the SCIA's combinations had missed eleven of the SCIA's slots). Later ones
+    win key by key; `attachments` (per screen), `supports` and `sections` add up; `asks` and
+    `rules` merge by key; a null drops what an earlier one set. `answers` merge by key, nulls
+    kept (combo_answers)."""
+    parents = recipe.get("extends") or []
+    if not parents:
+        return recipe
+    out = {}
+    for name in [parents] if isinstance(parents, str) else parents:
+        if name in seen:
+            raise GenError(f"{name}: extends goes round")
+        path = HERE / f"{name}.yaml" if name.startswith("parts/") else REHEARSALS / name / "recipe.yaml"
+        if not path.exists():
+            raise GenError(f"extends {name}: no {path}")
+        merge_recipe(out, resolved(load_yaml(path), seen + (name,)))
+    merge_recipe(out, {k: v for k, v in recipe.items() if k != "extends"})
+    return out
+
+
+def combo_answers(recipe):
+    """A combination's P6 answers: its main pratica's (the rehearsal it `extends`), changed by the
+    `answers` its parts and the recipe itself set (a null drops one), so the case can't drift
+    from the main pratica's (2026-10-31: written by hand from a diff). None without `answers`."""
+    changes = resolved(recipe).get("answers")
+    if not changes:
+        return None
+    parents = recipe.get("extends") or []
+    mains = [n for n in ([parents] if isinstance(parents, str) else parents) if not n.startswith("parts/")]
+    if len(mains) != 1:
+        raise GenError(f"answers: needs one main rehearsal in extends, not {mains}")
+    out = json.loads((REHEARSALS / mains[0] / "answers-p6.json").read_text())
+    for k, v in changes.items():
+        out.pop(k, None) if v is None else out.__setitem__(k, v)
+    return out
+
+
+def dump_answers(answers):
+    return json.dumps(answers, ensure_ascii=False, indent=1) + "\n"
+
+
+def merge_recipe(out, r):
+    add = lambda old, new: (old or []) + [x for x in new if x not in (old or [])]
+    for k, v in r.items():
+        if v is None:
+            out.pop(k, None)
+        elif k == "attachments":
+            screens = dict(out.get(k) or {})
+            for screen, slots in v.items():
+                if slots is None:
+                    screens.pop(screen, None)
+                else:
+                    # `{label, drop: true}` leaves out a slot a part adds that this pratica's form
+                    # never opens (the ordinaria's "Si allega" slot, which a CILA has no box for).
+                    gone = {s["label"] for s in slots if s.get("drop")}
+                    kept = [s for s in screens.get(screen) or [] if s.get("label") not in gone]
+                    screens[screen] = add(kept, [s for s in slots if not s.get("drop")])
+            out[k] = screens
+        elif k in ("supports", "sections"):
+            out[k] = add(out.get(k), v)
+        elif k == "answers":
+            # A null stays: it drops the main pratica's answer (combo_answers).
+            out[k] = {**(out.get(k) or {}), **v}
+        elif k in ("asks", "rules"):
+            merged = dict(out.get(k) or {})
+            for kk, vv in v.items():
+                if vv is None:
+                    merged.pop(kk, None)
+                else:
+                    merged[kk] = vv
+            out[k] = merged
+        else:
+            out[k] = v
 
 
 QUADRO = re.compile(r"^[a-z]\d?\)\s*", re.I)
@@ -288,7 +391,19 @@ def fill(entry, as_name, c, recipe, name):
         dfields = [g for d in dfields for g in ([d] if "when" in d else
                    [{**d, "when": w} for w in entry["branches"]])]
     branch_terms = {re.match(r"\s*(\{\{[^}]*\}\})", w)[1] for w in entry.get("branches", [])}
-    for i, role in enumerate(recipe.get("firms", entry.get("firms", [])) if "block" in entry else []):
+    # `repeat`: a block of people of the case, each after the first added with "+" under its
+    # `repeat_when`; `#N` in a field is "" in the first block, then "2", "3" (role a, a2, a3;
+    # ask altro_tecnico_..., altro_tecnico2_...). A field keeps its own `when` after the block's.
+    for i in range(entry.get("repeat", 0) if "block" in entry else 0):
+        cond = " ".join(x for x in (entry.get("firm_when", ""), entry["repeat_when"][i - 1] if i else "") if x)
+        anchor = entry["block"][0]["label"]
+        if i:
+            dfields.append({"kind": "add", "anchor": anchor, "block": i + 1, "when": cond})
+        for b in entry["block"]:
+            g = json.loads(json.dumps(b).replace("#N", str(i + 1) if i else ""))
+            when = " ".join(x for x in (cond, g.pop("when", "")) if x)
+            dfields.append({**g, "anchor": anchor, "block": i + 1, **({"when": when} if when else {})})
+    for i, role in enumerate(recipe.get("firms", entry.get("firms", [])) if "block" in entry and "firms" in entry else []):
         # One block per firm, the second and later added with "+", and only when the job has
         # that firm; each also under the entry's `firm_when`.
         when = " ".join(([entry["firm_when"]] if entry.get("firm_when") else [])
@@ -367,7 +482,11 @@ def fill(entry, as_name, c, recipe, name):
         filled.update((t["id"], t["label"]) for t in twins if t)
         # `by_label`: rows a choice the crawl tried alone moves in another branch (the SCIA's
         # sanatoria cases): never an id, found on the page as the answers left it.
-        if not look.added and not moved and not d.get("by_label"):
+        # Offsets from choices the crawl tried apart add up (the CILA's a), checked against a hand
+        # walk); from a choice it saw only nested under another this state hasn't made, they are a
+        # guess (2026-10-30: one named a radio for the permesso's "specificare tipo intervento").
+        guessed = bool(f.get("guessed"))
+        if not look.added and not moved and not guessed and not d.get("by_label"):
             g = {"id": f["id"], **g, "label": d["label"], **({"nth": d["nth"]} if d.get("nth", 1) > 1 else {})}
         else:
             g = {**g, "label": d["label"], **({"nth": d["nth"]} if d.get("nth", 1) > 1 else {})}
@@ -409,11 +528,42 @@ def fill(entry, as_name, c, recipe, name):
         out["note"] = entry["note"]
     # The questions this section asks: those its emitted fields read (a field only some
     # pratiche show doesn't bring its question along).
-    asks_used = set(re.findall(r"(?:\{\{|[+*])\s*ask\.(\w+)", json.dumps(fields)))
+    asks_used = set(ASKED.findall(json.dumps(fields)))
     return out, problems, asks_used
 
 
+def split_by_yaml(dictionary, recipe):
+    """A flow mapping's unquoted label with a comma ({label: a, b, when: ...}) loads as the label
+    "a" and a key "b" with no value: the field then matches the wrong box, silently (2026-10-30,
+    the tolerances' "..., comma 4, allegata" found the "presentata" box). Refuse it."""
+    found = []
+    entries = dictionary.get("sections", []) + dictionary.get("after", []) + recipe.get("sections", [])
+    fields = [(e.get("section"), f) for e in entries for f in e.get("fields", []) + e.get("block", [])]
+    fields += [(screen, f) for screen, fs in (recipe.get("attachments") or {}).items() for f in fs]
+    for where, f in fields:
+        empty = [k for k, v in f.items() if v is None]
+        if empty:
+            found.append(f"{where}: {f.get('label')!r} has {', '.join(map(repr, empty))} with no value: quote a label with a comma")
+    if found:
+        raise GenError("\n".join(found))
+
+
+
+def unslotted(steps):
+    """The boxes a steps file ticks that say something is attached ("si allega", "allega la
+    ricevuta") with no attachment slot under the same condition: each ticked box of the kind
+    has added a required slot on the portal (the sanction's receipt, the sewer connection's
+    documents), found only by a run. [(section, label, when)]; a case the recipe refuses
+    anyway is listed too (pre-flight decides which cases exist)."""
+    terms = lambda w: set(re.findall(r"\{\{.+?\}\}", w or ""))
+    files = [terms(f.get("when")) for s in steps["sections"] for f in s["fields"] if f["kind"] == "file"]
+    return [(s["section"], f["label"], f["when"]) for s in steps["sections"] for f in s["fields"]
+            if f["kind"] in ("checkbox", "radio", "tick") and f.get("when")
+            and re.match(r"(si )?alleg[ao]\b", norm(f.get("label")))
+            and not any(terms(f["when"]) <= t for t in files)]
+
 def generate(recipe, base=HERE):
+    recipe = resolved(recipe)
     cat_dir = base / "catalogue" / recipe["comune"]
     catalogue = json.loads((cat_dir / f"{recipe['sportello']}-wizard.json").read_text())
     crawl = json.loads((cat_dir / "sections" / f"{recipe['crawl']}.json").read_text())
@@ -422,6 +572,7 @@ def generate(recipe, base=HERE):
     if changed:
         raise GenError(f"the portal changed {recipe['crawl']} since its crawl ({'; '.join(changed)}): crawl it again")
     dictionary = load_yaml(base / "dictionary" / f"{recipe.get('dictionary', 'fnsuap')}.yaml")
+    split_by_yaml(dictionary, recipe)
 
     if "operations" not in catalogue:
         # A catalogue of the wizard's tree only (the SUAP's so far): the pratica's sections are
@@ -479,8 +630,10 @@ def generate(recipe, base=HERE):
             missing = [n for n in missing if norm(n) not in seen]
             extra = [h for h in have if not any(norm(h) == norm(n) for n in names)]
             if missing or extra:
+                hint = (" (a section the recipe's si_no adds: crawl the combination with that Si/No too,"
+                        " catalogue.py ops --combo ... --combo-scelta)" if missing and recipe.get("si_no") else "")
                 raise GenError(f"{recipe['crawl']} isn't a crawl of these operations together: "
-                               f"missing {missing}, more {extra}")
+                               f"missing {missing}, more {extra}{hint}")
             # Each crawled section once, under the name the combination shows ("Dati catastali" and
             # "dati catastali" are one).
             names = [h for h in have if any(norm(h) == norm(n) for n in names)]
@@ -496,8 +649,8 @@ def generate(recipe, base=HERE):
             crawl["sections"][i] = {**seen, "section": s["section"]}
     crawled = {norm(s["section"]): s for s in crawl["sections"]}
 
-    problems, out_sections, asks_used = [], [], set()
-    first = [next((n for n in names if norm(n).startswith(norm(x))), x) for x in recipe.get("first", [])]
+    problems, out_sections, asks_used, section_supports = [], [], set(), []
+    first =[next((n for n in names if norm(n).startswith(norm(x))), x) for x in recipe.get("first", [])]
     for name in first + [n for n in names if n not in first]:
         if name not in names:
             problems.append(f"{name}: in `first` but not in this pratica")
@@ -532,6 +685,11 @@ def generate(recipe, base=HERE):
             continue
         asks_used |= used
         out_sections.append(out)
+        # A section's own refusals (the cases its boxes can't state) go with it into every
+        # pratica that shows it, after the recipe's.
+        for c in entry.get("supports", []):
+            if c not in section_supports:
+                section_supports.append(c)
 
     for name in recipe.get("after", []):
         entry = next((e for e in dictionary.get("after", []) if e["section"] == name), None)
@@ -551,7 +709,7 @@ def generate(recipe, base=HERE):
                     # A slot only some answers add (an onerosa CILA's contributo receipt): the
                     # crawl's screen hasn't it, the run finds it by label under its `when`.
                     fields.append({k: v for k, v in d.items() if k != "on_page"})
-                    for t in re.findall(r"(?:\{\{|[+*])\s*ask\.(\w+)", json.dumps(d)):
+                    for t in ASKED.findall(json.dumps(d)):
                         asks_used.add(t)
                 continue  # this pratica has no such slot
             if slot.get("accepts") and all(t.endswith(".p7m") for t in slot["accepts"].split(";")):
@@ -560,7 +718,7 @@ def generate(recipe, base=HERE):
                 continue
             # What the slot takes, so pre-flight can refuse a file it wouldn't.
             fields.append(dict(d) | ({"accepts": slot["accepts"]} if slot.get("accepts") else {}))
-            for t in re.findall(r"(?:\{\{|[+*])\s*ask\.(\w+)", json.dumps(d)):
+            for t in ASKED.findall(json.dumps(d)):
                 asks_used.add(t)
         if slots is not None:
             # Every slot that takes only signed files is the person's, named or not.
@@ -584,7 +742,8 @@ def generate(recipe, base=HERE):
         raise GenError("\n".join(problems))
     for t in recipe.get("asks_used", []):
         asks_used.add(t)
-    for t in re.findall(r"(?:\{\{|[+*])\s*ask\.(\w+)", json.dumps([recipe.get("yours"), recipe.get("supports"), recipe.get("rules")])):
+    supports = recipe.get("supports", []) + [c for c in section_supports if c not in recipe.get("supports", [])]
+    for t in ASKED.findall(json.dumps([recipe.get("yours"), supports, recipe.get("rules")])):
         asks_used.add(t)
     # The dictionary's questions, the recipe's wording over them; a question only this pratica
     # asks (one `supports` or `rules` reads) is the recipe's alone.
@@ -629,7 +788,7 @@ def generate(recipe, base=HERE):
     return {
         "procedure": recipe["procedure"], "title": recipe["title"],
         "generated": f"gen.py from {recipe['crawl']} ({crawl.get('crawled', '?')[:10]}) and dictionary/{recipe.get('dictionary', 'fnsuap')}.yaml",
-        "yours": recipe["yours"], **({"groups": groups} if groups else {}), "asks": asks, "supports": recipe.get("supports", []),
+        "yours": recipe["yours"], **({"groups": groups} if groups else {}), "asks": asks, "supports": supports,
         **({"rules": ruled} if ruled else {}),
         "start": recipe.get("start", catalogue["start"]), "logged_in": recipe.get("logged_in", "https://suap.impresainungiorno.gov.it/fnsuap/"),
         "wizard": wizard, "sections": out_sections,
@@ -683,11 +842,17 @@ def main():
     ap.add_argument("recipe", type=Path)
     ap.add_argument("--out", type=Path)
     ap.add_argument("--check", type=Path, help="a hand-written steps file to compare with")
+    ap.add_argument("--answers", action="store_true", help="a combination: also write its answers-p6.json, next to the recipe")
     a = ap.parse_args()
     try:
         steps = generate(load_yaml(a.recipe))
+        answers = combo_answers(load_yaml(a.recipe)) if a.answers else None
     except GenError as e:
         sys.exit(f"gen.py: not generated:\n{e}")
+    if a.answers:
+        if answers is None:
+            sys.exit("gen.py --answers: the recipe and its parts set no `answers`")
+        (a.recipe.parent / "answers-p6.json").write_text(dump_answers(answers))
     if a.out:
         a.out.write_text(dump(steps))
     if a.check:

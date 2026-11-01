@@ -1,0 +1,42 @@
+# A permesso di costruire with its autorizzazione paesaggistica semplificata in one pratica on Napoli's
+# SUE: the two operations selected together in the wizard, as for the SCIA
+# (rehearsals/scia-paesaggistica-semplificata-fittizia). gen.py takes each one's sections from the
+# catalogue and the order from the combination's crawl
+# (catalogue/F839/sections/sue-combo-pdc-paesaggistica-semplificata.json); every section is one of
+# theirs. The permesso's people and cases are rehearsals/pdc-fittizio's; its asseverazione names
+# the semplificata procedure.
+# Everything else is pdc-fittizio's recipe and what the semplificata adds (parts/paesaggistica-semplificata.yaml):
+# a slot or a refusal mapped on either reaches this one.
+extends: [pdc-fittizio, parts/paesaggistica-semplificata]
+procedure: napoli/comune/permesso-di-costruire-con-paesaggistica-semplificata
+title: "Permesso di costruire con autorizzazione paesaggistica semplificata, SUE Napoli (tecnico con procura)"
+comune: F839
+sportello: sue
+crawl: sue-combo-pdc-paesaggistica-semplificata
+operation:
+  - Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001
+  - Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)
+asks:
+  descrizione: {default: "PROVA NON INVIARE - PdC e paesaggistica {{c:identity.last_name}}"}
+yours:
+  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
+  - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request"
+  - "On Allega documenti: the portal's procura signed by the client and the Quadro riepilogativo (PdC DSC), the broadband infrastructure drawing (art. 135-bis DPR 380/2001: signed files only), the relazione paesaggistica semplificata (DPR 31/2017, Allegato D) with its drawings and photos (signed files only), the contributo's prospetto or the documents for the SUE to work it out (the permesso has no slot for them: under Allegati liberi), then everything signed digitally (.p7m)"
+  - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
+  - "The landscape authorization comes before the permesso (art. 146 c. 4 D.Lgs. 42/2004): the works start only once both are in"
+  - "Once the permesso is issued: collect it (paying the contributo, if due, as quadro f) says), name the structural designer and the direttori dei lavori, and file the comunicazione di inizio lavori with the energy report and the structural filings"
+rules:
+  main: napoli/comune/permesso-di-costruire
+# The case: the main pratica's P6 answers, the part's, then these (a null drops one);
+# `gen.py --answers` writes answers-p6.json.
+answers:
+  oggetto: Ampliamento fuori sagoma di un edificio residenziale esistente, entro il 10% del volume e 60 m³, in area vincolata (dati inventati per la prova).
+  dettaglio_intervento: Ampliamento al piano terra sul retro dell'edificio esistente, 60 m³ (meno del 10% del volume originario), struttura in cemento armato, nuovo impianto elettrico e idrico. Dati inventati per la prova.
+  descrizione: PROVA NON INVIARE - PdC ampliamento e semplificata
+  demolizioni: 'false'
+  pdc_tipo: nuova costruzione
+  intervento: nuova_costruzione
+  allegato_b:
+  - paes_b1
+  nuova_costruzione_tipo: e1

@@ -19,6 +19,11 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 attachments:
   Gestione degli allegati:
+    # The asseverazione's "allega l’autorizzazione sismica" (a structural tolerance relevant for
+    # public safety) adds this required slot; plain PDFs are taken (seen on the SCIA 2026-10-30).
+    - {kind: file, label: Autorizzazione sismica, value: "{{ask.toll_sismica_doc}}", when: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}", on_page: true}
+    # Quadro f)/e)'s "si allega la relativa ricevuta" adds this required slot (seen on the SCIA 2026-10-30).
+    - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: "{{ask.sanzione_ricevuta}}", when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
     # Quadro g)'s answers add their slots: the contributo's prospetto, its receipt once paid, or the
     # technical documents for the SUE to work it out.
@@ -93,7 +98,7 @@ yours:
 rules:
   table: sue-napoli
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
-  facts: {permesso_per_scelta: "false"}
+  facts: {permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_5bis_caso}}", in: ["altezza", "monostanza uno", "monostanza due"], else: "More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions."}
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}

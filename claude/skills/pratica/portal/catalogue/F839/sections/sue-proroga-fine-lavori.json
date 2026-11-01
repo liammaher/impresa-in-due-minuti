@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T16:44:41.872Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-31T11:37:33.745Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Proroga fine lavori (sector Edilizia e pianificazione urbana)",
- "seconds": 20.3,
+ "seconds": 18.1,
  "generated": {
   "interventi": "Proroga del termine di ultimazione lavori",
   "adempimenti": [
@@ -68,25 +68,25 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
+   "same_as": "cil#Oggetto della pratica",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
-   "seconds": 0.9
+   "same_as": "cil#DOMICILIO DIGITALE",
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "seconds": 0.6
   },
   {
@@ -100,20 +100,20 @@
   {
    "section": "dichiarazione relativa alla sede dell'attività",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
+   "same_as": "cil#Localizzazione dell'intervento",
    "seconds": 0.6
   },
   {
    "section": "dichiarazione delle motivazioni della richiesta di proroga",
    "fingerprint": "0cd4b48a866a5e24",
    "same_as": "sue-proroga-inizio-lavori#dichiarazione delle motivazioni della richiesta di proroga",
-   "seconds": 0.8
+   "seconds": 0.7
   },
   {
    "section": "dichiarazione periodo di proroga",
    "fingerprint": "4a13a20b9ac3615b",
    "same_as": "sue-proroga-inizio-lavori#dichiarazione periodo di proroga",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "richiesta della proroga di ultimazione dei lavori",
@@ -126,8 +126,9 @@
     }
    ],
    "fingerprint": "10395948f398f904",
+   "text": "richiesta della proroga di ultimazione dei lavori tipo lavori",
    "branches": [],
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "dichiarazione dell'immobile oggetto della domanda, riferimenti titolo edilizio e data prevista della fine lavori",
@@ -167,18 +168,21 @@
      "kind": "text",
      "label": "P.G. numero",
      "context": "di cui al Permesso di costruire",
-     "max": 10
+     "max": 10,
+     "disabled": true
     },
     {
      "id": "r6c3p18reg:calendar_input",
      "kind": "date",
-     "label": "del"
+     "label": "del",
+     "disabled": true
     },
     {
      "id": "r6c4p20reg:txt",
      "kind": "text",
      "label": "N.Put",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r8c1p22reg:radio:1_clone",
@@ -191,12 +195,14 @@
      "kind": "text",
      "label": "P.G. numero",
      "context": "di cui alla DIA",
-     "max": 10
+     "max": 10,
+     "disabled": true
     },
     {
      "id": "r8c3p26reg:calendar_input",
      "kind": "date",
-     "label": "del"
+     "label": "del",
+     "disabled": true
     },
     {
      "id": "r11c1p29reg:txt",
@@ -240,6 +246,7 @@
     }
    ],
    "fingerprint": "5d5252a0a6a679c3",
+   "text": "dichiarazione dell'immobile oggetto della domanda, riferimenti titolo edilizio e data prevista della fine lavori via , viale, piazza numero civico Località CAP P.G. numero del N.Put di cui al Permesso di costruire P.G. numero del di cui alla DIA Riferimenti catastali foglio mappale subalterno per (specificare l'oggetto dell'intervento) intestato a la cui data di fine lavori dovrebbe essere entro il ed è invece prevista per",
    "branches": [
     {
      "choice": "di cui al Permesso di costruire",
@@ -250,6 +257,11 @@
        "r8c3p26reg:calendar_input",
        "r6c3p18reg:calendar_input"
       ]
+     ],
+     "enables": [
+      "r6c2p16reg:txt",
+      "r6c3p18reg:calendar_input",
+      "r6c4p20reg:txt"
      ]
     },
     {
@@ -261,10 +273,14 @@
        "r8c3p26reg:calendar_input",
        "r6c3p18reg:calendar_input"
       ]
+     ],
+     "enables": [
+      "r8c2p24reg:txt",
+      "r8c3p26reg:calendar_input"
      ]
     }
    ],
-   "seconds": 2.7
+   "seconds": 2.2
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -273,20 +289,20 @@
   {
    "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
    "seconds": 0.6
   },
   {
    "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
    "fingerprint": "869752d2cea5aef3",
    "same_as": "sue-permesso-di-costruire-art-10-d-p-r-380-2001#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
-   "seconds": 0.7
+   "seconds": 0.6
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
-   "seconds": 0.8,
+   "same_as": "cil#Qualifica e dati del procuratore",
+   "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],
@@ -328,6 +344,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft"
+ }
 }

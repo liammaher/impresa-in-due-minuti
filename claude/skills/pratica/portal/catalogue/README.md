@@ -24,7 +24,20 @@ catastale (`F839` is Napoli).
 ## How it's made
 
 In the Claude browser pane, logged in, on a scratch draft named "PROVA NON INVIARE -
-catalogo <sportello>" (Liam deletes it afterwards):
+catalogo <sportello>" (Liam deletes it afterwards). If Pratiche in bozza hasn't it, make it:
+`/fnsuap/cmd/create?comune=F839&tipoSportello=E` (the SUE), its name in the description box,
+Conferma, then Conferma on the access screen; the draft is listed from then on.
+
+`catalogue.py pane DIR` writes the scripts: on the portal's origin run `load.js` (it runs the
+copies kept in the pane's localStorage), and `install.js` only when it says they're stale (it
+checks each by sha256 before storing it). A page that navigates loses the scripts but not the
+copies: run `load.js` again. A batch's options are worth keeping in localStorage too, so it can be
+started again after a logout.
+
+After a crawl.js change that sees more (the switched-on boxes, 2026-10-30): crawl the sportello
+again (clear its `crawl:op:*` and `crawl:known`, keeping copies), import it, regenerate every
+recipe and diff the steps files, recount (`branches.py --write`), and rerun the changed
+rehearsals on the portal before trusting them.
 
 - `wizard.js`: the wizard tree. Takes the defaults past the operations (the preselected
   destinatario, every Si/No answered No, no box ticked), steps back with "Pagina precedente",
@@ -40,7 +53,8 @@ catalogo <sportello>" (Liam deletes it afterwards):
   common sections are known (the first restaurant pratica: 140 s).
 - `catalogue.py`: `ops sue|suap` lists a batch's operations, `known` the fingerprints the
   stored crawls have, `import` writes an exported batch here (refusing one that holds the
-  login's name: `CATALOGUE_PRIVATE`), `count` the distinct sections, how many pratiche use each
+  login's name: `CATALOGUE_PRIVATE`, whole words: `\bname\b`, or a label's "ampliamento" matches a
+  "liam"), `count` the distinct sections, how many pratiche use each
   and whether the dictionary fills it under each title the portal gives it (gen.py's own test;
   `names_missing` lists a title with no entry).
 
@@ -63,7 +77,10 @@ Neither fills a value, saves a section, ticks a declaration, pays or sends.
   (`rehearsals/cila-paesaggistica-fittizia`), run to the declarations; its attachments screen
   isn't read yet. Two more (2026-10-29): the SCIA with its semplificata, and with its ordinaria
   (`sue-combo-scia-paesaggistica-*`), every section one already crawled; their attachments
-  screens are read on the empty draft, plus the SCIA's answer-dependent slots.
+  screens are read on the empty draft, plus the SCIA's answer-dependent slots. Two more (2026-10-31): the
+  permesso di costruire with its semplificata and with its ordinaria
+  (`sue-combo-pdc-paesaggistica-*`, `catalogue.py ops --combo`), every section one already crawled;
+  and the SCIA alternativa with each (`sue-combo-scia-alt-paesaggistica-*`), the same.
 - **SUAP**: 278 pratiche crawled so far (the batch stands at about half of its 1,028 trips:
   the priority sectors, the common operations, part of the other sectors); **477 distinct
   sections**, 67 filled, 71% of section uses, counted under each title a section has. 107
@@ -105,6 +122,11 @@ by `run.py preflight` until it is crawled again (`import` clears it).
 - The fingerprint is the section before any choice: a change only inside a branch is caught by
   the runner, not by the check.
 - Operations are crawled one at a time; combinations (two operations in one pratica, an
-  intervento eventuale) are only what each adds on its own, except the one checked above.
+  intervento eventuale) are only what each adds on its own, except the five above.
+- Crawls before 2026-10-30 didn't record switched-off boxes: a block greyed until its choice
+  is made (quadro f)'s stato legittimo) read as a choice that opens nothing, and its own choices
+  were tried while greyed, doing nothing. crawl.js now marks `disabled`, a node's `enables` and
+  `disables`, and explores what a choice switches on; a SUE crawl from before misses such
+  branches until crawled again (depth 3 for the stato legittimo's sub-choices).
 - Names aren't identity: two sections with different titles can hold the same fields, which
   the section crawl settles.

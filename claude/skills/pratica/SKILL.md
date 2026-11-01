@@ -273,11 +273,41 @@ both when the form asks for files; `read` only shows or downloads something.
 
 ### Filling a portal from a steps file
 
-A portal someone has walked has a steps file: `portal-steps.yaml` in a folder of the vault
-repository's `rehearsals/`, next to its map (`portal-map.yaml`) and a README with the runs.
-Find one for the entry with
-`grep -l "procedure: <entry id>" "$(cd ~/.claude/skills/pratica && pwd -P)"/../../../rehearsals/*/portal-steps.yaml`.
-When there is one, follow it instead of exploring the portal:
+A portal someone has walked has a steps file in a folder of the vault repository's
+`rehearsals/` (`portal-steps.generated.yaml`, else `portal-steps.yaml`; called
+`portal-steps.yaml` below), next to its README with the runs. Find one for the entry with
+`grep -l "procedure: <entry id>" "$(cd ~/.claude/skills/pratica && pwd -P)"/../../../rehearsals/*/portal-steps*.yaml`.
+When there is one, follow it instead of exploring the portal.
+
+**Works needing a building title (SUE: CILA, SCIA, permesso, a sanatoria, a landscape
+authorization) are routed first**, because the case's facts decide which of these it is,
+not its name. `~/.cache/pratica-portal/venv/bin/python -I ~/.claude/skills/pratica/portal/route.py
+--table sue-napoli [--answers <facts.json>]` asks the rules table's facts as pre-flight asks its
+questions (the same format; write the replies into facts.json and run it again): the works
+first, alone, then the rest in one message (the yes/no ones as a checklist, `fatti`). If the
+answer about the works changes, keep only it and run again: the checklist was another case's.
+Once the table decides, it prints the one
+steps file that files the case (`steps`) and the `answers` to start its answers file with,
+so pre-flight doesn't ask them again (`asked_again`: the facts that steps file asks its own
+way). `unsupported` (refused by the table, no pratica needed, or a combination not mapped
+yet): tell the user the reason in one line and stop. Pratiche the person names (a proroga,
+fine lavori, a voltura) are found by their entry id, as above.
+
+**When the user hands over the job's documents** (a folder: the visura, the lease or deed, the
+relazione tecnica, the drawings, the receipts), read them with the intake before asking anything:
+`~/.cache/pratica-portal/venv/bin/python -I ~/.claude/skills/pratica/intake/intake.py scan <folder>
+--out <dir>` (`intake/README.md`). Never open the documents or `<dir>/private/` yourself: they
+hold people's data, which goes from the files to `private/values.json` without passing through
+the conversation. Read only `<dir>/intake.json`: each file's kind, the field ids filled, the
+`unread` files (scans: their facts are asked as before), `notes` (the titles the deed names, the
+planimetria's date, a receipt paid to the wrong account), and `proposals`, each with the document
+and words it comes from. Show the proposals in one message, grouped by document ("From the
+relazione tecnica: manutenzione straordinaria, nothing structural, works started 2026-10-19…").
+On "ok": `intake.py accept <dir> --into <facts.json> --part facts`, then route.py. Scan again with
+`--steps <the routed steps file>` and, on "ok", `accept <dir> --into <answers.json>` (it adds the
+client's and the owner's roles to `people`, never replacing an answer). Pre-flight then takes the
+vault's values and the documents': `--values - --values <dir>/private/values.json` (the vault's
+win). A proposal nobody confirmed is never used.
 
 1. **Pre-flight first, before anything opens.** `run.py preflight --steps <folder>/portal-steps.yaml
    [--answers <answers.json>]` with the same values as step 2 (the `pvault get` piped in,
@@ -310,7 +340,15 @@ When there is one, follow it instead of exploring the portal:
      that isn't a CAdES file is a `problem` (not ready: the user signs it again); one signed by
      someone other than the dichiarante, or carrying no codice fiscale, is a `warnings` entry
      (tell the user, it may be right: a technician signs their own relazione). It checks whose
-     name is on the signature, not that the signature holds: the portal does that.
+     name is on the signature, not that the signature holds: the portal does that. A PDF signed
+     in itself (PAdES) is read the same way. At Napoli's SUE (DD 501/2026) every file must also
+     be PDF/A, signed and named with letters, digits and underscores only, or the pratica is
+     irricevibile: a file that isn't is a `problem` saying which (have the user export it as
+     PDF/A, sign it, rename it), and `yours` says the same for their own files and how Napoli
+     takes the diritti (before sending, its postal account only); for a building title (CILA,
+     SCIA, SCIA alternativa, permesso) also Napoli's annexes: the Programma 100 and the Modello
+     DP, the Stato Comparativo sheet, and in zona A or for a frazionamento their own. A rehearsal with made-up
+     files passes `--made-up`: then these are only each file's `filing` and a warning.
    - `yours`: tell the user now what they'll do at the end, so nothing surprises them,
      including a pratica the case needs from another office ("File apart, …": the seismic
      filing at the Genio Civile), which they file themselves.

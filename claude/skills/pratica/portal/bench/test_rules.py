@@ -38,7 +38,7 @@ def case(name, fixture, **answers):
             a.pop(k, None)
         else:
             a[k] = v
-    return run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")))
+    return run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")), made_up=True)
 
 
 def shop(**answers):
@@ -144,7 +144,7 @@ def sue(name, answers="answers-p6.json", **changes):
             a.pop(k, None)
         else:
             a[k] = v
-    return run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")))
+    return run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")), made_up=True)
 
 
 def sue_every_case_decided_once():
@@ -162,15 +162,20 @@ def sue_every_case_decided_once():
 def sue_rehearsals_ready():
     names = ["cil-fittizia", "cila-fittizia", "cila-paesaggistica-fittizia", "scia-fittizia", "scia-paesaggistica-semplificata-fittizia",
              "scia-paesaggistica-ordinaria-fittizia", "pdc-fittizio", "scia-alternativa-fittizia",
-             "paesaggistica-semplificata-fittizia", "paesaggistica-ordinaria-fittizia", "scia-sanatoria-fittizia"]
+             "paesaggistica-semplificata-fittizia", "paesaggistica-ordinaria-fittizia", "scia-sanatoria-fittizia", "accertamento-paesaggistico-fittizio", "pdc-sanatoria-fittizio",
+             "parere-esonero-fittizio"]
     # A whole building's change of use with CILA works: the national SCIA form has a box for it,
     # but in Campania it is a SCIA alternativa (art. 2 c. 6 L.R. 13/2022).
-    refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "napoli/comune/scia-alternativa-pdc"}
+    refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "This case is another pratica: napoli/comune/scia-alternativa-pdc",
+               # The portal's art. 36-bis asseverazione is one radio group (the library's discrepancies).
+               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Only art. 36 ",
+               # The Comune gives no attestation of the exclusion (its landscape directive, § 3.2).
+               ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia"}
     for name in names:
         for f in sorted((REHEARSALS / name).glob("answers*.json")):
             r = sue(name, f.name)
             if (name, f.name) in refused:
-                assert r["unsupported"][0].startswith("This case is another pratica: " + refused[name, f.name]), r
+                assert r["unsupported"][0].startswith(refused[name, f.name]), r
             else:
                 assert r["ready"], (name, f.name, r)
 
@@ -215,9 +220,35 @@ def sue_another_pratica():
     assert sue("scia-sanatoria-fittizia", fatti=[])["unsupported"][0].startswith(other + cila)  # the late CILA
     assert "3-bis" in sue("scia-sanatoria-fittizia", intervento="ristrutturazione", fatti=[],
                           strutture="true", sismica="deposito")["unsupported"][0]
-    assert "paesaggistico" in sue("scia-sanatoria-fittizia", paesaggio="semplificata", fatti=["prospetti"])["unsupported"][0]
+    # In a protected area the art. 36-bis sanatoria carries the landscape compatibility (c. 4),
+    # new volumes too; the SCIA of works still under way doesn't.
+    assert sue("scia-sanatoria-fittizia", paesaggio="semplificata", fatti=["prospetti", "paesaggio_eseguiti", "paesaggio_volumi"])["ready"]
+    assert any("36-bis c. 4" in u for u in sue("scia-sanatoria-fittizia", paesaggio="ordinaria", fatti=["prospetti", "paesaggio_eseguiti"],
+                                                sanatoria_caso="in corso")["unsupported"])
     assert sue("scia-sanatoria-fittizia", intervento="ristrutturazione", fatti=[])["ready"]
     assert "accertamento di compatibilità" in sue("cila-paesaggistica-fittizia", fatti=["paesaggio_eseguiti"])["unsupported"][0]
+    # Works with no building title, already done in a protected area: the accertamento (art. 167
+    # c. 4-5 D.Lgs. 42/2004); not with new surfaces or volumes.
+    accertamento = "napoli/comune/accertamento-compatibilita-paesaggistica"
+    assert sue("paesaggistica-ordinaria-fittizia", fatti=["paesaggio_eseguiti"])["unsupported"][0].startswith(other + accertamento)
+    assert sue("accertamento-paesaggistico-fittizio", fatti=[])["unsupported"][0].startswith(other + ordinaria)
+    assert "167 c. 4" in sue("accertamento-paesaggistico-fittizio", fatti=["paesaggio_eseguiti", "paesaggio_volumi"])["unsupported"][0]
+    # Works that needed the permesso, already done: the permesso in sanatoria; not on structures.
+    pdcs = "napoli/comune/permesso-in-sanatoria"
+    assert sue("pdc-fittizio", intervento="nuova_costruzione", strutture="false", fatti=["sanatoria"])["unsupported"][0].startswith(other + pdcs)
+    assert sue("pdc-sanatoria-fittizio", intervento="variante_essenziale_pdc")["ready"]
+    assert "sanatoria sismica" in sue("pdc-sanatoria-fittizio", strutture="true", sismica="deposito")["unsupported"][0]
+    # The portal's permesso wants an energy incentive claimed even with no energy works.
+    assert "energy incentive" in sue("pdc-sanatoria-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
+    assert "energy incentive" in sue("pdc-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
+    # The parere di esonero: refused in Napoli; works needing an authorization are that pratica,
+    # and a property under no protection needs nothing.
+    esonero = sue("parere-esonero-fittizio")["unsupported"]
+    assert "D.D. 1072I/2024/154" in esonero[0], esonero
+    assert sue("parere-esonero-fittizio", paesaggio="semplificata")["unsupported"][0].startswith(other + semplificata)
+    assert sue("parere-esonero-fittizio", paesaggio="no")["unsupported"][0].startswith("This case needs no pratica: ")
+    # The other recipes never ask for it: a CILA in a protected area with works of Allegato A.
+    assert sue("cila-fittizia", later, paesaggio="senza_autorizzazione")["ready"]
     assert sue("scia-fittizia", "answers-variante-pdc.json", fatti=["demolizione_zona_a"])["unsupported"][0].startswith(
         other + "napoli/comune/permesso-di-costruire")
     assert "DGC 454/2014" in sue("scia-alternativa-fittizia", fatti=["demolizione_zona_a"])["unsupported"][0]

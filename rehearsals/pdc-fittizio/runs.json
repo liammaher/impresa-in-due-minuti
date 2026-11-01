@@ -1,0 +1,152 @@
+[
+ {
+  "date": "2026-10-31",
+  "answers": "answers-altri-tecnici.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-cambio-tra.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-convenzionato.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-deroga.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-impianti.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-mutamento-lr.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-parcheggi.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-sottotetti.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-tolleranze-autorizzazione.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-tolleranze-privo.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-tolleranze.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-variante-sagoma.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-variante-scia-alt.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-variante-titolo-unico.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-cambio-stessa.json",
+  "result": "filled",
+  "seconds": 146.5
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-intero-vincoli.json",
+  "result": "stopped",
+  "seconds": 148
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 158.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-per-scelta.json",
+  "result": "stopped",
+  "seconds": 48.9
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-rir-deroga-antincendio.json",
+  "result": "stopped",
+  "seconds": 150.4
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-rir-fuori-area.json",
+  "result": "filled",
+  "seconds": 148
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-variante-essenziale.json",
+  "result": "filled",
+  "seconds": 163.1
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-intero-vincoli.json",
+  "result": "filled",
+  "seconds": 153.8
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-per-scelta.json",
+  "result": "stopped",
+  "seconds": 52.7
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-rir-deroga-antincendio.json",
+  "result": "filled",
+  "seconds": 148
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-per-scelta.json",
+  "result": "filled",
+  "seconds": 164.2
+ }
+]

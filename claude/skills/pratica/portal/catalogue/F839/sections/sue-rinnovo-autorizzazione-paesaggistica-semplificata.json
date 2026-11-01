@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T17:19:16.775Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-31T11:43:06.831Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Beni Paesaggistici › Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune) (sector Edilizia e pianificazione urbana)",
- "seconds": 28.6,
+ "seconds": 20.9,
  "generated": {
   "interventi": "Richiesta di Rinnovo Autorizzazione Paesaggistica Semplificata ai sensi dell'art.7 del DPR 31/2017 (Ente Comune)",
   "adempimenti": [
@@ -67,26 +67,26 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
-   "seconds": 0.9
+   "same_as": "cil#Oggetto della pratica",
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
-   "seconds": 0.9
+   "same_as": "cil#DOMICILIO DIGITALE",
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.8
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -99,14 +99,14 @@
   {
    "section": "dichiarazione ubicazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
-   "seconds": 1.2
+   "same_as": "cil#Localizzazione dell'intervento",
+   "seconds": 0.6
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
-   "seconds": 0.8
+   "same_as": "cil#Dati catastali",
+   "seconds": 0.6
   },
   {
    "section": "Qualificazione dell'intervento di rinnovo",
@@ -148,6 +148,7 @@
     }
    ],
    "fingerprint": "dba88e495dd96ac1",
+   "text": "Qualificazione dell'intervento di rinnovo Precedente Autorizzazione: Num. Data Scadenza Ente L'istanza di rinnovo riguarda Autorizzazione Paesaggistica Semplificata per interventi di lieve entita' indicati nell'elenco di cui all'Allegato «B» del DPR del 13/02/2017 n.31 L'istanza di rinnovo riguarda l'Autorizzazione Paesaggistica, rilasciata ai sensi dell'articolo 146 del Codic e scaduta da non piu' di un anno. A tal fine Dichiara che l'Autorizzazione di cui si chiede il Rinnovo è relativa ad interventi in tutto o in parte non eseguiti e che il progetto è conforme a quanto in precedenza autorizzato e alle specifiche prescrizioni di tutela eventualmente sopravvenute [vedi nota 1]. (1)AVVERTENZA: qualora siano richieste anche variazioni progettuali che comportino interventi di non lieve entita', si applica il procedimento autorizzatorio ordinario di cui all'articolo 146 del Codice.",
    "branches": [
     {
      "choice": "L'istanza di rinnovo riguarda Autorizzazione Paesaggistica Semplificata per interventi di lieve entita' indicati nell'elenco di cui all'Allegato «B» del DPR del",
@@ -183,13 +184,13 @@
      ]
     }
    ],
-   "seconds": 6.1
+   "seconds": 3.1
   },
   {
    "section": "dati relativi al nome del tecnico",
    "fingerprint": "ffddb90f4d2ab273",
    "same_as": "sue-autorizzazione-paesaggistica-ordinaria#dati relativi al nome del tecnico",
-   "seconds": 1.1
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -198,19 +199,19 @@
   {
    "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
-   "seconds": 0.9
+   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
    "fingerprint": "869752d2cea5aef3",
    "same_as": "sue-permesso-di-costruire-art-10-d-p-r-380-2001#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
-   "seconds": 1.2
+   "seconds": 0.6
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
+   "same_as": "cil#Qualifica e dati del procuratore",
    "seconds": 1,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
@@ -246,6 +247,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft"
+ }
 }

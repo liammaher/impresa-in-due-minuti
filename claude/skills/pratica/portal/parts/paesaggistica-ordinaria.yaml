@@ -1,0 +1,44 @@
+# What the autorizzazione paesaggistica ordinaria (art. 146 D.Lgs. 42/2004 - Comune) adds to the
+# building pratica it's filed with, the two selected together in the wizard: a combination's
+# recipe `extends` its main pratica's rehearsal, then this. The asseverazione names the
+# procedure from `paesaggio`.
+asks:
+  paesaggio: {default: "ordinaria"}
+rules:
+  handles: [napoli/comune/autorizzazione-paesaggistica-ordinaria]
+attachments:
+  Gestione degli allegati:
+    # The relazione paesaggistica (DPCM 12/12/2005) takes a plain PDF, and the asseverazione's
+    # "Si allega la relazione paesaggistica e la documentazione" adds a second, required slot
+    # for it (read with the SCIA 2026-10-29 and the permesso 2026-10-31). A CILA or a CIL has no
+    # such box, so its recipe drops that slot (`drop: true`).
+    - {kind: file, label: Relazione paesaggistica (redatta ai sensi del D.P.C.M, value: "{{ask.relazione_paesaggistica}}"}
+    - {kind: file, label: Relazione paesaggistica e documentazione per il rilascio, value: "{{ask.relazione_paesaggistica}}", on_page: true}
+supports:
+  - when: "{{ask.vincolo|is_art_134|not}}"
+    else: "The ordinaria's form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose."
+  - when: "{{ask.titolo|is_locatario|not}}"
+    else: "The ordinaria's form offers only ownership, co-ownership, the condominio's administrator or another real right: a tenant isn't one."
+# The case it adds to the main pratica's P6 answers (a null drops one): a property under art. 136
+# and 142, the client as owner by deed (the form takes no tenant), the relazione as a plain PDF.
+# Each combination's recipe adds its own (`gen.py --answers`).
+answers:
+  # Stated, not left to the ask's default: the CILA's and CIL's steps ask it from the rules table.
+  paesaggio: ordinaria
+  bollo_marche: false
+  vincolo: art 136 and 142
+  vincolo_136_lettera: c) e d)
+  vincolo_136_provvedimento: D.M. fittizio PROVA NON INVIARE del 01/01/1960
+  vincolo_142_lettera: a)
+  titolo: proprietario
+  titolo_esclusivo: true
+  assenso_proprietario: null
+  titolo_atto: rogito
+  atto_notaio: Mario Fittizio
+  atto_notaio_sede: Napoli
+  atto_repertorio: '12345'
+  atti_gravanti: false
+  zona_prg: zona B
+  prg_nta: art. 33
+  paes_interessa: immobile
+  relazione_paesaggistica: rehearsals/scia-fittizia/files/relazione-paesaggistica.pdf

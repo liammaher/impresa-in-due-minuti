@@ -2,11 +2,11 @@
 # recipe and generate again.
 procedure: napoli/comune/proroga-inizio-lavori
 title: Proroga del termine di inizio lavori (permesso di costruire), SUE Napoli (tecnico con procura)
-generated: gen.py from sue-proroga-inizio-lavori (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from sue-proroga-inizio-lavori (2026-10-31) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali'
-- Pay the imposta di bollo (two marche da 16 €) and any diritti on pagoPA after sending
+- Pay the imposta di bollo (two marche da 16 €) as the portal asks
 - 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it'
 - Sign and send (Firma e invio); keep the receipt
 asks:
@@ -20,15 +20,16 @@ asks:
   proroga_giorni: {type: text, question: How many days of extension are asked (e.g. 365)}
   proroga_motivo: {type: text, question: 'Why the extension is needed: the facts beyond the holder''s control (500 characters)'}
   proroga_data_prevista: {type: date, question: The new date the works are now expected to start}
-  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', default: 'false'}
-  bollo_seriale: {type: text, question: The marca da bollo's serial number (14 digits)}
-  bollo_data: {type: date, question: The marca da bollo's date}
+  domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
+  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', propose: 'false'}
+  bollo_seriale: {type: text, question: 'The marca da bollo for the application: its serial number (14 digits)'}
+  bollo_data: {type: date, question: Its date}
+  bollo_seriale_2: {type: text, question: 'The marca da bollo for the authorization the Comune issues: its serial number (14 digits)'}
+  bollo_data_2: {type: date, question: Its date}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
 supports:
 - when: '{{ask.titolo_tipo|is_permesso_di_costruire}}'
   else: 'So far only for a permesso di costruire: the DIA branch isn''t run yet.'
-- when: '{{ask.bollo_marche|not}}'
-  else: 'So far only with the bollo paid on pagoPA: the marche route isn''t run yet.'
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
 wizard:
@@ -95,7 +96,9 @@ sections:
   fields:
   - {id: 'r2c1p2reg:txta', kind: text, value: '{{ask.oggetto}}', max: 300, label: descrizione sintetica}
 - section: DOMICILIO DIGITALE
-  fields: []
+  fields:
+  - {id: 'r4c1p4reg:chk', kind: checkbox, when: '{{ask.domicilio_inad}}', label: il seguente domicilio digitale inserito in INAD}
+  - {id: 'r6c1p6reg:txt', kind: text, value: '{{c:identity.pec}}', when: '{{ask.domicilio_inad}}', max: 9999, label: il seguente domicilio digitale inserito in INAD}
 - section: DOMICILIO ELETTRONICO
   theirs:
   - Si dichiara di essere consapevoli
@@ -145,5 +148,7 @@ sections:
   - {id: 'r5c2p7reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche|not}}', label: 'Due marche da €16,00 ciascuna'}
   - {id: 'r8c1p14reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche}}', label: Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo}
   - {id: 'r13c2p30reg:radio:2_clone', kind: radio, when: '{{ask.bollo_marche}}', label: 'Marca da €16,00 per l''autorizzazione'}
-  - {id: 'r15c2p34reg:txt', kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1)}
-  - {id: 'r15c3p36reg:calendar_input', kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}}', label: data}
+  - {kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1)}
+  - {kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}}', label: data}
+  - {id: 'r15c2p34reg:txt', kind: text, value: '{{ask.bollo_seriale_2}}', on_page: true, when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1), nth: 2}
+  - {id: 'r15c3p36reg:calendar_input', kind: date, value: '{{ask.bollo_data_2|date_it}}', on_page: true, when: '{{ask.bollo_marche}}', label: data, nth: 2}

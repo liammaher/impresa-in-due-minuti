@@ -92,7 +92,12 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      `supports:` (cases it maps), `rules:` (the library's rules tables, SUAP and SUE,
                      copied in `rules/`: whether the law makes the case this pratica, the others it
                      adds with it, and those filed apart, which go in `yours`)
-                     and `asks:` (questions, asked in one message, or proposed to confirm). A stopped run resumes on its draft (`--resume`, `--fix`).
+                     and `asks:` (questions, asked in one message, or proposed to confirm). Before it, for
+                     the SUE's building titles, `route.py` asks the table's facts and names the one steps
+                     file whose `rules:` main and `handles` are the case's pratiche, with the answers to
+                     carry (the index is read from the steps files). Pre-flight also holds each file to its
+                     sportello's `FILING` rules (Napoli's SUE, DD 501/2026: PDF/A, signed .p7m or PAdES,
+                     plain names; `--made-up` only warns, for rehearsals). A stopped run resumes on its draft (`--resume`, `--fix`).
                      Both take a draft's values from one `pvault get` (`--values -`, Touch ID).
                      Where a choice or "+" renumbers ids, fields are found by label
                      (`label` + `anchor`/`block`/`nth`; `kind: add` presses "+"); the job's other
@@ -104,10 +109,17 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      gen.py writes a steps file from a crawl, `dictionary/fnsuap.yaml` (each
                      section's fields by label, shared by every pratica) and a recipe
                      (rehearsals/*/recipe.yaml; `operation` may be a list, the union of their
-                     sections); it writes nothing if a field is unaccounted for. Adding a pratica,
+                     sections, and such a recipe `extends` its main pratica's and the other's
+                     `parts/` file, so neither drifts); it writes nothing if a field is unaccounted for. Adding a pratica,
                      the portal's quirks and clean batch reruns (`bench/rerun.py`): portal/README.md.
                      draft.py drafts dictionary entries for a new section from the national
-                     schema (`schema/`, InfoCamere's forms flattened), for a person to check
+                     schema (`schema/`, InfoCamere's forms flattened), for a person to check;
+                     schema_branches.py sets the 7 SUE forms' choices against the rehearsals' cases
+                     (docs/schema-branches.md: the branches no case takes yet)
+  pratica/intake/    intake.py: a job's documents (visura, lease, deed, relazione, receipts) to a
+                     private values file and proposed facts and answers, each with its source, for
+                     the person to confirm (`accept`); Claude reads only intake.json, never the
+                     documents' values (intake/README.md)
   pratica/review.py  the page the person reviews: what's left for them, the checks, every value
 plugin/              the Portali plugin for Cowork (docs/design/packaging.md): build.py copies the
                      runner, the rehearsals' steps files (as JSON: no packages in Cowork) and the
@@ -451,9 +463,14 @@ CI runs `regress.py` against the library's main (`fill.yml`); the library runs i
 The portal runner has offline tests on a fake portal: `claude/skills/pratica/portal/bench/test_inpage.py`,
 run with the pratica venv's Python (`~/.cache/pratica-portal/venv`, Playwright's Chromium, headless; no
 network, vault or model); `bench/test_preflight.py` tests pre-flight on the SCIA rehearsal's files, `bench/test_gen.py`
-gen.py on the crawls in `catalogue/F839/sections`, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
-the same bytes as the library's). On the real portal, `bench/rerun.py` reruns the rehearsals
-in the pane after a runner, dictionary or gen.py change (portal/README.md).
+gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the SUE choice count
+(`branches.py --write` writes `docs/sue-branches.md`), `bench/test_tolleranze.py` the asseverazioni's
+tolerances, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
+the same bytes as the library's), `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
+route.py on every case the SUE table decides (it prints the combinations not mapped yet), and
+`claude/skills/pratica/intake/bench/test_intake.py` the intake on a made-up dossier (`dossier.py`) against fixture-p6.json. On the real portal, `bench/rerun.py` reruns the rehearsals
+in the pane after a runner, dictionary or gen.py change (portal/README.md); `--record` files the results in each
+rehearsal's `runs.json`, which schema_branches.py counts as filled on the portal.
 
 ```go
 // Pattern: create temp vault, run test

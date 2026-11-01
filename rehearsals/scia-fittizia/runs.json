@@ -1,0 +1,176 @@
+[
+ {
+  "date": "2026-10-31",
+  "answers": "answers-altri-tecnici-due.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-altri-tecnici.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-altri-tecnici.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-stato-titoli-ripetuti.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-stato-titoli.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-tolleranze-autorizzazione.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-tolleranze-silenzio.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-tutele.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-strumenti.json",
+  "result": "filled",
+  "seconds": 137.2
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 134.5
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-cambio-unita-6bis-stessa.json",
+  "result": "filled",
+  "seconds": 141.1
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-stato-prova.json",
+  "result": "filled",
+  "seconds": 137.5
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-stato-sanzioni-estremi.json",
+  "result": "filled",
+  "seconds": 142.4
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-stato-sanzioni-ricevuta.json",
+  "result": "filled",
+  "seconds": 139.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-stato-tolleranze.json",
+  "result": "filled",
+  "seconds": 142.9
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-strutture.json",
+  "result": "filled",
+  "seconds": 152.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-tecnici.json",
+  "result": "filled",
+  "seconds": 152.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-cambio-unita-senza-stessa.json",
+  "result": "filled",
+  "seconds": 147.3
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-cambio-unita-senza-tra.json",
+  "result": "filled",
+  "seconds": 150.3
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-cambio-uso.json",
+  "result": "filled",
+  "seconds": 150.1
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-deroghe.json",
+  "result": "filled",
+  "seconds": 159.2
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-senza-impianti.json",
+  "result": "filled",
+  "seconds": 145.5
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-stato-epoca-copia.json",
+  "result": "filled",
+  "seconds": 146.1
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-stato-epoca.json",
+  "result": "filled",
+  "seconds": 149.2
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-stato-prova-copia.json",
+  "result": "filled",
+  "seconds": 147.1
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-tolleranze-asseverate.json",
+  "result": "filled",
+  "seconds": 149.5
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-variante-essenziale.json",
+  "result": "filled",
+  "seconds": 148
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-variante-pdc.json",
+  "result": "filled",
+  "seconds": 151.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-variante.json",
+  "result": "filled",
+  "seconds": 167.5
+ }
+]

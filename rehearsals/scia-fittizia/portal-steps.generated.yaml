@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/scia-edilizia
 title: SCIA edilizia, SUE Napoli (tecnico con procura)
-generated: gen.py from scia (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from scia (2026-10-31) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
@@ -12,12 +12,23 @@ yours:
 - 'A SCIA that asks for assents (the Soprintendenza, a park, a vincolo): no start date; the works start once the SUE says the assents are in'
 - Sign and send (Firma e invio); keep the receipt
 groups:
+  tolleranze_tipi:
+    question: Which construction tolerances does the relazione declare? Tick every one that applies.
   fasce_funzionali:
     question: Which fasce di rispetto is the property in? Tick every one that applies.
   barriere_requisiti:
     question: Which of the barriers rules' requirements does the project meet (D.M. 236/1989)? Tick every one that applies.
   acustica_documenti:
     question: Which acoustic documents are attached (art. 8 L. 447/1995, art. 4 DPR 227/2011)? Tick every one that applies.
+  precedenti:
+    question: 'Which building titles or pratiche make the building''s stato legittimo (art. 9-bis c. 1-bis DPR 380/2001: the one that built it or last covered all of it, and the partial ones after)? Tick
+      every one. The form has one line for each kind: a second title of a kind already ticked (two DIAs) is "Another title or pratica".'
+  prova_documenti:
+    question: What shows the building's original state? Tick every one that applies.
+  tolleranze_precedenti:
+    question: Where were the construction tolerance declarations (art. 34-bis or 34-ter c. 4) made? Tick every one that applies.
+  strumenti:
+    question: Which planning instruments besides the PRG cover the property's area? Tick every one.
   fatti:
     question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
 asks:
@@ -30,7 +41,37 @@ asks:
     propose: nessuna}
   ricevuta_contributo: {type: file, question: The contributo di costruzione's payment receipt (PDF)}
   prospetto_contributo: {type: file, question: The prospetto di calcolo preventivo of the contributo di costruzione (PDF)}
+  altri_tecnici: {type: yes_no, question: 'Are other technicians (structures, systems, acoustics, safety) already appointed for these works?', propose: 'false'}
+  altri_tecnici_quanti: {type: choice, question: 'How many other technicians? uno (`a:` in the job''s people); due (`a:` and `a2:`); tre (`a:`, `a2:` and `a3:`); piu di tre', options: [uno, due, tre, piu
+        di tre], propose: uno}
+  altro_tecnico_incarico: {type: text, question: 'What is the other technician (`a:`) appointed for (the form''s "Incaricato della", e.g. progettazione strutturale)?'}
+  altro_tecnico_dipendente: {type: yes_no, question: 'Does the other technician (`a:`) work as an employee of a firm or studio (the form''s "alle dipendenze di": the firm is `ad:` in the job''s people)?',
+    propose: 'false'}
+  altro_tecnico2_incarico: {type: text, question: 'What is the second other technician (`a2:`) appointed for?'}
+  altro_tecnico2_dipendente: {type: yes_no, question: 'Does the second other technician (`a2:`) work as an employee of a firm or studio (the firm is `ad2:`)?', propose: 'false'}
+  altro_tecnico3_incarico: {type: text, question: 'What is the third other technician (`a3:`) appointed for?'}
+  altro_tecnico3_dipendente: {type: yes_no, question: 'Does the third other technician (`a3:`) work as an employee of a firm or studio (the firm is `ad3:`)?', propose: 'false'}
   lavori_in_proprio: {type: yes_no, question: 'Are the works so minor that the client does them without a firm (opere di modesta entità, eseguite in proprio)?', propose: 'false'}
+  tolleranze: {type: yes_no, question: 'Does the relazione declare construction tolerances (art. 34-bis / 34-ter DPR 380/2001) on the property?', propose: 'false'}
+  toll_34bis_1: {type: yes_no, group: tolleranze_tipi, item: 'Art. 34-bis c. 1 and 1-ter, second period (2% of the measures)'}
+  toll_34bis_1bis: {type: yes_no, group: tolleranze_tipi, item: 'Art. 34-bis c. 1-bis and 1-ter, first period (2–6% by the unit''s floor area, works before 24 May 2024)'}
+  toll_34bis_2: {type: yes_no, group: tolleranze_tipi, item: Art. 34-bis c. 2 (geometric and execution irregularities)}
+  toll_34bis_2bis: {type: yes_no, group: tolleranze_tipi, item: 'Art. 34-bis c. 2-bis (works before 24 May 2024: minor execution irregularities)'}
+  toll_34ter_4: {type: yes_no, group: tolleranze_tipi, item: Art. 34-ter c. 4 (variants made during works before 1977)}
+  toll_superficie: {type: choice, question: 'The unit''s superficie utile, for the art. 34-bis c. 1-bis tolerance: oltre 500 (over 500 m², 2%); 300-500 (3%); 100-300 (4%); 60-100 (5%); sotto 60 (under 60
+      m², 6%)', options: [oltre 500, 300-500, 100-300, 60-100, sotto 60]}
+  toll_strutturale: {type: yes_no, question: 'Is the tolerance structurally relevant (it then complies with the technical rules for construction)?'}
+  toll_classe: {type: choice, question: 'Its class under art. 94-bis c. 1 DPR 380/2001: rilevante (a: relevant for public safety, needs the Genio Civile''s authorization); minore rilevanza (b); privo di
+      rilevanza (c)', options: [rilevante, minore rilevanza, privo di rilevanza], when: '{{ask.toll_strutturale}}'}
+  toll_sismica: {type: choice, question: 'What proves the seismic check of a relevant tolerance: autorizzazione (the Genio Civile''s authorization, art. 94 c. 2, attached); silenzio assenso (formed on the
+      authorization request, art. 94 c. 2-bis); nessuno (neither yet: the tolerance can''t be declared until one exists)', options: [autorizzazione, silenzio assenso, nessuno], when: '{{ask.toll_classe|is_rilevante}}'}
+  toll_sismica_data: {type: date, question: 'The authorization: issued on (the form''s "rilasciata in data")', when: '{{ask.toll_sismica|is_autorizzazione}}'}
+  toll_sismica_protocollo: {type: text, question: Its prot. n., when: '{{ask.toll_sismica|is_autorizzazione}}'}
+  toll_sismica_doc: {type: file, question: 'The Genio Civile''s seismic authorization (PDF): Allega documenti''s "Autorizzazione sismica"', when: '{{ask.toll_sismica|is_autorizzazione}}'}
+  toll_silenzio_data: {type: date, question: 'The silenzio assenso: the date the form asks ("in data")', when: '{{ask.toll_sismica|is_silenzio_assenso}}'}
+  toll_silenzio_protocollo: {type: text, question: Its prot. n., when: '{{ask.toll_sismica|is_silenzio_assenso}}'}
+  toll_decorso: {type: yes_no, question: 'Has the regional control term for this tolerance run out, with no request for more documents left unanswered and no negative outcome of the checks (the form''s
+      declaration)?', when: '{{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}}'}
   oggetto: {type: text, question: The works in one sentence (300 characters)}
   data_inizio_lavori: {type: date, question: When the works will start}
   dettaglio_intervento: {type: text, question: The works for the relazione tecnica (500 characters)}
@@ -39,6 +80,7 @@ asks:
   notifica_dovuta: {type: yes_no, question: 'Is a notifica preliminare due (more than one firm on site, or over 200 uomini-giorno)?'}
   pdc_numero: {type: text, question: The permesso di costruire's number}
   pdc_data: {type: date, question: Its issue date}
+  domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   impianti: {type: yes_no, question: 'Did the works touch the building''s systems (impianti)?'}
   impianto_elettrico: {type: yes_no, question: 'The electrical system (with its dichiarazione di conformità)?', when: '{{ask.impianti}}'}
   impianto_idrico: {type: yes_no, question: 'Water and sanitary systems?', when: '{{ask.impianti}}'}
@@ -51,18 +93,24 @@ asks:
   barriere_deroga: {type: yes_no, question: 'Are the works subject to the barriers rules but don''t meet them, so the SCIA condizionata asks for a deroga (its documents attached)?', propose: 'false'}
   barriere_elaborati: {type: file, question: The drawings and relazione showing the barriers rules are met (art. 77 ff. or art. 82 DPR 380/2001) (PDF)}
   barriere_deroga_doc: {type: file, question: The documents for the barriers deroga (relazione tecnica and drawings) (PDF)}
-  scia_sanatoria: {type: yes_no, question: 'Is this SCIA filed in sanatoria (the wizard''s sanatoria question answered Sì)?', default: 'false'}
+  sanatoria_titolo: {type: choice, question: 'Is this pratica filed in sanatoria? nessuna (no); scia (a SCIA in sanatoria); permesso (a permesso di costruire in sanatoria)', options: [nessuna, scia, permesso],
+    default: nessuna}
+  pdc_sanatoria_caso: {type: choice, question: 'Which permesso in sanatoria? assenza (works done without the permesso or SCIA alternativa, or in total difformity, conforming to the planning and building
+      rules both when done and today: art. 36 DPR 380/2001, the oblazione double the contributo di costruzione); parziale (works in partial difformity from the permesso or SCIA alternativa (art. 34) or
+      with essential variations: art. 36-bis)', options: [assenza, parziale], when: '{{ask.sanatoria_titolo|is_permesso}}'}
+  pdc_sanatoria_conformita: {type: choice, question: 'For art. 36-bis, the works conform: urbanistica (to today''s planning rules and the building rules of when they were done) or doppia (to the planning
+      and building rules both then and today)?', options: [urbanistica, doppia], when: '{{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}'}
   sanatoria_caso: {type: choice, question: 'Which case of the SCIA in sanatoria? in corso (works still under way, the SCIA filed of one''s own accord: a €516 sanction, art. 37 c. 5 DPR 380/2001); doppia
       conformita (works done without the SCIA or differing from it, conforming to the planning and building rules both when done and today: an oblazione of €516 to €5,164, art. 36-bis c. 5 b); conformita
       urbanistica (conforming to today''s planning rules and the building rules of the time: €1,032 to €10,328, art. 36-bis c. 1); variante pre 1977 (a variant to a title issued before L. 10/1977, art.
-      34-ter)', options: [in corso, doppia conformita, conformita urbanistica, variante pre 1977], when: '{{ask.scia_sanatoria}}'}
-  sanatoria_data: {type: date, question: 'When the works were done (for works still under way: when they started)', when: '{{ask.scia_sanatoria}}'}
-  sanatoria_oblazione: {type: number, question: 'The oblazione the technician determines and the client paid before filing, in euro (€516 to €5,164 with double conformity); the SUE may adjust it', when: '{{ask.scia_sanatoria}}
+      34-ter)', options: [in corso, doppia conformita, conformita urbanistica, variante pre 1977], when: '{{ask.sanatoria_titolo|is_scia}}'}
+  sanatoria_data: {type: date, question: 'When the works were done (for works still under way: when they started)', when: '{{ask.sanatoria_titolo|in_scia__permesso}}'}
+  sanatoria_oblazione: {type: number, question: 'The oblazione the technician determines and the client paid before filing, in euro (€516 to €5,164 with double conformity); the SUE may adjust it', when: '{{ask.sanatoria_titolo|is_scia}}
       {{ask.sanatoria_caso|is_doppia_conformita}}'}
   sanatoria_catasto: {type: choice, question: 'The catasto for the works to legalize: invariato (no change to the catasto registration); presentata (the DOCFA already filed: its protocol and date); dopo
-      (to be filed once the sanatoria takes effect)', options: [invariato, presentata, dopo], when: '{{ask.scia_sanatoria}}'}
-  sanatoria_catasto_protocollo: {type: text, question: The DOCFA's protocol number, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_presentata}}'}
-  sanatoria_catasto_data: {type: date, question: The DOCFA's date, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_presentata}}'}
+      (to be filed once the sanatoria takes effect)', options: [invariato, presentata, dopo], when: '{{ask.sanatoria_titolo|in_scia__permesso}}'}
+  sanatoria_catasto_protocollo: {type: text, question: The DOCFA's protocol number, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}'}
+  sanatoria_catasto_data: {type: date, question: The DOCFA's date, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}'}
   scia_tipo: {type: choice, question: 'What does the SCIA file? manutenzione straordinaria (art. 3 c. 1 b: on structural parts or the facades); restauro (c: restauro e risanamento conservativo on structural
       parts); ristrutturazione (d: a ristrutturazione edilizia that isn''t one of art. 10 c. 1 c); variante pdc (a variant in corso d''opera to a permesso di costruire, art. 22 c. 2 and 2-bis); variante
       scia (a variant to a SCIA that isn''t an essential variation); variante scia essenziale (one that is, art. 32); cambio uso (a change of use alone, art. 23-ter)', options: [manutenzione straordinaria,
@@ -94,15 +142,122 @@ asks:
   contributo_calcolo: {type: choice, question: 'Who works the contributo out: prospetto (the progettista''s prospetto di calcolo preventivo, attached); sportello (the SUE, from the technical documents attached)',
     options: [prospetto, sportello]}
   documentazione_calcolo_contributo: {type: file, question: The technical documents the SUE needs to work out the contributo (PDF)}
-  precedente_numero: {type: text, question: 'The building''s own title (licenza / concessione / permesso di costruire): its number'}
-  precedente_data: {type: date, question: Its date}
+  stato_legittimo: {type: choice, question: 'How does quadro f) (e) for the permesso) show the building''s stato legittimo? The form takes one: titoli (from its building titles or pratiche: you''ll list
+      them); epoca (built when no title was required: the catasto''s primo impianto or other documents); prova (its title is lost or unknown, but there is documentary proof of it); sanzioni (pecuniary sanctions
+      under artt. 33, 34, 37 or 38 DPR 380/2001 were imposed and fully paid); tolleranze (construction tolerance declarations, art. 34-bis or 34-ter c. 4)', options: [titoli, epoca, prova, sanzioni, tolleranze],
+    propose: titoli}
+  prec_titolo_unico: {type: yes_no, group: precedenti, item: Titolo unico (SUAP)}
+  prec_permesso: {type: yes_no, group: precedenti, item: 'Permesso di costruire, licenza edilizia or concessione edilizia'}
+  prec_autorizzazione: {type: yes_no, group: precedenti, item: Autorizzazione edilizia}
+  prec_comunicazione: {type: yes_no, group: precedenti, item: Comunicazione edilizia (art. 26 L. 47/1985)}
+  prec_dia: {type: yes_no, group: precedenti, item: Denuncia di inizio attività (DIA)}
+  prec_dia_alternativa: {type: yes_no, group: precedenti, item: DIA or SCIA alternativa al permesso di costruire}
+  prec_scia: {type: yes_no, group: precedenti, item: SCIA (segnalazione certificata di inizio attività)}
+  prec_cel: {type: yes_no, group: precedenti, item: Comunicazione edilizia libera}
+  prec_condono: {type: yes_no, group: precedenti, item: 'Condono edilizio (a title in sanatoria, its oblazione paid)'}
+  prec_pdc_sanatoria: {type: yes_no, group: precedenti, item: Permesso di costruire in sanatoria (artt. 36 or 36-bis DPR 380/2001)}
+  prec_scia_sanatoria: {type: yes_no, group: precedenti, item: SCIA in sanatoria (art. 36-bis)}
+  prec_scia_sanatoria_variante: {type: yes_no, group: precedenti, item: SCIA in sanatoria for a variant in corso d'opera in partial difformity from a title issued before L. 10/1977}
+  prec_altro: {type: yes_no, group: precedenti, item: 'Another title or pratica: of a kind not listed, or a second one of a kind already ticked'}
+  prec_titolo_unico_numero: {type: text, question: 'The titolo unico (SUAP): its number', when: '{{ask.prec_titolo_unico}}'}
+  prec_titolo_unico_data: {type: date, question: Its date, when: '{{ask.prec_titolo_unico}}'}
+  prec_permesso_numero: {type: text, question: 'The permesso di costruire / licenza / concessione edilizia: its number', when: '{{ask.prec_permesso}}'}
+  prec_permesso_data: {type: date, question: Its date, when: '{{ask.prec_permesso}}'}
+  prec_autorizzazione_numero: {type: text, question: 'The autorizzazione edilizia: its number', when: '{{ask.prec_autorizzazione}}'}
+  prec_autorizzazione_data: {type: date, question: Its date, when: '{{ask.prec_autorizzazione}}'}
+  prec_comunicazione_numero: {type: text, question: 'The comunicazione edilizia (art. 26 L. 47/1985): its number', when: '{{ask.prec_comunicazione}}'}
+  prec_comunicazione_data: {type: date, question: Its date, when: '{{ask.prec_comunicazione}}'}
+  prec_dia_numero: {type: text, question: 'The DIA: its number', when: '{{ask.prec_dia}}'}
+  prec_dia_data: {type: date, question: Its date, when: '{{ask.prec_dia}}'}
+  prec_dia_alternativa_numero: {type: text, question: 'The DIA / SCIA alternativa al permesso: its number', when: '{{ask.prec_dia_alternativa}}'}
+  prec_dia_alternativa_data: {type: date, question: Its date, when: '{{ask.prec_dia_alternativa}}'}
+  prec_scia_numero: {type: text, question: 'The SCIA: its number', when: '{{ask.prec_scia}}'}
+  prec_scia_data: {type: date, question: Its date, when: '{{ask.prec_scia}}'}
+  prec_cel_numero: {type: text, question: 'The comunicazione edilizia libera: its number', when: '{{ask.prec_cel}}'}
+  prec_cel_data: {type: date, question: Its date, when: '{{ask.prec_cel}}'}
+  prec_condono_numero: {type: text, question: 'The condono: its number', when: '{{ask.prec_condono}}'}
+  prec_condono_data: {type: date, question: Its date, when: '{{ask.prec_condono}}'}
+  prec_pdc_sanatoria_numero: {type: text, question: 'The permesso di costruire in sanatoria: its number', when: '{{ask.prec_pdc_sanatoria}}'}
+  prec_pdc_sanatoria_data: {type: date, question: Its date, when: '{{ask.prec_pdc_sanatoria}}'}
+  prec_scia_sanatoria_numero: {type: text, question: 'The SCIA in sanatoria: its number', when: '{{ask.prec_scia_sanatoria}}'}
+  prec_scia_sanatoria_data: {type: date, question: Its date, when: '{{ask.prec_scia_sanatoria}}'}
+  prec_scia_sanatoria_variante_numero: {type: text, question: 'The SCIA in sanatoria for the variant: its number', when: '{{ask.prec_scia_sanatoria_variante}}'}
+  prec_scia_sanatoria_variante_data: {type: date, question: Its date, when: '{{ask.prec_scia_sanatoria_variante}}'}
+  prec_altro_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro}}'}
+  prec_altro_numero: {type: text, question: Its number, when: '{{ask.prec_altro}}'}
+  prec_altro_data: {type: date, question: Its date, when: '{{ask.prec_altro}}'}
+  prec_altro_2: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro}}'}
+  prec_altro_2_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_2}}'}
+  prec_altro_2_numero: {type: text, question: Its number, when: '{{ask.prec_altro_2}}'}
+  prec_altro_2_data: {type: date, question: Its date, when: '{{ask.prec_altro_2}}'}
+  prec_altro_3: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro_2}}'}
+  prec_altro_3_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_3}}'}
+  prec_altro_3_numero: {type: text, question: Its number, when: '{{ask.prec_altro_3}}'}
+  prec_altro_3_data: {type: date, question: Its date, when: '{{ask.prec_altro_3}}'}
+  prec_altro_4: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro_3}}'}
+  prec_altro_4_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_4}}'}
+  prec_altro_4_numero: {type: text, question: Its number, when: '{{ask.prec_altro_4}}'}
+  prec_altro_4_data: {type: date, question: Its date, when: '{{ask.prec_altro_4}}'}
+  prec_altro_5: {type: yes_no, question: 'One more title or pratica to list, on another "altro" line (of a kind not listed, or another of a kind already listed)?', when: '{{ask.prec_altro_4}}'}
+  prec_altro_5_quale: {type: text, question: 'Which title or pratica it is (the form''s "specificare"), e.g. "denuncia di inizio attività" for a second DIA', when: '{{ask.prec_altro_5}}'}
+  prec_altro_5_numero: {type: text, question: Its number, when: '{{ask.prec_altro_5}}'}
+  prec_altro_5_data: {type: date, question: Its date, when: '{{ask.prec_altro_5}}'}
+  prec_altro_6: {type: yes_no, question: 'And another, beyond those five?', propose: 'false', when: '{{ask.prec_altro_5}}'}
+  prova_catasto: {type: yes_no, group: prova_documenti, item: 'The catasto''s primo impianto registration (its copy, or its details)'}
+  prova_catasto_modo: {type: choice, question: 'The catasto''s primo impianto registration in quadro f): estremi (you give its number and date) or copia (its copy, uploaded in the quadro)', options: [estremi,
+      copia], when: '{{ask.prova_catasto}}'}
+  prova_catasto_copia: {type: file, question: The copy of the primo impianto registration (PDF), when: '{{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}'}
+  prova_altri: {type: yes_no, group: prova_documenti, item: 'Other documents: photos, maps, archive records (art. 9-bis c. 1-bis, fourth and fifth periods)'}
+  prova_catasto_numero: {type: text, question: 'The primo impianto registration: its number', when: '{{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}'}
+  prova_catasto_data: {type: date, question: Its date, when: '{{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}'}
+  sanzione_prova: {type: choice, question: 'How does quadro f) show the sanctions were paid? ricevuta (their receipt is attached); estremi (you give the payment''s details)', options: [ricevuta, estremi],
+    when: '{{ask.stato_legittimo|is_sanzioni}}'}
+  sanzione_ricevuta: {type: file, question: The sanctions' payment receipt (PDF), when: '{{ask.sanzione_prova|is_ricevuta}}'}
+  sanzione_importo: {type: number, question: The sanction's amount in euro, when: '{{ask.sanzione_prova|is_estremi}}'}
+  sanzione_irrogata: {type: date, question: When it was imposed, when: '{{ask.sanzione_prova|is_estremi}}'}
+  sanzione_protocollo: {type: text, question: 'The payment details'' "Prot. n.", as the form asks it', when: '{{ask.sanzione_prova|is_estremi}}'}
+  sanzione_protocollo_data: {type: date, question: Its date, when: '{{ask.sanzione_prova|is_estremi}}'}
+  toll_prec_pratica: {type: yes_no, group: tolleranze_precedenti, item: In an earlier pratica edilizia's forms}
+  toll_prec_atto: {type: yes_no, group: tolleranze_precedenti, item: 'Attached to a deed that transferred, set up or ended rights on the building'}
+  toll_prec_pratica_protocollo: {type: text, question: That pratica's protocol number, when: '{{ask.toll_prec_pratica}}'}
+  toll_prec_pratica_data: {type: date, question: Its date, when: '{{ask.toll_prec_pratica}}'}
+  toll_prec_atto_numero: {type: text, question: The deed's registration number, when: '{{ask.toll_prec_atto}}'}
+  toll_prec_atto_data: {type: date, question: Its registration date, when: '{{ask.toll_prec_atto}}'}
   superficie_mq: {type: number, question: The unit's surface in m²}
   volume_mc: {type: number, question: Its volume in m³}
   piani_n: {type: number, question: The building's number of storeys}
   prg_specificare: {type: text, question: The town plan in force, default: Variante generale al PRG}
   prg_zona: {type: text, question: The PRG zone of the property}
   prg_articolo: {type: text, question: The article of the PRG's rules for that zone}
-  progetto_impianti: {type: yes_no, question: 'Do the systems need a project (DM 37/2008 art. 5)?'}
+  strumenti_altri: {type: yes_no, question: 'Besides the PRG, is the property in an area another planning instrument in force or in salvaguardia covers (an adopted PUC, a PUA, a piano particolareggiato
+      or di recupero, a P.I.P., a P.E.E.P., another)?', propose: 'false'}
+  strumento_puc: {type: yes_no, group: strumenti, item: A PUC (Piano Urbanistico Comunale) adopted or approved}
+  strumento_pua: {type: yes_no, group: strumenti, item: 'A PUA (piano urbanistico attuativo, L.R. Campania 16/2004 art. 26)'}
+  strumento_particolareggiato: {type: yes_no, group: strumenti, item: A piano particolareggiato}
+  strumento_recupero: {type: yes_no, group: strumenti, item: A piano di recupero (L. 457/1978)}
+  strumento_pip: {type: yes_no, group: strumenti, item: A P.I.P. (piano per gli insediamenti produttivi)}
+  strumento_peep: {type: yes_no, group: strumenti, item: 'A P.E.E.P. (piano per l''edilizia economica e popolare, L. 167/1962)'}
+  strumento_altro: {type: yes_no, group: strumenti, item: Another planning instrument}
+  strumento_puc_zona: {type: text, question: The property's zone in the PUC}
+  strumento_puc_articolo: {type: text, question: The article of the PUC's rules for that zone}
+  strumento_pua_zona: {type: text, question: The property's zone in the PUA}
+  strumento_pua_articolo: {type: text, question: The article of the PUA's rules for that zone}
+  strumento_particolareggiato_nome: {type: text, question: 'Which piano particolareggiato it is (its name, or its approval)'}
+  strumento_particolareggiato_zona: {type: text, question: The property's zone in the piano particolareggiato}
+  strumento_particolareggiato_articolo: {type: text, question: The article of the piano particolareggiato's rules for that zone}
+  strumento_recupero_nome: {type: text, question: 'Which piano di recupero it is (its name, or its approval)'}
+  strumento_recupero_zona: {type: text, question: The property's zone in the piano di recupero}
+  strumento_recupero_articolo: {type: text, question: The article of the piano di recupero's rules for that zone}
+  strumento_pip_nome: {type: text, question: 'Which P.I.P. it is (its name, or its approval)'}
+  strumento_pip_zona: {type: text, question: The property's zone in the P.I.P.}
+  strumento_pip_articolo: {type: text, question: The article of the P.I.P.'s rules for that zone}
+  strumento_peep_nome: {type: text, question: 'Which P.E.E.P. it is (its name, or its approval)'}
+  strumento_peep_zona: {type: text, question: The property's zone in the P.E.E.P.}
+  strumento_peep_articolo: {type: text, question: The article of the P.E.E.P.'s rules for that zone}
+  strumento_altro_nome: {type: text, question: 'Which instrument it is (its name, or its approval)'}
+  strumento_altro_zona: {type: text, question: The property's zone in that instrument}
+  strumento_altro_articolo: {type: text, question: The article of that instrument's rules for that zone}
+  progetto_impianti: {type: yes_no, question: 'Do the systems need a project (DM 37/2008 art. 5)?', when: '{{ask.impianti}}'}
   progetto_elettrico_doc: {type: file, question: The electrical system's project (PDF)}
   progetto_radiotv_doc: {type: file, question: The radio and TV systems' project (PDF)}
   progetto_termico_doc: {type: file, question: The heating or air-conditioning system's project (PDF)}
@@ -154,6 +309,7 @@ asks:
   paesaggio: {type: choice, question: 'Is the property under landscape protection (D.Lgs. 42/2004 parte III: art. 136, art. 142 or the piano paesaggistico), and what do the works need? no (not protected);
       senza autorizzazione (protected, but the works don''t alter the place or the buildings'' look, or need no authorization: art. 149, DPR 31/2017 Allegato A); semplificata (DPR 31/2017 Allegato B); ordinaria
       (art. 146)', options: ['no', senza autorizzazione, semplificata, ordinaria]}
+  sanatoria_paesaggio: {type: yes_no, question: 'Is this a sanatoria, so works that needed a landscape authorization go through art. 36-bis c. 4?', default: 'false'}
   bene_culturale: {type: yes_no, question: 'Is the building itself a protected bene culturale (D.Lgs. 42/2004 parte II: listed, so the works need the Soprintendenza''s authorization, art. 21)?'}
   soprintendenza_doc: {type: file, question: The documents for the Soprintendenza's authorization (art. 21 D.Lgs. 42/2004) (PDF)}
   area_protetta: {type: choice, question: 'Is the property in a protected natural area (a park or reserve, L. 394/1991 or regional law)? no; senza alterazione (inside, but the works don''t alter the place
@@ -213,8 +369,9 @@ asks:
         con cambio d''uso in zona omogenea A, o che cambia sagoma, volume o prospetti di un immobile tutelato, o la demolizione e ricostruzione in un''area tutelata (artt. 136 c. 1 c e d, 142) con modifiche',
       nuova_costruzione: 'Nuova costruzione (art. 3 c. 1 e), compresi gli ampliamenti fuori sagoma', ristrutturazione_urbanistica: Ristrutturazione urbanistica (art. 3 c. 1 f), variante_pdc: Variante in
         corso d'opera a un permesso di costruire che non è una variazione essenziale, variante_essenziale_pdc: Variante in corso d'opera a un permesso di costruire che è una variazione essenziale, variante_scia: Variante
-        in corso d'opera a una SCIA (essenziale o no), altro: 'Altro: permesso in deroga (art. 14), permesso convenzionato (art. 28-bis), sottotetti, parcheggi o Piano casa delle leggi regionali, proroghe
-        e volture'}, how: Lo stabilisce il tecnico dalle definizioni dell'art. 3 e dall'elenco dell'art. 6 DPR 380/2001.}
+        in corso d'opera a una SCIA (essenziale o no), altro: 'Altro: il Piano casa (L.R. 19/2009), proroghe e volture. Il permesso in deroga (art. 14), il permesso convenzionato (art. 28-bis), i sottotetti
+        (L.R. 15/2000), i parcheggi e i cambi d''uso della L.R. 19/2001 sono i lavori che fanno: scegli la loro voce dell''art. 3'}, how: Lo stabilisce il tecnico dalle definizioni dell'art. 3 e dall'elenco
+      dell'art. 6 DPR 380/2001.}
   sanatoria: {group: fatti, type: yes_no, item: 'I lavori sono già iniziati, o già finiti, senza il titolo che serviva?'}
   prospetti: {group: fatti, type: yes_no, item: 'La manutenzione straordinaria modifica i prospetti (le facciate) dell''edificio?'}
   cambio_uso: {type: choice, question: 'I lavori cambiano la destinazione d''uso? Si sceglie il primo caso che vale.', options: ['no', zona_agricola, non_rilevante, stessa_categoria, tra_categorie, piano_terra,
@@ -232,6 +389,7 @@ asks:
       è quella della tavola 7a "centro storico, area di salvaguardia dell''offerta abitativa ordinaria".'}
   cambio_uso_sagoma: {group: fatti, type: yes_no, item: 'Le opere che accompagnano il cambio d''uso dell''immobile incidono sulla sagoma o ne aumentano i volumi?'}
   paesaggio_eseguiti: {group: fatti, type: yes_no, item: 'Le opere che chiedono l''autorizzazione paesaggistica sono già state eseguite, anche in parte?'}
+  paesaggio_volumi: {group: fatti, type: yes_no, item: 'Le opere già eseguite hanno creato superfici utili o volumi, o aumentato quelli legittimamente realizzati?'}
   demolizione_zona_a: {group: fatti, type: yes_no, item: 'I lavori demoliscono e ricostruiscono un edificio, o la variante cambia la sagoma, in zona A della Variante generale al PRG o della Variante occidentale?',
     how: La zona si legge nella tavola di zonizzazione del PRG di Napoli.}
   piano_planovolumetrico: {group: fatti, type: yes_no, item: 'La nuova costruzione o la ristrutturazione urbanistica è disciplinata da un piano attuativo con precise disposizioni plano-volumetriche dichiarate
@@ -249,6 +407,51 @@ supports:
   in:
   - 'true'
   else: 'The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn''t qualify.'
+- if: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}}'
+  value: '{{ask.prec_altro_6}}'
+  in:
+  - 'false'
+  else: 'More than five "altro" lines (titles past one per kind, or of kinds not listed) aren''t mapped yet: each takes a "+" on the portal, and five have been prepared.'
+- if: '{{ask.stato_legittimo|is_titoli}}'
+  value: '{{ask.prec_titolo_unico,ask.prec_permesso,ask.prec_autorizzazione,ask.prec_comunicazione,ask.prec_dia,ask.prec_dia_alternativa,ask.prec_scia,ask.prec_cel,ask.prec_condono,ask.prec_pdc_sanatoria,ask.prec_scia_sanatoria,ask.prec_scia_sanatoria_variante,ask.prec_altro|any}}'
+  in:
+  - 'true'
+  else: A stato legittimo from the building's titles needs at least one title.
+- if: '{{ask.stato_legittimo|in_epoca__prova}}'
+  value: '{{ask.prova_catasto,ask.prova_altri|any}}'
+  in:
+  - 'true'
+  else: A building with no title on file needs its catasto primo impianto or other documents.
+- if: '{{ask.stato_legittimo|is_tolleranze}}'
+  value: '{{ask.toll_prec_pratica,ask.toll_prec_atto|any}}'
+  in:
+  - 'true'
+  else: A stato legittimo from tolerance declarations needs where they were made.
+- if: '{{ask.altri_tecnici}}'
+  value: '{{ask.altri_tecnici_quanti}}'
+  in:
+  - uno
+  - due
+  - tre
+  else: 'More than three other technicians aren''t mapped yet: each takes a "+" on the portal, and three have been prepared.'
+- if: '{{ask.tolleranze}}'
+  value: '{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}'
+  in:
+  - 'true'
+  else: Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4).
+- if: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}'
+  value: '{{ask.toll_sismica}}'
+  in:
+  - autorizzazione
+  - silenzio assenso
+  else: 'A structural tolerance relevant for public safety (art. 94-bis c. 1 a) can be declared only with the Genio Civile''s seismic authorization (art. 94 c. 2) or its silenzio assenso (c. 2-bis): art.
+    34-bis c. 3-bis DPR 380/2001.'
+- if: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}}'
+  value: '{{ask.toll_decorso}}'
+  in:
+  - 'true'
+  else: 'A structural tolerance of minor or no relevance for public safety can be declared only once the regional control term has run out, with no open requests and no negative outcome: art. 34-bis c.
+    3-bis DPR 380/2001.'
 rules:
   table: sue-napoli
   facts:
@@ -263,6 +466,8 @@ rules:
     cambio_uso_sagoma: '{{ask.cambio_uso_sagoma}}'
     paesaggio: '{{ask.paesaggio}}'
     paesaggio_eseguiti: '{{ask.paesaggio_eseguiti}}'
+    paesaggio_volumi: '{{ask.paesaggio_volumi}}'
+    parere_esonero: 'false'
     bene_culturale: '{{ask.bene_culturale}}'
     demolizione_zona_a: '{{ask.demolizione_zona_a}}'
     piano_planovolumetrico: '{{ask.piano_planovolumetrico}}'
@@ -335,7 +540,9 @@ sections:
   fields:
   - {id: 'r2c1p2reg:txta', kind: text, value: '{{ask.oggetto}}', max: 300, label: descrizione sintetica}
 - section: DOMICILIO DIGITALE
-  fields: []
+  fields:
+  - {id: 'r4c1p4reg:chk', kind: checkbox, when: '{{ask.domicilio_inad}}', label: il seguente domicilio digitale inserito in INAD}
+  - {id: 'r6c1p6reg:txt', kind: text, value: '{{c:identity.pec}}', when: '{{ask.domicilio_inad}}', max: 9999, label: il seguente domicilio digitale inserito in INAD}
 - section: DOMICILIO ELETTRONICO
   theirs:
   - Si dichiara di essere consapevoli
@@ -391,7 +598,7 @@ sections:
   - {id: 'r5c1p6reg:calendar_input', kind: date, value: '{{ask.data_inizio_lavori|date_it}}', when: '{{ask.bene_culturale|not}} {{ask.area_protetta|is_nulla_osta|not}} {{ask.idrogeologico|is_autorizzazione|not}}
       {{ask.idraulico|not}} {{ask.vinca|not}} {{ask.rir|is_in_area|not}} {{ask.rir|is_non_individuata|not}} {{ask.altri_vincoli_eco|is_assenso|not}} {{ask.fasce|is_assenso|not}} {{ask.paesaggio|is_semplificata|not}}
       {{ask.paesaggio|is_ordinaria|not}} {{ask.barriere_deroga|not}} {{ask.antincendio_deroga|not}} {{ask.vvf_valutazione|not}} {{ask.igienico_conforme}} {{ask.fascia_cimiteriale|is_non_consentito|not}}
-      {{ask.scia_sanatoria|not}}', label: 'Per SCIA/SCIA Unica, il titolare dichiara che i lavori avranno inizio'}
+      {{ask.sanatoria_titolo|is_nessuna}}', label: 'Per SCIA/SCIA Unica, il titolare dichiara che i lavori avranno inizio'}
 - section: c) Qualificazione dell'intervento
   fields:
   - {id: 'r2c1p2reg:radio:0_clone', kind: radio, when: '{{ask.scia_tipo|is_manutenzione_straordinaria}}', label: intervento di manutenzione straordinaria}
@@ -447,11 +654,109 @@ sections:
   - {id: 'r5c1p5reg:radio:3_clone', kind: radio, when: '{{ask.parti_comuni|is_art_1102}}', label: riguardano parti dell'edificio di proprietà comune}
 - section: f) Regolarità urbanistica e precedenti edilizi
   fields:
-  - {id: 'r1c1p1reg:radio:0_clone', kind: radio, label: che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i}
-  - {id: 'r5c1p9reg:chk', kind: checkbox, label: permesso di costruire / licenza edil.}
-  - {id: 'r5c2p11reg:txt', kind: text, value: '{{ask.precedente_numero}}', max: 8, label: permesso di costruire / licenza edil.}
-  - {id: 'r5c3p13reg:calendar_input', kind: date, value: '{{ask.precedente_data|date_it}}', label: del, nth: 2}
-  - {id: 'r63c1p147reg:radio:7_clone', kind: radio, label: pienamente conforme alla documentazione dello stato legittimo}
+  - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.stato_legittimo|is_titoli}}', label: che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i}
+  - {id: 'r3c1p3reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_titolo_unico}}', label: titolo unico (SUAP)}
+  - {id: 'r3c2p5reg:txt', kind: text, value: '{{ask.prec_titolo_unico_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_titolo_unico}}', max: 8, label: titolo unico (SUAP)}
+  - {id: 'r3c3p7reg:calendar_input', kind: date, value: '{{ask.prec_titolo_unico_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_titolo_unico}}', label: del}
+  - {id: 'r5c1p9reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}', label: permesso di costruire / licenza edil.}
+  - {id: 'r5c2p11reg:txt', kind: text, value: '{{ask.prec_permesso_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}', max: 8, label: permesso di costruire / licenza edil.}
+  - {id: 'r5c3p13reg:calendar_input', kind: date, value: '{{ask.prec_permesso_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_permesso}}', label: del, nth: 2}
+  - {id: 'r7c1p15reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}', label: autorizzazione edilizia}
+  - {id: 'r7c2p17reg:txt', kind: text, value: '{{ask.prec_autorizzazione_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}', max: 8, label: autorizzazione edilizia}
+  - {id: 'r7c3p19reg:calendar_input', kind: date, value: '{{ask.prec_autorizzazione_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_autorizzazione}}', label: del, nth: 3}
+  - {id: 'r9c1p21reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_comunicazione}}', label: comunicazione edilizia (art. 26}
+  - {id: 'r9c2p23reg:txt', kind: text, value: '{{ask.prec_comunicazione_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_comunicazione}}', max: 8, label: comunicazione edilizia (art. 26}
+  - {id: 'r9c3p25reg:calendar_input', kind: date, value: '{{ask.prec_comunicazione_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_comunicazione}}', label: del, nth: 4}
+  - {id: 'r11c1p27reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia}}', label: denuncia di inizio attività}
+  - {id: 'r11c2p29reg:txt', kind: text, value: '{{ask.prec_dia_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia}}', max: 8, label: denuncia di inizio attività}
+  - {id: 'r11c3p31reg:calendar_input', kind: date, value: '{{ask.prec_dia_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia}}', label: del, nth: 5}
+  - {id: 'r13c1p33reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia_alternativa}}', label: DIA/SCIA alternativa al permesso di costruire}
+  - {id: 'r13c2p35reg:txt', kind: text, value: '{{ask.prec_dia_alternativa_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia_alternativa}}', max: 9999, label: DIA/SCIA alternativa al permesso
+      di costruire}
+  - {id: 'r13c3p37reg:calendar_input', kind: date, value: '{{ask.prec_dia_alternativa_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_dia_alternativa}}', label: del, nth: 6}
+  - {id: 'r15c1p39reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia}}', label: segnalazione certificata di inizio attività}
+  - {id: 'r15c2p41reg:txt', kind: text, value: '{{ask.prec_scia_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia}}', max: 8, label: segnalazione certificata di inizio attività}
+  - {id: 'r15c3p43reg:calendar_input', kind: date, value: '{{ask.prec_scia_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia}}', label: del, nth: 7}
+  - {id: 'r17c1p45reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_cel}}', label: comunicazione edilizia libera}
+  - {id: 'r17c2p47reg:txt', kind: text, value: '{{ask.prec_cel_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_cel}}', max: 8, label: comunicazione edilizia libera}
+  - {id: 'r17c3p49reg:calendar_input', kind: date, value: '{{ask.prec_cel_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_cel}}', label: del, nth: 8}
+  - {id: 'r18c1p50reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono,ask.prec_pdc_sanatoria,ask.prec_scia_sanatoria,ask.prec_scia_sanatoria_variante|any}}', label: titolo
+      edilizio in sanatoria}
+  - {id: 'r20c1p52reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono}}', label: condono edilizio}
+  - {id: 'r20c2p54reg:txt', kind: text, value: '{{ask.prec_condono_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono}}', max: 9999, label: condono edilizio}
+  - {id: 'r20c3p56reg:calendar_input', kind: date, value: '{{ask.prec_condono_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_condono}}', label: del, nth: 9}
+  - {id: 'r22c1p58reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_pdc_sanatoria}}', label: permesso di costruire in sanatoria}
+  - {id: 'r22c2p60reg:txt', kind: text, value: '{{ask.prec_pdc_sanatoria_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_pdc_sanatoria}}', max: 9999, label: permesso di costruire in sanatoria}
+  - {id: 'r22c3p62reg:calendar_input', kind: date, value: '{{ask.prec_pdc_sanatoria_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_pdc_sanatoria}}', label: del, nth: 10}
+  - {id: 'r24c1p64reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria}}', label: SCIA in sanatoria di cui all’art. 36-bis}
+  - {id: 'r24c2p66reg:txt', kind: text, value: '{{ask.prec_scia_sanatoria_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria}}', max: 9999, label: SCIA in sanatoria di cui all’art.
+      36-bis}
+  - {id: 'r24c3p68reg:calendar_input', kind: date, value: '{{ask.prec_scia_sanatoria_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria}}', label: del, nth: 11}
+  - {id: 'r26c1p70reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria_variante}}', label: SCIA in sanatoria per variante}
+  - {id: 'r26c2p72reg:txt', kind: text, value: '{{ask.prec_scia_sanatoria_variante_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria_variante}}', max: 9999, label: SCIA in sanatoria
+      per variante}
+  - {id: 'r26c3p74reg:calendar_input', kind: date, value: '{{ask.prec_scia_sanatoria_variante_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_scia_sanatoria_variante}}', label: del,
+    nth: 12}
+  - {id: 'r27c1p75reg:chk', kind: checkbox, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}', label: altro}
+  - {id: 'r29c1p78reg:txt', kind: text, value: '{{ask.prec_altro_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}', max: 9999, label: specificare}
+  - {id: 'r29c2p80reg:txt', kind: text, value: '{{ask.prec_altro_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}', max: 9999, label: n., nth: 13}
+  - {id: 'r29c3p82reg:calendar_input', kind: date, value: '{{ask.prec_altro_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}', label: del, nth: 13}
+  - {kind: add, anchor: specificare, block: 2, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 2, value: '{{ask.prec_altro_2_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}'}
+  - {kind: text, label: n., anchor: specificare, block: 2, value: '{{ask.prec_altro_2_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}'}
+  - {kind: date, label: del, anchor: specificare, block: 2, value: '{{ask.prec_altro_2_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}'}
+  - {kind: add, anchor: specificare, block: 3, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 3, value: '{{ask.prec_altro_3_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}'}
+  - {kind: text, label: n., anchor: specificare, block: 3, value: '{{ask.prec_altro_3_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}'}
+  - {kind: date, label: del, anchor: specificare, block: 3, value: '{{ask.prec_altro_3_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}'}
+  - {kind: add, anchor: specificare, block: 4, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 4, value: '{{ask.prec_altro_4_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}}'}
+  - {kind: text, label: n., anchor: specificare, block: 4, value: '{{ask.prec_altro_4_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}'}
+  - {kind: date, label: del, anchor: specificare, block: 4, value: '{{ask.prec_altro_4_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}}'}
+  - {kind: add, anchor: specificare, block: 5, when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}}'}
+  - {kind: text, label: specificare, anchor: specificare, block: 5, value: '{{ask.prec_altro_5_quale}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}}'}
+  - {kind: text, label: n., anchor: specificare, block: 5, value: '{{ask.prec_altro_5_numero}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}
+      {{ask.prec_altro_5}}'}
+  - {kind: date, label: del, anchor: specificare, block: 5, value: '{{ask.prec_altro_5_data|date_it}}', when: '{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}
+      {{ask.prec_altro_4}} {{ask.prec_altro_5}}'}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_epoca}}', label: si tratta di immobile realizzato in un’epoca}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}', label: copia accatastamento di primo impianto}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: copia accatastamento di primo impianto, nth: 2}
+  - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', max: 8, label: n., nth: 14}
+  - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: del, nth: 14}
+  - {kind: checkbox, on_page: true, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo impianto, nth: 3}
+  - {kind: file, value: '{{ask.prova_catasto_copia}}', on_page: true, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo
+      impianto}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_epoca}} {{ask.prova_altri}}', label: altri documenti probanti}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_prova}}', label: non sono disponibili la copia o gli estremi del titolo abilitativo}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}}', label: copia accatastamento di primo impianto, nth: 2}
+  - {kind: checkbox, on_page: true, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: copia accatastamento di primo impianto, nth: 3}
+  - {kind: text, value: '{{ask.prova_catasto_numero}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', max: 9999, label: n., nth: 15}
+  - {kind: date, value: '{{ask.prova_catasto_data|date_it}}', when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}', label: del, nth: 15}
+  - {kind: checkbox, on_page: true, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo impianto, nth: 4}
+  - {kind: file, value: '{{ask.prova_catasto_copia}}', on_page: true, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_catasto}} {{ask.prova_catasto_modo|is_copia}}', label: copia accatastamento di primo
+      impianto}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_prova}} {{ask.prova_altri}}', label: altri documenti probanti, nth: 2}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}}', label: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}', label: si allega la relativa ricevuta}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}', label: si forniscono gli estremi del pagamento}
+  - {kind: number, value: '{{ask.sanzione_importo}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}', max: 11, label: di Euro}
+  - {kind: date, value: '{{ask.sanzione_irrogata|date_it}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}', label: 'a titolo di sanzione pecuniaria, irrogata in data'}
+  - {kind: text, value: '{{ask.sanzione_protocollo}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}', max: 9999, label: Prot. n.}
+  - {kind: date, value: '{{ask.sanzione_protocollo_data|date_it}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_estremi}}', label: del, nth: 16}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_tolleranze}}', label: che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_pratica}}', label: 'dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata'}
+  - {kind: text, value: '{{ask.toll_prec_pratica_protocollo}}', when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_pratica}}', max: 9999, label: Prot. n., nth: 2}
+  - {kind: date, value: '{{ask.toll_prec_pratica_data|date_it}}', when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_pratica}}', label: del, nth: 17}
+  - {kind: checkbox, when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_atto}}', label: 'dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata'}
+  - {kind: text, value: '{{ask.toll_prec_atto_numero}}', when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_atto}}', max: 9999, label: atto di registrazione n.}
+  - {kind: date, value: '{{ask.toll_prec_atto_data|date_it}}', when: '{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_atto}}', label: in data}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_area_libera|not}} {{ask.sanatoria_titolo|is_nessuna}}', label: pienamente conforme alla documentazione dello stato legittimo}
+  - {kind: radio, when: '{{ask.stato_legittimo|is_area_libera|not}} {{ask.sanatoria_titolo|in_scia__permesso}}', label: 'conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata,
+      unitamente'}
 - section: g) Calcolo del contributo di costruzione
   fields:
   - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.scia_onerosa|not}}', label: l'intervento da realizzare è a titolo gratuito}
@@ -508,7 +813,170 @@ sections:
   - {kind: text, label: cell., anchor: Cognome, block: 1, value: '{{s:identity.phone|phone_it}}', when: '{{ask.strutture}}'}
   - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: '{{s:identity.pec}}', when: '{{ask.strutture}}'}
 - section: H2) Altri tecnici incaricati
-  fields: []
+  fields:
+  - {id: 'r3c1p5reg:chk', kind: checkbox, when: '{{ask.altri_tecnici}}', label: di aver incaricato in qualità di altri tecnici}
+  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico_incarico}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: Cognome, value: '{{a:identity.last_name|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: Nome, value: '{{a:identity.first_name|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: C.F., value: '{{a:identity.codice_fiscale}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: date, label: Data di nascita, value: '{{a:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: select, label: Sesso, value: '{{a:identity.sex|sesso}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: select, label: Provincia, value: '{{a:identity.birth_province}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: Comune italiano, value: '{{a:identity.birth_comune|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: select, label: Provincia, nth: 2, value: '{{a:residenza.provincia}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: Comune italiano, nth: 2, value: '{{a:residenza.comune|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: 'Via, Piazza', value: '{{a:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: N., value: '{{a:residenza.civico}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: C.A.P., value: '{{a:residenza.cap}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{a:business.sede_legale_provincia}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente|not}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{a:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente|not}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente|not}}'}
+  - {kind: text, label: N., nth: 2, value: '{{a:business.sede_legale_civico}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente|not}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{a:business.sede_legale_cap}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente|not}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{ad:business.sede_legale_provincia}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: N., nth: 2, value: '{{ad:business.sede_legale_civico}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{ad:business.sede_legale_cap}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: Telefono, value: '{{a:identity.phone|phone_it}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: cell., value: '{{a:identity.phone|phone_it}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: posta elettronica certificata, value: '{{a:identity.pec}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: radio, label: si, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: di, value: '{{a:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: text, label: al n., value: '{{a:albo.numero}}', on_page: true, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}}'}
+  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente|not}}'}
+  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: Ragione sociale, value: '{{ad:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: con sede in, value: '{{ad:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: n., nth: 3, value: '{{ad:business.rea|rea_num}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: select, label: Provincia, nth: 4, value: '{{ad:business.sede_legale_provincia}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: N., nth: 4, value: '{{ad:business.sede_legale_civico}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 3, value: '{{ad:business.sede_legale_cap}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: Cognome, nth: 2, value: '{{ad:identity.last_name|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: text, label: Nome, nth: 2, value: '{{ad:identity.first_name|upper}}', anchor: Incaricato della, block: 1, when: '{{ask.altri_tecnici}} {{ask.altro_tecnico_dipendente}}'}
+  - {kind: add, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico2_incarico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: Cognome, value: '{{a2:identity.last_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: Nome, value: '{{a2:identity.first_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: C.F., value: '{{a2:identity.codice_fiscale}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: date, label: Data di nascita, value: '{{a2:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: select, label: Sesso, value: '{{a2:identity.sex|sesso}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: select, label: Provincia, value: '{{a2:identity.birth_province}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: Comune italiano, value: '{{a2:identity.birth_comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: select, label: Provincia, nth: 2, value: '{{a2:residenza.provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: Comune italiano, nth: 2, value: '{{a2:residenza.comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: 'Via, Piazza', value: '{{a2:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: N., value: '{{a2:residenza.civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: C.A.P., value: '{{a2:residenza.cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{a2:business.sede_legale_provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente|not}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{a2:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+      {{ask.altro_tecnico2_dipendente|not}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a2:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+      {{ask.altro_tecnico2_dipendente|not}}'}
+  - {kind: text, label: N., nth: 2, value: '{{a2:business.sede_legale_civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente|not}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{a2:business.sede_legale_cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente|not}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{ad2:business.sede_legale_provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad2:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad2:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: N., nth: 2, value: '{{ad2:business.sede_legale_civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{ad2:business.sede_legale_cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: Telefono, value: '{{a2:identity.phone|phone_it}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: cell., value: '{{a2:identity.phone|phone_it}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: posta elettronica certificata, value: '{{a2:identity.pec}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: radio, label: si, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a2:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: di, value: '{{a2:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: text, label: al n., value: '{{a2:albo.numero}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}'}
+  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente|not}}'}
+  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: Ragione sociale, value: '{{ad2:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad2:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad2:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: con sede in, value: '{{ad2:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: n., nth: 3, value: '{{ad2:business.rea|rea_num}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: select, label: Provincia, nth: 4, value: '{{ad2:business.sede_legale_provincia}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad2:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}}
+      {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: N., nth: 4, value: '{{ad2:business.sede_legale_civico}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 3, value: '{{ad2:business.sede_legale_cap}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: Cognome, nth: 2, value: '{{ad2:identity.last_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: text, label: Nome, nth: 2, value: '{{ad2:identity.first_name|upper}}', anchor: Incaricato della, block: 2, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|in_due__tre}} {{ask.altro_tecnico2_dipendente}}'}
+  - {kind: add, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: Incaricato della, value: '{{ask.altro_tecnico3_incarico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: Cognome, value: '{{a3:identity.last_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: Nome, value: '{{a3:identity.first_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: C.F., value: '{{a3:identity.codice_fiscale}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: date, label: Data di nascita, value: '{{a3:identity.date_of_birth|date_it}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: select, label: Cittadinanza, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: select, label: Sesso, value: '{{a3:identity.sex|sesso}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: select, label: Stato, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: select, label: Provincia, value: '{{a3:identity.birth_province}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: Comune italiano, value: '{{a3:identity.birth_comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: select, label: Stato, nth: 2, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: select, label: Provincia, nth: 2, value: '{{a3:residenza.provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: Comune italiano, nth: 2, value: '{{a3:residenza.comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: 'Via, Piazza', value: '{{a3:residenza.indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: N., value: '{{a3:residenza.civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: C.A.P., value: '{{a3:residenza.cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: select, label: Stato, nth: 3, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{a3:business.sede_legale_provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente|not}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{a3:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente|not}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{a3:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+      {{ask.altro_tecnico3_dipendente|not}}'}
+  - {kind: text, label: N., nth: 2, value: '{{a3:business.sede_legale_civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente|not}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{a3:business.sede_legale_cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente|not}}'}
+  - {kind: select, label: Provincia, nth: 3, value: '{{ad3:business.sede_legale_provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: Comune italiano, nth: 3, value: '{{ad3:business.sede_legale_comune|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, value: '{{ad3:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: N., nth: 2, value: '{{ad3:business.sede_legale_civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 2, value: '{{ad3:business.sede_legale_cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: Telefono, value: '{{a3:identity.phone|phone_it}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: cell., value: '{{a3:identity.phone|phone_it}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: posta elettronica certificata, value: '{{a3:identity.pec}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: radio, label: si, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, value: '{{a3:albo.ordine}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: di, value: '{{a3:albo.provincia|provincia_nome}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: text, label: al n., value: '{{a3:albo.numero}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}'}
+  - {kind: radio, label: 'no', nth: 2, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente|not}}'}
+  - {kind: radio, label: si, nth: 2, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: Ragione sociale, value: '{{ad3:business.denominazione}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: codice fiscale / p. IVA, value: '{{ad3:business.partita_iva}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: '{{ad3:business.cciaa}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: con sede in, value: '{{ad3:business.sede_legale_comune|upper}}', on_page: true, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: n., nth: 3, value: '{{ad3:business.rea|rea_num}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: select, label: Provincia, nth: 4, value: '{{ad3:business.sede_legale_provincia}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: select, label: Stato, nth: 4, value: ITALIA, anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 3, value: '{{ad3:business.sede_legale_indirizzo|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}}
+      {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: N., nth: 4, value: '{{ad3:business.sede_legale_civico}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: C.A.P., nth: 3, value: '{{ad3:business.sede_legale_cap}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: Cognome, nth: 2, value: '{{ad3:identity.last_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
+  - {kind: text, label: Nome, nth: 2, value: '{{ad3:identity.first_name|upper}}', anchor: Incaricato della, block: 3, when: '{{ask.altri_tecnici}} {{ask.altri_tecnici_quanti|is_tre}} {{ask.altro_tecnico3_dipendente}}'}
 - section: i) Impresa esecutrice dei lavori
   fields:
   - {id: 'r2c1p2reg:radio:1_clone', kind: radio, when: '{{ask.lavori_in_proprio}}', label: in quanto opere di modesta entità}
@@ -570,7 +1038,7 @@ sections:
   - {id: 'r6c2p10reg:radio:3_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.sotto_200|not}}', label: dichiara che l'entità presunta del cantiere è pari o superiore}
   - {id: 'r8c2p14reg:radio:4_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.notifica_dovuta|not}}', label: dichiara che l'intervento non è soggetto all'invio}
   - {id: 'r9c2p17reg:radio:5_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}', label: dichiara che l'intervento è soggetto all'invio}
-  - {kind: checkbox, label: e allega alla presente segnalazione la notifica, if_present: true, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
+  - {id: 'r10c3p21reg:chk', kind: checkbox, on_page: true, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}', label: e allega alla presente segnalazione la notifica}
   - {kind: radio, label: invierà la notifica prima dell'inizio dei lavori, if_present: true, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
 - section: m) Diritti di terzi
   theirs:
@@ -615,45 +1083,108 @@ sections:
       immobile}
   - {kind: checkbox, when: '{{ask.scia_tipo|is_cambio_uso}} {{ask.cambio_uso_tipo|is_immobile_opere_6bis}}', label: 'mutamento di destinazione d''uso, nel rispetto'}
   - {kind: radio, when: '{{ask.scia_tipo|is_cambio_uso}} {{ask.cambio_uso_tipo|is_immobile_opere_6bis}}', label: con opere riconducibili agli interventi di cui all'articolo 6-bis di un intero immobile}
-  - {kind: checkbox, when: '{{ask.scia_sanatoria}}', label: la presente SCIA è presentata in sanatoria}
+  - {kind: checkbox, when: '{{ask.sanatoria_titolo|is_scia}}', label: la presente SCIA è presentata in sanatoria}
   - {kind: text, value: '{{ask.dettaglio_intervento}}', max: 500, label: e che l’intervento sopra indicato}
 - section: Asseverazione SCIA - Stato legittimo
   fields:
   - {id: 'r3c2p5reg:radio:0_clone', kind: radio, label: si}
   - {id: 'r4c1p7reg:chk', kind: checkbox, label: corrisponde allo stato legittimo come risultante}
   - {id: 'r5c1p8reg:chk', kind: checkbox, label: dal/i titolo/i o dalla/e pratica/che edilizia/e}
-  - {id: 'r7c1p10reg:chk', kind: checkbox, when: '{{ask.scia_sanatoria}}', label: dalla sanatoria di cui al successivo quadro}
-  - {id: 'r5c3p10reg:radio:3_clone', kind: radio, label: 'no', nth: 2}
-  - {id: 'r12c3p19reg:radio:5_clone', kind: radio, when: '{{ask.scia_sanatoria|not}}', label: 'no', nth: 3}
-  - {id: 'r12c2p18reg:radio:4_clone', kind: radio, when: '{{ask.scia_sanatoria}}', label: si, nth: 3}
-  - {id: 'r14c1p21reg:chk', kind: checkbox, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_in_corso}}', label: un intervento soggetto a SCIA in corso di esecuzione}
-  - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_in_corso}}', label: i cui lavori sono stati iniziati in data}
-  - {kind: checkbox, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: un intervento soggetto a SCIA, nth: 2}
-  - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: realizzato in data}
-  - {kind: checkbox, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: determina l’oblazione dovuta}
-  - {kind: text, value: '{{ask.sanatoria_oblazione}}', when: '{{ask.scia_sanatoria}} {{ask.sanatoria_caso|is_doppia_conformita}}', max: 9999, label: in euro}
-  - {kind: radio, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_invariato}}', label: dichiara che l’intervento da sanare non richiede}
-  - {kind: radio, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_presentata}}', label: comunica gli estremi della dichiarazione per l’iscrizione}
-  - {kind: text, value: '{{ask.sanatoria_catasto_protocollo}}', when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_presentata}}', max: 9999, label: presentata con prot.}
-  - {kind: date, value: '{{ask.sanatoria_catasto_data|date_it}}', when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_presentata}}', label: in data}
-  - {kind: radio, when: '{{ask.scia_sanatoria}} {{ask.sanatoria_catasto|is_dopo}}', label: si impegna a presentare la dichiarazione}
+  - {id: 'r6c1p9reg:chk', kind: checkbox, when: '{{ask.tolleranze}}', label: dalle tolleranze di cui all’articolo 34-bis}
+  - {id: 'r7c1p10reg:chk', kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}}', label: dalla sanatoria di cui al successivo quadro}
+  - {id: 'r5c3p10reg:radio:3_clone', kind: radio, when: '{{ask.tolleranze|not}}', label: 'no', nth: 2}
+  - {id: 'r5c2p9reg:radio:2_clone', kind: radio, when: '{{ask.tolleranze}}', label: si, nth: 2}
+  - {kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34bis_1}}', label: 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER'}
+  - {kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}}', label: 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_oltre_500}}', label: '2%, per le U.I.'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_300_500}}', label: '3%, per le U.I.'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_100_300}}', label: '4%, per le U.I.'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_60_100}}', label: '5%, per le U.I.'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_34bis_1bis}} {{ask.toll_superficie|is_sotto_60}}', label: '6%, per le U.I.'}
+  - {kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34bis_2}}', label: 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2:'}
+  - {kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34bis_2bis}}', label: 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2-BIS'}
+  - {kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34ter_4}}', label: TOLLERANZA DI CUI ALL’ART. 34-TER}
+  - {kind: radio, when: '{{ask.tolleranze}}', label: trattandosi di immobile ubicato in zona sismica a media o alta}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale|not}}', label: non ha rilevanza strutturale}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}}', label: ha rilevanza strutturale}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}', label: intervento rilevante nei riguardi della pubblica incolumità}
+  - {kind: radio, label: allega l’autorizzazione sismica, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
+  - {kind: date, label: rilasciata in data, value: '{{ask.toll_sismica_data|date_it}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
+  - {kind: text, label: prot. n., value: '{{ask.toll_sismica_protocollo}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
+  - {kind: radio, label: attesta che sulla istanza di autorizzazione, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
+  - {kind: date, label: in data, value: '{{ask.toll_silenzio_data|date_it}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
+  - {kind: text, label: prot. n., value: '{{ask.toll_silenzio_protocollo}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_minore_rilevanza}}', label: intervento di minore rilevanza nei riguardi}
+  - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_privo_di_rilevanza}}', label: intervento privo di rilevanza nei riguardi}
+  - {kind: checkbox, label: dichiara il decorso del termine del procedimento, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}} {{ask.toll_decorso}}'}
+  - {id: 'r12c3p19reg:radio:5_clone', kind: radio, when: '{{ask.sanatoria_titolo|is_nessuna}}', label: 'no', nth: 3}
+  - {id: 'r12c2p18reg:radio:4_clone', kind: radio, when: '{{ask.sanatoria_titolo|in_scia__permesso}}', label: si, nth: 3}
+  - {id: 'r14c1p21reg:chk', kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_in_corso}}', label: un intervento soggetto a SCIA in
+      corso di esecuzione}
+  - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_in_corso}}', label: i cui lavori sono
+      stati iniziati in data}
+  - {kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: un intervento soggetto a SCIA, nth: 2}
+  - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: realizzato
+      in data}
+  - {kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_doppia_conformita}}', label: determina l’oblazione dovuta}
+  - {kind: text, value: '{{ask.sanatoria_oblazione}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_doppia_conformita}}', max: 9999, label: in
+      euro}
+  - {kind: checkbox, label: 'un intervento soggetto a permesso di costruire, in assenza', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_assenza}}'}
+  - {kind: checkbox, label: 'un intervento soggetto a permesso di costruire, In parziale', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}'}
+  - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}}', label: realizzato in data}
+  - {kind: checkbox, label: allega la documentazione necessaria indicata nel quadro riepilogativo, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_assenza}}'}
+  - {kind: radio, label: alla disciplina urbanistica vigente al momento della presentazione, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}
+      {{ask.pdc_sanatoria_conformita|is_urbanistica}}'}
+  - {kind: radio, label: alla disciplina urbanistica e edilizia vigente sia al momento, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}
+      {{ask.pdc_sanatoria_conformita|is_doppia}}'}
+  - {kind: radio, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_invariato}}', label: dichiara che l’intervento da sanare non richiede}
+  - {kind: radio, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}', label: comunica gli estremi della dichiarazione per l’iscrizione}
+  - {kind: text, value: '{{ask.sanatoria_catasto_protocollo}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}', max: 9999, label: presentata con prot.}
+  - {kind: date, value: '{{ask.sanatoria_catasto_data|date_it}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}', label: in data}
+  - {kind: radio, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_dopo}}', label: si impegna a presentare la dichiarazione}
 - section: Asseverazione SCIA - Dati immobile
   fields:
   - {id: 'r5c2p7reg:real', kind: number, value: '{{ask.superficie_mq}}', max: 9, label: Mq}
   - {id: 'r7c2p13reg:real', kind: number, value: '{{ask.volume_mc}}', max: 13, label: Mc}
   - {id: 'r9c2p19reg:number', kind: text, value: '{{ask.piani_n}}', max: 2, label: Numero dei piani}
-  - {id: 'r14c1p26reg:chk', kind: checkbox, label: PRG}
-  - {id: 'r16c1p28reg:txt', kind: text, value: '{{ask.prg_specificare}}', max: 9999, label: Specificare}
-  - {id: 'r18c1p30reg:txt', kind: text, value: '{{ask.prg_zona}}', max: 9999, label: Zona}
-  - {id: 'r18c2p32reg:txt', kind: text, value: '{{ask.prg_articolo}}', max: 9999, label: Art.}
-  - {id: 'r26c1p40reg:chk', kind: checkbox, when: '{{ask.barriere|not}}', label: non è soggetto alle prescrizioni degli articoli 77}
-  - {id: 'r27c1p41reg:chk', kind: checkbox, when: '{{ask.barriere_art82}}', label: interessa un edificio privato aperto al pubblico}
-  - {id: 'r28c1p42reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}}', label: è soggetto alle prescrizioni degli articoli 77}
-  - {id: 'r29c1p43reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_accessibilita}}', label: accessibilità}
-  - {id: 'r29c2p44reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_visitabilita}}', label: visitabilità}
-  - {id: 'r29c3p45reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_adattabilita}}', label: adattabilità}
-  - {id: 'r30c1p46reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga}}', label: pur essendo soggetto alle prescrizioni degli articoli 77}
-  - {id: 'r31c1p47reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga}}', label: presenta contestualmente alla SCIA condizionata}
+  - {id: 'r12c1p24reg:chk', kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_puc}}', label: PUC}
+  - {kind: text, label: Zona, anchor: PUC, block: 1, value: '{{ask.strumento_puc_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_puc}}'}
+  - {kind: text, label: Art., anchor: PUC, block: 1, value: '{{ask.strumento_puc_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_puc}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_pua}}', label: PUA}
+  - {kind: text, label: Zona, anchor: PUA, block: 1, value: '{{ask.strumento_pua_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pua}}'}
+  - {kind: text, label: Art., anchor: PUA, block: 1, value: '{{ask.strumento_pua_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pua}}'}
+  - {kind: checkbox, label: PRG}
+  - {kind: text, label: Specificare, anchor: PRG, block: 1, value: '{{ask.prg_specificare}}'}
+  - {kind: text, label: Zona, anchor: PRG, block: 1, value: '{{ask.prg_zona}}'}
+  - {kind: text, label: Art., anchor: PRG, block: 1, value: '{{ask.prg_articolo}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}', label: PIANO PARTICOLAREGGIATO}
+  - {kind: text, label: Specificare, anchor: PIANO PARTICOLAREGGIATO, block: 1, value: '{{ask.strumento_particolareggiato_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}'}
+  - {kind: text, label: Zona, anchor: PIANO PARTICOLAREGGIATO, block: 1, value: '{{ask.strumento_particolareggiato_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}'}
+  - {kind: text, label: Art., anchor: PIANO PARTICOLAREGGIATO, block: 1, value: '{{ask.strumento_particolareggiato_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}', label: PIANO DI RECUPERO}
+  - {kind: text, label: Specificare, anchor: PIANO DI RECUPERO, block: 1, value: '{{ask.strumento_recupero_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}'}
+  - {kind: text, label: Zona, anchor: PIANO DI RECUPERO, block: 1, value: '{{ask.strumento_recupero_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}'}
+  - {kind: text, label: Art., anchor: PIANO DI RECUPERO, block: 1, value: '{{ask.strumento_recupero_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}', label: P.I.P.}
+  - {kind: text, label: Specificare, anchor: P.I.P., block: 1, value: '{{ask.strumento_pip_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}'}
+  - {kind: text, label: Zona, anchor: P.I.P., block: 1, value: '{{ask.strumento_pip_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}'}
+  - {kind: text, label: Art., anchor: P.I.P., block: 1, value: '{{ask.strumento_pip_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}', label: P.E.E.P.}
+  - {kind: text, label: Specificare, anchor: P.E.E.P., block: 1, value: '{{ask.strumento_peep_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}'}
+  - {kind: text, label: Zona, anchor: P.E.E.P., block: 1, value: '{{ask.strumento_peep_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}'}
+  - {kind: text, label: Art., anchor: P.E.E.P., block: 1, value: '{{ask.strumento_peep_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}', label: ALTRO}
+  - {kind: text, label: Specificare, anchor: ALTRO, block: 1, value: '{{ask.strumento_altro_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}'}
+  - {kind: text, label: Zona, anchor: ALTRO, block: 1, value: '{{ask.strumento_altro_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}'}
+  - {kind: text, label: Art., anchor: ALTRO, block: 1, value: '{{ask.strumento_altro_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}'}
+  - {kind: checkbox, when: '{{ask.barriere|not}}', label: non è soggetto alle prescrizioni degli articoli 77}
+  - {kind: checkbox, when: '{{ask.barriere_art82}}', label: interessa un edificio privato aperto al pubblico}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}}', label: è soggetto alle prescrizioni degli articoli 77}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_accessibilita}}', label: accessibilità}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_visitabilita}}', label: visitabilità}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_adattabilita}}', label: adattabilità}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga}}', label: pur essendo soggetto alle prescrizioni degli articoli 77}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga}}', label: presenta contestualmente alla SCIA condizionata}
 - section: Asseverazione SCIA - Sicurezza impianti
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.impianti|not}}', label: Non comporta l'installazione}
@@ -666,10 +1197,10 @@ sections:
   - {id: 'r11c1p11reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_ascensore}}', label: impianti di sollevamento di persone o di cose}
   - {id: 'r12c1p12reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_antincendio}}', label: di protezione antincendio}
   - {id: 'r13c1p13reg:chk', kind: checkbox, when: '{{ask.impianti}} {{ask.impianto_altro}}', label: altre tipologie di impianti}
-  - {kind: text, label: specificare, value: '{{ask.impianto_altro_quale}}', when: '{{ask.impianti}} {{ask.impianto_altro}}'}
-  - {kind: radio, when: '{{ask.progetto_impianti|not}}', label: non è soggetto agli obblighi di presentazione del progetto}
-  - {kind: radio, when: '{{ask.progetto_impianti}}', label: è soggetto agli obblighi di presentazione del progetto}
-  - {kind: checkbox, when: '{{ask.progetto_impianti}}', label: allega i relativi elaborati}
+  - {id: 'r15c1p15reg:txt', kind: text, value: '{{ask.impianto_altro_quale}}', on_page: true, when: '{{ask.impianti}} {{ask.impianto_altro}}', max: 100, label: specificare}
+  - {kind: radio, when: '{{ask.impianti}} {{ask.progetto_impianti|not}}', label: non è soggetto agli obblighi di presentazione del progetto}
+  - {kind: radio, when: '{{ask.impianti}} {{ask.progetto_impianti}}', label: è soggetto agli obblighi di presentazione del progetto}
+  - {kind: checkbox, when: '{{ask.impianti}} {{ask.progetto_impianti}}', label: allega i relativi elaborati}
   - {kind: radio, when: '{{ask.prestazione_energetica|not}}', label: non è soggetto al deposito del progetto e della relazione tecnica}
   - {kind: radio, when: '{{ask.prestazione_energetica}}', label: è soggetto al deposito del progetto e della relazione tecnica}
   - {kind: checkbox, when: '{{ask.prestazione_energetica}}', label: si allega la relazione tecnica sul rispetto delle prescrizioni in materia di risparmio energetico}
@@ -735,12 +1266,16 @@ sections:
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.paesaggio|is_no}}', label: NON ricade in zona sottoposta a tutela}
   - {id: 'r5c1p5reg:radio:1_clone', kind: radio, when: '{{ask.paesaggio|is_senza_autorizzazione}}', label: 'ricade in zona tutelata, ma le opere non comportano alterazione'}
-  - {id: 'r6c1p6reg:radio:2_clone', kind: radio, when: '{{ask.paesaggio|is_semplificata}}', label: ricade in zona tutelata e le opere comportano alterazione}
-  - {id: 'r7c1p7reg:radio:3_clone', kind: radio, when: '{{ask.paesaggio|is_semplificata}}', label: è assoggettato al procedimento semplificato}
-  - {id: 'r8c1p8reg:chk', kind: checkbox, when: '{{ask.paesaggio|is_semplificata}}', label: Si allega la relazione paesaggistica semplificata}
-  - {id: 'r6c1p6reg:radio:2_clone', kind: radio, when: '{{ask.paesaggio|is_ordinaria}}', label: ricade in zona tutelata e le opere comportano alterazione}
-  - {id: 'r9c1p9reg:radio:4_clone', kind: radio, when: '{{ask.paesaggio|is_ordinaria}}', label: è assoggettato al procedimento ordinario}
-  - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.paesaggio|is_ordinaria}}', label: Si allega la relazione paesaggistica e la documentazione}
+  - {id: 'r6c1p6reg:radio:2_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}', label: ricade in zona tutelata e le opere comportano alterazione}
+  - {id: 'r7c1p7reg:radio:3_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}', label: è assoggettato al procedimento semplificato}
+  - {id: 'r8c1p8reg:chk', kind: checkbox, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}', label: Si allega la relazione paesaggistica semplificata}
+  - {id: 'r6c1p6reg:radio:2_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}', label: ricade in zona tutelata e le opere comportano alterazione}
+  - {id: 'r9c1p9reg:radio:4_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}', label: è assoggettato al procedimento ordinario}
+  - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}', label: Si allega la relazione paesaggistica e la documentazione}
+  - {id: 'r6c1p6reg:radio:2_clone', kind: radio, when: '{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}', label: ricade in zona tutelata e le opere comportano alterazione}
+  - {id: 'r11c1p11reg:radio:5_clone', kind: radio, when: '{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}', label: è assoggettato al procedimento di accertamento della compatibilità
+      paesaggistica}
+  - {id: 'r12c1p12reg:chk', kind: checkbox, when: '{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}', label: si allega documentazione necessaria ai fini del rilascio del parere vincolante}
   - {id: 'r16c1p16reg:radio:6_clone', kind: radio, when: '{{ask.bene_culturale|not}}', label: non è sottoposto a tutela}
   - {id: 'r17c1p17reg:radio:7_clone', kind: radio, when: '{{ask.bene_culturale}}', label: è sottoposto a tutela}
   - {id: 'r18c1p18reg:chk', kind: checkbox, when: '{{ask.bene_culturale}}', label: Si allega la documentazione necessaria ai fini del rilascio del parere/nulla osta}
@@ -790,7 +1325,7 @@ sections:
   - {kind: checkbox, when: '{{ask.fasce|is_no|not}} {{ask.fascia_aeroportuale}}', label: aeroportuale}
   - {kind: checkbox, when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}}', label: Altro}
   - {kind: text, value: '{{ask.fascia_altro_quale}}', when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}} {{ask.fascia_stradale|not}}', max: 9999, label: 'Specificare:'}
-  - {id: 'r16c1p16reg:txt', kind: text, value: '{{ask.fascia_altro_quale}}', when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}} {{ask.fascia_stradale}}', max: 9999, label: 'Specificare:', nth: 2}
+  - {id: 'r14c1p14reg:txt', kind: text, value: '{{ask.fascia_altro_quale}}', when: '{{ask.fasce|is_no|not}} {{ask.fascia_altro}} {{ask.fascia_stradale}}', max: 9999, label: 'Specificare:', nth: 2}
   - {kind: checkbox, when: '{{ask.fasce|is_autocertificazione}}', label: si allegano le autocertificazioni}
   - {kind: checkbox, when: '{{ask.fasce|is_assenso}}', label: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso}
 - section: Asseverazione SCIA - NOTE
@@ -820,6 +1355,8 @@ sections:
   - {kind: file, label: Notifica preliminare, value: '{{ask.notifica_preliminare}}', when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
   - {kind: file, label: 'Elaborati grafici dello stato di fatto, di progetto e comparativi', value: '{{ask.elaborati_grafici}}'}
   - {kind: file, label: Documentazione fotografica dello stato di fatto, value: '{{ask.documentazione_fotografica}}'}
+  - {kind: file, label: Autorizzazione sismica, value: '{{ask.toll_sismica_doc}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
+  - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: '{{ask.sanzione_ricevuta}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}'}
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica}
   - {kind: file, label: Prospetto di calcolo preventivo del contributo di costruzione, value: '{{ask.prospetto_contributo}}', when: '{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}'}
   - {kind: file, label: Attestazione del versamento del contributo di costruzione, value: '{{ask.ricevuta_contributo}}', when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_pagato}}'}

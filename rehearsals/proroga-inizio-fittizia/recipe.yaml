@@ -17,11 +17,9 @@ asks:
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
-  - "Pay the imposta di bollo (two marche da 16 €) and any diritti on pagoPA after sending"
+  - "Pay the imposta di bollo (two marche da 16 €) as the portal asks"
   - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
   - "Sign and send (Firma e invio); keep the receipt"
 supports:
   - when: "{{ask.titolo_tipo|is_permesso_di_costruire}}"
     else: "So far only for a permesso di costruire: the DIA branch isn't run yet."
-  - when: "{{ask.bollo_marche|not}}"
-    else: "So far only with the bollo paid on pagoPA: the marche route isn't run yet."
