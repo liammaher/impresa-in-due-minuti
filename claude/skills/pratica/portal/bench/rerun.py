@@ -235,7 +235,9 @@ if (!pvAlready) window.pvBatchRun = (async () => {
 })().finally(() => { window.pvBatchBusy = false; });
 pvAlready ? "a batch is already running in this tab: nothing started" : `started: ${(window.pvBatch || []).length} queued`
 """)
-    (a.out / "results.js").write_text("""await new Promise((r) => setTimeout(r, 35000));  // the pane cuts a call at 45 s
+    # Waits while the pane shows the page (the pane cuts a call at 45 s); a hidden pane slows its
+    # timers past that (2026-11-01), so then it answers at once and the caller waits outside.
+    (a.out / "results.js").write_text("""if (!document.hidden) await new Promise((r) => setTimeout(r, 35000));
 const done = JSON.parse(sessionStorage.getItem("pv-batch") || "[]");
 JSON.stringify({ done: done.length, of: (window.pvBatch || []).length, running: !!window.pvBatchBusy,
   halted: window.pvBatchHalted || null,
