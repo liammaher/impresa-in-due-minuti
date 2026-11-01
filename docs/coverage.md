@@ -60,25 +60,25 @@ Measured today:
 
 - Level 1: 39 of 39 pratiche fully in the dictionary. 12 of them are two operations in one pratica (`sue-combo-*`).
 - Which pratiche a case needs: of the 18176 cases the rules table decides, **1586 reach a steps file**, 16590 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
-- Level 2: **109 refusals across 22 recipes**, 21 distinct messages.
-- Level 3, in part: **16 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot a run would stop on.
+- Level 2: **61 refusals across 22 recipes**, 13 distinct messages.
+- Level 3, in part: **11 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot a run would stop on.
 - Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
-| `scia-alt-paesaggistica-ordinaria-fittizia` | 11 |
-| `scia-alt-paesaggistica-semplificata-fittizia` | 11 |
-| `scia-alternativa-fittizia` | 11 |
-| `pdc-fittizio` | 9 |
-| `pdc-paesaggistica-ordinaria-fittizio` | 9 |
-| `pdc-paesaggistica-semplificata-fittizio` | 9 |
-| `pdc-sanatoria-fittizio` | 9 |
 | `cila-fittizia` | 4 |
 | `cila-paesaggistica-fittizia` | 4 |
 | `cila-paesaggistica-ordinaria-fittizia` | 4 |
 | `scia-sanatoria-fittizia` | 4 |
 | `scia-sanatoria-paesaggistica-ordinaria-fittizia` | 4 |
 | `scia-sanatoria-paesaggistica-semplificata-fittizia` | 4 |
+| `pdc-fittizio` | 3 |
+| `pdc-paesaggistica-ordinaria-fittizio` | 3 |
+| `pdc-paesaggistica-semplificata-fittizio` | 3 |
+| `pdc-sanatoria-fittizio` | 3 |
+| `scia-alt-paesaggistica-ordinaria-fittizia` | 3 |
+| `scia-alt-paesaggistica-semplificata-fittizia` | 3 |
+| `scia-alternativa-fittizia` | 3 |
 | `scia-fittizia` | 3 |
 | `scia-paesaggistica-ordinaria-fittizia` | 3 |
 | `scia-paesaggistica-semplificata-fittizia` | 3 |
@@ -110,23 +110,15 @@ Pratiche filed together, not mapped yet (the cases that need them, most first):
 
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
-- 16×: More than three other technicians aren't mapped yet: each takes a "+" on the portal, and three have been prepared.
-- 13×: More than five "altro" lines (titles past one per kind, or of kinds not listed) aren't mapped yet: each takes a "+" on the portal, and five have been prepared.
+- 16×: More than eight other technicians aren't mapped yet: each takes a "+" on the portal, and eight have been prepared.
+- 13×: More than ten "altro" lines (titles past one per kind, or of kinds not listed) aren't mapped yet: each takes a "+" on the portal, and ten have been prepared.
 - 9×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions.
-- 7×: A hygiene derogation isn't mapped yet.
-- 7×: A project for the Vigili del Fuoco's assessment isn't mapped yet.
-- 7×: An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet.
-- 7×: An area without its primary urbanisation works isn't mapped yet.
-- 7×: Soil needing environmental investigations (or already remediated) isn't mapped yet.
-- 7×: Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet.
 - 4×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
 - 3×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
 - 3×: More than two assents already obtained aren't mapped yet: the relazione has two rows.
 - 3×: More than two filings already made aren't mapped yet: the relazione has two rows.
 - 3×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione mak
 - 3×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
-- 3×: The barriers rules (artt. 77-82) aren't mapped yet.
-- 3×: Works on parts with asbestos aren't mapped yet.
 - 1×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own boxes.
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
@@ -138,15 +130,10 @@ Ticked "si allega" boxes with no attachment slot under their condition (gen.py `
 - 6×: Asseverazione SCIA - Tutela Storico Ambientale: Si allega la relazione paesaggistica e la documentazione
 - 6×: Asseverazione SCIA - Tutela Storico Ambientale: Si allega la relazione paesaggistica semplificata
 - 6×: Asseverazione SCIA - Tutela Storico Ambientale: si allega documentazione necessaria ai fini del rilascio del parere vincolante
-- 4×: Asseverazione PdC - inquinamento acustico: si allega la documentazione necessaria alla valutazione del progetto
 - 4×: Asseverazione PdC - stato legittimo: allega la documentazione necessaria indicata nel quadro riepilogativo
-- 4×: Asseverazione PdC - tutela ecologica ambientale: Si allega la documentazione necessaria per la richiesta di deroga
 - 4×: Asseverazione PdC - tutela storico ambientale: Si allega la relazione paesaggistica e la documentazione
 - 4×: Asseverazione PdC - tutela storico ambientale: Si allega la relazione paesaggistica semplificata
 - 4×: f) Calcolo del contributo di costruzione: allega il prospetto di calcolo preventivo
-- 3×: Asseverazione SCIA Alternativa - Amianto: Si allega documentazione per la richiesta di deroga
-- 3×: Asseverazione SCIA Alternativa - Inquinamento acus: si allega la documentazione necessaria alla valutazione del progetto
-- 3×: Asseverazione SCIA Alternativa - Tutela Ecologica: Si allega la documentazione necessaria per la richiesta di deroga
 - 3×: Asseverazione SCIA Alternativa - Tutela Storico Am: Si allega la relazione paesaggistica e la documentazione
 - 3×: Asseverazione SCIA Alternativa - Tutela Storico Am: Si allega la relazione paesaggistica semplificata
 - 3×: g) Rispetto degli obblighi in materia di salute e : allega alla presente comunicazione la notifica

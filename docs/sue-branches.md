@@ -8,13 +8,13 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 901 | Claude takes it when the case does |
+| ticked | 910 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 1 | left empty on purpose |
 | law | 21 | closed by law to new cases (the piano casa): refused as the law's, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 169 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 160 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -161,29 +161,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - checkbox: In caso di intervento in VARIANTE :
 
-### Asseverazione PdC - amianto, conformità igienico sanitaria, sismica
-
-3 pratiche; 18 of 30 choices to map.
-
-- checkbox: in allegato alla presente relazione di asseverazione (under: interessano parti di edifici con presenza di fibre di amianto e che è stato pred)
-- radio: non è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste
-- checkbox: Si allega documentazione per la richiesta di deroga (under: non è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste)
-- radio: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ricade nelle ipotesi di cui all’articolo 24, comma 5-bis DPR 380/2001 trattandosi d
-- checkbox: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superiore a 2,40 metri (art. 24, comma 5-bis, lett a) DPR 380/2001); (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
-- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
-- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
-- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
-- checkbox: alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferiore a 28 metri quadrati ma uguale o superiore a 20 metri quadrati (art.  (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
-- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
-- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
-- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
-- checkbox: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferiore a 38 metri quadrati ma uguale o superiore a 28 metri quadrati (art.  (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
-- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
-- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
-- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
-- radio: si allega la documentazione relativa alla denuncia di cui all'articolo 65 del d.P.R. n. 380/2001 (under: prevede la realizzazione di opere di conglomerato cementizio armato, normale e p)
-- radio: si allega la documentazione relativa alla denuncia dei lavori in zona sismica (under: prevede opere in zona sismica da denunciare ai sensi dell'articolo 93 del d.P.R.)
-
 ### Asseverazione PdC - Dati immobile, strumentazione urbanistica, barriere architettoniche
 
 3 pratiche; 16 of 22 choices to map.
@@ -204,6 +181,27 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - checkbox: ALTRO
 - checkbox: interessa un edificio privato aperto al pubblico e che le opere previste sono conformi all'articolo 82 del d.P.R. n. 380/2001 come da relazione e schemi dimostr
 - checkbox: pur essendo soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/2001 e del d.m. n. 236/1989 non rispetta la normativa in materia di barrie
+
+### Asseverazione PdC - amianto, conformità igienico sanitaria, sismica
+
+3 pratiche; 16 of 30 choices to map.
+
+- checkbox: in allegato alla presente relazione di asseverazione (under: interessano parti di edifici con presenza di fibre di amianto e che è stato pred)
+- radio: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ricade nelle ipotesi di cui all’articolo 24, comma 5-bis DPR 380/2001 trattandosi d
+- checkbox: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superiore a 2,40 metri (art. 24, comma 5-bis, lett a) DPR 380/2001); (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
+- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
+- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
+- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superior)
+- checkbox: alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferiore a 28 metri quadrati ma uguale o superiore a 20 metri quadrati (art.  (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
+- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
+- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
+- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: alloggio monostanza per una persona con una superficie minima, inclusi i servizi)
+- checkbox: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferiore a 38 metri quadrati ma uguale o superiore a 28 metri quadrati (art.  (under: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ric)
+- checkbox: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e dimensionali, previsto dal regolamento di cui al decreto del Ministro d (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
+- checkbox: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di miglioramento delle caratteristiche igienico sanitarie (art. 24, comma 5-ter (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
+- checkbox: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a garantire, in relazio (under: alloggio monostanza per due persone con una superficie minima, inclusi i servizi)
+- radio: si allega la documentazione relativa alla denuncia di cui all'articolo 65 del d.P.R. n. 380/2001 (under: prevede la realizzazione di opere di conglomerato cementizio armato, normale e p)
+- radio: si allega la documentazione relativa alla denuncia dei lavori in zona sismica (under: prevede opere in zona sismica da denunciare ai sensi dell'articolo 93 del d.P.R.)
 
 ### SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione
 
@@ -232,28 +230,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: no (under: Direttore dei lavori delle opere strutturali)
 - radio: tecnico incaricato
 
-### Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi
-
-3 pratiche; 6 of 12 choices to map.
-
-- radio: a seguito delle preventive analisi ambientali effettuate, non necessita di bonifica, pertanto
-- radio: non interessa aree percorse dal fuoco ai sensi dell'art. 10 della legge 353/2000
-- radio: è stata oggetto di bonifica dei terreni con obiettivi compatibili con la destinazione d'uso del presente intervento, come risulta dalla certificazione conclusiv
-- radio: non è dotata delle opere di urbanizzazione primaria e la loro attuazione è prevista da parte dell'amministrazione comunale nel corso del prossimo triennio ovver
-- checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
-- checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
-
-### Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi
-
-3 pratiche; 6 of 12 choices to map.
-
-- radio: a seguito delle preventive analisi ambientali effettuate, non necessita di bonifica, pertanto
-- checkbox: si allegano i risultati delle analisi ambientali dei terreni (under: a seguito delle preventive analisi ambientali effettuate, non necessita di bonif)
-- radio: è stata oggetto di bonifica dei terreni con obiettivi compatibili con la destinazione d'uso del presente intervento, come risulta dalla certificazione conclusiv
-- radio: non è dotata delle opere di urbanizzazione primaria e la loro attuazione è prevista da parte dell'amministrazione comunale nel corso del prossimo triennio ovver
-- checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
-- checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
-
 ### Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi
 
 3 pratiche; 5 of 24 choices to map.
@@ -263,6 +239,14 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: le opere comportano la produzione di materiali da scavo per un volume superiore a quelle previste dalla vigente normativa e sono soggette a VIA o AIA, e pertant (under: le opere comportano la produzione di materiali da scavo considerati come sottopr)
 - checkbox: si allega / si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo dell'assenso al Piano di Utilizzo dei materiali da scavo, (under: le opere comportano la produzione di materiali da scavo per un volume superiore )
 - radio: costituisce variante e il sottoscritto assevera che le modifiche non costituiscono variazione dei requisiti di sicurezza antincendio già approvati con parere de
+
+### Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi
+
+3 pratiche; 3 of 12 choices to map.
+
+- radio: non interessa aree percorse dal fuoco ai sensi dell'art. 10 della legge 353/2000
+- checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
+- checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
 
 ### Asseverazione PdC - sicurezza impianti e consumi energetici
 
@@ -286,6 +270,13 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all’articolo 36-bis del DPR 380/2001 e (under: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspe)
 - checkbox: si allega documentazione necessaria ai fini del rilascio del parere vincolante (vedi quadro della documentazione allegata - art. 36-bis comma 4 DPR 380/2001)” (under: è assoggettato al procedimento di accertamento della compatibilità paesaggistica)
+
+### Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi
+
+3 pratiche; 2 of 12 choices to map.
+
+- checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
+- checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
 
 ### f) Impresa esecutrice dei lavori
 
