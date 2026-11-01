@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (140 cases in all, 140 with a recorded filled run).
+  case (138 cases in all, 138 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -33,7 +33,7 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 | Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 14 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 8 |
 | Permesso di costruire | 153 | 107 | 0 | 14 | 18 | 14 | 170 |
-| SCIA | 150 | 124 | 0 | 4 | 12 | 10 | 60 |
+| SCIA | 150 | 124 | 0 | 4 | 12 | 10 | 61 |
 | SCIA alternativa | 128 | 107 | 0 | 6 | 7 | 8 | 73 |
 | Agibilità (SCA) | 36 | 29 | 0 | 0 | 2 | 5 | 18 |
 
@@ -790,6 +790,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Asseverazione SCIA - Inquinamento acust…: le opere comportano la produzione di materiali da scavo considerati come sottoprodotti su… (not mapped)
 - Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno riutilizzati nello stesso luog… (mapped)
 - Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno gestiti dall'interessato come… (mapped)
+- Asseverazione SCIA - Amianto, conformit…: alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA - Amianto, conformit…: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA - Amianto, conformit…: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di… (mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)

@@ -13,6 +13,9 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 firms: [f1]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
+  # In the facts checklist, as the rules table asks it: the supports read it too (the
+  # Soprintendenza's authorization first).
+  bene_culturale: {group: fatti, item: "L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?"}
   descrizione: {default: "PROVA NON INVIARE - CIL {{c:identity.last_name}}"}
   diritti_euro: {default: "100", why: "Line SUE 14 of the Comune's 2026 table of diritti: 100 € for a CIL."}
   data_inizio_lavori: {question: "When the works will start"}
@@ -22,6 +25,7 @@ yours:
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
   - "Pay the {{ask.diritti_euro}} € diritti before sending, and attach the receipt (copia attestazione versamento) on Allega documenti"
+  - "On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); keep its authorization with the pratica"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -30,5 +34,7 @@ rules:
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
+  # A bene culturale: the Soprintendenza's authorization first, obtained apart (rules: soprintendenza-cil).
+  - {if: "{{ask.intervento|is_opere_temporanee}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "On a bene culturale the works need the Soprintendenza's authorization first (art. 21 c. 4 D.Lgs. 42/2004), and Napoli's SUE portal has no procedure to ask for it with this pratica: request it from the Soprintendenza ABAP per il Comune di Napoli (by PEC to sabap-na@pec.cultura.gov.it, on its form 'Istanza per opere su immobili vincolati', 16 euro bollo; up to 120 days, art. 22), then file this."}
   - when: "{{ask.altri_atti|not}}"
     else: "Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet."

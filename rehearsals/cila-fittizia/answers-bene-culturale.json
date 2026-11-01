@@ -1,0 +1,47 @@
+{
+ "people": {
+  "c": "luca",
+  "o": "immobiliare",
+  "r": "giulia",
+  "f1": "edil",
+  "f2": "impianti"
+ },
+ "descrizione": "PROVA NON INVIARE - CILA bene culturale",
+ "comunicazioni_presentate": false,
+ "atti_acquisiti": true,
+ "titolo": "locatario",
+ "oggetto": "Manutenzione straordinaria non strutturale in un appartamento di un palazzo vincolato (bene culturale): nuova distribuzione di cucina e bagno, impianti, autorizzata dalla Soprintendenza.",
+ "data_inizio_lavori": "2026-11-16",
+ "dettaglio_intervento": "In un palazzo dichiarato di interesse culturale (Parte II D.Lgs. 42/2004): demolizione e ricostruzione di due tramezzi interni recenti con nuova distribuzione di cucina e bagno; rifacimento degli impianti idrico ed elettrico in tracce già esistenti. Opere interne non strutturali, autorizzate dalla Soprintendenza. Dati inventati per la prova.",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "assenso_proprietario": "rehearsals/cila-fittizia/files/assenso-immobiliare-fittizia.pdf",
+ "notifica_preliminare": "rehearsals/cila-fittizia/files/notifica-preliminare.pdf",
+ "elaborati_grafici": "rehearsals/cila-fittizia/files/elaborati-stato-fatto-progetto-comparativo.pdf",
+ "relazione_tecnica": "rehearsals/cila-fittizia/files/relazione-tecnica.pdf",
+ "dlgs81": "true",
+ "sotto_200": "true",
+ "notifica_dovuta": "true",
+ "titolo_esclusivo": false,
+ "parti_comuni": "nessuna",
+ "lavori_in_proprio": false,
+ "cila_stato": "da iniziare",
+ "direttore_lavori": "progettista",
+ "altri_tecnici": false,
+ "altri_atti": false,
+ "cila_onerosa": false,
+ "tolleranze": false,
+ "cila_interventi": [
+  "cila_manutenzione"
+ ],
+ "intervento": "manutenzione_straordinaria",
+ "cambio_uso": "no",
+ "paesaggio": "no",
+ "fatti": [
+  "bene_culturale"
+ ],
+ "inizio_dopo_assensi": false,
+ "soprintendenza_autorizzata": "true",
+ "atti_quanti": "uno",
+ "atto_1": "Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004), prot. 0000 del 15/09/2026 (inventato)",
+ "atto_1_autorita": "Soprintendenza ABAP per il Comune di Napoli"
+}
