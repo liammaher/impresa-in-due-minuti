@@ -3066,7 +3066,9 @@ sections:
       - {kind: radio, label: dichiara che il versamento del contributo di costruzione sarà effettuato al momento del ritiro, when: "{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_prima_dei_lavori}}"}
       - {kind: radio, label: chiede la rateizzazione del contributo, when: "{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_rateizzazione}}"}
       - {kind: radio, label: si impegna a corrispondere il costo di costruzione, when: "{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_in_corso_d_opera}}"}
-      - {kind: radio, label: "NO"}
+      # The opere a scomputo's SI/NO open only under "a titolo oneroso" (disabled otherwise: a free
+      # permesso stopped twice on clicking it, 2026-10-31 and 11-01).
+      - {kind: radio, label: "NO", when: "{{ask.scia_onerosa}}"}
 
   # The permesso's g1): the architect is "colui che presenta la pratica" (the crawl names the
   # radio by its column, "titolare dell'intervento o procuratore"), which asks only for the

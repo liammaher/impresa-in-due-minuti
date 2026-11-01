@@ -812,7 +812,7 @@ sections:
   - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_prima_dei_lavori}}', label: dichiara che il versamento del contributo di costruzione sarà effettuato al momento del ritiro}
   - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_rateizzazione}}', label: chiede la rateizzazione del contributo}
   - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_in_corso_d_opera}}', label: si impegna a corrispondere il costo di costruzione}
-  - {kind: radio, label: 'NO'}
+  - {kind: radio, when: '{{ask.scia_onerosa}}', label: 'NO'}
 - section: g1) Tecnici incaricati
   fields:
   - {id: 'r4c1p7reg:chk', kind: checkbox, label: 'che il progettista delle opere strutturali, il/i direttore/i dei lavori saranno individuati'}
