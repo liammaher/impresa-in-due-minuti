@@ -11,6 +11,7 @@ yours:
   prospetto or the documents for the SUE to work it out (the permesso has no slot for them: under Allegati liberi), then everything signed digitally (.p7m)'
 - Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt
 - 'On Allega documenti: the Elaborati richiesti per la sanatoria (stato legittimo, stato di fatto and the comparison, the difformità in red as the SUE''s guidelines ask), signed digitally (.p7m only)'
+- 'For works on structures: the autorizzazione sismica in sanatoria from the Genio Civile di Napoli on S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983); its documents go in this pratica''s slot'
 - 'Once the SUE answers (within 60 days for art. 36, else it is refused): pay the oblazione it determines (twice the contributo di costruzione, art. 36 c. 2; art. 36-bis c. 5) and collect the permesso in
   sanatoria'
 groups:
@@ -450,6 +451,12 @@ supports:
   in:
   - prima dei lavori
   else: 'In sanatoria the release is subordinate to paying the oblazione (art. 36 c. 2, art. 36-bis c. 5): it''s paid when the permesso is collected, not in instalments or during works already done.'
+- if: '{{ask.strutture}}'
+  value: '{{ask.sismica}}'
+  in:
+  - autorizzazione
+  else: 'Works on structures begun without the seismic filing always need the autorizzazione sismica in Campania, never the deposito or a variant filing (art. 4 c. 1 e L.R. 9/1983): the sismica answer is
+    autorizzazione, filed with the Genio Civile.'
 - value: '{{ask.pdc_tipo}}'
   in:
   - nuova costruzione

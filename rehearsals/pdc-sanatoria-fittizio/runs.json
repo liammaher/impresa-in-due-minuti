@@ -28,5 +28,11 @@
   "answers": "answers-catasto-presentata.json",
   "result": "filled",
   "seconds": 154.1
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-strutture.json",
+  "result": "filled",
+  "seconds": 143.9
  }
 ]

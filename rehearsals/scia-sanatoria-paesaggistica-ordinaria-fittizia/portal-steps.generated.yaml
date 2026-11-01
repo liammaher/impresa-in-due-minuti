@@ -470,7 +470,7 @@ supports:
     portal: 'Napoli''s SUE on impresainungiorno: the SCIA''s asseverazione, sanatoria quadro'
     what: 'The case''s four rows (the date of the works proven by documents, the date attested, the oblazione, the works proposal) are one field: the portal keeps only the one ticked last.'
     law: 'Art. 36-bis DPR 380/2001 and the national form ask for all three together: when the works were done, the oblazione the technician determines (c. 5), and whether works are proposed (c. 2).'
-    checked: 2026-11-01, on a made-up draft
+    checked: 2026-11-01, on a made-up draft; the case's seismic box (art. 36-bis c. 3-bis) works and is not part of it
     choices:
     - 'Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) how they want this sanatoria filed while the portal can''t take it: by PEC, or on the portal with the date and the oblazione stated in the
       attached relazione tecnica asseverata.'
@@ -497,6 +497,12 @@ supports:
   in:
   - 'true'
   else: 'The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn''t qualify.'
+- if: '{{ask.strutture}}'
+  value: '{{ask.sismica}}'
+  in:
+  - autorizzazione
+  else: 'Works on structures begun without the seismic filing always need the autorizzazione sismica in Campania, never the deposito or a variant filing (art. 4 c. 1 e L.R. 9/1983): the sismica answer is
+    autorizzazione, filed with the Genio Civile.'
 - when: '{{ask.vincolo|is_art_134|not}}'
   else: 'The ordinaria''s form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose.'
 - when: '{{ask.titolo|is_locatario|not}}'
