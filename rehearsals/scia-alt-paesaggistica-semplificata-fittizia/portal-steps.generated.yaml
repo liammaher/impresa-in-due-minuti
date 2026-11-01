@@ -7,7 +7,7 @@ yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
 - 'As progettista, check every asseverazione on this page: they are yours, signed with the pratica'
-- Name the direttore dei lavori (and, for works on structures, the direttore dei lavori delle strutture) before the works start
+- Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina
 - 'On Allega documenti: the portal''s procura signed by the client and the Quadro riepilogativo (SCIA alternativa DSC), the relazione paesaggistica semplificata (DPR 31/2017, Allegato D) with its drawings
   and photos (signed files only), then everything signed digitally (.p7m)'
 - Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt
@@ -1004,7 +1004,7 @@ sections:
   - {kind: text, label: Nome, nth: 2, value: '{{ad#N:identity.first_name|upper}}', anchor: Incaricato della, block: '#N', when: '{{ask.altri_tecnici}} {{ask.altro_tecnico#N_dipendente}}'}
 - section: i) Impresa esecutrice dei lavori
   fields:
-  - {id: 'r2c1p2reg:radio:1_clone', kind: radio, when: '{{ask.lavori_in_proprio}}', label: in quanto opere di modesta entità}
+  - {id: 'r2c1p2reg:radio:1_clone', kind: radio, when: '{{ask.lavori_in_proprio}}', label: 'i lavori, in quanto opere di modesta entità'}
   - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo}}', label: l'impresa esecutrice/imprese esecutrici dei lavori sarà}
   - {id: 'r3c1p3reg:radio:2_clone', kind: radio, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}', label: i lavori sono eseguiti/sono stati eseguiti}
   - {kind: text, label: Ragione sociale, value: '{{f1:business.denominazione}}', anchor: Ragione sociale, block: 1, when: '{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}'}
@@ -1089,7 +1089,6 @@ sections:
   - {id: 'r6c2p12reg:radio:3_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.sotto_200|not}}', label: dichiara che l'entità presunta del cantiere è pari o superiore}
   - {id: 'r8c2p18reg:radio:4_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta|not}}', label: dichiara che l'intervento non è soggetto all'invio}
   - {id: 'r9c2p21reg:radio:5_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}', label: dichiara che l'intervento è soggetto all'invio}
-  - {kind: checkbox, label: e allega alla presente segnalazione la notifica, if_present: true, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}'}
   - {id: 'r10c3p25reg:radio:6_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}} {{ask.notifica_allegata}}', slot: 'Notifica preliminare (articolo 99 del d.lgs.
       n. 81/2008): its own (filled on the portal 2026-11-01)', label: e allega alla presente segnalazione la notifica}
   - {id: 'r11c3p29reg:radio:7_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}} {{ask.notifica_allegata|not}}', label: invierà la notifica prima dell'inizio dei

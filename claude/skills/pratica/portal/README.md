@@ -48,10 +48,14 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
 3. **Generate:** `gen.py <recipe> --out <dir>/portal-steps.generated.yaml`. It writes nothing
    if any field is unaccounted for. Regenerate every rehearsal after a dictionary or gen.py
    change and look at the diff: an unrelated steps file that changes is a regression until
-   shown otherwise.
+   shown otherwise. `bench/plan_diff.py` says what the change does to each case (its fill plan
+   before and after). A new question the existing cases reach makes their pre-flight propose
+   or ask it: answer it in each as the case did before, and plan_diff shows them unchanged, so
+   their recorded runs still stand.
 4. **Pre-flight** with made-up answers (`answers-p6.json`) and the P6 fixture's values
    (`--values rehearsals/cila-fittizia/fixture-p6.json`, the fixture as it is): `run.py preflight --made-up`
-   (the rehearsal's files are made up: Napoli's file rules only warn, below).
+   (the rehearsal's files are made up: Napoli's file rules only warn, below), from the repo's root:
+   an answers file names its files from there (elsewhere each reads "no file").
 5. **Run in the pane** (the pratica skill, step 2) and record each run in the rehearsal's
    README (`| Date | Browser | Result |`): what stopped it and what fixed it, then the
    filled run.
