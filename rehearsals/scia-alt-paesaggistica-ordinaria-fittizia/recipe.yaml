@@ -1,0 +1,34 @@
+# A SCIA alternativa al permesso di costruire with its autorizzazione paesaggistica ordinaria in one
+# pratica on Napoli's SUE: the two operations selected together in the wizard, as for the SCIA
+# and the permesso (rehearsals/pdc-paesaggistica-ordinaria-fittizio). gen.py takes each one's sections
+# from the catalogue and the order from the combination's crawl
+# (catalogue/F839/sections/sue-combo-scia-alt-paesaggistica-ordinaria.json); every section is one of
+# theirs. The SCIA alternativa's people and cases are rehearsals/scia-alternativa-fittizia's; its
+# asseverazione names the ordinaria procedure.
+# Everything else is scia-alternativa-fittizia's recipe and what the ordinaria adds (parts/paesaggistica-ordinaria.yaml):
+# a slot or a refusal mapped on either reaches this one.
+extends: [scia-alternativa-fittizia, parts/paesaggistica-ordinaria]
+procedure: napoli/comune/scia-alternativa-pdc-con-paesaggistica-ordinaria
+title: "SCIA alternativa al permesso di costruire con autorizzazione paesaggistica ordinaria, SUE Napoli (tecnico con procura)"
+comune: F839
+sportello: sue
+crawl: sue-combo-scia-alt-paesaggistica-ordinaria
+operation:
+  - Segnalazione Certificata Inizio Attività alternativa al Permesso di Costruire (S.C.I.A. alternativa P.d.C.)
+  - Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)
+asks:
+  descrizione: {default: "PROVA NON INVIARE - SCIA alt e paesaggistica {{c:identity.last_name}}"}
+yours:
+  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
+  - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
+  - "Name the direttore dei lavori (and, for works on structures, the direttore dei lavori delle strutture) before the works start"
+  - "On Allega documenti: the portal's procura signed by the client and the Quadro riepilogativo (SCIA alternativa DSC), the ordinaria's drawings and photos (signed files only), then everything signed digitally (.p7m)"
+  - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
+  - "The 30 days before the works may start run from the landscape authorization's release, not from filing (art. 23 c. 3 DPR 380/2001); the contributo, if due, is paid as quadro g) says"
+rules:
+  main: napoli/comune/scia-alternativa-pdc
+# The case: the main pratica's P6 answers, the part's, then these (a null drops one);
+# `gen.py --answers` writes answers-p6.json.
+answers:
+  descrizione: PROVA NON INVIARE - SCIA alt ristrutturazione e ordinaria

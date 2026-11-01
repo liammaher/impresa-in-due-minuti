@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T16:46:32.611Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-31T11:41:29.164Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Terre e rocce da scavo › Dichiarazione di avvenuto utilizzo (D.A.U.) ai sensi dell'art. 7 del DPR n. 120/2017 (sector Edilizia e pianificazione urbana)",
- "seconds": 14.4,
+ "seconds": 14,
  "generated": {
   "interventi": "Dichiarazione di avvenuto utilizzo delle terre e rocce da scavo in conformità al piano di utilizzo o alla dichiarazione di cui all'articolo 21 del DPR n. 120/2017",
   "adempimenti": [
@@ -67,25 +67,25 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
-   "seconds": 0.6
+   "same_as": "cil#Oggetto della pratica",
+   "seconds": 0.8
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
+   "same_as": "cil#DOMICILIO DIGITALE",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "seconds": 0.6
   },
   {
@@ -99,14 +99,14 @@
   {
    "section": "localizzazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
+   "same_as": "cil#Localizzazione dell'intervento",
    "seconds": 0.6
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
-   "seconds": 0.7
+   "same_as": "cil#Dati catastali",
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -115,7 +115,7 @@
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
+   "same_as": "cil#Qualifica e dati del procuratore",
    "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
@@ -151,6 +151,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft"
+ }
 }

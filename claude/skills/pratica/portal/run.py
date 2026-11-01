@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 """Fill a portal pratica from the vault in a real browser, then hand it to the person.
 
-  run.py preflight --steps STEPS.yaml [--answers A.json] VAULT
+  run.py preflight --steps STEPS.yaml [--answers A.json] VAULT [--made-up]
       Before anything opens: prints JSON with why this case isn't supported (the steps
       file's `supports:`, and its `rules:` table, which says whether the case is this pratica
       at all), the answers it proposes for the person to confirm (an ask's
       `propose:`), the questions still to ask (its `asks:`, branch questions first), the
-      vault fields missing or expired, the files to attach (each within the portal's 9.77 MB
-      and of a type its slot takes) and whether they fit the pane, and the person's own steps. Exits 0 when `ready`, 3 when not.
+      vault fields missing or expired, the files to attach (each within the portal's 9.77 MB,
+      of a type its slot takes, and as its sportello takes them: Napoli's SUE refuses a file
+      not in PDF/A, unsigned or oddly named, FILING) and whether they fit the pane, and the
+      person's own steps. Exits 0 when `ready`, 3 when not. --made-up (a rehearsal's made-up
+      files, never sent) reports the sportello's refusals as warnings instead.
 
   run.py plan --steps STEPS.yaml --answers A.json
-              (--values - | --server S.json --token NAME | --vault-dir DIR [--keychain SERVICE])
+              (--values - [--values FILE] | --server S.json --token NAME | --vault-dir DIR [--keychain SERVICE])
       Resolves every value the steps need and prints what goes where. No browser.
 
   run.py page --steps STEPS.yaml --answers A.json VAULT --out DIR [--plain]
@@ -51,7 +54,8 @@ fixes, and the fresh load at the end still checks every section.
 STEPS.yaml is a portal's steps file (rehearsals/*/portal-steps.yaml). Values come from
 the vault, VAULT as for plan. --values - takes what `pvault get` printed for the steps'
 categories (`pvault get 'business.*' 'locale.*' '*:identity.*' ...`, piped in: one Touch ID
-approval, nothing on disk). --server is the pilot vault's JSON ("url" and "tokens") and a
+approval, nothing on disk); a second --values FILE (intake.py's private values.json, read off
+the job's documents) fills what the vault doesn't hold. --server is the pilot vault's JSON ("url" and "tokens") and a
 token's name in it; --vault-dir is a real vault, read over its socket with the token in
 $VAULT_TOKEN or the Keychain (--keychain, default fill.py's), as fill.py reads it. The
 token reads the categories the steps name. Asks come from A.json. --cdp attaches
@@ -266,6 +270,8 @@ FILTERS = Filters({
     "forma": lambda v: FORMA[v],
     "categoria": lambda v: re.sub(r"^([A-F])/?(\d)$", r"\g<1>0\2", v.replace(" ", "").upper()),
     "empty": lambda v: "true" if not v else "false",
+    # Several yes/no answers at once ({{ask.a,ask.b|any}}): true when one is (a `when` has no "or").
+    "any": lambda v: "true" if any(truthy(x) for x in str(v).split("/")) else "false",
     "not": lambda v: "false" if truthy(v) else "true",
     "positive": lambda v: "true" if float(str(v or 0).replace(",", ".")) > 0 else "false",
     # The SUE rules table's facts as the forms' own boxes (an ask's `propose`).
@@ -282,6 +288,15 @@ def truthy(v):
     """True for a yes; a `when` of several words ("{{ask.a|not}} {{ask.b}}") wants every one."""
     words = str(v).strip().lower().split()
     return bool(words) and all(w in ("true", "1", "yes", "si", "sì") for w in words)
+
+
+def fields_of(text):
+    """--values: `pvault get`'s JSON object, or a rehearsal's fixture (its "fields", a list of
+    [id, value] pairs), as one dict."""
+    given = json.loads(text)
+    if isinstance(given, dict) and isinstance(given.get("fields"), list):
+        given = given["fields"]
+    return dict(given) if isinstance(given, list) else given
 
 
 class StepError(Exception):
@@ -617,11 +632,19 @@ def supported(steps, values):
             out.append(f"The rules need {f}, read from {tmpl}: empty in the vault.")
     for c in steps.get("supports", []):
         if "if" in c:
-            unknown = [r for r, f in refs_in(c["if"]) if r.startswith("ask.") and values.field(r) is None]
-            if unknown:
-                need += unknown
-                continue
-            if not truthy(values.render(c["if"])):
+            # Its words in order, as a field's `when`: a false one ends it, so a later word's
+            # asks aren't needed ("altro" ticked, and then a second altro line?).
+            holds = True
+            for word in re.findall(r"\{\{.+?\}\}", c["if"]):
+                unknown = [r for r, f in refs_in(word) if r.startswith("ask.") and values.field(r) is None]
+                if unknown:
+                    need += unknown
+                    holds = False
+                    break
+                if not truthy(values.render(word)):
+                    holds = False
+                    break
+            if not holds:
                 continue
         tmpl = c.get("when", c.get("value"))
         unknown = [r for r, f in refs_in(tmpl) if r.startswith("ask.") and values.field(r) is None]
@@ -680,12 +703,14 @@ def portal_changed(steps):
             "(crawl.js) and steps file (gen.py) first."] if diff else []
 
 
-def preflight(steps, values, urls=None):
+def preflight(steps, values, urls=None, made_up=False):
     """Everything a run needs, settled before any browser opens: why this case isn't
     supported, the questions still to ask, the vault fields missing or expired, the files
     to attach, and the person's own steps. ready: nothing is left before the run. urls: the
-    files sent by link (page --file-urls), which don't count to the pane's 256 KB."""
-    links = file_links(urls)
+    files sent by link (page --file-urls), which don't count to the pane's 256 KB. A file the
+    sportello would refuse (FILING) is a problem, or with made_up (a rehearsal's made-up data,
+    never sent) only its `filing` and a warning."""
+    links, sportello = file_links(urls), filing_rules(steps)
     order = check_asks(steps)
     asks = steps.get("asks", {})
     report = {"ready": False, "unsupported": [], "proposals": [], "questions": [], "missing": [], "files": [],
@@ -747,8 +772,9 @@ def preflight(steps, values, urls=None):
         if where in ("supports", "rules", "yours") or (f.get("optional") and tmpl == f.get("value")):
             continue
         if f and tmpl == f.get("value") and "when" in f:
-            w = values.render(f["when"])
-            if w is not None and not truthy(w):
+            # One false word is enough, whatever a later one would say (no other technicians:
+            # whether the second is an employee is never asked).
+            if any(w is not None and not truthy(w) for w in map(values.render, re.findall(r"\{\{.+?\}\}", f["when"]))):
                 continue  # this field isn't filled for this case
         for ref, filters in refs_in(tmpl):
             if ref.startswith("ask."):
@@ -803,11 +829,18 @@ def preflight(steps, values, urls=None):
                                             "compress it or split it across the slot's +")
                     elif takes and not any(p.name.lower().endswith("." + t) for t in takes):
                         entry["problem"] = f"the slot takes only {', '.join(takes)}"
-                    if p.name.lower().endswith(".p7m") and "problem" not in entry:
-                        signers, why = p7m_signers(p)
-                        if why:
-                            entry["problem"] = why
-                        elif signers is not None:
+                    raw = p.read_bytes()
+                    signers = why = None
+                    if "problem" not in entry:
+                        pades = None if p.name.lower().endswith(".p7m") else pades_signature(raw)
+                        if pades is None and p.name.lower().endswith(".p7m"):
+                            signers, why = p7m_signers(p)
+                        elif pades is not None:  # a PDF signed in itself (PAdES)
+                            signers, why = signers_in([("DER", pades)], "the PDF's own signature can't be read: "
+                                                      "sign it again with your firma digitale")
+                    if why:
+                        entry["problem"] = why
+                    elif signers is not None:
                             # Counts and a yes/no, never the codici fiscali: Claude reads this report.
                             try:
                                 cf = values.field("t:identity.codice_fiscale")
@@ -815,17 +848,28 @@ def preflight(steps, values, urls=None):
                                 cf = None
                             entry["signers"] = len(signers)
                             if not signers:
-                                report["warnings"].append(f"{entry['for']}: the .p7m carries no certificate with a "
-                                                          "codice fiscale, so who signed it can't be told")
+                                report["warnings"].append(f"{entry['for']}: the signature carries no certificate "
+                                                          "with a codice fiscale, so who signed it can't be told")
                             elif cf:
                                 entry["signed_by_dichiarante"] = cf.upper() in signers
                                 if not entry["signed_by_dichiarante"]:
                                     report["warnings"].append(
                                         f"{entry['for']}: signed by {len(signers)} other person(s), not by the "
                                         "dichiarante: right if someone else must sign it, otherwise sign it again")
+                    if sportello and "problem" not in entry:
+                        refused = filing_problems(p, raw, sportello)
+                        if refused and made_up:
+                            entry["filing"] = refused
+                        elif refused:
+                            entry["problem"] = "; ".join(refused)
                 report["files"].append(entry)
+    if made_up and any("filing" in x for x in report["files"]):
+        # A rehearsal's made-up files: filled into a draft that is never sent.
+        report["warnings"].append(f"made-up data: {sum('filing' in x for x in report['files'])} file(s) "
+                                  f"{sportello['office']} would refuse (each one's `filing`): never send this draft")
     report["pane_ok"] = sum(x["bytes"] or 0 for x in report["files"] if "link" not in x) <= PAGE_FILES_LIMIT
-    report["yours"] = [values.render(y) or y for y in steps.get("yours", [])] + apart(steps, values)
+    report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + filing_yours(steps, sportello)
+                       + apart(steps, values))
     report["ready"] = not (report["questions"] or report["proposals"] or report["missing"]
                            or any(not x["exists"] or x.get("problem") for x in report["files"] if x["path"]))
     return report
@@ -837,15 +881,25 @@ def p7m_signers(path):
     Who signed it is a name in a certificate, not proof the signature holds: the portal checks
     that, and so does the person's own signing software. This catches the wrong file, an
     unsigned copy renamed, and a signature by someone other than the dichiarante, before upload."""
-    openssl = shutil.which("openssl")
-    if not openssl:
-        return None, None
-    raw = Path(path).read_bytes()
+    return signers_in(p7m_forms(Path(path).read_bytes()),
+                      "not a readable .p7m (CAdES) file: sign the document again with your firma digitale")
+
+
+def p7m_forms(raw):
+    """The ways a .p7m may be saved: DER, PEM, or the DER as base64 text (some tools)."""
     forms = [("DER", raw), ("PEM", raw)]
-    try:  # some tools save the DER as base64 text
+    try:
         forms.append(("DER", base64.b64decode(b"".join(raw.split()), validate=True)))
     except ValueError:
         pass
+    return forms
+
+
+def signers_in(forms, unreadable):
+    """The codici fiscali in a PKCS#7 signature's certificates, as p7m_signers says."""
+    openssl = shutil.which("openssl")
+    if not openssl:
+        return None, None
     for form, data in forms:
         try:
             r = subprocess.run([openssl, "pkcs7", "-inform", form, "-print_certs"], input=data,
@@ -855,7 +909,132 @@ def p7m_signers(path):
         if r.returncode == 0:
             subjects = [x for x in r.stdout.decode(errors="replace").splitlines() if x.startswith("subject=")]
             return {cf for x in subjects for cf in CF.findall(x)}, None
-    return None, "not a readable .p7m (CAdES) file: sign the document again with your firma digitale"
+    return None, unreadable
+
+
+def p7m_content(raw):
+    """The document a .p7m wraps (its bytes), or None when openssl can't give it."""
+    openssl = shutil.which("openssl")
+    for form, data in p7m_forms(raw) if openssl else []:
+        try:
+            r = subprocess.run([openssl, "cms", "-verify", "-noverify", "-binary", "-inform", form], input=data,
+                               capture_output=True, timeout=20)
+        except subprocess.TimeoutExpired:
+            continue
+        if r.returncode == 0:
+            return r.stdout
+    return None
+
+
+def pades_signature(raw):
+    """The PKCS#7 a PDF's own signature (PAdES) carries: the /Contents of a dictionary with a
+    /ByteRange, as DER without the zeros that pad its slot. None: the PDF isn't signed."""
+    if b"/ByteRange" not in raw:
+        return None
+    blobs = [bytes.fromhex(m.group(1).decode()) for m in re.finditer(rb"/Contents\s*<([0-9A-Fa-f\s]{200,})>", raw)
+             if len(b"".join(m.group(1).split())) % 2 == 0]
+    for blob in sorted(blobs, key=len, reverse=True):
+        if len(blob) > 2 and blob[0] == 0x30:  # a DER SEQUENCE: cut it to its own length
+            n = blob[1]
+            if n < 0x80:
+                return blob[:2 + n]
+            k = n & 0x7F
+            return blob[:2 + k + int.from_bytes(blob[2:2 + k], "big")]
+    return None
+
+
+# PDF/A says so in the XMP metadata, which it keeps unfiltered: pdfaid:part="2" or <pdfaid:part>2<.
+PDFA = re.compile(rb"pdfaid:part\s*(?:=\s*[\"']|>)\s*[1-4]")
+# A name a SUE's back office takes: letters, digits and underscores, then the extensions.
+PLAIN_NAME = re.compile(r"[A-Za-z0-9_]+(\.[A-Za-z0-9]+)+")
+# What a sportello refuses before reading a pratica, by comune and sportello (its steps file's
+# start: comune=F839&tipoSportello=E). Napoli's SUE since 6 July 2026, DD 501/2026 and its Linee
+# Guida (§3 formats, §4 names and signatures, §7 payments, §8 irricevibilità), and the SUE's
+# Costi page: a file not in PDF/A or over 20 MB (the portal's slot takes 9.77), a name with
+# spaces, accents or other signs, an unsigned document, or diritti paid any other way make the
+# pratica irricevibile. The run checks what it attaches; `yours` says it for the rest.
+FILING = {
+    ("F839", "E"): {
+        "office": "Napoli's SUE (DD 501/2026)",
+        "pdfa": True,
+        "signed": True,
+        "names": True,
+        "yours": [
+            "Napoli's SUE takes only PDF/A files, each under 20 MB (images within 200 DPI), named without "
+            "spaces, accents or other signs (Tavola01_inquadramento), and every one signed digitally: "
+            "otherwise the pratica is irricevibile (DD 501/2026). That holds for the files you attach too",
+            "Before sending, pay the diritti di istruttoria the Comune's table sets for this pratica (and any "
+            "sanzione), and attach the receipt: the diritti only to c/c postale 57060964 (Comune di Napoli "
+            "Servizio Tesoreria Edilizia Privata), sanzioni and contributo by bonifico to IBAN "
+            "IT95X0306903496100000046118, causale N1051_SUE – tipo pratica, identificativo, anno (before it "
+            "has one: the titolare's name and the property's address). Paid any other way, it is irricevibile",
+        ],
+        # The building titles of DD 603/2025's forms (the CILA, the SCIA, the SCIA alternativa,
+        # the permesso, their sanatorie and landscape combinations), whose attachment tables
+        # mark these "sempre obbligatorio"; the zona A and frazionamento ones are the SUE's CILA
+        # notes (23/06/2025), the Stato Comparativo the Linee Guida's §9 "nuovo obbligo".
+        "titles": {
+            "procedures": ["napoli/comune/cila-lavori-edilizi", "napoli/comune/scia-edilizia",
+                           "napoli/comune/scia-alternativa-pdc", "napoli/comune/permesso-di-costruire",
+                           "napoli/comune/scia-in-sanatoria", "napoli/comune/permesso-in-sanatoria"],
+            "yours": [
+                "Attach Napoli's two declarations, always required with this pratica (DD 603/2025), each signed "
+                "digitally: the Allegato A Nuovo Programma 100 (the titolare's sworn statement on what they owe "
+                "the Comune) and the Modello DP (the professionals' statement that the client paid their fees, "
+                "L.R. Campania 59/2018)",
+                "For works on an existing building, the drawings include a Stato Comparativo sheet: the current "
+                "and the project plans overlaid, demolitions in yellow and new construction in red (green and "
+                "blue for works dropped in progress), black on white elsewhere (DD 501/2026 Linee Guida §9)",
+                "If the building is in the centro storico (zona A of the Variante generale): attach the "
+                "attestation, signed under art. 481 c.p., that the unit matches its tipo edilizio in the Norme "
+                "di attuazione (art. 63 c. 4)",
+                "If the works split the unit (frazionamento, art. 22 c. 2 of the Variante generale): the atto "
+                "d'obbligo not to split it further, transcribed at the Conservatoria, goes with this pratica "
+                "if the works are done, else with the fine lavori",
+            ],
+        },
+    },
+}
+
+
+def filing_rules(steps):
+    """The rules of the sportello a steps file files at, or None."""
+    from urllib.parse import parse_qs, urlparse
+    q = parse_qs(urlparse(steps.get("start", "")).query)
+    return FILING.get((q.get("comune", [""])[0], q.get("tipoSportello", [""])[0]))
+
+
+def filing_yours(steps, sportello):
+    """The person's steps the sportello asks of every pratica, and of the building titles for one
+    that is one (its procedure, or its `rules:` main for a title filed with its landscape one)."""
+    if not sportello:
+        return []
+    titles = sportello.get("titles", {})
+    procedure = (steps.get("rules") or {}).get("main", steps.get("procedure"))
+    return sportello["yours"] + (titles.get("yours", []) if procedure in titles.get("procedures", []) else [])
+
+
+def filing_problems(p, raw, rules):
+    """Why the sportello would refuse this file: its name, its format, its signature. A .p7m is
+    signed (p7m_signers reads it); its content must be PDF/A. Says what it couldn't check."""
+    out = []
+    if rules.get("names") and not PLAIN_NAME.fullmatch(p.name):
+        out.append(f"{rules['office']} refuses this name: only letters, digits and underscores "
+                   "(Tavola01_inquadramento.pdf), no spaces, accents or other signs")
+    signed_p7m = p.name.lower().endswith(".p7m")
+    doc = p7m_content(raw) if signed_p7m else raw
+    if rules.get("pdfa"):
+        if doc is None:
+            out.append("the document inside the .p7m can't be read to check it is PDF/A (no openssl?)")
+        elif not doc.startswith(b"%PDF"):
+            out.append(f"{rules['office']} takes only PDF/A files: this isn't a PDF")
+        elif not PDFA.search(doc):
+            out.append(f"{rules['office']} takes only PDF/A files: this PDF doesn't declare PDF/A "
+                       "(export it again as PDF/A)")
+    if rules.get("signed") and not signed_p7m and pades_signature(raw) is None:
+        out.append(f"{rules['office']} takes only files signed digitally: sign it (a .p7m, or the PDF's own "
+                   "signature) with your firma digitale")
+    return out
 
 
 def attachment(path, url=None):
@@ -1268,7 +1447,8 @@ def main():
     src = ap.add_mutually_exclusive_group(required=True)
     src.add_argument("--server", type=Path)
     src.add_argument("--vault-dir")
-    src.add_argument("--values", help="- or a file: pvault get's JSON of the fields the steps read")
+    src.add_argument("--values", action="append", help="- or a file: pvault get's JSON of the fields the steps read; "
+                     "again for another (intake.py's private values.json): the first to hold a field gives it")
     ap.add_argument("--token", default="prepare", help="--server: which of its tokens")
     ap.add_argument("--keychain", help="--vault-dir: the Keychain service of the token")
     ap.add_argument("--out", type=Path)
@@ -1276,6 +1456,7 @@ def main():
     ap.add_argument("--profile", type=Path, default=Path.home() / ".cache/pratica-portal/profile")
     ap.add_argument("--close", action="store_true")
     ap.add_argument("--plain", action="store_true", help="page: run.js carries the values in the clear, through the conversation")
+    ap.add_argument("--made-up", action="store_true", help="preflight: made-up files, never sent: the sportello's refusals are warnings")
     ap.add_argument("--resume", type=Path, help="page/run: a stopped run's report.json, to pick it up where it stopped")
     ap.add_argument("--file-urls", type=Path, help="preflight/page: JSON {path: https URL}, files the page fetches by link")
     ap.add_argument("--fix", type=Path, help="with --resume: JSON list of {section, field, set: {id|label|css}}")
@@ -1285,10 +1466,19 @@ def main():
         answers = json.loads(a.answers.read_text()) if a.answers else {}
         asks = steps.get("asks")
         if a.values:
-            given = sys.stdin.read() if a.values == "-" else Path(a.values).read_text()
-            if not given.strip():
-                raise StepError("no values: pvault get printed nothing (its error is above)")
-            values = Values(answers, fields=json.loads(given), asks=asks)
+            if a.values.count("-") > 1:
+                ap.error("--values - only once: there is one stdin")
+            fields = {}
+            for src_ in a.values:
+                given = sys.stdin.read() if src_ == "-" else Path(src_).read_text()
+                if not given.strip():
+                    raise StepError("no values: pvault get printed nothing (its error is above)" if src_ == "-"
+                                    else f"no values in {src_}")
+                # The vault's first (piped), the documents' after: a field the vault holds
+                # isn't replaced by what a document says.
+                for k, v in fields_of(given).items():
+                    fields.setdefault(k, v)
+            values = Values(answers, fields=fields, asks=asks)
         else:
             vaults = fill.connect(argparse.Namespace(server=a.server, vault_dir=a.vault_dir, keychain=a.keychain))
             if a.server and a.token not in vaults:
@@ -1303,10 +1493,12 @@ def main():
             resume = resumption(earlier, json.loads(a.fix.read_text()) if a.fix else None)
         if a.fix and not a.resume:
             ap.error("--fix needs --resume")
+        if a.made_up and a.command != "preflight":
+            ap.error("--made-up is for preflight")
         if a.plain and a.command != "page":
             ap.error("--plain is for page: run keeps the values out of the conversation without it")
         if a.command == "preflight":
-            report = preflight(steps, values, json.loads(a.file_urls.read_text()) if a.file_urls else None)
+            report = preflight(steps, values, json.loads(a.file_urls.read_text()) if a.file_urls else None, a.made_up)
             print(json.dumps(report, indent=2, ensure_ascii=False))
             return 0 if report["ready"] else 3
         if a.command == "plan":

@@ -1,0 +1,14 @@
+[
+ {
+  "date": "2026-10-31",
+  "answers": "answers-dopo-assensi.json",
+  "result": "filled",
+  "seconds": 113.1
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 113.7
+ }
+]

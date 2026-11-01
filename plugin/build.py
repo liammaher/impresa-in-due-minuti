@@ -82,7 +82,9 @@ def copy_runner(skill):
     portal.mkdir(parents=True)
     # catalogue.py for its drifted(): pre-flight refuses a pratica the last drift check found
     # changed on the portal, so a plugin update carries the refusal (drift.json, not the crawls).
-    for name in ("run.py", "rules.py", "inpage.js", "catalogue.py"):
+    (skill / "intake").mkdir()
+    shutil.copy2(PRATICA / "intake" / "intake.py", skill / "intake" / "intake.py")  # reads the job's documents
+    for name in ("run.py", "rules.py", "route.py", "inpage.js", "catalogue.py"):
         shutil.copy2(PRATICA / "portal" / name, portal / name)
     (portal / "catalogue" / "F839").mkdir(parents=True)
     shutil.copy2(PRATICA / "portal" / "catalogue" / "F839" / "drift.json", portal / "catalogue" / "F839" / "drift.json")
@@ -232,7 +234,7 @@ def self_check(plugin):
             sys.exit(f"check.py refused the test case:\n{r.stdout}{r.stderr}")
         r = subprocess.run([py, skill / "portal" / "run.py", "preflight", "--steps",
                             skill / "pratiche" / f"{TEST_CASE}.json", "--answers", "answers.json",
-                            "--values", values], cwd=case, capture_output=True, text=True)
+                            "--values", values, "--made-up"], cwd=case, capture_output=True, text=True)
         if r.returncode:
             sys.exit(f"pre-flight of the test case isn't ready:\n{r.stdout}{r.stderr}")
         # Every pratica's JSON must read as its YAML did: pre-flight prints the same, from

@@ -1,0 +1,68 @@
+[
+ {
+  "date": "2026-10-31",
+  "answers": "answers-condominio-strutture.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-impianti.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-tolleranze-autorizzazione.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-tolleranze-minore.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-tolleranze.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-strumenti.json",
+  "result": "filled",
+  "seconds": 150.6
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 163.6
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-rir-fuori-area.json",
+  "result": "filled",
+  "seconds": 169.1
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-variante-sismica.json",
+  "result": "stopped",
+  "seconds": 159.2
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-vincoli.json",
+  "result": "filled",
+  "seconds": 151.3
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-variante-sismica.json",
+  "result": "filled",
+  "seconds": 153.1
+ }
+]

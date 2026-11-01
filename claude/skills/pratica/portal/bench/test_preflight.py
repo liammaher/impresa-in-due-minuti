@@ -41,14 +41,14 @@ def raises(fn, words):
 
 
 def ready():
-    r = run.preflight(STEPS, values())
+    r = run.preflight(STEPS, values(), made_up=True)
     assert r["ready"], r
     assert not (r["questions"] or r["missing"] or r["unsupported"]), r
     assert any("€ 120" in y for y in r["yours"]), r["yours"]
 
 
 def all_questions():
-    r = run.preflight(STEPS, values(answers={}))
+    r = run.preflight(STEPS, values(answers={}), made_up=True)
     keys = [q["key"] for q in r["questions"]]
     assert keys == ["extras", "insegna", "superficie_somministrazione_mq"], keys
     items = [i["key"] for i in r["questions"][0]["items"]]
@@ -59,14 +59,14 @@ def all_questions():
 
 
 def alcohol():
-    r = run.preflight(STEPS, values(answers=ANSWERS | {"extras": ["alcolici"]}))
+    r = run.preflight(STEPS, values(answers=ANSWERS | {"extras": ["alcolici"]}), made_up=True)
     assert not r["ready"] and r["unsupported"] == ["Selling alcohol isn't supported yet: it adds the Dogane "
                                                    "notice to the pratica."], r
     assert not r["questions"], "asked questions for an unsupported case"
 
 
 def company():
-    r = run.preflight(STEPS, values(fields=FIELDS | {"business.forma_giuridica": "srl"}))
+    r = run.preflight(STEPS, values(fields=FIELDS | {"business.forma_giuridica": "srl"}), made_up=True)
     assert r["unsupported"] and "ditta individuale" in r["unsupported"][0], r
 
 
@@ -78,19 +78,19 @@ def page_refuses():
 
 def missing_vault_field():
     fields = {k: v for k, v in FIELDS.items() if k != "business.partita_iva"}
-    r = run.preflight(STEPS, values(fields=fields))
+    r = run.preflight(STEPS, values(fields=fields), made_up=True)
     assert [m["field"] for m in r["missing"]] == ["business.partita_iva"], r["missing"]
     assert not r["ready"]
 
 
 def no_titolare():
     fields = {k: v for k, v in FIELDS.items() if not k.endswith(":ruolo.tipo")}
-    r = run.preflight(STEPS, values(fields=fields))
+    r = run.preflight(STEPS, values(fields=fields), made_up=True)
     assert r["missing"] and r["missing"][0]["field"] == "*:ruolo.tipo", r["missing"]
 
 
 def bad_answer():
-    r = run.preflight(STEPS, values(answers=ANSWERS | {"superficie_somministrazione_mq": "trenta"}))
+    r = run.preflight(STEPS, values(answers=ANSWERS | {"superficie_somministrazione_mq": "trenta"}), made_up=True)
     q = [q for q in r["questions"] if q["key"] == "superficie_somministrazione_mq"]
     assert q and q[0]["error"] == "answer with a number", r["questions"]
 
@@ -103,7 +103,7 @@ def default_used():
 def ask_without_question():
     steps = copy.deepcopy(STEPS)
     del steps["asks"]["insegna"]
-    raises(lambda: run.preflight(steps, values(steps=steps)), "no question in asks: for insegna")
+    raises(lambda: run.preflight(steps, values(steps=steps), made_up=True), "no question in asks: for insegna")
 
 
 def expired():
@@ -111,7 +111,7 @@ def expired():
     steps["sections"][0]["fields"].append({"id": "x", "kind": "text", "label": "CIE", "value": "{{t:cie.numero}}"})
     slug = run.Values({}, fields=FIELDS).titolare
     r = run.preflight(steps, values(steps=steps, fields=FIELDS | {f"{slug}:cie.numero": "CA00000AA",
-                                                                  f"{slug}:cie.data_scadenza": "2020-01-01"}))
+                                                                  f"{slug}:cie.data_scadenza": "2020-01-01"}), made_up=True)
     assert any(m["why"] == "expired on 2020-01-01" for m in r["missing"]), r["missing"]
 
 
@@ -123,46 +123,115 @@ def files():
     steps["asks"]["planimetria"] = {"type": "file", "question": "The planimetria (PDF)"}
     steps["sections"][-1]["fields"].append({"id": "p", "kind": "file", "label": "Planimetria",
                                             "value": "{{ask.planimetria}}"})
-    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}))
+    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}), made_up=True)
     assert r["ready"] and r["files"][0]["exists"] and not r["pane_ok"], r
-    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(tmp / "nope.pdf")}))
+    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(tmp / "nope.pdf")}), made_up=True)
     assert not r["ready"] and r["questions"][0]["error"].startswith("no file"), r
     # Over the portal's 9.77 MB, or a type the slot doesn't take: not ready, and why.
     huge = tmp / "rilievo.pdf"
     with huge.open("wb") as f:
         f.truncate(run.SLOT_MAX_BYTES + 1)
-    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(huge)}))
+    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(huge)}), made_up=True)
     assert not r["ready"] and "over the portal's 9.77 MB" in r["files"][0]["problem"], r["files"]
     steps["sections"][-1]["fields"][-1]["accepts"] = "pdf.p7m;jpg.p7m"
-    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}))
+    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}), made_up=True)
     assert not r["ready"] and r["files"][0]["problem"] == "the slot takes only pdf.p7m, jpg.p7m", r["files"]
     signed = tmp / "planimetria.pdf.p7m"
     signed.write_bytes(b"0")
-    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(signed)}))
+    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(signed)}), made_up=True)
     assert not r["ready"] and "not a readable .p7m" in r["files"][0]["problem"], r["files"]
     for f in (big, huge, signed):
         f.unlink()
     tmp.rmdir()
 
 
-def signed_file(tmp, name, cf, base64_text=False):
-    """A real CAdES .p7m (a self-signed certificate carrying cf as TINIT-cf, as a firma digitale's does)."""
+def signed_file(tmp, name, cf, base64_text=False, content=b"%PDF-1.4 finto\n", pades=False):
+    """A real CAdES .p7m (a self-signed certificate carrying cf as TINIT-cf, as a firma digitale's
+    does), or with pades the PDF itself carrying a detached PKCS#7 as a PAdES one does: a
+    /ByteRange and the signature in /Contents, padded with zeros."""
     import base64
     import shutil
     import subprocess
     openssl = shutil.which("openssl")
     key, crt, doc, out = tmp / "k.pem", tmp / "c.pem", tmp / "doc.pdf", tmp / name
-    doc.write_bytes(b"%PDF-1.4 finto\n")
+    doc.write_bytes(content)
     subprocess.run([openssl, "req", "-x509", "-newkey", "rsa:2048", "-nodes", "-keyout", str(key), "-out", str(crt),
                     "-days", "2", "-subj", f"/C=IT/O=Fittizio/CN=Firma Finta/serialNumber=TINIT-{cf}"],
                    check=True, capture_output=True)
     subprocess.run([openssl, "cms", "-sign", "-signer", str(crt), "-inkey", str(key), "-in", str(doc),
-                    "-outform", "DER", "-out", str(out), "-nodetach", "-binary"], check=True, capture_output=True)
+                    "-outform", "DER", "-out", str(out)] + ([] if pades else ["-nodetach"]) + ["-binary"],
+                   check=True, capture_output=True)
+    if pades:
+        sig = out.read_bytes().hex().upper()
+        out.write_bytes(content + b"1 0 obj\n<< /Type /Sig /Filter /Adobe.PPKLite /SubFilter /ETSI.CAdES.detached "
+                        b"/ByteRange [0 100 200 300] /Contents <" + (sig + "0" * 2048).encode() + b"> >>\nendobj\n%%EOF\n")
     if base64_text:
         out.write_bytes(base64.encodebytes(out.read_bytes()))
     for f in (key, crt, doc):
         f.unlink()
     return out
+
+
+# A PDF that declares PDF/A in its XMP, as an export to PDF/A writes it.
+PDFA_CONTENT = (b"%PDF-1.7\n<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF><rdf:Description "
+                b"xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\"><pdfaid:part>2</pdfaid:part>"
+                b"<pdfaid:conformance>B</pdfaid:conformance></rdf:Description></rdf:RDF></x:xmpmeta>\n")
+
+
+def napoli_filing():
+    """Napoli's SUE (DD 501/2026): a file the run attaches must be PDF/A, signed digitally (a
+    .p7m, or the PDF's own PAdES signature) and plainly named, else the pratica is irricevibile;
+    made-up files are only warned about. A SUAP pratica isn't checked."""
+    import shutil
+    if not shutil.which("openssl"):
+        return
+    suap = copy.deepcopy(STEPS)
+    suap["asks"]["relazione"] = {"type": "file", "question": "The relazione tecnica"}
+    suap["sections"][-1]["fields"].append({"id": "r", "kind": "file", "label": "Relazione",
+                                           "value": "{{ask.relazione}}"})
+    sue = copy.deepcopy(suap)
+    sue["start"] = "https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E"
+    tmp = Path(tempfile.mkdtemp(prefix="preflight-filing-"))
+    own = "FTTGNR90E12F839R"
+
+    def check(path, steps=sue, made_up=False):
+        r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"relazione": str(path)}), made_up=made_up)
+        return r, r["files"][0]
+    plain = tmp / "relazione tecnica.pdf"
+    plain.write_bytes(b"%PDF-1.4 non firmato\n")
+    r, f = check(plain)
+    assert not r["ready"] and all(w in f["problem"] for w in ("this name", "PDF/A", "signed digitally")), f
+    assert any(y.startswith("Napoli's SUE takes only PDF/A") for y in r["yours"]), r["yours"]
+    assert any("c/c postale 57060964" in y for y in r["yours"]), r["yours"]
+    # The same file with made-up data: ready, each refusal noted, and a warning never to send it.
+    r, f = check(plain, made_up=True)
+    assert r["ready"] and len(f["filing"]) == 3 and "problem" not in f, f
+    assert r["warnings"][-1].startswith("made-up data: 1 file(s)"), r["warnings"]
+    # PDF/A but unsigned: refused for its signature only.
+    unsigned = tmp / "Relazione_tecnica.pdf"
+    unsigned.write_bytes(PDFA_CONTENT)
+    r, f = check(unsigned)
+    assert not r["ready"] and "PDF/A" not in f["problem"] and "signed digitally" in f["problem"], f
+    # PDF/A signed in itself (PAdES), by the dichiarante: taken, its signer read as a .p7m's is.
+    r, f = check(signed_file(tmp, "Relazione_firmata.pdf", own, content=PDFA_CONTENT, pades=True))
+    assert r["ready"] and f["signers"] == 1 and f["signed_by_dichiarante"] is True, f
+    # A .p7m: its content must be PDF/A.
+    r, f = check(signed_file(tmp, "Relazione_tecnica.pdf.p7m", own, content=PDFA_CONTENT))
+    assert r["ready"] and "problem" not in f, f
+    r, f = check(signed_file(tmp, "Relazione_vecchia.pdf.p7m", own))
+    assert not r["ready"] and f["problem"].endswith("(export it again as PDF/A)"), f
+    # A PDF that says it's signed and isn't readable as a signature: refused, as a bad .p7m is.
+    broken = tmp / "Relazione_rotta.pdf"
+    broken.write_bytes(PDFA_CONTENT + b"/ByteRange [0 1 2 3] /Contents <30" + b"AB" * 300 + b">")
+    r, f = check(broken)
+    assert not r["ready"] and "own signature can't be read" in f["problem"], f
+    # Not Napoli's SUE (the pizzeria's SUAP): none of this is checked.
+    r, f = check(plain, steps=suap)
+    assert r["ready"] and "problem" not in f and not any("PDF/A" in y for y in r["yours"]), (f, r["yours"])
+    rehearsals = HERE.parents[4] / "rehearsals"
+    assert run.filing_rules(yaml.safe_load((rehearsals / "cila-fittizia" / "portal-steps.generated.yaml").read_text()))
+    assert run.filing_rules(STEPS) is None
+    shutil_rmtree(tmp)
 
 
 def p7m_signer():
@@ -177,7 +246,7 @@ def p7m_signer():
     own, other = "FTTGNR90E12F839R", "RSSMRA80A01H501U"
 
     def check(path):
-        return run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(path)}))
+        return run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(path)}), made_up=True)
     r = check(signed_file(tmp, "mio.pdf.p7m", own))
     assert r["ready"] and r["files"][0]["signed_by_dichiarante"] is True and not r["warnings"], r
     r = check(signed_file(tmp, "mio-b64.pdf.p7m", own, base64_text=True))
@@ -227,14 +296,14 @@ def checklist_forms():
     listed = ANSWERS | {"extras": ["stagionale"]}
     a, b = run.page_scripts(STEPS, values(answers=each)), run.page_scripts(STEPS, values(answers=listed))
     assert a == b, "a list and per-item answers filled differently"
-    r = run.preflight(STEPS, values(answers=ANSWERS | {"extras": ["vino"]}))
+    r = run.preflight(STEPS, values(answers=ANSWERS | {"extras": ["vino"]}), made_up=True)
     assert r["questions"] and r["questions"][0]["key"] == "extras" and "error" in r["questions"][0], r["questions"]
 
 
 def unused_ask():
     steps = copy.deepcopy(STEPS)
     steps["asks"]["colore"] = {"type": "text", "question": "Favourite colour?"}
-    raises(lambda: run.preflight(steps, values(steps=steps)), "no field reads asks.colore")
+    raises(lambda: run.preflight(steps, values(steps=steps), made_up=True), "no field reads asks.colore")
 
 
 def not_needed_here():
@@ -244,11 +313,11 @@ def not_needed_here():
     steps["asks"]["data_stagione"] = {"type": "date", "question": "When does the season start?"}
     steps["sections"][0]["fields"].append({"id": "s", "kind": "text", "label": "Inizio stagione",
                                            "when": "{{ask.stagionale}}", "value": "{{ask.data_stagione}}"})
-    r = run.preflight(steps, values(steps=steps))
+    r = run.preflight(steps, values(steps=steps), made_up=True)
     assert r["ready"] and not r["questions"], r["questions"]
-    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"extras": ["stagionale"]}))
+    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"extras": ["stagionale"]}), made_up=True)
     assert [q["key"] for q in r["questions"]] == ["data_stagione"], r["questions"]
-    r = run.preflight(steps, values(steps=steps, answers={k: v for k, v in ANSWERS.items() if k != "extras"}))
+    r = run.preflight(steps, values(steps=steps, answers={k: v for k, v in ANSWERS.items() if k != "extras"}), made_up=True)
     q = [q for q in r["questions"] if q["key"] == "data_stagione"]
     assert q and q[0]["only_if"] == ["stagionale"], r["questions"]
 
@@ -259,17 +328,17 @@ def proposals():
     steps = copy.deepcopy(STEPS)
     steps["asks"]["insegna"]["propose"] = "{{business.denominazione}}"
     no_sign = {k: v for k, v in ANSWERS.items() if k != "insegna"}
-    r = run.preflight(steps, values(steps=steps, answers=no_sign))
+    r = run.preflight(steps, values(steps=steps, answers=no_sign), made_up=True)
     assert [p["key"] for p in r["proposals"]] == ["insegna"], r["proposals"]
     assert r["proposals"][0]["proposal"] == FIELDS["business.denominazione"], r["proposals"]
     assert "insegna" not in [q["key"] for q in r["questions"]] and not r["ready"], r
     confirmed = no_sign | {"insegna": r["proposals"][0]["proposal"]}
-    assert run.preflight(steps, values(steps=steps, answers=confirmed))["ready"]
+    assert run.preflight(steps, values(steps=steps, answers=confirmed), made_up=True)["ready"]
     fields = {k: v for k, v in FIELDS.items() if k != "business.denominazione"}
-    r = run.preflight(steps, values(steps=steps, answers=no_sign, fields=fields))
+    r = run.preflight(steps, values(steps=steps, answers=no_sign, fields=fields), made_up=True)
     assert "insegna" in [q["key"] for q in r["questions"]] and not r["proposals"], r
     steps["asks"]["alcolici"]["propose"] = "false"
-    raises(lambda: run.preflight(steps, values(steps=steps)), "no propose")
+    raises(lambda: run.preflight(steps, values(steps=steps), made_up=True), "no propose")
 
 
 def sums():
@@ -291,7 +360,7 @@ def too_long():
     vault = next(f for sec in steps["sections"] for f in sec["fields"]
                  if str(f.get("value", "")).startswith("{{business.denominazione") and "when" not in f)
     asked["max"], vault["max"] = 3, 3
-    r = run.preflight(steps, values(steps=steps))
+    r = run.preflight(steps, values(steps=steps), made_up=True)
     key = asked["value"][6:].split("}")[0]
     assert any(q["key"] == key and "at most 3" in q.get("error", "") for q in r["questions"]), r["questions"]
     assert any("at most 3" in m["why"] for m in r["missing"]), r["missing"]
@@ -311,7 +380,7 @@ def nested_when():
     here = os.getcwd()
     os.chdir(HERE.parents[4])  # the answers name files from the repo's root
     try:
-        ask = lambda a: {q["key"]: q for q in run.preflight(steps, values(a, fields, steps))["questions"]}
+        ask = lambda a: {q["key"]: q for q in run.preflight(steps, values(a, fields, steps), made_up=True)["questions"]}
         q = ask(base)
         assert q["contributo_pagato"]["only_if"] == ["cila_onerosa"], q.get("contributo_pagato")
         assert q["toll_strutturale"]["only_if"] == ["tolleranze"], q.get("toll_strutturale")
@@ -335,7 +404,7 @@ def gated_support():
     here = os.getcwd()
     os.chdir(HERE.parents[4])  # the answers name files from the repo's root
     try:
-        pre = lambda a: run.preflight(steps, values(a, fields, steps))
+        pre = lambda a: run.preflight(steps, values(a, fields, steps), made_up=True)
         r = pre(base | {"scia_onerosa": "false", "contributo_normativa": "art. 17 (inventato)"})
         assert r["ready"] and not r["unsupported"], r
         q = {x["key"]: x for x in pre(base)["questions"]}
@@ -348,8 +417,9 @@ def gated_support():
 
 
 def agibilita_systems():
-    """The agibilità's systems: certified by their dichiarazione di conformità it fills; by a
-    collaudo, an atto notorio or a filed document it refuses, and asks only with systems."""
+    """The agibilità's systems: certified by their dichiarazione di conformità alone it fills; by
+    others it asks system by system, one checklist a certificate (a filed one's P.G. only once
+    ticked), and asks only with systems."""
     agi = HERE.parents[4] / "rehearsals" / "agibilita-fittizia"
     steps = yaml.safe_load((agi / "portal-steps.generated.yaml").read_text())
     fields = dict(json.loads((HERE.parents[4] / "rehearsals" / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
@@ -357,12 +427,41 @@ def agibilita_systems():
     here = os.getcwd()
     os.chdir(HERE.parents[4])
     try:
-        pre = lambda a: run.preflight(steps, values(a, fields, steps))
+        pre = lambda a: run.preflight(steps, values(a, fields, steps), made_up=True)
         assert pre(collaudo)["ready"]
         r = pre(collaudo | {"impianti_certificazione": "altro"})
-        assert any("atto notorio" in u for u in r["unsupported"]), r["unsupported"]
+        lists = {q["key"] for q in r["questions"] if q["type"] == "checklist"}
+        assert not r["unsupported"] and lists == {"impianti_dichiarazione", "impianti_depositato", "impianti_collaudo",
+                                                  "impianti_atto_notorio"}, r
+        assert not any(q["key"].endswith("_pg") and not q.get("only_if") for q in r["questions"]), r["questions"]
+        assert pre(json.loads((agi / "answers-impianti-depositati.json").read_text()))["ready"]
         none = {k: v for k, v in collaudo.items() if k != "impianti_certificazione"} | {"impianti": "false"}
         assert pre(none)["ready"], pre(none)
+    finally:
+        os.chdir(here)
+
+
+def agibilita_slots():
+    """The agibilità's systems decide its attachment slots (read on the portal 2026-10-31): the
+    dichiarazione's slot only while some system has one (none when all are deposited); a
+    collaudo or atto notorio opens its own required slot."""
+    root = HERE.parents[4] / "rehearsals"
+    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+    slots = {"Dichiarazione di conformità degli impianti", "Certificato di collaudo ove previsto, degli impianti installati",
+             "Atto notorio relativo alla conformità degli impianti"}
+
+    def filed(rehearsal, answers):
+        steps = yaml.safe_load((root / rehearsal / "portal-steps.generated.yaml").read_text())
+        a = json.loads((root / rehearsal / answers).read_text())
+        return {f["label"] for f in run.plan(steps, values(a, fields, steps)) if f["kind"] == "file"} & slots
+
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+    try:
+        assert filed("agibilita-fittizia", "answers-collaudo.json") == {"Dichiarazione di conformità degli impianti"}
+        assert filed("agibilita-fittizia", "answers-impianti-depositati.json") == set()
+        assert filed("agibilita-fittizia", "answers-impianti-collaudo.json") >= {
+            "Certificato di collaudo ove previsto, degli impianti installati", "Atto notorio relativo alla conformità degli impianti"}
     finally:
         os.chdir(here)
 
@@ -377,7 +476,7 @@ def sanatoria_cases():
     here = os.getcwd()
     os.chdir(HERE.parents[4])
     try:
-        pre = lambda a: run.preflight(steps, values(a, fields, steps))
+        pre = lambda a: run.preflight(steps, values(a, fields, steps), made_up=True)
         assert pre(p6)["ready"] and pre(json.loads((d / "answers-in-corso.json").read_text()))["ready"]
         r = pre(p6 | {"sanatoria_caso": "conformita urbanistica"})
         assert any("one radio choice" in u for u in r["unsupported"]), r["unsupported"]
@@ -393,8 +492,8 @@ def linked_files():
         big.write_bytes(b"%PDF-1.4\n" + b"0" * (300 * 1024))
         steps = copy.deepcopy(STEPS)
         steps["sections"][0]["fields"].append({"kind": "file", "label": "Planimetria", "value": str(big)})
-        assert not run.preflight(steps, values(steps=steps))["pane_ok"]
-        r = run.preflight(steps, values(steps=steps), {str(big): "https://example.org/planimetria.pdf"})
+        assert not run.preflight(steps, values(steps=steps), made_up=True)["pane_ok"]
+        r = run.preflight(steps, values(steps=steps), {str(big): "https://example.org/planimetria.pdf"}, made_up=True)
         assert r["pane_ok"] and any(f.get("link") for f in r["files"]), r["files"]
 
 
@@ -419,10 +518,12 @@ CASES = [
     ("a value longer than its box is asked again, or named in the vault, before the run", too_long),
     ("a file over the pane's 256 KB is pane_ok once it goes by link", linked_files),
     ("a .p7m is read: signed by the dichiarante, by someone else (a warning without any codice fiscale), or not a signature (not ready)", p7m_signer),
+    ("Napoli's SUE: PDF/A, signed (.p7m or PAdES), plain names, else not ready; made-up files only warned; the SUAP unchecked", napoli_filing),
     ("the imposta di bollo route is listed as a choice made in the person's name", bollo_chosen),
     ("a condition's words gate each other: a later question waits on the earlier answer (CILA contributo)", nested_when),
     ("a supports check with `if` applies, and is asked, only once its gate holds (permesso contributo)", gated_support),
-    ("the agibilità's systems: their dichiarazione is filled, any other certificate refused, asked only with systems", agibilita_systems),
+    ("the agibilità's systems: their dichiarazione is filled, other certificates asked system by system, asked only with systems", agibilita_systems),
+    ("the agibilità's systems decide its slots: the dichiarazione's only with one, collaudo and atto notorio their own", agibilita_slots),
     ("the SCIA in sanatoria: in progress and double conformity ready, art. 36-bis c. 1 and pre-1977 variants refused", sanatoria_cases),
 ]
 

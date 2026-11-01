@@ -1,0 +1,675 @@
+
+## SECTION: Scheda anagrafica
+P000 | radio | DITTA/SOCIETA'/IMPRESA
+P001 | radio | PERSONA (Privato)
+P002 | radio | ISCRITTA ALLA CCIAA
+P003 | radio | NON ANCORA ISCRITTA
+P004 | radio | NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA
+P005 | text | Nome
+P006 | text | Cognome
+P007 | text | Cod.Fiscale
+P008 | select | Sesso | options=['Femminile', 'Maschile']
+P009 | date | Data nascita
+P010 | select | Cittadinanza
+P011 | select | Stato
+P012 | select | Provincia
+P013 | select | Comune | options=[]
+P014 | checkbox | Se cittadino non UE
+P015 | select | Stato
+P016 | select | Provincia
+P017 | select | Comune | options=[]
+P018 | select | Toponimo (DUG) | options=['ALTRO', 'CORSO', 'LARGO', 'PIAZZA', 'VIA', 'VIALE']
+P019 | text | Denominazione stradale
+P020 | text | Numero civico
+P021 | text | CAP
+P022 | text | eMail/PEC
+P023 | text | Telefono fisso/cellulare
+P024 | select | Carica
+P025 | text | Denominazione (nome della ditta o azienda o ragione sociale)
+P026 | select | Forma giuridica
+P027 | text | Codice Fiscale
+P028 | text | P.IVA
+P029 | select | Stato
+P030 | select | Provincia
+P031 | select | Comune | options=[]
+P032 | select | Toponimo (DUG) | options=['ALTRO', 'CORSO', 'LARGO', 'PIAZZA', 'VIA', 'VIALE']
+P033 | text | Denominazione stradale
+P034 | text | Numero civico
+P035 | text | CAP
+P036 | text | Telefono fisso/Cellulare
+P037 | text | Fax
+P038 | text | PEC
+P039 | REVEALED by 'PERSONA (Privato)' | select | In qualità di:
+P040 | REVEALED by 'In qualità di: = Altro' | text | specificare:
+P041 | REVEALED by 'ISCRITTA ALLA CCIAA' | select | Camera di commercio di:
+P042 | REVEALED by 'Se cittadino non UE' | text | estremi del documento di soggiorno
+P043 | REVEALED by 'Se cittadino non UE' | text | rilasciato da
+P044 | REVEALED by 'Se cittadino non UE' | date | il
+P045 | REVEALED by 'Se cittadino non UE' | date | scadenza
+P046 | REVEALED by 'Toponimo (DUG) = ALTRO' | select | da compilare obbligatoriamente nel caso si sia selezionato 'ALTRO' nel Toponimo-DUG
+P047 | REVEALED by 'Toponimo (DUG) = ALTRO' | select | da compilare obbligatoriamente nel caso si sia selezionato 'ALTRO' nel Toponimo-DUG
+
+## SECTION: Oggetto della pratica
+P048 | textarea | 300 Caratteri restanti | ctx=descrizione sintetica
+
+## SECTION: DOMICILIO DIGITALE
+P049 | checkbox | il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005):
+P050 | checkbox | il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) :
+P051 | REVEALED by 'il seguente domicilio digitale inserito in INAD (art.6 -quat' | text | il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005):
+P052 | REVEALED by 'il seguente domicilio digitale inserito in INI-PEC (art. 6-b' | text | il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) :
+
+## SECTION: DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)
+P053 | text | N.B. Inserire l'indirizzo della casella PEC a cui lo Sportello dovrà inviare la ricevuta e le altre comunicazioni relative alla pratica
+P054 | checkbox | Si dichiara di essere consapevoli che nel caso non venga indicata una casella di posta elettronica certificata (PEC), non si avra' la certez
+
+## SECTION: Localizzazione dell'intervento
+P055 | text | Comune
+P056 | text | Frazione
+P057 | text | Prov.
+P058 | lookup | CAP
+P059 | lookup | Via, Viale, Piazza
+P060 | lookup | n° civico
+P061 | lookup | scala
+P062 | lookup | piano
+P063 | lookup | interno
+
+## SECTION: Dati catastali
+P064 | radio | Nuovo Catasto Edilizio Urbano | ctx=NCEU
+P065 | radio | Nuovo Catasto Terreni | ctx=NCT
+P066 | text | foglio
+P067 | text | particella/mappale
+P068 | text | subalterno
+P069 | REVEALED by 'Nuovo Catasto Edilizio Urbano' | text | sezione Amministrativa (Fabbricati)
+P070 | REVEALED by 'Nuovo Catasto Edilizio Urbano' | text | sezione Urbana (Fabbricati)
+P071 | REVEALED by 'Nuovo Catasto Edilizio Urbano' | text | classe
+P072 | REVEALED by 'Nuovo Catasto Edilizio Urbano' | select | categoria
+P073 | REVEALED by 'Nuovo Catasto Terreni' | text | sezione Censuaria (Terreni)
+
+## SECTION: a) Titolarità dell'intervento
+P074 | select | Il richiedente dichiara di avere titolo alla presentazione di questa pratica edilizia in quanto | options=['proprietario', 'comproprietario', 'usufruttuario', 'amministratore di condominio', 'altro']
+P075 | radio | avere titolarità esclusiva all'esecuzione dell'intervento
+P076 | radio | non avere titolarità esclusiva all'esecuzione dell'intervento, ma di disporre comunque della dichiarazione di assenso dei terzi titolari di 
+P077 | REVEALED by 'Il richiedente dichiara di avere titolo alla presentazione d' | text | specificare
+P078 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | Cognome
+P079 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | Nome
+P080 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | C.F.
+P081 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | date | Data di nascita
+P082 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | select | Cittadinanza
+P083 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | select | Sesso
+P084 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | select | Stato
+P085 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | select | Provincia
+P086 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | Comune italiano o Località estera
+P087 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | select | Stato
+P088 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | select | Provincia
+P089 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | Comune italiano o Località estera
+P090 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | Via, Piazza, ecc.
+P091 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | N.
+P092 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | C.A.P.
+P093 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | PEC / posta elettronica
+P094 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | Telefono fisso / cellulare
+P095 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | checkbox | Da compilare solo nel caso in cui il titolare sia una ditta o società:
+P096 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | in qualità di
+P097 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | della ditta / società
+P098 | REVEALED by 'non avere titolarità esclusiva all'esecuzione dell'intervent' | text | con codice fiscale / p. IVA
+
+## SECTION: b) Presentazione della SCIA/SCIA Unica/SCIA Condizionata
+P099 | date | Per SCIA/SCIA Unica, il titolare dichiara che i lavori avranno inizio in data:
+P100 | checkbox | PER PRESA VISIONE
+
+## SECTION: c) Qualificazione dell'intervento
+P101 | radio | intervento di manutenzione straordinaria di cui all’articolo 3, comma 1, lettera b) del d.P.R. n. 380/2001, che riguardino le parti struttur
+P102 | radio | intervento di manutenzione restauro e risanamento conservativo di cui all'articolo 3, comma 1, lettera c) del d.P.R. n. 380/2001, qualora ri
+P103 | radio | intervento di ristrutturazione edilizia di cui all'articolo 3, comma 1, lettera d) del d.P.R. n. 380/2001, ad esclusione dei casi di cui all
+P104 | radio | variante in corso d'opera a permesso di costruire che non incide sui parametri urbanistici e non costituisce variante essenziale (d.P.R. n. 
+P105 | radio | variante in corso d’opera a SCIA che non costituisce variazione essenziale
+P106 | radio | variante in corso d’opera a SCIA che si configura come variazione essenziale ai sensi dell’articolo 32 del d.P.R. n. 380/2001
+P107 | radio | mutamento di destinazione d’uso, nel rispetto delle eventuali normative di settore e specifiche condizioni fissate dagli strumenti urbanisti
+P108 | radio | mutamento di destinazione d'uso, di un intero immobile all’interno della stessa categoria funzionale nelle ipotesi di cui all’art. 23-ter, c
+P109 | REVEALED by 'intervento di manutenzione straordinaria di cui all’articolo' | radio | non comporta mutamento di destinazione d’uso di una singola unità immobiliare o di un intero immobile
+P110 | REVEALED by 'intervento di manutenzione straordinaria di cui all’articolo' | radio | comporta mutamento di destinazione d’uso di una singola unità immobiliare all’interno della stessa categoria funzionale
+P111 | REVEALED by 'intervento di manutenzione straordinaria di cui all’articolo' | radio | comporta mutamento di destinazione d’uso di una singola unità immobiliare, ubicata in immobili ricompresi nelle zone A), B) e C) di cui all'
+P112 | REVEALED by 'intervento di manutenzione straordinaria di cui all’articolo' | radio | comporta mutamento di destinazione d’uso di un intero immobile all’interno della stessa categoria funzionale nelle ipotesi di cui all’art. 2
+P113 | REVEALED by 'intervento di manutenzione restauro e risanamento conservati' | radio | comporta mutamento di destinazione d’uso di un intero immobile all’interno della stessa categoria funzionale nelle ipotesi di cui all’art. 2
+P114 | REVEALED by 'intervento di ristrutturazione edilizia di cui all'articolo ' | radio | comporta mutamento di destinazione d’uso di un intero immobile all’interno della stessa categoria funzionale nelle ipotesi di cui all’art. 2
+P115 | REVEALED by 'variante in corso d'opera a permesso di costruire che non in' | text | permesso di costruire n.
+P116 | REVEALED by 'variante in corso d'opera a permesso di costruire che non in' | date | del
+P117 | REVEALED by 'variante in corso d’opera a SCIA che non costituisce variazi' | text | SCIA n.
+P118 | REVEALED by 'variante in corso d’opera a SCIA che non costituisce variazi' | date | del
+P119 | REVEALED by 'mutamento di destinazione d’uso, nel rispetto delle eventual' | radio | senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di singola unità immobiliare tra le categorie funzionali di cu
+P120 | REVEALED by 'mutamento di destinazione d’uso, nel rispetto delle eventual' | radio | con opere riconducibili agli interventi di cui all'articolo 6-bis di singola unità immobiliare all’interno della stessa categoria funzionale
+P121 | REVEALED by 'mutamento di destinazione d’uso, nel rispetto delle eventual' | radio | con opere riconducibili agli interventi di cui all'articolo 6-bis di singola unità immobiliare tra le categorie funzionali di cui all’artico
+
+## SECTION: d) Destinazione d'uso dell'immobile
+P122 | select | L'intervento interessa l'immobile / l'area avente destinazione d'uso | options=['residenziale', 'industriale', 'commerciale', 'altro']
+P123 | REVEALED by 'L'intervento interessa l'immobile / l'area avente destinazio' | text | specificare
+
+## SECTION: e) Opere su parti comuni o modifiche esterne
+P124 | radio | non riguardano parti comuni
+P125 | radio | riguardano le parti comuni di un fabbricato condominiale (1)
+P126 | radio | riguardano parti comuni di un fabbricato con più proprietà, non costituito in condominio, e dichiara che l'intervento è stato approvato dai 
+P127 | radio | riguardano parti dell'edificio di proprietà comune ma non necessitano di assenso perché, secondo l'art. 1102 c.c., apportano, a spese del ti
+
+## SECTION: f) Regolarità urbanistica e precedenti edilizi
+P128 | radio | che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o pratica/che edilizia/e ¹
+P129 | checkbox | titolo unico (SUAP)
+P130 | text | n. | ctx=titolo unico (SUAP)
+P131 | date | del
+P132 | checkbox | permesso di costruire / licenza edil. / concessione edilizia
+P133 | text | n. | ctx=permesso di costruire / licenza edil. / concessione edilizia
+P134 | date | del
+P135 | checkbox | autorizzazione edilizia
+P136 | text | n. | ctx=autorizzazione edilizia
+P137 | date | del
+P138 | checkbox | comunicazione edilizia (art. 26 l. n. 47/1985)
+P139 | text | n. | ctx=comunicazione edilizia (art. 26 l. n. 47/1985)
+P140 | date | del
+P141 | checkbox | denuncia di inizio attività
+P142 | text | n. | ctx=denuncia di inizio attività
+P143 | date | del
+P144 | checkbox | DIA/SCIA alternativa al permesso di costruire
+P145 | text | n. | ctx=DIA/SCIA alternativa al permesso di costruire
+P146 | date | del
+P147 | checkbox | segnalazione certificata di inizio attività
+P148 | text | n. | ctx=segnalazione certificata di inizio attività
+P149 | date | del
+P150 | checkbox | comunicazione edilizia libera
+P151 | text | n. | ctx=comunicazione edilizia libera
+P152 | date | del
+P153 | checkbox | titolo edilizio in sanatoria con il pagamento della relativa oblazione ed in particolare:
+P154 | checkbox | condono edilizio
+P155 | text | n. | ctx=condono edilizio
+P156 | date | del
+P157 | checkbox | permesso di costruire in sanatoria di cui agli artt. 36 o 36-bis del d.P.R. n. 380/2001
+P158 | text | n. | ctx=permesso di costruire in sanatoria di cui agli artt. 36 o 36
+P159 | date | del
+P160 | checkbox | SCIA in sanatoria di cui all’art. 36-bis d.P.R. n. 380/2001
+P161 | text | n. | ctx=SCIA in sanatoria di cui all’art. 36-bis d.P.R. n. 380/2001
+P162 | date | del
+P163 | checkbox | SCIA in sanatoria per variante in corso d’opera realizzata costituente parziale difformità dal titolo rilasciato prima della data di entrata
+P164 | text | n. | ctx=SCIA in sanatoria per variante in corso d’opera realizzata c
+P165 | date | del
+P166 | checkbox | altro
+P167 | text | specificare
+P168 | text | n.
+P169 | date | del
+P170 | radio | si tratta di immobile realizzato in un’epoca in cui non era obbligatorio un titolo abilitativo e pertanto si allega:
+P171 | checkbox | copia accatastamento di primo impianto o si forniscono i relativi estremi
+P172 | text | n.
+P173 | date | del
+P174 | checkbox | altri documenti probanti (riprese fotografiche, estratti cartografici, documenti di archivio, ecc.) a norma dell’ art.9-bis, comma 1-bis, qu
+P175 | radio | non sono disponibili la copia o gli estremi del titolo abilitativo, ma sussiste un principio di prova documentale del medesimo titolo abilit
+P176 | checkbox | copia accatastamento di primo impianto o si forniscono i relativi estremi
+P177 | text | n.
+P178 | date | del
+P179 | checkbox | altri documenti probanti (riprese fotografiche, estratti cartografici, documenti di archivio, ecc.) a norma dell’ art.9-bis, comma 1-bis, qu
+P180 | radio | che per l’immobile/U.I. sono state irrogate le seguenti sanzioni pecuniarie, previste dagli articoli 33, 34, 37, commi 1, 3, 5 e 6, e 38, in
+P181 | radio | si allega la relativa ricevuta
+P182 | radio | si forniscono gli estremi del pagamento
+P183 | text | di Euro
+P184 | date | a titolo di sanzione pecuniaria, irrogata in data
+P185 | text | Prot. n.
+P186 | date | del
+P187 | radio | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/i di tolleranza/e costruttiva/e di cui all'articolo 34-bis o 34-ter, co
+P188 | checkbox | dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata nella modulistica relativa alla pratica edilizia
+P189 | text | Prot. n.
+P190 | date | del
+P191 | checkbox | dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata agli atti aventi per oggetto trasferimento o costituzione,
+P192 | text | atto di registrazione n.
+P193 | date | in data
+P194 | radio | pienamente conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata
+P195 | radio | conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata, unitamente alla/e sanatoria/e di cui al quadro pre
+
+## SECTION: g) Calcolo del contributo di costruzione
+P196 | radio | l'intervento da realizzare è a titolo gratuito
+P197 | text | ai sensi della seguente normativa
+P198 | radio | l'intervento da realizzare è a titolo oneroso e pertanto
+P199 | radio | chiede allo Sportello unico di effettuare il calcolo del contributo di costruzione e a tal fine allega la documentazione tecnica necessaria 
+P200 | radio | allega il prospetto di calcolo preventivo del contributo di costruzione a firma del tecnico abilitato
+P201 | REVEALED by 'l'intervento da realizzare è a titolo oneroso e pertanto' | radio | si allega l'attestazione del completo versamento del contributo dovuto
+P202 | REVEALED by 'l'intervento da realizzare è a titolo oneroso e pertanto' | radio | si riserva di trasmettere prima dell'inizio dei lavori l'attestazione del completo versamento del contributo dovuto
+P203 | REVEALED by 'l'intervento da realizzare è a titolo oneroso e pertanto' | radio | chiede la rateizzazione del contributo di costruzione secondo le modalità e garanzie stabilite dal Comune
+P204 | REVEALED by 'l'intervento da realizzare è a titolo oneroso e pertanto' | radio | si impegna a corrispondere il costo di costruzione in corso di esecuzione delle opere, con le modalità e le garanzie stabilite dal Comune
+
+## SECTION: h1) Tecnici incaricati
+P205 | checkbox | di aver incaricato, in qualità di direttore/i dei lavori, i soggetti indicati nella sezione DIRETTORE/I LAVORI
+P206 | checkbox | che il/i direttore/i dei lavori sarà/saranno individuati prima dell'inizio dei lavori
+P207 | checkbox | Progettista delle opere architettoniche
+P208 | checkbox | Progettista delle opere strutturali
+P209 | REVEALED by 'di aver incaricato, in qualità di direttore/i dei lavori, i ' | checkbox | Direttore dei lavori delle opere architettoniche
+P210 | REVEALED by 'di aver incaricato, in qualità di direttore/i dei lavori, i ' | checkbox | Direttore dei lavori delle opere strutturali
+P211 | REVEALED by 'Direttore dei lavori delle opere architettoniche' | radio | si
+P212 | REVEALED by 'Direttore dei lavori delle opere architettoniche' | radio | no
+P213 | REVEALED by 'Direttore dei lavori delle opere strutturali' | radio | si
+P214 | REVEALED by 'Direttore dei lavori delle opere strutturali' | radio | no
+P215 | REVEALED by 'Progettista delle opere architettoniche' | radio | tecnico incaricato
+P216 | REVEALED by 'Progettista delle opere architettoniche' | radio | titolare dell'intervento o procuratore
+P217 | REVEALED by 'tecnico incaricato' | text | Cognome
+P218 | REVEALED by 'tecnico incaricato' | text | Nome
+P219 | REVEALED by 'tecnico incaricato' | text | C.F.
+P220 | REVEALED by 'tecnico incaricato' | date | Data di nascita
+P221 | REVEALED by 'tecnico incaricato' | select | Cittadinanza
+P222 | REVEALED by 'tecnico incaricato' | select | Sesso
+P223 | REVEALED by 'tecnico incaricato' | select | Stato
+P224 | REVEALED by 'tecnico incaricato' | select | Provincia
+P225 | REVEALED by 'tecnico incaricato' | text | Comune italiano o Località estera
+P226 | REVEALED by 'tecnico incaricato' | select | Stato
+P227 | REVEALED by 'tecnico incaricato' | select | Provincia
+P228 | REVEALED by 'tecnico incaricato' | text | Comune italiano o Località estera
+P229 | REVEALED by 'tecnico incaricato' | text | Via, Piazza, ecc.
+P230 | REVEALED by 'tecnico incaricato' | text | N.
+P231 | REVEALED by 'tecnico incaricato' | text | C.A.P.
+P232 | REVEALED by 'tecnico incaricato' | select | Stato
+P233 | REVEALED by 'tecnico incaricato' | select | Provincia
+P234 | REVEALED by 'tecnico incaricato' | text | Comune italiano o Località estera
+P235 | REVEALED by 'tecnico incaricato' | text | Via, Piazza, ecc.
+P236 | REVEALED by 'tecnico incaricato' | text | N.
+P237 | REVEALED by 'tecnico incaricato' | text | C.A.P.
+P238 | REVEALED by 'tecnico incaricato' | text | Iscritto all'ordine/collegio
+P239 | REVEALED by 'tecnico incaricato' | text | di
+P240 | REVEALED by 'tecnico incaricato' | text | al n.
+P241 | REVEALED by 'tecnico incaricato' | text | Telefono
+P242 | REVEALED by 'tecnico incaricato' | text | fax
+P243 | REVEALED by 'tecnico incaricato' | text | cell.
+P244 | REVEALED by 'tecnico incaricato' | text | posta elettronica certificata
+P245 | REVEALED by 'titolare dell'intervento o procuratore' | select | Stato
+P246 | REVEALED by 'titolare dell'intervento o procuratore' | select | Provincia
+P247 | REVEALED by 'titolare dell'intervento o procuratore' | text | Comune italiano o Località estera
+P248 | REVEALED by 'titolare dell'intervento o procuratore' | text | Via, Piazza, ecc.
+P249 | REVEALED by 'titolare dell'intervento o procuratore' | text | N.
+P250 | REVEALED by 'titolare dell'intervento o procuratore' | text | C.A.P.
+P251 | REVEALED by 'titolare dell'intervento o procuratore' | text | Iscritto all'ordine/collegio
+P252 | REVEALED by 'titolare dell'intervento o procuratore' | text | di
+P253 | REVEALED by 'titolare dell'intervento o procuratore' | text | al n.
+P254 | REVEALED by 'titolare dell'intervento o procuratore' | text | Telefono
+P255 | REVEALED by 'titolare dell'intervento o procuratore' | text | fax
+P256 | REVEALED by 'titolare dell'intervento o procuratore' | text | cell.
+P257 | REVEALED by 'titolare dell'intervento o procuratore' | text | posta elettronica certificata
+P258 | REVEALED by 'Progettista delle opere strutturali' | text | Cognome
+P259 | REVEALED by 'Progettista delle opere strutturali' | text | Nome
+P260 | REVEALED by 'Progettista delle opere strutturali' | text | C.F.
+P261 | REVEALED by 'Progettista delle opere strutturali' | date | Data di nascita
+P262 | REVEALED by 'Progettista delle opere strutturali' | select | Cittadinanza
+P263 | REVEALED by 'Progettista delle opere strutturali' | select | Sesso
+P264 | REVEALED by 'Progettista delle opere strutturali' | select | Stato
+P265 | REVEALED by 'Progettista delle opere strutturali' | select | Provincia
+P266 | REVEALED by 'Progettista delle opere strutturali' | text | Comune italiano o Località estera
+P267 | REVEALED by 'Progettista delle opere strutturali' | select | Stato
+P268 | REVEALED by 'Progettista delle opere strutturali' | select | Provincia
+P269 | REVEALED by 'Progettista delle opere strutturali' | text | Via, Piazza, ecc.
+P270 | REVEALED by 'Progettista delle opere strutturali' | text | N.
+P271 | REVEALED by 'Progettista delle opere strutturali' | text | C.A.P.
+P272 | REVEALED by 'Progettista delle opere strutturali' | select | Stato
+P273 | REVEALED by 'Progettista delle opere strutturali' | select | Provincia
+P274 | REVEALED by 'Progettista delle opere strutturali' | text | Via, Piazza, ecc.
+P275 | REVEALED by 'Progettista delle opere strutturali' | text | N.
+P276 | REVEALED by 'Progettista delle opere strutturali' | text | C.A.P.
+P277 | REVEALED by 'Progettista delle opere strutturali' | text | Iscritto all'ordine/collegio
+P278 | REVEALED by 'Progettista delle opere strutturali' | text | di
+P279 | REVEALED by 'Progettista delle opere strutturali' | text | al n.
+P280 | REVEALED by 'Progettista delle opere strutturali' | text | Telefono
+P281 | REVEALED by 'Progettista delle opere strutturali' | text | fax
+P282 | REVEALED by 'Progettista delle opere strutturali' | text | cell.
+P283 | REVEALED by 'Progettista delle opere strutturali' | text | posta elettronica certificata
+
+## SECTION: H2) Altri tecnici incaricati
+P284 | checkbox | che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori
+P285 | checkbox | di aver incaricato in qualità di altri tecnici, i soggetti indicati nella sezione seguente
+P286 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | Incaricato della
+P287 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | Cognome
+P288 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | Nome
+P289 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | C.F.
+P290 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | date | Data di nascita
+P291 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | select | Cittadinanza
+P292 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | select | Sesso
+P293 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | select | Stato
+P294 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | select | Provincia
+P295 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | Comune italiano o Località estera
+P296 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | select | Stato
+P297 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | select | Provincia
+P298 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | Comune italiano o Località estera
+P299 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | Via, Piazza, ecc.
+P300 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | N.
+P301 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | C.A.P.
+P302 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | select | Stato
+P303 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | select | Provincia
+P304 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | Comune italiano o Località estera
+P305 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | Via, Piazza, ecc.
+P306 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | N.
+P307 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | C.A.P.
+P308 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | radio | si
+P309 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | radio | no
+P310 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | radio | si
+P311 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | radio | no
+P312 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | Estremi dell'abilitazione (se per lo svolgimento dell'attività oggetto dell'incarico è richiesta una specifica autorizzazione iscrizione in 
+P313 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | Telefono
+P314 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | fax
+P315 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | cell.
+P316 | REVEALED by 'di aver incaricato in qualità di altri tecnici, i soggetti i' | text | posta elettronica certificata
+P317 | REVEALED by 'si' | text | Iscritto all'ordine/collegio
+P318 | REVEALED by 'si' | text | di
+P319 | REVEALED by 'si' | text | al n.
+P320 | REVEALED by 'si' | text | codice fiscale / p. IVA
+P321 | REVEALED by 'si' | select | Iscritta alla C.C.I.A.A. di
+P322 | REVEALED by 'si' | text | con sede in
+
+## SECTION: i) Impresa esecutrice dei lavori
+P323 | radio | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno individuata/e prima dell'inizio dei lavori
+P324 | radio | i lavori, in quanto opere di modesta entità che non interessano le specifiche normative di settore, sono eseguiti/sono stati eseguiti in pri
+P325 | radio | i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata/e alla seguente sezione
+P326 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | Ragione sociale
+P327 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | codice fiscale / p. IVA
+P328 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | select | Iscritta alla C.C.I.A.A. di
+P329 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | n.
+P330 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | con sede in
+P331 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | select | provincia
+P332 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | select | stato
+P333 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | Via, Piazza, ecc.
+P334 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | N.
+P335 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | C.A.P.
+P336 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | Cognome
+P337 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | Nome
+P338 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | codice fiscale
+P339 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | nato a
+P340 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | select | provincia
+P341 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | select | stato
+P342 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | date | nato il
+P343 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | Telefono
+P344 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | fax
+P345 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | cell.
+P346 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | text | posta elettronica
+P347 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | checkbox | Cassa edile
+P348 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | checkbox | INPS
+P349 | REVEALED by 'i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e' | checkbox | INAIL
+P350 | REVEALED by 'Cassa edile' | text | sede di
+P351 | REVEALED by 'Cassa edile' | text | codice impresa n.
+P352 | REVEALED by 'Cassa edile' | text | codice cassa n.
+P353 | REVEALED by 'INPS' | text | Matr./Pos. Contr. n.
+P354 | REVEALED by 'INAIL' | text | sede di
+P355 | REVEALED by 'INAIL' | text | codice impresa n.
+P356 | REVEALED by 'INAIL' | text | pos. assicurativa territoriale n.
+
+## SECTION: l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
+P357 | radio | non ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008)
+P358 | radio | ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza nei luoghi di lavoro (d.lgs. n. 81/2008) e pertanto:
+P359 | radio | dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-giorno ed i lavori non comportano i rischi particolari di cui all'alleg
+P360 | radio | dichiara che l'entità presunta del cantiere è pari o superiore a 200 uomini-giorno o i lavori comportano i rischi particolari di cui all'all
+P361 | radio | dichiara che l'intervento non è soggetto all'invio della notifica
+P362 | radio | dichiara che l'intervento è soggetto all'invio della notifica
+P363 | radio | ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza sul luogo di lavoro (d.lgs. n. 81/2008), ma si riserva di pr
+
+## SECTION: m) Diritti di terzi
+P364 | checkbox | dichiara di essere consapevole che la presente segnalazione non può comportare limitazione dei diritti dei terzi, fermo restando quanto prev
+
+## SECTION: Note
+P365 | textarea | 5000 Caratteri restanti | ctx=Note:
+
+## SECTION: Asseverazione SCIA - Tipologia di intervento, descrizione opere
+P366 | text | Cognome
+P367 | text | Nome
+P368 | text | Iscritto all'ordine / collegio
+P369 | text | di
+P370 | text | al n.
+P371 | checkbox | che le opere in progetto sono subordinate a Segnalazione Certificata di Inizio Attività in quanto rientrano nella seguente tipologia di inte
+P372 | checkbox | la presente SCIA è presentata in sanatoria secondo quanto asseverato al successivo quadro “Sanatoria e regolarizzazioni per interventi già r
+P373 | textarea | 500 Caratteri restanti | ctx=e che l’intervento sopra indicato o da sanare consiste in:
+P374 | REVEALED by 'che le opere in progetto sono subordinate a Segnalazione Cer' | checkbox | intervento di restauro e risanamento conservativo di cui all'articolo 3, comma 1, lettera c) del d.P.R. n. 380/2001, qualora riguardi parti 
+P375 | REVEALED by 'che le opere in progetto sono subordinate a Segnalazione Cer' | checkbox | intervento di ristrutturazione edilizia di cui all'articolo 3, comma 1, lettera d), del d.P.R. n. 380/2001, ad esclusione dei casi di cui al
+P376 | REVEALED by 'che le opere in progetto sono subordinate a Segnalazione Cer' | checkbox | variante in corso d’opera a permessi di costruire, di cui all'articolo 22, commi 2 e 2-bis, del d.P.R. n. 380/2001, (d.P.R. n. 380/2001, art
+P377 | REVEALED by 'che le opere in progetto sono subordinate a Segnalazione Cer' | checkbox | variante in corso d’opera a SCIA che si configura come variazione essenziale ai sensi dell’art. 32 del d.P.R. n. 380/2001
+P378 | REVEALED by 'che le opere in progetto sono subordinate a Segnalazione Cer' | checkbox | variante in corso d’opera a SCIA che non costituisce variazione essenziale
+P379 | REVEALED by 'che le opere in progetto sono subordinate a Segnalazione Cer' | checkbox | mutamento di destinazione d'uso, nel rispetto delle eventuali normative di settore e delle specifiche condizioni fissate dagli strumenti urb
+P380 | REVEALED by 'intervento di manutenzione straordinaria di cui all'articolo' | radio | Si specifica che l’intervento non comporta mutamento di destinazione d’uso
+P381 | REVEALED by 'intervento di manutenzione straordinaria di cui all'articolo' | radio | Si specifica che l’intervento comporta mutamento di destinazione d’uso
+P382 | REVEALED by 'intervento di restauro e risanamento conservativo di cui all' | radio | Si specifica che l’intervento non comporta mutamento di destinazione d’uso
+P383 | REVEALED by 'intervento di restauro e risanamento conservativo di cui all' | radio | Si specifica che l’intervento comporta mutamento di destinazione d’uso
+P384 | REVEALED by 'intervento di ristrutturazione edilizia di cui all'articolo ' | radio | Si specifica che l’intervento non comporta mutamento di destinazione d’uso
+P385 | REVEALED by 'intervento di ristrutturazione edilizia di cui all'articolo ' | radio | Si specifica che l’intervento comporta mutamento di destinazione d’uso
+P386 | REVEALED by 'mutamento di destinazione d'uso, nel rispetto delle eventual' | radio | senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di singola unità immobiliare all’interno della stessa categori
+P387 | REVEALED by 'mutamento di destinazione d'uso, nel rispetto delle eventual' | radio | senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di singola unità immobiliare tra le categorie funzionali di cu
+P388 | REVEALED by 'mutamento di destinazione d'uso, nel rispetto delle eventual' | radio | con opere riconducibili agli interventi di cui all'articolo 6-bis di singola unità immobiliare all’interno della stessa categoria funzionale
+P389 | REVEALED by 'mutamento di destinazione d'uso, nel rispetto delle eventual' | radio | con opere riconducibili agli interventi di cui all'articolo 6-bis di singola unità immobiliare tra le categorie funzionali di cui all’artico
+P390 | REVEALED by 'mutamento di destinazione d'uso, nel rispetto delle eventual' | radio | senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di un intero immobile all’interno della stessa categoria funzi
+P391 | REVEALED by 'mutamento di destinazione d'uso, nel rispetto delle eventual' | radio | con opere riconducibili agli interventi di cui all'articolo 6-bis di un intero immobile all’interno della stessa categoria funzionale nelle 
+
+## SECTION: Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione
+P392 | radio | si
+P393 | radio | no
+P394 | radio | si
+P395 | radio | no
+P396 | radio | si
+P397 | radio | no
+P398 | REVEALED by 'si' | checkbox | corrisponde allo stato legittimo come risultante
+P399 | REVEALED by 'corrisponde allo stato legittimo come risultante' | checkbox | dal/i titolo/i o dalla/e pratica/che edilizia/e, dall’avvenuto pagamento di sanzione/i pecuniaria/e e dalla/e dichiarazione/i di tolleranza 
+P400 | REVEALED by 'corrisponde allo stato legittimo come risultante' | checkbox | dalle tolleranze di cui all’articolo 34-bis accertate con la presente Relazione tecnica di asseverazione, di cui al quadro “Dichiarazione di
+P401 | REVEALED by 'corrisponde allo stato legittimo come risultante' | checkbox | dalla sanatoria di cui al successivo quadro “Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione”.
+P402 | REVEALED by 'si' | checkbox | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO:
+P403 | REVEALED by 'si' | checkbox | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO:
+P404 | REVEALED by 'si' | checkbox | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2:
+P405 | REVEALED by 'si' | checkbox | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 2-BIS:
+P406 | REVEALED by 'si' | checkbox | TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4:
+P407 | REVEALED by 'si' | radio | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4)
+P408 | REVEALED by 'si' | radio | trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che la tolleranza cos
+P409 | REVEALED by 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIM' | radio | 2%, per le U.I. > 500 mq di superficie utile ;
+P410 | REVEALED by 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIM' | radio | 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile;
+P411 | REVEALED by 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIM' | radio | 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;
+P412 | REVEALED by 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIM' | radio | 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;
+P413 | REVEALED by 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIM' | radio | 6%, per le U.I. < 60 mq di superficie utile;
+P414 | REVEALED by 'trattandosi di immobile ubicato in zona sismica a media o al' | radio | non ha rilevanza strutturale;
+P415 | REVEALED by 'trattandosi di immobile ubicato in zona sismica a media o al' | radio | ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la mede
+P416 | REVEALED by 'si' | checkbox | un intervento soggetto a SCIA in corso di esecuzione
+P417 | REVEALED by 'si' | checkbox | una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della data di entrata in vigore della legge 28 gennaio 19
+P418 | REVEALED by 'si' | checkbox | un intervento soggetto a SCIA
+P419 | REVEALED by 'si' | checkbox | un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in difformità da essa, che risulta conforme alla disciplina urbanist
+P420 | REVEALED by 'si' | radio | dichiara che l’intervento da sanare non richiede variazione dell’iscrizione catastale
+P421 | REVEALED by 'si' | radio | comunica gli estremi della dichiarazione per l’iscrizione al catasto
+P422 | REVEALED by 'si' | radio | si impegna a presentare la dichiarazione per l’iscrizione al catasto successivamente all’efficacia della pratica di sanatoria
+P423 | REVEALED by 'un intervento soggetto a SCIA in corso di esecuzione' | date | i cui lavori sono stati iniziati in data
+P424 | REVEALED by 'una variante in corso d'opera, in parziale difformità dal ti' | radio | dà atto che la data/epoca di realizzazione dell’intervento
+P425 | REVEALED by 'una variante in corso d'opera, in parziale difformità dal ti' | radio | attesta che la data/epoca di realizzazione dell’intervento
+P426 | REVEALED by 'una variante in corso d'opera, in parziale difformità dal ti' | radio | determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguaglio a seguito di quantificazione da parte del respo
+P427 | REVEALED by 'un intervento soggetto a SCIA' | date | realizzato in data
+P428 | REVEALED by 'un intervento soggetto a SCIA' | checkbox | determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguaglio a seguito di quantificazione da parte del respo
+P429 | REVEALED by 'un intervento soggetto a SCIA' | text | in euro
+P430 | REVEALED by 'un intervento soggetto a SCIA realizzato in assenza della SC' | radio | dà atto che la data/epoca di realizzazione dell’intervento
+P431 | REVEALED by 'un intervento soggetto a SCIA realizzato in assenza della SC' | radio | attesta che la data/epoca di realizzazione dell’intervento
+P432 | REVEALED by 'un intervento soggetto a SCIA realizzato in assenza della SC' | radio | determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguaglio a seguito di quantificazione da parte del respo
+P433 | REVEALED by 'un intervento soggetto a SCIA realizzato in assenza della SC' | radio | ai fini della sanatoria, la presente SCIA:
+P434 | REVEALED by 'un intervento soggetto a SCIA realizzato in assenza della SC' | checkbox | Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla SCIA, ai sensi dell’art. 36-bis, comma 3-bis:
+P435 | REVEALED by 'comunica gli estremi della dichiarazione per l’iscrizione al' | text | presentata con prot.
+P436 | REVEALED by 'comunica gli estremi della dichiarazione per l’iscrizione al' | date | in data
+
+## SECTION: Asseverazione SCIA - Dati immobile, strumentazione urbanistica, barriere architettoniche
+P437 | text | Mq | ctx=Superficie
+P438 | text | Mc | ctx=Volumetria
+P439 | text | N. | ctx=Numero dei piani
+P440 | checkbox | PUC
+P441 | checkbox | PUA
+P442 | checkbox | PRG
+P443 | checkbox | PIANO PARTICOLAREGGIATO
+P444 | checkbox | PIANO DI RECUPERO
+P445 | checkbox | P.I.P.
+P446 | checkbox | P.E.E.P.
+P447 | checkbox | ALTRO
+P448 | checkbox | non è soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/2001 e del d.m. n. 236/1989 o della corrispondente normativa
+P449 | checkbox | interessa un edificio privato aperto al pubblico e che le opere previste sono conformi all'articolo 82 del d.P.R. n. 380/2001 o della corris
+P450 | checkbox | è soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/2001 e del d.m. n. 236/1989 o della corrispondente normativa reg
+P451 | checkbox | accessibilità
+P452 | checkbox | visitabilità
+P453 | checkbox | adattabilità
+P454 | checkbox | pur essendo soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/2001 e del d.m. n. 236/1989 o della corrispondente nor
+P455 | checkbox | presenta contestualmente alla SCIA condizionata, la documentazione per la richiesta di deroga come meglio descritto nella relazione tecnica 
+P456 | REVEALED by 'PUC' | text | Zona
+P457 | REVEALED by 'PUC' | text | Art.
+P458 | REVEALED by 'PUA' | text | Zona
+P459 | REVEALED by 'PUA' | text | Art.
+P460 | REVEALED by 'PRG' | text | Specificare
+P461 | REVEALED by 'PRG' | text | Zona
+P462 | REVEALED by 'PRG' | text | Art.
+P463 | REVEALED by 'PIANO PARTICOLAREGGIATO' | text | Specificare
+P464 | REVEALED by 'PIANO PARTICOLAREGGIATO' | text | Zona
+P465 | REVEALED by 'PIANO PARTICOLAREGGIATO' | text | Art.
+P466 | REVEALED by 'PIANO DI RECUPERO' | text | Zona
+P467 | REVEALED by 'PIANO DI RECUPERO' | text | Art.
+P468 | REVEALED by 'P.I.P.' | text | Zona
+P469 | REVEALED by 'P.I.P.' | text | Art.
+P470 | REVEALED by 'P.E.E.P.' | text | Zona
+P471 | REVEALED by 'P.E.E.P.' | text | Art.
+P472 | REVEALED by 'ALTRO' | text | Zona
+P473 | REVEALED by 'ALTRO' | text | Art.
+
+## SECTION: Asseverazione SCIA - Sicurezza impianti, consumi energetici
+P474 | radio | Non comporta l'installazione, la trasformazione o l'ampliamento di impianti tecnologici
+P475 | radio | Comporta l'installazione, la trasformazione o l'ampliamento dei seguenti impianti tecnologici:
+P476 | checkbox | di produzione, trasformazione, trasporto, distribuzione, utilizzazione dell'energia elettrica, di protezione contro le scariche atmosferiche
+P477 | checkbox | radiotelevisivi, antenne ed elettronici in genere
+P478 | checkbox | di riscaldamento, di climatizzazione, di condizionamento e di refrigerazione di qualsiasi natura o specie, comprese le opere di evacuazione 
+P479 | checkbox | idrici e sanitari di qualsiasi natura o specie
+P480 | checkbox | per la distribuzione e l'utilizzazione di gas di qualsiasi tipo, comprese le opere di evacuazione dei prodotti della combustione e ventilazi
+P481 | checkbox | impianti di sollevamento di persone o di cose per mezzo di ascensori, di montacarichi, di scale mobili e simili
+P482 | checkbox | di protezione antincendio
+P483 | checkbox | altre tipologie di impianti, anche definite dalla corrispondente normativa regionale
+P484 | radio | non è soggetto agli obblighi di presentazione del progetto
+P485 | radio | è soggetto agli obblighi di presentazione del progetto e pertanto
+P486 | checkbox | allega i relativi elaborati
+P487 | radio | non è soggetto al deposito del progetto e della relazione tecnica di cui all'articolo 125 del d.P.R. n. 380/2001 e del d.lgs. n. 192/2005
+P488 | radio | è soggetto al deposito del progetto e della relazione tecnica di cui all'articolo 125 del d.P.R. n. 380/2001 e del d.lgs. n. 192/2005, perta
+P489 | checkbox | si allega la relazione tecnica sul rispetto delle prescrizioni in materia di risparmio energetico e la documentazione richiesta dalla legge
+P490 | radio | non è soggetto all'applicazione del d.lgs. n. 28/2011, in quanto non riguarda edifici di nuova costruzione o edifici sottoposti ad una ristr
+P491 | radio | è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto:
+P492 | checkbox | il rispetto delle prescrizioni in materia di utilizzo di fonti di energia rinnovabili è indicato negli elaborati progettuali e nella relazio
+P493 | checkbox | l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è evidenziata nella relazione tecnica dovuta ai sensi d
+P494 | radio | ricade nell'articolo 14, comma 6, del d.lgs. n. 102/2014 in merito al computo degli spessori delle murature, nonché alla deroga alle distanz
+P495 | checkbox | si certifica nella relazione tecnica una riduzione minima del 20 per cento dell'indice di prestazione energetica previsto dal d.lgs. n. 192/
+P496 | radio | ricade nell'articolo 14, comma 7, del d.lgs. n. 102/2014 in merito alle deroga alle distanze minime e alle altezze massime degli edifici, pe
+P497 | checkbox | si certifica nella relazione tecnica una riduzione minima del 10 per cento del limite di trasmittanza previsto dal d.lgs. n. 192/2005
+P498 | radio | ricade nell'articolo 12, comma 1, del d.lgs. n. 28/2011 in merito al bonus volumetrico del 5 per cento, pertanto:
+P499 | checkbox | si certifica nella relazione tecnica una copertura dei consumi di calore, di elettricità e per il raffrescamento, mediante energia prodotta 
+P500 | radio | L'intervento non ricade in alcuno dei casi sopra elencati
+
+## SECTION: Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi
+P501 | radio | Non rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1995
+P502 | radio | Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1995, integrato con i contenuti dell'articolo 4 del d.P.R. n. 227/2011 e
+P503 | checkbox | documentazione di impatto acustico (art. 8, commi 2 e 4, l. n. 447/1995)
+P504 | checkbox | valutazione previsionale di clima acustico (art. 8, comma 3, l. n. 447/1995)
+P505 | checkbox | dichiarazione sostitutiva dell'atto di notorietà, a firma del titolare, relativa al rispetto dei limiti stabiliti dal documento di classific
+P506 | checkbox | la documentazione di previsione di impatto acusticocon l'indicazione delle misure previste per ridurre o eliminare le emissioni sonore, nel 
+P507 | radio | non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997
+P508 | radio | rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997
+P509 | checkbox | non sono soggette alla normativa vigente relativa ai materiali da scavo
+P510 | checkbox | le opere comportano la produzione di materiali da scavo considerati come sottoprodotti sulla base della normativa vigente
+P511 | radio | le opere comportano la produzione di materiali da scavo per un volume inferiore o uguale a quello previsto dalla normativa vigente ovvero (p
+P512 | radio | le opere comportano la produzione di materiali da scavo per un volume inferiore o uguale a 6000 mc e sono soggette a VIA o AIA, e pertanto, 
+P513 | checkbox | si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo dell'assenso al Piano di Utilizzo dei materiali da scavo,
+P514 | text | rilasciato da:
+P515 | text | con prot.
+P516 | date | in data
+P517 | checkbox | comportano la produzione di materiali da scavo che saranno riutilizzati nello stesso luogo di produzione
+P518 | checkbox | riguardano interventi di demolizione di edifici o altri manufatti preesistenti e producono rifiuti la cui gestione è disciplinata ai sensi d
+P519 | checkbox | comportano la produzione di materiali da scavo che saranno gestiti dall'interessato come rifiuti
+P520 | radio | non è soggetto alle norme di prevenzione incendi
+P521 | radio | è soggetto alle norme tecniche di prevenzione incendi e le stesse sono rispettate nel progetto
+P522 | radio | presenta caratteristiche tali da non consentire l'integrale osservanza delle regole tecniche di prevenzione incendi
+P523 | checkbox | si allega documentazione necessaria all'ottenimento della deroga
+P524 | radio | non è soggetto alla valutazione del progetto da parte del Comando Provinciale dei Vigili del Fuoco ai sensi del d.P.R. n. 151/2011
+P525 | radio | è soggetto alla valutazione del progetto da parte del Comando Provinciale dei Vigili del Fuoco, ai sensi dell'articolo 3 del d.P.R. n. 151/2
+P526 | checkbox | si allega la documentazione necessaria alla valutazione del progetto
+P527 | radio | costituisce variante e il sottoscritto assevera che le modifiche non costituiscono variazione dei requisiti di sicurezza antincendio già app
+P528 | text | rilasciato con prot.
+P529 | date | In data
+
+## SECTION: Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica
+P530 | radio | non interessano parti di edifici con presenza di fibre di amianto
+P531 | radio | interessano parti di edifici con presenza di fibre di amianto e che è stato predisposto, ai sensi dei commi 2 e 5 dell'articolo 256 del d.lg
+P532 | checkbox | in allegato alla presente relazione di asseverazione
+P533 | radio | è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste
+P534 | radio | non è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe previste
+P535 | checkbox | Si allega documentazione per la richiesta di deroga
+P536 | radio | è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ricade nelle ipotesi di cui all’articolo 24, comma 5-bis DPR 38
+P537 | radio | non prevede la realizzazione di opere di conglomerato cementizio armato, normale e precompresso ed a struttura metallica
+P538 | radio | prevede la realizzazione di opere di conglomerato cementizio armato, normale e precompresso ed a struttura metallica
+P539 | checkbox | si allega la denuncia di cui all'articolo 65 del d.P.R. n. 380/2001
+P540 | radio | non prevede opere da denunciare o autorizzare ai sensi degli articoli 93 e 94 del d.P.R. n. 380/2001 o della corrispondente normativa region
+P541 | radio | costituisce una variante non sostanziale riguardante parti strutturali (art. 12 del Regolamento 4/2010) relativa ad un progetto esecutivo de
+P542 | text | con prot.
+P543 | date | in data
+P544 | radio | prevede opere in zona sismica da denunciare ai sensi dell'articolo 93 del d.P.R. n. 380/2001 o della corrispondente normativa regionale (L.R
+P545 | checkbox | Si allega documentazione relativa alla denuncia dei lavori in zona sismica
+P546 | radio | prevede opere strutturali soggette ad autorizzazione sismica ai sensi dell'articolo 94 del d.P.R. n. 380/2001 o della corrispondente normati
+P547 | checkbox | Si allega la documentazione necessaria per il rilascio dell'autorizzazione sismica
+P548 | REVEALED by 'è conforme ai requisiti igienico-sanitari previsti dalla nor' | checkbox | locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superiore a 2,40 metri (art. 24, comma 5-bis, lett a) DPR 380/2001);
+P549 | REVEALED by 'è conforme ai requisiti igienico-sanitari previsti dalla nor' | checkbox | alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferiore a 28 metri quadrati ma uguale o superiore a 20 m
+P550 | REVEALED by 'è conforme ai requisiti igienico-sanitari previsti dalla nor' | checkbox | alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferiore a 38 metri quadrati ma uguale o superiore a 28 m
+P551 | REVEALED by 'locali con un’altezza minima interna inferiore a 2,70 metri ' | checkbox | è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a g
+P552 | REVEALED by 'alloggio monostanza per due persone con una superficie minim' | checkbox | è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di ristrutturazione con soluzioni alternative atte a g
+
+## SECTION: Asseverazione SCIA - Tutela Storico Ambientale
+P553 | radio | NON ricade in zona sottoposta a tutela
+P554 | radio | ricade in zona tutelata, ma le opere non comportano alterazione dei luoghi o dell'aspetto esteriore degli edifici ovvero non sono soggetti a
+P555 | radio | ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspetto esteriore degli edifici
+P556 | radio | è assoggettato al procedimento semplificato di autorizzazione paesaggistica, in quanto di lieve entità, secondo quanto previsto dal d.P.R. n
+P557 | checkbox | Si allega la relazione paesaggistica semplificata e la documentazione necessaria ai fini del rilascio dell'autorizzazione paesaggistica semp
+P558 | radio | è assoggettato al procedimento ordinario di autorizzazione paesaggistica
+P559 | checkbox | Si allega la relazione paesaggistica e la documentazione necessaria ai fini del rilascio dell'autorizzazione paesaggistica
+P560 | radio | è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all’articolo 36-bis del DPR 380/2001 e
+P561 | checkbox | si allega documentazione necessaria ai fini del rilascio del parere vincolante (vedi quadro della documentazione allegata - art. 36-bis comm
+P562 | radio | non è sottoposto a tutela
+P563 | radio | è sottoposto a tutela
+P564 | checkbox | Si allega la documentazione necessaria ai fini del rilascio del parere/nulla osta
+P565 | radio | non ricade in area tutelata
+P566 | radio | ricade in area tutelata, ma le opere non comportano alterazione dei luoghi o dell'aspetto esteriore degli edifici
+P567 | radio | è sottoposto alle relative disposizioni
+P568 | checkbox | Si allega la documentazione necessaria ai fini del rilascio del parere/nulla osta
+
+## SECTION: Asseverazione SCIA - Tutela Ecologica
+P569 | radio | non è sottoposta a tutela
+P570 | radio | è sottoposta a tutela e l'intervento rientra nei casi eseguibili senza autorizzazione di cui al comma 5 dell'articolo 61 del d.lgs. n. 152/2
+P571 | radio | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione di cui al comma 5 dell'articolo 61 del d.lgs. n. 152/2006 e al r.d.l. 
+P572 | checkbox | Si allega la documentazione necessaria ai fini del rilascio dell'autorizzazione
+P573 | radio | non è sottoposta a tutela
+P574 | radio | è sottoposta a tutela ed è necessario il rilascio dell'autorizzazione di cui al comma 2 dell'articolo 115 del d.lgs. n. 152/2006 e al r.d. n
+P575 | checkbox | Si allega la documentazione necessaria ai fini del rilascio dell'autorizzazione
+P576 | radio | non è soggetto a Valutazione d'incidenza (VINCA)
+P577 | radio | è soggetto a Valutazione d'incidenza (VINCA)
+P578 | checkbox | Si allega la documentazione necessaria all'approvazione del progetto
+P579 | radio | l'intervento non ricade nella fascia di rispetto
+P580 | radio | l'intervento ricade nella fascia di rispetto ed è consentito
+P581 | radio | l'intervento ricade in fascia di rispetto cimiteriale e non è consentito
+P582 | checkbox | Si allega la documentazione necessaria per la richiesta di deroga
+
+## SECTION: Asseverazione SCIA - Altri Vincoli di Tutela Ecologica
+P583 | radio | nel comune NON è presente un'attività a rischio d'incidente rilevante
+P584 | radio | nel comune E' presente un'attività a rischio d'incidente rilevante e la relativa “area di danno” è individuata nella pianificazione comunale
+P585 | radio | l'intervento NON ricade nell'area di danno
+P586 | radio | l'intervento ricade in area di danno
+P587 | checkbox | si allega la documentazione necessaria alla valutazione del progetto dal Comitato Tecnico Regionale
+P588 | radio | nel comune E' presente un'attività a rischio d'incidente rilevante e la relativa “area di danno” non è individuata nella pianificazione comu
+P589 | checkbox | si allega la documentazione necessaria alla valutazione del progetto dal Comitato Tecnico Regionale
+P590 | radio | Fascia di rispetto dei depuratori (punto 1.2, allegato 4 della deliberazione 4 febbraio 1977 del Comitato dei Ministri per la tutela delle a
+P591 | radio | Altro
+P592 | checkbox | si allegano le autocertificazioni relative alla conformità dell'intervento per i relativi vincoli
+P593 | checkbox | si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso
+P594 | REVEALED by 'Altro' | text | Specificare:
+
+## SECTION: Asseverazione SCIA - Tutela Funzionale
+P595 | checkbox | stradale (d.m. n. 1404/1968, d.P.R. n. 495/92)
+P596 | checkbox | ferroviario (d.P.R. n. 753/1980)
+P597 | checkbox | elettrodotto (d.P.C.M. 8 luglio 2003)
+P598 | checkbox | gasdotto (d.m. 24 novembre 1984)
+P599 | checkbox | militare (d.lgs. n. 66/2010)
+P600 | checkbox | aeroportuale (piano di rischio ai sensi dell'art. 707 del Codice della navigazione, specifiche tecniche ENAC)
+P601 | checkbox | Altro
+P602 | checkbox | si allegano le autocertificazioni relative alla conformità dell'intervento per i relativi vincoli
+P603 | checkbox | si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso
+P604 | REVEALED by 'stradale (d.m. n. 1404/1968, d.P.R. n. 495/92)' | text | Specificare:
+P605 | REVEALED by 'Altro' | text | Specificare:
+
+## SECTION: Asseverazione SCIA - NOTE
+P606 | textarea | 500 Caratteri restanti | ctx=Note:
+
+## SECTION: Dichiarazione relativa ai diritti di segreteria/istruttori
+P607 | radio | non sono dovuti oneri quali diritti o spese
+P608 | radio | poiché non previsti dal tariffario
+P609 | radio | poiché esentati
+P610 | radio | sono dovuti oneri quali diritti o spese
+P611 | text | per un totale di Euro
+P612 | radio | pagamento on line alla pagina successiva "Pagamento oneri"

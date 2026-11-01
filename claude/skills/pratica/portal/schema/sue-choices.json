@@ -1,0 +1,1816 @@
+{
+ "cila": [
+  {
+   "id": "000",
+   "at": "dichiarazioni/titolo_possesso",
+   "alternatives": [
+    "titolare_esclusivo",
+    "non_titolare_esclusivo"
+   ]
+  },
+  {
+   "id": "001",
+   "at": "dichiarazioni/opere_previste/[opere_previste_ctype]",
+   "alternatives": [
+    "no_parti_comuni",
+    "parti_comuni_condominio",
+    "parti_comuni_fabbricato_multiprop",
+    "parti_comuni_no_assenso"
+   ]
+  },
+  {
+   "id": "002",
+   "at": "comunicazioni/presentazione_inizio_lavori/[interventi_soggetti_acila_ctype]",
+   "alternatives": [
+    "no_altri_atti",
+    "comunicazioni_certificate",
+    "domanda_contestuale_cila"
+   ]
+  },
+  {
+   "id": "003",
+   "at": "comunicazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/intervento_dichiarazione_progettista",
+   "alternatives": [
+    "data_inizio_lavori",
+    "inizio_lavori_comunicazione_suap"
+   ]
+  },
+  {
+   "id": "004",
+   "at": "comunicazioni/qualificazione_intervento/[qualificazione_intervento_ctype]",
+   "alternatives": [
+    "intervento_corso_di_esecuzione_data_inizio_lavori",
+    "intervento_con_sanzione_data_lavori"
+   ]
+  },
+  {
+   "id": "005",
+   "at": "comunicazioni/qualificazione_intervento/[qualificazione_intervento_ctype]",
+   "alternatives": [
+    "procedimento_automatizzato",
+    "procedimento_ordinario"
+   ]
+  },
+  {
+   "id": "006",
+   "at": "comunicazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali",
+   "alternatives": [
+    "fabbricati",
+    "terreni"
+   ]
+  },
+  {
+   "id": "007",
+   "at": "comunicazioni/calcolo_contributo_costruzione/[calcolo_contributo_ctype]",
+   "alternatives": [
+    "titolo_gratuito",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "008",
+   "at": "comunicazioni/calcolo_contributo_costruzione/[calcolo_contributo_ctype]/titolo_oneroso",
+   "alternatives": [
+    "ric_versamento",
+    "versamento_inizio_lavori"
+   ]
+  },
+  {
+   "id": "009",
+   "at": "comunicazioni/imprese_esecutrici",
+   "alternatives": [
+    "da_soggetti_coinvolti",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "010",
+   "at": "comunicazioni/obblighi_salute_sicurezza",
+   "alternatives": [
+    "non_ricade",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "011",
+   "at": "comunicazioni/obblighi_salute_sicurezza/ricade",
+   "alternatives": [
+    "inf200ggUomo",
+    "pariSup200ggUomo"
+   ]
+  },
+  {
+   "id": "012",
+   "at": "comunicazioni/obblighi_salute_sicurezza/ricade",
+   "alternatives": [
+    "no_notifica",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "013",
+   "at": "dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie",
+   "alternatives": [
+    "tolleranza_oltre_500_mq",
+    "tolleranza_da_500_a_300_mq",
+    "tolleranza_da_300_a_100_mq",
+    "tolleranza_da_100_a_60_mq",
+    "tolleranza_sotto_60_mq"
+   ]
+  },
+  {
+   "id": "014",
+   "at": "dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]",
+   "alternatives": [
+    "tolleranza_zona_sismica_bassa",
+    "tolleranza_zona_sismica_alta"
+   ]
+  },
+  {
+   "id": "015",
+   "at": "dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta",
+   "alternatives": [
+    "tolleranza_non_strutturale",
+    "tolleranza_strutturale"
+   ]
+  },
+  {
+   "id": "016",
+   "at": "dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale",
+   "alternatives": [
+    "tolleranza_pubblica_incolumita",
+    "tolleranza_minore_rilevanza",
+    "tolleranza_priva_rilevanza"
+   ]
+  },
+  {
+   "id": "017",
+   "at": "dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale/tolleranza_pubblica_incolumita",
+   "alternatives": [
+    "allega_autorizzazione_sismica",
+    "silenzio_assenso_autorizzazione"
+   ]
+  }
+ ],
+ "comunicazione_fine_lavori": [
+  {
+   "id": "000",
+   "at": "comunicazioni/fine_lavori",
+   "alternatives": [
+    "stato_lavori_completati",
+    "stato_lavori_parziale"
+   ]
+  }
+ ],
+ "comunicazione_inizio_lavori": [
+  {
+   "id": "000",
+   "at": "dichiarazioni/titolo_possesso",
+   "alternatives": [
+    "titolare_esclusivo",
+    "non_titolare_esclusivo"
+   ]
+  },
+  {
+   "id": "001",
+   "at": "dichiarazioni/opere_previste/[opere_previste_ctype]",
+   "alternatives": [
+    "no_parti_comuni",
+    "parti_comuni_condominio",
+    "parti_comuni_fabbricato_multiprop",
+    "parti_comuni_no_assenso"
+   ]
+  },
+  {
+   "id": "002",
+   "at": "dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali",
+   "alternatives": [
+    "fabbricati",
+    "terreni"
+   ]
+  },
+  {
+   "id": "003",
+   "at": "dichiarazioni/imprese_esecutrici",
+   "alternatives": [
+    "da_soggetti_coinvolti",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "004",
+   "at": "dichiarazioni/obblighi_salute_sicurezza",
+   "alternatives": [
+    "non_ricade",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "005",
+   "at": "dichiarazioni/obblighi_salute_sicurezza/ricade",
+   "alternatives": [
+    "inf200ggUomo",
+    "pariSup200ggUomo"
+   ]
+  },
+  {
+   "id": "006",
+   "at": "dichiarazioni/obblighi_salute_sicurezza/ricade",
+   "alternatives": [
+    "no_notifica",
+    "(nothing)"
+   ]
+  }
+ ],
+ "permesso_di_costruire": [
+  {
+   "id": "000",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/new_articolo_10",
+   "alternatives": [
+    "no_mutamento",
+    "mutamento_categoria_singola_unita",
+    "mutamento_tra_categorie_singola_unita",
+    "mutamento_categoria_intero_immobile"
+   ]
+  },
+  {
+   "id": "001",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]",
+   "alternatives": [
+    "assoggettato_scia",
+    "conforme_disciplina_urbanistica",
+    "deroga_pianificazione_urbanistica"
+   ]
+  },
+  {
+   "id": "002",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/variazione_sostanziale",
+   "alternatives": [
+    "titolo_unico",
+    "permesso_costruire",
+    "segnalazione_certificata"
+   ]
+  },
+  {
+   "id": "003",
+   "at": "dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/intervento_permesso_sanatoria/conformita_presentazione_realizzazione",
+   "alternatives": [
+    "oblazione_doppio_contributo_parziale",
+    "condizione_sicurezza_rimozione"
+   ]
+  },
+  {
+   "id": "004",
+   "at": "dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/intervento_permesso_sanatoria/conformita_urbanistica_edilizia_presentazione_realizzazione",
+   "alternatives": [
+    "oblazione_doppio_contributo_totale",
+    "condizione_sicurezza_rimozione_doppia"
+   ]
+  },
+  {
+   "id": "005",
+   "at": "dichiarazioni/titolo_possesso",
+   "alternatives": [
+    "titolare_esclusivo",
+    "non_titolare_esclusivo"
+   ]
+  },
+  {
+   "id": "006",
+   "at": "dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali",
+   "alternatives": [
+    "fabbricati",
+    "terreni"
+   ]
+  },
+  {
+   "id": "007",
+   "at": "dichiarazioni/opere_previste",
+   "alternatives": [
+    "no_parti_comuni",
+    "parti_comuni_condominio",
+    "parti_comuni_fabbricato_multiprop",
+    "parti_comuni_no_assenso"
+   ]
+  },
+  {
+   "id": "008",
+   "at": "dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]",
+   "alternatives": [
+    "nuova_costruzione_area_libera_check",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "009",
+   "at": "dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]",
+   "alternatives": [
+    "oggetto_titolo_pratiche_edilizie",
+    "immobile_non_obbligatorio",
+    "non_disponibile_titolo",
+    "tolleranza_costruttiva"
+   ]
+  },
+  {
+   "id": "010",
+   "at": "dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]/sanzioni_pecuniarie",
+   "alternatives": [
+    "allega_ricevuta",
+    "estremi_pagamenti"
+   ]
+  },
+  {
+   "id": "011",
+   "at": "dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]",
+   "alternatives": [
+    "pienamente_conforme",
+    "conforme_documentazione"
+   ]
+  },
+  {
+   "id": "012",
+   "at": "dichiarazioni/calcolo_contributo_costruzione/[calcolo_contributo_ctype]",
+   "alternatives": [
+    "titolo_gratuito",
+    "titolo_oneroso"
+   ]
+  },
+  {
+   "id": "013",
+   "at": "dichiarazioni/calcolo_contributo_costruzione/[calcolo_contributo_ctype]/titolo_oneroso",
+   "alternatives": [
+    "calcolo_sportello",
+    "calcolo_preventivo"
+   ]
+  },
+  {
+   "id": "014",
+   "at": "dichiarazioni/calcolo_contributo_costruzione/[calcolo_contributo_ctype]/titolo_oneroso/versamento",
+   "alternatives": [
+    "momento_ritiro",
+    "chiede_rateizzazione"
+   ]
+  },
+  {
+   "id": "015",
+   "at": "dichiarazioni/imprese_esecutrici",
+   "alternatives": [
+    "da_soggetti_coinvolti",
+    "prima_inizio_lavori"
+   ]
+  },
+  {
+   "id": "016",
+   "at": "dichiarazioni/obblighi_salute_sicurezza_pdc",
+   "alternatives": [
+    "non_ricade",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "017",
+   "at": "dichiarazioni/obblighi_salute_sicurezza_pdc/ricade",
+   "alternatives": [
+    "inf200ggUomo",
+    "pariSup200ggUomo"
+   ]
+  },
+  {
+   "id": "018",
+   "at": "dichiarazioni/obblighi_salute_sicurezza_pdc/ricade",
+   "alternatives": [
+    "no_notifica",
+    "notifica"
+   ]
+  },
+  {
+   "id": "019",
+   "at": "relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo_interventi_opere_ctype]/opere_in_progetto",
+   "alternatives": [
+    "no_mutamento_destinazione_uso",
+    "si_mutamento_destinazione_uso_stessa_categoria",
+    "si_mutamento_destinazione_uso_tra_categorie",
+    "si_mutamento_destinazione_uso_intero_immobile_stessa_categoria"
+   ]
+  },
+  {
+   "id": "020",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie",
+   "alternatives": [
+    "tolleranza_oltre_500_mq",
+    "tolleranza_da_500_a_300_mq",
+    "tolleranza_da_300_a_100_mq",
+    "tolleranza_da_100_a_60_mq",
+    "tolleranza_sotto_60_mq"
+   ]
+  },
+  {
+   "id": "021",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]",
+   "alternatives": [
+    "tolleranza_zona_sismica_bassa",
+    "tolleranza_zona_sismica_alta"
+   ]
+  },
+  {
+   "id": "022",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta",
+   "alternatives": [
+    "tolleranza_non_strutturale",
+    "tolleranza_strutturale"
+   ]
+  },
+  {
+   "id": "023",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale",
+   "alternatives": [
+    "tolleranza_pubblica_incolumita",
+    "tolleranza_minore_rilevanza",
+    "tolleranza_priva_rilevanza"
+   ]
+  },
+  {
+   "id": "024",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale/tolleranza_pubblica_incolumita",
+   "alternatives": [
+    "allega_autorizzazione_sismica",
+    "silenzio_assenso_autorizzazione"
+   ]
+  },
+  {
+   "id": "025",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita",
+   "alternatives": [
+    "disciplina_urbanistica",
+    "disciplina_urbanistica_edilizia"
+   ]
+  },
+  {
+   "id": "026",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica",
+   "alternatives": [
+    "allega_documentazione_necessaria",
+    "realizzazione_intervento_atto",
+    "realizzazione_intervento_attesta",
+    "permesso_costruire_in_sanatoria"
+   ]
+  },
+  {
+   "id": "027",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica/rilevanza_sismica",
+   "alternatives": [
+    "bassa_sismicita",
+    "media_alta_sismicita"
+   ]
+  },
+  {
+   "id": "028",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica/rilevanza_sismica/media_alta_sismicita",
+   "alternatives": [
+    "no_rilevanza_strutturale",
+    "ha_rilevanza_strutturale"
+   ]
+  },
+  {
+   "id": "029",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia",
+   "alternatives": [
+    "allega_documentazione_necessaria",
+    "realizzazione_intervento_atto",
+    "realizzazione_intervento_attesta",
+    "permesso_costruire_in_sanatoria"
+   ]
+  },
+  {
+   "id": "030",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia/rilevanza_sismica",
+   "alternatives": [
+    "bassa_sismicita",
+    "media_alta_sismicita"
+   ]
+  },
+  {
+   "id": "031",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia/rilevanza_sismica/media_alta_sismicita",
+   "alternatives": [
+    "no_rilevanza_strutturale",
+    "ha_rilevanza_strutturale"
+   ]
+  },
+  {
+   "id": "032",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia/rilevanza_sismica/media_alta_sismicita/pubblica_incolumita",
+   "alternatives": [
+    "autorizzazione_sismica",
+    "istanza_autorizzazione"
+   ]
+  },
+  {
+   "id": "033",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/iscrizione_catastale",
+   "alternatives": [
+    "dichiara",
+    "comunica",
+    "si_impegna"
+   ]
+  },
+  {
+   "id": "034",
+   "at": "relazione_tecnica_asseverazione/sicurezza_impianti",
+   "alternatives": [
+    "non_comporta_impianti",
+    "comporta_impianti"
+   ]
+  },
+  {
+   "id": "035",
+   "at": "relazione_tecnica_asseverazione/sicurezza_impianti/comporta_impianti/altro/[comporta_impianti_altro_ctype]",
+   "alternatives": [
+    "non_soggetto",
+    "soggetto"
+   ]
+  },
+  {
+   "id": "036",
+   "at": "relazione_tecnica_asseverazione/consumi_energetici/[consumi_energetici_ctype]",
+   "alternatives": [
+    "non_soggetto_risparmio_energetico",
+    "soggetto_risparmio_energetico"
+   ]
+  },
+  {
+   "id": "037",
+   "at": "relazione_tecnica_asseverazione/consumi_energetici/[consumi_energetici_ctype]",
+   "alternatives": [
+    "non_soggetto_fonti_rinnovabili",
+    "soggetto_fonti_rinnovabili"
+   ]
+  },
+  {
+   "id": "038",
+   "at": "relazione_tecnica_asseverazione/tutela_inquinamento_acustico/[tutela_inquinamento_acustico_ctype]",
+   "alternatives": [
+    "non_rientra_art_8",
+    "rientra_art_8"
+   ]
+  },
+  {
+   "id": "039",
+   "at": "relazione_tecnica_asseverazione/tutela_inquinamento_acustico/[tutela_inquinamento_acustico_ctype]",
+   "alternatives": [
+    "non_rientra_1997_12_05",
+    "rientra_1997_12_05"
+   ]
+  },
+  {
+   "id": "040",
+   "at": "relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione",
+   "alternatives": [
+    "vol_inf_ugu_6000",
+    "vol_sup_6000"
+   ]
+  },
+  {
+   "id": "041",
+   "at": "relazione_tecnica_asseverazione/prevenzione_incendi",
+   "alternatives": [
+    "non_soggetto_prevenzione_incendi",
+    "soggetto_prevenzione_incendi",
+    "parziale_copertura_prevenzione_incendi"
+   ]
+  },
+  {
+   "id": "042",
+   "at": "relazione_tecnica_asseverazione/prevenzione_incendi",
+   "alternatives": [
+    "non_soggetto_valutazione_progetto",
+    "soggetto_valutazione_progetto",
+    "variante_progetto"
+   ]
+  },
+  {
+   "id": "043",
+   "at": "relazione_tecnica_asseverazione/amianto",
+   "alternatives": [
+    "non_interessano",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "044",
+   "at": "relazione_tecnica_asseverazione/amianto/interessano",
+   "alternatives": [
+    "piano_di_lavoro_prima_inizio_lavori",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "045",
+   "at": "relazione_tecnica_asseverazione/conformita_sanitaria/[conformita_sanitaria_ctype]",
+   "alternatives": [
+    "conforme",
+    "non_conforme",
+    "conforme_art_24"
+   ]
+  },
+  {
+   "id": "046",
+   "at": "relazione_tecnica_asseverazione/intervento_zona_sismica/[intervento_zona_sismica_ctype]",
+   "alternatives": [
+    "non_previste_opere",
+    "previste_opere"
+   ]
+  },
+  {
+   "id": "047",
+   "at": "relazione_tecnica_asseverazione/intervento_zona_sismica/[intervento_zona_sismica_ctype]",
+   "alternatives": [
+    "non_previste_opere_normativa_regionale",
+    "variante_sostanziale",
+    "previste_opere_normativa_regionale",
+    "previste_opere_strutturali"
+   ]
+  },
+  {
+   "id": "048",
+   "at": "relazione_tecnica_asseverazione/qualita_ambientale_terreni/[qualita_ambientale_terreni_ctype]",
+   "alternatives": [
+    "non_richiede_indagini",
+    "non_necessita_bonifica",
+    "avvenuta_bonifica"
+   ]
+  },
+  {
+   "id": "049",
+   "at": "relazione_tecnica_asseverazione/opere_urbanizzazione_primaria/[opere_urbanizzazione_primaria_ctype]",
+   "alternatives": [
+    "dotata",
+    "non_dotata"
+   ]
+  },
+  {
+   "id": "050",
+   "at": "relazione_tecnica_asseverazione/scarichi_idrici/[scarichi_idrici_ctype]",
+   "alternatives": [
+    "non_necessita_autorizzazione",
+    "necessita_autorizzazione_scarico",
+    "necessita_autorizzazione"
+   ]
+  },
+  {
+   "id": "051",
+   "at": "relazione_tecnica_asseverazione/autorizzazione_paesaggistica",
+   "alternatives": [
+    "non_ricade_in_zona_tutelata",
+    "non_soggetto_autorizzazione"
+   ]
+  },
+  {
+   "id": "052",
+   "at": "relazione_tecnica_asseverazione/autorizzazione_paesaggistica/ricade_in_zona_tutelata",
+   "alternatives": [
+    "procedimento_semplificato",
+    "procedimento_ordinario",
+    "procedimento_accertamento"
+   ]
+  },
+  {
+   "id": "053",
+   "at": "relazione_tecnica_asseverazione/autorizzazione_soprintendenza",
+   "alternatives": [
+    "non_sottoposto_tutela",
+    "sottoposto_tutela",
+    "sottoposto_tutela_allegato_rilascio_parere"
+   ]
+  },
+  {
+   "id": "054",
+   "at": "relazione_tecnica_asseverazione/area_protetta/[area_protetta_ctype]",
+   "alternatives": [
+    "non_ricade_tutela",
+    "ricade_tutela",
+    "sottoposto_disposizioni"
+   ]
+  },
+  {
+   "id": "055",
+   "at": "relazione_tecnica_asseverazione/vincolo_idrogeologico/[vincolo_idrogeologico_ctype]",
+   "alternatives": [
+    "non_sottoposto_tutela",
+    "tutela_senza_autorizzazione",
+    "sottoposto_tutela"
+   ]
+  },
+  {
+   "id": "056",
+   "at": "relazione_tecnica_asseverazione/vincolo_idraulico/[vincolo_idraulico_ctype]",
+   "alternatives": [
+    "non_sottoposto_tutela",
+    "sottoposto_tutela"
+   ]
+  },
+  {
+   "id": "057",
+   "at": "relazione_tecnica_asseverazione/natura_2000/[natura_2000_ctype]",
+   "alternatives": [
+    "non_soggetto_vinca",
+    "soggetto_vinca"
+   ]
+  },
+  {
+   "id": "058",
+   "at": "relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispetto_cimiteriale_ctype]",
+   "alternatives": [
+    "non_ricade",
+    "ricade_consentito",
+    "ricade_non_consentito"
+   ]
+  },
+  {
+   "id": "059",
+   "at": "relazione_tecnica_asseverazione/rischio_rilevante/[rischio_rilevante_ctype]",
+   "alternatives": [
+    "assenza_attivita",
+    "presenza_attivita_no_area_danno"
+   ]
+  },
+  {
+   "id": "060",
+   "at": "relazione_tecnica_asseverazione/rischio_rilevante/[rischio_rilevante_ctype]/presenza_attivita_area_danno",
+   "alternatives": [
+    "non_ricade_area_danno",
+    "ricade_area_danno"
+   ]
+  }
+ ],
+ "scia": [
+  {
+   "id": "000",
+   "at": "dichiarazioni/titolo_possesso",
+   "alternatives": [
+    "titolare_esclusivo",
+    "non_titolare_esclusivo"
+   ]
+  },
+  {
+   "id": "001",
+   "at": "dichiarazioni/presentazione",
+   "alternatives": [
+    "scia",
+    "scia_unica",
+    "scia_condizionata"
+   ]
+  },
+  {
+   "id": "002",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/manutenzione_straordinaria",
+   "alternatives": [
+    "no_mutamento",
+    "mutamento_categoria_singola_unita",
+    "mutamento_tra_categorie_singola_unita",
+    "mutamento_categoria_intero_immobile"
+   ]
+  },
+  {
+   "id": "003",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/manutenzione_restauro",
+   "alternatives": [
+    "no_mutamento",
+    "mutamento_categoria_singola_unita",
+    "mutamento_tra_categorie_singola_unita",
+    "mutamento_categoria_intero_immobile"
+   ]
+  },
+  {
+   "id": "004",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/manutenzione_ristrutturazione",
+   "alternatives": [
+    "no_mutamento",
+    "mutamento_categoria_singola_unita",
+    "mutamento_tra_categorie_singola_unita",
+    "mutamento_categoria_intero_immobile"
+   ]
+  },
+  {
+   "id": "005",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]",
+   "alternatives": [
+    "variante_in_corso_dopera_permesso_di_costruire_nr_protocollo",
+    "variante_in_corso_dopera_permesso_di_costruire_data_protocollo",
+    "variante_in_corso_dopera_scia_nr_protocollo",
+    "variante_in_corso_dopera_scia_data_protocollo",
+    "variante_in_corso_dopera_variazione_essenziale"
+   ]
+  },
+  {
+   "id": "006",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/mutamento_destinazione_uso_singola_unita",
+   "alternatives": [
+    "senza_opere_categoria_singola_unita",
+    "senza_opere_tra_categorie_singola_unita",
+    "con_opere_categoria_singola_unita",
+    "con_opere_tra_categorie_singola_unita"
+   ]
+  },
+  {
+   "id": "007",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/mutamento_destinazione_uso_intero_immobile",
+   "alternatives": [
+    "con_opere",
+    "senza_opere"
+   ]
+  },
+  {
+   "id": "008",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]",
+   "alternatives": [
+    "procedimento_automatizzato",
+    "procedimento_ordinario"
+   ]
+  },
+  {
+   "id": "009",
+   "at": "dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/pagamento_sanzione",
+   "alternatives": [
+    "estremi_pagamento_sanzione",
+    "ricevuta_pagamento"
+   ]
+  },
+  {
+   "id": "010",
+   "at": "dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/sanatoria_soggetto",
+   "alternatives": [
+    "estremi_pagamento_sanatoria",
+    "importo_ricevuta_pagamento"
+   ]
+  },
+  {
+   "id": "011",
+   "at": "dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/sanatoria_soggetto_fino_dieci_mila",
+   "alternatives": [
+    "estremi_pagamento_sanatoria",
+    "importo_ricevuta_pagamento"
+   ]
+  },
+  {
+   "id": "012",
+   "at": "dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali",
+   "alternatives": [
+    "fabbricati",
+    "terreni"
+   ]
+  },
+  {
+   "id": "013",
+   "at": "dichiarazioni/opere_previste",
+   "alternatives": [
+    "no_parti_comuni",
+    "parti_comuni_condominio",
+    "parti_comuni_fabbricato_multiprop",
+    "parti_comuni_no_assenso"
+   ]
+  },
+  {
+   "id": "014",
+   "at": "dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]",
+   "alternatives": [
+    "oggetto_titolo_pratiche_edilizie",
+    "immobile_non_obbligatorio",
+    "non_disponibile_titolo",
+    "tolleranza_costruttiva"
+   ]
+  },
+  {
+   "id": "015",
+   "at": "dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]/sanzioni_pecuniarie",
+   "alternatives": [
+    "allega_ricevuta",
+    "estremi_pagamenti"
+   ]
+  },
+  {
+   "id": "016",
+   "at": "dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]",
+   "alternatives": [
+    "pienamente_conforme",
+    "conforme_documentazione"
+   ]
+  },
+  {
+   "id": "017",
+   "at": "dichiarazioni/calcolo_contributo_costruzione/[calcolo_contributo_ctype]",
+   "alternatives": [
+    "titolo_gratuito",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "018",
+   "at": "dichiarazioni/calcolo_contributo_costruzione/[calcolo_contributo_ctype]/titolo_oneroso/contributo",
+   "alternatives": [
+    "calcolos_portello",
+    "calcolo_preventivo"
+   ]
+  },
+  {
+   "id": "019",
+   "at": "dichiarazioni/calcolo_contributo_costruzione/[calcolo_contributo_ctype]/titolo_oneroso/versamento",
+   "alternatives": [
+    "allega_attestazione",
+    "trasmette_prima_inizio_lavori",
+    "chiede_rateizzazione",
+    "corrisponde_in_corso"
+   ]
+  },
+  {
+   "id": "020",
+   "at": "dichiarazioni/imprese_esecutrici",
+   "alternatives": [
+    "da_soggetti_coinvolti",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "021",
+   "at": "dichiarazioni/obblighi_salute_sicurezza",
+   "alternatives": [
+    "non_ricade",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "022",
+   "at": "dichiarazioni/obblighi_salute_sicurezza/ricade",
+   "alternatives": [
+    "inf200ggUomo",
+    "pariSup200ggUomo"
+   ]
+  },
+  {
+   "id": "023",
+   "at": "dichiarazioni/obblighi_salute_sicurezza/ricade",
+   "alternatives": [
+    "no_notifica",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "024",
+   "at": "relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo_interventi_opere_ctype]/progetto_in_scia/intervento_manutenzione_straordinaria",
+   "alternatives": [
+    "no_mutamento_destinazione_uso_straordinaria",
+    "si_mutamento_destinazione_uso_straordinaria"
+   ]
+  },
+  {
+   "id": "025",
+   "at": "relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo_interventi_opere_ctype]/progetto_in_scia/intervento_restauro_risanamento",
+   "alternatives": [
+    "no_mutamento_destinazione_uso_restauro",
+    "si_mutamento_destinazione_uso_restauro"
+   ]
+  },
+  {
+   "id": "026",
+   "at": "relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo_interventi_opere_ctype]/progetto_in_scia/intervento_ristrutturazione_edilizia",
+   "alternatives": [
+    "no_mutamento_destinazione_uso_ristrutturazione",
+    "si_mutamento_destinazione_uso_ristrutturazione"
+   ]
+  },
+  {
+   "id": "027",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie",
+   "alternatives": [
+    "tolleranza_oltre_500_mq",
+    "tolleranza_da_500_a_300_mq",
+    "tolleranza_da_300_a_100_mq",
+    "tolleranza_da_100_a_60_mq",
+    "tolleranza_sotto_60_mq"
+   ]
+  },
+  {
+   "id": "028",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]",
+   "alternatives": [
+    "tolleranza_zona_sismica_bassa",
+    "tolleranza_zona_sismica_alta"
+   ]
+  },
+  {
+   "id": "029",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta",
+   "alternatives": [
+    "tolleranza_non_strutturale",
+    "tolleranza_strutturale"
+   ]
+  },
+  {
+   "id": "030",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale",
+   "alternatives": [
+    "tolleranza_pubblica_incolumita",
+    "tolleranza_minore_rilevanza",
+    "tolleranza_priva_rilevanza"
+   ]
+  },
+  {
+   "id": "031",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale/tolleranza_pubblica_incolumita",
+   "alternatives": [
+    "allega_autorizzazione_sismica",
+    "silenzio_assenso_autorizzazione"
+   ]
+  },
+  {
+   "id": "032",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_assenza_scia_fino_dieci_mila/ai_fini_della_sanatoria",
+   "alternatives": [
+    "no_interventi",
+    "propone_interventi"
+   ]
+  },
+  {
+   "id": "033",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_assenza_scia_fino_dieci_mila/rilevanza_sismica_interventi",
+   "alternatives": [
+    "zona_sismica_bassa",
+    "zona_sismica_media_alta"
+   ]
+  },
+  {
+   "id": "034",
+   "at": "relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_assenza_scia_fino_dieci_mila/rilevanza_sismica_interventi/zona_sismica_media_alta",
+   "alternatives": [
+    "no_rilevanza_strutturale",
+    "ha_rilevanza_strutturale"
+   ]
+  },
+  {
+   "id": "035",
+   "at": "relazione_tecnica_asseverazione/sicurezza_impianti",
+   "alternatives": [
+    "non_comporta_impianti",
+    "comporta_impianti"
+   ]
+  },
+  {
+   "id": "036",
+   "at": "relazione_tecnica_asseverazione/sicurezza_impianti/comporta_impianti/altro/[comporta_impianti_altro_ctype]",
+   "alternatives": [
+    "non_soggetto",
+    "soggetto"
+   ]
+  },
+  {
+   "id": "037",
+   "at": "relazione_tecnica_asseverazione/consumi_energetici/[consumi_energetici_ctype]",
+   "alternatives": [
+    "non_soggetto_risparmio_energetico",
+    "soggetto_risparmio_energetico"
+   ]
+  },
+  {
+   "id": "038",
+   "at": "relazione_tecnica_asseverazione/consumi_energetici/[consumi_energetici_ctype]",
+   "alternatives": [
+    "non_soggetto_fonti_rinnovabili",
+    "soggetto_fonti_rinnovabili"
+   ]
+  },
+  {
+   "id": "039",
+   "at": "relazione_tecnica_asseverazione/tutela_inquinamento_acustico/[tutela_inquinamento_acustico_ctype]",
+   "alternatives": [
+    "non_rientra_art_8",
+    "rientra_art_8"
+   ]
+  },
+  {
+   "id": "040",
+   "at": "relazione_tecnica_asseverazione/tutela_inquinamento_acustico/[tutela_inquinamento_acustico_ctype]",
+   "alternatives": [
+    "non_rientra_1997_12_05",
+    "rientra_1997_12_05"
+   ]
+  },
+  {
+   "id": "041",
+   "at": "relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione",
+   "alternatives": [
+    "vol_inf_ugu_6000",
+    "vol_sup_6000"
+   ]
+  },
+  {
+   "id": "042",
+   "at": "relazione_tecnica_asseverazione/prevenzione_incendi",
+   "alternatives": [
+    "non_soggetto_prevenzione_incendi",
+    "soggetto_prevenzione_incendi",
+    "parziale_copertura_prevenzione_incendi"
+   ]
+  },
+  {
+   "id": "043",
+   "at": "relazione_tecnica_asseverazione/prevenzione_incendi",
+   "alternatives": [
+    "non_soggetto_valutazione_progetto",
+    "soggetto_valutazione_progetto",
+    "variante_progetto"
+   ]
+  },
+  {
+   "id": "044",
+   "at": "relazione_tecnica_asseverazione/amianto",
+   "alternatives": [
+    "non_interessano",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "045",
+   "at": "relazione_tecnica_asseverazione/amianto/interessano",
+   "alternatives": [
+    "piano_di_lavoro_prima_inizio_lavori",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "046",
+   "at": "relazione_tecnica_asseverazione/conformita_sanitaria/[conformita_sanitaria_ctype]",
+   "alternatives": [
+    "conforme",
+    "non_conforme",
+    "conforme_art_24"
+   ]
+  },
+  {
+   "id": "047",
+   "at": "relazione_tecnica_asseverazione/intervento_zona_sismica/[intervento_zona_sismica_ctype]",
+   "alternatives": [
+    "non_previste_opere",
+    "previste_opere"
+   ]
+  },
+  {
+   "id": "048",
+   "at": "relazione_tecnica_asseverazione/intervento_zona_sismica/[intervento_zona_sismica_ctype]",
+   "alternatives": [
+    "non_previste_opere_normativa_regionale",
+    "variante_sostanziale",
+    "previste_opere_normativa_regionale",
+    "previste_opere_strutturali"
+   ]
+  },
+  {
+   "id": "049",
+   "at": "relazione_tecnica_asseverazione/autorizzazione_paesaggistica",
+   "alternatives": [
+    "non_ricade_in_zona_tutelata",
+    "non_soggetto_autorizzazione"
+   ]
+  },
+  {
+   "id": "050",
+   "at": "relazione_tecnica_asseverazione/autorizzazione_paesaggistica/ricade_in_zona_tutelata",
+   "alternatives": [
+    "procedimento_semplificato",
+    "procedimento_ordinario",
+    "procedimento_accertamento"
+   ]
+  },
+  {
+   "id": "051",
+   "at": "relazione_tecnica_asseverazione/autorizzazione_soprintendenza",
+   "alternatives": [
+    "non_sottoposto_tutela",
+    "sottoposto_tutela",
+    "sottoposto_tutela_allegato_rilascio_parere"
+   ]
+  },
+  {
+   "id": "052",
+   "at": "relazione_tecnica_asseverazione/area_protetta/[area_protetta_ctype]",
+   "alternatives": [
+    "non_ricade_tutela",
+    "ricade_tutela",
+    "sottoposto_disposizioni"
+   ]
+  },
+  {
+   "id": "053",
+   "at": "relazione_tecnica_asseverazione/vincolo_idrogeologico/[vincolo_idrogeologico_ctype]",
+   "alternatives": [
+    "non_sottoposto_tutela",
+    "tutela_senza_autorizzazione",
+    "sottoposto_tutela"
+   ]
+  },
+  {
+   "id": "054",
+   "at": "relazione_tecnica_asseverazione/vincolo_idraulico/[vincolo_idraulico_ctype]",
+   "alternatives": [
+    "non_sottoposto_tutela",
+    "sottoposto_tutela"
+   ]
+  },
+  {
+   "id": "055",
+   "at": "relazione_tecnica_asseverazione/natura_2000/[natura_2000_ctype]",
+   "alternatives": [
+    "non_soggetto_vinca",
+    "soggetto_vinca"
+   ]
+  },
+  {
+   "id": "056",
+   "at": "relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispetto_cimiteriale_ctype]",
+   "alternatives": [
+    "non_ricade",
+    "ricade_consentito",
+    "ricade_non_consentito"
+   ]
+  },
+  {
+   "id": "057",
+   "at": "relazione_tecnica_asseverazione/rischio_rilevante",
+   "alternatives": [
+    "assenza_attivita",
+    "presenza_attivita_no_area_danno"
+   ]
+  },
+  {
+   "id": "058",
+   "at": "relazione_tecnica_asseverazione/rischio_rilevante/presenza_attivita_area_danno",
+   "alternatives": [
+    "non_ricade_area_danno",
+    "ricade_area_danno"
+   ]
+  }
+ ],
+ "scia_alternativa": [
+  {
+   "id": "000",
+   "at": "dichiarazioni/titolo_possesso",
+   "alternatives": [
+    "titolare_esclusivo",
+    "non_titolare_esclusivo"
+   ]
+  },
+  {
+   "id": "001",
+   "at": "dichiarazioni/presentazione/[presentazione_scia_alternativa_ctype]",
+   "alternatives": [
+    "scia_alternativa",
+    "scia_unica",
+    "scia_condizionata"
+   ]
+  },
+  {
+   "id": "002",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/newInterventiSCIAAlternativa",
+   "alternatives": [
+    "noMutamento",
+    "mutamentoCategoriaSingolaUnita",
+    "mutamentoTraCategorieSingolaUnita",
+    "mutamentoCategoriaInteroImmobile"
+   ]
+  },
+  {
+   "id": "003",
+   "at": "dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]",
+   "alternatives": [
+    "procedimentoAutomatizzato",
+    "procedimentoOrdinario"
+   ]
+  },
+  {
+   "id": "004",
+   "at": "dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali",
+   "alternatives": [
+    "fabbricati",
+    "terreni"
+   ]
+  },
+  {
+   "id": "005",
+   "at": "dichiarazioni/opere_previste",
+   "alternatives": [
+    "no_parti_comuni",
+    "parti_comuni_condominio",
+    "parti_comuni_fabbricato_multiprop",
+    "parti_comuni_no_assenso"
+   ]
+  },
+  {
+   "id": "006",
+   "at": "dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]",
+   "alternatives": [
+    "oggetto_titolo_pratiche_edilizie",
+    "immobile_non_obbligatorio",
+    "non_disponibile_titolo",
+    "tolleranza_costruttiva"
+   ]
+  },
+  {
+   "id": "007",
+   "at": "dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]/sanzioni_pecuniarie",
+   "alternatives": [
+    "allega_ricevuta",
+    "estremi_pagamenti"
+   ]
+  },
+  {
+   "id": "008",
+   "at": "dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_scia_ctype]",
+   "alternatives": [
+    "pienamente_conforme",
+    "conforme_documentazione"
+   ]
+  },
+  {
+   "id": "009",
+   "at": "dichiarazioni/calcolo_contributo_costruzione/[calcolo_contributo_ctype]",
+   "alternatives": [
+    "titolo_gratuito",
+    "titolo_oneroso"
+   ]
+  },
+  {
+   "id": "010",
+   "at": "dichiarazioni/calcolo_contributo_costruzione/[calcolo_contributo_ctype]/titolo_oneroso",
+   "alternatives": [
+    "calcolo_sportello",
+    "calcolo_preventivo"
+   ]
+  },
+  {
+   "id": "011",
+   "at": "dichiarazioni/calcolo_contributo_costruzione/[calcolo_contributo_ctype]/titolo_oneroso/versamento",
+   "alternatives": [
+    "pagamento_entro_30_giorni",
+    "chiede_rateizzazione",
+    "corrisponde_in_corso"
+   ]
+  },
+  {
+   "id": "012",
+   "at": "dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_dei_lavori_ctype]",
+   "alternatives": [
+    "da_soggetti_coinvolti",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "013",
+   "at": "dichiarazioni/obblighi_salute_sicurezza",
+   "alternatives": [
+    "non_ricade",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "014",
+   "at": "dichiarazioni/obblighi_salute_sicurezza/ricade",
+   "alternatives": [
+    "inf200ggUomo",
+    "pariSup200ggUomo"
+   ]
+  },
+  {
+   "id": "015",
+   "at": "dichiarazioni/obblighi_salute_sicurezza/ricade",
+   "alternatives": [
+    "no_notifica",
+    "notifica"
+   ]
+  },
+  {
+   "id": "016",
+   "at": "relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo_interventi_opere_ctype]/ristrutturazione_edilizia",
+   "alternatives": [
+    "no_mutamento_destinazione_uso_ristrutturazione_edilizia",
+    "si_mutamento_destinazione_uso_ristrutturazione_edilizia"
+   ]
+  },
+  {
+   "id": "017",
+   "at": "relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo_interventi_opere_ctype]/nuova_costruzione_ristrutturazione_urbanistica",
+   "alternatives": [
+    "no_mutamento_destinazione_uso_ristrutturazione_urbanistica",
+    "si_mutamento_destinazione_uso_ristrutturazione_urbanistica"
+   ]
+  },
+  {
+   "id": "018",
+   "at": "relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo_interventi_opere_ctype]/nuovacostruzione",
+   "alternatives": [
+    "no_mutamento_destinazione_uso_nuova_costruzione",
+    "si_mutamento_destinazione_uso_nuova_costruzione"
+   ]
+  },
+  {
+   "id": "019",
+   "at": "relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo_interventi_opere_ctype]/altri_interventi",
+   "alternatives": [
+    "no_mutamento_destinazione_uso_altri_interventi",
+    "si_mutamento_destinazione_uso_altri_interventi"
+   ]
+  },
+  {
+   "id": "020",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie",
+   "alternatives": [
+    "tolleranza_oltre_500_mq",
+    "tolleranza_da_500_a_300_mq",
+    "tolleranza_da_300_a_100_mq",
+    "tolleranza_da_100_a_60_mq",
+    "tolleranza_sotto_60_mq"
+   ]
+  },
+  {
+   "id": "021",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]",
+   "alternatives": [
+    "tolleranza_zona_sismica_bassa",
+    "tolleranza_zona_sismica_alta"
+   ]
+  },
+  {
+   "id": "022",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta",
+   "alternatives": [
+    "tolleranza_non_strutturale",
+    "tolleranza_strutturale"
+   ]
+  },
+  {
+   "id": "023",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale",
+   "alternatives": [
+    "tolleranza_pubblica_incolumita",
+    "tolleranza_minore_rilevanza",
+    "tolleranza_priva_rilevanza"
+   ]
+  },
+  {
+   "id": "024",
+   "at": "relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale/tolleranza_pubblica_incolumita",
+   "alternatives": [
+    "allega_autorizzazione_sismica",
+    "silenzio_assenso_autorizzazione"
+   ]
+  },
+  {
+   "id": "025",
+   "at": "relazione_tecnica_asseverazione/sicurezza_impianti",
+   "alternatives": [
+    "non_comporta_impianti",
+    "comporta_impianti"
+   ]
+  },
+  {
+   "id": "026",
+   "at": "relazione_tecnica_asseverazione/sicurezza_impianti/comporta_impianti/altro/[comporta_impianti_altro_ctype]",
+   "alternatives": [
+    "non_soggetto",
+    "soggetto"
+   ]
+  },
+  {
+   "id": "027",
+   "at": "relazione_tecnica_asseverazione/consumi_energetici/[consumi_energetici_ctype]",
+   "alternatives": [
+    "non_soggetto_risparmio_energetico",
+    "soggetto_risparmio_energetico"
+   ]
+  },
+  {
+   "id": "028",
+   "at": "relazione_tecnica_asseverazione/consumi_energetici/[consumi_energetici_ctype]",
+   "alternatives": [
+    "non_soggetto_fonti_rinnovabili",
+    "soggetto_fonti_rinnovabili"
+   ]
+  },
+  {
+   "id": "029",
+   "at": "relazione_tecnica_asseverazione/tutela_inquinamento_acustico/[tutela_inquinamento_acustico_ctype]",
+   "alternatives": [
+    "non_rientra_art_8",
+    "rientra_art_8"
+   ]
+  },
+  {
+   "id": "030",
+   "at": "relazione_tecnica_asseverazione/tutela_inquinamento_acustico/[tutela_inquinamento_acustico_ctype]",
+   "alternatives": [
+    "non_rientra_1997_12_05",
+    "rientra_1997_12_05"
+   ]
+  },
+  {
+   "id": "031",
+   "at": "relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione",
+   "alternatives": [
+    "vol_inf_ugu_6000",
+    "vol_sup_6000"
+   ]
+  },
+  {
+   "id": "032",
+   "at": "relazione_tecnica_asseverazione/prevenzione_incendi",
+   "alternatives": [
+    "non_soggetto_prevenzione_incendi",
+    "soggetto_prevenzione_incendi",
+    "parziale_copertura_prevenzione_incendi"
+   ]
+  },
+  {
+   "id": "033",
+   "at": "relazione_tecnica_asseverazione/prevenzione_incendi",
+   "alternatives": [
+    "non_soggetto_valutazione_progetto",
+    "soggetto_valutazione_progetto",
+    "variante_progetto"
+   ]
+  },
+  {
+   "id": "034",
+   "at": "relazione_tecnica_asseverazione/amianto",
+   "alternatives": [
+    "non_interessano",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "035",
+   "at": "relazione_tecnica_asseverazione/amianto/interessano",
+   "alternatives": [
+    "piano_di_lavoro_prima_inizio_lavori",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "036",
+   "at": "relazione_tecnica_asseverazione/conformita_sanitaria/[conformita_sanitaria_ctype]",
+   "alternatives": [
+    "conforme",
+    "non_conforme",
+    "conforme_art_24"
+   ]
+  },
+  {
+   "id": "037",
+   "at": "relazione_tecnica_asseverazione/intervento_zona_sismica/[intervento_zona_sismica_ctype]",
+   "alternatives": [
+    "non_previste_opere",
+    "previste_opere"
+   ]
+  },
+  {
+   "id": "038",
+   "at": "relazione_tecnica_asseverazione/intervento_zona_sismica/[intervento_zona_sismica_ctype]",
+   "alternatives": [
+    "non_previste_opere_normativa_regionale",
+    "variante_sostanziale",
+    "previste_opere_normativa_regionale",
+    "previste_opere_strutturali"
+   ]
+  },
+  {
+   "id": "039",
+   "at": "relazione_tecnica_asseverazione/qualita_ambientale_terreni/[qualita_ambientale_terreni_ctype]",
+   "alternatives": [
+    "non_richiede_indagini",
+    "non_necessita_bonifica",
+    "avvenuta_bonifica"
+   ]
+  },
+  {
+   "id": "040",
+   "at": "relazione_tecnica_asseverazione/opere_urbanizzazione_primaria/[opere_urbanizzazione_primaria_ctype]",
+   "alternatives": [
+    "dotata",
+    "non_dotata"
+   ]
+  },
+  {
+   "id": "041",
+   "at": "relazione_tecnica_asseverazione/scarichi_idrici/[scarichi_idrici_ctype]",
+   "alternatives": [
+    "non_necessita_autorizzazione",
+    "necessita_autorizzazione_scarico",
+    "necessita_autorizzazione"
+   ]
+  },
+  {
+   "id": "042",
+   "at": "relazione_tecnica_asseverazione/autorizzazione_paesaggistica",
+   "alternatives": [
+    "non_ricade_in_zona_tutelata",
+    "non_soggetto_autorizzazione"
+   ]
+  },
+  {
+   "id": "043",
+   "at": "relazione_tecnica_asseverazione/autorizzazione_paesaggistica/ricade_in_zona_tutelata",
+   "alternatives": [
+    "procedimento_semplificato",
+    "procedimento_ordinario",
+    "procedimento_accertamento"
+   ]
+  },
+  {
+   "id": "044",
+   "at": "relazione_tecnica_asseverazione/autorizzazione_soprintendenza",
+   "alternatives": [
+    "non_sottoposto_tutela",
+    "sottoposto_tutela",
+    "sottoposto_tutela_allegato_rilascio_parere"
+   ]
+  },
+  {
+   "id": "045",
+   "at": "relazione_tecnica_asseverazione/area_protetta/[area_protetta_ctype]",
+   "alternatives": [
+    "non_ricade_tutela",
+    "ricade_tutela",
+    "sottoposto_disposizioni"
+   ]
+  },
+  {
+   "id": "046",
+   "at": "relazione_tecnica_asseverazione/vincolo_idrogeologico/[vincolo_idrogeologico_ctype]",
+   "alternatives": [
+    "non_sottoposto_tutela",
+    "tutela_senza_autorizzazione",
+    "sottoposto_tutela"
+   ]
+  },
+  {
+   "id": "047",
+   "at": "relazione_tecnica_asseverazione/vincolo_idraulico/[vincolo_idraulico_ctype]",
+   "alternatives": [
+    "non_sottoposto_tutela",
+    "sottoposto_tutela"
+   ]
+  },
+  {
+   "id": "048",
+   "at": "relazione_tecnica_asseverazione/natura_2000/[natura_2000_ctype]",
+   "alternatives": [
+    "non_soggetto_vinca",
+    "soggetto_vinca"
+   ]
+  },
+  {
+   "id": "049",
+   "at": "relazione_tecnica_asseverazione/rispetto_cimiteriale/[rispetto_cimiteriale_ctype]",
+   "alternatives": [
+    "non_ricade",
+    "ricade_consentito",
+    "ricade_non_consentito"
+   ]
+  },
+  {
+   "id": "050",
+   "at": "relazione_tecnica_asseverazione/rischio_rilevante",
+   "alternatives": [
+    "assenza_attivita",
+    "presenza_attivita_no_area_danno"
+   ]
+  },
+  {
+   "id": "051",
+   "at": "relazione_tecnica_asseverazione/rischio_rilevante/presenza_attivita_area_danno",
+   "alternatives": [
+    "non_ricade_area_danno",
+    "ricade_area_danno"
+   ]
+  }
+ ],
+ "segnalazione_certificata_agibilita": [
+  {
+   "id": "000",
+   "at": "identificativi_immobile/dati_catastali",
+   "alternatives": [
+    "fabbricati",
+    "terreni"
+   ]
+  },
+  {
+   "id": "001",
+   "at": "dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunicazione_fine_lavori_ctype]",
+   "alternatives": [
+    "protocollo_comunicazione_fine_lavori",
+    "data_fine_lavori"
+   ]
+  },
+  {
+   "id": "002",
+   "at": "dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunicazione_fine_lavori_ctype]",
+   "alternatives": [
+    "stato_lavori_completati",
+    "stato_lavori_parziale"
+   ]
+  },
+  {
+   "id": "003",
+   "at": "dichiarazioni_sezione_a/presentazione_inizio_lavori",
+   "alternatives": [
+    "scia_agibilita_immobile",
+    "scia_agibilita_parziale_edifici",
+    "scia_agibilita_parziale_singoli_immobili",
+    "scia_unica_agibilita_immobile",
+    "scia_unica_agibilita_parziale_edifici",
+    "scia_unica_agibilita_parziale_singoli_immobili"
+   ]
+  },
+  {
+   "id": "004",
+   "at": "dichiarazioni_sezione_b/scheda_tecnico/studio_pro",
+   "alternatives": [
+    "comune",
+    "localitaEstera"
+   ]
+  },
+  {
+   "id": "005",
+   "at": "dichiarazioni_sezione_b/scheda_tecnico",
+   "alternatives": [
+    "direttore_lavori",
+    "professionista_abilitato"
+   ]
+  },
+  {
+   "id": "006",
+   "at": "dichiarazioni_sezione_b/assevera",
+   "alternatives": [
+    "agibilita_immobile",
+    "agibilita_parziale_edifici",
+    "agibilita_parziale_singoli_immobili"
+   ]
+  },
+  {
+   "id": "007",
+   "at": "dichiarazioni_sezione_b/sicurezza_impianti",
+   "alternatives": [
+    "nessun_impianto",
+    "impianti_con_certificazione"
+   ]
+  },
+  {
+   "id": "008",
+   "at": "dichiarazioni_sezione_b/sicurezza_statica_sismica/[sicurezza_statica_sismica_ctype]",
+   "alternatives": [
+    "non_ha_interessato_strutture",
+    "(nothing)"
+   ]
+  },
+  {
+   "id": "009",
+   "at": "dichiarazioni_sezione_b/sicurezza_statica_sismica/[sicurezza_statica_sismica_ctype]/ha_interessato_strutture",
+   "alternatives": [
+    "certificato_collaudo_statico",
+    "estremi_collaudo_statico",
+    "dichiarazione_esecuzione_interventi",
+    "estremi_dichiarazione_esecuzione_interventi",
+    "no_collaudo_statico"
+   ]
+  },
+  {
+   "id": "010",
+   "at": "dichiarazioni_sezione_b/prestazione_energetica/[prestazione_energetica_ctype]",
+   "alternatives": [
+    "non_soggetto_requisiti_minimi",
+    "soggetto_requisiti_minimi"
+   ]
+  },
+  {
+   "id": "011",
+   "at": "dichiarazioni_sezione_b/documentazione_catastale",
+   "alternatives": [
+    "non_comporta_variazione_iscrizione",
+    "comporta_variazione_iscrizione"
+   ]
+  },
+  {
+   "id": "012",
+   "at": "dichiarazioni_sezione_b/toponomastica",
+   "alternatives": [
+    "non_comporta_variazione_civici",
+    "comporta_variazione_civici"
+   ]
+  },
+  {
+   "id": "013",
+   "at": "dichiarazioni_sezione_b/prevenzione_incendi/[prevenzione_incendi_ctype]",
+   "alternatives": [
+    "non_comportato_variazioni_sicurezza",
+    "comportato_variazioni_sicurezza"
+   ]
+  }
+ ]
+}

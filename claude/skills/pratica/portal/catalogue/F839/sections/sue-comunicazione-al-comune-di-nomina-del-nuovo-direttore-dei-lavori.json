@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T16:41:55.363Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-31T11:34:33.669Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Comunicazione al Comune di nomina del nuovo direttore dei lavori (sector Edilizia e pianificazione urbana)",
- "seconds": 28.3,
+ "seconds": 23.9,
  "generated": {
   "interventi": "Comunicazione di nomina nuovo direttore dei lavori",
   "adempimenti": [
@@ -66,25 +66,25 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
+   "same_as": "cil#Oggetto della pratica",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
+   "same_as": "cil#DOMICILIO DIGITALE",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "seconds": 0.6
   },
   {
@@ -98,13 +98,13 @@
   {
    "section": "ubicazione dell'attività",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
+   "same_as": "cil#Localizzazione dell'intervento",
    "seconds": 0.6
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
+   "same_as": "cil#Dati catastali",
    "seconds": 0.6
   },
   {
@@ -195,6 +195,7 @@
     }
    ],
    "fingerprint": "8ed8e9b04d334662",
+   "text": "nomina nuovo direttore dei lavori cognome nome codice fiscale via, viale, piazza numero civico comune Provincia (sigla) telefono fax ordine/collegio/albo Provincia (sigla) numero iscrizione a partire dalla data",
    "branches": [
     {
      "choice": "ordine/collegio/albo = Architetto",
@@ -257,7 +258,7 @@
      ]
     }
    ],
-   "seconds": 4.7
+   "seconds": 4.9
   },
   {
    "section": "titolo di legittimazione dell'intervento",
@@ -273,12 +274,14 @@
      "kind": "text",
      "label": "ID pratica SUAP",
      "context": "permesso di costruire",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r3c3p7reg:calendar_input",
      "kind": "date",
-     "label": "del"
+     "label": "del",
+     "disabled": true
     },
     {
      "id": "r5c1p11reg:radio:1_clone",
@@ -291,12 +294,14 @@
      "kind": "text",
      "label": "ID pratica SUAP",
      "context": "DIA",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r5c3p15reg:calendar_input",
      "kind": "date",
-     "label": "del"
+     "label": "del",
+     "disabled": true
     },
     {
      "id": "r7c1p19reg:radio:2_clone",
@@ -309,12 +314,14 @@
      "kind": "text",
      "label": "ID pratica SUAP",
      "context": "SCIA",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r7c3p23reg:calendar_input",
      "kind": "date",
-     "label": "del"
+     "label": "del",
+     "disabled": true
     },
     {
      "id": "r9c1p27reg:radio:3_clone",
@@ -327,12 +334,14 @@
      "kind": "text",
      "label": "ID pratica SUAP",
      "context": "CILA",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r9c3p31reg:calendar_input",
      "kind": "date",
-     "label": "del"
+     "label": "del",
+     "disabled": true
     },
     {
      "id": "r11c1p35reg:radio:4_clone",
@@ -345,15 +354,18 @@
      "kind": "text",
      "label": "ID pratica SUAP",
      "context": "Variante",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r11c3p39reg:calendar_input",
      "kind": "date",
-     "label": "del"
+     "label": "del",
+     "disabled": true
     }
    ],
    "fingerprint": "a6ad99bbdd629f7f",
+   "text": "titolo di legittimazione dell'intervento Indicare il Titolo posseduto: ID pratica SUAP del permesso di costruire ID pratica SUAP del DIA ID pratica SUAP del SCIA ID pratica SUAP del CILA ID pratica SUAP del Variante",
    "branches": [
     {
      "choice": "permesso di costruire",
@@ -376,6 +388,10 @@
        "r11c3p39reg:calendar_input",
        "r9c3p31reg:calendar_input"
       ]
+     ],
+     "enables": [
+      "r3c2p5reg:txt",
+      "r3c3p7reg:calendar_input"
      ]
     },
     {
@@ -399,6 +415,10 @@
        "r11c3p39reg:calendar_input",
        "r9c3p31reg:calendar_input"
       ]
+     ],
+     "enables": [
+      "r5c2p13reg:txt",
+      "r5c3p15reg:calendar_input"
      ]
     },
     {
@@ -422,6 +442,10 @@
        "r11c3p39reg:calendar_input",
        "r9c3p31reg:calendar_input"
       ]
+     ],
+     "enables": [
+      "r7c2p21reg:txt",
+      "r7c3p23reg:calendar_input"
      ]
     },
     {
@@ -445,6 +469,10 @@
        "r11c3p39reg:calendar_input",
        "r9c3p31reg:calendar_input"
       ]
+     ],
+     "enables": [
+      "r9c2p29reg:txt",
+      "r9c3p31reg:calendar_input"
      ]
     },
     {
@@ -468,10 +496,14 @@
        "r11c3p39reg:calendar_input",
        "r9c3p31reg:calendar_input"
       ]
+     ],
+     "enables": [
+      "r11c2p37reg:txt",
+      "r11c3p39reg:calendar_input"
      ]
     }
    ],
-   "seconds": 4.4
+   "seconds": 4.3
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -480,13 +512,13 @@
   {
    "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
-   "seconds": 0.6
+   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.7
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
+   "same_as": "cil#Qualifica e dati del procuratore",
    "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
@@ -529,6 +561,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft"
+ }
 }

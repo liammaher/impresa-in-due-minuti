@@ -41,5 +41,7 @@
  "impianto_antincendio": "false",
  "impianto_scariche": "false",
  "impianto_linee_vita": "false",
- "impianto_altro": "false"
+ "impianto_altro": "false",
+ "igienico_24_5bis": "false",
+ "igienico_5quater": "false"
 }

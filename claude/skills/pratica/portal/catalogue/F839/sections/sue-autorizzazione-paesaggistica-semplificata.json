@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T17:17:59.407Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-30T14:37:04.712Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Beni Paesaggistici › Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune) (sector Edilizia e pianificazione urbana)",
- "seconds": 77.4,
+ "seconds": 380.9,
  "generated": {
   "interventi": "Autorizzazione paesaggistica semplificata per interventi di lieve entità in aree soggette a vincolo paesaggistico (DPR 31/2017)",
   "adempimenti": [
@@ -67,27 +67,1763 @@
  "sections": [
   {
    "section": "Scheda anagrafica",
+   "fields": [
+    {
+     "id": "r1c1p1reg:radio:0_clone",
+     "kind": "radio",
+     "label": "DITTA/SOCIETA'/IMPRESA",
+     "group": "r1c1p1reg:radio",
+     "checked": true
+    },
+    {
+     "id": "r1c2p2reg:radio:1_clone",
+     "kind": "radio",
+     "label": "PERSONA (Privato)",
+     "group": "r1c2p2reg:radio"
+    },
+    {
+     "id": "r2c2p4reg:radio:2_clone",
+     "kind": "radio",
+     "label": "ISCRITTA ALLA CCIAA",
+     "group": "r2c2p4reg:radio"
+    },
+    {
+     "id": "r6c2p16reg:radio:3_clone",
+     "kind": "radio",
+     "label": "NON ANCORA ISCRITTA",
+     "group": "r6c2p16reg:radio"
+    },
+    {
+     "id": "r7c2p19reg:radio:4_clone",
+     "kind": "radio",
+     "label": "NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA",
+     "group": "r7c2p19reg:radio"
+    },
+    {
+     "id": "r10c1p23reg:txt",
+     "kind": "text",
+     "label": "Nome",
+     "max": 40
+    },
+    {
+     "id": "r10c2p25reg:txt",
+     "kind": "text",
+     "label": "Cognome",
+     "max": 40
+    },
+    {
+     "id": "r10c3p27reg:txt",
+     "kind": "text",
+     "label": "Cod.Fiscale",
+     "max": 16
+    },
+    {
+     "id": "r12c1p29reg",
+     "kind": "select",
+     "label": "Sesso",
+     "options": [
+      "Femminile",
+      "Maschile"
+     ]
+    },
+    {
+     "id": "r12c2p31reg:calendar_input",
+     "kind": "date",
+     "label": "Data nascita"
+    },
+    {
+     "id": "r12c3p33reg",
+     "kind": "select",
+     "label": "Cittadinanza",
+     "options": "251 options",
+     "value": "ITALIA"
+    },
+    {
+     "id": "r15c1p39reg",
+     "kind": "select",
+     "label": "Stato",
+     "options": "249 options",
+     "value": "Italia"
+    },
+    {
+     "id": "r15c2p41reg",
+     "kind": "select",
+     "label": "Provincia",
+     "options": "115 options"
+    },
+    {
+     "id": "r17c1p45reg",
+     "kind": "select",
+     "label": "Comune",
+     "options": []
+    },
+    {
+     "id": "r19c1p50reg:chk",
+     "kind": "checkbox",
+     "label": "Se cittadino non UE"
+    },
+    {
+     "id": "r24c1p61reg",
+     "kind": "select",
+     "label": "Stato",
+     "options": "244 options",
+     "value": "Italia"
+    },
+    {
+     "id": "r24c2p63reg",
+     "kind": "select",
+     "label": "Provincia",
+     "options": "111 options"
+    },
+    {
+     "id": "r26c1p67reg",
+     "kind": "select",
+     "label": "Comune",
+     "options": []
+    },
+    {
+     "id": "r29c1p73reg",
+     "kind": "select",
+     "label": "Toponimo (DUG)",
+     "options": [
+      "ALTRO",
+      "CORSO",
+      "LARGO",
+      "PIAZZA",
+      "VIA",
+      "VIALE"
+     ]
+    },
+    {
+     "id": "r31c1p79reg:txt",
+     "kind": "text",
+     "label": "Denominazione stradale",
+     "max": 60
+    },
+    {
+     "id": "r33c1p83reg:txt",
+     "kind": "text",
+     "label": "Numero civico",
+     "max": 20
+    },
+    {
+     "id": "r33c2p85reg:txt",
+     "kind": "text",
+     "label": "CAP",
+     "max": 5
+    },
+    {
+     "id": "r33c3p87reg:txt",
+     "kind": "text",
+     "label": "eMail/PEC",
+     "max": 100
+    },
+    {
+     "id": "r33c4p89reg:number",
+     "kind": "text",
+     "label": "Telefono fisso/cellulare",
+     "max": 12
+    },
+    {
+     "id": "r36c1p93reg",
+     "kind": "select",
+     "label": "Carica",
+     "options": "322 options"
+    },
+    {
+     "id": "r39c1p99reg:txt",
+     "kind": "text",
+     "label": "Denominazione (nome della ditta o azienda o ragione sociale)",
+     "max": 305
+    },
+    {
+     "id": "r41c1p103reg",
+     "kind": "select",
+     "label": "Forma giuridica",
+     "options": "72 options"
+    },
+    {
+     "id": "r41c2p105reg:txt",
+     "kind": "text",
+     "label": "Codice Fiscale",
+     "max": 16
+    },
+    {
+     "id": "r41c3p107reg:txt",
+     "kind": "text",
+     "label": "P.IVA",
+     "max": 11
+    },
+    {
+     "id": "r44c1p111reg",
+     "kind": "select",
+     "label": "Stato",
+     "options": "244 options",
+     "value": "Italia"
+    },
+    {
+     "id": "r44c2p113reg",
+     "kind": "select",
+     "label": "Provincia",
+     "options": "111 options"
+    },
+    {
+     "id": "r46c1p117reg",
+     "kind": "select",
+     "label": "Comune",
+     "options": []
+    },
+    {
+     "id": "r49c1p123reg",
+     "kind": "select",
+     "label": "Toponimo (DUG)",
+     "options": [
+      "ALTRO",
+      "CORSO",
+      "LARGO",
+      "PIAZZA",
+      "VIA",
+      "VIALE"
+     ]
+    },
+    {
+     "id": "r51c1p129reg:txt",
+     "kind": "text",
+     "label": "Denominazione stradale",
+     "max": 60
+    },
+    {
+     "id": "r51c2p131reg:txt",
+     "kind": "text",
+     "label": "Numero civico",
+     "max": 20
+    },
+    {
+     "id": "r51c3p133reg:txt",
+     "kind": "text",
+     "label": "CAP",
+     "max": 5
+    },
+    {
+     "id": "r53c1p135reg:txt",
+     "kind": "text",
+     "label": "Telefono fisso/Cellulare",
+     "max": 12
+    },
+    {
+     "id": "r53c2p137reg:txt",
+     "kind": "text",
+     "label": "Fax",
+     "max": 12
+    },
+    {
+     "id": "r53c3p139reg:txt",
+     "kind": "text",
+     "label": "PEC",
+     "max": 100
+    }
+   ],
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
-   "seconds": 0
+   "text": "Scheda anagrafica DITTA/SOCIETA'/IMPRESA PERSONA (Privato) ISCRITTA ALLA CCIAA NON ANCORA ISCRITTA NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA DATI DEL DICHIARANTE Nome Cognome Cod.Fiscale Sesso Data nascita Cittadinanza Luogo di nascita: Stato Provincia Comune Se cittadino non UE Informazioni relative alla residenza : Stato Provincia Comune Toponimo (DUG) Denominazione stradale Numero civico CAP eMail/PEC Telefono fisso/cellulare Carica DATI DELLA DITTA/SOCIETA'/IMPRESA Denominazione (nome della ditta o azienda o ragione sociale) Forma giuridica Codice Fiscale P.IVA Dati relativi alla sede legale della ditta/società/impresa Stato Provincia Comune Toponimo (DUG) Denominazione stradale Numero civico CAP Telefono fisso/Cellulare Fax PEC",
+   "branches": [
+    {
+     "choice": "PERSONA (Privato)",
+     "id": "r1c2p2reg:radio:1_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r35c1p91reg",
+       "kind": "select",
+       "label": "In qualità di:",
+       "options": [
+        "Proprietario",
+        "Comproprietario",
+        "Usufruttuario",
+        "Amministratore di condominio",
+        "Legale rappresentante",
+        "Amministratore unico",
+        "Procuratore",
+        "Altro"
+       ]
+      }
+     ],
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ],
+     "hides": [
+      "r2c2p4reg:radio:2_clone",
+      "r6c2p16reg:radio:3_clone",
+      "r7c2p19reg:radio:4_clone",
+      "r36c1p93reg",
+      "r39c1p99reg:txt",
+      "r41c1p103reg",
+      "r41c2p105reg:txt",
+      "r41c3p107reg:txt",
+      "r44c1p111reg",
+      "r44c2p113reg",
+      "r46c1p117reg",
+      "r49c1p123reg",
+      "r51c1p129reg:txt",
+      "r51c2p131reg:txt",
+      "r51c3p133reg:txt",
+      "r53c1p135reg:txt",
+      "r53c2p137reg:txt",
+      "r53c3p139reg:txt"
+     ],
+     "then": [
+      {
+       "choice": "In qualità di: = Proprietario",
+       "id": "r35c1p91reg",
+       "kind": "select",
+       "option": "Proprietario",
+       "moved": [
+        [
+         "r24c1p61reg",
+         "r15c1p39reg"
+        ],
+        [
+         "r24c2p63reg",
+         "r15c2p41reg"
+        ],
+        [
+         "r26c1p67reg",
+         "r17c1p45reg"
+        ]
+       ]
+      },
+      {
+       "choice": "In qualità di: = Comproprietario",
+       "id": "r35c1p91reg",
+       "kind": "select",
+       "option": "Comproprietario",
+       "moved": [
+        [
+         "r24c1p61reg",
+         "r15c1p39reg"
+        ],
+        [
+         "r24c2p63reg",
+         "r15c2p41reg"
+        ],
+        [
+         "r26c1p67reg",
+         "r17c1p45reg"
+        ]
+       ]
+      },
+      {
+       "choice": "In qualità di: = Usufruttuario",
+       "id": "r35c1p91reg",
+       "kind": "select",
+       "option": "Usufruttuario",
+       "moved": [
+        [
+         "r24c1p61reg",
+         "r15c1p39reg"
+        ],
+        [
+         "r24c2p63reg",
+         "r15c2p41reg"
+        ],
+        [
+         "r26c1p67reg",
+         "r17c1p45reg"
+        ]
+       ]
+      },
+      {
+       "choice": "In qualità di: = Amministratore di condominio",
+       "id": "r35c1p91reg",
+       "kind": "select",
+       "option": "Amministratore di condominio",
+       "moved": [
+        [
+         "r24c1p61reg",
+         "r15c1p39reg"
+        ],
+        [
+         "r24c2p63reg",
+         "r15c2p41reg"
+        ],
+        [
+         "r26c1p67reg",
+         "r17c1p45reg"
+        ]
+       ]
+      },
+      {
+       "choice": "In qualità di: = Legale rappresentante",
+       "id": "r35c1p91reg",
+       "kind": "select",
+       "option": "Legale rappresentante",
+       "moved": [
+        [
+         "r24c1p61reg",
+         "r15c1p39reg"
+        ],
+        [
+         "r24c2p63reg",
+         "r15c2p41reg"
+        ],
+        [
+         "r26c1p67reg",
+         "r17c1p45reg"
+        ]
+       ]
+      },
+      {
+       "choice": "In qualità di: = Amministratore unico",
+       "id": "r35c1p91reg",
+       "kind": "select",
+       "option": "Amministratore unico",
+       "moved": [
+        [
+         "r24c1p61reg",
+         "r15c1p39reg"
+        ],
+        [
+         "r24c2p63reg",
+         "r15c2p41reg"
+        ],
+        [
+         "r26c1p67reg",
+         "r17c1p45reg"
+        ]
+       ]
+      },
+      {
+       "choice": "In qualità di: = Procuratore",
+       "id": "r35c1p91reg",
+       "kind": "select",
+       "option": "Procuratore",
+       "moved": [
+        [
+         "r24c1p61reg",
+         "r15c1p39reg"
+        ],
+        [
+         "r24c2p63reg",
+         "r15c2p41reg"
+        ],
+        [
+         "r26c1p67reg",
+         "r17c1p45reg"
+        ]
+       ]
+      },
+      {
+       "choice": "In qualità di: = Altro",
+       "id": "r35c1p91reg",
+       "kind": "select",
+       "option": "Altro",
+       "reveals": [
+        {
+         "id": "r37c1p95reg:txt",
+         "kind": "text",
+         "label": "specificare:",
+         "max": 100
+        }
+       ],
+       "moved": [
+        [
+         "r24c1p61reg",
+         "r15c1p39reg"
+        ],
+        [
+         "r24c2p63reg",
+         "r15c2p41reg"
+        ],
+        [
+         "r26c1p67reg",
+         "r17c1p45reg"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "choice": "ISCRITTA ALLA CCIAA",
+     "id": "r2c2p4reg:radio:2_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r8c1p16reg",
+       "kind": "select",
+       "label": "Camera di commercio di:",
+       "options": "106 options"
+      }
+     ],
+     "moved": [
+      [
+       "r41c2p105reg:txt",
+       "r4c1p7reg:txt"
+      ],
+      [
+       "r6c2p16reg:radio:3_clone",
+       "r9c2p24reg:radio:3_clone"
+      ],
+      [
+       "r7c2p19reg:radio:4_clone",
+       "r10c2p27reg:radio:4_clone"
+      ],
+      [
+       "r10c1p23reg:txt",
+       "r13c1p31reg:txt"
+      ],
+      [
+       "r10c2p25reg:txt",
+       "r13c2p33reg:txt"
+      ],
+      [
+       "r10c3p27reg:txt",
+       "r13c3p35reg:txt"
+      ],
+      [
+       "r12c1p29reg",
+       "r15c1p37reg"
+      ],
+      [
+       "r12c2p31reg:calendar_input",
+       "r15c2p39reg:calendar_input"
+      ],
+      [
+       "r12c3p33reg",
+       "r15c3p41reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r18c1p47reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r18c2p49reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r20c1p53reg"
+      ],
+      [
+       "r19c1p50reg:chk",
+       "r22c1p58reg:chk"
+      ],
+      [
+       "r44c1p111reg",
+       "r27c1p69reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r27c2p71reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r29c1p75reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r32c1p81reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r34c1p87reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r36c1p91reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r36c2p93reg:txt"
+      ],
+      [
+       "r33c3p87reg:txt",
+       "r36c3p95reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r36c4p97reg:number"
+      ],
+      [
+       "r36c1p93reg",
+       "r39c1p101reg"
+      ],
+      [
+       "r39c1p99reg:txt",
+       "r42c1p107reg:txt"
+      ],
+      [
+       "r41c1p103reg",
+       "r44c1p111reg"
+      ],
+      [
+       "r41c2p105reg:txt",
+       "r44c2p113reg:txt"
+      ],
+      [
+       "r41c3p107reg:txt",
+       "r44c3p115reg:txt"
+      ],
+      [
+       "r44c1p111reg",
+       "r47c1p119reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r47c2p121reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r49c1p125reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r52c1p131reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r54c1p137reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r54c2p139reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r54c3p141reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r56c1p143reg:txt"
+      ],
+      [
+       "r53c2p137reg:txt",
+       "r56c2p145reg:txt"
+      ],
+      [
+       "r53c3p139reg:txt",
+       "r56c3p147reg:txt"
+      ]
+     ]
+    },
+    {
+     "choice": "NON ANCORA ISCRITTA",
+     "id": "r6c2p16reg:radio:3_clone",
+     "kind": "radio",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA",
+     "id": "r7c2p19reg:radio:4_clone",
+     "kind": "radio",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Sesso = Femminile",
+     "id": "r12c1p29reg",
+     "kind": "select",
+     "option": "Femminile",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Sesso = Maschile",
+     "id": "r12c1p29reg",
+     "kind": "select",
+     "option": "Maschile",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Se cittadino non UE",
+     "id": "r19c1p50reg:chk",
+     "kind": "checkbox",
+     "reveals": [
+      {
+       "id": "r21c1p53reg:txt",
+       "kind": "text",
+       "label": "estremi del documento di soggiorno",
+       "max": 9
+      },
+      {
+       "id": "r21c2p55reg:txt",
+       "kind": "text",
+       "label": "rilasciato da",
+       "max": 100
+      },
+      {
+       "id": "r23c1p59reg:calendar_input",
+       "kind": "date",
+       "label": "il"
+      },
+      {
+       "id": "r23c2p61reg:calendar_input",
+       "kind": "date",
+       "label": "scadenza"
+      }
+     ],
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r26c2p69reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r28c1p73reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r31c1p79reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r33c1p85reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r35c1p89reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r35c2p91reg:txt"
+      ],
+      [
+       "r33c3p87reg:txt",
+       "r35c3p93reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r35c4p95reg:number"
+      ],
+      [
+       "r36c1p93reg",
+       "r38c1p99reg"
+      ],
+      [
+       "r39c1p99reg:txt",
+       "r41c1p105reg:txt"
+      ],
+      [
+       "r41c1p103reg",
+       "r43c1p109reg"
+      ],
+      [
+       "r41c2p105reg:txt",
+       "r43c2p111reg:txt"
+      ],
+      [
+       "r41c3p107reg:txt",
+       "r43c3p113reg:txt"
+      ],
+      [
+       "r44c1p111reg",
+       "r46c1p117reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r46c2p119reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r48c1p123reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r51c1p129reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r53c1p135reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r53c2p137reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r53c3p139reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r55c1p141reg:txt"
+      ],
+      [
+       "r53c2p137reg:txt",
+       "r55c2p143reg:txt"
+      ],
+      [
+       "r53c3p139reg:txt",
+       "r55c3p145reg:txt"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = ALTRO",
+     "id": "r29c1p73reg",
+     "kind": "select",
+     "option": "ALTRO",
+     "reveals": [
+      {
+       "id": "r29c2p75reg",
+       "kind": "select",
+       "label": "da compilare obbligatoriamente nel caso si sia selezionato 'ALTRO' nel Toponimo-DUG",
+       "context": "Dettaglio DUG",
+       "options": "190 options"
+      }
+     ],
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = CORSO",
+     "id": "r29c1p73reg",
+     "kind": "select",
+     "option": "CORSO",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = LARGO",
+     "id": "r29c1p73reg",
+     "kind": "select",
+     "option": "LARGO",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = PIAZZA",
+     "id": "r29c1p73reg",
+     "kind": "select",
+     "option": "PIAZZA",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = VIA",
+     "id": "r29c1p73reg",
+     "kind": "select",
+     "option": "VIA",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = VIALE",
+     "id": "r29c1p73reg",
+     "kind": "select",
+     "option": "VIALE",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = ALTRO",
+     "id": "r49c1p123reg",
+     "kind": "select",
+     "option": "ALTRO",
+     "reveals": [
+      {
+       "id": "r49c2p125reg",
+       "kind": "select",
+       "label": "da compilare obbligatoriamente nel caso si sia selezionato 'ALTRO' nel Toponimo-DUG",
+       "context": "Dettaglio DUG",
+       "options": "190 options"
+      }
+     ],
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = CORSO",
+     "id": "r49c1p123reg",
+     "kind": "select",
+     "option": "CORSO",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = LARGO",
+     "id": "r49c1p123reg",
+     "kind": "select",
+     "option": "LARGO",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = PIAZZA",
+     "id": "r49c1p123reg",
+     "kind": "select",
+     "option": "PIAZZA",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = VIA",
+     "id": "r49c1p123reg",
+     "kind": "select",
+     "option": "VIA",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    },
+    {
+     "choice": "Toponimo (DUG) = VIALE",
+     "id": "r49c1p123reg",
+     "kind": "select",
+     "option": "VIALE",
+     "moved": [
+      [
+       "r44c1p111reg",
+       "r15c1p39reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r15c2p41reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r17c1p45reg"
+      ],
+      [
+       "r44c1p111reg",
+       "r24c1p61reg"
+      ],
+      [
+       "r44c2p113reg",
+       "r24c2p63reg"
+      ],
+      [
+       "r46c1p117reg",
+       "r26c1p67reg"
+      ],
+      [
+       "r49c1p123reg",
+       "r29c1p73reg"
+      ],
+      [
+       "r51c1p129reg:txt",
+       "r31c1p79reg:txt"
+      ],
+      [
+       "r51c2p131reg:txt",
+       "r33c1p83reg:txt"
+      ],
+      [
+       "r51c3p133reg:txt",
+       "r33c2p85reg:txt"
+      ],
+      [
+       "r53c1p135reg:txt",
+       "r33c4p89reg:number"
+      ]
+     ]
+    }
+   ],
+   "seconds": 95.5
   },
   {
    "section": "Oggetto della pratica",
+   "fields": [
+    {
+     "id": "r2c1p2reg:txta",
+     "kind": "textarea",
+     "label": "300 Caratteri restanti",
+     "context": "descrizione sintetica",
+     "max": 300
+    }
+   ],
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
-   "seconds": 1.2
+   "text": "Oggetto della pratica descrizione sintetica 300 Caratteri restanti",
+   "branches": [],
+   "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
+   "fields": [
+    {
+     "id": "r4c1p4reg:chk",
+     "kind": "checkbox",
+     "label": "il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005):"
+    },
+    {
+     "id": "r5c1p5reg:chk",
+     "kind": "checkbox",
+     "label": "il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) :"
+    }
+   ],
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
-   "seconds": 0.7
+   "text": "DOMICILIO DIGITALE Il /La sottoscritta/o, consapevole che il domicilio digitale è l’indirizzo elettronico eletto presso un servizio di posta elettronica certificata o un servizio elettronico di recapito certificato qualificato, come definito dal regolamento (UE) 23 luglio 2014 n. 910 – eIDAS valido ai fini delle comunicazioni avente valore legale, COMUNICA ai sensi dell’art. 3 3-bis e dell’art. 6 del D.lgs lgs. n. 82/2005 2005, il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005): il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) : Che cos’è il domicilio digitale ? • Il domicilio digitale è un indirizzo elettronico eletto presso un servizio di posta elettronica certificata o un servizio elettronico di recapito certificato qualificato, come definito dal regolamento (UE) 23 luglio 2014 n. 910 del Parlamento europeo e del Consiglio in materia di identificazione elettronica e servizi fiduciari per le transazioni elettroniche nel mercato interno e che abroga la direttiva 1999/93/CE \"Regolamento valido ai fini delle comunicazioni elettroniche aventi valore legale. (Art. 1, comma 1, lett. n ter del D. lgs . 82/2005 (Codice dell’amministra zione digitale, CAD)). • I soggetti tenuti all'iscrizione nel registro delle imprese e i professionisti tenuti all'iscrizione in albi ed elenchi hanno l'obbligo di dotarsi di un domicilio digitale iscritto nell'Indice nazionale dei domicili digitali (INI PEC ) delle imprese e dei professionist i (Art. 3 b is , comma 1 del CAD) • Le persone fisiche e i professionisti non iscritti in albi, registri o elenchi professionali possono iscrivere un loro domicilio elettronico nell’ elenco dei domicili digitali delle persone fisiche, dei professionisti e degli altri enti di diritto privato (INAD) (Art. 3 bis , comma 1 bis del CAD). • È possibile eleggere anche un domicilio digitale speciale per determinati atti, procedi menti o affari. In tal caso, ferma restando la validità ai fini delle comunicazioni elettroniche aventi valore legale, colui che lo ha eletto non può opporre eccezioni relative alla forma e alla data della spedizione e del ricevimento delle comunicazioni o notificazioni ivi indirizzate (Art. 3 bis , comma 4 quinques del CAD). • Le comunicazioni tramite i domicili digitali sono effettuate agli indirizzi inseriti in INI-PEC o INAD o a quello eletto come domicilio speciale per determinati atti o affari. Le comunicazioni elettroniche trasmesse a uno di questi domicili digitali producono, al momento della spedizione e del ricevimento, gli stessi effetti giuridici delle comunicazioni a mezzo raccomandata con ricevuta di ritorno ed equivalgono alla notificazione per mezzo della posta salvo che la legge disponga diversamente. Le suddette comunicazioni si intendono spedite dal mittente se inviate al proprio gestore e si intendono consegnate se rese disponibili al domicilio digitale del destinatario, salva la prova che la mancata consegna sia dovuta a f",
+   "branches": [
+    {
+     "choice": "il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005):",
+     "id": "r4c1p4reg:chk",
+     "kind": "checkbox",
+     "reveals": [
+      {
+       "id": "r6c1p6reg:txt",
+       "kind": "text",
+       "label": "il seguente domicilio digitale inserito in INAD (art.6 -quater, D.lgs lgs. n. 82/2005):",
+       "max": 9999
+      }
+     ],
+     "moved": [
+      [
+       "r5c1p5reg:chk",
+       "r7c1p7reg:chk"
+      ]
+     ]
+    },
+    {
+     "choice": "il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) :",
+     "id": "r5c1p5reg:chk",
+     "kind": "checkbox",
+     "reveals": [
+      {
+       "id": "r7c1p7reg:txt",
+       "kind": "text",
+       "label": "il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) :",
+       "max": 9999
+      }
+     ]
+    }
+   ],
+   "seconds": 4
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "fields": [
+    {
+     "id": "r3c1p3reg:txt",
+     "kind": "text",
+     "label": "N.B. Inserire l'indirizzo della casella PEC a cui lo Sportello dovrà inviare la ricevuta e le altre comunicazioni relative alla pratica",
+     "max": 9999
+    },
+    {
+     "id": "r4c1p4reg:chk",
+     "kind": "checkbox",
+     "label": "Si dichiara di essere consapevoli che nel caso non venga indicata una casella di posta elettronica certificata (PEC), non si avra' la certezza del buon esito de"
+    }
+   ],
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 1
+   "text": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE) Per tutti gli atti e le comunicazioni inerenti il procedimento ELEGGE il seguente domicilio digitale speciale (art. 3-bis, comma 4-quinquies del D.lgs. n. 82/2005): N.B. Inserire l'indirizzo della casella PEC a cui lo Sportello dovrà inviare la ricevuta e le altre comunicazioni relative alla pratica Si dichiara di essere consapevoli che nel caso non venga indicata una casella di posta elettronica certificata (PEC), non si avra' la certezza del buon esito dell' eventuale scambio di comunicazioni che seguiranno la presente istanza",
+   "branches": [],
+   "seconds": 1.6
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -99,21 +1835,315 @@
   },
   {
    "section": "dichiarazione ubicazione dell'intervento",
+   "fields": [
+    {
+     "id": "r2c1p2reg:txt",
+     "kind": "text",
+     "label": "Comune",
+     "max": 50,
+     "prefilled": true
+    },
+    {
+     "id": "r2c2p4reg:txt",
+     "kind": "text",
+     "label": "Frazione",
+     "max": 60
+    },
+    {
+     "id": "r2c3p6reg:txt",
+     "kind": "text",
+     "label": "Prov.",
+     "max": 2,
+     "prefilled": true
+    },
+    {
+     "id": "r2c4p8reg:txtws_input",
+     "kind": "lookup",
+     "label": "CAP",
+     "max": 5
+    },
+    {
+     "id": "r5c1p13reg:txtws_input",
+     "kind": "lookup",
+     "label": "Via, Viale, Piazza",
+     "max": 60
+    },
+    {
+     "id": "r5c2p15reg:txtws_input",
+     "kind": "lookup",
+     "label": "n° civico",
+     "max": 20
+    },
+    {
+     "id": "r7c1p19reg:txtws_input",
+     "kind": "lookup",
+     "label": "scala",
+     "max": 9999
+    },
+    {
+     "id": "r7c2p21reg:txtws_input",
+     "kind": "lookup",
+     "label": "piano",
+     "max": 10
+    },
+    {
+     "id": "r7c3p23reg:txtws_input",
+     "kind": "lookup",
+     "label": "interno",
+     "max": 10
+    }
+   ],
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
-   "seconds": 0.9
+   "text": "dichiarazione ubicazione dell'intervento Comune Frazione Prov. CAP ATTENZIONE - l'ubicazione dell'attività o intervento coincide con il Comune a cui è destinata la pratica Via, Viale, Piazza n° civico scala piano interno",
+   "branches": [],
+   "seconds": 1.1
   },
   {
    "section": "dati catastali",
+   "fields": [
+    {
+     "id": "r1c1p1reg:radio:0_clone",
+     "kind": "radio",
+     "label": "Nuovo Catasto Edilizio Urbano",
+     "group": "r1c1p1reg:radio",
+     "context": "NCEU"
+    },
+    {
+     "id": "r1c2p2reg:radio:1_clone",
+     "kind": "radio",
+     "label": "Nuovo Catasto Terreni",
+     "group": "r1c2p2reg:radio",
+     "context": "NCT"
+    },
+    {
+     "id": "r3c1p5reg:number",
+     "kind": "text",
+     "label": "foglio",
+     "max": 5
+    },
+    {
+     "id": "r3c2p7reg:txt",
+     "kind": "text",
+     "label": "particella/mappale",
+     "max": 5
+    },
+    {
+     "id": "r3c3p9reg:number",
+     "kind": "text",
+     "label": "subalterno",
+     "max": 4
+    }
+   ],
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
-   "seconds": 1.3
+   "text": "dati catastali NCEU NCT foglio particella/mappale subalterno _____________________________________________________________________________________",
+   "branches": [
+    {
+     "choice": "Nuovo Catasto Edilizio Urbano",
+     "id": "r1c1p1reg:radio:0_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r5c1p13reg:txt",
+       "kind": "text",
+       "label": "sezione Amministrativa (Fabbricati)",
+       "max": 1
+      },
+      {
+       "id": "r5c2p15reg:txt",
+       "kind": "text",
+       "label": "sezione Urbana (Fabbricati)",
+       "max": 3
+      },
+      {
+       "id": "r5c3p17reg:txt",
+       "kind": "text",
+       "label": "classe",
+       "max": 3
+      },
+      {
+       "id": "r8c1p23reg",
+       "kind": "select",
+       "label": "categoria",
+       "options": "52 options"
+      }
+     ],
+     "plus": {
+      "anchor": "Il valore è obbligatorio",
+      "adds": 16
+     }
+    },
+    {
+     "choice": "Nuovo Catasto Terreni",
+     "id": "r1c2p2reg:radio:1_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r6c1p17reg:txt",
+       "kind": "text",
+       "label": "sezione Censuaria (Terreni)",
+       "max": 1
+      }
+     ],
+     "plus": {
+      "anchor": "Nuovo Catasto Edilizio Urbano",
+      "adds": 10
+     }
+    }
+   ],
+   "seconds": 7.1
   },
   {
    "section": "dati relativi al nome del tecnico",
+   "fields": [
+    {
+     "id": "r1c1p1reg:radio:0_clone",
+     "kind": "radio",
+     "label": "è colui che presenta la pratica",
+     "group": "r1c1p1reg:radio"
+    },
+    {
+     "id": "r1c2p2reg:radio:1_clone",
+     "kind": "radio",
+     "label": "non è colui che presenta la pratica",
+     "group": "r1c2p2reg:radio"
+    },
+    {
+     "id": "r9c1p22reg:txt",
+     "kind": "text",
+     "label": "ordine/collegio/albo (1) (2)",
+     "max": 100
+    },
+    {
+     "id": "r9c2p24reg:txt",
+     "kind": "text",
+     "label": "provincia (sigla) (2)",
+     "max": 2
+    },
+    {
+     "id": "r9c3p26reg:txt",
+     "kind": "text",
+     "label": "numero iscrizione (2)",
+     "max": 8
+    }
+   ],
    "fingerprint": "ffddb90f4d2ab273",
-   "same_as": "sue-autorizzazione-paesaggistica-ordinaria#dati relativi al nome del tecnico",
-   "seconds": 0.6
+   "text": "dati relativi al nome del tecnico è colui che presenta la pratica non è colui che presenta la pratica ordine/collegio/albo (1) (2) provincia (sigla) (2) numero iscrizione (2) (1) indicare se architetto, geometra, ingegnere, perito o agronomo. (2) La compilazione di questi campi è obbligatoria anche nel caso in cui il tecnico incaricato è colui che presenta la pratica.",
+   "branches": [
+    {
+     "choice": "è colui che presenta la pratica",
+     "id": "r1c1p1reg:radio:0_clone",
+     "kind": "radio",
+     "plus": {
+      "anchor": "ordine/collegio/albo (1) (2)",
+      "adds": 6
+     }
+    },
+    {
+     "choice": "non è colui che presenta la pratica",
+     "id": "r1c2p2reg:radio:1_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r3c1p5reg:txt",
+       "kind": "text",
+       "label": "cognome",
+       "max": 30
+      },
+      {
+       "id": "r3c2p7reg:txt",
+       "kind": "text",
+       "label": "nome",
+       "max": 30
+      },
+      {
+       "id": "r5c1p11reg:txt",
+       "kind": "text",
+       "label": "codice fiscale",
+       "max": 16
+      },
+      {
+       "id": "r8c1p17reg",
+       "kind": "select",
+       "label": "Stato",
+       "options": "251 options",
+       "value": "ITALIA"
+      },
+      {
+       "id": "r8c2p19reg",
+       "kind": "select",
+       "label": "Provincia",
+       "options": "112 options"
+      },
+      {
+       "id": "r8c3p21reg:txt",
+       "kind": "text",
+       "label": "Comune italiano o Località estera",
+       "max": 100
+      },
+      {
+       "id": "r10c1p25reg:txt",
+       "kind": "text",
+       "label": "Via, viale, piazza",
+       "max": 50
+      },
+      {
+       "id": "r10c2p27reg:txt",
+       "kind": "text",
+       "label": "Numero civico",
+       "max": 5
+      },
+      {
+       "id": "r10c3p29reg:txt",
+       "kind": "text",
+       "label": "C.A.P.",
+       "max": 5
+      },
+      {
+       "id": "r12c1p31reg:number",
+       "kind": "text",
+       "label": "Telefono",
+       "max": 10
+      },
+      {
+       "id": "r12c2p33reg:number",
+       "kind": "text",
+       "label": "Fax",
+       "max": 15
+      },
+      {
+       "id": "r14c1p37reg:number",
+       "kind": "text",
+       "label": "Cell.",
+       "max": 15
+      },
+      {
+       "id": "r14c2p39reg:txt",
+       "kind": "text",
+       "label": "Posta elettronica certificata",
+       "max": 100
+      }
+     ],
+     "moved": [
+      [
+       "r9c1p22reg:txt",
+       "r16c1p43reg:txt"
+      ],
+      [
+       "r9c2p24reg:txt",
+       "r16c2p45reg:txt"
+      ],
+      [
+       "r9c3p26reg:txt",
+       "r16c3p47reg:txt"
+      ]
+     ],
+     "plus": {
+      "anchor": "cognome",
+      "adds": 32
+     }
+    }
+   ],
+   "seconds": 7.9
   },
   {
    "section": "Qualificazione dell'intervento",
@@ -330,6 +2360,7 @@
     }
    ],
    "fingerprint": "24951c61da272643",
+   "text": "Qualificazione dell'intervento L'intervento in oggetto è di lieve entità ed è riconducibile all' Allegato B (Elenco interventi di lieve entità soggetti a procedimento autorizzativo semplificato) del D.P.R. del 13 febbraio 2017, n. 31 Selezionare la voce dell'allegato B a cui l'intervento è riconducibile: B.1. Incrementi di volume non superiori al 10 per cento della volumetria della costruzione originaria e comunque non superiori a 100 mc, eseguiti nel rispetto delle caratteristiche architettoniche, morfo-tipologiche, dei materiali e delle finiture esistenti. Ogni ulteriore incremento sullo stesso immobile da eseguirsi nei cinque anni successivi all'ultimazione lavori è sottoposto a procedimento autorizzatorio ordinario; B.2. realizzazione o modifica di aperture esterne o finestre a tetto riguardanti beni vincolati ai sensi del Codice, art. 136, comma 1, lettere a), b) e c) limitatamente, per quest'ultima, agli immobili di interesse storico-architettonico o storico-testimoniale, ivi compresa l'edilizia rurale tradizionale, isolati o ricompresi nei centri o nuclei storici, purchè tali interventi siano eseguiti nel rispetto delle caratteristiche architettoniche, morfo-tipologiche, dei materiali e delle finiture esistenti; B.3. interventi sui prospetti, diversi da quelli di cui alla voce B.2, comportanti alterazione dell'aspetto esteriore degli edifici mediante modifica delle caratteristiche architettoniche, morfo-tipologiche, dei materiali o delle finiture esistenti, quali: modifica delle facciate mediante realizzazione o riconfigurazione di aperture esterne, ivi comprese vetrine e dispositivi di protezione delle attività economiche, o di manufatti quali cornicioni, ringhiere, parapetti; interventi sulle finiture esterne, con rifacimento di intonaci, tinteggiature o rivestimenti esterni, modificativi di quelli preesistenti; realizzazione, modifica o chiusura di balconi o terrazze; realizzazione o modifica sostanziale di scale esterne; B.4. interventi sulle coperture, diversi da quelli di cui alla voce B.2, comportanti alterazione dell'aspetto esteriore degli edifici mediante modifica delle caratteristiche architettoniche, morfo-tipologiche, dei materiali o delle finiture esistenti, quali: rifacimento del manto del tetto con materiali diversi; modifiche alle coperture finalizzate all'installazione di impianti tecnologici; modifiche alla inclinazione o alla configurazione delle falde; realizzazione di lastrici solari o terrazze a tasca; inserimento di canne fumarie o comignoli; realizzazione di finestre a tetto, lucernari, abbaini o elementi consimili; B.5. interventi di adeguamento alla normativa antisismica ovvero finalizzati al contenimento dei consumi energetici degli edifici, laddove comportanti innovazioni nelle caratteristiche morfotipologiche, ovvero nei materiali di finitura o di rivestimento preesistenti; B.6. interventi necessari per il superamento di barriere architettoniche, laddove comportanti la realizzazione di rampe per il superamento",
    "branches": [
     {
      "choice": "B.1. Incrementi di volume non superiori al 10 per cento della volumetria della costruzione originaria e comunque non superiori a 100 mc, eseguiti nel rispetto d",
@@ -437,12 +2468,6 @@
      "kind": "checkbox"
     },
     {
-     "choice": "B.22. taglio, senza sostituzione, di alberi, ferma l'autorizzazione degli uffici competenti, ove prevista; sostituzione o messa a dimora di alberi e arbusti nel",
-     "id": "r24c1p25reg:chk",
-     "kind": "checkbox",
-     "by_hand": "2026-10-29: crawl.js never ticks a box with 'autorizz' in it; tried in the pane, undone with Annulla"
-    },
-    {
      "choice": "B.23. realizzazione di opere accessorie in soprasuolo correlate alla realizzazione di reti di distribuzione locale di servizi di pubblico interesse o di fognatu",
      "id": "r25c1p26reg:chk",
      "kind": "checkbox"
@@ -543,7 +2568,7 @@
      "kind": "checkbox"
     }
    ],
-   "seconds": 48
+   "seconds": 101.1
   },
   {
    "section": "Ambito dell'intervento",
@@ -570,6 +2595,7 @@
     }
    ],
    "fingerprint": "8cbcfdd54fdcde26",
+   "text": "Ambito dell'intervento Il sottoscritto dichiara che l'intervento necessita di Autorizzazione Paesaggistica, ai sensi dell'art. 146 del D.lgs 42/2004 e s.m.i., in quanto ricade in ambito assogettato a tutela paesaggistica ai sensi: dell'art. 136, c.1, del D.lgs 42/2004 dell'art. 142, c.1, del D.lgs 42/2004 dell'art. 134, c.1, del D.Lgs 42/2004 In caso di intervento in VARIANTE :",
    "branches": [
     {
      "choice": "dell'art. 136, c.1, del D.lgs 42/2004",
@@ -667,7 +2693,7 @@
      ]
     }
    ],
-   "seconds": 6.7
+   "seconds": 8.6
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -675,21 +2701,755 @@
   },
   {
    "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
+   "fields": [
+    {
+     "id": "r2c1p2reg:radio:0_clone",
+     "kind": "radio",
+     "label": "non sono dovuti oneri quali diritti o spese",
+     "group": "r2c1p2reg:radio"
+    },
+    {
+     "id": "r3c1p3reg:radio:1_clone",
+     "kind": "radio",
+     "label": "poiché non previsti dal tariffario",
+     "group": "r3c1p3reg:radio",
+     "disabled": true
+    },
+    {
+     "id": "r3c2p4reg:radio:2_clone",
+     "kind": "radio",
+     "label": "poiché esentati",
+     "group": "r3c2p4reg:radio",
+     "disabled": true
+    },
+    {
+     "id": "r5c1p8reg:radio:3_clone",
+     "kind": "radio",
+     "label": "sono dovuti oneri quali diritti o spese",
+     "group": "r5c1p8reg:radio"
+    },
+    {
+     "id": "r7c1p10reg:real",
+     "kind": "text",
+     "label": "per un totale di Euro",
+     "max": 11,
+     "disabled": true
+    },
+    {
+     "id": "r8c1p13reg:radio:4_clone",
+     "kind": "radio",
+     "label": "pagamento on line alla pagina successiva \"Pagamento oneri\"",
+     "group": "r8c1p13reg:radio",
+     "disabled": true
+    }
+   ],
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
-   "seconds": 1
+   "text": "dichiarazione relativa ai diritti di segreteria/istruttori VERSAMENTO DIRITTI O SPESE non sono dovuti oneri quali diritti o spese poiché non previsti dal tariffario poiché esentati sono dovuti oneri quali diritti o spese per un totale di Euro pagamento on line alla pagina successiva \"Pagamento oneri\"",
+   "branches": [
+    {
+     "choice": "non sono dovuti oneri quali diritti o spese",
+     "id": "r2c1p2reg:radio:0_clone",
+     "kind": "radio",
+     "enables": [
+      "r3c1p3reg:radio:1_clone",
+      "r3c2p4reg:radio:2_clone"
+     ],
+     "then": [
+      {
+       "choice": "poiché non previsti dal tariffario",
+       "id": "r3c1p3reg:radio:1_clone",
+       "kind": "radio"
+      },
+      {
+       "choice": "poiché esentati",
+       "id": "r3c2p4reg:radio:2_clone",
+       "kind": "radio",
+       "reveals": [
+        {
+         "id": "r5c1p7reg:txta",
+         "kind": "textarea",
+         "label": "300 Caratteri restanti",
+         "context": "specificare la motivazione",
+         "max": 300
+        }
+       ],
+       "moved": [
+        [
+         "r5c1p8reg:radio:3_clone",
+         "r6c1p10reg:radio:3_clone"
+        ],
+        [
+         "r7c1p10reg:real",
+         "r8c1p12reg:real"
+        ],
+        [
+         "r8c1p13reg:radio:4_clone",
+         "r9c1p15reg:radio:4_clone"
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "choice": "sono dovuti oneri quali diritti o spese",
+     "id": "r5c1p8reg:radio:3_clone",
+     "kind": "radio",
+     "enables": [
+      "r7c1p10reg:real",
+      "r8c1p13reg:radio:4_clone"
+     ],
+     "then": [
+      {
+       "choice": "pagamento on line alla pagina successiva \"Pagamento oneri\"",
+       "id": "r8c1p13reg:radio:4_clone",
+       "kind": "radio"
+      }
+     ]
+    }
+   ],
+   "seconds": 10
   },
   {
    "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "fields": [
+    {
+     "id": "r3c1p3reg:radio:0_clone",
+     "kind": "radio",
+     "label": "Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digitale pagoPA [NB: questa opzione è possibile solo se lo Sportello Unico aderisce a",
+     "group": "r3c1p3reg:radio"
+    },
+    {
+     "id": "r8c1p14reg:radio:1_clone",
+     "kind": "radio",
+     "label": "Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo di cui si riportano i numeri di serie identificativi (le marche da bollo utilizzate s",
+     "group": "r8c1p14reg:radio"
+    },
+    {
+     "id": "r11c2p21reg:txt",
+     "kind": "text",
+     "label": "numero seriale (1)",
+     "max": 14,
+     "disabled": true
+    },
+    {
+     "id": "r19c1p43reg:radio:2_clone",
+     "kind": "radio",
+     "label": "Per gli Enti autorizzati, l'imposta di bollo è assolta in modo virtuale ai sensi del D.M. 10/11/2011 o ai sensi dell'art. 15 D.P.R. 642/1972 ...",
+     "group": "r19c1p43reg:radio"
+    },
+    {
+     "id": "r21c1p46reg:radio:3_clone",
+     "kind": "radio",
+     "label": "Il pagamento non è dovuto poiché esentati ...",
+     "group": "r21c1p46reg:radio"
+    }
+   ],
    "fingerprint": "869752d2cea5aef3",
-   "same_as": "sue-permesso-di-costruire-art-10-d-p-r-380-2001#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
-   "seconds": 1.3
+   "text": "Dichiarazione relativa all'assolvimento dell'imposta di bollo VERSAMENTO DELL'IMPOSTA DI BOLLO E' obbligatorio selezionare una delle seguenti quattro opzioni: Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digitale pagoPA [NB: questa opzione è possibile solo se lo Sportello Unico aderisce a pagoPA] ... Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo di cui si riportano i numeri di serie identificativi (le marche da bollo utilizzate saranno poi annullate e conservate in originale) ... numero seriale (1) Per gli Enti autorizzati, l'imposta di bollo è assolta in modo virtuale ai sensi del D.M. 10/11/2011 o ai sensi dell'art. 15 D.P.R. 642/1972 ... Il pagamento non è dovuto poiché esentati ...",
+   "branches": [
+    {
+     "choice": "Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digitale pagoPA [NB: questa opzione è possibile solo se lo Sportello Unico aderisce a",
+     "id": "r3c1p3reg:radio:0_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r5c2p7reg:radio:1_clone",
+       "kind": "radio",
+       "label": "Due marche da €16,00 ciascuna, una per la domanda e una per l'autorizzazione",
+       "group": "r5c2p7reg:radio"
+      },
+      {
+       "id": "r6c2p10reg:radio:2_clone",
+       "kind": "radio",
+       "label": "Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo per l'autorizzazione perché il procedimento può concludersi con il silenzio assens",
+       "group": "r6c2p10reg:radio"
+      }
+     ],
+     "moved": [
+      [
+       "r8c1p14reg:radio:1_clone",
+       "r8c1p14reg:radio:3_clone"
+      ],
+      [
+       "r19c1p43reg:radio:2_clone",
+       "r19c1p43reg:radio:4_clone"
+      ],
+      [
+       "r21c1p46reg:radio:3_clone",
+       "r21c1p46reg:radio:5_clone"
+      ]
+     ],
+     "then": [
+      {
+       "choice": "Due marche da €16,00 ciascuna, una per la domanda e una per l'autorizzazione",
+       "id": "r5c2p7reg:radio:1_clone",
+       "kind": "radio"
+      },
+      {
+       "choice": "Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo per l'autorizzazione perché il procedimento può concludersi con il silenzio assens",
+       "id": "r6c2p10reg:radio:2_clone",
+       "kind": "radio",
+       "reveals": [
+        {
+         "id": "r8c2p15reg",
+         "kind": "select",
+         "label": "per la seguente motivazione",
+         "options": [
+          "adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comprese nell'A.U.A.)",
+          "domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ricettive alberghiere/all'aperto/complementari",
+          "procedura abilitativa semplificata e comunicazione per gli impianti alimentati da energia rinnovabile - Impianti fotovoltaici di potenza inferiore ad 1 MW (ex art. 6 D.Lgs. 28/2011)",
+          "denuncia opere in conglomerato cementizio armato normale e precompresso ed a struttura metallica (art. 65 DPR n. 380/2001)",
+          "richiesta di nulla osta alla Provincia/città metropolitana per l'occupazione di suolo pubblico dentro i centri abitati",
+          "presentazione della Valutazione progetto ai VVF (art. 3 DPR n. 151/2011)",
+          "presentazione della Valutazione progetto ai VVF per installazione impianto di stoccaggio e rigassificazione del GNL",
+          "rilascio nulla osta allo scarico in pubblica fognatura di acque reflue domestiche o assimilabili alle domestiche",
+          "deposito del collaudo statico ai sensi dell'art. 67 del DPR 380/2001",
+          "deposito relazione a struttura ultimata ai sensi dell'art. 65 del DPR 380/2001"
+         ]
+        }
+       ],
+       "moved": [
+        [
+         "r8c1p14reg:radio:3_clone",
+         "r9c1p16reg:radio:3_clone"
+        ],
+        [
+         "r11c2p21reg:txt",
+         "r12c2p23reg:txt"
+        ],
+        [
+         "r19c1p43reg:radio:4_clone",
+         "r20c1p45reg:radio:4_clone"
+        ],
+        [
+         "r21c1p46reg:radio:5_clone",
+         "r22c1p48reg:radio:5_clone"
+        ]
+       ],
+       "then": [
+        {
+         "choice": "per la seguente motivazione = adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comprese nell'A.U.A.)",
+         "id": "r8c2p15reg",
+         "kind": "select",
+         "option": "adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comprese nell'A.U.A.)"
+        },
+        {
+         "choice": "per la seguente motivazione = domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ricettive alberghiere/all'aperto/complementari",
+         "id": "r8c2p15reg",
+         "kind": "select",
+         "option": "domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ricettive alberghiere/all'aperto/complementari"
+        },
+        {
+         "choice": "per la seguente motivazione = procedura abilitativa semplificata e comunicazione per gli impianti alimentati da energia rinnovabile - Impianti fotovoltaici di potenza inferiore ad 1 MW (ex art. 6 D.Lgs. 28/2011)",
+         "id": "r8c2p15reg",
+         "kind": "select",
+         "option": "procedura abilitativa semplificata e comunicazione per gli impianti alimentati da energia rinnovabile - Impianti fotovoltaici di potenza inferiore ad 1 MW (ex art. 6 D.Lgs. 28/2011)"
+        },
+        {
+         "choice": "per la seguente motivazione = denuncia opere in conglomerato cementizio armato normale e precompresso ed a struttura metallica (art. 65 DPR n. 380/2001)",
+         "id": "r8c2p15reg",
+         "kind": "select",
+         "option": "denuncia opere in conglomerato cementizio armato normale e precompresso ed a struttura metallica (art. 65 DPR n. 380/2001)"
+        },
+        {
+         "choice": "per la seguente motivazione = richiesta di nulla osta alla Provincia/città metropolitana per l'occupazione di suolo pubblico dentro i centri abitati",
+         "id": "r8c2p15reg",
+         "kind": "select",
+         "option": "richiesta di nulla osta alla Provincia/città metropolitana per l'occupazione di suolo pubblico dentro i centri abitati"
+        },
+        {
+         "choice": "per la seguente motivazione = presentazione della Valutazione progetto ai VVF (art. 3 DPR n. 151/2011)",
+         "id": "r8c2p15reg",
+         "kind": "select",
+         "option": "presentazione della Valutazione progetto ai VVF (art. 3 DPR n. 151/2011)"
+        },
+        {
+         "choice": "per la seguente motivazione = presentazione della Valutazione progetto ai VVF per installazione impianto di stoccaggio e rigassificazione del GNL",
+         "id": "r8c2p15reg",
+         "kind": "select",
+         "option": "presentazione della Valutazione progetto ai VVF per installazione impianto di stoccaggio e rigassificazione del GNL"
+        },
+        {
+         "choice": "per la seguente motivazione = rilascio nulla osta allo scarico in pubblica fognatura di acque reflue domestiche o assimilabili alle domestiche",
+         "id": "r8c2p15reg",
+         "kind": "select",
+         "option": "rilascio nulla osta allo scarico in pubblica fognatura di acque reflue domestiche o assimilabili alle domestiche"
+        },
+        {
+         "choice": "per la seguente motivazione = deposito del collaudo statico ai sensi dell'art. 67 del DPR 380/2001",
+         "id": "r8c2p15reg",
+         "kind": "select",
+         "option": "deposito del collaudo statico ai sensi dell'art. 67 del DPR 380/2001"
+        },
+        {
+         "choice": "per la seguente motivazione = deposito relazione a struttura ultimata ai sensi dell'art. 65 del DPR 380/2001",
+         "id": "r8c2p15reg",
+         "kind": "select",
+         "option": "deposito relazione a struttura ultimata ai sensi dell'art. 65 del DPR 380/2001"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "choice": "Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo di cui si riportano i numeri di serie identificativi (le marche da bollo utilizzate s",
+     "id": "r8c1p14reg:radio:1_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r11c3p23reg:calendar_input",
+       "kind": "date",
+       "label": "data"
+      },
+      {
+       "id": "r13c2p30reg:radio:2_clone",
+       "kind": "radio",
+       "label": "Marca da €16,00 per l'autorizzazione...",
+       "group": "r13c2p30reg:radio"
+      },
+      {
+       "id": "r15c2p36reg:radio:3_clone",
+       "kind": "radio",
+       "label": "Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procedimento può concludersi con il silenzio assenso dell'Amministrazione o con rilascio di",
+       "group": "r15c2p36reg:radio"
+      }
+     ],
+     "moved": [
+      [
+       "r19c1p43reg:radio:2_clone",
+       "r19c1p43reg:radio:4_clone"
+      ],
+      [
+       "r21c1p46reg:radio:3_clone",
+       "r21c1p46reg:radio:5_clone"
+      ]
+     ],
+     "enables": [
+      "r11c2p21reg:txt"
+     ],
+     "then": [
+      {
+       "choice": "Marca da €16,00 per l'autorizzazione...",
+       "id": "r13c2p30reg:radio:2_clone",
+       "kind": "radio",
+       "moved": [
+        [
+         "r11c2p21reg:txt",
+         "r15c2p34reg:txt"
+        ],
+        [
+         "r11c3p23reg:calendar_input",
+         "r15c3p36reg:calendar_input"
+        ],
+        [
+         "r15c2p36reg:radio:3_clone",
+         "r16c2p40reg:radio:3_clone"
+        ],
+        [
+         "r19c1p43reg:radio:4_clone",
+         "r20c1p47reg:radio:4_clone"
+        ],
+        [
+         "r21c1p46reg:radio:5_clone",
+         "r22c1p50reg:radio:5_clone"
+        ]
+       ]
+      },
+      {
+       "choice": "Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procedimento può concludersi con il silenzio assenso dell'Amministrazione o con rilascio di",
+       "id": "r15c2p36reg:radio:3_clone",
+       "kind": "radio",
+       "reveals": [
+        {
+         "id": "r17c2p40reg",
+         "kind": "select",
+         "label": "per la seguente motivazione",
+         "options": [
+          "adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comprese nell'A.U.A.)",
+          "domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ricettive alberghiere/all'aperto/complementari",
+          "procedura abilitativa semplificata e comunicazione per gli impianti alimentati da energia rinnovabile - Impianti fotovoltaici di potenza inferiore ad 1 MW (ex art. 6 D.Lgs. 28/2011)",
+          "denuncia opere in conglomerato cementizio armato normale e precompresso ed a struttura metallica (art. 65 DPR n. 380/2001)",
+          "richiesta di nulla osta alla Provincia/città metropolitana per l'occupazione di suolo pubblico dentro i centri abitati",
+          "presentazione della Valutazione progetto ai VVF (art. 3 DPR n. 151/2011)",
+          "presentazione della Valutazione progetto ai VVF per installazione impianto di stoccaggio e rigassificazione del GNL",
+          "rilascio nulla osta allo scarico in pubblica fognatura di acque reflue domestiche o assimilabili alle domestiche",
+          "deposito del collaudo statico ai sensi dell'art. 67 del DPR 380/2001",
+          "deposito relazione a struttura ultimata ai sensi dell'art. 65 del DPR 380/2001"
+         ]
+        }
+       ],
+       "moved": [
+        [
+         "r19c1p43reg:radio:4_clone",
+         "r20c1p45reg:radio:4_clone"
+        ],
+        [
+         "r21c1p46reg:radio:5_clone",
+         "r22c1p48reg:radio:5_clone"
+        ]
+       ],
+       "then": [
+        {
+         "choice": "per la seguente motivazione = adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comprese nell'A.U.A.)",
+         "id": "r17c2p40reg",
+         "kind": "select",
+         "option": "adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comprese nell'A.U.A.)"
+        },
+        {
+         "choice": "per la seguente motivazione = domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ricettive alberghiere/all'aperto/complementari",
+         "id": "r17c2p40reg",
+         "kind": "select",
+         "option": "domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ricettive alberghiere/all'aperto/complementari"
+        },
+        {
+         "choice": "per la seguente motivazione = procedura abilitativa semplificata e comunicazione per gli impianti alimentati da energia rinnovabile - Impianti fotovoltaici di potenza inferiore ad 1 MW (ex art. 6 D.Lgs. 28/2011)",
+         "id": "r17c2p40reg",
+         "kind": "select",
+         "option": "procedura abilitativa semplificata e comunicazione per gli impianti alimentati da energia rinnovabile - Impianti fotovoltaici di potenza inferiore ad 1 MW (ex art. 6 D.Lgs. 28/2011)"
+        },
+        {
+         "choice": "per la seguente motivazione = denuncia opere in conglomerato cementizio armato normale e precompresso ed a struttura metallica (art. 65 DPR n. 380/2001)",
+         "id": "r17c2p40reg",
+         "kind": "select",
+         "option": "denuncia opere in conglomerato cementizio armato normale e precompresso ed a struttura metallica (art. 65 DPR n. 380/2001)"
+        },
+        {
+         "choice": "per la seguente motivazione = richiesta di nulla osta alla Provincia/città metropolitana per l'occupazione di suolo pubblico dentro i centri abitati",
+         "id": "r17c2p40reg",
+         "kind": "select",
+         "option": "richiesta di nulla osta alla Provincia/città metropolitana per l'occupazione di suolo pubblico dentro i centri abitati"
+        },
+        {
+         "choice": "per la seguente motivazione = presentazione della Valutazione progetto ai VVF (art. 3 DPR n. 151/2011)",
+         "id": "r17c2p40reg",
+         "kind": "select",
+         "option": "presentazione della Valutazione progetto ai VVF (art. 3 DPR n. 151/2011)"
+        },
+        {
+         "choice": "per la seguente motivazione = presentazione della Valutazione progetto ai VVF per installazione impianto di stoccaggio e rigassificazione del GNL",
+         "id": "r17c2p40reg",
+         "kind": "select",
+         "option": "presentazione della Valutazione progetto ai VVF per installazione impianto di stoccaggio e rigassificazione del GNL"
+        },
+        {
+         "choice": "per la seguente motivazione = rilascio nulla osta allo scarico in pubblica fognatura di acque reflue domestiche o assimilabili alle domestiche",
+         "id": "r17c2p40reg",
+         "kind": "select",
+         "option": "rilascio nulla osta allo scarico in pubblica fognatura di acque reflue domestiche o assimilabili alle domestiche"
+        },
+        {
+         "choice": "per la seguente motivazione = deposito del collaudo statico ai sensi dell'art. 67 del DPR 380/2001",
+         "id": "r17c2p40reg",
+         "kind": "select",
+         "option": "deposito del collaudo statico ai sensi dell'art. 67 del DPR 380/2001"
+        },
+        {
+         "choice": "per la seguente motivazione = deposito relazione a struttura ultimata ai sensi dell'art. 65 del DPR 380/2001",
+         "id": "r17c2p40reg",
+         "kind": "select",
+         "option": "deposito relazione a struttura ultimata ai sensi dell'art. 65 del DPR 380/2001"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "choice": "Per gli Enti autorizzati, l'imposta di bollo è assolta in modo virtuale ai sensi del D.M. 10/11/2011 o ai sensi dell'art. 15 D.P.R. 642/1972 ...",
+     "id": "r19c1p43reg:radio:2_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r22c1p47reg:upload1_input",
+       "kind": "file",
+       "label": "Tipologie ammesse: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m Allega Max: 9,77 MB",
+       "context": "dichiarazione relativa all'assolvimento dell'imposta di bollo",
+       "accepts": "Tipologie ammesse: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m"
+      }
+     ],
+     "moved": [
+      [
+       "r21c1p46reg:radio:3_clone",
+       "r24c1p49reg:radio:3_clone"
+      ]
+     ]
+    },
+    {
+     "choice": "Il pagamento non è dovuto poiché esentati ...",
+     "id": "r21c1p46reg:radio:3_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r23c1p49reg",
+       "kind": "select",
+       "label": "per la seguente motivazione",
+       "options": [
+        "ai sensi dell'art.82, c.5, d.Lgs. n.117/2017 (Enti del Terzo settore iscritti nel registro unico nazionale del Terzo settore ai sensi dell'art. 4, legge 117/2017)",
+        "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 16 (amministrazioni dello Stato, Regioni, Province, Comuni, loro consorzi ed associazioni, nonchè Comunità montane)",
+        "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 21 (piccola proprietà contadina)",
+        "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (federazioni sportive, enti di promozione sportiva ed associazioni e società sportive dilettantistiche senza fine di lucro riconosciuti dal CONI)",
+        "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (organizzazioni non lucrative di utilità sociale - ONLUS)",
+        "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti politici limitatamente all'adempimento di obblighi derivanti da disposizioni legislative o regolamentari)",
+        "ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo settore comprese le cooperative sociali ed escluse le imprese sociali costituite in forma di società)"
+       ]
+      }
+     ],
+     "then": [
+      {
+       "choice": "per la seguente motivazione = ai sensi dell'art.82, c.5, d.Lgs. n.117/2017 (Enti del Terzo settore iscritti nel registro unico nazionale del Terzo settore ai sensi dell'art. 4, legge 117/2017)",
+       "id": "r23c1p49reg",
+       "kind": "select",
+       "option": "ai sensi dell'art.82, c.5, d.Lgs. n.117/2017 (Enti del Terzo settore iscritti nel registro unico nazionale del Terzo settore ai sensi dell'art. 4, legge 117/2017)"
+      },
+      {
+       "choice": "per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 16 (amministrazioni dello Stato, Regioni, Province, Comuni, loro consorzi ed associazioni, nonchè Comunità montane)",
+       "id": "r23c1p49reg",
+       "kind": "select",
+       "option": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 16 (amministrazioni dello Stato, Regioni, Province, Comuni, loro consorzi ed associazioni, nonchè Comunità montane)"
+      },
+      {
+       "choice": "per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 21 (piccola proprietà contadina)",
+       "id": "r23c1p49reg",
+       "kind": "select",
+       "option": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 21 (piccola proprietà contadina)"
+      },
+      {
+       "choice": "per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (federazioni sportive, enti di promozione sportiva ed associazioni e società sportive dilettantistiche senza fine di lucro riconosciuti dal CONI)",
+       "id": "r23c1p49reg",
+       "kind": "select",
+       "option": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (federazioni sportive, enti di promozione sportiva ed associazioni e società sportive dilettantistiche senza fine di lucro riconosciuti dal CONI)"
+      },
+      {
+       "choice": "per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (organizzazioni non lucrative di utilità sociale - ONLUS)",
+       "id": "r23c1p49reg",
+       "kind": "select",
+       "option": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (organizzazioni non lucrative di utilità sociale - ONLUS)"
+      },
+      {
+       "choice": "per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti politici limitatamente all'adempimento di obblighi derivanti da disposizioni legislative o regolamentari)",
+       "id": "r23c1p49reg",
+       "kind": "select",
+       "option": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti politici limitatamente all'adempimento di obblighi derivanti da disposizioni legislative o regolamentari)"
+      },
+      {
+       "choice": "per la seguente motivazione = ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo settore comprese le cooperative sociali ed escluse le imprese sociali costituite in forma di società)",
+       "id": "r23c1p49reg",
+       "kind": "select",
+       "option": "ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo settore comprese le cooperative sociali ed escluse le imprese sociali costituite in forma di società)"
+      }
+     ]
+    }
+   ],
+   "seconds": 91.3
   },
   {
    "section": "Qualifica e dati del procuratore",
+   "fields": [
+    {
+     "id": "r2c1p2reg",
+     "kind": "select",
+     "label": "Qualifica del procuratore",
+     "options": [
+      "ALTRO PREVISTO DALLA NORMATIVA",
+      "ASSOCIAZIONE DI CATEGORIA",
+      "CENTRO ELABORAZIONE",
+      "CONSULENTE",
+      "NOTAIO",
+      "PROFESSIONISTA INCARICATO",
+      "STUDIO ASSOCIATO"
+     ]
+    },
+    {
+     "id": "r5c1p7reg:txt",
+     "kind": "text",
+     "label": "Nome",
+     "max": 25,
+     "prefilled": true
+    },
+    {
+     "id": "r5c2p9reg:txt",
+     "kind": "text",
+     "label": "Cognome",
+     "max": 25,
+     "prefilled": true
+    },
+    {
+     "id": "r5c3p11reg",
+     "kind": "select",
+     "label": "Sesso",
+     "options": [
+      "Femmina",
+      "Maschio"
+     ]
+    },
+    {
+     "id": "r5c4p13reg",
+     "kind": "select",
+     "label": "Cittadinanza",
+     "options": "251 options"
+    },
+    {
+     "id": "r7c1p15reg:txt",
+     "kind": "text",
+     "label": "Nato a",
+     "max": 30
+    },
+    {
+     "id": "r7c2p17reg:calendar_input",
+     "kind": "date",
+     "label": "il"
+    },
+    {
+     "id": "r9c1p19reg:radio:0_clone",
+     "kind": "radio",
+     "label": "in Italia",
+     "group": "r9c1p19reg:radio"
+    },
+    {
+     "id": "r9c2p21reg:txt",
+     "kind": "text",
+     "label": "Provincia",
+     "context": "in Italia",
+     "max": 2,
+     "disabled": true
+    },
+    {
+     "id": "r9c3p23reg:radio:1_clone",
+     "kind": "radio",
+     "label": "all'Estero",
+     "group": "r9c3p23reg:radio"
+    },
+    {
+     "id": "r9c4p25reg",
+     "kind": "select",
+     "label": "Stato",
+     "disabled": true,
+     "options": "250 options"
+    },
+    {
+     "id": "r11c1p27reg:txt",
+     "kind": "text",
+     "label": "Cod.Fiscale",
+     "max": 16,
+     "prefilled": true
+    },
+    {
+     "id": "r14c1p32reg:txt",
+     "kind": "text",
+     "label": "Residente in",
+     "max": 30
+    },
+    {
+     "id": "r14c2p34reg:txt",
+     "kind": "text",
+     "label": "Provincia",
+     "max": 2
+    },
+    {
+     "id": "r14c3p36reg:txt",
+     "kind": "text",
+     "label": "CAP",
+     "max": 5
+    },
+    {
+     "id": "r16c1p40reg:txt",
+     "kind": "text",
+     "label": "Indirizzo",
+     "max": 60
+    },
+    {
+     "id": "r16c2p42reg:number",
+     "kind": "text",
+     "label": "Tel",
+     "max": 12
+    },
+    {
+     "id": "r16c3p44reg:txt",
+     "kind": "text",
+     "label": "Fax",
+     "max": 12
+    },
+    {
+     "id": "r18c1p46reg:txt",
+     "kind": "text",
+     "label": "eMail PEC",
+     "max": 100
+    }
+   ],
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
-   "seconds": 1.1,
+   "text": "Qualifica e dati del procuratore Qualifica del procuratore Il procuratore: Nome Cognome Sesso Cittadinanza Nato a il Provincia Stato in Italia all'Estero Cod.Fiscale Informazioni relative alla residenza del procuratore: Residente in Provincia CAP Indirizzo Tel Fax eMail PEC",
+   "branches": [
+    {
+     "choice": "Qualifica del procuratore = ALTRO PREVISTO DALLA NORMATIVA",
+     "id": "r2c1p2reg",
+     "kind": "select",
+     "option": "ALTRO PREVISTO DALLA NORMATIVA"
+    },
+    {
+     "choice": "Qualifica del procuratore = ASSOCIAZIONE DI CATEGORIA",
+     "id": "r2c1p2reg",
+     "kind": "select",
+     "option": "ASSOCIAZIONE DI CATEGORIA"
+    },
+    {
+     "choice": "Qualifica del procuratore = CENTRO ELABORAZIONE",
+     "id": "r2c1p2reg",
+     "kind": "select",
+     "option": "CENTRO ELABORAZIONE"
+    },
+    {
+     "choice": "Qualifica del procuratore = CONSULENTE",
+     "id": "r2c1p2reg",
+     "kind": "select",
+     "option": "CONSULENTE"
+    },
+    {
+     "choice": "Qualifica del procuratore = NOTAIO",
+     "id": "r2c1p2reg",
+     "kind": "select",
+     "option": "NOTAIO"
+    },
+    {
+     "choice": "Qualifica del procuratore = PROFESSIONISTA INCARICATO",
+     "id": "r2c1p2reg",
+     "kind": "select",
+     "option": "PROFESSIONISTA INCARICATO"
+    },
+    {
+     "choice": "Qualifica del procuratore = STUDIO ASSOCIATO",
+     "id": "r2c1p2reg",
+     "kind": "select",
+     "option": "STUDIO ASSOCIATO"
+    },
+    {
+     "choice": "Sesso = Femmina",
+     "id": "r5c3p11reg",
+     "kind": "select",
+     "option": "Femmina"
+    },
+    {
+     "choice": "Sesso = Maschio",
+     "id": "r5c3p11reg",
+     "kind": "select",
+     "option": "Maschio"
+    },
+    {
+     "choice": "in Italia",
+     "id": "r9c1p19reg:radio:0_clone",
+     "kind": "radio",
+     "enables": [
+      "r9c2p21reg:txt"
+     ]
+    },
+    {
+     "choice": "all'Estero",
+     "id": "r9c3p23reg:radio:1_clone",
+     "kind": "radio",
+     "enables": [
+      "r9c4p25reg"
+     ]
+    }
+   ],
+   "seconds": 31.3,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],
@@ -738,6 +3498,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft"
+ }
 }

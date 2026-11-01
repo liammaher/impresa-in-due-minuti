@@ -1,8 +1,8 @@
 {
- "crawled": "2026-10-28T16:43:00.984Z",
- "by": "crawl.js batch, depth 2",
+ "crawled": "2026-10-31T11:35:33.657Z",
+ "by": "crawl.js batch, depth 3",
  "pratica": "SUE: EDILIZIA › Altri adempimenti edilizi (inizio e fine lavori, agibilità, notifica preliminare, etc.) › Voltura intestazione Permesso di costruire (sector Edilizia e pianificazione urbana)",
- "seconds": 32.7,
+ "seconds": 31.2,
  "generated": {
   "interventi": "Voltura intestazione del permesso di costruire",
   "adempimenti": [
@@ -83,26 +83,26 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "cil#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
+   "same_as": "cil#Oggetto della pratica",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
+   "same_as": "cil#DOMICILIO DIGITALE",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
-   "seconds": 0.7
+   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.6
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -115,13 +115,13 @@
   {
    "section": "ubicazione dell'attività",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
+   "same_as": "cil#Localizzazione dell'intervento",
    "seconds": 0.6
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
+   "same_as": "cil#Dati catastali",
    "seconds": 0.6
   },
   {
@@ -158,6 +158,7 @@
     }
    ],
    "fingerprint": "d5a7ced7a7a7c4be",
+   "text": "Numero del permesso di costruire e proprietario numero di data rilasciato a: cognome / ragione sociale nome codice fiscale / P. IVA",
    "branches": [],
    "seconds": 0.6
   },
@@ -187,7 +188,8 @@
      "kind": "text",
      "label": "(specificare)",
      "context": "altro titolo",
-     "max": 30
+     "max": 30,
+     "disabled": true
     },
     {
      "id": "r8c1p10reg:txt",
@@ -280,6 +282,7 @@
     }
    ],
    "fingerprint": "ccce02694f7bbdb2",
+   "text": "Contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento) titolo che legittima il richiedente: proprietà comproprietà (specificare) altro titolo a seguito di: (indicare atto idoneo al trasferimento del titolo edilizio) stipulato / autenticato in data dal Notaio dott. di rep. n° rogito n° registrato a in data al n° riferimenti dell'intervento: sommaria e sintetica categoria dell'intervento 250 Caratteri restanti ad uso in zona di PRG coordinate geografiche latitudine longitudine",
    "branches": [
     {
      "choice": "proprietà",
@@ -303,6 +306,9 @@
      "choice": "altro titolo",
      "id": "r5c1p5reg:radio:2_clone",
      "kind": "radio",
+     "enables": [
+      "r5c2p7reg:txt"
+     ],
      "plus": {
       "anchor": "coordinate geografiche",
       "adds": 6
@@ -321,6 +327,7 @@
     }
    ],
    "fingerprint": "923f0a595e17ec6b",
+   "text": "dichiarazione relativa alla conoscenza delle prescrizioni e condizioni da rispettare di aver preso visione del Permesso da volturare, dei relativi allegati e pareri degli enti preposti e pertanto di essere a conoscenza di tutte le prescrizioni e condizioni che devono essere rispettate nella realizzazione dell'intervento",
    "branches": [
     {
      "choice": "di aver preso visione del Permesso da volturare, dei relativi allegati e pareri degli enti preposti e pertanto di essere a conoscenza di tutte le prescrizioni e",
@@ -328,11 +335,10 @@
      "kind": "checkbox"
     }
    ],
-   "seconds": 1.4
+   "seconds": 1.2
   },
   {
    "section": "dichiarazione relativa alla conoscenza dei soggetti che intervengono nella realizzazione dell'intervento",
-   "by_hand": "2026-10-29: the batch read the prescrizioni section again here (crawl.js waited on the first 20 characters of the title, which both share); read in the pane, labels from the radios' own cells",
    "fields": [
     {
      "id": "r1c1p1reg:radio:0_clone",
@@ -350,22 +356,26 @@
      "id": "r4c1p4reg:txt",
      "kind": "text",
      "label": "direttore dei lavori",
-     "max": 50
+     "max": 50,
+     "disabled": true
     },
     {
      "id": "r6c1p6reg:txt",
      "kind": "text",
      "label": "coordinatore per la sicurezza",
-     "max": 50
+     "max": 50,
+     "disabled": true
     },
     {
      "id": "r8c1p8reg:txt",
      "kind": "text",
      "label": "esecutore",
-     "max": 50
+     "max": 50,
+     "disabled": true
     }
    ],
    "fingerprint": "5fb787b8c572e94b",
+   "text": "dichiarazione relativa alla conoscenza dei soggetti che intervengono nella realizzazione dell'intervento di essere a conoscenza dei nominativi del Progettista, del Direttore dei Lavori, del Coordinatore per la sicurezza, dell'Esecutore ed altri soggetti che intervengono a vario titolo nella realizzazione dell'intervento, che con la presente si confermano la direzione e/o l'esecuzione dei lavori saranno assunte dai soggetti di seguito indicati direttore dei lavori coordinatore per la sicurezza esecutore",
    "branches": [
     {
      "choice": "di essere a conoscenza dei nominativi del Progettista, del Direttore dei Lavori, del Coordinatore per la sicurezza, dell'Esecutore ed altri soggetti che interve",
@@ -375,9 +385,15 @@
     {
      "choice": "la direzione e/o l'esecuzione dei lavori saranno assunte dai soggetti di seguito indicati",
      "id": "r2c1p2reg:radio:1_clone",
-     "kind": "radio"
+     "kind": "radio",
+     "enables": [
+      "r4c1p4reg:txt",
+      "r6c1p6reg:txt",
+      "r8c1p8reg:txt"
+     ]
     }
-   ]
+   ],
+   "seconds": 1.9
   },
   {
    "section": "Contributo di Costruzione",
@@ -389,6 +405,7 @@
     }
    ],
    "fingerprint": "1d3f396f286a63cc",
+   "text": "Contributo di Costruzione di impegnarsi al versamento del Contributo di Costruzione residuo (nel caso di pagamento rateizzato)",
    "branches": [
     {
      "choice": "di impegnarsi al versamento del Contributo di Costruzione residuo (nel caso di pagamento rateizzato)",
@@ -396,7 +413,7 @@
      "kind": "checkbox"
     }
    ],
-   "seconds": 1.4
+   "seconds": 1.3
   },
   {
    "section": "Domicilio dei nuovi intestatari per comunicazioni o notifiche",
@@ -445,6 +462,7 @@
     }
    ],
    "fingerprint": "93ee53bc126d46cf",
+   "text": "Domicilio dei nuovi intestatari per comunicazioni o notifiche comune via, viale, piazza numero civico CAP prov tel fax",
    "branches": [],
    "seconds": 0.6
   },
@@ -455,7 +473,7 @@
   {
    "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
    "seconds": 0.6
   },
   {
@@ -552,6 +570,7 @@
     }
    ],
    "fingerprint": "a360bfc4d6101451",
+   "text": "Informazioni su eventuali altri aventi titolo cognome nome nato/a il a prov residente a in via numero civico CAP prov cittadinanza sesso: M sesso: F codice fiscale",
    "branches": [
     {
      "choice": "sesso: M",
@@ -590,8 +609,8 @@
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Qualifica e dati del procuratore",
-   "seconds": 0.9,
+   "same_as": "cil#Qualifica e dati del procuratore",
+   "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
  ],
@@ -647,6 +666,5 @@
     "portal_document": false
    }
   ]
- },
- "slots_read": "2026-10-29 in the pane: the Allega Documenti screen of the P6 draft"
+ }
 }

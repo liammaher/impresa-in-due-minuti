@@ -8,7 +8,13 @@
      over everything; ?rename=1 renames the second section's label, as a portal update would;
      ?fade=1 opens a suggestion list over Impresa esecutrice as Dati tecnici opens, whose
      widget's hide() fades it out slowly, as PrimeFaces 11's does; ?slot=signed (or =plain) adds
-     an attachments slot the portal says is required, taking only signed files (or plain ones). -->
+     an attachments slot the portal says is required, taking only signed files (or plain ones);
+     ?off=1 switches Impresa esecutrice off, greyed until a choice the steps don't make; ?deroga=1
+     adds two tick boxes, each with a box of no text of its own beside it, titled "(specificare)",
+     as the permesso's deroga draws them: the cell before it is the tick box's label; ?req=1 adds
+     an empty box the portal flags, its title and cell "Il valore è obbligatorio"; ?offradio=1 adds
+     a radio drawn as PrimeFaces draws one, greyed (its input disabled, its drawn box ignoring the
+     mouse), as the permesso's opere a scomputo until "a titolo oneroso". -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -41,7 +47,32 @@
 </div>
 <script>
 if (location.search.includes("banner=1")) document.getElementById("consenso").hidden = false;
+// By its label's row: the server's ?flaky=1 cut checks that box's id is gone from the whole page.
+if (location.search.includes("off=1")) document.getElementById("impresa-label").closest("tr").querySelector("input").disabled = true;
 if (location.search.includes("rename=1")) document.getElementById("impresa-label").textContent = "Ditta esecutrice";
+if (location.search.includes("deroga=1")) {
+  for (const [k, label] of [["dens", "alla densità edilizia"], ["alt", "all'altezza"]]) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td><input type="checkbox" id="form:r5c1:dynaForm:${k}_chk"> ${label}</td>` +
+      `<td><input type="text" title="(specificare)" id="form:r5c2:dynaForm:${k}_txt"></td>`;
+    document.querySelector("#tecnici + table").tBodies[0].append(tr);
+  }
+}
+if (location.search.includes("offradio=1")) {
+  const tr = document.createElement("tr");
+  tr.innerHTML = '<td><div id="form:r7c1:dynaForm:scomputo:opt" title="opt"><div class="ui-radiobutton ui-state-disabled">' +
+    '<div style="position:absolute;width:1px;height:1px;overflow:hidden"><input type="radio" disabled ' +
+    'id="form:r7c1:dynaForm:scomputo:radio:1_clone" name="scomputo"></div><div class="ui-radiobutton-box ui-state-disabled" ' +
+    'style="display:inline-block;width:14px;height:14px;border:1px solid #888;pointer-events:none"></div></div>' +
+    '<label>NO</label></div></td>';
+  document.querySelector("#tecnici + table").tBodies[0].append(tr);
+}
+if (location.search.includes("req=1")) {
+  const tr = document.createElement("tr");
+  tr.innerHTML = '<td><label class="labelDynaFormControl">Ragione sociale</label></td><td><input type="text" ' +
+    'id="form:r6c1:dynaForm:rs_txt" title="Il valore è obbligatorio"><span class="error-message-text">Il valore è obbligatorio</span></td>';
+  document.querySelector("#tecnici + table").tBodies[0].append(tr);
+}
 const slot = new URLSearchParams(location.search).get("slot");
 if (slot) {
   const tr = document.createElement("tr");
@@ -106,6 +137,7 @@ const list = (name) => {
 };
 fetch("/state").then((r) => r.json()).then((st) => {
   for (const t of texts()) t.value = st.fields[t.id] || "";
+  for (const c of document.querySelectorAll("input[type=checkbox]")) c.checked = st.fields[c.id] === "on";
   st.files.forEach(list);
   // As the portal does, a slot's cell names the file in it.
   for (const [id, name] of Object.entries(st.boxes || {})) {
@@ -124,6 +156,7 @@ for (const box of document.querySelectorAll("input[type=file]")) {
 }
 document.getElementById("salva").addEventListener("click", () => {
   const fields = Object.fromEntries(texts().map((t) => [t.id, t.value]));
+  for (const c of document.querySelectorAll("input[type=checkbox]")) if (c.checked) fields[c.id] = "on";
   fetch("/save", { method: "POST", body: JSON.stringify({ fields }) })
     .then(() => { document.getElementById("saved").textContent = "Dati salvati"; });
 });

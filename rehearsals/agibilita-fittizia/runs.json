@@ -1,0 +1,110 @@
+[
+ {
+  "date": "2026-10-30",
+  "answers": "answers-collaudo.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-estremi.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-30",
+  "answers": "answers-parziale.json",
+  "result": "filled",
+  "from": "README"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-impianti-depositati.json",
+  "result": "stopped",
+  "seconds": 2
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-impianti-collaudo.json",
+  "result": "stopped",
+  "seconds": 92.2
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-monostanza-due.json",
+  "result": "filled",
+  "seconds": 86.9
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-5quater.json",
+  "result": "filled",
+  "seconds": 86.2
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-impianti-depositati.json",
+  "result": "filled",
+  "seconds": 96
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-impianti-collaudo.json",
+  "result": "filled",
+  "seconds": 98.2
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-non-soggetto-collaudo.json",
+  "result": "stopped",
+  "seconds": 52.3
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-parziale-vale-fine.json",
+  "result": "stopped",
+  "seconds": 52.4
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-regolare-esecuzione.json",
+  "result": "stopped",
+  "seconds": 72.7
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-vale-fine-lavori.json",
+  "result": "stopped",
+  "seconds": 60
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-non-soggetto-collaudo.json",
+  "result": "filled",
+  "seconds": 105.4
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-parziale-vale-fine.json",
+  "result": "filled",
+  "seconds": 87.9
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-regolare-esecuzione.json",
+  "result": "filled",
+  "seconds": 90.6
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-vale-fine-lavori.json",
+  "result": "filled",
+  "seconds": 90.3
+ }
+]

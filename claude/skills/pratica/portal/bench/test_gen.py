@@ -5,11 +5,13 @@
 """
 
 import copy
+import os
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[4]
+os.chdir(ROOT)  # the answers name files from the repo's root, wherever this runs from
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True
 import gen  # noqa: E402
@@ -212,12 +214,19 @@ def _():
         t = Path(t)
         (t / "values.json").write_text(json.dumps(dict(fixture["fields"])))
         names = ["dau-fittizia", "paesaggistica-semplificata-fittizia"]
-        subprocess.run([sys.executable, str(HERE / "rerun.py"), "--values", str(t / "values.json"), "--out", str(t / "out"), *names],
-                       check=True, capture_output=True)
+        subprocess.run([sys.executable, str(HERE / "rerun.py"), "--values", str(t / "values.json"), "--out", str(t / "out"),
+                        "--bundle", str(t / "bundle.js"), *names], check=True, capture_output=True)
+        # A bundle is a new batch: an earlier batch's result under the same name would skip a run.
+        bundle = (t / "bundle.js").read_text()
+        assert bundle.index('sessionStorage.removeItem("pv-batch")') < bundle.index("window.pvBatchRun = ")
+        loop = (t / "out" / "loop.js").read_text()
+        assert "moved: r.moved || []" in loop and "r.snapshot.boxes" in loop and "gaps" in loop
+        assert 'querySelectorAll(\'[data-pv="review"]' in loop, "the batch leaves the review over the portal"
         queue = (t / "out" / "queue-0.js").read_text()
         check = (t / "out" / "check.js").read_text()
         assert all(f'"steps/{n}.js"' in check for n in names) and '"runner.js"' in check
-        assert '["dau-fittizia","napoli/comune/dichiarazione-avvenuto-utilizzo-terre",{"wizard":["PROVA NON INVIARE - DAU P6 generato"' in queue
+        # Each procedure's first run whole ({"base": ...}); a later one is what differs from it.
+        assert '["dau-fittizia","napoli/comune/dichiarazione-avvenuto-utilizzo-terre",{"base":{"wizard":["PROVA NON INVIARE - DAU P6 generato"' in queue
         assert (t / "out" / "steps" / "dau-fittizia.js").read_text().startswith('localStorage.setItem("pv-steps:napoli/comune/dichiarazione-avvenuto-utilizzo-terre"')
 
 
@@ -225,7 +234,8 @@ def _():
 def _():
     steps = generated("cila-paesaggistica-fittizia")
     names = [x["section"] for x in steps["sections"]]
-    assert len(names) == len(set(n.lower() for n in names)) == 22
+    # 22 in the form, then Pagamento degli oneri and Gestione degli allegati (read 2026-10-31).
+    assert len(names) == len(set(n.lower() for n in names)) == 24
     assert names.index("a) Titolarità dell'intervento") < names.index("Qualificazione dell'intervento") < names.index("Ambito dell'intervento")
     assert "dichiarazione ubicazione dell'intervento" not in names  # the CILA's Localizzazione, the same section
     assert steps["wizard"][3]["tree"] == ["Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)",
@@ -237,6 +247,23 @@ def _():
         assert False, "generated from the wrong crawl"
     except gen.GenError as e:
         assert "isn't a crawl of these operations together" in str(e)
+
+
+@case("a recipe drops a slot its part adds that its form never opens (the CILA with the ordinaria)")
+def _():
+    labels = lambda name: [f["label"] for f in section(generated(name), "Gestione degli allegati")["fields"]]
+    cila, scia = labels("cila-paesaggistica-ordinaria-fittizia"), labels("scia-paesaggistica-ordinaria-fittizia")
+    assert "Relazione paesaggistica e documentazione per il rilascio" in scia
+    assert "Relazione paesaggistica e documentazione per il rilascio" not in cila
+    assert "Relazione paesaggistica (redatta ai sensi del D.P.C.M" in cila
+
+
+@case("the agibilità's art. 24 boxes stay theirs: the portal asks for one even where neither applies")
+def _():
+    # a592b60 mapped the boxes and dropped the section's `theirs`: every case ticking neither stopped
+    # on the portal's "deve essere selezionata almeno un'opzione" (2026-10-31).
+    sec = section(generated("agibilita-fittizia"), "Attestazione tecnica - Agibilità")
+    assert any("articolo 24" in t for t in sec.get("theirs", [])), sec.get("theirs")
 
 
 @case("two scelte both keep the sections they add, and the wizard ticks both (voltura with a co-holder)")
@@ -276,7 +303,7 @@ def _():
     scia, alt = generated("scia-fittizia"), generated("scia-alternativa-fittizia")
     for s in (scia, alt):
         imp = next(x for x in s["sections"] if "Sicurezza impianti" in x["section"])
-        assert field(imp, "allega i relativi elaborati")["when"] == "{{ask.progetto_impianti}}"
+        assert field(imp, "allega i relativi elaborati")["when"] == "{{ask.impianti}} {{ask.progetto_impianti}}"
     am = section(scia, "Asseverazione SCIA - Amianto")
     assert field(am, "alloggio monostanza per due persone").get("on_page")
     assert field(section(scia, "Asseverazione SCIA - Sicurezza impianti"), "specificare")["value"] == "{{ask.impianto_altro_quale}}"
@@ -578,6 +605,311 @@ def _():
     assert "IUV 0000000000000000 (inventato)" in corso[gen.norm("SANATORIA e regolarizzazioni per interventi già realizzati")]
     plain = filled(gen.generate(gen.load_yaml(ROOT / "rehearsals" / "scia-fittizia" / "recipe.yaml")), p6_values("scia-fittizia"))
     assert plain[gen.norm("Presentazione della SCIA/SCIA Unica/SCIA Condizionata")] == ["23/11/2026"]
+
+
+@case("an unquoted label with a comma, which YAML splits into a label and an empty key, is refused")
+def _():
+    d = {"sections": [{"section": "X", "fields": gen.yaml.safe_load("[{kind: checkbox, label: a, comma 4, allegata, when: x}]")}]}
+    try:
+        gen.split_by_yaml(d, {})
+    except gen.GenError as e:
+        assert "comma 4" in str(e), e
+    else:
+        raise AssertionError("not refused")
+    gen.split_by_yaml({"sections": [{"section": "X", "fields": [{"kind": "checkbox", "label": "a, comma 4"}]}]}, {})
+
+
+@case("an id from a choice seen only nested under another isn't guessed: the permesso's specificare goes by label")
+def _():
+    st = gen.generate(gen.load_yaml(REH / "pdc-fittizio" / "recipe.yaml"))
+    f = [f for s in st["sections"] for f in s["fields"] if (f.get("label") or "").startswith("specificare tipo intervento")]
+    assert f and "id" not in f[0], f
+
+
+@case("a choice the crawl tried apart moves its reveals by the earlier choices' offsets, not by its own (SCIA tolerances)")
+def _():
+    crawl = gen.json.loads((HERE.parent / "catalogue" / "F839" / "sections" / "scia.json").read_text())
+    s = gen.Section(next(x for x in crawl["sections"] if x["section"].startswith("Asseverazione SCIA - Stato legittimo")))
+    s.choose(s.find("radio", "si")[0])     # the state: one row more from r7c13
+    s.choose(s.find("radio", "si", 2)[0])  # the tolerances, crawled apart: 20 rows more from r7c13
+    # The crawl's r7c1p12 already has the 20 rows; only the first choice's one is added.
+    assert s.find("checkbox", "TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER")[0]["id"] == "r8c1p13reg:chk"
+
+
+@case("a yes or a no is a whole word, other short labels stay prefixes (the sanatoria's no below the tolerances)")
+def _():
+    assert gen.starts_label("no", "no") and gen.starts_label("No (barrare)", "no") and gen.starts_label("sì", "si")
+    assert not gen.starts_label("non ha rilevanza strutturale;", "no") and not gen.starts_label("sistema di", "si")
+    assert gen.starts_label("Telefono", "tel") and gen.starts_label("dell'immobile", "del")
+    assert not gen.matches({"kind": "radio", "label": "non ha rilevanza strutturale;"}, "radio", "no")
+    assert gen.matches({"kind": "radio", "label": "no"}, "radio", "no")
+
+
+@case("the bollo: pagoPA proposed, never assumed; with marche, two serials and dates by label; no section, no question")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    steps = generated("paesaggistica-semplificata-fittizia")
+    a = json.loads((REH / "paesaggistica-semplificata-fittizia" / "answers-p6.json").read_text())
+    del a["bollo_marche"]
+    r = run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")), made_up=True)
+    assert [p["proposal"] for p in r["proposals"] if p["key"] == "bollo_marche"] == ["false"], r["proposals"]
+    m = json.loads((REH / "paesaggistica-semplificata-fittizia" / "answers-marche.json").read_text())
+    plan = run.plan(steps, run.Values(m, fields=fields, asks=steps.get("asks")))
+    bollo = [(p["label"], p.get("value")) for p in plan if "bollo" in p["section"].lower()]
+    # Both serial boxes are titled "numero seriale (1)" on the portal: the first, then the second.
+    assert [v for l, v in bollo if l == "numero seriale (1)"] == ["01234567890123", "01234567890124"], bollo
+    assert [l for l, _ in bollo].index("Marca da €16,00 per l'autorizzazione") < [l for l, _ in bollo].index("numero seriale (1)")
+    sec = section(steps, "Dichiarazione relativa all'assolvimento")
+    assert all("id" not in f for f in sec["fields"] if (f.get("label") or "").startswith(("numero seriale", "data")))
+    assert "bollo_marche" not in generated("nomina-impresa-fittizia").get("asks", {})
+
+
+@case("systems needing a project: the permesso's every kind, and each project's slot, in the five pratiche that refused them")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    for name in ("pdc-fittizio", "pdc-sanatoria-fittizio", "scia-alternativa-fittizia",
+                 "scia-paesaggistica-ordinaria-fittizia", "scia-paesaggistica-semplificata-fittizia"):
+        steps = generated(name)
+        assert not any("Systems needing a project" in c.get("else", "") for c in steps["supports"]), name
+        v = run.Values(json.loads((REH / name / "answers-impianti.json").read_text()), fields=fields, asks=steps.get("asks"))
+        assert run.preflight(steps, v, made_up=True)["ready"], name
+        labels = [p["label"] or "" for p in run.plan(steps, v)]
+        assert any(l.startswith("è soggetto agli obblighi di presentazione del progetto") for l in labels), name
+        assert any(l.startswith("Progetto degli impianti radiotelevisivi") for l in labels), name
+        assert "radiotelevisivi" in labels and "di protezione antincendio" in labels, name
+
+
+@case("the CILA's technicians: another direttore dei lavori, another technician (G2, the SCIA's H2 too), filings and assents already made")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    def check(name, answers, **change):
+        steps = generated(name)
+        a = json.loads((REH / name / answers).read_text()); a.update(change)
+        v = run.Values(a, fields=fields, asks=steps.get("asks"))
+        return steps, v, run.preflight(steps, v, made_up=True)
+    steps, v, r = check("cila-fittizia", "answers-direttore-atti.json")
+    assert r["ready"], r
+    plan = [(p["label"] or "", str(p.get("value") or "")) for p in run.plan(steps, v)]
+    assert ("Cognome", "ESEMPIO") in plan and ("Tipologia di atto", "Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004)") in plan
+    assert [x for l, x in plan if l == "Autorità competente"] == ["ASL Napoli 1 Centro", "Comune di Napoli"], plan
+    for name in ("cila-fittizia", "scia-fittizia"):
+        steps, v, r = check(name, "answers-altri-tecnici.json")
+        assert r["ready"], (name, r)
+        labels = [p["label"] for p in run.plan(steps, v)]
+        assert "Incaricato della" in labels and "Iscritto all'ordine/collegio" in labels, name
+        assert not any((l or "").startswith("che gli altri tecnici incaricati saranno") for l in labels), name
+        assert any("More than three other technicians" in u for u in check(name, "answers-altri-tecnici.json", altri_tecnici_quanti="piu di tre")[2]["unsupported"])
+    r = check("cila-fittizia", "answers-direttore-atti.json", atti_quanti="piu di due")[2]
+    assert any("More than two assents" in u for u in r["unsupported"]), r["unsupported"]
+
+
+@case("other technicians repeat by \"+\" (a, a2, a3), each an employee of a firm or not (ad: its seat is the studio)")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    for name, answers, n in (("cila-fittizia", "answers-altri-tecnici-tre.json", 3), ("scia-fittizia", "answers-altri-tecnici-due.json", 2),
+                             ("pdc-fittizio", "answers-altri-tecnici.json", 2), ("cila-fittizia", "answers-altri-tecnici.json", 1)):
+        steps = generated(name)
+        v = run.Values(json.loads((REH / name / answers).read_text()), fields=fields, asks=steps.get("asks"))
+        r = run.preflight(steps, v, made_up=True)
+        assert r["ready"], (name, r)
+        planned = [p for p in run.plan(steps, v) if "Altri tecnici" in p["section"]]
+        assert sum(p["kind"] == "add" for p in planned) == n - 1, name
+        assert sum(p.get("label") == "Incaricato della" for p in planned) == n, name
+        employed = any(p.get("label") == "Ragione sociale" and p.get("value") == "Impianti Fittizi S.n.c." for p in planned)
+        assert employed == (answers != "answers-altri-tecnici.json" or name == "pdc-fittizio"), name
+    # No other technicians: whether one is an employee is never asked, nor their studio read.
+    steps = generated("cila-fittizia")
+    r = run.preflight(steps, run.Values(json.loads((REH / "cila-fittizia" / "answers-p6.json").read_text()), fields=fields, asks=steps.get("asks")), made_up=True)
+    assert r["ready"] and "altro_tecnico_dipendente" not in json.dumps(r), r
+
+
+@case("the permesso's other kinds: Campania's (quadro a's procedimento ordinario), convenzionato, deroga, variants, art. 36; the piano casa closed by law")
+def _():
+    import json
+    import run
+    import branches
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    def plan(name, answers, **change):
+        steps = generated(name)
+        a = json.loads((REH / name / answers).read_text()); a.update(change)
+        v = run.Values(a, fields=fields, asks=steps.get("asks"))
+        r = run.preflight(steps, v, made_up=True)
+        return r, ([(p["label"] or "", str(p.get("value") or "")) for p in run.plan(steps, v)] if r["ready"] else [])
+    has = lambda p, label: any(l.startswith(label) for l, _ in p)
+    r, p = plan("pdc-fittizio", "answers-sottotetti.json")
+    assert r["ready"] and has(p, "attività che rientrano nell'ambito del procedimento ordinario"), r
+    assert has(p, "interventi di recupero abitativo dei sottotetti") and has(p, "Interventi di recupero abitativo dei sottotetti")
+    assert not has(p, "interventi di cui all'articolo 10") and "pdc_procedura" not in json.dumps(r)
+    r, p = plan("pdc-fittizio", "answers-mutamento-lr.json")
+    assert has(p, "Mutamento di destinazione d'uso, ai sensi dell'articolo 2") and has(p, "con opere che determinino un aumento plano volumetrico")
+    r, p = plan("pdc-fittizio", "answers-convenzionato.json")
+    assert has(p, "permesso di costruire convenzionato") and has(p, "Permesso di costruire convenzionato") and has(p, "Interventi di ristrutturazione edilizia che portino")
+    r, p = plan("pdc-fittizio", "answers-deroga.json")
+    assert [v for l, v in p if l == "(specificare)"] == ["Indice fondiario 3,5 mc/mq invece di 3 (inventato)", "Altezza 14 m invece di 12 m (inventato)", "Distanza 8 m invece di 10 m (inventato)"], p
+    assert has(p, "intervento in deroga alle previsioni") and not has(p, "alla destinazione d'uso")
+    r, p = plan("pdc-fittizio", "answers-deroga.json", deroga_densita="false", deroga_altezza="false", deroga_distanza="false")
+    assert any("derogates from at least one limit" in u for u in r["unsupported"]), r
+    for answers, radio in (("answers-variante-scia-alt.json", "segnalazione certificata/denuncia"), ("answers-variante-titolo-unico.json", "titolo unico"),
+                           ("answers-variante-sagoma.json", "permesso di costruire")):
+        r, p = plan("pdc-fittizio", answers)
+        assert r["ready"] and has(p, "variazione essenziale e/o sostanziale") and has(p, radio) and ("n.", "4321") in p, (answers, p)
+    r, p = plan("pdc-fittizio", "answers-p6.json", pdc_tipo="piano casa")
+    assert any("30 September 2022" in u for u in r["unsupported"]), r
+    # The sanatoria's quadro a) is art. 36's own radio, not art. 10's.
+    r, p = plan("pdc-sanatoria-fittizio", "answers-p6.json")
+    assert r["ready"] and has(p, "intervento realizzato, ai sensi dell'articolo 36") and not has(p, "interventi di cui all'articolo 10"), p
+    r, _ = plan("pdc-sanatoria-fittizio", "answers-p6.json", pdc_procedura="deroga")
+    assert any("asked as such" in u for u in r["unsupported"]), r
+    # A sewer connection to request adds its own required slot (read on the permesso 2026-10-31).
+    for name, answers in (("pdc-fittizio", "answers-cambio-tra.json"), ("scia-alternativa-fittizia", "answers-condominio-strutture.json")):
+        r, p = plan(name, answers)
+        assert r["ready"] and has(p, "Documentazione necessaria per la richiesta di autorizzazione all'allaccio"), (name, r)
+    law = [x for x in branches.rows() if x["state"] == "law"]
+    assert len(law) >= 20 and all("piano casa" in x["choice"].lower() or x.get("depth", 0) > 1 for x in law), len(law)
+
+
+
+@case("a ticked \"si allega\" with no slot under its condition is listed (the sewer's has one now; the prospetto's not)")
+def _():
+    out = gen.unslotted(generated("pdc-fittizio"))
+    labels = [label for _, label, _ in out]
+    assert not any("rilascio dell'autorizzazione" in l for l in labels), labels
+    assert any(l.startswith("allega il prospetto di calcolo") for l in labels), labels
+
+
+
+@case("rerun.py --record files each run in its rehearsal's runs.json, once")
+def _():
+    import json
+    import tempfile
+    sys.path.insert(0, str(HERE))
+    import rerun
+    with tempfile.TemporaryDirectory() as t:
+        before, rerun.REHEARSALS = rerun.REHEARSALS, Path(t)
+        try:
+            (Path(t) / "pdc-fittizio").mkdir()
+            done = [{"name": "pdc-fittizio/answers-deroga", "result": "filled", "total_seconds": 142.4},
+                    {"name": "pdc-fittizio", "result": "stopped"}]
+            rerun.record(done, "answers-p6.json", "2026-10-31")
+            rerun.record(done, "answers-p6.json", "2026-10-31")
+            runs = json.loads((Path(t) / "pdc-fittizio" / "runs.json").read_text())
+        finally:
+            rerun.REHEARSALS = before
+    assert [(r["answers"], r["result"]) for r in runs] == [("answers-deroga.json", "filled"), ("answers-p6.json", "stopped")], runs
+
+
+
+@case("catalogue.py pane --bundle: one picked file installs and starts the crawl; export.js saves what the store couldn't keep")
+def _():
+    import hashlib
+    import json
+    import subprocess
+    import tempfile
+    with tempfile.TemporaryDirectory() as t:
+        t = Path(t)
+        (t / "ops.json").write_text(json.dumps([{"name": "cila", "sector": "S", "path": "P"}]))
+        subprocess.run([sys.executable, str(HERE.parent / "catalogue.py"), "pane", str(t / "out"), "--bundle",
+                        str(t / "pv-prova.js"), "--ops", str(t / "ops.json"), "--fresh"], check=True, capture_output=True)
+        text = (t / "pv-prova.js").read_text()
+        assert hashlib.sha256(text.encode()).hexdigest() in (t / "out" / "pick.js").read_text()
+        assert "window.__crawl.batch(opts)" in text and 'localStorage.removeItem(\"crawl:op:\" + o.name)' in text
+        export = (t / "out" / "export.js").read_text()
+        assert "__crawlUnsaved" in export and "crawl-batch-prova.json" in export
+        assert "crawl:batch" in (t / "out" / "status.js").read_text()
+
+
+@case("catalogue.py: a combination is one op (the procura only, its slots read), and a printed batch that changed is refused")
+def _():
+    import json
+    import subprocess
+    cat = [sys.executable, str(HERE.parent / "catalogue.py")]
+    ops = json.loads(subprocess.run(cat + ["ops", "sue", "--combo", "sue-combo-prova", "Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001",
+                                           "Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)"],
+                                    check=True, capture_output=True, text=True).stdout)
+    assert len(ops) == 1 and ops[0]["slots"] and ops[0]["also"][0].endswith("(DPR 31/2017 - Comune)") and "PROCURA" in ops[0]["scelte"][0], ops
+    two = json.loads(subprocess.run(cat + ["ops", "sue", "--combo", "a", "Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001",
+                                           "Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)",
+                                           "--combo", "b", "Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001",
+                                           "Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)"],
+                                    check=True, capture_output=True, text=True).stdout)
+    assert [o["name"] for o in two] == ["a", "b"] and two[1]["also"][0].endswith("(art.146 del D.Lgs 42/2004 - Comune)"), two
+    bad = subprocess.run(cat + ["import", "-"], input="0" * 64 + "\n{}", capture_output=True, text=True)
+    assert bad.returncode and "sha256 differs" in bad.stderr, bad.stderr
+    # A copy with the newline a heredoc adds is the same text: hashed without it.
+    import hashlib
+    body = '{"other": 1}'
+    ok = subprocess.run(cat + ["import", "-"], input=hashlib.sha256(body.encode()).hexdigest() + "\n" + body + "\n",
+                        capture_output=True, text=True)
+    assert ok.returncode == 0, ok.stderr
+
+
+@case("extends: later ones win, attachments and supports add up, asks and rules merge, null drops")
+def _():
+    out = {}
+    gen.merge_recipe(out, {"title": "a", "asks": {"x": 1, "y": 2}, "rules": {"table": "t", "facts": {}},
+                           "supports": [{"when": "1"}], "attachments": {"S": [{"label": "A"}]}, "after": ["P"]})
+    gen.merge_recipe(out, {"title": "b", "asks": {"y": None, "z": 3}, "rules": {"main": "m"},
+                           "supports": [{"when": "1"}, {"when": "2"}], "attachments": {"S": [{"label": "B"}]}, "after": None})
+    assert out == {"title": "b", "asks": {"x": 1, "z": 3}, "rules": {"table": "t", "facts": {}, "main": "m"},
+                   "supports": [{"when": "1"}, {"when": "2"}], "attachments": {"S": [{"label": "A"}, {"label": "B"}]}}, out
+    try:
+        gen.resolved({"extends": ["parts/nessuna"]})
+        raise AssertionError("a missing part went unnoticed")
+    except gen.GenError:
+        pass
+
+
+@case("a combination carries its main pratica's slots and refusals, and its part's (2026-10-31: the SCIA's had drifted)")
+def _():
+    for main, part, combos in [("scia-fittizia", None, ["scia-paesaggistica-semplificata-fittizia", "scia-paesaggistica-ordinaria-fittizia"]),
+                               ("pdc-fittizio", None, ["pdc-paesaggistica-semplificata-fittizio", "pdc-paesaggistica-ordinaria-fittizio"])]:
+        base = gen.resolved(gen.load_yaml(ROOT / "rehearsals" / main / "recipe.yaml"))
+        for c in combos:
+            r = gen.resolved(gen.load_yaml(ROOT / "rehearsals" / c / "recipe.yaml"))
+            for screen, slots in base["attachments"].items():
+                missing = [s["label"] for s in slots if s not in r["attachments"][screen]]
+                assert not missing, f"{c} lacks {main}'s slots {missing}"
+            assert all(s in r["supports"] for s in base["supports"]), c
+            kind = c.split("-")[-2]
+            assert r["asks"]["paesaggio"]["default"] == kind and r["rules"]["handles"] == [f"napoli/comune/autorizzazione-paesaggistica-{kind}"], c
+    ordinaria = gen.resolved(gen.load_yaml(ROOT / "rehearsals" / "pdc-paesaggistica-ordinaria-fittizio" / "recipe.yaml"))
+    assert any(s["label"].startswith("Relazione paesaggistica e documentazione") for s in ordinaria["attachments"]["Gestione degli allegati"])
+
+
+@case("a combination's P6 answers are its main pratica's, its part's and its own: none has drifted (gen.py --answers)")
+def _():
+    import json
+    combos = [p.parent for p in sorted(REH.glob("*/recipe.yaml")) if (gen.load_yaml(p) or {}).get("answers")]
+    assert len(combos) >= 7, combos
+    for d in combos:
+        want = gen.combo_answers(gen.load_yaml(d / "recipe.yaml"))
+        assert json.loads((d / "answers-p6.json").read_text()) == want, f"{d.name}: regenerate with gen.py --answers"
+    # A part's null drops the main pratica's answer, its value replaces one (paesaggio, stated since
+    # the CILA's steps don't take the ask's default); the recipe's own win over the part's.
+    o = gen.combo_answers(gen.load_yaml(REH / "pdc-paesaggistica-ordinaria-fittizio" / "recipe.yaml"))
+    assert o["paesaggio"] == "ordinaria" and "assenso_proprietario" not in o and o["titolo"] == "proprietario", o
+    c = gen.combo_answers(gen.load_yaml(REH / "cila-paesaggistica-fittizia" / "recipe.yaml"))
+    assert c["paesaggio"] == "semplificata", c.get("paesaggio")
+
+
+@case("the permesso with its landscape authorization: the asseverazione names the procedure")
+def _():
+    for kind, label in [("semplificata", "è assoggettato al procedimento semplificato"), ("ordinaria", "è assoggettato al procedimento ordinario")]:
+        import run
+        steps = gen.generate(gen.load_yaml(ROOT / "rehearsals" / f"pdc-paesaggistica-{kind}-fittizio" / "recipe.yaml"))
+        v = p6_values(f"pdc-paesaggistica-{kind}-fittizio")(steps)
+        sec = section(steps, "Asseverazione PdC - tutela storico")
+        ticked = [f["label"] for f in sec["fields"] if run.truthy(v.render(f.get("when", "true")) or "")]
+        assert label in ticked and "ricade in zona tutelata e le opere comportano alterazione" in ticked, (kind, ticked)
+
 
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

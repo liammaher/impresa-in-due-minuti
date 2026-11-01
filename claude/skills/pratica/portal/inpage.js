@@ -48,7 +48,10 @@
 //   __pv.open()                    loads the frame's page as the top page, for the person
 (() => {
   class StepError extends Error {}
-  const fail = (m) => { throw new StepError(m); };
+  // A stop while the frame sits on a sign-in page is the sign-in, whatever failed first.
+  const fail = (m) => {
+    throw new StepError(frame && !/^signed out/.test(m) && signedOut() ? `signed out: the portal sent the page to its sign-in (${m}); sign in again, then rerun` : m);
+  };
   // The pane slows timers to a few ticks a second; message events aren't slowed.
   const channel = new MessageChannel(), waiting = [];
   channel.port1.onmessage = () => waiting.shift()();
@@ -56,6 +59,13 @@
   const sleep = async (ms) => { const end = performance.now() + ms; do await yieldTask(); while (performance.now() < end); };
   const norm = (s) => (s || "").normalize("NFKD").replace(/[^\x00-\x7f]/g, "")
     .replace(/\s+/g, " ").trim().toLowerCase();
+  // A label starts a text; a yes or a no only as a whole word: "no" isn't "non ha rilevanza
+  // strutturale" (2026-10-30, the SCIA's sanatoria "no" below declared tolerances). Other short
+  // labels stay prefixes on purpose ("Tel" is "Telefono"). gen.py's starts_label is the same rule.
+  const startsLabel = (t, label) => {
+    const a = norm(t), b = norm(label);
+    return a.startsWith(b) && (!["si", "no"].includes(b) || a.length === b.length || !/[a-z0-9]/.test(a[b.length]));
+  };
 
   let steps, frame, report, kept, secrets = [], details = [], declared = [], sealedRun = null, previewBlob = null;
 
@@ -191,9 +201,14 @@
       !!(w.PrimeFaces && w.PrimeFaces.ajax && !w.PrimeFaces.ajax.Queue.isEmpty());
   };
 
+  // An expired sign-in sends the frame to the identity provider (another origin: no document
+  // to read) or to a login page: it looked like "the portal stayed busy" for 20 s (2026-10-30).
+  const signedOut = () => { try { const d = frame.contentDocument; return !d || /login|spid|idp/i.test(d.location.pathname); } catch (e) { return true; } };
+
   async function idle(ms = 20000) {
-    const end = performance.now() + ms;
+    const start = performance.now(), end = start + ms;
     for (let quiet = 0; quiet < 3;) {
+      if (signedOut() && performance.now() - start > 2000) fail("signed out: the portal sent the page to its sign-in (no document to read); sign in again, then rerun");
       if (performance.now() > end) fail("the portal stayed busy");
       quiet = busy() ? 0 : quiet + 1;
       await sleep(30);
@@ -280,6 +295,8 @@
   // so stop there. e must still be in the page and be what's on top at its centre.
   function onTop(e, what) {
     if (!e.isConnected) fail(`${what}: the page changed under it`);
+    // A greyed box ignores the mouse, so its own wrapper reads as "on top" of it: say what it is.
+    if (e.disabled) fail(`${what}: switched off (a choice before it, which the steps file doesn't make, switches it on)`);
     e.scrollIntoView({ block: "center", inline: "nearest" });
     const r = e.getBoundingClientRect();
     if (!r.width || !r.height) fail(`${what}: not visible`);
@@ -396,7 +413,10 @@
     const sel = el(f.id + ":combo_input") || fail(`${f.id}: no dropdown`);
     checkLabel(el(f.id + ":combo_label"), f.label);
     const opts = [...sel.options];
-    const i = opts.findIndex((o) => o.value === value || o.text.trim().toUpperCase() === value.toUpperCase());
+    let i = opts.findIndex((o) => o.value === value || o.text.trim().toUpperCase() === value.toUpperCase());
+    // A list item named by its number ("A.2.", an annex's long items): the one option that starts with it.
+    const numbered = /\.$/.test(value) ? opts.filter((o) => o.text.trim().startsWith(value + " ")) : [];
+    if (i < 0 && numbered.length === 1) i = opts.indexOf(numbered[0]);
     if (i < 0) fail(`${f.id}: none of its ${opts.length} options is the value`);
     if (sel.value !== opts[i].value) {
       const w = widgetOf(sel) || fail(`${f.id}: no dropdown widget`);
@@ -416,6 +436,9 @@
   async function tick(f) {
     const e = el(f.id) || fail(`${f.id}: no box`);
     checkLabel(e, f.label);
+    // A greyed radio's drawn box ignores the mouse, so the click lands on its wrapper ("covered by
+    // ...:opt", the permesso's opere a scomputo, 2026-11-01): name it as what it is.
+    if (!e.checked && e.disabled) fail(`${f.label || f.id}: switched off (a choice before it, which the steps file doesn't make, switches it on)`);
     if (!e.checked) {
       const wrap = e.closest(".ui-radiobutton, .ui-chkbox");
       press(wrap && wrap.querySelector(".ui-radiobutton-box, .ui-chkbox-box") || e, f.label || f.id);
@@ -548,7 +571,7 @@
     while (texts.length && MESSAGE.test(norm(texts[0]))) texts.shift();
     // A text said twice (the title "mq" and its cell "mq") counts once, so the third is the
     // label beside it ("Superficie di somministrazione").
-    return texts.filter((t, i) => !t || texts.indexOf(t) === i).slice(0, 3).findIndex((t) => norm(t).startsWith(norm(label)));
+    return texts.filter((t, i) => !t || texts.indexOf(t) === i).slice(0, 3).findIndex((t) => startsLabel(t, label));
   }
   const labelled = (e, label) => labelRank(e, label) >= 0;
   // A steps file's id is the row the crawl saw; a choice made earlier in the section can
@@ -577,7 +600,11 @@
     if (f.id || f.css) return f;
     let list = inputs();
     if (f.anchor) {
-      const starts = list.map((e, i) => (labelled(e, f.anchor) ? i : -1)).filter((i) => i >= 0);
+      // A block starts at the boxes the anchor names best: a box of no text of its own beside
+      // the anchor (the deroga's "(specificare)") reads it from the cell before, and isn't one.
+      const ranks = list.map((e) => labelRank(e, f.anchor));
+      const best = Math.min(...ranks.filter((r) => r >= 0));
+      const starts = ranks.map((r, i) => (r === best ? i : -1)).filter((i) => i >= 0);
       const b = (f.block || 1) - 1;
       if (b >= starts.length) fail(`${f.label}: no block ${f.block} of ${f.anchor} (found ${starts.length})`);
       list = list.slice(starts[b], starts[b + 1]);
@@ -588,7 +615,7 @@
     // "Si" whose nearby texts include the "No" before it is not a "No" (three Si/No pairs in a
     // row); the beds total under a shared header is not the rooms total.
     const ownLabel = (e) => [e.title, ...win().eval(`(${steps.label_js})`)(e)].find((t) => norm(t) && !MESSAGE.test(norm(t)));
-    const own = hits.filter((e) => norm(ownLabel(e)).startsWith(norm(f.label)));
+    const own = hits.filter((e) => startsLabel(ownLabel(e), f.label));
     if (own.length >= (f.nth || 1)) hits = own; // else a box labelled from above ("Provincia" of birth) counts too
     else if (hits.length > 1) {
       // Else the boxes that have the label first among their texts, and nth counts those: in a
@@ -923,9 +950,11 @@
   // (each visible box, its label, whether it holds anything) without reading what it holds.
   function look() {
     if (!frame || !doc()) return null;
-    const label = (e) => {
-      try { return scrub(norm(win().eval(`(${steps.label_js})`)(e)[0] || "")).slice(0, 80); } catch (x) { return ""; }
-    };
+    // A box the portal says is required reads "Il valore è obbligatorio" first: its label is
+    // the text after that, and it says it's required.
+    const texts = (e) => { try { return win().eval(`(${steps.label_js})`)(e); } catch (x) { return []; } };
+    const label = (e) => scrub(norm(texts(e).find((t) => norm(t) && !MESSAGE.test(norm(t))) || "")).slice(0, 80);
+    const flagged = (e) => [e.title, ...texts(e)].some((t) => MESSAGE.test(norm(t)));
     const boxes = [...doc().querySelectorAll("input, select, textarea")]
       .filter((e) => e.type !== "hidden" && (e.type === "file" || shown(e))).slice(0, 150)
       .map((e) => {
@@ -937,6 +966,7 @@
         const slot = kind === "file" || /file_dropzone/.test(e.id) ? slotOf(e) : null;
         return { id: e.id.replace(/^.*dynaForm:/, ""), label: slot ? scrub(norm(slot.title)).slice(0, 80) : label(e), kind, state,
           ...(kind === "select" ? { options: e.options.length } : {}),
+          ...(!slot && flagged(e) ? { required: true } : {}),
           ...(slot && slot.accepts.length ? { accepts: slot.accepts.join(";"), required: slot.required } : {}) };
       });
     const open = doc().querySelector("li#corrente");
@@ -954,7 +984,9 @@
     for (let n = 0; ; n++) {
       await run(values, resume);
       const prev = report, at = prev.at, onError = /\/cmd\/error/.test(prev.url || "");
-      if (prev.result !== "stopped" || !at || n >= (resume.retries ?? 2) || !(onError || TRANSIENT.test(prev.error || ""))) return;
+      // Signed out is never retried: a reload lands on the same sign-in page.
+      if (prev.result !== "stopped" || !at || n >= (resume.retries ?? 2) || /^signed out/.test(prev.error || "")
+          || !(onError || TRANSIENT.test(prev.error || ""))) return;
       // Still running for wait(): the retry is part of this run.
       const retries = (prev.retries || []).concat([{ error: prev.error, at }]);
       report = { ...prev, result: "running", error: undefined, snapshot: undefined, retries, resumed: true };
@@ -1020,8 +1052,8 @@
     start(procedure, values, resume = {}, sealed = null) {
       const raw = localStorage.getItem("pv-steps:" + procedure) || fail(`no steps installed for ${procedure}`);
       // One frame at a time: a run that ended left its own over the page, maybe from a
-      // runner loaded before this one (and its review, drawn over the portal).
-      document.querySelectorAll('iframe[data-pv="runner"], [data-pv="review"]').forEach((f) => f.remove());
+      // runner loaded before this one (and its review, drawn over the portal), or a crawl's.
+      document.querySelectorAll('iframe[data-pv="runner"], iframe[data-pv="crawl"], [data-pv="review"]').forEach((f) => f.remove());
       if (!sealed) sealedRun = null;
       try { sessionStorage.setItem("pv-run", JSON.stringify(sealed ? { procedure, sealed } : { procedure, values })); }
       catch (e) { /* storage off */ }

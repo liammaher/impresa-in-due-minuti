@@ -1,0 +1,37 @@
+# A CIL for temporary works with its autorizzazione paesaggistica semplificata in one pratica on
+# Napoli's SUE: the CIL rehearsal's people (rehearsals/cil-fittizia) with a removable timber
+# platform and canopy kept for 150 days on the terrace of a protected building: a temporary
+# occupation over 120 days a year (DPR 31/2017 Allegato B, B.25; up to 120 days it would be free,
+# A.16). Two operations: gen.py takes each one's sections from the catalogue and the order from
+# the combination's crawl (catalogue/F839/sections/sue-combo-cil-paesaggistica-semplificata.json).
+# Everything else is cil-fittizia's recipe and what the semplificata adds (parts/paesaggistica-semplificata.yaml).
+extends: [cil-fittizia, parts/paesaggistica-semplificata]
+procedure: napoli/comune/cil-con-paesaggistica-semplificata
+title: "CIL opere temporanee con autorizzazione paesaggistica semplificata, SUE Napoli (tecnico con procura)"
+comune: F839
+sportello: sue
+crawl: sue-combo-cil-paesaggistica-semplificata
+operation:
+  - Comunicazione di Inizio Lavori per opere temporanee (C.I.L.)
+  - Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)
+asks:
+  descrizione: {default: "PROVA NON INVIARE - CIL e paesaggistica {{c:identity.last_name}}"}
+yours:
+  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
+  - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "On Allega documenti: the portal's procura signed by the client, the relazione paesaggistica semplificata (DPR 31/2017, Allegato D) with its drawings and photos, signed digitally (.p7m)"
+  - "Pay the {{ask.diritti_euro}} € diritti and the bollo before sending, and attach the receipts"
+  - "The works start only once the SUE says the landscape authorization is in: the start date is the earliest"
+  - "Sign and send (Firma e invio); keep the receipt"
+rules:
+  main: napoli/comune/cil-opere-temporanee
+# The case: the main pratica's P6 answers, the part's, then these (a null drops one);
+# `gen.py --answers` writes answers-p6.json.
+answers:
+  descrizione: PROVA NON INVIARE - CIL e semplificata P6 generato
+  oggetto: "Installazione temporanea di una pedana e copertura leggera smontabile sul terrazzo dell'appartamento, per 150 giorni, rimossa a fine periodo, in area vincolata (dati inventati per la prova)."
+  data_inizio_lavori: '2027-01-11'
+  data_fine_prevista: '2027-06-09'
+  dettaglio_intervento: "Pedana in legno e copertura leggera in tela su struttura smontabile in alluminio, appoggiate senza ancoraggi sul terrazzo, per 150 giorni; rimozione integrale entro il 09/06/2027 con ripristino dello stato dei luoghi. Dati inventati per la prova."
+  allegato_b:
+  - paes_b25

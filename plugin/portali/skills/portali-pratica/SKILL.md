@@ -74,9 +74,20 @@ use `coverage.json` and say its `built` date.
 
 ## 1. Which pratica
 
-Read the request and the job's documents. Find the pratica (`find_pratica` with the case's
-facts, else `catalog.json` and `coverage.json`); a case can need two (a restaurant and its
-dehors). Then, with the connector, call `get_pratica` with its `name` and the
+Read the request and the job's documents. Works needing a building title (a CILA, SCIA,
+permesso, sanatoria or landscape authorization at the SUE) are routed by their facts:
+
+```sh
+python3 SKILL/portal/route.py --table sue-napoli --answers facts.json
+```
+
+Start `facts.json` as `{}`. It asks the rules table's facts as pre-flight asks (the works alone
+first, then the rest in one message, the yes/no ones as the checklist `fatti`); write the replies
+into `facts.json` and run it again. If the answer about the works changes, keep only it and run
+again (the checklist was another case's). Once they decide, it names the one pratica (`pratica`)
+and the `answers` to start `answers.json` with; `unsupported` is the reason none fits. Other
+pratiche: `find_pratica` with the case's facts, else `catalog.json` and `coverage.json`; a case
+can need two (a restaurant and its dehors). Then, with the connector, call `get_pratica` with its `name` and the
 `steps_sha256` from `catalog.json`:
 
 - a status other than `available`: tell the architect in one line what it means and stop.
@@ -100,6 +111,18 @@ job's other people are roles, which `answers.json` names under `people` (the ent
 `bianchi`). Write each person's fields into `values.json` as `"bianchi:identity.first_name":
 "Mario"`, with their `bianchi:ruolo.tipo` (`cliente`, `impresa_esecutrice`, ...). Slugs are
 lower case, letters, digits and hyphens. `reference/schema.json` says what each field is.
+
+Start from the intake when the job's folder has the documents (`docs/`: the visura, the lease or
+deed, the relazione tecnica, the drawings, the receipts):
+
+```sh
+python3 SKILL/intake/intake.py scan docs --out run/intake --steps SKILL/pratiche/<name>.json
+```
+
+It writes the fields it reads off them to `run/intake/private/values.json` (start `values.json`
+from it, and add what it lacks) and proposes answers in `run/intake/intake.json`, each with its
+document and words. Show them grouped by document; on "ok", `python3 SKILL/intake/intake.py accept
+run/intake --into answers.json`. Don't read the documents or `private/` into the conversation.
 
 Then check and merge, from the job's folder:
 
@@ -133,7 +156,11 @@ folder.
 - `files`: each attachment. In this version a run carries its files through the
   conversation, so all of them together must fit in 256 KB (`pane_ok`). When they don't,
   stop: tell the architect in one line that files that size can't go in automatically yet.
-- `yours`: tell the architect now what they'll do at the end.
+  A file's `problem` says what the sportello would refuse: at Napoli's SUE (DD 501/2026) a file
+  not in PDF/A, not signed digitally (a .p7m or the PDF's own signature), or named with spaces,
+  accents or other signs makes the pratica irricevibile. Tell the architect which files and why.
+- `yours`: tell the architect now what they'll do at the end (at Napoli's SUE: the same file
+  rules for their own files, and the diritti paid before sending, to its postal account only).
 
 Only when it says `ready` go on. From here the architect hears nothing more from you until
 the review page, except the login.

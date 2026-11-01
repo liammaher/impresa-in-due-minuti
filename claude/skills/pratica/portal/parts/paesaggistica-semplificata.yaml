@@ -1,0 +1,23 @@
+# What the autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune) adds to the building
+# pratica it's filed with, the two selected together in the wizard: a combination's recipe
+# `extends` its main pratica's rehearsal, then this. The asseverazione names the procedure from
+# `paesaggio`; the relazione and its drawings take only signed files, so they are the person's
+# (each recipe's `yours`).
+asks:
+  paesaggio: {default: "semplificata"}
+rules:
+  handles: [napoli/comune/autorizzazione-paesaggistica-semplificata]
+supports:
+  - when: "{{ask.paes_variante|not}}"
+    else: "So far only for a new authorization: the variant of one already issued isn't run yet."
+# The case it adds to the main pratica's P6 answers (a null drops one): a property under art. 136
+# and 142, a new authorization. Each combination's recipe adds its works (`gen.py --answers`).
+answers:
+  # Stated, not left to the ask's default: the CILA's and CIL's steps ask it from the rules table.
+  paesaggio: semplificata
+  bollo_marche: false
+  paes_variante: false
+  vincolo: art 136 and 142
+  vincolo_136_lettera: c) e d)
+  vincolo_136_provvedimento: D.M. fittizio PROVA NON INVIARE del 01/01/1960
+  vincolo_142_lettera: a)

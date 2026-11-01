@@ -70,6 +70,8 @@ class Handler(BaseHTTPRequestHandler):
                                     b'        <td><input type="text" id="form:r4c1:dynaForm:impresa_txt"></td></tr>', b"")
                 assert b"impresa_txt" not in html, "the bench page changed: update the flaky cut"
             self.send(html, "text/html; charset=utf-8")
+        elif path == "/login":  # where an expired sign-in lands (the portal's identity provider)
+            self.send(b"<!doctype html><title>Accedi</title><p>Entra con SPID", "text/html")
         elif path == "/anteprima.pdf":
             self.send(b"%PDF-1.4\nl'anteprima del portale finto\n", "application/pdf")
         elif path.startswith("/files/") and path[7:] in LINKED:
@@ -220,10 +222,76 @@ def main():
             assert "loose" not in r, r.get("loose")
         case("an id that names another box now goes by its label, and the report names the move", moved_id)
 
+        def signed_out():
+            # The sign-in expired: the frame lands on a login page. The run says so, not "busy".
+            PORTAL.reset()
+            st = steps(base)
+            st["sections"][1]["open"] = False
+            r = fill(browser, base, {**st, "start": base + "/login"}, answers)
+            assert r["result"] == "stopped" and r["error"].startswith("signed out"), r.get("error")
+            assert not r.get("retries"), r.get("retries")
+        case("an expired sign-in stops the run saying so, not as the portal staying busy", signed_out)
+
+        def anchored():
+            # A block's start is a box the anchor is the own label of: the "(specificare)" box
+            # beside a tick box reads it as its cell before, and must not start a block itself.
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?deroga=1")
+            st["sections"][1]["fields"] += [
+                {"kind": "checkbox", "label": "alla densità edilizia"},
+                {"kind": "text", "label": "(specificare)", "anchor": "alla densità edilizia", "value": "{{ask.den}}"},
+                {"kind": "checkbox", "label": "all'altezza"},
+                {"kind": "text", "label": "(specificare)", "anchor": "all'altezza", "value": "{{ask.impresa}}"}]
+            r = fill(browser, base, st, answers)
+            assert r["result"] == "filled", r.get("error")
+            assert PORTAL.fields.get("form:r5c2:dynaForm:dens_txt") == answers["den"], PORTAL.fields
+            assert PORTAL.fields.get("form:r5c2:dynaForm:alt_txt") == answers["impresa"], PORTAL.fields
+        case("a box beside an anchor's tick box, labelled by it from the cell before, doesn't start a block", anchored)
+
+        def crawl_reveals():
+            # A choice that opens an employer's block repeating labels above it (Cognome, Via):
+            # its boxes are revealed, counted per label, never read as the ones above moving.
+            page = browser.new_page()
+            try:
+                page.goto(base + "/")
+                page.evaluate((HERE.parent / "crawl.js").read_text())
+                box = lambda i, label: {"id": i, "kind": "text", "label": label}
+                before = [box("r9c1", "Cognome"), box("r23c1", "Via, Piazza, ecc."), box("r30c2", "si")]
+                now = [box("r9c1", "Cognome"), box("r23c1", "Via, Piazza, ecc."), box("r30c2", "si"),
+                       box("r36c1", "Ragione sociale"), box("r42c1", "Via, Piazza, ecc."), box("r45c1", "Cognome")]
+                got = page.evaluate("([b, n]) => __crawl.revealed(b, n).map((f) => f.id)", [before, now])
+                assert got == ["r36c1", "r42c1", "r45c1"], got
+                # Two of a label before, three now, every id renumbered: the last one is the new box.
+                moved = [box("a1", "N."), box("a2", "N.")]
+                got = page.evaluate("([b, n]) => __crawl.revealed(b, n).map((f) => f.id)",
+                                    [moved, [box("b1", "N."), box("b2", "N."), box("b3", "N.")]])
+                assert got == ["b3"], got
+                # A full store: the result stays in the tab (export.js saves it), the call says so.
+                kept = page.evaluate("""() => { const real = Storage.prototype.setItem;
+                    Storage.prototype.setItem = () => { throw new DOMException("full", "QuotaExceededError"); };
+                    try { return [__crawl.save("crawl:op:prova", "{}"), window.__crawlUnsaved["crawl:op:prova"]]; }
+                    finally { Storage.prototype.setItem = real; } }""")
+                assert kept == [False, "{}"], kept
+            finally:
+                page.close()
+        case("the crawl counts a revealed box whose label repeats one above it (an employer's address)", crawl_reveals)
+
         def banner():
             PORTAL.reset()
             stops(fill(browser, base, steps(base, start="/portal.html?banner=1"), answers), "covered by div#consenso")
         case("a consent banner over the form stops the run", banner)
+
+        def switched_off():
+            PORTAL.reset()
+            stops(fill(browser, base, steps(base, start="/portal.html?off=1"), answers), "Impresa esecutrice: switched off")
+        case("a box greyed until an earlier choice stops the run, named as switched off", switched_off)
+
+        def radio_switched_off():
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?offradio=1")
+            st["sections"][1]["fields"].append({"id": "scomputo:radio:1_clone", "kind": "radio", "label": "NO"})
+            stops(fill(browser, base, st, answers), "NO: switched off")
+        case("a greyed radio, its drawn box under its wrapper, is named as switched off, not covered", radio_switched_off)
 
         def fading_list():
             PORTAL.reset()
@@ -241,6 +309,11 @@ def main():
             r = fill(browser, base, steps(base, start="/portal.html?slot=plain"), answers)
             assert r["result"] == "stopped" and "obbligatorio" in r["error"], r
             box = next(b for b in r["snapshot"]["boxes"] if b["id"] == "procura_input")
+            # A box the portal flags reads by its label, not by the message, and says it's required.
+            PORTAL.reset()
+            r2 = fill(browser, base, steps(base, start="/portal.html?slot=plain&req=1"), answers)
+            rs = next(b for b in r2["snapshot"]["boxes"] if b["id"] == "rs_txt")
+            assert rs["label"] == "ragione sociale" and rs.get("required") and rs["state"] == "empty", rs
             assert box["label"] == "procura speciale" and box["required"] and box["accepts"] == "pdf;pdf.p7m", box
             assert ".pdf" not in json.dumps(r["snapshot"]), "a file's name in the snapshot"
         case("a required slot taking only signed files is the person's; a plain one stops, named by its title", signed_slot)

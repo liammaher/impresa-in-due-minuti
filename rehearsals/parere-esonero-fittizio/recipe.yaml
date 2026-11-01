@@ -1,0 +1,36 @@
+# Domanda di parere per esonero dall'obbligo di autorizzazione paesaggistica (Allegato A of DPR
+# 31/2017) from the Comune of Napoli, on its SUE, as gen.py writes its steps file from the batch
+# crawl (catalogue/F839/sections/sue-domanda-di-parere-per-esonero-dallobbligo-di-
+# autorizzazione-paesaggistic.json). The CILA rehearsal's architect (with procura) and client.
+# In Napoli the rules table refuses every case: the Comune's landscape directive (D.D.
+# 1072I/2024/154, § 3.2) rules out the attestation this asks for. The steps are kept so the
+# pratica is mapped whole, and filled the day a case is one the table gives it.
+procedure: napoli/comune/parere-esonero-autorizzazione-paesaggistica
+title: "Domanda di parere per esonero dall'autorizzazione paesaggistica, SUE Napoli (tecnico con procura)"
+comune: F839
+sportello: sue
+crawl: sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic
+operation: "Domanda di parere per esonero dall’obbligo di autorizzazione paesaggistica"
+scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
+first: [Scheda anagrafica, Qualifica e dati del procuratore]
+asks:
+  descrizione: {default: "PROVA NON INVIARE - parere esonero {{c:identity.last_name}}"}
+  oggetto: {question: "The works in one sentence (300 characters)"}
+yours:
+  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
+  - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
+  - "On Allega documenti: the drawings (stato attuale, progetto, tavola interventi) and the photos of the state as it is, signed digitally"
+  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
+  - "Pay the imposta di bollo as the portal asks"
+  - "Sign and send (Firma e invio); keep the receipt"
+# Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides; its
+# parere-esonero rule refuses the request in Napoli, with the reason.
+rules:
+  table: sue-napoli
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+  facts: {permesso_per_scelta: "false", parere_esonero: "true"}
+supports:
+  - when: "{{ask.esonero_altri_titoli|not}}"
+    else: "Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet."
+  - when: "{{ask.allegato_a_uno}}"
+    else: "The form takes one item of Allegato A: works under several items aren't mapped."

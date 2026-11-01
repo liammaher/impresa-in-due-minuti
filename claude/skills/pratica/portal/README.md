@@ -16,6 +16,19 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    person: declarations, attachments, payment, signing), `supports` (the cases refused, with
    why: all or nothing; `if:` checks one only once its gate holds, asking it only then).
    Copy a sibling: `rehearsals/paesaggistica-ordinaria-fittizia`.
+   **Two operations in one pratica** (a building pratica with its landscape authorization): the
+   recipe `extends: [<main pratica's rehearsal>, parts/<the other's part>]` and states only what is
+   its own (procedure, title, crawl, operation list, `descrizione`, `yours`, `rules.main`). Later
+   ones win key by key; `attachments`, `supports` and `sections` add up; `asks` and `rules` merge;
+   a null drops what came before (`data_inizio_lavori: null`); a slot `{label, drop: true}` drops
+   one a part adds that this form never opens (the ordinaria's second relazione slot comes from the
+   SCIA's and the permesso's "Si allega" box: a CILA or CIL has none, 2026-10-31). Then a slot or a
+   refusal mapped on the main pratica reaches its combinations (2026-10-31: the SCIA's had missed
+   eleven slots).
+   Its case is `answers:` too: the main pratica's `answers-p6.json` changed by the part's
+   `answers` (the protected property) and the recipe's own (the works, `descrizione`), a null
+   dropping one; `gen.py RECIPE --answers` writes its `answers-p6.json`, and `bench/test_gen.py`
+   fails when one drifts from its main pratica's. A combination's crawl: below, *Crawling*.
    **Which pratica it is** is the library's rules table's (`rules/`, a byte-for-byte copy):
    `rules: {table, facts, handles}`, as the SUAP and SUE recipes have. `facts` fixes what the
    recipe is (`permesso_per_scelta: "true"` for the permesso); a fact it doesn't fix is an ask
@@ -34,12 +47,31 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    change and look at the diff: an unrelated steps file that changes is a regression until
    shown otherwise.
 4. **Pre-flight** with made-up answers (`answers-p6.json`) and the P6 fixture's values
-   (`rehearsals/cila-fittizia/fixture-p6.json` "fields" as a dict): `run.py preflight`.
+   (`--values rehearsals/cila-fittizia/fixture-p6.json`, the fixture as it is): `run.py preflight --made-up`
+   (the rehearsal's files are made up: Napoli's file rules only warn, below).
 5. **Run in the pane** (the pratica skill, step 2) and record each run in the rehearsal's
    README (`| Date | Browser | Result |`): what stopped it and what fixed it, then the
    filled run.
 6. **Tests:** `bench/test_gen.py` (add a case for what the pratica taught), `test_preflight.py`,
-   `test_inpage.py` when inpage.js changed.
+   `test_inpage.py` when inpage.js changed, `test_route.py` for a recipe with `rules:`.
+
+## From the facts to the steps file: `route.py`
+
+A recipe with `rules:` is routed to by its combination: its main pratica (`main`, else its
+procedure) and its `handles`. `route.py` reads that from every steps file each time, so a new
+recipe is routed once its steps file is generated; two steps files for one combination stop it.
+`bench/test_route.py` walks every case the table decides: each must reach the steps file for its
+combination, read the same way there, or be refused with the reason. It prints the combinations
+no steps file files yet ("to map"), most cases first: the SUE's mapping still to do.
+
+## Every choice: `branches.py`
+
+gen.py passes a radio or tick box the dictionary doesn't name (the run leaves it unticked), so a
+section counts as filled with choices no case can take yet. `branches.py --write` lists every SUE
+choice the crawls saw, once per section, in `docs/sue-branches.md`: ticked under some answer,
+from an answer (a dropdown), the person's, or unmapped, most shared sections first. A box a choice
+opened that the crawl never tried itself counts too, marked `not_tried` (what it opens is unknown:
+the art. 94-bis class under a structural tolerance). It flags a section at the 30-choice limit.
 
 ## What the portal does that bit us
 
@@ -52,7 +84,10 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
   the nearest label before each is the *last* column's, so a label can name several boxes:
   the runner takes those whose own text it is first, and `nth` counts only those. "sì"/"no"
   radios under one another name each other: name them by the question beside them
-  (`on_page` when the crawl labels them only "sì").
+  (`on_page` when the crawl labels them only "sì"). A label "si" or "no" matches only a whole
+  word: as a prefix, "no" was also "non ha rilevanza strutturale", which declared tolerances
+  show above the sanatoria's no, so `nth: 3` missed it (2026-10-30). Other short labels stay
+  prefixes ("Tel" is "Telefono").
 - **Boxes that move.** A tick that opens rows above the box renumbers it (the paesaggistica's
   art. 136): gen.py sends it by label. The crawl's `moved` pairs two same-label boxes wrongly
   at times; a pair whose new id was on the page already is not a move.
@@ -73,9 +108,26 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
   An asseverazione's "si allega" adds its own required slot, one per fascia di rispetto
   ("… tutela funzionale (stradale)"): run a new case to Allega documenti first, read the
   slots it adds, then map them (the SCIA, 2026-10-29).
+  It works the other way too: a slot the crawl's screen has can be gone for some answers (the
+  agibilità's dichiarazione di conformità, when every system's certificate is already
+  deposited), so a slot gets the `when` of every box that brings it, and a box that adds a
+  slot (a system's collaudo or atto notorio) is mapped with it: offline mapping doesn't see
+  either, so a new case runs to Allega documenti before it counts (2026-10-31).
 - **Assents asked with a pratica.** On Napoli's SUE a SCIA condizionata (the Soprintendenza,
   a park, a vincolo) gives no start date, and an assent that is its own operation (a landscape
   authorization) is selected with the pratica in the wizard, not attached to it.
+- **A box with no text of its own** reads as the cell above it: the primo impianto line's two
+  boxes (its details, its copy) are "copia accatastamento di primo impianto" like the line's
+  own, hidden until their radio is picked, and in the crawl only as choices under that box. They
+  go by label and `nth`, never by id (2026-10-30).
+- **A block of people repeats by "+"** (the other technicians, as the firms): a dictionary entry's
+  `repeat: N` with `block:`, `firm_when` and `repeat_when` (each later block's condition); `#N` in
+  a field is "" in the first block, then "2", "3" (roles `a`, `a2`; asks `altro_tecnico_...`,
+  `altro_tecnico2_...`). "Alle dipendenze di" opens more than the crawl saw: the firm's REA, seat
+  and legale rappresentante (read 2026-10-31).
+- **A choice's revealed boxes may repeat labels above them** (an employer's "Via, Piazza", "N.",
+  "Cognome"): crawl.js counts reveals per label since 2026-10-31; crawls before then left those
+  out, so a run can still find required boxes there (recrawl a section to see them).
 - **A block a tick opens may repeat the labels above it** (h1's structural designer under
   the architect's): fill it by label from its first box (`anchor`, `block: 1`).
 - **Suggestion lists fade out.** A street's list, hidden by its widget, lies over the next
@@ -110,6 +162,32 @@ opens: unreadable is `not ready`; no codice fiscale in its certificates, or none
 dichiarante's (`t:identity.codice_fiscale`), is a `warnings` entry. Counts and a yes/no only: Claude
 reads the report, so no codice fiscale is in it. It does not verify the signature or the
 certificate's validity at signing time; the portal does.
+
+## What a sportello refuses before reading: `FILING`
+
+Napoli's SUE declares a pratica irricevibile, without reading it, for a file not in PDF/A or over
+20 MB, a name with spaces, accents or other signs, an unsigned document or procura, or diritti
+paid other than before sending to its postal account (DD 501/2026, Linee Guida §§3, 4, 7, 8; the
+SUE's Costi page). `run.py`'s `FILING`, keyed by the steps file's `start` (`comune=F839&tipoSportello=E`),
+says so; pre-flight checks each file the run attaches:
+- **PDF/A**: the XMP's `pdfaid:part`, which PDF/A keeps unfiltered (a .p7m's content, read with
+  openssl). It says the file declares PDF/A, not that a validator would pass it.
+- **Signed**: a .p7m, or the PDF's own signature (PAdES: a `/ByteRange` and the PKCS#7 in
+  `/Contents`), whose signer is read as a .p7m's is. Neither proves the signature holds.
+- **Names**: letters, digits and underscores, then the extensions.
+
+Each failure is the file's `problem`, and `yours` carries the same rules for the person's own files
+and the payment. For a building title (`FILING`'s `titles`: the CILA, SCIA, SCIA alternativa and
+permesso, their sanatorie, and those filed with a landscape authorization, by `rules.main`) `yours`
+adds Napoli's annexes: the Allegato A Nuovo Programma 100 and the Modello DP ("sempre obbligatorio"
+in each of DD 603/2025's forms), the Stato Comparativo sheet (Linee Guida §9), and, when they apply,
+the zona A tipo edilizio attestation and the frazionamento's atto d'obbligo (the SUE's CILA notes of
+23/06/2025). The other SUE pratiche (proroghe, voltura, agibilità) get only the file and payment
+rules: nothing found says they need more. The 200 DPI the Linee Guida ask for is advice there and isn't checked. With
+`--made-up` (a rehearsal) they are the file's `filing` and a warning, so rehearsals still run;
+the tests pass `made_up=True` for the rehearsals' files. Seen on 2026-10-31: the Comune's own DD 501
+and DD 603 are PAdES-signed and read as such, and are not PDF/A; the veraPDF corpus's PDF/A-1b and
+2b files declare it both ways (`part="2"`, `<pdfaid:part>2<`).
 
 ## What the person reads before they declare
 
@@ -153,11 +231,72 @@ after another, nothing touched between them:
     --values <values.json> --out <dir> [rehearsal ...]
 ```
 
+Hide the pane (Cmd+Shift+B) rather than close it: closing it ends the SPID session and drops a
+loaded bundle, so the person signs in and picks the file again (2026-11-01, twice).
 In the pane, on the portal's origin and logged in: `check.js` (it names which of `runner.js`
 and `steps/<name>.js` the pane lacks: send only those), the `queue-N.js` files, `loop.js`,
 then `results.js` until `done` equals `of`. A stopped one: rerun it alone, unchanged, before
 calling it a bug (the portal is sometimes slow); twice the same is a bug. 2026-10-29: 20 of
 23 on the first pass, 23 of 23 once the runner waited for each section to open.
+
+A rehearsal can be named `NAME:ANSWERS.json` (one pratica, several cases), and a procedure's
+later runs travel as what differs from its first. When the pane lacks big files (a new runner,
+several steps files), don't copy them through the conversation: a long script can arrive garbled
+(2026-10-30). Pass `--bundle <file in Downloads>`, run `pick.js` in the pane, and the person picks
+that file once in the box it shows; it is checked by sha256, loaded once, and starts the batch.
+One batch per tab: `loop.js` refuses a second while one runs (two would drive one runner and
+file each other's results), and `pick.js` refuses to clear the page during one. A bundle clears
+the tab's earlier results first: `loop.js` skips a name it finds there, to resume after a reload.
+`results.js` lists each run's `moved` ids and `loose` labels, what a gen.py change is checked by.
+A run that stops in ~20 s on "the portal stayed busy" with no section opened is most likely a
+sign-in that expired: the runner's frame lands on the login page (2026-10-30). Since 2026-10-31
+the run says "signed out" instead, and isn't retried.
+A run that never reaches the portal ("the page didn't load", "the portal stayed busy", "signed
+out") is kept out of the results, and two in a row halt the batch (`halted` in results.js): once
+the portal stuck in its wizard after a 10-minute busy run, and each later run, a new frame each,
+failed in about a minute until the page was reloaded (2026-10-31). Then save `record.js`'s output,
+reload, and bundle what's left: a bundle clears the tab's results.
+The queue goes into the bundle by number: each later run of a procedure is what differs from its
+first, so name order (queue-10 before queue-2) broke a batch of 14 pieces (2026-10-31).
+A stopped run lists its `gaps`: the empty boxes the portal wants, by label, from the runner's
+snapshot (no values), so a stop names them without opening the draft (2026-10-31). `--values`
+takes the fixture as it is. After a batch, run `record.js` in the pane and pipe what it prints (names
+and results, no values) into `rerun.py --record -`: each run goes in its rehearsal's `runs.json`: schema_branches.py
+counts a box as filled on the portal only from there. The batch clears the runner's review from
+the page when it ends.
+
+## Crawling: `catalogue.py pane --bundle`
+
+A crawl batch goes to the pane as one file too: `catalogue.py ops sue --all > ops.json`, then
+`catalogue.py pane <dir> --bundle ~/Downloads/pv-<name>.js --ops ops.json [--fresh]` (`--fresh`
+crawls them again, though stored; a section it has seen comes back as `same_as`. `--forget-known`
+reads every section again too: about 8 minutes for a combination, against 2, for a deeper crawl or
+a section that changed in place). In the pane: `pick.js` (the person picks the file once; it
+stores and runs wizard.js and crawl.js and starts the batch on the scratch draft, "PROVA NON
+INVIARE - catalogo sue"), then `status.js` until `done`; then, with the person's yes, `export.js`
+saves the results to Downloads for `catalogue.py import`. The pane's storage also holds the SUAP
+crawls and is near Chrome's limit (2026-10-31: 7.2 of about 10 million characters): a result it
+can't keep stays in the tab, the batch stops saying so, and export.js still saves it. crawl.js
+tries 80 choices a section (the semplificata's Allegato B list has 41); a section with more says
+`truncated`.
+
+A combination (two operations in one pratica) is one op: `catalogue.py ops sue --combo NAME MAIN
+OTHER` (labels as in `sue-wizard.json`) tries only the procura scelta, as recipes take it, and reads
+the attachments screen on the way (crawl.js `also`, `scelte`, `slots`); repeat `--combo` for
+several in one batch. `import` keeps the operations and adds the main one's answer-dependent slots.
+A main pratica that answers a wizard's Si/No (the SCIA in sanatoria) needs a crawl with that answer
+too: `--combo-scelta NAME "<the Si/No question>"` (that combination alone, besides the procura;
+`--scelta` sets them for every combination and replaces the default), else
+gen.py says the crawl "isn't a crawl of these operations together", missing the section the Sì
+adds (`sue-combo-scia-sanatoria-paesaggistica-*`, 2026-10-31). The slots it reads tick only the
+checkboxes, so a Si/No's own slots come from the main pratica's recipe.
+Once a batch is done and the tab still has wizard.js and crawl.js, a small second one starts from
+the page without a bundle: `crawl:batch` set to its ops, then `__crawl.batch(opts)`, the known
+fingerprints kept (2026-10-31: the two SCIA in sanatoria combinations). Save the first batch's
+results before, or name all of them in export.js: it reads the ops of `crawl:batch`.
+A batch whose sections were all seen before is small: `print.js` prints it with its sha256, and
+`catalogue.py import -` refuses a copy that arrived changed (no download to ask for), trailing
+newlines aside.
 
 ## Attachments screens
 

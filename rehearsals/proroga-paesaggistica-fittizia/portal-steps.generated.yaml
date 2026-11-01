@@ -2,12 +2,12 @@
 # recipe and generate again.
 procedure: napoli/comune/proroga-autorizzazione-paesaggistica
 title: Proroga dell'autorizzazione paesaggistica (art. 10 septies L. 51/2022), SUE Napoli (tecnico con procura)
-generated: gen.py from sue-proroga-autorizzazione-paesaggistica (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from sue-proroga-autorizzazione-paesaggistica (2026-10-31) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client''s name'
 - 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it, with the pratica''s other documents'
-- Pay any bollo and diritti on pagoPA after sending
+- Pay any imposta di bollo as the portal asks
 - Sign and send (Firma e invio); keep the receipt
 asks:
   descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'PROVA NON INVIARE - proroga paesaggistica {{c:identity.last_name}}'}
@@ -19,11 +19,9 @@ asks:
   paes_scadenza: {type: date, question: The date it was to stop being valid}
   proroga_tipo_lavori: {type: text, question: 'The works still to finish, in a few words (30 characters)'}
   proroga_data_prevista: {type: date, question: The new date the works are now expected to start (or end)}
-  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', default: 'false'}
+  domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
-supports:
-- when: '{{ask.bollo_marche|not}}'
-  else: 'So far only with the bollo paid on pagoPA: the marche route isn''t run yet.'
+supports: []
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
 wizard:
@@ -90,7 +88,9 @@ sections:
   fields:
   - {id: 'r2c1p2reg:txta', kind: text, value: '{{ask.oggetto}}', max: 300, label: descrizione sintetica}
 - section: DOMICILIO DIGITALE
-  fields: []
+  fields:
+  - {id: 'r4c1p4reg:chk', kind: checkbox, when: '{{ask.domicilio_inad}}', label: il seguente domicilio digitale inserito in INAD}
+  - {id: 'r6c1p6reg:txt', kind: text, value: '{{c:identity.pec}}', when: '{{ask.domicilio_inad}}', max: 9999, label: il seguente domicilio digitale inserito in INAD}
 - section: DOMICILIO ELETTRONICO
   theirs:
   - Si dichiara di essere consapevoli

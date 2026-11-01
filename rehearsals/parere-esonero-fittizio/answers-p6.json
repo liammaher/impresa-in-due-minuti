@@ -1,0 +1,27 @@
+{
+ "people": {
+  "c": "luca"
+ },
+ "descrizione": "PROVA NON INVIARE - parere esonero P6",
+ "titolo": "proprietario",
+ "oggetto": "Rifacimento dell'intonaco e tinteggiatura della facciata su strada nei colori esistenti, con sostituzione delle lattonerie.",
+ "esonero_lotto": "precedente",
+ "precedente_tipo": "Licenza edilizia",
+ "precedente_numero": "1234",
+ "precedente_data": "1962-03-14",
+ "esonero_altri_titoli": false,
+ "esonero_conformita": "conforme",
+ "esonero_prova": "titoli",
+ "allegato_a": "A.2",
+ "allegato_a_uno": true,
+ "esonero_ente": "Comune di Napoli - Servizio Tutela dell'Ambiente, della Salute e del Paesaggio",
+ "esonero_ente_sede": "Napoli",
+ "esonero_ente_pec": "prova.non.inviare@pec.example.it",
+ "relazione_illustrativa": "rehearsals/cila-fittizia/files/relazione-tecnica.pdf",
+ "bollo_marche": false,
+ "diritti_euro": "0",
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "senza_autorizzazione",
+ "fatti": []
+}

@@ -22,3 +22,5 @@ The case: a non-essential variant to a SCIA under way (a new opening and an outd
 | Date | Browser | Result |
 |---|---|---|
 | 2026-10-29 | pane | First run, from scratch, in a batch of eight: **filled** in 177 s, every value read back on a fresh load (28 s); variant to a SCIA, contributo in instalments with the prospetto attached, no start date. |
+| 2026-10-30 | pane | systems needing a project (`answers-impianti`: six systems, each project in its own slot, the energy report's slot too), `bench/rerun.py` bundle | **filled** in 157 s, read back on a fresh load (25 s), nothing moved or loose |
+| 2026-10-31 | pane | P6 and systems needing a project (`answers-impianti`), `bench/rerun.py` bundle, after the recipe became `extends: [scia-fittizia, parts/paesaggistica-semplificata]` (it gained the SCIA's 12 slots it had missed, and lost 6 refusals the SCIA had closed) | **filled** both (146.9 s, 152.8 s), read back on a fresh load (25 s, 25 s), nothing moved or loose |

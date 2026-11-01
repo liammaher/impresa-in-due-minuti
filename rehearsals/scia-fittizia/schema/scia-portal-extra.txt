@@ -1,0 +1,52 @@
+
+## SECTION (only after the choice 'Le opere ricadono nell'ambito della Sanatoria e regolarizzazioni per interventi già realiz'): SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione
+P613 | checkbox | intervento soggetto a SCIA in corso di esecuzione, con pagamento di sanzione (d.P.R. n. 380/2001, articolo 37, comma 5), e pertanto:
+P614 | checkbox | sanatoria di intervento soggetto a SCIA, in assenza della SCIA stessa o in difformità da essa, che risulta conforme alla disciplina urbanist
+P615 | checkbox | sanatoria di intervento soggetto a SCIA, in assenza della SCIA o in difformità da essa, che risulta conforme alla disciplina urbanistica vig
+P616 | checkbox | regolarizzazione di interventi realizzati come variante in corso d'opera che costituiscono parziali difformità dal titolo rilasciato prima d
+P617 | REVEALED by 'intervento soggetto a SCIA in corso di esecuzione, con pagam' | radio | si forniscono gli estremi del pagamento di € 516,00
+P618 | REVEALED by 'intervento soggetto a SCIA in corso di esecuzione, con pagam' | radio | si allega la ricevuta del pagamento di € 516,00
+P619 | REVEALED by 'si forniscono gli estremi del pagamento di € 516,00' | text | si forniscono gli estremi del pagamento di € 516,00
+P620 | REVEALED by 'si forniscono gli estremi del pagamento di € 516,00' | date | del
+P621 | REVEALED by 'sanatoria di intervento soggetto a SCIA, in assenza della SC' | date | realizzato in data
+P622 | REVEALED by 'sanatoria di intervento soggetto a SCIA, in assenza della SC' | radio | si forniscono gli estremi del pagamento
+P623 | REVEALED by 'sanatoria di intervento soggetto a SCIA, in assenza della SC' | radio | si allega la ricevuta del pagamento
+P624 | REVEALED by 'si forniscono gli estremi del pagamento' | text | di Euro
+P625 | REVEALED by 'si forniscono gli estremi del pagamento' | date | del
+P626 | REVEALED by 'si allega la ricevuta del pagamento' | text | di euro
+P627 | REVEALED by 'sanatoria di intervento soggetto a SCIA, in assenza della SC' | date | realizzato in data
+P628 | REVEALED by 'sanatoria di intervento soggetto a SCIA, in assenza della SC' | radio | si forniscono gli estremi del pagamento
+P629 | REVEALED by 'sanatoria di intervento soggetto a SCIA, in assenza della SC' | radio | si allega la ricevuta del pagamento
+P630 | REVEALED by 'si forniscono gli estremi del pagamento' | text | di Euro
+P631 | REVEALED by 'si forniscono gli estremi del pagamento' | date | del
+P632 | REVEALED by 'si allega la ricevuta del pagamento' | text | di euro
+P633 | REVEALED by 'regolarizzazione di interventi realizzati come variante in c' | radio | si indicano gli estremi del titolo edilizio variato
+P634 | REVEALED by 'regolarizzazione di interventi realizzati come variante in c' | radio | si allega altra documentazione di cui all'articolo 9-bis, comma 1-bis, quarto periodo nei casi in cui sussista un principio di prova del tit
+P635 | REVEALED by 'regolarizzazione di interventi realizzati come variante in c' | radio | si forniscono gli estremi di versamento
+P636 | REVEALED by 'regolarizzazione di interventi realizzati come variante in c' | radio | si allega la ricevuta di versamento
+P637 | REVEALED by 'si indicano gli estremi del titolo edilizio variato' | text | n.
+P638 | REVEALED by 'si indicano gli estremi del titolo edilizio variato' | date | del
+P639 | REVEALED by 'si forniscono gli estremi di versamento' | text | di Euro
+P640 | REVEALED by 'si forniscono gli estremi di versamento' | date | del
+P641 | REVEALED by 'si allega la ricevuta di versamento' | text | di euro
+
+## SECTION (only after the choice 'IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECI'): Qualifica e dati del procuratore
+P642 | select | Qualifica del procuratore | options=['ALTRO PREVISTO DALLA NORMATIVA', 'ASSOCIAZIONE DI CATEGORIA', 'CENTRO ELABORAZIONE', 'CONSULENTE', 'NOTAIO', 'PROFESSIONISTA INCARICATO', 'STUDIO ASSOCIATO']
+P643 | text | Nome
+P644 | text | Cognome
+P645 | select | Sesso | options=['Femmina', 'Maschio']
+P646 | select | Cittadinanza
+P647 | text | Nato a
+P648 | date | il
+P649 | radio | in Italia
+P650 | text | Provincia
+P651 | radio | all'Estero
+P652 | select | Stato
+P653 | text | Cod.Fiscale
+P654 | text | Residente in
+P655 | text | Provincia
+P656 | text | CAP
+P657 | text | Indirizzo
+P658 | text | Tel
+P659 | text | Fax
+P660 | text | eMail PEC

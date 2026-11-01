@@ -3,7 +3,8 @@
 # dictionary/fnsuap.yaml. The architect is the direttore dei lavori and attests; the client is
 # the tenant of the CILA (rehearsals/cila-fittizia). Works on structures (collaudo statico or
 # dichiarazione di regolare esecuzione), energy (AQE), house numbers, fire safety (the fire
-# SCIA, a SCIA Unica), lifts and every system are mapped; partial agibilità too.
+# SCIA, a SCIA Unica), lifts and every system with each of its certificates are mapped; partial
+# agibilità and art. 24 c. 5-bis/5-quater too.
 procedure: napoli/comune/agibilita
 title: "Segnalazione certificata per l'agibilità, SUE Napoli (tecnico con procura)"
 comune: F839
@@ -19,14 +20,14 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As direttore dei lavori, check every attestation on this page: they are yours, signed with the pratica"
-  - "Attestazione tecnica - Agibilità: the portal requires one of the art. 24 c. 5-bis/5-ter or 5-quater boxes; tick the one that applies (if none does, ask the SUE)"
+  - "Attestazione tecnica - Agibilità: the portal requires one of the art. 24 c. 5-bis/5-ter or 5-quater boxes; Claude ticks the one the case is, and none when it is neither (then ask the SUE)"
   - "On Allega documenti: the portal's procura signed by the client, then everything signed digitally (.p7m)"
   - "Sign and send (Firma e invio); keep the receipt"
 supports:
-  - value: "{{ask.impianti_certificazione}}"
-    in: [dichiarazione]
-    if: "{{ask.impianti}}"
-    else: "Systems certified by a collaudo, an atto notorio or a document already filed with the Comune aren't mapped yet."
+  # Art. 24 c. 5-bis: one case per pratica (the form's boxes open their own sizes), and only
+  # with c. 5-ter's adattabilità met; the one-room flat also names its c. 5-ter condition.
+  - {if: "{{ask.igienico_24_5bis}}", value: "{{ask.igienico_5bis_caso}}", in: ["altezza", "monostanza uno", "monostanza due"], else: "More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own boxes."}
+  - {if: "{{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "Art. 24 c. 5-bis applies only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}
 # Each "si allega" of the attestazione adds its own required slot (read on the portal 2026-10-30).
 attachments:
   Gestione degli allegati:
@@ -36,3 +37,6 @@ attachments:
     - {kind: file, label: Documentazione necessaria per l'assegnazione o aggiornamento di numerazione civica, value: "{{ask.civici_doc}}", when: "{{ask.civici_variazione}} {{ask.civici_richiesta|is_allegata}}", on_page: true}
     - {kind: file, label: SCIA ai sensi dell’art. 4 comma 1 del d.P.R. n. 151/2011, value: "{{ask.antincendio_scia_doc}}", when: "{{ask.antincendio_variazione}}", on_page: true}
     - {kind: file, label: "Copia di elaborato planimetrico, del progetto ed eventuali varianti", value: "{{ask.elaborato_parziale_doc}}", when: "{{ask.agibilita_parziale|in_edificio__unita}}", on_page: true}
+    # Opened by a system's collaudo or atto notorio, and required then (read on the portal 2026-10-31).
+    - {kind: file, label: "Certificato di collaudo ove previsto, degli impianti installati", value: "{{ask.impianti_collaudo_doc}}", when: "{{ask.impianti}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_elettrico_collaudo,ask.impianto_radiotv_collaudo,ask.impianto_termico_collaudo,ask.impianto_idrico_collaudo,ask.impianto_gas_collaudo,ask.impianto_ascensore_collaudo,ask.impianto_antincendio_collaudo,ask.impianto_scariche_collaudo,ask.impianto_linee_vita_collaudo,ask.impianto_altro_collaudo|any}}", on_page: true}
+    - {kind: file, label: "Atto notorio relativo alla conformità degli impianti", value: "{{ask.impianti_atto_notorio_doc}}", when: "{{ask.impianti}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_elettrico_atto_notorio,ask.impianto_radiotv_atto_notorio,ask.impianto_termico_atto_notorio,ask.impianto_idrico_atto_notorio,ask.impianto_gas_atto_notorio,ask.impianto_ascensore_atto_notorio,ask.impianto_antincendio_atto_notorio,ask.impianto_scariche_atto_notorio|any}}", on_page: true}

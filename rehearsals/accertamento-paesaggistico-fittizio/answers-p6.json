@@ -1,0 +1,28 @@
+{
+ "people": {
+  "c": "luca"
+ },
+ "descrizione": "PROVA NON INVIARE - accertamento paesaggistico P6",
+ "titolo": "proprietario",
+ "oggetto": "Accertamento di compatibilità paesaggistica di una pergola in legno sul terrazzo di copertura e della nuova pavimentazione esterna, eseguite nel 2022 senza autorizzazione.",
+ "titolo_atto": "rogito",
+ "atto_notaio": "Mario Fittizio",
+ "atto_notaio_sede": "Napoli",
+ "atto_repertorio": "12345",
+ "paes_interessa": "immobile",
+ "prg_nta": "art. 33",
+ "zona_prg": "zona B",
+ "atti_gravanti": false,
+ "vincolo": "art 136 and 142",
+ "bollo_marche": false,
+ "diritti_euro": "441",
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "ordinaria",
+ "fatti": [
+  "paesaggio_eseguiti"
+ ],
+ "accertamento_descrizione": "Pergola in legno a falde aperte sul terrazzo di copertura (m 4 x 3, senza coperture né chiusure laterali) e sostituzione della pavimentazione esterna in cotto con gres effetto pietra. Nessuna nuova superficie utile né volume.",
+ "accertamento_effetti": "La pergola è visibile dalla strada sopra il parapetto; il colore della pavimentazione cambia la vista dall'alto.",
+ "accertamento_data": "2022-06-15"
+}
