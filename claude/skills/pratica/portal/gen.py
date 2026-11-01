@@ -582,11 +582,12 @@ def unslotted(steps):
     ricevuta") with no attachment slot under the same condition: each ticked box of the kind
     has added a required slot on the portal (the sanction's receipt, the sewer connection's
     documents), found only by a run. [(section, label, when)]; a case the recipe refuses
-    anyway is listed too (pre-flight decides which cases exist)."""
+    anyway is listed too (pre-flight decides which cases exist). A box whose dictionary entry says
+    what it adds (`slot`: the slot's title, or why it adds none, as read on the portal) is known."""
     terms = lambda w: set(re.findall(r"\{\{.+?\}\}", w or ""))
     files = [terms(f.get("when")) for s in steps["sections"] for f in s["fields"] if f["kind"] == "file"]
     return [(s["section"], f["label"], f["when"]) for s in steps["sections"] for f in s["fields"]
-            if f["kind"] in ("checkbox", "radio", "tick") and f.get("when")
+            if f["kind"] in ("checkbox", "radio", "tick") and f.get("when") and not f.get("slot")
             and re.match(r"(si )?alleg[ao]\b", norm(f.get("label")))
             and not any(terms(f["when"]) <= t for t in files)]
 

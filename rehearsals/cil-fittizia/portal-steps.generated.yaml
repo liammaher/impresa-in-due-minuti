@@ -9,6 +9,7 @@ yours:
 - 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it'
 - Pay the {{ask.diritti_euro}} € diritti before sending, and attach the receipt (copia attestazione versamento) on Allega documenti
 - 'On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); keep its authorization with the pratica'
+- 'If a notifica preliminare is due (art. 99 D.Lgs. 81/2008): attach it under Allegati liberi, signed digitally (.p7m only): the CIL has no slot of its own for it'
 - Sign and send (Firma e invio); keep the receipt
 groups:
   fatti:
@@ -283,7 +284,8 @@ sections:
   - {id: 'r6c2p12reg:chk', kind: checkbox, when: '{{ask.dlgs81}} {{ask.verificato_idoneita}}', label: dichiara di aver verificato la documentazione}
   - {id: 'r8c2p18reg:radio:2_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.notifica_dovuta|not}}', label: dichiara che l'intervento non è soggetto all'invio}
   - {id: 'r9c2p21reg:radio:3_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}', label: dichiara che l'intervento è soggetto all'invio}
-  - {id: 'r10c2p24reg:chk', kind: checkbox, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}', label: allega alla presente comunicazione la notifica}
+  - {id: 'r10c2p24reg:chk', kind: checkbox, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}', slot: 'none of its own: Allegati liberi (signed files only on the CIL: the person''s)', label: allega alla presente
+      comunicazione la notifica}
   - {kind: checkbox, label: e allega alla presente segnalazione la notifica, if_present: true, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
   - {kind: radio, label: invierà la notifica prima dell'inizio dei lavori, if_present: true, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
 - section: Dichiarazione relativa ai diritti

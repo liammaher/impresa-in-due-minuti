@@ -760,7 +760,7 @@ sections:
   - {id: 'r3c2p5reg:txt', kind: text, value: '{{ask.contributo_normativa}}', when: '{{ask.scia_onerosa|not}}', max: 100, label: ai sensi della seguente normativa}
   - {kind: radio, when: '{{ask.scia_onerosa}}', label: è a titolo oneroso}
   - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_sportello}}', label: chiede allo Sportello Unico di effettuare il calcolo}
-  - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}', label: allega il prospetto di calcolo preventivo}
+  - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}', slot: 'none of its own: Allegati liberi', label: allega il prospetto di calcolo preventivo}
   - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_prima_dei_lavori}}', label: dichiara che il versamento del contributo di costruzione sarà effettuato al momento del ritiro}
   - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_rateizzazione}}', label: chiede la rateizzazione del contributo}
   - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_in_corso_d_opera}}', label: si impegna a corrispondere il costo di costruzione}
@@ -1006,15 +1006,20 @@ sections:
   - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale|not}}', label: non ha rilevanza strutturale}
   - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}}', label: ha rilevanza strutturale}
   - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}', label: intervento rilevante nei riguardi della pubblica incolumità}
-  - {kind: radio, label: allega l’autorizzazione sismica, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
-  - {kind: date, label: rilasciata in data, value: '{{ask.toll_sismica_data|date_it}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
-  - {kind: text, label: prot. n., value: '{{ask.toll_sismica_protocollo}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
-  - {kind: radio, label: attesta che sulla istanza di autorizzazione, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
-  - {kind: date, label: in data, value: '{{ask.toll_silenzio_data|date_it}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
-  - {kind: text, label: prot. n., value: '{{ask.toll_silenzio_protocollo}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
+  - {kind: radio, on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}', label: allega l’autorizzazione sismica}
+  - {kind: date, value: '{{ask.toll_sismica_data|date_it}}', on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}', label: rilasciata
+      in data}
+  - {kind: text, value: '{{ask.toll_sismica_protocollo}}', on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}', max: 9999,
+    label: prot. n.}
+  - {kind: radio, on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}', label: attesta che sulla istanza di autorizzazione}
+  - {kind: date, value: '{{ask.toll_silenzio_data|date_it}}', on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}',
+    label: in data}
+  - {kind: text, value: '{{ask.toll_silenzio_protocollo}}', on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}',
+    max: 9999, label: prot. n.}
   - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_minore_rilevanza}}', label: intervento di minore rilevanza nei riguardi}
   - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_privo_di_rilevanza}}', label: intervento privo di rilevanza nei riguardi}
-  - {kind: checkbox, label: dichiara il decorso del termine del procedimento, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}} {{ask.toll_decorso}}'}
+  - {kind: checkbox, on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}} {{ask.toll_decorso}}', label: dichiara il decorso del termine
+      del procedimento}
   - {id: 'r12c3p19reg:radio:5_clone', kind: radio, when: '{{ask.sanatoria_titolo|is_nessuna}}', label: 'no', nth: 3}
   - {id: 'r12c2p18reg:radio:4_clone', kind: radio, when: '{{ask.sanatoria_titolo|in_scia__permesso}}', label: si, nth: 3}
   - {id: 'r14c1p21reg:chk', kind: checkbox, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_in_corso}}', label: un intervento soggetto a SCIA in
@@ -1030,7 +1035,8 @@ sections:
   - {kind: checkbox, label: 'un intervento soggetto a permesso di costruire, in assenza', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_assenza}}'}
   - {kind: checkbox, label: 'un intervento soggetto a permesso di costruire, In parziale', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}'}
   - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}}', label: realizzato in data}
-  - {kind: checkbox, label: allega la documentazione necessaria indicata nel quadro riepilogativo, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_assenza}}'}
+  - {kind: checkbox, label: allega la documentazione necessaria indicata nel quadro riepilogativo, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_assenza}}',
+    slot: 'none of its own: the documents the Quadro riepilogativo lists, in their slots'}
   - {kind: radio, label: alla disciplina urbanistica vigente al momento della presentazione, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}
       {{ask.pdc_sanatoria_conformita|is_urbanistica}}'}
   - {kind: radio, label: alla disciplina urbanistica e edilizia vigente sia al momento, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}
@@ -1150,10 +1156,12 @@ sections:
   - {id: 'r5c1p5reg:radio:1_clone', kind: radio, when: '{{ask.paesaggio|is_senza_autorizzazione}}', label: 'ricade in zona tutelata, ma le opere non comportano alterazione'}
   - {id: 'r6c1p6reg:radio:2_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}', label: ricade in zona tutelata e le opere comportano alterazione}
   - {id: 'r7c1p7reg:radio:3_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}', label: è assoggettato al procedimento semplificato}
-  - {id: 'r8c1p8reg:chk', kind: checkbox, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}', label: Si allega la relazione paesaggistica semplificata}
+  - {id: 'r8c1p8reg:chk', kind: checkbox, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}', slot: Relazione paesaggistica semplificata e documentazione necessaria, label: Si allega
+      la relazione paesaggistica semplificata}
   - {id: 'r6c1p6reg:radio:2_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}', label: ricade in zona tutelata e le opere comportano alterazione}
   - {id: 'r9c1p9reg:radio:4_clone', kind: radio, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}', label: è assoggettato al procedimento ordinario}
-  - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}', label: Si allega la relazione paesaggistica e la documentazione}
+  - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}', slot: Relazione paesaggistica e documentazione per il rilascio, label: Si allega la relazione
+      paesaggistica e la documentazione}
   - {id: 'r15c1p15reg:radio:6_clone', kind: radio, when: '{{ask.bene_culturale|not}}', label: non è sottoposto a tutela}
   - {id: 'r16c1p16reg:radio:7_clone', kind: radio, when: '{{ask.bene_culturale}}', label: è sottoposto a tutela}
   - {id: 'r20c1p20reg:radio:8_clone', kind: radio, when: '{{ask.area_protetta|is_no}}', label: non ricade in area tutelata}

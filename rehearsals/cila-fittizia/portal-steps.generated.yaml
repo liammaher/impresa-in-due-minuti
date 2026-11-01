@@ -556,7 +556,8 @@ sections:
   - {id: 'r6c2p11reg:radio:3_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.sotto_200|not}}', label: dichiara che l'entità presunta del cantiere è pari o superiore}
   - {id: 'r8c2p15reg:radio:4_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.notifica_dovuta|not}}', label: dichiara che l'intervento non è soggetto all'invio}
   - {id: 'r9c2p18reg:radio:5_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}', label: dichiara che l'intervento è soggetto all'invio}
-  - {id: 'r10c2p21reg:chk', kind: checkbox, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}', label: allega alla presente comunicazione la notifica}
+  - {id: 'r10c2p21reg:chk', kind: checkbox, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}', slot: 'none of its own: Allegati liberi (signed files only on the CIL: the person''s)', label: allega alla presente
+      comunicazione la notifica}
   - {kind: checkbox, label: e allega alla presente segnalazione la notifica, if_present: true, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
   - {kind: radio, label: invierà la notifica prima dell'inizio dei lavori, if_present: true, when: '{{ask.dlgs81}} {{ask.notifica_dovuta}}'}
 - section: Relazione Tecnica di Asseverazione
@@ -608,15 +609,20 @@ sections:
   - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale|not}}', label: non ha rilevanza strutturale}
   - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}}', label: ha rilevanza strutturale}
   - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}', label: intervento rilevante nei riguardi della pubblica incolumità}
-  - {kind: radio, label: allega l’autorizzazione sismica, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
-  - {kind: date, label: rilasciata in data, value: '{{ask.toll_sismica_data|date_it}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
-  - {kind: text, label: prot. n., value: '{{ask.toll_sismica_protocollo}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
-  - {kind: radio, label: attesta che sulla istanza di autorizzazione, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
-  - {kind: date, label: in data, value: '{{ask.toll_silenzio_data|date_it}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
-  - {kind: text, label: prot. n., value: '{{ask.toll_silenzio_protocollo}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}'}
+  - {kind: radio, on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}', label: allega l’autorizzazione sismica}
+  - {kind: date, value: '{{ask.toll_sismica_data|date_it}}', on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}', label: rilasciata
+      in data}
+  - {kind: text, value: '{{ask.toll_sismica_protocollo}}', on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}', max: 9999,
+    label: prot. n.}
+  - {kind: radio, on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}', label: attesta che sulla istanza di autorizzazione}
+  - {kind: date, value: '{{ask.toll_silenzio_data|date_it}}', on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}',
+    label: in data}
+  - {kind: text, value: '{{ask.toll_silenzio_protocollo}}', on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_silenzio_assenso}}',
+    max: 9999, label: prot. n.}
   - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_minore_rilevanza}}', label: intervento di minore rilevanza nei riguardi}
   - {kind: radio, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_privo_di_rilevanza}}', label: intervento privo di rilevanza nei riguardi}
-  - {kind: checkbox, label: dichiara il decorso del termine del procedimento, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}} {{ask.toll_decorso}}'}
+  - {kind: checkbox, on_page: true, when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}} {{ask.toll_decorso}}', label: dichiara il decorso del termine
+      del procedimento}
 - section: Dichiarazione relativa ai diritti
   fields:
   - {id: 'r2c1p2reg:radio:0_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: non sono dovuti oneri}

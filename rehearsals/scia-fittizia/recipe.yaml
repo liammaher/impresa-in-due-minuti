@@ -100,4 +100,9 @@ rules:
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
+  # Works done without a permesso di costruire (or a SCIA alternativa) are regularized by the
+  # permesso in sanatoria the Comune issues (art. 36 DPR 380/2001), never by a SCIA: the asseverazione's
+  # "in assenza" row is the permesso's (rehearsals/pdc-sanatoria-fittizio). Partial difformity from a
+  # permesso can go by SCIA (art. 36-bis c. 1).
+  - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_sanatoria_caso}}", in: [parziale], else: "Works done without a permesso di costruire (or a SCIA alternativa) are regularized by the permesso in sanatoria (art. 36 DPR 380/2001), not by a SCIA: file the permesso in sanatoria."}
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}

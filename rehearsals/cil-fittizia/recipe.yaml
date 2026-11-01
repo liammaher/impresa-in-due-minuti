@@ -26,6 +26,7 @@ yours:
   - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
   - "Pay the {{ask.diritti_euro}} € diritti before sending, and attach the receipt (copia attestazione versamento) on Allega documenti"
   - "On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); keep its authorization with the pratica"
+  - "If a notifica preliminare is due (art. 99 D.Lgs. 81/2008): attach it under Allegati liberi, signed digitally (.p7m only): the CIL has no slot of its own for it"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.

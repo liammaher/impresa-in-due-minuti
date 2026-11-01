@@ -80,11 +80,16 @@ def _():
     assert r["state"] != "theirs", r["state"]
 
 
-@case("a box a choice opened but the crawl never tried counts, marked not_tried (art. 94-bis's class)")
+@case("a box a choice opened but the crawl never tried counts, marked not_tried; the art. 94-bis class, recrawled deeper, is tried")
 def _():
-    # Mapped since from the page (what it opens was read there), so ticked, and still not_tried.
+    opened = {"id": "r2c1p2reg:radio:0_clone", "kind": "radio", "label": "una classe"}
+    nodes = [{"id": "r1c1p1reg:radio:0_clone", "kind": "radio", "choice": "una scelta", "reveals": [opened]}]
+    walked = [(n, d) for n, _, d, _ in branches.walk(nodes, [])]
+    assert [(n["id"], n.get("not_tried"), d) for n, d in walked] == [(nodes[0]["id"], None, 1), (opened["id"], True, 2)], walked
+    # Recrawled at depth 8 (2026-11-01): tried, and it opens the authorization or its silenzio assenso.
     r = one("Relazione Tecnica di Asseverazione C.I.L.A.", "intervento rilevante nei riguardi della pubblica")
-    assert r.get("not_tried") and r["state"] == "ticked" and r["under"].startswith("ha rilevanza strutturale"), r
+    assert not r.get("not_tried") and r["state"] == "ticked" and r["opens"] == 2 and r["under"].startswith("ha rilevanza strutturale"), r
+    assert all(x["state"] == "law" for x in branches.rows() if x.get("not_tried"))
 
 
 @case("the weakest title decides: ticked under one title, not the other, is unmapped")
