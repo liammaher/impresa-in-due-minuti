@@ -59,35 +59,28 @@ SUE pratiche not yet fillable:
 Measured today:
 
 - Level 1: 39 of 39 pratiche fully in the dictionary. 12 of them are two operations in one pratica (`sue-combo-*`).
-- Which pratiche a case needs: of the 13990 cases the rules table decides, **1650 reach a steps file**, 12340 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
-- Level 2: **61 refusals across 22 recipes**, 13 distinct messages.
-- Level 3, in part: **11 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot a run would stop on.
+- Which pratiche a case needs: of the 13997 cases the rules table decides, **1630 reach a steps file**, 12367 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
+- Level 2: **16 refusals across 15 recipes**, 7 distinct messages.
+- Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot, which a run's Salva doesn't check. A box read on a filled draft says what it adds (the dictionary's `slot`).
 - Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
-| `cila-fittizia` | 4 |
-| `cila-paesaggistica-fittizia` | 4 |
-| `cila-paesaggistica-ordinaria-fittizia` | 4 |
-| `scia-sanatoria-fittizia` | 4 |
-| `scia-sanatoria-paesaggistica-ordinaria-fittizia` | 4 |
-| `scia-sanatoria-paesaggistica-semplificata-fittizia` | 4 |
-| `pdc-fittizio` | 3 |
-| `pdc-paesaggistica-ordinaria-fittizio` | 3 |
-| `pdc-paesaggistica-semplificata-fittizio` | 3 |
-| `pdc-sanatoria-fittizio` | 3 |
-| `scia-alt-paesaggistica-ordinaria-fittizia` | 3 |
-| `scia-alt-paesaggistica-semplificata-fittizia` | 3 |
-| `scia-alternativa-fittizia` | 3 |
-| `scia-fittizia` | 3 |
-| `scia-paesaggistica-ordinaria-fittizia` | 3 |
-| `scia-paesaggistica-semplificata-fittizia` | 3 |
 | `parere-esonero-fittizio` | 2 |
-| `agibilita-fittizia` | 1 |
 | `cil-fittizia` | 1 |
 | `cil-paesaggistica-ordinaria-fittizia` | 1 |
 | `cil-paesaggistica-semplificata-fittizia` | 1 |
+| `cila-fittizia` | 1 |
+| `cila-paesaggistica-fittizia` | 1 |
+| `cila-paesaggistica-ordinaria-fittizia` | 1 |
 | `fine-lavori-fittizia` | 1 |
+| `pdc-fittizio` | 1 |
+| `pdc-paesaggistica-ordinaria-fittizio` | 1 |
+| `pdc-paesaggistica-semplificata-fittizio` | 1 |
+| `pdc-sanatoria-fittizio` | 1 |
+| `scia-sanatoria-fittizia` | 1 |
+| `scia-sanatoria-paesaggistica-ordinaria-fittizia` | 1 |
+| `scia-sanatoria-paesaggistica-semplificata-fittizia` | 1 |
 
 Pratiche filed together, mapped (a steps file each):
 
@@ -110,33 +103,17 @@ Pratiche filed together, not mapped yet (the cases that need them, most first):
 
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
-- 16×: More than eight other technicians aren't mapped yet: each takes a "+" on the portal, and eight have been prepared.
-- 13×: More than ten "altro" lines (titles past one per kind, or of kinds not listed) aren't mapped yet: each takes a "+" on the portal, and ten have been prepared.
-- 9×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions.
 - 4×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
 - 3×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
-- 3×: More than two assents already obtained aren't mapped yet: the relazione has two rows.
-- 3×: More than two filings already made aren't mapped yet: the relazione has two rows.
 - 3×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
 - 3×: Variants to pre-1977 titles (art. 34-ter) aren't mapped yet.
-- 1×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own boxes.
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
 - 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
 
-Ticked "si allega" boxes with no attachment slot under their condition (gen.py `unslotted`; some only in cases a recipe refuses, some with no slot on the portal: a run tells):
+Ticked "si allega" boxes with no attachment slot under their condition (gen.py `unslotted`; some only in cases a recipe refuses, some with no slot on the portal: a filled draft's slots tell):
 
-- 6×: Asseverazione SCIA - Stato legittimo: allega la documentazione necessaria indicata nel quadro riepilogativo
-- 6×: Asseverazione SCIA - Tutela Storico Ambientale: Si allega la relazione paesaggistica e la documentazione
-- 6×: Asseverazione SCIA - Tutela Storico Ambientale: Si allega la relazione paesaggistica semplificata
-- 6×: Asseverazione SCIA - Tutela Storico Ambientale: si allega documentazione necessaria ai fini del rilascio del parere vincolante
-- 4×: Asseverazione PdC - stato legittimo: allega la documentazione necessaria indicata nel quadro riepilogativo
-- 4×: Asseverazione PdC - tutela storico ambientale: Si allega la relazione paesaggistica e la documentazione
-- 4×: Asseverazione PdC - tutela storico ambientale: Si allega la relazione paesaggistica semplificata
-- 4×: f) Calcolo del contributo di costruzione: allega il prospetto di calcolo preventivo
-- 3×: Asseverazione SCIA Alternativa - Tutela Storico Am: Si allega la relazione paesaggistica e la documentazione
-- 3×: Asseverazione SCIA Alternativa - Tutela Storico Am: Si allega la relazione paesaggistica semplificata
-- 3×: g) Rispetto degli obblighi in materia di salute e : allega alla presente comunicazione la notifica
+- none
 
 Open items no recipe shows:
 

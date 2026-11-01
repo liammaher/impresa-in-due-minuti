@@ -825,12 +825,58 @@ def _():
 
 
 
-@case("a ticked \"si allega\" with no slot under its condition is listed (the sewer's has one now; the prospetto's not)")
+@case("a ticked \"si allega\" with no slot under its condition is listed, unless the portal was read for it (`slot`)")
 def _():
-    out = gen.unslotted(generated("pdc-fittizio"))
-    labels = [label for _, label, _ in out]
-    assert not any("rilascio dell'autorizzazione" in l for l in labels), labels
-    assert any(l.startswith("allega il prospetto di calcolo") for l in labels), labels
+    import copy
+    steps = generated("pdc-fittizio")
+    assert gen.unslotted(steps) == [], gen.unslotted(steps)
+    # The permesso's prospetto box adds no slot (read 2026-11-01): without that read it is listed.
+    unread = copy.deepcopy(steps)
+    for s in unread["sections"]:
+        for f in s["fields"]:
+            if f.get("label", "").startswith("allega il prospetto di calcolo"):
+                f.pop("slot")
+    assert [l for _, l, _ in gen.unslotted(unread)] == ["allega il prospetto di calcolo preventivo"], gen.unslotted(unread)
+
+
+@case("the semplificata's \"Si allega\" adds a required slot on the SCIA, the permesso and the SCIA alternativa, not on a CILA or a CIL")
+def _():
+    files = lambda name: [f["label"] for s in generated(name)["sections"] for f in s["fields"] if f["kind"] == "file"]
+    slot = "Relazione paesaggistica semplificata e documentazione necessaria"
+    for name in ("scia-paesaggistica-semplificata-fittizia", "pdc-paesaggistica-semplificata-fittizio",
+                 "scia-alt-paesaggistica-semplificata-fittizia", "scia-sanatoria-paesaggistica-semplificata-fittizia"):
+        assert slot in files(name), name
+    for name in ("cil-paesaggistica-semplificata-fittizia", "cila-paesaggistica-fittizia"):
+        assert slot not in files(name), name
+
+
+@case("a SCIA never sanates works done without a permesso (art. 36: the permesso in sanatoria's), only partial difformity")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    for name in ("scia-fittizia", "scia-sanatoria-fittizia", "scia-sanatoria-paesaggistica-ordinaria-fittizia"):
+        steps = generated(name)
+        for caso, refused in (("assenza", True), ("parziale", False)):
+            a = json.loads((REH / name / "answers-p6.json").read_text()) | {"sanatoria_titolo": "permesso", "pdc_sanatoria_caso": caso}
+            r = run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")), made_up=True)
+            assert any("art. 36 DPR" in u for u in r["unsupported"]) == refused, (name, caso, r["unsupported"])
+
+
+@case("the proroga's permesso with its landscape authorization: the box, its prot. n. and the second \"del\" (crawled 2026-11-01)")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    name = "proroga-straordinaria-ultimazione-fittizia"
+    steps = generated(name)
+    p = run.plan(steps, run.Values(json.loads((REH / name / "answers-paesaggistica.json").read_text()), fields=fields, asks=steps.get("asks")))
+    got = [(x["label"], str(x.get("value") or "")) for x in p if x["section"].startswith("Riferimenti titolo")]
+    assert ("e autorizzazione paesaggistica", "") in got and ("prot.n.", "PG/2025/0777777") in got and ("del", "10/12/2025") in got, got
+    sec = section(steps, "Riferimenti titolo")
+    assert [f.get("nth") for f in sec["fields"] if f.get("value") == "{{ask.paes_data|date_it}}" and "titolo_con_paesaggistica" in f["when"]] == [2, 2]
+    p = run.plan(steps, run.Values(json.loads((REH / name / "answers-p6.json").read_text()), fields=fields, asks=steps.get("asks")))
+    assert not any(x["label"] == "e autorizzazione paesaggistica" for x in p)
 
 
 
@@ -897,6 +943,39 @@ def _():
     ok = subprocess.run(cat + ["import", "-"], input=hashlib.sha256(body.encode()).hexdigest() + "\n" + body + "\n",
                         capture_output=True, text=True)
     assert ok.returncode == 0, ok.stderr
+
+
+@case("catalogue.py graft: a deeper crawl of a section goes into every stored copy of it; a changed one is refused")
+def _():
+    import argparse
+    import json
+    import tempfile
+    sys.path.insert(0, str(HERE.parent))
+    import catalogue
+    sec = lambda **k: {"section": "Asseverazione X - stato legittimo", "fingerprint": "f1", "fields": [], **k}
+    with tempfile.TemporaryDirectory() as t:
+        before, catalogue.SECTIONS = catalogue.SECTIONS, Path(t)
+        try:
+            for name, s in (("a", sec(branches=[])), ("b", sec(branches=[])), ("c", {"section": "Asseverazione X - stato legittimo", "same_as": "a#x"})):
+                (Path(t) / f"{name}.json").write_text(json.dumps({"by": "crawl.js batch, depth 3", "sections": [s]}))
+            deeper = {"crawl:op:d8": {"name": "d8", "crawled": "2026-11-01T10:00:00Z", "depth": 8,
+                                      "sections": [sec(branches=[{"choice": "una classe"}], section="Asseverazione X - stato legittimo, altro")]}}
+            (Path(t) / "in").mkdir()
+            (Path(t) / "in" / "export.json").write_text(json.dumps(deeper))
+            args = argparse.Namespace(export=str(Path(t) / "in" / "export.json"), section=["Asseverazione X - stato legittimo"])
+            out = catalogue.cmd_graft(args)
+            got = {n: json.loads((Path(t) / f"{n}.json").read_text())["sections"][0] for n in "abc"}
+            deeper["crawl:op:d8"]["sections"][0]["fingerprint"] = "f2"
+            (Path(t) / "in" / "export.json").write_text(json.dumps(deeper))
+            try:
+                catalogue.cmd_graft(args)
+                refused = False
+            except SystemExit as e:
+                refused = "crawl the pratica again" in str(e)
+        finally:
+            catalogue.SECTIONS = before
+    assert len(out) == 2 and all(got[n]["branches"] == [{"choice": "una classe"}] and got[n]["depth"] == 8 for n in "ab"), (out, got)
+    assert got["a"]["section"] == "Asseverazione X - stato legittimo" and "branches" not in got["c"] and refused, got
 
 
 @case("extends: later ones win, attachments and supports add up, asks and rules merge, null drops")

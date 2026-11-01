@@ -4,23 +4,23 @@
 
 Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdown option), each counted once however many pratiche share its section, and what the dictionary does with it. A case that takes an **unmapped** choice can't be filled yet. The scoreboard (`coverage.md`) counts a section as filled even with these left unticked, so they don't show there.
 
-**1163 choices** in 96 sections that have any.
+**1184 choices** in 96 sections that have any.
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 910 | Claude takes it when the case does |
+| ticked | 933 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
-| left | 1 | left empty on purpose |
+| left | 4 | left empty on purpose |
 | law | 21 | closed by law to new cases (the piano casa): refused as the law's, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 160 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 155 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
 
 - 0 sections cut at crawl.js's limit of choices (`truncated`, or exactly 30 from older crawls): none.
-- 26 of these choices the crawl saw but never tried: what they open isn't known.
+- 11 of these choices the crawl saw but never tried: what they open isn't known (11 of them closed by law: no case takes them).
 - Choices only a saved answer shows (attachment slots, sections a scelta adds) aren't here: the crawl never saves.
 
 ## Unmapped, by section
@@ -102,7 +102,7 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria / Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione
 
-8 pratiche; 13 of 47 choices to map.
+8 pratiche; 10 of 60 choices to map.
 
 - radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
 - checkbox: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della data di entrata in vigore della legge 28 gennaio 1977, n. 10 (articolo  (under: si)
@@ -113,10 +113,7 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: attesta che la data/epoca di realizzazione dell’intervento (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
 - radio: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguaglio a seguito di quantificazione da parte del responsabile del procedim (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
 - radio: ai fini della sanatoria, la presente SCIA: (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
-- radio: non prevede interventi; (under: ai fini della sanatoria, la presente SCIA:)
-- radio: propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezza e/o la rimozione di opere che non possono essere sanate, a cui lo Spo (under: ai fini della sanatoria, la presente SCIA:)
 - checkbox: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla SCIA, ai sensi dell’art. 36-bis, comma 3-bis: (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
-- radio: dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformit)
 
 ### h1) Tecnici incaricati
 
@@ -325,7 +322,7 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze
 
-3 pratiche; 1 of 24 choices to map.
+3 pratiche; 1 of 28 choices to map.
 
 - radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
 
@@ -337,7 +334,7 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### Relazione Tecnica di Asseverazione C.I.L.A.
 
-3 pratiche; 1 of 27 choices to map.
+3 pratiche; 1 of 31 choices to map.
 
 - radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
 
@@ -370,13 +367,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 3 pratiche; 1 of 9 choices to map.
 
 - radio: e allega alla presente segnalazione la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in lu (under: dichiara che l'intervento è soggetto all'invio della notifica)
-
-### Riferimenti titolo edilizio e/o paesaggistico e data prevista della fine dei lavori
-
-1 pratiche; 2 of 5 choices to map.
-
-- checkbox: e autorizzazione paesaggistica (under: di cui al Permesso di costruire)
-- checkbox: e autorizzazione paesaggistica (under: di cui alla SCIA)
 
 ### SANATORIA
 

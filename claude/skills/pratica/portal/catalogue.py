@@ -7,6 +7,8 @@
     catalogue.py known                                     fingerprints of the stored crawls
     catalogue.py import EXPORT.json|-                      a batch's results into sections/ (export.js's
                                                            file, or print.js's text: its sha256 checked)
+    catalogue.py graft EXPORT.json|- --section NAME ...   a deeper crawl of those sections (crawl.js `recrawl`)
+                                                           into the stored crawl that holds each one
     catalogue.py count                                     distinct sections and their uses
     catalogue.py drift EXPORT.json                         a check batch against the stored crawls
     catalogue.py pane DIR                                  the pane's scripts: install.js stores wizard.js
@@ -241,6 +243,47 @@ def cmd_import(args):
         new = sum(1 for s in r["sections"] if s.get("fields"))
         out.append(f"{r['name']}: {len(r['sections'])} sections, {new} new")
     return out
+
+
+def cmd_graft(args):
+    """A deeper crawl of a few sections (crawl.js batch's `recrawl`, a greater `depth`) into the
+    stored crawls that hold each one: every section with the same fingerprint, not a `same_as`
+    (a combination keeps its own copy), gets the new choices; everything else stays. A section whose fingerprint no
+    stored crawl holds is refused: the portal changed it, so crawl the pratica again instead."""
+    text = sys.stdin.read() if args.export == "-" else Path(args.export).read_text()
+    head, _, rest = text.partition("\n")
+    if re.fullmatch(r"[0-9a-f]{64}", head.strip()):
+        rest = rest.rstrip("\r\n")
+        if hashlib.sha256(rest.encode()).hexdigest() != head.strip():
+            sys.exit("not the text print.js printed (its sha256 differs): nothing grafted")
+        text = rest
+    owners = {}
+    for name, c in crawls().items():
+        for i, s in enumerate(c["sections"]):
+            if s.get("branches") is not None and not s.get("same_as") and s.get("fingerprint"):
+                owners.setdefault(s["fingerprint"], []).append((name, i))
+    out, changed = [], {}
+    for key, r in sorted(json.loads(text).items()):
+        r = r if isinstance(r, dict) else json.loads(r)
+        if not key.startswith("crawl:op:") or r.get("error"):
+            continue
+        private = os.environ.get("CATALOGUE_PRIVATE")  # the login's name and CF: as import
+        if private and re.search(private, json.dumps(r, ensure_ascii=False), re.I):
+            sys.exit(f"{r['name']}: holds the login's name or CF, not grafted")
+        for s in r["sections"]:
+            if not s.get("branches") or not any(slug(s["section"], 200).startswith(slug(n, 200)) for n in args.section):
+                continue
+            if s["fingerprint"] not in owners:
+                sys.exit(f"{s['section']}: no stored crawl holds the fingerprint {s['fingerprint']}: crawl the pratica again")
+            for name, i in owners[s["fingerprint"]]:
+                doc = changed.setdefault(name, json.loads((SECTIONS / f"{name}.json").read_text()))
+                old = doc["sections"][i]
+                doc["sections"][i] = {**{k: v for k, v in s.items() if k != "truncated"}, "section": old["section"],
+                                      "depth": r["depth"], "recrawled": r["crawled"][:10]}
+                out.append(f"{name}: {old['section'][:60]} at depth {r['depth']}")
+    for name, doc in changed.items():
+        (SECTIONS / f"{name}.json").write_text(json.dumps(doc, ensure_ascii=False, indent=1) + "\n")
+    return out or ["nothing grafted: no section named"]
 
 
 def covered(section, dictionary):
@@ -496,6 +539,9 @@ def main():
     p = sub.add_parser("import")
     p.add_argument("export")
     p.add_argument("--depth", type=int, help="the batch's depth, for one that didn't record it (before 2026-10-30: 2)")
+    p = sub.add_parser("graft")
+    p.add_argument("export")
+    p.add_argument("--section", action="append", required=True, help="a recrawled section's name (its start); repeat it")
     p = sub.add_parser("count")
     p.add_argument("--summary", action="store_true")
     p = sub.add_parser("drift")
