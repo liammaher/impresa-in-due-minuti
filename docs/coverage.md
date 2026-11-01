@@ -117,8 +117,8 @@ Refusals, by how many recipes carry them (the most shared are the cheapest to cl
 - 3×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
 - 3×: More than two assents already obtained aren't mapped yet: the relazione has two rows.
 - 3×: More than two filings already made aren't mapped yet: the relazione has two rows.
-- 3×: Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione sav
 - 3×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
+- 3×: Variants to pre-1977 titles (art. 34-ter) aren't mapped yet.
 - 1×: More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own boxes.
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.

@@ -743,6 +743,15 @@ def generate(recipe, base=HERE):
     for t in recipe.get("asks_used", []):
         asks_used.add(t)
     supports = recipe.get("supports", []) + [c for c in section_supports if c not in recipe.get("supports", [])]
+    # A refusal that names a known portal defect carries its record (defects.yaml), so the steps
+    # file alone tells pre-flight what to say: the plugin ships steps files, not this folder.
+    defects = None
+    for i, c in enumerate(supports):
+        if isinstance(c.get("defect"), str):
+            defects = defects or load_yaml(HERE / "defects.yaml")
+            if c["defect"] not in defects:
+                raise GenError(f"supports names the defect {c['defect']!r}, not in defects.yaml")
+            supports[i] = {**c, "defect": {"id": c["defect"], **defects[c["defect"]]}}
     for t in ASKED.findall(json.dumps([recipe.get("yours"), supports, recipe.get("rules")])):
         asks_used.add(t)
     # The dictionary's questions, the recipe's wording over them; a question only this pratica
