@@ -548,6 +548,11 @@ supports:
   - 'true'
   else: 'A structural tolerance of minor or no relevance for public safety can be declared only once the regional control term has run out, with no open requests and no negative outcome: art. 34-bis c.
     3-bis DPR 380/2001.'
+- if: '{{ask.urbanizzazione|not}}'
+  value: '{{ask.urbanizzazione_attuazione}}'
+  in:
+  - convenzione
+  else: 'Without primary urbanisation works the portal wants the date of a convenzione, even where the Comune plans the works itself within three years: that case can''t be stated on it as is; ask the SUE.'
 rules:
   table: sue-napoli
   main: napoli/comune/permesso-di-costruire
@@ -1907,5 +1912,6 @@ sections:
   - {kind: file, label: Documentazione necessaria al rilascio del parere progetto da parte dei Vigili del Fuoco, value: '{{ask.vvf_doc}}', when: '{{ask.vvf_valutazione}}'}
   - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: '{{ask.igienico_deroga_doc}}', when: '{{ask.igienico_conforme|not}}'}
   - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: '{{ask.cimiteriale_doc}}', when: '{{ask.fascia_cimiteriale|is_non_consentito}}'}
+  - {kind: file, label: Risultati delle analisi ambientali sulla qualità dei terreni, value: '{{ask.indagini_analisi_doc}}', when: '{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}'}
   - {kind: file, label: Relazione paesaggistica (redatta ai sensi del D.P.C.M, value: '{{ask.relazione_paesaggistica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Relazione paesaggistica e documentazione per il rilascio, value: '{{ask.relazione_paesaggistica}}'}

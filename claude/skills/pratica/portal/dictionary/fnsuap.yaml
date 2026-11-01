@@ -3036,6 +3036,10 @@ sections:
   - section: Asseverazione PdC - qualità terreni
     aliases: ["Asseverazione SCIA Alternativa - Qualità terreni"]
     leave: [in data, con prot.]
+    # The portal requires "stipulata in data" with "non è dotata" (seen on the SCIA alternativa
+    # 2026-11-01), though the form puts it only after "ovvero ... convenzione".
+    supports:
+      - {if: "{{ask.urbanizzazione|not}}", value: "{{ask.urbanizzazione_attuazione}}", in: [convenzione], else: "Without primary urbanisation works the portal wants the date of a convenzione, even where the Comune plans the works itself within three years: that case can't be stated on it as is; ask the SUE."}
     fields:
       - {kind: radio, label: non richiede indagini ambientali preventive, when: "{{ask.indagini_ambientali|not}}"}
       # Analyses done, no remediation: the SCIA alternativa ticks "si allegano i risultati" (its

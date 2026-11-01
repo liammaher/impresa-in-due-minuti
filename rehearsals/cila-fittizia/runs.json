@@ -52,5 +52,11 @@
   "answers": "answers-proprietario.json",
   "result": "filled",
   "seconds": 83.7
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-altri-tecnici-otto.json",
+  "result": "filled",
+  "seconds": 521.6
  }
 ]

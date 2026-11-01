@@ -148,5 +148,17 @@
   "answers": "answers-per-scelta.json",
   "result": "filled",
   "seconds": 164.2
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-acustica-vvf-igiene.json",
+  "result": "filled",
+  "seconds": 154
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-terreni-urbanizzazione.json",
+  "result": "stopped",
+  "seconds": 165.9
  }
 ]
