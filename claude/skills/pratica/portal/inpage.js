@@ -269,14 +269,22 @@
   // ".error-message-text" is the portal's message under a field ("Il valore è obbligatorio").
   // `theirs`: a section's fields the person fills (a statement in their name); the
   // portal's "required" under one of them isn't the run's error, nor under a slot that takes
-  // only signed files (.p7m): the person signs and attaches those.
-  const errors = (theirs = []) => [...doc().querySelectorAll(".ui-message-error, .ui-messages-error, .ui-growl-message-error, [id*=\"dynaForm\"] .error-message-text")]
-    .filter((e) => e.getClientRects().length && norm(e.textContent))
-    .filter((e) => { const box = e.closest("td") && e.closest("td").querySelector("input, select, textarea");
-      if (box && (slotOf(box) || {}).signed_only) return false;
-      return !(box && theirs.some((t) => box.id.endsWith("dynaForm:" + t) ||
-        win().eval(`(${steps.label_js})`)(box).some((x) => norm(x).includes(norm(t))))); })
-    .map((e) => norm(e.textContent));
+  // only signed files (.p7m): the person signs and attaches those. A slot is the person's by its
+  // title's start, unless the entry is another slot's whole title: "Relazione Paesaggistica
+  // Semplificata" (signed only) is not "Relazione paesaggistica semplificata e documentazione…"
+  // (a plain PDF, Claude's), whose empty required slot four runs passed as filled (2026-11-01).
+  const errors = (theirs = []) => {
+    const titles = [...doc().querySelectorAll("input[type=file]")].map((b) => norm(slotOf(b).title));
+    const owns = (title, t) => norm(title).startsWith(norm(t)) && (norm(title) === norm(t) || !titles.includes(norm(t)));
+    return [...doc().querySelectorAll(".ui-message-error, .ui-messages-error, .ui-growl-message-error, [id*=\"dynaForm\"] .error-message-text")]
+      .filter((e) => e.getClientRects().length && norm(e.textContent))
+      .filter((e) => { const box = e.closest("td") && e.closest("td").querySelector("input, select, textarea");
+        if (box && (slotOf(box) || {}).signed_only) return false;
+        if (box && box.type === "file") return !theirs.some((t) => box.id.endsWith("dynaForm:" + t) || owns(slotOf(box).title, t));
+        return !(box && theirs.some((t) => box.id.endsWith("dynaForm:" + t) ||
+          win().eval(`(${steps.label_js})`)(box).some((x) => norm(x).includes(norm(t))))); })
+      .map((e) => norm(e.textContent));
+  };
 
   function checkLabel(e, label) {
     if (!label) return;

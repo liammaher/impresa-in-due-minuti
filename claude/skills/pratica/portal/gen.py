@@ -759,7 +759,10 @@ def generate(recipe, base=HERE):
             for s in slots:
                 hit = any(norm(s["title"]).startswith(norm(d["label"])) for d in fields)
                 # The person's: the entry's own, and the signed-only slots handed to them above.
-                theirs = any(norm(s["title"]).startswith(norm(t)) for t in entry.get("theirs", []) + out.get("theirs", []))
+                # An entry that is another slot's whole title names that slot alone (inpage.js `errors`).
+                titles = {norm(x["title"]) for x in slots}
+                theirs = any(norm(s["title"]).startswith(norm(t)) and (norm(s["title"]) == norm(t) or norm(t) not in titles)
+                             for t in entry.get("theirs", []) + out.get("theirs", []))
                 if s.get("required") and not hit and not theirs:
                     problems.append(f"{name}: required slot {s['title'][:70]!r} is in no dictionary entry")
         out["fields"] = fields
