@@ -44,7 +44,11 @@ Refused at pre-flight, with the reason:
 - **Conformità urbanistica** (art. 36-bis c. 1, €1,032 to €10,328): on the portal the
   asseverazione's dating (by documents or by attestation), its oblazione and its works proposal
   (art. 36-bis c. 2) are one radio group though the form asks for all three: ticking one unticks
-  the others (seen 2026-10-30), so the asseverazione can't state the case. Ask the SUE.
+  the others (seen 2026-10-30). Checked again on a draft 2026-11-01: the four rows (dating by
+  documents, dating attested, oblazione, "ai fini della sanatoria") are one field with the values
+  1 to 4, so the portal can save only one of them, where the national form keeps the dating, the
+  oblazione and the works choice apart. A defect of the portal, not a gap in the mapping
+  (`docs/portal-defects.md`): the asseverazione can't state the case. Ask the SUE.
 - **Variants to pre-1977 titles** (art. 34-ter): not mapped.
 - Structures, bene culturale, changes of use, a permesso's works: the table's.
 

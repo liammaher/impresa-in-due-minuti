@@ -432,7 +432,7 @@ supports:
   in:
   - assenza
   else: 'Only art. 36 (works without the permesso or in total difformity) is mapped. Under art. 36-bis the portal''s asseverazione makes the documents attached, the date of the works and the works proposal
-    one radio choice, so it can''t state the case in full: ask the SUE.'
+    one radio choice, so it can''t state the case in full: a defect of the portal (docs/portal-defects.md); ask the SUE.'
 - if: '{{ask.scia_onerosa}}'
   value: '{{ask.contributo_pagamento}}'
   in:
