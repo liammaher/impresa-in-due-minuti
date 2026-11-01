@@ -213,13 +213,13 @@ def sue_another_pratica():
     assert sue("paesaggistica-ordinaria-fittizia", paesaggio="semplificata")["unsupported"][0].startswith(other + semplificata)
     # Works that need no title, work already done, and a Naples rule (DGC 454/2014).
     assert sue("paesaggistica-semplificata-fittizia", paesaggio="no")["unsupported"][0].startswith("This case needs no pratica: ")
-    # Works already done: the SCIA in sanatoria (facades, ristrutturazione without structures), its
-    # own pratica; on structures, in a protected area or a permesso's, refused.
+    # Works already done: the SCIA in sanatoria (facades, structures, ristrutturazione), its own
+    # pratica; a permesso's goes to the permesso in sanatoria.
     assert sue("scia-fittizia", fatti=["prospetti", "sanatoria"])["unsupported"][0].startswith(
         other + "napoli/comune/scia-in-sanatoria")
     assert sue("scia-sanatoria-fittizia", fatti=[])["unsupported"][0].startswith(other + cila)  # the late CILA
-    assert "3-bis" in sue("scia-sanatoria-fittizia", intervento="ristrutturazione", fatti=[],
-                          strutture="true", sismica="deposito")["unsupported"][0]
+    assert sue("scia-fittizia", "answers-strutture.json", fatti=["sanatoria"], sismica="autorizzazione")["unsupported"][0].startswith(
+        other + "napoli/comune/scia-in-sanatoria")
     # In a protected area the art. 36-bis sanatoria carries the landscape compatibility (c. 4),
     # new volumes too; the SCIA of works still under way doesn't.
     assert sue("scia-sanatoria-fittizia", paesaggio="semplificata", fatti=["prospetti", "paesaggio_eseguiti", "paesaggio_volumi"])["ready"]
@@ -233,11 +233,19 @@ def sue_another_pratica():
     assert sue("paesaggistica-ordinaria-fittizia", fatti=["paesaggio_eseguiti"])["unsupported"][0].startswith(other + accertamento)
     assert sue("accertamento-paesaggistico-fittizio", fatti=[])["unsupported"][0].startswith(other + ordinaria)
     assert "167 c. 4" in sue("accertamento-paesaggistico-fittizio", fatti=["paesaggio_eseguiti", "paesaggio_volumi"])["unsupported"][0]
-    # Works that needed the permesso, already done: the permesso in sanatoria; not on structures.
+    # Works that needed the permesso, already done: the permesso in sanatoria.
     pdcs = "napoli/comune/permesso-in-sanatoria"
     assert sue("pdc-fittizio", intervento="nuova_costruzione", strutture="false", fatti=["sanatoria"])["unsupported"][0].startswith(other + pdcs)
     assert sue("pdc-sanatoria-fittizio", intervento="variante_essenziale_pdc")["ready"]
-    assert "sanatoria sismica" in sue("pdc-sanatoria-fittizio", strutture="true", sismica="deposito")["unsupported"][0]
+    # On structures, begun without the seismic filing: the autorizzazione at the Genio Civile,
+    # filed apart, never the deposito (art. 4 c. 1 e L.R. 9/1983); the SCIA's the same.
+    genio = "File apart, with its own office: napoli/genio-civile/deposito-autorizzazione-sismica (autorizzazione)"
+    for name in ("pdc-sanatoria-fittizio", "scia-sanatoria-fittizia"):
+        assert "L.R. 9/1983" in sue(name, "answers-strutture.json", sismica="deposito")["unsupported"][0]
+        assert genio in sue(name, "answers-strutture.json")["yours"]
+    assert genio in sue("scia-sanatoria-fittizia", "answers-ristrutturazione-strutture.json")["yours"]
+    # Under art. 36-bis c. 1 the case's defect still refuses it, structures or not.
+    assert sue("scia-sanatoria-fittizia", "answers-strutture.json", sanatoria_caso="conformita urbanistica")["defects"]
     # The portal's permesso wants an energy incentive claimed even with no energy works.
     assert "energy incentive" in sue("pdc-sanatoria-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
     assert "energy incentive" in sue("pdc-fittizio", incentivo_energetico="nessuno")["unsupported"][0]

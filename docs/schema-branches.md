@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (133 cases in all, 133 with a recorded filled run).
+  case (136 cases in all, 136 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -375,7 +375,7 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere_normativa_regionale` | non prevede opere da denunciare o autorizzare ai sensi degli articoli… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `variante_sostanziale` | costituisce una variante non sostanziale riguardante parti struttural… | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_normativa_regionale` | prevede opere in zona sismica da denunciare ai sensi dell'articolo 93… | h | filled on the portal | 3 |
-| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 2 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `non_richiede_indagini` | non richiede indagini ambientali preventive in relazione alle attivit… | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `non_necessita_bonifica` | a seguito delle preventive analisi ambientali effettuate, non necessi… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `avvenuta_bonifica` | è stata oggetto di bonifica dei terreni con obiettivi compatibili con… | h | mapped, no case yet |  |
@@ -711,7 +711,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere_normativa_regionale` | non prevede opere da denunciare o autorizzare ai sensi degli articoli… | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `variante_sostanziale` | costituisce una variante non sostanziale riguardante parti struttural… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_normativa_regionale` | prevede opere in zona sismica da denunciare ai sensi dell'articolo 93… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 2 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistica` | `non_ricade_in_zona_tutelata` | NON ricade in zona sottoposta a tutela | h | filled on the portal | 2 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistica` | `non_soggetto_autorizzazione` | ricade in zona tutelata, ma le opere non comportano alterazione dei l… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_semplificato` | è assoggettato al procedimento semplificato di autorizzazione paesagg… | h | filled on the portal | 2 |

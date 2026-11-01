@@ -16,5 +16,17 @@
   "answers": "answers-paesaggio.json",
   "result": "filled",
   "seconds": 139.7
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-strutture.json",
+  "result": "filled",
+  "seconds": 162.2
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-ristrutturazione-strutture.json",
+  "result": "filled",
+  "seconds": 151
  }
 ]

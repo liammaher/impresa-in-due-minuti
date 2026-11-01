@@ -1,4 +1,4 @@
-# SCIA in sanatoria: generated, never walked
+# SCIA in sanatoria: generated and walked
 
 The SCIA rehearsal's job (rehearsals/scia-fittizia: new shutters and railings of another design on
 the facade, two partitions, a bathroom, the systems) found done without a SCIA. Same people and
@@ -10,11 +10,12 @@ sending.
 and the wizard's "Le opere ricadono nell'ambito della Sanatoria ...?" answered Sì, which adds the
 quadro "SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione".
 
-## What it covers (2026-10-31)
+## What it covers (2026-11-01)
 
 The SUE rules table (`rules/sue-napoli.yaml`) gives this pratica (`napoli/comune/scia-in-sanatoria`)
-for works already done or under way that a SCIA needed: manutenzione straordinaria on the facades,
-or a ristrutturazione without structures, with no change of use, outside a bene culturale. Interior works only are the late CILA's.
+for works already done or under way that a SCIA needed: manutenzione straordinaria on the facades
+or the structures, restauro on the structures, or a ristrutturazione, with no change of use,
+outside a bene culturale. Interior works only are the late CILA's.
 
 - **In corso** (art. 37 c. 5 DPR 380/2001): works still under way, the SCIA filed of one's own
   accord with the €516 sanction, paid and given by its reference and date; the asseverazione's
@@ -23,8 +24,19 @@ or a ristrutturazione without structures, with no change of use, outside a bene 
   building rules both then and now; the date, the oblazione the technician determines (€516 to
   €5,164) paid and given by amount and date, in both quadri.
 - The asseverazione: the stato legittimo also from this sanatoria, the SCIA "presentata in
-  sanatoria", the catasto (unchanged, DOCFA filed, or to file once it takes effect). Works on
-  structures are refused by the table.
+  sanatoria", the catasto (unchanged, DOCFA filed, or to file once it takes effect).
+- **Works on structures** (2026-11-01): in Campania structural works begun without the seismic
+  filing always need the autorizzazione sismica (art. 4 c. 1 e L.R. 9/1983), so the asseverazione's
+  sismica quadro says "prevede opere strutturali soggette ad autorizzazione sismica" and attaches
+  the documents for it, the strutturista goes in quadro h1, and the table adds the autorizzazione
+  at the Genio Civile, filed apart (`sismica-sanatoria`); a deposito or a variant filing is refused
+  at pre-flight. On the portal the art. 36-bis c. 3-bis box (seismic zone, structural relevance,
+  art. 94-bis class, authorization attached or silenzio assenso) shows only under the c. 1 case,
+  already refused for its defect; with double conformity and for works under way the sismica
+  quadro is the form's only place, and the c. 3-bis attestation (the technical rules of the time)
+  goes with the authorization's documents. `answers-strutture.json` (beams of a timber floor
+  replaced in 2019, double conformity) and `answers-ristrutturazione-strutture.json` (a roof
+  rebuilt, works under way).
 - **In a protected landscape area** (art. 36-bis c. 4 and 5-bis): works that needed a landscape
   authorization (semplificata or ordinaria), new surfaces or volumes included. The asseverazione
   says the intervento goes through the accertamento of landscape compatibility of art. 36-bis and
@@ -64,6 +76,8 @@ paper; DD 501/2026 makes the portal the only channel from 1/7/2026, and the port
 | 2026-10-30 | pane | `answers-in-corso.json` (art. 37 c. 5) | **Filled** from a blank draft in 143.4 s, read back on a fresh load (24.2 s), 7 files kept |
 | 2026-10-30 | pane | `answers-p6.json`, after the sanatoria choice became `sanatoria_titolo` (shared with the permesso) | **Filled** from a blank draft in 149.2 s, read back on a fresh load (25.0 s), nothing moved or loose |
 | 2026-10-31 | pane | `answers-paesaggio`: works in a protected area, the art. 36-bis c. 4 route, `bench/rerun.py` bundle | **filled** in 140 s, nothing moved or loose |
+| 2026-11-01 | pane | `answers-strutture`: timber floor beams replaced, double conformity, the sismica quadro's autorizzazione and the strutturista, `bench/rerun.py` bundle | **filled** from a blank draft in 162 s, read back on a fresh load, nothing moved or loose |
+| 2026-11-01 | pane | `answers-ristrutturazione-strutture`: a roof rebuilt, works under way (art. 37 c. 5), same bundle | **filled** from a blank draft in 151 s, read back on a fresh load, nothing moved or loose |
 
 Exploring by hand first (a blank draft with only the wizard, then ticking each case) showed the
 four cases' rows and the case-3 radio group. Opening the sanatoria quadro right after saving an
