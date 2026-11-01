@@ -89,5 +89,8 @@
  "sanatoria_catasto_data": "2026-10-20",
  "strumenti_altri": "false",
  "paesaggio_eseguiti": "true",
- "paesaggio_volumi": "true"
+ "paesaggio_volumi": "true",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false"
 }

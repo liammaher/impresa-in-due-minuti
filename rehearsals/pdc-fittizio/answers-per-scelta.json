@@ -94,5 +94,9 @@
  "area_protetta_doc": "rehearsals/scia-fittizia/files/documentazione-nulla-osta-parco.pdf",
  "idrogeologico_doc": "rehearsals/scia-fittizia/files/documentazione-idrogeologico.pdf",
  "sismica_protocollo": "98765",
- "sismica_data": "2026-03-10"
+ "sismica_data": "2026-03-10",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false"
 }

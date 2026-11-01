@@ -93,5 +93,8 @@
  "scavo": "nessuno",
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false"
 }

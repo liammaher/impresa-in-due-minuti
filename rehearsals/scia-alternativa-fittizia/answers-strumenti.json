@@ -103,5 +103,9 @@
  "strumento_peep_articolo": "6",
  "strumento_altro_nome": "Programma di recupero urbano fittizio",
  "strumento_altro_zona": "Ambito 1",
- "strumento_altro_articolo": "4"
+ "strumento_altro_articolo": "4",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false"
 }

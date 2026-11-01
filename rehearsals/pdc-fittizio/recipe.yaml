@@ -38,6 +38,8 @@ attachments:
     # The asseverazione's sewer connection to request adds this required slot (read on the
     # permesso's attachments screen 2026-10-31): plain PDFs.
     - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura, value: "{{ask.allaccio_doc}}", when: "{{ask.scarichi|is_allaccio_da_richiedere}}", on_page: true}
+    # The safety quadro's "allega la notifica" (the notifica attached now): its slot, as on the SCIA.
+    - {kind: file, label: Notifica preliminare, value: "{{ask.notifica_preliminare}}", when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}} {{ask.notifica_allegata}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
     # Under the barriers rules, their drawings (a slot read on the P6 run's screen).
     - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: "{{ask.elaborati_barriere}}", when: "{{ask.barriere}}"}
@@ -98,7 +100,7 @@ yours:
   - "As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request"
   - "On Allega documenti: the portal's procura signed by the client and the Quadro riepilogativo (PdC DSC), the broadband infrastructure drawing (art. 135-bis DPR 380/2001: signed files only), the contributo's prospetto or the documents for the SUE to work it out (the permesso has no slot for them: under Allegati liberi), then everything signed digitally (.p7m)"
   - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
-  - "Once the permesso is issued: collect it (paying the contributo, if due, as quadro f) says), name the structural designer and the direttori dei lavori, and file the comunicazione di inizio lavori with the energy report and the structural filings"
+  - "Once the permesso is issued: collect it (paying the contributo, if due, as quadro f) says), name the structural designer and whoever else the permesso leaves to be named (the direttori dei lavori, the firm), and file the comunicazione di inizio lavori with the energy report and the structural filings"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
 # The permesso is the choice where the law lets SCIA works be asked as one (art. 22 c. 7).

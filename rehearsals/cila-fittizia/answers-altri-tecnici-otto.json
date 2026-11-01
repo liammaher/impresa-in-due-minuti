@@ -63,5 +63,7 @@
  "altro_tecnico7_incarico": "progettazione antincendio",
  "altro_tecnico7_dipendente": false,
  "altro_tecnico8_incarico": "relazione energetica (legge 10)",
- "altro_tecnico8_dipendente": false
+ "altro_tecnico8_dipendente": false,
+ "altri_tecnici_dopo": "false",
+ "impresa_dopo": "false"
 }

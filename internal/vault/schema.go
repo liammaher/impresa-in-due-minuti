@@ -158,7 +158,7 @@ var RecommendedSchema = Schema{
 		Identity:   `^(` + identityWords + `)$`,
 		Account:    `^(` + accountWords + `)$`,
 	},
-	Version: "19",
+	Version: "20",
 	Categories: []SchemaCategory{
 		{
 			Name:        "identity",
@@ -384,6 +384,9 @@ var RecommendedSchema = Schema{
 				{ID: "business.inail_codice_ditta", Description: "INAIL codice ditta", Sensitivity: "standard"},
 				{ID: "business.inail_pat", Description: "INAIL PAT (posizione assicurativa territoriale)", Sensitivity: "standard"},
 				{ID: "business.inail_codice_sede", Description: "INAIL codice sede, as on the F24 for the autoliquidazione", Sensitivity: "standard"},
+				{ID: "business.cassa_edile_sede", Description: "Cassa Edile the building firm is enrolled with: its seat (e.g. Napoli), as on the DURC", Sensitivity: "standard"},
+				{ID: "business.cassa_edile_codice", Description: "Cassa Edile's own code (codice cassa), as on the DURC", Sensitivity: "standard"},
+				{ID: "business.cassa_edile_codice_impresa", Description: "The firm's code at its Cassa Edile (codice impresa), as on the DURC", Sensitivity: "standard"},
 				{ID: "business.ccnl", Description: "Contratto collettivo applied to employees (e.g. Commercio Confcommercio)", Sensitivity: "standard"},
 				{ID: "business.pec_data_scadenza", Description: "Date the PEC mailbox subscription expires (YYYY-MM-DD); tracked by 'pvault expiring'", Sensitivity: "standard"},
 				{ID: "business.durc_data_scadenza", Description: "Date the last DURC stops being valid, 120 days after issue (YYYY-MM-DD); tracked by 'pvault expiring'", Sensitivity: "standard"},

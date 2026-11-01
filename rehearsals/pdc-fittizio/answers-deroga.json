@@ -98,5 +98,9 @@
  "deroga_destinazione": "false",
  "deroga_densita_quale": "Indice fondiario 3,5 mc/mq invece di 3 (inventato)",
  "deroga_altezza_quale": "Altezza 14 m invece di 12 m (inventato)",
- "deroga_distanza_quale": "Distanza 8 m invece di 10 m (inventato)"
+ "deroga_distanza_quale": "Distanza 8 m invece di 10 m (inventato)",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false"
 }

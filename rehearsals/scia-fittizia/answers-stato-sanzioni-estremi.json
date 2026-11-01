@@ -85,5 +85,8 @@
  "sanzione_irrogata": "2019-06-04",
  "sanzione_protocollo": "PG/2019/123456",
  "sanzione_protocollo_data": "2019-07-01",
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false"
 }

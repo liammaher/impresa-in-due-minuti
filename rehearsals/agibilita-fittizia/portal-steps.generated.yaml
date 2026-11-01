@@ -24,6 +24,8 @@ asks:
   titolo: {type: text, question: 'The client''s title to the property, in one word (proprietario, comproprietario, usufruttuario, amministratore di condominio, locatario, comodatario, ...)', propose: '{{c:immobile.titolo}}'}
   titolo_esclusivo: {type: yes_no, question: 'Does the client hold the title alone, with no one else (co-owners, the landlord) whose assent the works need? If not, the other holder is the job''s `r:` person,
       with `o:` their company if a company owns it', propose: '{{ask.titolo|titolo_solo}}'}
+  agibilita_attestante: {type: choice, question: 'In what role does the architect sign the agibilità''s attestazione tecnica? direttore dei lavori; professionista abilitato (no direttore dei lavori was
+      named for the works)', options: [direttore dei lavori, professionista abilitato], propose: direttore dei lavori}
   oggetto: {type: text, question: The works in one sentence (300 characters)}
   fine_presentata: {type: yes_no, question: 'Was the comunicazione di fine lavori already filed?'}
   domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
@@ -302,7 +304,8 @@ sections:
   - {id: 'r14c1p19reg:chk', kind: checkbox, label: le comunicazioni o segnalazioni di cui alla SEZIONE C}
 - section: Attestazione tecnica - Dati del Direttore Lavori
   fields:
-  - {id: 'r3c1p3reg:radio:0_clone', kind: radio, label: Direttore dei Lavori}
+  - {id: 'r3c1p3reg:radio:0_clone', kind: radio, when: '{{ask.agibilita_attestante|is_direttore_dei_lavori}}', label: Direttore dei Lavori}
+  - {id: 'r3c2p4reg:radio:1_clone', kind: radio, when: '{{ask.agibilita_attestante|is_professionista_abilitato}}', label: Professionista abilitato}
   - {id: 'r5c1p6reg:txt', kind: text, value: '{{t:identity.last_name}}', max: 100, label: Cognome}
   - {id: 'r5c2p8reg:txt', kind: text, value: '{{t:identity.first_name}}', max: 9999, label: Nome}
   - {id: 'r7c1p12reg:txt', kind: text, value: '{{t:identity.codice_fiscale}}', max: 16, label: C.F.}

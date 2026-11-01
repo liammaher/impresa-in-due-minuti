@@ -27,5 +27,6 @@
  "fatti": [
   "bene_culturale"
  ],
- "soprintendenza_autorizzata": "true"
+ "soprintendenza_autorizzata": "true",
+ "impresa_dopo": "false"
 }

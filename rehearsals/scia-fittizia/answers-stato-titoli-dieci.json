@@ -124,5 +124,8 @@
  "prec_altro_10_quale": "denuncia di inizio attività n. 10 (inventata)",
  "prec_altro_10_numero": "1010",
  "prec_altro_10_data": "2010-03-20",
- "prec_altro_quanti": "10"
+ "prec_altro_quanti": "10",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false"
 }

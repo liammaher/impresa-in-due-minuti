@@ -44,5 +44,6 @@
  "impianto_altro": "false",
  "data_fine_lavori": "2026-09-30",
  "igienico_24_5bis": "false",
- "igienico_5quater": "false"
+ "igienico_5quater": "false",
+ "agibilita_attestante": "direttore dei lavori"
 }

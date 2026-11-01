@@ -45,5 +45,7 @@
  "cambio_uso": "no",
  "paesaggio": "semplificata",
  "fatti": [],
- "inizio_dopo_assensi": "true"
+ "inizio_dopo_assensi": "true",
+ "altri_tecnici_dopo": "false",
+ "impresa_dopo": "false"
 }
