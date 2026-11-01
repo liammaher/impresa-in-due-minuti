@@ -463,8 +463,9 @@ supports:
   in:
   - in corso
   - doppia conformita
-  else: 'Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal''s asseverazione makes the date of the works,
-    the oblazione and the works proposal one radio choice, so it can''t state the case in full: ask the SUE. Variants to pre-1977 titles (art. 34-ter) aren''t mapped.'
+  else: 'Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal''s asseverazione saves the date of the works,
+    the oblazione and the works proposal as one field (one of the three), so it can''t state the case in full: a defect of the portal (docs/portal-defects.md); ask the SUE. Variants to pre-1977 titles (art.
+    34-ter) aren''t mapped.'
 - if: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}'
   value: '{{ask.igienico_5bis_caso}}'
   in:

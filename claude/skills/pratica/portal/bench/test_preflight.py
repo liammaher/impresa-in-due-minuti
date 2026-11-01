@@ -479,7 +479,7 @@ def sanatoria_cases():
         pre = lambda a: run.preflight(steps, values(a, fields, steps), made_up=True)
         assert pre(p6)["ready"] and pre(json.loads((d / "answers-in-corso.json").read_text()))["ready"]
         r = pre(p6 | {"sanatoria_caso": "conformita urbanistica"})
-        assert any("one radio choice" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("a defect of the portal" in u for u in r["unsupported"]), r["unsupported"]
         assert pre(p6 | {"sanatoria_caso": "variante pre 1977"})["unsupported"]
     finally:
         os.chdir(here)
