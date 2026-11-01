@@ -338,6 +338,17 @@ def main():
             assert ".pdf" not in json.dumps(r["snapshot"]), "a file's name in the snapshot"
         case("a required slot taking only signed files is the person's; a plain one stops, named by its title", signed_slot)
 
+        def twin_slots():
+            # The screen's `theirs` names the signed-only "Relazione Paesaggistica Semplificata";
+            # the plain slot whose title starts with it is Claude's: left empty, it stops the run.
+            # The attachments screen alone: on this one-page portal a later section would see the message too.
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?twins=1", theirs=["Relazione Paesaggistica Semplificata"])
+            st["sections"] = st["sections"][:1]
+            r = fill(browser, base, st, answers)
+            assert r["result"] == "stopped" and r["error"].startswith("Allega documenti") and "obbligatorio" in r["error"], r
+        case("a person's slot whose title starts another's covers only its own: the other, empty and required, stops", twin_slots)
+
         def theirs():
             PORTAL.reset()
             stops(fill(browser, base, steps(base, save="Firma e invio"), answers), "refused to click")

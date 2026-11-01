@@ -84,6 +84,18 @@ if (slot) {
     ' <span class="error-message-text">Il valore è obbligatorio</span></div></td>';
   document.querySelector("#allega + table").tBodies[0].append(tr);
 }
+// ?twins=1: two required slots whose titles share a start, the signed-only one's the other's
+// prefix (the semplificata's, 2026-11-01): only the signed one is the person's.
+if (location.search.includes("twins=1")) {
+  for (const [id, title, types] of [["rps", "Relazione Paesaggistica Semplificata", "jpg.p7m;pdf.p7m"],
+                                    ["rpsdoc", "Relazione paesaggistica semplificata e documentazione necessaria per il rilascio", "pdf;pdf.p7m"]]) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td><label class="labelDynaFormControl">${title}</label></td><td><div id="form:r9c1:dynaForm:${id}">` +
+      `<input type="file" id="form:r9c1:dynaForm:${id}_input"> Tipologie ammesse: ${types}` +
+      ' <span class="error-message-text">Il valore è obbligatorio</span></div></td>';
+    document.querySelector("#allega + table").tBodies[0].append(tr);
+  }
+}
 if (location.search.includes("fade=1")) {
   const panel = document.createElement("div");
   panel.className = "ui-autocomplete-panel";
