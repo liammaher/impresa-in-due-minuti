@@ -218,7 +218,7 @@ def sue_another_pratica():
     assert sue("scia-fittizia", fatti=["prospetti", "sanatoria"])["unsupported"][0].startswith(
         other + "napoli/comune/scia-in-sanatoria")
     assert sue("scia-sanatoria-fittizia", fatti=[])["unsupported"][0].startswith(other + cila)  # the late CILA
-    assert sue("scia-fittizia", "answers-strutture.json", fatti=["sanatoria"], sismica="autorizzazione")["unsupported"][0].startswith(
+    assert sue("scia-fittizia", "answers-strutture.json", fatti=["sanatoria", "uso_ammesso_prg"], sismica="autorizzazione")["unsupported"][0].startswith(
         other + "napoli/comune/scia-in-sanatoria")
     # In a protected area the art. 36-bis sanatoria carries the landscape compatibility (c. 4),
     # new volumes too; the SCIA of works still under way doesn't.
@@ -293,9 +293,11 @@ def sue_asks_and_apart():
     # What the works are is asked alone first: the other facts depend on it.
     r = sue("cila-fittizia", intervento=None, fatti=None, paesaggio=None, cambio_uso=None)
     assert [q["key"] for q in r["questions"]] == ["intervento"], r["questions"]
-    # Then, in one message, the facts the rules for those works still wait on.
+    # Then, in one message, the facts the rules for those works still wait on. The CILA's works
+    # are under way, a sanatoria: the seismic filing is never asked, it can only be the
+    # autorizzazione (art. 4 c. 1 e L.R. 9/1983).
     r = sue("cila-fittizia", fatti=None, paesaggio=None, cambio_uso=None)
-    assert [q["key"] for q in r["questions"]] == ["fatti", "sismica", "cambio_uso", "paesaggio"], r["questions"]
+    assert [q["key"] for q in r["questions"]] == ["fatti", "cambio_uso", "paesaggio"], r["questions"]
     assert [i["key"] for i in r["questions"][0]["items"]] == ["strutture", "prospetti", "uso_ammesso_prg", "verso_a2_tavola_7a",
                                                                "paesaggio_eseguiti", "bene_culturale"], r["questions"][0]
     assert "permesso_per_scelta" not in str(r["questions"])  # the recipe's: a CILA is no choice
