@@ -30,7 +30,9 @@
   // A checkbox never ticked, even for a moment: an acknowledgement in the person's name.
   // Radios aren't held to it: "dichiara" starts many factual choices (d.1 names "la
   // dichiarazione del progettista"), and the declarations' own sections are never opened.
-  const PERSONAL = /presa visione|consapevol|privacy|autorizz|sottoscritt/i;
+  // "Autorizzo" is the person's consent; "autorizzazione" names a title, a fact ("e
+  // autorizzazione paesaggistica" under a proroga's permesso: never tried until 2026-11-01).
+  const PERSONAL = /presa visione|consapevol|privacy|autorizz(?!azion)|sottoscritt/i;
   // ...except a box that says what changed ("Il/La sottoscritto/a comunica la modifica della
   // sede legale"): a choice, which the shops' changes section opens its boxes with.
   const CHANGE = /comunica la modifica/i;

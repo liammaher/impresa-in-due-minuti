@@ -183,7 +183,9 @@ def render(rs):
         "", "What the crawl didn't see (more choices may exist there):", "",
         f"- {len(capped)} sections cut at crawl.js's limit of choices (`truncated`, or exactly {LIMIT} from older crawls): "
         + (", ".join(capped) if capped else "none") + ".",
-        f"- {len(untried)} of these choices the crawl saw but never tried: what they open isn't known.",
+        f"- {len(untried)} of these choices the crawl saw but never tried: what they open isn't known"
+        + (f" ({sum(r['state'] == 'law' for r in untried)} of them closed by law: no case takes them)."
+           if any(r["state"] == "law" for r in untried) else "."),
         "- Choices only a saved answer shows (attachment slots, sections a scelta adds) aren't here: the "
         "crawl never saves.", "",
         "## Unmapped, by section", "",

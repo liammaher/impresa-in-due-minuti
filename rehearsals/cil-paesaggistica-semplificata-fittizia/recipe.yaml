@@ -22,7 +22,13 @@ yours:
   - "On Allega documenti: the portal's procura signed by the client, the relazione paesaggistica semplificata (DPR 31/2017, Allegato D) with its drawings and photos, signed digitally (.p7m)"
   - "Pay the {{ask.diritti_euro}} € diritti and the bollo before sending, and attach the receipts"
   - "The works start only once the SUE says the landscape authorization is in: the start date is the earliest"
+  - "If a notifica preliminare is due (art. 99 D.Lgs. 81/2008): attach it under Allegati liberi, signed digitally (.p7m only): the CIL has no slot of its own for it"
   - "Sign and send (Firma e invio); keep the receipt"
+attachments:
+  Gestione degli allegati:
+    # The semplificata's second relazione slot opens from the SCIA's and the permesso's asseverazione
+    # ("Si allega la relazione paesaggistica semplificata"): the CIL has no such box.
+    - {label: Relazione paesaggistica semplificata e documentazione necessaria, drop: true}
 rules:
   main: napoli/comune/cil-opere-temporanee
 # The case: the main pratica's P6 answers, the part's, then these (a null drops one);

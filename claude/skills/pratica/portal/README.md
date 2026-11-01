@@ -309,9 +309,20 @@ A batch whose sections were all seen before is small: `print.js` prints it with 
 `catalogue.py import -` refuses a copy that arrived changed (no download to ask for), trailing
 newlines aside.
 
+A choice deeper than the crawl went (branches.py's `not_tried`) is read by crawling only its
+section again, deeper: a batch with `recrawl: [section names]` and `depth: 8` (the sections it
+knows come back as `same_as`; 2026-11-01: the art. 94-bis classes, depth 7 at most, 1.5 minutes a
+section), then `catalogue.py graft EXPORT --section NAME ...` puts each into every stored crawl
+holding its fingerprint, the rest of each crawl untouched. A section whose fingerprint changed is
+refused: crawl the pratica again.
+
 ## Attachments screens
 
 `__crawl.slotsOf("<draft name>")` (crawl.js) opens a draft from Pratiche in bozza and reads
 its Allega Documenti slots from the menu at the top, so the sections need not be complete;
 an empty "catalogo" draft gives a pratica's base slots (those its answers add are missing).
-A slot is marked `required` only once the portal has checked the screen.
+A slot is marked `required` only once the portal has checked the screen, and a run's Salva
+doesn't check it: a filled run can leave a required slot empty (2026-11-01: the semplificata's
+second relazione slot, missed by four filled runs). So a "si allega" box (gen.py `unslotted`,
+coverage.md Level 3) is settled by reading a filled draft's slots and writing what the box adds
+in the dictionary, `slot:` on the box (the slot's title, or why it adds none).

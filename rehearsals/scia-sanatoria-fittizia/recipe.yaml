@@ -91,6 +91,7 @@ yours:
   - "On Allega documenti: the portal's procura signed by the client, the stato legittimo documents (signed files only), then everything signed digitally (.p7m)"
   - "A SCIA that asks for assents (the Soprintendenza, a park, a vincolo): no start date; the works start once the SUE says the assents are in"
   - "For works on structures: the autorizzazione sismica in sanatoria from the Genio Civile di Napoli on S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983), with the strutturista's attestation that the works met the technical rules in force when they were done (art. 36-bis c. 3-bis DPR 380/2001); its documents go in this pratica's slot"
+  - "Works done in a protected area (art. 36-bis c. 4): on Allega documenti, the documents for the binding parere on their landscape compatibility go in \"Documentazione necessaria ai fini del rilascio del parere vincolante\", signed digitally (.p7m only)"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -100,6 +101,11 @@ rules:
   main: napoli/comune/scia-in-sanatoria
   facts: {permesso_per_scelta: "false", sanatoria: "true", parere_esonero: "false"}
 supports:
+  # Works done without a permesso di costruire (or a SCIA alternativa) are regularized by the
+  # permesso in sanatoria the Comune issues (art. 36 DPR 380/2001), never by a SCIA: the asseverazione's
+  # "in assenza" row is the permesso's (rehearsals/pdc-sanatoria-fittizio). Partial difformity from a
+  # permesso can go by SCIA (art. 36-bis c. 1).
+  - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_sanatoria_caso}}", in: [parziale], else: "Works done without a permesso di costruire (or a SCIA alternativa) are regularized by the permesso in sanatoria (art. 36 DPR 380/2001), not by a SCIA: file the permesso in sanatoria."}
   # Works already done that needed a landscape authorization: their compatibility goes with the
   # art. 36-bis sanatoria (c. 4), not with the SCIA of works still under way (art. 37 c. 5). Landscape
   # works still to come take the authorization with the sanatoria (rehearsals/scia-sanatoria-paesaggistica-*).

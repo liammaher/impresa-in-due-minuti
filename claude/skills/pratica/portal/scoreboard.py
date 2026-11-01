@@ -270,7 +270,8 @@ def sue_completeness(reh, status):
         f"file yet**: {len(c['unmapped'])} combinations of pratiche, listed below (`bench/test_route.py`).",
         f"- Level 2: **{sum(per.values())} refusals across {len(per)} recipes**, {len(refusals)} distinct messages.",
         f"- Level 3, in part: **{len(slots)} ticked \"si allega\" boxes with no attachment slot** under their"
-        " condition (listed below): each may add a required slot a run would stop on.",
+        " condition (listed below): each may add a required slot, which a run's Salva doesn't check. A box read on a"
+        " filled draft says what it adds (the dictionary's `slot`).",
         "- Levels 4 and 5: not measured yet (see the open items).", "",
         "| Recipe | Refusals left |", "|---|---:|"]
     out += [f"| `{n}` | {k} |" for n, k in sorted(per.items(), key=lambda kv: (-kv[1], kv[0]))]
@@ -282,7 +283,7 @@ def sue_completeness(reh, status):
     for msg, rs in sorted(refusals.items(), key=lambda kv: (-len(kv[1]), kv[0])):
         out.append(f"- {len(rs)}×: {msg[:170]}")
     out += ["", "Ticked \"si allega\" boxes with no attachment slot under their condition (gen.py `unslotted`; "
-            "some only in cases a recipe refuses, some with no slot on the portal: a run tells):", ""]
+            "some only in cases a recipe refuses, some with no slot on the portal: a filled draft's slots tell):", ""]
     out += [f"- {len(rs)}×: {sec[:50]}: {label[:100]}" for (sec, label), rs in sorted(slots.items(), key=lambda kv: (-len(kv[1]), kv[0]))] or ["- none"]
     out += ["", "Open items no recipe shows:", ""] + [f"- {x}" for x in OPEN_BEYOND] + [""]
     return out
