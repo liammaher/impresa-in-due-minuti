@@ -631,7 +631,7 @@ def generate(recipe, base=HERE):
             extra = [h for h in have if not any(norm(h) == norm(n) for n in names)]
             if missing or extra:
                 hint = (" (a section the recipe's si_no adds: crawl the combination with that Si/No too,"
-                        " catalogue.py ops --combo ... --scelta)" if missing and recipe.get("si_no") else "")
+                        " catalogue.py ops --combo ... --combo-scelta)" if missing and recipe.get("si_no") else "")
                 raise GenError(f"{recipe['crawl']} isn't a crawl of these operations together: "
                                f"missing {missing}, more {extra}{hint}")
             # Each crawled section once, under the name the combination shows ("Dati catastali" and

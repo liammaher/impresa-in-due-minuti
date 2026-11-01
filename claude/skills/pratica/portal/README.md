@@ -231,6 +231,8 @@ after another, nothing touched between them:
     --values <values.json> --out <dir> [rehearsal ...]
 ```
 
+Hide the pane (Cmd+Shift+B) rather than close it: closing it ends the SPID session and drops a
+loaded bundle, so the person signs in and picks the file again (2026-11-01, twice).
 In the pane, on the portal's origin and logged in: `check.js` (it names which of `runner.js`
 and `steps/<name>.js` the pane lacks: send only those), the `queue-N.js` files, `loop.js`,
 then `results.js` until `done` equals `of`. A stopped one: rerun it alone, unchanged, before
@@ -267,8 +269,9 @@ the page when it ends.
 
 A crawl batch goes to the pane as one file too: `catalogue.py ops sue --all > ops.json`, then
 `catalogue.py pane <dir> --bundle ~/Downloads/pv-<name>.js --ops ops.json [--fresh]` (`--fresh`
-crawls them again, though stored, and forgets the known sections' fingerprints, so every section
-is read again: about 8 minutes for a combination, against 2 when its sections are known). In the pane: `pick.js` (the person picks the file once; it
+crawls them again, though stored; a section it has seen comes back as `same_as`. `--forget-known`
+reads every section again too: about 8 minutes for a combination, against 2, for a deeper crawl or
+a section that changed in place). In the pane: `pick.js` (the person picks the file once; it
 stores and runs wizard.js and crawl.js and starts the batch on the scratch draft, "PROVA NON
 INVIARE - catalogo sue"), then `status.js` until `done`; then, with the person's yes, `export.js`
 saves the results to Downloads for `catalogue.py import`. The pane's storage also holds the SUAP
@@ -282,7 +285,8 @@ OTHER` (labels as in `sue-wizard.json`) tries only the procura scelta, as recipe
 the attachments screen on the way (crawl.js `also`, `scelte`, `slots`); repeat `--combo` for
 several in one batch. `import` keeps the operations and adds the main one's answer-dependent slots.
 A main pratica that answers a wizard's Si/No (the SCIA in sanatoria) needs a crawl with that answer
-too: `--scelta "<procura>" --scelta "<the Si/No question>"` (both: it replaces the default), else
+too: `--combo-scelta NAME "<the Si/No question>"` (that combination alone, besides the procura;
+`--scelta` sets them for every combination and replaces the default), else
 gen.py says the crawl "isn't a crawl of these operations together", missing the section the Sì
 adds (`sue-combo-scia-sanatoria-paesaggistica-*`, 2026-10-31). The slots it reads tick only the
 checkboxes, so a Si/No's own slots come from the main pratica's recipe.

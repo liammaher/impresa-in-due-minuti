@@ -436,6 +436,9 @@
   async function tick(f) {
     const e = el(f.id) || fail(`${f.id}: no box`);
     checkLabel(e, f.label);
+    // A greyed radio's drawn box ignores the mouse, so the click lands on its wrapper ("covered by
+    // ...:opt", the permesso's opere a scomputo, 2026-11-01): name it as what it is.
+    if (!e.checked && e.disabled) fail(`${f.label || f.id}: switched off (a choice before it, which the steps file doesn't make, switches it on)`);
     if (!e.checked) {
       const wrap = e.closest(".ui-radiobutton, .ui-chkbox");
       press(wrap && wrap.querySelector(".ui-radiobutton-box, .ui-chkbox-box") || e, f.label || f.id);

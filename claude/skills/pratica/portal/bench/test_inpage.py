@@ -286,6 +286,13 @@ def main():
             stops(fill(browser, base, steps(base, start="/portal.html?off=1"), answers), "Impresa esecutrice: switched off")
         case("a box greyed until an earlier choice stops the run, named as switched off", switched_off)
 
+        def radio_switched_off():
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?offradio=1")
+            st["sections"][1]["fields"].append({"id": "scomputo:radio:1_clone", "kind": "radio", "label": "NO"})
+            stops(fill(browser, base, st, answers), "NO: switched off")
+        case("a greyed radio, its drawn box under its wrapper, is named as switched off, not covered", radio_switched_off)
+
         def fading_list():
             PORTAL.reset()
             r = fill(browser, base, steps(base, start="/portal.html?fade=1"), answers)
