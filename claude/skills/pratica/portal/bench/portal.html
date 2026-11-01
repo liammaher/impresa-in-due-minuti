@@ -14,7 +14,9 @@
      as the permesso's deroga draws them: the cell before it is the tick box's label; ?req=1 adds
      an empty box the portal flags, its title and cell "Il valore è obbligatorio"; ?offradio=1 adds
      a radio drawn as PrimeFaces draws one, greyed (its input disabled, its drawn box ignoring the
-     mouse), as the permesso's opere a scomputo until "a titolo oneroso". -->
+     mouse), as the permesso's opere a scomputo until "a titolo oneroso"; ?liste=1 adds two lists
+     to Dati tecnici, each with its own "+" after its rows (the CILA relazione's filings, then its
+     assents): a "+" adds a row to its own list, and the rows saved come back on a load. -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -129,6 +131,27 @@ if (location.search.includes("decl=1")) {
   preview.addEventListener("click", () => window.open("/anteprima.pdf"));
   document.getElementById("form").append(preview);
 }
+const liste = {};
+if (location.search.includes("liste=1")) {
+  const div = document.createElement("div");
+  div.id = "form:r6c1:dynaForm:liste";
+  document.querySelector("#tecnici + table").after(div);
+  for (const [k, label] of [["com", "Comunicazioni"], ["atto", "Tipologia di atto"]]) {
+    const t = document.createElement("table");
+    div.append(t);
+    liste[k] = () => {
+      const tr = t.insertRow();
+      tr.innerHTML = `<td><label class="labelDynaFormControl">${label}</label></td>` +
+        `<td><input type="text" id="form:r6c1:dynaForm:${k}${t.rows.length}_txt"></td>`;
+    };
+    liste[k]();
+    const plus = document.createElement("button");
+    plus.type = "button";
+    plus.textContent = "+";
+    plus.addEventListener("click", liste[k]);
+    div.append(plus);
+  }
+}
 const texts = () => [...document.querySelectorAll("input[type=text]")];
 const list = (name) => {
   const li = document.createElement("li");
@@ -136,6 +159,10 @@ const list = (name) => {
   document.getElementById("uploaded").append(li);
 };
 fetch("/state").then((r) => r.json()).then((st) => {
+  for (const id of Object.keys(st.fields)) {
+    const m = id.match(/dynaForm:(com|atto)(\d+)_txt$/);
+    while (m && liste[m[1]] && !document.getElementById(id)) liste[m[1]]();
+  }
   for (const t of texts()) t.value = st.fields[t.id] || "";
   for (const c of document.querySelectorAll("input[type=checkbox]")) c.checked = st.fields[c.id] === "on";
   st.files.forEach(list);

@@ -24,9 +24,8 @@ yours:
   - "On Allega documenti: the portal's procura signed by the client, then everything signed digitally (.p7m)"
   - "Sign and send (Firma e invio); keep the receipt"
 supports:
-  # Art. 24 c. 5-bis: one case per pratica (the form's boxes open their own sizes), and only
-  # with c. 5-ter's adattabilità met; the one-room flat also names its c. 5-ter condition.
-  - {if: "{{ask.igienico_24_5bis}}", value: "{{ask.igienico_5bis_caso}}", in: ["altezza", "monostanza uno", "monostanza due"], else: "More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own boxes."}
+  # Art. 24 c. 5-bis only with c. 5-ter's adattabilità met; the one-room flat also names its
+  # c. 5-ter condition.
   - {if: "{{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "Art. 24 c. 5-bis applies only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}
 # Each "si allega" of the attestazione adds its own required slot (read on the portal 2026-10-30).
 attachments:
