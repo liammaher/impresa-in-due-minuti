@@ -641,7 +641,22 @@ asks:
     options: [nessuno, riutilizzo in sito, rifiuti]
     propose: "nessuno"
   indagini_ambientali: {type: yes_no, question: "Does the area need environmental investigations of its soil first (past uses that may have polluted it)?", propose: "false"}
+  # The permesso's and the SCIA alternativa's quadro 13: the investigations' outcome.
+  indagini_esito:
+    type: choice
+    question: "What came of the soil investigations? analisi (the analyses were done and no remediation is needed: their results attached); bonifica (the soil was remediated, as the conclusive certificate of remediation says, artt. 248 c. 2 and 242-bis c. 4 D.Lgs. 152/2006)"
+    options: [analisi, bonifica]
+    when: "{{ask.indagini_ambientali}}"
+  indagini_analisi_doc: {type: file, question: "The results of the soil's environmental analyses (PDF)", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}"}
+  bonifica_ente: {type: text, question: "Who issued the conclusive certificate of remediation (the form's \"rilasciata da\", e.g. Città Metropolitana di Napoli)?", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}"}
+  bonifica_data: {type: date, question: "Its date", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}"}
   urbanizzazione: {type: yes_no,question: "Does the area have the primary urbanisation works (roads, sewers, water, power)?", propose: "true"}
+  urbanizzazione_attuazione:
+    type: choice
+    question: "Without them, who builds them? comune (the Comune plans them within the next three years); convenzione (an agreement with the Comune provides for them: its date)"
+    options: [comune, convenzione]
+    when: "{{ask.urbanizzazione|not}}"
+  urbanizzazione_convenzione_data: {type: date, question: "The date the convenzione was signed", when: "{{ask.urbanizzazione|not}} {{ask.urbanizzazione_attuazione|is_convenzione}}"}
   scarichi:
     type: choice
     question: "The works' drains: nessuna autorizzazione (they need none); allaccio ottenuto (the connection to the public sewer is authorised: its protocol and date); allaccio da richiedere (the request's documents attached)"
@@ -3020,10 +3035,21 @@ sections:
   # need no authorisation or the sewer connection's (got, or asked with its documents).
   - section: Asseverazione PdC - qualità terreni
     aliases: ["Asseverazione SCIA Alternativa - Qualità terreni"]
-    leave: ["rilasciata da:", in data, stipulata in data, con prot.]
+    leave: [in data, con prot.]
     fields:
       - {kind: radio, label: non richiede indagini ambientali preventive, when: "{{ask.indagini_ambientali|not}}"}
+      # Analyses done, no remediation: the SCIA alternativa ticks "si allegano i risultati" (its
+      # slot on the attachments screen); the permesso takes the file here, in the quadro.
+      - {kind: radio, label: a seguito delle preventive analisi ambientali effettuate, when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}"}
+      - {kind: checkbox, label: si allegano i risultati delle analisi ambientali, if_present: true, when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}"}
+      - {kind: file, label: Tipologie ammesse, if_present: true, value: "{{ask.indagini_analisi_doc}}", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}"}
+      - {kind: radio, label: è stata oggetto di bonifica dei terreni, when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}"}
+      - {kind: text, label: "rilasciata da:", value: "{{ask.bonifica_ente}}", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}"}
+      - {kind: date, label: in data, anchor: "rilasciata da:", block: 1, value: "{{ask.bonifica_data|date_it}}", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_bonifica}}"}
       - {kind: radio, label: è dotata delle opere di urbanizzazione primaria, when: "{{ask.urbanizzazione}}"}
+      # One radio for both: the Comune within three years, "ovvero" an agreement, its date.
+      - {kind: radio, label: non è dotata delle opere di urbanizzazione primaria, when: "{{ask.urbanizzazione|not}}"}
+      - {kind: date, label: stipulata in data, value: "{{ask.urbanizzazione_convenzione_data|date_it}}", when: "{{ask.urbanizzazione|not}} {{ask.urbanizzazione_attuazione|is_convenzione}}"}
       - {kind: radio, label: non necessita di autorizzazione allo scarico, when: "{{ask.scarichi|is_nessuna_autorizzazione}}"}
       - {kind: radio, label: necessita di autorizzazione, nth: 2, when: "{{ask.scarichi|is_nessuna_autorizzazione|not}}"}
       - {kind: checkbox, label: all'allaccio in pubblica fognatura, when: "{{ask.scarichi|is_nessuna_autorizzazione|not}}"}
@@ -3250,6 +3276,8 @@ sections:
       - {kind: radio, label: interessano parti di edifici con presenza di fibre di amianto, when: "{{ask.amianto}}"}
       - {kind: checkbox, label: sarà presentato 30 giorni prima dell'inizio dei lavori, when: "{{ask.amianto}}"}
       - {kind: radio, label: è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe, when: "{{ask.igienico_conforme}}"}
+      - {kind: radio, label: non è conforme ai requisiti igienico-sanitari, when: "{{ask.igienico_conforme|not}}"}
+      - {kind: checkbox, label: Si allega documentazione per la richiesta di deroga, when: "{{ask.igienico_conforme|not}}"}
       - {kind: radio, label: non prevede la realizzazione di opere di conglomerato cementizio, when: "{{ask.strutture|not}}"}
       - {kind: radio, label: non prevede la realizzazione di opere di conglomerato cementizio, when: "{{ask.strutture}} {{ask.cemento_armato|not}}"}
       - {kind: radio, label: prevede la realizzazione di opere di conglomerato cementizio, when: "{{ask.strutture}} {{ask.cemento_armato}}"}

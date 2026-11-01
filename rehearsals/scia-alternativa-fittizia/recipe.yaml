@@ -76,6 +76,19 @@ attachments:
     - {kind: file, label: "Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (militare)", value: "{{ask.fascia_militare_doc}}", when: "{{ask.fasce|is_assenso}} {{ask.fascia_militare}}", on_page: true}
     - {kind: file, label: "Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (aeroportuale)", value: "{{ask.fascia_aeroportuale_doc}}", when: "{{ask.fasce|is_assenso}} {{ask.fascia_aeroportuale}}", on_page: true}
     - {kind: file, label: "Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (altro)", value: "{{ask.fascia_altro_doc}}", when: "{{ask.fasce|is_assenso}} {{ask.fascia_altro}}", on_page: true}
+    # The SCIA's slots for the asseverazione's acoustics, fire brigade review, hygiene and cemetery
+    # deroghe, asbestos plan and barriers (labels as on the SCIA's screen, 2026-11-01: a run names this form's own).
+    - {kind: file, label: Documentazione di impatto acustico, value: "{{ask.acustica_impatto_doc}}", when: "{{ask.acustica}} {{ask.acustica_impatto}}", on_page: true}
+    - {kind: file, label: Dichiarazione sostitutiva, value: "{{ask.acustica_dichiarazione_doc}}", when: "{{ask.acustica}} {{ask.acustica_dichiarazione}}", on_page: true}
+    - {kind: file, label: Valutazione previsionale di clima acustico, value: "{{ask.acustica_clima_doc}}", when: "{{ask.acustica}} {{ask.acustica_clima}}", on_page: true}
+    - {kind: file, label: Documentazione di previsione di impatto acustico, value: "{{ask.acustica_misure_doc}}", when: "{{ask.acustica}} {{ask.acustica_misure}}", on_page: true}
+    - {kind: file, label: Documentazione necessaria al rilascio del parere progetto da parte dei Vigili del Fuoco, value: "{{ask.vvf_doc}}", when: "{{ask.vvf_valutazione}}", on_page: true}
+    - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: "{{ask.igienico_deroga_doc}}", when: "{{ask.igienico_conforme|not}}", on_page: true}
+    - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: "{{ask.cimiteriale_doc}}", when: "{{ask.fascia_cimiteriale|is_non_consentito}}", on_page: true}
+    - {kind: file, label: "Piano di lavoro di demolizione o rimozione dell'amianto", value: "{{ask.amianto_piano}}", when: "{{ask.amianto}}", on_page: true}
+    - {kind: file, label: "Elaborati relativi al superamento delle barriere architettoniche (art. 82", value: "{{ask.barriere_elaborati}}", when: "{{ask.barriere_art82}}", on_page: true}
+    - {kind: file, label: "Elaborati relativi al superamento delle barriere architettoniche (art. 77", value: "{{ask.barriere_elaborati}}", when: "{{ask.barriere}} {{ask.barriere_deroga|not}}", on_page: true}
+    - {kind: file, label: Documentazione per la richiesta di deroga alla normativa per l'abbattimento delle barriere, value: "{{ask.barriere_deroga_doc}}", when: "{{ask.barriere}} {{ask.barriere_deroga}}", on_page: true}
 asks:
   descrizione: {default: "PROVA NON INVIARE - SCIA alt {{c:identity.last_name}}"}
   acustica: {question: "Does art. 8 of L. 447/1995 apply (an acoustic impact or clima acustico report: e.g. homes next to a main road, a railway or an airport)?"}
@@ -93,14 +106,6 @@ rules:
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
-  - {value: "{{ask.fascia_cimiteriale}}", in: ["no", "consentito"], else: "Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet."}
-  - {value: "{{ask.acustica}}", in: ["false"], else: "An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet."}
-  - {value: "{{ask.vvf_valutazione}}", in: ["false"], else: "A project for the Vigili del Fuoco's assessment isn't mapped yet."}
-  - {value: "{{ask.amianto}}", in: ["false"], else: "Works on parts with asbestos aren't mapped yet."}
-  - {value: "{{ask.igienico_conforme}}", in: ["true"], else: "A hygiene derogation isn't mapped yet."}
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_5bis_caso}}", in: ["altezza", "monostanza uno", "monostanza due"], else: "More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions."}
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}
-  - {value: "{{ask.barriere}}", in: ["false"], else: "The barriers rules (artt. 77-82) aren't mapped yet."}
-  - {value: "{{ask.indagini_ambientali}}", in: ["false"], else: "Soil needing environmental investigations (or already remediated) isn't mapped yet."}
-  - {value: "{{ask.urbanizzazione}}", in: ["true"], else: "An area without its primary urbanisation works isn't mapped yet."}
   - {if: "{{ask.scia_onerosa}}", value: "{{ask.contributo_pagamento}}", in: ["prima dei lavori", "rateizzazione", "in corso d'opera"], else: "A SCIA alternativa's contributo is paid within 30 days of filing, in instalments or during the works: its form has no box for a receipt already paid."}
