@@ -125,6 +125,7 @@ asks:
   bollo_seriale_2: {type: text, question: 'The marca da bollo for the authorization the Comune issues: its serial number (14 digits)'}
   bollo_data_2: {type: date, question: Its date}
   relazione_paesaggistica: {type: file, question: 'The relazione paesaggistica (DPCM 12/12/2005), for the autorizzazione paesaggistica ordinaria (PDF)'}
+  soprintendenza_autorizzata: {type: yes_no, question: 'Has the Soprintendenza already authorized these works (art. 21 c. 4 D.Lgs. 42/2004)?'}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due), default: '151'}
   documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
   assenso_proprietario: {type: file, question: The owner's signed assent to the works (PDF)}
@@ -169,12 +170,26 @@ asks:
         lavori che alterano i luoghi o l''aspetto esteriore'}, how: Lo stabilisce il tecnico dal vincolo e dagli Allegati A e B del D.P.R. 31/2017.}
   paesaggio_eseguiti: {group: fatti, type: yes_no, item: 'Le opere che chiedono l''autorizzazione paesaggistica sono già state eseguite, anche in parte?'}
   paesaggio_volumi: {group: fatti, type: yes_no, item: 'Le opere già eseguite hanno creato superfici utili o volumi, o aumentato quelli legittimamente realizzati?'}
-  bene_culturale: {group: fatti, type: yes_no, item: 'L''edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?'}
+  bene_culturale: {type: yes_no, question: 'Is the building itself a protected bene culturale (D.Lgs. 42/2004 parte II: listed, so the works need the Soprintendenza''s authorization, art. 21)?', group: fatti,
+    item: 'L''edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?'}
   demolizione_zona_a: {group: fatti, type: yes_no, item: 'I lavori demoliscono e ricostruiscono un edificio, o la variante cambia la sagoma, in zona A della Variante generale al PRG o della Variante occidentale?',
     how: La zona si legge nella tavola di zonizzazione del PRG di Napoli.}
   piano_planovolumetrico: {group: fatti, type: yes_no, item: 'La nuova costruzione o la ristrutturazione urbanistica è disciplinata da un piano attuativo con precise disposizioni plano-volumetriche dichiarate
       dal Comune, o (per una nuova costruzione) è in diretta esecuzione di uno strumento urbanistico generale che le contiene?'}
 supports:
+- if: '{{ask.intervento|in_manutenzione_straordinaria__restauro}} {{ask.cila_stato|is_da_iniziare}} {{ask.bene_culturale}}'
+  value: '{{ask.soprintendenza_autorizzata}}'
+  in:
+  - 'true'
+  else: 'On a bene culturale the works need the Soprintendenza''s authorization first (art. 21 c. 4 D.Lgs. 42/2004), and Napoli''s SUE portal has no procedure to ask for it with this pratica: request it
+    from the Soprintendenza ABAP per il Comune di Napoli (by PEC to sabap-na@pec.cultura.gov.it, on its form ''Istanza per opere su immobili vincolati'', 16 euro bollo; up to 120 days, art. 22), then file
+    this.'
+- if: '{{ask.intervento|in_manutenzione_straordinaria__restauro}} {{ask.cila_stato|is_da_iniziare}} {{ask.bene_culturale}} {{ask.soprintendenza_autorizzata}}'
+  value: '{{ask.atti_acquisiti}}'
+  in:
+  - 'true'
+  else: 'The CILA''s relazione lists the Soprintendenza''s authorization among the assents already obtained (Tipologia di atto, Autorità competente al rilascio): answer that assents were obtained, and name
+    it.'
 - when: '{{ask.altri_atti|not}}'
   else: 'Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its semplificata): those combinations
     aren''t mapped yet. Those already made or obtained go in the relazione.'

@@ -869,6 +869,9 @@ asks:
     type: yes_no
     question: "Is the building itself a protected bene culturale (D.Lgs. 42/2004 parte II: listed, so the works need the Soprintendenza's authorization, art. 21)?"
   soprintendenza_doc: {type: file, question: "The documents for the Soprintendenza's authorization (art. 21 D.Lgs. 42/2004) (PDF)"}
+  # The CILA and the CIL have no procedure on Napoli's SUE portal to ask for it with them: it is
+  # obtained first, from the Soprintendenza (the rules table's soprintendenza-* rules).
+  soprintendenza_autorizzata: {type: yes_no, question: "Has the Soprintendenza already authorized these works (art. 21 c. 4 D.Lgs. 42/2004)?"}
   area_protetta:
     type: choice
     question: "Is the property in a protected natural area (a park or reserve, L. 394/1991 or regional law)? no; senza alterazione (inside, but the works don't alter the place or the buildings' look); nulla osta (the park authority's nulla osta is needed: its documents attached)"
