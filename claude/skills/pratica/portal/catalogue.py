@@ -448,7 +448,8 @@ input.addEventListener("change", async () => {{
 }});
 "box shown: pick the file once, then poll status.js"
 """)
-    (out / "status.js").write_text("""await new Promise((r) => setTimeout(r, 38000));  // the pane cuts a call at 45 s
+    # As rerun.py's results.js: it waits only while the pane shows the page.
+    (out / "status.js").write_text("""if (!document.hidden) await new Promise((r) => setTimeout(r, 38000));
 const r = window.__crawl ? await window.__crawl.wait(300) : null;
 JSON.stringify(r ? { done: r.done, done_ops: r.done_ops, of: JSON.parse(localStorage.getItem("crawl:batch")).ops.length,
   current: r.current, tried: r.tried, errors: r.errors, stopped: r.stopped, error: r.error, storage: r.storage } : "no crawl in this tab")

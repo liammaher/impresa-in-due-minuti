@@ -249,6 +249,12 @@ later runs travel as what differs from its first. When the pane lacks big files 
 several steps files), don't copy them through the conversation: a long script can arrive garbled
 (2026-10-30). Pass `--bundle <file in Downloads>`, run `pick.js` in the pane, and the person picks
 that file once in the box it shows; it is checked by sha256, loaded once, and starts the batch.
+No way around the pick: the pane blocks the portal's page from fetching a local server
+(`net::ERR_BLOCKED_BY_CLIENT`, tried 2026-11-01), and its file box can't be set by a script.
+A hidden pane slows the page's timers, so a script waiting inside the page outlasts the 45 s
+call limit (2026-11-01): `results.js` and catalogue.py's `status.js` wait only while the page
+shows and otherwise answer at once, so while it's hidden, wait between polls outside the page
+(the pane's `wait` actions in one batch, then `results.js`).
 One batch per tab: `loop.js` refuses a second while one runs (two would drive one runner and
 file each other's results), and `pick.js` refuses to clear the page during one. A bundle clears
 the tab's earlier results first: `loop.js` skips a name it finds there, to resume after a reload.
