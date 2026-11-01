@@ -258,6 +258,20 @@ def _():
     assert "Relazione paesaggistica (redatta ai sensi del D.P.C.M" in cila
 
 
+@case("a refusal naming a known portal defect carries its record into the steps file; an unknown one is an error")
+def _():
+    steps = generated("scia-sanatoria-fittizia")
+    d = [c["defect"] for c in steps["supports"] if "defect" in c]
+    assert [x["id"] for x in d] == ["scia-36bis-c1"] and d[0]["choices"] and d[0]["law"], d
+    recipe = gen.load_yaml(REH / "scia-sanatoria-fittizia" / "recipe.yaml")
+    recipe["supports"] = recipe["supports"] + [{"value": "x", "in": ["x"], "else": "x", "defect": "no-such-defect"}]
+    try:
+        gen.generate(recipe)
+        assert False, "generated with an unknown defect"
+    except gen.GenError as e:
+        assert "no-such-defect" in str(e)
+
+
 @case("the agibilità's art. 24 boxes stay theirs: the portal asks for one even where neither applies")
 def _():
     # a592b60 mapped the boxes and dropped the section's `theirs`: every case ticking neither stopped

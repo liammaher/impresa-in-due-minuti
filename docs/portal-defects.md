@@ -1,7 +1,9 @@
 # Portal defects
 
 Things Napoli's SUE on impresainungiorno does that a pratica can't work around: each blocks a case
-the law allows, so the recipe refuses it with the reason. Fixing them is the portal's operator's
+the law allows, so the recipe refuses it with the reason. Each is also a record in
+`claude/skills/pratica/portal/defects.yaml`, which the refusal names (`defect:`): pre-flight then
+returns it under `defects`, and the person is told what the portal does and chooses what to do. Fixing them is the portal's operator's
 (InfoCamere, which runs impresainungiorno) or the Comune's (the SUE configures its forms). Each
 entry says what to report and how it was checked, without personal data.
 
