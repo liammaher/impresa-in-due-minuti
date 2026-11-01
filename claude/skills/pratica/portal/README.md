@@ -27,8 +27,11 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    eleven slots).
    Its case is `answers:` too: the main pratica's `answers-p6.json` changed by the part's
    `answers` (the protected property) and the recipe's own (the works, `descrizione`), a null
-   dropping one; `gen.py RECIPE --answers` writes its `answers-p6.json`, and `bench/test_gen.py`
-   fails when one drifts from its main pratica's. A combination's crawl: below, *Crawling*.
+   dropping one; `gen.py RECIPE --answers` writes its `answers-p6.json` itself (stdout is still the
+   steps file: never redirect it there), and `bench/test_gen.py` fails when one drifts from its main
+   pratica's. A combination's other cases (`answers-*.json`) aren't generated: an answer a part
+   gains goes into each by hand (2026-11-01: the semplificata's new file, missing from
+   `answers-impianti.json`, left pre-flight a question). A combination's crawl: below, *Crawling*.
    **Which pratica it is** is the library's rules table's (`rules/`, a byte-for-byte copy):
    `rules: {table, facts, handles}`, as the SUAP and SUE recipes have. `facts` fixes what the
    recipe is (`permesso_per_scelta: "true"` for the permesso); a fact it doesn't fix is an ask
@@ -75,6 +78,10 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
 
 ## What the portal does that bit us
 
+- **Two origins.** The front office is `https://suap.impresainungiorno.gov.it/fnsuap/...`; the
+  pane's storage (runner, steps, crawls, known fingerprints) lives there. `www.impresainungiorno.gov.it`
+  is the public site: its `/fnsuap/cmd/home` says "Non trovato" and its pages show the guest view,
+  signed in or not (2026-11-01). Check the origin before deciding the sign-in is gone.
 - **A bare `/fnsuap/` that says Forbidden.** On 2026-10-29 it answered a 403 after every SPID
   sign-in for hours, while `/fnsuap/cmd/home` (where the pratica skill starts) and a recipe's
   `start` (`/fnsuap/cmd/create?...`) worked and the runs filled. Open one of those before
@@ -310,19 +317,29 @@ A batch whose sections were all seen before is small: `print.js` prints it with 
 newlines aside.
 
 A choice deeper than the crawl went (branches.py's `not_tried`) is read by crawling only its
-section again, deeper: a batch with `recrawl: [section names]` and `depth: 8` (the sections it
-knows come back as `same_as`; 2026-11-01: the art. 94-bis classes, depth 7 at most, 1.5 minutes a
-section), then `catalogue.py graft EXPORT --section NAME ...` puts each into every stored crawl
-holding its fingerprint, the rest of each crawl untouched. A section whose fingerprint changed is
-refused: crawl the pratica again.
+section again, deeper: `__crawl.batch` with `recrawl: [section names]`, `depth: 8` and `variants:
+false`, under op names of its own (`d8-scia`: a stored `crawl:op:<name>` is skipped, and the
+repo's crawls stay as imported), then `catalogue.py graft EXPORT --section NAME ...` puts each
+into every stored crawl holding its fingerprint (a combination keeps its own copy), the rest of
+each crawl untouched. Go to depth 8 at once: one level deeper shows the boxes the newly tried
+choices open, untried again (2026-11-01: depth 4 still left the 94-bis class's own boxes; depth 8
+reached the bottom, 7, in about 1.5 minutes a section). Sections the pane's `crawl:known` lacks are
+crawled whole at that depth too (minutes each); keep the store. A section whose fingerprint
+changed is refused: crawl the pratica again. Export with a download (the person's yes), checked by
+sha256; `CATALOGUE_PRIVATE` is checked as on import.
 
 ## Attachments screens
 
 `__crawl.slotsOf("<draft name>")` (crawl.js) opens a draft from Pratiche in bozza and reads
 its Allega Documenti slots from the menu at the top, so the sections need not be complete;
 an empty "catalogo" draft gives a pratica's base slots (those its answers add are missing).
-A slot is marked `required` only once the portal has checked the screen, and a run's Salva
-doesn't check it: a filled run can leave a required slot empty (2026-11-01: the semplificata's
-second relazione slot, missed by four filled runs). So a "si allega" box (gen.py `unslotted`,
-coverage.md Level 3) is settled by reading a filled draft's slots and writing what the box adds
-in the dictionary, `slot:` on the box (the slot's title, or why it adds none).
+A slot is marked `required` only once the portal has checked the screen. A run stops on a
+required slot left empty unless it is the person's: a signed-only slot, or one the screen's
+`theirs` names. A `theirs` entry covers the slots whose titles start with it, except where it is
+another slot's whole title: until 2026-11-01 the signed-only "Relazione Paesaggistica
+Semplificata" also covered "Relazione paesaggistica semplificata e documentazione…", and four
+runs passed as filled with that required slot empty. So a "si allega" box (gen.py `unslotted`,
+coverage.md Level 3) is settled by reading a filled draft's slots (`slotsOf`, no rerun needed:
+each case's `descrizione` names its draft, so keep it distinct per case, and the newest draft of
+a name is read) and writing what the box adds in the dictionary, `slot:` on the box (the slot's
+title, or why it adds none).

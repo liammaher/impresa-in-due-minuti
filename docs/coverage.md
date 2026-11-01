@@ -61,7 +61,7 @@ Measured today:
 - Level 1: 39 of 39 pratiche fully in the dictionary. 12 of them are two operations in one pratica (`sue-combo-*`).
 - Which pratiche a case needs: of the 13997 cases the rules table decides, **1630 reach a steps file**, 12367 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
 - Level 2: **16 refusals across 15 recipes**, 7 distinct messages.
-- Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot, which a run's Salva doesn't check. A box read on a filled draft says what it adds (the dictionary's `slot`).
+- Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot. A box read on a filled draft says what it adds (the dictionary's `slot`).
 - Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
