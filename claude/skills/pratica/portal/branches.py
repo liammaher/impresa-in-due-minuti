@@ -101,7 +101,8 @@ def state(n, f, name, entries):
             return "theirs"
     fixed = False
     for entry, _ in entries:
-        for d in [*entry.get("fields", []), *entry.get("block", [])]:
+        for d in [*entry.get("fields", []), *entry.get("block", []),
+                  *(b for e in entry.get("fields", []) if e.get("kind") == "each" for b in e["block"])]:
             if n["kind"] == "select":
                 if d.get("kind") == "select" and gen.matches(f, "select", d.get("label", "")):
                     v = str(d.get("value", ""))

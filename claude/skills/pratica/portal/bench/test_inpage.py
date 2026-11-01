@@ -248,6 +248,26 @@ def main():
             assert PORTAL.fields.get("form:r5c2:dynaForm:alt_txt") == answers["impresa"], PORTAL.fields
         case("a box beside an anchor's tick box, labelled by it from the cell before, doesn't start a block", anchored)
 
+        def two_lists():
+            # Two lists in one section, each with its "+" after its rows: a block of the first is
+            # added by the first "+", not the page's last. The second list is a template, as
+            # gen.py writes one (an `add` with `each`, its fields with `block: "#N"`), three rows
+            # by its count.
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?liste=1")
+            st["sections"][1]["fields"] += [
+                {"kind": "text", "label": "Comunicazioni", "anchor": "Comunicazioni", "block": 1, "value": "{{ask.den}}"},
+                {"kind": "add", "anchor": "Comunicazioni", "block": 2},
+                {"kind": "text", "label": "Comunicazioni", "anchor": "Comunicazioni", "block": 2, "value": "{{ask.impresa}}"},
+                {"kind": "text", "label": "Tipologia di atto", "anchor": "Tipologia di atto", "block": 1, "value": "{{ask.atto_1}}"},
+                {"kind": "add", "anchor": "Tipologia di atto", "block": "#N", "each": {"count": "{{ask.atti}}", "from": 2}},
+                {"kind": "text", "label": "Tipologia di atto", "anchor": "Tipologia di atto", "block": "#N", "value": "{{ask.atto_#K}}"}]
+            r = fill(browser, base, st, answers | {"atti": "3", "atto_1": "uno", "atto_2": "due", "atto_3": "tre"})
+            assert r["result"] == "filled", r.get("error")
+            got = {k.split(":")[-1]: v for k, v in PORTAL.fields.items() if ":dynaForm:" in k and k.endswith(("com1_txt", "com2_txt")) or "atto" in k}
+            assert got == {"com1_txt": answers["den"], "com2_txt": answers["impresa"], "atto1_txt": "uno", "atto2_txt": "due", "atto3_txt": "tre"}, got
+        case("two lists in a section: each \"+\" adds to its own list, as many rows as the count says", two_lists)
+
         def crawl_reveals():
             # A choice that opens an employer's block repeating labels above it (Cognome, Via):
             # its boxes are revealed, counted per label, never read as the ones above moving.

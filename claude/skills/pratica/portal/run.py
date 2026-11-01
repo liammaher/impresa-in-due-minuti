@@ -406,8 +406,80 @@ class Values:
             return None
 
 
+# --- "+" blocks, as many as the case has --------------------------------------------
+
+def nth_block(obj, n):
+    """A template block's field or ask for its n-th repeat: #N is "" in the first and n after
+    (role a, a2; ask altro_tecnico_..., altro_tecnico2_...), #K is n always (comunicazione_3)."""
+    return json.loads(json.dumps(obj, ensure_ascii=False).replace("#N", str(n) if n > 1 else "").replace("#K", str(n)))
+
+
+def expand(steps, values):
+    """The steps for this case's count of each "+" block. gen.py writes a block the national
+    form lets repeat without limit (other technicians, "altro" titles, filings) once, as a
+    template: an `add` with `each` (the count, the first block it adds), then its fields with
+    `block: "#N"`. Each block also waits for its count (`atleast_n`), so before the count is
+    answered one block shows what will be asked. An ask named with #N or #K becomes one per
+    block (values.asks too). Steps with no template come back as they are."""
+    if not any(f.get("block") == "#N" for s in steps["sections"] for f in s["fields"]):
+        return steps
+    out = {**steps, "sections": []}
+    for sec in steps["sections"]:
+        fields, fs, i = [], sec["fields"], 0
+        while i < len(fs):
+            f, i = fs[i], i + 1
+            if not (f["kind"] == "add" and "each" in f):
+                fields.append(f)
+                continue
+            body = []
+            while i < len(fs) and fs[i].get("block") == "#N":
+                body.append(fs[i])
+                i += 1
+            each = f["each"]
+            v = values.render(each["count"])
+            try:
+                count = int(float(v.replace(",", "."))) if v is not None else None
+            except ValueError:
+                count = None  # pre-flight says it isn't a number
+            gate = lambda n: each["count"][:-2] + f"|atleast_{n}}}}}"
+            base = f.get("when", "")
+
+            def when(g, n):
+                # The count right after the block's own condition: a field's own words (is the
+                # second technician an employee?) are asked only for a block there is.
+                w = g.get("when", "")
+                rest = w[len(base):] if base and w.startswith(base) else w
+                return " ".join(x for x in (base, gate(n), rest.strip()) if x)
+            # The first block it adds is there even when the count says none: it holds the
+            # count's question (asked first), and its own `when` keeps it off the page.
+            for n in range(each["from"], max(each["from"], count or 0) + 1):
+                fields.append({**{k: x for k, x in f.items() if k != "each"}, "block": n, "when": when(f, n)})
+                fields += [{**g, "block": n, "when": when(g, n)} for g in map(lambda b: nth_block(b, n), body)]
+        out["sections"].append({**sec, "fields": fields})
+    used = {r[4:] for _, t, _ in templates(out) for r, _ in refs_in(t) if r.startswith("ask.")}
+    asks = {}
+    for k, a in steps.get("asks", {}).items():
+        if "#N" not in k and "#K" not in k:
+            asks[k] = a
+        for n, u in block_asks(k, used):
+            asks.setdefault(u, nth_block(a, n))
+    out["asks"] = values.asks = asks
+    return out
+
+
+def block_asks(key, used):
+    """The asks in `used` that are blocks of the template ask `key` (named with #N or #K), with
+    each one's block number, in order; none for an ask that isn't a template."""
+    if "#N" not in key and "#K" not in key:
+        return []
+    pattern = re.compile("^" + "".join(r"(\d*)" if p == "#N" else r"(\d+)" if p == "#K" else re.escape(p)
+                                       for p in re.split("(#N|#K)", key)) + "$")
+    return sorted((int(next((g for g in m.groups() if g), "1")), u) for u in used if (m := pattern.match(u)))
+
+
 def plan(steps, values):
     """Each field with its value; raises on a missing required value."""
+    steps = expand(steps, values)
     out, missing = [], []
     for w in steps.get("wizard", []):
         v = values.render(w["fill"]["value"]) if "fill" in w else None
@@ -722,6 +794,7 @@ def preflight(steps, values, urls=None, made_up=False):
     files sent by link (page --file-urls), which don't count to the pane's 256 KB. A file the
     sportello would refuse (FILING) is a problem, or with made_up (a rehearsal's made-up data,
     never sent) only its `filing` and a warning."""
+    steps = expand(steps, values)
     links, sportello = file_links(urls), filing_rules(steps)
     order = check_asks(steps)
     asks = steps.get("asks", {})
@@ -1192,6 +1265,8 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=N
     """page_files, and what runner.js and steps.js leave in the pane's localStorage. urls:
     {path: https URL}, files the page fetches itself instead of run.js carrying them.
     code: seal the values under it (see above); None carries them in the clear."""
+    expanded = expand(steps, values)
+    blocks, steps = expanded is not steps, expanded
     links = file_links(urls)
     require_supported(steps, values)
     plan(steps, values)  # stops on a missing required value
@@ -1232,6 +1307,10 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=N
             raise StepError(f"the attachments come to {size // 1024} KB, more than the {files_limit // 1024} KB "
                             "run.js can carry in the pane: send the big ones by link (--file-urls) or use `run`")
     proc = steps["procedure"]
+    if blocks:
+        # Its "+" blocks as this case counts them: a case with other counts has other steps, so
+        # they are stored apart in the pane (the same counts, the same key).
+        proc += "#" + hashlib.sha256(json.dumps(skeleton["sections"], sort_keys=True).encode()).hexdigest()[:8]
     runner_js, steps_js, stored = pane_parts(proc, skeleton)
     load = "if (!window.__pv) (0, eval)(localStorage.getItem('pv-runner'));\n"
     if code:
@@ -1310,6 +1389,7 @@ def drift(out, steps, resume):
 def review_shown(steps, values):
     """What the review page shows besides the run: each value, the choices made in the person's
     name (DECIDED), and the person's own steps."""
+    steps = expand(steps, values)
     rows = plan(steps, values)
     decisions = {}
     for v in rows:
@@ -1373,6 +1453,7 @@ def run(steps, values, out, cdp=None, profile=None, close=False, resume=None):
     the pane's 45 s call limit and slowed timers. A window behind others keeps full speed
     with no call of ours: Playwright turns on focus emulation for each page it drives
     (--cdp too) and launches Chromium with background throttling off."""
+    steps = expand(steps, values)
     from playwright.sync_api import sync_playwright
     # page.evaluate runs run.js here, not through the conversation, so files of any size.
     install, run_js = page_scripts(steps, values, files_limit=None, resume=resume)
@@ -1498,6 +1579,7 @@ def main():
             if a.server and a.token not in vaults:
                 ap.error(f"{a.server} has no token {a.token!r}")
             values = Values(answers, vault=vaults[a.token if a.server else "prepare"], asks=asks)
+        steps = expand(steps, values)
         resume = None
         if a.resume:
             earlier = json.loads(a.resume.read_text())

@@ -39,7 +39,7 @@
  "cambio_uso": "no",
  "paesaggio": "no",
  "fatti": [],
- "altri_tecnici_quanti": "uno",
+ "altri_tecnici_quanti": "1",
  "altro_tecnico_dipendente": false,
  "altro_tecnico_incarico": "progettazione degli impianti"
 }
