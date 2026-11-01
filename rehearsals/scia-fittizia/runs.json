@@ -184,5 +184,17 @@
   "answers": "answers-stato-titoli-dieci.json",
   "result": "filled",
   "seconds": 151.6
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-elenchi-lunghi.json",
+  "result": "filled",
+  "seconds": 812.9
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-bassa-monostanza.json",
+  "result": "filled",
+  "seconds": 150.1
  }
 ]

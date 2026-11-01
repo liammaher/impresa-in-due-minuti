@@ -574,6 +574,17 @@
     return texts.filter((t, i) => !t || texts.indexOf(t) === i).slice(0, 3).findIndex((t) => startsLabel(t, label));
   }
   const labelled = (e, label) => labelRank(e, label) >= 0;
+  // A box's own label: its title, else its first text that isn't a validation message.
+  const ownLabel = (e) => [e.title, ...win().eval(`(${steps.label_js})`)(e)].find((t) => norm(t) && !MESSAGE.test(norm(t)));
+  // Where each repeat of a group starts: the boxes the anchor names best, and the boxes of no
+  // text of their own under it (the CILA relazione's rows after the first read the column's
+  // header, 2026-11-01). A box with its own text beside the anchor (the deroga's
+  // "(specificare)", which reads it from the cell before) isn't one.
+  function blockStarts(list, anchor) {
+    const ranks = list.map((e) => labelRank(e, anchor));
+    const best = Math.min(...ranks.filter((r) => r >= 0));
+    return ranks.map((r, i) => (r === best || r > 0 && startsLabel(ownLabel(list[i]), anchor) ? i : -1)).filter((i) => i >= 0);
+  }
   // A steps file's id is the row the crawl saw; a choice made earlier in the section can
   // have moved it onto another box, which a click would then tick in silence. The box must
   // be of the field's kind and carry its label as the lookup reads labels; else the field
@@ -600,11 +611,7 @@
     if (f.id || f.css) return f;
     let list = inputs();
     if (f.anchor) {
-      // A block starts at the boxes the anchor names best: a box of no text of its own beside
-      // the anchor (the deroga's "(specificare)") reads it from the cell before, and isn't one.
-      const ranks = list.map((e) => labelRank(e, f.anchor));
-      const best = Math.min(...ranks.filter((r) => r >= 0));
-      const starts = ranks.map((r, i) => (r === best ? i : -1)).filter((i) => i >= 0);
+      const starts = blockStarts(list, f.anchor);
       const b = (f.block || 1) - 1;
       if (b >= starts.length) fail(`${f.label}: no block ${f.block} of ${f.anchor} (found ${starts.length})`);
       list = list.slice(starts[b], starts[b + 1]);
@@ -614,7 +621,6 @@
     // A box is counted by its own label (its title, else its cell), as the crawl counts it: a
     // "Si" whose nearby texts include the "No" before it is not a "No" (three Si/No pairs in a
     // row); the beds total under a shared header is not the rooms total.
-    const ownLabel = (e) => [e.title, ...win().eval(`(${steps.label_js})`)(e)].find((t) => norm(t) && !MESSAGE.test(norm(t)));
     const own = hits.filter((e) => startsLabel(ownLabel(e), f.label));
     if (own.length >= (f.nth || 1)) hits = own; // else a box labelled from above ("Provincia" of birth) counts too
     else if (hits.length > 1) {
@@ -628,7 +634,7 @@
     return { ...f, id: e.id.split("dynaForm:")[1].replace(/:combo_input$/, "") };
   }
   async function addBlock(f) {
-    const count = () => inputs().filter((e) => labelled(e, f.anchor)).length;
+    const count = () => blockStarts(inputs(), f.anchor).length;
     const before = count();
     // `block`: the block this "+" is for. A resumed draft may have it already.
     if (f.block && before >= f.block) return `block ${f.block}`;
@@ -636,7 +642,7 @@
     if (!plus.length) fail(`no + to add a block of ${f.anchor}`);
     // The first "+" after the anchor's last block is its own: a section can have one per list
     // (the CILA relazione's filings, then its assents).
-    const last = inputs().filter((e) => labelled(e, f.anchor)).pop();
+    const last = inputs()[blockStarts(inputs(), f.anchor).pop()];
     const own = last && plus.find((b) => last.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
     press(own || plus[plus.length - 1], `+ ${f.anchor}`);
     await idle();

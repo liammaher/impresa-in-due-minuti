@@ -58,5 +58,17 @@
   "answers": "answers-altri-tecnici-otto.json",
   "result": "filled",
   "seconds": 521.6
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-elenchi-lunghi.json",
+  "result": "stopped",
+  "seconds": 626.9
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-direttore-atti.json",
+  "result": "filled",
+  "seconds": 108.1
  }
 ]
