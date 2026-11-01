@@ -43,5 +43,6 @@
  "impianto_linee_vita": "false",
  "impianto_altro": "false",
  "igienico_24_5bis": "false",
- "igienico_5quater": "false"
+ "igienico_5quater": "false",
+ "agibilita_attestante": "direttore dei lavori"
 }

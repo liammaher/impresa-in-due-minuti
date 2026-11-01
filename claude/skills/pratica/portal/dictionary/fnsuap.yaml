@@ -109,12 +109,29 @@ asks:
   prospetto_contributo: {type: file, question: "The prospetto di calcolo preventivo of the contributo di costruzione (PDF)"}
   direttore_lavori:
     type: choice
-    question: "Who directs the works? progettista (the architect filing the pratica); da nominare (no direttore dei lavori named in the CILA); altro tecnico (another technician)"
+    question: "Who directs the works? progettista (the architect filing the pratica); da nominare (no direttore dei lavori named in the pratica: named before the works start); altro tecnico (another technician, `d:` in the job's people)"
     options: [progettista, da nominare, altro tecnico]
     propose: "progettista"
+  # The agibilità's attestazione tecnica is the direttore dei lavori's or, where none was
+  # named, a professionista abilitato's (art. 24 c. 5 DPR 380/2001): the architect either way.
+  agibilita_attestante:
+    type: choice
+    question: "In what role does the architect sign the agibilità's attestazione tecnica? direttore dei lavori; professionista abilitato (no direttore dei lavori was named for the works)"
+    options: [direttore dei lavori, professionista abilitato]
+    propose: "direttore dei lavori"
+  # The SCIA's h1: the structural direttore dei lavori is the structural designer (the form's
+  # "diverso dal progettista delle opere strutturali": no), or named before the works start.
+  dl_strutture:
+    type: yes_no
+    question: "Does the structural designer (`s:`) also direct the structural works? If not, that direttore dei lavori is named before the works start"
+    propose: "true"
   altri_tecnici:
     type: yes_no
     question: "Are other technicians (structures, systems, acoustics, safety) already appointed for these works?"
+    propose: "false"
+  altri_tecnici_dopo:
+    type: yes_no
+    question: "Will further technicians (structures, systems, safety coordinator) be appointed before the works start, besides any named here?"
     propose: "false"
   # The other technicians are `a:`, `a2:`, `a3:` ... in the job's people, as many as there are
   # (the national form sets no limit); an employee's firm is `ad:`, `ad2:` ...
@@ -127,6 +144,12 @@ asks:
   lavori_in_proprio:
     type: yes_no
     question: "Are the works so minor that the client does them without a firm (opere di modesta entità, eseguite in proprio)?"
+    propose: "false"
+  # The firm named after filing, before the works start (the SUE's comunicazione di nomina
+  # dell'impresa esecutrice); the site-safety declarations wait for it (d.lgs. 81 "si riserva").
+  impresa_dopo:
+    type: yes_no
+    question: "Is the building firm still to be chosen (named before the works start, with the comunicazione di nomina dell'impresa esecutrice)?"
     propose: "false"
   # The CILA's relazione tecnica: what the works are (art. 6-bis DPR 380/2001 and Tabella A of
   # D.Lgs. 222/2016), the progettista's to say.
@@ -204,6 +227,7 @@ asks:
   dlgs81: {type: yes_no, question: "Do the D.Lgs. 81/2008 site-safety rules apply (works by a firm, not a self-builder)?", propose: "true"}
   sotto_200: {type: yes_no, question: "Is the site under 200 uomini-giorno?", propose: "true"}
   notifica_dovuta: {type: yes_no, question: "Is a notifica preliminare due (more than one firm on site, or over 200 uomini-giorno)?"}
+  notifica_allegata: {type: yes_no, question: "Is the notifica preliminare (art. 99 D.Lgs. 81/2008) attached now, rather than sent before the works start?"}
   verificato_idoneita: {type: yes_no, question: "Has the client checked the firms' documents (DURC and technical suitability, art. 90 c. 9 D.Lgs. 81/2008)?"}
   data_fine_prevista: {type: date, question: "When the works will end (temporary works: within 180 days)"}
   pdc_numero: {type: text, question: "The permesso di costruire's number"}
@@ -1328,10 +1352,11 @@ sections:
   # employee: the block "di aver incaricato" opens, the G1 block's labels after "Incaricato
   # della", then two si/no (registered: the order's boxes; a firm's employee: the firm's) and
   # the abilitazione, left empty for a registered technician. With none appointed nothing is
-  # ticked, as before: "saranno individuati" says some will be.
+  # ticked, as before: "saranno individuati" says some will be (with or without those named).
   - section: G2) Altri tecnici incaricati
     leave: [fax, "Estremi dell'abilitazione"]
     fields:
+      - {kind: checkbox, label: che gli altri tecnici incaricati saranno individuati, when: "{{ask.altri_tecnici_dopo}}"}
       - {kind: checkbox, label: di aver incaricato in qualità di altri tecnici, when: "{{ask.altri_tecnici}}"}
       # One block per technician, each after the first by "+". An employee's studio is the
       # employer's seat (ad, ad2 ...: the firm of "alle dipendenze di").
@@ -1395,15 +1420,18 @@ sections:
   # minor works the client does without one. Fields by label inside the block-th repeat that
   # starts at "Ragione sociale"; `firm_when` is each block's condition (a later one also
   # needs its firm).
+  # A firm still to be chosen: the SCIA and the permesso say so ("sarà individuata"); the CILA
+  # and the CIL have no such line, and their recipes refuse it.
   - section: h) Impresa esecutrice dei lavori
     leave: [Telefono, fax]
     firms: [f1, f2]
-    firm_when: "{{ask.lavori_in_proprio|not}}"
+    firm_when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}"
     fields:
       - {kind: radio, label: in quanto opere di modesta entità, if_present: true, when: "{{ask.lavori_in_proprio}}"}
+      - {kind: radio, label: l'impresa esecutrice/imprese esecutrici dei lavori sarà, if_present: true, when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo}}"}
       - {kind: radio, label: lavori sono/saranno eseguiti dall, if_present: true, when: "{{ask.lavori_in_proprio|not}}"}
-      - {kind: radio, label: i lavori sono eseguiti/sono stati eseguiti, if_present: true, when: "{{ask.lavori_in_proprio|not}}"}
-      - {kind: radio, label: i lavori saranno eseguiti/sono eseguiti, if_present: true, when: "{{ask.lavori_in_proprio|not}}"}
+      - {kind: radio, label: i lavori sono eseguiti/sono stati eseguiti, if_present: true, when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}"}
+      - {kind: radio, label: i lavori saranno eseguiti/sono eseguiti, if_present: true, when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}"}
     block:
       - {kind: text, label: Ragione sociale, value: "{{F:business.denominazione}}"}
       - {kind: text, label: codice fiscale / p. IVA, value: "{{F:business.partita_iva}}"}
@@ -1422,13 +1450,22 @@ sections:
       - {kind: date, label: nato il, value: "{{F:identity.date_of_birth|date_it}}"}
       - {kind: text, label: cell., value: "{{F:identity.phone|phone_it}}"}
       - {kind: text, label: posta elettronica, value: "{{F:business.pec}}"}
-      # DURC: each box opens its own rows (and renumbers what follows).
+      # DURC: each box opens its own rows (and renumbers what follows). A firm enrolled with a
+      # Cassa edile ticks it too; its rows come first, so the INPS's and INAIL's "sede di" and
+      # "codice impresa" count after its own.
+      - {kind: checkbox, label: Cassa edile, when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
+      - {kind: text, label: sede di, nth: 1, value: "{{F:business.cassa_edile_sede|upper}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
+      - {kind: text, label: codice impresa, nth: 1, value: "{{F:business.cassa_edile_codice_impresa}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
+      - {kind: text, label: codice cassa, value: "{{F:business.cassa_edile_codice}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
       - {kind: checkbox, label: INPS}
-      - {kind: text, label: sede di, nth: 1, value: "{{F:business.sede_legale_comune|upper}}"}
+      - {kind: text, label: sede di, nth: 1, value: "{{F:business.sede_legale_comune|upper}}", when: "{{F:business.cassa_edile_codice_impresa|empty}}"}
+      - {kind: text, label: sede di, nth: 2, value: "{{F:business.sede_legale_comune|upper}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
       - {kind: text, label: Matr./Pos. Contr., value: "{{F:business.inps_matricola}}"}
       - {kind: checkbox, label: INAIL}
-      - {kind: text, label: sede di, nth: 2, value: "{{F:business.inail_codice_sede}}"}
-      - {kind: text, label: codice impresa, value: "{{F:business.inail_codice_ditta}}"}
+      - {kind: text, label: sede di, nth: 2, value: "{{F:business.inail_codice_sede}}", when: "{{F:business.cassa_edile_codice_impresa|empty}}"}
+      - {kind: text, label: sede di, nth: 3, value: "{{F:business.inail_codice_sede}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
+      - {kind: text, label: codice impresa, nth: 1, value: "{{F:business.inail_codice_ditta}}", when: "{{F:business.cassa_edile_codice_impresa|empty}}"}
+      - {kind: text, label: codice impresa, nth: 2, value: "{{F:business.inail_codice_ditta}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
       - {kind: text, label: pos. assicurativa, value: "{{F:business.inail_pat}}"}
 
   # Site safety. A choice is a radio in one pratica and a checkbox in another (`tick`); the
@@ -1436,19 +1473,27 @@ sections:
   - section: i) Rispetto degli obblighi
     fields:
       - {kind: tick, label: non ricade nell'ambito di applicazione delle norme, when: "{{ask.dlgs81|not}}"}
-      - {kind: tick, label: ricade nell'ambito di applicazione delle norme, when: "{{ask.dlgs81}}"}
+      - {kind: tick, label: ricade nell'ambito di applicazione delle norme, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}}"}
+      # A firm still to be chosen: the declarations below come with its data, before the works
+      # start ("si riserva"). The CILA's and the CIL's own "si riserva" isn't here: the portal
+      # requires their firm's details anyway (their recipes refuse a firm still to be chosen).
+      - {kind: tick, label: ricade nell'ambito di applicazione del d.lgs. n. 81/2008 ma si riserva, if_present: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo}}"}
+      - {kind: tick, label: "ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza sul luogo di lavoro (d.lgs. n. 81/2008), ma si riserva", if_present: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo}}"}
       # The rest only where the rules apply (works with no firm on site are outside them).
-      - {kind: tick, label: dichiara che l'entità presunta del cantiere è inferiore, when: "{{ask.dlgs81}} {{ask.sotto_200}}"}
-      - {kind: tick, label: dichiara che l'entità presunta del cantiere è pari o superiore, if_present: true, when: "{{ask.dlgs81}} {{ask.sotto_200|not}}"}
-      - {kind: tick, label: dichiara di aver verificato la documentazione, if_present: true, when: "{{ask.dlgs81}} {{ask.verificato_idoneita}}"}
-      - {kind: tick, label: dichiara che l'intervento non è soggetto all'invio, when: "{{ask.dlgs81}} {{ask.notifica_dovuta|not}}"}
-      - {kind: tick, label: dichiara che l'intervento è soggetto all'invio, when: "{{ask.dlgs81}} {{ask.notifica_dovuta}}"}
+      - {kind: tick, label: dichiara che l'entità presunta del cantiere è inferiore, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.sotto_200}}"}
+      - {kind: tick, label: dichiara che l'entità presunta del cantiere è pari o superiore, if_present: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.sotto_200|not}}"}
+      - {kind: tick, label: dichiara di aver verificato la documentazione, if_present: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.verificato_idoneita}}"}
+      - {kind: tick, label: dichiara che l'intervento non è soggetto all'invio, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta|not}}"}
+      - {kind: tick, label: dichiara che l'intervento è soggetto all'invio, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}"}
       # The CIL's and the CILA's notifica has no slot of its own: Allegati liberi, which on the CIL
       # takes only signed files (read on a filled CIL draft 2026-11-01; the CILA 2026-10-28).
-      - {kind: tick, label: allega alla presente comunicazione la notifica, if_present: true, when: "{{ask.dlgs81}} {{ask.notifica_dovuta}}", slot: "none of its own: Allegati liberi (signed files only on the CIL: the person's)"}
-      - {kind: checkbox, label: e allega alla presente segnalazione la notifica, if_present: true, on_page: true, when: "{{ask.dlgs81}} {{ask.notifica_dovuta}}"}
-      # A permesso's notifica goes before the works start, once it is issued.
-      - {kind: radio, label: invierà la notifica prima dell'inizio dei lavori, if_present: true, on_page: true, when: "{{ask.dlgs81}} {{ask.notifica_dovuta}}"}
+      - {kind: tick, label: allega alla presente comunicazione la notifica, if_present: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}", slot: "none of its own: Allegati liberi (signed files only on the CIL: the person's)"}
+      - {kind: checkbox, label: e allega alla presente segnalazione la notifica, if_present: true, on_page: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}"}
+      # The permesso and the SCIA alternativa: the notifica attached now (its slot is the recipe's,
+      # read on the portal 2026-11-01), or sent before the works start (a permesso's once issued).
+      - {kind: radio, label: e allega alla presente segnalazione la notifica, if_present: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}} {{ask.notifica_allegata}}", slot: "Notifica preliminare (articolo 99 del d.lgs. n. 81/2008): its own (filled on the portal 2026-11-01)"}
+      - {kind: radio, label: "allega la notifica, il cui contenuto", if_present: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}} {{ask.notifica_allegata}}", slot: "Notifica preliminare (articolo 99 del d.lgs. n. 81/2008): its own (filled on the portal 2026-11-01)"}
+      - {kind: radio, label: invierà la notifica prima dell'inizio dei lavori, if_present: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}} {{ask.notifica_allegata|not}}"}
 
   # The progettista's relazione (her asseverazione and signature are the signed CILA).
   - section: Relazione Tecnica di Asseverazione
@@ -2087,7 +2132,8 @@ sections:
   - section: Attestazione tecnica - Dati del Direttore Lavori
     leave: [fax]
     fields:
-      - {kind: radio, label: Direttore dei Lavori}
+      - {kind: radio, label: Direttore dei Lavori, when: "{{ask.agibilita_attestante|is_direttore_dei_lavori}}"}
+      - {kind: radio, label: Professionista abilitato, when: "{{ask.agibilita_attestante|is_professionista_abilitato}}"}
       - {kind: text, label: Cognome, value: "{{t:identity.last_name}}"}
       - {kind: text, label: Nome, value: "{{t:identity.first_name}}"}
       - {kind: text, label: C.F., value: "{{t:identity.codice_fiscale}}"}
@@ -2451,12 +2497,17 @@ sections:
       - {kind: radio, label: chiede allo Sportello unico di effettuare il calcolo, when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_sportello}}"}
       - {kind: radio, label: allega il prospetto di calcolo preventivo, when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}"}
 
-  # The architect designs the works and presents the pratica; the direttore dei lavori is named
-  # before the works start (the crawl doesn't reach the fields of "di aver incaricato").
+  # The architect designs the works and presents the pratica. The direttore dei lavori is the
+  # architect too (the form's "diverso dal progettista": no), another technician (`d:`: yes, and
+  # the block it opens, by label from its Cognome), or named before the works start; the
+  # structural one is the structural designer (`dl_strutture`) or named later. The director's
+  # block shows above the structural designer's, so it is filled first and `s:` is then the
+  # second Cognome. Read on the portal 2026-11-01.
   - section: Tecnici incaricati
     aliases: [h1) Tecnici incaricati]
     fields:
-      - {kind: checkbox, label: che il/i direttore/i dei lavori sarà/saranno individuati}
+      - {kind: checkbox, label: che il/i direttore/i dei lavori sarà/saranno individuati, when: "{{ask.direttore_lavori|is_da_nominare}}"}
+      - {kind: checkbox, label: che il/i direttore/i dei lavori sarà/saranno individuati, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.dl_strutture|not}}"}
       - {kind: checkbox, label: Progettista delle opere architettoniche}
       - {kind: radio, label: titolare dell'intervento o procuratore}
       - {kind: select, label: Provincia, value: "{{business.sede_legale_provincia}}"}
@@ -2470,39 +2521,99 @@ sections:
       - {kind: text, label: Telefono, value: "{{business.telefono|phone_it}}"}
       - {kind: text, label: cell., value: "{{t:identity.phone|phone_it}}"}
       - {kind: text, label: posta elettronica certificata, value: "{{t:identity.pec}}"}
+      - {kind: checkbox, label: "di aver incaricato, in qualità di direttore/i dei lavori", when: "{{ask.direttore_lavori|is_da_nominare|not}}"}
+      - {kind: checkbox, label: Direttore dei lavori delle opere architettoniche, when: "{{ask.direttore_lavori|is_da_nominare|not}}"}
+      - {kind: radio, label: "no", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_progettista}}"}
+      - {kind: radio, label: si, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: "{{d:identity.last_name|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Nome, anchor: Cognome, block: 1, value: "{{d:identity.first_name|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.F., anchor: Cognome, block: 1, value: "{{d:identity.codice_fiscale}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: date, label: Data di nascita, anchor: Cognome, block: 1, value: "{{d:identity.date_of_birth|date_it}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Cittadinanza, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Sesso, anchor: Cognome, block: 1, value: "{{d:identity.sex|sesso}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, anchor: Cognome, block: 1, value: "{{d:identity.birth_province}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, anchor: Cognome, block: 1, value: "{{d:identity.birth_comune|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, nth: 2, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, nth: 2, anchor: Cognome, block: 1, value: "{{d:residenza.provincia}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, nth: 2, anchor: Cognome, block: 1, value: "{{d:residenza.comune|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "Via, Piazza", anchor: Cognome, block: 1, value: "{{d:residenza.indirizzo|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "N.", anchor: Cognome, block: 1, value: "{{d:residenza.civico}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.A.P., anchor: Cognome, block: 1, value: "{{d:residenza.cap}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, nth: 3, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, nth: 3, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_provincia}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, nth: 3, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_comune|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "Via, Piazza", nth: 2, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_indirizzo|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "N.", nth: 2, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_civico}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.A.P., nth: 2, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_cap}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, anchor: Cognome, block: 1, value: "{{d:albo.ordine}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: di, anchor: Cognome, block: 1, value: "{{d:albo.provincia|provincia_nome}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: al n., anchor: Cognome, block: 1, value: "{{d:albo.numero}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Telefono, anchor: Cognome, block: 1, value: "{{d:identity.phone|phone_it}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: cell., anchor: Cognome, block: 1, value: "{{d:identity.phone|phone_it}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: "{{d:identity.pec}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: checkbox, label: Direttore dei lavori delle opere strutturali, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.dl_strutture}}"}
+      - {kind: radio, label: "no", nth: 2, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.dl_strutture}}"}
       # Works on structures: their designer, another technician (`s:`; the architect as
       # structural designer too isn't mapped: her studio is the business's), in the block the tick
-      # opens below the architect's (seen 2026-10-29: Luogo di nascita, Residenza, Studio in,
-      # each a Stato, Provincia, Comune; the studio is `s:business.sede_legale_*`). Its boxes
-      # repeat the architect's labels, so they go by label inside the block from its Cognome.
+      # opens (seen 2026-10-29: Luogo di nascita, Residenza, Studio in, each a Stato, Provincia,
+      # Comune; the studio is `s:business.sede_legale_*`), by label from its Cognome: the first,
+      # or the second under another technician's direction.
       - {kind: checkbox, label: Progettista delle opere strutturali, when: "{{ask.strutture}}"}
-      - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: "{{s:identity.last_name|upper}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: Nome, anchor: Cognome, block: 1, value: "{{s:identity.first_name|upper}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: C.F., anchor: Cognome, block: 1, value: "{{s:identity.codice_fiscale}}", when: "{{ask.strutture}}"}
-      - {kind: date, label: Data di nascita, anchor: Cognome, block: 1, value: "{{s:identity.date_of_birth|date_it}}", when: "{{ask.strutture}}"}
-      - {kind: select, label: Cittadinanza, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.strutture}}"}
-      - {kind: select, label: Sesso, anchor: Cognome, block: 1, value: "{{s:identity.sex|sesso}}", when: "{{ask.strutture}}"}
-      - {kind: select, label: Stato, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.strutture}}"}
-      - {kind: select, label: Provincia, anchor: Cognome, block: 1, value: "{{s:identity.birth_province}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: Comune italiano, anchor: Cognome, block: 1, value: "{{s:identity.birth_comune|upper}}", when: "{{ask.strutture}}"}
-      - {kind: select, label: Stato, nth: 2, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.strutture}}"}
-      - {kind: select, label: Provincia, nth: 2, anchor: Cognome, block: 1, value: "{{s:residenza.provincia}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: Comune italiano, nth: 2, anchor: Cognome, block: 1, value: "{{s:residenza.comune|upper}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: "Via, Piazza", anchor: Cognome, block: 1, value: "{{s:residenza.indirizzo|upper}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: "N.", anchor: Cognome, block: 1, value: "{{s:residenza.civico}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: C.A.P., anchor: Cognome, block: 1, value: "{{s:residenza.cap}}", when: "{{ask.strutture}}"}
-      - {kind: select, label: Stato, nth: 3, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.strutture}}"}
-      - {kind: select, label: Provincia, nth: 3, anchor: Cognome, block: 1, value: "{{s:business.sede_legale_provincia}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: Comune italiano, nth: 3, anchor: Cognome, block: 1, value: "{{s:business.sede_legale_comune|upper}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: "Via, Piazza", nth: 2, anchor: Cognome, block: 1, value: "{{s:business.sede_legale_indirizzo|upper}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: "N.", nth: 2, anchor: Cognome, block: 1, value: "{{s:business.sede_legale_civico}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: C.A.P., nth: 2, anchor: Cognome, block: 1, value: "{{s:business.sede_legale_cap}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: Iscritto all'ordine/collegio, anchor: Cognome, block: 1, value: "{{s:albo.ordine}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: di, anchor: Cognome, block: 1, value: "{{s:albo.provincia|provincia_nome}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: al n., anchor: Cognome, block: 1, value: "{{s:albo.numero}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: Telefono, anchor: Cognome, block: 1, value: "{{s:identity.phone|phone_it}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: cell., anchor: Cognome, block: 1, value: "{{s:identity.phone|phone_it}}", when: "{{ask.strutture}}"}
-      - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: "{{s:identity.pec}}", when: "{{ask.strutture}}"}
+      - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: "{{s:identity.last_name|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: Nome, anchor: Cognome, block: 1, value: "{{s:identity.first_name|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: C.F., anchor: Cognome, block: 1, value: "{{s:identity.codice_fiscale}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: date, label: Data di nascita, anchor: Cognome, block: 1, value: "{{s:identity.date_of_birth|date_it}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: select, label: Cittadinanza, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: select, label: Sesso, anchor: Cognome, block: 1, value: "{{s:identity.sex|sesso}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: select, label: Stato, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: select, label: Provincia, anchor: Cognome, block: 1, value: "{{s:identity.birth_province}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: Comune italiano, anchor: Cognome, block: 1, value: "{{s:identity.birth_comune|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: select, label: Stato, nth: 2, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: select, label: Provincia, nth: 2, anchor: Cognome, block: 1, value: "{{s:residenza.provincia}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: Comune italiano, nth: 2, anchor: Cognome, block: 1, value: "{{s:residenza.comune|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: "Via, Piazza", anchor: Cognome, block: 1, value: "{{s:residenza.indirizzo|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: "N.", anchor: Cognome, block: 1, value: "{{s:residenza.civico}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: C.A.P., anchor: Cognome, block: 1, value: "{{s:residenza.cap}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: select, label: Stato, nth: 3, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: select, label: Provincia, nth: 3, anchor: Cognome, block: 1, value: "{{s:business.sede_legale_provincia}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: Comune italiano, nth: 3, anchor: Cognome, block: 1, value: "{{s:business.sede_legale_comune|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: "Via, Piazza", nth: 2, anchor: Cognome, block: 1, value: "{{s:business.sede_legale_indirizzo|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: "N.", nth: 2, anchor: Cognome, block: 1, value: "{{s:business.sede_legale_civico}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: C.A.P., nth: 2, anchor: Cognome, block: 1, value: "{{s:business.sede_legale_cap}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, anchor: Cognome, block: 1, value: "{{s:albo.ordine}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: di, anchor: Cognome, block: 1, value: "{{s:albo.provincia|provincia_nome}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: al n., anchor: Cognome, block: 1, value: "{{s:albo.numero}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: Telefono, anchor: Cognome, block: 1, value: "{{s:identity.phone|phone_it}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: cell., anchor: Cognome, block: 1, value: "{{s:identity.phone|phone_it}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: "{{s:identity.pec}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
+      - {kind: text, label: Cognome, anchor: Cognome, block: 2, value: "{{s:identity.last_name|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Nome, anchor: Cognome, block: 2, value: "{{s:identity.first_name|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.F., anchor: Cognome, block: 2, value: "{{s:identity.codice_fiscale}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: date, label: Data di nascita, anchor: Cognome, block: 2, value: "{{s:identity.date_of_birth|date_it}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Cittadinanza, anchor: Cognome, block: 2, value: ITALIA, when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Sesso, anchor: Cognome, block: 2, value: "{{s:identity.sex|sesso}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, anchor: Cognome, block: 2, value: ITALIA, when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, anchor: Cognome, block: 2, value: "{{s:identity.birth_province}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, anchor: Cognome, block: 2, value: "{{s:identity.birth_comune|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, nth: 2, anchor: Cognome, block: 2, value: ITALIA, when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, nth: 2, anchor: Cognome, block: 2, value: "{{s:residenza.provincia}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, nth: 2, anchor: Cognome, block: 2, value: "{{s:residenza.comune|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "Via, Piazza", anchor: Cognome, block: 2, value: "{{s:residenza.indirizzo|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "N.", anchor: Cognome, block: 2, value: "{{s:residenza.civico}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.A.P., anchor: Cognome, block: 2, value: "{{s:residenza.cap}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, nth: 3, anchor: Cognome, block: 2, value: ITALIA, when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, nth: 3, anchor: Cognome, block: 2, value: "{{s:business.sede_legale_provincia}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, nth: 3, anchor: Cognome, block: 2, value: "{{s:business.sede_legale_comune|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "Via, Piazza", nth: 2, anchor: Cognome, block: 2, value: "{{s:business.sede_legale_indirizzo|upper}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "N.", nth: 2, anchor: Cognome, block: 2, value: "{{s:business.sede_legale_civico}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.A.P., nth: 2, anchor: Cognome, block: 2, value: "{{s:business.sede_legale_cap}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, anchor: Cognome, block: 2, value: "{{s:albo.ordine}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: di, anchor: Cognome, block: 2, value: "{{s:albo.provincia|provincia_nome}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: al n., anchor: Cognome, block: 2, value: "{{s:albo.numero}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Telefono, anchor: Cognome, block: 2, value: "{{s:identity.phone|phone_it}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: cell., anchor: Cognome, block: 2, value: "{{s:identity.phone|phone_it}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 2, value: "{{s:identity.pec}}", when: "{{ask.strutture}} {{ask.direttore_lavori|is_altro_tecnico}}"}
     leave: [fax]
 
   - section: Diritti di terzi
@@ -3124,11 +3235,14 @@ sections:
 
   # The permesso's g1): the architect is "colui che presenta la pratica" (the crawl names the
   # radio by its column, "titolare dell'intervento o procuratore"), which asks only for the
-  # studio, the albo and the contacts; the structural designer and the direttori dei lavori
-  # are named before the works start.
+  # studio, the albo and the contacts. The direttore dei lavori is the architect (the form's
+  # "diverso dal progettista": no), another technician (`d:`, the block it opens), or named
+  # before the works start; the structural designer and the structural direttore are named
+  # before the works start (their own boxes aren't mapped).
   - section: Tecnici incaricati
     fields:
-      - {kind: checkbox, label: "che il progettista delle opere strutturali, il/i direttore/i dei lavori saranno individuati"}
+      - {kind: checkbox, label: "che il progettista delle opere strutturali, il/i direttore/i dei lavori saranno individuati", when: "{{ask.direttore_lavori|is_da_nominare}}"}
+      - {kind: checkbox, label: "che il progettista delle opere strutturali, il/i direttore/i dei lavori saranno individuati", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}}"}
       - {kind: radio, label: titolare dell'intervento o procuratore}
       - {kind: select, label: Provincia, value: "{{business.sede_legale_provincia}}"}
       - {kind: text, label: Comune italiano, value: "{{business.sede_legale_comune|upper}}"}
@@ -3141,6 +3255,37 @@ sections:
       - {kind: text, label: Telefono, value: "{{business.telefono|phone_it}}"}
       - {kind: text, label: cell., value: "{{t:identity.phone|phone_it}}"}
       - {kind: text, label: posta elettronica certificata, value: "{{t:identity.pec}}"}
+      - {kind: checkbox, label: "di aver incaricato, in qualità di progettista delle opere strutturali, di direttori dei lavori", when: "{{ask.direttore_lavori|is_da_nominare|not}}"}
+      - {kind: checkbox, label: Direttore dei lavori delle opere architettoniche, when: "{{ask.direttore_lavori|is_da_nominare|not}}"}
+      - {kind: radio, label: "no", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_progettista}}"}
+      - {kind: radio, label: si, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: "{{d:identity.last_name|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Nome, anchor: Cognome, block: 1, value: "{{d:identity.first_name|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.F., anchor: Cognome, block: 1, value: "{{d:identity.codice_fiscale}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: date, label: Data di nascita, anchor: Cognome, block: 1, value: "{{d:identity.date_of_birth|date_it}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Cittadinanza, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Sesso, anchor: Cognome, block: 1, value: "{{d:identity.sex|sesso}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, anchor: Cognome, block: 1, value: "{{d:identity.birth_province}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, anchor: Cognome, block: 1, value: "{{d:identity.birth_comune|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, nth: 2, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, nth: 2, anchor: Cognome, block: 1, value: "{{d:residenza.provincia}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, nth: 2, anchor: Cognome, block: 1, value: "{{d:residenza.comune|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "Via, Piazza", anchor: Cognome, block: 1, value: "{{d:residenza.indirizzo|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "N.", anchor: Cognome, block: 1, value: "{{d:residenza.civico}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.A.P., anchor: Cognome, block: 1, value: "{{d:residenza.cap}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Stato, nth: 3, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: select, label: Provincia, nth: 3, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_provincia}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Comune italiano, nth: 3, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_comune|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "Via, Piazza", nth: 2, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_indirizzo|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: "N.", nth: 2, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_civico}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: C.A.P., nth: 2, anchor: Cognome, block: 1, value: "{{d:business.sede_legale_cap}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, anchor: Cognome, block: 1, value: "{{d:albo.ordine}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: di, anchor: Cognome, block: 1, value: "{{d:albo.provincia|provincia_nome}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: al n., anchor: Cognome, block: 1, value: "{{d:albo.numero}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: Telefono, anchor: Cognome, block: 1, value: "{{d:identity.phone|phone_it}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: cell., anchor: Cognome, block: 1, value: "{{d:identity.phone|phone_it}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
+      - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: "{{d:identity.pec}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}"}
     leave: [fax]
 
   - section: Asseverazione PdC - Dati progettista
@@ -4139,7 +4284,7 @@ after:
       - {kind: file, label: "Copia dei documenti d'identità del/i titolare/i", value: "{{ask.documento_identita_cliente}}", when: "{{ask.titolo_esclusivo|not}}"}
       # The other holder's assent only without an exclusive title (a.2); the notifica only when due.
       - {kind: file, label: Dichiarazione di assenso dei terzi titolari, value: "{{ask.assenso_proprietario}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: file, label: Notifica preliminare, value: "{{ask.notifica_preliminare}}", when: "{{ask.dlgs81}} {{ask.notifica_dovuta}}"}
+      - {kind: file, label: Notifica preliminare, value: "{{ask.notifica_preliminare}}", when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}"}
       - {kind: file, label: Elaborati grafici dello stato di fatto e progetto, value: "{{ask.elaborati_grafici}}"}
       - {kind: file, label: "Elaborati grafici dello stato di fatto, di progetto e comparativi", value: "{{ask.elaborati_grafici}}"}
       - {kind: file, label: Documentazione fotografica dello stato di fatto, value: "{{ask.documentazione_fotografica}}"}

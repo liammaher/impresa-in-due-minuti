@@ -90,5 +90,9 @@
  "elaborati_barriere": "rehearsals/pdc-fittizio/files/elaborati-barriere.pdf",
  "intervento": "ristrutturazione",
  "fatti": [],
- "cambio_uso": "no"
+ "cambio_uso": "no",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false"
 }

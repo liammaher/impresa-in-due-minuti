@@ -82,5 +82,11 @@
   "answers": "answers-bene-culturale.json",
   "result": "filled",
   "seconds": 99.5
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-impresa-dopo.json",
+  "result": "stopped",
+  "seconds": 88.4
  }
 ]

@@ -82,5 +82,8 @@
  "tolleranze": false,
  "sanzione_prova": "ricevuta",
  "sanzione_ricevuta": "rehearsals/scia-fittizia/files/ricevuta-sanzione.pdf",
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false"
 }

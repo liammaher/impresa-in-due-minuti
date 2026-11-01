@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (142 cases in all, 142 with a recorded filled run).
+  case (150 cases in all, 150 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -29,13 +29,13 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 31 | 0 | 1 | 4 | 7 | 30 |
+| CILA | 43 | 31 | 0 | 1 | 4 | 7 | 28 |
 | Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 14 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 8 |
-| Permesso di costruire | 153 | 107 | 0 | 14 | 14 | 14 | 170 |
-| SCIA | 150 | 124 | 0 | 4 | 9 | 10 | 61 |
-| SCIA alternativa | 128 | 107 | 0 | 6 | 7 | 8 | 74 |
-| Agibilità (SCA) | 36 | 29 | 0 | 0 | 2 | 5 | 18 |
+| Permesso di costruire | 153 | 108 | 0 | 14 | 13 | 14 | 162 |
+| SCIA | 150 | 125 | 0 | 4 | 8 | 10 | 53 |
+| SCIA alternativa | 128 | 108 | 0 | 6 | 6 | 8 | 66 |
+| Agibilità (SCA) | 36 | 30 | 0 | 0 | 1 | 5 | 18 |
 
 ## Next cases
 
@@ -75,7 +75,6 @@ On the portal, not mapped (dictionary work first):
 - CILA: `comunicazioni/imprese_esecutrici` → `(nothing)` (che, in quanto opere di modesta entità che non interessano le specifi…)
 - CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - Permesso di costruire: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
-- Permesso di costruire: `dichiarazioni/imprese_esecutrici` → `prima_inizio_lavori` (l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_atto` (dà atto che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_attesta` (attesta che la data/epoca di realizzazione dell’intervento)
@@ -92,20 +91,17 @@ On the portal, not mapped (dictionary work first):
 - SCIA: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/sanatoria_soggetto` → `importo_ricevuta_pagamento` (si allega la ricevuta del pagamento)
 - SCIA: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/sanatoria_soggetto_fino_dieci_mila` → `importo_ricevuta_pagamento` (si allega la ricevuta del pagamento)
 - SCIA: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
-- SCIA: `dichiarazioni/imprese_esecutrici` → `(nothing)` (l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp…)
 - SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - SCIA: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_inf_ugu_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
 - SCIA: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo…)
 - SCIA: `relazione_tecnica_asseverazione/prevenzione_incendi` → `variante_progetto` (costituisce variante e il sottoscritto assevera che le modifiche non…)
 - SCIA alternativa: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
-- SCIA alternativa: `dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_dei_lavori_ctype]` → `(nothing)` (l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_inf_ugu_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/prevenzione_incendi` → `variante_progetto` (costituisce variante e il sottoscritto assevera che le modifiche non…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/scarichi_idrici/[scarichi_idrici_ctype]` → `necessita_autorizzazione_scarico` (necessita di autorizzazione allo scarico e la stessa è stata richiest…)
 - Agibilità (SCA): `identificativi_immobile/dati_catastali` → `terreni` (Nuovo Catasto Terreni)
-- Agibilità (SCA): `dichiarazioni_sezione_b/scheda_tecnico` → `professionista_abilitato` (Professionista abilitato)
 
 ## Every choice
 
@@ -172,8 +168,6 @@ Portal boxes of the CILA no schema alternative matched and no case ticks:
 - e) Destinazione d'uso: commerciale (mapped)
 - e) Destinazione d'uso: altro (mapped)
 - G1) Tecnici incaricati: tecnico incaricato (not mapped)
-- G2) Altri tecnici incaricati: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori (not mapped)
-- h) Impresa esecutrice dei lavori: Cassa edile (not mapped)
 - i) Rispetto degli obblighi in materia d…: ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dich… (not mapped)
 - Relazione Tecnica di Asseverazione C.I.…: Interventi di eliminazione delle barriere architettoniche che comportino la realizzazione… (mapped)
 - Relazione Tecnica di Asseverazione C.I.…: Opere temporanee per attività di ricerca nel sottosuolo che abbiano carattere geognostico… (mapped)
@@ -289,7 +283,7 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `momento_ritiro` | dichiara che il versamento del contributo di costruzione sarà effettu… | h | filled on the portal | 4 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `chiede_rateizzazione` | chiede la rateizzazione del contributo di costruzione secondo le moda… | h | filled on the portal | 1 |
 | `dichiarazioni/imprese_esecutrici` | `da_soggetti_coinvolti` | i lavori saranno eseguiti/sono eseguiti dalla/e impresa/e indicata/e… | h | filled on the portal | 4 |
-| `dichiarazioni/imprese_esecutrici` | `prima_inizio_lavori` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv… | h | on the portal, not mapped |  |
+| `dichiarazioni/imprese_esecutrici` | `prima_inizio_lavori` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv… | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza_pdc` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza_pdc` | `(nothing)` | absence; P091/P092 are other elements | h | no portal box |  |
 | `dichiarazioni/obblighi_salute_sicurezza_pdc/ricade` | `inf200ggUomo` | dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-… | h | filled on the portal | 7 |
@@ -445,17 +439,9 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata agli at… (mapped)
 - f) Calcolo del contributo di costruzione: si impegna a corrispondere il costo di costruzione in corso di esecuzione delle opere, co… (mapped)
 - f) Calcolo del contributo di costruzione: SI (not mapped)
-- g1) Tecnici incaricati: di aver incaricato, in qualità di progettista delle opere strutturali, di direttori dei l… (not mapped)
 - g1) Tecnici incaricati: tecnico incaricato (not mapped)
 - g1) Tecnici incaricati: Progettista delle opere strutturali (not mapped)
-- g1) Tecnici incaricati: Direttore dei lavori delle opere architettoniche (not mapped)
 - g1) Tecnici incaricati: Direttore dei lavori delle opere strutturali (not mapped)
-- g1) Tecnici incaricati: si (not mapped)
-- g1) Tecnici incaricati: no (not mapped)
-- g2) Altri tecnici incaricati: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori (not mapped)
-- h) Impresa esecutrice dei lavori: Cassa edile (not mapped)
-- i) Rispetto degli obblighi in materia d…: ricade nell'ambito di applicazione del d.lgs. n. 81/2008 ma si riserva di presentare le d… (not mapped)
-- i) Rispetto degli obblighi in materia d…: allega la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cant… (not mapped)
 - j) Diritti di terzi: dichiara di essere consapevole che il permesso di costruire non comporta limitazione dei… (not mapped)
 - Asseverazione PdC - Dati progettista e…: Interventi di ristrutturazione urbanistica articolo 3, comma 1, lettera f) del d.P.R. n.… (mapped)
 - Asseverazione PdC - Dati progettista e…: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa) (not mapped)
@@ -640,7 +626,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `chiede_rateizzazione` | chiede la rateizzazione del contributo di costruzione secondo le moda… | h | filled on the portal | 4 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `corrisponde_in_corso` | si impegna a corrispondere il costo di costruzione in corso di esecuz… | h | filled on the portal | 1 |
 | `dichiarazioni/imprese_esecutrici` | `da_soggetti_coinvolti` | i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata… | h | filled on the portal | 9 |
-| `dichiarazioni/imprese_esecutrici` | `(nothing)` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp… | l | on the portal, not mapped |  |
+| `dichiarazioni/imprese_esecutrici` | `(nothing)` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp… | l | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza` | `(nothing)` | ricade nell'ambito di applicazione delle norme in materia di salute e… | l | filled on the portal | 9 |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `inf200ggUomo` | dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-… | h | filled on the portal | 9 |
@@ -747,15 +733,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - d) Destinazione d'uso dell'immobile: industriale (mapped)
 - d) Destinazione d'uso dell'immobile: commerciale (mapped)
 - d) Destinazione d'uso dell'immobile: altro (mapped)
-- h1) Tecnici incaricati: di aver incaricato, in qualità di direttore/i dei lavori, i soggetti indicati nella sezio… (not mapped)
-- h1) Tecnici incaricati: Direttore dei lavori delle opere architettoniche (not mapped)
-- h1) Tecnici incaricati: Direttore dei lavori delle opere strutturali (not mapped)
-- h1) Tecnici incaricati: si (not mapped)
-- h1) Tecnici incaricati: no (not mapped)
 - h1) Tecnici incaricati: tecnico incaricato (not mapped)
-- H2) Altri tecnici incaricati: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori (not mapped)
-- i) Impresa esecutrice dei lavori: Cassa edile (not mapped)
-- l) Rispetto degli obblighi in materia d…: ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza sul luogo… (not mapped)
 - m) Diritti di terzi: dichiara di essere consapevole che la presente segnalazione non può comportare limitazion… (not mapped)
 - Asseverazione SCIA - Tipologia di inter…: senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di un inter… (mapped)
 - Asseverazione SCIA - Tipologia di inter…: con opere riconducibili agli interventi di cui all'articolo 6-bis di un intero immobile a… (mapped)
@@ -833,7 +811,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `chiede_rateizzazione` | chiede la rateizzazione del contributo di costruzione secondo le moda… | h | filled on the portal | 4 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `corrisponde_in_corso` | si impegna a corrispondere il costo di costruzione in corso di esecuz… | h | filled on the portal | 1 |
 | `dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_d…` | `da_soggetti_coinvolti` | i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata… | h | filled on the portal | 9 |
-| `dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_d…` | `(nothing)` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp… | l | on the portal, not mapped |  |
+| `dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_d…` | `(nothing)` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp… | l | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza` | `(nothing)` | ricade nell'ambito di applicazione delle norme in materia di salute e… | l | filled on the portal | 9 |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `inf200ggUomo` | dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-… | h | filled on the portal | 9 |
@@ -944,15 +922,7 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - d) Destinazione d'uso dell'immobile: commerciale (mapped)
 - d) Destinazione d'uso dell'immobile: altro (mapped)
 - g) Calcolo del contributo di costruzione: Chiede di eseguire direttamente, a scomputo di quanto dovuto, le opere di urbanizzazione… (not mapped)
-- h1) Tecnici incaricati: di aver incaricato, in qualità di direttore/i dei lavori, i soggetti indicati nella sezio… (not mapped)
-- h1) Tecnici incaricati: Direttore dei lavori delle opere architettoniche (not mapped)
-- h1) Tecnici incaricati: Direttore dei lavori delle opere strutturali (not mapped)
-- h1) Tecnici incaricati: si (not mapped)
-- h1) Tecnici incaricati: no (not mapped)
 - h1) Tecnici incaricati: tecnico incaricato (not mapped)
-- H2) Altri tecnici incaricati: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori (not mapped)
-- i) Impresa esecutrice dei lavori: Cassa edile (not mapped)
-- l) Rispetto degli obblighi in materia d…: ricade nell'ambito di applicazione delle norme in materia di salute e sicurezza sul luogo… (not mapped)
 - m) Diritti di terzi: dichiara di essere consapevole che la presente segnalazione non può comportare limitazion… (not mapped)
 - Asseverazione SCIA Alternativa - Dati p…: 2. Interventi di nuova costruzione o di ristrutturazione urbanistica qualora siano discip… (mapped)
 - Asseverazione SCIA Alternativa - Dati p…: 3. Interventi di nuova costruzione qualora siano in diretta esecuzione di strumenti urban… (mapped)
@@ -1025,7 +995,7 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 | `dichiarazioni_sezione_b/scheda_tecnico/studio_pro` | `comune` | data field (studio's comune), not a choice | h | no portal box |  |
 | `dichiarazioni_sezione_b/scheda_tecnico/studio_pro` | `localitaEstera` | data field, not a choice | h | no portal box |  |
 | `dichiarazioni_sezione_b/scheda_tecnico` | `direttore_lavori` | Direttore dei Lavori | h | filled on the portal | 1 |
-| `dichiarazioni_sezione_b/scheda_tecnico` | `professionista_abilitato` | Professionista abilitato | h | on the portal, not mapped |  |
+| `dichiarazioni_sezione_b/scheda_tecnico` | `professionista_abilitato` | Professionista abilitato | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/assevera` | `agibilita_immobile` | L'agibilità relativa all'immobile oggetto dell'intervento edilizio | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/assevera` | `agibilita_parziale_edifici` | L' agibilità parziale relativa a singoli edifici o singole porzioni d… | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_b/assevera` | `agibilita_parziale_singoli_immobili` | L'agibilità parziale relativa a singole unità immobiliari (U.I.), pur… | h | filled on the portal | 1 |

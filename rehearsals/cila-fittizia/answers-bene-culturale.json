@@ -43,5 +43,7 @@
  "soprintendenza_autorizzata": "true",
  "atti_quanti": "uno",
  "atto_1": "Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004), prot. 0000 del 15/09/2026 (inventato)",
- "atto_1_autorita": "Soprintendenza ABAP per il Comune di Napoli"
+ "atto_1_autorita": "Soprintendenza ABAP per il Comune di Napoli",
+ "altri_tecnici_dopo": "false",
+ "impresa_dopo": "false"
 }

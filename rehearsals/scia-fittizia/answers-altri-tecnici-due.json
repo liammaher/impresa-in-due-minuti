@@ -93,5 +93,8 @@
  "altro_tecnico_incarico": "coordinamento della sicurezza in fase di progettazione",
  "altro_tecnico2_incarico": "progettazione degli impianti",
  "altro_tecnico2_dipendente": false,
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false"
 }

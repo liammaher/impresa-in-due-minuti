@@ -93,5 +93,9 @@
   "uso_ammesso_prg"
  ],
  "cambio_uso": "tra_categorie",
- "mutamento_lr_tipo": "aumento volumetrico"
+ "mutamento_lr_tipo": "aumento volumetrico",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false"
 }

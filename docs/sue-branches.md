@@ -8,13 +8,13 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 933 | Claude takes it when the case does |
+| ticked | 957 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 4 | left empty on purpose |
 | law | 21 | closed by law to new cases (the piano casa): refused as the law's, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 155 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 131 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -29,10 +29,18 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### SCHEDA ANAGRAFICA / Scheda anagrafica
 
-39 pratiche; 2 of 27 choices to map.
+39 pratiche; 4 of 27 choices to map.
 
+- radio: ISCRITTA ALLA CCIAA
+- radio: NON ANCORA ISCRITTA
 - radio: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA
 - checkbox: Se cittadino non UE
+
+### DOMICILIO DIGITALE
+
+39 pratiche; 1 of 2 choices to map.
+
+- checkbox: il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) :
 
 ### Qualifica e dati del procuratore
 
@@ -94,12 +102,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: non è colui che presenta la pratica
 
-### G2) Altri tecnici incaricati / H2) Altri tecnici incaricati / g2) Altri tecnici incaricati
-
-14 pratiche; 1 of 8 choices to map.
-
-- checkbox: che gli altri tecnici incaricati saranno individuati prima dell'inizio dei lavori
-
 ### Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria / Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione
 
 8 pratiche; 10 of 60 choices to map.
@@ -115,19 +117,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: ai fini della sanatoria, la presente SCIA: (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
 - checkbox: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla SCIA, ai sensi dell’art. 36-bis, comma 3-bis: (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
 
-### h1) Tecnici incaricati
-
-8 pratiche; 8 of 16 choices to map.
-
-- checkbox: di aver incaricato, in qualità di direttore/i dei lavori, i soggetti indicati nella sezione DIRETTORE/I LAVORI
-- checkbox: Direttore dei lavori delle opere architettoniche (under: di aver incaricato, in qualità di direttore/i dei lavori, i soggetti indicati ne)
-- radio: si (under: Direttore dei lavori delle opere architettoniche)
-- radio: no (under: Direttore dei lavori delle opere architettoniche)
-- checkbox: Direttore dei lavori delle opere strutturali (under: di aver incaricato, in qualità di direttore/i dei lavori, i soggetti indicati ne)
-- radio: si (under: Direttore dei lavori delle opere strutturali)
-- radio: no (under: Direttore dei lavori delle opere strutturali)
-- radio: tecnico incaricato (under: Progettista delle opere architettoniche)
-
 ### Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi / Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi
 
 8 pratiche; 5 of 24 choices to map.
@@ -138,19 +127,17 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - checkbox: si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo dell'assenso al Piano di Utilizzo dei materiali da scavo, (under: le opere comportano la produzione di materiali da scavo per un volume inferiore )
 - radio: costituisce variante e il sottoscritto assevera che le modifiche non costituiscono variazione dei requisiti di sicurezza antincendio già approvati con parere de
 
-### i) Impresa esecutrice dei lavori
-
-8 pratiche; 3 of 6 choices to map.
-
-- radio: l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno individuata/e prima dell'inizio dei lavori
-- radio: i lavori, in quanto opere di modesta entità che non interessano le specifiche normative di settore, sono eseguiti/sono stati eseguiti in prima persona, senza al
-- checkbox: Cassa edile (under: i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata/e alla seg)
-
 ### Asseverazione SCIA - Sicurezza impianti, consumi energetici / Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici
 
 8 pratiche; 1 of 27 choices to map.
 
 - checkbox: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è evidenziata nella relazione tecnica dovuta ai sensi dell'articolo 125 del (under: è soggetto all'applicazione del d.lgs. n. 28/2011, pertanto:)
+
+### h1) Tecnici incaricati
+
+8 pratiche; 1 of 16 choices to map.
+
+- radio: tecnico incaricato (under: Progettista delle opere architettoniche)
 
 ### Ambito dell'intervento
 
@@ -214,19 +201,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: si forniscono gli estremi di versamento (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
 - radio: si allega la ricevuta di versamento (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
 
-### g1) Tecnici incaricati
-
-3 pratiche; 8 of 15 choices to map.
-
-- checkbox: di aver incaricato, in qualità di progettista delle opere strutturali, di direttori dei lavori, i soggetti indicati nella sezione PROGETTISTA DELLE OPERE STRUTT
-- checkbox: Direttore dei lavori delle opere architettoniche (under: di aver incaricato, in qualità di progettista delle opere strutturali, di dirett)
-- radio: si (under: Direttore dei lavori delle opere architettoniche)
-- radio: no (under: Direttore dei lavori delle opere architettoniche)
-- checkbox: Direttore dei lavori delle opere strutturali (under: di aver incaricato, in qualità di progettista delle opere strutturali, di dirett)
-- radio: si (under: Direttore dei lavori delle opere strutturali)
-- radio: no (under: Direttore dei lavori delle opere strutturali)
-- radio: tecnico incaricato
-
 ### Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi
 
 3 pratiche; 5 of 24 choices to map.
@@ -253,13 +227,13 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - radio: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto:
 - checkbox: si allega la valutazione della sostenibilità energetico-ambientale degli edifici redatta secondo le Linee Guida per la valutazione della sostenibilità energetic (under: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto:)
 
-### h) Impresa esecutrice dei lavori
+### g1) Tecnici incaricati
 
-3 pratiche; 3 of 5 choices to map.
+3 pratiche; 3 of 15 choices to map.
 
-- radio: che, in quanto opere di modesta entità che non interessano le specifiche normative di settore, i lavori saranno eseguiti in prima persona, senza alcun affidamen
-- radio: che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla seguente sezione
-- checkbox: Cassa edile (under: che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla seguente sezi)
+- checkbox: Progettista delle opere strutturali (under: di aver incaricato, in qualità di progettista delle opere strutturali, di dirett)
+- checkbox: Direttore dei lavori delle opere strutturali (under: di aver incaricato, in qualità di progettista delle opere strutturali, di dirett)
+- radio: tecnico incaricato
 
 ### Asseverazione PdC - tutela storico ambientale
 
@@ -274,27 +248,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - checkbox: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
 - checkbox: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo ai sensi del d.lgs. n. 152/2006 e pertanto (under: necessita di autorizzazione)
-
-### f) Impresa esecutrice dei lavori
-
-3 pratiche; 2 of 5 choices to map.
-
-- radio: i lavori sono/saranno eseguiti dalla/e impresa/e indicata/e alla seguente sezione
-- checkbox: Cassa edile (under: i lavori sono/saranno eseguiti dalla/e impresa/e indicata/e alla seguente sezion)
-
-### h) Impresa esecutrice dei lavori
-
-3 pratiche; 2 of 5 choices to map.
-
-- radio: l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno individuata/e prima dell'inizio dei lavori
-- checkbox: Cassa edile (under: i lavori saranno eseguiti/sono eseguiti dalla/e impresa/e indicata/e alla seguen)
-
-### i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
-
-3 pratiche; 2 of 9 choices to map.
-
-- radio: ricade nell'ambito di applicazione del d.lgs. n. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché
-- radio: allega la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in luogo visibile dall'esterno (under: dichiara che l'intervento è soggetto all'invio della notifica)
 
 ### Asseverazione PdC - Dati progettista e descrizione opere
 
@@ -362,24 +315,12 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché i 
 
-### l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
-
-3 pratiche; 1 of 9 choices to map.
-
-- radio: e allega alla presente segnalazione la notifica, il cui contenuto sarà riprodotto su apposita tabella, esposta in cantiere per tutta la durata dei lavori, in lu (under: dichiara che l'intervento è soggetto all'invio della notifica)
-
 ### SANATORIA
 
 1 pratiche; 2 of 9 choices to map.
 
 - radio: lo Sportello Unico può subordinare il rilascio del permesso di costruire in sanatoria alla realizzazione di interventi anche strutturali necessari alla sicurezz (under: che risulta conforme alla disciplina urbanistica vigente al momento della presen)
 - radio: lo Sportello Unico può subordinare il rilascio del permesso di costruire in sanatoria alla realizzazione di interventi anche strutturali necessari alla sicurezz (under: che risulta conforme alla disciplina urbanistica e edilizia vigente sia al momen)
-
-### Attestazione tecnica - Dati del Direttore Lavori/Professionista Abilitato
-
-1 pratiche; 1 of 4 choices to map.
-
-- radio: Professionista abilitato
 
 ### Qualificazione dell'intervento di rinnovo
 

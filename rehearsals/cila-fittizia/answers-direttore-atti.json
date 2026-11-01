@@ -46,5 +46,7 @@
  "comunicazione_1": "Notifica preliminare (art. 99 D.Lgs. 81/2008)",
  "comunicazione_1_autorita": "ASL Napoli 1 Centro",
  "comunicazione_2": "Comunicazione di occupazione di suolo pubblico per ponteggio",
- "comunicazione_2_autorita": "Comune di Napoli"
+ "comunicazione_2_autorita": "Comune di Napoli",
+ "altri_tecnici_dopo": "false",
+ "impresa_dopo": "false"
 }

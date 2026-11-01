@@ -55,6 +55,15 @@ def _():
     assert one("Asseverazione SCIA - Sicurezza impianti", "idrici e sanitari")["state"] == "ticked"
 
 
+@case("a choice is ticked as gen.py finds it: a label inside its text where none of the section starts with it")
+def _():
+    # The CILA's "che i lavori sono/saranno eseguiti dall'impresa": the dictionary's "lavori
+    # sono/saranno eseguiti dall" starts no box there.
+    assert one("h) Impresa esecutrice", "che i lavori sono/saranno eseguiti")["state"] == "ticked"
+    # The permesso's g1 is filled by its own entry, not the SCIA's h1 one: its structural boxes aren't.
+    assert one("g1) Tecnici incaricati", "Progettista delle opere strutturali")["state"] == "unmapped"
+
+
 @case("a choice no entry names is unmapped (the land register)")
 def _():
     assert one("Dati catastali", "Nuovo Catasto Terreni")["state"] == "unmapped"

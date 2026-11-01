@@ -44,5 +44,7 @@
  "paesaggio": "no",
  "fatti": [],
  "toll_classe": "minore rilevanza",
- "toll_decorso": "true"
+ "toll_decorso": "true",
+ "altri_tecnici_dopo": "false",
+ "impresa_dopo": "false"
 }
