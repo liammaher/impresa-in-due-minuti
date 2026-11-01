@@ -270,8 +270,8 @@ def sue_completeness(reh, status):
         f"file yet**: {len(c['unmapped'])} combinations of pratiche, listed below (`bench/test_route.py`).",
         f"- Level 2: **{sum(per.values())} refusals across {len(per)} recipes**, {len(refusals)} distinct messages.",
         f"- Level 3, in part: **{len(slots)} ticked \"si allega\" boxes with no attachment slot** under their"
-        " condition (listed below): each may add a required slot, which a run's Salva doesn't check. A box read on a"
-        " filled draft says what it adds (the dictionary's `slot`).",
+        " condition (listed below): each may add a required slot. A box read on a filled draft says what it adds"
+        " (the dictionary's `slot`).",
         "- Levels 4 and 5: not measured yet (see the open items).", "",
         "| Recipe | Refusals left |", "|---|---:|"]
     out += [f"| `{n}` | {k} |" for n, k in sorted(per.items(), key=lambda kv: (-kv[1], kv[0]))]
