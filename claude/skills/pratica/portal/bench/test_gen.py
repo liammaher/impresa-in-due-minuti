@@ -68,6 +68,38 @@ P6_ONLY = gen.yaml.safe_load("""
 - section: e) Destinazione d'uso
   fields:
     - {kind: select, label: "L'intervento interessa l'immobile", value: "{{c:immobile.destinazione_uso}}"}
+- section: h) Impresa esecutrice dei lavori
+  leave: [Telefono, fax]
+  firms: [f1, f2]
+  firm_when: "{{ask.lavori_in_proprio|not}}"
+  fields:
+    - {kind: radio, label: lavori sono/saranno eseguiti dall, if_present: true, when: "{{ask.lavori_in_proprio|not}}"}
+  block:
+    - {kind: text, label: Ragione sociale, value: "{{F:business.denominazione}}"}
+    - {kind: text, label: codice fiscale / p. IVA, value: "{{F:business.partita_iva}}"}
+    - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: "{{F:business.cciaa}}"}
+    - {kind: text, label: n., nth: 1, value: "{{F:business.rea|rea_num}}"}
+    - {kind: text, label: con sede in, value: "{{F:business.sede_legale_comune|upper}}"}
+    - {kind: select, label: provincia, nth: 1, value: "{{F:business.sede_legale_provincia}}"}
+    - {kind: text, label: "Via, Piazza", value: "{{F:business.sede_legale_indirizzo|upper}}"}
+    - {kind: text, label: N., nth: 2, value: "{{F:business.sede_legale_civico}}"}
+    - {kind: text, label: C.A.P., value: "{{F:business.sede_legale_cap}}"}
+    - {kind: text, label: Cognome, value: "{{F:identity.last_name}}"}
+    - {kind: text, label: Nome, value: "{{F:identity.first_name}}"}
+    - {kind: text, label: codice fiscale, nth: 2, value: "{{F:identity.codice_fiscale}}"}
+    - {kind: text, label: nato a, value: "{{F:identity.birth_comune|upper}}"}
+    - {kind: select, label: provincia, nth: 2, value: "{{F:identity.birth_province}}"}
+    - {kind: date, label: nato il, value: "{{F:identity.date_of_birth|date_it}}"}
+    - {kind: text, label: cell., value: "{{F:identity.phone|phone_it}}"}
+    - {kind: text, label: posta elettronica, value: "{{F:business.pec}}"}
+    # DURC: each box opens its own rows (and renumbers what follows).
+    - {kind: checkbox, label: INPS}
+    - {kind: text, label: sede di, nth: 1, value: "{{F:business.sede_legale_comune|upper}}"}
+    - {kind: text, label: Matr./Pos. Contr., value: "{{F:business.inps_matricola}}"}
+    - {kind: checkbox, label: INAIL}
+    - {kind: text, label: sede di, nth: 2, value: "{{F:business.inail_codice_sede}}"}
+    - {kind: text, label: codice impresa, value: "{{F:business.inail_codice_ditta}}"}
+    - {kind: text, label: pos. assicurativa, value: "{{F:business.inail_pat}}"}
 """)
 
 
@@ -1036,6 +1068,28 @@ def _():
         sec = section(steps, "Asseverazione PdC - tutela storico")
         ticked = [f["label"] for f in sec["fields"] if run.truthy(v.render(f.get("when", "true")) or "")]
         assert label in ticked and "ricade in zona tutelata e le opere comportano alterazione" in ticked, (kind, ticked)
+
+
+@case("a firm block's field keeps its own `when` after the block's: the Cassa edile's rows only for a firm enrolled")
+def _():
+    steps = gen.generate(gen.load_yaml(ROOT / "rehearsals" / "scia-fittizia" / "recipe.yaml"))
+    sec = section(steps, "i) Impresa esecutrice")
+    cassa = next(f for f in sec["fields"] if f.get("label") == "Cassa edile" and f["block"] == 1)
+    assert cassa["when"] == "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}} {{f1:business.cassa_edile_codice_impresa|empty|not}}", cassa
+    second = next(f for f in sec["fields"] if f.get("label") == "Cassa edile" and f["block"] == 2)
+    assert "{{f2:business.denominazione|empty|not}} {{f2:business.cassa_edile_codice_impresa|empty|not}}" in second["when"], second
+
+
+@case("the SCIA's h1: under another technician's direction the structural designer is the second Cognome block")
+def _():
+    import run
+    steps = gen.generate(gen.load_yaml(ROOT / "rehearsals" / "scia-fittizia" / "recipe.yaml"))
+    sec = section(steps, "h1) Tecnici incaricati")
+    for answers, d_block, s_block in [("answers-direttori.json", 1, 2), ("answers-strutture.json", None, 1)]:
+        v = p6_values("scia-fittizia", answers)(steps)
+        on = [f for f in sec["fields"] if run.truthy(v.render(f.get("when", "true")) or "")]
+        blocks = lambda role: {f["block"] for f in on if "{{%s:" % role in str(f.get("value"))}
+        assert blocks("s") == {s_block} and blocks("d") == ({d_block} if d_block else set()), (answers, blocks("s"), blocks("d"))
 
 
 print(f"{sum(results)}/{len(results)} passed")

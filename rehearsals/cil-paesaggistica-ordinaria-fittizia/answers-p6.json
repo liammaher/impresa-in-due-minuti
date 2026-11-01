@@ -24,6 +24,7 @@
  "intervento": "opere_temporanee",
  "paesaggio": "ordinaria",
  "fatti": [],
+ "impresa_dopo": "false",
  "bollo_marche": false,
  "vincolo": "art 136 and 142",
  "vincolo_136_lettera": "c) e d)",

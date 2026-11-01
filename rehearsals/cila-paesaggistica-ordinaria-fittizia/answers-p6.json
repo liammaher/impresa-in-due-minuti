@@ -37,6 +37,8 @@
  "cambio_uso": "no",
  "paesaggio": "ordinaria",
  "fatti": [],
+ "altri_tecnici_dopo": "false",
+ "impresa_dopo": "false",
  "bollo_marche": false,
  "vincolo": "art 136 and 142",
  "vincolo_136_lettera": "c) e d)",

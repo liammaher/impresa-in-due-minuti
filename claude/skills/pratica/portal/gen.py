@@ -427,7 +427,9 @@ def fill(entry, as_name, c, recipe, name):
             dfields.append({"kind": "add", "anchor": entry["block"][0]["label"], "block": i + 1, **cond})
         for b in entry["block"]:
             g = json.loads(json.dumps(b).replace("{{F:", "{{" + role + ":"))
-            dfields.append({**g, "anchor": entry["block"][0]["label"], "block": i + 1, **cond})
+            # A field's own `when` (the Cassa edile's rows) after the block's.
+            own = " ".join(w for w in (when, g.pop("when", "")) if w)
+            dfields.append({**g, "anchor": entry["block"][0]["label"], "block": i + 1, **({"when": own} if own else {})})
     last_select = None
     # A field under a `when` lives in its branch of the section (keyed by the condition's
     # first term): "already filed" and "this counts as filing" each open their own rows,

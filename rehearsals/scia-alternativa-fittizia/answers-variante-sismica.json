@@ -92,5 +92,8 @@
  "sismica_protocollo": "98765",
  "sismica_data": "2026-03-10",
  "rir_doc": "rehearsals/scia-fittizia/files/documentazione-rir.pdf",
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false"
 }

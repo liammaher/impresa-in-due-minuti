@@ -92,5 +92,9 @@
  "antincendio_deroga": "false",
  "denuncia_art65": "rehearsals/scia-fittizia/files/denuncia-art65.pdf",
  "strumenti_altri": "false",
- "allaccio_doc": "rehearsals/pdc-fittizio/files/documentazione-allaccio-fognatura.pdf"
+ "allaccio_doc": "rehearsals/pdc-fittizio/files/documentazione-allaccio-fognatura.pdf",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false"
 }

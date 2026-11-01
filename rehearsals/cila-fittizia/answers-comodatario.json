@@ -35,5 +35,6 @@
  "intervento": "manutenzione_straordinaria",
  "cambio_uso": "no",
  "paesaggio": "no",
- "fatti": []
+ "fatti": [],
+ "altri_tecnici_dopo": "false"
 }

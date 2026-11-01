@@ -95,5 +95,8 @@
  "strumenti_altri": "false",
  "cemento_armato": "false",
  "sismica": "autorizzazione",
- "sismica_doc": "rehearsals/scia-fittizia/files/autorizzazione-sismica.pdf"
+ "sismica_doc": "rehearsals/scia-fittizia/files/autorizzazione-sismica.pdf",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false"
 }

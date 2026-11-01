@@ -91,5 +91,9 @@
  "fatti": [
   "uso_ammesso_prg"
  ],
- "cambio_uso": "stessa_categoria"
+ "cambio_uso": "stessa_categoria",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false"
 }

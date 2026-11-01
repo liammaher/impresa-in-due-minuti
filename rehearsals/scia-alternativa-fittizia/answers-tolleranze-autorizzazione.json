@@ -100,5 +100,9 @@
  "toll_sismica_data": "2023-04-18",
  "toll_sismica_protocollo": "GC/2023/45210",
  "toll_sismica_doc": "rehearsals/scia-fittizia/files/autorizzazione-sismica-rilasciata.pdf",
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false"
 }
