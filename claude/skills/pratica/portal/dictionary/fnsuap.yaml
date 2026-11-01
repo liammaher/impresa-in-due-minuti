@@ -16,7 +16,10 @@
 # `anchor`/`block` a field inside the block that starts at another field; `slot` on a "si allega"
 # box, what it adds on Allega documenti as read on the portal (gen.py `unslotted`). A `when`'s
 # words gate each other in order: pre-flight asks a later one only once the earlier hold.
-# A `when` has no "or": `|in_<a>__<b>` is true for any of those answers.
+# A `when` has no "or": `|in_<a>__<b>` is true for any of those answers; two fields on one box,
+# each with its own `when`, tick it under either (a box ticked twice under one `when` is once).
+# A `when`'s first term is its branch: a box a choice opens is found only in the state that
+# choice left, so it starts with that choice's first term (h1's si/no under the director's tick).
 # An ask's `default` answers it silently: only where no answer can be a wrong statement (a
 # blank optional date, the bollo's payment method, Napoli's own constants). A fact of the case,
 # however usual, is `propose`d: pre-flight shows it for the person to confirm.
@@ -1427,9 +1430,14 @@ sections:
     firms: [f1, f2]
     firm_when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}"
     fields:
+      # Each form words a choice its own way: one label per wording, each starting its box's text
+      # (a label found only inside it reads "loose" at run time).
+      - {kind: radio, label: "che, in quanto opere di modesta entità", if_present: true, when: "{{ask.lavori_in_proprio}}"}
+      - {kind: radio, label: "i lavori, in quanto opere di modesta entità", if_present: true, when: "{{ask.lavori_in_proprio}}"}
       - {kind: radio, label: in quanto opere di modesta entità, if_present: true, when: "{{ask.lavori_in_proprio}}"}
       - {kind: radio, label: l'impresa esecutrice/imprese esecutrici dei lavori sarà, if_present: true, when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo}}"}
-      - {kind: radio, label: lavori sono/saranno eseguiti dall, if_present: true, when: "{{ask.lavori_in_proprio|not}}"}
+      - {kind: radio, label: che i lavori sono/saranno eseguiti dall, if_present: true, when: "{{ask.lavori_in_proprio|not}}"}
+      - {kind: radio, label: i lavori sono/saranno eseguiti dall, if_present: true, when: "{{ask.lavori_in_proprio|not}}"}
       - {kind: radio, label: i lavori sono eseguiti/sono stati eseguiti, if_present: true, when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}"}
       - {kind: radio, label: i lavori saranno eseguiti/sono eseguiti, if_present: true, when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}"}
     block:
