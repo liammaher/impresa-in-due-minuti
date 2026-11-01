@@ -58,9 +58,10 @@ import yaml
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import rules  # noqa: E402
+import run  # noqa: E402  (a "+" block's template, as run.py expands it)
 # The asks a template reads: after "{{", and each term of a sum ("+", "*") or of several fields
 # for one filter (",": {{ask.a,ask.b|any}}).
-ASKED = re.compile(r"(?:\{\{|[+*,])\s*ask\.(\w+)")
+ASKED = re.compile(r"(?:\{\{|[+*,])\s*ask\.([\w#]+)")
 DECLARATIONS = re.compile(
     r"consapevolezza|informativa sulla privacy|requisiti di o|altre dichiarazioni|"
     r"dichiarazioni ai sensi dell'art\. 6|rispetto sulle tasse|art\. ?75", re.I)
@@ -384,25 +385,35 @@ def fill(entry, as_name, c, recipe, name):
         if k in entry:
             out[k] = entry[k]
     fields, filled = [], set()
-    dfields = list(entry.get("fields", []))
+    # `each`: a block the national form repeats without limit (other technicians, "altro"
+    # titles, filings already made), as many as `count` says. The blocks up to `on_page` are on
+    # the page already (from `first`: those before are the entry's own fields); every later one
+    # is added with "+", written once as a template run.py expands for the case's count (an
+    # `add` with `each`, then the block's fields with `block: "#N"`). `#N` in a field is "" in
+    # the first block, then "2", "3" (role a, a2, a3), `#K` the block's number always; each block
+    # after the first waits for its count. `when` is every block's; a field keeps its own after it.
+    def each(e):
+        anchor = e.get("anchor", e["block"][0]["label"])
+        first, on_page = e.get("first", 1), e.get("on_page", 1)
+        joined = lambda *ws: {"when": " ".join(w for w in ws if w)} if any(ws) else {}
+        out = []
+        for n in range(first, on_page + 1):
+            gate = e["count"][:-2] + f"|atleast_{n}}}}}" if n > 1 else ""
+            for b in e["block"]:
+                g = run.nth_block(b, n)
+                out.append({**g, "anchor": anchor, "block": n, **joined(e.get("when", ""), gate, g.pop("when", ""))})
+        out.append({"kind": "add", "anchor": anchor, "block": "#N", "each": {"count": e["count"], "from": max(first, on_page + 1)},
+                    **joined(e.get("when", ""))})
+        out += [{**{k: v for k, v in b.items() if k != "when"}, "anchor": anchor, "block": "#N",
+                 **joined(e.get("when", ""), b.get("when", ""))} for b in e["block"]]
+        return out
+    dfields = [g for d in entry.get("fields", []) for g in (each(d) if d["kind"] == "each" else [d])]
     # `branches`: conditions of a choice made first that renumbers every box below it (a
     # registered business or not): each box without a `when` once per branch, with its ids.
     if entry.get("branches"):
         dfields = [g for d in dfields for g in ([d] if "when" in d else
                    [{**d, "when": w} for w in entry["branches"]])]
     branch_terms = {re.match(r"\s*(\{\{[^}]*\}\})", w)[1] for w in entry.get("branches", [])}
-    # `repeat`: a block of people of the case, each after the first added with "+" under its
-    # `repeat_when`; `#N` in a field is "" in the first block, then "2", "3" (role a, a2, a3;
-    # ask altro_tecnico_..., altro_tecnico2_...). A field keeps its own `when` after the block's.
-    for i in range(entry.get("repeat", 0) if "block" in entry else 0):
-        cond = " ".join(x for x in (entry.get("firm_when", ""), entry["repeat_when"][i - 1] if i else "") if x)
-        anchor = entry["block"][0]["label"]
-        if i:
-            dfields.append({"kind": "add", "anchor": anchor, "block": i + 1, "when": cond})
-        for b in entry["block"]:
-            g = json.loads(json.dumps(b).replace("#N", str(i + 1) if i else ""))
-            when = " ".join(x for x in (cond, g.pop("when", "")) if x)
-            dfields.append({**g, "anchor": anchor, "block": i + 1, **({"when": when} if when else {})})
     for i, role in enumerate(recipe.get("firms", entry.get("firms", [])) if "block" in entry and "firms" in entry else []):
         # One block per firm, the second and later added with "+", and only when the job has
         # that firm; each also under the entry's `firm_when`.
@@ -422,6 +433,17 @@ def fill(entry, as_name, c, recipe, name):
     # ticked only for some answers): a later field of that branch goes by label unless its own
     # condition includes that choice's.
     branches, main, changed, within = {}, sec, {}, {}
+    # A "+" renumbers every box after the block it adds to: a box the section shows before any
+    # choice, from the block's first box on, goes by label. (One a choice opens keeps the id the
+    # crawl saw in that state: the CILA's tolerances, above its filings' "+".)
+    pluses = []
+    base = {x["id"]: x for x in sec.base}
+
+    def after_plus(f):
+        b = f.get("base_id", f["id"])
+        starts = [next((x["id"] for x in sorted(base.values(), key=lambda x: pos(x["id"]) or (0, 0))
+                        if matches(x, "text", a)), "") for a in pluses]
+        return b in base and any((pos(b) or (0, 0)) >= (pos(s) or (0, 0)) for s in starts)
     for d in dfields:
         term = re.match(r"\s*(\{\{[^}]*\}\})", d.get("when", ""))
         sec = main if not term else branches.setdefault(term[1], copy.deepcopy(main))
@@ -434,6 +456,8 @@ def fill(entry, as_name, c, recipe, name):
                 if len(hits) >= d.get("nth", 1):
                     filled.add((hits[d.get("nth", 1) - 1]["id"], hits[d.get("nth", 1) - 1]["label"]))
             sec.added = True
+            if d["kind"] == "add" and d["anchor"] not in pluses:
+                pluses.append(d["anchor"])
             fields.append(dict(d))
             continue
         look = sec
@@ -478,7 +502,7 @@ def fill(entry, as_name, c, recipe, name):
             and (pos(f.get("base_id", f["id"])) or (0, 0)) >= at for k, at in changed.items()) or term and any(
             k.split()[0] == term[1] and not set(k.split()) <= set(d["when"].split())
             and (pos(f.get("base_id", f["id"])) or (0, 0)) >= at for k, at in within.items()) or (
-            d["kind"] in ("radio", "checkbox", "tick") and look.moves_itself(f))
+            d["kind"] in ("radio", "checkbox", "tick") and look.moves_itself(f)) or after_plus(f)
         filled.update((t["id"], t["label"]) for t in twins if t)
         # `by_label`: rows a choice the crawl tried alone moves in another branch (the SCIA's
         # sanatoria cases): never an id, found on the page as the answers left it.
@@ -538,7 +562,8 @@ def split_by_yaml(dictionary, recipe):
     the tolerances' "..., comma 4, allegata" found the "presentata" box). Refuse it."""
     found = []
     entries = dictionary.get("sections", []) + dictionary.get("after", []) + recipe.get("sections", [])
-    fields = [(e.get("section"), f) for e in entries for f in e.get("fields", []) + e.get("block", [])]
+    fields = [(e.get("section"), f) for e in entries for f in e.get("fields", []) + e.get("block", [])
+              + [b for d in e.get("fields", []) if d.get("kind") == "each" for b in d["block"]]]
     fields += [(screen, f) for screen, fs in (recipe.get("attachments") or {}).items() for f in fs]
     for where, f in fields:
         empty = [k for k, v in f.items() if v is None]
@@ -758,6 +783,10 @@ def generate(recipe, base=HERE):
     # asks (one `supports` or `rules` reads) is the recipe's alone.
     asks = {}
     for k, v in list(dictionary["asks"].items()) + [(k, {}) for k in recipe.get("asks", {}) if k not in dictionary["asks"]]:
+        # A "+" block's question: one for each block written out (on the page), then the
+        # template run.py makes the others from.
+        for n, u in run.block_asks(k, asks_used - {k}):
+            asks.setdefault(u, {**run.nth_block(v, n), **recipe.get("asks", {}).get(u, {})})
         if k in asks_used:
             asks[k] = {**v, **recipe.get("asks", {}).get(k, {})}
     missing = (asks_used - set(asks)) | {k for k, a in asks.items() if "type" not in a}

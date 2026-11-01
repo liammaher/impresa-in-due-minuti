@@ -161,11 +161,13 @@ def main():
         except run.StepError as e:
             failed.append(f"{label}: {e}")
             continue
-        proc = steps["procedure"]
+        # The pane's key: a case's "+" blocks give its steps their own (run.page_bundle).
+        proc = next(k for k in parts if k.startswith("pv-steps:"))[len("pv-steps:"):]
+        js = f"steps/{name}{'-' + proc.partition('#')[2] if '#' in proc else ''}.js"
         (a.out / "runner.js").write_text(files["runner.js"])
-        (a.out / "steps" / f"{name}.js").write_text(files["steps.js"] + "'installed'\n")
+        (a.out / js).write_text(files["steps.js"] + "'installed'\n")
         stored |= parts
-        sources |= {"pv-runner": "runner.js", f"pv-steps:{proc}": f"steps/{name}.js"}
+        sources |= {"pv-runner": "runner.js", f"pv-steps:{proc}": js}
         origin = origin or run.re.match(r"https?://[^/]+", steps["logged_in"])[0]
         queue.append([label, proc, json.loads(values_of(files["run.js"], proc))])
     if failed:

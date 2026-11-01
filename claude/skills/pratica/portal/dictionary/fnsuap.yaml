@@ -115,29 +115,14 @@ asks:
     type: yes_no
     question: "Are other technicians (structures, systems, acoustics, safety) already appointed for these works?"
     propose: "false"
-  # The other technicians are `a:`, `a2:` ... `a8:` in the job's people; an employee's firm is
-  # `ad:`, `ad2:` ... `ad8:`.
+  # The other technicians are `a:`, `a2:`, `a3:` ... in the job's people, as many as there are
+  # (the national form sets no limit); an employee's firm is `ad:`, `ad2:` ...
   altri_tecnici_quanti:
-    type: choice
-    question: "How many other technicians? uno (`a:` in the job's people); due (`a:` and `a2:`); tre to otto (`a3:` up to `a8:` too); piu di otto"
-    options: [uno, due, tre, quattro, cinque, sei, sette, otto, piu di otto]
-    propose: uno
-  altro_tecnico_incarico: {type: text, question: "What is the other technician (`a:`) appointed for (the form's \"Incaricato della\", e.g. progettazione strutturale)?"}
-  altro_tecnico_dipendente: {type: yes_no, question: "Does the other technician (`a:`) work as an employee of a firm or studio (the form's \"alle dipendenze di\": the firm is `ad:` in the job's people)?", propose: "false"}
-  altro_tecnico2_incarico: {type: text, question: "What is the second other technician (`a2:`) appointed for?"}
-  altro_tecnico2_dipendente: {type: yes_no, question: "Does the second other technician (`a2:`) work as an employee of a firm or studio (the firm is `ad2:`)?", propose: "false"}
-  altro_tecnico3_incarico: {type: text, question: "What is the third other technician (`a3:`) appointed for?"}
-  altro_tecnico3_dipendente: {type: yes_no, question: "Does the third other technician (`a3:`) work as an employee of a firm or studio (the firm is `ad3:`)?", propose: "false"}
-  altro_tecnico4_incarico: {type: text, question: "What is the fourth other technician (`a4:`) appointed for?"}
-  altro_tecnico4_dipendente: {type: yes_no, question: "Does the fourth other technician (`a4:`) work as an employee of a firm or studio (the firm is `ad4:`)?", propose: "false"}
-  altro_tecnico5_incarico: {type: text, question: "What is the fifth other technician (`a5:`) appointed for?"}
-  altro_tecnico5_dipendente: {type: yes_no, question: "Does the fifth other technician (`a5:`) work as an employee of a firm or studio (the firm is `ad5:`)?", propose: "false"}
-  altro_tecnico6_incarico: {type: text, question: "What is the sixth other technician (`a6:`) appointed for?"}
-  altro_tecnico6_dipendente: {type: yes_no, question: "Does the sixth other technician (`a6:`) work as an employee of a firm or studio (the firm is `ad6:`)?", propose: "false"}
-  altro_tecnico7_incarico: {type: text, question: "What is the seventh other technician (`a7:`) appointed for?"}
-  altro_tecnico7_dipendente: {type: yes_no, question: "Does the seventh other technician (`a7:`) work as an employee of a firm or studio (the firm is `ad7:`)?", propose: "false"}
-  altro_tecnico8_incarico: {type: text, question: "What is the eighth other technician (`a8:`) appointed for?"}
-  altro_tecnico8_dipendente: {type: yes_no, question: "Does the eighth other technician (`a8:`) work as an employee of a firm or studio (the firm is `ad8:`)?", propose: "false"}
+    type: number
+    question: "How many other technicians? (the first is `a:` in the job's people, the second `a2:`, and so on)"
+    propose: "1"
+  altro_tecnico#N_incarico: {type: text, question: "What is other technician #K (`a#N:`) appointed for (the form's \"Incaricato della\", e.g. progettazione strutturale)?"}
+  altro_tecnico#N_dipendente: {type: yes_no, question: "Does other technician #K (`a#N:`) work as an employee of a firm or studio (the form's \"alle dipendenze di\": the firm is `ad#N:` in the job's people)?", propose: "false"}
   lavori_in_proprio:
     type: yes_no
     question: "Are the works so minor that the client does them without a firm (opere di modesta entità, eseguite in proprio)?"
@@ -193,19 +178,20 @@ asks:
     type: yes_no
     question: "Do the works need other filings or assents not yet made or obtained, that this pratica doesn't file (the Soprintendenza, ASL, fire brigade, a landscape authorization not in this pratica)?"
     propose: "false"
-  # The CILA relazione's two lists: filings already made, assents already obtained (two rows each).
+  # The CILA relazione's two lists: filings already made, assents already obtained (two rows each
+  # on the page, more by "+": the national form's altre_comunicazioni and atti_di_assenso are unbounded).
   comunicazioni_presentate: {type: yes_no, question: "Were other filings already made for these works (a comunicazione or segnalazione to another office)?", propose: "false"}
-  comunicazioni_quante: {type: choice, question: "How many?", options: [una, due, piu di due]}
+  comunicazioni_quante: {type: number, question: "How many?"}
   comunicazione_1: {type: text, question: "The first: what was filed (e.g. notifica preliminare ASL)?"}
   comunicazione_1_autorita: {type: text, question: "Its authority (e.g. ASL Napoli 1 Centro)"}
-  comunicazione_2: {type: text, question: "The second: what was filed?"}
-  comunicazione_2_autorita: {type: text, question: "Its authority"}
+  comunicazione_#K: {type: text, question: "Filing #K: what was filed?"}
+  comunicazione_#K_autorita: {type: text, question: "Filing #K: its authority"}
   atti_acquisiti: {type: yes_no, question: "Were other assents already obtained for these works (a nulla osta, an authorization)?", propose: "false"}
-  atti_quanti: {type: choice, question: "How many?", options: [uno, due, piu di due]}
+  atti_quanti: {type: number, question: "How many?"}
   atto_1: {type: text, question: "The first: which act (e.g. autorizzazione della Soprintendenza, art. 21 D.Lgs. 42/2004)?"}
   atto_1_autorita: {type: text, question: "Who issued it (e.g. Soprintendenza ABAP per il Comune di Napoli)?"}
-  atto_2: {type: text, question: "The second: which act?"}
-  atto_2_autorita: {type: text, question: "Who issued it?"}
+  atto_#K: {type: text, question: "Assent #K: which act?"}
+  atto_#K_autorita: {type: text, question: "Assent #K: who issued it?"}
   oggetto:
     type: text
     question: "The works in one sentence (300 characters)"
@@ -739,44 +725,11 @@ asks:
   prec_altro_numero: {type: text, question: "Its number", when: "{{ask.prec_altro}}"}
   prec_altro_data: {type: date, question: "Its date", when: "{{ask.prec_altro}}"}
   # "altro" is the quadro's only line that repeats ("+"; the national form's altro_titolo_gruppo,
-  # the one unbounded group): every title past one per kind goes there. Five lines in all.
-  prec_altro_2: {type: yes_no, question: "One more title or pratica to list, on another \"altro\" line (of a kind not listed, or another of a kind already listed)?", when: "{{ask.prec_altro}}"}
-  prec_altro_2_quale: {type: text, question: "Which title or pratica it is (the form's \"specificare\"), e.g. \"denuncia di inizio attività\" for a second DIA", when: "{{ask.prec_altro_2}}"}
-  prec_altro_2_numero: {type: text, question: "Its number", when: "{{ask.prec_altro_2}}"}
-  prec_altro_2_data: {type: date, question: "Its date", when: "{{ask.prec_altro_2}}"}
-  prec_altro_3: {type: yes_no, question: "One more title or pratica to list, on another \"altro\" line (of a kind not listed, or another of a kind already listed)?", when: "{{ask.prec_altro_2}}"}
-  prec_altro_3_quale: {type: text, question: "Which title or pratica it is (the form's \"specificare\"), e.g. \"denuncia di inizio attività\" for a second DIA", when: "{{ask.prec_altro_3}}"}
-  prec_altro_3_numero: {type: text, question: "Its number", when: "{{ask.prec_altro_3}}"}
-  prec_altro_3_data: {type: date, question: "Its date", when: "{{ask.prec_altro_3}}"}
-  prec_altro_4: {type: yes_no, question: "One more title or pratica to list, on another \"altro\" line (of a kind not listed, or another of a kind already listed)?", when: "{{ask.prec_altro_3}}"}
-  prec_altro_4_quale: {type: text, question: "Which title or pratica it is (the form's \"specificare\"), e.g. \"denuncia di inizio attività\" for a second DIA", when: "{{ask.prec_altro_4}}"}
-  prec_altro_4_numero: {type: text, question: "Its number", when: "{{ask.prec_altro_4}}"}
-  prec_altro_4_data: {type: date, question: "Its date", when: "{{ask.prec_altro_4}}"}
-  prec_altro_5: {type: yes_no, question: "One more title or pratica to list, on another \"altro\" line (of a kind not listed, or another of a kind already listed)?", when: "{{ask.prec_altro_4}}"}
-  prec_altro_5_quale: {type: text, question: "Which title or pratica it is (the form's \"specificare\"), e.g. \"denuncia di inizio attività\" for a second DIA", when: "{{ask.prec_altro_5}}"}
-  prec_altro_5_numero: {type: text, question: "Its number", when: "{{ask.prec_altro_5}}"}
-  prec_altro_5_data: {type: date, question: "Its date", when: "{{ask.prec_altro_5}}"}
-  prec_altro_6: {type: yes_no, question: "One more title or pratica to list, on another \"altro\" line (of a kind not listed, or another of a kind already listed)?", when: "{{ask.prec_altro_5}}"}
-  prec_altro_6_quale: {type: text, question: "Which title or pratica it is (the form's \"specificare\"), e.g. \"denuncia di inizio attività\" for a second DIA", when: "{{ask.prec_altro_6}}"}
-  prec_altro_6_numero: {type: text, question: "Its number", when: "{{ask.prec_altro_6}}"}
-  prec_altro_6_data: {type: date, question: "Its date", when: "{{ask.prec_altro_6}}"}
-  prec_altro_7: {type: yes_no, question: "One more title or pratica to list, on another \"altro\" line (of a kind not listed, or another of a kind already listed)?", when: "{{ask.prec_altro_6}}"}
-  prec_altro_7_quale: {type: text, question: "Which title or pratica it is (the form's \"specificare\"), e.g. \"denuncia di inizio attività\" for a second DIA", when: "{{ask.prec_altro_7}}"}
-  prec_altro_7_numero: {type: text, question: "Its number", when: "{{ask.prec_altro_7}}"}
-  prec_altro_7_data: {type: date, question: "Its date", when: "{{ask.prec_altro_7}}"}
-  prec_altro_8: {type: yes_no, question: "One more title or pratica to list, on another \"altro\" line (of a kind not listed, or another of a kind already listed)?", when: "{{ask.prec_altro_7}}"}
-  prec_altro_8_quale: {type: text, question: "Which title or pratica it is (the form's \"specificare\"), e.g. \"denuncia di inizio attività\" for a second DIA", when: "{{ask.prec_altro_8}}"}
-  prec_altro_8_numero: {type: text, question: "Its number", when: "{{ask.prec_altro_8}}"}
-  prec_altro_8_data: {type: date, question: "Its date", when: "{{ask.prec_altro_8}}"}
-  prec_altro_9: {type: yes_no, question: "One more title or pratica to list, on another \"altro\" line (of a kind not listed, or another of a kind already listed)?", when: "{{ask.prec_altro_8}}"}
-  prec_altro_9_quale: {type: text, question: "Which title or pratica it is (the form's \"specificare\"), e.g. \"denuncia di inizio attività\" for a second DIA", when: "{{ask.prec_altro_9}}"}
-  prec_altro_9_numero: {type: text, question: "Its number", when: "{{ask.prec_altro_9}}"}
-  prec_altro_9_data: {type: date, question: "Its date", when: "{{ask.prec_altro_9}}"}
-  prec_altro_10: {type: yes_no, question: "One more title or pratica to list, on another \"altro\" line (of a kind not listed, or another of a kind already listed)?", when: "{{ask.prec_altro_9}}"}
-  prec_altro_10_quale: {type: text, question: "Which title or pratica it is (the form's \"specificare\"), e.g. \"denuncia di inizio attività\" for a second DIA", when: "{{ask.prec_altro_10}}"}
-  prec_altro_10_numero: {type: text, question: "Its number", when: "{{ask.prec_altro_10}}"}
-  prec_altro_10_data: {type: date, question: "Its date", when: "{{ask.prec_altro_10}}"}
-  prec_altro_11: {type: yes_no, question: "And another, beyond those ten?", propose: "false", when: "{{ask.prec_altro_10}}"}
+  # unbounded): every title past one per kind goes there, one line each.
+  prec_altro_quanti: {type: number, question: "How many titles or pratiche go on \"altro\" lines, one per line (those of a kind not listed, and every one after the first of a kind already listed)?", propose: "1", when: "{{ask.prec_altro}}"}
+  prec_altro_#K_quale: {type: text, question: "\"altro\" line #K: which title or pratica it is (the form's \"specificare\"), e.g. \"denuncia di inizio attività\" for a second DIA"}
+  prec_altro_#K_numero: {type: text, question: "\"altro\" line #K: its number"}
+  prec_altro_#K_data: {type: date, question: "\"altro\" line #K: its date"}
   # Built before a title was required, or a title lost with proof of it (art. 9-bis c. 1-bis):
   # the same two documents.
   prova_catasto: {type: yes_no, group: prova_documenti, item: "The catasto's primo impianto registration (its copy, or its details)"}
@@ -878,8 +831,8 @@ asks:
   # one case per pratica is mapped (the recipe refuses more).
   igienico_5bis_caso:
     type: choice
-    question: "Which case of art. 24 c. 5-bis? altezza (rooms with a minimum inner height under 2.70 m but at least 2.40 m, lett. a); monostanza uno (a one-room flat for one person, 20 m² or more but under 28 m² with its services, lett. b); monostanza due (for two people, 28 m² or more but under 38 m²); piu casi (more than one)"
-    options: [altezza, monostanza uno, monostanza due, piu casi]
+    question: "Which case of art. 24 c. 5-bis? altezza (rooms with a minimum inner height under 2.70 m but at least 2.40 m, lett. a); monostanza uno (a one-room flat for one person, 20 m² or more but under 28 m² with its services, lett. b); monostanza due (for two people, 28 m² or more but under 38 m²); altezza e monostanza uno, altezza e monostanza due (both: a low one-room flat)"
+    options: [altezza, monostanza uno, monostanza due, altezza e monostanza uno, altezza e monostanza due]
   igienico_adattabilita: {type: yes_no, question: "Do the rooms meet the adattabilità requirement of DM 236/1989 (art. 24 c. 5-ter DPR 380/2001)?"}
   igienico_5ter:
     type: choice
@@ -1365,74 +1318,72 @@ sections:
       - {kind: text, label: cell., anchor: Cognome, block: 1, value: "{{d:identity.phone|phone_it}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
       - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: "{{d:identity.pec}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
 
-  # One other technician (`a:`), registered with an order, not a firm's employee: the block "di
-  # aver incaricato" opens, the G1 block's labels after "Incaricato della", then two si/no
-  # (registered: the order's boxes; a firm's employee: the firm's) and the abilitazione, left
-  # empty for a registered technician. More than one, or an employee, the recipe refuses. With
-  # none appointed nothing is ticked, as before: "saranno individuati" says some will be.
+  # The other technicians (`a:`, `a2:` ...), each registered with an order or a firm's
+  # employee: the block "di aver incaricato" opens, the G1 block's labels after "Incaricato
+  # della", then two si/no (registered: the order's boxes; a firm's employee: the firm's) and
+  # the abilitazione, left empty for a registered technician. With none appointed nothing is
+  # ticked, as before: "saranno individuati" says some will be.
   - section: G2) Altri tecnici incaricati
     leave: [fax, "Estremi dell'abilitazione"]
-    supports:
-      - {if: "{{ask.altri_tecnici}}", value: "{{ask.altri_tecnici_quanti}}", in: [uno, due, tre, quattro, cinque, sei, sette, otto], else: "More than eight other technicians aren't mapped yet: each takes a \"+\" on the portal, and eight have been prepared."}
     fields:
       - {kind: checkbox, label: di aver incaricato in qualità di altri tecnici, when: "{{ask.altri_tecnici}}"}
-    # One block per technician (a, a2 ... a8), each after the first by "+". An employee's studio
-    # is the employer's seat (ad, ad2 ... ad8: the firm of "alle dipendenze di").
-    repeat: 8
-    firm_when: "{{ask.altri_tecnici}}"
-    repeat_when: ["{{ask.altri_tecnici_quanti|in_due__tre__quattro__cinque__sei__sette__otto}}", "{{ask.altri_tecnici_quanti|in_tre__quattro__cinque__sei__sette__otto}}", "{{ask.altri_tecnici_quanti|in_quattro__cinque__sei__sette__otto}}", "{{ask.altri_tecnici_quanti|in_cinque__sei__sette__otto}}", "{{ask.altri_tecnici_quanti|in_sei__sette__otto}}", "{{ask.altri_tecnici_quanti|in_sette__otto}}", "{{ask.altri_tecnici_quanti|is_otto}}"]
-    block:
-      - {kind: text, label: Incaricato della, value: "{{ask.altro_tecnico#N_incarico}}"}
-      - {kind: text, label: Cognome, value: "{{a#N:identity.last_name|upper}}"}
-      - {kind: text, label: Nome, value: "{{a#N:identity.first_name|upper}}"}
-      - {kind: text, label: C.F., value: "{{a#N:identity.codice_fiscale}}"}
-      - {kind: date, label: Data di nascita, value: "{{a#N:identity.date_of_birth|date_it}}"}
-      - {kind: select, label: Cittadinanza, value: ITALIA}
-      - {kind: select, label: Sesso, value: "{{a#N:identity.sex|sesso}}"}
-      - {kind: select, label: Stato, value: ITALIA}
-      - {kind: select, label: Provincia, value: "{{a#N:identity.birth_province}}"}
-      - {kind: text, label: Comune italiano, value: "{{a#N:identity.birth_comune|upper}}"}
-      - {kind: select, label: Stato, nth: 2, value: ITALIA}
-      - {kind: select, label: Provincia, nth: 2, value: "{{a#N:residenza.provincia}}"}
-      - {kind: text, label: Comune italiano, nth: 2, value: "{{a#N:residenza.comune|upper}}"}
-      - {kind: text, label: "Via, Piazza", value: "{{a#N:residenza.indirizzo|upper}}"}
-      - {kind: text, label: "N.", value: "{{a#N:residenza.civico}}"}
-      - {kind: text, label: C.A.P., value: "{{a#N:residenza.cap}}"}
-      - {kind: select, label: Stato, nth: 3, value: ITALIA}
-      - {kind: select, label: Provincia, nth: 3, value: "{{a#N:business.sede_legale_provincia}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
-      - {kind: text, label: Comune italiano, nth: 3, value: "{{a#N:business.sede_legale_comune|upper}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
-      - {kind: text, label: "Via, Piazza", nth: 2, value: "{{a#N:business.sede_legale_indirizzo|upper}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
-      - {kind: text, label: "N.", nth: 2, value: "{{a#N:business.sede_legale_civico}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
-      - {kind: text, label: C.A.P., nth: 2, value: "{{a#N:business.sede_legale_cap}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
-      - {kind: select, label: Provincia, nth: 3, value: "{{ad#N:business.sede_legale_provincia}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: Comune italiano, nth: 3, value: "{{ad#N:business.sede_legale_comune|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: "Via, Piazza", nth: 2, value: "{{ad#N:business.sede_legale_indirizzo|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: "N.", nth: 2, value: "{{ad#N:business.sede_legale_civico}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: C.A.P., nth: 2, value: "{{ad#N:business.sede_legale_cap}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: Telefono, value: "{{a#N:identity.phone|phone_it}}"}
-      - {kind: text, label: cell., value: "{{a#N:identity.phone|phone_it}}"}
-      - {kind: text, label: posta elettronica certificata, value: "{{a#N:identity.pec}}"}
-      - {kind: radio, label: si}
-      - {kind: text, label: Iscritto all'ordine/collegio, value: "{{a#N:albo.ordine}}", on_page: true}
-      - {kind: text, label: di, value: "{{a#N:albo.provincia|provincia_nome}}", on_page: true}
-      - {kind: text, label: al n., value: "{{a#N:albo.numero}}", on_page: true}
-      - {kind: radio, label: "no", nth: 2, when: "{{ask.altro_tecnico#N_dipendente|not}}"}
-      - {kind: radio, label: si, nth: 2, when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: Ragione sociale, value: "{{ad#N:business.denominazione}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: codice fiscale / p. IVA, value: "{{ad#N:business.partita_iva}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: "{{ad#N:business.cciaa}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: con sede in, value: "{{ad#N:business.sede_legale_comune|upper}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
-      # More than the crawl saw (read on the SCIA 2026-10-31): the REA number, the seat's
-      # address, and "il cui legale rappresentante è". In the block, the REA "n." is the
-      # third "N." (after the home's and the studio's), and so on for the rest.
-      - {kind: text, label: n., nth: 3, value: "{{ad#N:business.rea|rea_num}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: select, label: Provincia, nth: 4, value: "{{ad#N:business.sede_legale_provincia}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: select, label: Stato, nth: 4, value: ITALIA, when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: "Via, Piazza", nth: 3, value: "{{ad#N:business.sede_legale_indirizzo|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: "N.", nth: 4, value: "{{ad#N:business.sede_legale_civico}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: C.A.P., nth: 3, value: "{{ad#N:business.sede_legale_cap}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: Cognome, nth: 2, value: "{{ad#N:identity.last_name|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
-      - {kind: text, label: Nome, nth: 2, value: "{{ad#N:identity.first_name|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+      # One block per technician, each after the first by "+". An employee's studio is the
+      # employer's seat (ad, ad2 ...: the firm of "alle dipendenze di").
+      - kind: each
+        count: "{{ask.altri_tecnici_quanti}}"
+        when: "{{ask.altri_tecnici}}"
+        block:
+          - {kind: text, label: Incaricato della, value: "{{ask.altro_tecnico#N_incarico}}"}
+          - {kind: text, label: Cognome, value: "{{a#N:identity.last_name|upper}}"}
+          - {kind: text, label: Nome, value: "{{a#N:identity.first_name|upper}}"}
+          - {kind: text, label: C.F., value: "{{a#N:identity.codice_fiscale}}"}
+          - {kind: date, label: Data di nascita, value: "{{a#N:identity.date_of_birth|date_it}}"}
+          - {kind: select, label: Cittadinanza, value: ITALIA}
+          - {kind: select, label: Sesso, value: "{{a#N:identity.sex|sesso}}"}
+          - {kind: select, label: Stato, value: ITALIA}
+          - {kind: select, label: Provincia, value: "{{a#N:identity.birth_province}}"}
+          - {kind: text, label: Comune italiano, value: "{{a#N:identity.birth_comune|upper}}"}
+          - {kind: select, label: Stato, nth: 2, value: ITALIA}
+          - {kind: select, label: Provincia, nth: 2, value: "{{a#N:residenza.provincia}}"}
+          - {kind: text, label: Comune italiano, nth: 2, value: "{{a#N:residenza.comune|upper}}"}
+          - {kind: text, label: "Via, Piazza", value: "{{a#N:residenza.indirizzo|upper}}"}
+          - {kind: text, label: "N.", value: "{{a#N:residenza.civico}}"}
+          - {kind: text, label: C.A.P., value: "{{a#N:residenza.cap}}"}
+          - {kind: select, label: Stato, nth: 3, value: ITALIA}
+          - {kind: select, label: Provincia, nth: 3, value: "{{a#N:business.sede_legale_provincia}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+          - {kind: text, label: Comune italiano, nth: 3, value: "{{a#N:business.sede_legale_comune|upper}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+          - {kind: text, label: "Via, Piazza", nth: 2, value: "{{a#N:business.sede_legale_indirizzo|upper}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+          - {kind: text, label: "N.", nth: 2, value: "{{a#N:business.sede_legale_civico}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+          - {kind: text, label: C.A.P., nth: 2, value: "{{a#N:business.sede_legale_cap}}", when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+          - {kind: select, label: Provincia, nth: 3, value: "{{ad#N:business.sede_legale_provincia}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: Comune italiano, nth: 3, value: "{{ad#N:business.sede_legale_comune|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: "Via, Piazza", nth: 2, value: "{{ad#N:business.sede_legale_indirizzo|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: "N.", nth: 2, value: "{{ad#N:business.sede_legale_civico}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: C.A.P., nth: 2, value: "{{ad#N:business.sede_legale_cap}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: Telefono, value: "{{a#N:identity.phone|phone_it}}"}
+          - {kind: text, label: cell., value: "{{a#N:identity.phone|phone_it}}"}
+          - {kind: text, label: posta elettronica certificata, value: "{{a#N:identity.pec}}"}
+          - {kind: radio, label: si}
+          - {kind: text, label: Iscritto all'ordine/collegio, value: "{{a#N:albo.ordine}}", on_page: true}
+          - {kind: text, label: di, value: "{{a#N:albo.provincia|provincia_nome}}", on_page: true}
+          - {kind: text, label: al n., value: "{{a#N:albo.numero}}", on_page: true}
+          - {kind: radio, label: "no", nth: 2, when: "{{ask.altro_tecnico#N_dipendente|not}}"}
+          - {kind: radio, label: si, nth: 2, when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: Ragione sociale, value: "{{ad#N:business.denominazione}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: codice fiscale / p. IVA, value: "{{ad#N:business.partita_iva}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: "{{ad#N:business.cciaa}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: con sede in, value: "{{ad#N:business.sede_legale_comune|upper}}", on_page: true, when: "{{ask.altro_tecnico#N_dipendente}}"}
+          # More than the crawl saw (read on the SCIA 2026-10-31): the REA number, the seat's
+          # address, and "il cui legale rappresentante è". In the block, the REA "n." is the
+          # third "N." (after the home's and the studio's), and so on for the rest.
+          - {kind: text, label: n., nth: 3, value: "{{ad#N:business.rea|rea_num}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: select, label: Provincia, nth: 4, value: "{{ad#N:business.sede_legale_provincia}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: select, label: Stato, nth: 4, value: ITALIA, when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: "Via, Piazza", nth: 3, value: "{{ad#N:business.sede_legale_indirizzo|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: "N.", nth: 4, value: "{{ad#N:business.sede_legale_civico}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: C.A.P., nth: 3, value: "{{ad#N:business.sede_legale_cap}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: Cognome, nth: 2, value: "{{ad#N:identity.last_name|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
+          - {kind: text, label: Nome, nth: 2, value: "{{ad#N:identity.first_name|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
 
   # The firms on site (`f1:`, and `f2:` when the job has one: its block comes from "+"), or
   # minor works the client does without one. Fields by label inside the block-th repeat that
@@ -1495,8 +1446,6 @@ sections:
   - section: Relazione Tecnica di Asseverazione
     leave: [specificare il tipo di intervento, Comunicazioni, Autorità competente, Tipologia di atto, Note]
     supports:
-      - {if: "{{ask.comunicazioni_presentate}}", value: "{{ask.comunicazioni_quante}}", in: [una, due], else: "More than two filings already made aren't mapped yet: the relazione has two rows."}
-      - {if: "{{ask.atti_acquisiti}}", value: "{{ask.atti_quanti}}", in: [uno, due], else: "More than two assents already obtained aren't mapped yet: the relazione has two rows."}
       - {if: "{{ask.tolleranze}}", value: "{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}", in: ["true"], else: "Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4)."}
       - {if: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}", value: "{{ask.toll_sismica}}", in: [autorizzazione, silenzio assenso], else: "A structural tolerance relevant for public safety (art. 94-bis c. 1 a) can be declared only with the Genio Civile's seismic authorization (art. 94 c. 2) or its silenzio assenso (c. 2-bis): art. 34-bis c. 3-bis DPR 380/2001."}
       - {if: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}}", value: "{{ask.toll_decorso}}", in: ["true"], else: "A structural tolerance of minor or no relevance for public safety can be declared only once the regional control term has run out, with no open requests and no negative outcome: art. 34-bis c. 3-bis DPR 380/2001."}
@@ -1516,17 +1465,33 @@ sections:
       - {kind: checkbox, label: Altri interventi non riconducibili, when: "{{ask.cila_altri}}"}
       - {kind: text, label: specificare il tipo di intervento, value: "{{ask.cila_altri_tipo}}", when: "{{ask.cila_altri}}"}
       - {kind: textarea, label: e che consistono in, value: "{{ask.dettaglio_intervento}}"}
-      # Filings already made and assents already obtained, two rows each (the national form's
-      # altre_comunicazioni and atti_di_assenso). "Autorità competente" also starts the assents'
-      # "… al rilascio": the filings' are its first two.
+      # Filings already made and assents already obtained, two rows each on the page and more
+      # by "+" (the national form's altre_comunicazioni and atti_di_assenso). "Autorità
+      # competente" also starts the assents' "… al rilascio": the filings' are its first two.
       - {kind: text, label: "Comunicazioni, segnalazioni", value: "{{ask.comunicazione_1}}", when: "{{ask.comunicazioni_presentate}}"}
       - {kind: text, label: Autorità competente, value: "{{ask.comunicazione_1_autorita}}", when: "{{ask.comunicazioni_presentate}}"}
-      - {kind: text, label: "Comunicazioni, segnalazioni", nth: 2, value: "{{ask.comunicazione_2}}", when: "{{ask.comunicazioni_presentate}} {{ask.comunicazioni_quante|is_due}}"}
-      - {kind: text, label: Autorità competente, nth: 2, value: "{{ask.comunicazione_2_autorita}}", when: "{{ask.comunicazioni_presentate}} {{ask.comunicazioni_quante|is_due}}"}
+      - {kind: text, label: "Comunicazioni, segnalazioni", nth: 2, value: "{{ask.comunicazione_2}}", when: "{{ask.comunicazioni_presentate}} {{ask.comunicazioni_quante|atleast_2}}"}
+      - {kind: text, label: Autorità competente, nth: 2, value: "{{ask.comunicazione_2_autorita}}", when: "{{ask.comunicazioni_presentate}} {{ask.comunicazioni_quante|atleast_2}}"}
+      - kind: each
+        count: "{{ask.comunicazioni_quante}}"
+        when: "{{ask.comunicazioni_presentate}}"
+        first: 3
+        on_page: 2
+        block:
+          - {kind: text, label: "Comunicazioni, segnalazioni", value: "{{ask.comunicazione_#K}}"}
+          - {kind: text, label: Autorità competente, value: "{{ask.comunicazione_#K_autorita}}"}
       - {kind: text, label: Tipologia di atto, value: "{{ask.atto_1}}", when: "{{ask.atti_acquisiti}}"}
       - {kind: text, label: Autorità competente al rilascio, value: "{{ask.atto_1_autorita}}", when: "{{ask.atti_acquisiti}}"}
-      - {kind: text, label: Tipologia di atto, nth: 2, value: "{{ask.atto_2}}", when: "{{ask.atti_acquisiti}} {{ask.atti_quanti|is_due}}"}
-      - {kind: text, label: Autorità competente al rilascio, nth: 2, value: "{{ask.atto_2_autorita}}", when: "{{ask.atti_acquisiti}} {{ask.atti_quanti|is_due}}"}
+      - {kind: text, label: Tipologia di atto, nth: 2, value: "{{ask.atto_2}}", when: "{{ask.atti_acquisiti}} {{ask.atti_quanti|atleast_2}}"}
+      - {kind: text, label: Autorità competente al rilascio, nth: 2, value: "{{ask.atto_2_autorita}}", when: "{{ask.atti_acquisiti}} {{ask.atti_quanti|atleast_2}}"}
+      - kind: each
+        count: "{{ask.atti_quanti}}"
+        when: "{{ask.atti_acquisiti}}"
+        first: 3
+        on_page: 2
+        block:
+          - {kind: text, label: Tipologia di atto, value: "{{ask.atto_#K}}"}
+          - {kind: text, label: Autorità competente al rilascio, value: "{{ask.atto_#K_autorita}}"}
       # Tolerances (art. 34-bis/34-ter): each declared, the 1-bis one's percentage by the unit's
       # floor area. Napoli is in seismic zone 2 (Campania, DGR 5447/2002), so a tolerance there
       # says whether it is structurally relevant; a relevant one opens its art. 94-bis class.
@@ -2144,12 +2109,12 @@ sections:
       - {kind: radio, label: L' agibilità parziale relativa a singoli edifici, when: "{{ask.agibilita_parziale|is_edificio}}"}
       - {kind: radio, label: L'agibilità parziale relativa a singole unità immobiliari, when: "{{ask.agibilita_parziale|is_unita}}"}
       - {kind: checkbox, label: "nei casi di cui all’articolo 24, comma 5-bis e 5-ter", when: "{{ask.igienico_24_5bis}}"}
-      - {kind: checkbox, label: "locali con un’altezza minima interna inferiore a 2,70 metri", when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_altezza}}"}
-      - {kind: checkbox, label: "alloggio mono-stanza, con una superficie minima", when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due}}"}
-      - {kind: checkbox, label: inferiore a 28 metri quadrati, when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_monostanza_uno}}"}
-      - {kind: checkbox, label: inferiore a 38 metri quadrati, when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_monostanza_due}}"}
-      - {kind: checkbox, label: i locali sono situati in edifici che sono stati sottoposti, when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due}} {{ask.igienico_5ter|is_recupero}}"}
-      - {kind: checkbox, label: è stata realizzata una ristrutturazione con soluzioni alternative, when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due}} {{ask.igienico_5ter|is_progetto_alternativo}}"}
+      - {kind: checkbox, label: "locali con un’altezza minima interna inferiore a 2,70 metri", when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_altezza__altezza_e_monostanza_uno__altezza_e_monostanza_due}}"}
+      - {kind: checkbox, label: "alloggio mono-stanza, con una superficie minima", when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due__altezza_e_monostanza_uno__altezza_e_monostanza_due}}"}
+      - {kind: checkbox, label: inferiore a 28 metri quadrati, when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__altezza_e_monostanza_uno}}"}
+      - {kind: checkbox, label: inferiore a 38 metri quadrati, when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_due__altezza_e_monostanza_due}}"}
+      - {kind: checkbox, label: i locali sono situati in edifici che sono stati sottoposti, when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due__altezza_e_monostanza_uno__altezza_e_monostanza_due}} {{ask.igienico_5ter|is_recupero}}"}
+      - {kind: checkbox, label: è stata realizzata una ristrutturazione con soluzioni alternative, when: "{{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__monostanza_due__altezza_e_monostanza_uno__altezza_e_monostanza_due}} {{ask.igienico_5ter|is_progetto_alternativo}}"}
       - {kind: checkbox, label: "nei casi di cui all’articolo 24, comma 5-quater", when: "{{ask.igienico_5quater}}"}
       - {kind: text, label: "specificare l’atto normativo o il provvedimento", value: "{{ask.igienico_5quater_atto}}", when: "{{ask.igienico_5quater}}"}
 
@@ -2354,7 +2319,6 @@ sections:
   - section: Regolarità urbanistica e precedenti edilizi
     leave: [n., del, specificare, di Euro, a titolo di sanzione, Prot. n., atto di registrazione, in data]
     supports:
-      - {if: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}} {{ask.prec_altro_10}}", value: "{{ask.prec_altro_11}}", in: ["false"], else: "More than ten \"altro\" lines (titles past one per kind, or of kinds not listed) aren't mapped yet: each takes a \"+\" on the portal, and ten have been prepared."}
       - {if: "{{ask.stato_legittimo|is_titoli}}", value: "{{ask.prec_titolo_unico,ask.prec_permesso,ask.prec_autorizzazione,ask.prec_comunicazione,ask.prec_dia,ask.prec_dia_alternativa,ask.prec_scia,ask.prec_cel,ask.prec_condono,ask.prec_pdc_sanatoria,ask.prec_scia_sanatoria,ask.prec_scia_sanatoria_variante,ask.prec_altro|any}}", in: ["true"], else: "A stato legittimo from the building's titles needs at least one title."}
       - {if: "{{ask.stato_legittimo|in_epoca__prova}}", value: "{{ask.prova_catasto,ask.prova_altri|any}}", in: ["true"], else: "A building with no title on file needs its catasto primo impianto or other documents."}
       - {if: "{{ask.stato_legittimo|is_tolleranze}}", value: "{{ask.toll_prec_pratica,ask.toll_prec_atto|any}}", in: ["true"], else: "A stato legittimo from tolerance declarations needs where they were made."}
@@ -2405,42 +2369,15 @@ sections:
       - {kind: text, label: specificare, value: "{{ask.prec_altro_quale}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}"}
       - {kind: text, label: n., nth: 13, value: "{{ask.prec_altro_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}"}
       - {kind: date, label: del, nth: 13, value: "{{ask.prec_altro_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}"}
-      - {kind: add, anchor: specificare, block: 2, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}"}
-      - {kind: text, label: specificare, anchor: specificare, block: 2, value: "{{ask.prec_altro_2_quale}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}"}
-      - {kind: text, label: n., anchor: specificare, block: 2, value: "{{ask.prec_altro_2_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}"}
-      - {kind: date, label: del, anchor: specificare, block: 2, value: "{{ask.prec_altro_2_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}}"}
-      - {kind: add, anchor: specificare, block: 3, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}"}
-      - {kind: text, label: specificare, anchor: specificare, block: 3, value: "{{ask.prec_altro_3_quale}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}"}
-      - {kind: text, label: n., anchor: specificare, block: 3, value: "{{ask.prec_altro_3_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}"}
-      - {kind: date, label: del, anchor: specificare, block: 3, value: "{{ask.prec_altro_3_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}}"}
-      - {kind: add, anchor: specificare, block: 4, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}"}
-      - {kind: text, label: specificare, anchor: specificare, block: 4, value: "{{ask.prec_altro_4_quale}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}"}
-      - {kind: text, label: n., anchor: specificare, block: 4, value: "{{ask.prec_altro_4_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}"}
-      - {kind: date, label: del, anchor: specificare, block: 4, value: "{{ask.prec_altro_4_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}}"}
-      - {kind: add, anchor: specificare, block: 5, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}}"}
-      - {kind: text, label: specificare, anchor: specificare, block: 5, value: "{{ask.prec_altro_5_quale}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}}"}
-      - {kind: text, label: n., anchor: specificare, block: 5, value: "{{ask.prec_altro_5_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}}"}
-      - {kind: date, label: del, anchor: specificare, block: 5, value: "{{ask.prec_altro_5_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}}"}
-      - {kind: add, anchor: specificare, block: 6, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}}"}
-      - {kind: text, label: specificare, anchor: specificare, block: 6, value: "{{ask.prec_altro_6_quale}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}}"}
-      - {kind: text, label: n., anchor: specificare, block: 6, value: "{{ask.prec_altro_6_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}}"}
-      - {kind: date, label: del, anchor: specificare, block: 6, value: "{{ask.prec_altro_6_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}}"}
-      - {kind: add, anchor: specificare, block: 7, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}}"}
-      - {kind: text, label: specificare, anchor: specificare, block: 7, value: "{{ask.prec_altro_7_quale}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}}"}
-      - {kind: text, label: n., anchor: specificare, block: 7, value: "{{ask.prec_altro_7_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}}"}
-      - {kind: date, label: del, anchor: specificare, block: 7, value: "{{ask.prec_altro_7_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}}"}
-      - {kind: add, anchor: specificare, block: 8, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}}"}
-      - {kind: text, label: specificare, anchor: specificare, block: 8, value: "{{ask.prec_altro_8_quale}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}}"}
-      - {kind: text, label: n., anchor: specificare, block: 8, value: "{{ask.prec_altro_8_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}}"}
-      - {kind: date, label: del, anchor: specificare, block: 8, value: "{{ask.prec_altro_8_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}}"}
-      - {kind: add, anchor: specificare, block: 9, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}}"}
-      - {kind: text, label: specificare, anchor: specificare, block: 9, value: "{{ask.prec_altro_9_quale}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}}"}
-      - {kind: text, label: n., anchor: specificare, block: 9, value: "{{ask.prec_altro_9_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}}"}
-      - {kind: date, label: del, anchor: specificare, block: 9, value: "{{ask.prec_altro_9_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}}"}
-      - {kind: add, anchor: specificare, block: 10, when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}} {{ask.prec_altro_10}}"}
-      - {kind: text, label: specificare, anchor: specificare, block: 10, value: "{{ask.prec_altro_10_quale}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}} {{ask.prec_altro_10}}"}
-      - {kind: text, label: n., anchor: specificare, block: 10, value: "{{ask.prec_altro_10_numero}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}} {{ask.prec_altro_10}}"}
-      - {kind: date, label: del, anchor: specificare, block: 10, value: "{{ask.prec_altro_10_data|date_it}}", when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}} {{ask.prec_altro_2}} {{ask.prec_altro_3}} {{ask.prec_altro_4}} {{ask.prec_altro_5}} {{ask.prec_altro_6}} {{ask.prec_altro_7}} {{ask.prec_altro_8}} {{ask.prec_altro_9}} {{ask.prec_altro_10}}"}
+      # Every other title on its own "altro" line, each added with "+".
+      - kind: each
+        count: "{{ask.prec_altro_quanti}}"
+        when: "{{ask.stato_legittimo|is_titoli}} {{ask.prec_altro}}"
+        first: 2
+        block:
+          - {kind: text, label: specificare, value: "{{ask.prec_altro_#K_quale}}"}
+          - {kind: text, label: n., value: "{{ask.prec_altro_#K_numero}}"}
+          - {kind: date, label: del, value: "{{ask.prec_altro_#K_data|date_it}}"}
       # Built when no title was required.
       - {kind: radio, label: si tratta di immobile realizzato in un’epoca, when: "{{ask.stato_legittimo|is_epoca}}"}
       - {kind: checkbox, label: copia accatastamento di primo impianto, nth: 1, when: "{{ask.stato_legittimo|is_epoca}} {{ask.prova_catasto}}"}
@@ -2759,13 +2696,20 @@ sections:
       - {kind: radio, label: è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis|not}}"}
       - {kind: radio, label: "è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ricade", when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}"}
       # Its cases, opened by it (seen 2026-10-29): one is required, and each opens art. 5-ter's
-      # adattabilità box (required) and its two conditions (one required) below it.
-      - {kind: checkbox, label: "locali con un’altezza minima interna", on_page: true, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_altezza}}"}
-      - {kind: checkbox, label: alloggio monostanza per una persona, on_page: true, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_monostanza_uno}}"}
-      - {kind: checkbox, label: alloggio monostanza per due persone, on_page: true, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|is_monostanza_due}}"}
-      - {kind: checkbox, label: che soddisfano il requisito dell, on_page: true, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_adattabilita}}"}
-      - {kind: checkbox, label: i locali sono situati in edifici sottoposti ad interventi di recupero, on_page: true, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5ter|is_recupero}}"}
-      - {kind: checkbox, label: è contestualmente presentato, on_page: true, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5ter|is_progetto_alternativo}}"}
+      # adattabilità box (required) and its two conditions (one required) below it, found from
+      # its box (`anchor`): a low one-room flat ticks two cases, and each one's conditions.
+      - {kind: checkbox, label: locali con un’altezza minima interna, on_page: true, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_altezza__altezza_e_monostanza_uno__altezza_e_monostanza_due}}"}
+      - {kind: checkbox, label: che soddisfano il requisito dell, anchor: locali con un’altezza minima interna, block: 1, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_altezza__altezza_e_monostanza_uno__altezza_e_monostanza_due}} {{ask.igienico_adattabilita}}"}
+      - {kind: checkbox, label: i locali sono situati in edifici sottoposti ad interventi di recupero, anchor: locali con un’altezza minima interna, block: 1, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_altezza__altezza_e_monostanza_uno__altezza_e_monostanza_due}} {{ask.igienico_5ter|is_recupero}}"}
+      - {kind: checkbox, label: è contestualmente presentato, anchor: locali con un’altezza minima interna, block: 1, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_altezza__altezza_e_monostanza_uno__altezza_e_monostanza_due}} {{ask.igienico_5ter|is_progetto_alternativo}}"}
+      - {kind: checkbox, label: alloggio monostanza per una persona, on_page: true, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__altezza_e_monostanza_uno}}"}
+      - {kind: checkbox, label: che soddisfano il requisito dell, anchor: alloggio monostanza per una persona, block: 1, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__altezza_e_monostanza_uno}} {{ask.igienico_adattabilita}}"}
+      - {kind: checkbox, label: i locali sono situati in edifici sottoposti ad interventi di recupero, anchor: alloggio monostanza per una persona, block: 1, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__altezza_e_monostanza_uno}} {{ask.igienico_5ter|is_recupero}}"}
+      - {kind: checkbox, label: è contestualmente presentato, anchor: alloggio monostanza per una persona, block: 1, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__altezza_e_monostanza_uno}} {{ask.igienico_5ter|is_progetto_alternativo}}"}
+      - {kind: checkbox, label: alloggio monostanza per due persone, on_page: true, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_due__altezza_e_monostanza_due}}"}
+      - {kind: checkbox, label: che soddisfano il requisito dell, anchor: alloggio monostanza per due persone, block: 1, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_due__altezza_e_monostanza_due}} {{ask.igienico_adattabilita}}"}
+      - {kind: checkbox, label: i locali sono situati in edifici sottoposti ad interventi di recupero, anchor: alloggio monostanza per due persone, block: 1, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_due__altezza_e_monostanza_due}} {{ask.igienico_5ter|is_recupero}}"}
+      - {kind: checkbox, label: è contestualmente presentato, anchor: alloggio monostanza per due persone, block: 1, when: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_due__altezza_e_monostanza_due}} {{ask.igienico_5ter|is_progetto_alternativo}}"}
       - {kind: radio, label: non è conforme ai requisiti igienico-sanitari, when: "{{ask.igienico_conforme|not}}"}
       - {kind: checkbox, label: Si allega documentazione per la richiesta di deroga, when: "{{ask.igienico_conforme|not}}"}
       # Sismica: concrete or steel works (their art. 65 denuncia attached), then the seismic
