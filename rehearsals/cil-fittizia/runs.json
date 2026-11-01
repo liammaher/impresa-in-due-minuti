@@ -16,5 +16,11 @@
   "answers": "answers-bene-culturale.json",
   "result": "filled",
   "seconds": 75.6
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-notifica.json",
+  "result": "filled",
+  "seconds": 76.7
  }
 ]

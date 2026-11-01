@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (138 cases in all, 138 with a recorded filled run).
+  case (142 cases in all, 142 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -29,12 +29,12 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 31 | 0 | 1 | 4 | 7 | 29 |
+| CILA | 43 | 31 | 0 | 1 | 4 | 7 | 30 |
 | Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 14 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 8 |
-| Permesso di costruire | 153 | 107 | 0 | 14 | 18 | 14 | 170 |
-| SCIA | 150 | 124 | 0 | 4 | 12 | 10 | 61 |
-| SCIA alternativa | 128 | 107 | 0 | 6 | 7 | 8 | 73 |
+| Permesso di costruire | 153 | 107 | 0 | 14 | 14 | 14 | 170 |
+| SCIA | 150 | 124 | 0 | 4 | 9 | 10 | 61 |
+| SCIA alternativa | 128 | 107 | 0 | 6 | 7 | 8 | 74 |
 | Agibilità (SCA) | 36 | 29 | 0 | 0 | 2 | 5 | 18 |
 
 ## Next cases
@@ -74,19 +74,15 @@ On the portal, not mapped (dictionary work first):
 - CILA: `comunicazioni/imprese_esecutrici` → `da_soggetti_coinvolti` (che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla se…)
 - CILA: `comunicazioni/imprese_esecutrici` → `(nothing)` (che, in quanto opere di modesta entità che non interessano le specifi…)
 - CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
-- Permesso di costruire: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/intervento_permesso_sanatoria/conformita_presentazione_realizzazione` → `condizione_sicurezza_rimozione` (propone la realizzazione di interventi anche strutturali necessari re…)
-- Permesso di costruire: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/intervento_permesso_sanatoria/conformita_urbanistica_edilizia_presentazione_realizzazione` → `condizione_sicurezza_rimozione_doppia` (propone la realizzazione di interventi anche strutturali necessari re…)
 - Permesso di costruire: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - Permesso di costruire: `dichiarazioni/imprese_esecutrici` → `prima_inizio_lavori` (l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_atto` (dà atto che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_attesta` (attesta che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `permesso_costruire_in_sanatoria` (ai fini della sanatoria, la presente SCIA:)
-- Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica/rilevanza_sismica` → `bassa_sismicita` (dà atto che l’immobile interessato dall’intervento è ubicato in zona…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `realizzazione_intervento_atto` (dà atto che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `realizzazione_intervento_attesta` (attesta che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `permesso_costruire_in_sanatoria` (ai fini della sanatoria, la presente SCIA:)
-- Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia/rilevanza_sismica` → `bassa_sismicita` (dà atto che l’immobile interessato dall’intervento è ubicato in zona…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_inf_ugu_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/prevenzione_incendi` → `variante_progetto` (costituisce variante e il sottoscritto assevera che le modifiche non…)
@@ -98,9 +94,6 @@ On the portal, not mapped (dictionary work first):
 - SCIA: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - SCIA: `dichiarazioni/imprese_esecutrici` → `(nothing)` (l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp…)
 - SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
-- SCIA: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_assenza_scia_fino_dieci_mila/ai_fini_della_sanatoria` → `no_interventi` (non prevede interventi;)
-- SCIA: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_assenza_scia_fino_dieci_mila/ai_fini_della_sanatoria` → `propone_interventi` (propone la realizzazione di interventi anche strutturali necessari re…)
-- SCIA: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_assenza_scia_fino_dieci_mila/rilevanza_sismica_interventi` → `zona_sismica_bassa` (dà atto che l’immobile interessato dall’intervento è ubicato in zona…)
 - SCIA: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_inf_ugu_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
 - SCIA: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo…)
 - SCIA: `relazione_tecnica_asseverazione/prevenzione_incendi` → `variante_progetto` (costituisce variante e il sottoscritto assevera che le modifiche non…)
@@ -193,6 +186,7 @@ Portal boxes of the CILA no schema alternative matched and no case ticks:
 - Relazione Tecnica di Asseverazione C.I.…: 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; (mapped)
 - Relazione Tecnica di Asseverazione C.I.…: 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; (mapped)
 - Relazione Tecnica di Asseverazione C.I.…: 6%, per le U.I. < 60 mq di superficie utile; (mapped)
+- Relazione Tecnica di Asseverazione C.I.…: attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso… (mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
 - Qualifica e dati del procuratore: all'Estero (not mapped)
 
@@ -267,9 +261,9 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `permesso_costruire` | permesso di costruire | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `segnalazione_certificata` | segnalazione certificata/denuncia di inizio attività alternativa al p… | h | filled on the portal | 1 |
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `oblazione_doppio_contributo_parziale` | il rilascio del permesso di costruire in sanatoria è subordinato al p… | l | filled on the portal | 1 |
-| `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `condizione_sicurezza_rimozione` | propone la realizzazione di interventi anche strutturali necessari re… | l | on the portal, not mapped |  |
+| `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `condizione_sicurezza_rimozione` | propone la realizzazione di interventi anche strutturali necessari re… | l | left empty |  |
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `oblazione_doppio_contributo_totale` | il rilascio del permesso di costruire in sanatoria è subordinato al p… | l | filled on the portal | 1 |
-| `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `condizione_sicurezza_rimozione_doppia` | propone la realizzazione di interventi anche strutturali necessari re… | l | on the portal, not mapped |  |
+| `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `condizione_sicurezza_rimozione_doppia` | propone la realizzazione di interventi anche strutturali necessari re… | l | left empty |  |
 | `dichiarazioni/titolo_possesso` | `titolare_esclusivo` | avere titolarità esclusiva all'esecuzione dell'intervento | h | filled on the portal | 1 |
 | `dichiarazioni/titolo_possesso` | `non_titolare_esclusivo` | non avere titolarità esclusiva all'esecuzione dell'intervento, ma di… | h | filled on the portal | 3 |
 | `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `fabbricati` | Nuovo Catasto Edilizio Urbano | h | filled on the portal | 36 |
@@ -326,7 +320,7 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `realizzazione_intervento_atto` | dà atto che la data/epoca di realizzazione dell’intervento | m | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `realizzazione_intervento_attesta` | attesta che la data/epoca di realizzazione dell’intervento | m | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `permesso_costruire_in_sanatoria` | ai fini della sanatoria, la presente SCIA: | m | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `bassa_sismicita` | dà atto che l’immobile interessato dall’intervento è ubicato in zona… | m | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `bassa_sismicita` | dà atto che l’immobile interessato dall’intervento è ubicato in zona… | m | left empty |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `media_alta_sismicita` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `no_rilevanza_strutturale` | no portal box | h | no portal box |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `ha_rilevanza_strutturale` | no portal box | h | no portal box |  |
@@ -334,7 +328,7 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `realizzazione_intervento_atto` | dà atto che la data/epoca di realizzazione dell’intervento | m | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `realizzazione_intervento_attesta` | attesta che la data/epoca di realizzazione dell’intervento | m | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `permesso_costruire_in_sanatoria` | ai fini della sanatoria, la presente SCIA: | m | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `bassa_sismicita` | dà atto che l’immobile interessato dall’intervento è ubicato in zona… | m | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `bassa_sismicita` | dà atto che l’immobile interessato dall’intervento è ubicato in zona… | m | left empty |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `media_alta_sismicita` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `no_rilevanza_strutturale` | no portal box | h | no portal box |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `ha_rilevanza_strutturale` | no portal box | h | no portal box |  |
@@ -491,6 +485,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - Dati progettista e…: nelle zone agricole – zone E, ai sensi dell'art. 2 comma 8 della l.r. n. 19/2001 e suo re… (mapped)
 - Asseverazione PdC - stato legittimo, di…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (mapped)
 - Asseverazione PdC - stato legittimo, di…: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (mapped)
+- Asseverazione PdC - stato legittimo, di…: attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso… (mapped)
 - Asseverazione PdC - stato legittimo, di…: un intervento soggetto a SCIA in corso di esecuzione (mapped)
 - Asseverazione PdC - stato legittimo, di…: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della… (not mapped)
 - Asseverazione PdC - stato legittimo, di…: un intervento soggetto a SCIA (mapped)
@@ -498,7 +493,6 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - stato legittimo, di…: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguag… (mapped)
 - Asseverazione PdC - stato legittimo, di…: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguag… (mapped)
 - Asseverazione PdC - stato legittimo, di…: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla S… (not mapped)
-- Asseverazione PdC - stato legittimo, di…: non prevede interventi; (not mapped)
 - Asseverazione PdC - Dati immobile, stru…: PIANO PARTICOLAREGGIATO (not mapped)
 - Asseverazione PdC - Dati immobile, stru…: PIANO DI LOTIZZAZIONE (not mapped)
 - Asseverazione PdC - Dati immobile, stru…: PIANO DI RECUPERO (not mapped)
@@ -673,9 +667,9 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `allega_autorizzazione_sismica` | sub-option inside P127 text; no separate box in worksheet | l | no portal box |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `silenzio_assenso_autorizzazione` | sub-option inside P127 text; no separate box in worksheet | l | no portal box |  |
-| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `no_interventi` | non prevede interventi; | h | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `propone_interventi` | propone la realizzazione di interventi anche strutturali necessari re… | h | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `zona_sismica_bassa` | dà atto che l’immobile interessato dall’intervento è ubicato in zona… | h | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `no_interventi` | non prevede interventi; | h | left empty |  |
+| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `propone_interventi` | propone la realizzazione di interventi anche strutturali necessari re… | h | left empty |  |
+| `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `zona_sismica_bassa` | dà atto che l’immobile interessato dall’intervento è ubicato in zona… | h | left empty |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `zona_sismica_media_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `no_rilevanza_strutturale` | portal has no such option in sanatoria section | m | no portal box |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `ha_rilevanza_strutturale` | portal has no such option in sanatoria section | m | no portal box |  |
@@ -771,6 +765,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Asseverazione SCIA - Stato legittimo, D…: 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; (mapped)
 - Asseverazione SCIA - Stato legittimo, D…: 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; (mapped)
 - Asseverazione SCIA - Stato legittimo, D…: 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile; (mapped)
+- Asseverazione SCIA - Stato legittimo, D…: dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di… (mapped)
 - Asseverazione SCIA - Stato legittimo, D…: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della… (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: si impegna a presentare la dichiarazione per l’iscrizione al catasto successivamente all’… (mapped)
 - Asseverazione SCIA - Stato legittimo, D…: dà atto che la data/epoca di realizzazione dell’intervento (not mapped)
@@ -790,7 +785,6 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Asseverazione SCIA - Inquinamento acust…: le opere comportano la produzione di materiali da scavo considerati come sottoprodotti su… (not mapped)
 - Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno riutilizzati nello stesso luog… (mapped)
 - Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno gestiti dall'interessato come… (mapped)
-- Asseverazione SCIA - Amianto, conformit…: alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA - Amianto, conformit…: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA - Amianto, conformit…: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di… (mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
@@ -965,6 +959,7 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Asseverazione SCIA Alternativa - Dati p…: 4. Altri interventi individuati dalla legislazione regionale (1) (not mapped)
 - Asseverazione SCIA Alternativa - stato…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (mapped)
 - Asseverazione SCIA Alternativa - stato…: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (mapped)
+- Asseverazione SCIA Alternativa - stato…: attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso… (mapped)
 - Asseverazione SCIA Alternativa - Dati i…: PUC (mapped)
 - Asseverazione SCIA Alternativa - Dati i…: PUA (mapped)
 - Asseverazione SCIA Alternativa - Dati i…: PIANO PARTICOLAREGGIATO (mapped)

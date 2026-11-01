@@ -13,7 +13,8 @@
 # is a radio in one pratica and a checkbox in another; `if_present` a field only some pratiche
 # show; `on_page` one the crawl can't see (shown by two choices together), found by label on
 # the page; `by_label` one the crawl sees but whose id another answer moves, found the same way;
-# `anchor`/`block` a field inside the block that starts at another field. A `when`'s
+# `anchor`/`block` a field inside the block that starts at another field; `slot` on a "si allega"
+# box, what it adds on Allega documenti as read on the portal (gen.py `unslotted`). A `when`'s
 # words gate each other in order: pre-flight asks a later one only once the earlier hold.
 # A `when` has no "or": `|in_<a>__<b>` is true for any of those answers.
 # An ask's `default` answers it silently: only where no answer can be a wrong statement (a
@@ -222,6 +223,7 @@ asks:
   paes_protocollo: {type: text, question: "The landscape authorization's P.G. (protocollo) number"}
   paes_data: {type: date, question: "Its date"}
   paes_scadenza: {type: date, question: "The date it was to stop being valid"}
+  titolo_con_paesaggistica: {type: yes_no, question: "Did the permesso or SCIA go with a landscape authorization (its P.G. number and date)?", only_if: [titolo_tipo]}
   # The autorizzazione paesaggistica semplificata (DPR 31/2017): the protection the property
   # is under (art. 136: a declaration by D.M. or D.G.R.; art. 142: by law, e.g. the coast) and
   # what the works are in the decree's Allegato B, the architect's to say.
@@ -862,6 +864,7 @@ asks:
     question: "Is the property under landscape protection (D.Lgs. 42/2004 parte III: art. 136, art. 142 or the piano paesaggistico), and what do the works need? no (not protected); senza autorizzazione (protected, but the works don't alter the place or the buildings' look, or need no authorization: art. 149, DPR 31/2017 Allegato A); semplificata (DPR 31/2017 Allegato B); ordinaria (art. 146)"
     options: ["no", senza autorizzazione, semplificata, ordinaria]
   relazione_paesaggistica: {type: file, question: "The relazione paesaggistica (DPCM 12/12/2005), for the autorizzazione paesaggistica ordinaria (PDF)"}
+  relazione_semplificata_doc: {type: file, question: "The relazione paesaggistica semplificata with its documentation (DPR 31/2017, Allegato D), for the slot the asseverazione's \"Si allega\" adds (PDF)"}
   # In a SCIA in sanatoria (the recipe sets it) works that needed a landscape authorization are
   # assessed for compatibility by the Sportello's request for a binding parere (art. 36-bis c. 4).
   sanatoria_paesaggio: {type: yes_no, question: "Is this a sanatoria, so works that needed a landscape authorization go through art. 36-bis c. 4?", default: "false"}
@@ -1440,7 +1443,9 @@ sections:
       - {kind: tick, label: dichiara di aver verificato la documentazione, if_present: true, when: "{{ask.dlgs81}} {{ask.verificato_idoneita}}"}
       - {kind: tick, label: dichiara che l'intervento non è soggetto all'invio, when: "{{ask.dlgs81}} {{ask.notifica_dovuta|not}}"}
       - {kind: tick, label: dichiara che l'intervento è soggetto all'invio, when: "{{ask.dlgs81}} {{ask.notifica_dovuta}}"}
-      - {kind: tick, label: allega alla presente comunicazione la notifica, if_present: true, when: "{{ask.dlgs81}} {{ask.notifica_dovuta}}"}
+      # The CIL's and the CILA's notifica has no slot of its own: Allegati liberi, which on the CIL
+      # takes only signed files (read on a filled CIL draft 2026-11-01; the CILA 2026-10-28).
+      - {kind: tick, label: allega alla presente comunicazione la notifica, if_present: true, when: "{{ask.dlgs81}} {{ask.notifica_dovuta}}", slot: "none of its own: Allegati liberi (signed files only on the CIL: the person's)"}
       - {kind: checkbox, label: e allega alla presente segnalazione la notifica, if_present: true, on_page: true, when: "{{ask.dlgs81}} {{ask.notifica_dovuta}}"}
       # A permesso's notifica goes before the works start, once it is issued.
       - {kind: radio, label: invierà la notifica prima dell'inizio dei lavori, if_present: true, on_page: true, when: "{{ask.dlgs81}} {{ask.notifica_dovuta}}"}
@@ -1735,9 +1740,17 @@ sections:
       - {kind: radio, label: di cui al Permesso di costruire, when: "{{ask.titolo_tipo|is_permesso_di_costruire}}"}
       - {kind: text, label: P.G. numero, value: "{{ask.pdc_protocollo}}", when: "{{ask.titolo_tipo|is_permesso_di_costruire}}"}
       - {kind: date, label: del, value: "{{ask.pdc_data|date_it}}", when: "{{ask.titolo_tipo|is_permesso_di_costruire}}"}
+      # A permesso or SCIA that went with a landscape authorization names it too (crawled 2026-11-01:
+      # the box opens its prot. n. and date, after the title's own "del": the second one shown).
+      - {kind: checkbox, label: e autorizzazione paesaggistica, by_label: true, when: "{{ask.titolo_tipo|is_permesso_di_costruire}} {{ask.titolo_con_paesaggistica}}"}
+      - {kind: text, label: prot.n., by_label: true, value: "{{ask.paes_protocollo}}", when: "{{ask.titolo_tipo|is_permesso_di_costruire}} {{ask.titolo_con_paesaggistica}}"}
+      - {kind: date, label: del, nth: 2, by_label: true, value: "{{ask.paes_data|date_it}}", when: "{{ask.titolo_tipo|is_permesso_di_costruire}} {{ask.titolo_con_paesaggistica}}"}
       - {kind: radio, label: di cui alla SCIA, when: "{{ask.titolo_tipo|is_scia}}"}
       - {kind: text, label: P.G. numero, value: "{{ask.pdc_protocollo}}", when: "{{ask.titolo_tipo|is_scia}}"}
       - {kind: date, label: del, value: "{{ask.pdc_data|date_it}}", when: "{{ask.titolo_tipo|is_scia}}"}
+      - {kind: checkbox, label: e autorizzazione paesaggistica, by_label: true, when: "{{ask.titolo_tipo|is_scia}} {{ask.titolo_con_paesaggistica}}"}
+      - {kind: text, label: prot.n., by_label: true, value: "{{ask.paes_protocollo}}", when: "{{ask.titolo_tipo|is_scia}} {{ask.titolo_con_paesaggistica}}"}
+      - {kind: date, label: del, nth: 2, by_label: true, value: "{{ask.paes_data|date_it}}", when: "{{ask.titolo_tipo|is_scia}} {{ask.titolo_con_paesaggistica}}"}
       - {kind: radio, label: di cui all'autorizzazione paesaggistica, when: "{{ask.titolo_tipo|is_autorizzazione_paesaggistica}}"}
       - {kind: text, label: prot.n., value: "{{ask.paes_protocollo}}", when: "{{ask.titolo_tipo|is_autorizzazione_paesaggistica}}"}
       - {kind: date, label: del, value: "{{ask.paes_data|date_it}}", when: "{{ask.titolo_tipo|is_autorizzazione_paesaggistica}}"}
@@ -2545,7 +2558,13 @@ sections:
   # label (the tolerances move the sanatoria's radios too: the runner finds them by label).
   - section: Asseverazione SCIA - Stato legittimo
     aliases: ["Asseverazione PdC - stato legittimo"]
-    leave: [presentata con prot., in data, i cui lavori sono stati iniziati in data, realizzato in data, in euro]
+    # Case 3's works proposal (non prevede / propone interventi) is one of the four rows the portal
+    # keeps as one field (defects.yaml scia-36bis-c1): the case is refused, these are never ticked.
+    # Its "bassa sismicità" row (zones 3 and 4) never holds in Napoli, zona 2 (DGR Campania
+    # 5447/2002): the seismic row ticked is the one for zones 1 and 2. All crawled 2026-11-01.
+    leave: [presentata con prot., in data, i cui lavori sono stati iniziati in data, realizzato in data, in euro,
+            non prevede interventi, propone la realizzazione di interventi anche strutturali,
+            dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa]
     supports:
       - {if: "{{ask.tolleranze}}", value: "{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}", in: ["true"], else: "Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4)."}
       - {if: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}", value: "{{ask.toll_sismica}}", in: [autorizzazione, silenzio assenso], else: "A structural tolerance relevant for public safety (art. 94-bis c. 1 a) can be declared only with the Genio Civile's seismic authorization (art. 94 c. 2) or its silenzio assenso (c. 2-bis): art. 34-bis c. 3-bis DPR 380/2001."}
@@ -2595,7 +2614,9 @@ sections:
       - {kind: checkbox, label: "un intervento soggetto a permesso di costruire, in assenza", on_page: true, when: "{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_assenza}}"}
       - {kind: checkbox, label: "un intervento soggetto a permesso di costruire, In parziale", on_page: true, when: "{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}"}
       - {kind: date, label: realizzato in data, by_label: true, value: "{{ask.sanatoria_data|date_it}}", when: "{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}}"}
-      - {kind: checkbox, label: allega la documentazione necessaria indicata nel quadro riepilogativo, on_page: true, when: "{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_assenza}}"}
+      # Read on the permesso in sanatoria's filled drafts 2026-11-01: no slot beyond the sanatoria's own
+      # (Elaborati richiesti per la sanatoria, which the SCIA in sanatoria shows without this box).
+      - {kind: checkbox, label: allega la documentazione necessaria indicata nel quadro riepilogativo, on_page: true, when: "{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_assenza}}", slot: "none of its own: the documents the Quadro riepilogativo lists, in their slots"}
       - {kind: radio, label: alla disciplina urbanistica vigente al momento della presentazione, on_page: true, when: "{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}} {{ask.pdc_sanatoria_conformita|is_urbanistica}}"}
       - {kind: radio, label: alla disciplina urbanistica e edilizia vigente sia al momento, on_page: true, when: "{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}} {{ask.pdc_sanatoria_conformita|is_doppia}}"}
       - {kind: radio, label: dichiara che l’intervento da sanare non richiede, by_label: true, when: "{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_invariato}}"}
@@ -2743,15 +2764,18 @@ sections:
       - {kind: radio, label: "ricade in zona tutelata, ma le opere non comportano alterazione", when: "{{ask.paesaggio|is_senza_autorizzazione}}"}
       - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
       - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
-      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
+      # What each box adds on Allega documenti, read on the combinations' filled drafts 2026-11-01:
+      # the semplificata's a required slot taking a plain PDF (parts/paesaggistica-semplificata.yaml), the
+      # ordinaria's the second relazione slot, the parere vincolante's a signed-only slot (the person's).
+      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
       - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
       - {kind: radio, label: è assoggettato al procedimento ordinario, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
-      - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}", slot: "Relazione paesaggistica e documentazione per il rilascio"}
       # A sanatoria: the compatibility of works already done, the parere's documents attached
       # (the SCIA's form only: the SCIA alternativa has no sanatoria).
       - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}"}
       - {kind: radio, label: è assoggettato al procedimento di accertamento della compatibilità paesaggistica, if_present: true, when: "{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}"}
-      - {kind: checkbox, label: si allega documentazione necessaria ai fini del rilascio del parere vincolante, if_present: true, when: "{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}"}
+      - {kind: checkbox, label: si allega documentazione necessaria ai fini del rilascio del parere vincolante, if_present: true, when: "{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}", slot: "Documentazione necessaria ai fini del rilascio del parere vincolante (signed files only: the person's)"}
       - {kind: radio, label: non è sottoposto a tutela, when: "{{ask.bene_culturale|not}}"}
       - {kind: radio, label: è sottoposto a tutela, when: "{{ask.bene_culturale}}"}
       - {kind: checkbox, label: "Si allega la documentazione necessaria ai fini del rilascio del parere/nulla osta", when: "{{ask.bene_culturale}}"}
@@ -3089,7 +3113,8 @@ sections:
       - {kind: text, label: ai sensi della seguente normativa, value: "{{ask.contributo_normativa}}", when: "{{ask.scia_onerosa|not}}"}
       - {kind: radio, label: è a titolo oneroso, when: "{{ask.scia_onerosa}}"}
       - {kind: radio, label: chiede allo Sportello Unico di effettuare il calcolo, when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_sportello}}"}
-      - {kind: radio, label: allega il prospetto di calcolo preventivo, when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}"}
+      # Read on a filled draft 2026-11-01: the permesso adds no slot for the prospetto (the SCIA's does).
+      - {kind: radio, label: allega il prospetto di calcolo preventivo, when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}", slot: "none of its own: Allegati liberi"}
       - {kind: radio, label: dichiara che il versamento del contributo di costruzione sarà effettuato al momento del ritiro, when: "{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_prima_dei_lavori}}"}
       - {kind: radio, label: chiede la rateizzazione del contributo, when: "{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_rateizzazione}}"}
       - {kind: radio, label: si impegna a corrispondere il costo di costruzione, when: "{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_in_corso_d_opera}}"}
@@ -3252,10 +3277,11 @@ sections:
       - {kind: radio, label: "ricade in zona tutelata, ma le opere non comportano alterazione", when: "{{ask.paesaggio|is_senza_autorizzazione}}"}
       - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
       - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
-      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
+      # What each box adds on Allega documenti: as the SCIA's (read on the permesso's filled drafts 2026-11-01).
+      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
       - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
       - {kind: radio, label: è assoggettato al procedimento ordinario, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
-      - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}", slot: "Relazione paesaggistica e documentazione per il rilascio"}
       - {kind: radio, label: non è sottoposto a tutela, when: "{{ask.bene_culturale|not}}"}
       - {kind: radio, label: è sottoposto a tutela, when: "{{ask.bene_culturale}}"}
       - {kind: radio, label: non ricade in area tutelata, when: "{{ask.area_protetta|is_no}}"}

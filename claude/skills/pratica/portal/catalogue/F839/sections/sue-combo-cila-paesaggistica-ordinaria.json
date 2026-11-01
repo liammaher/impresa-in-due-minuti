@@ -5921,7 +5921,11 @@
            "r64c2p92reg:txt",
            "r62c2p88reg:txt"
           ]
-         ]
+         ],
+         "plus": {
+          "anchor": "Tipologia di atto (2)",
+          "adds": 6
+         }
         },
         {
          "choice": "3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile;",
@@ -5944,7 +5948,11 @@
            "r64c2p92reg:txt",
            "r62c2p88reg:txt"
           ]
-         ]
+         ],
+         "plus": {
+          "anchor": "Tipologia di atto (2)",
+          "adds": 6
+         }
         },
         {
          "choice": "4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;",
@@ -5967,7 +5975,11 @@
            "r64c2p92reg:txt",
            "r62c2p88reg:txt"
           ]
-         ]
+         ],
+         "plus": {
+          "anchor": "Tipologia di atto (2)",
+          "adds": 6
+         }
         },
         {
          "choice": "5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;",
@@ -5990,7 +6002,11 @@
            "r64c2p92reg:txt",
            "r62c2p88reg:txt"
           ]
-         ]
+         ],
+         "plus": {
+          "anchor": "Tipologia di atto (2)",
+          "adds": 6
+         }
         },
         {
          "choice": "6%, per le U.I. < 60 mq di superficie utile;",
@@ -6013,7 +6029,11 @@
            "r64c2p92reg:txt",
            "r62c2p88reg:txt"
           ]
-         ]
+         ],
+         "plus": {
+          "anchor": "Tipologia di atto (2)",
+          "adds": 6
+         }
         }
        ]
       },
@@ -6207,7 +6227,11 @@
            "r62c2p90reg:txt",
            "r60c2p86reg:txt"
           ]
-         ]
+         ],
+         "plus": {
+          "anchor": "Tipologia di atto (2)",
+          "adds": 6
+         }
         },
         {
          "choice": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che la medesima tolleranza cost",
@@ -6270,6 +6294,373 @@
            "r67c1p96reg:txta",
            "r70c1p99reg:txta"
           ]
+         ],
+         "plus": {
+          "anchor": "Tipologia di atto (2)",
+          "adds": 6
+         },
+         "then": [
+          {
+           "choice": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :",
+           "id": "r46c1p55reg:radio:6_clone",
+           "kind": "radio",
+           "reveals": [
+            {
+             "id": "r47c2p57reg:radio:7_clone",
+             "kind": "radio",
+             "label": "allega l’autorizzazione sismica",
+             "group": "r47c2p57reg:radio"
+            },
+            {
+             "id": "r49c2p64reg:radio:8_clone",
+             "kind": "radio",
+             "label": "attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso dei termini del procedimento,",
+             "group": "r49c2p64reg:radio"
+            }
+           ],
+           "moved": [
+            [
+             "r51c1p70reg:radio:7_clone",
+             "r51c1p70reg:radio:9_clone"
+            ],
+            [
+             "r52c1p71reg:radio:8_clone",
+             "r52c1p71reg:radio:10_clone"
+            ],
+            [
+             "r58c1p79reg:txt",
+             "r56c1p75reg:txt"
+            ],
+            [
+             "r58c2p81reg:txt",
+             "r56c2p77reg:txt"
+            ],
+            [
+             "r65c1p91reg:txt",
+             "r63c1p87reg:txt"
+            ],
+            [
+             "r65c2p93reg:txt",
+             "r63c2p89reg:txt"
+            ]
+           ],
+           "plus": {
+            "anchor": "Tipologia di atto (2)",
+            "adds": 6
+           },
+           "then": [
+            {
+             "choice": "allega l’autorizzazione sismica",
+             "id": "r47c2p57reg:radio:7_clone",
+             "kind": "radio",
+             "reveals": [
+              {
+               "id": "r49c2p62reg:calendar_input",
+               "kind": "date",
+               "label": "rilasciata in data"
+              },
+              {
+               "id": "r49c3p64reg:txt",
+               "kind": "text",
+               "label": "prot. n.",
+               "max": 9999
+              }
+             ],
+             "moved": [
+              [
+               "r49c2p64reg:radio:8_clone",
+               "r50c2p68reg:radio:8_clone"
+              ],
+              [
+               "r51c1p70reg:radio:9_clone",
+               "r52c1p74reg:radio:9_clone"
+              ],
+              [
+               "r52c1p71reg:radio:10_clone",
+               "r53c1p75reg:radio:10_clone"
+              ],
+              [
+               "r58c1p79reg:txt",
+               "r57c1p79reg:txt"
+              ],
+              [
+               "r58c2p81reg:txt",
+               "r57c2p81reg:txt"
+              ],
+              [
+               "r58c1p79reg:txt",
+               "r59c1p83reg:txt"
+              ],
+              [
+               "r58c2p81reg:txt",
+               "r59c2p85reg:txt"
+              ],
+              [
+               "r65c1p91reg:txt",
+               "r64c1p91reg:txt"
+              ],
+              [
+               "r65c2p93reg:txt",
+               "r64c2p93reg:txt"
+              ],
+              [
+               "r65c1p91reg:txt",
+               "r66c1p95reg:txt"
+              ],
+              [
+               "r65c2p93reg:txt",
+               "r66c2p97reg:txt"
+              ],
+              [
+               "r70c1p99reg:txta",
+               "r71c1p103reg:txta"
+              ]
+             ],
+             "plus": {
+              "anchor": "Tipologia di atto (2)",
+              "adds": 6
+             }
+            },
+            {
+             "choice": "attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso dei termini del procedimento,",
+             "id": "r49c2p64reg:radio:8_clone",
+             "kind": "radio",
+             "reveals": [
+              {
+               "id": "r51c2p69reg:calendar_input",
+               "kind": "date",
+               "label": "in data"
+              },
+              {
+               "id": "r51c3p71reg:txt",
+               "kind": "text",
+               "label": "prot. n.",
+               "max": 9999
+              }
+             ],
+             "moved": [
+              [
+               "r51c1p70reg:radio:9_clone",
+               "r52c1p74reg:radio:9_clone"
+              ],
+              [
+               "r52c1p71reg:radio:10_clone",
+               "r53c1p75reg:radio:10_clone"
+              ],
+              [
+               "r58c1p79reg:txt",
+               "r57c1p79reg:txt"
+              ],
+              [
+               "r58c2p81reg:txt",
+               "r57c2p81reg:txt"
+              ],
+              [
+               "r58c1p79reg:txt",
+               "r59c1p83reg:txt"
+              ],
+              [
+               "r58c2p81reg:txt",
+               "r59c2p85reg:txt"
+              ],
+              [
+               "r65c1p91reg:txt",
+               "r64c1p91reg:txt"
+              ],
+              [
+               "r65c2p93reg:txt",
+               "r64c2p93reg:txt"
+              ],
+              [
+               "r65c1p91reg:txt",
+               "r66c1p95reg:txt"
+              ],
+              [
+               "r65c2p93reg:txt",
+               "r66c2p97reg:txt"
+              ],
+              [
+               "r70c1p99reg:txta",
+               "r71c1p103reg:txta"
+              ]
+             ],
+             "plus": {
+              "anchor": "Tipologia di atto (2)",
+              "adds": 6
+             }
+            }
+           ]
+          },
+          {
+           "choice": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:",
+           "id": "r51c1p70reg:radio:7_clone",
+           "kind": "radio",
+           "reveals": [
+            {
+             "id": "r52c1p71reg:chk",
+             "kind": "checkbox",
+             "label": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito"
+            }
+           ],
+           "moved": [
+            [
+             "r52c1p71reg:radio:8_clone",
+             "r53c1p72reg:radio:8_clone"
+            ],
+            [
+             "r58c1p79reg:txt",
+             "r57c1p76reg:txt"
+            ],
+            [
+             "r58c2p81reg:txt",
+             "r57c2p78reg:txt"
+            ],
+            [
+             "r58c1p79reg:txt",
+             "r59c1p80reg:txt"
+            ],
+            [
+             "r58c2p81reg:txt",
+             "r59c2p82reg:txt"
+            ],
+            [
+             "r65c1p91reg:txt",
+             "r64c1p88reg:txt"
+            ],
+            [
+             "r65c2p93reg:txt",
+             "r64c2p90reg:txt"
+            ],
+            [
+             "r65c1p91reg:txt",
+             "r66c1p92reg:txt"
+            ],
+            [
+             "r65c2p93reg:txt",
+             "r66c2p94reg:txt"
+            ],
+            [
+             "r70c1p99reg:txta",
+             "r71c1p100reg:txta"
+            ]
+           ],
+           "plus": {
+            "anchor": "Tipologia di atto (2)",
+            "adds": 6
+           },
+           "then": [
+            {
+             "choice": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito",
+             "id": "r52c1p71reg:chk",
+             "kind": "checkbox",
+             "moved": [
+              [
+               "r59c1p80reg:txt",
+               "r57c1p76reg:txt"
+              ],
+              [
+               "r59c2p82reg:txt",
+               "r57c2p78reg:txt"
+              ],
+              [
+               "r66c1p92reg:txt",
+               "r64c1p88reg:txt"
+              ],
+              [
+               "r66c2p94reg:txt",
+               "r64c2p90reg:txt"
+              ]
+             ],
+             "plus": {
+              "anchor": "Tipologia di atto (2)",
+              "adds": 6
+             }
+            }
+           ]
+          },
+          {
+           "choice": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:",
+           "id": "r52c1p71reg:radio:8_clone",
+           "kind": "radio",
+           "reveals": [
+            {
+             "id": "r53c1p72reg:chk",
+             "kind": "checkbox",
+             "label": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito"
+            }
+           ],
+           "moved": [
+            [
+             "r58c1p79reg:txt",
+             "r57c1p76reg:txt"
+            ],
+            [
+             "r58c2p81reg:txt",
+             "r57c2p78reg:txt"
+            ],
+            [
+             "r58c1p79reg:txt",
+             "r59c1p80reg:txt"
+            ],
+            [
+             "r58c2p81reg:txt",
+             "r59c2p82reg:txt"
+            ],
+            [
+             "r65c1p91reg:txt",
+             "r64c1p88reg:txt"
+            ],
+            [
+             "r65c2p93reg:txt",
+             "r64c2p90reg:txt"
+            ],
+            [
+             "r65c1p91reg:txt",
+             "r66c1p92reg:txt"
+            ],
+            [
+             "r65c2p93reg:txt",
+             "r66c2p94reg:txt"
+            ],
+            [
+             "r70c1p99reg:txta",
+             "r71c1p100reg:txta"
+            ]
+           ],
+           "plus": {
+            "anchor": "Tipologia di atto (2)",
+            "adds": 6
+           },
+           "then": [
+            {
+             "choice": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito",
+             "id": "r53c1p72reg:chk",
+             "kind": "checkbox",
+             "moved": [
+              [
+               "r59c1p80reg:txt",
+               "r57c1p76reg:txt"
+              ],
+              [
+               "r59c2p82reg:txt",
+               "r57c2p78reg:txt"
+              ],
+              [
+               "r66c1p92reg:txt",
+               "r64c1p88reg:txt"
+              ],
+              [
+               "r66c2p94reg:txt",
+               "r64c2p90reg:txt"
+              ]
+             ],
+             "plus": {
+              "anchor": "Tipologia di atto (2)",
+              "adds": 6
+             }
+            }
+           ]
+          }
          ]
         }
        ]
@@ -6304,7 +6695,9 @@
      }
     }
    ],
-   "seconds": 32.9
+   "seconds": 56.6,
+   "depth": 8,
+   "recrawled": "2026-11-01"
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",

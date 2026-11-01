@@ -16,5 +16,11 @@
   "answers": "answers-impianti.json",
   "result": "filled",
   "seconds": 152.8
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 153.1
  }
 ]
