@@ -1092,5 +1092,35 @@ def _():
         assert blocks("s") == {s_block} and blocks("d") == ({d_block} if d_block else set()), (answers, blocks("s"), blocks("d"))
 
 
+@case("one box ticked by two labels under one condition is ticked once: the second choice would move the rows after it")
+def _():
+    steps = gen.generate(gen.load_yaml(ROOT / "rehearsals" / "cila-fittizia" / "recipe.yaml"))
+    sec = section(steps, "h) Impresa esecutrice")
+    radios = [f for f in sec["fields"] if f["kind"] == "radio"]
+    # "lavori sono/saranno eseguiti dall" is inside the CILA's own "che i lavori ...": one step
+    assert [f["label"] for f in radios] == ["che, in quanto opere di modesta entità", "che i lavori sono/saranno eseguiti dall"], radios
+
+
+@case("an on_page tick box isn't sent where the crawl has its label as the other kind (the SCIA alternativa's notifica radio)")
+def _():
+    steps = gen.generate(gen.load_yaml(ROOT / "rehearsals" / "scia-alternativa-fittizia" / "recipe.yaml"))
+    sec = section(steps, "l) Rispetto degli obblighi")
+    hits = [f["kind"] for f in sec["fields"] if f.get("label") == "e allega alla presente segnalazione la notifica"]
+    assert hits == ["radio"], hits
+
+
+@case("a box only a choice opens, under a `when` that starts elsewhere: the problem says to start it with that choice's term")
+def _():
+    import json
+    d = gen.load_yaml(HERE.parent / "dictionary" / "fnsuap.yaml")
+    e = next(x for x in d["sections"] if x["section"] == "Tecnici incaricati" and x.get("aliases"))
+    next(f for f in e["fields"] if f.get("label") == "si")["when"] = "{{ask.direttore_lavori|is_altro_tecnico}}"
+    crawl = json.loads((HERE.parent / "catalogue" / "F839" / "sections" / "scia.json").read_text())
+    c = next(s for s in crawl["sections"] if s["section"].startswith("h1)"))
+    recipe = gen.resolved(gen.load_yaml(ROOT / "rehearsals" / "scia-fittizia" / "recipe.yaml"))
+    probs = gen.fill(e, "h1) Tecnici incaricati", c, recipe, "h1)")[1]
+    assert probs and "start its `when` with that choice's first term" in probs[0], probs
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

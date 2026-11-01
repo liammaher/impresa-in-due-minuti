@@ -170,7 +170,9 @@ def sue_rehearsals_ready():
                # The portal's art. 36-bis asseverazione is one radio group (the library's discrepancies).
                ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Only art. 36 ",
                # The Comune gives no attestation of the exclusion (its landscape directive, § 3.2).
-               ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia"}
+               ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia",
+               # The portal requires the CILA's firm, "si riserva" or not (a run stopped on it, 2026-11-01).
+               ("cila-fittizia", "answers-impresa-dopo.json"): "The CILA names its building firm"}
     for name in names:
         for f in sorted((REHEARSALS / name).glob("answers*.json")):
             r = sue(name, f.name)

@@ -29,7 +29,7 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 31 | 0 | 1 | 4 | 7 | 28 |
+| CILA | 43 | 32 | 0 | 1 | 3 | 7 | 28 |
 | Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 14 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 8 |
 | Permesso di costruire | 153 | 108 | 0 | 14 | 13 | 14 | 162 |
@@ -72,7 +72,6 @@ On the portal, not mapped (dictionary work first):
 
 - CILA: `comunicazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - CILA: `comunicazioni/imprese_esecutrici` → `da_soggetti_coinvolti` (che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla se…)
-- CILA: `comunicazioni/imprese_esecutrici` → `(nothing)` (che, in quanto opere di modesta entità che non interessano le specifi…)
 - CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - Permesso di costruire: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
@@ -131,7 +130,7 @@ On the portal, not mapped (dictionary work first):
 | `comunicazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `ric_versamento` | allega la ricevuta di versamento | h | filled on the portal | 1 |
 | `comunicazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `versamento_inizio_lavori` | effettuerà, prima dell'inizio dei lavori, il pagamento del contributo… | h | filled on the portal | 1 |
 | `comunicazioni/imprese_esecutrici` | `da_soggetti_coinvolti` | che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla se… | h | on the portal, not mapped |  |
-| `comunicazioni/imprese_esecutrici` | `(nothing)` | che, in quanto opere di modesta entità che non interessano le specifi… | m | on the portal, not mapped |  |
+| `comunicazioni/imprese_esecutrici` | `(nothing)` | che, in quanto opere di modesta entità che non interessano le specifi… | m | filled on the portal | 1 |
 | `comunicazioni/obblighi_salute_sicurezza` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | filled on the portal | 1 |
 | `comunicazioni/obblighi_salute_sicurezza` | `(nothing)` | ricade nell'ambito di applicazione delle norme in materia di salute e… | m | filled on the portal | 7 |
 | `comunicazioni/obblighi_salute_sicurezza/ricade` | `inf200ggUomo` | dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-… | h | filled on the portal | 7 |
