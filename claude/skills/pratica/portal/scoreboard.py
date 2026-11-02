@@ -221,6 +221,10 @@ OPEN_BEYOND = [
     "oblazione and works proposal as one field with four values (checked 2026-11-01): a portal defect "
     "(docs/portal-defects.md), as is the permesso's under art. 36-bis. So is a variant to a pre-1977 title "
     "(art. 34-ter): its dating and oblazione are one field (checked 2026-11-02).",
+    "PdC in sanatoria under art. 36 in a protected area: works that don't alter the place are filled "
+    "(2026-11-02); works that do go with the accertamento of art. 167 in the same pratica, refused because the "
+    "permesso's landscape quadro wants one of three procedures and none is that one (pdc-36-paesaggio, checked "
+    "2026-11-02); new usable surface or volume is refused by law (art. 167 c. 4).",
     "The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.",
     "Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots "
     "may be missing (the catalogue notes this for the pratiche read on an empty draft); the diritti amount per "

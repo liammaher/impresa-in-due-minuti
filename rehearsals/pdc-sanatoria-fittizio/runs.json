@@ -34,5 +34,11 @@
   "answers": "answers-strutture.json",
   "result": "filled",
   "seconds": 143.9
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-tutela.json",
+  "result": "filled",
+  "seconds": 144.6
  }
 ]
