@@ -13,7 +13,8 @@
 # is a radio in one pratica and a checkbox in another; `if_present` a field only some pratiche
 # show; `on_page` one the crawl can't see (shown by two choices together), found by label on
 # the page; `by_label` one the crawl sees but whose id another answer moves, found the same way;
-# `anchor`/`block` a field inside the block that starts at another field; `slot` on a "si allega"
+# `anchor`/`block` a field inside the block that starts at another field, and an entry's `shift`
+# ({when, anchor}) a block that choice opens above the others of `anchor`; `slot` on a "si allega"
 # box, what it adds on Allega documenti as read on the portal (gen.py `unslotted`). A `when`'s
 # words gate each other in order: pre-flight asks a later one only once the earlier hold.
 # A `when` has no "or": `|in_<a>__<b>` is true for any of those answers; two fields on one box,
@@ -37,7 +38,8 @@
 # business.*: its property and procura are its own), `cr:` the person declaring for a client
 # company or condominium (its legale rappresentante or administrator), `o:` the owner company, `r:` its legale
 # rappresentante, `f1:`/`f2:` the firms, `s:` the structural designer, `d:` a direttore dei
-# lavori who isn't the architect, `a:`/`a2:`/`a3:` other technicians appointed for the works
+# lavori who isn't the architect, `p:` the architectural designer when it isn't the architect
+# presenting the pratica, `a:`/`a2:`/`a3:` other technicians appointed for the works
 # and `ad:`/`ad2:`/`ad3:` the firm each is employed by.
 
 # Yes/no asks with a `group` are asked as one checklist (`item`), the answer the list of
@@ -132,9 +134,17 @@ asks:
   contributo_pagato: {type: yes_no, question: "Is the contributo already paid (its receipt attached), rather than to be paid before the works start?"}
   ricevuta_contributo: {type: file, question: "The contributo di costruzione's payment receipt (PDF)"}
   prospetto_contributo: {type: file, question: "The prospetto di calcolo preventivo of the contributo di costruzione (PDF)"}
+  # The architect presents the pratica with the client's procura; the works' designer is her, or
+  # another technician (`p:`), whose block, asseverazione and signature they then are. An ask's
+  # `yours` is a step of the person's when it's answered yes.
+  progettista_altro:
+    type: yes_no
+    question: "Is the architectural designer (progettista) another technician than the architect presenting the pratica? If so, they are `p:` in the job's people: the form names them as the progettista and their asseverazione"
+    propose: "false"
+    yours: "The asseverazione is the designer's (`p:`): have them sign the pratica digitally too, besides the procuratore, before Firma e invio"
   direttore_lavori:
     type: choice
-    question: "Who directs the works? progettista (the architect filing the pratica); da nominare (no direttore dei lavori named in the pratica: named before the works start); altro tecnico (another technician, `d:` in the job's people)"
+    question: "Who directs the works? progettista (the works' designer: the architect filing the pratica, or `p:`); da nominare (no direttore dei lavori named in the pratica: named before the works start); altro tecnico (another technician, `d:` in the job's people)"
     options: [progettista, da nominare, altro tecnico]
     propose: "progettista"
   # The agibilità's attestazione tecnica is the direttore dei lavori's or, where none was
@@ -1516,22 +1526,54 @@ sections:
   # procuratore's section), and the direttore dei lavori too unless none is named. Another
   # technician as direttore (`d:`) is in the block "diverso dal progettista" opens below hers:
   # the SCIA's structural designer's labels (birth, residence, studio), by label from its Cognome.
+  # Another designer (`p:`) has the same block, above the director's (`shift`).
   - section: G1) Tecnici incaricati
     leave: [fax]
+    shift: {when: "{{ask.progettista_altro}}", anchor: Cognome}
     fields:
-      - {kind: radio, label: titolare dell'intervento o procuratore}
+      - {kind: radio, label: titolare dell'intervento o procuratore, when: "{{ask.progettista_altro|not}}"}
       - {kind: checkbox, label: incaricato anche come direttore dei lavori, when: "{{ask.direttore_lavori|is_progettista}}"}
-      - {kind: select, label: Provincia, value: "{{business.sede_legale_provincia}}"}
-      - {kind: text, label: Comune italiano, value: "{{business.sede_legale_comune|upper}}"}
-      - {kind: text, label: "Via, Piazza", value: "{{business.sede_legale_indirizzo|upper}}"}
-      - {kind: text, label: "N.", value: "{{business.sede_legale_civico}}"}
-      - {kind: text, label: C.A.P., value: "{{business.sede_legale_cap}}"}
-      - {kind: text, label: Iscritto all'ordine/collegio, value: "{{t:albo.ordine}}"}
-      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}"}
-      - {kind: text, label: al n., value: "{{t:albo.numero}}"}
-      - {kind: text, label: Telefono, value: "{{business.telefono|phone_it}}"}
-      - {kind: text, label: cell., value: "{{t:identity.phone|phone_it}}"}
-      - {kind: text, label: posta elettronica certificata, value: "{{t:identity.pec}}"}
+      - {kind: select, label: Provincia, value: "{{business.sede_legale_provincia}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Comune italiano, value: "{{business.sede_legale_comune|upper}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: "Via, Piazza", value: "{{business.sede_legale_indirizzo|upper}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: "N.", value: "{{business.sede_legale_civico}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: C.A.P., value: "{{business.sede_legale_cap}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: al n., value: "{{t:albo.numero}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Telefono, value: "{{business.telefono|phone_it}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: cell., value: "{{t:identity.phone|phone_it}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: posta elettronica certificata, value: "{{t:identity.pec}}", when: "{{ask.progettista_altro|not}}"}
+      # Another technician designs (`p:`): the radio the page words "non è colui che presenta la pratica"
+      # (the crawl names it by its column) opens their block, the first Cognome (read 2026-11-02).
+      - {kind: radio, label: tecnico incaricato, when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: "{{p:identity.last_name|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Nome, anchor: Cognome, block: 1, value: "{{p:identity.first_name|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: C.F., anchor: Cognome, block: 1, value: "{{p:identity.codice_fiscale}}", when: "{{ask.progettista_altro}}"}
+      - {kind: date, label: Data di nascita, anchor: Cognome, block: 1, value: "{{p:identity.date_of_birth|date_it}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Cittadinanza, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Sesso, anchor: Cognome, block: 1, value: "{{p:identity.sex|sesso}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Stato, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Provincia, anchor: Cognome, block: 1, value: "{{p:identity.birth_province}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Comune italiano, anchor: Cognome, block: 1, value: "{{p:identity.birth_comune|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Stato, nth: 2, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Provincia, nth: 2, anchor: Cognome, block: 1, value: "{{p:residenza.provincia}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Comune italiano, nth: 2, anchor: Cognome, block: 1, value: "{{p:residenza.comune|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "Via, Piazza", anchor: Cognome, block: 1, value: "{{p:residenza.indirizzo|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "N.", anchor: Cognome, block: 1, value: "{{p:residenza.civico}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: C.A.P., anchor: Cognome, block: 1, value: "{{p:residenza.cap}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Stato, nth: 3, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Provincia, nth: 3, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_provincia}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Comune italiano, nth: 3, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_comune|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "Via, Piazza", nth: 2, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_indirizzo|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "N.", nth: 2, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_civico}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: C.A.P., nth: 2, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_cap}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, anchor: Cognome, block: 1, value: "{{p:albo.ordine}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: di, anchor: Cognome, block: 1, value: "{{p:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: al n., anchor: Cognome, block: 1, value: "{{p:albo.numero}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Telefono, anchor: Cognome, block: 1, value: "{{p:identity.phone|phone_it}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: cell., anchor: Cognome, block: 1, value: "{{p:identity.phone|phone_it}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: "{{p:identity.pec}}", when: "{{ask.progettista_altro}}"}
       - {kind: checkbox, label: se il direttore dei lavori delle opere architettoniche è diverso, when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
       - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: "{{d:identity.last_name|upper}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
       - {kind: text, label: Nome, anchor: Cognome, block: 1, value: "{{d:identity.first_name|upper}}", when: "{{ask.direttore_lavori|is_altro_tecnico}}"}
@@ -1724,11 +1766,16 @@ sections:
       - {if: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}", value: "{{ask.toll_sismica}}", in: [autorizzazione, silenzio assenso], else: "A structural tolerance relevant for public safety (art. 94-bis c. 1 a) can be declared only with the Genio Civile's seismic authorization (art. 94 c. 2) or its silenzio assenso (c. 2-bis): art. 34-bis c. 3-bis DPR 380/2001."}
       - {if: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}}", value: "{{ask.toll_decorso}}", in: ["true"], else: "A structural tolerance of minor or no relevance for public safety can be declared only once the regional control term has run out, with no open requests and no negative outcome: art. 34-bis c. 3-bis DPR 380/2001."}
     fields:
-      - {kind: text, label: Cognome, value: "{{t:identity.last_name}}"}
-      - {kind: text, label: Nome, value: "{{t:identity.first_name}}"}
-      - {kind: text, label: Iscritto all'ordine, value: "{{t:albo.ordine}}"}
-      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}"}
-      - {kind: text, label: al n., value: "{{t:albo.numero}}"}
+      - {kind: text, label: Cognome, value: "{{t:identity.last_name}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Nome, value: "{{t:identity.first_name}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Iscritto all'ordine, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: al n., value: "{{t:albo.numero}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Cognome, value: "{{p:identity.last_name}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Nome, value: "{{p:identity.first_name}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Iscritto all'ordine, value: "{{p:albo.ordine}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: di, value: "{{p:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: al n., value: "{{p:albo.numero}}", when: "{{ask.progettista_altro}}"}
       - {kind: checkbox, label: interventi di manutenzione straordinaria, when: "{{ask.cila_manutenzione}}"}
       - {kind: checkbox, label: Interventi di restauro e risanamento conservativo, when: "{{ask.cila_restauro}}"}
       - {kind: checkbox, label: Interventi di eliminazione delle barriere architettoniche, when: "{{ask.cila_barriere}}"}
@@ -1927,15 +1974,32 @@ sections:
       - {kind: radio, label: prima nomina dell'impresa esecutrice, when: "{{ask.nomina_aggiunta|not}}"}
       - {kind: radio, label: nomina in aggiunta alla precedente impresa, when: "{{ask.nomina_aggiunta}}"}
 
-  # Landscape pratiche: the tecnico is the architect who files with the procura; another
-  # tecnico (the other choice's boxes) isn't mapped.
+  # Landscape pratiche: the tecnico is the designer, the architect who files with the procura or
+  # another technician (`p:`), whose name, codice fiscale and studio ("Studio in:", read
+  # 2026-11-02) the other choice opens above the albo's rows. More tecnici ("+") aren't mapped.
   - section: dati relativi al nome del tecnico
-    leave: [cognome, nome, codice fiscale, Stato, Provincia, Comune italiano, "Via, viale", Numero civico, C.A.P., Telefono, Fax, Cell., Posta elettronica]
+    leave: [Fax]
     fields:
-      - {kind: radio, label: è colui che presenta la pratica}
-      - {kind: text, label: ordine/collegio/albo, value: "{{t:albo.ordine}}"}
-      - {kind: text, label: provincia (sigla), value: "{{t:albo.provincia}}"}
-      - {kind: text, label: numero iscrizione, value: "{{t:albo.numero}}"}
+      - {kind: radio, label: è colui che presenta la pratica, when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: ordine/collegio/albo, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: provincia (sigla), value: "{{t:albo.provincia}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: numero iscrizione, value: "{{t:albo.numero}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: radio, label: non è colui che presenta la pratica, when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: cognome, value: "{{p:identity.last_name|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: nome, value: "{{p:identity.first_name|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: codice fiscale, value: "{{p:identity.codice_fiscale}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Stato, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Provincia, value: "{{p:business.sede_legale_provincia}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Comune italiano, value: "{{p:business.sede_legale_comune|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "Via, viale", value: "{{p:business.sede_legale_indirizzo|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Numero civico, value: "{{p:business.sede_legale_civico}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: C.A.P., value: "{{p:business.sede_legale_cap}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Telefono, value: "{{p:identity.phone|phone_it}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Cell., value: "{{p:identity.phone|phone_it}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Posta elettronica, value: "{{p:identity.pec}}", made_up: "the portal looks the PEC up at Salva and keeps it, flagged \"Indirizzo Pec non valido\" unless it is a real one (read 2026-11-02): a made-up address stays flagged", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: ordine/collegio/albo, value: "{{p:albo.ordine}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: provincia (sigla), value: "{{p:albo.provincia}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: numero iscrizione, value: "{{p:albo.numero}}", when: "{{ask.progettista_altro}}"}
 
   # The accertamento di compatibilità paesaggistica: the works and what they changed, the
   # technician (the architect; more are "+" blocks, not mapped), art. 181 (the dichiarante's
@@ -2730,7 +2794,8 @@ sections:
       - {kind: radio, label: chiede allo Sportello unico di effettuare il calcolo, when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_sportello}}"}
       - {kind: radio, label: allega il prospetto di calcolo preventivo, when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}"}
 
-  # The architect designs the works and presents the pratica. The direttore dei lavori is the
+  # The architect designs the works and presents the pratica, or another designer (`p:`) does,
+  # whose block opens above the director's and the structural designer's (`shift`). The direttore dei lavori is the
   # architect too (the form's "diverso dal progettista": no), another technician (`d:`: yes, and
   # the block it opens, by label from its Cognome), or named before the works start; the
   # structural one is the structural designer (`dl_strutture`) or named later. The director's
@@ -2738,22 +2803,53 @@ sections:
   # second Cognome. Read on the portal 2026-11-01.
   - section: Tecnici incaricati
     aliases: [h1) Tecnici incaricati]
+    shift: {when: "{{ask.progettista_altro}}", anchor: Cognome}
     fields:
       - {kind: checkbox, label: che il/i direttore/i dei lavori sarà/saranno individuati, when: "{{ask.direttore_lavori|is_da_nominare}}"}
       - {kind: checkbox, label: che il/i direttore/i dei lavori sarà/saranno individuati, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.dl_strutture|not}}"}
       - {kind: checkbox, label: Progettista delle opere architettoniche}
-      - {kind: radio, label: titolare dell'intervento o procuratore}
-      - {kind: select, label: Provincia, value: "{{business.sede_legale_provincia}}"}
-      - {kind: text, label: Comune italiano, value: "{{business.sede_legale_comune|upper}}"}
-      - {kind: text, label: "Via, Piazza", value: "{{business.sede_legale_indirizzo|upper}}"}
-      - {kind: text, label: "N.", value: "{{business.sede_legale_civico}}"}
-      - {kind: text, label: C.A.P., value: "{{business.sede_legale_cap}}"}
-      - {kind: text, label: Iscritto all'ordine/collegio, value: "{{t:albo.ordine}}"}
-      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}"}
-      - {kind: text, label: al n., value: "{{t:albo.numero}}"}
-      - {kind: text, label: Telefono, value: "{{business.telefono|phone_it}}"}
-      - {kind: text, label: cell., value: "{{t:identity.phone|phone_it}}"}
-      - {kind: text, label: posta elettronica certificata, value: "{{t:identity.pec}}"}
+      - {kind: radio, label: titolare dell'intervento o procuratore, when: "{{ask.progettista_altro|not}}"}
+      - {kind: select, label: Provincia, value: "{{business.sede_legale_provincia}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Comune italiano, value: "{{business.sede_legale_comune|upper}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: "Via, Piazza", value: "{{business.sede_legale_indirizzo|upper}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: "N.", value: "{{business.sede_legale_civico}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: C.A.P., value: "{{business.sede_legale_cap}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: al n., value: "{{t:albo.numero}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Telefono, value: "{{business.telefono|phone_it}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: cell., value: "{{t:identity.phone|phone_it}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: posta elettronica certificata, value: "{{t:identity.pec}}", when: "{{ask.progettista_altro|not}}"}
+      # Another technician designs (`p:`): the radio the page words "non è colui che presenta la pratica"
+      # (the crawl names it by its column) opens their block, the first Cognome (read 2026-11-02).
+      - {kind: radio, label: tecnico incaricato, when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: "{{p:identity.last_name|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Nome, anchor: Cognome, block: 1, value: "{{p:identity.first_name|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: C.F., anchor: Cognome, block: 1, value: "{{p:identity.codice_fiscale}}", when: "{{ask.progettista_altro}}"}
+      - {kind: date, label: Data di nascita, anchor: Cognome, block: 1, value: "{{p:identity.date_of_birth|date_it}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Cittadinanza, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Sesso, anchor: Cognome, block: 1, value: "{{p:identity.sex|sesso}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Stato, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Provincia, anchor: Cognome, block: 1, value: "{{p:identity.birth_province}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Comune italiano, anchor: Cognome, block: 1, value: "{{p:identity.birth_comune|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Stato, nth: 2, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Provincia, nth: 2, anchor: Cognome, block: 1, value: "{{p:residenza.provincia}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Comune italiano, nth: 2, anchor: Cognome, block: 1, value: "{{p:residenza.comune|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "Via, Piazza", anchor: Cognome, block: 1, value: "{{p:residenza.indirizzo|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "N.", anchor: Cognome, block: 1, value: "{{p:residenza.civico}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: C.A.P., anchor: Cognome, block: 1, value: "{{p:residenza.cap}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Stato, nth: 3, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Provincia, nth: 3, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_provincia}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Comune italiano, nth: 3, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_comune|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "Via, Piazza", nth: 2, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_indirizzo|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "N.", nth: 2, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_civico}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: C.A.P., nth: 2, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_cap}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, anchor: Cognome, block: 1, value: "{{p:albo.ordine}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: di, anchor: Cognome, block: 1, value: "{{p:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: al n., anchor: Cognome, block: 1, value: "{{p:albo.numero}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Telefono, anchor: Cognome, block: 1, value: "{{p:identity.phone|phone_it}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: cell., anchor: Cognome, block: 1, value: "{{p:identity.phone|phone_it}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: "{{p:identity.pec}}", when: "{{ask.progettista_altro}}"}
       - {kind: checkbox, label: "di aver incaricato, in qualità di direttore/i dei lavori", when: "{{ask.direttore_lavori|is_da_nominare|not}}"}
       - {kind: checkbox, label: Direttore dei lavori delle opere architettoniche, when: "{{ask.direttore_lavori|is_da_nominare|not}}"}
       - {kind: radio, label: "no", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_progettista}}"}
@@ -2859,11 +2955,16 @@ sections:
 
   - section: Asseverazione SCIA - Tipologia di intervento
     fields:
-      - {kind: text, label: Cognome, value: "{{t:identity.last_name}}"}
-      - {kind: text, label: Nome, value: "{{t:identity.first_name}}"}
-      - {kind: text, label: Iscritto all'ordine, value: "{{t:albo.ordine}}"}
-      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}"}
-      - {kind: text, label: al n., value: "{{t:albo.numero}}"}
+      - {kind: text, label: Cognome, value: "{{t:identity.last_name}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Nome, value: "{{t:identity.first_name}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Iscritto all'ordine, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: al n., value: "{{t:albo.numero}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Cognome, value: "{{p:identity.last_name}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Nome, value: "{{p:identity.first_name}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Iscritto all'ordine, value: "{{p:albo.ordine}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: di, value: "{{p:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: al n., value: "{{p:albo.numero}}", when: "{{ask.progettista_altro}}"}
       - {kind: checkbox, label: che le opere in progetto sono subordinate a Segnalazione}
       - {kind: checkbox, label: intervento di manutenzione straordinaria, when: "{{ask.scia_tipo|is_manutenzione_straordinaria}}"}
       - {kind: radio, label: Si specifica che l’intervento non comporta mutamento, when: "{{ask.scia_tipo|is_manutenzione_straordinaria}} {{ask.scia_cambio_uso|is_no}}"}
@@ -3243,11 +3344,16 @@ sections:
   - section: Asseverazione SCIA Alternativa - Dati progettista
     leave: [specificare il tipo di intervento]
     fields:
-      - {kind: text, label: Cognome, value: "{{t:identity.last_name}}"}
-      - {kind: text, label: Nome, value: "{{t:identity.first_name}}"}
-      - {kind: text, label: Iscritto all'ordine, value: "{{t:albo.ordine}}"}
-      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}"}
-      - {kind: text, label: al n., value: "{{t:albo.numero}}"}
+      - {kind: text, label: Cognome, value: "{{t:identity.last_name}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Nome, value: "{{t:identity.first_name}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Iscritto all'ordine, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: al n., value: "{{t:albo.numero}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Cognome, value: "{{p:identity.last_name}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Nome, value: "{{p:identity.first_name}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Iscritto all'ordine, value: "{{p:albo.ordine}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: di, value: "{{p:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: al n., value: "{{p:albo.numero}}", when: "{{ask.progettista_altro}}"}
       - {kind: checkbox, label: 1. Interventi di ristrutturazione edilizia, when: "{{ask.scia_alt_tipo|is_ristrutturazione_edilizia}}"}
       - {kind: checkbox, label: 2. Interventi di nuova costruzione o di ristrutturazione urbanistica, when: "{{ask.scia_alt_tipo|is_nuova_costruzione_piano_attuativo}}"}
       - {kind: checkbox, label: 3. Interventi di nuova costruzione qualora, when: "{{ask.scia_alt_tipo|is_nuova_costruzione_strumento_generale}}"}
@@ -3524,29 +3630,60 @@ sections:
 
   # The permesso's g1): the architect is "colui che presenta la pratica" (the crawl names the
   # radio by its column, "titolare dell'intervento o procuratore"), which asks only for the
-  # studio, the albo and the contacts. The direttore dei lavori is the architect (the form's
+  # studio, the albo and the contacts; another designer (`p:`) has a whole block, the first (`shift`). The direttore dei lavori is the architect (the form's
   # "diverso dal progettista": no), another technician (`d:`, the block it opens), or named
   # before the works start. The structural designer (`s:`) is appointed now or named before
   # the works start, and so is the structural direttore (the structural designer, as on the
   # SCIA, or named later). As on the SCIA, the director's block opens above the structural
   # designer's, so `s:` is then the second Cognome (read on the portal 2026-11-01).
   - section: Tecnici incaricati
+    shift: {when: "{{ask.progettista_altro}}", anchor: Cognome}
     fields:
       - {kind: checkbox, label: "che il progettista delle opere strutturali, il/i direttore/i dei lavori saranno individuati", when: "{{ask.direttore_lavori|is_da_nominare}}"}
       - {kind: checkbox, label: "che il progettista delle opere strutturali, il/i direttore/i dei lavori saranno individuati", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato|not}}"}
       - {kind: checkbox, label: "che il progettista delle opere strutturali, il/i direttore/i dei lavori saranno individuati", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.dl_strutture|not}}"}
-      - {kind: radio, label: titolare dell'intervento o procuratore}
-      - {kind: select, label: Provincia, value: "{{business.sede_legale_provincia}}"}
-      - {kind: text, label: Comune italiano, value: "{{business.sede_legale_comune|upper}}"}
-      - {kind: text, label: "Via, Piazza", value: "{{business.sede_legale_indirizzo|upper}}"}
-      - {kind: text, label: "N.", value: "{{business.sede_legale_civico}}"}
-      - {kind: text, label: C.A.P., value: "{{business.sede_legale_cap}}"}
-      - {kind: text, label: Iscritto all'ordine/collegio, value: "{{t:albo.ordine}}"}
-      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}"}
-      - {kind: text, label: al n., value: "{{t:albo.numero}}"}
-      - {kind: text, label: Telefono, value: "{{business.telefono|phone_it}}"}
-      - {kind: text, label: cell., value: "{{t:identity.phone|phone_it}}"}
-      - {kind: text, label: posta elettronica certificata, value: "{{t:identity.pec}}"}
+      - {kind: radio, label: titolare dell'intervento o procuratore, when: "{{ask.progettista_altro|not}}"}
+      - {kind: select, label: Provincia, value: "{{business.sede_legale_provincia}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Comune italiano, value: "{{business.sede_legale_comune|upper}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: "Via, Piazza", value: "{{business.sede_legale_indirizzo|upper}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: "N.", value: "{{business.sede_legale_civico}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: C.A.P., value: "{{business.sede_legale_cap}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: al n., value: "{{t:albo.numero}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Telefono, value: "{{business.telefono|phone_it}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: cell., value: "{{t:identity.phone|phone_it}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: posta elettronica certificata, value: "{{t:identity.pec}}", when: "{{ask.progettista_altro|not}}"}
+      # Another technician designs (`p:`): the radio the page words "non è colui che presenta la pratica"
+      # (the crawl names it by its column) opens their block, the first Cognome (read 2026-11-02).
+      - {kind: radio, label: tecnico incaricato, when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: "{{p:identity.last_name|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Nome, anchor: Cognome, block: 1, value: "{{p:identity.first_name|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: C.F., anchor: Cognome, block: 1, value: "{{p:identity.codice_fiscale}}", when: "{{ask.progettista_altro}}"}
+      - {kind: date, label: Data di nascita, anchor: Cognome, block: 1, value: "{{p:identity.date_of_birth|date_it}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Cittadinanza, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Sesso, anchor: Cognome, block: 1, value: "{{p:identity.sex|sesso}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Stato, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Provincia, anchor: Cognome, block: 1, value: "{{p:identity.birth_province}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Comune italiano, anchor: Cognome, block: 1, value: "{{p:identity.birth_comune|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Stato, nth: 2, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Provincia, nth: 2, anchor: Cognome, block: 1, value: "{{p:residenza.provincia}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Comune italiano, nth: 2, anchor: Cognome, block: 1, value: "{{p:residenza.comune|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "Via, Piazza", anchor: Cognome, block: 1, value: "{{p:residenza.indirizzo|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "N.", anchor: Cognome, block: 1, value: "{{p:residenza.civico}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: C.A.P., anchor: Cognome, block: 1, value: "{{p:residenza.cap}}", when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Stato, nth: 3, anchor: Cognome, block: 1, value: ITALIA, when: "{{ask.progettista_altro}}"}
+      - {kind: select, label: Provincia, nth: 3, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_provincia}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Comune italiano, nth: 3, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_comune|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "Via, Piazza", nth: 2, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_indirizzo|upper}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: "N.", nth: 2, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_civico}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: C.A.P., nth: 2, anchor: Cognome, block: 1, value: "{{p:business.sede_legale_cap}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Iscritto all'ordine/collegio, anchor: Cognome, block: 1, value: "{{p:albo.ordine}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: di, anchor: Cognome, block: 1, value: "{{p:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: al n., anchor: Cognome, block: 1, value: "{{p:albo.numero}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Telefono, anchor: Cognome, block: 1, value: "{{p:identity.phone|phone_it}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: cell., anchor: Cognome, block: 1, value: "{{p:identity.phone|phone_it}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: "{{p:identity.pec}}", when: "{{ask.progettista_altro}}"}
       - {kind: checkbox, label: "di aver incaricato, in qualità di progettista delle opere strutturali, di direttori dei lavori", when: "{{ask.direttore_lavori|is_da_nominare|not}}"}
       - {kind: checkbox, label: Progettista delle opere strutturali, when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}"}
       - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: "{{s:identity.last_name|upper}}", when: "{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}"}
@@ -3643,11 +3780,16 @@ sections:
     # The piano casa: closed to new requests (quadro a's note).
     law: ["Opere edilizie straordinarie di cui alla l.r. n. 19/2009", interventi straordinari di ampliamento, ampliamento fino al venti per cento, modifica della destinazione d'uso da volumetria esistente non residenziale, realizzazione di opere interne finalizzate all'utilizzo dei volumi esistenti, interventi straordinari di demolizione e ricostruzione, aumento entro il limite del trentacinque per cento, ricostruzione a parità di volume, interventi edilizi in zona agricola (articolo 6-bis), mutamento di destinazione d'uso di immobili o loro parti per uso residenziale, realizzazione di nuove costruzioni ad uso produttivo, riqualificazione di aree urbane degradate (articolo 7), mutamento di destinazione d'uso ai fini abitativi, ricostruzione in sito di edifici diruti]
     fields:
-      - {kind: text, label: Cognome, value: "{{t:identity.last_name}}"}
-      - {kind: text, label: Nome, value: "{{t:identity.first_name}}"}
-      - {kind: text, label: Iscritto all'ordine, value: "{{t:albo.ordine}}"}
-      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}"}
-      - {kind: text, label: al n., value: "{{t:albo.numero}}"}
+      - {kind: text, label: Cognome, value: "{{t:identity.last_name}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Nome, value: "{{t:identity.first_name}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Iscritto all'ordine, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: di, value: "{{t:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: al n., value: "{{t:albo.numero}}", when: "{{ask.progettista_altro|not}}"}
+      - {kind: text, label: Cognome, value: "{{p:identity.last_name}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Nome, value: "{{p:identity.first_name}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: Iscritto all'ordine, value: "{{p:albo.ordine}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: di, value: "{{p:albo.provincia|provincia_nome}}", when: "{{ask.progettista_altro}}"}
+      - {kind: text, label: al n., value: "{{p:albo.numero}}", when: "{{ask.progettista_altro}}"}
       # Two radios with their own names, but the portal keeps one: the tipologia's.
       - {kind: radio, label: che le opere in progetto sono subordinate a rilascio}
       - {kind: checkbox, label: Intervento di nuova costruzione, when: "{{ask.pdc_tipo|is_nuova_costruzione}}"}

@@ -111,5 +111,6 @@
  "igienico_5ter": "progetto alternativo",
  "strutture_incaricato": "true",
  "dl_strutture": "false",
- "scarico_doc": "rehearsals/pdc-fittizio/files/documentazione-scarico.pdf"
+ "scarico_doc": "rehearsals/pdc-fittizio/files/documentazione-scarico.pdf",
+ "progettista_altro": false
 }

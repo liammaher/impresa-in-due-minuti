@@ -65,5 +65,6 @@
  "altro_tecnico8_incarico": "relazione energetica (legge 10)",
  "altro_tecnico8_dipendente": false,
  "altri_tecnici_dopo": "false",
- "impresa_dopo": "false"
+ "impresa_dopo": "false",
+ "progettista_altro": false
 }

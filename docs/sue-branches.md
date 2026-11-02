@@ -8,14 +8,14 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 1004 | Claude takes it when the case does |
+| ticked | 1008 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
-| left | 4 | left empty on purpose |
+| left | 6 | left empty on purpose |
 | law | 25 | closed by law to new cases (the piano casa, a repealed rule): refused as the law's, not a gap |
 | defect | 30 | a known portal defect blocks the case (`defects.yaml`): refused with it, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 50 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 44 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -82,18 +82,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - select: per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti politici limitatamente all'adempimento di obb → ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti politici limitatamente all'adempimento di obblighi derivanti da disposizioni legislative o regolamentari) (under: Il pagamento non è dovuto poiché esentati ...)
 - select: per la seguente motivazione = ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo settore comprese le cooperative sociali ed es → ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo settore comprese le cooperative sociali ed escluse le imprese sociali costituite in forma di società) (under: Il pagamento non è dovuto poiché esentati ...)
 
-### dati relativi al nome del tecnico
-
-15 pratiche; 1 of 2 choices to map.
-
-- radio: non è colui che presenta la pratica
-
-### h1) Tecnici incaricati
-
-8 pratiche; 1 of 16 choices to map.
-
-- radio: tecnico incaricato (under: Progettista delle opere architettoniche)
-
 ### Ambito dell'intervento
 
 7 pratiche; 1 of 4 choices to map.
@@ -119,35 +107,11 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - checkbox: 4. Altri interventi individuati dalla legislazione regionale (1)
 
-### Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze
-
-3 pratiche; 1 of 28 choices to map.
-
-- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
-
-### G1) Tecnici incaricati
-
-3 pratiche; 1 of 8 choices to map.
-
-- radio: tecnico incaricato
-
-### Relazione Tecnica di Asseverazione C.I.L.A.
-
-3 pratiche; 1 of 31 choices to map.
-
-- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
-
 ### g) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
 
 3 pratiche; 1 of 8 choices to map.
 
 - radio: ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché i 
-
-### g1) Tecnici incaricati
-
-3 pratiche; 1 of 15 choices to map.
-
-- radio: tecnico incaricato
 
 ### i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
 

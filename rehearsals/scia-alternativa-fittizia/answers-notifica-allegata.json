@@ -96,5 +96,6 @@
  "notifica_allegata": "true",
  "dl_strutture": "true",
  "vvf_variante": "false",
- "scomputo": "false"
+ "scomputo": "false",
+ "progettista_altro": false
 }

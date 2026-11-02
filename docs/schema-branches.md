@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (164 cases in all, 163 with a recorded filled run).
+  case (171 cases in all, 170 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -29,12 +29,12 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 32 | 0 | 1 | 3 | 7 | 20 |
+| CILA | 43 | 32 | 0 | 1 | 2 | 7 | 19 |
 | Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 8 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 2 |
-| Permesso di costruire | 153 | 112 | 0 | 14 | 8 | 14 | 118 |
-| SCIA | 150 | 130 | 0 | 4 | 2 | 10 | 44 |
-| SCIA alternativa | 128 | 110 | 0 | 6 | 4 | 8 | 51 |
+| Permesso di costruire | 153 | 112 | 0 | 14 | 8 | 14 | 117 |
+| SCIA | 150 | 130 | 0 | 4 | 2 | 10 | 43 |
+| SCIA alternativa | 128 | 110 | 0 | 6 | 3 | 8 | 50 |
 | Agibilità (SCA) | 36 | 30 | 0 | 0 | 1 | 5 | 12 |
 
 ## Next cases
@@ -72,7 +72,6 @@ On the portal, not mapped (dictionary work first):
 
 - CILA: `comunicazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - CILA: `comunicazioni/imprese_esecutrici` → `da_soggetti_coinvolti` (che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla se…)
-- CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - Permesso di costruire: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_atto` (dà atto che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_attesta` (attesta che la data/epoca di realizzazione dell’intervento)
@@ -84,7 +83,6 @@ On the portal, not mapped (dictionary work first):
 - SCIA: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - SCIA: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo…)
 - SCIA alternativa: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
-- SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/scarichi_idrici/[scarichi_idrici_ctype]` → `necessita_autorizzazione_scarico` (necessita di autorizzazione allo scarico e la stessa è stata richiest…)
 - Agibilità (SCA): `identificativi_immobile/dati_catastali` → `terreni` (Nuovo Catasto Terreni)
@@ -129,7 +127,7 @@ On the portal, not mapped (dictionary work first):
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_da_300_a_100_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | m | filled on the portal | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_da_100_a_60_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | m | filled on the portal | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_sotto_60_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | m | filled on the portal | 1 |
-| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | on the portal, not mapped |  |
+| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | left empty |  |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | filled on the portal | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | filled on the portal | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | filled on the portal | 1 |
@@ -145,7 +143,6 @@ Portal boxes of the CILA no schema alternative matched and no case ticks:
 - c) Presentazione della comunicazione di…: PER PRESA VISIONE (not mapped)
 - e) Destinazione d'uso: industriale (mapped)
 - e) Destinazione d'uso: commerciale (mapped)
-- G1) Tecnici incaricati: tecnico incaricato (not mapped)
 - i) Rispetto degli obblighi in materia d…: ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dich… (not mapped)
 - Relazione Tecnica di Asseverazione C.I.…: Interventi di eliminazione delle barriere architettoniche che comportino la realizzazione… (mapped)
 - Relazione Tecnica di Asseverazione C.I.…: Opere temporanee per attività di ricerca nel sottosuolo che abbiano carattere geognostico… (mapped)
@@ -397,7 +394,6 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - e) Regolarità urbanistica e precedenti…: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni pecuniarie, previste dag… (mapped)
 - e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata nella… (mapped)
 - e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata agli at… (mapped)
-- g1) Tecnici incaricati: tecnico incaricato (not mapped)
 - j) Diritti di terzi: dichiara di essere consapevole che il permesso di costruire non comporta limitazione dei… (not mapped)
 - Asseverazione PdC - Dati progettista e…: Interventi di ristrutturazione urbanistica articolo 3, comma 1, lettera f) del d.P.R. n.… (mapped)
 - Asseverazione PdC - Dati progettista e…: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa) (not mapped)
@@ -648,7 +644,6 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - d) Destinazione d'uso dell'immobile: industriale (mapped)
 - d) Destinazione d'uso dell'immobile: commerciale (mapped)
 - d) Destinazione d'uso dell'immobile: altro (mapped)
-- h1) Tecnici incaricati: tecnico incaricato (not mapped)
 - m) Diritti di terzi: dichiara di essere consapevole che la presente segnalazione non può comportare limitazion… (not mapped)
 - Asseverazione SCIA - Tipologia di inter…: senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di un inter… (mapped)
 - Asseverazione SCIA - Tipologia di inter…: con opere riconducibili agli interventi di cui all'articolo 6-bis di un intero immobile a… (mapped)
@@ -744,7 +739,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_300_a_100_mq` | 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_100_a_60_mq` | 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile; | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_sotto_60_mq` | 6%, per le U.I. < 60 mq di superficie utile; | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | left empty |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | filled on the portal | 1 |
@@ -827,7 +822,6 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - d) Destinazione d'uso dell'immobile: industriale (mapped)
 - d) Destinazione d'uso dell'immobile: commerciale (mapped)
 - d) Destinazione d'uso dell'immobile: altro (mapped)
-- h1) Tecnici incaricati: tecnico incaricato (not mapped)
 - m) Diritti di terzi: dichiara di essere consapevole che la presente segnalazione non può comportare limitazion… (not mapped)
 - Asseverazione SCIA Alternativa - Dati p…: 2. Interventi di nuova costruzione o di ristrutturazione urbanistica qualora siano discip… (mapped)
 - Asseverazione SCIA Alternativa - Dati p…: 3. Interventi di nuova costruzione qualora siano in diretta esecuzione di strumenti urban… (mapped)

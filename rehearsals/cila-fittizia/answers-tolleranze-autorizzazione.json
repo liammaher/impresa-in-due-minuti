@@ -49,5 +49,6 @@
  "toll_sismica_protocollo": "GC/2023/45210",
  "toll_sismica_doc": "rehearsals/scia-fittizia/files/autorizzazione-sismica-rilasciata.pdf",
  "altri_tecnici_dopo": "false",
- "impresa_dopo": "false"
+ "impresa_dopo": "false",
+ "progettista_altro": false
 }

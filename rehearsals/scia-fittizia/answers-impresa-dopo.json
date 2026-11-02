@@ -100,5 +100,6 @@
  "direttore_lavori": "progettista",
  "impresa_dopo": "true",
  "dl_strutture": "false",
- "vvf_variante": "false"
+ "vvf_variante": "false",
+ "progettista_altro": false
 }
