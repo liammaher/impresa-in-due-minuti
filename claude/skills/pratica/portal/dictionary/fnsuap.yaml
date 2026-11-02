@@ -29,6 +29,8 @@
 # names boxes the law closes to new cases (the piano casa, l.r. 19/2009; a repealed rule, the
 # SCIA's DM 161/2012 line): a case that takes one is refused as the law's. `defect:` names, by
 # defects.yaml id, the boxes of a case a portal defect blocks (the recipe refuses the case with it).
+# `made_up:` on a box says why made-up data can't pass it (the portal checks it against a real
+# register): pre-flight --made-up warns, so a rehearsal's stop there isn't read as a regression.
 #
 # Roles (answers.json "people"): no prefix and `t:` are the studio's own (the business and its
 # titolare, the architect), `c:` the client (a person, or a company or condominium with
@@ -93,15 +95,14 @@ asks:
   # Scheda anagrafica's Carica, and whether it is in the Registro delle imprese when it has no REA.
   cliente_carica:
     type: choice
-    question: "What is the person declaring for the client company (`cr:`) to it? legale rappresentante; amministratore unico; amministratore delegato; presidente cda (presidente del consiglio di amministrazione); amministratore di condominio (the client is a condominium)"
+    question: "What is the person declaring for the client company (`cr:`) to it? legale rappresentante; amministratore unico; amministratore delegato; presidente cda (presidente del consiglio di amministrazione); amministratore di condominio (a condominium's administrator)"
     options: [legale rappresentante, amministratore unico, amministratore delegato, presidente cda, amministratore di condominio]
-    propose: "{{ask.titolo|carica_proposta}}"
-  cliente_rea_data: {type: date, question: "When was the client company entered in the REA (the visura camerale's data di iscrizione)?"}
+    propose: "{{c:business.forma_giuridica|carica_proposta}}"
   cliente_registro:
     type: choice
     question: "The client company has no REA in the vault: non ancora iscritta (being registered in the Registro delle imprese); non necessita (never registered: a condominium, an association, an ente)?"
     options: [non ancora iscritta, non necessita]
-    propose: "{{ask.cliente_carica|registro_proposto}}"
+    propose: "{{c:business.forma_giuridica|registro_proposto}}"
   # Whether anyone else's assent is needed (a.1 or a.2): an owner usually holds it alone, a
   # tenant or a co-owner doesn't.
   titolo_esclusivo:
@@ -1273,11 +1274,11 @@ sections:
       # By label: the crawls pair this "Codice Fiscale" with the company's own below, and "Data"
       # is also "Data nascita"; on the page each is the first.
       - {kind: radio, label: "DITTA/SOCIETA'/IMPRESA", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
-      - {kind: radio, label: ISCRITTA ALLA CCIAA, when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: radio, label: ISCRITTA ALLA CCIAA, made_up: "the portal looks the company's codice fiscale up in the Registro Imprese at Salva (\"Il CF inserito non è presente nel RI\"): a made-up company stops there", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: text, label: Codice Fiscale, by_label: true, value: "{{c:business.codice_fiscale,c:business.partita_iva|first}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: select, label: "Camera di commercio di:", value: "{{c:business.cciaa|provincia_nome}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: text, label: Numero REA, on_page: true, value: "{{c:business.rea|rea_num}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
-      - {kind: date, label: Data, by_label: true, on_page: true, value: "{{ask.cliente_rea_data|date_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: date, label: Data, by_label: true, on_page: true, value: "{{c:business.data_iscrizione_rea|date_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: select, label: Cittadinanza, value: "{{cr:identity.citizenship|cittadinanza}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.citizenship|straniera}}"}
       - {kind: select, label: Stato, value: "{{cr:identity.birth_country}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
       - {kind: text, label: Località estera, on_page: true, value: "{{cr:identity.birth_comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
@@ -1299,7 +1300,7 @@ sections:
       - {kind: text, label: "eMail/PEC", value: "{{cr:identity.email}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: text, label: "Telefono fisso/cellulare", value: "{{cr:identity.phone|phone_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: select, label: Carica, value: "{{ask.cliente_carica|carica_cliente}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
-      - {kind: select, label: Forma giuridica, value: "{{c:business.forma_giuridica,ask.cliente_carica|forma_cliente}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: select, label: Forma giuridica, value: "{{c:business.forma_giuridica|forma_cliente}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: text, label: "Denominazione (nome della ditta", value: "{{c:business.denominazione}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       # The second "Codice Fiscale", after the one beside "Recupera dati": a crawl that paired the two
       # as one moved box saw only that one.
@@ -1346,7 +1347,7 @@ sections:
       - {kind: text, label: "eMail/PEC", value: "{{cr:identity.email}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
       - {kind: text, label: "Telefono fisso/cellulare", value: "{{cr:identity.phone|phone_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
       - {kind: select, label: Carica, value: "{{ask.cliente_carica|carica_cliente}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
-      - {kind: select, label: Forma giuridica, value: "{{c:business.forma_giuridica,ask.cliente_carica|forma_cliente}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: select, label: Forma giuridica, value: "{{c:business.forma_giuridica|forma_cliente}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
       - {kind: text, label: "Denominazione (nome della ditta", value: "{{c:business.denominazione}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
       - {kind: text, label: Codice Fiscale, value: "{{c:business.codice_fiscale,c:business.partita_iva|first}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
       - {kind: text, label: P.IVA, optional: true, value: "{{c:business.partita_iva}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
