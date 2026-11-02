@@ -125,5 +125,5 @@ rules:
 supports:
   # The portal requires one energy incentive claimed on every permesso, even with no energy
   # works or renewables (seen 2026-10-30): with none it can't be filed as is.
-  - {value: "{{ask.incentivo_energetico}}", in: ["art 14 c6", "art 14 c7", "bonus volumetrico"], else: "The permesso's form on the portal wants one energy incentive claimed (art. 14 c. 6 or 7 D.Lgs. 102/2014, or the 5% bonus of D.Lgs. 28/2011) even with no energy works: a project with none can't be filed on it as is; ask the SUE."}
+  - {value: "{{ask.incentivo_energetico}}", in: ["art 14 c6", "art 14 c7", "bonus volumetrico"], defect: pdc-incentivo-energetico, else: "The permesso's form on the portal wants one energy incentive claimed (art. 14 c. 6 or 7 D.Lgs. 102/2014, or the 5% bonus of D.Lgs. 28/2011) even with no energy works: a project with none can't be filed on it as is; ask the SUE."}
   - {if: "{{ask.scia_onerosa}}", value: "{{ask.contributo_pagamento}}", in: ["prima dei lavori", "rateizzazione", "in corso d'opera"], else: "A permesso's contributo is paid when it's collected, in instalments or during the works: never before filing."}

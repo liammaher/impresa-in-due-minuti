@@ -549,6 +549,18 @@ supports:
   - art 14 c6
   - art 14 c7
   - bonus volumetrico
+  defect:
+    id: pdc-incentivo-energetico
+    title: 'Permesso: an energy incentive must be claimed, even for a project with none'
+    portal: 'Napoli''s SUE on impresainungiorno: the permesso''s asseverazione, quadro sicurezza impianti e consumi energetici'
+    what: 'The quadro requires one of the energy incentives (art. 14 c. 6 or c. 7 D.Lgs. 102/2014, or the 5% volume bonus of D.Lgs. 28/2011) to be ticked: it offers no line for a project that claims none.'
+    law: 'The incentives are options the designer may use (art. 14 D.Lgs. 102/2014: thicker walls and roofs not counted, distances and heights in derogation; the 5% bonus of D.Lgs. 28/2011 for renewables
+      beyond the minimum), not a requirement of every permesso.'
+    checked: '2026-10-29, the permesso''s first runs in the pane (rehearsals/pdc-fittizio): the quadro saved only with an incentive ticked'
+    choices:
+    - Ask the SUE how a permesso with no energy incentive is filed while the portal requires one.
+    - 'Report the defect to the portal''s operator (InfoCamere''s impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked.'
+    report: docs/portal-defects.md
   else: 'The permesso''s form on the portal wants one energy incentive claimed (art. 14 c. 6 or 7 D.Lgs. 102/2014, or the 5% bonus of D.Lgs. 28/2011) even with no energy works: a project with none can''t
     be filed on it as is; ask the SUE.'
 - if: '{{ask.scia_onerosa}}'

@@ -10,12 +10,15 @@
     catalogue.py graft EXPORT.json|- --section NAME ...   a deeper crawl of those sections (crawl.js `recrawl`)
                                                            into the stored crawl that holds each one
     catalogue.py count                                     distinct sections and their uses
-    catalogue.py drift EXPORT.json                         a check batch against the stored crawls
+    catalogue.py drift EXPORT.json|-                       a check batch against the stored crawls (check-print.js's
+                                                           text, its sha256 checked)
+    catalogue.py drift --digests FILE|-                   digest.js's per-pratica digests against the stored
+                                                           crawls: the same are recorded, the others named
     catalogue.py pane DIR                                  the pane's scripts: install.js stores wizard.js
                                                            and crawl.js in localStorage, load.js runs them
                                                            (an op with `like`: against that pratica, into same.json)
     catalogue.py pane DIR --bundle FILE --ops OPS.json     a batch as one file the person picks (pick.js),
-        [--draft NAME] [--depth 3] [--fresh|--forget-known]
+        [--draft NAME] [--depth 3] [--fresh|--forget-known] [--check]   (--check: a drift check, today's)
                                                            status.js to poll, export.js to save the results
                                                            (print.js prints a small batch's, sha256 first)
 
@@ -177,18 +180,23 @@ def cmd_known(_):
     return known
 
 
-def cmd_import(args):
-    """Each pratica of an export (localStorage `crawl:op:*`) to sections/<name>.json."""
-    text = sys.stdin.read() if args.export == "-" else Path(args.export).read_text()
-    # print.js's text: its sha256 first, so a copy that arrived changed is refused. Its JSON never
-    # ends in a newline, but a heredoc or a paste adds one (2026-10-31: a good copy refused).
+def read_export(source, what="imported"):
+    """An export file, or a script's text with its sha256 first (print.js, check-print.js,
+    digest.js), so a copy that arrived changed is refused. Its JSON never ends in a newline,
+    but a heredoc or a paste adds one (2026-10-31: a good copy refused)."""
+    text = sys.stdin.read() if source == "-" else Path(source).read_text()
     head, _, rest = text.partition("\n")
     rest = rest.rstrip("\r\n")
     if re.fullmatch(r"[0-9a-f]{64}", head.strip()):
         if hashlib.sha256(rest.encode()).hexdigest() != head.strip():
-            sys.exit("not the text print.js printed (its sha256 differs): nothing imported")
+            sys.exit(f"not the text the script printed (its sha256 differs): nothing {what}")
         text = rest
-    data = json.loads(text)
+    return json.loads(text)
+
+
+def cmd_import(args):
+    """Each pratica of an export (localStorage `crawl:op:*`) to sections/<name>.json."""
+    data = read_export(args.export)
     out = []
     for key, r in sorted(data.items()):
         if not key.startswith("crawl:op:"):
@@ -371,10 +379,45 @@ def stored_fingerprints(name, cache=None):
     return out
 
 
+def digest(fingerprints):
+    """One pratica's sections and fingerprints as a short hash, as digest.js computes it in the
+    pane: 27 of these come back through the conversation, not 40 KB of fingerprints."""
+    items = sorted(([k, v] for k, v in fingerprints.items()), key=lambda kv: kv[0])
+    return hashlib.sha256(json.dumps(items, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()[:12]
+
+
+def drift_digests(source):
+    """digest.js's output against the stored crawls: a pratica with the same digest is recorded
+    as checked and unchanged; the others are named, for check-print.js and `drift -`."""
+    data = read_export(source, "recorded")
+    path = CAT / "drift.json"
+    drift = json.loads(path.read_text()) if path.exists() else {"pratiche": {}}
+    out, cache, again = [], {}, []
+    for name, d in sorted(data["digests"].items()):
+        if not isinstance(d, dict):
+            out.append(f"{name}: not checked ({d})")
+            continue
+        if not (SECTIONS / f"{name}.json").exists():
+            out.append(f"{name}: no stored crawl to compare")
+            continue
+        if d["digest"] == digest(stored_fingerprints(name, cache)):
+            drift["pratiche"][name] = {"checked": d["crawled"][:10], "differences": []}
+            out.append(f"{name}: same as the stored crawl")
+        else:
+            again.append(name)
+            out.append(f"{name}: differs: print it (window.pvCheckNames, check-print.js) for `drift -`")
+    path.write_text(json.dumps(drift, ensure_ascii=False, indent=1) + "\n")
+    if again:
+        out.append("window.pvCheckNames = " + json.dumps(again))
+    return out
+
+
 def cmd_drift(args):
     """A check batch (`crawl:check:*` keys) against the stored crawls, into drift.json: the
     pratiche whose sections changed, which gen.py and run.py then refuse."""
-    data = json.loads(Path(args.export).read_text())
+    if getattr(args, "digests", False):
+        return drift_digests(args.export)
+    data = read_export(args.export, "recorded")
     path = CAT / "drift.json"
     drift = json.loads(path.read_text()) if path.exists() else {"pratiche": {}}
     same = json.loads(SAME.read_text()) if SAME.exists() else {"same": {}, "different": {}}
@@ -455,7 +498,11 @@ def bundle(out, path, srcs, ops, args):
     status.js polls it; export.js saves the results as the export `import` reads, those the
     pane's storage couldn't keep included."""
     names = [o["name"] for o in ops]
+    if args.check:
+        ops = [{**o, "check": True} for o in ops]
     opts = {"draft": args.draft, "depth": args.depth, "variants": True, "ops": ops}
+    if args.check:
+        opts["since"] = datetime.date.today().isoformat()
     stamp = "backup-" + datetime.date.today().strftime("%Y%m%d")
     # Busy only while a batch runs: one that ended doesn't hold the tab (2026-10-31: a second
     # bundle in the tab was refused).
@@ -517,9 +564,38 @@ const text = JSON.stringify(out);
 const sha = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
 text.length > 40000 ? `${text.length} characters: too big to print, save it with export.js` : sha + "\\n" + text
 """)
+    if args.check:
+        # A check's results come back as one short digest a pratica (catalogue.py drift
+        # --digests), and in full only for those that differ: 40 KB of fingerprints copied
+        # through the conversation can arrive changed.
+        (out / "digest.js").write_text("""// Each checked pratica's digest (catalogue.py `digest`), sha256 first: `catalogue.py drift --digests -`.
+const opts = JSON.parse(localStorage.getItem("crawl:batch")), digests = {};
+const sha = async (t) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t)))).map((b) => b.toString(16).padStart(2, "0")).join("");
+for (const o of opts.ops) {
+  const v = JSON.parse(localStorage.getItem("crawl:check:" + o.name) || "null");
+  if (!v) { digests[o.name] = "not checked"; continue; }
+  if (v.error) { digests[o.name] = "error: " + v.error; continue; }
+  if (opts.since && v.crawled < opts.since) { digests[o.name] = "a check from " + v.crawled.slice(0, 10); continue; }
+  const fp = {};
+  for (const s of v.sections) if (!s.skipped && !s.error) fp[s.section] = s.fingerprint;
+  const items = Object.entries(fp).sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
+  digests[o.name] = { digest: (await sha(JSON.stringify(items))).slice(0, 12), crawled: v.crawled };
+}
+const text = JSON.stringify({ digests });
+(await sha(text)) + "\\n" + text
+""")
+        (out / "check-print.js").write_text("""// The full check of the pratiche named in window.pvCheckNames (those whose digest differs),
+// sha256 first: `catalogue.py drift -`. Keep it under 40 KB: name a few at a time.
+const names = window.pvCheckNames || [], out = {};
+for (const n of names) { const v = localStorage.getItem("crawl:check:" + n); if (v) out["crawl:check:" + n] = JSON.parse(v); }
+const text = JSON.stringify(out);
+const sha = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
+text.length > 40000 ? `${text.length} characters: name fewer pratiche` : sha + "\\n" + text
+""")
     return [f"{path} ({path.stat().st_size // 1024} KB, {len(names)} pratiche) and, in {out}: pick.js (the box "
-            f"where the person picks it), status.js (poll), export.js (saves {name}, once they agree), "
-            f"print.js (a small batch's results as text)"]
+            f"where the person picks it), status.js (poll), "
+            + ("digest.js (each pratica's digest, for `drift --digests -`), check-print.js (those that differ, for `drift -`)"
+               if args.check else f"export.js (saves {name}, once they agree), print.js (a small batch's results as text)")]
 
 
 def main():
@@ -546,6 +622,7 @@ def main():
     p.add_argument("--summary", action="store_true")
     p = sub.add_parser("drift")
     p.add_argument("export")
+    p.add_argument("--digests", action="store_true", help="EXPORT is digest.js's output")
     p = sub.add_parser("pane")
     p.add_argument("dir")
     p.add_argument("--bundle", help="also a batch as one file the person picks (with --ops)")
@@ -554,6 +631,7 @@ def main():
     p.add_argument("--depth", type=int, default=3)
     p.add_argument("--fresh", action="store_true", help="--bundle: crawl the ops again, though stored (known sections as same_as)")
     p.add_argument("--forget-known", action="store_true", help="--bundle: --fresh, and read every section again")
+    p.add_argument("--check", action="store_true", help="--bundle: a drift check (fingerprints only), redoing checks of other days")
     args = ap.parse_args()
     res = globals()["cmd_" + args.cmd](args)
     if isinstance(res, list) and res and isinstance(res[0], str):

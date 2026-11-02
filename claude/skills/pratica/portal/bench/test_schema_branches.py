@@ -50,6 +50,28 @@ def states():
     assert state("scia", "Dichiarazione relativa ai diritti di segreteria", "poiché esentati")[0] == "none"
 
 
+def required_choices():
+    """No ready case states none of a required choice; and the report catches the free land's
+    conformity (choice 011 of the permesso) when its tick is taken away, as it was until a portal
+    run stopped on it (2026-11-02)."""
+    assert sb.required() == []
+    real = sb.sue_steps
+
+    def without_conformity():
+        for d, steps in real():
+            if d.name == "pdc-fittizio":
+                steps = {**steps, "sections": [{**sec, "fields": [f for f in sec["fields"]
+                         if not sb.norm(f.get("label")).startswith(sb.norm("pienamente conforme alla documentazione"))]}
+                         for sec in steps["sections"]]}
+            yield d, steps
+    sb.sue_steps = without_conformity
+    try:
+        flagged = {(i, r, a) for _, i, _, r, a in sb.required()}
+    finally:
+        sb.sue_steps = real
+    assert ("011", "pdc-fittizio", "answers-terreno.json") in flagged, sorted(flagged)[:5]
+
+
 def deeper_boxes():
     """A box only a choice under another choice reveals, two levels down, is listed; a deeper
     choice's own box counts once, by its fuller label."""
@@ -91,7 +113,7 @@ def table_current():
 
 
 def main():
-    tests = [labels_alike, states, deeper_boxes, every_alternative_matched, table_current]
+    tests = [labels_alike, states, deeper_boxes, every_alternative_matched, required_choices, table_current]
     for t in tests:
         t()
         print(f"ok  {t.__name__}")
