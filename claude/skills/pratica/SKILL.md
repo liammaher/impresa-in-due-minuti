@@ -385,7 +385,10 @@ win). A proposal nobody confirmed is never used.
    open it yourself) as the place to check the draft, with step 5's list. `run` also copies
    the declarations' text and the portal's PDF preview into it (a failure of either is a
    note on the page, never a stop); it lists every value we typed, and the declarations and
-   the preview are what the person actually swears to.
+   the preview are what the person actually swears to. A report's `alerts` are the portal's
+   warnings beside boxes it kept ("Indirizzo Pec non valido", "Dati catastali sconosciuti"):
+   never a stop, so tell the user each one (section and box, as listed) to check; the address's
+   "Indirizzo sconosciuto" shows for every address, the Comune's own too.
    No environment yet: `python3 -m venv ~/.cache/pratica-portal/venv`, then its `pip install
    pyyaml playwright` and `python -m playwright install chromium` (ask first).
    **If it stops, recover it without the user** (they hear nothing about the page):

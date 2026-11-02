@@ -290,6 +290,22 @@
       .map((e) => norm(e.textContent));
   };
 
+  // ".alert-message-text" is the portal's warning beside a box it looked up at Salva and kept
+  // anyway, which errors() never read (2026-11-02): a PEC that isn't a real one ("Indirizzo Pec non
+  // valido"), cadastral data it doesn't know, and an address it doesn't know, which every address
+  // gets, the Comune's own (Piazza Municipio 1) too. So it's never a stop: the report lists each
+  // by section and the box's label (no value), and the person's review shows them.
+  const alerts = () => [...doc().querySelectorAll(".alert-message-text")]
+    .filter((e) => e.getClientRects().length && norm(e.textContent))
+    .map((e) => {
+      const box = e.closest("td") && e.closest("td").querySelector("input, select, textarea");
+      const text = e.textContent.replace(/\s+/g, " ").trim();
+      // The warning sits in the box's cell, so it's among the box's texts: not its label.
+      const own = box ? [box.title, ...win().eval(`(${steps.label_js})`)(box)].map(norm)
+        .filter((x) => x && x !== norm(text) && !MESSAGE.test(x)) : [];
+      return { id: box ? box.id.split("dynaForm:")[1].replace(/:combo_input$/, "") : null, label: own[0] || null, text };
+    });
+
   function checkLabel(e, label) {
     if (!label) return;
     const texts = win().eval(`(${steps.label_js})`)(e);
@@ -742,6 +758,13 @@
     // An attachments screen may keep each file as it uploads, with no Salva (save: false).
     if (sec.save !== false) await act(() => press(button(sec.save || "Salva"), sec.save || "Salva"));
     const errs = errors(sec.theirs);
+    for (const a of alerts()) {
+      // A warning that echoes a value is scrubbed, as an error is.
+      // A box this section filled goes by its steps label; another by the page's text.
+      const label = (done.find((d) => d.id === a.id) || {}).label || a.label;
+      const x = { section: sec.section, label: label && scrub(label), text: scrub(a.text) };
+      if (!(report.alerts = report.alerts || []).some((y) => y.section === x.section && y.label === x.label && y.text === x.text)) report.alerts.push(x);
+    }
     const checks = done.map((f) => readBack(f, true));
     const bad = checks.filter((c) => !c.ok);
     details.push(...bad.map((c) => ({ section: sec.section, ...c })));
@@ -883,6 +906,13 @@
         "them before you tick any: you make them in your own name, and a false one is a crime (DPR 445/2000, art. 76)."),
       btn("Show the draft", () => host.remove()),
       note);
+    // The portal's warnings beside boxes it kept (alerts()): the person checks those values.
+    if ((report.alerts || []).length) {
+      page.append(el("h2", "font-size:17px;margin:24px 0 8px", "What the portal flagged"),
+        el("p", "margin:0 0 8px", "The portal kept these values but warned about them. Check each one; " +
+          "\"Indirizzo sconosciuto\" shows for every address, the Comune's own too."),
+        el("ul", "margin:0 0 8px 20px", null, ...report.alerts.map((a) => el("li", "", `${a.section}, ${a.label || "a box"}: ${a.text}`))));
+    }
     page.append(el("h2", "font-size:17px;margin:24px 0 8px", "The declarations you will tick"));
     if (!declared.length) {
       page.append(el("p", "color:GrayText", "Not copied" + (report.declarations_note ? ` (${report.declarations_note})` : "") +

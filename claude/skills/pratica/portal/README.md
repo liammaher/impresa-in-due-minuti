@@ -15,6 +15,10 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    sede Stato empty after PERSONA, 2026-11-02). The crawl tries only dropdowns of up to 12
    options: what a longer one opens is found by choosing one on the page (the Camera di
    commercio opens "Numero REA" and "Data", a foreign Stato of birth "Località estera").
+   Where a choice puts its boxes (which block comes first) is the page's layout, not a value: any
+   saved draft of the pratica shows it, ticked there and left without Salva (the designer's block
+   above the director's, read on three rehearsals' drafts 2026-11-02). A section of a draft reads
+   with `__crawl.sectionOf(draft, section)`.
 2. **The recipe** (`rehearsals/<name>/recipe.yaml`): procedure, title, comune, sportello,
    crawl, operation (or a list of them), scelte, `first`, `asks`, `yours` (what's left to the
    person: declarations, attachments, payment, signing), `supports` (the cases refused, with
@@ -56,7 +60,10 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    before and after). A new question the existing cases reach makes their pre-flight propose
    or ask it: answer it in each as the case did before, and plan_diff shows them unchanged, so
    their recorded runs still stand. Add the keys as text: rewriting a file with `json.dump` reflows
-   its inline lists, and the diff of 84 files buries the answers (2026-11-01).
+   its inline lists, and the diff of 84 files buries the answers (2026-11-01). `bench/add_answer.py KEY
+   VALUE` does it for every rehearsal whose steps ask KEY, and names the combinations to regenerate
+   (`gen.py --answers`); one whose main pratica doesn't ask KEY takes it from its part's `answers`
+   (the CIL with its landscape authorization: regenerated from the CIL's, it lost the key, 2026-11-02).
 4. **Pre-flight** with made-up answers (`answers-p6.json`) and the P6 fixture's values
    (`--values rehearsals/cila-fittizia/fixture-p6.json`, the fixture as it is): `run.py preflight --made-up`
    (the rehearsal's files are made up: Napoli's file rules only warn, below), from the repo's root:
@@ -65,7 +72,9 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    codice fiscale, looked up in the Registro Imprese): that case's run stops there by design.
 5. **Run in the pane** (the pratica skill, step 2) and record each run in the rehearsal's
    README (`| Date | Browser | Result |`): what stopped it and what fixed it, then the
-   filled run.
+   filled run. Where a case fills blocks that share labels (technicians, firms), read its draft's
+   section after (`__crawl.sectionOf`): the read-back finds each box the way it was filled, so two
+   blocks swapped read back as kept.
 6. **Tests:** `bench/test_gen.py` (add a case for what the pratica taught), `test_preflight.py`,
    `test_inpage.py` when inpage.js changed, `test_route.py` for a recipe with `rules:`. Each is a
    script, run with the pratica venv's Python (`~/.cache/pratica-portal/venv/bin/python`), not pytest.
@@ -124,6 +133,15 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   fixture's pass), the draft's name at most 60 characters, a P.G. box may take 10. The landscape
   pratiche's other technician's PEC is looked up at Salva: kept, but "Indirizzo Pec non valido" under
   any address that isn't a real one, `@pec.it` included (a real public PEC cleared it, 2026-11-02).
+  That warning is an `.alert-message-text` beside the box, not the `.error-message-text` the runner
+  read, so every run passed without a word about it. A scan of a filled SCIA draft's 35 sections found
+  three: the domicilio's PEC too ("Indirizzo Pec non valido": every rehearsal's, `made_up`), the
+  property's street ("Attenzione! Indirizzo sconosciuto.", which the Comune's own Piazza Municipio 1,
+  80133 got as well, with no scala or interno), and foglio, particella, subalterno and categoria
+  ("Attenzione! Dati catastali sconosciuti", not tried with a real parcel). The portal keeps each
+  value, and a person couldn't clear the address one, so a warning never stops a run: the report's
+  `alerts` lists each by section and the box's label (no value), results.js counts them, and the
+  person's review shows them to check.
 - **Required oddities.** The voltura's co-holder sex is two radio groups, each required: the
   section saves only with both ticked (the recipe says so in `yours`).
 - **Acknowledgements** in the person's name are `theirs` in the dictionary (their wording

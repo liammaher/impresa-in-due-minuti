@@ -18,6 +18,9 @@
 //   await __crawl.slotsOf(draft)                         a draft's, by its name in Pratiche in bozza:
 //       opened from the list, then its Allega Documenti step (from the menu at the top, so the
 //       sections need not be complete; an empty "catalogo" draft shows the base slots)
+//   await __crawl.sectionOf(draft, section)              a draft's section as the page shows it, each
+//       box's value in [brackets], a tick box [x] or [ ]: for a rehearsal's draft (made-up values),
+//       to see which block holds whom where blocks share labels (the read-back can't tell)
 //
 // A choice's node says what it reveals, hides and moves (old id → new id); gen.py reads them.
 // It also says which shown boxes it switches on and off (`enables`, `disables`): a block
@@ -512,10 +515,8 @@
     });
   }
 
-  // A draft opened from Pratiche in bozza (ten a page, the newest first), then its Allega
-  // Documenti step from the menu at the top. The step can need a second press, and may ask
-  // "Proseguire senza salvare?" (nothing to save: confirm).
-  async function slotsOf(draft) {
+  // A draft opened from Pratiche in bozza (ten a page, the newest first).
+  async function openDraft(draft) {
     await newFrame(location.origin + "/fnsuap/cmd/home");
     await idle();
     const row = () => [...doc().querySelectorAll("tr")].find((t) => t.innerText.includes(draft));
@@ -531,6 +532,12 @@
       await sleep(250);
     }
     await idle();
+  }
+
+  // Its Allega Documenti step, from the menu at the top. The step can need a second press, and
+  // may ask "Proseguire senza salvare?" (nothing to save: confirm).
+  async function slotsOf(draft) {
+    await openDraft(draft);
     for (let t = 0; t < 3 && !doc().querySelector("input[type=file]"); t++) {
       const step = [...doc().querySelectorAll("button, a")].filter((e) => e.offsetParent && e.textContent.trim() === "Allega Documenti").pop();
       if (!step) break;
@@ -543,11 +550,55 @@
     return { draft, title, slots: slots() };
   }
 
+  // A draft opens on the step it was left on (Allega Documenti, after a run): "Dati Dichiarazioni"
+  // shows the sections' menu, then the section's link opens it. Nothing is ticked or saved: what
+  // the page shows, its texts and each box's value in reading order (2026-11-02: the designer's,
+  // the director's and the structural designer's blocks, each under its own heading).
+  async function sectionOf(draft, section) {
+    await openDraft(draft);
+    const link = () => [...doc().querySelectorAll("a.linkmenu")].find((a) => norm(a.textContent).startsWith(norm(section)));
+    const open = () => norm((doc().querySelector("li#corrente") || {}).innerText).startsWith(norm(section));
+    for (let t = 0; t < 3 && !link() && !open(); t++) {
+      const step = [...doc().querySelectorAll("button, a")].filter((e) => e.offsetParent && e.textContent.trim() === "Dati Dichiarazioni").pop();
+      if (!step) break;
+      await act(() => step.click());
+      await idle();
+    }
+    if (!open()) {
+      if (!link()) throw new Error(`${draft}: no section ${section}`);
+      await act(() => link().click());
+      for (let end = performance.now() + 20000; !open();) {
+        if (performance.now() > end) throw new Error(`${draft}: ${section} didn't open`);
+        await sleep(250);
+      }
+      await idle();
+    }
+    const out = [];
+    const walk = (n) => {
+      if (n.nodeType === 3) { const s = n.textContent.replace(/\s+/g, " ").trim(); if (s) out.push(s); return; }
+      if (n.nodeType !== 1 || /^(SCRIPT|STYLE|OPTION)$/.test(n.tagName)) return;
+      if (n.tagName === "SELECT") { const o = n.options[n.selectedIndex]; out.push(`[${o && o.value ? o.text.trim() : ""}]`); return; }
+      if (n.tagName === "INPUT" || n.tagName === "TEXTAREA") {
+        const shown = n.offsetParent || (n.closest(".ui-radiobutton, .ui-chkbox") || {}).offsetParent;
+        // A radio's real input sits in a hidden span (skipped below): its _clone is the one shown.
+        if (n.type === "hidden" || /combo_focus$|combo_filter$/.test(n.id) || !shown) return;
+        out.push(n.type === "radio" || n.type === "checkbox" ? (n.checked ? "[x]" : "[ ]") : `[${n.value}]`);
+        return;
+      }
+      const cs = win().getComputedStyle(n);
+      if (cs.display === "none" || cs.visibility === "hidden" || n.classList.contains("ui-selectonemenu-panel")) return;
+      n.childNodes.forEach(walk);
+    };
+    walk(doc().querySelector("li#corrente"));
+    return { draft, section, text: out.join(" ").replace(/\s*Selezionare un valore\s*/g, " ") };
+  }
+
   window.__crawl = {
     revealed, save, // for bench/test_inpage.py
     // The frame of the page's own run (or of a run that ended): never one already removed.
     slots: () => { if (!frame || !frame.isConnected) frame = document.querySelector("iframe"); return slots(); },
     slotsOf,
+    sectionOf,
     report: () => report,
     // Ends a batch after the pratica under way (await __crawl.wait() for it): before another
     // script drives the portal, so two never drive one draft through wizard.js's shared frame.

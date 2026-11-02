@@ -31,7 +31,8 @@
 # SCIA's DM 161/2012 line): a case that takes one is refused as the law's. `defect:` names, by
 # defects.yaml id, the boxes of a case a portal defect blocks (the recipe refuses the case with it).
 # `made_up:` on a box says why made-up data can't pass it (the portal checks it against a real
-# register): pre-flight --made-up warns, so a rehearsal's stop there isn't read as a regression.
+# register): pre-flight --made-up warns, so a rehearsal's stop or the portal's warning there (the
+# run's `alerts`) isn't read as a regression.
 #
 # Roles (answers.json "people"): no prefix and `t:` are the studio's own (the business and its
 # titolare, the architect), `c:` the client (a person, or a company or condominium with
@@ -1415,11 +1416,13 @@ sections:
       - {kind: text, label: il seguente domicilio digitale inserito in INI-PEC, value: "{{c:business.pec}}", when: "{{c:business.denominazione|empty|not}} {{ask.domicilio_inipec}}"}
 
   # The box under the PEC ("si dichiara di essere consapevoli ...") is required, and the
-  # person's: the run leaves it and its "required" to them.
+  # person's: the run leaves it and its "required" to them. The PEC is looked up at Salva, as the
+  # landscape technician's is: every rehearsal's made-up one is flagged (seen 2026-11-02, once the
+  # runner read the portal's warnings).
   - section: DOMICILIO ELETTRONICO
     theirs: [Si dichiara di essere consapevoli]
     fields:
-      - {kind: text, label: "N.B. Inserire l'indirizzo della casella PEC", value: "{{t:identity.pec}}"}
+      - {kind: text, label: "N.B. Inserire l'indirizzo della casella PEC", value: "{{t:identity.pec}}", made_up: "the portal looks the PEC up at Salva and keeps it, flagged \"Indirizzo Pec non valido\" unless it is a real one: a made-up address stays flagged"}
 
   # The property: the client's immobile in the vault (c:immobile.*), the property the works are on.
   - section: Localizzazione dell'intervento
