@@ -39,5 +39,6 @@
  "paesaggio": "no",
  "fatti": [],
  "altri_tecnici_dopo": "true",
- "impresa_dopo": "true"
+ "impresa_dopo": "true",
+ "progettista_altro": false
 }

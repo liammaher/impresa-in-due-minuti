@@ -19,5 +19,6 @@
  "intervento": "edilizia_libera",
  "cambio_uso": "no",
  "paesaggio": "ordinaria",
- "fatti": []
+ "fatti": [],
+ "progettista_altro": false
 }

@@ -101,5 +101,6 @@
  "direttore_lavori": "altro tecnico",
  "impresa_dopo": "false",
  "dl_strutture": "true",
- "vvf_variante": "false"
+ "vvf_variante": "false",
+ "progettista_altro": false
 }

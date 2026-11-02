@@ -61,9 +61,9 @@ def _():
     # sono/saranno eseguiti dall" starts no box there.
     assert one("h) Impresa esecutrice", "che i lavori sono/saranno eseguiti")["state"] == "ticked"
     # The permesso's g1 is filled by its own entry, not the SCIA's h1 one: its structural boxes
-    # are, its "tecnico incaricato" (a designer who isn't the one presenting) isn't yet.
+    # are, and its "tecnico incaricato" (a designer who isn't the one presenting, since 2026-11-02).
     assert one("g1) Tecnici incaricati", "Progettista delle opere strutturali")["state"] == "ticked"
-    assert one("g1) Tecnici incaricati", "tecnico incaricato")["state"] == "unmapped"
+    assert one("g1) Tecnici incaricati", "tecnico incaricato")["state"] == "ticked"
 
 
 @case("a choice no entry names is unmapped (the land register)")

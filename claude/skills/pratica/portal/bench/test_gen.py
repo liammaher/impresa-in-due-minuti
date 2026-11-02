@@ -1130,9 +1130,12 @@ def _():
     import run
     steps = generated("pdc-fittizio")
     sec = section(steps, "g1) Tecnici incaricati")
-    order = [(f["kind"], f.get("label"), f.get("block"), str(f.get("value"))) for f in sec["fields"]]
-    tick = next(i for i, (k, l, _, _) in enumerate(order) if k == "radio" and l == "si")
-    second = [i for i, (_, _, b, v) in enumerate(order) if b == 2 and "{{s:" in v]
+    order = [(f["kind"], f.get("label"), f.get("block"), str(f.get("value")), f.get("when", "")) for f in sec["fields"]]
+    tick = next(i for i, (k, l, _, _, _) in enumerate(order) if k == "radio" and l == "si")
+    # The structural designer's block below the director's: the second, or the third under another
+    # architectural designer (whose block, opened by its own radio earlier, is the first).
+    second = [i for i, (_, _, b, v, w) in enumerate(order) if "{{s:" in v and b in (2, 3)
+              and "{{ask.direttore_lavori|is_altro_tecnico}}" in w.split()]
     # A block 2 exists only once the director's block has opened above it (read 2026-11-02).
     assert second and min(second) > tick, (tick, second)
     # The permesso has no slot for a barriers deroga or a scomputo proposal; the SCIA
@@ -1167,6 +1170,33 @@ def _():
         v = run.Values(json.loads((CILA / answers).read_text()), fields=fields, asks=steps.get("asks"))
         r = run.preflight(steps, v, made_up=True)
         assert r["ready"] and not r["missing"], (answers, r["missing"])
+
+
+@case("another designer (`p:`): their block is the first Cognome, every other block counts one more under it (`shift`), the architect's own rows only without; the person is told to have them sign")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    for name, sec_name in (("cila-fittizia", "G1) Tecnici incaricati"), ("scia-fittizia", "h1) Tecnici incaricati"),
+                           ("pdc-fittizio", "g1) Tecnici incaricati")):
+        sec = section(generated(name), sec_name)
+        cognomi = [f for f in sec["fields"] if f.get("label") == "Cognome"]
+        designer = [f for f in cognomi if f["value"].startswith("{{p:")]
+        assert [f.get("block") for f in designer] == [1], (name, designer)
+        others = [f for f in cognomi if f not in designer]
+        without = [f for f in others if f["when"].endswith(" {{ask.progettista_altro|not}}")]
+        under = [f for f in others if f["when"].endswith(" {{ask.progettista_altro}}")]
+        assert others and len(without) == len(under) == len(others) // 2, (name, others)
+        assert all(g["value"] == f["value"] and g["block"] == f["block"] + 1 for f, g in zip(without, under)), name
+        own = [f for f in sec["fields"] if "{{t:" in f.get("value", "") or "{{business." in f.get("value", "")]
+        assert own and all(f["when"].startswith("{{ask.progettista_altro|not}}") for f in own), (name, own)
+    steps = generated("scia-fittizia")
+    for answers, signs in (("answers-progettista.json", True), ("answers-direttori.json", False)):
+        v = run.Values(json.loads((ROOT / "rehearsals/scia-fittizia" / answers).read_text()), fields=fields, asks=steps.get("asks"))
+        r = run.preflight(steps, v, made_up=True)
+        assert r["ready"] and any("designer's (`p:`)" in y for y in r["yours"]) == signs, (answers, r["yours"])
+        plan = [(p["section"], p["label"], p["value"]) for p in run.plan(steps, v)]
+        assert (("Asseverazione SCIA - Tipologia di intervento", "Cognome", "Disegno") in plan) == signs, answers
 
 
 print(f"{sum(results)}/{len(results)} passed")

@@ -204,9 +204,10 @@ def end_to_end():
           f"{len(with_docs['proposals'])} and {len(with_docs['missing'])} with them")
     assert count(with_docs) == 0 and count(without) >= 20, (count(with_docs), count(without))
     # Left to confirm: only the steps file's own defaults, which no document answers (no other
-    # filings or assents made; no firm or technicians still to be named, since 2026-11-01).
+    # filings or assents made; no firm or technicians still to be named, since 2026-11-01; the
+    # architect is the designer, since 2026-11-02).
     assert {p["key"] for p in with_docs["proposals"]} <= {"comunicazioni_presentate", "atti_acquisiti",
-                                                        "impresa_dopo", "altri_tecnici_dopo"}, with_docs["proposals"]
+                                                        "impresa_dopo", "altri_tecnici_dopo", "progettista_altro"}, with_docs["proposals"]
     # The lease carries no citizenship: the Scheda anagrafica's Cittadinanza is asked of the vault
     # (since 2026-11-02; before, every client went as the portal's preset ITALIA).
     assert len(with_docs["missing"]) <= 6 < len(without["missing"]), with_docs["missing"]

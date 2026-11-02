@@ -99,5 +99,6 @@
  "notifica_allegata": "false",
  "rinnovabili_obblighi": "rispettati",
  "vvf_variante": "false",
- "scomputo": "false"
+ "scomputo": "false",
+ "progettista_altro": false
 }

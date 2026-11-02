@@ -424,6 +424,16 @@ def fill(entry, as_name, c, recipe, name):
     if entry.get("branches"):
         dfields = [g for d in dfields for g in ([d] if "when" in d else
                    [{**d, "when": w} for w in entry["branches"]])]
+    # `shift` ({when, anchor}): a block that choice opens above every block of `anchor` (the
+    # architectural designer's, when another technician designs: read on the CILA, SCIA and
+    # permesso 2026-11-02), so under it each other field anchored there counts one block more.
+    if entry.get("shift"):
+        s = entry["shift"]
+        also = lambda d, w: {**d, "when": " ".join(x for x in (d.get("when", ""), w) if x)}
+        shifted = lambda d: d.get("anchor") == s["anchor"] and s["when"] not in d.get("when", "")
+        dfields = [g for d in dfields for g in ([also(d, s["when"][:-2] + "|not}}"),
+                                                 {**also(d, s["when"]), "block": d.get("block", 1) + 1}]
+                                                if shifted(d) else [d])]
     branch_terms = {re.match(r"\s*(\{\{[^}]*\}\})", w)[1] for w in entry.get("branches", [])}
     for i, role in enumerate(recipe.get("firms", entry.get("firms", [])) if "block" in entry and "firms" in entry else []):
         # One block per firm, the second and later added with "+", and only when the job has

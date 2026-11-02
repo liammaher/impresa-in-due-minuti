@@ -729,6 +729,13 @@ def apart(steps, values):
     return [f"File apart, with its own office: {a['procedure']} ({a['regime']})" for a in d["apart"]]
 
 
+def asked_yours(steps, values):
+    """The person's steps an answer brings (an ask's `yours`, said when it's answered yes: the
+    other designer's signature)."""
+    return [a["yours"] for k, a in steps.get("asks", {}).items()
+            if a.get("yours") and truthy(values.field("ask." + k) or "")]
+
+
 def supported(steps, values):
     """Why this case isn't mapped, and the asks still needed to tell."""
     out, need, _ = refusals(steps, values)
@@ -1016,7 +1023,7 @@ def preflight(steps, values, urls=None, made_up=False):
                     report["warnings"].append(f"made-up data: {sec['section']}: {f['made_up']}")
     report["pane_ok"] = sum(x["bytes"] or 0 for x in report["files"] if "link" not in x) <= PAGE_FILES_LIMIT
     report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + filing_yours(steps, sportello)
-                       + apart(steps, values))
+                       + asked_yours(steps, values) + apart(steps, values))
     report["ready"] = not (report["questions"] or report["proposals"] or report["missing"]
                            or any(not x["exists"] or x.get("problem") for x in report["files"] if x["path"]))
     return report
@@ -1456,7 +1463,7 @@ def review_shown(steps, values):
         if DECIDED.search(v["section"]):
             what = v["label"] or v["id"]
             decisions.setdefault(v["section"], []).append(what if v["value"] is None else f"{what}: {v['value']}")
-    return {"title": steps.get("title"), "yours": [values.render(y) for y in steps.get("yours", [])] + apart(steps, values),
+    return {"title": steps.get("title"), "yours": [values.render(y) for y in steps.get("yours", [])] + asked_yours(steps, values) + apart(steps, values),
             "decisions": [{"section": s, "choices": c} for s, c in decisions.items()],
             "values": [{"section": v["section"], "label": v["label"] or v["id"],
                         "value": "chosen" if v["value"] is None
