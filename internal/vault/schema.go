@@ -158,7 +158,7 @@ var RecommendedSchema = Schema{
 		Identity:   `^(` + identityWords + `)$`,
 		Account:    `^(` + accountWords + `)$`,
 	},
-	Version: "20",
+	Version: "21",
 	Categories: []SchemaCategory{
 		{
 			Name:        "identity",
@@ -370,6 +370,7 @@ var RecommendedSchema = Schema{
 				{ID: "business.regime_fiscale", Description: "Tax regime (e.g. forfettario, ordinario)", Sensitivity: "standard"},
 				{ID: "business.pec", Description: "PEC (certified email) address", Sensitivity: "standard"},
 				{ID: "business.rea", Description: "REA number (e.g. NA-123456)", Sensitivity: "standard"},
+				{ID: "business.data_iscrizione_rea", Description: "Date the business was entered in the REA, as on the visura camerale (YYYY-MM-DD); forms ask it with the REA number", Sensitivity: "standard"},
 				{ID: "business.data_apertura", Description: "Date the partita IVA was opened (YYYY-MM-DD)", Sensitivity: "standard"},
 				{ID: "business.qualita_dichiarante", Description: "Your role when you sign for the business: titolare or legale_rappresentante (validated). In a business vault the signer's role is their ruolo.tipo", Sensitivity: "standard", Kinds: []string{KindPersona}},
 				{ID: "business.forma_giuridica", Description: "Legal form: " + strings.Join(formeGiuridiche, ", ") + " (validated; SRL, S.r.l.s., ditta... accepted)", Sensitivity: "standard"},
