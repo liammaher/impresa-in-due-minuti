@@ -100,5 +100,7 @@
  "altri_tecnici_dopo": "false",
  "direttore_lavori": "da nominare",
  "impresa_dopo": "false",
- "notifica_allegata": "false"
+ "notifica_allegata": "false",
+ "vvf_variante": "false",
+ "scomputo": "false"
 }

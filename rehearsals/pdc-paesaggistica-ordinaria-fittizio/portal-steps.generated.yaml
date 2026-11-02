@@ -7,6 +7,8 @@ yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
 - 'As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request'
+- 'The asseverazione''s "non interessa aree percorse dal fuoco" (qualità terreni) is one choice with the soil statement on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md);
+  state it in the relazione tecnica if the SUE wants it'
 - 'On Allega documenti: the portal''s procura signed by the client and the Quadro riepilogativo (PdC DSC), the broadband infrastructure drawing (art. 135-bis DPR 380/2001: signed files only), the ordinaria''s
   drawings and photos (signed files only), the contributo''s prospetto or the documents for the SUE to work it out (the permesso has no slot for them: under Allegati liberi), then everything signed digitally
   (.p7m)'
@@ -30,6 +32,8 @@ groups:
     question: What shows the building's original state? Tick every one that applies.
   tolleranze_precedenti:
     question: Where were the construction tolerance declarations (art. 34-bis or 34-ter c. 4) made? Tick every one that applies.
+  strumenti:
+    question: Which planning instruments besides the PRG cover the property's area? Tick every one.
   deroga_parametri:
     question: Which of the town plan's limits does the permesso derogate from (art. 14 c. 3 DPR 380/2001)? Tick every one that applies.
   fatti:
@@ -44,6 +48,7 @@ asks:
     propose: nessuna}
   direttore_lavori: {type: choice, question: 'Who directs the works? progettista (the architect filing the pratica); da nominare (no direttore dei lavori named in the pratica: named before the works start);
       altro tecnico (another technician, `d:` in the job''s people)', options: [progettista, da nominare, altro tecnico], propose: progettista}
+  dl_strutture: {type: yes_no, question: 'Does the structural designer (`s:`) also direct the structural works? If not, that direttore dei lavori is named before the works start', propose: 'true'}
   altri_tecnici: {type: yes_no, question: 'Are other technicians (structures, systems, acoustics, safety) already appointed for these works?', propose: 'false'}
   altri_tecnici_dopo: {type: yes_no, question: 'Will further technicians (structures, systems, safety coordinator) be appointed before the works start, besides any named here?', propose: 'false'}
   altri_tecnici_quanti: {type: number, question: 'How many other technicians? (the first is `a:` in the job''s people, the second `a2:`, and so on)', propose: '1'}
@@ -116,6 +121,9 @@ asks:
   strutture: {type: yes_no, question: 'Did the works touch the building''s structure?'}
   prestazione_energetica: {type: yes_no, question: 'Are the works subject to the minimum energy-performance requirements?'}
   barriere: {type: yes_no, question: 'Are the works subject to the barriers rules of artt. 77 ff. DPR 380/2001 and DM 236/1989 (private buildings)?'}
+  barriere_art82: {type: yes_no, question: 'Is it a private building open to the public, the works conforming to art. 82 DPR 380/2001 (as the relazione and drawings show)?'}
+  barriere_deroga: {type: yes_no, question: 'Are the works subject to the barriers rules but don''t meet them, so a deroga is asked (its documents attached)?', propose: 'false'}
+  barriere_elaborati: {type: file, question: The drawings and relazione showing the barriers rules are met (art. 77 ff. or art. 82 DPR 380/2001) (PDF)}
   sanatoria_titolo: {type: choice, question: 'Is this pratica filed in sanatoria? nessuna (no); scia (a SCIA in sanatoria); permesso (a permesso di costruire in sanatoria)', options: [nessuna, scia, permesso],
     default: nessuna}
   nuova_costruzione_tipo: {type: choice, question: 'Which new construction (art. 3 c. 1 e DPR 380/2001)? e1 (new buildings above or below ground, or an existing one extended outside its shape); e2 (urbanization
@@ -168,13 +176,24 @@ asks:
   barriere_visitabilita: {type: yes_no, group: barriere_requisiti, item: Visitabilità}
   barriere_adattabilita: {type: yes_no, group: barriere_requisiti, item: Adattabilità}
   rinnovabili: {type: yes_no, question: 'Does the renewables obligation apply (D.Lgs. 28/2011: a new building or a major renovation), its respect shown in the drawings and the relazione tecnica?'}
+  rinnovabili_obblighi: {type: choice, question: 'Are the renewables obligations met? rispettati (in full, as the drawings show); in parte (in part: the technical impossibility of the rest shown in the
+      art. 125 relazione tecnica); impossibili (technically impossible in full, shown there)', options: [rispettati, in parte, impossibili], propose: rispettati, when: '{{ask.rinnovabili}}'}
   incentivo_energetico: {type: choice, question: 'Which energy incentive does the project use, certified in the relazione tecnica? nessuno; art 14 c6 (D.Lgs. 102/2014: thicker walls and roofs not counted,
       the energy index at least 20% lower); art 14 c7 (deroga to distances and heights, the transmittance limit at least 10% lower); bonus volumetrico (D.Lgs. 28/2011 art. 12: 5% more volume, renewables
       covering more than the obligation)', options: [nessuno, art 14 c6, art 14 c7, bonus volumetrico], propose: nessuno}
   acustica_passiva: {type: yes_no, question: 'Does the DPCM 5/12/1997 on buildings'' passive acoustic requirements apply (a new building, or one rebuilt)?'}
   vvf_valutazione: {type: yes_no, question: 'Does the project need the Vigili del Fuoco''s assessment (an activity of DPR 151/2011 cat. B or C, e.g. a residential building over 24 m)?', propose: 'false'}
-  scavo: {type: choice, question: 'Do the works produce excavated earth? nessuno (no excavation subject to the rules); riutilizzo in sito (reused where it is dug); rifiuti (handled as waste)', options: [
-      nessuno, riutilizzo in sito, rifiuti], propose: nessuno}
+  vvf_variante: {type: yes_no, question: 'Is it a variant to a project the Vigili del Fuoco already approved (their parere: its protocol and date), the changes not altering the fire-safety requirements
+      approved?', propose: 'false', when: '{{ask.vvf_valutazione|not}}'}
+  vvf_parere_protocollo: {type: text, question: 'The Vigili del Fuoco''s parere on the project: its protocol number'}
+  vvf_parere_data: {type: date, question: Its date}
+  scavo: {type: choice, question: 'Do the works produce excavated earth? nessuno (no excavation subject to the rules); sottoprodotti (used elsewhere as by-products, DPR 120/2017); riutilizzo in sito (reused
+      where it is dug); rifiuti (handled as waste)', options: [nessuno, sottoprodotti, riutilizzo in sito, rifiuti], propose: nessuno}
+  scavo_piano_utilizzo: {type: yes_no, question: 'Is it a large site (over 6000 m³ of excavated earth) subject to VIA or AIA, so the earth is used under the Piano di Utilizzo approved with them (DPR 120/2017
+      art. 9)? If not, the dichiarazione di utilizzo (artt. 21-22) covers it', when: '{{ask.scavo|is_sottoprodotti}}'}
+  scavo_via_ente: {type: text, question: 'Who issued the VIA or AIA approving the Piano di Utilizzo (e.g. Regione Campania)?'}
+  scavo_via_protocollo: {type: text, question: Its protocol number}
+  scavo_via_data: {type: date, question: Its date}
   indagini_ambientali: {type: yes_no, question: 'Does the area need environmental investigations of its soil first (past uses that may have polluted it)?', propose: 'false'}
   indagini_esito: {type: choice, question: 'What came of the soil investigations? analisi (the analyses were done and no remediation is needed: their results attached); bonifica (the soil was remediated,
       as the conclusive certificate of remediation says, artt. 248 c. 2 and 242-bis c. 4 D.Lgs. 152/2006)', options: [analisi, bonifica], when: '{{ask.indagini_ambientali}}'}
@@ -186,14 +205,21 @@ asks:
       its date)', options: [comune, convenzione], when: '{{ask.urbanizzazione|not}}'}
   urbanizzazione_convenzione_data: {type: date, question: The date the convenzione was signed, when: '{{ask.urbanizzazione|not}} {{ask.urbanizzazione_attuazione|is_convenzione}}'}
   scarichi: {type: choice, question: 'The works'' drains: nessuna autorizzazione (they need none); allaccio ottenuto (the connection to the public sewer is authorised: its protocol and date); allaccio da
-      richiedere (the request''s documents attached)', options: [nessuna autorizzazione, allaccio ottenuto, allaccio da richiedere], propose: nessuna autorizzazione}
+      richiedere (the request''s documents attached); fognatura ottenuta, fognatura da richiedere (a discharge into the public sewer authorised under D.Lgs. 152/2006, e.g. industrial waste water: its protocol
+      and date, or the request''s documents attached); superficiali ottenuta, superficiali da richiedere (a discharge into surface water, on the ground or the subsoil, D.Lgs. 152/2006)', options: [nessuna
+        autorizzazione, allaccio ottenuto, allaccio da richiedere, fognatura ottenuta, fognatura da richiedere, superficiali ottenuta, superficiali da richiedere], propose: nessuna autorizzazione}
   allaccio_protocollo: {type: text, question: 'The sewer connection''s authorisation: its protocol number'}
   allaccio_data: {type: date, question: Its date}
   allaccio_doc: {type: file, question: The documents for the sewer connection's authorisation (PDF)}
+  scarico_protocollo: {type: text, question: 'The discharge''s authorisation (D.Lgs. 152/2006): its protocol number'}
+  scarico_data: {type: date, question: Its date}
+  scarico_doc: {type: file, question: The documents for the discharge's authorisation (D.Lgs. 152/2006) (PDF)}
   autorita_bacino: {type: choice, question: 'Under the Autorità di Bacino''s plans (PSAI: landslide and flood risk), the property is: no (in no constrained area); vincolata (under vincoli: named below);
       costa (under the coastal safeguards: described below)', options: ['no', vincolata, costa], propose: 'no'}
   autorita_bacino_quale: {type: text, question: The Autorità di Bacino's vincoli on the property}
   scia_onerosa: {type: yes_no, question: 'Is a contributo di costruzione due (e.g. a change of use between categories, or works adding urban load)?', propose: 'false'}
+  scomputo: {type: yes_no, question: 'Does the holder ask to build the urbanisation works directly, a scomputo of the oneri due (art. 16 c. 2 DPR 380/2001), attaching the proposed project?', propose: 'false',
+    when: '{{ask.scia_onerosa}}'}
   contributo_normativa: {type: text, question: 'Why the works are free of the contributo di costruzione (the rule, e.g. art. 17 c. 3 DPR 380/2001)'}
   contributo_pagamento: {type: choice, question: 'How the contributo is paid: pagato (already: its receipt attached); prima dei lavori (the receipt sent before the works start; for a permesso, paid when
       it''s collected; for a SCIA alternativa, within 30 days of filing); rateizzazione (in instalments, as the Comune sets); in corso d''opera (the costo di costruzione paid during the works)', options: [
@@ -275,6 +301,60 @@ asks:
   prg_specificare: {type: text, question: The town plan in force, default: Variante generale al PRG}
   prg_zona: {type: text, question: The PRG zone of the property}
   prg_articolo: {type: text, question: The article of the PRG's rules for that zone}
+  strumenti_altri: {type: yes_no, question: 'Besides the PRG, is the property in an area another planning instrument in force or in salvaguardia covers (an adopted PUC, a PUA, a piano particolareggiato,
+      di lottizzazione or di recupero, a P.I.P., a P.E.E.P., a piano di settore, the Autorità di Bacino''s piano stralcio, the PTCP, a piano paesistico or a park''s plan, another)?', propose: 'false'}
+  strumento_pua: {type: yes_no, group: strumenti, item: 'A PUA (piano urbanistico attuativo, L.R. Campania 16/2004 art. 26)'}
+  strumento_particolareggiato: {type: yes_no, group: strumenti, item: A piano particolareggiato}
+  strumento_recupero: {type: yes_no, group: strumenti, item: A piano di recupero (L. 457/1978)}
+  strumento_pip: {type: yes_no, group: strumenti, item: A P.I.P. (piano per gli insediamenti produttivi)}
+  strumento_peep: {type: yes_no, group: strumenti, item: 'A P.E.E.P. (piano per l''edilizia economica e popolare, L. 167/1962)'}
+  strumento_lottizzazione: {type: yes_no, group: strumenti, item: A piano di lottizzazione}
+  strumento_ruec: {type: yes_no, group: strumenti, item: The Regolamento Edilizio (RUEC)}
+  strumento_settore: {type: yes_no, group: strumenti, item: A piano di settore}
+  strumento_psai: {type: yes_no, group: strumenti, item: The Autorità di Bacino's piano stralcio (PSAI)}
+  strumento_ptcp: {type: yes_no, group: strumenti, item: The P.T.C.P. (piano territoriale di coordinamento provinciale)}
+  strumento_paesistico: {type: yes_no, group: strumenti, item: A piano territoriale paesistico}
+  strumento_parco: {type: yes_no, group: strumenti, item: A park authority's plan (piano dell'ente parco)}
+  strumento_altro: {type: yes_no, group: strumenti, item: Another planning instrument}
+  strumento_pua_zona: {type: text, question: The property's zone in the PUA}
+  strumento_pua_articolo: {type: text, question: The article of the PUA's rules for that zone}
+  strumento_particolareggiato_nome: {type: text, question: 'Which piano particolareggiato it is (its name, or its approval)'}
+  strumento_particolareggiato_zona: {type: text, question: The property's zone in the piano particolareggiato}
+  strumento_particolareggiato_articolo: {type: text, question: The article of the piano particolareggiato's rules for that zone}
+  strumento_recupero_nome: {type: text, question: 'Which piano di recupero it is (its name, or its approval)'}
+  strumento_recupero_zona: {type: text, question: The property's zone in the piano di recupero}
+  strumento_recupero_articolo: {type: text, question: The article of the piano di recupero's rules for that zone}
+  strumento_pip_nome: {type: text, question: 'Which P.I.P. it is (its name, or its approval)'}
+  strumento_pip_zona: {type: text, question: The property's zone in the P.I.P.}
+  strumento_pip_articolo: {type: text, question: The article of the P.I.P.'s rules for that zone}
+  strumento_peep_nome: {type: text, question: 'Which P.E.E.P. it is (its name, or its approval)'}
+  strumento_peep_zona: {type: text, question: The property's zone in the P.E.E.P.}
+  strumento_peep_articolo: {type: text, question: The article of the P.E.E.P.'s rules for that zone}
+  strumento_altro_nome: {type: text, question: 'Which instrument it is (its name, or its approval)'}
+  strumento_altro_zona: {type: text, question: The property's zone in that instrument}
+  strumento_altro_articolo: {type: text, question: The article of that instrument's rules for that zone}
+  strumento_pua_nome: {type: text, question: 'Which PUA it is (its approval: the act and its date)'}
+  strumento_lottizzazione_zona: {type: text, question: The property's zone in the piano di lottizzazione}
+  strumento_lottizzazione_articolo: {type: text, question: The article of the piano di lottizzazione's rules for that zone}
+  strumento_lottizzazione_nome: {type: text, question: 'Which piano di lottizzazione it is (its approval: the act and its date)'}
+  strumento_ruec_zona: {type: text, question: The property's zone in the RUEC}
+  strumento_ruec_articolo: {type: text, question: The article of the RUEC's rules for that zone}
+  strumento_ruec_nome: {type: text, question: 'Which RUEC it is (its approval: the act and its date)'}
+  strumento_settore_zona: {type: text, question: The property's zone in the piano di settore}
+  strumento_settore_articolo: {type: text, question: The article of the piano di settore's rules for that zone}
+  strumento_settore_nome: {type: text, question: 'Which piano di settore it is (its approval: the act and its date)'}
+  strumento_psai_zona: {type: text, question: The property's zone in the piano stralcio}
+  strumento_psai_articolo: {type: text, question: The article of the piano stralcio's rules for that zone}
+  strumento_psai_nome: {type: text, question: 'Which piano stralcio it is (its approval: the act and its date)'}
+  strumento_ptcp_zona: {type: text, question: The property's zone in the P.T.C.P.}
+  strumento_ptcp_articolo: {type: text, question: The article of the P.T.C.P.'s rules for that zone}
+  strumento_ptcp_nome: {type: text, question: 'Which P.T.C.P. it is (its approval: the act and its date)'}
+  strumento_paesistico_zona: {type: text, question: The property's zone in the piano paesistico}
+  strumento_paesistico_articolo: {type: text, question: The article of the piano paesistico's rules for that zone}
+  strumento_paesistico_nome: {type: text, question: 'Which piano paesistico it is (its approval: the act and its date)'}
+  strumento_parco_zona: {type: text, question: The property's zone in the park's plan}
+  strumento_parco_articolo: {type: text, question: The article of the park's plan's rules for that zone}
+  strumento_parco_nome: {type: text, question: 'Which park''s plan it is (its approval: the act and its date)'}
   progetto_impianti: {type: yes_no, question: 'Do the systems need a project (DM 37/2008 art. 5)?', when: '{{ask.impianti}}'}
   progetto_elettrico_doc: {type: file, question: The electrical system's project (PDF)}
   progetto_radiotv_doc: {type: file, question: The radio and TV systems' project (PDF)}
@@ -305,9 +385,23 @@ asks:
   antincendio_deroga_doc: {type: file, question: The documents for the fire-prevention deroga (PDF)}
   vvf_doc: {type: file, question: The documents for the Vigili del Fuoco's assessment of the project (art. 3 DPR 151/2011) (PDF)}
   amianto: {type: yes_no, question: 'Do the works touch parts with asbestos (so a piano di lavoro under art. 256 D.Lgs. 81/2008 is needed)?', propose: 'false'}
+  amianto_piano_allegato: {type: yes_no, question: 'Is the asbestos piano di lavoro attached now, rather than sent 30 days before the works start (art. 256 c. 5 D.Lgs. 81/2008)?', propose: 'false', when: '{{ask.amianto}}'}
+  amianto_piano: {type: file, question: The piano di lavoro for the asbestos (art. 256 D.Lgs. 81/2008) (PDF)}
   igienico_conforme: {type: yes_no, question: 'Does the unit meet the hygiene and health requirements (no derogation)?', propose: 'true'}
+  igienico_24_5bis: {type: yes_no, question: 'Does it meet them under art. 24 c. 5-bis DPR 380/2001 (rooms 2.40 to 2.70 m high, or a one-room flat of 20 to 28 m² for one person or 28 to 38 m² for two)?',
+    propose: 'false'}
+  igienico_5bis_caso: {type: choice, question: 'Which case of art. 24 c. 5-bis? altezza (rooms with a minimum inner height under 2.70 m but at least 2.40 m, lett. a); monostanza uno (a one-room flat for
+      one person, 20 m² or more but under 28 m² with its services, lett. b); monostanza due (for two people, 28 m² or more but under 38 m²); altezza e monostanza uno, altezza e monostanza due (both: a low
+      one-room flat)', options: [altezza, monostanza uno, monostanza due, altezza e monostanza uno, altezza e monostanza due]}
+  igienico_adattabilita: {type: yes_no, question: 'Do the rooms meet the adattabilità requirement of DM 236/1989 (art. 24 c. 5-ter DPR 380/2001)?'}
+  igienico_5ter: {type: choice, question: 'Which condition of art. 24 c. 5-ter holds? recupero (the building is under works of recupero edilizio improving its hygiene, lett. a); progetto alternativo (the
+      drawings attached include a renovation project with alternative solutions for the occupants: more surface, or better natural ventilation, lett. b)', options: [recupero, progetto alternativo]}
   igienico_deroga_doc: {type: file, question: The documents for the hygiene derogation request (PDF)}
   cemento_armato: {type: yes_no, question: 'Do the works build reinforced or prestressed concrete, or steel structures (art. 65 DPR 380/2001)?'}
+  strutture_allegate: {type: yes_no, question: 'Are the structural filings'' documents (the art. 65 denuncia, the seismic deposito''s) attached to the request now, rather than to the comunicazione di inizio
+      lavori?', propose: 'false', when: '{{ask.strutture}}'}
+  strutture_incaricato: {type: yes_no, question: 'Is the structural designer already appointed (`s:` in the job''s people), rather than named before the works start?', propose: 'false', when: '{{ask.strutture}}'}
+  denuncia_art65: {type: file, question: 'The denuncia of the concrete or steel works (art. 65 DPR 380/2001), as filed (PDF)'}
   sismica: {type: choice, question: 'The works'' seismic filing (art. 93-94 DPR 380/2001, L.R. 9/1983, Reg. 4/2010)? deposito (works to report: the denuncia''s documents attached); autorizzazione (the documents
       for the seismic authorization attached); variante (a non-substantial variant to a structural project already filed, art. 12 Reg. 4/2010)', options: [deposito, autorizzazione, variante]}
   sismica_doc: {type: file, question: 'The seismic filing''s documents (the denuncia, or the request for the authorization) (PDF)'}
@@ -339,7 +433,8 @@ asks:
   rir_doc: {type: file, question: The documents for the Comitato Tecnico Regionale's assessment (PDF)}
   altri_vincoli_eco: {type: choice, question: 'Other ecological vincoli on the property (a sewage plant''s fascia di rispetto, or another)? nessuno; autocertificazione (the progettista self-certifies the
       works comply: attached); assenso (they need an assent: the request''s documents attached)', options: [nessuno, autocertificazione, assenso], propose: nessuno}
-  altri_vincoli_eco_tipo: {type: choice, question: 'Which vincolo? depuratori (a sewage plant''s fascia di rispetto); altro (another: named below)', options: [depuratori, altro]}
+  altri_vincoli_eco_tipo: {type: choice, question: 'Which vincolo? depuratori (a sewage plant''s fascia di rispetto); pozzi (a well''s or spring''s, art. 94 c. 1 and 6 D.Lgs. 152/2006); altro (another:
+      named below)', options: [depuratori, pozzi, altro]}
   altri_vincoli_eco_quale: {type: text, question: Which other ecological vincolo}
   altri_vincoli_eco_doc: {type: file, question: 'The documents for that vincolo: the self-certification or the request for its assent (PDF)'}
   fasce: {type: choice, question: 'Is the property in a fascia di rispetto of a road, a railway, a power line, a gas pipeline, a military site or an airport (tutela funzionale)? no; autocertificazione (the
@@ -843,11 +938,15 @@ sections:
   - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_prima_dei_lavori}}', label: dichiara che il versamento del contributo di costruzione sarà effettuato al momento del ritiro}
   - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_rateizzazione}}', label: chiede la rateizzazione del contributo}
   - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.contributo_pagamento|is_in_corso_d_opera}}', label: si impegna a corrispondere il costo di costruzione}
-  - {kind: radio, when: '{{ask.scia_onerosa}}', label: 'NO'}
+  - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.scomputo}}', label: SI, nth: 2}
+  - {kind: radio, when: '{{ask.scia_onerosa}} {{ask.scomputo|not}}', label: 'NO'}
 - section: g1) Tecnici incaricati
   fields:
   - {id: 'r4c1p7reg:chk', kind: checkbox, when: '{{ask.direttore_lavori|is_da_nominare}}', label: 'che il progettista delle opere strutturali, il/i direttore/i dei lavori saranno individuati'}
-  - {id: 'r4c1p7reg:chk', kind: checkbox, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}}', label: 'che il progettista delle opere strutturali, il/i direttore/i dei lavori saranno individuati'}
+  - {id: 'r4c1p7reg:chk', kind: checkbox, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato|not}}', label: 'che il progettista delle opere strutturali, il/i
+      direttore/i dei lavori saranno individuati'}
+  - {id: 'r4c1p7reg:chk', kind: checkbox, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.dl_strutture|not}}', label: 'che il progettista delle opere
+      strutturali, il/i direttore/i dei lavori saranno individuati'}
   - {id: 'r13c3p34reg:radio:1_clone', kind: radio, label: titolare dell'intervento o procuratore}
   - {id: r15c3p41reg, kind: select, value: '{{business.sede_legale_provincia}}', label: Provincia}
   - {id: 'r17c1p45reg:txt', kind: text, value: '{{business.sede_legale_comune|upper}}', max: 100, label: Comune italiano}
@@ -861,9 +960,50 @@ sections:
   - {id: 'r25c1p71reg:number', kind: text, value: '{{t:identity.phone|phone_it}}', max: 15, label: cell.}
   - {id: 'r25c2p73reg:txt', kind: text, value: '{{t:identity.pec}}', max: 100, label: posta elettronica certificata}
   - {id: 'r3c1p5reg:chk', kind: checkbox, when: '{{ask.direttore_lavori|is_da_nominare|not}}', label: 'di aver incaricato, in qualità di progettista delle opere strutturali, di direttori dei lavori'}
-  - {id: 'r7c2p15reg:chk', kind: checkbox, when: '{{ask.direttore_lavori|is_da_nominare|not}}', label: Direttore dei lavori delle opere architettoniche}
-  - {id: 'r8c3p19reg:radio:1_clone', kind: radio, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_progettista}}', label: 'no'}
-  - {id: 'r8c2p18reg:radio:0_clone', kind: radio, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}', label: si}
+  - {id: 'r6c2p12reg:chk', kind: checkbox, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}', label: Progettista delle opere strutturali}
+  - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: '{{s:identity.last_name|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: Nome, anchor: Cognome, block: 1, value: '{{s:identity.first_name|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: C.F., anchor: Cognome, block: 1, value: '{{s:identity.codice_fiscale}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: date, label: Data di nascita, anchor: Cognome, block: 1, value: '{{s:identity.date_of_birth|date_it}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: select, label: Cittadinanza, anchor: Cognome, block: 1, value: ITALIA, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: select, label: Sesso, anchor: Cognome, block: 1, value: '{{s:identity.sex|sesso}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: select, label: Stato, anchor: Cognome, block: 1, value: ITALIA, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: select, label: Provincia, anchor: Cognome, block: 1, value: '{{s:identity.birth_province}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: Comune italiano, anchor: Cognome, block: 1, value: '{{s:identity.birth_comune|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: select, label: Stato, nth: 2, anchor: Cognome, block: 1, value: ITALIA, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: select, label: Provincia, nth: 2, anchor: Cognome, block: 1, value: '{{s:residenza.provincia}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: Comune italiano, nth: 2, anchor: Cognome, block: 1, value: '{{s:residenza.comune|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: 'Via, Piazza', anchor: Cognome, block: 1, value: '{{s:residenza.indirizzo|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: N., anchor: Cognome, block: 1, value: '{{s:residenza.civico}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: C.A.P., anchor: Cognome, block: 1, value: '{{s:residenza.cap}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: select, label: Stato, nth: 3, anchor: Cognome, block: 1, value: ITALIA, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: select, label: Provincia, nth: 3, anchor: Cognome, block: 1, value: '{{s:business.sede_legale_provincia}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: Comune italiano, nth: 3, anchor: Cognome, block: 1, value: '{{s:business.sede_legale_comune|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, anchor: Cognome, block: 1, value: '{{s:business.sede_legale_indirizzo|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: N., nth: 2, anchor: Cognome, block: 1, value: '{{s:business.sede_legale_civico}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: C.A.P., nth: 2, anchor: Cognome, block: 1, value: '{{s:business.sede_legale_cap}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, anchor: Cognome, block: 1, value: '{{s:albo.ordine}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: di, anchor: Cognome, block: 1, value: '{{s:albo.provincia|provincia_nome}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: al n., anchor: Cognome, block: 1, value: '{{s:albo.numero}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: Telefono, anchor: Cognome, block: 1, value: '{{s:identity.phone|phone_it}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: cell., anchor: Cognome, block: 1, value: '{{s:identity.phone|phone_it}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: '{{s:identity.pec}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico|not}}'}
+  - {kind: checkbox, when: '{{ask.direttore_lavori|is_da_nominare|not}}', label: Direttore dei lavori delle opere architettoniche}
+  - {kind: radio, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_progettista}}', label: 'no'}
+  - {kind: radio, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}', label: si}
   - {kind: text, label: Cognome, anchor: Cognome, block: 1, value: '{{d:identity.last_name|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}'}
   - {kind: text, label: Nome, anchor: Cognome, block: 1, value: '{{d:identity.first_name|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}'}
   - {kind: text, label: C.F., anchor: Cognome, block: 1, value: '{{d:identity.codice_fiscale}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}'}
@@ -891,6 +1031,48 @@ sections:
   - {kind: text, label: Telefono, anchor: Cognome, block: 1, value: '{{d:identity.phone|phone_it}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}'}
   - {kind: text, label: cell., anchor: Cognome, block: 1, value: '{{d:identity.phone|phone_it}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}'}
   - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 1, value: '{{d:identity.pec}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: Cognome, anchor: Cognome, block: 2, value: '{{s:identity.last_name|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: Nome, anchor: Cognome, block: 2, value: '{{s:identity.first_name|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: C.F., anchor: Cognome, block: 2, value: '{{s:identity.codice_fiscale}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: date, label: Data di nascita, anchor: Cognome, block: 2, value: '{{s:identity.date_of_birth|date_it}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: select, label: Cittadinanza, anchor: Cognome, block: 2, value: ITALIA, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: select, label: Sesso, anchor: Cognome, block: 2, value: '{{s:identity.sex|sesso}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: select, label: Stato, anchor: Cognome, block: 2, value: ITALIA, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: select, label: Provincia, anchor: Cognome, block: 2, value: '{{s:identity.birth_province}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: Comune italiano, anchor: Cognome, block: 2, value: '{{s:identity.birth_comune|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: select, label: Stato, nth: 2, anchor: Cognome, block: 2, value: ITALIA, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: select, label: Provincia, nth: 2, anchor: Cognome, block: 2, value: '{{s:residenza.provincia}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: Comune italiano, nth: 2, anchor: Cognome, block: 2, value: '{{s:residenza.comune|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: 'Via, Piazza', anchor: Cognome, block: 2, value: '{{s:residenza.indirizzo|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: N., anchor: Cognome, block: 2, value: '{{s:residenza.civico}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: C.A.P., anchor: Cognome, block: 2, value: '{{s:residenza.cap}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: select, label: Stato, nth: 3, anchor: Cognome, block: 2, value: ITALIA, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: select, label: Provincia, nth: 3, anchor: Cognome, block: 2, value: '{{s:business.sede_legale_provincia}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: Comune italiano, nth: 3, anchor: Cognome, block: 2, value: '{{s:business.sede_legale_comune|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: 'Via, Piazza', nth: 2, anchor: Cognome, block: 2, value: '{{s:business.sede_legale_indirizzo|upper}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: N., nth: 2, anchor: Cognome, block: 2, value: '{{s:business.sede_legale_civico}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: C.A.P., nth: 2, anchor: Cognome, block: 2, value: '{{s:business.sede_legale_cap}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: Iscritto all'ordine/collegio, anchor: Cognome, block: 2, value: '{{s:albo.ordine}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: di, anchor: Cognome, block: 2, value: '{{s:albo.provincia|provincia_nome}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: al n., anchor: Cognome, block: 2, value: '{{s:albo.numero}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: Telefono, anchor: Cognome, block: 2, value: '{{s:identity.phone|phone_it}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: cell., anchor: Cognome, block: 2, value: '{{s:identity.phone|phone_it}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: text, label: posta elettronica certificata, anchor: Cognome, block: 2, value: '{{s:identity.pec}}', when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}}
+      {{ask.direttore_lavori|is_altro_tecnico}}'}
+  - {kind: checkbox, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.dl_strutture}}', label: Direttore dei lavori delle opere strutturali}
+  - {kind: radio, when: '{{ask.direttore_lavori|is_da_nominare|not}} {{ask.strutture}} {{ask.strutture_incaricato}} {{ask.dl_strutture}}', label: 'no', nth: 2}
 - section: G2) Altri tecnici incaricati
   fields:
   - {id: 'r2c1p3reg:chk', kind: checkbox, when: '{{ask.altri_tecnici_dopo}}', label: che gli altri tecnici incaricati saranno individuati}
@@ -1196,11 +1378,65 @@ sections:
   - {id: 'r16c1p24reg:txt', kind: text, value: '{{ask.prg_specificare}}', max: 9999, label: Estremi Provv. di Approvazione}
   - {id: 'r18c1p26reg:txt', kind: text, value: '{{ask.prg_zona}}', max: 9999, label: Zona}
   - {id: 'r18c2p28reg:txt', kind: text, value: '{{ask.prg_articolo}}', max: 9999, label: Art.}
-  - {id: 'r35c1p45reg:chk', kind: checkbox, when: '{{ask.barriere|not}}', label: non è soggetto alle prescrizioni degli articoli 77}
-  - {id: 'r37c1p47reg:chk', kind: checkbox, when: '{{ask.barriere}}', label: è soggetto alle prescrizioni degli articoli 77}
-  - {id: 'r38c1p48reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_accessibilita}}', label: accessibilità}
-  - {id: 'r38c2p49reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_visitabilita}}', label: visitabilità}
-  - {id: 'r38c3p50reg:chk', kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_adattabilita}}', label: adattabilità}
+  - {id: 'r19c1p29reg:chk', kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}', label: PIANO PARTICOLAREGGIATO}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: PIANO PARTICOLAREGGIATO, block: 1, value: '{{ask.strumento_particolareggiato_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}'}
+  - {kind: text, label: Zona, anchor: PIANO PARTICOLAREGGIATO, block: 1, value: '{{ask.strumento_particolareggiato_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}'}
+  - {kind: text, label: Art., anchor: PIANO PARTICOLAREGGIATO, block: 1, value: '{{ask.strumento_particolareggiato_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_particolareggiato}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_lottizzazione}}', label: PIANO DI LOTIZZAZIONE}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: PIANO DI LOTIZZAZIONE, block: 1, value: '{{ask.strumento_lottizzazione_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_lottizzazione}}'}
+  - {kind: text, label: Zona, anchor: PIANO DI LOTIZZAZIONE, block: 1, value: '{{ask.strumento_lottizzazione_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_lottizzazione}}'}
+  - {kind: text, label: Art., anchor: PIANO DI LOTIZZAZIONE, block: 1, value: '{{ask.strumento_lottizzazione_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_lottizzazione}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}', label: PIANO DI RECUPERO}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: PIANO DI RECUPERO, block: 1, value: '{{ask.strumento_recupero_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}'}
+  - {kind: text, label: Zona, anchor: PIANO DI RECUPERO, block: 1, value: '{{ask.strumento_recupero_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}'}
+  - {kind: text, label: Art., anchor: PIANO DI RECUPERO, block: 1, value: '{{ask.strumento_recupero_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_recupero}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}', label: P.I.P.}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: P.I.P., block: 1, value: '{{ask.strumento_pip_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}'}
+  - {kind: text, label: Zona, anchor: P.I.P., block: 1, value: '{{ask.strumento_pip_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}'}
+  - {kind: text, label: Art., anchor: P.I.P., block: 1, value: '{{ask.strumento_pip_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pip}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}', label: P.E.E.P.}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: P.E.E.P., block: 1, value: '{{ask.strumento_peep_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}'}
+  - {kind: text, label: Zona, anchor: P.E.E.P., block: 1, value: '{{ask.strumento_peep_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}'}
+  - {kind: text, label: Art., anchor: P.E.E.P., block: 1, value: '{{ask.strumento_peep_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_peep}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_ruec}}', label: Regolamento Edilizio/RUEC}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: Regolamento Edilizio/RUEC, block: 1, value: '{{ask.strumento_ruec_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_ruec}}'}
+  - {kind: text, label: Zona, anchor: Regolamento Edilizio/RUEC, block: 1, value: '{{ask.strumento_ruec_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_ruec}}'}
+  - {kind: text, label: Art., anchor: Regolamento Edilizio/RUEC, block: 1, value: '{{ask.strumento_ruec_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_ruec}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_pua}}', label: PIANO URBANISTICO ATTUATIVO}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: PIANO URBANISTICO ATTUATIVO, block: 1, value: '{{ask.strumento_pua_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pua}}'}
+  - {kind: text, label: Zona, anchor: PIANO URBANISTICO ATTUATIVO, block: 1, value: '{{ask.strumento_pua_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pua}}'}
+  - {kind: text, label: Art., anchor: PIANO URBANISTICO ATTUATIVO, block: 1, value: '{{ask.strumento_pua_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_pua}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_settore}}', label: PIANO DI SETTORE}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: PIANO DI SETTORE, block: 1, value: '{{ask.strumento_settore_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_settore}}'}
+  - {kind: text, label: Zona, anchor: PIANO DI SETTORE, block: 1, value: '{{ask.strumento_settore_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_settore}}'}
+  - {kind: text, label: Art., anchor: PIANO DI SETTORE, block: 1, value: '{{ask.strumento_settore_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_settore}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_psai}}', label: PIANO STRALCIO AUTORITA'}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: PIANO STRALCIO AUTORITA', block: 1, value: '{{ask.strumento_psai_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_psai}}'}
+  - {kind: text, label: Zona, anchor: PIANO STRALCIO AUTORITA', block: 1, value: '{{ask.strumento_psai_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_psai}}'}
+  - {kind: text, label: Art., anchor: PIANO STRALCIO AUTORITA', block: 1, value: '{{ask.strumento_psai_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_psai}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_ptcp}}', label: P.T.C.P.}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: P.T.C.P., block: 1, value: '{{ask.strumento_ptcp_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_ptcp}}'}
+  - {kind: text, label: Zona, anchor: P.T.C.P., block: 1, value: '{{ask.strumento_ptcp_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_ptcp}}'}
+  - {kind: text, label: Art., anchor: P.T.C.P., block: 1, value: '{{ask.strumento_ptcp_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_ptcp}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_paesistico}}', label: PIANO TERRITORIALE PAESISTICO}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: PIANO TERRITORIALE PAESISTICO, block: 1, value: '{{ask.strumento_paesistico_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_paesistico}}'}
+  - {kind: text, label: Zona, anchor: PIANO TERRITORIALE PAESISTICO, block: 1, value: '{{ask.strumento_paesistico_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_paesistico}}'}
+  - {kind: text, label: Art., anchor: PIANO TERRITORIALE PAESISTICO, block: 1, value: '{{ask.strumento_paesistico_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_paesistico}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_parco}}', label: PIANO DELL'ENTE PARCO}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: PIANO DELL'ENTE PARCO, block: 1, value: '{{ask.strumento_parco_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_parco}}'}
+  - {kind: text, label: Zona, anchor: PIANO DELL'ENTE PARCO, block: 1, value: '{{ask.strumento_parco_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_parco}}'}
+  - {kind: text, label: Art., anchor: PIANO DELL'ENTE PARCO, block: 1, value: '{{ask.strumento_parco_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_parco}}'}
+  - {kind: checkbox, when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}', label: ALTRO}
+  - {kind: text, label: Estremi Provv. di Approvazione, anchor: ALTRO, block: 1, value: '{{ask.strumento_altro_nome}}', when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}'}
+  - {kind: text, label: Zona, anchor: ALTRO, block: 1, value: '{{ask.strumento_altro_zona}}', when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}'}
+  - {kind: text, label: Art., anchor: ALTRO, block: 1, value: '{{ask.strumento_altro_articolo}}', when: '{{ask.strumenti_altri}} {{ask.strumento_altro}}'}
+  - {kind: checkbox, when: '{{ask.barriere|not}}', label: non è soggetto alle prescrizioni degli articoli 77}
+  - {kind: checkbox, when: '{{ask.barriere_art82}}', label: interessa un edificio privato aperto al pubblico}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}}', label: è soggetto alle prescrizioni degli articoli 77}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_accessibilita}}', label: accessibilità}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_visitabilita}}', label: visitabilità}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga|not}} {{ask.barriere_adattabilita}}', label: adattabilità}
+  - {kind: checkbox, when: '{{ask.barriere}} {{ask.barriere_deroga}}', label: pur essendo soggetto alle prescrizioni degli articoli 77}
 - section: Asseverazione PdC - sicurezza impianti
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.impianti|not}}', label: Non comporta l'installazione}
@@ -1223,7 +1459,8 @@ sections:
   - {kind: checkbox, when: '{{ask.prestazione_energetica}} {{ask.sanatoria_titolo|is_permesso}}', label: sono allegate alla presente richiesta di permesso di costruire}
   - {kind: radio, when: '{{ask.rinnovabili|not}}', label: non è soggetto all'applicazione del d.lgs. n. 28/2011}
   - {kind: radio, when: '{{ask.rinnovabili}}', label: è soggetto all'applicazione del d.lgs. n. 28/2011}
-  - {kind: checkbox, when: '{{ask.rinnovabili}}', label: il rispetto delle prescrizioni in materia di utilizzo di fonti di energia rinnovabili}
+  - {kind: checkbox, when: '{{ask.rinnovabili}} {{ask.rinnovabili_obblighi|in_rispettati__in_parte}}', label: il rispetto delle prescrizioni in materia di utilizzo di fonti di energia rinnovabili}
+  - {kind: checkbox, when: '{{ask.rinnovabili}} {{ask.rinnovabili_obblighi|in_in_parte__impossibili}}', label: l'impossibilità tecnica di ottemperare}
   - {kind: checkbox, when: '{{ask.incentivo_energetico|is_art_14_c6}}', label: 'ricade nell''articolo 14, comma 6'}
   - {kind: checkbox, when: '{{ask.incentivo_energetico|is_art_14_c6}}', label: si certifica nella relazione tecnica una riduzione minima del 20}
   - {kind: checkbox, when: '{{ask.incentivo_energetico|is_art_14_c7}}', label: 'ricade nell''articolo 14, comma 7'}
@@ -1242,6 +1479,15 @@ sections:
   - {id: 'r10c1p10reg:radio:2_clone', kind: radio, when: '{{ask.acustica_passiva|not}}', label: non rientra nell'ambito dell'applicazione del d.P.C.M.}
   - {id: 'r11c1p11reg:radio:3_clone', kind: radio, when: '{{ask.acustica_passiva}}', label: rientra nell'ambito dell'applicazione del d.P.C.M.}
   - {id: 'r14c1p14reg:chk', kind: checkbox, when: '{{ask.scavo|is_nessuno}}', label: non sono soggette alla normativa vigente relativa ai materiali da scavo}
+  - {id: 'r15c1p15reg:chk', kind: checkbox, when: '{{ask.scavo|is_sottoprodotti}}', label: le opere comportano la produzione di materiali da scavo considerati come sottoprodotti}
+  - {id: 'r16c1p16reg:radio:4_clone', kind: radio, when: '{{ask.scavo|is_sottoprodotti}} {{ask.scavo_piano_utilizzo|not}}', label: le opere comportano la produzione di materiali da scavo per un volume inferiore
+      o uguale a quello}
+  - {id: 'r17c1p17reg:radio:5_clone', kind: radio, when: '{{ask.scavo|is_sottoprodotti}} {{ask.scavo_piano_utilizzo}}', label: le opere comportano la produzione di materiali da scavo per un volume superiore}
+  - {id: 'r18c2p19reg:chk', kind: checkbox, when: '{{ask.scavo|is_sottoprodotti}} {{ask.scavo_piano_utilizzo}}', slot: 'none: the rows below give its estremi (read on the permesso''s screen 2026-11-02)',
+    label: si allega / si comunicano gli estremi del provvedimento di VIA o AIA}
+  - {id: 'r20c2p24reg:txt', kind: text, value: '{{ask.scavo_via_ente}}', when: '{{ask.scavo|is_sottoprodotti}} {{ask.scavo_piano_utilizzo}}', max: 9999, label: 'rilasciato da:'}
+  - {id: 'r22c2p30reg:txt', kind: text, value: '{{ask.scavo_via_protocollo}}', when: '{{ask.scavo|is_sottoprodotti}} {{ask.scavo_piano_utilizzo}}', max: 20, label: con prot.}
+  - {id: 'r22c3p32reg:calendar_input', kind: date, value: '{{ask.scavo_via_data|date_it}}', when: '{{ask.scavo|is_sottoprodotti}} {{ask.scavo_piano_utilizzo}}', label: in data}
   - {id: 'r23c1p35reg:chk', kind: checkbox, when: '{{ask.scavo|is_riutilizzo_in_sito}}', label: comportano la produzione di materiali da scavo che saranno riutilizzati}
   - {id: 'r25c1p37reg:chk', kind: checkbox, when: '{{ask.scavo|is_rifiuti}}', label: comportano la produzione di materiali da scavo che saranno gestiti}
   - {id: 'r24c1p36reg:chk', kind: checkbox, when: '{{ask.demolizioni}}', label: riguardano interventi di demolizione}
@@ -1249,29 +1495,60 @@ sections:
   - {id: 'r29c1p41reg:radio:7_clone', kind: radio, when: '{{ask.antincendio_soggetto}} {{ask.antincendio_deroga|not}}', label: è soggetto alle norme tecniche di prevenzione incendi}
   - {id: 'r30c1p42reg:radio:8_clone', kind: radio, when: '{{ask.antincendio_soggetto}} {{ask.antincendio_deroga}}', label: presenta caratteristiche tali da non consentire l'integrale osservanza}
   - {id: 'r31c1p43reg:chk', kind: checkbox, when: '{{ask.antincendio_soggetto}} {{ask.antincendio_deroga}}', label: si allega documentazione necessaria all'ottenimento della deroga}
-  - {id: 'r33c1p45reg:radio:9_clone', kind: radio, when: '{{ask.vvf_valutazione|not}}', label: non è soggetto alla valutazione del progetto da parte del Comando}
+  - {id: 'r33c1p45reg:radio:9_clone', kind: radio, when: '{{ask.vvf_valutazione|not}} {{ask.vvf_variante|not}}', label: non è soggetto alla valutazione del progetto da parte del Comando}
   - {id: 'r34c1p46reg:radio:10_clone', kind: radio, when: '{{ask.vvf_valutazione}}', label: è soggetto alla valutazione del progetto da parte del Comando}
   - {id: 'r35c1p47reg:chk', kind: checkbox, when: '{{ask.vvf_valutazione}}', label: si allega la documentazione necessaria alla valutazione del progetto}
+  - {id: 'r36c1p48reg:radio:11_clone', kind: radio, when: '{{ask.vvf_valutazione|not}} {{ask.vvf_variante}}', label: costituisce variante e il sottoscritto assevera}
+  - {id: 'r38c1p50reg:txt', kind: text, value: '{{ask.vvf_parere_protocollo}}', when: '{{ask.vvf_valutazione|not}} {{ask.vvf_variante}}', max: 9999, label: rilasciato con prot.}
+  - {id: 'r38c2p52reg:calendar_input', kind: date, value: '{{ask.vvf_parere_data|date_it}}', when: '{{ask.vvf_valutazione|not}} {{ask.vvf_variante}}', label: In data, nth: 2}
 - section: Asseverazione PdC - amianto
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.amianto|not}}', label: non interessano parti di edifici con presenza di fibre di amianto}
   - {id: 'r5c1p5reg:radio:1_clone', kind: radio, when: '{{ask.amianto}}', label: interessano parti di edifici con presenza di fibre di amianto}
-  - {id: 'r7c1p7reg:chk', kind: checkbox, when: '{{ask.amianto}}', label: sarà presentato 30 giorni prima dell'inizio dei lavori}
-  - {id: 'r10c1p10reg:radio:2_clone', kind: radio, when: '{{ask.igienico_conforme}}', label: è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe}
+  - {id: 'r6c1p6reg:chk', kind: checkbox, when: '{{ask.amianto}} {{ask.amianto_piano_allegato}}', label: in allegato alla presente relazione di asseverazione}
+  - {id: 'r7c1p7reg:chk', kind: checkbox, when: '{{ask.amianto}} {{ask.amianto_piano_allegato|not}}', label: sarà presentato 30 giorni prima dell'inizio dei lavori}
+  - {id: 'r10c1p10reg:radio:2_clone', kind: radio, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis|not}}', label: è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe}
+  - {id: 'r13c1p13reg:radio:4_clone', kind: radio, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}', label: è conforme ai requisiti igienico-sanitari previsti dalla normativa vigente e ricade}
+  - {id: 'r14c1p14reg:chk', kind: checkbox, on_page: true, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_altezza__altezza_e_monostanza_uno__altezza_e_monostanza_due}}',
+    label: locali con un’altezza minima interna}
+  - {kind: checkbox, label: che soddisfano il requisito dell, anchor: locali con un’altezza minima interna, block: 1, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_altezza__altezza_e_monostanza_uno__altezza_e_monostanza_due}}
+      {{ask.igienico_adattabilita}}'}
+  - {kind: checkbox, label: i locali sono situati in edifici sottoposti ad interventi di recupero, anchor: locali con un’altezza minima interna, block: 1, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}
+      {{ask.igienico_5bis_caso|in_altezza__altezza_e_monostanza_uno__altezza_e_monostanza_due}} {{ask.igienico_5ter|is_recupero}}'}
+  - {kind: checkbox, label: è contestualmente presentato, anchor: locali con un’altezza minima interna, block: 1, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_altezza__altezza_e_monostanza_uno__altezza_e_monostanza_due}}
+      {{ask.igienico_5ter|is_progetto_alternativo}}'}
+  - {kind: checkbox, on_page: true, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__altezza_e_monostanza_uno}}', label: alloggio monostanza per una
+      persona}
+  - {kind: checkbox, label: che soddisfano il requisito dell, anchor: alloggio monostanza per una persona, block: 1, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__altezza_e_monostanza_uno}}
+      {{ask.igienico_adattabilita}}'}
+  - {kind: checkbox, label: i locali sono situati in edifici sottoposti ad interventi di recupero, anchor: alloggio monostanza per una persona, block: 1, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}
+      {{ask.igienico_5bis_caso|in_monostanza_uno__altezza_e_monostanza_uno}} {{ask.igienico_5ter|is_recupero}}'}
+  - {kind: checkbox, label: è contestualmente presentato, anchor: alloggio monostanza per una persona, block: 1, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_uno__altezza_e_monostanza_uno}}
+      {{ask.igienico_5ter|is_progetto_alternativo}}'}
+  - {kind: checkbox, on_page: true, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_due__altezza_e_monostanza_due}}', label: alloggio monostanza per due
+      persone}
+  - {kind: checkbox, label: che soddisfano il requisito dell, anchor: alloggio monostanza per due persone, block: 1, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_due__altezza_e_monostanza_due}}
+      {{ask.igienico_adattabilita}}'}
+  - {kind: checkbox, label: i locali sono situati in edifici sottoposti ad interventi di recupero, anchor: alloggio monostanza per due persone, block: 1, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}
+      {{ask.igienico_5bis_caso|in_monostanza_due__altezza_e_monostanza_due}} {{ask.igienico_5ter|is_recupero}}'}
+  - {kind: checkbox, label: è contestualmente presentato, anchor: alloggio monostanza per due persone, block: 1, when: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}} {{ask.igienico_5bis_caso|in_monostanza_due__altezza_e_monostanza_due}}
+      {{ask.igienico_5ter|is_progetto_alternativo}}'}
   - {id: 'r11c1p11reg:radio:3_clone', kind: radio, when: '{{ask.igienico_conforme|not}}', label: non è conforme ai requisiti igienico-sanitari}
   - {id: 'r12c1p12reg:chk', kind: checkbox, when: '{{ask.igienico_conforme|not}}', label: Si allega documentazione per la richiesta di deroga}
-  - {id: 'r16c1p16reg:radio:5_clone', kind: radio, when: '{{ask.strutture|not}}', label: non prevede la realizzazione di opere di conglomerato cementizio}
-  - {id: 'r16c1p16reg:radio:5_clone', kind: radio, when: '{{ask.strutture}} {{ask.cemento_armato|not}}', label: non prevede la realizzazione di opere di conglomerato cementizio}
-  - {id: 'r17c1p17reg:radio:6_clone', kind: radio, when: '{{ask.strutture}} {{ask.cemento_armato}}', label: prevede la realizzazione di opere di conglomerato cementizio}
-  - {id: 'r19c1p19reg:radio:8_clone', kind: radio, when: '{{ask.strutture}} {{ask.cemento_armato}}', label: la documentazione tecnica relativa alla denuncia di cui all'articolo 65}
-  - {id: 'r21c1p21reg:radio:9_clone', kind: radio, when: '{{ask.strutture|not}}', label: non prevede opere da denunciare o autorizzare}
-  - {id: 'r25c1p27reg:radio:11_clone', kind: radio, when: '{{ask.strutture}} {{ask.sismica|is_deposito}}', label: prevede opere in zona sismica da denunciare}
-  - {id: 'r27c1p29reg:radio:13_clone', kind: radio, when: '{{ask.strutture}} {{ask.sismica|is_deposito}}', label: la documentazione relativa alla denuncia dei lavori in zona sismica sarà allegata}
-  - {id: 'r28c1p30reg:radio:14_clone', kind: radio, when: '{{ask.strutture}} {{ask.sismica|is_autorizzazione}}', label: prevede opere strutturali soggette ad autorizzazione sismica}
-  - {id: 'r29c1p31reg:chk', kind: checkbox, when: '{{ask.strutture}} {{ask.sismica|is_autorizzazione}}', label: si allega la documentazione necessaria per il rilascio dell'autorizzazione sismica}
-  - {id: 'r22c1p22reg:radio:10_clone', kind: radio, when: '{{ask.strutture}} {{ask.sismica|is_variante}}', label: costituisce una variante non sostanziale riguardante parti strutturali}
-  - {id: 'r24c1p24reg:txt', kind: text, value: '{{ask.sismica_protocollo}}', when: '{{ask.strutture}} {{ask.sismica|is_variante}}', max: 9999, label: con prot.}
-  - {id: 'r24c2p26reg:calendar_input', kind: date, value: '{{ask.sismica_data|date_it}}', when: '{{ask.strutture}} {{ask.sismica|is_variante}}', label: in data}
+  - {kind: radio, when: '{{ask.strutture|not}}', label: non prevede la realizzazione di opere di conglomerato cementizio}
+  - {kind: radio, when: '{{ask.strutture}} {{ask.cemento_armato|not}}', label: non prevede la realizzazione di opere di conglomerato cementizio}
+  - {kind: radio, when: '{{ask.strutture}} {{ask.cemento_armato}}', label: prevede la realizzazione di opere di conglomerato cementizio}
+  - {kind: radio, when: '{{ask.strutture}} {{ask.cemento_armato}} {{ask.strutture_allegate}}', label: si allega la documentazione relativa alla denuncia di cui all'articolo 65}
+  - {kind: radio, when: '{{ask.strutture}} {{ask.cemento_armato}} {{ask.strutture_allegate|not}}', label: la documentazione tecnica relativa alla denuncia di cui all'articolo 65}
+  - {kind: radio, when: '{{ask.strutture|not}}', label: non prevede opere da denunciare o autorizzare}
+  - {kind: radio, when: '{{ask.strutture}} {{ask.sismica|is_deposito}}', label: prevede opere in zona sismica da denunciare}
+  - {kind: radio, when: '{{ask.strutture}} {{ask.sismica|is_deposito}} {{ask.strutture_allegate}}', label: si allega la documentazione relativa alla denuncia dei lavori in zona sismica}
+  - {kind: radio, when: '{{ask.strutture}} {{ask.sismica|is_deposito}} {{ask.strutture_allegate|not}}', label: la documentazione relativa alla denuncia dei lavori in zona sismica sarà allegata}
+  - {kind: radio, when: '{{ask.strutture}} {{ask.sismica|is_autorizzazione}}', label: prevede opere strutturali soggette ad autorizzazione sismica}
+  - {kind: checkbox, when: '{{ask.strutture}} {{ask.sismica|is_autorizzazione}}', label: si allega la documentazione necessaria per il rilascio dell'autorizzazione sismica}
+  - {kind: radio, when: '{{ask.strutture}} {{ask.sismica|is_variante}}', label: costituisce una variante non sostanziale riguardante parti strutturali}
+  - {kind: text, value: '{{ask.sismica_protocollo}}', when: '{{ask.strutture}} {{ask.sismica|is_variante}}', max: 9999, label: con prot.}
+  - {kind: date, value: '{{ask.sismica_data|date_it}}', when: '{{ask.strutture}} {{ask.sismica|is_variante}}', label: in data}
 - section: Asseverazione PdC - qualità terreni
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.indagini_ambientali|not}}', label: non richiede indagini ambientali preventive}
@@ -1285,7 +1562,17 @@ sections:
   - {kind: date, value: '{{ask.urbanizzazione_convenzione_data|date_it}}', when: '{{ask.urbanizzazione|not}} {{ask.urbanizzazione_attuazione|is_convenzione}}', label: stipulata in data}
   - {kind: radio, when: '{{ask.scarichi|is_nessuna_autorizzazione}}', label: non necessita di autorizzazione allo scarico}
   - {kind: radio, when: '{{ask.scarichi|is_nessuna_autorizzazione|not}}', label: necessita di autorizzazione, nth: 2}
-  - {kind: checkbox, when: '{{ask.scarichi|is_nessuna_autorizzazione|not}}', label: all'allaccio in pubblica fognatura}
+  - {kind: checkbox, when: '{{ask.scarichi|in_fognatura_ottenuta__fognatura_da_richiedere}}', label: allo scarico in pubblica fognatura}
+  - {kind: checkbox, when: '{{ask.scarichi|is_fognatura_ottenuta}}', label: la relativa autorizzazione è stata ottenuta}
+  - {kind: text, value: '{{ask.scarico_protocollo}}', when: '{{ask.scarichi|is_fognatura_ottenuta}}', max: 9999, label: con prot.}
+  - {kind: date, value: '{{ask.scarico_data|date_it}}', when: '{{ask.scarichi|is_fognatura_ottenuta}}', label: in data, nth: 2}
+  - {kind: checkbox, when: '{{ask.scarichi|is_fognatura_da_richiedere}}', label: si allega la documentazione necessaria ai fini del rilascio dell'autorizzazione}
+  - {kind: checkbox, when: '{{ask.scarichi|in_superficiali_ottenuta__superficiali_da_richiedere}}', label: allo scarico in acque superficiali}
+  - {kind: checkbox, when: '{{ask.scarichi|is_superficiali_ottenuta}}', label: la relativa autorizzazione è stata ottenuta, nth: 2}
+  - {kind: text, value: '{{ask.scarico_protocollo}}', when: '{{ask.scarichi|is_superficiali_ottenuta}}', max: 9999, label: con prot., nth: 2}
+  - {kind: date, value: '{{ask.scarico_data|date_it}}', when: '{{ask.scarichi|is_superficiali_ottenuta}}', label: in data, nth: 3}
+  - {kind: checkbox, when: '{{ask.scarichi|is_superficiali_da_richiedere}}', label: si allega la documentazione necessaria ai fini del rilascio dell'autorizzazione, nth: 2}
+  - {kind: checkbox, when: '{{ask.scarichi|in_allaccio_ottenuto__allaccio_da_richiedere}}', label: all'allaccio in pubblica fognatura}
   - {kind: checkbox, when: '{{ask.scarichi|is_allaccio_ottenuto}}', label: la relativa autorizzazione è stata ottenuta, nth: 3}
   - {kind: text, value: '{{ask.allaccio_protocollo}}', when: '{{ask.scarichi|is_allaccio_ottenuto}}', max: 9999, label: con prot., nth: 3}
   - {kind: date, value: '{{ask.allaccio_data|date_it}}', when: '{{ask.scarichi|is_allaccio_ottenuto}}', label: in data, nth: 4}
@@ -1335,6 +1622,7 @@ sections:
   - {id: 'r9c1p9reg:radio:4_clone', kind: radio, when: '{{ask.rir|is_non_individuata}}', label: nel comune E' presente un'attività a rischio d'incidente rilevante e la relativa “area di danno” non è individuata}
   - {id: 'r10c1p10reg:chk', kind: checkbox, when: '{{ask.rir|is_non_individuata}}', label: si allega la documentazione necessaria alla valutazione del progetto, nth: 2}
   - {id: 'r13c1p13reg:chk', kind: checkbox, when: '{{ask.altri_vincoli_eco|is_nessuno|not}} {{ask.altri_vincoli_eco_tipo|is_depuratori}}', label: fascia di rispetto dei depuratori}
+  - {id: 'r14c1p14reg:chk', kind: checkbox, when: '{{ask.altri_vincoli_eco|is_nessuno|not}} {{ask.altri_vincoli_eco_tipo|is_pozzi}}', label: fascia di rispetto per pozzi}
   - {id: 'r15c1p15reg:chk', kind: checkbox, when: '{{ask.altri_vincoli_eco|is_nessuno|not}} {{ask.altri_vincoli_eco_tipo|is_altro}}', label: Altro}
   - {id: 'r17c1p17reg:txt', kind: text, value: '{{ask.altri_vincoli_eco_quale}}', when: '{{ask.altri_vincoli_eco|is_nessuno|not}} {{ask.altri_vincoli_eco_tipo|is_altro}}', max: 9999, label: 'Specificare:'}
   - {kind: checkbox, when: '{{ask.altri_vincoli_eco|is_autocertificazione}}', label: si allegano le autocertificazioni}
@@ -1343,10 +1631,12 @@ sections:
   - {kind: radio, when: '{{ask.autorita_bacino|is_vincolata}}', label: l'immobile è assoggettato ai seguenti vincoli}
   - {kind: radio, when: '{{ask.autorita_bacino|is_costa}}', label: rispetto alle misure di salvaguardia della costa}
   - {kind: text, value: '{{ask.autorita_bacino_quale}}', when: '{{ask.autorita_bacino|is_vincolata}} {{ask.altri_vincoli_eco|is_nessuno}}', max: 9999, label: 'specificare:'}
-  - {kind: text, value: '{{ask.autorita_bacino_quale}}', when: '{{ask.autorita_bacino|is_vincolata}} {{ask.altri_vincoli_eco|is_nessuno|not}} {{ask.altri_vincoli_eco_tipo|is_depuratori}}', max: 9999, label: 'specificare:'}
+  - {kind: text, value: '{{ask.autorita_bacino_quale}}', when: '{{ask.autorita_bacino|is_vincolata}} {{ask.altri_vincoli_eco|is_nessuno|not}} {{ask.altri_vincoli_eco_tipo|in_depuratori__pozzi}}', max: 9999,
+    label: 'specificare:'}
   - {kind: text, label: 'specificare:', nth: 2, value: '{{ask.autorita_bacino_quale}}', when: '{{ask.autorita_bacino|is_vincolata}} {{ask.altri_vincoli_eco|is_nessuno|not}} {{ask.altri_vincoli_eco_tipo|is_altro}}'}
   - {kind: text, value: '{{ask.autorita_bacino_quale}}', when: '{{ask.autorita_bacino|is_costa}} {{ask.altri_vincoli_eco|is_nessuno}}', max: 9999, label: 'specificare:'}
-  - {kind: text, value: '{{ask.autorita_bacino_quale}}', when: '{{ask.autorita_bacino|is_costa}} {{ask.altri_vincoli_eco|is_nessuno|not}} {{ask.altri_vincoli_eco_tipo|is_depuratori}}', max: 9999, label: 'specificare:'}
+  - {kind: text, value: '{{ask.autorita_bacino_quale}}', when: '{{ask.autorita_bacino|is_costa}} {{ask.altri_vincoli_eco|is_nessuno|not}} {{ask.altri_vincoli_eco_tipo|in_depuratori__pozzi}}', max: 9999,
+    label: 'specificare:'}
   - {kind: text, label: 'specificare:', nth: 2, value: '{{ask.autorita_bacino_quale}}', when: '{{ask.autorita_bacino|is_costa}} {{ask.altri_vincoli_eco|is_nessuno|not}} {{ask.altri_vincoli_eco_tipo|is_altro}}'}
 - section: Asseverazione PdC - tutela funzionale
   fields:
@@ -1412,9 +1702,15 @@ sections:
   - {kind: file, label: Autorizzazione sismica, value: '{{ask.toll_sismica_doc}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
   - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: '{{ask.sanzione_ricevuta}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}'}
   - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura, value: '{{ask.allaccio_doc}}', when: '{{ask.scarichi|is_allaccio_da_richiedere}}'}
+  - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in pubblica fognatura, value: '{{ask.scarico_doc}}', when: '{{ask.scarichi|is_fognatura_da_richiedere}}'}
+  - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in acque, value: '{{ask.scarico_doc}}', when: '{{ask.scarichi|is_superficiali_da_richiedere}}'}
   - {kind: file, label: Notifica preliminare, value: '{{ask.notifica_preliminare}}', when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}} {{ask.notifica_allegata}}'}
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
-  - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: '{{ask.elaborati_barriere}}', when: '{{ask.barriere}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: '{{ask.elaborati_barriere}}', when: '{{ask.barriere}} {{ask.barriere_deroga|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Piano di lavoro di demolizione o rimozione dell'amianto, value: '{{ask.amianto_piano}}', when: '{{ask.amianto}} {{ask.amianto_piano_allegato}}'}
+  - {kind: file, label: Denuncia dei lavori, value: '{{ask.denuncia_art65}}', when: '{{ask.strutture}} {{ask.cemento_armato}} {{ask.strutture_allegate}}'}
+  - {kind: file, label: Denuncia dei lavori in zona sismica, value: '{{ask.sismica_doc}}', when: '{{ask.strutture}} {{ask.sismica|is_deposito}} {{ask.strutture_allegate}}'}
+  - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche (art. 82, value: '{{ask.barriere_elaborati}}', when: '{{ask.barriere_art82}}'}
   - {kind: file, label: Documentazione necessaria per il rilascio dell'autorizzazione sismica, value: '{{ask.sismica_doc}}', when: '{{ask.strutture}} {{ask.sismica|is_autorizzazione}}'}
   - {kind: file, label: Documentazione per il rilascio del parere/nulla osta da parte della Soprintendenza, value: '{{ask.soprintendenza_doc}}', when: '{{ask.bene_culturale}}'}
   - {kind: file, label: Deroga all'integrale osservanza delle regole tecniche di prevenzione incendi, value: '{{ask.antincendio_deroga_doc}}', when: '{{ask.antincendio_soggetto}} {{ask.antincendio_deroga}}'}

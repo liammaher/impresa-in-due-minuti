@@ -853,7 +853,9 @@ def _():
         r, p = plan(name, answers)
         assert r["ready"] and has(p, "Documentazione necessaria per la richiesta di autorizzazione all'allaccio"), (name, r)
     law = [x for x in branches.rows() if x["state"] == "law"]
-    assert len(law) >= 20 and all("piano casa" in x["choice"].lower() or x.get("depth", 0) > 1 for x in law), len(law)
+    # The permesso's impianti name the piano casa by its law (l.r. 19/2009).
+    assert len(law) >= 20 and all("piano casa" in x["choice"].lower() or "19/2009" in x["choice"] or x.get("depth", 0) > 1
+                                  for x in law), len(law)
 
 
 

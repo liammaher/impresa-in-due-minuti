@@ -28,3 +28,15 @@ pdc-36bis:
     - "Report the defect to the portal's operator or the SUE: docs/portal-defects.md says what."
     - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
   report: docs/portal-defects.md
+
+pdc-aree-fuoco:
+  title: "Permesso: \"non interessa aree percorse dal fuoco\" unticks the soil statement"
+  portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, quadro qualità terreni, opere di urbanizzazione, scarichi"
+  what: "The line that the area isn't one burned by a fire (art. 10 L. 353/2000) is one radio choice with the soil investigations' lines (none needed, analyses done, remediated): ticking it unticks the soil statement, and the other way round."
+  law: "The two are separate statements: the soil's environmental quality (D.Lgs. 152/2006) and the ten-year ban on building on burned woods and pastures (art. 10 c. 1 L. 353/2000)."
+  checked: "2026-11-01, on a made-up draft, ticked and cancelled without saving"
+  choices:
+    - "Claude ticks the soil statement and leaves the burned-area line; state it in the relazione tecnica if the SUE wants it, or ask the SUE how they want both stated."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+  report: docs/portal-defects.md
+
