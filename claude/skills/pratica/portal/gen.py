@@ -282,8 +282,27 @@ class Section:
         self.avail = []
 
 
+class _Unique(yaml.SafeLoader):
+    """PyYAML keeps the last of two equal keys without a word: a question defined twice in the
+    dictionary took the later definition (2026-11-02, paes_variante). Here it's an error."""
+
+
+def _mapping(loader, node, deep=False):
+    seen = set()
+    for k, _ in node.value:
+        key = loader.construct_object(k, deep=deep)
+        if key in seen:
+            raise GenError(f"{node.start_mark.name}:{k.start_mark.line + 1}: the key {key!r} twice in one mapping")
+        seen.add(key)
+    return yaml.SafeLoader.construct_mapping(loader, node, deep)
+
+
+_Unique.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _mapping)
+
+
 def load_yaml(p):
-    return yaml.safe_load(Path(p).read_text())
+    with open(p, encoding="utf-8") as f:  # the file's name in an error's mark
+        return yaml.load(f, Loader=_Unique)
 
 
 REHEARSALS = HERE.parents[3] / "rehearsals"

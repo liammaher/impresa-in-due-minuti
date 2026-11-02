@@ -96,6 +96,36 @@ entry says what to report and how it was checked, without personal data.
   `answers-impresa-dopo.json`) stopped on the firm's required boxes. Nothing was sent.
 - **To report**: either the reservation should let the firm's quadro wait, or the box should go.
 
+## Permesso: an energy incentive must be claimed, even for a project with none
+
+- **Where**: the permesso's asseverazione, quadro "sicurezza impianti e consumi energetici".
+- **What happens**: the quadro requires one of the energy incentives (art. 14 c. 6 or c. 7 D.Lgs.
+  102/2014, or the 5% volume bonus of D.Lgs. 28/2011) and offers no line for a project with none.
+- **What the law asks**: the incentives are options the designer may take, not a requirement.
+- **Effect**: a permesso with no energy incentive can't be filed as it is; the recipe refuses it.
+- **Checked**: 2026-10-29, the permesso's first runs in the pane (`rehearsals/pdc-fittizio`).
+- **To report**: the quadro should offer "no incentive".
+
+## Voltura and cambio d'intestazione: the co-holder's sex is two required boxes
+
+- **Where**: the co-holders' section ("ci sono cointestatari") of both pratiche.
+- **What happens**: "sesso: M" and "sesso: F" are two radio groups, each required, so the section
+  saves only with both ticked.
+- **Effect**: the pratica states both sexes; Claude ticks both and says so in the person's steps.
+- **Checked**: 2026-10-31 (the voltura's runs), 2026-11-02 (the cambio d'intestazione's co-holder).
+- **To report**: one group, M or F.
+
+## Agibilità: the art. 24 exceptions are marked required
+
+- **Where**: the agibilità's "Attestazione tecnica - Agibilità".
+- **What happens**: the boxes for art. 24 c. 5-bis/5-ter (small or low units) and c. 5-quater (a
+  derogation another law allows) show "deve essere selezionata almeno un'opzione" when neither is
+  ticked, though an ordinary unit is neither.
+- **Effect**: an ordinary unit's draft carries the message; it kept its values on the runs. Whether
+  sending accepts it isn't known (nothing is sent).
+- **Checked**: 2026-10-31, the four agibilità cases ticking neither (`rehearsals/agibilita-fittizia`).
+- **To report**: the exceptions should be optional.
+
 ## Permesso: the burned-area line is one choice with the soil statement
 
 - **Where**: permesso di costruire, the asseverazione's quadro "qualità terreni, opere di

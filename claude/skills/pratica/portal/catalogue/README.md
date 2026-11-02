@@ -115,6 +115,14 @@ a section) into `crawl:check:*`; `catalogue.py drift EXPORT.json` compares them 
 stored crawls and writes `drift.json`. A pratica with a difference is refused by `gen.py` and
 by `run.py preflight` until it is crawled again (`import` clears it).
 
+A check of the SUE: `catalogue.py ops sue --all > ops.json`, then `catalogue.py pane DIR --bundle
+~/Downloads/pv-drift-sue.js --ops ops.json --check`, picked in the pane (about 10 minutes for the
+27 operations). The batch's `since` is today, so a check another day left in the pane's storage is
+done again (2026-11-02: six from 28 October were reused, unnoticed, until cleared by hand). Then
+`digest.js` prints one short digest a pratica, sha256 first, for `catalogue.py drift --digests -`:
+the same are recorded, and the others are named; set `window.pvCheckNames` to them, run
+`check-print.js`, and give its text to `catalogue.py drift -`. 2026-11-02: 27 of 27 the same.
+
 ## Limits
 
 - One comune's view on one day: the portal changes, so a drift check (above) stops runs of a
