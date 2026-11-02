@@ -669,8 +669,8 @@ sections:
   - {id: 'r23c1p59reg:calendar_input', kind: date, value: '{{c:permesso_soggiorno.data_rilascio|date_it}}', when: '{{c:business.denominazione|empty}} {{c:permesso_soggiorno.numero|empty|not}}', label: il}
   - {id: 'r23c2p61reg:calendar_input', kind: date, value: '{{c:permesso_soggiorno.data_scadenza|date_it}}', when: '{{c:business.denominazione|empty}} {{c:permesso_soggiorno.numero|empty|not}}', label: scadenza}
   - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: DITTA/SOCIETA'/IMPRESA}
-  - {id: 'r2c2p4reg:radio:2_clone', kind: radio, made_up: 'the portal looks the company''s codice fiscale up in the Registro Imprese at Salva ("Il CF inserito non è presente nel RI"): a made-up company
-      stops there', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: ISCRITTA ALLA CCIAA}
+  - {id: 'r2c2p4reg:radio:2_clone', kind: radio, made_up_stops: true, made_up: 'the portal looks the company''s codice fiscale up in the Registro Imprese at Salva ("Il CF inserito non è presente nel RI"):
+      a made-up company stops there', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: ISCRITTA ALLA CCIAA}
   - {kind: text, value: '{{c:business.codice_fiscale,c:business.partita_iva|first}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', max: 16, label: Codice Fiscale}
   - {id: r8c1p16reg, kind: select, value: '{{c:business.cciaa|provincia_nome}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: 'Camera di commercio di:'}
   - {kind: text, label: Numero REA, value: '{{c:business.rea|rea_num}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}'}
