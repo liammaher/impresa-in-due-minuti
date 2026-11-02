@@ -1029,6 +1029,9 @@ asks:
   # In a SCIA in sanatoria (the recipe sets it) works that needed a landscape authorization are
   # assessed for compatibility by the Sportello's request for a binding parere (art. 36-bis c. 4).
   sanatoria_paesaggio: {type: yes_no, question: "Is this a sanatoria, so works that needed a landscape authorization go through art. 36-bis c. 4?", default: "false"}
+  # A permesso in sanatoria of art. 36 (the recipe sets it): the landscape compatibility of works
+  # already done is the accertamento of art. 167, filed in the same pratica as its own operation.
+  paesaggio_accertamento: {type: yes_no, question: "Is the landscape compatibility of the works already done asked with this pratica, as the accertamento of art. 167 D.Lgs. 42/2004?", default: "false"}
   bene_culturale:
     type: yes_no
     question: "Is the building itself a protected bene culturale (D.Lgs. 42/2004 parte II: listed, so the works need the Soprintendenza's authorization, art. 21)?"
@@ -4081,19 +4084,24 @@ sections:
   # names its procedure, as the SCIA's does. Its landscape compatibility of art. 36-bis c. 4 (works
   # done without the landscape authorization) is only for the cases of art. 36-bis c. 1, which the
   # permesso's asseverazione can't state (defects.yaml pdc-36bis): refused with it, never ticked.
+  # A permesso in sanatoria of art. 36 has its compatibility from the accertamento of art. 167,
+  # the pratica's other operation (rehearsals/pdc-sanatoria-accertamento-fittizio): the quadro says
+  # the works alter the place, and none of its three procedures is that one, so none is ticked.
+  # The portal then refuses Salva (2026-11-02): the recipe refuses the case (defects.yaml pdc-36-paesaggio).
   - section: Asseverazione PdC - tutela storico ambientale
     defect:
       pdc-36bis: ["è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all", "si allega documentazione necessaria ai fini del rilascio del parere vincolante"]
     fields:
       - {kind: radio, label: NON ricade in zona sottoposta a tutela, when: "{{ask.paesaggio|is_no}}"}
       - {kind: radio, label: "ricade in zona tutelata, ma le opere non comportano alterazione", when: "{{ask.paesaggio|is_senza_autorizzazione}}"}
-      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
-      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.paesaggio_accertamento}} {{ask.paesaggio|in_semplificata__ordinaria}}"}
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_semplificata}}"}
       # What each box adds on Allega documenti: as the SCIA's (read on the permesso's filled drafts 2026-11-01).
-      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
-      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
-      - {kind: radio, label: è assoggettato al procedimento ordinario, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
-      - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}", slot: "Relazione paesaggistica e documentazione per il rilascio"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_semplificata}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_ordinaria}}"}
+      - {kind: radio, label: è assoggettato al procedimento ordinario, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_ordinaria}}"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_ordinaria}}", slot: "Relazione paesaggistica e documentazione per il rilascio"}
       - {kind: radio, label: non è sottoposto a tutela, when: "{{ask.bene_culturale|not}}"}
       - {kind: radio, label: è sottoposto a tutela, when: "{{ask.bene_culturale}}"}
       - {kind: radio, label: non ricade in area tutelata, when: "{{ask.area_protetta|is_no}}"}

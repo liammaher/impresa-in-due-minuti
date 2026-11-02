@@ -20,12 +20,12 @@ branch no rehearsal took.
 
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
-| SUE (building works) | 39 | 39 | 38 | 27 checked, 0 changed |
+| SUE (building works) | 40 | 40 | 38 | 27 checked, 0 changed |
 | SUAP (businesses) | 278 | 112 | 13 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
-- SUE: 39 pratiche, 128 distinct sections, 125 in the dictionary; 746 of 746 uses (100%)
+- SUE: 40 pratiche, 128 distinct sections, 125 in the dictionary; 784 of 784 uses (100%)
 - SUAP: 278 pratiche, 477 distinct sections, 77 in the dictionary; 2432 of 3365 uses (72%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
@@ -33,6 +33,7 @@ Rehearsals with no recorded run (written, never confirmed on the portal):
 - `dehors-fittizio`
 - `negozio-insegna-fittizio`
 - `parere-esonero-fittizio`
+- `pdc-sanatoria-accertamento-fittizio`
 - `ristorante-alcolici-fittizio`
 - `ristorante-centro-storico-fittizio`
 - `sospensione-srl-fittizia`
@@ -58,9 +59,9 @@ SUE pratiche not yet fillable:
 
 Measured today:
 
-- Level 1: 39 of 39 pratiche fully in the dictionary. 12 of them are two operations in one pratica (`sue-combo-*`).
-- Which pratiche a case needs: of the 13990 cases the rules table decides, **1650 reach a steps file**, 12340 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
-- Level 2: **15 refusals across 14 recipes**, 7 distinct messages.
+- Level 1: 40 of 40 pratiche fully in the dictionary. 13 of them are two operations in one pratica (`sue-combo-*`).
+- Which pratiche a case needs: of the 14486 cases the rules table decides, **1682 reach a steps file**, 12804 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
+- Level 2: **16 refusals across 15 recipes**, 7 distinct messages.
 - Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot. A box read on a filled draft says what it adds (the dictionary's `slot`).
 - Levels 4 and 5: not measured yet (see the open items).
 
@@ -78,6 +79,7 @@ Measured today:
 | `pdc-fittizio` | 1 |
 | `pdc-paesaggistica-ordinaria-fittizio` | 1 |
 | `pdc-paesaggistica-semplificata-fittizio` | 1 |
+| `pdc-sanatoria-accertamento-fittizio` | 1 |
 | `pdc-sanatoria-fittizio` | 1 |
 | `voltura-pdc-fittizia` | 1 |
 
@@ -89,6 +91,7 @@ Pratiche filed together, mapped (a steps file each):
 - cila-lavori-edilizi + autorizzazione-paesaggistica-semplificata
 - permesso-di-costruire + autorizzazione-paesaggistica-ordinaria
 - permesso-di-costruire + autorizzazione-paesaggistica-semplificata
+- permesso-in-sanatoria + accertamento-compatibilita-paesaggistica
 - scia-alternativa-pdc + autorizzazione-paesaggistica-ordinaria
 - scia-alternativa-pdc + autorizzazione-paesaggistica-semplificata
 - scia-edilizia + autorizzazione-paesaggistica-ordinaria
@@ -102,7 +105,7 @@ Pratiche filed together, not mapped yet (the cases that need them, most first):
 
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
-- 4×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
+- 5×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
 - 3×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
 - 3×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
 - 2×: The portal's co-holders section (the wizard's ci sono cointestatari) holds one person: more than one co-holder isn't mapped.
@@ -118,6 +121,7 @@ Open items no recipe shows:
 
 - Not mapped: PdC in sanatoria under art. 36-bis (refused: the portal makes two acknowledgment checkboxes a radio pair; art. 36 is filled). A SCIA in sanatoria in a protected area is mapped two ways: works done through the art. 36-bis c. 4 compatibility, works under way (art. 37 c. 5) with the authorization for the landscape works still to come; partly done landscape works under way are refused (art. 146 c. 4). The combinations of pratiche still to map are counted above, from the rules table.
 - SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal saves its dating, oblazione and works proposal as one field with four values (checked 2026-11-01): a portal defect (docs/portal-defects.md), as is the permesso's under art. 36-bis. So is a variant to a pre-1977 title (art. 34-ter): its dating and oblazione are one field (checked 2026-11-02).
+- PdC in sanatoria under art. 36 in a protected area: works that don't alter the place are filled (2026-11-02); works that do go with the accertamento of art. 167 in the same pratica, refused because the permesso's landscape quadro wants one of three procedures and none is that one (pdc-36-paesaggio, checked 2026-11-02); new usable surface or volume is refused by law (art. 167 c. 4).
 - The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.
 - Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots may be missing (the catalogue notes this for the pratiche read on an empty draft); the diritti amount per pratica is unknown.
 - The screens after the attachments (the declarations' signing, the sending) and everything after filing (integration requests, the receipt, the status): nothing in the repo maps them.
@@ -128,7 +132,7 @@ What a Napoli architect or pratiche agency files again and again, so what has to
 
 **SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, extensions, voltura, DL and contractor changes, the landscape authorizations), all of them.
 
-- 39 of 39 fillable, 38 run on the portal.
+- 40 of 40 fillable, 38 run on the portal.
 
 **SUAP: nine sectors × seven operations.** Each cell is one pratica on the portal:
 

@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (185 cases in all, 184 with a recorded filled run).
+  case (186 cases in all, 185 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -321,7 +321,7 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/scarichi_idrici/[scarichi_i…` | `necessita_autorizzazione_scarico` | necessita di autorizzazione allo scarico e la stessa è stata richiest… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/scarichi_idrici/[scarichi_i…` | `necessita_autorizzazione` | necessita di autorizzazione | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistica` | `non_ricade_in_zona_tutelata` | NON ricade in zona sottoposta a tutela | h | filled on the portal | 2 |
-| `relazione_tecnica_asseverazione/autorizzazione_paesaggistica` | `non_soggetto_autorizzazione` | ricade in zona tutelata, ma le opere non comportano alterazione dei l… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/autorizzazione_paesaggistica` | `non_soggetto_autorizzazione` | ricade in zona tutelata, ma le opere non comportano alterazione dei l… | h | filled on the portal | 2 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_semplificato` | è assoggettato al procedimento semplificato di autorizzazione paesagg… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_ordinario` | è assoggettato al procedimento ordinario di autorizzazione paesaggist… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/autorizzazione_paesaggistic…` | `procedimento_accertamento` | è assoggettato al procedimento di accertamento della compatibilità pa… | h | on the portal, not mapped |  |
