@@ -605,6 +605,22 @@ def main():
             assert not r.get("retries"), r.get("retries")
         case("retries are bounded, and a renamed label is never retried", stubborn)
 
+        def onefield():
+            # Two rows the portal keeps as one radio field, each opening its own box: the second's
+            # tick hides the first's box. The section's read-back says so, and it isn't retried as a
+            # slow portal (the art. 34-ter dating and oblazione, 2026-11-02).
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?onefield=1")
+            st["sections"][1]["fields"] += [
+                {"kind": "radio", "label": "dà atto che la data/epoca di realizzazione"},
+                {"kind": "text", "label": "è", "value": "1966"},
+                {"kind": "radio", "label": "determina l’oblazione dovuta"},
+                {"kind": "text", "label": "in euro", "value": "1032"}]
+            r = fill(browser, base, st, answers, resume={"retry_wait_ms": 100})
+            stops(r, "not kept")
+            assert "hidden by a later choice" in r["error"] and not r.get("retries"), (r["error"], r.get("retries"))
+        case("a box a later choice hid is not kept, said so, and not retried", onefield)
+
         def silent():
             # A run that stops on a lost value tells a caller which box and why, never what it
             # held: the report, its snapshot and the stored copy have no value in them, while
