@@ -99,5 +99,6 @@
  "altri_tecnici_dopo": "false",
  "direttore_lavori": "progettista",
  "impresa_dopo": "true",
- "dl_strutture": "false"
+ "dl_strutture": "false",
+ "vvf_variante": "false"
 }

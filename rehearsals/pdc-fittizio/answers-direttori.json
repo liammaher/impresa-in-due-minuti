@@ -96,5 +96,14 @@
  "altri_tecnici_dopo": "true",
  "direttore_lavori": "altro tecnico",
  "impresa_dopo": "false",
- "notifica_allegata": "true"
+ "notifica_allegata": "true",
+ "barriere_deroga": "false",
+ "rinnovabili_obblighi": "rispettati",
+ "vvf_variante": "false",
+ "scomputo": "false",
+ "strumenti_altri": "false",
+ "igienico_24_5bis": "false",
+ "strutture_allegate": "false",
+ "strutture_incaricato": "false",
+ "barriere_art82": "false"
 }

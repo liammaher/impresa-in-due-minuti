@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (150 cases in all, 150 with a recorded filled run).
+  case (158 cases in all, 158 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -32,9 +32,9 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 | CILA | 43 | 32 | 0 | 1 | 3 | 7 | 28 |
 | Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 14 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 8 |
-| Permesso di costruire | 153 | 108 | 0 | 14 | 13 | 14 | 162 |
-| SCIA | 150 | 125 | 0 | 4 | 8 | 10 | 53 |
-| SCIA alternativa | 128 | 108 | 0 | 6 | 6 | 8 | 66 |
+| Permesso di costruire | 153 | 112 | 0 | 14 | 9 | 14 | 124 |
+| SCIA | 150 | 127 | 0 | 4 | 6 | 10 | 51 |
+| SCIA alternativa | 128 | 110 | 0 | 6 | 4 | 8 | 58 |
 | Agibilità (SCA) | 36 | 30 | 0 | 0 | 1 | 5 | 18 |
 
 ## Next cases
@@ -81,24 +81,16 @@ On the portal, not mapped (dictionary work first):
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `realizzazione_intervento_atto` (dà atto che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `realizzazione_intervento_attesta` (attesta che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `permesso_costruire_in_sanatoria` (ai fini della sanatoria, la presente SCIA:)
-- Permesso di costruire: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_inf_ugu_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
-- Permesso di costruire: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
-- Permesso di costruire: `relazione_tecnica_asseverazione/prevenzione_incendi` → `variante_progetto` (costituisce variante e il sottoscritto assevera che le modifiche non…)
-- Permesso di costruire: `relazione_tecnica_asseverazione/conformita_sanitaria/[conformita_sanitaria_ctype]` → `conforme_art_24` (è conforme ai requisiti igienico-sanitari previsti dalla normativa vi…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/autorizzazione_paesaggistica/ricade_in_zona_tutelata` → `procedimento_accertamento` (è assoggettato al procedimento di accertamento della compatibilità pa…)
 - SCIA: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/pagamento_sanzione` → `ricevuta_pagamento` (si allega la ricevuta del pagamento di € 516,00)
 - SCIA: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/sanatoria_soggetto` → `importo_ricevuta_pagamento` (si allega la ricevuta del pagamento)
 - SCIA: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/sanatoria_soggetto_fino_dieci_mila` → `importo_ricevuta_pagamento` (si allega la ricevuta del pagamento)
 - SCIA: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
-- SCIA: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_inf_ugu_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
 - SCIA: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo…)
-- SCIA: `relazione_tecnica_asseverazione/prevenzione_incendi` → `variante_progetto` (costituisce variante e il sottoscritto assevera che le modifiche non…)
 - SCIA alternativa: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
-- SCIA alternativa: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_inf_ugu_6000` (le opere comportano la produzione di materiali da scavo per un volume…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo…)
-- SCIA alternativa: `relazione_tecnica_asseverazione/prevenzione_incendi` → `variante_progetto` (costituisce variante e il sottoscritto assevera che le modifiche non…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/scarichi_idrici/[scarichi_idrici_ctype]` → `necessita_autorizzazione_scarico` (necessita di autorizzazione allo scarico e la stessa è stata richiest…)
 - Agibilità (SCA): `identificativi_immobile/dati_catastali` → `terreni` (Nuovo Catasto Terreni)
 
@@ -342,21 +334,21 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_art_8` | Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_1997_12_05` | non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_1997_12_05` | rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | on the portal, not mapped |  |
-| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_sup_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_sup_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_prevenzione_incendi` | non è soggetto alle norme di prevenzione incendi | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_prevenzione_incendi` | è soggetto alle norme tecniche di prevenzione incendi e le stesse son… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `parziale_copertura_prevenzione_incendi` | presenta caratteristiche tali da non consentire l'integrale osservanz… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_valutazione_progetto` | non è soggetto alla valutazione del progetto da parte del Comando Pro… | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_valutazione_progetto` | è soggetto alla valutazione del progetto da parte del Comando Provinc… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/prevenzione_incendi` | `variante_progetto` | costituisce variante e il sottoscritto assevera che le modifiche non… | h | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/prevenzione_incendi` | `variante_progetto` | costituisce variante e il sottoscritto assevera che le modifiche non… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/amianto` | `non_interessano` | non interessano parti di edifici con presenza di fibre di amianto | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/amianto` | `(nothing)` | absence; P211 is the "interessano" branch | h | no portal box |  |
 | `relazione_tecnica_asseverazione/amianto/interessano` | `piano_di_lavoro_prima_inizio_lavori` | sarà presentato 30 giorni prima dell'inizio dei lavori | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/amianto/interessano` | `(nothing)` | absence; P212 (attached) is a different element | h | no portal box |  |
 | `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `conforme` | è conforme ai requisiti igienico-sanitari e alle ipotesi di deroghe p… | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `non_conforme` | non è conforme ai requisiti igienico-sanitari e alle ipotesi di derog… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `conforme_art_24` | è conforme ai requisiti igienico-sanitari previsti dalla normativa vi… | h | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/conformita_sanitaria/[confo…` | `conforme_art_24` | è conforme ai requisiti igienico-sanitari previsti dalla normativa vi… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere` | non prevede la realizzazione di opere di conglomerato cementizio arma… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere` | prevede la realizzazione di opere di conglomerato cementizio armato,… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `non_previste_opere_normativa_regionale` | non prevede opere da denunciare o autorizzare ai sensi degli articoli… | h | filled on the portal | 1 |
@@ -436,11 +428,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - e) Regolarità urbanistica e precedenti…: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni pecuniarie, previste dag… (mapped)
 - e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata nella… (mapped)
 - e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata agli at… (mapped)
-- f) Calcolo del contributo di costruzione: si impegna a corrispondere il costo di costruzione in corso di esecuzione delle opere, co… (mapped)
-- f) Calcolo del contributo di costruzione: SI (not mapped)
 - g1) Tecnici incaricati: tecnico incaricato (not mapped)
-- g1) Tecnici incaricati: Progettista delle opere strutturali (not mapped)
-- g1) Tecnici incaricati: Direttore dei lavori delle opere strutturali (not mapped)
 - j) Diritti di terzi: dichiara di essere consapevole che il permesso di costruire non comporta limitazione dei… (not mapped)
 - Asseverazione PdC - Dati progettista e…: Interventi di ristrutturazione urbanistica articolo 3, comma 1, lettera f) del d.P.R. n.… (mapped)
 - Asseverazione PdC - Dati progettista e…: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa) (not mapped)
@@ -478,53 +466,19 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - stato legittimo, di…: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguag… (mapped)
 - Asseverazione PdC - stato legittimo, di…: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguag… (mapped)
 - Asseverazione PdC - stato legittimo, di…: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla S… (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: PIANO PARTICOLAREGGIATO (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: PIANO DI LOTIZZAZIONE (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: PIANO DI RECUPERO (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: P.I.P. (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: P.E.E.P. (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: Regolamento Edilizio/RUEC (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: PIANO URBANISTICO ATTUATIVO (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: PIANO DI SETTORE (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: PIANO STRALCIO AUTORITA' (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: DI BACINO (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: P.T.C.P. (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: PIANO TERRITORIALE PAESISTICO (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: PIANO DELL'ENTE PARCO (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: ALTRO (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: interessa un edificio privato aperto al pubblico e che le opere previste sono conformi al… (not mapped)
 - Asseverazione PdC - Dati immobile, stru…: accessibilità (mapped)
-- Asseverazione PdC - Dati immobile, stru…: pur essendo soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/200… (not mapped)
 - Asseverazione PdC - sicurezza impianti…: per la distribuzione e l'utilizzazione di gas di qualsiasi tipo, comprese le opere di eva… (mapped)
 - Asseverazione PdC - sicurezza impianti…: altre tipologie di impianti, anche definite dalla corrispondente normativa regionale (mapped)
-- Asseverazione PdC - sicurezza impianti…: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è ev… (not mapped)
 - Asseverazione PdC - sicurezza impianti…: ricade nell'articolo 12, comma 1, del d.lgs. n. 28/2011 in merito al bonus volumetrico de… (mapped)
 - Asseverazione PdC - sicurezza impianti…: si certifica nella relazione tecnica una copertura dei consumi di calore, di elettricità… (mapped)
 - Asseverazione PdC - sicurezza impianti…: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto: (not mapped)
 - Asseverazione PdC - sicurezza impianti…: si allega la valutazione della sostenibilità energetico-ambientale degli edifici redatta… (not mapped)
 - Asseverazione PdC - inquinamento acusti…: dichiarazione sostitutiva dell'atto di notorietà, a firma del titolare, relativa al rispe… (mapped)
 - Asseverazione PdC - inquinamento acusti…: (art. 4, commi 1 e 2, d.P.R. 227/2011) a documentazione di previsione di impatto acustico… (mapped)
-- Asseverazione PdC - inquinamento acusti…: le opere comportano la produzione di materiali da scavo considerati come sottoprodotti su… (not mapped)
-- Asseverazione PdC - inquinamento acusti…: si allega / si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo dell'as… (not mapped)
 - Asseverazione PdC - inquinamento acusti…: comportano la produzione di materiali da scavo che saranno gestiti dall'interessato come… (mapped)
-- Asseverazione PdC - amianto, conformità…: in allegato alla presente relazione di asseverazione (not mapped)
-- Asseverazione PdC - amianto, conformità…: si allega la documentazione relativa alla denuncia di cui all'articolo 65 del d.P.R. n. 3… (not mapped)
-- Asseverazione PdC - amianto, conformità…: si allega la documentazione relativa alla denuncia dei lavori in zona sismica (not mapped)
-- Asseverazione PdC - amianto, conformità…: locali con un’altezza minima interna inferiore a 2,70 metri ma uguale o superiore a 2,40… (not mapped)
-- Asseverazione PdC - amianto, conformità…: alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferio… (not mapped)
-- Asseverazione PdC - amianto, conformità…: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferio… (not mapped)
-- Asseverazione PdC - amianto, conformità…: che soddisfano il requisito dell’adattabilità, in relazione alle specifiche funzionali e… (not mapped)
-- Asseverazione PdC - amianto, conformità…: i locali sono situati in edifici sottoposti ad interventi di recupero edilizio e di migli… (not mapped)
-- Asseverazione PdC - amianto, conformità…: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di… (not mapped)
-- Asseverazione PdC - qualità terreni, op…: non interessa aree percorse dal fuoco ai sensi dell'art. 10 della legge 353/2000 (not mapped)
-- Asseverazione PdC - qualità terreni, op…: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (not mapped)
-- Asseverazione PdC - qualità terreni, op…: la relativa autorizzazione è stata ottenuta (mapped)
-- Asseverazione PdC - qualità terreni, op…: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo… (not mapped)
 - Asseverazione PdC - tutela storico ambi…: si allega documentazione necessaria ai fini del rilascio del parere vincolante (vedi quad… (not mapped)
 - Asseverazione PdC - aree a rischio e al…: fascia di rispetto dei depuratori (punto 1.2, allegato 4 della deliberazione 4 febbraio 1… (mapped)
-- Asseverazione PdC - aree a rischio e al…: fascia di rispetto per pozzi e emergenze idriche (art. 94, commi 1 e 6, d.lgs. n. 152/200… (not mapped)
 - Asseverazione PdC - aree a rischio e al…: Altro (mapped)
-- Asseverazione PdC - aree a rischio e al…: si allegano le autocertificazioni relative alla conformità dell'intervento per i relativi… (mapped)
 - Asseverazione PdC - aree a rischio e al…: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso (mapped)
 - Asseverazione PdC - aree a rischio e al…: l'immobile è assoggettato ai seguenti vincoli (mapped)
 - Asseverazione PdC - aree a rischio e al…: rispetto alle misure di salvaguardia della costa la situazione vincolistica è la seguente (mapped)
@@ -670,14 +624,14 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_art_8` | Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_1997_12_05` | non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_1997_12_05` | rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_sup_6000` | le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo… | l | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_prevenzione_incendi` | non è soggetto alle norme di prevenzione incendi | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_prevenzione_incendi` | è soggetto alle norme tecniche di prevenzione incendi e le stesse son… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `parziale_copertura_prevenzione_incendi` | presenta caratteristiche tali da non consentire l'integrale osservanz… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_valutazione_progetto` | non è soggetto alla valutazione del progetto da parte del Comando Pro… | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_valutazione_progetto` | è soggetto alla valutazione del progetto da parte del Comando Provinc… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/prevenzione_incendi` | `variante_progetto` | costituisce variante e il sottoscritto assevera che le modifiche non… | h | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/prevenzione_incendi` | `variante_progetto` | costituisce variante e il sottoscritto assevera che le modifiche non… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/amianto` | `non_interessano` | non interessano parti di edifici con presenza di fibre di amianto | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/amianto` | `(nothing)` | interessano parti di edifici con presenza di fibre di amianto e che è… | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/amianto/interessano` | `piano_di_lavoro_prima_inizio_lavori` | no separate box; P203 is the whole interessano branch | l | no portal box |  |
@@ -753,13 +707,11 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Asseverazione SCIA - Dati immobile, str…: P.E.E.P. (mapped)
 - Asseverazione SCIA - Dati immobile, str…: ALTRO (mapped)
 - Asseverazione SCIA - Dati immobile, str…: adattabilità (mapped)
-- Asseverazione SCIA - Sicurezza impianti…: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è ev… (not mapped)
 - Asseverazione SCIA - Sicurezza impianti…: ricade nell'articolo 14, comma 7, del d.lgs. n. 102/2014 in merito alle deroga alle dista… (mapped)
 - Asseverazione SCIA - Sicurezza impianti…: si certifica nella relazione tecnica una riduzione minima del 10 per cento del limite di… (mapped)
 - Asseverazione SCIA - Sicurezza impianti…: ricade nell'articolo 12, comma 1, del d.lgs. n. 28/2011 in merito al bonus volumetrico de… (mapped)
 - Asseverazione SCIA - Sicurezza impianti…: si certifica nella relazione tecnica una copertura dei consumi di calore, di elettricità… (mapped)
 - Asseverazione SCIA - Inquinamento acust…: la documentazione di previsione di impatto acusticocon l'indicazione delle misure previst… (not mapped)
-- Asseverazione SCIA - Inquinamento acust…: le opere comportano la produzione di materiali da scavo considerati come sottoprodotti su… (not mapped)
 - Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno riutilizzati nello stesso luog… (mapped)
 - Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno gestiti dall'interessato come… (mapped)
 - Asseverazione SCIA - Amianto, conformit…: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferio… (mapped)
@@ -851,14 +803,14 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_art_8` | Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_1997_12_05` | non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_1997_12_05` | rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_sup_6000` | le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo… | l | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_prevenzione_incendi` | non è soggetto alle norme di prevenzione incendi | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_prevenzione_incendi` | è soggetto alle norme tecniche di prevenzione incendi e le stesse son… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `parziale_copertura_prevenzione_incendi` | presenta caratteristiche tali da non consentire l'integrale osservanz… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_valutazione_progetto` | non è soggetto alla valutazione del progetto da parte del Comando Pro… | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_valutazione_progetto` | è soggetto alla valutazione del progetto da parte del Comando Provinc… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/prevenzione_incendi` | `variante_progetto` | costituisce variante e il sottoscritto assevera che le modifiche non… | h | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/prevenzione_incendi` | `variante_progetto` | costituisce variante e il sottoscritto assevera che le modifiche non… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/amianto` | `non_interessano` | non interessano parti di edifici con presenza di fibre di amianto | h | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/amianto` | `(nothing)` | interessano parti di edifici con presenza di fibre di amianto e che è… | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/amianto/interessano` | `piano_di_lavoro_prima_inizio_lavori` | interessano parti di edifici con presenza di fibre di amianto e che è… | l | filled on the portal | 1 |
@@ -920,7 +872,6 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - d) Destinazione d'uso dell'immobile: industriale (mapped)
 - d) Destinazione d'uso dell'immobile: commerciale (mapped)
 - d) Destinazione d'uso dell'immobile: altro (mapped)
-- g) Calcolo del contributo di costruzione: Chiede di eseguire direttamente, a scomputo di quanto dovuto, le opere di urbanizzazione… (not mapped)
 - h1) Tecnici incaricati: tecnico incaricato (not mapped)
 - m) Diritti di terzi: dichiara di essere consapevole che la presente segnalazione non può comportare limitazion… (not mapped)
 - Asseverazione SCIA Alternativa - Dati p…: 2. Interventi di nuova costruzione o di ristrutturazione urbanistica qualora siano discip… (mapped)
@@ -939,7 +890,6 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Asseverazione SCIA Alternativa - Dati i…: presenta contestualmente alla SCIA condizionata, la documentazione per la richiesta di de… (mapped)
 - Asseverazione SCIA Alternativa - Sicure…: per la distribuzione e l'utilizzazione di gas di qualsiasi tipo, comprese le opere di eva… (mapped)
 - Asseverazione SCIA Alternativa - Sicure…: altre tipologie di impianti, anche definite dalla corrispondente normativa regionale (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: l'impossibilità tecnica di ottemperare, in tutto o in parte, agli obblighi previsti, è ev… (not mapped)
 - Asseverazione SCIA Alternativa - Sicure…: ricade nell'articolo 14, comma 6, del d.lgs. n. 102/2014 in merito al computo degli spess… (mapped)
 - Asseverazione SCIA Alternativa - Sicure…: si certifica nella relazione tecnica una riduzione minima del 20 per cento dell'indice di… (mapped)
 - Asseverazione SCIA Alternativa - Sicure…: ricade nell'articolo 14, comma 7, del d.lgs. n. 102/2014 in merito alle deroga alle dista… (mapped)
@@ -948,21 +898,15 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Asseverazione SCIA Alternativa - Sicure…: si certifica nella relazione tecnica una copertura dei consumi di calore, di elettricità… (mapped)
 - Asseverazione SCIA alternativa - Inquin…: dichiarazione sostitutiva dell'atto di notorietà, a firma del titolare, relativa al rispe… (mapped)
 - Asseverazione SCIA alternativa - Inquin…: la documentazione di previsione di impatto acusticocon l'indicazione delle misure previst… (not mapped)
-- Asseverazione SCIA alternativa - Inquin…: le opere comportano la produzione di materiali da scavo considerati come sottoprodotti su… (not mapped)
 - Asseverazione SCIA alternativa - Inquin…: comportano la produzione di materiali da scavo che saranno riutilizzati nello stesso luog… (mapped)
 - Asseverazione SCIA alternativa - Inquin…: comportano la produzione di materiali da scavo che saranno gestiti dall'interessato come… (mapped)
 - Asseverazione SCIA Alternativa - Amiant…: alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA Alternativa - Amiant…: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA Alternativa - Amiant…: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di… (mapped)
 - Asseverazione SCIA Alternativa - Qualit…: si allegano i risultati delle analisi ambientali dei terreni (mapped)
-- Asseverazione SCIA Alternativa - Qualit…: allo scarico in pubblica fognatura ai sensi del d.lgs. n. 152/2006 e pertanto (not mapped)
-- Asseverazione SCIA Alternativa - Qualit…: la relativa autorizzazione è stata ottenuta (mapped)
-- Asseverazione SCIA Alternativa - Qualit…: allo scarico in acque superficiali, sul suolo e negli strati superficiali del sottosuolo… (not mapped)
 - Asseverazione SCIA Alternativa - Altri…: fascia di rispetto dei depuratori (punto 1.2, allegato 4 della deliberazione 4 febbraio 1… (mapped)
-- Asseverazione SCIA Alternativa - Altri…: fascia di rispetto per pozzi e emergenze idriche (art. 94, commi 1 e 6, d.lgs. n. 152/200… (not mapped)
 - Asseverazione SCIA Alternativa - Altri…: Altro (mapped)
 - Asseverazione SCIA Alternativa - Altri…: si allegano le autocertificazioni relative alla conformità dell'intervento per i relativi… (mapped)
-- Asseverazione SCIA Alternativa - Altri…: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso (mapped)
 - Asseverazione SCIA Alternativa - TUTELA…: stradale (d.m. n. 1404/1968, d.P.R. n. 495/92) (mapped)
 - Asseverazione SCIA Alternativa - TUTELA…: ferroviario (d.P.R. n. 753/1980) (mapped)
 - Asseverazione SCIA Alternativa - TUTELA…: elettrodotto (d.P.C.M. 8 luglio 2003) (mapped)

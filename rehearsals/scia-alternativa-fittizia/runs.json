@@ -88,5 +88,29 @@
   "answers": "answers-notifica-allegata.json",
   "result": "filled",
   "seconds": 211.5
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-scomputo-pozzi.json",
+  "result": "stopped",
+  "seconds": 152
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-scarico-superficiali.json",
+  "result": "stopped",
+  "seconds": 155.7
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-scomputo-pozzi.json",
+  "result": "filled",
+  "seconds": 158.7
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-scarico-superficiali.json",
+  "result": "filled",
+  "seconds": 174.8
  }
 ]

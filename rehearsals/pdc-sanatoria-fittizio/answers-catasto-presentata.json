@@ -85,5 +85,10 @@
  "sanatoria_catasto_data": "2026-05-20",
  "altri_tecnici_dopo": "false",
  "direttore_lavori": "da nominare",
- "impresa_dopo": "false"
+ "impresa_dopo": "false",
+ "vvf_variante": "false",
+ "scomputo": "false",
+ "strumenti_altri": "false",
+ "igienico_24_5bis": "false",
+ "barriere_art82": "false"
 }
