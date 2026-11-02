@@ -175,10 +175,7 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   "non interessa aree percorse dal fuoco" with the soil statements, so ticking it unticks "non
   richiede indagini" (2026-11-02). The SCIA in sanatoria's art. 34-ter rows are one more: the
   dating (two ways) and the oblazione carry the values 1 to 3 of one field, where the quadro's title
-  and payment rows are 1 and 2 each (read by the inputs' names and values, 2026-11-02). A run shows
-  it as "not kept … hidden by a later choice": the section's read-back can't find a box it filled, as
-  the next row's tick hid it (until 2026-11-02 that stop read as a lookup's "fields with this label",
-  which the runner retried twice as a slow portal, filing the draft wrong each time). Where the form's own choice can't say both, it's a portal
+  and payment rows are 1 and 2 each (read by the inputs' names and values, 2026-11-02). Where the form's own choice can't say both, it's a portal
   defect (`defects.yaml`, `pdc-aree-fuoco`): left unticked and in `yours`, never filled around.
 - **A portal document's box reads "Scarica il documento"** (the procura, the DSC): the
   attachments screen's `theirs` names it, so its "required" isn't the run's error; nor is one
@@ -187,12 +184,9 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   whether it holds a file. An upload widget's wrapper has a title of its own (the portal's message
   once the screen is checked, else "false" or "true"), which is never the slot's; a slot is
   required by the message, not by a title that says "OBBLIGATORIO" (the broadband one, 2026-11-02).
-- **A decimal box shows 516 as 516,00.** gen.py makes the crawled box it finds a number when its id
-  ends `:real`. Two choices of one radio group whose `when`s start with the same term are looked up in
-  one state, both opened, and labels compare without case: the sanatoria receipt's "di euro" (a `:real`)
-  was found as the estremi row's "di Euro" (a text box), so it went as text and the read-back said "not
-  kept" (2026-11-02). Such a box is `kind: number` in the dictionary; an `anchor` field, never looked up
-  in the crawl, too.
+- **A decimal box shows 516 as 516,00.** gen.py makes a crawled `:real` box a number; one found by
+  label (an `anchor`, or a box the crawl never had an id for) is the dictionary's `kind: number`, or
+  the read-back says "not kept" (the sanatoria receipt's "di euro", 2026-11-02).
 - **A file box's cell names the file once it's in.** Name an upload by the row above it (the
   crawl's `context`), not by its cell ("Tipologie ammesse"), or the read-back can't find it.
 - **The portal's own errors:** "errore inatteso", a 503 for maintenance, a fresh load that
@@ -377,8 +371,6 @@ sha256; `CATALOGUE_PRIVATE` is checked as on import.
 `__crawl.slotsOf("<draft name>")` (crawl.js) opens a draft from Pratiche in bozza and reads
 its Allega Documenti slots from the menu at the top, so the sections need not be complete;
 an empty "catalogo" draft gives a pratica's base slots (those its answers add are missing).
-In a tab where a rerun batch ran, `__crawl` isn't loaded: `catalogue.py pane`'s `load.js` loads the
-stored wizard.js and crawl.js once their sha256 is the repo's (2026-11-02, after the receipts' runs).
 A slot is marked `required` only once the portal has checked the screen. A run stops on a
 required slot left empty unless it is the person's: a signed-only slot, or one the screen's
 `theirs` names. A `theirs` entry covers the slots whose titles start with it, except where it is

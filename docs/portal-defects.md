@@ -54,8 +54,7 @@ entry says what to report and how it was checked, without personal data.
   the variant's date is proven by the documents of art. 9-bis c. 1-bis, fourth and fifth periods, and
   where they can't date it the technician attests it; c. 3: the SCIA goes with the payment of an
   oblazione determined under art. 36-bis c. 5. The dating (one of two ways) and the oblazione are both
-  due. InfoCamere's national SCIA form (`schema/sue-choices.json`, 12 March 2026) has no pick-one
-  rule for this case at all.
+  due.
 - **Effect**: the asseverazione can state the variant's date or its oblazione, never both, so a
   regularization of a variant to a pre-1977 title can't be filed complete on the portal.
 - **Checked**: 2026-11-02 on a made-up draft ("PROVA NON INVIARE"), ticked in turn and cancelled
