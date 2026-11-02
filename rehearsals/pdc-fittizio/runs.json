@@ -244,5 +244,17 @@
   "answers": "answers-p6.json",
   "result": "filled",
   "seconds": 146.5
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-terreno.json",
+  "result": "stopped",
+  "seconds": 32.2
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-terreno.json",
+  "result": "filled",
+  "seconds": 142.7
  }
 ]

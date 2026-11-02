@@ -7,10 +7,13 @@ comune: F839
 sportello: sue
 crawl: sue-comunicazione-al-comune-di-cambio-dell-impresa-esecutrice
 operation: "Comunicazione al Comune di cambio dell'impresa esecutrice (da utilizzare in caso di cessazione della precedente impresa)"
-scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
+scelte:
+  - {option: "Se l'intervento ricade nell'ambito di applicazione del d.lgs. n.81/2008 e la notifica E' STATA già trasmessa (ai sensi dell'art. 99 del d.lgs. n.81/2008)", when: "{{ask.notifica_trasmessa}}"}
+  - IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 asks:
   descrizione: {default: "PROVA NON INVIARE - cambio impresa {{c:identity.last_name}}"}
+  notifica_trasmessa: {type: yes_no, question: "Does the site fall under D.Lgs. 81/2008, with its notifica preliminare (art. 99) already sent?"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client's name"

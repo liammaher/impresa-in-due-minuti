@@ -17,6 +17,7 @@ asks:
         di condominio], propose: '{{c:business.forma_giuridica|carica_proposta}}'}
   cliente_registro: {type: choice, question: 'The client company has no REA in the vault: non ancora iscritta (being registered in the Registro delle imprese); non necessita (never registered: a condominium,
       an association, an ente)?', options: [non ancora iscritta, non necessita], propose: '{{c:business.forma_giuridica|registro_proposto}}'}
+  catasto_terreni: {type: yes_no, question: 'Is the property only in the Catasto Terreni (a plot to build on, with no subalterno or categoria), rather than the Catasto Fabbricati?', default: '{{c:immobile.catasto_categoria|filled|not}}'}
   progettista_altro: {type: yes_no, question: 'Is the architectural designer (progettista) another technician than the architect presenting the pratica? If so, they are `p:` in the job''s people: the form
       names them as the progettista and their asseverazione', propose: 'false', yours: 'The asseverazione is the designer''s (`p:`): have them sign the pratica digitally too, besides the procuratore, before
       Firma e invio'}
@@ -249,12 +250,14 @@ sections:
   - {id: 'r7c3p23reg:txtws_input', kind: text, value: '{{c:immobile.interno}}', optional: true, max: 10, label: interno}
 - section: Dati catastali
   fields:
-  - {id: 'r1c1p1reg:radio:0_clone', kind: radio, label: Nuovo Catasto Edilizio Urbano}
+  - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.catasto_terreni|not}}', label: Nuovo Catasto Edilizio Urbano}
+  - {id: 'r1c2p2reg:radio:1_clone', kind: radio, when: '{{ask.catasto_terreni}}', label: Nuovo Catasto Terreni}
   - {id: 'r3c1p5reg:number', kind: text, value: '{{c:immobile.catasto_foglio}}', max: 5, label: foglio}
   - {id: 'r3c2p7reg:txt', kind: text, value: '{{c:immobile.catasto_particella}}', max: 5, label: particella/mappale}
-  - {id: 'r3c3p9reg:number', kind: text, value: '{{c:immobile.catasto_subalterno}}', max: 4, label: subalterno}
-  - {id: 'r5c2p15reg:txt', kind: text, value: '{{c:immobile.catasto_sezione}}', optional: true, max: 3, label: sezione Urbana}
-  - {id: r8c1p23reg, kind: select, value: '{{c:immobile.catasto_categoria|categoria}}', label: categoria}
+  - {id: 'r3c3p9reg:number', kind: text, value: '{{c:immobile.catasto_subalterno}}', when: '{{ask.catasto_terreni|not}}', max: 4, label: subalterno}
+  - {id: 'r5c2p15reg:txt', kind: text, value: '{{c:immobile.catasto_sezione}}', optional: true, when: '{{ask.catasto_terreni|not}}', max: 3, label: sezione Urbana}
+  - {id: r8c1p23reg, kind: select, value: '{{c:immobile.catasto_categoria|categoria}}', when: '{{ask.catasto_terreni|not}}', label: categoria}
+  - {id: 'r6c1p17reg:txt', kind: text, value: '{{c:immobile.catasto_sezione}}', optional: true, when: '{{ask.catasto_terreni}}', max: 1, label: sezione Censuaria}
 - section: Qualificazione dell'intervento di rinnovo
   fields:
   - {id: 'r3c1p4reg:txt', kind: text, value: '{{ask.paes_protocollo}}', max: 9999, label: Num.}

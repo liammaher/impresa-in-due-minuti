@@ -29,6 +29,18 @@ pdc-36bis:
     - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
   report: docs/portal-defects.md
 
+cila-impresa-dopo:
+  title: "CILA and CIL: the firm can't be left to be named later, though the form offers it"
+  portal: "Napoli's SUE on impresainungiorno: the CILA's quadro i) and the CIL's quadro g) (salute e sicurezza), and their firm's quadro (h, f)"
+  what: "The safety quadro offers \"ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori\", yet the firm's quadro has no line for a firm still to be chosen and the portal requires the firm's details (16 required boxes, the DURC ones among them) whatever the safety quadro says."
+  law: "The committente sends the firm's documents (DURC, the notifica preliminare, the check of the firm's fitness) before the works start (art. 90 c. 9 c D.Lgs. 81/2008), not necessarily with the filing; the permesso's and the SCIA's forms on the same portal let the firm be named later."
+  checked: "2026-11-01, a run of a made-up CILA in the pane (rehearsals/cila-fittizia, answers-impresa-dopo) stopped on the firm's required boxes; InfoCamere's national CILA form has no such reservation (schema/sue-choices.json 009-012)"
+  choices:
+    - "File the CILA or CIL once the firm is chosen: Claude fills it then."
+    - "Ask the SUE whether a CILA may be filed before the firm is chosen, and how."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+  report: docs/portal-defects.md
+
 pdc-aree-fuoco:
   title: "Permesso: \"non interessa aree percorse dal fuoco\" unticks the soil statement"
   portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, quadro qualità terreni, opere di urbanizzazione, scarichi"

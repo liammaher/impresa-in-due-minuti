@@ -60,13 +60,14 @@ Measured today:
 
 - Level 1: 39 of 39 pratiche fully in the dictionary. 12 of them are two operations in one pratica (`sue-combo-*`).
 - Which pratiche a case needs: of the 13990 cases the rules table decides, **1650 reach a steps file**, 12340 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
-- Level 2: **13 refusals across 12 recipes**, 6 distinct messages.
+- Level 2: **15 refusals across 14 recipes**, 7 distinct messages.
 - Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot. A box read on a filled draft says what it adds (the dictionary's `slot`).
 - Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
 | `parere-esonero-fittizio` | 2 |
+| `cambio-intestazione-fittizio` | 1 |
 | `cil-fittizia` | 1 |
 | `cil-paesaggistica-ordinaria-fittizia` | 1 |
 | `cil-paesaggistica-semplificata-fittizia` | 1 |
@@ -78,6 +79,7 @@ Measured today:
 | `pdc-paesaggistica-ordinaria-fittizio` | 1 |
 | `pdc-paesaggistica-semplificata-fittizio` | 1 |
 | `pdc-sanatoria-fittizio` | 1 |
+| `voltura-pdc-fittizia` | 1 |
 
 Pratiche filed together, mapped (a steps file each):
 
@@ -103,6 +105,7 @@ Refusals, by how many recipes carry them (the most shared are the cheapest to cl
 - 4×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
 - 3×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
 - 3×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
+- 2×: The portal's co-holders section (the wizard's ci sono cointestatari) holds one person: more than one co-holder isn't mapped.
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
 - 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
