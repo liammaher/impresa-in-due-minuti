@@ -61,11 +61,18 @@ Refused at pre-flight, with the reason:
   1 to 4, so the portal can save only one of them, where the national form keeps the dating, the
   oblazione and the works choice apart. A defect of the portal, not a gap in the mapping
   (`docs/portal-defects.md`): the asseverazione can't state the case. Ask the SUE.
-- **Variants to pre-1977 titles** (art. 34-ter): not mapped.
+- **Variants to pre-1977 titles** (art. 34-ter c. 1-3): the law asks for the variant's date (by the
+  art. 9-bis documents, else the technician's attestation, c. 2) and the oblazione of art. 36-bis c. 5
+  (c. 3). On the portal the asseverazione's three rows (dating by documents, dating attested,
+  oblazione) are one field with the values 1 to 3: ticking one unticked the others (read on a made-up
+  draft 2026-11-02, cancelled). A defect of the portal (`scia-34ter`, `docs/portal-defects.md`): the
+  case is refused. The quadro's own rows work (the varied title and the payment are two fields).
 - Structures, bene culturale, changes of use, a permesso's works: the table's.
 
-The payment goes by its references: the receipt route has no slot of its own (it would go in the
-fee slot, the person's .p7m). The Comune's SCIA form (23/06/2025) still says cases d.2 to d.4 go on
+The payment goes by its references or its receipt (`sanatoria_prova`): read on both filled drafts
+(2026-11-02), the receipt adds no slot of its own, so it goes signed in "copia attestazione versamento
+oneri, diritti e spese" (.p7m only), the person's. With double conformity the receipt row asks the
+amount again, a decimal box. `answers-ricevuta.json` and `answers-in-corso-ricevuta.json`. The Comune's SCIA form (23/06/2025) still says cases d.2 to d.4 go on
 paper; DD 501/2026 makes the portal the only channel from 1/7/2026, and the portal offers them.
 
 ## Runs
@@ -86,3 +93,6 @@ anagrafica, and in both runs, worked.
 
 The plain SCIA's P6 (rehearsals/scia-fittizia) on the steps regenerated with these entries: filled
 in 140 s, read back on a fresh load (23.4 s).
+| 2026-11-02 | pane | `answers-in-corso-ricevuta`: works under way, the €516 sanction's receipt attached, `bench/rerun.py` bundle | **filled** in 153 s, read back on a fresh load, nothing moved or loose |
+| 2026-11-02 | pane | `answers-ricevuta`: double conformity, the oblazione's receipt | First try stopped: the receipt row's "di euro" is a decimal box, which read 516 back as 516,00 (now `kind: number`). Rerun: **filled** in 146 s, nothing moved or loose |
+| 2026-11-02 | pane | two art. 34-ter cases (title by estremi, dating by documents, payment by estremi; title by the art. 9-bis documents, dating attested, receipt) | Both stopped in the asseverazione on the dating's date box. On the draft the dating and the oblazione turned out to be one field: the case is refused as a portal defect (`scia-34ter`), the answers files dropped |

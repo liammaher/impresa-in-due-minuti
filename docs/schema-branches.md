@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (158 cases in all, 158 with a recorded filled run).
+  case (160 cases in all, 160 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -32,8 +32,8 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 | CILA | 43 | 32 | 0 | 1 | 3 | 7 | 28 |
 | Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 14 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 8 |
-| Permesso di costruire | 153 | 112 | 0 | 14 | 9 | 14 | 124 |
-| SCIA | 150 | 127 | 0 | 4 | 6 | 10 | 51 |
+| Permesso di costruire | 153 | 112 | 0 | 14 | 8 | 14 | 124 |
+| SCIA | 150 | 130 | 0 | 4 | 2 | 10 | 51 |
 | SCIA alternativa | 128 | 110 | 0 | 6 | 4 | 8 | 58 |
 | Agibilità (SCA) | 36 | 30 | 0 | 0 | 1 | 5 | 18 |
 
@@ -74,7 +74,6 @@ On the portal, not mapped (dictionary work first):
 - CILA: `comunicazioni/imprese_esecutrici` → `da_soggetti_coinvolti` (che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla se…)
 - CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - Permesso di costruire: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
-- Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_atto` (dà atto che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_attesta` (attesta che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `permesso_costruire_in_sanatoria` (ai fini della sanatoria, la presente SCIA:)
@@ -82,11 +81,7 @@ On the portal, not mapped (dictionary work first):
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `realizzazione_intervento_attesta` (attesta che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `permesso_costruire_in_sanatoria` (ai fini della sanatoria, la presente SCIA:)
 - Permesso di costruire: `relazione_tecnica_asseverazione/autorizzazione_paesaggistica/ricade_in_zona_tutelata` → `procedimento_accertamento` (è assoggettato al procedimento di accertamento della compatibilità pa…)
-- SCIA: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/pagamento_sanzione` → `ricevuta_pagamento` (si allega la ricevuta del pagamento di € 516,00)
-- SCIA: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/sanatoria_soggetto` → `importo_ricevuta_pagamento` (si allega la ricevuta del pagamento)
-- SCIA: `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]/sanatoria_soggetto_fino_dieci_mila` → `importo_ricevuta_pagamento` (si allega la ricevuta del pagamento)
 - SCIA: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
-- SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
 - SCIA: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo…)
 - SCIA alternativa: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]` → `tolleranza_zona_sismica_bassa` (dà atto che l’immobile interessato dalla tolleranza è ubicato in zona…)
@@ -290,7 +285,7 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_300_a_100_mq` | 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_100_a_60_mq` | 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile; | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_sotto_60_mq` | 6%, per le U.I. < 60 mq di superficie utile; | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | left empty |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | filled on the portal | 1 |
@@ -551,11 +546,11 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `procedimento_automatizzato` | portal has no such option | h | no portal box |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `procedimento_ordinario` | portal has no such option | h | no portal box |  |
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `estremi_pagamento_sanzione` | si forniscono gli estremi del pagamento di € 516,00 | h | filled on the portal | 3 |
-| `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `ricevuta_pagamento` | si allega la ricevuta del pagamento di € 516,00 | h | on the portal, not mapped |  |
+| `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `ricevuta_pagamento` | si allega la ricevuta del pagamento di € 516,00 | h | filled on the portal | 1 |
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `estremi_pagamento_sanatoria` | si forniscono gli estremi del pagamento | m | filled on the portal | 1 |
-| `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `importo_ricevuta_pagamento` | si allega la ricevuta del pagamento | m | on the portal, not mapped |  |
+| `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `importo_ricevuta_pagamento` | si allega la ricevuta del pagamento | m | filled on the portal | 1 |
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `estremi_pagamento_sanatoria` | si forniscono gli estremi del pagamento | m | filled on the portal | 1 |
-| `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `importo_ricevuta_pagamento` | si allega la ricevuta del pagamento | m | on the portal, not mapped |  |
+| `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `importo_ricevuta_pagamento` | si allega la ricevuta del pagamento | m | filled on the portal | 1 |
 | `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `fabbricati` | Nuovo Catasto Edilizio Urbano | h | filled on the portal | 36 |
 | `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | on the portal, not mapped |  |
 | `dichiarazioni/opere_previste` | `no_parti_comuni` | non riguardano parti comuni | h | filled on the portal | 9 |
@@ -597,7 +592,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_300_a_100_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_100_a_60_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_sotto_60_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | l | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | on the portal, not mapped |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | left empty |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | filled on the portal | 1 |

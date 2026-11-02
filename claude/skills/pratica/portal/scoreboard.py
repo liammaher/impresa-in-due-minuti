@@ -217,7 +217,8 @@ OPEN_BEYOND = [
     "The combinations of pratiche still to map are counted above, from the rules table.",
     "SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal saves its dating, "
     "oblazione and works proposal as one field with four values (checked 2026-11-01): a portal defect "
-    "(docs/portal-defects.md), as is the permesso's under art. 36-bis.",
+    "(docs/portal-defects.md), as is the permesso's under art. 36-bis. So is a variant to a pre-1977 title "
+    "(art. 34-ter): its dating and oblazione are one field (checked 2026-11-02).",
     "The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.",
     "Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots "
     "may be missing (the catalogue notes this for the pratiche read on an empty draft); the diritti amount per "

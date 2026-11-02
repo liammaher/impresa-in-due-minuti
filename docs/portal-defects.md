@@ -39,6 +39,31 @@ entry says what to report and how it was checked, without personal data.
   and for works under way, structures go in the asseverazione's sismica quadro (the SCIA in
   sanatoria maps them there).
 
+## SCIA in sanatoria, art. 34-ter: a pre-1977 variant's dating and oblazione saved as one field
+
+- **Where**: SCIA edilizia with the sanatoria scelta, section "Asseverazione SCIA - Stato legittimo,
+  Dichiarazione di tolleranze, Sanatoria e regolarizzazioni [...]", case "una variante in corso
+  d'opera, in parziale difformità dal titolo, rilasciato prima della data di entrata in vigore della
+  legge 28 gennaio 1977, n. 10 (articolo 34-ter DPR. n. 380)".
+- **What happens**: the case opens three rows, "dà atto che la data/epoca di realizzazione
+  dell'intervento" (with its date), "attesta che la data/epoca di realizzazione dell'intervento" (with
+  its date) and "determina l'oblazione dovuta [...]" (with the amount). Their inputs carry the values
+  1, 2 and 3 of one choice: ticking "dà atto" unticked the oblazione, ticking "attesta" unticked
+  "dà atto", so the form saves one of them.
+- **What the law asks**: art. 34-ter c. 2 DPR 380/2001 (as the Salva Casa decree 69/2024 wrote it):
+  the variant's date is proven by the documents of art. 9-bis c. 1-bis, fourth and fifth periods, and
+  where they can't date it the technician attests it; c. 3: the SCIA goes with the payment of an
+  oblazione determined under art. 36-bis c. 5. The dating (one of two ways) and the oblazione are both
+  due.
+- **Effect**: the asseverazione can state the variant's date or its oblazione, never both, so a
+  regularization of a variant to a pre-1977 title can't be filed complete on the portal.
+- **Checked**: 2026-11-02 on a made-up draft ("PROVA NON INVIARE"), ticked in turn and cancelled
+  without saving. The case's quadro "SANATORIA e regolarizzazioni [...]" works: the varied title
+  (its number and date, or the art. 9-bis documents) and the payment (its amount and date, or the
+  receipt with the amount) are two fields with the values 1 and 2 each, and both stayed ticked.
+- **To report**: the dating and the oblazione should be separate choices, as the quadro's title and
+  payment are.
+
 ## Permesso in sanatoria, art. 36-bis: the same, on the permesso's asseverazione
 
 - **Where**: permesso di costruire with the sanatoria scelta, the asseverazione's sanatoria quadro,
