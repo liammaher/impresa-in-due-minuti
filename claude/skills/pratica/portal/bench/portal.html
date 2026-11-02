@@ -5,7 +5,7 @@
 <!-- A fake portal for test_inpage.py: two sections in a dynaForm-style form, upload boxes
      that send a file as soon as it's chosen, a Salva that stores every text box on the
      server, and what was stored shown again on every load. ?banner=1 puts a consent banner
-     over everything; ?rename=1 renames the second section's label, as a portal update would;
+     over everything; ?calendar=1 a calendar a text box opens over the page; ?rename=1 renames the second section's label, as a portal update would;
      ?fade=1 opens a suggestion list over Impresa esecutrice as Dati tecnici opens, whose
      widget's hide() fades it out slowly, as PrimeFaces 11's does; ?slot=signed (or =plain) adds
      an attachments slot the portal says is required, taking only signed files (or plain ones);
@@ -53,6 +53,17 @@
 </div>
 <script>
 if (location.search.includes("banner=1")) document.getElementById("consenso").hidden = false;
+// ?calendar=1: a text box opens a calendar over the page, as jQuery UI's datepicker does, closed
+// only by a mouse press elsewhere (a script's click() sends none).
+if (location.search.includes("calendar=1")) {
+  const cal = document.createElement("div");
+  cal.id = "ui-datepicker-div";
+  cal.style.cssText = "position:fixed;inset:0;background:#fff;z-index:10;display:none";
+  cal.textContent = "gen feb mar apr mag giu lug ago set ott nov dic";
+  document.body.append(cal);
+  document.addEventListener("focusin", (e) => { if (e.target.type === "text") cal.style.display = "block"; });
+  document.addEventListener("mousedown", (e) => { if (!cal.contains(e.target)) cal.style.display = "none"; });
+}
 // By its label's row: the server's ?flaky=1 cut checks that box's id is gone from the whole page.
 if (location.search.includes("off=1")) document.getElementById("impresa-label").closest("tr").querySelector("input").disabled = true;
 if (location.search.includes("rename=1")) document.getElementById("impresa-label").textContent = "Ditta esecutrice";

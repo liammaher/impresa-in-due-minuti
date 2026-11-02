@@ -419,7 +419,16 @@
       if (w && w.hide) w.hide();
       p.style.display = "none"; // PrimeFaces 11's hide() only starts a fade, still over the next box
     }
-    if (open.length) await idle();
+    // A date typed leaves jQuery UI's calendar open: a person's click elsewhere closes it, a
+    // script's click doesn't, so it covered the next box (the permesso's sanatoria quadro, 2026-11-02).
+    const cal = doc().getElementById("ui-datepicker-div");
+    const calOpen = cal && cal.getClientRects().length > 0; // fixed or absolute alike
+    if (calOpen) {
+      const jq = win().jQuery;
+      if (jq && jq.datepicker && jq.datepicker._hideDatepicker) jq.datepicker._hideDatepicker();
+      cal.style.display = "none";
+    }
+    if (open.length || calOpen) await idle();
   }
 
   async function text(f, value) {
@@ -745,6 +754,7 @@
         try { f = { ...resolve(f), spec: f }; } catch (e) { if (e instanceof StepError) continue; throw e; }
       }
       f = f.id || f.css ? f : { ...resolve(f), spec: f };
+      await closeLists();
       if (f.kind === "radio" || f.kind === "checkbox") typed = await tick(f);
       else if (v === null || v === "") continue;
       else if (f.kind === "select") typed = await select(f, v);
@@ -756,6 +766,7 @@
     delete report.at.field;
     delete report.at.label;
     // An attachments screen may keep each file as it uploads, with no Salva (save: false).
+    await closeLists();
     if (sec.save !== false) await act(() => press(button(sec.save || "Salva"), sec.save || "Salva"));
     const errs = errors(sec.theirs);
     for (const a of alerts()) {
