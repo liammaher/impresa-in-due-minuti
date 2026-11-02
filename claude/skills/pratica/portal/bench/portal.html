@@ -17,8 +17,7 @@
      mouse), as the permesso's opere a scomputo until "a titolo oneroso"; ?liste=1 adds two lists
      to Dati tecnici, each with its own "+" after its rows (the CILA relazione's filings, then its
      assents): a "+" adds a row to its own list, a row after the first has no text of its own,
-     and the rows saved come back on a load; ?onefield=1 adds two rows that are one radio field
-     (the art. 34-ter dating and oblazione), each opening its own box only while it's the one ticked. -->
+     and the rows saved come back on a load. -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -70,21 +69,6 @@ if (location.search.includes("offradio=1")) {
     'style="display:inline-block;width:14px;height:14px;border:1px solid #888;pointer-events:none"></div></div>' +
     '<label>NO</label></div></td>';
   document.querySelector("#tecnici + table").tBodies[0].append(tr);
-}
-if (location.search.includes("onefield=1")) {
-  const body = document.querySelector("#tecnici + table").tBodies[0];
-  const rows = [["data", "dà atto che la data/epoca di realizzazione dell’intervento", "è"], ["obl", "determina l’oblazione dovuta", "in euro"]];
-  const boxes = rows.map(([k, label, box], i) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td><input type="radio" name="form:r8c1:dynaForm:epoca:radio" value="${i + 1}" id="form:r8c${i}:dynaForm:${k}:radio:${i}_clone"> ${label}</td>`;
-    const open = document.createElement("tr");
-    open.style.display = "none";
-    open.innerHTML = `<td>${box}</td><td><input type="text" id="form:r9c${i}:dynaForm:${k}_txt"></td>`;
-    body.append(tr, open);
-    return open;
-  });
-  for (const r of document.querySelectorAll('input[name="form:r8c1:dynaForm:epoca:radio"]'))
-    r.addEventListener("change", () => boxes.forEach((b, i) => { b.style.display = document.querySelectorAll('input[name="form:r8c1:dynaForm:epoca:radio"]')[i].checked ? "" : "none"; }));
 }
 if (location.search.includes("req=1")) {
   const tr = document.createElement("tr");

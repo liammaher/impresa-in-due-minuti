@@ -2845,8 +2845,7 @@ sections:
       - {kind: text, label: di Euro, value: "{{ask.sanatoria_oblazione}}", when: "{{ask.sanatoria_caso|is_doppia_conformita}} {{ask.sanatoria_prova|is_estremi}}"}
       - {kind: date, label: del, value: "{{ask.sanatoria_pagamento_data|date_it}}", when: "{{ask.sanatoria_caso|is_doppia_conformita}} {{ask.sanatoria_prova|is_estremi}}"}
       - {kind: radio, label: si allega la ricevuta del pagamento, when: "{{ask.sanatoria_caso|is_doppia_conformita}} {{ask.sanatoria_prova|is_ricevuta}}", slot: "none of its own: the receipt goes in copia attestazione versamento oneri, diritti e spese, which takes only signed files (.p7m): the person's"}
-      # A decimal box (516 reads back as 516,00): looked up with the estremi row opened too, gen.py
-      # would take that row's "di Euro" text box for it (portal/README.md, decimal boxes).
+      # A decimal box (516 reads back as 516,00); with no id from the crawl gen.py can't tell.
       - {kind: number, label: di euro, value: "{{ask.sanatoria_oblazione}}", when: "{{ask.sanatoria_caso|is_doppia_conformita}} {{ask.sanatoria_prova|is_ricevuta}}"}
 
   # The permesso's sanatoria quadro (only with the wizard's sanatoria scelta): art. 36, or art.
