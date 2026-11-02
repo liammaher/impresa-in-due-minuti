@@ -257,8 +257,18 @@ def _():
         queue = (t / "out" / "queue-0.js").read_text()
         check = (t / "out" / "check.js").read_text()
         assert all(f'"steps/{n}.js"' in check for n in names) and '"runner.js"' in check
+        # The piece's values as a string it checks before adding them (a garbled copy throws): its
+        # length and FNV-1a hash as the page computes them.
+        line = next(x for x in queue.splitlines() if x.strip().startswith("const raw = "))
+        raw = json.loads(line.strip()[len("const raw = "):-1])
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("rerun", HERE / "rerun.py")
+        rerun = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(rerun)
+        n, h = rerun.fnv1a(raw)
+        assert f"raw.length !== {n} || h !== {h}" in queue
         # Each procedure's first run whole ({"base": ...}); a later one is what differs from it.
-        assert '["dau-fittizia","napoli/comune/dichiarazione-avvenuto-utilizzo-terre",{"base":{"wizard":["PROVA NON INVIARE - DAU P6 generato"' in queue
+        assert '["dau-fittizia","napoli/comune/dichiarazione-avvenuto-utilizzo-terre",{"base":{"wizard":["PROVA NON INVIARE - DAU P6 generato"' in raw
         assert (t / "out" / "steps" / "dau-fittizia.js").read_text().startswith('localStorage.setItem("pv-steps:napoli/comune/dichiarazione-avvenuto-utilizzo-terre"')
 
 

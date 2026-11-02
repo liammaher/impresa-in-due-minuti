@@ -56,6 +56,16 @@ def values_of(run_js, proc):
     return line[len(head):-1]
 
 
+def fnv1a(text):
+    """The UTF-16 length and 32-bit FNV-1a hash of text, as a queue piece computes them in the page
+    (charCodeAt: UTF-16 code units)."""
+    units = text.encode("utf-16-le")
+    h = 0x811c9dc5
+    for k in range(0, len(units), 2):
+        h = ((h ^ int.from_bytes(units[k:k + 2], "little")) * 0x01000193) & 0xFFFFFFFF
+    return len(units) // 2, h
+
+
 def write_bundle(out, path):
     """runner.js, the steps, the queue and loop.js as one file, and pick.js: a box on the page where
     the person picks that file. Copying a big script into the pane through the conversation can
@@ -156,6 +166,12 @@ def main():
             steps_file = d / "portal-steps.yaml"
         steps = yaml.safe_load(steps_file.read_text())
         values = run.Values(json.loads((d / answers).read_text()), fields=fields, asks=steps.get("asks"))
+        # A box the portal checks against a real register (a company in the Registro Imprese)
+        # refuses made-up data: such a run only stops there (2026-11-02, one did).
+        stops = run.preflight(steps, values, urls, made_up=True)["made_up_stops"]
+        if stops:
+            failed.append(f"{label}: made-up data can't pass {'; '.join(stops)}")
+            continue
         try:
             files, parts = run.page_bundle(steps, values, urls=urls)
         except run.StepError as e:
@@ -182,9 +198,18 @@ def main():
         cur.append(q)
     chunks.append(cur)
     for i, c in enumerate(chunks):
+        # Each piece checks itself before it joins the batch: 13 KB of values copied into the pane
+        # arrived with an element too many (2026-11-02), so a garbled piece now throws instead of
+        # running a case on values nobody chose.
+        raw = "[" + ",".join(c) + "]"
+        n, h = fnv1a(raw)
         (a.out / f"queue-{i}.js").write_text(
             ("window.pvBatch = [];\n" if i == 0 else "")
-            + "window.pvBatch = window.pvBatch.concat([" + ",".join(c) + "]);\nwindow.pvBatch.length\n")
+            + "(() => {\n  const raw = " + json.dumps(raw, ensure_ascii=False) + ";\n"
+            + "  let h = 0x811c9dc5;\n"
+            + "  for (let k = 0; k < raw.length; k++) { h ^= raw.charCodeAt(k); h = Math.imul(h, 0x01000193) >>> 0; }\n"
+            + f"  if (raw.length !== {n} || h !== {h}) throw new Error(\"queue-{i}.js arrived changed: send it again, or use --bundle\");\n"
+            + "  window.pvBatch = window.pvBatch.concat(JSON.parse(raw));\n})();\nwindow.pvBatch.length\n")
     (a.out / "loop.js").write_text("""if (!window.__pv) (0, eval)(localStorage.getItem('pv-runner'));
 // A run's values: whole ({base}), or what differs from its procedure's first run.
 if (window.pvBatch && window.pvBatch.some(([, , d]) => d.base || d.set)) {
