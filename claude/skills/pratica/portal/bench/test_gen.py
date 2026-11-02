@@ -15,6 +15,7 @@ os.chdir(ROOT)  # the answers name files from the repo's root, wherever this run
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True
 import gen  # noqa: E402
+import yaml  # noqa: E402
 
 CILA = ROOT / "rehearsals" / "cila-fittizia"
 FINE = ROOT / "rehearsals" / "fine-lavori-fittizia"
@@ -270,6 +271,69 @@ def _():
         # Each procedure's first run whole ({"base": ...}); a later one is what differs from it.
         assert '["dau-fittizia","napoli/comune/dichiarazione-avvenuto-utilizzo-terre",{"base":{"wizard":["PROVA NON INVIARE - DAU P6 generato"' in raw
         assert (t / "out" / "steps" / "dau-fittizia.js").read_text().startswith('localStorage.setItem("pv-steps:napoli/comune/dichiarazione-avvenuto-utilizzo-terre"')
+        # A case on other values (a copy of the fixture) goes in the same batch, labelled with them,
+        # and isn't recorded: the repo's fixture wouldn't give that run again.
+        other = dict(fixture["fields"]) | {"chiara:identity.birth_province": "EE", "chiara:identity.birth_country": "ARGENTINA"}
+        (t / "estero.json").write_text(json.dumps(other))
+        subprocess.run([sys.executable, str(HERE / "rerun.py"), "--values", str(t / "values.json"), "--out", str(t / "out2"),
+                        "dau-fittizia", f"dau-fittizia:answers-p6.json:{t / 'estero.json'}"], check=True, capture_output=True)
+        assert "dau-fittizia/answers-p6@estero" in (t / "out2" / "queue-0.js").read_text()
+        r = subprocess.run([sys.executable, str(HERE / "rerun.py"), "--record", "-"], input='[{"name": "dau-fittizia/answers-p6@estero", "result": "filled"}]',
+                           check=True, capture_output=True, text=True)
+        assert "not recorded" in r.stdout
+
+
+@case("every SUE recipe takes, gates or answers every choice its operations' wizard offers (a co-holder, a new direttore, the sanatoria's Si/No)")
+def _():
+    # Until 2026-11-02 a voltura always ticked a co-holder and a cambio d'intestazione never did,
+    # whatever the case: a choice a recipe never names is filed as not taken, without a word.
+    import json
+    wizard = json.loads((HERE.parent / "catalogue" / "F839" / "sue-wizard.json").read_text())
+    missing = []
+    for f in sorted(REH.glob("*/recipe.yaml")):
+        r = gen.resolved(gen.load_yaml(f))
+        if r.get("sportello") != "sue":
+            continue
+        taken = {s if isinstance(s, str) else s["option"] for s in r.get("scelte") or []}
+        answered = {gen.norm(k) for k in (r.get("si_no") or {})}
+        for label in r["operation"] if isinstance(r["operation"], list) else [r["operation"]]:
+            op = next(o for o in wizard["operations"] if o["label"] == label)
+            for sc in op.get("scelte", []):
+                if sc["option"] not in taken and not (sc.get("type") == "SIN" and any(gen.norm(sc["option"]).startswith(a) for a in answered)):
+                    missing.append(f"{f.parent.name}: {sc['option'][:60]}")
+    assert not missing, missing
+
+
+@case("the dictionary: every question is read somewhere, and no key is given twice (gen.load_yaml refuses it)")
+def _():
+    import re, tempfile
+    # A question nothing reads is a box nobody connected: the renewal's design changes were one
+    # (paes_rinnovo_variazioni, 2026-11-02), so a renewal with changes was filed as one without.
+    asked = re.compile(r"(?:\{\{|[+*,])\s*ask\.([\w#]+)")
+    d = gen.load_yaml(HERE.parent / "dictionary" / "fnsuap.yaml")
+    texts = [yaml.safe_dump({k: v for k, v in d.items() if k != "asks"}, allow_unicode=True), yaml.safe_dump(d["asks"], allow_unicode=True)]
+    texts += [f.read_text() for f in [*REH.glob("*/recipe.yaml"), *REH.glob("*/portal-steps.yaml"), *(HERE.parent / "parts").glob("*.yaml")]]
+    reads = {r for t in texts for r in asked.findall(t)}
+    for f in (HERE.parent / "rules").glob("*.yaml"):
+        reads |= set(gen.load_yaml(f).get("facts") or {})
+    unread = sorted(k for k in d["asks"] if k not in reads)
+    assert not unread, unread
+    with tempfile.NamedTemporaryFile("w", suffix=".yaml", delete=False) as t:
+        t.write("asks:\n  a: {type: text}\n  a: {type: date}\n")
+    try:
+        gen.load_yaml(t.name)
+        raise AssertionError("a key given twice was read")
+    except gen.GenError as e:
+        assert "twice" in str(e)
+    finally:
+        os.unlink(t.name)
+
+
+@case("a drift check's digests: catalogue.py computes what the pane's digest.js computed on the live portal (2026-11-02)")
+def _():
+    import catalogue
+    assert catalogue.digest(catalogue.stored_fingerprints("cil")) == "041974574c75"
+    assert catalogue.digest(catalogue.stored_fingerprints("sue-permesso-di-costruire-art-10-d-p-r-380-2001")) == "6e4da66eda5f"
 
 
 @case("two operations in one pratica: their sections once each, in the combination's crawl's order, and both ticked")

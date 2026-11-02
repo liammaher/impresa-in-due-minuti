@@ -41,6 +41,39 @@ cila-impresa-dopo:
     - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
   report: docs/portal-defects.md
 
+pdc-incentivo-energetico:
+  title: "Permesso: an energy incentive must be claimed, even for a project with none"
+  portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, quadro sicurezza impianti e consumi energetici"
+  what: "The quadro requires one of the energy incentives (art. 14 c. 6 or c. 7 D.Lgs. 102/2014, or the 5% volume bonus of D.Lgs. 28/2011) to be ticked: it offers no line for a project that claims none."
+  law: "The incentives are options the designer may use (art. 14 D.Lgs. 102/2014: thicker walls and roofs not counted, distances and heights in derogation; the 5% bonus of D.Lgs. 28/2011 for renewables beyond the minimum), not a requirement of every permesso."
+  checked: "2026-10-29, the permesso's first runs in the pane (rehearsals/pdc-fittizio): the quadro saved only with an incentive ticked"
+  choices:
+    - "Ask the SUE how a permesso with no energy incentive is filed while the portal requires one."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+  report: docs/portal-defects.md
+
+coholder-sesso:
+  title: "Voltura and cambio d'intestazione: the co-holder's sex is two required boxes"
+  portal: "Napoli's SUE on impresainungiorno: the co-holders' section (\"ci sono cointestatari\") of the voltura del permesso and of the cambio d'intestazione of a CILA, SCIA or DIA"
+  what: "\"sesso: M\" and \"sesso: F\" are two radio groups, each required: the section saves only with both ticked, so it states both sexes."
+  law: "A person has one sex on their codice fiscale; the form should take one."
+  checked: "2026-10-31, the voltura's runs in the pane (rehearsals/voltura-pdc-fittizia); the cambio d'intestazione's co-holder 2026-11-02, the same section"
+  choices:
+    - "Claude ticks both, as the portal saves it no other way, and says so in the person's steps; the codice fiscale says which."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+  report: docs/portal-defects.md
+
+agibilita-art24:
+  title: "Agibilità: the art. 24 exceptions are marked required"
+  portal: "Napoli's SUE on impresainungiorno: the agibilità's Attestazione tecnica - Agibilità"
+  what: "The boxes for art. 24 c. 5-bis and 5-ter (small or low units) and c. 5-quater (a derogation another law allows) show \"deve essere selezionata almeno un'opzione\" when neither is ticked, though most units are neither."
+  law: "Art. 24 c. 5-bis, 5-ter and 5-quater DPR 380/2001 are exceptions to the minimum heights and surfaces, for the units they name; an ordinary unit meets the minimums and states neither."
+  checked: "2026-10-31, the agibilità's runs in the pane (rehearsals/agibilita-fittizia): the four cases ticking neither showed the message, and the drafts kept their values"
+  choices:
+    - "Claude ticks the exception the case is, and none for an ordinary unit; the message is left for the direttore dei lavori, whose attestation it is, and the SUE if sending is refused."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+  report: docs/portal-defects.md
+
 pdc-aree-fuoco:
   title: "Permesso: \"non interessa aree percorse dal fuoco\" unticks the soil statement"
   portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, quadro qualità terreni, opere di urbanizzazione, scarichi"

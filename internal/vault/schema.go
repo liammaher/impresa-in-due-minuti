@@ -454,7 +454,7 @@ var RecommendedSchema = Schema{
 				{ID: "immobile.quartiere", Description: "Quartiere of Napoli (e.g. Vomero), computed from the property when the street settles it; store it to settle a street that crosses a municipalità boundary. One of the 30 quartieri (validated); ignored once older than the property's address", Sensitivity: "standard", Derived: true},
 				{ID: "immobile.municipalita", Description: "Municipalità of Napoli (1-10), computed from the property; store it only to override. A number or a Roman numeral (validated, saved as 1-10); ignored once older than the property's address", Sensitivity: "standard", Derived: true},
 				{ID: "immobile.distretto_asl", Description: "ASL Napoli 1 Centro distretto sanitario (24/73, 25-33), computed from the municipalità; store it only to override (validated; DS 31 is saved as 31)", Sensitivity: "standard", Derived: true},
-				{ID: "immobile.catasto_sezione", Description: "Sezione urbana from the visura, if any", Sensitivity: "standard"},
+				{ID: "immobile.catasto_sezione", Description: "The visura's sezione, if any: urbana for the Catasto Fabbricati, censuaria (one letter) for a plot only in the Catasto Terreni", Sensitivity: "standard"},
 				{ID: "immobile.catasto_foglio", Description: "Foglio from the visura (digits, validated)", Sensitivity: "standard"},
 				{ID: "immobile.catasto_particella", Description: "Particella (mappale) from the visura (validated)", Sensitivity: "standard"},
 				{ID: "immobile.catasto_subalterno", Description: "Subalterno from the visura, exactly as written (digits, validated)", Sensitivity: "standard"},
