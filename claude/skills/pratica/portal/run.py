@@ -173,6 +173,14 @@ def _bollo(v):
     return " ".join(str(v).lower().split())
 
 
+def _bollo_non_dovuto(v):
+    """bollo_marche's default: no marche or pagoPA question for a client exempt or paying
+    virtually ("false", unasked); for one who pays, render's None, so it is proposed."""
+    if _bollo(v) in BOLLO_ESENZIONE or _bollo(v) == "virtuale":
+        return "false"
+    raise KeyError("a client who pays the bollo")
+
+
 def _bollo_yours(v):
     """The person's bollo step, from {{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}."""
     marche, esenzione = _facts(v, 2)
@@ -342,6 +350,7 @@ FILTERS = Filters({
     "bollo_esente": lambda v: "true" if _bollo(v) in BOLLO_ESENZIONE else "false",
     "bollo_motivo": lambda v: BOLLO_ESENZIONE[_bollo(v)],
     "bollo_yours": _bollo_yours,
+    "bollo_non_dovuto": _bollo_non_dovuto,
     "categoria": lambda v: re.sub(r"^([A-F])/?(\d)$", r"\g<1>0\2", v.replace(" ", "").upper()),
     "empty": lambda v: "true" if not v else "false",
     # Several yes/no answers at once ({{ask.a,ask.b|any}}): true when one is (a `when` has no "or").
@@ -1044,6 +1053,17 @@ def preflight(steps, values, urls=None, made_up=False):
                                                 "error": why})
             else:
                 missing.setdefault(f["value"], {"field": f["value"], "why": why, "for": sec["section"]})
+    # A vault value the form can't take (a ruolo with no Carica on the portal, for an architect
+    # named in `people` who isn't the titolare) is named here, not met by the run as a crash.
+    for sec in steps["sections"]:
+        for f in sec["fields"]:
+            if "value" not in f or any(r.startswith("ask.") for r, _ in refs_in(f["value"])):
+                continue
+            try:
+                if "when" not in f or truthy(values.render(f["when"]) or ""):
+                    values.render(f["value"])
+            except ValueError as e:
+                missing.setdefault(f["value"], {"field": f["value"], "why": f"{sec['section']}: {e}", "for": sec["section"]})
     report["missing"] = list(missing.values())
     for sec in steps["sections"]:
         for f in sec["fields"]:

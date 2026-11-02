@@ -7,9 +7,10 @@ plans stay as they were (bench/plan_diff.py) and their recorded runs still stand
 VALUE is JSON (false, true, "text"). Every answers*.json of the rehearsals whose generated steps ask
 KEY (or those named) gets `"KEY": VALUE` before its closing brace, unless it has KEY: rewriting a file
 with json.dump reflows its inline lists, and the diff of 84 files buries the answers (2026-11-01).
-A combination's answers-p6.json is its main pratica's changed by its parts (gen.py --answers): this
-says which to regenerate, and which main pratica doesn't ask KEY, so its part's `answers` must carry
-it (the CIL with its landscape authorization, 2026-11-02).
+A combination's answers-p6.json is its main pratica's changed by its parts: where the main pratica
+doesn't answer KEY, its part's `answers` gets it (the CIL with its landscape authorization, 2026-11-02,
+and the bollo exemption on ten combinations), then each combination's answers are written again
+(regen.py).
 """
 import argparse
 import json
@@ -23,6 +24,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True
 import gen  # noqa: E402
+import regen  # noqa: E402
 
 REHEARSALS = HERE.parents[4] / "rehearsals"
 
@@ -62,18 +64,43 @@ def main():
                 f.write_text(new)
                 changed.append(f)
     print(f"{len(changed)} answers file(s) in {len(names)} rehearsal(s) now answer {a.key}")
+    combos = []
     for d in sorted(REHEARSALS.iterdir()):
         recipe = d / "recipe.yaml"
         r = (yaml.safe_load(recipe.read_text()) or {}) if recipe.exists() else {}
         if d.name not in names or not r.get("extends") or not gen.resolved(r).get("answers"):
             continue
+        combos.append(d.name)
         parents = r.get("extends") or []
-        main = [p for p in ([parents] if isinstance(parents, str) else parents) if not p.startswith("parts/")]
-        lacks = main and a.key not in json.loads((REHEARSALS / main[0] / "answers-p6.json").read_text()) \
-            and a.key not in gen.resolved(r)["answers"]
-        print(f"  {d.name}: regenerate its answers-p6.json (gen.py --answers)"
-              + (f"; its main pratica {main[0]} doesn't answer {a.key}: put it in the part's `answers`" if lacks else ""))
+        parents = [parents] if isinstance(parents, str) else parents
+        main = [p for p in parents if not p.startswith("parts/")]
+        if main and a.key not in json.loads((REHEARSALS / main[0] / "answers-p6.json").read_text()) \
+                and a.key not in gen.resolved(r)["answers"]:
+            for part in (p for p in parents if p.startswith("parts/")):
+                if add_to_part(HERE.parent / f"{part}.yaml", a.key, a.value):
+                    print(f"  {part}: answers {a.key} (its main pratica {main[0]} doesn't)")
+    if combos:
+        written, refused = regen.regenerate(combos)
+        for name, why in refused.items():
+            print(f"  {name}: gen.py refuses it: {why}")
+        print(f"  {len(written)} combination file(s) written again")
 
+
+def add_to_part(path, key, value):
+    """KEY at the end of a part's `answers:` block, as text; False when the part has it already."""
+    lines = path.read_text().split("\n")
+    start = lines.index("answers:")
+    if key in (yaml.safe_load("\n".join(lines)).get("answers") or {}):
+        return False
+    end = start + 1
+    while end < len(lines) and (lines[end].startswith(" ") or lines[end].startswith("#")):
+        end += 1
+    while lines[end - 1].strip() == "" or lines[end - 1].lstrip().startswith("#"):
+        end -= 1
+    lines.insert(end, f"  {key}: {json.dumps(value, ensure_ascii=False)}")
+    path.write_text("\n".join(lines))
+    assert yaml.safe_load(path.read_text())["answers"][key] == value, path
+    return True
 
 if __name__ == "__main__":
     main()
