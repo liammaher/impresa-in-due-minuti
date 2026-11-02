@@ -226,6 +226,19 @@ def sanatoria_cambio_uso():
     assert not r["routed"] and "PRG" in r["unsupported"][0], r
 
 
+def sanatoria_zona_a():
+    """A demolition and reconstruction in zona A, done without a title (2026-11-02): it needed the
+    permesso in Naples, so the permesso in sanatoria (art. 36); in a protected area the same
+    landscape rules as any permesso in sanatoria."""
+    base = {"intervento": "ristrutturazione", "cambio_uso": "no", "paesaggio": "no", "fatti": ["sanatoria", "demolizione_zona_a"]}
+    r = route.route(TABLE, base, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+    r = route.route(TABLE, {**base, "paesaggio": "ordinaria", "fatti": base["fatti"] + ["paesaggio_eseguiti"]}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-accertamento-fittizio", r
+    r = route.route(TABLE, {**base, "intervento": "ristrutturazione_pesante"}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+
+
 def rehearsal_cases_come_home():
     """Each rehearsal's answers files, read as its steps file reads the facts, route back to it
     (a case its own rules refuse is left out: it tests the refusal)."""
@@ -317,7 +330,7 @@ def plugin_layout():
 def main():
     tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, as_a_conversation,
              wrong_answers, gated_items_stay_unknown, own_words_kept_only_if_they_agree, missing_answers_file,
-             cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso,
+             cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso, sanatoria_zona_a,
              rehearsal_cases_come_home, asks_as_the_table_asks, refusals_say_why, apart_is_the_persons,
              one_steps_file_per_combination, plugin_layout]
     for t in tests:
