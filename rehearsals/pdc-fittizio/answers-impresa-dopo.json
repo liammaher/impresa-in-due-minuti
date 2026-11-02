@@ -95,5 +95,14 @@
  "altri_tecnici_dopo": "false",
  "direttore_lavori": "progettista",
  "impresa_dopo": "true",
- "notifica_allegata": "false"
+ "notifica_allegata": "false",
+ "barriere_deroga": "false",
+ "rinnovabili_obblighi": "rispettati",
+ "vvf_variante": "false",
+ "scomputo": "false",
+ "strumenti_altri": "false",
+ "igienico_24_5bis": "false",
+ "strutture_allegate": "false",
+ "strutture_incaricato": "false",
+ "barriere_art82": "false"
 }

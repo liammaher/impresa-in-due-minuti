@@ -94,5 +94,7 @@
  "direttore_lavori": "progettista",
  "impresa_dopo": "false",
  "notifica_allegata": "true",
- "dl_strutture": "true"
+ "dl_strutture": "true",
+ "vvf_variante": "false",
+ "scomputo": "false"
 }

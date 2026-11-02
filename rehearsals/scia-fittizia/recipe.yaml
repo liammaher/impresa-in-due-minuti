@@ -100,6 +100,9 @@ rules:
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
+  # The SCIA's form has no line for a large site under VIA or AIA (its Piano di Utilizzo line is
+  # for sites up to 6000 m³, under the repealed DM 161/2012).
+  - {if: "{{ask.scavo|is_sottoprodotti}}", value: "{{ask.scavo_piano_utilizzo}}", in: ["false"], else: "The SCIA's form has no line for excavated earth over 6000 m³ under VIA or AIA, used as by-products under a Piano di Utilizzo (DPR 120/2017 art. 9): works of that size go by permesso di costruire; ask the SUE."}
   # Works done without a permesso di costruire (or a SCIA alternativa) are regularized by the
   # permesso in sanatoria the Comune issues (art. 36 DPR 380/2001), never by a SCIA: the asseverazione's
   # "in assenza" row is the permesso's (rehearsals/pdc-sanatoria-fittizio). Partial difformity from a

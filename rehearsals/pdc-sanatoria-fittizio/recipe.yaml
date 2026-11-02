@@ -36,9 +36,22 @@ attachments:
     # The asseverazione's sewer connection to request adds this required slot (read on the
     # permesso's attachments screen 2026-10-31): plain PDFs.
     - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura, value: "{{ask.allaccio_doc}}", when: "{{ask.scarichi|is_allaccio_da_richiedere}}", on_page: true}
+    # A discharge whose authorisation is asked with the pratica: its "si allega" adds its slot (read on the
+    # permesso's and the SCIA alternativa's screens, 2026-11-02).
+    - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in pubblica fognatura, value: "{{ask.scarico_doc}}", when: "{{ask.scarichi|is_fognatura_da_richiedere}}", on_page: true}
+    - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in acque, value: "{{ask.scarico_doc}}", when: "{{ask.scarichi|is_superficiali_da_richiedere}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
     # Under the barriers rules, their drawings (a slot read on the P6 run's screen).
-    - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: "{{ask.elaborati_barriere}}", when: "{{ask.barriere}}"}
+    - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: "{{ask.elaborati_barriere}}", when: "{{ask.barriere}} {{ask.barriere_deroga|not}}"}
+    # The asseverazione's other "si allega" lines, by the SCIA's slot titles (each read on the
+    # permesso's screen once a case filled it, 2026-11-01).
+    - {kind: file, label: "Piano di lavoro di demolizione o rimozione dell'amianto", value: "{{ask.amianto_piano}}", when: "{{ask.amianto}} {{ask.amianto_piano_allegato}}", on_page: true}
+    - {kind: file, label: Denuncia dei lavori, value: "{{ask.denuncia_art65}}", when: "{{ask.strutture}} {{ask.cemento_armato}} {{ask.strutture_allegate}}", on_page: true}
+    - {kind: file, label: Denuncia dei lavori in zona sismica, value: "{{ask.sismica_doc}}", when: "{{ask.strutture}} {{ask.sismica|is_deposito}} {{ask.strutture_allegate}}", on_page: true}
+    - {kind: file, label: "Elaborati relativi al superamento delle barriere architettoniche (art. 82", value: "{{ask.barriere_elaborati}}", when: "{{ask.barriere_art82}}", on_page: true}
+    # The permesso has no slot for a barriers deroga's documents nor for a scomputo's proposal
+    # (read on its screen 2026-11-02): the deroga's reasons go in the relazione tecnica, and
+    # the works to scomputo are agreed with the Comune once the permesso is granted (art. 16 c. 2).
     # Each "si allega" of the asseverazione adds its own slot, as on the SCIA.
     - {kind: file, label: Documentazione necessaria per il rilascio dell'autorizzazione sismica, value: "{{ask.sismica_doc}}", when: "{{ask.strutture}} {{ask.sismica|is_autorizzazione}}", on_page: true}
     # A protected building (bene culturale): its "Si allega" adds this required slot, as on the SCIA
@@ -95,6 +108,7 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request"
+  - "The asseverazione's \"non interessa aree percorse dal fuoco\" (qualità terreni) is one choice with the soil statement on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md); state it in the relazione tecnica if the SUE wants it"
   - "On Allega documenti: the portal's procura signed by the client and the Quadro riepilogativo (PdC DSC), the broadband infrastructure drawing (art. 135-bis DPR 380/2001: signed files only), the contributo's prospetto or the documents for the SUE to work it out (the permesso has no slot for them: under Allegati liberi), then everything signed digitally (.p7m)"
   - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
   - "On Allega documenti: the Elaborati richiesti per la sanatoria (stato legittimo, stato di fatto and the comparison, the difformità in red as the SUE's guidelines ask), signed digitally (.p7m only)"
