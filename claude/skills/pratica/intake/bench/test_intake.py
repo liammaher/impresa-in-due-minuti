@@ -203,9 +203,14 @@ def end_to_end():
           f"{len(without['missing'])} vault fields without the documents; {count(with_docs)}, "
           f"{len(with_docs['proposals'])} and {len(with_docs['missing'])} with them")
     assert count(with_docs) == 0 and count(without) >= 20, (count(with_docs), count(without))
-    # Left to confirm: only the steps file's own defaults (no other filings or assents made).
-    assert {p["key"] for p in with_docs["proposals"]} <= {"comunicazioni_presentate", "atti_acquisiti"}, with_docs["proposals"]
-    assert len(with_docs["missing"]) <= 5 < len(without["missing"]), with_docs["missing"]
+    # Left to confirm: only the steps file's own defaults, which no document answers (no other
+    # filings or assents made; no firm or technicians still to be named, since 2026-11-01).
+    assert {p["key"] for p in with_docs["proposals"]} <= {"comunicazioni_presentate", "atti_acquisiti",
+                                                        "impresa_dopo", "altri_tecnici_dopo"}, with_docs["proposals"]
+    # The lease carries no citizenship: the Scheda anagrafica's Cittadinanza is asked of the vault
+    # (since 2026-11-02; before, every client went as the portal's preset ITALIA).
+    assert len(with_docs["missing"]) <= 6 < len(without["missing"]), with_docs["missing"]
+    assert any(m["field"] == "c:identity.citizenship" for m in with_docs["missing"]), with_docs["missing"]
     # The vault's value wins over a document's (--values in order), and a document fills the rest.
     (work / "one.yaml").write_text(json.dumps({"procedure": "x", "sections": [{"section": "S", "fields": [
         {"id": "p", "kind": "text", "label": "Piano", "value": "{{c:immobile.piano}}"},

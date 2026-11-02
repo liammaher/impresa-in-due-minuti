@@ -292,10 +292,11 @@ FILTERS = Filters({
     "impresa_iscritta": lambda v: "true" if all(_facts(v, 2)) else "false",
     "impresa_non_iscritta": lambda v: "true" if _facts(v, 2)[0] and not _facts(v, 2)[1] else "false",
     "carica_cliente": lambda v: CARICA_CLIENTE[v.strip().lower()],
-    # {{c:business.forma_giuridica,ask.cliente_carica|forma_cliente}}: a condominium is ALTRE FORME.
-    "forma_cliente": lambda v: "ALTRE FORME" if _facts(v, 2)[1] == "amministratore di condominio" else FORMA[_facts(v, 2)[0]],
-    "carica_proposta": lambda v: v.strip().lower() if v.strip().lower() == "amministratore di condominio" else "legale rappresentante",
-    "registro_proposto": lambda v: "non necessita" if v.strip().lower() == "amministratore di condominio" else "",
+    # From c:business.forma_giuridica: a condominium is ALTRE FORME, its administrator declares,
+    # and it is never in the Registro delle imprese.
+    "forma_cliente": lambda v: "ALTRE FORME" if v == "condominio" else FORMA[v],
+    "carica_proposta": lambda v: "amministratore di condominio" if v == "condominio" else "legale rappresentante",
+    "registro_proposto": lambda v: "non necessita" if v == "condominio" else "",
     # The first of several fields that is set (a company's codice fiscale, else its partita IVA).
     "first": lambda v: next((x for x in v.split("/") if x), ""),
     # The holder a title is in the name of: a company's name, else the person's (first/last/company).
@@ -907,8 +908,12 @@ def preflight(steps, values, urls=None, made_up=False):
             # One false word is enough, whatever a later one would say (no other technicians:
             # whether the second is an employee is never asked), for the `when`'s own fields too
             # (a person client's citizenship, under a company client's branch).
-            if any(w is not None and not truthy(w) for w in map(values.render, re.findall(r"\{\{.+?\}\}", f["when"]))):
+            words = list(map(values.render, re.findall(r"\{\{.+?\}\}", f["when"])))
+            if any(w is not None and not truthy(w) for w in words):
                 continue  # this field isn't filled for this case
+            if tmpl == f.get("value") and None in words:
+                continue  # not known yet whether it is: the `when`'s own missing fields are asked
+                # (born abroad: the birth province first, then the country)
         # Several fields read at once ({{a,b|f}}) take an empty one as "" (a company with no REA).
         several = {r.strip() for m in re.findall(r"\{\{([^}|]*,[^}|]*)", tmpl) for r in m.split(",")}
         for ref, filters in refs_in(tmpl):
@@ -1002,6 +1007,13 @@ def preflight(steps, values, urls=None, made_up=False):
         # A rehearsal's made-up files: filled into a draft that is never sent.
         report["warnings"].append(f"made-up data: {sum('filing' in x for x in report['files'])} file(s) "
                                   f"{sportello['office']} would refuse (each one's `filing`): never send this draft")
+    if made_up:
+        # A box the portal checks against a real register (a company's codice fiscale in the
+        # Registro Imprese): made-up data stops there, whatever the mapping (`made_up` in the dictionary).
+        for sec in steps["sections"]:
+            for f in sec["fields"]:
+                if f.get("made_up") and truthy(values.render(f.get("when", "true")) or ""):
+                    report["warnings"].append(f"made-up data: {sec['section']}: {f['made_up']}")
     report["pane_ok"] = sum(x["bytes"] or 0 for x in report["files"] if "link" not in x) <= PAGE_FILES_LIMIT
     report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + filing_yours(steps, sportello)
                        + apart(steps, values))

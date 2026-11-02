@@ -603,7 +603,14 @@ def main():
             r = fill(browser, base, steps(base, start="/portal.html?rename=1"), answers, resume={"retry_wait_ms": 100})
             stops(r, "expected the label Impresa esecutrice")
             assert not r.get("retries"), r.get("retries")
-        case("retries are bounded, and a renamed label is never retried", stubborn)
+            # Some boxes with the label, but not the nth: the page as it is, never retried.
+            PORTAL.reset()
+            st = steps(base)
+            st["sections"][1]["fields"].append({"kind": "text", "label": "Impresa esecutrice", "nth": 2, "value": "x"})
+            r = fill(browser, base, st, answers, resume={"retry_wait_ms": 100})
+            stops(r, "1 fields with this label")
+            assert not r.get("retries"), r.get("retries")
+        case("retries are bounded; a renamed label, or a box found but not the nth, is never retried", stubborn)
 
         def onefield():
             # Two rows the portal keeps as one radio field, each opening its own box: the second's
