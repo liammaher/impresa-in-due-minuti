@@ -1015,8 +1015,10 @@
   // to show its boxes, a busy queue. A run stopped by one picks itself up on the same draft,
   // as a person would by reloading (at most `retries` times, 2 by default); anything else (a
   // value the portal refuses or doesn't keep, a label it renamed) still stops, so a real
-  // change is never retried into a misfill. Each retry is in the report's `retries`.
-  const TRANSIENT = /didn't open|stayed busy|fields with this label|expected the screen|no section |error page|has expired/;
+  // change is never retried into a misfill. Each retry is in the report's `retries`. A lookup
+  // that finds no box is a section still showing; one that finds some, but not the nth, is the
+  // page as it is (the sede's Provincia read as no "Provincia", retried twice, 2026-11-02).
+  const TRANSIENT = /didn't open|stayed busy|\b0 fields with this label|expected the screen|no section |error page|has expired/;
   async function attempt(values, resume) {
     for (let n = 0; ; n++) {
       await run(values, resume);

@@ -18,11 +18,10 @@ asks:
   descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'PROVA NON INVIARE - CIL {{c:identity.last_name}}'}
   titolo: {type: text, question: 'The client''s title to the property, in one word (proprietario, comproprietario, usufruttuario, amministratore di condominio, locatario, comodatario, ...)', propose: '{{c:immobile.titolo}}'}
   cliente_carica: {type: choice, question: 'What is the person declaring for the client company (`cr:`) to it? legale rappresentante; amministratore unico; amministratore delegato; presidente cda (presidente
-      del consiglio di amministrazione); amministratore di condominio (the client is a condominium)', options: [legale rappresentante, amministratore unico, amministratore delegato, presidente cda, amministratore
-        di condominio], propose: '{{ask.titolo|carica_proposta}}'}
-  cliente_rea_data: {type: date, question: 'When was the client company entered in the REA (the visura camerale''s data di iscrizione)?'}
+      del consiglio di amministrazione); amministratore di condominio (a condominium''s administrator)', options: [legale rappresentante, amministratore unico, amministratore delegato, presidente cda, amministratore
+        di condominio], propose: '{{c:business.forma_giuridica|carica_proposta}}'}
   cliente_registro: {type: choice, question: 'The client company has no REA in the vault: non ancora iscritta (being registered in the Registro delle imprese); non necessita (never registered: a condominium,
-      an association, an ente)?', options: [non ancora iscritta, non necessita], propose: '{{ask.cliente_carica|registro_proposto}}'}
+      an association, an ente)?', options: [non ancora iscritta, non necessita], propose: '{{c:business.forma_giuridica|registro_proposto}}'}
   titolo_esclusivo: {type: yes_no, question: 'Does the client hold the title alone, with no one else (co-owners, the landlord) whose assent the works need? If not, the other holder is the job''s `r:` person,
       with `o:` their company if a company owns it', propose: '{{ask.titolo|titolo_solo}}'}
   parti_comuni: {type: choice, question: 'Do the works touch common parts of the building? nessuna; condominio (common parts of a condominium); comproprieta (a building of several owners that isn''t a condominium,
@@ -183,11 +182,12 @@ sections:
   - {id: 'r23c1p59reg:calendar_input', kind: date, value: '{{c:permesso_soggiorno.data_rilascio|date_it}}', when: '{{c:business.denominazione|empty}} {{c:permesso_soggiorno.numero|empty|not}}', label: il}
   - {id: 'r23c2p61reg:calendar_input', kind: date, value: '{{c:permesso_soggiorno.data_scadenza|date_it}}', when: '{{c:business.denominazione|empty}} {{c:permesso_soggiorno.numero|empty|not}}', label: scadenza}
   - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: DITTA/SOCIETA'/IMPRESA}
-  - {id: 'r2c2p4reg:radio:2_clone', kind: radio, when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: ISCRITTA ALLA CCIAA}
+  - {id: 'r2c2p4reg:radio:2_clone', kind: radio, made_up: 'the portal looks the company''s codice fiscale up in the Registro Imprese at Salva ("Il CF inserito non è presente nel RI"): a made-up company
+      stops there', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: ISCRITTA ALLA CCIAA}
   - {kind: text, value: '{{c:business.codice_fiscale,c:business.partita_iva|first}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', max: 16, label: Codice Fiscale}
   - {id: r8c1p16reg, kind: select, value: '{{c:business.cciaa|provincia_nome}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: 'Camera di commercio di:'}
   - {kind: text, label: Numero REA, value: '{{c:business.rea|rea_num}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}'}
-  - {kind: date, on_page: true, value: '{{ask.cliente_rea_data|date_it}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: Data}
+  - {kind: date, on_page: true, value: '{{c:business.data_iscrizione_rea|date_it}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: Data}
   - {id: r15c3p41reg, kind: select, value: '{{cr:identity.citizenship|cittadinanza}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.citizenship|straniera}}', label: Cittadinanza}
   - {id: r18c1p47reg, kind: select, value: '{{cr:identity.birth_country}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}', label: Stato}
   - {kind: text, label: Località estera, value: '{{cr:identity.birth_comune|upper}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}'}
@@ -211,7 +211,7 @@ sections:
   - {id: 'r36c3p95reg:txt', kind: text, value: '{{cr:identity.email}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', max: 100, label: eMail/PEC}
   - {id: 'r36c4p97reg:number', kind: text, value: '{{cr:identity.phone|phone_it}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', max: 12, label: Telefono fisso/cellulare}
   - {id: r39c1p101reg, kind: select, value: '{{ask.cliente_carica|carica_cliente}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: Carica}
-  - {id: r44c1p111reg, kind: select, value: '{{c:business.forma_giuridica,ask.cliente_carica|forma_cliente}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: Forma giuridica}
+  - {id: r44c1p111reg, kind: select, value: '{{c:business.forma_giuridica|forma_cliente}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', label: Forma giuridica}
   - {id: 'r42c1p107reg:txt', kind: text, value: '{{c:business.denominazione}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', max: 305, label: Denominazione (nome della ditta}
   - {id: 'r44c2p113reg:txt', kind: text, on_page: true, value: '{{c:business.codice_fiscale,c:business.partita_iva|first}}', when: '{{c:business.denominazione,c:business.rea|impresa_iscritta}}', max: 16,
     label: Codice Fiscale, nth: 2}
@@ -267,7 +267,7 @@ sections:
   - {id: 'r33c3p87reg:txt', kind: text, value: '{{cr:identity.email}}', when: '{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}', max: 100, label: eMail/PEC}
   - {id: 'r33c4p89reg:number', kind: text, value: '{{cr:identity.phone|phone_it}}', when: '{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}', max: 12, label: Telefono fisso/cellulare}
   - {id: r36c1p93reg, kind: select, value: '{{ask.cliente_carica|carica_cliente}}', when: '{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}', label: Carica}
-  - {id: r41c1p103reg, kind: select, value: '{{c:business.forma_giuridica,ask.cliente_carica|forma_cliente}}', when: '{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}', label: Forma giuridica}
+  - {id: r41c1p103reg, kind: select, value: '{{c:business.forma_giuridica|forma_cliente}}', when: '{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}', label: Forma giuridica}
   - {id: 'r39c1p99reg:txt', kind: text, value: '{{c:business.denominazione}}', when: '{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}', max: 305, label: Denominazione (nome della ditta}
   - {id: 'r41c2p105reg:txt', kind: text, value: '{{c:business.codice_fiscale,c:business.partita_iva|first}}', when: '{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}', max: 16, label: Codice
       Fiscale}

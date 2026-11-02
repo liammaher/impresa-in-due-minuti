@@ -10,7 +10,11 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    fills. A section none fills needs a dictionary entry (`dictionary/fnsuap.yaml`; its header
    says what a field can carry). Read the section on the portal when the crawl kept no `text`:
    the yes/no questions and their order are only on the page (open a scratch draft: a steps
-   file with the wizard only and no sections, "PROVA NON INVIARE - catalogo …").
+   file with the wizard only and no sections, "PROVA NON INVIARE - catalogo …"). Read it on a
+   fresh draft: a draft saved under other answers keeps their traces (the Scheda anagrafica's
+   sede Stato empty after PERSONA, 2026-11-02). The crawl tries only dropdowns of up to 12
+   options: what a longer one opens is found by choosing one on the page (the Camera di
+   commercio opens "Numero REA" and "Data", a foreign Stato of birth "Località estera").
 2. **The recipe** (`rehearsals/<name>/recipe.yaml`): procedure, title, comune, sportello,
    crawl, operation (or a list of them), scelte, `first`, `asks`, `yours` (what's left to the
    person: declarations, attachments, payment, signing), `supports` (the cases refused, with
@@ -56,7 +60,9 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
 4. **Pre-flight** with made-up answers (`answers-p6.json`) and the P6 fixture's values
    (`--values rehearsals/cila-fittizia/fixture-p6.json`, the fixture as it is): `run.py preflight --made-up`
    (the rehearsal's files are made up: Napoli's file rules only warn, below), from the repo's root:
-   an answers file names its files from there (elsewhere each reads "no file").
+   an answers file names its files from there (elsewhere each reads "no file"). A box the portal
+   checks against a real register warns too (`made_up:` in the dictionary: a registered company's
+   codice fiscale, looked up in the Registro Imprese): that case's run stops there by design.
 5. **Run in the pane** (the pratica skill, step 2) and record each run in the rehearsal's
    README (`| Date | Browser | Result |`): what stopped it and what fixed it, then the
    filled run.
@@ -203,7 +209,9 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   lands on `/cmd/error`, a section slow to open or to show its boxes. Every section is saved
   by then, so the runner picks itself up: it reopens the draft from Pratiche in bozza (or
   goes on from its address), waits 10 s and resumes, at most twice, each try in the report's
-  `retries`. A value the portal refuses or doesn't keep, or a renamed label, still stops.
+  `retries`. A value the portal refuses or doesn't keep, or a renamed label, still stops, and so
+  does a lookup that finds some boxes with the label but not the nth: only "0 fields with this
+  label" is a section still showing (2026-11-02: the sede's Provincia, retried twice for nothing).
   Two runs on one login (another session's, a crawl) make these errors: one at a time.
 - **An id is checked before it's used.** A choice earlier in a section can move a crawled id
   onto another box. The box an id names must be of the field's kind and carry its label as
