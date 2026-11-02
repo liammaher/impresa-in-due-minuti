@@ -99,12 +99,14 @@ asks:
   pdc_data: {type: date, question: Its issue date}
   domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   domicilio_inipec: {type: yes_no, question: 'Is the client company''s PEC (business.pec) its domicilio digitale in INI-PEC, to be communicated on the form?', default: 'false'}
-  bollo_marche: {type: yes_no, question: 'Where the imposta di bollo is paid: with physical marche da bollo (rather than pagoPA)?', propose: 'false'}
+  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', default: '{{ask.bollo_esenzione|bollo_non_dovuto}}', propose: '{{ask.bollo_esenzione|is_no|not}}'}
   bollo_esenzione: {type: choice, question: 'Is the client exempt from the imposta di bollo, or authorized to pay it virtually? no (it pays it); ets (an ente del Terzo settore in the RUNTS: art. 82 c. 5
       D.Lgs. 117/2017); cooperativa sociale (the same article''s own words); pubblica (the State, a Regione, Provincia, Comune or their consorzi: All. B art. 16 DPR 642/1972); sportiva (a CONI-recognized
-      non-profit sports body: All. B art. 27-bis); onlus (only one whose tax year began before 1 January 2026, when the ONLUS regime ended); partito (a political party, for obligations of law: art. 27-ter);
+      non-profit sports body: All. B art. 27-bis); onlus (the ONLUS regime ended on 1 January 2026: only one whose tax year began before then); partito (a political party, for obligations of law: art. 27-ter);
       contadina (piccola proprietà contadina: art. 21); virtuale (authorized by the Agenzia delle Entrate to pay it virtually: D.M. 10/11/2011, art. 15 DPR 642/1972)', options: ['no', ets, cooperativa sociale,
       pubblica, sportiva, onlus, partito, contadina, virtuale], propose: 'no'}
+  bollo_onlus_esercizio: {type: yes_no, question: 'Did the ONLUS''s current tax year begin before 1 January 2026 (a tax year that isn''t the calendar year)? The ONLUS regime ended then (D.Lgs. 117/2017
+      art. 102 c. 2 and art. 104 c. 2): an ex-ONLUS in the RUNTS is an ets', propose: 'false'}
   bollo_virtuale_autorizzazione: {type: file, question: 'The client''s dichiarazione relativa all''assolvimento dell''imposta di bollo: that it pays it virtually, with the Agenzia delle Entrate''s authorization
       (number and date), signed (PDF)'}
   bollo_seriale: {type: text, question: 'The marca da bollo for the application: its serial number (14 digits)'}
@@ -616,6 +618,9 @@ supports:
   in:
   - convenzione
   else: 'Without primary urbanisation works the portal wants the date of a convenzione, even where the Comune plans the works itself within three years: that case can''t be stated on it as is; ask the SUE.'
+- if: '{{ask.bollo_esenzione|is_onlus}}'
+  when: '{{ask.bollo_onlus_esercizio}}'
+  else: 'The ONLUS exemption ended with the ONLUS regime on 1 January 2026, except for a tax year begun before then: an ex-ONLUS in the RUNTS is exempt as an ets.'
 rules:
   table: sue-napoli
   main: napoli/comune/permesso-in-sanatoria
