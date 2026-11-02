@@ -11,5 +11,6 @@
  "paes_data": "2021-09-01",
  "paes_scadenza": "2026-09-01",
  "paes_rinnovo_di": "semplificata",
- "progettista_altro": false
+ "progettista_altro": false,
+ "paes_rinnovo_variazioni": false
 }
