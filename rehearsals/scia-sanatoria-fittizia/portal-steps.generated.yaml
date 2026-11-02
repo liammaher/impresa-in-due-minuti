@@ -15,6 +15,8 @@ yours:
   technical rules in force when they were done (art. 36-bis c. 3-bis DPR 380/2001); its documents go in this pratica''s slot'
 - 'Works done in a protected area (art. 36-bis c. 4): on Allega documenti, the documents for the binding parere on their landscape compatibility go in "Documentazione necessaria ai fini del rilascio del
   parere vincolante", signed digitally (.p7m only)'
+- 'A sanction or oblazione whose receipt the sanatoria quadro attaches: on Allega documenti, the receipt in "copia attestazione versamento oneri, diritti e spese", signed (.p7m only): the quadro adds no
+  slot of its own'
 - Sign and send (Firma e invio); keep the receipt
 groups:
   tolleranze_tipi:
@@ -110,13 +112,16 @@ asks:
       and building rules both then and today)?', options: [urbanistica, doppia], when: '{{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}'}
   sanatoria_caso: {type: choice, question: 'Which case of the SCIA in sanatoria? in corso (works still under way, the SCIA filed of one''s own accord: a €516 sanction, art. 37 c. 5 DPR 380/2001); doppia
       conformita (works done without the SCIA or differing from it, conforming to the planning and building rules both when done and today: an oblazione of €516 to €5,164, art. 36-bis c. 5 b); conformita
-      urbanistica (conforming to today''s planning rules and the building rules of the time: €1,032 to €10,328, art. 36-bis c. 1); variante pre 1977 (a variant to a title issued before L. 10/1977, art.
-      34-ter)', options: [in corso, doppia conformita, conformita urbanistica, variante pre 1977], when: '{{ask.sanatoria_titolo|is_scia}}'}
+      urbanistica (conforming to today''s planning rules and the building rules of the time: €1,032 to €10,328, art. 36-bis c. 1); variante pre 1977 (a variant made during the works of a title issued before
+      L. 10/1977, in partial difformity from it and not a tolerance of art. 34-bis: art. 34-ter c. 1-3, an oblazione under art. 36-bis c. 5)', options: [in corso, doppia conformita, conformita urbanistica,
+      variante pre 1977], when: '{{ask.sanatoria_titolo|is_scia}}'}
   sanatoria_data: {type: date, question: 'When the works were done (for works still under way: when they started)', when: '{{ask.sanatoria_titolo|in_scia__permesso}}'}
-  sanatoria_estremi: {type: text, question: The €516 sanction's payment reference (IUV or transaction number), when: '{{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_in_corso}}'}
-  sanatoria_oblazione: {type: number, question: 'The oblazione the technician determines and the client paid before filing, in euro (€516 to €5,164 with double conformity); the SUE may adjust it', when: '{{ask.sanatoria_titolo|is_scia}}
-      {{ask.sanatoria_caso|is_doppia_conformita}}'}
-  sanatoria_pagamento_data: {type: date, question: The date the sanction or oblazione was paid, when: '{{ask.sanatoria_titolo|is_scia}}'}
+  sanatoria_prova: {type: choice, question: 'How does the sanatoria quadro show the sanction or oblazione, paid before filing? estremi (its details: amount, date, for the €516 sanction its reference); ricevuta
+      (its receipt, which you attach signed)', options: [estremi, ricevuta], when: '{{ask.sanatoria_titolo|is_scia}}'}
+  sanatoria_estremi: {type: text, question: The €516 sanction's payment reference (IUV or transaction number), when: '{{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_in_corso}} {{ask.sanatoria_prova|is_estremi}}'}
+  sanatoria_oblazione: {type: number, question: 'The oblazione the technician determines and the client paid before filing, in euro (art. 36-bis c. 5 b: €516 to €5,164 with double conformity); the SUE may
+      adjust it', when: '{{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_doppia_conformita}}'}
+  sanatoria_pagamento_data: {type: date, question: The date the sanction or oblazione was paid, when: '{{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_prova|is_estremi}}'}
   sanatoria_catasto: {type: choice, question: 'The catasto for the works to legalize: invariato (no change to the catasto registration); presentata (the DOCFA already filed: its protocol and date); dopo
       (to be filed once the sanatoria takes effect)', options: [invariato, presentata, dopo], when: '{{ask.sanatoria_titolo|in_scia__permesso}}'}
   sanatoria_catasto_protocollo: {type: text, question: The DOCFA's protocol number, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}'}
@@ -446,7 +451,22 @@ supports:
   - in corso
   - doppia conformita
   - conformita urbanistica
-  else: Variants to pre-1977 titles (art. 34-ter) aren't mapped yet.
+  defect:
+    id: scia-34ter
+    title: 'SCIA in sanatoria, art. 34-ter (a variant to a pre-1977 title): the portal saves the dating or the oblazione'
+    portal: 'Napoli''s SUE on impresainungiorno: the SCIA''s asseverazione, sanatoria quadro'
+    what: 'The case''s three rows (the date of the variant proven by documents, the date attested, the oblazione) are one field: the portal keeps only the one ticked last.'
+    law: 'Art. 34-ter c. 2 and 3 DPR 380/2001 ask for both: the variant''s date (by the documents of art. 9-bis c. 1-bis, else the technician''s attestation) and the oblazione of art. 36-bis c. 5 the SCIA
+      is subject to.'
+    checked: 2026-11-02, on a made-up draft, ticked and cancelled without saving; the sanatoria quadro's own rows (the varied title, the payment) are two fields and work
+    choices:
+    - 'Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) how they want this sanatoria filed while the portal can''t take it: by PEC, or on the portal with the date or the oblazione stated in the
+      attached relazione tecnica asseverata.'
+    - 'Report the defect to the portal''s operator (InfoCamere''s impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked.'
+    - 'File it on the portal yourself, by hand, as the SUE tells you: Claude doesn''t fill this case.'
+    report: docs/portal-defects.md
+  else: 'For a variant to a pre-1977 title (art. 34-ter) the portal''s asseverazione saves the variant''s date (by documents or attested) and the oblazione as one field, so it can''t state both, as art.
+    34-ter c. 2 and 3 ask: a defect of the portal (docs/portal-defects.md); ask the SUE.'
 - if: '{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}'
   value: '{{ask.igienico_adattabilita}}'
   in:
@@ -1428,14 +1448,20 @@ sections:
 - section: SANATORIA e regolarizzazioni per interventi già realizzati
   fields:
   - {id: 'r2c1p2reg:chk', kind: checkbox, when: '{{ask.sanatoria_caso|is_in_corso}}', label: intervento soggetto a SCIA in corso di esecuzione}
-  - {id: 'r3c1p3reg:radio:0_clone', kind: radio, when: '{{ask.sanatoria_caso|is_in_corso}}', label: si forniscono gli estremi del pagamento di € 516}
-  - {id: 'r5c1p5reg:txt', kind: text, value: '{{ask.sanatoria_estremi}}', when: '{{ask.sanatoria_caso|is_in_corso}}', max: 9999, label: si forniscono gli estremi del pagamento di € 516}
-  - {id: 'r5c2p7reg:calendar_input', kind: date, value: '{{ask.sanatoria_pagamento_data|date_it}}', when: '{{ask.sanatoria_caso|is_in_corso}}', label: del}
+  - {id: 'r3c1p3reg:radio:0_clone', kind: radio, when: '{{ask.sanatoria_caso|is_in_corso}} {{ask.sanatoria_prova|is_estremi}}', label: si forniscono gli estremi del pagamento di € 516}
+  - {id: 'r5c1p5reg:txt', kind: text, value: '{{ask.sanatoria_estremi}}', when: '{{ask.sanatoria_caso|is_in_corso}} {{ask.sanatoria_prova|is_estremi}}', max: 9999, label: si forniscono gli estremi del pagamento
+      di € 516}
+  - {id: 'r5c2p7reg:calendar_input', kind: date, value: '{{ask.sanatoria_pagamento_data|date_it}}', when: '{{ask.sanatoria_caso|is_in_corso}} {{ask.sanatoria_prova|is_estremi}}', label: del}
+  - {kind: radio, when: '{{ask.sanatoria_caso|is_in_corso}} {{ask.sanatoria_prova|is_ricevuta}}', slot: 'none of its own: the receipt goes in copia attestazione versamento oneri, diritti e spese, which
+      takes only signed files (.p7m): the person''s', label: si allega la ricevuta del pagamento di € 516}
   - {kind: checkbox, when: '{{ask.sanatoria_caso|is_doppia_conformita}}', label: 'sanatoria di intervento soggetto a SCIA, in assenza della SCIA stessa'}
   - {kind: date, value: '{{ask.sanatoria_data|date_it}}', when: '{{ask.sanatoria_caso|is_doppia_conformita}}', label: realizzato in data}
-  - {kind: radio, when: '{{ask.sanatoria_caso|is_doppia_conformita}}', label: si forniscono gli estremi del pagamento}
-  - {kind: text, value: '{{ask.sanatoria_oblazione}}', when: '{{ask.sanatoria_caso|is_doppia_conformita}}', max: 9999, label: di Euro}
-  - {kind: date, value: '{{ask.sanatoria_pagamento_data|date_it}}', when: '{{ask.sanatoria_caso|is_doppia_conformita}}', label: del}
+  - {kind: radio, when: '{{ask.sanatoria_caso|is_doppia_conformita}} {{ask.sanatoria_prova|is_estremi}}', label: si forniscono gli estremi del pagamento}
+  - {kind: text, value: '{{ask.sanatoria_oblazione}}', when: '{{ask.sanatoria_caso|is_doppia_conformita}} {{ask.sanatoria_prova|is_estremi}}', max: 9999, label: di Euro}
+  - {kind: date, value: '{{ask.sanatoria_pagamento_data|date_it}}', when: '{{ask.sanatoria_caso|is_doppia_conformita}} {{ask.sanatoria_prova|is_estremi}}', label: del}
+  - {kind: radio, when: '{{ask.sanatoria_caso|is_doppia_conformita}} {{ask.sanatoria_prova|is_ricevuta}}', slot: 'none of its own: the receipt goes in copia attestazione versamento oneri, diritti e spese,
+      which takes only signed files (.p7m): the person''s', label: si allega la ricevuta del pagamento}
+  - {kind: number, value: '{{ask.sanatoria_oblazione}}', when: '{{ask.sanatoria_caso|is_doppia_conformita}} {{ask.sanatoria_prova|is_ricevuta}}', max: 9999, label: di euro}
 - section: Pagamento degli oneri
   go: Prosegui
   save: false
