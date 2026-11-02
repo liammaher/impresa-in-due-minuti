@@ -21,5 +21,7 @@
  "cambio_uso": "no",
  "paesaggio": "semplificata",
  "fatti": [],
- "progettista_altro": true
+ "progettista_altro": true,
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

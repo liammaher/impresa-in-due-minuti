@@ -23,5 +23,7 @@
  "progettista_altro": false,
  "paes_variante_numero": "PG/2025/0444444",
  "paes_variante_data": "2025-09-15",
- "paes_variante_ente": "Comune di Napoli"
+ "paes_variante_ente": "Comune di Napoli",
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

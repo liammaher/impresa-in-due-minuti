@@ -38,5 +38,6 @@
  "impresa_dopo": "false",
  "cliente_carica": "amministratore di condominio",
  "cliente_registro": "non necessita",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false
 }

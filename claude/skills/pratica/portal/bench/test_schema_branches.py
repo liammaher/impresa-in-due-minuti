@@ -46,8 +46,9 @@ def states():
     assert state("fine-lavori", "", "in forma parziale")[0] == "mapped"
     # The land register: a case ticks it since 2026-11-02 (the permesso's plot), not yet run.
     assert state("scia", "Dati catastali", "Nuovo Catasto Terreni")[0] == "case"
-    assert state("scia", "Qualifica e dati del procuratore", "all'Estero")[0] == "mapped"  # 2026-11-02
-    assert state("scia", "Dichiarazione relativa ai diritti di segreteria", "poiché esentati")[0] == "none"
+    # The procuratore born abroad: a CILA case ticks it since 2026-11-02 (the shared section).
+    st, who = state("scia", "Qualifica e dati del procuratore", "all'Estero")
+    assert st == "case" and "cila-fittizia" in who, (st, who)
 
 
 def required_choices():

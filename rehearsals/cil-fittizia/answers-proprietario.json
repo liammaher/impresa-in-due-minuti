@@ -18,5 +18,6 @@
  "sotto_200": "true",
  "intervento": "opere_temporanee",
  "paesaggio": "no",
- "fatti": []
+ "fatti": [],
+ "diritti_esente": false
 }

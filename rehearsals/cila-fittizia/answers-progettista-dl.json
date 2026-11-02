@@ -42,5 +42,6 @@
  "fatti": [],
  "altri_tecnici_dopo": "false",
  "impresa_dopo": "false",
- "progettista_altro": true
+ "progettista_altro": true,
+ "diritti_esente": false
 }

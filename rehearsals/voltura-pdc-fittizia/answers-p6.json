@@ -25,5 +25,7 @@
  "pdc_data": "2026-03-15",
  "soggetti_cambiati": "false",
  "cointestatario": true,
- "altri_cointestatari": false
+ "altri_cointestatari": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

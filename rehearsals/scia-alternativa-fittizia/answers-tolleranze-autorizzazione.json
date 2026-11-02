@@ -107,5 +107,6 @@
  "notifica_allegata": "false",
  "vvf_variante": "false",
  "scomputo": "false",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false
 }

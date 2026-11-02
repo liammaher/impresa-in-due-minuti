@@ -109,7 +109,9 @@ asks:
     propose: '{{ask.cambio_uso|sue_scia_cambio_uso}}'}
   scia_alt_tipo: {type: choice, question: 'Which works does the SCIA alternativa al permesso file (art. 23 c. 1 DPR 380/2001)? ristrutturazione edilizia (one of art. 10 c. 1 c); nuova costruzione piano
       attuativo (new building or ristrutturazione urbanistica under a piano attuativo with precise plano-volumetric rules); nuova costruzione strumento generale (new building directly under the town plan''s
-      precise plano-volumetric rules)', options: [ristrutturazione edilizia, nuova costruzione piano attuativo, nuova costruzione strumento generale], propose: '{{ask.intervento|sue_scia_alt_tipo}}'}
+      precise plano-volumetric rules); regionale (other works a regional law files by SCIA alternativa, art. 23 c. 01, named as the relazione tecnico-illustrativa names them)', options: [ristrutturazione
+        edilizia, nuova costruzione piano attuativo, nuova costruzione strumento generale, regionale], propose: '{{ask.intervento|sue_scia_alt_tipo}}'}
+  intervento_tipo: {type: text, question: The works' type as the relazione tecnico-illustrativa names it (one line)}
   barriere_accessibilita: {type: yes_no, group: barriere_requisiti, item: Accessibilità}
   barriere_visitabilita: {type: yes_no, group: barriere_requisiti, item: Visitabilità}
   barriere_adattabilita: {type: yes_no, group: barriere_requisiti, item: Adattabilità}
@@ -363,6 +365,9 @@ asks:
   fascia_aeroportuale_doc: {type: file, question: 'The airport fascia''s document: the self-certification, or the request for its assent (PDF)'}
   fascia_altro_doc: {type: file, question: 'The other fascia''s document: the self-certification, or the request for its assent (PDF)'}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
+  diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
+    propose: 'false'}
+  diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
   documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
   assenso_proprietario: {type: file, question: The owner's signed assent to the works (PDF)}
   notifica_preliminare: {type: file, question: The notifica preliminare already sent (PDF)}
@@ -1294,12 +1299,16 @@ sections:
   - {id: 'r13c1p19reg:chk', kind: checkbox, when: '{{ask.scia_alt_tipo|is_ristrutturazione_edilizia}}', label: 1. Interventi di ristrutturazione edilizia}
   - {kind: checkbox, when: '{{ask.scia_alt_tipo|is_nuova_costruzione_piano_attuativo}}', label: 2. Interventi di nuova costruzione o di ristrutturazione urbanistica}
   - {kind: checkbox, when: '{{ask.scia_alt_tipo|is_nuova_costruzione_strumento_generale}}', label: 3. Interventi di nuova costruzione qualora}
+  - {kind: checkbox, when: '{{ask.scia_alt_tipo|is_regionale}}', label: 4. Altri interventi individuati dalla legislazione regionale}
+  - {kind: text, value: '{{ask.intervento_tipo}}', when: '{{ask.scia_alt_tipo|is_regionale}}', max: 9999, label: specificare il tipo di intervento}
   - {kind: radio, when: '{{ask.scia_alt_tipo|is_ristrutturazione_edilizia}} {{ask.scia_cambio_uso|is_no}}', label: non comporta mutamento di destinazione d’uso}
   - {kind: radio, when: '{{ask.scia_alt_tipo|is_ristrutturazione_edilizia}} {{ask.scia_cambio_uso|is_no|not}}', label: comporta mutamento di destinazione d’uso}
   - {kind: radio, when: '{{ask.scia_alt_tipo|is_nuova_costruzione_piano_attuativo}} {{ask.scia_cambio_uso|is_no}}', label: non comporta mutamento di destinazione d’uso}
   - {kind: radio, when: '{{ask.scia_alt_tipo|is_nuova_costruzione_piano_attuativo}} {{ask.scia_cambio_uso|is_no|not}}', label: comporta mutamento di destinazione d’uso}
   - {kind: radio, when: '{{ask.scia_alt_tipo|is_nuova_costruzione_strumento_generale}} {{ask.scia_cambio_uso|is_no}}', label: non comporta mutamento di destinazione d’uso}
   - {kind: radio, when: '{{ask.scia_alt_tipo|is_nuova_costruzione_strumento_generale}} {{ask.scia_cambio_uso|is_no|not}}', label: comporta mutamento di destinazione d’uso}
+  - {kind: radio, when: '{{ask.scia_alt_tipo|is_regionale}} {{ask.scia_cambio_uso|is_no}}', label: non comporta mutamento di destinazione d’uso}
+  - {kind: radio, when: '{{ask.scia_alt_tipo|is_regionale}} {{ask.scia_cambio_uso|is_no|not}}', label: comporta mutamento di destinazione d’uso}
   - {kind: text, value: '{{ask.dettaglio_intervento}}', max: 500, label: e che consistono in}
 - section: Asseverazione SCIA Alternativa - stato legittimo
   fields:
@@ -1585,7 +1594,9 @@ sections:
 - section: Dichiarazione relativa ai diritti
   fields:
   - {id: 'r2c1p2reg:radio:0_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: non sono dovuti oneri}
-  - {id: 'r3c1p3reg:radio:1_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: poiché non previsti dal tariffario}
+  - {id: 'r3c1p3reg:radio:1_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente|not}}', label: poiché non previsti dal tariffario}
+  - {id: 'r3c2p4reg:radio:2_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente}}', label: poiché esentati}
+  - {id: 'r5c1p7reg:txta', kind: text, on_page: true, value: '{{ask.diritti_esenzione_motivo}}', when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente}}', max: 300, label: specificare la motivazione}
   - {id: 'r5c1p8reg:radio:3_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: sono dovuti oneri quali diritti o spese}
   - {id: 'r7c1p10reg:real', kind: number, value: '{{ask.diritti_euro}}', when: '{{ask.diritti_euro|positive}}', max: 11, label: per un totale di Euro}
   - {id: 'r8c1p13reg:radio:4_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: pagamento on line}

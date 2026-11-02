@@ -154,5 +154,7 @@
  "strumento_altro_zona": "B (inventata)",
  "strumento_altro_articolo": "12 (inventato)",
  "barriere_elaborati": "rehearsals/scia-fittizia/files/elaborati-barriere.pdf",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

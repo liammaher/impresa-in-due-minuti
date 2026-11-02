@@ -25,5 +25,6 @@
  "intervento": "opere_temporanee",
  "paesaggio": "no",
  "fatti": [],
- "impresa_dopo": "false"
+ "impresa_dopo": "false",
+ "diritti_esente": false
 }
