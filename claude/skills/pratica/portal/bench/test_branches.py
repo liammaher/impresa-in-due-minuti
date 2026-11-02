@@ -60,8 +60,10 @@ def _():
     # The CILA's "che i lavori sono/saranno eseguiti dall'impresa": the dictionary's "lavori
     # sono/saranno eseguiti dall" starts no box there.
     assert one("h) Impresa esecutrice", "che i lavori sono/saranno eseguiti")["state"] == "ticked"
-    # The permesso's g1 is filled by its own entry, not the SCIA's h1 one: its structural boxes aren't.
-    assert one("g1) Tecnici incaricati", "Progettista delle opere strutturali")["state"] == "unmapped"
+    # The permesso's g1 is filled by its own entry, not the SCIA's h1 one: its structural boxes
+    # are, its "tecnico incaricato" (a designer who isn't the one presenting) isn't yet.
+    assert one("g1) Tecnici incaricati", "Progettista delle opere strutturali")["state"] == "ticked"
+    assert one("g1) Tecnici incaricati", "tecnico incaricato")["state"] == "unmapped"
 
 
 @case("a choice no entry names is unmapped (the land register)")

@@ -47,3 +47,18 @@ entry says what to report and how it was checked, without personal data.
   proposal are one radio group, as on the SCIA (seen 2026-10-30). Art. 36 (works without the
   permesso) fills.
 - **Effect**: a permesso in sanatoria under art. 36-bis can't be filed complete on the portal.
+
+## Permesso: the burned-area line is one choice with the soil statement
+
+- **Where**: permesso di costruire, the asseverazione's quadro "qualità terreni, opere di
+  urbanizzazione, scarichi": "non interessa aree percorse dal fuoco ai sensi dell'art. 10 della
+  legge 353/2000".
+- **What happens**: the line is a radio of the same choice as the soil investigations' ("non
+  richiede indagini ambientali preventive", "a seguito delle preventive analisi ambientali", "è
+  stata oggetto di bonifica"): ticking it unticks the soil statement (seen 2026-11-01, on a
+  made-up draft, cancelled without saving).
+- **Effect**: a permesso states either its soil or that the area wasn't burned, never both.
+  Claude ticks the soil statement and leaves the other (the steps' `yours` says so).
+- **To report**: the two lines should be separate choices (the soil under D.Lgs. 152/2006, the
+  burned areas under art. 10 c. 1 L. 353/2000).
+

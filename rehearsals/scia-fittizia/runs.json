@@ -208,5 +208,11 @@
   "answers": "answers-impresa-dopo.json",
   "result": "filled",
   "seconds": 142.3
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-scavo-vvf.json",
+  "result": "filled",
+  "seconds": 148.7
  }
 ]

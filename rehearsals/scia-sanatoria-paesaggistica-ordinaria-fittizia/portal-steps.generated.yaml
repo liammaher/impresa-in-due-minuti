@@ -119,7 +119,7 @@ asks:
   prestazione_energetica: {type: yes_no, question: 'Are the works subject to the minimum energy-performance requirements?'}
   barriere: {type: yes_no, question: 'Are the works subject to the barriers rules of artt. 77 ff. DPR 380/2001 and DM 236/1989 (private buildings)?'}
   barriere_art82: {type: yes_no, question: 'Is it a private building open to the public, the works conforming to art. 82 DPR 380/2001 (as the relazione and drawings show)?'}
-  barriere_deroga: {type: yes_no, question: 'Are the works subject to the barriers rules but don''t meet them, so the SCIA condizionata asks for a deroga (its documents attached)?', propose: 'false'}
+  barriere_deroga: {type: yes_no, question: 'Are the works subject to the barriers rules but don''t meet them, so a deroga is asked (its documents attached)?', propose: 'false'}
   barriere_elaborati: {type: file, question: The drawings and relazione showing the barriers rules are met (art. 77 ff. or art. 82 DPR 380/2001) (PDF)}
   barriere_deroga_doc: {type: file, question: The documents for the barriers deroga (relazione tecnica and drawings) (PDF)}
   sanatoria_titolo: {type: choice, question: 'Is this pratica filed in sanatoria? nessuna (no); scia (a SCIA in sanatoria); permesso (a permesso di costruire in sanatoria)', options: [nessuna, scia, permesso],
@@ -156,13 +156,24 @@ asks:
   barriere_visitabilita: {type: yes_no, group: barriere_requisiti, item: Visitabilità}
   barriere_adattabilita: {type: yes_no, group: barriere_requisiti, item: Adattabilità}
   rinnovabili: {type: yes_no, question: 'Does the renewables obligation apply (D.Lgs. 28/2011: a new building or a major renovation), its respect shown in the drawings and the relazione tecnica?'}
+  rinnovabili_obblighi: {type: choice, question: 'Are the renewables obligations met? rispettati (in full, as the drawings show); in parte (in part: the technical impossibility of the rest shown in the
+      art. 125 relazione tecnica); impossibili (technically impossible in full, shown there)', options: [rispettati, in parte, impossibili], propose: rispettati, when: '{{ask.rinnovabili}}'}
   incentivo_energetico: {type: choice, question: 'Which energy incentive does the project use, certified in the relazione tecnica? nessuno; art 14 c6 (D.Lgs. 102/2014: thicker walls and roofs not counted,
       the energy index at least 20% lower); art 14 c7 (deroga to distances and heights, the transmittance limit at least 10% lower); bonus volumetrico (D.Lgs. 28/2011 art. 12: 5% more volume, renewables
       covering more than the obligation)', options: [nessuno, art 14 c6, art 14 c7, bonus volumetrico], propose: nessuno}
   acustica_passiva: {type: yes_no, question: 'Does the DPCM 5/12/1997 on buildings'' passive acoustic requirements apply (a new building, or one rebuilt)?'}
   vvf_valutazione: {type: yes_no, question: 'Does the project need the Vigili del Fuoco''s assessment (an activity of DPR 151/2011 cat. B or C, e.g. a residential building over 24 m)?', propose: 'false'}
-  scavo: {type: choice, question: 'Do the works produce excavated earth? nessuno (no excavation subject to the rules); riutilizzo in sito (reused where it is dug); rifiuti (handled as waste)', options: [
-      nessuno, riutilizzo in sito, rifiuti], propose: nessuno}
+  vvf_variante: {type: yes_no, question: 'Is it a variant to a project the Vigili del Fuoco already approved (their parere: its protocol and date), the changes not altering the fire-safety requirements
+      approved?', propose: 'false', when: '{{ask.vvf_valutazione|not}}'}
+  vvf_parere_protocollo: {type: text, question: 'The Vigili del Fuoco''s parere on the project: its protocol number'}
+  vvf_parere_data: {type: date, question: Its date}
+  scavo: {type: choice, question: 'Do the works produce excavated earth? nessuno (no excavation subject to the rules); sottoprodotti (used elsewhere as by-products, DPR 120/2017); riutilizzo in sito (reused
+      where it is dug); rifiuti (handled as waste)', options: [nessuno, sottoprodotti, riutilizzo in sito, rifiuti], propose: nessuno}
+  scavo_piano_utilizzo: {type: yes_no, question: 'Is it a large site (over 6000 m³ of excavated earth) subject to VIA or AIA, so the earth is used under the Piano di Utilizzo approved with them (DPR 120/2017
+      art. 9)? If not, the dichiarazione di utilizzo (artt. 21-22) covers it', when: '{{ask.scavo|is_sottoprodotti}}'}
+  scavo_via_ente: {type: text, question: 'Who issued the VIA or AIA approving the Piano di Utilizzo (e.g. Regione Campania)?'}
+  scavo_via_protocollo: {type: text, question: Its protocol number}
+  scavo_via_data: {type: date, question: Its date}
   scia_variata_numero: {type: text, question: 'The SCIA the variant changes: its number'}
   scia_variata_data: {type: date, question: Its date}
   scia_onerosa: {type: yes_no, question: 'Is a contributo di costruzione due (e.g. a change of use between categories, or works adding urban load)?', propose: 'false'}
@@ -248,8 +259,8 @@ asks:
   prg_specificare: {type: text, question: The town plan in force, default: Variante generale al PRG}
   prg_zona: {type: text, question: The PRG zone of the property}
   prg_articolo: {type: text, question: The article of the PRG's rules for that zone}
-  strumenti_altri: {type: yes_no, question: 'Besides the PRG, is the property in an area another planning instrument in force or in salvaguardia covers (an adopted PUC, a PUA, a piano particolareggiato
-      or di recupero, a P.I.P., a P.E.E.P., another)?', propose: 'false'}
+  strumenti_altri: {type: yes_no, question: 'Besides the PRG, is the property in an area another planning instrument in force or in salvaguardia covers (an adopted PUC, a PUA, a piano particolareggiato,
+      di lottizzazione or di recupero, a P.I.P., a P.E.E.P., a piano di settore, the Autorità di Bacino''s piano stralcio, the PTCP, a piano paesistico or a park''s plan, another)?', propose: 'false'}
   strumento_puc: {type: yes_no, group: strumenti, item: A PUC (Piano Urbanistico Comunale) adopted or approved}
   strumento_pua: {type: yes_no, group: strumenti, item: 'A PUA (piano urbanistico attuativo, L.R. Campania 16/2004 art. 26)'}
   strumento_particolareggiato: {type: yes_no, group: strumenti, item: A piano particolareggiato}
@@ -351,7 +362,8 @@ asks:
   rir_doc: {type: file, question: The documents for the Comitato Tecnico Regionale's assessment (PDF)}
   altri_vincoli_eco: {type: choice, question: 'Other ecological vincoli on the property (a sewage plant''s fascia di rispetto, or another)? nessuno; autocertificazione (the progettista self-certifies the
       works comply: attached); assenso (they need an assent: the request''s documents attached)', options: [nessuno, autocertificazione, assenso], propose: nessuno}
-  altri_vincoli_eco_tipo: {type: choice, question: 'Which vincolo? depuratori (a sewage plant''s fascia di rispetto); altro (another: named below)', options: [depuratori, altro]}
+  altri_vincoli_eco_tipo: {type: choice, question: 'Which vincolo? depuratori (a sewage plant''s fascia di rispetto); pozzi (a well''s or spring''s, art. 94 c. 1 and 6 D.Lgs. 152/2006); altro (another:
+      named below)', options: [depuratori, pozzi, altro]}
   altri_vincoli_eco_quale: {type: text, question: Which other ecological vincolo}
   altri_vincoli_eco_doc: {type: file, question: 'The documents for that vincolo: the self-certification or the request for its assent (PDF)'}
   fasce: {type: choice, question: 'Is the property in a fascia di rispetto of a road, a railway, a power line, a gas pipeline, a military site or an airport (tutela funzionale)? no; autocertificazione (the
@@ -414,6 +426,12 @@ asks:
   piano_planovolumetrico: {group: fatti, type: yes_no, item: 'La nuova costruzione o la ristrutturazione urbanistica è disciplinata da un piano attuativo con precise disposizioni plano-volumetriche dichiarate
       dal Comune, o (per una nuova costruzione) è in diretta esecuzione di uno strumento urbanistico generale che le contiene?'}
 supports:
+- if: '{{ask.scavo|is_sottoprodotti}}'
+  value: '{{ask.scavo_piano_utilizzo}}'
+  in:
+  - 'false'
+  else: 'The SCIA''s form has no line for excavated earth over 6000 m³ under VIA or AIA, used as by-products under a Piano di Utilizzo (DPR 120/2017 art. 9): works of that size go by permesso di costruire;
+    ask the SUE.'
 - if: '{{ask.sanatoria_titolo|is_permesso}}'
   value: '{{ask.pdc_sanatoria_caso}}'
   in:
@@ -504,6 +522,12 @@ supports:
   - 'true'
   else: 'A structural tolerance of minor or no relevance for public safety can be declared only once the regional control term has run out, with no open requests and no negative outcome: art. 34-bis c.
     3-bis DPR 380/2001.'
+- if: '{{ask.altri_vincoli_eco|is_nessuno|not}}'
+  value: '{{ask.altri_vincoli_eco_tipo}}'
+  in:
+  - depuratori
+  - altro
+  else: 'The SCIA''s form has no line of its own for a well''s fascia di rispetto (art. 94 D.Lgs. 152/2006): answer altro and name it.'
 rules:
   table: sue-napoli
   main: napoli/comune/scia-in-sanatoria
@@ -1316,7 +1340,8 @@ sections:
   - {kind: checkbox, when: '{{ask.prestazione_energetica}}', label: si allega la relazione tecnica sul rispetto delle prescrizioni in materia di risparmio energetico}
   - {kind: radio, when: '{{ask.rinnovabili|not}}', label: non è soggetto all'applicazione del d.lgs. n. 28/2011}
   - {kind: radio, when: '{{ask.rinnovabili}}', label: è soggetto all'applicazione del d.lgs. n. 28/2011}
-  - {kind: checkbox, when: '{{ask.rinnovabili}}', label: il rispetto delle prescrizioni in materia di utilizzo di fonti di energia rinnovabili}
+  - {kind: checkbox, when: '{{ask.rinnovabili}} {{ask.rinnovabili_obblighi|in_rispettati__in_parte}}', label: il rispetto delle prescrizioni in materia di utilizzo di fonti di energia rinnovabili}
+  - {kind: checkbox, when: '{{ask.rinnovabili}} {{ask.rinnovabili_obblighi|in_in_parte__impossibili}}', label: l'impossibilità tecnica di ottemperare}
   - {kind: radio, when: '{{ask.incentivo_energetico|is_art_14_c6}}', label: 'ricade nell''articolo 14, comma 6'}
   - {kind: checkbox, when: '{{ask.incentivo_energetico|is_art_14_c6}}', label: si certifica nella relazione tecnica una riduzione minima del 20}
   - {kind: radio, when: '{{ask.incentivo_energetico|is_art_14_c7}}', label: 'ricade nell''articolo 14, comma 7'}
@@ -1335,6 +1360,12 @@ sections:
   - {id: 'r10c1p10reg:radio:2_clone', kind: radio, when: '{{ask.acustica_passiva|not}}', label: non rientra nell'ambito dell'applicazione del d.P.C.M.}
   - {id: 'r11c1p11reg:radio:3_clone', kind: radio, when: '{{ask.acustica_passiva}}', label: rientra nell'ambito dell'applicazione del d.P.C.M.}
   - {id: 'r14c1p14reg:chk', kind: checkbox, when: '{{ask.scavo|is_nessuno}}', label: non sono soggette alla normativa vigente relativa ai materiali da scavo}
+  - {id: 'r15c1p15reg:chk', kind: checkbox, when: '{{ask.scavo|is_sottoprodotti}}', label: le opere comportano la produzione di materiali da scavo considerati come sottoprodotti}
+  - {id: 'r16c1p16reg:radio:4_clone', kind: radio, when: '{{ask.scavo|is_sottoprodotti}} {{ask.scavo_piano_utilizzo|not}}', label: le opere comportano la produzione di materiali da scavo per un volume inferiore
+      o uguale a quello}
+  - {id: 'r20c2p24reg:txt', kind: text, value: '{{ask.scavo_via_ente}}', when: '{{ask.scavo|is_sottoprodotti}} {{ask.scavo_piano_utilizzo}}', max: 9999, label: 'rilasciato da:'}
+  - {id: 'r22c2p30reg:txt', kind: text, value: '{{ask.scavo_via_protocollo}}', when: '{{ask.scavo|is_sottoprodotti}} {{ask.scavo_piano_utilizzo}}', max: 20, label: con prot.}
+  - {id: 'r22c3p32reg:calendar_input', kind: date, value: '{{ask.scavo_via_data|date_it}}', when: '{{ask.scavo|is_sottoprodotti}} {{ask.scavo_piano_utilizzo}}', label: in data}
   - {id: 'r23c1p35reg:chk', kind: checkbox, when: '{{ask.scavo|is_riutilizzo_in_sito}}', label: comportano la produzione di materiali da scavo che saranno riutilizzati}
   - {id: 'r25c1p37reg:chk', kind: checkbox, when: '{{ask.scavo|is_rifiuti}}', label: comportano la produzione di materiali da scavo che saranno gestiti}
   - {id: 'r24c1p36reg:chk', kind: checkbox, when: '{{ask.demolizioni}}', label: riguardano interventi di demolizione}
@@ -1342,9 +1373,12 @@ sections:
   - {id: 'r29c1p41reg:radio:7_clone', kind: radio, when: '{{ask.antincendio_soggetto}} {{ask.antincendio_deroga|not}}', label: è soggetto alle norme tecniche di prevenzione incendi}
   - {id: 'r30c1p42reg:radio:8_clone', kind: radio, when: '{{ask.antincendio_soggetto}} {{ask.antincendio_deroga}}', label: presenta caratteristiche tali da non consentire l'integrale osservanza}
   - {id: 'r31c1p43reg:chk', kind: checkbox, when: '{{ask.antincendio_soggetto}} {{ask.antincendio_deroga}}', label: si allega documentazione necessaria all'ottenimento della deroga}
-  - {id: 'r33c1p45reg:radio:9_clone', kind: radio, when: '{{ask.vvf_valutazione|not}}', label: non è soggetto alla valutazione del progetto da parte del Comando}
+  - {id: 'r33c1p45reg:radio:9_clone', kind: radio, when: '{{ask.vvf_valutazione|not}} {{ask.vvf_variante|not}}', label: non è soggetto alla valutazione del progetto da parte del Comando}
   - {id: 'r34c1p46reg:radio:10_clone', kind: radio, when: '{{ask.vvf_valutazione}}', label: è soggetto alla valutazione del progetto da parte del Comando}
   - {id: 'r35c1p47reg:chk', kind: checkbox, when: '{{ask.vvf_valutazione}}', label: si allega la documentazione necessaria alla valutazione del progetto}
+  - {id: 'r36c1p48reg:radio:11_clone', kind: radio, when: '{{ask.vvf_valutazione|not}} {{ask.vvf_variante}}', label: costituisce variante e il sottoscritto assevera}
+  - {id: 'r38c1p50reg:txt', kind: text, value: '{{ask.vvf_parere_protocollo}}', when: '{{ask.vvf_valutazione|not}} {{ask.vvf_variante}}', max: 9999, label: rilasciato con prot.}
+  - {id: 'r38c2p52reg:calendar_input', kind: date, value: '{{ask.vvf_parere_data|date_it}}', when: '{{ask.vvf_valutazione|not}} {{ask.vvf_variante}}', label: In data, nth: 2}
 - section: Asseverazione SCIA - Amianto
   fields:
   - {id: 'r4c1p4reg:radio:0_clone', kind: radio, when: '{{ask.amianto|not}}', label: non interessano parti di edifici con presenza di fibre di amianto}

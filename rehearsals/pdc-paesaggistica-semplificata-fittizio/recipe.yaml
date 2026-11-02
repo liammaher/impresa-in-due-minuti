@@ -22,6 +22,7 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request"
+  - "The asseverazione's \"non interessa aree percorse dal fuoco\" (qualità terreni) is one choice with the soil statement on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md); state it in the relazione tecnica if the SUE wants it"
   - "On Allega documenti: the portal's procura signed by the client and the Quadro riepilogativo (PdC DSC), the broadband infrastructure drawing (art. 135-bis DPR 380/2001: signed files only), the relazione paesaggistica semplificata (DPR 31/2017, Allegato D) with its drawings and photos (signed files only), the contributo's prospetto or the documents for the SUE to work it out (the permesso has no slot for them: under Allegati liberi), then everything signed digitally (.p7m)"
   - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
   - "The landscape authorization comes before the permesso (art. 146 c. 4 D.Lgs. 42/2004): the works start only once both are in"
