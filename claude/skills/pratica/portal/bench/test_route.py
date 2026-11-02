@@ -209,6 +209,23 @@ def sanatoria_in_tutela():
     assert not r["routed"] and "dopo la sanatoria" in r["unsupported"][0], r
 
 
+def sanatoria_cambio_uso():
+    """A change of use done without a title (2026-11-02) is legalized by the title it needed: one
+    unit's by the SCIA in sanatoria (art. 36-bis c. 1), a whole building's by the permesso in
+    sanatoria (art. 36 names the SCIA alternativa); without works between compatible categories
+    it is free, and a use the PRG doesn't allow is refused."""
+    base = {"intervento": "manutenzione_straordinaria", "cambio_uso": "stessa_categoria", "paesaggio": "no",
+            "fatti": ["sanatoria", "uso_ammesso_prg"]}
+    r = route.route(TABLE, base, REHEARSALS)
+    assert r["pratica"] == "scia-sanatoria-fittizia", r
+    r = route.route(TABLE, {**base, "cambio_uso": "intero_tra_categorie"}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+    r = route.route(TABLE, {**base, "intervento": "nessuna_opera", "cambio_uso": "tra_categorie"}, REHEARSALS)
+    assert not r["routed"] and r["unsupported"][0].startswith("This case needs no pratica"), r
+    r = route.route(TABLE, {**base, "fatti": ["sanatoria"]}, REHEARSALS)
+    assert not r["routed"] and "PRG" in r["unsupported"][0], r
+
+
 def rehearsal_cases_come_home():
     """Each rehearsal's answers files, read as its steps file reads the facts, route back to it
     (a case its own rules refuse is left out: it tests the refusal)."""
@@ -300,7 +317,7 @@ def plugin_layout():
 def main():
     tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, as_a_conversation,
              wrong_answers, gated_items_stay_unknown, own_words_kept_only_if_they_agree, missing_answers_file,
-             cila_reads_sanatoria_its_way, sanatoria_in_tutela,
+             cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso,
              rehearsal_cases_come_home, asks_as_the_table_asks, refusals_say_why, apart_is_the_persons,
              one_steps_file_per_combination, plugin_layout]
     for t in tests:

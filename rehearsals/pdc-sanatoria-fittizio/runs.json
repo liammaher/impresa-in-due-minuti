@@ -40,5 +40,17 @@
   "answers": "answers-tutela.json",
   "result": "filled",
   "seconds": 144.6
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-cambio-intero.json",
+  "result": "stopped",
+  "seconds": 37.6
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-cambio-intero.json",
+  "result": "filled",
+  "seconds": 171.8
  }
 ]

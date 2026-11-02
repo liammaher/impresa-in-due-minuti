@@ -565,7 +565,9 @@ supports:
   - nuova costruzione
   - ristrutturazione urbanistica
   - ristrutturazione edilizia
-  else: 'A permesso in sanatoria (art. 36 DPR 380/2001) is mapped for art. 10 works: not a Campania kind or a variant.'
+  - mutamento uso
+  - altro
+  else: 'A permesso in sanatoria (art. 36 DPR 380/2001) is mapped for art. 10 works and changes of use: not SCIA works asked as a permesso (the SCIA in sanatoria files them), a Campania kind or a variant.'
 - if: '{{ask.sanatoria_titolo|is_permesso}}'
   value: '{{ask.pdc_procedura}}'
   in:
@@ -872,8 +874,8 @@ sections:
       {{ask.scia_cambio_uso|is_intero_immobile}}', label: comporta mutamento di destinazione d’uso di un intero immobile}
   - {id: 'r8c1p8reg:radio:5_clone', kind: radio, when: '{{ask.pdc_tipo|is_facolta_scia}}', label: interventi assoggettati a Segnalazione Certificata di Inizio Attività}
   - {id: 'r10c1p10reg:txt', kind: text, value: '{{ask.intervento_tipo}}', when: '{{ask.pdc_tipo|is_facolta_scia}}', max: 200, label: (specificare)}
-  - {kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.sanatoria_titolo|is_permesso}}', label: 'intervento realizzato, ai sensi dell''articolo
-      36'}
+  - {kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia__mutamento_uso__altro}} {{ask.sanatoria_titolo|is_permesso}}', label: 'intervento realizzato,
+      ai sensi dell''articolo 36'}
   - {kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}}', label: intervento in deroga alle previsioni}
   - {kind: checkbox, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}} {{ask.deroga_densita}}', label: alla densità edilizia}
   - {kind: text, label: (specificare), anchor: alla densità edilizia, value: '{{ask.deroga_densita_quale}}', when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}}
@@ -902,13 +904,14 @@ sections:
   - {kind: radio, when: '{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_scia_alternativa}}', label: segnalazione certificata/denuncia di inizio attività alternativa}
   - {kind: text, value: '{{ask.pdc_numero}}', when: '{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_scia_alternativa}}', max: 20, label: n., nth: 3}
   - {kind: date, value: '{{ask.pdc_data|date_it}}', when: '{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_scia_alternativa}}', label: del, nth: 3}
-  - {kind: radio, when: '{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}}', label: attività che rientrano nell'ambito del procedimento ordinario}
+  - {kind: radio, when: '{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.sanatoria_titolo|is_permesso|not}}', label: attività che rientrano nell'ambito del procedimento ordinario}
   - {kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_convenzionato}}', label: attività che rientrano nell'ambito
       del procedimento ordinario}
   - {kind: checkbox, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_convenzionato}}', label: permesso di costruire convenzionato}
   - {kind: checkbox, when: '{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.pdc_tipo|is_sottotetti}}', label: interventi di recupero abitativo dei sottotetti}
   - {kind: checkbox, when: '{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.pdc_tipo|is_parcheggi}}', label: realizzazione di parcheggi in aree libere}
-  - {kind: checkbox, when: '{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.pdc_tipo|is_mutamento_uso}}', label: 'mutamento di destinazione d''uso, ai sensi della l.r.'}
+  - {kind: checkbox, when: '{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.pdc_tipo|is_mutamento_uso}} {{ask.sanatoria_titolo|is_permesso|not}}', label: 'mutamento di destinazione d''uso,
+      ai sensi della l.r.'}
 - section: b) Titolarità dell'intervento
   fields:
   - {id: r2c1p2reg, kind: select, value: altro, when: '{{ask.titolo|titolo_is_altro}}', label: Il richiedente dichiara di avere titolo}
