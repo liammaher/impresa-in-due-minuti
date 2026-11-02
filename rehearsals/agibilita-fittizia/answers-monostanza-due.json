@@ -47,5 +47,6 @@
  "igienico_5bis_caso": "monostanza due",
  "igienico_adattabilita": "true",
  "igienico_5ter": "progetto alternativo",
- "agibilita_attestante": "direttore dei lavori"
+ "agibilita_attestante": "direttore dei lavori",
+ "diritti_esente": false
 }

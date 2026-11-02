@@ -17,5 +17,6 @@
  "multi_responsabili_tecnici": "false",
  "diritti_euro": "0",
  "essere_responsabile_qualifica_professionale": "false",
- "fatti": []
+ "fatti": [],
+ "diritti_esente": false
 }

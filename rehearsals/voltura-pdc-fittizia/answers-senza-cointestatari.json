@@ -23,5 +23,7 @@
  "pdc_numero": "999/2026",
  "pdc_data": "2026-03-15",
  "soggetti_cambiati": "false",
- "cointestatario": false
+ "cointestatario": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

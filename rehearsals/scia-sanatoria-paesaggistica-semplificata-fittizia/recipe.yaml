@@ -27,7 +27,8 @@ yours:
   - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
   - "On Allega documenti: the Elaborati richiesti per la sanatoria (stato legittimo, stato di fatto and the comparison), the portal's procura signed by the client, the relazione paesaggistica semplificata (DPR 31/2017, Allegato D) with its drawings and photos, then everything signed digitally (.p7m)"
   - "The works under way stop until the SUE says the landscape authorization is in; the facade works start only then"
-  - "Pay the €516 sanction (art. 37 c. 5), the imposta di bollo and the diritti; upload the receipts"
+  - "Pay the €516 sanction (art. 37 c. 5) and the diritti; upload the receipts"
+  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "Sign and send (Firma e invio); keep the receipt"
 rules:
   main: napoli/comune/scia-in-sanatoria

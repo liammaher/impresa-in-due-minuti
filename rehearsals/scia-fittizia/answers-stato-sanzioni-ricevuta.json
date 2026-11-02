@@ -87,5 +87,6 @@
  "direttore_lavori": "da nominare",
  "impresa_dopo": "false",
  "vvf_variante": "false",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false
 }

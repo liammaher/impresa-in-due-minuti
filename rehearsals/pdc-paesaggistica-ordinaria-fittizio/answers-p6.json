@@ -104,6 +104,8 @@
  "strutture_allegate": "false",
  "barriere_art82": "false",
  "progettista_altro": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
  "vincolo": "art 136 and 142",
  "vincolo_136_lettera": "c) e d)",
  "vincolo_136_provvedimento": "D.M. fittizio PROVA NON INVIARE del 01/01/1960",

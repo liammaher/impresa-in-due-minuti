@@ -113,5 +113,7 @@
  "strutture_incaricato": "true",
  "dl_strutture": "false",
  "scarico_doc": "rehearsals/pdc-fittizio/files/documentazione-scarico.pdf",
- "progettista_altro": true
+ "progettista_altro": true,
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

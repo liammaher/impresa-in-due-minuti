@@ -104,5 +104,7 @@
  "catasto_terreni": true,
  "cliente_carica": "amministratore unico",
  "nuova_costruzione_tipo": "e1",
- "cliente_registro": "non ancora iscritta"
+ "cliente_registro": "non ancora iscritta",
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

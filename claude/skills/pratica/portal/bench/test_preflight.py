@@ -599,6 +599,61 @@ def group_two_choices():
         os.chdir(here)
 
 
+def exemptions_and_other_kinds():
+    """The bollo: proposed "no" for any client (a farmer can be exempt too), an exemption ticks its
+    reason whatever its spacing, a virtual payment its radio and upload, and the person's step
+    follows the case. The diritti's exemption and its reason (a text box, never a textarea the
+    page can't find); the permesso's "altro" and the SCIA alternativa's regional works; a studio's
+    other architect named as `t`, one with nothing in the vault reported, not guessed."""
+    root = HERE.parents[4] / "rehearsals"
+    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+
+    def case(name, a):
+        steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
+        v = values(json.loads((root / name / f"answers-{a}.json").read_text()) if isinstance(a, str) else a, fields, steps)
+        r = run.preflight(steps, v, made_up=True)
+        return r, ([(p["label"] or "", p["value"]) for p in run.plan(steps, v)] if r["ready"] else [])
+    semplificata = "paesaggistica-semplificata-fittizia"
+    try:
+        for a in ("p6", "bollo-virtuale"):
+            base = json.loads((root / semplificata / f"answers-{a}.json").read_text())
+            base.pop("bollo_esenzione")
+            r, _ = case(semplificata, base)
+            assert ("bollo_esenzione", "no") in [(p["key"], p["proposal"]) for p in r["proposals"]], (a, r["proposals"])
+        r, b = case(semplificata, "esenzioni")
+        assert ("Il pagamento non è dovuto poiché esentati", None) in b and not any(l.startswith("Il pagamento è dovuto") for l, _ in b), b
+        assert ("per la seguente motivazione", run.BOLLO_ESENZIONE["cooperativa sociale"]) in b, b
+        assert ("poiché esentati", None) in b and any(l == "specificare la motivazione" and v for l, v in b), b
+        assert any(y.startswith("No imposta di bollo to pay") for y in r["yours"]) and not any("pagoPA" in y for y in r["yours"]), r["yours"]
+        spaced = json.loads((root / semplificata / "answers-esenzioni.json").read_text()) | {"bollo_esenzione": "cooperativa sociale "}
+        _, b2 = case(semplificata, spaced)
+        assert [x for x in b2 if x[0].startswith(("Il pagamento", "per la seguente"))] == [x for x in b if x[0].startswith(("Il pagamento", "per la seguente"))], b2
+        r, b = case(semplificata, "bollo-virtuale")
+        assert any(l.startswith("Per gli Enti autorizzati") for l, _ in b), b
+        assert ("dichiarazione relativa all'assolvimento dell'imposta di bollo", "rehearsals/scia-fittizia/files/dichiarazione-bollo-virtuale.pdf") in b, b
+        r, _ = case(semplificata, "p6")
+        assert "Pay the imposta di bollo on pagoPA as the portal asks" in r["yours"], r["yours"]
+        # The reason's box, wherever the crawl didn't see it (a SUAP draft), goes as the text box it reads as.
+        for name in ("dehors-fittizio", "cila-fittizia"):
+            steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
+            box = [f for s in steps["sections"] for f in s["fields"] if f.get("label") == "specificare la motivazione"]
+            assert box and all(f["kind"] == "text" for f in box), (name, box)
+        _, b = case("pdc-fittizio", "altro")
+        assert ("altro non indicato nei punti precedenti", None) in b and ("interventi di cui all'articolo 10", None) in b, b
+        _, b = case("scia-alternativa-fittizia", "regionale")
+        assert ("4. Altri interventi individuati dalla legislazione regionale", None) in b, b
+        assert not any(l.startswith("1. Interventi di ristrutturazione") for l, _ in b), b
+        _, b = case("cila-fittizia", "procuratore-estero")
+        assert ("Nome", "Sofia") in b and ("Stato", "Argentina") in b, b
+        a = json.loads((root / "cila-fittizia" / "answers-procuratore-estero.json").read_text())
+        r, _ = case("cila-fittizia", a | {"people": a["people"] | {"t": "nessuno"}})
+        assert not r["ready"] and "nessuno" in r["missing"][0]["why"], r["missing"]
+    finally:
+        os.chdir(here)
+
+
 def every_sue_case_ready():
     """Every SUE rehearsal's every answers file pre-flights ready, but those refused on purpose: a
     case that stops being ready drops out of the counts without a word (schema_branches.py skips
@@ -678,6 +733,7 @@ CASES = [
     ("every SUE case is ready but those refused on purpose; only the registered company can't pass on made-up data", every_sue_case_ready),
     ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
     ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused", scelte_follow_the_case),
+    ("the bollo and diritti exemptions, the virtual bollo, the permesso's altro, the SCIA alternativa's regional works, a studio's other architect", exemptions_and_other_kinds),
 ]
 
 

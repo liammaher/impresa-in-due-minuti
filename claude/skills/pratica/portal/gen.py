@@ -521,7 +521,8 @@ def fill(entry, as_name, c, recipe, name):
         if f is None and d.get("on_page"):
             # Shown only by a combination of choices the crawl didn't try: by label, found on
             # the page (and skipped there too if it isn't, `if_present`).
-            fields.append({k: v for k, v in d.items() if k not in ("note", "on_page")})
+            fields.append({k: v for k, v in d.items() if k not in ("note", "on_page")}
+                          | ({"kind": "text"} if d["kind"] == "textarea" else {}))
             continue
         if f is None and d.get("if_present"):
             continue  # a choice only some pratiche show

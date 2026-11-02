@@ -112,5 +112,7 @@
  "vvf_parere_data": "2024-06-20",
  "scarico_protocollo": "PG/2025/0054321 (inventato)",
  "scarico_data": "2025-04-15",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

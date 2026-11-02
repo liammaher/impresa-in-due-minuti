@@ -13,5 +13,7 @@
  "dehors_mq": "12",
  "stagionale": "false",
  "diritti_euro": "250",
- "area_privata_uso_pubblico": "false"
+ "area_privata_uso_pubblico": "false",
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

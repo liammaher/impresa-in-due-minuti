@@ -31,5 +31,6 @@
  "cambio_dl": true,
  "cambio_ditta": true,
  "nuovo_dl": "ARCH. MARIO FITTIZIO",
- "nuovo_esecutore": "EDIL FITTIZIA S.R.L."
+ "nuovo_esecutore": "EDIL FITTIZIA S.R.L.",
+ "diritti_esente": false
 }

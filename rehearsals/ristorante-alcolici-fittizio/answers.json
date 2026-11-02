@@ -14,5 +14,6 @@
   "alcol_vino",
   "alcol_birra"
  ],
- "stagionale": "false"
+ "stagionale": "false",
+ "diritti_esente": false
 }

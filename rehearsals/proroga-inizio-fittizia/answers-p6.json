@@ -13,5 +13,7 @@
  "proroga_giorni": "365",
  "proroga_motivo": "Ritardo nella consegna delle strutture prefabbricate da parte del fornitore, per cause non imputabili al titolare.",
  "diritti_euro": "0",
- "titolo_tipo": "permesso di costruire"
+ "titolo_tipo": "permesso di costruire",
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

@@ -104,5 +104,6 @@
  "scavo_piano_utilizzo": "false",
  "vvf_parere_protocollo": "VVF/2024/9876 (inventato)",
  "vvf_parere_data": "2024-06-20",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false
 }

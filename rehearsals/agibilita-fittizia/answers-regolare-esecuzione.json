@@ -52,5 +52,6 @@
  "ascensore_comunicazione": "sca",
  "igienico_24_5bis": "false",
  "igienico_5quater": "false",
- "agibilita_attestante": "direttore dei lavori"
+ "agibilita_attestante": "direttore dei lavori",
+ "diritti_esente": false
 }
