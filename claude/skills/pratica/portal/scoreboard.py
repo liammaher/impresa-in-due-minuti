@@ -18,6 +18,8 @@ import re
 import sys
 from pathlib import Path
 
+import yaml
+
 import catalogue as cat
 import gen
 import route
@@ -238,7 +240,8 @@ def sue_completeness(reh, status):
         if v["sportello"] != "sue":
             continue
         text = (REHEARSALS / name / "recipe.yaml").read_text()
-        msgs = [m.group(1) for m in re.finditer(r'else:\s*"((?:[^"\\]|\\.)*)"', text)]
+        # As YAML reads them: an escaped quote left raw counted one refusal twice (2026-11-02).
+        msgs = [yaml.safe_load('"' + m.group(1) + '"') for m in re.finditer(r'else:\s*"((?:[^"\\]|\\.)*)"', text)]
         try:
             steps = gen.generate(gen.load_yaml(REHEARSALS / name / "recipe.yaml"))
             msgs += [c["else"] for c in steps["supports"] if "else" in c and c["else"] not in msgs]

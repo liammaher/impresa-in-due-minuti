@@ -32,7 +32,8 @@
 # defects.yaml id, the boxes of a case a portal defect blocks (the recipe refuses the case with it).
 # `made_up:` on a box says why made-up data can't pass it (the portal checks it against a real
 # register): pre-flight --made-up warns, so a rehearsal's stop or the portal's warning there (the
-# run's `alerts`) isn't read as a regression.
+# run's `alerts`) isn't read as a regression. `made_up_stops: true` where the portal refuses to save
+# it (not just flags it): pre-flight lists it in `made_up_stops`, and bench/rerun.py won't send the case.
 #
 # Roles (answers.json "people"): no prefix and `t:` are the studio's own (the business and its
 # titolare, the architect), `c:` the client (a person, or a company or condominium with
@@ -1301,7 +1302,7 @@ sections:
       # By label: the crawls pair this "Codice Fiscale" with the company's own below, and "Data"
       # is also "Data nascita"; on the page each is the first.
       - {kind: radio, label: "DITTA/SOCIETA'/IMPRESA", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
-      - {kind: radio, label: ISCRITTA ALLA CCIAA, made_up: "the portal looks the company's codice fiscale up in the Registro Imprese at Salva (\"Il CF inserito non è presente nel RI\"): a made-up company stops there", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: radio, label: ISCRITTA ALLA CCIAA, made_up_stops: true, made_up: "the portal looks the company's codice fiscale up in the Registro Imprese at Salva (\"Il CF inserito non è presente nel RI\"): a made-up company stops there", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: text, label: Codice Fiscale, by_label: true, value: "{{c:business.codice_fiscale,c:business.partita_iva|first}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: select, label: "Camera di commercio di:", value: "{{c:business.cciaa|provincia_nome}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: text, label: Numero REA, on_page: true, value: "{{c:business.rea|rea_num}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
@@ -2407,8 +2408,9 @@ sections:
   # marca's line, which "per l'autorizzazione" opens below it, copies the first's: its serial
   # box is titled "numero seriale (1)" too (read on the portal 2026-10-30), so crawl.js took it
   # for the first's, moved. Both lines go by label, the first then the second (nth). Exemptions
-  # aren't mapped: every reason the dropdown lists is an entity's (ETS, public bodies, sports
-  # clubs; ONLUS repealed from 1 January 2026), and the SUE files for a private person only.
+  # aren't mapped yet: every reason the dropdown lists is an entity's (ETS, public bodies, sports
+  # clubs; ONLUS repealed from 1 January 2026), and a SUE client can be one since company and
+  # condominium clients (the `c:` business.*): a client exempt from the bollo isn't asked yet.
   # "Only the 16 € for the application" (silenzio assenso) takes one of its dropdown's procedures:
   # fire brigade, emissions, renewables, hotels, drains, public land, the structural deposits
   # (the Genio Civile's in Campania). None is one of Napoli's 27 SUE operations (sue-wizard.json).

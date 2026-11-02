@@ -1062,10 +1062,15 @@ def preflight(steps, values, urls=None, made_up=False):
     if made_up:
         # A box the portal checks against a real register (a company's codice fiscale in the
         # Registro Imprese): made-up data stops there, whatever the mapping (`made_up` in the dictionary).
+        # Ready all the same (a real case passes there), but a batch of rehearsals skips it
+        # (bench/rerun.py): one was sent and stopped there (2026-11-02).
+        report["made_up_stops"] = []
         for sec in steps["sections"]:
             for f in sec["fields"]:
                 if f.get("made_up") and truthy(values.render(f.get("when", "true")) or ""):
                     report["warnings"].append(f"made-up data: {sec['section']}: {f['made_up']}")
+                    if f.get("made_up_stops"):
+                        report["made_up_stops"].append(f"{sec['section']}: {f['made_up']}")
     report["pane_ok"] = sum(x["bytes"] or 0 for x in report["files"] if "link" not in x) <= PAGE_FILES_LIMIT
     report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + filing_yours(steps, sportello)
                        + asked_yours(steps, values) + apart(steps, values))

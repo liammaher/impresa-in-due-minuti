@@ -564,6 +564,41 @@ def catasto_terreni():
         os.chdir(here)
 
 
+def every_sue_case_ready():
+    """Every SUE rehearsal's every answers file pre-flights ready, but those refused on purpose: a
+    case that stops being ready drops out of the counts without a word (schema_branches.py skips
+    it): a new question proposed instead of answered from the vault would have stopped some 170 at
+    once (the land register, 2026-11-02). And only the registered company's case can't pass the
+    portal on made-up data (`made_up_stops`)."""
+    root = HERE.parents[4] / "rehearsals"
+    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+    refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "This case is another pratica",
+               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Only art. 36 ",
+               ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia",
+               ("cila-fittizia", "answers-impresa-dopo.json"): "The CILA names its building firm"}
+    here, seen, stops = os.getcwd(), 0, set()
+    os.chdir(HERE.parents[4])
+    try:
+        for d in sorted(root.iterdir()):
+            f = d / "portal-steps.generated.yaml"
+            if not f.is_file() or yaml.safe_load((d / "recipe.yaml").read_text()).get("sportello") != "sue":
+                continue
+            steps = yaml.safe_load(f.read_text())
+            for a in sorted(d.glob("answers*.json")):
+                seen += 1
+                r = run.preflight(steps, values(json.loads(a.read_text()), fields, steps), made_up=True)
+                if (d.name, a.name) in refused:
+                    assert r["unsupported"][0].startswith(refused[d.name, a.name]), (d.name, a.name, r["unsupported"])
+                    continue
+                assert r["ready"], (d.name, a.name, {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]})
+                if r["made_up_stops"]:
+                    stops.add((d.name, a.name))
+    finally:
+        os.chdir(here)
+    assert seen > 150, seen
+    assert stops == {("cila-fittizia", "answers-societa.json")}, stops
+
+
 def linked_files():
     """A file over the pane's 256 KB is pane_ok once it goes by link (page --file-urls)."""
     with tempfile.TemporaryDirectory() as tmp:
@@ -604,6 +639,7 @@ CASES = [
     ("the agibilità's systems: their dichiarazione is filled, other certificates asked system by system, asked only with systems", agibilita_systems),
     ("the agibilità's systems decide its slots: the dichiarazione's only with one, collaudo and atto notorio their own", agibilita_slots),
     ("the SCIA in sanatoria: in progress and double conformity ready, art. 36-bis c. 1 and pre-1977 variants refused", sanatoria_cases),
+    ("every SUE case is ready but those refused on purpose; only the registered company can't pass on made-up data", every_sue_case_ready),
     ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
     ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused", scelte_follow_the_case),
 ]
