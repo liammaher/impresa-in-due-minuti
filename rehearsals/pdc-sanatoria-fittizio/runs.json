@@ -52,5 +52,17 @@
   "answers": "answers-cambio-intero.json",
   "result": "filled",
   "seconds": 171.8
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-zona-a.json",
+  "result": "stopped",
+  "seconds": 81.6
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-zona-a.json",
+  "result": "filled",
+  "seconds": 153.5
  }
 ]

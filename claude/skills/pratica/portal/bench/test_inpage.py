@@ -319,6 +319,14 @@ def main():
             assert r["result"] == "filled", r
         case("a suggestion list still fading out over the next box is closed, not a stop", fading_list)
 
+        def calendar_left_open():
+            # A typed date leaves the calendar open over the next box; a person's click elsewhere
+            # would close it, so the runner does (the permesso's sanatoria quadro, 2026-11-02).
+            PORTAL.reset()
+            r = fill(browser, base, steps(base, start="/portal.html?calendar=1"), answers)
+            assert r["result"] == "filled", r
+        case("a calendar a typed date left open over the next box is closed, not a stop", calendar_left_open)
+
         def signed_slot():
             # The portal's "required" under a slot that takes only signed files is the person's;
             # under a plain one it stops the run, and the snapshot names the slot by its title.

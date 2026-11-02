@@ -107,6 +107,10 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
 
 ## What the portal does that bit us
 
+- **A calendar left open.** A date box opens jQuery UI's calendar (`div#ui-datepicker-div`), which
+  a person's click elsewhere closes and a script's `click()` doesn't: it covered the next box (the
+  permesso's sanatoria quadro, 2026-11-02). `closeLists` closes it, with the suggestion lists,
+  before every box and before Salva (`bench/test_inpage.py`, `?calendar=1`).
 - **Two origins.** The front office is `https://suap.impresainungiorno.gov.it/fnsuap/...`; the
   pane's storage (runner, steps, crawls, known fingerprints) lives there. `www.impresainungiorno.gov.it`
   is the public site: its `/fnsuap/cmd/home` says "Non trovato" and its pages show the guest view,
