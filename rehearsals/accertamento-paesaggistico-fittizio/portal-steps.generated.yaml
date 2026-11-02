@@ -303,8 +303,10 @@ sections:
   - {id: r5c4p13reg, kind: select, value: ITALIA, label: Cittadinanza}
   - {id: 'r7c1p15reg:txt', kind: text, value: '{{t:identity.birth_comune|upper}}', max: 30, label: Nato a}
   - {id: 'r7c2p17reg:calendar_input', kind: text, value: '{{t:identity.date_of_birth|date_it}}', label: il}
-  - {id: 'r9c1p19reg:radio:0_clone', kind: radio, label: in Italia}
-  - {id: 'r9c2p21reg:txt', kind: text, value: '{{t:identity.birth_province}}', max: 2, label: Provincia}
+  - {id: 'r9c1p19reg:radio:0_clone', kind: radio, when: '{{t:identity.birth_province|estero|not}}', label: in Italia}
+  - {id: 'r9c2p21reg:txt', kind: text, value: '{{t:identity.birth_province}}', when: '{{t:identity.birth_province|estero|not}}', max: 2, label: Provincia}
+  - {id: 'r9c3p23reg:radio:1_clone', kind: radio, when: '{{t:identity.birth_province|estero}}', label: all'Estero}
+  - {id: r9c4p25reg, kind: select, value: '{{t:identity.birth_country}}', when: '{{t:identity.birth_province|estero}}', label: Stato}
   - {id: 'r11c1p27reg:txt', kind: text, value: '{{t:identity.codice_fiscale}}', max: 16, label: Cod.Fiscale}
   - {id: 'r14c1p32reg:txt', kind: text, value: '{{t:residenza.comune|upper}}', max: 30, label: Residente in}
   - {id: 'r14c2p34reg:txt', kind: text, value: '{{t:residenza.provincia}}', max: 2, label: Provincia, nth: 2}
