@@ -335,6 +335,12 @@ def main():
             rs = next(b for b in r2["snapshot"]["boxes"] if b["id"] == "rs_txt")
             assert rs["label"] == "ragione sociale" and rs.get("required") and rs["state"] == "empty", rs
             assert box["label"] == "procura speciale" and box["required"] and box["accepts"] == "pdf;pdf.p7m", box
+            assert box["state"] == "empty", box
+            # A slot the portal hasn't flagged: named by its title, not its wrapper's "false"; not
+            # required for the "OBBLIGATORIO" in its title; filled, since its cell names a file.
+            held = next(b for b in r["snapshot"]["boxes"] if b["id"] == "fibra_input")
+            assert held["label"].startswith("elaborato dimostrativo della fibra") and not held.get("required") \
+                and held["state"] == "filled", held
             assert ".pdf" not in json.dumps(r["snapshot"]), "a file's name in the snapshot"
         case("a required slot taking only signed files is the person's; a plain one stops, named by its title", signed_slot)
 

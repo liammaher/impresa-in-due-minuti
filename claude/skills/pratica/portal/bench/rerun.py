@@ -221,8 +221,10 @@ if (!pvAlready) window.pvBatchRun = (async () => {
     // moved and loose: the ids that named another box, the labels worth a look (what a gen.py
     // change is checked by). gaps: a stopped run's empty boxes the portal wants (labels only,
     // from its snapshot, which holds no value), so the stop names them without opening the draft.
+    // Not a slot taking only signed files: the person's (2026-11-02, they hid the one missing slot).
+    const signed = (b) => b.kind === "file" && !!b.accepts && b.accepts.split(";").every((x) => x.endsWith(".p7m"));
     const gaps = ((r.snapshot && r.snapshot.boxes) || []).filter((b) => b.required && b.state !== "filled"
-      && b.state !== "checked").map((b) => `${b.kind} ${b.label || b.id}`);
+      && b.state !== "checked" && !signed(b)).map((b) => `${b.kind} ${b.label || b.id}`);
     done.push({ name, result: r.result, error: r.error || null, at: r.at, sections: r.sections.length,
       verify_seconds: r.verify_seconds ?? null, total_seconds: r.total_seconds, url: r.url,
       moved: r.moved || [], loose: r.loose || [], retries: (r.retries || []).length, ...(gaps.length ? { gaps } : {}) });

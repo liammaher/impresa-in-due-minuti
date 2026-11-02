@@ -79,10 +79,17 @@ if (location.search.includes("req=1")) {
 const slot = new URLSearchParams(location.search).get("slot");
 if (slot) {
   const tr = document.createElement("tr");
-  tr.innerHTML = '<td><label class="labelDynaFormControl">Procura speciale</label></td><td><div id="form:r3c1:dynaForm:procura">' +
+  // As the portal does, an upload widget's wrapper carries a title of its own: the message once
+  // the screen is checked, else "false". The second slot holds a file and isn't flagged, though its
+  // title says "OBBLIGATORIO" (the broadband one's, 2026-11-02).
+  tr.innerHTML = '<td><label class="labelDynaFormControl">Procura speciale</label></td><td><div id="form:r3c1:dynaForm:procura" title="Il valore è obbligatorio">' +
     '<input type="file" id="form:r3c1:dynaForm:procura_input"> Tipologie ammesse: ' + (slot === "signed" ? "jpg.p7m;pdf.p7m" : "pdf;pdf.p7m") +
     ' <span class="error-message-text">Il valore è obbligatorio</span></div></td>';
-  document.querySelector("#allega + table").tBodies[0].append(tr);
+  const held = document.createElement("tr");
+  held.innerHTML = '<td><label class="labelDynaFormControl">Elaborato dimostrativo della fibra ottica (OBBLIGATORIO per nuove costruzioni)</label></td>' +
+    '<td><div id="form:r4c1:dynaForm:fibra" title="false"><input type="file" id="form:r4c1:dynaForm:fibra_input"> Tipologie ammesse: pdf;pdf.p7m' +
+    ' fibra.pdf Rimuovi</div></td>';
+  document.querySelector("#allega + table").tBodies[0].append(tr, held);
 }
 // ?twins=1: two required slots whose titles share a start, the signed-only one's the other's
 // prefix (the semplificata's, 2026-11-01): only the signed one is the person's.
@@ -90,7 +97,7 @@ if (location.search.includes("twins=1")) {
   for (const [id, title, types] of [["rps", "Relazione Paesaggistica Semplificata", "jpg.p7m;pdf.p7m"],
                                     ["rpsdoc", "Relazione paesaggistica semplificata e documentazione necessaria per il rilascio", "pdf;pdf.p7m"]]) {
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td><label class="labelDynaFormControl">${title}</label></td><td><div id="form:r9c1:dynaForm:${id}">` +
+    tr.innerHTML = `<td><label class="labelDynaFormControl">${title}</label></td><td><div id="form:r9c1:dynaForm:${id}" title="Il valore è obbligatorio">` +
       `<input type="file" id="form:r9c1:dynaForm:${id}_input"> Tipologie ammesse: ${types}` +
       ' <span class="error-message-text">Il valore è obbligatorio</span></div></td>';
     document.querySelector("#allega + table").tBodies[0].append(tr);

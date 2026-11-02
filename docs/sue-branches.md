@@ -12,7 +12,7 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 6 | left empty on purpose |
-| law | 25 | closed by law to new cases (the piano casa): refused as the law's, not a gap |
+| law | 25 | closed by law to new cases (the piano casa, a repealed rule): refused as the law's, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
 | unmapped | 74 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
