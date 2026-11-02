@@ -51,7 +51,8 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    shown otherwise. `bench/plan_diff.py` says what the change does to each case (its fill plan
    before and after). A new question the existing cases reach makes their pre-flight propose
    or ask it: answer it in each as the case did before, and plan_diff shows them unchanged, so
-   their recorded runs still stand.
+   their recorded runs still stand. Add the keys as text: rewriting a file with `json.dump` reflows
+   its inline lists, and the diff of 84 files buries the answers (2026-11-01).
 4. **Pre-flight** with made-up answers (`answers-p6.json`) and the P6 fixture's values
    (`--values rehearsals/cila-fittizia/fixture-p6.json`, the fixture as it is): `run.py preflight --made-up`
    (the rehearsal's files are made up: Napoli's file rules only warn, below), from the repo's root:
@@ -60,7 +61,8 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    README (`| Date | Browser | Result |`): what stopped it and what fixed it, then the
    filled run.
 6. **Tests:** `bench/test_gen.py` (add a case for what the pratica taught), `test_preflight.py`,
-   `test_inpage.py` when inpage.js changed, `test_route.py` for a recipe with `rules:`.
+   `test_inpage.py` when inpage.js changed, `test_route.py` for a recipe with `rules:`. Each is a
+   script, run with the pratica venv's Python (`~/.cache/pratica-portal/venv/bin/python`), not pytest.
 
 ## From the facts to the steps file: `route.py`
 
@@ -97,8 +99,9 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   radios under one another name each other: name them by the question beside them
   (`on_page` when the crawl labels them only "sì"). A label "si" or "no" matches only a whole
   word: as a prefix, "no" was also "non ha rilevanza strutturale", which declared tolerances
-  show above the sanatoria's no, so `nth: 3` missed it (2026-10-30). Other short labels stay
-  prefixes ("Tel" is "Telefono").
+  show above the sanatoria's no, so `nth: 3` missed it (2026-10-30). A whole word still starts
+  sentences: the contributo's "SI" (opere a scomputo) is also "si impegna a corrispondere" above it,
+  so it's `nth: 2` (2026-11-01). Other short labels stay prefixes ("Tel" is "Telefono").
 - **Boxes that move.** A tick that opens rows above the box renumbers it (the paesaggistica's
   art. 136): gen.py sends it by label. The crawl's `moved` pairs two same-label boxes wrongly
   at times; a pair whose new id was on the page already is not a move.
@@ -124,6 +127,11 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   deposited), so a slot gets the `when` of every box that brings it, and a box that adds a
   slot (a system's collaudo or atto notorio) is mapped with it: offline mapping doesn't see
   either, so a new case runs to Allega documenti before it counts (2026-10-31).
+  A sibling form's slot title is a guess: the same "si allega" may add a slot on one form and none
+  on another (the permesso has none for a barriers deroga or a scomputo proposal, where the SCIA and
+  the SCIA alternativa have one, 2026-11-02). An `on_page` slot that isn't there stops the run ("0
+  fields with this label"): read the draft's slots (`slotsOf`, *Attachments screens*) and write
+  what the box adds, or why it adds none, as its `slot:`.
 - **Assents asked with a pratica.** On Napoli's SUE a SCIA condizionata (the Soprintendenza,
   a park, a vincolo) gives no start date, and an assent that is its own operation (a landscape
   authorization) is selected with the pratica in the wizard, not attached to it.
@@ -148,6 +156,9 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   the architect's): fill it by label from its first box (`anchor`, `block: 1`). A block counts
   as the page finally shows it: the SCIA's other direttore dei lavori opens above the structural
   designer's, so the director is filled first and the designer is then `block: 2` (2026-11-01).
+  A `block: 2` exists only once the tick that opens the block above it is done, so its lines come
+  after that tick in the dictionary (gen.py keeps their order): the permesso's g1 had the designer's
+  before the director's tick, and the run found one block (2026-11-02).
 - **A firm block's field may carry its own `when`** (the Cassa edile's rows, only for a firm
   enrolled with one): gen.py puts it after the block's. Its rows come first, so the INPS's and
   INAIL's "sede di" and "codice impresa" count after them.
@@ -160,10 +171,17 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   its own text ("e che consistono in", the crawl's `context`): the counter changes as it fills.
 - **Radios with their own names can still be one choice.** The permesso's asseverazione keeps
   only one of its two opening radios after Salva: the read-back says so; keep the one it keeps.
+  A line that reads as a question of its own can be one choice with another's: the permesso's
+  "non interessa aree percorse dal fuoco" with the soil statements, so ticking it unticks "non
+  richiede indagini" (2026-11-02). Where the form's own choice can't say both, it's a portal
+  defect (`defects.yaml`, `pdc-aree-fuoco`): left unticked and in `yours`, never filled around.
 - **A portal document's box reads "Scarica il documento"** (the procura, the DSC): the
   attachments screen's `theirs` names it, so its "required" isn't the run's error; nor is one
   under any slot that takes only signed files (.p7m), the person's to sign and attach. A stop's
-  snapshot names each slot by its title, with the types it takes and whether it's required.
+  snapshot names each slot by its title, with the types it takes, whether it's required and
+  whether it holds a file. An upload widget's wrapper has a title of its own (the portal's message
+  once the screen is checked, else "false" or "true"), which is never the slot's; a slot is
+  required by the message, not by a title that says "OBBLIGATORIO" (the broadband one, 2026-11-02).
 - **A file box's cell names the file once it's in.** Name an upload by the row above it (the
   crawl's `context`), not by its cell ("Tipologie ammesse"), or the read-back can't find it.
 - **The portal's own errors:** "errore inatteso", a 503 for maintenance, a fresh load that
@@ -288,11 +306,15 @@ reload, and bundle what's left: a bundle clears the tab's results.
 The queue goes into the bundle by number: each later run of a procedure is what differs from its
 first, so name order (queue-10 before queue-2) broke a batch of 14 pieces (2026-10-31).
 A stopped run lists its `gaps`: the empty boxes the portal wants, by label, from the runner's
-snapshot (no values), so a stop names them without opening the draft (2026-10-31). `--values`
+snapshot (no values), so a stop names them without opening the draft (2026-10-31). A slot holding a
+file isn't one, nor one taking only signed files (the person's): until 2026-11-02 every slot was
+listed, filled or not, which hid the one missing. `--values`
 takes the fixture as it is. After a batch, run `record.js` in the pane and pipe what it prints (names
 and results, no values) into `rerun.py --record -`: each run goes in its rehearsal's `runs.json`: schema_branches.py
-counts a box as filled on the portal only from there. The batch clears the runner's review from
-the page when it ends.
+counts a box as filled on the portal only from there. Stopped runs are recorded too. Record a batch
+before bundling the next (a bundle clears the tab's results), and leave `--date` out for a batch
+run today: it defaults to today (a guessed date filed a batch under the day before, 2026-11-02).
+The batch clears the runner's review from the page when it ends.
 
 ## Crawling: `catalogue.py pane --bundle`
 
