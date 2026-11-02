@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (186 cases in all, 185 with a recorded filled run).
+  case (188 cases in all, 187 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -241,7 +241,7 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `no_mutamento_destinazione_uso` | non comportano mutamento di destinazione d’uso di una singola unità i… | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_stessa_categoria` | comportano mutamento di destinazione d’uso di una singola unità immob… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_tra_categorie` | comportano mutamento di destinazione d’uso di una singola unità immob… | m | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_intero_immobile_stessa_categoria` | comportano mutamento di destinazione d’uso di un intero immobile all’… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_intero_immobile_stessa_categoria` | comportano mutamento di destinazione d’uso di un intero immobile all’… | h | filled on the portal | 2 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_oltre_500_mq` | 2%, per le U.I. > 500 mq di superficie utile ; | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_500_a_300_mq` | 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_300_a_100_mq` | 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; | h | mapped, no case yet |  |
@@ -488,7 +488,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_variazione_essenziale` | variante in corso d’opera a SCIA che si configura come variazione ess… | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `senza_opere_categoria_singola_unita` | senza opere (o con opere riconducibili agli interventi di cui all'art… | h | filled on the portal | 2 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `senza_opere_tra_categorie_singola_unita` | senza opere (o con opere riconducibili agli interventi di cui all'art… | h | filled on the portal | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `con_opere_categoria_singola_unita` | con opere riconducibili agli interventi di cui all'articolo 6-bis di… | h | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `con_opere_categoria_singola_unita` | con opere riconducibili agli interventi di cui all'articolo 6-bis di… | h | filled on the portal | 2 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `con_opere_tra_categorie_singola_unita` | con opere riconducibili agli interventi di cui all'articolo 6-bis di… | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `con_opere` | con opere riconducibili agli interventi di cui di cui all'articolo 6-… | h | mapped, no case yet |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `senza_opere` | senza opere (o con opere riconducibili agli interventi di cui all'art… | h | mapped, no case yet |  |
@@ -531,11 +531,11 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `no_notifica` | dichiara che l'intervento non è soggetto all'invio della notifica | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `(nothing)` | dichiara che l'intervento è soggetto all'invio della notifica | l | filled on the portal | 9 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `no_mutamento_destinazione_uso_straordinaria` | Si specifica che l’intervento non comporta mutamento di destinazione… | m | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_straordinaria` | mutamento di destinazione d'uso, nel rispetto delle eventuali normati… | l | filled on the portal | 2 |
+| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_straordinaria` | mutamento di destinazione d'uso, nel rispetto delle eventuali normati… | l | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `no_mutamento_destinazione_uso_restauro` | Si specifica che l’intervento non comporta mutamento di destinazione… | m | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_restauro` | mutamento di destinazione d'uso, nel rispetto delle eventuali normati… | l | filled on the portal | 2 |
+| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_restauro` | mutamento di destinazione d'uso, nel rispetto delle eventuali normati… | l | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `no_mutamento_destinazione_uso_ristrutturazione` | Si specifica che l’intervento non comporta mutamento di destinazione… | m | filled on the portal | 4 |
-| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_ristrutturazione` | mutamento di destinazione d'uso, nel rispetto delle eventuali normati… | l | filled on the portal | 2 |
+| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_ristrutturazione` | mutamento di destinazione d'uso, nel rispetto delle eventuali normati… | l | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_oltre_500_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_500_a_300_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | l | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_300_a_100_mq` | TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMI 1-BIS E 1-TER, PRIMO PERIODO: | l | filled on the portal | 1 |
