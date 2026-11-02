@@ -388,7 +388,10 @@ asks:
     type: choice
     question: "What is being renewed: a semplificata (DPR 31/2017) or an ordinaria (art. 146 D.Lgs. 42/2004)?"
     options: [semplificata, ordinaria]
-  paes_rinnovo_variazioni: {type: yes_no, question: "Does the renewal change the project?", propose: "false"}
+  paes_rinnovo_variazioni: {type: yes_no, question: "Does the renewal change the project, or have new protection prescriptions come in since the authorization?", yours: "In the renewal's section, attach the relazione paesaggistica semplificata for the changes, signed digitally (.p7m)"}
+  paes_variante_numero: {type: text, question: "That authorization's number"}
+  paes_variante_data: {type: date, question: "Its date"}
+  paes_variante_ente: {type: text, question: "The body that issued it (e.g. Comune di Napoli)", propose: "Comune di Napoli"}
   attivita_svolta: {type: text, question: "The new holder's occupation or business (60 characters)"}
   soggetti_cambiati: {type: yes_no, question: "Will the works' direttore or firm change with the new holder?", propose: "false"}
   nuovo_dl: {type: text, question: "The new direttore dei lavori's name"}
@@ -1398,9 +1401,10 @@ sections:
 
 
   # The architect, from the studio vault's titolare. Prefilled with the SPID login's name and
-  # CF, overwritten here.
+  # CF, overwritten here. Born abroad (birth province EE, as the client's): "all'Estero" and the
+  # Stato it switches on, in the "Nato a" row.
   - section: Qualifica e dati del procuratore
-    leave: [Fax, Stato]
+    leave: [Fax]
     fields:
       - {kind: select, label: Qualifica del procuratore, value: PROFESSIONISTA INCARICATO}
       - {kind: text, label: Nome, value: "{{t:identity.first_name}}"}
@@ -1409,8 +1413,10 @@ sections:
       - {kind: select, label: Cittadinanza, value: ITALIA}
       - {kind: text, label: Nato a, value: "{{t:identity.birth_comune|upper}}"}
       - {kind: text, label: il, value: "{{t:identity.date_of_birth|date_it}}"}
-      - {kind: radio, label: in Italia}
-      - {kind: text, label: Provincia, value: "{{t:identity.birth_province}}"}
+      - {kind: radio, label: in Italia, when: "{{t:identity.birth_province|estero|not}}"}
+      - {kind: text, label: Provincia, value: "{{t:identity.birth_province}}", when: "{{t:identity.birth_province|estero|not}}"}
+      - {kind: radio, label: all'Estero, when: "{{t:identity.birth_province|estero}}"}
+      - {kind: select, label: Stato, value: "{{t:identity.birth_country}}", when: "{{t:identity.birth_province|estero}}"}
       - {kind: text, label: Cod.Fiscale, value: "{{t:identity.codice_fiscale}}"}
       - {kind: text, label: Residente in, value: "{{t:residenza.comune|upper}}"}
       - {kind: text, label: Provincia, nth: 2, value: "{{t:residenza.provincia}}"}
@@ -2197,10 +2203,20 @@ sections:
       - {kind: text, label: Citare estremi del provvedimento, value: "{{ask.vincolo_136_provvedimento}}", when: "{{ask.vincolo|is_art_136_and_142}}"}
       - {kind: text, label: "dell'art. 142", value: "{{ask.vincolo_142_lettera}}", when: "{{ask.vincolo|is_art_136_and_142}}"}
       - {kind: checkbox, label: "dell'art. 134", when: "{{ask.vincolo|is_art_134}}"}
+      # A variant to a landscape authorization already issued: that one's number, date and body.
+      - {kind: checkbox, label: "In caso di intervento in VARIANTE", when: "{{ask.paes_variante}}"}
+      - {kind: text, label: Num., value: "{{ask.paes_variante_numero}}", when: "{{ask.paes_variante}}"}
+      - {kind: date, label: Data, value: "{{ask.paes_variante_data|date_it}}", when: "{{ask.paes_variante}}"}
+      - {kind: text, label: Ente, value: "{{ask.paes_variante_ente}}", when: "{{ask.paes_variante}}"}
 
-  # Its renewal (DPR 31/2017 art. 7): the authorization that expired and what kind it was. A
-  # renewal that changes the project opens more and is refused by its recipe.
+  # Its renewal (DPR 31/2017 art. 7): the authorization that expired and what kind it was. Only
+  # an ordinaria's renewal offers design changes (or new protection prescriptions): its box opens
+  # an upload of the relazione paesaggistica semplificata, signed only (.p7m): the person's.
   - section: Qualificazione dell'intervento di rinnovo
+    leave: ["Allega Relazione paesaggistica semplificata"]
+    theirs: ["Allega Relazione paesaggistica semplificata"]
+    supports:
+      - {if: "{{ask.paes_rinnovo_di|is_semplificata}}", when: "{{ask.paes_rinnovo_variazioni|not}}", else: "The portal's renewal of a semplificata authorization has no box for design changes (only an ordinaria's has one): ask the SUE how to file it."}
     fields:
       - {kind: text, label: Num., value: "{{ask.paes_protocollo}}"}
       - {kind: date, label: Data, value: "{{ask.paes_data|date_it}}"}
@@ -2208,6 +2224,7 @@ sections:
       - {kind: text, label: Ente, value: "{{ask.paes_ente}}"}
       - {kind: radio, label: "L'istanza di rinnovo riguarda Autorizzazione Paesaggistica Semplificata", when: "{{ask.paes_rinnovo_di|is_semplificata}}"}
       - {kind: radio, label: "L'istanza di rinnovo riguarda l'Autorizzazione Paesaggistica, rilasciata ai sensi dell'articolo 146", when: "{{ask.paes_rinnovo_di|is_ordinaria}}"}
+      - {kind: checkbox, label: sono richieste variazioni progettuali, when: "{{ask.paes_rinnovo_di|is_ordinaria}} {{ask.paes_rinnovo_variazioni}}"}
 
   # Voltura of a permesso di costruire to a new holder (the client, `c:`): the permit and its
   # holder until now, the deed that passed the property, the property, where the new holder

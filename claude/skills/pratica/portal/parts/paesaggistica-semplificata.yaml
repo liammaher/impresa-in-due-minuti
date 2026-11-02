@@ -14,9 +14,6 @@ attachments:
     # signed-only "Relazione Paesaggistica Semplificata" (read on their filled drafts 2026-11-01).
     # A CILA or a CIL has no such box, so its recipe drops the slot (`drop: true`).
     - {kind: file, label: Relazione paesaggistica semplificata e documentazione necessaria, value: "{{ask.relazione_semplificata_doc}}", on_page: true}
-supports:
-  - when: "{{ask.paes_variante|not}}"
-    else: "So far only for a new authorization: the variant of one already issued isn't run yet."
 # The case it adds to the main pratica's P6 answers (a null drops one): a property under art. 136
 # and 142, a new authorization. Each combination's recipe adds its works (`gen.py --answers`).
 answers:

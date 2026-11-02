@@ -564,6 +564,41 @@ def catasto_terreni():
         os.chdir(here)
 
 
+def group_two_choices():
+    """A variant to a landscape authorization ticks its box and gives that one's details; an
+    ordinaria's renewal with design changes ticks its box, a semplificata's is refused (no box);
+    an architect born abroad (birth province EE) is "all'Estero" with the Stato, not "in Italia"."""
+    root = HERE.parents[4] / "rehearsals"
+    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+
+    def labels(name, a, flds=fields, section=None):
+        steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
+        v = values(json.loads((root / name / f"answers-{a}.json").read_text()) if isinstance(a, str) else a, flds, steps)
+        r = run.preflight(steps, v, made_up=True)
+        return r, [(p["label"], p["value"]) for p in run.plan(steps, v) if section is None or p["section"].startswith(section)] if r["ready"] else []
+    try:
+        _, b = labels("paesaggistica-semplificata-fittizia", "variante", section="Ambito")
+        assert ("In caso di intervento in VARIANTE", None) in b and ("Num.", "PG/2025/0444444") in b, b
+        _, b = labels("paesaggistica-semplificata-fittizia", "p6", section="Ambito")
+        assert not any(l == "In caso di intervento in VARIANTE" for l, _ in b), b
+        _, b = labels("rinnovo-paesaggistica-fittizia", "variazioni", section="Qualificazione")
+        assert any(l == "sono richieste variazioni progettuali" for l, _ in b), b
+        a = json.loads((root / "rinnovo-paesaggistica-fittizia" / "answers-p6.json").read_text())
+        r, _ = labels("rinnovo-paesaggistica-fittizia", a | {"paes_rinnovo_variazioni": True})
+        assert any("has no box for design changes" in u for u in r["unsupported"]), r["unsupported"]
+        # The studio's titolare (chiara) born in Buenos Aires.
+        abroad = fields | {"chiara:identity.birth_province": "EE", "chiara:identity.birth_country": "ARGENTINA",
+                           "chiara:identity.birth_comune": "Buenos Aires"}
+        _, b = labels("cila-fittizia", "p6", abroad, "Qualifica e dati del procuratore")
+        assert ("all'Estero", None) in b and ("Stato", "ARGENTINA") in b and not any(l == "in Italia" for l, _ in b), b
+        _, b = labels("cila-fittizia", "p6", fields, "Qualifica e dati del procuratore")
+        assert ("in Italia", None) in b and not any(l == "Stato" for l, _ in b), b
+    finally:
+        os.chdir(here)
+
+
 def every_sue_case_ready():
     """Every SUE rehearsal's every answers file pre-flights ready, but those refused on purpose: a
     case that stops being ready drops out of the counts without a word (schema_branches.py skips
@@ -639,6 +674,7 @@ CASES = [
     ("the agibilità's systems: their dichiarazione is filled, other certificates asked system by system, asked only with systems", agibilita_systems),
     ("the agibilità's systems decide its slots: the dichiarazione's only with one, collaudo and atto notorio their own", agibilita_slots),
     ("the SCIA in sanatoria: in progress and double conformity ready, art. 36-bis c. 1 and pre-1977 variants refused", sanatoria_cases),
+    ("a landscape variant, a renewal with changes (refused for a semplificata), an architect born abroad", group_two_choices),
     ("every SUE case is ready but those refused on purpose; only the registered company can't pass on made-up data", every_sue_case_ready),
     ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
     ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused", scelte_follow_the_case),
