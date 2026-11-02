@@ -1577,7 +1577,10 @@ sections:
 
   # The progettista's relazione (her asseverazione and signature are the signed CILA).
   - section: Relazione Tecnica di Asseverazione
-    leave: [specificare il tipo di intervento, Comunicazioni, Autorità competente, Tipologia di atto, Note]
+    # A tolerance's "bassa sismicità" row (zones 3 and 4) never holds in Napoli, zona 2 (DGR Campania
+    # 5447/2002): the seismic row ticked is the one for zones 1 and 2.
+    leave: [specificare il tipo di intervento, Comunicazioni, Autorità competente, Tipologia di atto, Note,
+            dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa]
     supports:
       - {if: "{{ask.tolleranze}}", value: "{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}", in: ["true"], else: "Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4)."}
       - {if: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}", value: "{{ask.toll_sismica}}", in: [autorizzazione, silenzio assenso], else: "A structural tolerance relevant for public safety (art. 94-bis c. 1 a) can be declared only with the Genio Civile's seismic authorization (art. 94 c. 2) or its silenzio assenso (c. 2-bis): art. 34-bis c. 3-bis DPR 380/2001."}
@@ -3111,6 +3114,8 @@ sections:
   # relazione declares), and the tolerances (the CILA's block,
   # by label: crawled apart from the first question, its ids would be offsets).
   - section: Asseverazione SCIA Alternativa - stato legittimo
+    # The tolerance's "bassa sismicità" row never holds in Napoli, zona 2 (as the SCIA's, above).
+    leave: [dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa]
     supports:
       - {if: "{{ask.tolleranze}}", value: "{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}", in: ["true"], else: "Declared construction tolerances need at least one kind (art. 34-bis or 34-ter c. 4)."}
       - {if: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}}", value: "{{ask.toll_sismica}}", in: [autorizzazione, silenzio assenso], else: "A structural tolerance relevant for public safety (art. 94-bis c. 1 a) can be declared only with the Genio Civile's seismic authorization (art. 94 c. 2) or its silenzio assenso (c. 2-bis): art. 34-bis c. 3-bis DPR 380/2001."}
