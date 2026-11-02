@@ -1124,5 +1124,30 @@ def _():
     assert probs and "start its `when` with that choice's first term" in probs[0], probs
 
 
+@case("the permesso's g1: the designer's second block comes after the director's tick that opens the first; its slots aren't the SCIA's")
+def _():
+    import json
+    import run
+    steps = generated("pdc-fittizio")
+    sec = section(steps, "g1) Tecnici incaricati")
+    order = [(f["kind"], f.get("label"), f.get("block"), str(f.get("value"))) for f in sec["fields"]]
+    tick = next(i for i, (k, l, _, _) in enumerate(order) if k == "radio" and l == "si")
+    second = [i for i, (_, _, b, v) in enumerate(order) if b == 2 and "{{s:" in v]
+    # A block 2 exists only once the director's block has opened above it (read 2026-11-02).
+    assert second and min(second) > tick, (tick, second)
+    # The permesso has no slot for a barriers deroga or a scomputo proposal; the SCIA
+    # alternativa has the scomputo's (read on each screen, 2026-11-02).
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    def slots(name, answers):
+        steps = generated(name)
+        v = run.Values(json.loads((REH / name / answers).read_text()), fields=fields, asks=steps.get("asks"))
+        assert run.preflight(steps, v, made_up=True)["ready"]
+        return [p["label"] for p in run.plan(steps, v) if p["kind"] == "file"]
+    pdc = slots("pdc-fittizio", "answers-strumenti-barriere.json")
+    assert not any(l.startswith(("Documentazione per la richiesta di deroga", "Proposta di progetto")) for l in pdc), pdc
+    alt = slots("scia-alternativa-fittizia", "answers-scomputo-pozzi.json")
+    assert "Proposta di progetto per la realizzazione delle opere di urbanizzazione" in alt, alt
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

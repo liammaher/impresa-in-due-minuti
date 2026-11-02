@@ -254,16 +254,20 @@
   }
 
   // An attachments slot, as its box's own texts tell: its title, the types it takes
-  // ("Tipologie ammesse: pdf.p7m;..."), whether the portal says it's required. Never the name of
-  // a file in it (a cell with one reads "<name> Rimuovi").
+  // ("Tipologie ammesse: pdf.p7m;..."), whether the portal says it's required, whether it holds a
+  // file. Never the name of a file in it (a cell with one reads "<name> Rimuovi"). The upload
+  // widget's wrapper has a title of its own: the portal's message once it has checked the screen,
+  // else "false" (or "true"), which named every unflagged slot "false" (2026-11-02). Required is
+  // the message only: the broadband slot's title reads "(OBBLIGATORIO per nuove costruzioni…)".
   function slotOf(box) {
     const texts = win().eval(`(${steps.label_js})`)(box);
     const types = texts.map((t) => /Tipologie ammesse:\s*([\w.;]+)/i.exec(t)).find(Boolean);
     const accepts = types ? types[1].split(";").filter(Boolean) : [];
-    const title = texts.find((t) => t && !/^(il valore|la descrizione|tipologie ammesse|scarica il documento)/.test(norm(t)) &&
+    const title = texts.find((t) => t && !/^(il valore|la descrizione|tipologie ammesse|scarica il documento|true$|false$)/.test(norm(t)) &&
       !/rimuovi|\.(pdf|p7m|jpe?g|png|dwf|svg|xml|zip|tiff?)\b/i.test(t)) || "";
+    const cell = box.closest("td");
     return { title, accepts, signed_only: accepts.length > 0 && accepts.every((x) => x.endsWith(".p7m")),
-      required: texts.some((t) => /obbligatori/.test(norm(t))) };
+      required: texts.some((t) => MESSAGE.test(norm(t))), holds: !!cell && /\bRimuovi\b/.test(cell.innerText) };
   }
 
   // ".error-message-text" is the portal's message under a field ("Il valore è obbligatorio").
@@ -978,7 +982,7 @@
       .map((e) => {
         const kind = kindOf(e);
         const state = kind === "radio" || kind === "checkbox" ? (e.checked ? "checked" : "unchecked")
-          : kind === "file" ? "file" : e.value ? "filled" : "empty";
+          : kind === "file" ? (slotOf(e).holds ? "filled" : "empty") : e.value ? "filled" : "empty";
         // A slot's box is named by its title, never by its cell: that reads "<file name> Rimuovi"
         // once a file is in, and its first text is the portal's "required".
         const slot = kind === "file" || /file_dropzone/.test(e.id) ? slotOf(e) : null;
