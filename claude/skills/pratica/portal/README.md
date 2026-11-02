@@ -102,6 +102,10 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   show above the sanatoria's no, so `nth: 3` missed it (2026-10-30). A whole word still starts
   sentences: the contributo's "SI" (opere a scomputo) is also "si impegna a corrispondere" above it,
   so it's `nth: 2` (2026-11-01). Other short labels stay prefixes ("Tel" is "Telefono").
+  A dropdown the portal has flagged required takes "Il valore è obbligatorio" as its title, and its
+  cell lists its options: neither is its label. The Scheda anagrafica's Forma giuridica re-renders the
+  company block and flags the sede's empty boxes, so its Provincia counted as no "Provincia" until
+  2026-11-02 ("2 fields with this label", three runs).
 - **Boxes that move.** A tick that opens rows above the box renumbers it (the paesaggistica's
   art. 136): gen.py sends it by label. The crawl's `moved` pairs two same-label boxes wrongly
   at times; a pair whose new id was on the page already is not a move.

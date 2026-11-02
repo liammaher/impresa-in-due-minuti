@@ -31,7 +31,9 @@
 # defects.yaml id, the boxes of a case a portal defect blocks (the recipe refuses the case with it).
 #
 # Roles (answers.json "people"): no prefix and `t:` are the studio's own (the business and its
-# titolare, the architect), `c:` the client, `o:` the owner company, `r:` its legale
+# titolare, the architect), `c:` the client (a person, or a company or condominium with
+# business.*: its property and procura are its own), `cr:` the person declaring for a client
+# company or condominium (its legale rappresentante or administrator), `o:` the owner company, `r:` its legale
 # rappresentante, `f1:`/`f2:` the firms, `s:` the structural designer, `d:` a direttore dei
 # lavori who isn't the architect, `a:`/`a2:`/`a3:` other technicians appointed for the works
 # and `ad:`/`ad2:`/`ad3:` the firm each is employed by.
@@ -87,6 +89,19 @@ asks:
     type: text
     question: "The client's title to the property, in one word (proprietario, comproprietario, usufruttuario, amministratore di condominio, locatario, comodatario, ...)"
     propose: "{{c:immobile.titolo}}"
+  # A client company or condominium (`c:` with business.*): who declares for it (`cr:`), in the
+  # Scheda anagrafica's Carica, and whether it is in the Registro delle imprese when it has no REA.
+  cliente_carica:
+    type: choice
+    question: "What is the person declaring for the client company (`cr:`) to it? legale rappresentante; amministratore unico; amministratore delegato; presidente cda (presidente del consiglio di amministrazione); amministratore di condominio (the client is a condominium)"
+    options: [legale rappresentante, amministratore unico, amministratore delegato, presidente cda, amministratore di condominio]
+    propose: "{{ask.titolo|carica_proposta}}"
+  cliente_rea_data: {type: date, question: "When was the client company entered in the REA (the visura camerale's data di iscrizione)?"}
+  cliente_registro:
+    type: choice
+    question: "The client company has no REA in the vault: non ancora iscritta (being registered in the Registro delle imprese); non necessita (never registered: a condominium, an association, an ente)?"
+    options: [non ancora iscritta, non necessita]
+    propose: "{{ask.cliente_carica|registro_proposto}}"
   # Whether anyone else's assent is needed (a.1 or a.2): an owner usually holds it alone, a
   # tenant or a co-owner doesn't.
   titolo_esclusivo:
@@ -359,6 +374,7 @@ asks:
   # Communicating the INAD address is optional: the Comune reads INAD itself (art. 6-quater
   # CAD), so it is filled only when the person asks for it.
   domicilio_inad: {type: yes_no, question: "Is the client's PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?", default: "false"}
+  domicilio_inipec: {type: yes_no, question: "Is the client company's PEC (business.pec) its domicilio digitale in INI-PEC, to be communicated on the form?", default: "false"}
   bollo_marche: {type: yes_no, question: "Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?", propose: "false"}
   bollo_seriale: {type: text, question: "The marca da bollo for the application: its serial number (14 digits)"}
   bollo_data: {type: date, question: "Its date"}
@@ -1208,30 +1224,149 @@ asks:
   allegato_dichiarazione_sul_possesso_dei_requisiti: {type: "file", question: "Caricare l'ALLEGATO B compilato + Copia documento di Identità in corso di validità"}
 
 sections:
-  # The dichiarante is the client (the titolare), as a private person. The draft opens on it.
+  # The dichiarante is the client (the titolare). The draft opens on it. A private person declares
+  # in their own name (PERSONA); a company or a condominium (`c:` with business.*) as DITTA/SOCIETA',
+  # its legale rappresentante or administrator (`cr:`) declaring for it. Each way is a branch of
+  # its own: ISCRITTA renumbers every row below it. The choices that move rows come first, the
+  # non-EU box (which opens four rows) last, so the rows typed before keep the crawl's ids. Born
+  # abroad, the Stato of birth replaces its Provincia and Comune with "Località estera" (no rows
+  # move), so the residence's and the sede's Provincia and Comune count one fewer.
   - section: Scheda anagrafica
     open: false
+    leave: [Fax]
+    branches: ["{{c:business.denominazione|empty}}", "{{c:business.denominazione,c:business.rea|impresa_iscritta}}", "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"]
     fields:
-      - {kind: radio, label: PERSONA (Privato)}
-      - {kind: text, label: Nome, value: "{{c:identity.first_name}}"}
-      - {kind: text, label: Cognome, value: "{{c:identity.last_name}}"}
-      - {kind: text, label: Cod.Fiscale, value: "{{c:identity.codice_fiscale}}"}
-      - {kind: select, label: Sesso, value: "{{c:identity.sex}}"}
-      - {kind: text, label: Data nascita, value: "{{c:identity.date_of_birth|date_it}}"}
-      - {kind: select, label: Provincia, value: "{{c:identity.birth_province}}"}
-      - {kind: select, label: Comune, value: "{{c:identity.birth_comune|upper}}"}
-      - {kind: select, label: Provincia, nth: 2, value: "{{c:residenza.provincia}}"}
-      - {kind: select, label: Comune, nth: 2, value: "{{c:residenza.comune|upper}}"}
-      - {kind: select, label: Toponimo (DUG), value: "{{c:residenza.indirizzo|dug}}"}
-      - {kind: text, label: Denominazione stradale, value: "{{c:residenza.indirizzo|street|upper}}"}
-      - {kind: text, label: Numero civico, value: "{{c:residenza.civico}}"}
-      - {kind: text, label: CAP, value: "{{c:residenza.cap}}"}
-      - {kind: text, label: eMail/PEC, value: "{{c:identity.email}}"}
-      - {kind: text, label: Telefono fisso/cellulare, value: "{{c:identity.phone|phone_it}}"}
+      # A private person: the client (`c:`).
+      - {kind: radio, label: "PERSONA (Privato)", when: "{{c:business.denominazione|empty}}"}
+      - {kind: select, label: Cittadinanza, value: "{{c:identity.citizenship|cittadinanza}}", when: "{{c:business.denominazione|empty}} {{c:identity.citizenship|straniera}}"}
+      - {kind: select, label: Stato, value: "{{c:identity.birth_country}}", when: "{{c:business.denominazione|empty}} {{c:identity.birth_province|estero}}"}
+      - {kind: text, label: Località estera, on_page: true, value: "{{c:identity.birth_comune|upper}}", when: "{{c:business.denominazione|empty}} {{c:identity.birth_province|estero}}"}
+      - {kind: text, label: Nome, value: "{{c:identity.first_name}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: Cognome, value: "{{c:identity.last_name}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: Cod.Fiscale, value: "{{c:identity.codice_fiscale}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: select, label: Sesso, value: "{{c:identity.sex}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: Data nascita, value: "{{c:identity.date_of_birth|date_it}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: select, label: Provincia, value: "{{c:identity.birth_province}}", when: "{{c:business.denominazione|empty}} {{c:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Comune, value: "{{c:identity.birth_comune|upper}}", when: "{{c:business.denominazione|empty}} {{c:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Provincia, nth: 2, value: "{{c:residenza.provincia}}", when: "{{c:business.denominazione|empty}} {{c:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Comune, nth: 2, value: "{{c:residenza.comune|upper}}", when: "{{c:business.denominazione|empty}} {{c:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Provincia, by_label: true, value: "{{c:residenza.provincia}}", when: "{{c:business.denominazione|empty}} {{c:identity.birth_province|estero}}"}
+      - {kind: select, label: Comune, by_label: true, value: "{{c:residenza.comune|upper}}", when: "{{c:business.denominazione|empty}} {{c:identity.birth_province|estero}}"}
+      - {kind: select, label: "Toponimo (DUG)", value: "{{c:residenza.indirizzo|dug}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: Denominazione stradale, value: "{{c:residenza.indirizzo|street|upper}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: Numero civico, value: "{{c:residenza.civico}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: CAP, value: "{{c:residenza.cap}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: "eMail/PEC", value: "{{c:identity.email}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: "Telefono fisso/cellulare", value: "{{c:identity.phone|phone_it}}", when: "{{c:business.denominazione|empty}}"}
       # In qualità di: Proprietario, Comproprietario, Usufruttuario, Amministratore di
       # condominio, Legale rappresentante, Amministratore unico, Procuratore, Altro (+ specificare).
-      - {kind: select, label: "In qualità di", value: "{{ask.titolo|qualita}}"}
-      - {kind: text, label: specificare, via: Altro, value: "{{ask.titolo|qualita_altro}}", when: "{{ask.titolo|qualita_is_altro}}"}
+      - {kind: select, label: In qualità di, value: "{{ask.titolo|qualita}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: specificare, via: Altro, value: "{{ask.titolo|qualita_altro}}", when: "{{c:business.denominazione|empty}} {{ask.titolo|qualita_is_altro}}"}
+      - {kind: checkbox, label: Se cittadino non UE, when: "{{c:business.denominazione|empty}} {{c:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: text, label: estremi del documento di soggiorno, value: "{{c:permesso_soggiorno.numero}}", when: "{{c:business.denominazione|empty}} {{c:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: text, label: rilasciato da, value: "QUESTURA DI {{c:permesso_soggiorno.questura_rilascio|upper}}", when: "{{c:business.denominazione|empty}} {{c:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: date, label: il, value: "{{c:permesso_soggiorno.data_rilascio|date_it}}", when: "{{c:business.denominazione|empty}} {{c:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: date, label: scadenza, value: "{{c:permesso_soggiorno.data_scadenza|date_it}}", when: "{{c:business.denominazione|empty}} {{c:permesso_soggiorno.numero|empty|not}}"}
+      # A company in the Registro delle imprese (a REA): its codice fiscale (beside "Recupera dati",
+      # never pressed: it would overwrite the rows from the register), Camera di commercio, REA
+      # number and its date, which the Camera opens on its own row; all required (read 2026-11-02).
+      # By label: the crawls pair this "Codice Fiscale" with the company's own below, and "Data"
+      # is also "Data nascita"; on the page each is the first.
+      - {kind: radio, label: "DITTA/SOCIETA'/IMPRESA", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: radio, label: ISCRITTA ALLA CCIAA, when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: Codice Fiscale, by_label: true, value: "{{c:business.codice_fiscale,c:business.partita_iva|first}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: select, label: "Camera di commercio di:", value: "{{c:business.cciaa|provincia_nome}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: Numero REA, on_page: true, value: "{{c:business.rea|rea_num}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: date, label: Data, by_label: true, on_page: true, value: "{{ask.cliente_rea_data|date_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: select, label: Cittadinanza, value: "{{cr:identity.citizenship|cittadinanza}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.citizenship|straniera}}"}
+      - {kind: select, label: Stato, value: "{{cr:identity.birth_country}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: text, label: Località estera, on_page: true, value: "{{cr:identity.birth_comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: text, label: Nome, value: "{{cr:identity.first_name}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: Cognome, value: "{{cr:identity.last_name}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: Cod.Fiscale, value: "{{cr:identity.codice_fiscale}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: select, label: Sesso, value: "{{cr:identity.sex}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: Data nascita, value: "{{cr:identity.date_of_birth|date_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: select, label: Provincia, value: "{{cr:identity.birth_province}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Comune, value: "{{cr:identity.birth_comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Provincia, nth: 2, value: "{{cr:residenza.provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Comune, nth: 2, value: "{{cr:residenza.comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Provincia, by_label: true, value: "{{cr:residenza.provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: select, label: Comune, by_label: true, value: "{{cr:residenza.comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: select, label: "Toponimo (DUG)", value: "{{cr:residenza.indirizzo|dug}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: Denominazione stradale, value: "{{cr:residenza.indirizzo|street|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: Numero civico, value: "{{cr:residenza.civico}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: CAP, value: "{{cr:residenza.cap}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: "eMail/PEC", value: "{{cr:identity.email}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: "Telefono fisso/cellulare", value: "{{cr:identity.phone|phone_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: select, label: Carica, value: "{{ask.cliente_carica|carica_cliente}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: select, label: Forma giuridica, value: "{{c:business.forma_giuridica,ask.cliente_carica|forma_cliente}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: "Denominazione (nome della ditta", value: "{{c:business.denominazione}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      # The second "Codice Fiscale", after the one beside "Recupera dati": a crawl that paired the two
+      # as one moved box saw only that one.
+      - {kind: text, label: Codice Fiscale, nth: 2, on_page: true, value: "{{c:business.codice_fiscale,c:business.partita_iva|first}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: P.IVA, optional: true, value: "{{c:business.partita_iva}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: select, label: Stato, nth: 3, value: "Italia", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: select, label: Provincia, nth: 3, value: "{{c:business.sede_legale_provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Comune, nth: 3, value: "{{c:business.sede_legale_comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Provincia, nth: 2, by_label: true, value: "{{c:business.sede_legale_provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: select, label: Comune, nth: 2, by_label: true, value: "{{c:business.sede_legale_comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: select, label: "Toponimo (DUG)", nth: 2, value: "{{c:business.sede_legale_indirizzo|dug}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: Denominazione stradale, nth: 2, value: "{{c:business.sede_legale_indirizzo|street|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: Numero civico, nth: 2, value: "{{c:business.sede_legale_civico}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: CAP, nth: 2, value: "{{c:business.sede_legale_cap}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: "Telefono fisso/Cellulare", nth: 2, optional: true, value: "{{c:business.telefono|phone_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: text, label: PEC, optional: true, value: "{{c:business.pec}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: checkbox, label: Se cittadino non UE, when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: text, label: estremi del documento di soggiorno, value: "{{cr:permesso_soggiorno.numero}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: text, label: rilasciato da, value: "QUESTURA DI {{cr:permesso_soggiorno.questura_rilascio|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: date, label: il, value: "{{cr:permesso_soggiorno.data_rilascio|date_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: date, label: scadenza, value: "{{cr:permesso_soggiorno.data_scadenza|date_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:permesso_soggiorno.numero|empty|not}}"}
+      # Not in it: being registered, or never (a condominium, an association, an ente).
+      - {kind: radio, label: "DITTA/SOCIETA'/IMPRESA", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: radio, label: NON ANCORA ISCRITTA, when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{ask.cliente_registro|is_non_ancora_iscritta}}"}
+      - {kind: radio, label: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA, when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{ask.cliente_registro|is_non_necessita}}"}
+      - {kind: select, label: Cittadinanza, value: "{{cr:identity.citizenship|cittadinanza}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.citizenship|straniera}}"}
+      - {kind: select, label: Stato, value: "{{cr:identity.birth_country}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: text, label: Località estera, on_page: true, value: "{{cr:identity.birth_comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: text, label: Nome, value: "{{cr:identity.first_name}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: Cognome, value: "{{cr:identity.last_name}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: Cod.Fiscale, value: "{{cr:identity.codice_fiscale}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: select, label: Sesso, value: "{{cr:identity.sex}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: Data nascita, value: "{{cr:identity.date_of_birth|date_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: select, label: Provincia, value: "{{cr:identity.birth_province}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Comune, value: "{{cr:identity.birth_comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Provincia, nth: 2, value: "{{cr:residenza.provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Comune, nth: 2, value: "{{cr:residenza.comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Provincia, by_label: true, value: "{{cr:residenza.provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: select, label: Comune, by_label: true, value: "{{cr:residenza.comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: select, label: "Toponimo (DUG)", value: "{{cr:residenza.indirizzo|dug}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: Denominazione stradale, value: "{{cr:residenza.indirizzo|street|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: Numero civico, value: "{{cr:residenza.civico}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: CAP, value: "{{cr:residenza.cap}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: "eMail/PEC", value: "{{cr:identity.email}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: "Telefono fisso/cellulare", value: "{{cr:identity.phone|phone_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: select, label: Carica, value: "{{ask.cliente_carica|carica_cliente}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: select, label: Forma giuridica, value: "{{c:business.forma_giuridica,ask.cliente_carica|forma_cliente}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: "Denominazione (nome della ditta", value: "{{c:business.denominazione}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: Codice Fiscale, value: "{{c:business.codice_fiscale,c:business.partita_iva|first}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: P.IVA, optional: true, value: "{{c:business.partita_iva}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: select, label: Stato, nth: 3, value: "Italia", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: select, label: Provincia, nth: 3, value: "{{c:business.sede_legale_provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Comune, nth: 3, value: "{{c:business.sede_legale_comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero|not}}"}
+      - {kind: select, label: Provincia, nth: 2, by_label: true, value: "{{c:business.sede_legale_provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: select, label: Comune, nth: 2, by_label: true, value: "{{c:business.sede_legale_comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero}}"}
+      - {kind: select, label: "Toponimo (DUG)", nth: 2, value: "{{c:business.sede_legale_indirizzo|dug}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: Denominazione stradale, nth: 2, value: "{{c:business.sede_legale_indirizzo|street|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: Numero civico, nth: 2, value: "{{c:business.sede_legale_civico}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: CAP, nth: 2, value: "{{c:business.sede_legale_cap}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: "Telefono fisso/Cellulare", nth: 2, optional: true, value: "{{c:business.telefono|phone_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: text, label: PEC, optional: true, value: "{{c:business.pec}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: checkbox, label: Se cittadino non UE, when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: text, label: estremi del documento di soggiorno, value: "{{cr:permesso_soggiorno.numero}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: text, label: rilasciato da, value: "QUESTURA DI {{cr:permesso_soggiorno.questura_rilascio|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: date, label: il, value: "{{cr:permesso_soggiorno.data_rilascio|date_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:permesso_soggiorno.numero|empty|not}}"}
+      - {kind: date, label: scadenza, value: "{{cr:permesso_soggiorno.data_scadenza|date_it}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:permesso_soggiorno.numero|empty|not}}"}
+
 
   # The architect, from the studio vault's titolare. Prefilled with the SPID login's name and
   # CF, overwritten here.
@@ -1260,11 +1395,13 @@ sections:
       - {kind: text, label: descrizione sintetica, value: "{{ask.oggetto}}"}
 
   # The client's own domicilio digitale: their PEC in INAD when they say so, else saved empty.
-  # A private person's is in INAD; INI-PEC is a business's or a professional's (subject: impresa).
+  # A private person's is in INAD; INI-PEC is a business's or a professional's: a client company's.
   - section: DOMICILIO DIGITALE
     fields:
       - {kind: checkbox, label: il seguente domicilio digitale inserito in INAD, when: "{{ask.domicilio_inad}}"}
       - {kind: text, label: il seguente domicilio digitale inserito in INAD, value: "{{c:identity.pec}}", when: "{{ask.domicilio_inad}}"}
+      - {kind: checkbox, label: il seguente domicilio digitale inserito in INI-PEC, when: "{{c:business.denominazione|empty|not}} {{ask.domicilio_inipec}}"}
+      - {kind: text, label: il seguente domicilio digitale inserito in INI-PEC, value: "{{c:business.pec}}", when: "{{c:business.denominazione|empty|not}} {{ask.domicilio_inipec}}"}
 
   # The box under the PEC ("si dichiara di essere consapevoli ...") is required, and the
   # person's: the run leaves it and its "required" to them.
@@ -1700,12 +1837,17 @@ sections:
 
   - section: dichiarazione dell'intestatario del permesso di costruire
     fields:
-      - {kind: text, label: intestatario, value: "{{c:identity.first_name|upper}} {{c:identity.last_name|upper}}"}
+      - {kind: text, label: intestatario, value: "{{c:identity.first_name,c:identity.last_name,c:business.denominazione|intestatario}}"}
       - {kind: text, label: in qualità di, value: "{{ask.titolo}}"}
-      - {kind: text, label: residente in, value: "{{c:residenza.comune|upper}}"}
-      - {kind: text, label: CAP, value: "{{c:residenza.cap}}"}
-      - {kind: text, label: via, value: "{{c:residenza.indirizzo|upper}}"}
-      - {kind: text, label: numero civico, value: "{{c:residenza.civico}}"}
+      # A company or condominium holds it at its sede legale.
+      - {kind: text, label: residente in, value: "{{c:residenza.comune|upper}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: CAP, value: "{{c:residenza.cap}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: via, value: "{{c:residenza.indirizzo|upper}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: numero civico, value: "{{c:residenza.civico}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: residente in, value: "{{c:business.sede_legale_comune|upper}}", when: "{{c:business.denominazione|empty|not}}"}
+      - {kind: text, label: CAP, value: "{{c:business.sede_legale_cap}}", when: "{{c:business.denominazione|empty|not}}"}
+      - {kind: text, label: via, value: "{{c:business.sede_legale_indirizzo|upper}}", when: "{{c:business.denominazione|empty|not}}"}
+      - {kind: text, label: numero civico, value: "{{c:business.sede_legale_civico}}", when: "{{c:business.denominazione|empty|not}}"}
 
   # The SUE is the Comune di Napoli's: the comune is always Napoli.
   - section: dichiarazione dell'ubicazione dei lavori
@@ -1733,7 +1875,7 @@ sections:
       - {kind: text, label: mappale, value: "{{c:immobile.catasto_particella}}"}
       - {kind: text, label: subalterno, value: "{{c:immobile.catasto_subalterno}}"}
       - {kind: text, label: per (specificare l'oggetto dell'intervento), value: "{{ask.pdc_interventi}}"}
-      - {kind: text, label: intestato a, value: "{{c:identity.first_name|upper}} {{c:identity.last_name|upper}}"}
+      - {kind: text, label: intestato a, value: "{{c:identity.first_name,c:identity.last_name,c:business.denominazione|intestatario}}"}
       - {kind: date, label: la cui data di inizio lavori è prevista per, value: "{{ask.proroga_data_prevista|date_it}}", if_present: true}
       - {kind: date, label: la cui data di fine lavori dovrebbe essere entro il, value: "{{ask.fine_termine|date_it}}", if_present: true}
       - {kind: date, label: ed è invece prevista per, value: "{{ask.proroga_data_prevista|date_it}}", if_present: true}
@@ -1750,7 +1892,7 @@ sections:
       - {kind: text, label: P.G. numero, nth: 2, value: "{{ask.pdc_protocollo}}", when: "{{ask.titolo_tipo|is_scia}}"}
       - {kind: date, label: del, nth: 2, value: "{{ask.pdc_data|date_it}}", when: "{{ask.titolo_tipo|is_scia}}"}
       - {kind: text, label: per (specificare l'oggetto dell'intervento), value: "{{ask.pdc_interventi}}"}
-      - {kind: text, label: intestato a, value: "{{c:identity.first_name|upper}} {{c:identity.last_name|upper}}"}
+      - {kind: text, label: intestato a, value: "{{c:identity.first_name,c:identity.last_name,c:business.denominazione|intestatario}}"}
       - {kind: date, label: la cui data di inizio lavori è prevista per, value: "{{ask.proroga_data_prevista|date_it}}", if_present: true}
       - {kind: date, label: la cui data di fine lavori dovrebbe essere entro il, value: "{{ask.fine_termine|date_it}}", if_present: true}
       - {kind: date, label: ed è invece prevista per, value: "{{ask.proroga_data_prevista|date_it}}", if_present: true}
@@ -1883,7 +2025,7 @@ sections:
       - {kind: text, label: prot.n., value: "{{ask.paes_protocollo}}", when: "{{ask.titolo_tipo|is_autorizzazione_paesaggistica}}"}
       - {kind: date, label: del, value: "{{ask.paes_data|date_it}}", when: "{{ask.titolo_tipo|is_autorizzazione_paesaggistica}}"}
       - {kind: text, label: per (specificare l'oggetto dell'intervento), value: "{{ask.pdc_interventi}}"}
-      - {kind: text, label: intestato a, value: "{{c:identity.first_name|upper}} {{c:identity.last_name|upper}}"}
+      - {kind: text, label: intestato a, value: "{{c:identity.first_name,c:identity.last_name,c:business.denominazione|intestatario}}"}
       - {kind: date, label: la cui data di fine lavori dovrebbe essere entro il, value: "{{ask.fine_termine|date_it}}"}
       - {kind: date, label: ed è invece prevista per, value: "{{ask.proroga_data_prevista|date_it}}"}
 
@@ -1897,7 +2039,7 @@ sections:
       - {kind: text, label: Autorizzazione paesaggistica P.G. numero, value: "{{ask.paes_protocollo}}"}
       - {kind: date, label: del, value: "{{ask.paes_data|date_it}}"}
       - {kind: text, label: per (specificare l'oggetto dell'intervento), value: "{{ask.pdc_interventi}}"}
-      - {kind: text, label: intestato a, value: "{{c:identity.first_name|upper}} {{c:identity.last_name|upper}}"}
+      - {kind: text, label: intestato a, value: "{{c:identity.first_name,c:identity.last_name,c:business.denominazione|intestatario}}"}
       - {kind: date, label: la cui data di scadenza dell'efficacia dovrebbe essere il, value: "{{ask.paes_scadenza|date_it}}"}
       - {kind: date, label: ed è invece prevista per il, value: "{{ask.proroga_data_prevista|date_it}}"}
 
@@ -2058,12 +2200,19 @@ sections:
     aliases: [dichiarazione relativa al domicilio dei nuovi intestatari]
     leave: [fax]
     fields:
-      - {kind: text, label: comune, value: "{{c:residenza.comune|upper}}"}
-      - {kind: text, label: "via, viale, piazza", value: "{{c:residenza.indirizzo|upper}}"}
-      - {kind: text, label: numero civico, value: "{{c:residenza.civico}}"}
-      - {kind: text, label: CAP, value: "{{c:residenza.cap}}"}
-      - {kind: text, label: prov, value: "{{c:residenza.provincia}}"}
-      - {kind: text, label: tel, value: "{{c:identity.phone|phone_it}}"}
+      - {kind: text, label: comune, value: "{{c:residenza.comune|upper}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: "via, viale, piazza", value: "{{c:residenza.indirizzo|upper}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: numero civico, value: "{{c:residenza.civico}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: CAP, value: "{{c:residenza.cap}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: prov, value: "{{c:residenza.provincia}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: text, label: tel, value: "{{c:identity.phone|phone_it}}", when: "{{c:business.denominazione|empty}}"}
+      # A company's or condominium's: its sede legale.
+      - {kind: text, label: comune, value: "{{c:business.sede_legale_comune|upper}}", when: "{{c:business.denominazione|empty|not}}"}
+      - {kind: text, label: "via, viale, piazza", value: "{{c:business.sede_legale_indirizzo|upper}}", when: "{{c:business.denominazione|empty|not}}"}
+      - {kind: text, label: numero civico, value: "{{c:business.sede_legale_civico}}", when: "{{c:business.denominazione|empty|not}}"}
+      - {kind: text, label: CAP, value: "{{c:business.sede_legale_cap}}", when: "{{c:business.denominazione|empty|not}}"}
+      - {kind: text, label: prov, value: "{{c:business.sede_legale_provincia}}", when: "{{c:business.denominazione|empty|not}}"}
+      - {kind: text, label: tel, value: "{{c:business.telefono|phone_it}}", when: "{{c:business.denominazione|empty|not}}", optional: true}
 
   # Cambio d'intestazione of a CILA, SCIA or DIA: as the voltura, the title by its kind.
   - section: dichiarazione relativa agli estremi della CILA / SCIA / DIA e proprietario
