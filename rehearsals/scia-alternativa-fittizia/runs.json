@@ -112,5 +112,11 @@
   "answers": "answers-scarico-superficiali.json",
   "result": "filled",
   "seconds": 174.8
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-progettista.json",
+  "result": "filled",
+  "seconds": 190.7
  }
 ]

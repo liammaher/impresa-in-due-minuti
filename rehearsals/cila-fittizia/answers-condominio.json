@@ -37,5 +37,6 @@
  "altri_tecnici_dopo": "false",
  "impresa_dopo": "false",
  "cliente_carica": "amministratore di condominio",
- "cliente_registro": "non necessita"
+ "cliente_registro": "non necessita",
+ "progettista_altro": false
 }

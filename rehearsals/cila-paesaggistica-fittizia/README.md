@@ -35,3 +35,4 @@ form no case took. Each passes pre-flight offline; **none has been run on the po
 | 2026-10-29 | pane | **Filled**, resumed on the same draft: all 22 sections read back on a fresh load. The ordinaria was then re-run (both deed registrations: the second and third "con sede a", "al n. gen.", "in data"): filled. |
 | 2026-10-29 | pane | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 172.3 s; second, with the runner waiting for a section to open, **filled** in 123.5 s, read back on a fresh load. |
 | 2026-10-31 | pane | `answers-p6` (now with its attachments screen) and `answers-dopo-assensi`, `bench/rerun.py` bundle | **filled** both (114 s, 113 s) |
+| 2026-11-02 | pane | `answers-progettista`: another architectural designer (`p:`), in G1 and as the landscape tecnico, `bench/rerun.py` bundle | **filled** in 126 s; both sections read on the draft after: the designer's block, studio and albo in each |

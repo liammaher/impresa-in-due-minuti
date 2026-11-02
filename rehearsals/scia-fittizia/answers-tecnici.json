@@ -109,5 +109,6 @@
  "altri_tecnici_dopo": "false",
  "direttore_lavori": "da nominare",
  "impresa_dopo": "false",
- "rinnovabili_obblighi": "rispettati"
+ "rinnovabili_obblighi": "rispettati",
+ "progettista_altro": false
 }

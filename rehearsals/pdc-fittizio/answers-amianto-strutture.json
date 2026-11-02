@@ -115,5 +115,6 @@
  "strutture_incaricato": "true",
  "dl_strutture": "true",
  "scarico_protocollo": "PG/2025/0012345 (inventato)",
- "scarico_data": "2025-03-10"
+ "scarico_data": "2025-03-10",
+ "progettista_altro": false
 }

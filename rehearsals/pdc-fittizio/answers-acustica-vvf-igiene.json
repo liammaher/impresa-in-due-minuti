@@ -109,5 +109,6 @@
  "scomputo": "false",
  "strumenti_altri": "false",
  "strutture_allegate": "false",
- "barriere_art82": "false"
+ "barriere_art82": "false",
+ "progettista_altro": false
 }

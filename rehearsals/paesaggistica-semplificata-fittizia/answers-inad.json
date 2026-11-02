@@ -20,5 +20,6 @@
  "cambio_uso": "no",
  "paesaggio": "semplificata",
  "fatti": [],
- "domicilio_inad": true
+ "domicilio_inad": true,
+ "progettista_altro": false
 }

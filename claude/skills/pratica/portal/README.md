@@ -121,7 +121,9 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
 - **Scelte.** Some sections exist only with a scelta ("ci sono cointestatari"): list every
   scelta the case needs; gen.py ticks them all.
 - **Values the portal checks.** Codici fiscali and partite IVA by their check digit (the P6
-  fixture's pass), the draft's name at most 60 characters, a P.G. box may take 10.
+  fixture's pass), the draft's name at most 60 characters, a P.G. box may take 10. The landscape
+  pratiche's other technician's PEC is looked up at Salva: kept, but "Indirizzo Pec non valido" under
+  any address that isn't a real one, `@pec.it` included (a real public PEC cleared it, 2026-11-02).
 - **Required oddities.** The voltura's co-holder sex is two radio groups, each required: the
   section saves only with both ticked (the recipe says so in `yours`).
 - **Acknowledgements** in the person's name are `theirs` in the dictionary (their wording
@@ -169,6 +171,12 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   A `block: 2` exists only once the tick that opens the block above it is done, so its lines come
   after that tick in the dictionary (gen.py keeps their order): the permesso's g1 had the designer's
   before the director's tick, and the run found one block (2026-11-02).
+- **A choice can open a block above the others.** The architectural designer who isn't the architect
+  presenting the pratica ("non è colui che presenta la pratica", which the crawl names "tecnico
+  incaricato") opens a whole block of their own, the first Cognome of G1, h1 and g1, above the other
+  director's and the structural designer's (read on drafts of each 2026-11-02). The entry's `shift`
+  says so: under that answer every other block of the anchor counts one more, and gen.py writes each
+  of their fields twice. A radio isn't an anchor: it is two inputs (the real one and its `_clone`).
 - **A firm block's field may carry its own `when`** (the Cassa edile's rows, only for a firm
   enrolled with one): gen.py puts it after the block's. Its rows come first, so the INPS's and
   INAIL's "sede di" and "codice impresa" count after them.
