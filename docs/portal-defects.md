@@ -78,6 +78,26 @@ entry says what to report and how it was checked, without personal data.
   and the sanatoria quadro's acknowledgment that the SUE may ask for structural works, which the
   portal also keeps in one radio group with the oblazione's.
 
+## Permesso in sanatoria, art. 36, in a protected area: no line for the accertamento of art. 167
+
+- **Where**: the pratica that selects the permesso di costruire (sanatoria answered Sì) with the
+  "Accertamento di compatibilità paesaggistica (artt. 167-181 D.Lgs. 42/2004 - Comune)"; the
+  permesso's asseverazione, quadro 16 "Bene sottoposto ad autorizzazione paesaggistica".
+- **What happens**: "ricade in zona tutelata e le opere comportano alterazione" opens three
+  procedures (semplificato, ordinario, accertamento "di cui all'articolo 36-bis") and Salva wants one
+  ("il valore è obbligatorio" on each, seen 2026-11-02 on a made-up draft). None is the accertamento
+  of art. 167 the pratica's other operation asks for.
+- **Law**: works done without the permesso or in total difformity (art. 36 DPR 380/2001) in a
+  protected area are legalized only with their landscape compatibility found (art. 146 c. 4 D.Lgs.
+  42/2004), by the accertamento of art. 167 c. 4-5, which excludes new usable surfaces or volumes;
+  art. 36-bis c. 4 is for partial difformity and essential variations only.
+- **Effect**: an art. 36 permesso in sanatoria in a protected area can't be filed on the portal
+  without stating a procedure that isn't the case's. The rules table sends the case to the
+  permesso with the accertamento (`rehearsals/pdc-sanatoria-accertamento-fittizio`), whose
+  recipe refuses it with this defect; every other section of the pratica fills.
+- **Ask for**: a line "è assoggettato al procedimento di accertamento della compatibilità
+  paesaggistica di cui agli artt. 167 e 181 del D.Lgs. 42/2004" beside the art. 36-bis one.
+
 ## CILA and CIL: a firm still to be chosen is offered, then refused
 
 - **Where**: the CILA's quadro "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi

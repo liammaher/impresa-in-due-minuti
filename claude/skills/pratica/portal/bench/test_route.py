@@ -192,6 +192,23 @@ def cila_reads_sanatoria_its_way():
     assert r["asked_again"] == [{"fact": "sanatoria", "ask": "cila_stato", "fits": ["in corso", "realizzato"]}], r
 
 
+def sanatoria_in_tutela():
+    """Works that needed the permesso, done without it in a protected area (2026-11-02): no
+    alteration is the plain permesso in sanatoria; a new volume can't have its compatibility found
+    (art. 167 c. 4); otherwise the permesso with the accertamento, whose landscape quadro the
+    portal can't state (pdc-36-paesaggio)."""
+    base = {"intervento": "ristrutturazione_pesante", "cambio_uso": "no", "paesaggio": "ordinaria",
+            "fatti": ["sanatoria", "paesaggio_eseguiti"]}
+    r = route.route(TABLE, {**base, "paesaggio": "senza_autorizzazione", "fatti": ["sanatoria"]}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+    r = route.route(TABLE, {**base, "fatti": base["fatti"] + ["paesaggio_volumi"]}, REHEARSALS)
+    assert not r["routed"] and "art. 167 c. 4" in r["unsupported"][0], r
+    r = route.route(TABLE, base, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-accertamento-fittizio", r
+    r = route.route(TABLE, {**base, "fatti": ["sanatoria"]}, REHEARSALS)
+    assert not r["routed"] and "dopo la sanatoria" in r["unsupported"][0], r
+
+
 def rehearsal_cases_come_home():
     """Each rehearsal's answers files, read as its steps file reads the facts, route back to it
     (a case its own rules refuse is left out: it tests the refusal)."""
@@ -283,7 +300,7 @@ def plugin_layout():
 def main():
     tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, as_a_conversation,
              wrong_answers, gated_items_stay_unknown, own_words_kept_only_if_they_agree, missing_answers_file,
-             cila_reads_sanatoria_its_way,
+             cila_reads_sanatoria_its_way, sanatoria_in_tutela,
              rehearsal_cases_come_home, asks_as_the_table_asks, refusals_say_why, apart_is_the_persons,
              one_steps_file_per_combination, plugin_layout]
     for t in tests:

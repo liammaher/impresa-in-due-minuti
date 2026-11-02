@@ -97,3 +97,15 @@ scia-34ter:
     - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
     - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
   report: docs/portal-defects.md
+
+pdc-36-paesaggio:
+  title: "Permesso in sanatoria (art. 36) in a protected area: the landscape quadro has no line for the accertamento of art. 167"
+  portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, quadro 16 (bene sottoposto ad autorizzazione paesaggistica), in the pratica that selects the permesso, its sanatoria and the accertamento di compatibilità paesaggistica together"
+  what: "For works that alter the place the quadro requires one of three procedures (semplificata, ordinaria, the accertamento of art. 36-bis), none of which is the accertamento of art. 167 that works done without the permesso need, though the portal lets that accertamento be selected with the permesso in the same pratica."
+  law: "Works done without the permesso (art. 36 DPR 380/2001) in a protected area are legalized only with their landscape compatibility found (art. 146 c. 4 D.Lgs. 42/2004), by the accertamento of art. 167 c. 4-5; the binding parere of art. 36-bis c. 4 is for partial difformity and essential variations only."
+  checked: "2026-11-02, a made-up run in the pane (rehearsals/pdc-sanatoria-accertamento-fittizio): with the alteration ticked and no procedure, Salva answered \"il valore è obbligatorio\" on all three"
+  choices:
+    - "Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) how they want the permesso's landscape quadro stated for an art. 36 sanatoria with the accertamento filed in the same pratica."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+    - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
+  report: docs/portal-defects.md

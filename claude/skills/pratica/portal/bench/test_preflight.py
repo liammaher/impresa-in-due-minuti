@@ -693,7 +693,9 @@ def every_sue_case_ready():
     refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "This case is another pratica",
                ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Only art. 36 ",
                ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia",
-               ("cila-fittizia", "answers-impresa-dopo.json"): "The CILA names its building firm"}
+               ("cila-fittizia", "answers-impresa-dopo.json"): "The CILA names its building firm",
+               # The permesso's landscape quadro has no line for the art. 167 accertamento (pdc-36-paesaggio).
+               ("pdc-sanatoria-accertamento-fittizio", "answers-p6.json"): "The permesso's asseverazione on the portal requires one of three"}
     here, seen, stops = os.getcwd(), 0, set()
     os.chdir(HERE.parents[4])
     try:
