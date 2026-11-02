@@ -355,6 +355,22 @@ def main():
             assert r["result"] == "stopped" and r["error"].startswith("Allega documenti") and "obbligatorio" in r["error"], r
         case("a person's slot whose title starts another's covers only its own: the other, empty and required, stops", twin_slots)
 
+        def flagged():
+            # The portal's warning beside a box it kept ("Indirizzo Pec non valido"; "Indirizzo
+            # sconosciuto" under every address): never a stop, listed by section and the box's label,
+            # no value. The attachments section alone: the warning is page-wide on this fake page.
+            st = steps(base, start="/portal.html?pec=1")
+            st["sections"] = st["sections"][:1]
+            st["sections"][0]["fields"].append({"id": "pec_txt", "kind": "text", "label": "Posta elettronica certificata",
+                                               "value": "{{ask.pec}}"})
+            PORTAL.reset()
+            r = fill(browser, base, st, {**answers, "pec": "prova@pec.example.it"})
+            assert r["result"] == "filled", r
+            assert r["alerts"] == [{"section": "Allega documenti", "label": "Posta elettronica certificata",
+                                    "text": "Indirizzo Pec non valido"}], r
+            assert "pec.example" not in json.dumps(r), "a value in the report"
+        case("the portal's warning beside a box it kept is reported, by label and without the value, never a stop", flagged)
+
         def theirs():
             PORTAL.reset()
             stops(fill(browser, base, steps(base, save="Firma e invio"), answers), "refused to click")

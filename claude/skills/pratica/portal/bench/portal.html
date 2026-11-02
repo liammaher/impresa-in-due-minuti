@@ -18,7 +18,9 @@
      to Dati tecnici, each with its own "+" after its rows (the CILA relazione's filings, then its
      assents): a "+" adds a row to its own list, a row after the first has no text of its own,
      and the rows saved come back on a load; ?onefield=1 adds two rows that are one radio field
-     (the art. 34-ter dating and oblazione), each opening its own box only while it's the one ticked. -->
+     (the art. 34-ter dating and oblazione), each opening its own box only while it's the one ticked;
+     ?pec=1 adds a PEC box with the portal's warning beside it, "Indirizzo Pec non valido", as the
+     landscape technician's reads for any address that isn't a real one. -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -85,6 +87,13 @@ if (location.search.includes("onefield=1")) {
   });
   for (const r of document.querySelectorAll('input[name="form:r8c1:dynaForm:epoca:radio"]'))
     r.addEventListener("change", () => boxes.forEach((b, i) => { b.style.display = document.querySelectorAll('input[name="form:r8c1:dynaForm:epoca:radio"]')[i].checked ? "" : "none"; }));
+}
+if (location.search.includes("pec=1")) {
+  const tr = document.createElement("tr");
+  tr.innerHTML = '<td><label class="labelDynaFormControl">Posta elettronica certificata</label></td><td class="pe-dynaform-cell">' +
+    '<input type="text" id="form:r10c1:dynaForm:pec_txt"><div class="alert-message-text"><span title="">Indirizzo Pec non valido</span>' +
+    '<div id="form:r10c1:dynaForm:j_idt329" class="ui-message"></div></div></td>';
+  document.querySelector("#allega + table").tBodies[0].append(tr);
 }
 if (location.search.includes("req=1")) {
   const tr = document.createElement("tr");

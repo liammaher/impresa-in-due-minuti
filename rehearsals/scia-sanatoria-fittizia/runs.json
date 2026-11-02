@@ -46,5 +46,11 @@
   "answers": "answers-ricevuta.json",
   "result": "filled",
   "seconds": 145.8
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 150.1
  }
 ]

@@ -237,7 +237,8 @@ sections:
   theirs:
   - Si dichiara di essere consapevoli
   fields:
-  - {id: 'r3c1p3reg:txt', kind: text, value: '{{t:identity.pec}}', max: 9999, label: N.B. Inserire l'indirizzo della casella PEC}
+  - {id: 'r3c1p3reg:txt', kind: text, value: '{{t:identity.pec}}', made_up: 'the portal looks the PEC up at Salva and keeps it, flagged "Indirizzo Pec non valido" unless it is a real one: a made-up address
+      stays flagged', max: 9999, label: N.B. Inserire l'indirizzo della casella PEC}
 - section: dichiarazione ubicazione dell'intervento
   fields:
   - {id: 'r2c4p8reg:txtws_input', kind: text, value: '{{c:immobile.cap}}', max: 5, label: CAP}
