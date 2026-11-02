@@ -3657,7 +3657,10 @@ sections:
       - {if: "{{ask.pdc_tipo|is_mutamento_uso}}", value: "{{ask.scia_cambio_uso}}", in: [stessa categoria, tra categorie, intero immobile], else: "A change of use under art. 2 L.R. 19/2001 changes the use: say which (stessa categoria, tra categorie or intero immobile)."}
       - {if: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}}", value: "{{ask.deroga_densita,ask.deroga_altezza,ask.deroga_distanza,ask.deroga_destinazione|any}}", in: ["true"], else: "A permesso in deroga (art. 14 DPR 380/2001) derogates from at least one limit: density, height, distance or use."}
       - {if: "{{ask.pdc_tipo|is_altro}}", value: "{{ask.pdc_procedura}}", in: [ordinaria], else: "Works no other line names are asked under art. 10 as such: not as a convenzionato or in deroga."}
-      - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_tipo}}", in: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia], else: "A permesso in sanatoria (art. 36 DPR 380/2001) is mapped for art. 10 works: not a Campania kind or a variant."}
+      # A change of use that needed a SCIA alternativa or a permesso, done without it, is legalized by
+      # the permesso in sanatoria too (art. 36 c. 1 names the SCIA of art. 23 c. 01): the asseverazione
+      # states it as an L.R. 19/2001 change of use, or as "altro" (a whole building, L.R. 13/2022).
+      - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_tipo}}", in: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, mutamento uso, altro], else: "A permesso in sanatoria (art. 36 DPR 380/2001) is mapped for art. 10 works and changes of use: not SCIA works asked as a permesso (the SCIA in sanatoria files them), a Campania kind or a variant."}
       - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_procedura}}", in: [ordinaria], else: "A permesso in sanatoria (art. 36 DPR 380/2001) is asked as such: not as a convenzionato or in deroga."}
     fields:
       - {kind: radio, label: interventi di cui all'articolo 10, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia__altro}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}"}
@@ -3667,7 +3670,8 @@ sections:
       - {kind: radio, label: comporta mutamento di destinazione d’uso di un intero immobile, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia__altro}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}} {{ask.scia_cambio_uso|is_intero_immobile}}"}
       - {kind: radio, label: interventi assoggettati a Segnalazione Certificata di Inizio Attività, when: "{{ask.pdc_tipo|is_facolta_scia}}"}
       - {kind: text, label: (specificare), value: "{{ask.intervento_tipo}}", when: "{{ask.pdc_tipo|is_facolta_scia}}"}
-      - {kind: radio, label: "intervento realizzato, ai sensi dell'articolo 36", when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.sanatoria_titolo|is_permesso}}"}
+      # In sanatoria the art. 36 line is quadro a)'s one answer, a change of use's too (2026-11-02).
+      - {kind: radio, label: "intervento realizzato, ai sensi dell'articolo 36", when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia__mutamento_uso__altro}} {{ask.sanatoria_titolo|is_permesso}}"}
       - {kind: radio, label: intervento in deroga alle previsioni, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}}"}
       - {kind: checkbox, label: alla densità edilizia, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}} {{ask.deroga_densita}}"}
       - {kind: text, label: (specificare), anchor: alla densità edilizia, value: "{{ask.deroga_densita_quale}}", when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}} {{ask.deroga_densita}}"}
@@ -3690,12 +3694,12 @@ sections:
       - {kind: radio, label: segnalazione certificata/denuncia di inizio attività alternativa, when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_scia_alternativa}}"}
       - {kind: text, label: n., nth: 3, value: "{{ask.pdc_numero}}", when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_scia_alternativa}}"}
       - {kind: date, label: del, nth: 3, value: "{{ask.pdc_data|date_it}}", when: "{{ask.pdc_tipo|is_variante_essenziale}} {{ask.pdc_variante_di|is_scia_alternativa}}"}
-      - {kind: radio, label: attività che rientrano nell'ambito del procedimento ordinario, when: "{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}}"}
+      - {kind: radio, label: attività che rientrano nell'ambito del procedimento ordinario, when: "{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.sanatoria_titolo|is_permesso|not}}"}
       - {kind: radio, label: attività che rientrano nell'ambito del procedimento ordinario, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_convenzionato}}"}
       - {kind: checkbox, label: permesso di costruire convenzionato, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_convenzionato}}"}
       - {kind: checkbox, label: interventi di recupero abitativo dei sottotetti, when: "{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.pdc_tipo|is_sottotetti}}"}
       - {kind: checkbox, label: realizzazione di parcheggi in aree libere, when: "{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.pdc_tipo|is_parcheggi}}"}
-      - {kind: checkbox, label: "mutamento di destinazione d'uso, ai sensi della l.r.", when: "{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.pdc_tipo|is_mutamento_uso}}"}
+      - {kind: checkbox, label: "mutamento di destinazione d'uso, ai sensi della l.r.", when: "{{ask.pdc_tipo|in_sottotetti__parcheggi__mutamento_uso}} {{ask.pdc_tipo|is_mutamento_uso}} {{ask.sanatoria_titolo|is_permesso|not}}"}
 
   # Quadro f): paid when the permesso is collected ("prima dei lavori"), in instalments or
   # during the works; the opere a scomputo asked or not.
