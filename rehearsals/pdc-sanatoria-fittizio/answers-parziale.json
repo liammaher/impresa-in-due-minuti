@@ -83,5 +83,7 @@
  "incentivo_energetico": "art 14 c6",
  "nuova_costruzione_tipo": "e1",
  "relazione_energetica": "rehearsals/scia-fittizia/files/relazione-energetica.pdf",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

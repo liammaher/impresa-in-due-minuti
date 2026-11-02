@@ -15,5 +15,6 @@
  "cedente_notifica_data": "2023-09-12",
  "diritti_euro": "96",
  "zona": "c",
- "fatti": []
+ "fatti": [],
+ "diritti_esente": false
 }

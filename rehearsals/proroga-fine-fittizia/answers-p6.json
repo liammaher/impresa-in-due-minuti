@@ -19,5 +19,7 @@
  "fine_termine": "2029-03-15",
  "proroga_giorni": "365",
  "proroga_motivo": "Ritardo nella consegna dei materiali da parte del fornitore, per cause non imputabili al titolare.",
- "titolo_tipo": "permesso di costruire"
+ "titolo_tipo": "permesso di costruire",
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

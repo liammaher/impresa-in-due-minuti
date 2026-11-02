@@ -37,7 +37,8 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Have a technician sign the dehors project (plans and report) and attach it"
   - "Tick the declarations and commitments yourself: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, the certified mounting, the canone"
-  - "Pay the diritti di segreteria (€ {{ask.diritti_euro}}) and the imposta di bollo with pagoPA"
+  - "Pay the diritti di segreteria (€ {{ask.diritti_euro}}) with pagoPA"
+  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "Sign and send (Firma e invio); once granted, pay the canone unico with the notice the Comune sends"
 supports:
   - value: "{{business.forma_giuridica}}"

@@ -112,5 +112,6 @@
  "direttore_lavori": "da nominare",
  "impresa_dopo": "false",
  "rinnovabili_obblighi": "rispettati",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false
 }

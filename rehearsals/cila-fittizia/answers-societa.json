@@ -39,5 +39,6 @@
  "impresa_dopo": "false",
  "cliente_carica": "legale rappresentante",
  "domicilio_inipec": true,
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false
 }

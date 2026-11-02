@@ -114,5 +114,7 @@
  "scarico_doc": "rehearsals/pdc-fittizio/files/documentazione-scarico.pdf",
  "altri_vincoli_eco_tipo": "pozzi",
  "altri_vincoli_eco_doc": "rehearsals/scia-fittizia/files/autocertificazione-vincoli.pdf",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

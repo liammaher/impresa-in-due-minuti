@@ -10,5 +10,6 @@
  "superficie_non_alimentare_mq": "60",
  "diritti_euro": "80",
  "fatti": [],
- "superficie_alimentare_mq": "0"
+ "superficie_alimentare_mq": "0",
+ "diritti_esente": false
 }

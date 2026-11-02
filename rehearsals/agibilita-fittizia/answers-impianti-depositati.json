@@ -96,5 +96,6 @@
  "igienico_5bis_caso": "altezza",
  "igienico_adattabilita": "true",
  "ascensore_comunicazione": "sca",
- "agibilita_attestante": "direttore dei lavori"
+ "agibilita_attestante": "direttore dei lavori",
+ "diritti_esente": false
 }

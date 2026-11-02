@@ -256,5 +256,11 @@
   "answers": "answers-terreno.json",
   "result": "filled",
   "seconds": 142.7
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-altro.json",
+  "result": "filled",
+  "seconds": 168.5
  }
 ]
