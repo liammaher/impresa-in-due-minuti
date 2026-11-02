@@ -450,13 +450,47 @@ def nth_block(obj, n):
     return json.loads(json.dumps(obj, ensure_ascii=False).replace("#N", str(n) if n > 1 else "").replace("#K", str(n)))
 
 
+def leaves(w):
+    """A wizard screen's tree as a list: each a label, a {leaf, nth}, or a {leaf, when}."""
+    t = w.get("tree", [])
+    return t if isinstance(t, list) else [t]
+
+
+def chosen(steps, values):
+    """The steps for this case's "Scelte eventuali": a tick a recipe takes only for some cases
+    ({leaf, when}: there are co-holders) is ticked when its `when` holds for this case, and the
+    sections it adds (each with the same `when`) are gone when it doesn't. An unanswered `when`
+    counts as not taken; pre-flight asks it first: the steps keep each such `when` (`chosen`)."""
+    conditional = any(isinstance(x, dict) and "when" in x for w in steps.get("wizard", []) for x in leaves(w)) \
+        or any("when" in s for s in steps["sections"])
+    if not conditional:
+        return steps
+    taken = lambda x: truthy(values.render(x["when"]) or "")
+
+    def bare(x):
+        rest = {k: v for k, v in x.items() if k != "when"}
+        return rest["leaf"] if set(rest) == {"leaf"} else rest
+    wizard = []
+    for w in steps.get("wizard", []):
+        if "tree" not in w:
+            wizard.append(w)
+            continue
+        tree = [bare(x) if isinstance(x, dict) and "when" in x else x
+                for x in leaves(w) if not (isinstance(x, dict) and "when" in x) or taken(x)]
+        wizard.append({k: (tree[0] if len(tree) == 1 else tree) if k == "tree" else v for k, v in w.items() if k != "tree" or tree})
+    sections = [{k: v for k, v in s.items() if k != "when"} for s in steps["sections"] if "when" not in s or taken(s)]
+    whens = [x["when"] for w in steps.get("wizard", []) for x in leaves(w) if isinstance(x, dict) and "when" in x]
+    return {**steps, "wizard": wizard, "sections": sections, "chosen": list(dict.fromkeys(whens))}
+
+
 def expand(steps, values):
     """The steps for this case's count of each "+" block. gen.py writes a block the national
     form lets repeat without limit (other technicians, "altro" titles, filings) once, as a
     template: an `add` with `each` (the count, the first block it adds), then its fields with
     `block: "#N"`. Each block also waits for its count (`atleast_n`), so before the count is
     answered one block shows what will be asked. An ask named with #N or #K becomes one per
-    block (values.asks too). Steps with no template come back as they are."""
+    block (values.asks too). Steps with no template come back as they are, after `chosen`."""
+    steps = chosen(steps, values)
     if not any(f.get("block") == "#N" for s in steps["sections"] for f in s["fields"]):
         return steps
     out = {**steps, "sections": []}
@@ -557,6 +591,11 @@ def templates(steps):
     for w in steps.get("wizard", []):
         if "fill" in w:
             yield f"wizard: {w['screen']}", w["fill"]["value"], {}
+        for x in leaves(w):
+            if isinstance(x, dict) and "when" in x:
+                yield f"wizard: {w['screen']}: {x['leaf']}", x["when"], {}
+    for w in steps.get("chosen", []):
+        yield "wizard: Scelte eventuali", w, {}
     for sec in steps["sections"]:
         for f in sec["fields"]:
             for k in ("when", "value"):
@@ -646,6 +685,11 @@ def needed(steps, values):
     for w in steps.get("wizard", []):
         if "fill" in w:
             add(asked(w["fill"]["value"]))
+        for x in leaves(w):
+            if isinstance(x, dict) and "when" in x:
+                gate(x["when"])  # a scelta ticked only for some cases: its question
+    for w in steps.get("chosen", []):
+        gate(w)
     for sec in steps["sections"]:
         for f in sec["fields"]:
             deps = ()
@@ -860,7 +904,8 @@ def preflight(steps, values, urls=None, made_up=False):
         if k not in need:
             continue
         a, v = asks[k], values.raw(k)
-        if v is None and "default" in a:
+        # A default answers it, unless it reads a vault field that's empty: then it's asked.
+        if v is None and "default" in a and values.field("ask." + k) is not None:
             continue
         hangs = {"only_if": sorted(need[k])} if need[k] else {}
         if v is None and "propose" in a:

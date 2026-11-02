@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (171 cases in all, 170 with a recorded filled run).
+  case (178 cases in all, 177 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -29,13 +29,13 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 32 | 0 | 1 | 2 | 7 | 19 |
+| CILA | 43 | 33 | 0 | 1 | 1 | 7 | 19 |
 | Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 8 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 2 |
-| Permesso di costruire | 153 | 112 | 0 | 14 | 8 | 14 | 117 |
-| SCIA | 150 | 130 | 0 | 4 | 2 | 10 | 43 |
-| SCIA alternativa | 128 | 110 | 0 | 6 | 3 | 8 | 50 |
-| Agibilità (SCA) | 36 | 30 | 0 | 0 | 1 | 5 | 12 |
+| Permesso di costruire | 153 | 114 | 0 | 13 | 7 | 14 | 117 |
+| SCIA | 150 | 131 | 0 | 4 | 1 | 10 | 43 |
+| SCIA alternativa | 128 | 111 | 0 | 6 | 2 | 8 | 50 |
+| Agibilità (SCA) | 36 | 31 | 0 | 0 | 0 | 5 | 12 |
 
 ## Next cases
 
@@ -43,7 +43,6 @@ Mapped, no case yet (an answers file away):
 
 - CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
 - Fine lavori: `comunicazioni/fine_lavori` → `stato_lavori_parziale` (in forma parziale come da planimetria allegata)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `nuova_costruzione_area_libera_check` (che le opere riguardano un intervento di nuova costruzione su area li…)
 - Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `immobile_non_obbligatorio` (si tratta di immobile realizzato in un’epoca in cui non era obbligato…)
 - Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `non_disponibile_titolo` (non sono disponibili la copia o gli estremi del titolo abilitativo, m…)
 - Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `tolleranza_costruttiva` (che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/…)
@@ -70,9 +69,7 @@ Mapped, no case yet (an answers file away):
 
 On the portal, not mapped (dictionary work first):
 
-- CILA: `comunicazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - CILA: `comunicazioni/imprese_esecutrici` → `da_soggetti_coinvolti` (che i lavori sono/saranno eseguiti dalla impresa/e indicata/e alla se…)
-- Permesso di costruire: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_atto` (dà atto che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `realizzazione_intervento_attesta` (attesta che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica` → `permesso_costruire_in_sanatoria` (ai fini della sanatoria, la presente SCIA:)
@@ -80,12 +77,9 @@ On the portal, not mapped (dictionary work first):
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `realizzazione_intervento_attesta` (attesta che la data/epoca di realizzazione dell’intervento)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita/disciplina_urbanistica_edilizia` → `permesso_costruire_in_sanatoria` (ai fini della sanatoria, la presente SCIA:)
 - Permesso di costruire: `relazione_tecnica_asseverazione/autorizzazione_paesaggistica/ricade_in_zona_tutelata` → `procedimento_accertamento` (è assoggettato al procedimento di accertamento della compatibilità pa…)
-- SCIA: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - SCIA: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo…)
-- SCIA alternativa: `dichiarazioni/localizzazione_intervento/immobile/riferimentiCatastali/datiCatastali` → `terreni` (Nuovo Catasto Terreni)
 - SCIA alternativa: `relazione_tecnica_asseverazione/materiali_risulta/[materiali_risulta_ctype]/comporta_produzione` → `vol_sup_6000` (le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo…)
 - SCIA alternativa: `relazione_tecnica_asseverazione/scarichi_idrici/[scarichi_idrici_ctype]` → `necessita_autorizzazione_scarico` (necessita di autorizzazione allo scarico e la stessa è stata richiest…)
-- Agibilità (SCA): `identificativi_immobile/dati_catastali` → `terreni` (Nuovo Catasto Terreni)
 
 ## Every choice
 
@@ -109,7 +103,7 @@ On the portal, not mapped (dictionary work first):
 | `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `procedimento_automatizzato` | portal has no automated/ordinary procedure box in the CILA | h | no portal box |  |
 | `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `procedimento_ordinario` | portal has no automated/ordinary procedure box in the CILA | h | no portal box |  |
 | `comunicazioni/localizzazione_intervento/immobile/riferiment…` | `fabbricati` | Nuovo Catasto Edilizio Urbano | h | filled on the portal | 36 |
-| `comunicazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | on the portal, not mapped |  |
+| `comunicazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | filled on the portal | 1 |
 | `comunicazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_gratuito` | l'intervento da realizzare è a titolo gratuito | h | filled on the portal | 3 |
 | `comunicazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `(nothing)` | l'intervento da realizzare è a titolo oneroso, in quanto rientra negl… | m | filled on the portal | 1 |
 | `comunicazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `ric_versamento` | allega la ricevuta di versamento | h | filled on the portal | 1 |
@@ -221,15 +215,15 @@ Portal boxes of the Inizio lavori no schema alternative matched and no case tick
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `condizione_sicurezza_rimozione` | propone la realizzazione di interventi anche strutturali necessari re… | l | left empty |  |
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `oblazione_doppio_contributo_totale` | il rilascio del permesso di costruire in sanatoria è subordinato al p… | l | filled on the portal | 1 |
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `condizione_sicurezza_rimozione_doppia` | propone la realizzazione di interventi anche strutturali necessari re… | l | left empty |  |
-| `dichiarazioni/titolo_possesso` | `titolare_esclusivo` | avere titolarità esclusiva all'esecuzione dell'intervento | h | filled on the portal | 1 |
+| `dichiarazioni/titolo_possesso` | `titolare_esclusivo` | avere titolarità esclusiva all'esecuzione dell'intervento | h | filled on the portal | 2 |
 | `dichiarazioni/titolo_possesso` | `non_titolare_esclusivo` | non avere titolarità esclusiva all'esecuzione dell'intervento, ma di… | h | filled on the portal | 3 |
 | `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `fabbricati` | Nuovo Catasto Edilizio Urbano | h | filled on the portal | 36 |
-| `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | on the portal, not mapped |  |
+| `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | filled on the portal | 1 |
 | `dichiarazioni/opere_previste` | `no_parti_comuni` | non riguardano parti comuni | h | filled on the portal | 4 |
 | `dichiarazioni/opere_previste` | `parti_comuni_condominio` | riguardano le parti comuni di un fabbricato condominiale (1) | h | filled on the portal | 1 |
 | `dichiarazioni/opere_previste` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | filled on the portal | 1 |
 | `dichiarazioni/opere_previste` | `parti_comuni_no_assenso` | riguardano parti dell'edificio di proprietà comune ma non necessitano… | h | filled on the portal | 1 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `nuova_costruzione_area_libera_check` | che le opere riguardano un intervento di nuova costruzione su area li… | h | mapped, no case yet |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `nuova_costruzione_area_libera_check` | che le opere riguardano un intervento di nuova costruzione su area li… | h | filled on the portal | 1 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `(nothing)` | absence: leave P037 unticked | h | no portal box |  |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `oggetto_titolo_pratiche_edilizie` | che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o prati… | h | filled on the portal | 4 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | mapped, no case yet |  |
@@ -522,7 +516,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `estremi_pagamento_sanatoria` | si forniscono gli estremi del pagamento | m | filled on the portal | 1 |
 | `dichiarazioni/sanatoria_in_corso/[sanatoria_in_corso_ctype]…` | `importo_ricevuta_pagamento` | si allega la ricevuta del pagamento | m | filled on the portal | 1 |
 | `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `fabbricati` | Nuovo Catasto Edilizio Urbano | h | filled on the portal | 36 |
-| `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | on the portal, not mapped |  |
+| `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | filled on the portal | 1 |
 | `dichiarazioni/opere_previste` | `no_parti_comuni` | non riguardano parti comuni | h | filled on the portal | 9 |
 | `dichiarazioni/opere_previste` | `parti_comuni_condominio` | riguardano le parti comuni di un fabbricato condominiale (1) | h | filled on the portal | 1 |
 | `dichiarazioni/opere_previste` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | filled on the portal | 1 |
@@ -698,7 +692,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `procedimentoAutomatizzato` | portal has no such option (P012 only states the SCIA alt. eligibility) | m | no portal box |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `procedimentoOrdinario` | portal has no such option | m | no portal box |  |
 | `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `fabbricati` | Nuovo Catasto Edilizio Urbano | h | filled on the portal | 36 |
-| `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | on the portal, not mapped |  |
+| `dichiarazioni/localizzazione_intervento/immobile/riferiment…` | `terreni` | Nuovo Catasto Terreni | h | filled on the portal | 1 |
 | `dichiarazioni/opere_previste` | `no_parti_comuni` | non riguardano parti comuni | h | filled on the portal | 9 |
 | `dichiarazioni/opere_previste` | `parti_comuni_condominio` | riguardano le parti comuni di un fabbricato condominiale (1) | h | filled on the portal | 1 |
 | `dichiarazioni/opere_previste` | `parti_comuni_fabbricato_multiprop` | riguardano parti comuni di un fabbricato con più proprietà, non costi… | h | filled on the portal | 1 |
@@ -873,7 +867,7 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 | Schema choice | Alternative | Portal box | Match | State | Rehearsals |
 |---|---|---|---|---|---:|
 | `identificativi_immobile/dati_catastali` | `fabbricati` | Nuovo Catasto Edilizio Urbano | h | filled on the portal | 36 |
-| `identificativi_immobile/dati_catastali` | `terreni` | Nuovo Catasto Terreni | h | on the portal, not mapped |  |
+| `identificativi_immobile/dati_catastali` | `terreni` | Nuovo Catasto Terreni | h | filled on the portal | 1 |
 | `dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunica…` | `protocollo_comunicazione_fine_lavori` | che la comunicazione di fine lavori è stata già presentata | m | filled on the portal | 1 |
 | `dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunica…` | `data_fine_lavori` | che la presente segnalazione vale come comunicazione di fine lavori | m | filled on the portal | 1 |
 | `dichiarazioni_sezione_a/comunicazione_fine_lavori/[comunica…` | `stato_lavori_completati` | completamente | h | filled on the portal | 1 |

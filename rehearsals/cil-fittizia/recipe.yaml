@@ -37,7 +37,7 @@ rules:
 supports:
   # A firm still to be chosen: the CIL's quadro f) has no line for it, and the portal requires the
   # firm's details whatever its site-safety quadro says (a CILA case stopped on them, 2026-11-01).
-  - {if: "{{ask.lavori_in_proprio|not}}", value: "{{ask.impresa_dopo}}", in: ["false"], else: "The CIL names its building firm: its quadro f) has no line for a firm still to be chosen, and the portal requires the firm's details (seen 2026-11-01). File the CIL once the firm is chosen."}
+  - {if: "{{ask.lavori_in_proprio|not}}", value: "{{ask.impresa_dopo}}", in: ["false"], defect: cila-impresa-dopo, else: "The CIL names its building firm: its quadro f) has no line for a firm still to be chosen, and the portal requires the firm's details (seen 2026-11-01). File the CIL once the firm is chosen."}
   # A bene culturale: the Soprintendenza's authorization first, obtained apart (rules: soprintendenza-cil).
   - {if: "{{ask.intervento|is_opere_temporanee}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "On a bene culturale the works need the Soprintendenza's authorization first (art. 21 c. 4 D.Lgs. 42/2004), and Napoli's SUE portal has no procedure to ask for it with this pratica: request it from the Soprintendenza ABAP per il Comune di Napoli (by PEC to sabap-na@pec.cultura.gov.it, on its form 'Istanza per opere su immobili vincolati', 16 euro bollo; up to 120 days, art. 22), then file this."}
   - when: "{{ask.altri_atti|not}}"

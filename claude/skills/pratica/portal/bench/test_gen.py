@@ -312,12 +312,15 @@ def _():
     assert any("articolo 24" in t for t in sec.get("theirs", [])), sec.get("theirs")
 
 
-@case("two scelte both keep the sections they add, and the wizard ticks both (voltura with a co-holder)")
+@case("two scelte both keep the sections they add, and the wizard ticks both; one the case decides waits on it, its section too (voltura's co-holder)")
 def _():
     steps = generated("voltura-pdc-fittizia")
     names = [x["section"] for x in steps["sections"]]
     assert "Informazioni su eventuali altri aventi titolo" in names and "Qualifica e dati del procuratore" in names
-    assert steps["wizard"][-1]["tree"][0] == "ci sono cointestatari" and len(steps["wizard"][-1]["tree"]) == 2
+    tree = steps["wizard"][-1]["tree"]
+    assert tree[0] == {"leaf": "ci sono cointestatari", "when": "{{ask.cointestatario}}"} and len(tree) == 2, tree
+    sec = section(steps, "Informazioni su eventuali altri aventi titolo")
+    assert sec["when"] == "{{ask.cointestatario}}" and all(f["when"].startswith("{{ask.cointestatario}}") for f in sec["fields"])
 
 
 @case("a section name two pratiche share takes the entry that fits; a tick that renumbers itself and what follows go by label (paesaggistica semplificata)")
