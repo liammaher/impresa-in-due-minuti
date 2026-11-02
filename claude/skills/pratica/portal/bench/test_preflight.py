@@ -482,7 +482,8 @@ def sanatoria_cases():
             assert pre(json.loads((d / f"answers-{a}.json").read_text()))["ready"], a
         assert pre(p6)["ready"]
         # The receipt has no slot of its own: the person attaches it signed, so pre-flight asks no file.
-        assert not any(q.get("ask") == "sanatoria_ricevuta" for q in pre(p6 | {"sanatoria_prova": "ricevuta"})["questions"])
+        r = pre(p6 | {"sanatoria_prova": "ricevuta"})
+        assert r["ready"] and not r["questions"], r["questions"]
         r = pre(p6 | {"sanatoria_caso": "conformita urbanistica"})
         assert any("a defect of the portal" in u for u in r["unsupported"]), r["unsupported"]
         # The known defect comes with it, for the person to choose (defects.yaml through gen.py).
