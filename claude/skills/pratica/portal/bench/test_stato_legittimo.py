@@ -158,12 +158,13 @@ def _():
     assert has(rs, "conforme alla documentazione dello stato legittimo o di fatto") and not has(rs, "pienamente conforme")
 
 
-@case("the permesso's new construction on free land: its own radio, no conformity")
+@case("the permesso's new construction on free land: its own radio, and fully conformant (the portal requires one of the two, 2026-11-02)")
 def _():
     a = json.loads((ROOT / "rehearsals" / "pdc-fittizio" / "answers-p6.json").read_text())
     a.update({"stato_legittimo": "area libera"})
     b = boxes(a, "pdc-fittizio")
-    assert list(b) == ["r1c1p1reg:radio:0_clone"], b
+    assert list(b)[0] == "r1c1p1reg:radio:0_clone" and len(b) == 2, b
+    assert has(rows(a, "pdc-fittizio"), "pienamente conforme")
 
 
 @case("as many altro lines as the count says (the national form sets no limit); refused: titles with none named, no document, no declaration")

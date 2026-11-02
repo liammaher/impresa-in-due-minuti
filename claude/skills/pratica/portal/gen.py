@@ -31,7 +31,10 @@ pratica that shows the section.
 A recipe's `operation` may be a list (a CILA with its autorizzazione paesaggistica): the
 pratica is the union of each operation's sections with the recipe's `scelte`, in the order
 of the combination's own crawl, which must hold just those (a section both have under two
-names, the same fields, is one). Every scelta named is ticked.
+names, the same fields, is one). Every scelta named is ticked, unless it is `{option, when}`:
+then it is ticked only when the case's answers make `when` true, and each section it adds
+carries that `when` (run.py drops the section otherwise), so one recipe files a pratica with
+co-holders and one without.
 
 It stops, writing nothing, on a section the dictionary doesn't have, a dictionary field
 the crawl doesn't show, or a field the section shows that no dictionary entry fills or
@@ -631,6 +634,10 @@ def unslotted(steps):
 
 def generate(recipe, base=HERE):
     recipe = resolved(recipe)
+    # A scelta is its option, or {option, when}: ticked only for the cases `when` holds (co-holders).
+    scelte = [s if isinstance(s, str) else s["option"] for s in recipe.get("scelte") or []]
+    scelta_when = {s["option"]: s["when"] for s in recipe.get("scelte") or [] if isinstance(s, dict)}
+    added_when = {}  # a section a conditional scelta adds: that scelta's `when`
     cat_dir = base / "catalogue" / recipe["comune"]
     catalogue = json.loads((cat_dir / f"{recipe['sportello']}-wizard.json").read_text())
     crawl = json.loads((cat_dir / "sections" / f"{recipe['crawl']}.json").read_text())
@@ -647,9 +654,9 @@ def generate(recipe, base=HERE):
         op = {"label": recipe["operation"], "scelte": []}
         # A batch crawl (crawl.js batch) says which sections the base pratica has and which a
         # scelta adds; the recipe's scelte pick those.
-        names = [s["section"] for s in crawl["sections"] if not s.get("scelta") or s["scelta"] in recipe.get("scelte", [])]
+        names = [s["section"] for s in crawl["sections"] if not s.get("scelta") or s["scelta"] in scelte]
         # A scelta the batch tried only once (its first pratica): its sections from there.
-        for sc in recipe.get("scelte", []):
+        for sc in scelte:
             if any(s.get("scelta") == sc for s in crawl["sections"]):
                 continue
             for other in sorted((cat_dir / "sections").glob("*.json")):
@@ -660,6 +667,7 @@ def generate(recipe, base=HERE):
                     break
             else:
                 raise GenError(f"no crawl has tried the scelta {sc!r}")
+        added_when = {norm(s["section"]): scelta_when[s["scelta"]] for s in crawl["sections"] if s.get("scelta") in scelta_when}
         if "wizard" not in recipe:
             raise GenError("the catalogue has no pratica for this operation: the recipe needs `wizard`")
     else:
@@ -673,9 +681,13 @@ def generate(recipe, base=HERE):
                 raise GenError(f"no operation {label!r} in the catalogue")
             # Each scelta drops and adds by index, so a second one keeps what the first added.
             own = list(o["sections"])
-            for s in recipe.get("scelte", []):
+            for s in scelte:
                 sc = next((x for x in o.get("scelte", []) if x["option"] == s), None) or \
                     (_ for _ in ()).throw(GenError(f"no scelta {s!r} for {label}"))
+                if s in scelta_when:
+                    if sc.get("drops"):
+                        raise GenError(f"the scelta {s!r} drops sections: it can't depend on the case (`when`)")
+                    added_when.update({norm(catalogue["sections"][i]): scelta_when[s] for i in sc.get("adds", []) if i not in own})
                 own = [i for i in own if i not in sc.get("drops", [])] + [i for i in sc.get("adds", []) if i not in own]
             # A Si/No question answered Si adds its sections too (the SCIA's sanatoria quadro).
             for q, a in (recipe.get("si_no") or {}).items():
@@ -751,6 +763,11 @@ def generate(recipe, base=HERE):
             problems.extend(min(tried, key=len))  # the entry that came closest
             continue
         asks_used |= used
+        if norm(name) in added_when:
+            # A section a scelta adds only for some cases: it and each of its fields wait on it.
+            w = added_when[norm(name)]
+            out = {"section": out["section"], "when": w, **{k: v for k, v in out.items() if k != "section"}}
+            out["fields"] = [{**f, "when": f"{w} {f['when']}" if f.get("when") else w} for f in out["fields"]]
         out_sections.append(out)
         # A section's own refusals (the cases its boxes can't state) go with it into every
         # pratica that shows it, after the recipe's.
@@ -822,7 +839,7 @@ def generate(recipe, base=HERE):
             if c["defect"] not in defects:
                 raise GenError(f"supports names the defect {c['defect']!r}, not in defects.yaml")
             supports[i] = {**c, "defect": {"id": c["defect"], **defects[c["defect"]]}}
-    for t in ASKED.findall(json.dumps([recipe.get("yours"), supports, recipe.get("rules")])):
+    for t in ASKED.findall(json.dumps([recipe.get("yours"), supports, recipe.get("rules"), scelta_when])):
         asks_used.add(t)
     # The dictionary's questions, the recipe's wording over them; a question only this pratica
     # asks (one `supports` or `rules` reads) is the recipe's alone.
@@ -872,7 +889,8 @@ def generate(recipe, base=HERE):
         {"screen": "Scelta del destinatario della pratica", "confirm": "CONFERMA"},
     ]
     if recipe.get("scelte") is not None and "wizard" not in recipe:
-        wizard.append({"screen": "Scelte eventuali", **({"tree": recipe["scelte"][0] if len(recipe["scelte"]) == 1 else recipe["scelte"]} if recipe["scelte"] else {}),
+        tree = [{"leaf": s, "when": scelta_when[s]} if s in scelta_when else s for s in scelte]
+        wizard.append({"screen": "Scelte eventuali", **({"tree": tree[0] if len(tree) == 1 else tree} if tree else {}),
                        **({"answers": recipe["si_no"]} if recipe.get("si_no") else {}),
                        "confirm": "CONFERMA"})
     return {

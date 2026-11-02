@@ -8,14 +8,15 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 1008 | Claude takes it when the case does |
+| ticked | 1009 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 6 | left empty on purpose |
 | law | 25 | closed by law to new cases (the piano casa, a repealed rule): refused as the law's, not a gap |
-| defect | 30 | a known portal defect blocks the case (`defects.yaml`): refused with it, not a gap |
+| suap | 22 | an option only the SUAP's procedures take (the bollo's reasons for a fire-brigade or emissions filing): no SUE case, not a gap |
+| defect | 36 | a known portal defect blocks the case (`defects.yaml`): refused with it, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 44 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 15 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -34,12 +35,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: all'Estero
 
-### Dati catastali / dati catastali
-
-35 pratiche; 1 of 2 choices to map.
-
-- radio: Nuovo Catasto Terreni
-
 ### Dichiarazione relativa ai diritti di segreteria/istruttori / dichiarazione relativa ai diritti di segreteria/istruttori
 
 31 pratiche; 1 of 5 choices to map.
@@ -48,30 +43,8 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 ### Dichiarazione relativa all'assolvimento dell'imposta di bollo / dichiarazione relativa all'imposta di bollo
 
-21 pratiche; 31 of 35 choices to map.
+21 pratiche; 9 of 35 choices to map.
 
-- radio: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo per l'autorizzazione perché il procedimento può concludersi con il silenzio assens (under: Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digit)
-- select: per la seguente motivazione = adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comp → adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comprese nell'A.U.A.) (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
-- select: per la seguente motivazione = domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ricettive alberghiere/all'aperto/complement → domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ricettive alberghiere/all'aperto/complementari (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
-- select: per la seguente motivazione = procedura abilitativa semplificata e comunicazione per gli impianti alimentati da energia rinnovabile - Impianti fotovoltaici di p → procedura abilitativa semplificata e comunicazione per gli impianti alimentati da energia rinnovabile - Impianti fotovoltaici di potenza inferiore ad 1 MW (ex art. 6 D.Lgs. 28/2011) (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
-- select: per la seguente motivazione = denuncia opere in conglomerato cementizio armato normale e precompresso ed a struttura metallica (art. 65 DPR n. 380/2001) (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
-- select: per la seguente motivazione = richiesta di nulla osta alla Provincia/città metropolitana per l'occupazione di suolo pubblico dentro i centri abitati (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
-- select: per la seguente motivazione = presentazione della Valutazione progetto ai VVF (art. 3 DPR n. 151/2011) (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
-- select: per la seguente motivazione = presentazione della Valutazione progetto ai VVF per installazione impianto di stoccaggio e rigassificazione del GNL (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
-- select: per la seguente motivazione = rilascio nulla osta allo scarico in pubblica fognatura di acque reflue domestiche o assimilabili alle domestiche (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
-- select: per la seguente motivazione = deposito del collaudo statico ai sensi dell'art. 67 del DPR 380/2001 (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
-- select: per la seguente motivazione = deposito relazione a struttura ultimata ai sensi dell'art. 65 del DPR 380/2001 (under: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo pe)
-- radio: Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procedimento può concludersi con il silenzio assenso dell'Amministrazione o con rilascio di (under: Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo di cu)
-- select: per la seguente motivazione = adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comp → adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152 del 2006 (esclusivamente quando non comprese nell'A.U.A.) (under: Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procediment)
-- select: per la seguente motivazione = domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ricettive alberghiere/all'aperto/complement → domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ricettive alberghiere/all'aperto/complementari (under: Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procediment)
-- select: per la seguente motivazione = procedura abilitativa semplificata e comunicazione per gli impianti alimentati da energia rinnovabile - Impianti fotovoltaici di p → procedura abilitativa semplificata e comunicazione per gli impianti alimentati da energia rinnovabile - Impianti fotovoltaici di potenza inferiore ad 1 MW (ex art. 6 D.Lgs. 28/2011) (under: Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procediment)
-- select: per la seguente motivazione = denuncia opere in conglomerato cementizio armato normale e precompresso ed a struttura metallica (art. 65 DPR n. 380/2001) (under: Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procediment)
-- select: per la seguente motivazione = richiesta di nulla osta alla Provincia/città metropolitana per l'occupazione di suolo pubblico dentro i centri abitati (under: Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procediment)
-- select: per la seguente motivazione = presentazione della Valutazione progetto ai VVF (art. 3 DPR n. 151/2011) (under: Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procediment)
-- select: per la seguente motivazione = presentazione della Valutazione progetto ai VVF per installazione impianto di stoccaggio e rigassificazione del GNL (under: Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procediment)
-- select: per la seguente motivazione = rilascio nulla osta allo scarico in pubblica fognatura di acque reflue domestiche o assimilabili alle domestiche (under: Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procediment)
-- select: per la seguente motivazione = deposito del collaudo statico ai sensi dell'art. 67 del DPR 380/2001 (under: Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procediment)
-- select: per la seguente motivazione = deposito relazione a struttura ultimata ai sensi dell'art. 65 del DPR 380/2001 (under: Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procediment)
 - radio: Per gli Enti autorizzati, l'imposta di bollo è assolta in modo virtuale ai sensi del D.M. 10/11/2011 o ai sensi dell'art. 15 D.P.R. 642/1972 ...
 - radio: Il pagamento non è dovuto poiché esentati ...
 - select: per la seguente motivazione = ai sensi dell'art.82, c.5, d.Lgs. n.117/2017 (Enti del Terzo settore iscritti nel registro unico nazionale del Terzo settore ai se → ai sensi dell'art.82, c.5, d.Lgs. n.117/2017 (Enti del Terzo settore iscritti nel registro unico nazionale del Terzo settore ai sensi dell'art. 4, legge 117/2017) (under: Il pagamento non è dovuto poiché esentati ...)
@@ -88,13 +61,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - checkbox: In caso di intervento in VARIANTE :
 
-### Asseverazione PdC - tutela storico ambientale
-
-3 pratiche; 2 of 13 choices to map.
-
-- radio: è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all’articolo 36-bis del DPR 380/2001 e (under: ricade in zona tutelata e le opere comportano alterazione dei luoghi o dell'aspe)
-- checkbox: si allega documentazione necessaria ai fini del rilascio del parere vincolante (vedi quadro della documentazione allegata - art. 36-bis comma 4 DPR 380/2001)” (under: è assoggettato al procedimento di accertamento della compatibilità paesaggistica)
-
 ### Asseverazione PdC - Dati progettista e descrizione opere
 
 3 pratiche; 1 of 44 choices to map.
@@ -106,25 +72,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 3 pratiche; 1 of 12 choices to map.
 
 - checkbox: 4. Altri interventi individuati dalla legislazione regionale (1)
-
-### g) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
-
-3 pratiche; 1 of 8 choices to map.
-
-- radio: ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché i 
-
-### i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
-
-3 pratiche; 1 of 8 choices to map.
-
-- radio: ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori, poiché i 
-
-### SANATORIA
-
-1 pratiche; 2 of 9 choices to map.
-
-- radio: lo Sportello Unico può subordinare il rilascio del permesso di costruire in sanatoria alla realizzazione di interventi anche strutturali necessari alla sicurezz (under: che risulta conforme alla disciplina urbanistica vigente al momento della presen)
-- radio: lo Sportello Unico può subordinare il rilascio del permesso di costruire in sanatoria alla realizzazione di interventi anche strutturali necessari alla sicurezz (under: che risulta conforme alla disciplina urbanistica e edilizia vigente sia al momen)
 
 ### Qualificazione dell'intervento di rinnovo
 

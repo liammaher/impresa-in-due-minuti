@@ -66,9 +66,10 @@ def _():
     assert one("g1) Tecnici incaricati", "tecnico incaricato")["state"] == "ticked"
 
 
-@case("a choice no entry names is unmapped (the land register)")
+@case("a choice no entry names is unmapped (a procuratore living abroad); one under an answer is ticked (the land register)")
 def _():
-    assert one("Dati catastali", "Nuovo Catasto Terreni")["state"] == "unmapped"
+    assert one("Qualifica e dati del procuratore", "all'Estero")["state"] == "unmapped"
+    assert one("Dati catastali", "Nuovo Catasto Terreni")["state"] == "ticked"
     assert one("Dati catastali", "Nuovo Catasto Edilizio Urbano")["state"] == "ticked"
 
 
