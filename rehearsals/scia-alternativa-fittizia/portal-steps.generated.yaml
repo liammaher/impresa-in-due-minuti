@@ -109,8 +109,8 @@ asks:
     propose: '{{ask.cambio_uso|sue_scia_cambio_uso}}'}
   scia_alt_tipo: {type: choice, question: 'Which works does the SCIA alternativa al permesso file (art. 23 c. 1 DPR 380/2001)? ristrutturazione edilizia (one of art. 10 c. 1 c); nuova costruzione piano
       attuativo (new building or ristrutturazione urbanistica under a piano attuativo with precise plano-volumetric rules); nuova costruzione strumento generale (new building directly under the town plan''s
-      precise plano-volumetric rules); regionale (other works a regional law files by SCIA alternativa, art. 23 c. 01, named as the relazione tecnico-illustrativa names them)', options: [ristrutturazione
-        edilizia, nuova costruzione piano attuativo, nuova costruzione strumento generale, regionale], propose: '{{ask.intervento|sue_scia_alt_tipo}}'}
+      precise plano-volumetric rules); regionale (works Campania adds, L.R. 13/2022 art. 2 c. 6 under art. 23 c. 01: an urbanistically relevant change of use, with or without works, or an attic made habitable;
+      named as the relazione tecnico-illustrativa names them)', options: [ristrutturazione edilizia, nuova costruzione piano attuativo, nuova costruzione strumento generale, regionale], propose: '{{ask.intervento|sue_scia_alt_tipo}}'}
   intervento_tipo: {type: text, question: The works' type as the relazione tecnico-illustrativa names it (one line)}
   barriere_accessibilita: {type: yes_no, group: barriere_requisiti, item: Accessibilità}
   barriere_visitabilita: {type: yes_no, group: barriere_requisiti, item: Visitabilità}

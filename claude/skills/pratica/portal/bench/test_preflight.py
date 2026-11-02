@@ -622,6 +622,16 @@ def exemptions_and_other_kinds():
             base.pop("bollo_esenzione")
             r, _ = case(semplificata, base)
             assert ("bollo_esenzione", "no") in [(p["key"], p["proposal"]) for p in r["proposals"]], (a, r["proposals"])
+        # An exempt client isn't asked how it pays; one that pays is, once that's known.
+        unasked = json.loads((root / semplificata / "answers-esenzioni.json").read_text())
+        unasked.pop("bollo_marche")
+        r, _ = case(semplificata, unasked)
+        assert r["ready"] and not any(p["key"] == "bollo_marche" for p in r["proposals"]), r["proposals"]
+        paying = json.loads((root / semplificata / "answers-p6.json").read_text())
+        paying.pop("bollo_marche"); paying.pop("bollo_esenzione")
+        r, _ = case(semplificata, paying)
+        # (the ONLUS follow-up waits on the exemption: `only_if`)
+        assert [p["key"] for p in r["proposals"] if p["key"].startswith("bollo") and not p.get("only_if")] == ["bollo_esenzione"], r["proposals"]
         r, b = case(semplificata, "esenzioni")
         assert ("Il pagamento non è dovuto poiché esentati", None) in b and not any(l.startswith("Il pagamento è dovuto") for l, _ in b), b
         assert ("per la seguente motivazione", run.BOLLO_ESENZIONE["cooperativa sociale"]) in b, b
@@ -630,6 +640,12 @@ def exemptions_and_other_kinds():
         spaced = json.loads((root / semplificata / "answers-esenzioni.json").read_text()) | {"bollo_esenzione": "cooperativa sociale "}
         _, b2 = case(semplificata, spaced)
         assert [x for x in b2 if x[0].startswith(("Il pagamento", "per la seguente"))] == [x for x in b if x[0].startswith(("Il pagamento", "per la seguente"))], b2
+        # An ONLUS only for a tax year begun before 2026, when the regime ended.
+        onlus = json.loads((root / semplificata / "answers-esenzioni.json").read_text()) | {"bollo_esenzione": "onlus"}
+        r, _ = case(semplificata, onlus | {"bollo_onlus_esercizio": False})
+        assert any("ONLUS exemption ended" in u for u in r["unsupported"]), r["unsupported"]
+        r, b = case(semplificata, onlus | {"bollo_onlus_esercizio": True})
+        assert ("per la seguente motivazione", run.BOLLO_ESENZIONE["onlus"]) in b, b
         r, b = case(semplificata, "bollo-virtuale")
         assert any(l.startswith("Per gli Enti autorizzati") for l, _ in b), b
         assert ("dichiarazione relativa all'assolvimento dell'imposta di bollo", "rehearsals/scia-fittizia/files/dichiarazione-bollo-virtuale.pdf") in b, b
@@ -652,6 +668,18 @@ def exemptions_and_other_kinds():
         assert not r["ready"] and "nessuno" in r["missing"][0]["why"], r["missing"]
     finally:
         os.chdir(here)
+
+
+def carica_not_crash():
+    """An architect named in `people` who isn't the titolare has no Carica on the portal: pre-flight
+    names the box (the run would have crashed on it), and the titolare's own still passes."""
+    steps = {"sections": [{"section": "Scheda anagrafica", "fields": [
+        {"id": "x", "kind": "select", "label": "Carica", "value": "{{t:ruolo.tipo|carica}}"}]}]}
+    flds = {"chiara:ruolo.tipo": "titolare", "sofia:ruolo.tipo": "collaboratore", "sofia:identity.first_name": "Sofia"}
+    r = run.preflight(steps, run.Values({"people": {"t": "sofia"}}, fields=flds, asks={}), made_up=True)
+    assert not r["ready"] and any("carica" in m["field"] and "Scheda anagrafica" in m["why"] for m in r["missing"]), r["missing"]
+    r = run.preflight(steps, run.Values({}, fields=flds, asks={}), made_up=True)
+    assert r["ready"], r
 
 
 def every_sue_case_ready():
@@ -734,6 +762,7 @@ CASES = [
     ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
     ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused", scelte_follow_the_case),
     ("the bollo and diritti exemptions, the virtual bollo, the permesso's altro, the SCIA alternativa's regional works, a studio's other architect", exemptions_and_other_kinds),
+    ("a value the vault has but the form can't take (a Carica for a named architect who isn't the titolare) is reported, not crashed on", carica_not_crash),
 ]
 
 
