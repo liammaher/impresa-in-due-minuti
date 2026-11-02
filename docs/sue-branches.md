@@ -8,7 +8,7 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 1009 | Claude takes it when the case does |
+| ticked | 1012 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 6 | left empty on purpose |
@@ -16,7 +16,7 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 | suap | 22 | an option only the SUAP's procedures take (the bollo's reasons for a fire-brigade or emissions filing): no SUE case, not a gap |
 | defect | 36 | a known portal defect blocks the case (`defects.yaml`): refused with it, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 15 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 12 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -28,12 +28,6 @@ What the crawl didn't see (more choices may exist there):
 ## Unmapped, by section
 
 Most shared first: closing a choice in a section many pratiche show helps all of them.
-
-### Qualifica e dati del procuratore
-
-39 pratiche; 1 of 11 choices to map.
-
-- radio: all'Estero
 
 ### Dichiarazione relativa ai diritti di segreteria/istruttori / dichiarazione relativa ai diritti di segreteria/istruttori
 
@@ -55,12 +49,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 - select: per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti politici limitatamente all'adempimento di obb → ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti politici limitatamente all'adempimento di obblighi derivanti da disposizioni legislative o regolamentari) (under: Il pagamento non è dovuto poiché esentati ...)
 - select: per la seguente motivazione = ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo settore comprese le cooperative sociali ed es → ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo settore comprese le cooperative sociali ed escluse le imprese sociali costituite in forma di società) (under: Il pagamento non è dovuto poiché esentati ...)
 
-### Ambito dell'intervento
-
-7 pratiche; 1 of 4 choices to map.
-
-- checkbox: In caso di intervento in VARIANTE :
-
 ### Asseverazione PdC - Dati progettista e descrizione opere
 
 3 pratiche; 1 of 44 choices to map.
@@ -72,9 +60,3 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 3 pratiche; 1 of 12 choices to map.
 
 - checkbox: 4. Altri interventi individuati dalla legislazione regionale (1)
-
-### Qualificazione dell'intervento di rinnovo
-
-1 pratiche; 1 of 3 choices to map.
-
-- checkbox: sono richieste variazioni progettuali e/o sono sopravvenute specifiche prescrizioni di tutela (under: L'istanza di rinnovo riguarda l'Autorizzazione Paesaggistica, rilasciata ai sens)

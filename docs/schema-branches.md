@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (178 cases in all, 177 with a recorded filled run).
+  case (180 cases in all, 179 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -151,7 +151,7 @@ Portal boxes of the CILA no schema alternative matched and no case ticks:
 - Relazione Tecnica di Asseverazione C.I.…: 6%, per le U.I. < 60 mq di superficie utile; (mapped)
 - Relazione Tecnica di Asseverazione C.I.…: attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso… (mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
-- Qualifica e dati del procuratore: all'Estero (not mapped)
+- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### Fine lavori
 
@@ -169,7 +169,7 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 - Titolarità dell'intervento: avere titolarità esclusiva all'esecuzione dell'intervento (mapped)
 - Titolarità dell'intervento: Maschio (not mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
-- Qualifica e dati del procuratore: all'Estero (not mapped)
+- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### Inizio lavori
 
@@ -195,7 +195,7 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 Portal boxes of the Inizio lavori no schema alternative matched and no case ticks:
 
 - dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
-- Qualifica e dati del procuratore: all'Estero (not mapped)
+- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### Permesso di costruire
 
@@ -473,7 +473,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Dichiarazione relativa all'assolvimento…: ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti poli… (not mapped)
 - Dichiarazione relativa all'assolvimento…: ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo sett… (not mapped)
 - SANATORIA: lo Sportello Unico può subordinare il rilascio del permesso di costruire in sanatoria all… (not mapped)
-- Qualifica e dati del procuratore: all'Estero (not mapped)
+- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### SCIA
 
@@ -674,7 +674,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - SANATORIA e regolarizzazioni per interv…: si allega altra documentazione di cui all'articolo 9-bis, comma 1-bis, quarto periodo nei… (not mapped)
 - SANATORIA e regolarizzazioni per interv…: si forniscono gli estremi di versamento (not mapped)
 - SANATORIA e regolarizzazioni per interv…: si allega la ricevuta di versamento (not mapped)
-- Qualifica e dati del procuratore: all'Estero (not mapped)
+- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### SCIA alternativa
 
@@ -860,7 +860,7 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Asseverazione SCIA Alternativa - TUTELA…: si allegano le autocertificazioni relative alla conformità dell'intervento per i relativi… (mapped)
 - Asseverazione SCIA Alternativa - TUTELA…: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso (mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
-- Qualifica e dati del procuratore: all'Estero (not mapped)
+- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### Agibilità (SCA)
 
@@ -916,4 +916,4 @@ Portal boxes of the Agibilità (SCA) no schema alternative matched and no case t
 - Titolarità dell'intervento: Maschio (not mapped)
 - Attestazione tecnica - Dati del Diretto…: Maschio (mapped)
 - Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
-- Qualifica e dati del procuratore: all'Estero (not mapped)
+- Qualifica e dati del procuratore: all'Estero (mapped)
