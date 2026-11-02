@@ -130,7 +130,25 @@ FORMA = {
     "snc": "SOCIETA' IN NOME COLLETTIVO",
     "sas": "SOCIETA' IN ACCOMANDITA SEMPLICE",
     "spa": "SOCIETA' PER AZIONI",
+    "sapa": "SOCIETA' IN ACCOMANDITA PER AZIONI",
+    "cooperativa": "SOCIETA' COOPERATIVA",
 }
+# A client company's dichiarante (asks.cliente_carica) as the Scheda anagrafica's Carica list (the
+# Registro Imprese's) names it. That list and the Forma giuridica one have no condominium: its
+# administrator is AMMINISTRATORE of ALTRE FORME, NON NECESSITA DI ISCRIZIONE (read 2026-11-02).
+CARICA_CLIENTE = {"legale rappresentante": "LEGALE RAPPRESENTANTE", "amministratore unico": "AMMINISTRATORE UNICO",
+                  "amministratore delegato": "AMMINISTRATORE DELEGATO",
+                  "presidente cda": "PRESIDENTE CONSIGLIO AMMINISTRAZIONE",
+                  "amministratore di condominio": "AMMINISTRATORE"}
+# identity.citizenship as the Scheda anagrafica's Cittadinanza list names the country: the ones a
+# case has needed so far; another stops the run (a KeyError) instead of guessing.
+CITTADINANZA = {"italiana": "ITALIA", "francese": "FRANCIA", "tedesca": "GERMANIA", "spagnola": "SPAGNA",
+                "rumena": "ROMANIA", "romena": "ROMANIA", "polacca": "POLONIA", "britannica": "REGNO UNITO",
+                "statunitense": "STATI UNITI D'AMERICA", "albanese": "ALBANIA", "ucraina": "UCRAINA",
+                "marocchina": "MAROCCO", "cinese": "CINA", "srilankese": "SRI LANKA", "bangladese": "BANGLADESH",
+                "filippina": "FILIPPINE", "senegalese": "SENEGAL", "nigeriana": "NIGERIA", "egiziana": "EGITTO",
+                "tunisina": "TUNISIA", "russa": "RUSSIA", "indiana": "INDIA", "pakistana": "PAKISTAN",
+                "brasiliana": "BRASILE", "peruviana": "PERÙ"}
 
 
 def _carica(v):
@@ -269,6 +287,23 @@ FILTERS = Filters({
     "street": lambda v: _split_street(v)[1],
     "carica": _carica,
     "forma": lambda v: FORMA[v],
+    # A client that is a company or a condominium (c:business.*), from {{c:business.denominazione,
+    # c:business.rea|...}}: in the Registro delle imprese (a REA), or not (yet).
+    "impresa_iscritta": lambda v: "true" if all(_facts(v, 2)) else "false",
+    "impresa_non_iscritta": lambda v: "true" if _facts(v, 2)[0] and not _facts(v, 2)[1] else "false",
+    "carica_cliente": lambda v: CARICA_CLIENTE[v.strip().lower()],
+    # {{c:business.forma_giuridica,ask.cliente_carica|forma_cliente}}: a condominium is ALTRE FORME.
+    "forma_cliente": lambda v: "ALTRE FORME" if _facts(v, 2)[1] == "amministratore di condominio" else FORMA[_facts(v, 2)[0]],
+    "carica_proposta": lambda v: v.strip().lower() if v.strip().lower() == "amministratore di condominio" else "legale rappresentante",
+    "registro_proposto": lambda v: "non necessita" if v.strip().lower() == "amministratore di condominio" else "",
+    # The first of several fields that is set (a company's codice fiscale, else its partita IVA).
+    "first": lambda v: next((x for x in v.split("/") if x), ""),
+    # The holder a title is in the name of: a company's name, else the person's (first/last/company).
+    "intestatario": lambda v: (_facts(v, 3)[2] or f"{_facts(v, 3)[0]} {_facts(v, 3)[1]}").upper(),
+    "cittadinanza": lambda v: CITTADINANZA[v.strip().lower()],
+    "straniera": lambda v: "false" if v.strip().lower() in ("italiana", "italiano") else "true",
+    # Born abroad: identity.birth_province is EE.
+    "estero": lambda v: "true" if v.strip().upper() == "EE" else "false",
     "categoria": lambda v: re.sub(r"^([A-F])/?(\d)$", r"\g<1>0\2", v.replace(" ", "").upper()),
     "empty": lambda v: "true" if not v else "false",
     # Several yes/no answers at once ({{ask.a,ask.b|any}}): true when one is (a `when` has no "or").
@@ -868,13 +903,16 @@ def preflight(steps, values, urls=None, made_up=False):
     for where, tmpl, f in templates(steps):
         if where in ("supports", "rules", "yours") or (f.get("optional") and tmpl == f.get("value")):
             continue
-        if f and tmpl == f.get("value") and "when" in f:
+        if f and tmpl in (f.get("value"), f.get("when")) and "when" in f:
             # One false word is enough, whatever a later one would say (no other technicians:
-            # whether the second is an employee is never asked).
+            # whether the second is an employee is never asked), for the `when`'s own fields too
+            # (a person client's citizenship, under a company client's branch).
             if any(w is not None and not truthy(w) for w in map(values.render, re.findall(r"\{\{.+?\}\}", f["when"]))):
                 continue  # this field isn't filled for this case
+        # Several fields read at once ({{a,b|f}}) take an empty one as "" (a company with no REA).
+        several = {r.strip() for m in re.findall(r"\{\{([^}|]*,[^}|]*)", tmpl) for r in m.split(",")}
         for ref, filters in refs_in(tmpl):
-            if ref.startswith("ask."):
+            if ref.startswith("ask.") or ref in several:
                 continue
             full = values.titolare + ":" + ref[2:] if ref.startswith("t:") else ref
             read.add(full.rsplit(".", 1)[0])

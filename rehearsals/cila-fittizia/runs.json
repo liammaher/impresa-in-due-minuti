@@ -88,5 +88,41 @@
   "answers": "answers-impresa-dopo.json",
   "result": "stopped",
   "seconds": 88.4
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-societa.json",
+  "result": "stopped",
+  "seconds": 3
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-societa-non-iscritta.json",
+  "result": "stopped",
+  "seconds": 3.1
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-condominio.json",
+  "result": "stopped",
+  "seconds": 2.6
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-non-ue.json",
+  "result": "filled",
+  "seconds": 85.7
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-societa-non-iscritta.json",
+  "result": "filled",
+  "seconds": 92.4
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-condominio.json",
+  "result": "filled",
+  "seconds": 93.9
  }
 ]
