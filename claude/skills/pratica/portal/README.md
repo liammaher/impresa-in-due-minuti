@@ -23,6 +23,10 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    crawl, operation (or a list of them), scelte, `first`, `asks`, `yours` (what's left to the
    person: declarations, attachments, payment, signing), `supports` (the cases refused, with
    why: all or nothing; `if:` checks one only once its gate holds, asking it only then).
+   A scelta only some cases take is `{option, when}` (co-holders, a new direttore, the others'
+   assent): run.py ticks it, and keeps the sections it adds, only when its `when` holds. Until
+   2026-11-02 every scelta was fixed, so a voltura always had a co-holder and a cambio
+   d'intestazione never did, whatever the case said.
    Copy a sibling: `rehearsals/paesaggistica-ordinaria-fittizia`.
    **Two operations in one pratica** (a building pratica with its landscape authorization): the
    recipe `extends: [<main pratica's rehearsal>, parts/<the other's part>]` and states only what is

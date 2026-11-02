@@ -495,6 +495,75 @@ def sanatoria_cases():
         os.chdir(here)
 
 
+def scelte_follow_the_case():
+    """A wizard choice a recipe takes only for some cases ({leaf, when}): ticked, with the section
+    it adds, only when the case's answer says so; asked when unanswered; more co-holders than the
+    portal's one-person section refused (the voltura, the cambio d'intestazione, a proroga)."""
+    root = HERE.parents[4] / "rehearsals"
+    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+
+    def load(name):
+        steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
+        return steps, (lambda a: values(json.loads((root / name / f"answers-{a}.json").read_text()) if isinstance(a, str) else a, fields, steps))
+
+    def ticks(steps, v):
+        w = next(w for w in run.expand(steps, v)["wizard"] if w["screen"] == "Scelte eventuali")
+        return run.leaves(w)
+    try:
+        steps, v = load("voltura-pdc-fittizia")
+        coholder = "Informazioni su eventuali altri aventi titolo"
+        for a, has in (("p6", True), ("senza-cointestatari", False)):
+            assert run.preflight(steps, v(a), made_up=True)["ready"], a
+            assert ("ci sono cointestatari" in ticks(steps, v(a))) == has, a
+            assert any(s["section"] == coholder for s in run.expand(steps, v(a))["sections"]) == has, a
+        p6 = json.loads((root / "voltura-pdc-fittizia" / "answers-p6.json").read_text())
+        r = run.preflight(steps, v({k: x for k, x in p6.items() if k != "cointestatario"}), made_up=True)
+        # Proposed (none) for the person to confirm, never assumed.
+        assert [q["key"] for q in r["proposals"]] == ["cointestatario"] and not r["ready"], r["proposals"]
+        r = run.preflight(steps, v(p6 | {"altri_cointestatari": True}), made_up=True)
+        assert any("holds one person" in u for u in r["unsupported"]), r["unsupported"]
+
+        steps, v = load("cambio-intestazione-fittizio")
+        assert len(ticks(steps, v("p6"))) == 1
+        assert len(ticks(steps, v("subentro"))) == 4 and run.preflight(steps, v("subentro"), made_up=True)["ready"]
+        sub = json.loads((root / "cambio-intestazione-fittizio" / "answers-subentro.json").read_text())
+        r = run.preflight(steps, v(sub | {"cambio_dl": False, "cambio_ditta": False}), made_up=True)
+        assert any("say which" in u for u in r["unsupported"]), r["unsupported"]
+
+        steps, v = load("proroga-paesaggistica-fittizia")
+        assert len(ticks(steps, v("p6"))) == 1 and len(ticks(steps, v("assenso"))) == 2
+    finally:
+        os.chdir(here)
+
+
+def catasto_terreni():
+    """A unit with a categoria in the vault is in the Catasto Fabbricati, unasked; a plot (the
+    a made-up company's plot (lotto), no categoria) only in the Catasto Terreni: its radio, foglio and
+    particella, no subalterno or categoria (the permesso's new building on free land)."""
+    d = HERE.parents[4] / "rehearsals" / "pdc-fittizio"
+    steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
+    fields = dict(json.loads((HERE.parents[4] / "rehearsals" / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+    try:
+        def ticked(a):
+            v = values(json.loads((d / f"answers-{a}.json").read_text()), fields, steps)
+            assert run.preflight(steps, v, made_up=True)["ready"], a
+            sec = next(s for s in run.expand(steps, v)["sections"] if s["section"] == "Dati catastali")
+            return [f["label"] for f in sec["fields"] if run.truthy(v.render(f.get("when", "true")) or "")]
+        assert ticked("p6")[0] == "Nuovo Catasto Edilizio Urbano" and "categoria" in ticked("p6")
+        assert ticked("terreno") == ["Nuovo Catasto Terreni", "foglio", "particella/mappale", "sezione Censuaria"], ticked("terreno")
+        # No categoria in the vault and no answer: asked, never assumed either way.
+        a = json.loads((d / "answers-p6.json").read_text())
+        no_cat = {k: x for k, x in fields.items() if k != "luca:immobile.catasto_categoria"}
+        r = run.preflight(steps, values(a, no_cat, steps), made_up=True)
+        assert "catasto_terreni" in [q["key"] for q in r["questions"]], r["questions"]
+    finally:
+        os.chdir(here)
+
+
 def linked_files():
     """A file over the pane's 256 KB is pane_ok once it goes by link (page --file-urls)."""
     with tempfile.TemporaryDirectory() as tmp:
@@ -535,6 +604,8 @@ CASES = [
     ("the agibilità's systems: their dichiarazione is filled, other certificates asked system by system, asked only with systems", agibilita_systems),
     ("the agibilità's systems decide its slots: the dichiarazione's only with one, collaudo and atto notorio their own", agibilita_slots),
     ("the SCIA in sanatoria: in progress and double conformity ready, art. 36-bis c. 1 and pre-1977 variants refused", sanatoria_cases),
+    ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
+    ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused", scelte_follow_the_case),
 ]
 
 

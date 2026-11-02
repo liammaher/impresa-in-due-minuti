@@ -112,6 +112,22 @@ asks:
     type: yes_no
     question: "Does the client hold the title alone, with no one else (co-owners, the landlord) whose assent the works need? If not, the other holder is the job's `r:` person, with `o:` their company if a company owns it"
     propose: "{{ask.titolo|titolo_solo}}"
+  # A unit with a categoria in the vault is in the Catasto Fabbricati: asked only without one.
+  catasto_terreni:
+    type: yes_no
+    question: "Is the property only in the Catasto Terreni (a plot to build on, with no subalterno or categoria), rather than the Catasto Fabbricati?"
+    default: "{{c:immobile.catasto_categoria|filled|not}}"
+  # A voltura's or cambio d'intestazione's co-holders: the wizard's "ci sono cointestatari"
+  # adds a section for one (`a:`); it has no "+" for more.
+  cointestatario:
+    type: yes_no
+    question: "Does the new holder share the title with someone else (a co-holder)? If so, the co-holder is the job's `a:` person"
+    propose: "false"
+    yours: "The co-holder's section has both sesso boxes ticked: the portal saves it no other way (two required groups); their codice fiscale says which"
+  altri_cointestatari:
+    type: yes_no
+    question: "Are there more co-holders than the one (`a:`)?"
+    propose: "false"
   parti_comuni:
     type: choice
     question: "Do the works touch common parts of the building? nessuna; condominio (common parts of a condominium); comproprieta (a building of several owners that isn't a condominium, with their approval); art 1102 (common parts used at the client's expense without changing their purpose, art. 1102 c.c.: no assent needed)"
@@ -1438,15 +1454,20 @@ sections:
       - {kind: text, label: piano, value: "{{c:immobile.piano}}", optional: true}
       - {kind: text, label: interno, value: "{{c:immobile.interno}}", optional: true}
 
+  # The property in the Catasto Fabbricati (NCEU: a unit with its subalterno and categoria), or a
+  # plot only in the Catasto Terreni (NCT: a new building's land), whose one box of its own is the
+  # sezione censuaria: the visura's sezione, which the vault keeps as catasto_sezione either way.
   - section: Dati catastali
     leave: [sezione Amministrativa, classe]
     fields:
-      - {kind: radio, label: Nuovo Catasto Edilizio Urbano}
+      - {kind: radio, label: Nuovo Catasto Edilizio Urbano, when: "{{ask.catasto_terreni|not}}"}
+      - {kind: radio, label: Nuovo Catasto Terreni, when: "{{ask.catasto_terreni}}"}
       - {kind: text, label: foglio, value: "{{c:immobile.catasto_foglio}}"}
       - {kind: text, label: particella/mappale, value: "{{c:immobile.catasto_particella}}"}
-      - {kind: text, label: subalterno, value: "{{c:immobile.catasto_subalterno}}"}
-      - {kind: text, label: sezione Urbana, value: "{{c:immobile.catasto_sezione}}", optional: true}
-      - {kind: select, label: categoria, value: "{{c:immobile.catasto_categoria|categoria}}"}
+      - {kind: text, label: subalterno, value: "{{c:immobile.catasto_subalterno}}", when: "{{ask.catasto_terreni|not}}"}
+      - {kind: text, label: sezione Urbana, value: "{{c:immobile.catasto_sezione}}", optional: true, when: "{{ask.catasto_terreni|not}}"}
+      - {kind: select, label: categoria, value: "{{c:immobile.catasto_categoria|categoria}}", when: "{{ask.catasto_terreni|not}}"}
+      - {kind: text, label: sezione Censuaria, value: "{{c:immobile.catasto_sezione}}", optional: true, when: "{{ask.catasto_terreni}}"}
 
   # The client's title. The dropdown's "altro" (a tenant, a comodatario: + specificare) adds a
   # row and renumbers the radios below it. Then the title held alone (a.1), or the assent of
@@ -1734,6 +1755,8 @@ sections:
   # Site safety. A choice is a radio in one pratica and a checkbox in another (`tick`); the
   # check of the firms' documents shows only in some (`if_present`).
   - section: i) Rispetto degli obblighi
+    defect:
+      cila-impresa-dopo: ["ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva"]
     fields:
       - {kind: tick, label: non ricade nell'ambito di applicazione delle norme, when: "{{ask.dlgs81|not}}"}
       - {kind: tick, label: ricade nell'ambito di applicazione delle norme, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}}"}
@@ -2386,8 +2409,12 @@ sections:
   # for the first's, moved. Both lines go by label, the first then the second (nth). Exemptions
   # aren't mapped: every reason the dropdown lists is an entity's (ETS, public bodies, sports
   # clubs; ONLUS repealed from 1 January 2026), and the SUE files for a private person only.
+  # "Only the 16 € for the application" (silenzio assenso) takes one of its dropdown's procedures:
+  # fire brigade, emissions, renewables, hotels, drains, public land, the structural deposits
+  # (the Genio Civile's in Campania). None is one of Napoli's 27 SUE operations (sue-wizard.json).
   - section: Dichiarazione relativa all'assolvimento dell'imposta di bollo
     aliases: [dichiarazione relativa all'imposta di bollo]
+    suap_only: ["Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo per l'autorizzazione", "Non è richiesta alcuna marca da bollo per l'autorizzazione perché il procedimento può concludersi con il silenzio assenso"]
     fields:
       - {kind: radio, label: "Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digitale pagoPA", when: "{{ask.bollo_marche|not}}"}
       - {kind: radio, label: "Due marche da €16,00 ciascuna", when: "{{ask.bollo_marche|not}}"}
@@ -2780,9 +2807,11 @@ sections:
       - {kind: date, label: in data, value: "{{ask.toll_prec_atto_data|date_it}}", when: "{{ask.stato_legittimo|is_tolleranze}} {{ask.toll_prec_atto}}"}
       # The state today: as the legitimate one, or with this pratica's sanatoria (its quadro c's
       # "presentata in sanatoria"). This pratica's own tolerances aren't mapped (the asseverazione
-      # answers "no"). A new construction on free land has no building to compare: left.
-      - {kind: radio, label: pienamente conforme alla documentazione dello stato legittimo, when: "{{ask.stato_legittimo|is_area_libera|not}} {{ask.sanatoria_titolo|is_nessuna}}"}
-      - {kind: radio, label: "conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata, unitamente", when: "{{ask.stato_legittimo|is_area_libera|not}} {{ask.sanatoria_titolo|in_scia__permesso}}"}
+      # answers "no"). New construction on free land too: the portal requires one of the two, as the
+      # national form does (its choice 011 has no "none"); free land with nothing built is fully
+      # conformant (a run stopped on it, 2026-11-02).
+      - {kind: radio, label: pienamente conforme alla documentazione dello stato legittimo, when: "{{ask.sanatoria_titolo|is_nessuna}}"}
+      - {kind: radio, label: "conforme alla documentazione dello stato legittimo o di fatto legittimato sopra indicata, unitamente", when: "{{ask.sanatoria_titolo|in_scia__permesso}}"}
 
   - section: Calcolo del contributo di costruzione
     leave: [ai sensi della seguente normativa]
@@ -3108,9 +3137,12 @@ sections:
 
   # The permesso's sanatoria quadro (only with the wizard's sanatoria scelta): art. 36, or art.
   # 36-bis with its conformity. Its two acknowledgments under art. 36-bis (the oblazione, and the
-  # works the SUE may ask for) are one radio group on the portal: the oblazione's is ticked.
+  # works the SUE may ask for) are one radio group on the portal: the oblazione's is ticked; the
+  # other can't be, so it goes with the defect that refuses art. 36-bis.
   - section: SANATORIA
     leave: [realizzato in data]
+    defect:
+      pdc-36bis: ["lo Sportello Unico può subordinare il rilascio del permesso di costruire in sanatoria"]
     fields:
       - {kind: checkbox, label: "sanatoria di intervento soggetto a permesso di costruire,", when: "{{ask.pdc_sanatoria_caso|is_assenza}}"}
       - {kind: date, label: realizzato in data, by_label: true, value: "{{ask.sanatoria_data|date_it}}", when: "{{ask.pdc_sanatoria_caso|is_assenza}}"}
@@ -3993,8 +4025,12 @@ sections:
   # The permesso's protections: no box to attach for a bene culturale (the SUE asks the
   # Soprintendenza), the park's nulla osta request attached. A landscape authorization is its
   # own operation on Napoli's SUE, selected with the permesso in one pratica: the asseverazione
-  # names its procedure, as the SCIA's does.
+  # names its procedure, as the SCIA's does. Its landscape compatibility of art. 36-bis c. 4 (works
+  # done without the landscape authorization) is only for the cases of art. 36-bis c. 1, which the
+  # permesso's asseverazione can't state (defects.yaml pdc-36bis): refused with it, never ticked.
   - section: Asseverazione PdC - tutela storico ambientale
+    defect:
+      pdc-36bis: ["è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui all", "si allega documentazione necessaria ai fini del rilascio del parere vincolante"]
     fields:
       - {kind: radio, label: NON ricade in zona sottoposta a tutela, when: "{{ask.paesaggio|is_no}}"}
       - {kind: radio, label: "ricade in zona tutelata, ma le opere non comportano alterazione", when: "{{ask.paesaggio|is_senza_autorizzazione}}"}

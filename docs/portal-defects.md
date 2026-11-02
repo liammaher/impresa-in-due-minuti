@@ -73,6 +73,28 @@ entry says what to report and how it was checked, without personal data.
   proposal are one radio group, as on the SCIA (seen 2026-10-30). Art. 36 (works without the
   permesso) fills.
 - **Effect**: a permesso in sanatoria under art. 36-bis can't be filed complete on the portal.
+  What only that case opens goes with it, mapped by no recipe: the landscape compatibility of art.
+  36-bis c. 4 in the asseverazione's tutela quadro (works done without the landscape authorization),
+  and the sanatoria quadro's acknowledgment that the SUE may ask for structural works, which the
+  portal also keeps in one radio group with the oblazione's.
+
+## CILA and CIL: a firm still to be chosen is offered, then refused
+
+- **Where**: the CILA's quadro "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi
+  di lavoro" (the CIL's g)), and the firm's quadro (the CILA's h), the CIL's f)).
+- **What happens**: the safety quadro offers "ricade nell'ambito di applicazione del d.lgs. 81/2008 ma
+  si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori", but
+  the firm's quadro has no line for a firm still to be chosen, and the portal requires the firm's
+  details (16 required boxes, the DURC ones among them) whatever the safety quadro says.
+- **What the law asks**: the firm's documents (DURC, the notifica preliminare, the check of its
+  fitness) go to the Comune before the works start (art. 90 c. 9 c D.Lgs. 81/2008). On the same
+  portal the permesso's and the SCIA's forms let the firm be named later. InfoCamere's national CILA
+  form has no such reservation at all (`schema/sue-choices.json`), so the box looks like the
+  Comune's own, without the rest of the form following it.
+- **Effect**: a CILA or CIL can't be filed before the firm is chosen.
+- **Checked**: 2026-11-01, a made-up CILA run in the pane (`rehearsals/cila-fittizia`,
+  `answers-impresa-dopo.json`) stopped on the firm's required boxes. Nothing was sent.
+- **To report**: either the reservation should let the firm's quadro wait, or the box should go.
 
 ## Permesso: the burned-area line is one choice with the soil statement
 
