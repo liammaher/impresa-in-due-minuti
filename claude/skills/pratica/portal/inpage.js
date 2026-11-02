@@ -86,7 +86,7 @@
   }
   const scrub = (s) => secrets.reduce((t, rx) => t.replace(rx, "‹value›"), String(s));
   // Why a read-back failed, without what it wanted or found.
-  const redact = (c) => ({ label: c.label, why: c.hidden ? "hidden by a later choice" : c.got === null ? "missing" : c.got === "" || c.got === "unchecked" ? "empty" : "different" });
+  const redact = (c) => ({ label: c.label, why: c.got === null ? "missing" : c.got === "" || c.got === "unchecked" ? "empty" : "different" });
   function publicReport() {
     const out = { ...report };
     delete out.kept;
@@ -535,18 +535,8 @@
     return v.name;
   }
 
-  // `own`: the section's own read-back, right after its Salva. A box filled there that is gone now
-  // was hidden by a later choice in the section: rows the portal keeps as one field (the SCIA in
-  // sanatoria's art. 34-ter dating and oblazione, 2026-11-02). That's a value not kept, never the
-  // portal being slow: as a lookup's "fields with this label" it was retried twice into the same misfill.
-  function readBack(f, own) {
-    if (f.spec) {
-      try { f = { ...f, id: resolve(f.spec).id }; } // rows added since may have renumbered it
-      catch (e) {
-        if (own && e instanceof StepError && /fields with this label/.test(e.message)) return { label: f.label || f.id, want: f.typed, got: null, ok: false, hidden: true };
-        throw e;
-      }
-    }
+  function readBack(f) {
+    if (f.spec) f = { ...f, id: resolve(f.spec).id }; // rows added since may have renumbered it
     else if (f.id && f.label) f = { ...f, id: located({ kind: f.kind, label: f.label, nth: f.nth, id: f.id }).id }; // as when it was filled
     if (f.kind === "file") {
       // An upload widget empties its box once it has sent the file; its list names it.
@@ -737,7 +727,7 @@
     // An attachments screen may keep each file as it uploads, with no Salva (save: false).
     if (sec.save !== false) await act(() => press(button(sec.save || "Salva"), sec.save || "Salva"));
     const errs = errors(sec.theirs);
-    const checks = done.map((f) => readBack(f, true));
+    const checks = done.map(readBack);
     const bad = checks.filter((c) => !c.ok);
     details.push(...bad.map((c) => ({ section: sec.section, ...c })));
     const gone = bad.map(redact);

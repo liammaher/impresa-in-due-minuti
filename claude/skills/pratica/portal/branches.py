@@ -23,8 +23,7 @@ see these; here each one is:
              refused as the law's
   defect     a known portal defect blocks the case (the dictionary's `defect`, by defects.yaml id:
              the portal saves rows the law asks for together as one field): refused with the defect,
-             not a gap in the mapping. What a law- or defect-closed box opens is closed with it,
-             though its label is ticked elsewhere
+             not a gap in the mapping
   unmapped   the section has an entry, the choice is in none of it: a case that takes it is
              unmapped (a recipe refuses it, or pre-flight never asks it)
   no entry   the section isn't in the dictionary at all
