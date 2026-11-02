@@ -596,8 +596,13 @@
     return texts.filter((t, i) => !t || texts.indexOf(t) === i).slice(0, 3).findIndex((t) => startsLabel(t, label));
   }
   const labelled = (e, label) => labelRank(e, label) >= 0;
-  // A box's own label: its title, else its first text that isn't a validation message.
-  const ownLabel = (e) => [e.title, ...win().eval(`(${steps.label_js})`)(e)].find((t) => norm(t) && !MESSAGE.test(norm(t)));
+  // A box's own label: its title, else its first text that isn't a validation message. A
+  // dropdown's cell lists its options, never its label: once the portal flags it required (the
+  // SUE Scheda anagrafica's sede, after Forma giuridica re-renders the block, 2026-11-02), that
+  // list came next, and the sede's Provincia stopped counting as one.
+  const OPTIONS = /^selezionare un valore/;
+  const ownLabel = (e) => [e.title, ...win().eval(`(${steps.label_js})`)(e)].find((t) => norm(t) && !MESSAGE.test(norm(t))
+    && !(e.tagName === "SELECT" && OPTIONS.test(norm(t))));
   // Where each repeat of a group starts: the boxes the anchor names best, and the boxes of no
   // text of their own under it (the CILA relazione's rows after the first read the column's
   // header, 2026-11-01). A box with its own text beside the anchor (the deroga's

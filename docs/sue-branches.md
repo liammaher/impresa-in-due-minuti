@@ -8,14 +8,14 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 999 | Claude takes it when the case does |
+| ticked | 1004 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
-| left | 6 | left empty on purpose |
+| left | 4 | left empty on purpose |
 | law | 25 | closed by law to new cases (the piano casa, a repealed rule): refused as the law's, not a gap |
 | defect | 30 | a known portal defect blocks the case (`defects.yaml`): refused with it, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 53 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 50 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -27,21 +27,6 @@ What the crawl didn't see (more choices may exist there):
 ## Unmapped, by section
 
 Most shared first: closing a choice in a section many pratiche show helps all of them.
-
-### SCHEDA ANAGRAFICA / Scheda anagrafica
-
-39 pratiche; 4 of 27 choices to map.
-
-- radio: ISCRITTA ALLA CCIAA
-- radio: NON ANCORA ISCRITTA
-- radio: NON NECESSITA DI ISCRIZIONE AL RI DELLA CCIAA
-- checkbox: Se cittadino non UE
-
-### DOMICILIO DIGITALE
-
-39 pratiche; 1 of 2 choices to map.
-
-- checkbox: il seguente domicilio digitale inserito in INI-PEC (art. 6-bis, D.lgs lgs. n. 82/2005) :
 
 ### Qualifica e dati del procuratore
 
@@ -134,11 +119,23 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - checkbox: 4. Altri interventi individuati dalla legislazione regionale (1)
 
+### Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze
+
+3 pratiche; 1 of 28 choices to map.
+
+- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
+
 ### G1) Tecnici incaricati
 
 3 pratiche; 1 of 8 choices to map.
 
 - radio: tecnico incaricato
+
+### Relazione Tecnica di Asseverazione C.I.L.A.
+
+3 pratiche; 1 of 31 choices to map.
+
+- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
 
 ### g) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro
 

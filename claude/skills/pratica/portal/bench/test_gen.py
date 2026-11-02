@@ -1149,5 +1149,25 @@ def _():
     assert "Proposta di progetto per la realizzazione delle opere di urbanizzazione" in alt, alt
 
 
+@case("the Scheda anagrafica's client: a person keeps its ids, a company's three ways each keep the crawl's; a when's own fields aren't missing under a false word")
+def _():
+    import json
+    import run
+    sec = section(generated("cila-fittizia"), "Scheda anagrafica")
+    person = [f for f in sec["fields"] if f.get("when", "").startswith("{{c:business.denominazione|empty}}")]
+    assert next(f for f in person if f.get("label") == "Nome")["id"] == "r10c1p23reg:txt"
+    iscritta = [f for f in sec["fields"] if "impresa_iscritta" in f.get("when", "")]
+    # ISCRITTA moves every row below it 3 down: the company's sede, after Forma giuridica flags
+    # its empty boxes, is found by its id (its label lookup counted two Provincia, 2026-11-02).
+    sede = [f for f in iscritta if f.get("label") == "Provincia" and f.get("nth") == 3]
+    assert sede and sede[0]["id"] == "r47c2p121reg", sede
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+    steps = generated("cila-fittizia")
+    for answers in ("answers-condominio.json", "answers-non-ue.json", "answers-p6.json"):
+        v = run.Values(json.loads((CILA / answers).read_text()), fields=fields, asks=steps.get("asks"))
+        r = run.preflight(steps, v, made_up=True)
+        assert r["ready"] and not r["missing"], (answers, r["missing"])
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

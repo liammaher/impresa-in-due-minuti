@@ -46,6 +46,7 @@ in one checklist); run.py preflight then refuses a case the table gives to anoth
 """
 
 import argparse
+import collections
 import copy
 import json
 import re
@@ -568,7 +569,9 @@ def fill(entry, as_name, c, recipe, name):
     same = lambda g: (g["kind"], norm(g["label"]), norm(g.get("context")))
     filled_as = {same(g) for g in shown.values() if (g["id"], g["label"]) in filled}
     for f in shown.values():
-        if (f["id"], f["label"]) in filled or same(f) in filled_as or f["kind"] in ("radio", "checkbox") and not entry.get("strict"):
+        # A box filled before a later choice moved it (the SUE's "In qualità di", under the non-EU box) too.
+        if (f["id"], f["label"]) in filled or (f.get("base_id"), f["label"]) in filled or same(f) in filled_as \
+                or f["kind"] in ("radio", "checkbox") and not entry.get("strict"):
             continue
         if any(norm(f.get("label")).startswith(x) or norm(f.get("context")).startswith(x) for x in leave):
             continue
@@ -901,7 +904,14 @@ def check(gen, hand):
             diffs.append(f"{s['section']}: not in the hand-written file")
             continue
         hand_keys = [key(b) for b in h["fields"]]
-        gen_fields = [a for a in s["fields"] if key(a) in hand_keys or "when" not in a]
+        # A box another branch fills again (a client company's rows, where the person's are) is
+        # that branch's case: each key counts as often as the hand file has it.
+        left = collections.Counter(hand_keys)
+        gen_fields = []
+        for a in s["fields"]:
+            if "when" not in a or left[key(a)] > 0:
+                gen_fields.append(a)
+                left[key(a)] -= 1
         extra += [f"{s['section']}: {key(a)} when {a['when']}" for a in s["fields"] if a not in gen_fields]
         for i, (a, b) in enumerate(zip(gen_fields, h["fields"])):
             if key(a) != key(b) or a.get("value") != b.get("value"):
