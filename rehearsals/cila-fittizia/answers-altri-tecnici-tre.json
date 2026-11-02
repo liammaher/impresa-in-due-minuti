@@ -51,5 +51,6 @@
  "altro_tecnico3_dipendente": false,
  "altri_tecnici_dopo": "false",
  "impresa_dopo": "false",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false
 }

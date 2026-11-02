@@ -102,5 +102,6 @@
  "impresa_dopo": "false",
  "dl_strutture": "true",
  "vvf_variante": "false",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false
 }

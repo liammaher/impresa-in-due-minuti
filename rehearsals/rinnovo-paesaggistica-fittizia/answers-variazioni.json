@@ -12,5 +12,7 @@
  "paes_scadenza": "2026-09-01",
  "paes_rinnovo_di": "ordinaria",
  "progettista_altro": false,
- "paes_rinnovo_variazioni": true
+ "paes_rinnovo_variazioni": true,
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

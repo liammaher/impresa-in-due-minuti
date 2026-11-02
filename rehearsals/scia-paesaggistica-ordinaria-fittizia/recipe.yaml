@@ -26,7 +26,8 @@ yours:
   - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
   - "On Allega documenti: the portal's procura signed by the client, the stato legittimo documents (signed files only), the ordinaria's drawings and photos (signed files only), then everything signed digitally (.p7m)"
   - "No start date: the works start once the SUE says the landscape authorization (and any other assent) is in"
-  - "Pay the imposta di bollo and the diritti; upload the receipts"
+  - "Pay the diritti; upload the receipt"
+  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "Sign and send (Firma e invio); keep the receipt"
 rules:
   main: napoli/comune/scia-edilizia

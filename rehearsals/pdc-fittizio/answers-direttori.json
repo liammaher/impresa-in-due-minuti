@@ -106,5 +106,7 @@
  "strutture_allegate": "false",
  "strutture_incaricato": "false",
  "barriere_art82": "false",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

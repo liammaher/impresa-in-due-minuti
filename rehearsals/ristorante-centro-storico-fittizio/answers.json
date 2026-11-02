@@ -18,5 +18,7 @@
  ],
  "zona": "a",
  "fatti": [],
- "stagionale": "false"
+ "stagionale": "false",
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (180 cases in all, 179 with a recorded filled run).
+  case (185 cases in all, 184 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -29,13 +29,13 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 33 | 0 | 1 | 1 | 7 | 19 |
-| Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 8 |
-| Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 2 |
-| Permesso di costruire | 153 | 114 | 0 | 13 | 7 | 14 | 117 |
-| SCIA | 150 | 131 | 0 | 4 | 1 | 10 | 43 |
-| SCIA alternativa | 128 | 111 | 0 | 6 | 2 | 8 | 50 |
-| Agibilità (SCA) | 36 | 31 | 0 | 0 | 0 | 5 | 12 |
+| CILA | 43 | 33 | 0 | 1 | 1 | 7 | 17 |
+| Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 6 |
+| Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 0 |
+| Permesso di costruire | 153 | 114 | 0 | 13 | 7 | 14 | 111 |
+| SCIA | 150 | 131 | 0 | 4 | 1 | 10 | 41 |
+| SCIA alternativa | 128 | 111 | 0 | 6 | 2 | 8 | 47 |
+| Agibilità (SCA) | 36 | 31 | 0 | 0 | 0 | 5 | 10 |
 
 ## Next cases
 
@@ -150,8 +150,6 @@ Portal boxes of the CILA no schema alternative matched and no case ticks:
 - Relazione Tecnica di Asseverazione C.I.…: 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; (mapped)
 - Relazione Tecnica di Asseverazione C.I.…: 6%, per le U.I. < 60 mq di superficie utile; (mapped)
 - Relazione Tecnica di Asseverazione C.I.…: attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso… (mapped)
-- Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
-- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### Fine lavori
 
@@ -168,8 +166,6 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 - Titolarità dell'intervento: amministratore di condominio (mapped)
 - Titolarità dell'intervento: avere titolarità esclusiva all'esecuzione dell'intervento (mapped)
 - Titolarità dell'intervento: Maschio (not mapped)
-- Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
-- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### Inizio lavori
 
@@ -191,11 +187,6 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `pariSup200ggUomo` | this portal pratica has no such section/box | h | no portal box |  |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `no_notifica` | this portal pratica has no such section/box | h | no portal box |  |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `(nothing)` | this portal pratica has no such section/box | h | no portal box |  |
-
-Portal boxes of the Inizio lavori no schema alternative matched and no case ticks:
-
-- dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
-- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### Permesso di costruire
 
@@ -391,7 +382,6 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - j) Diritti di terzi: dichiara di essere consapevole che il permesso di costruire non comporta limitazione dei… (not mapped)
 - Asseverazione PdC - Dati progettista e…: Interventi di ristrutturazione urbanistica articolo 3, comma 1, lettera f) del d.P.R. n.… (mapped)
 - Asseverazione PdC - Dati progettista e…: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa) (not mapped)
-- Asseverazione PdC - Dati progettista e…: altro non indicato nei punti precedenti (not mapped)
 - Asseverazione PdC - Dati progettista e…: urbanizzazione primaria e secondaria realizzati da soggetti diversi dal Comune (mapped)
 - Asseverazione PdC - Dati progettista e…: realizzazione di infrastrutture e di impianti, anche per pubblici servizi, che comporti l… (mapped)
 - Asseverazione PdC - Dati progettista e…: installazione di torri e tralicci per impianti radio-ricetrasmittenti e di ripetitori per… (mapped)
@@ -450,9 +440,6 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - tutela funzionale: Altro (mapped)
 - Asseverazione PdC - tutela funzionale: si allegano le autocertificazioni relative alla conformità dell'intervento per i relativi… (mapped)
 - Asseverazione PdC - tutela funzionale: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso (mapped)
-- Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
-- Dichiarazione relativa all'assolvimento…: Per gli Enti autorizzati, l'imposta di bollo è assolta in modo virtuale ai sensi del D.M.… (not mapped)
-- Dichiarazione relativa all'assolvimento…: Il pagamento non è dovuto poiché esentati ... (not mapped)
 - Dichiarazione relativa all'assolvimento…: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo per l'autor… (not mapped)
 - Dichiarazione relativa all'assolvimento…: adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152… (not mapped)
 - Dichiarazione relativa all'assolvimento…: domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ri… (not mapped)
@@ -471,9 +458,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Dichiarazione relativa all'assolvimento…: ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (federazioni sportive, en… (not mapped)
 - Dichiarazione relativa all'assolvimento…: ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (organizzazioni non lucra… (not mapped)
 - Dichiarazione relativa all'assolvimento…: ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti poli… (not mapped)
-- Dichiarazione relativa all'assolvimento…: ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo sett… (not mapped)
 - SANATORIA: lo Sportello Unico può subordinare il rilascio del permesso di costruire in sanatoria all… (not mapped)
-- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### SCIA
 
@@ -667,14 +652,12 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno gestiti dall'interessato come… (mapped)
 - Asseverazione SCIA - Amianto, conformit…: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA - Amianto, conformit…: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di… (mapped)
-- Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
 - SANATORIA e regolarizzazioni per interv…: sanatoria di intervento soggetto a SCIA, in assenza della SCIA o in difformità da essa, c… (not mapped)
 - SANATORIA e regolarizzazioni per interv…: regolarizzazione di interventi realizzati come variante in corso d'opera che costituiscon… (not mapped)
 - SANATORIA e regolarizzazioni per interv…: si indicano gli estremi del titolo edilizio variato (not mapped)
 - SANATORIA e regolarizzazioni per interv…: si allega altra documentazione di cui all'articolo 9-bis, comma 1-bis, quarto periodo nei… (not mapped)
 - SANATORIA e regolarizzazioni per interv…: si forniscono gli estremi di versamento (not mapped)
 - SANATORIA e regolarizzazioni per interv…: si allega la ricevuta di versamento (not mapped)
-- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### SCIA alternativa
 
@@ -819,7 +802,6 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - m) Diritti di terzi: dichiara di essere consapevole che la presente segnalazione non può comportare limitazion… (not mapped)
 - Asseverazione SCIA Alternativa - Dati p…: 2. Interventi di nuova costruzione o di ristrutturazione urbanistica qualora siano discip… (mapped)
 - Asseverazione SCIA Alternativa - Dati p…: 3. Interventi di nuova costruzione qualora siano in diretta esecuzione di strumenti urban… (mapped)
-- Asseverazione SCIA Alternativa - Dati p…: 4. Altri interventi individuati dalla legislazione regionale (1) (not mapped)
 - Asseverazione SCIA Alternativa - stato…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (mapped)
 - Asseverazione SCIA Alternativa - stato…: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (mapped)
 - Asseverazione SCIA Alternativa - stato…: attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso… (mapped)
@@ -859,8 +841,6 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Asseverazione SCIA Alternativa - TUTELA…: Altro (mapped)
 - Asseverazione SCIA Alternativa - TUTELA…: si allegano le autocertificazioni relative alla conformità dell'intervento per i relativi… (mapped)
 - Asseverazione SCIA Alternativa - TUTELA…: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso (mapped)
-- Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
-- Qualifica e dati del procuratore: all'Estero (mapped)
 
 ### Agibilità (SCA)
 
@@ -915,5 +895,3 @@ Portal boxes of the Agibilità (SCA) no schema alternative matched and no case t
 - Titolarità dell'intervento: avere titolarità esclusiva all'esecuzione dell'intervento (mapped)
 - Titolarità dell'intervento: Maschio (not mapped)
 - Attestazione tecnica - Dati del Diretto…: Maschio (mapped)
-- Dichiarazione relativa ai diritti di se…: poiché esentati (not mapped)
-- Qualifica e dati del procuratore: all'Estero (mapped)

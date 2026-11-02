@@ -21,6 +21,9 @@ asks:
   stagione_dal: {type: text, question: The season's first day (gg/mm)}
   stagione_al: {type: text, question: The season's last day (gg/mm)}
   diritti_euro: {type: number, question: 'The SUAP fees in euro (the shop''s 100 and the sign''s 100, S204: summed for a joined pratica, to confirm)'}
+  diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
+    propose: 'false'}
+  diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
   solo_distributori: {type: yes_no, question: 'Will it sell only through vending machines?', propose: 'false'}
   anche_ingrosso: {type: yes_no, question: 'Will it also sell wholesale (not only to the public)?', propose: 'false'}
   superficie_vendita_mq: {type: number, question: 'The sales area in m² (where customers shop, not stores or toilets)'}
@@ -257,7 +260,9 @@ sections:
 - section: Dichiarazione relativa ai diritti
   fields:
   - {id: 'r2c1p2reg:radio:0_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: non sono dovuti oneri}
-  - {id: 'r3c1p3reg:radio:1_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: poiché non previsti dal tariffario}
+  - {id: 'r3c1p3reg:radio:1_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente|not}}', label: poiché non previsti dal tariffario}
+  - {id: 'r3c2p4reg:radio:2_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente}}', label: poiché esentati}
+  - {kind: text, label: specificare la motivazione, value: '{{ask.diritti_esenzione_motivo}}', when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente}}'}
   - {id: 'r5c1p8reg:radio:3_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: sono dovuti oneri quali diritti o spese}
   - {id: 'r7c1p10reg:real', kind: number, value: '{{ask.diritti_euro}}', when: '{{ask.diritti_euro|positive}}', max: 11, label: per un totale di Euro}
   - {id: 'r8c1p13reg:radio:4_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: pagamento on line}

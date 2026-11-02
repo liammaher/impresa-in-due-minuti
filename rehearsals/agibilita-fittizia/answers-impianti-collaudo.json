@@ -89,5 +89,6 @@
  "ascensore_comunicazione": "sca",
  "impianti_collaudo_doc": "rehearsals/agibilita-fittizia/files/collaudo-impianti.pdf",
  "impianti_atto_notorio_doc": "rehearsals/agibilita-fittizia/files/atto-notorio-impianti.pdf",
- "agibilita_attestante": "direttore dei lavori"
+ "agibilita_attestante": "direttore dei lavori",
+ "diritti_esente": false
 }

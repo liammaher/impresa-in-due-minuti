@@ -149,6 +149,40 @@ CITTADINANZA = {"italiana": "ITALIA", "francese": "FRANCIA", "tedesca": "GERMANI
                 "filippina": "FILIPPINE", "senegalese": "SENEGAL", "nigeriana": "NIGERIA", "egiziana": "EGITTO",
                 "tunisina": "TUNISIA", "russa": "RUSSIA", "indiana": "INDIA", "pakistana": "PAKISTAN",
                 "brasiliana": "BRASILE", "peruviana": "PERÙ"}
+# A client exempt from the imposta di bollo (ask bollo_esenzione), as the SUE form's "per la
+# seguente motivazione" words it. Its two art. 82 c. 5 lines are one law: an ETS in the RUNTS,
+# and the article's own words, which name the cooperative sociali.
+BOLLO_ESENZIONE = {
+    "ets": "ai sensi dell'art.82, c.5, d.Lgs. n.117/2017 (Enti del Terzo settore iscritti nel registro unico "
+           "nazionale del Terzo settore ai sensi dell'art. 4, legge 117/2017)",
+    "cooperativa sociale": "ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo "
+                           "settore comprese le cooperative sociali ed escluse le imprese sociali costituite in forma di società)",
+    "pubblica": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 16 (amministrazioni dello Stato, Regioni, "
+                "Province, Comuni, loro consorzi ed associazioni, nonchè Comunità montane)",
+    "contadina": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 21 (piccola proprietà contadina)",
+    "sportiva": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (federazioni sportive, enti di "
+                "promozione sportiva ed associazioni e società sportive dilettantistiche senza fine di lucro riconosciuti dal CONI)",
+    "onlus": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (organizzazioni non lucrative di utilità sociale - ONLUS)",
+    "partito": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti politici "
+               "limitatamente all'adempimento di obblighi derivanti da disposizioni legislative o regolamentari)",
+}
+
+
+def _bollo(v):
+    """An answer to bollo_esenzione as check_answer and `is_` read it: case and spaces aside."""
+    return " ".join(str(v).lower().split())
+
+
+def _bollo_yours(v):
+    """The person's bollo step, from {{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}."""
+    marche, esenzione = _facts(v, 2)
+    if _bollo(esenzione) in BOLLO_ESENZIONE:
+        return "No imposta di bollo to pay: the client is exempt, and the form gives the reason"
+    if _bollo(esenzione) == "virtuale":
+        return "No marche or pagoPA for the imposta di bollo: the client pays it virtually (the form carries its dichiarazione)"
+    if truthy(marche):
+        return "Cancel the marche da bollo whose serial numbers the form carries, and keep the originals"
+    return "Pay the imposta di bollo on pagoPA as the portal asks"
 
 
 def _carica(v):
@@ -305,6 +339,9 @@ FILTERS = Filters({
     "straniera": lambda v: "false" if v.strip().lower() in ("italiana", "italiano") else "true",
     # Born abroad: identity.birth_province is EE.
     "estero": lambda v: "true" if v.strip().upper() == "EE" else "false",
+    "bollo_esente": lambda v: "true" if _bollo(v) in BOLLO_ESENZIONE else "false",
+    "bollo_motivo": lambda v: BOLLO_ESENZIONE[_bollo(v)],
+    "bollo_yours": _bollo_yours,
     "categoria": lambda v: re.sub(r"^([A-F])/?(\d)$", r"\g<1>0\2", v.replace(" ", "").upper()),
     "empty": lambda v: "true" if not v else "false",
     # Several yes/no answers at once ({{ask.a,ask.b|any}}): true when one is (a `when` has no "or").
@@ -377,7 +414,13 @@ class Values:
         return self.cache[cat]
 
     def _titolare(self):
+        # A studio's other architect presents the pratica when the job names them ("people" t).
+        named = (self.answers.get("people") or {}).get("t")
         ids = list(self.fields) if self.fields is not None else [f["id"] for f in self._get("/vault/fields")]
+        if named:
+            if not any(i.startswith(named + ":") for i in ids):
+                raise StepError(f"the architect named in people (t: {named}) has nothing in the vault")
+            return named
         slugs = sorted({i.split(":")[0] for i in ids if i.endswith(":ruolo.tipo")})
         found = [s for s in slugs if "titolare" in self.category(s + ":ruolo").get(s + ":ruolo.tipo", "")
                  or "legale_rappresentante" in self.category(s + ":ruolo").get(s + ":ruolo.tipo", "")]

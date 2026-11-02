@@ -25,5 +25,6 @@
  "pdc_protocollo": "PG/2026/0666666",
  "attivita_svolta": "impiegato",
  "soggetti_cambiati": "false",
- "cointestatario": false
+ "cointestatario": false,
+ "diritti_esente": false
 }

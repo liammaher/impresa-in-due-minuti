@@ -85,5 +85,6 @@
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
  "strumenti_altri": "false",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false
 }

@@ -8,15 +8,15 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 1012 | Claude takes it when the case does |
-| answer | 58 | a dropdown filled from an answer (options reached not counted) |
+| ticked | 1017 | Claude takes it when the case does |
+| answer | 65 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 6 | left empty on purpose |
 | law | 25 | closed by law to new cases (the piano casa, a repealed rule): refused as the law's, not a gap |
 | suap | 22 | an option only the SUAP's procedures take (the bollo's reasons for a fire-brigade or emissions filing): no SUE case, not a gap |
 | defect | 36 | a known portal defect blocks the case (`defects.yaml`): refused with it, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 12 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 0 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -28,35 +28,3 @@ What the crawl didn't see (more choices may exist there):
 ## Unmapped, by section
 
 Most shared first: closing a choice in a section many pratiche show helps all of them.
-
-### Dichiarazione relativa ai diritti di segreteria/istruttori / dichiarazione relativa ai diritti di segreteria/istruttori
-
-31 pratiche; 1 of 5 choices to map.
-
-- radio: poiché esentati (under: non sono dovuti oneri quali diritti o spese)
-
-### Dichiarazione relativa all'assolvimento dell'imposta di bollo / dichiarazione relativa all'imposta di bollo
-
-21 pratiche; 9 of 35 choices to map.
-
-- radio: Per gli Enti autorizzati, l'imposta di bollo è assolta in modo virtuale ai sensi del D.M. 10/11/2011 o ai sensi dell'art. 15 D.P.R. 642/1972 ...
-- radio: Il pagamento non è dovuto poiché esentati ...
-- select: per la seguente motivazione = ai sensi dell'art.82, c.5, d.Lgs. n.117/2017 (Enti del Terzo settore iscritti nel registro unico nazionale del Terzo settore ai se → ai sensi dell'art.82, c.5, d.Lgs. n.117/2017 (Enti del Terzo settore iscritti nel registro unico nazionale del Terzo settore ai sensi dell'art. 4, legge 117/2017) (under: Il pagamento non è dovuto poiché esentati ...)
-- select: per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 16 (amministrazioni dello Stato, Regioni, Province, Comuni, loro consorzi → ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 16 (amministrazioni dello Stato, Regioni, Province, Comuni, loro consorzi ed associazioni, nonchè Comunità montane) (under: Il pagamento non è dovuto poiché esentati ...)
-- select: per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 21 (piccola proprietà contadina) (under: Il pagamento non è dovuto poiché esentati ...)
-- select: per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (federazioni sportive, enti di promozione sportiva ed associazioni → ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (federazioni sportive, enti di promozione sportiva ed associazioni e società sportive dilettantistiche senza fine di lucro riconosciuti dal CONI) (under: Il pagamento non è dovuto poiché esentati ...)
-- select: per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (organizzazioni non lucrative di utilità sociale - ONLUS) (under: Il pagamento non è dovuto poiché esentati ...)
-- select: per la seguente motivazione = ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti politici limitatamente all'adempimento di obb → ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti politici limitatamente all'adempimento di obblighi derivanti da disposizioni legislative o regolamentari) (under: Il pagamento non è dovuto poiché esentati ...)
-- select: per la seguente motivazione = ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo settore comprese le cooperative sociali ed es → ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo settore comprese le cooperative sociali ed escluse le imprese sociali costituite in forma di società) (under: Il pagamento non è dovuto poiché esentati ...)
-
-### Asseverazione PdC - Dati progettista e descrizione opere
-
-3 pratiche; 1 of 44 choices to map.
-
-- checkbox: altro non indicato nei punti precedenti (under: che le opere in progetto sono subordinate a rilascio del permesso di costruire i)
-
-### Asseverazione SCIA Alternativa - Dati progettista e descrizione opere
-
-3 pratiche; 1 of 12 choices to map.
-
-- checkbox: 4. Altri interventi individuati dalla legislazione regionale (1)

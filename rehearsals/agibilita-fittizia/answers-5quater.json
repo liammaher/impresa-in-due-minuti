@@ -45,5 +45,6 @@
  "igienico_24_5bis": "false",
  "igienico_5quater": "true",
  "igienico_5quater_atto": "L.R. Campania 28 novembre 2000, n. 15 (recupero abitativo dei sottotetti)",
- "agibilita_attestante": "direttore dei lavori"
+ "agibilita_attestante": "direttore dei lavori",
+ "diritti_esente": false
 }

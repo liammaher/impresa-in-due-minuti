@@ -51,5 +51,7 @@
  "vincolo_142_lettera": "a)",
  "allegato_b": [
   "paes_b7"
- ]
+ ],
+ "diritti_esente": false,
+ "bollo_esenzione": "no"
 }

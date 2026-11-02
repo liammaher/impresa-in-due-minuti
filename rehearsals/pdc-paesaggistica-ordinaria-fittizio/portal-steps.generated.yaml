@@ -118,7 +118,14 @@ asks:
   atti_gravanti_quali: {type: text, question: 'Which deed(s), as the deed names them'}
   domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   domicilio_inipec: {type: yes_no, question: 'Is the client company''s PEC (business.pec) its domicilio digitale in INI-PEC, to be communicated on the form?', default: 'false'}
-  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', propose: 'false'}
+  bollo_marche: {type: yes_no, question: 'Where the imposta di bollo is paid: with physical marche da bollo (rather than pagoPA)?', propose: 'false'}
+  bollo_esenzione: {type: choice, question: 'Is the client exempt from the imposta di bollo, or authorized to pay it virtually? no (it pays it); ets (an ente del Terzo settore in the RUNTS: art. 82 c. 5
+      D.Lgs. 117/2017); cooperativa sociale (the same article''s own words); pubblica (the State, a Regione, Provincia, Comune or their consorzi: All. B art. 16 DPR 642/1972); sportiva (a CONI-recognized
+      non-profit sports body: All. B art. 27-bis); onlus (only one whose tax year began before 1 January 2026, when the ONLUS regime ended); partito (a political party, for obligations of law: art. 27-ter);
+      contadina (piccola proprietà contadina: art. 21); virtuale (authorized by the Agenzia delle Entrate to pay it virtually: D.M. 10/11/2011, art. 15 DPR 642/1972)', options: ['no', ets, cooperativa sociale,
+      pubblica, sportiva, onlus, partito, contadina, virtuale], propose: 'no'}
+  bollo_virtuale_autorizzazione: {type: file, question: 'The client''s dichiarazione relativa all''assolvimento dell''imposta di bollo: that it pays it virtually, with the Agenzia delle Entrate''s authorization
+      (number and date), signed (PDF)'}
   bollo_seriale: {type: text, question: 'The marca da bollo for the application: its serial number (14 digits)'}
   bollo_data: {type: date, question: Its date}
   bollo_seriale_2: {type: text, question: 'The marca da bollo for the authorization the Comune issues: its serial number (14 digits)'}
@@ -164,10 +171,11 @@ asks:
       a different building with more volume, a change of use in zone A, or new shape, volume or facades on a protected building); facolta scia (works a SCIA could file, asked as a permesso by choice, art.
       22 c. 7); variante essenziale (a variant in corso d''opera to a permesso, SCIA alternativa or titolo unico that is an essential variation); variante sagoma (a variant to a permesso changing the shape
       in the centro storico, Tab. A n. 38 D.Lgs. 222/2016); sottotetti (an attic made habitable, L.R. Campania 15/2000); parcheggi (car parks on free land, L.R. Campania 19/2001); mutamento uso (a change
-      of use under art. 2 L.R. Campania 19/2001); piano casa (L.R. Campania 19/2009, artt. 4, 5, 6-bis, 7)', options: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, facolta
-        scia, variante essenziale, variante sagoma, sottotetti, parcheggi, mutamento uso, piano casa], propose: '{{ask.intervento,ask.cambio_uso,ask.demolizione_zona_a|sue_pdc_tipo}}'}
+      of use under art. 2 L.R. Campania 19/2001); piano casa (L.R. Campania 19/2009, artt. 4, 5, 6-bis, 7); altro (other works that need a permesso, which none of these names: a regional law''s, art. 10
+      c. 3, named as the relazione names them)', options: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, facolta scia, variante essenziale, variante sagoma, sottotetti, parcheggi,
+      mutamento uso, piano casa, altro], propose: '{{ask.intervento,ask.cambio_uso,ask.demolizione_zona_a|sue_pdc_tipo}}'}
   pdc_procedura: {type: choice, question: 'How is the permesso asked? ordinaria (as art. 10 permits); convenzionato (a permesso di costruire convenzionato, art. 28-bis DPR 380/2001); deroga (in deroga to
-      the town plan, art. 14: a building of public interest, the Consiglio comunale having deliberated)', options: [ordinaria, convenzionato, deroga], propose: ordinaria, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}}'}
+      the town plan, art. 14: a building of public interest, the Consiglio comunale having deliberated)', options: [ordinaria, convenzionato, deroga], propose: ordinaria, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia__altro}}'}
   deroga_densita: {type: yes_no, group: deroga_parametri, item: La densità edilizia, when: '{{ask.pdc_procedura|is_deroga}}'}
   deroga_altezza: {type: yes_no, group: deroga_parametri, item: L'altezza, when: '{{ask.pdc_procedura|is_deroga}}'}
   deroga_distanza: {type: yes_no, group: deroga_parametri, item: La distanza tra i fabbricati, when: '{{ask.pdc_procedura|is_deroga}}'}
@@ -467,6 +475,9 @@ asks:
   fascia_aeroportuale_doc: {type: file, question: 'The airport fascia''s document: the self-certification, or the request for its assent (PDF)'}
   fascia_altro_doc: {type: file, question: 'The other fascia''s document: the self-certification, or the request for its assent (PDF)'}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
+  diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
+    propose: 'false'}
+  diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
   documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
   assenso_proprietario: {type: file, question: The owner's signed assent to the works (PDF)}
   notifica_preliminare: {type: file, question: The notifica preliminare already sent (PDF)}
@@ -551,6 +562,7 @@ supports:
   - sottotetti
   - parcheggi
   - mutamento uso
+  - altro
   else: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then). A variant to a permesso
     issued under it isn't mapped.
 - if: '{{ask.pdc_tipo|is_mutamento_uso}}'
@@ -565,6 +577,11 @@ supports:
   in:
   - 'true'
   else: 'A permesso in deroga (art. 14 DPR 380/2001) derogates from at least one limit: density, height, distance or use.'
+- if: '{{ask.pdc_tipo|is_altro}}'
+  value: '{{ask.pdc_procedura}}'
+  in:
+  - ordinaria
+  else: 'Works no other line names are asked under art. 10 as such: not as a convenzionato or in deroga.'
 - if: '{{ask.sanatoria_titolo|is_permesso}}'
   value: '{{ask.pdc_tipo}}'
   in:
@@ -891,15 +908,15 @@ sections:
   - {id: 'r16c3p47reg:txt', kind: text, value: '{{p:albo.numero}}', when: '{{ask.progettista_altro}}', max: 8, label: numero iscrizione}
 - section: a) Qualificazione pratica dell'intervento
   fields:
-  - {id: 'r2c1p2reg:radio:0_clone', kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}',
+  - {id: 'r2c1p2reg:radio:0_clone', kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia__altro}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}',
     label: interventi di cui all'articolo 10}
-  - {id: 'r4c1p4reg:radio:1_clone', kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}
+  - {id: 'r4c1p4reg:radio:1_clone', kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia__altro}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}
       {{ask.scia_cambio_uso|is_no}}', label: non comporta mutamento di destinazione d’uso}
-  - {id: 'r5c1p5reg:radio:2_clone', kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}
+  - {id: 'r5c1p5reg:radio:2_clone', kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia__altro}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}
       {{ask.scia_cambio_uso|is_stessa_categoria}}', label: comporta mutamento di destinazione d’uso di una singola unità immobiliare all’interno}
-  - {id: 'r6c1p6reg:radio:3_clone', kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}
+  - {id: 'r6c1p6reg:radio:3_clone', kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia__altro}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}
       {{ask.scia_cambio_uso|is_tra_categorie}}', label: 'comporta mutamento di destinazione d’uso di una singola unità immobiliare, ubicata'}
-  - {id: 'r7c1p7reg:radio:4_clone', kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}
+  - {id: 'r7c1p7reg:radio:4_clone', kind: radio, when: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia__altro}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}
       {{ask.scia_cambio_uso|is_intero_immobile}}', label: comporta mutamento di destinazione d’uso di un intero immobile}
   - {id: 'r8c1p8reg:radio:5_clone', kind: radio, when: '{{ask.pdc_tipo|is_facolta_scia}}', label: interventi assoggettati a Segnalazione Certificata di Inizio Attività}
   - {id: 'r10c1p10reg:txt', kind: text, value: '{{ask.intervento_tipo}}', when: '{{ask.pdc_tipo|is_facolta_scia}}', max: 200, label: (specificare)}
@@ -1684,6 +1701,8 @@ sections:
   - {kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_mutamento_uso}} {{ask.mutamento_lr_tipo|is_sagoma}}', label: con opere che incidano sulla sagoma}
   - {kind: checkbox, on_page: true, when: '{{ask.pdc_tipo|is_mutamento_uso}} {{ask.mutamento_lr_tipo|is_zona_agricola}}', label: nelle zone agricole}
   - {kind: checkbox, when: '{{ask.pdc_tipo|is_variante_sagoma}}', label: Varianti a permessi di costruire comportanti modifica della sagoma}
+  - {kind: checkbox, when: '{{ask.pdc_tipo|is_altro}}', label: altro non indicato nei punti precedenti}
+  - {kind: text, value: '{{ask.intervento_tipo}}', when: '{{ask.pdc_tipo|is_altro}}', max: 9999, label: 'specificare:'}
   - {kind: radio, when: '{{ask.scia_cambio_uso|is_no}}', label: non comportano mutamento di destinazione d’uso}
   - {kind: radio, when: '{{ask.scia_cambio_uso|is_stessa_categoria}}', label: comportano mutamento di destinazione d’uso di una singola unità immobiliare all’interno}
   - {kind: radio, when: '{{ask.scia_cambio_uso|is_tra_categorie}}', label: 'comportano mutamento di destinazione d’uso di una singola unità immobiliare, ubicata'}
@@ -2040,20 +2059,27 @@ sections:
 - section: Dichiarazione relativa ai diritti
   fields:
   - {id: 'r2c1p2reg:radio:0_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: non sono dovuti oneri}
-  - {id: 'r3c1p3reg:radio:1_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: poiché non previsti dal tariffario}
+  - {id: 'r3c1p3reg:radio:1_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente|not}}', label: poiché non previsti dal tariffario}
+  - {id: 'r3c2p4reg:radio:2_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente}}', label: poiché esentati}
+  - {id: 'r5c1p7reg:txta', kind: text, on_page: true, value: '{{ask.diritti_esenzione_motivo}}', when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente}}', max: 300, label: specificare la motivazione}
   - {id: 'r5c1p8reg:radio:3_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: sono dovuti oneri quali diritti o spese}
   - {id: 'r7c1p10reg:real', kind: number, value: '{{ask.diritti_euro}}', when: '{{ask.diritti_euro|positive}}', max: 11, label: per un totale di Euro}
   - {id: 'r8c1p13reg:radio:4_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: pagamento on line}
 - section: Dichiarazione relativa all'assolvimento dell'imposta di bollo
   fields:
-  - {id: 'r3c1p3reg:radio:0_clone', kind: radio, when: '{{ask.bollo_marche|not}}', label: Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digitale pagoPA}
-  - {id: 'r5c2p7reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche|not}}', label: 'Due marche da €16,00 ciascuna'}
-  - {id: 'r8c1p14reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche}}', label: Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo}
-  - {id: 'r13c2p30reg:radio:2_clone', kind: radio, when: '{{ask.bollo_marche}}', label: 'Marca da €16,00 per l''autorizzazione'}
-  - {kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1)}
-  - {kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}}', label: data}
-  - {id: 'r15c2p34reg:txt', kind: text, value: '{{ask.bollo_seriale_2}}', on_page: true, when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1), nth: 2}
-  - {id: 'r15c3p36reg:calendar_input', kind: date, value: '{{ask.bollo_data_2|date_it}}', on_page: true, when: '{{ask.bollo_marche}}', label: data, nth: 2}
+  - {id: 'r3c1p3reg:radio:0_clone', kind: radio, when: '{{ask.bollo_marche|not}} {{ask.bollo_esenzione|is_no}}', label: Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digitale
+      pagoPA}
+  - {id: 'r5c2p7reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche|not}} {{ask.bollo_esenzione|is_no}}', label: 'Due marche da €16,00 ciascuna'}
+  - {id: 'r8c1p14reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', label: Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo}
+  - {id: 'r13c2p30reg:radio:2_clone', kind: radio, when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', label: 'Marca da €16,00 per l''autorizzazione'}
+  - {kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', max: 14, label: numero seriale (1)}
+  - {kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', label: data}
+  - {id: 'r15c2p34reg:txt', kind: text, value: '{{ask.bollo_seriale_2}}', on_page: true, when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', max: 14, label: numero seriale (1), nth: 2}
+  - {id: 'r15c3p36reg:calendar_input', kind: date, value: '{{ask.bollo_data_2|date_it}}', on_page: true, when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', label: data, nth: 2}
+  - {kind: radio, when: '{{ask.bollo_esenzione|is_virtuale}}', label: 'Per gli Enti autorizzati, l''imposta di bollo è assolta in modo virtuale'}
+  - {kind: file, value: '{{ask.bollo_virtuale_autorizzazione}}', when: '{{ask.bollo_esenzione|is_virtuale}}', label: dichiarazione relativa all'assolvimento dell'imposta di bollo}
+  - {kind: radio, when: '{{ask.bollo_esenzione|bollo_esente}}', label: Il pagamento non è dovuto poiché esentati}
+  - {kind: select, value: '{{ask.bollo_esenzione|bollo_motivo}}', when: '{{ask.bollo_esenzione|bollo_esente}}', label: per la seguente motivazione}
 - section: Pagamento degli oneri
   go: Prosegui
   save: false

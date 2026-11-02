@@ -39,5 +39,6 @@
  "impresa_dopo": "false",
  "cliente_carica": "amministratore unico",
  "cliente_registro": "non ancora iscritta",
- "progettista_altro": false
+ "progettista_altro": false,
+ "diritti_esente": false
 }
