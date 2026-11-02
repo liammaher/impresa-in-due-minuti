@@ -29,7 +29,10 @@ prints, or a fixture as it is (rehearsals/cila-fittizia/fixture-p6.json: its "fi
 person added to it is in the next batch).
 No rehearsal named: every one with a generated steps file and the answers file. A rehearsal
 named `NAME:ANSWERS.json` runs with that answers file instead (one pratica, several cases: each
-its own run, `NAME/ANSWERS` in the results).
+its own run, `NAME/ANSWERS` in the results). `NAME:ANSWERS.json:VALUES.json` runs that case on
+other values than --values' (an architect born abroad, from a copy of the fixture), so one bundle
+holds both: its result is `NAME/ANSWERS@VALUES`, which --record leaves out of runs.json (the
+repo's fixture wouldn't give that run again).
 """
 
 import argparse
@@ -124,6 +127,9 @@ def record(done, default, day):
     """Each run of a batch (record.js: "pdc-fittizio/answers-deroga", or a rehearsal alone for its
     default answers file) into rehearsals/<name>/runs.json, once per date, case and result."""
     for d in done:
+        if "@" in d["name"]:
+            print(f"{d['name']}: {d['result']}, on other values than the fixture's: not recorded")
+            continue
         name, _, stem = d["name"].partition("/")
         f = REHEARSALS / name / "runs.json"
         runs = json.loads(f.read_text()) if f.is_file() else []
@@ -158,14 +164,18 @@ def main():
     stored, sources, origin, queue, failed = {}, {}, None, [], []
     for item in names:
         name, _, answers = item.partition(":")
+        answers, _, own = answers.partition(":")
         answers = answers or a.answers
-        label = f"{name}/{Path(answers).stem}" if answers != a.answers else name
+        label = f"{name}/{Path(answers).stem}" if answers != a.answers or own else name
+        if own:
+            label += f"@{Path(own).stem}"
         d = REHEARSALS / name
         steps_file = d / "portal-steps.generated.yaml"
         if not steps_file.exists():
             steps_file = d / "portal-steps.yaml"
         steps = yaml.safe_load(steps_file.read_text())
-        values = run.Values(json.loads((d / answers).read_text()), fields=fields, asks=steps.get("asks"))
+        values = run.Values(json.loads((d / answers).read_text()), fields=run.fields_of(Path(own).read_text()) if own else fields,
+                            asks=steps.get("asks"))
         # A box the portal checks against a real register (a company in the Registro Imprese)
         # refuses made-up data: such a run only stops there (2026-11-02, one did).
         stops = run.preflight(steps, values, urls, made_up=True)["made_up_stops"]

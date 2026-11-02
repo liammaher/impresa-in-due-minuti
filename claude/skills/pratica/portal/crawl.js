@@ -11,7 +11,8 @@
 //       interventi: each "interventi eventuali" tick alone too, as a variant; recrawl: section
 //       names crawled again though seen, with `depth`, for a choice that opens deeper boxes);
 //       `check`: fingerprints only (catalogue.py drift), for the batch or one op (`like`:
-//       the crawled pratica it should match); a combination: `also` the other operations
+//       the crawled pratica it should match), `since`: a check stored before that day is redone;
+//       a combination: `also` the other operations
 //       selected with it, `scelte` the only ones tried, `slots` its attachments screen read too
 //   await __crawl.wait(ms)                               the map so far, once done or after ms
 //   __crawl.slots()                                      the attachments screen's slots
@@ -409,7 +410,9 @@
       // same operation in another sector, crawled there.
       const check = !!(opts.check || op.check);
       const stored = JSON.parse(localStorage.getItem((check ? "crawl:check:" : "crawl:op:") + op.name) || "null");
-      if (stored && !stored.error) { report.skipped++; continue; }
+      // A check another day left is that day's portal: a check batch (`since`, its day) redoes it
+      // (2026-11-02: six checks from 28 October passed as new). The same day's resumes.
+      if (stored && !stored.error && !(check && opts.since && stored.crawled < opts.since)) { report.skipped++; continue; }
       const o0 = performance.now();
       const r = { name: op.name, sector: op.sector, operation: op.path, crawled: new Date().toISOString(), depth: opts.depth || 2, sections: [] };
       if (op.like) r.like = op.like;

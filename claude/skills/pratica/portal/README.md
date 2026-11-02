@@ -338,7 +338,9 @@ later runs travel as what differs from its first. Don't copy files through the c
 queue's either: a long script can arrive garbled (2026-10-30), and so did 13 KB of one case's values
 (2026-11-02, an element too many). Each queue piece checks its own length and hash before it joins
 the batch and throws if it changed. A case whose made-up data the portal can't save (a company in
-the Registro Imprese: the dictionary's `made_up_stops`) isn't written into a batch at all. Pass `--bundle <file in Downloads>`, run `pick.js` in the pane, and the person picks
+the Registro Imprese: the dictionary's `made_up_stops`) isn't written into a batch at all. A case
+on other values than the fixture's (an architect born abroad, from a copy of it) goes in the same
+batch as `NAME:ANSWERS.json:VALUES.json`; its result is `NAME/ANSWERS@VALUES` and isn't recorded. Pass `--bundle <file in Downloads>`, run `pick.js` in the pane, and the person picks
 that file once in the box it shows; it is checked by sha256, loaded once, and starts the batch.
 No way around the pick: the pane blocks the portal's page from fetching a local server
 (`net::ERR_BLOCKED_BY_CLIENT`, tried 2026-11-01), and its file box can't be set by a script.
