@@ -175,7 +175,12 @@ func TestFinishInit_KeyBeforePort(t *testing.T) {
 	if err := finishInit(&out, dir, "SK-TEST-KEY", "impresa"); err != nil {
 		t.Fatal(err)
 	}
-	if got := out.String(); !strings.Contains(got, "Business vault") || !strings.Contains(got, ":7201") || !strings.Contains(got, "'pvault --vault studio unlock'") {
+	// The port it chose: the first free one, which on a machine running a named vault isn't 7201.
+	port, ok, err := readPort(dir)
+	if err != nil || !ok || port < firstNamedPort || port > lastNamedPort {
+		t.Fatalf("port file: %d, %v, %v", port, ok, err)
+	}
+	if got := out.String(); !strings.Contains(got, "Business vault") || !strings.Contains(got, ":"+strconv.Itoa(port)) || !strings.Contains(got, "'pvault --vault studio unlock'") {
 		t.Fatalf("finishInit output:\n%s", got)
 	}
 }

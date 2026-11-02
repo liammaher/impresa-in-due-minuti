@@ -1276,5 +1276,14 @@ def _():
         assert (("Asseverazione SCIA - Tipologia di intervento", "Cognome", "Disegno") in plan) == signs, answers
 
 
+
+@case("every steps file and combination's answers are as the dictionary, recipes and crawls write them now (regen.py --check)")
+def _():
+    import regen
+    changed, refused = regen.regenerate(check=True)
+    assert not refused, refused
+    assert not changed, "regenerate (bench/regen.py): " + ", ".join(str(p.relative_to(regen.REHEARSALS)) for p in changed)
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

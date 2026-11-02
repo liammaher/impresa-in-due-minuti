@@ -6,6 +6,9 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
 
 ## Adding a pratica
 
+Before mapping anything, look at the other worktrees' branches (`git worktree list`, `git log --all
+--since=yesterday`): on 2026-11-02 two chats mapped the same three choices twenty minutes apart.
+
 1. **Is it all mapped?** `catalogue.py count` says which crawled sections the dictionary
    fills. A section none fills needs a dictionary entry (`dictionary/fnsuap.yaml`; its header
    says what a field can carry). Read the section on the portal when the crawl kept no `text`:
@@ -58,16 +61,17 @@ person-facing flow (pre-flight questions, the review page) is in the pratica ski
    table's answers, for the person to confirm: `{{ask.intervento,ask.strutture|sue_scia_tipo}}`
    reads several facts at once, and a proposal waits while a fact it reads is still asked.
 3. **Generate:** `gen.py <recipe> --out <dir>/portal-steps.generated.yaml`. It writes nothing
-   if any field is unaccounted for. Regenerate every rehearsal after a dictionary or gen.py
-   change and look at the diff: an unrelated steps file that changes is a regression until
+   if any field is unaccounted for. Regenerate every rehearsal after a dictionary, recipe or gen.py
+   change (`bench/regen.py`: every steps file and combination's answers; test_gen fails while one is
+   stale) and look at the diff: an unrelated steps file that changes is a regression until
    shown otherwise. `bench/plan_diff.py` says what the change does to each case (its fill plan
    before and after). A new question the existing cases reach makes their pre-flight propose
    or ask it: answer it in each as the case did before, and plan_diff shows them unchanged, so
    their recorded runs still stand. Add the keys as text: rewriting a file with `json.dump` reflows
    its inline lists, and the diff of 84 files buries the answers (2026-11-01). `bench/add_answer.py KEY
-   VALUE` does it for every rehearsal whose steps ask KEY, and names the combinations to regenerate
-   (`gen.py --answers`); one whose main pratica doesn't ask KEY takes it from its part's `answers`
-   (the CIL with its landscape authorization: regenerated from the CIL's, it lost the key, 2026-11-02).
+   VALUE` does it for every rehearsal whose steps ask KEY, puts it in a part's `answers` where a
+   combination's main pratica doesn't ask KEY (the CIL with its landscape authorization: regenerated
+   from the CIL's, it lost the key, 2026-11-02), and writes the combinations' answers again.
 4. **Pre-flight** with made-up answers (`answers-p6.json`) and the P6 fixture's values
    (`--values rehearsals/cila-fittizia/fixture-p6.json`, the fixture as it is): `run.py preflight --made-up`
    (the rehearsal's files are made up: Napoli's file rules only warn, below), from the repo's root:
