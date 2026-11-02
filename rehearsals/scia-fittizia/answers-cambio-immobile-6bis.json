@@ -84,5 +84,6 @@
  "scavo": "nessuno",
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "progettista_altro": false
 }

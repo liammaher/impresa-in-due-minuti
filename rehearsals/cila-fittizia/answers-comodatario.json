@@ -36,5 +36,6 @@
  "cambio_uso": "no",
  "paesaggio": "no",
  "fatti": [],
- "altri_tecnici_dopo": "false"
+ "altri_tecnici_dopo": "false",
+ "progettista_altro": false
 }

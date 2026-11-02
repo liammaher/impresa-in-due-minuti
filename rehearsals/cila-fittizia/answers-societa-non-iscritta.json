@@ -38,5 +38,6 @@
  "altri_tecnici_dopo": "false",
  "impresa_dopo": "false",
  "cliente_carica": "amministratore unico",
- "cliente_registro": "non ancora iscritta"
+ "cliente_registro": "non ancora iscritta",
+ "progettista_altro": false
 }

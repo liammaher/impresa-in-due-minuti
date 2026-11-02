@@ -102,5 +102,6 @@
  "impresa_dopo": "false",
  "notifica_allegata": "false",
  "vvf_variante": "false",
- "scomputo": "false"
+ "scomputo": "false",
+ "progettista_altro": false
 }

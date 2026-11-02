@@ -86,6 +86,7 @@
  "direttore_lavori": "da nominare",
  "impresa_dopo": "false",
  "vvf_variante": "false",
+ "progettista_altro": false,
  "bollo_marche": false,
  "vincolo": "art 136 and 142",
  "vincolo_136_lettera": "c) e d)",

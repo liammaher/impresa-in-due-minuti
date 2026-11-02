@@ -17,6 +17,9 @@ asks:
         di condominio], propose: '{{c:business.forma_giuridica|carica_proposta}}'}
   cliente_registro: {type: choice, question: 'The client company has no REA in the vault: non ancora iscritta (being registered in the Registro delle imprese); non necessita (never registered: a condominium,
       an association, an ente)?', options: [non ancora iscritta, non necessita], propose: '{{c:business.forma_giuridica|registro_proposto}}'}
+  progettista_altro: {type: yes_no, question: 'Is the architectural designer (progettista) another technician than the architect presenting the pratica? If so, they are `p:` in the job''s people: the form
+      names them as the progettista and their asseverazione', propose: 'false', yours: 'The asseverazione is the designer''s (`p:`): have them sign the pratica digitally too, besides the procuratore, before
+      Firma e invio'}
   oggetto: {type: text, question: The works in one sentence (300 characters)}
   paes_protocollo: {type: text, question: The landscape authorization's P.G. (protocollo) number}
   paes_data: {type: date, question: Its date}
@@ -262,10 +265,27 @@ sections:
       146'}
 - section: dati relativi al nome del tecnico
   fields:
-  - {id: 'r1c1p1reg:radio:0_clone', kind: radio, label: è colui che presenta la pratica}
-  - {id: 'r9c1p22reg:txt', kind: text, value: '{{t:albo.ordine}}', max: 100, label: ordine/collegio/albo}
-  - {id: 'r9c2p24reg:txt', kind: text, value: '{{t:albo.provincia}}', max: 2, label: provincia (sigla)}
-  - {id: 'r9c3p26reg:txt', kind: text, value: '{{t:albo.numero}}', max: 8, label: numero iscrizione}
+  - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.progettista_altro|not}}', label: è colui che presenta la pratica}
+  - {id: 'r9c1p22reg:txt', kind: text, value: '{{t:albo.ordine}}', when: '{{ask.progettista_altro|not}}', max: 100, label: ordine/collegio/albo}
+  - {id: 'r9c2p24reg:txt', kind: text, value: '{{t:albo.provincia}}', when: '{{ask.progettista_altro|not}}', max: 2, label: provincia (sigla)}
+  - {id: 'r9c3p26reg:txt', kind: text, value: '{{t:albo.numero}}', when: '{{ask.progettista_altro|not}}', max: 8, label: numero iscrizione}
+  - {id: 'r1c2p2reg:radio:1_clone', kind: radio, when: '{{ask.progettista_altro}}', label: non è colui che presenta la pratica}
+  - {id: 'r3c1p5reg:txt', kind: text, value: '{{p:identity.last_name|upper}}', when: '{{ask.progettista_altro}}', max: 30, label: cognome}
+  - {id: 'r3c2p7reg:txt', kind: text, value: '{{p:identity.first_name|upper}}', when: '{{ask.progettista_altro}}', max: 30, label: nome}
+  - {id: 'r5c1p11reg:txt', kind: text, value: '{{p:identity.codice_fiscale}}', when: '{{ask.progettista_altro}}', max: 16, label: codice fiscale}
+  - {id: r8c1p17reg, kind: select, value: ITALIA, when: '{{ask.progettista_altro}}', label: Stato}
+  - {id: r8c2p19reg, kind: select, value: '{{p:business.sede_legale_provincia}}', when: '{{ask.progettista_altro}}', label: Provincia}
+  - {id: 'r8c3p21reg:txt', kind: text, value: '{{p:business.sede_legale_comune|upper}}', when: '{{ask.progettista_altro}}', max: 100, label: Comune italiano}
+  - {id: 'r10c1p25reg:txt', kind: text, value: '{{p:business.sede_legale_indirizzo|upper}}', when: '{{ask.progettista_altro}}', max: 50, label: 'Via, viale'}
+  - {id: 'r10c2p27reg:txt', kind: text, value: '{{p:business.sede_legale_civico}}', when: '{{ask.progettista_altro}}', max: 5, label: Numero civico}
+  - {id: 'r10c3p29reg:txt', kind: text, value: '{{p:business.sede_legale_cap}}', when: '{{ask.progettista_altro}}', max: 5, label: C.A.P.}
+  - {id: 'r12c1p31reg:number', kind: text, value: '{{p:identity.phone|phone_it}}', when: '{{ask.progettista_altro}}', max: 10, label: Telefono}
+  - {id: 'r14c1p37reg:number', kind: text, value: '{{p:identity.phone|phone_it}}', when: '{{ask.progettista_altro}}', max: 15, label: Cell.}
+  - {id: 'r14c2p39reg:txt', kind: text, value: '{{p:identity.pec}}', made_up: 'the portal looks the PEC up at Salva and keeps it, flagged "Indirizzo Pec non valido" unless it is a real one (read 2026-11-02):
+      a made-up address stays flagged', when: '{{ask.progettista_altro}}', max: 100, label: Posta elettronica}
+  - {id: 'r16c1p43reg:txt', kind: text, value: '{{p:albo.ordine}}', when: '{{ask.progettista_altro}}', max: 100, label: ordine/collegio/albo}
+  - {id: 'r16c2p45reg:txt', kind: text, value: '{{p:albo.provincia}}', when: '{{ask.progettista_altro}}', max: 2, label: provincia (sigla)}
+  - {id: 'r16c3p47reg:txt', kind: text, value: '{{p:albo.numero}}', when: '{{ask.progettista_altro}}', max: 8, label: numero iscrizione}
 - section: Dichiarazione relativa ai diritti
   fields:
   - {id: 'r2c1p2reg:radio:0_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: non sono dovuti oneri}

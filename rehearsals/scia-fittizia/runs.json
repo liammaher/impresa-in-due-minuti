@@ -214,5 +214,17 @@
   "answers": "answers-scavo-vvf.json",
   "result": "filled",
   "seconds": 148.7
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-progettista.json",
+  "result": "filled",
+  "seconds": 191.1
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-direttori.json",
+  "result": "filled",
+  "seconds": 182.5
  }
 ]

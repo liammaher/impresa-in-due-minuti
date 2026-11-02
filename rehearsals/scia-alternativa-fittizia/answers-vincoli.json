@@ -101,5 +101,6 @@
  "direttore_lavori": "da nominare",
  "impresa_dopo": "false",
  "vvf_variante": "false",
- "scomputo": "false"
+ "scomputo": "false",
+ "progettista_altro": false
 }
