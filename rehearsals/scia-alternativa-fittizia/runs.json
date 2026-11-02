@@ -118,5 +118,11 @@
   "answers": "answers-progettista.json",
   "result": "filled",
   "seconds": 190.7
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 153.9
  }
 ]

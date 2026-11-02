@@ -118,5 +118,11 @@
   "answers": "answers-professionista.json",
   "result": "filled",
   "seconds": 230.4
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 143.4
  }
 ]

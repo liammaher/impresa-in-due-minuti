@@ -226,5 +226,11 @@
   "answers": "answers-direttori.json",
   "result": "filled",
   "seconds": 182.5
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 138.8
  }
 ]

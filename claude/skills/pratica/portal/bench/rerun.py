@@ -227,7 +227,8 @@ if (!pvAlready) window.pvBatchRun = (async () => {
       && b.state !== "checked" && !signed(b)).map((b) => `${b.kind} ${b.label || b.id}`);
     done.push({ name, result: r.result, error: r.error || null, at: r.at, sections: r.sections.length,
       verify_seconds: r.verify_seconds ?? null, total_seconds: r.total_seconds, url: r.url,
-      moved: r.moved || [], loose: r.loose || [], retries: (r.retries || []).length, ...(gaps.length ? { gaps } : {}) });
+      moved: r.moved || [], loose: r.loose || [], retries: (r.retries || []).length, ...(gaps.length ? { gaps } : {}),
+      ...(r.alerts ? { alerts: r.alerts } : {}) });
     sessionStorage.setItem("pv-batch", JSON.stringify(done));
   }
   // Each filled run drew the person's review over the portal: nobody reads it in a batch, and it
@@ -246,7 +247,10 @@ JSON.stringify({ done: done.length, of: (window.pvBatch || []).length, running: 
   filled: done.filter((d) => d.result === "filled").length,
   stopped: done.filter((d) => d.result !== "filled").map((d) => [d.name, d.error, d.at && d.at.section, d.gaps || []]),
   moved: done.filter((d) => (d.moved || []).length).map((d) => [d.name, d.moved]),
-  loose: done.filter((d) => (d.loose || []).length).map((d) => [d.name, d.loose]) })
+  loose: done.filter((d) => (d.loose || []).length).map((d) => [d.name, d.loose]),
+  // The portal's warnings: by text, with how many runs had each (the made-up PEC and address are in all).
+  alerts: Object.entries(done.flatMap((d) => [...new Set((d.alerts || []).map((a) => `${a.section}: ${a.text}`))])
+    .reduce((n, a) => ({ ...n, [a]: (n[a] || 0) + 1 }), {})) })
 """)
     (a.out / "record.js").write_text('JSON.stringify(JSON.parse(sessionStorage.getItem("pv-batch") || "[]")'
                                       '.map((d) => ({ name: d.name, result: d.result, total_seconds: d.total_seconds })))\n')
