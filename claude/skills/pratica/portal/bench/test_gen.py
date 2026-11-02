@@ -294,7 +294,7 @@ def _():
 def _():
     steps = generated("scia-sanatoria-fittizia")
     d = [c["defect"] for c in steps["supports"] if "defect" in c]
-    assert [x["id"] for x in d] == ["scia-36bis-c1"] and d[0]["choices"] and d[0]["law"], d
+    assert [x["id"] for x in d] == ["scia-36bis-c1", "scia-34ter"] and all(x["choices"] and x["law"] for x in d), d
     recipe = gen.load_yaml(REH / "scia-sanatoria-fittizia" / "recipe.yaml")
     recipe["supports"] = recipe["supports"] + [{"value": "x", "in": ["x"], "else": "x", "defect": "no-such-defect"}]
     try:

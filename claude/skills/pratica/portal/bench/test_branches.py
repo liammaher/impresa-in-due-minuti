@@ -114,6 +114,16 @@ def _():
     assert max(["ticked", "unmapped"], key=branches.STATES.index) == "unmapped"
 
 
+@case("a case a portal defect blocks counts as defect, not a gap: art. 34-ter's rows; its payment receipts, mapped, are ticked")
+def _():
+    r = one("SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione", "regolarizzazione di interventi realizzati come variante")
+    assert r["state"] == "defect", r
+    r = one("Asseverazione PdC", "una variante in corso d'opera, in parziale difformità")
+    assert r["state"] == "defect", r
+    r = one("SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione", "si allega la ricevuta del pagamento di € 516")
+    assert r["state"] == "ticked", r
+
+
 @case("the page renders with its counts")
 def _():
     text = branches.render(ROWS)

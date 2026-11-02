@@ -92,6 +92,7 @@ yours:
   - "A SCIA that asks for assents (the Soprintendenza, a park, a vincolo): no start date; the works start once the SUE says the assents are in"
   - "For works on structures: the autorizzazione sismica in sanatoria from the Genio Civile di Napoli on S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983), with the strutturista's attestation that the works met the technical rules in force when they were done (art. 36-bis c. 3-bis DPR 380/2001); its documents go in this pratica's slot"
   - "Works done in a protected area (art. 36-bis c. 4): on Allega documenti, the documents for the binding parere on their landscape compatibility go in \"Documentazione necessaria ai fini del rilascio del parere vincolante\", signed digitally (.p7m only)"
+  - "A sanction or oblazione whose receipt the sanatoria quadro attaches: on Allega documenti, the receipt in \"copia attestazione versamento oneri, diritti e spese\", signed (.p7m only): the quadro adds no slot of its own"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -119,9 +120,12 @@ supports:
     in: [in corso, doppia conformita, variante pre 1977]
     defect: scia-36bis-c1
     else: "For the conformity of art. 36-bis c. 1 the portal's asseverazione saves the date of the works, the oblazione and the works proposal as one field (one of the three), so it can't state the case in full: a defect of the portal (docs/portal-defects.md); ask the SUE."
+  # Art. 34-ter (a variant to a pre-1977 title): the asseverazione saves its dating and its oblazione
+  # as one field (read 2026-11-02); the sanatoria quadro's title and payment rows work.
   - value: "{{ask.sanatoria_caso}}"
     in: [in corso, doppia conformita, conformita urbanistica]
-    else: "Variants to pre-1977 titles (art. 34-ter) aren't mapped yet."
+    defect: scia-34ter
+    else: "For a variant to a pre-1977 title (art. 34-ter) the portal's asseverazione saves the variant's date (by documents or attested) and the oblazione as one field, so it can't state both, as art. 34-ter c. 2 and 3 ask: a defect of the portal (docs/portal-defects.md); ask the SUE."
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}
   # Works on structures begun without the seismic filing always need the autorizzazione sismica
   # in Campania (art. 4 c. 1 e L.R. 9/1983): the asseverazione's sismica row says so, and the

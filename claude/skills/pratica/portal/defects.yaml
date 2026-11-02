@@ -40,3 +40,15 @@ pdc-aree-fuoco:
     - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
   report: docs/portal-defects.md
 
+
+scia-34ter:
+  title: "SCIA in sanatoria, art. 34-ter (a variant to a pre-1977 title): the portal saves the dating or the oblazione"
+  portal: "Napoli's SUE on impresainungiorno: the SCIA's asseverazione, sanatoria quadro"
+  what: "The case's three rows (the date of the variant proven by documents, the date attested, the oblazione) are one field: the portal keeps only the one ticked last."
+  law: "Art. 34-ter c. 2 and 3 DPR 380/2001 ask for both: the variant's date (by the documents of art. 9-bis c. 1-bis, else the technician's attestation) and the oblazione of art. 36-bis c. 5 the SCIA is subject to."
+  checked: "2026-11-02, on a made-up draft, ticked and cancelled without saving; the sanatoria quadro's own rows (the varied title, the payment) are two fields and work"
+  choices:
+    - "Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) how they want this sanatoria filed while the portal can't take it: by PEC, or on the portal with the date or the oblazione stated in the attached relazione tecnica asseverata."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+    - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
+  report: docs/portal-defects.md

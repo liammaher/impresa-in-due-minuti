@@ -8,13 +8,14 @@ Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdo
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 1008 | Claude takes it when the case does |
+| ticked | 999 | Claude takes it when the case does |
 | answer | 58 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
-| left | 6 | left empty on purpose |
+| left | 4 | left empty on purpose |
 | law | 25 | closed by law to new cases (the piano casa, a repealed rule): refused as the law's, not a gap |
+| defect | 30 | a known portal defect blocks the case (`defects.yaml`): refused with it, not a gap |
 | fixed | 6 | another option of a dropdown the dictionary sets to one value |
-| unmapped | 74 | in a mapped section, not taken: a case that needs it is refused or not asked |
+| unmapped | 55 | in a mapped section, not taken: a case that needs it is refused or not asked |
 | no entry | 0 | its section isn't in the dictionary yet |
 
 What the crawl didn't see (more choices may exist there):
@@ -102,21 +103,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 
 - radio: non è colui che presenta la pratica
 
-### Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria / Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione
-
-8 pratiche; 10 of 60 choices to map.
-
-- radio: dà atto che l’immobile interessato dalla tolleranza è ubicato in zona sismica a bassa sismicità (zone 3 e 4) (under: si)
-- checkbox: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della data di entrata in vigore della legge 28 gennaio 1977, n. 10 (articolo  (under: si)
-- radio: dà atto che la data/epoca di realizzazione dell’intervento (under: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato pri)
-- radio: attesta che la data/epoca di realizzazione dell’intervento (under: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato pri)
-- radio: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguaglio a seguito di quantificazione da parte del responsabile del procedim (under: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato pri)
-- radio: dà atto che la data/epoca di realizzazione dell’intervento (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
-- radio: attesta che la data/epoca di realizzazione dell’intervento (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
-- radio: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguaglio a seguito di quantificazione da parte del responsabile del procedim (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
-- radio: ai fini della sanatoria, la presente SCIA: (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
-- checkbox: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla SCIA, ai sensi dell’art. 36-bis, comma 3-bis: (under: un intervento soggetto a SCIA realizzato in assenza della SCIA stessa o in diffo)
-
 ### h1) Tecnici incaricati
 
 8 pratiche; 1 of 16 choices to map.
@@ -128,20 +114,6 @@ Most shared first: closing a choice in a section many pratiche show helps all of
 7 pratiche; 1 of 4 choices to map.
 
 - checkbox: In caso di intervento in VARIANTE :
-
-### SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione
-
-3 pratiche; 9 of 14 choices to map.
-
-- radio: si allega la ricevuta del pagamento di € 516,00 (under: intervento soggetto a SCIA in corso di esecuzione, con pagamento di sanzione (d.)
-- radio: si allega la ricevuta del pagamento (under: sanatoria di intervento soggetto a SCIA, in assenza della SCIA stessa o in diffo)
-- checkbox: sanatoria di intervento soggetto a SCIA, in assenza della SCIA o in difformità da essa, che risulta conforme alla disciplina urbanistica vigente al momento dell
-- radio: si allega la ricevuta del pagamento (under: sanatoria di intervento soggetto a SCIA, in assenza della SCIA o in difformità d)
-- checkbox: regolarizzazione di interventi realizzati come variante in corso d'opera che costituiscono parziali difformità dal titolo rilasciato prima della data di entrata
-- radio: si indicano gli estremi del titolo edilizio variato (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
-- radio: si allega altra documentazione di cui all'articolo 9-bis, comma 1-bis, quarto periodo nei casi in cui sussista un principio di prova del titolo abilitativo vari (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
-- radio: si forniscono gli estremi di versamento (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
-- radio: si allega la ricevuta di versamento (under: regolarizzazione di interventi realizzati come variante in corso d'opera che cos)
 
 ### Asseverazione PdC - tutela storico ambientale
 

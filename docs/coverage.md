@@ -59,8 +59,8 @@ SUE pratiche not yet fillable:
 Measured today:
 
 - Level 1: 39 of 39 pratiche fully in the dictionary. 12 of them are two operations in one pratica (`sue-combo-*`).
-- Which pratiche a case needs: of the 13997 cases the rules table decides, **1630 reach a steps file**, 12367 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
-- Level 2: **16 refusals across 15 recipes**, 7 distinct messages.
+- Which pratiche a case needs: of the 13990 cases the rules table decides, **1650 reach a steps file**, 12340 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
+- Level 2: **13 refusals across 12 recipes**, 6 distinct messages.
 - Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot. A box read on a filled draft says what it adds (the dictionary's `slot`).
 - Levels 4 and 5: not measured yet (see the open items).
 
@@ -78,9 +78,6 @@ Measured today:
 | `pdc-paesaggistica-ordinaria-fittizio` | 1 |
 | `pdc-paesaggistica-semplificata-fittizio` | 1 |
 | `pdc-sanatoria-fittizio` | 1 |
-| `scia-sanatoria-fittizia` | 1 |
-| `scia-sanatoria-paesaggistica-ordinaria-fittizia` | 1 |
-| `scia-sanatoria-paesaggistica-semplificata-fittizia` | 1 |
 
 Pratiche filed together, mapped (a steps file each):
 
@@ -106,7 +103,6 @@ Refusals, by how many recipes carry them (the most shared are the cheapest to cl
 - 4×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
 - 3×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
 - 3×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
-- 3×: Variants to pre-1977 titles (art. 34-ter) aren't mapped yet.
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
 - 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
@@ -118,7 +114,7 @@ Ticked "si allega" boxes with no attachment slot under their condition (gen.py `
 Open items no recipe shows:
 
 - Not mapped: PdC in sanatoria under art. 36-bis (refused: the portal makes two acknowledgment checkboxes a radio pair; art. 36 is filled). A SCIA in sanatoria in a protected area is mapped two ways: works done through the art. 36-bis c. 4 compatibility, works under way (art. 37 c. 5) with the authorization for the landscape works still to come; partly done landscape works under way are refused (art. 146 c. 4). The combinations of pratiche still to map are counted above, from the rules table.
-- SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal saves its dating, oblazione and works proposal as one field with four values (checked 2026-11-01): a portal defect (docs/portal-defects.md), as is the permesso's under art. 36-bis.
+- SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal saves its dating, oblazione and works proposal as one field with four values (checked 2026-11-01): a portal defect (docs/portal-defects.md), as is the permesso's under art. 36-bis. So is a variant to a pre-1977 title (art. 34-ter): its dating and oblazione are one field (checked 2026-11-02).
 - The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.
 - Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots may be missing (the catalogue notes this for the pratiche read on an empty draft); the diritti amount per pratica is unknown.
 - The screens after the attachments (the declarations' signing, the sending) and everything after filing (integration requests, the receipt, the status): nothing in the repo maps them.
