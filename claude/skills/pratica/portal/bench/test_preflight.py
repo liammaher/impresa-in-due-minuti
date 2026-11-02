@@ -467,8 +467,9 @@ def agibilita_slots():
 
 
 def sanatoria_cases():
-    """The SCIA in sanatoria: works in progress and double conformity fill; the conformity of art.
-    36-bis c. 1 (the portal's asseverazione can't state it) and pre-1977 variants are refused."""
+    """The SCIA in sanatoria: works in progress and double conformity fill, the payment by its estremi
+    or its receipt; the conformity of art. 36-bis c. 1 and pre-1977 variants (art. 34-ter) are refused,
+    each with its defect: the portal's asseverazione can't state either case."""
     d = HERE.parents[4] / "rehearsals" / "scia-sanatoria-fittizia"
     steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
     fields = dict(json.loads((HERE.parents[4] / "rehearsals" / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
@@ -477,13 +478,18 @@ def sanatoria_cases():
     os.chdir(HERE.parents[4])
     try:
         pre = lambda a: run.preflight(steps, values(a, fields, steps), made_up=True)
-        assert pre(p6)["ready"] and pre(json.loads((d / "answers-in-corso.json").read_text()))["ready"]
+        for a in ("in-corso", "ricevuta", "in-corso-ricevuta"):
+            assert pre(json.loads((d / f"answers-{a}.json").read_text()))["ready"], a
+        assert pre(p6)["ready"]
+        # The receipt has no slot of its own: the person attaches it signed, so pre-flight asks no file.
+        assert not any(q.get("ask") == "sanatoria_ricevuta" for q in pre(p6 | {"sanatoria_prova": "ricevuta"})["questions"])
         r = pre(p6 | {"sanatoria_caso": "conformita urbanistica"})
         assert any("a defect of the portal" in u for u in r["unsupported"]), r["unsupported"]
         # The known defect comes with it, for the person to choose (defects.yaml through gen.py).
         assert [d["id"] for d in r["defects"]] == ["scia-36bis-c1"] and len(r["defects"][0]["choices"]) == 3, r.get("defects")
-        assert "defects" not in pre(p6 | {"sanatoria_caso": "variante pre 1977"})
-        assert pre(p6 | {"sanatoria_caso": "variante pre 1977"})["unsupported"]
+        r = pre(p6 | {"sanatoria_caso": "variante pre 1977"})
+        assert any("art. 34-ter" in u and "a defect of the portal" in u for u in r["unsupported"]), r["unsupported"]
+        assert [d["id"] for d in r["defects"]] == ["scia-34ter"], r.get("defects")
     finally:
         os.chdir(here)
 

@@ -28,5 +28,23 @@
   "answers": "answers-ristrutturazione-strutture.json",
   "result": "filled",
   "seconds": 151
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-ricevuta.json",
+  "result": "stopped",
+  "seconds": 105.2
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-in-corso-ricevuta.json",
+  "result": "filled",
+  "seconds": 152.8
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-ricevuta.json",
+  "result": "filled",
+  "seconds": 145.8
  }
 ]

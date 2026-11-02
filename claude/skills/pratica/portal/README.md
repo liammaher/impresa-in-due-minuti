@@ -173,7 +173,9 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   only one of its two opening radios after Salva: the read-back says so; keep the one it keeps.
   A line that reads as a question of its own can be one choice with another's: the permesso's
   "non interessa aree percorse dal fuoco" with the soil statements, so ticking it unticks "non
-  richiede indagini" (2026-11-02). Where the form's own choice can't say both, it's a portal
+  richiede indagini" (2026-11-02). The SCIA in sanatoria's art. 34-ter rows are one more: the
+  dating (two ways) and the oblazione carry the values 1 to 3 of one field, where the quadro's title
+  and payment rows are 1 and 2 each (read by the inputs' names and values, 2026-11-02). Where the form's own choice can't say both, it's a portal
   defect (`defects.yaml`, `pdc-aree-fuoco`): left unticked and in `yours`, never filled around.
 - **A portal document's box reads "Scarica il documento"** (the procura, the DSC): the
   attachments screen's `theirs` names it, so its "required" isn't the run's error; nor is one
@@ -182,6 +184,9 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
   whether it holds a file. An upload widget's wrapper has a title of its own (the portal's message
   once the screen is checked, else "false" or "true"), which is never the slot's; a slot is
   required by the message, not by a title that says "OBBLIGATORIO" (the broadband one, 2026-11-02).
+- **A decimal box shows 516 as 516,00.** gen.py makes a crawled `:real` box a number; one found by
+  label (an `anchor`, or a box the crawl never had an id for) is the dictionary's `kind: number`, or
+  the read-back says "not kept" (the sanatoria receipt's "di euro", 2026-11-02).
 - **A file box's cell names the file once it's in.** Name an upload by the row above it (the
   crawl's `context`), not by its cell ("Tipologie ammesse"), or the read-back can't find it.
 - **The portal's own errors:** "errore inatteso", a 503 for maintenance, a fresh load that

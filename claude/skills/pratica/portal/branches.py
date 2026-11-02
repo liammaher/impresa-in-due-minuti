@@ -21,6 +21,9 @@ see these; here each one is:
   law        the law closes it to new cases (the dictionary's `law`: the piano casa, closed to new
              requests since 2022, or a repealed rule): not a gap, and a case that takes it is
              refused as the law's
+  defect     a known portal defect blocks the case (the dictionary's `defect`, by defects.yaml id:
+             the portal saves rows the law asks for together as one field): refused with the defect,
+             not a gap in the mapping
   unmapped   the section has an entry, the choice is in none of it: a case that takes it is
              unmapped (a recipe refuses it, or pre-flight never asks it)
   no entry   the section isn't in the dictionary at all
@@ -46,7 +49,7 @@ HERE = Path(__file__).resolve().parent
 OUT = HERE.parents[3] / "docs" / "sue-branches.md"
 LIMIT = 30  # crawl.js's default `limit` before 2026-10-31 (80 since; a cut section says `truncated`)
 TICKS = ("radio", "checkbox", "tick")
-STATES = ["ticked", "answer", "theirs", "left", "law", "fixed", "unmapped", "no entry"]
+STATES = ["ticked", "answer", "theirs", "left", "law", "defect", "fixed", "unmapped", "no entry"]
 
 
 def distinct_sections():
@@ -143,12 +146,15 @@ def state(n, f, name, entries, fields=()):
     for entry, _ in entries:
         if any(gen.norm(f.get("label")).startswith(gen.norm(x)) for x in entry.get("law", [])):
             return "law"
+    for entry, _ in entries:
+        if any(gen.norm(f.get("label")).startswith(gen.norm(x)) for xs in (entry.get("defect") or {}).values() for x in xs):
+            return "defect"
     return "fixed" if fixed else "unmapped"
 
 
 def rows():
     dictionary = gen.load_yaml(HERE / "dictionary" / "fnsuap.yaml")
-    out, seen = [], set()
+    out, seen, closed = [], set(), {}
     for fp, s in sorted(distinct_sections().items()):
         crawl = s["crawl"]
         base = [f for f in crawl.get("fields", []) if f["kind"] != "message"]
@@ -168,6 +174,13 @@ def rows():
             # The weakest title decides: a choice ticked under one title and not another is
             # unmapped where it isn't.
             st = max(per.values(), key=STATES.index)
+            # What a box the law or a defect closes opens is closed with it, though its label is
+            # ticked elsewhere (art. 36-bis c. 1's receipt shares the double conformity's).
+            up = closed.get((fp, (parent or {}).get("id"), (parent or {}).get("choice")))
+            if up:
+                st = up
+            if st in ("law", "defect"):
+                closed[(fp, n["id"], n.get("choice"))] = st
             out.append({
                 "section": names[0], "titles": names, "fingerprint": fp, "pratiche": sorted(s["pratiche"]),
                 "choice": (n.get("choice") or f.get("label") or "")[:160], "kind": n["kind"],
@@ -203,6 +216,7 @@ def render(rs):
         f"| theirs | {count['theirs']} | the person's own (an acknowledgement, a declaration), never ticked |",
         f"| left | {count['left']} | left empty on purpose |",
         f"| law | {count['law']} | closed by law to new cases (the piano casa, a repealed rule): refused as the law's, not a gap |",
+        f"| defect | {count['defect']} | a known portal defect blocks the case (`defects.yaml`): refused with it, not a gap |",
         f"| fixed | {count['fixed']} | another option of a dropdown the dictionary sets to one value |",
         f"| unmapped | {count['unmapped']} | in a mapped section, not taken: a case that needs it is refused or not asked |",
         f"| no entry | {count['no entry']} | its section isn't in the dictionary yet |",

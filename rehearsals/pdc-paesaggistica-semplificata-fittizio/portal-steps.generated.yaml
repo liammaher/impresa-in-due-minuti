@@ -168,11 +168,12 @@ asks:
       and building rules both then and today)?', options: [urbanistica, doppia], when: '{{ask.sanatoria_titolo|is_permesso}} {{ask.pdc_sanatoria_caso|is_parziale}}'}
   sanatoria_caso: {type: choice, question: 'Which case of the SCIA in sanatoria? in corso (works still under way, the SCIA filed of one''s own accord: a €516 sanction, art. 37 c. 5 DPR 380/2001); doppia
       conformita (works done without the SCIA or differing from it, conforming to the planning and building rules both when done and today: an oblazione of €516 to €5,164, art. 36-bis c. 5 b); conformita
-      urbanistica (conforming to today''s planning rules and the building rules of the time: €1,032 to €10,328, art. 36-bis c. 1); variante pre 1977 (a variant to a title issued before L. 10/1977, art.
-      34-ter)', options: [in corso, doppia conformita, conformita urbanistica, variante pre 1977], when: '{{ask.sanatoria_titolo|is_scia}}'}
+      urbanistica (conforming to today''s planning rules and the building rules of the time: €1,032 to €10,328, art. 36-bis c. 1); variante pre 1977 (a variant made during the works of a title issued before
+      L. 10/1977, in partial difformity from it and not a tolerance of art. 34-bis: art. 34-ter c. 1-3, an oblazione under art. 36-bis c. 5)', options: [in corso, doppia conformita, conformita urbanistica,
+      variante pre 1977], when: '{{ask.sanatoria_titolo|is_scia}}'}
   sanatoria_data: {type: date, question: 'When the works were done (for works still under way: when they started)', when: '{{ask.sanatoria_titolo|in_scia__permesso}}'}
-  sanatoria_oblazione: {type: number, question: 'The oblazione the technician determines and the client paid before filing, in euro (€516 to €5,164 with double conformity); the SUE may adjust it', when: '{{ask.sanatoria_titolo|is_scia}}
-      {{ask.sanatoria_caso|is_doppia_conformita}}'}
+  sanatoria_oblazione: {type: number, question: 'The oblazione the technician determines and the client paid before filing, in euro (art. 36-bis c. 5 b: €516 to €5,164 with double conformity); the SUE may
+      adjust it', when: '{{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_doppia_conformita}}'}
   sanatoria_catasto: {type: choice, question: 'The catasto for the works to legalize: invariato (no change to the catasto registration); presentata (the DOCFA already filed: its protocol and date); dopo
       (to be filed once the sanatoria takes effect)', options: [invariato, presentata, dopo], when: '{{ask.sanatoria_titolo|in_scia__permesso}}'}
   sanatoria_catasto_protocollo: {type: text, question: The DOCFA's protocol number, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}'}
