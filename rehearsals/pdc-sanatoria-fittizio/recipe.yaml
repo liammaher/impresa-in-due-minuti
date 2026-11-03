@@ -100,6 +100,7 @@ attachments:
     # Soil analysed, no remediation: their results' required slot (read on the permesso's screen 2026-11-01).
     - {kind: file, label: Risultati delle analisi ambientali sulla qualità dei terreni, value: "{{ask.indagini_analisi_doc}}", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}", on_page: true}
 asks:
+  diritti_euro: {default: "441", why: "Line SUE 16 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 441 € at filing for an accertamento di conformità (artt. 36, 36-bis), the rest by the contributo's bracket once determined; art. 36-bis c. 5 b, SUE 17-18"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}

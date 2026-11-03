@@ -100,6 +100,7 @@ attachments:
     - {kind: file, label: "Elaborati relativi al superamento delle barriere architettoniche (art. 77", value: "{{ask.barriere_elaborati}}", when: "{{ask.barriere}} {{ask.barriere_deroga|not}}", on_page: true}
     - {kind: file, label: Documentazione per la richiesta di deroga alla normativa per l'abbattimento delle barriere, value: "{{ask.barriere_deroga_doc}}", when: "{{ask.barriere}} {{ask.barriere_deroga}}", on_page: true}
 asks:
+  diritti_euro: {question: "The SUE's diritti in euro. Onerous, by the contributo di costruzione (oneri di urbanizzazione + costo di costruzione, as the prospetto works it out), lines SUE 7-9 of the 2026 table: 1003 up to 5,000 €, 1505 up to 30,000 €, 1998 above", propose: "{{ask.scia_onerosa|diritti_gratuito}}", why: "Line SUE 10 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 401 € when free of the contributo; onerous, SUE 7-9 by the contributo (urbanizzazione + costo di costruzione): 1,003 € up to 5,000 €, 1,505 € up to 30,000 €, 1,998 € above"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}
