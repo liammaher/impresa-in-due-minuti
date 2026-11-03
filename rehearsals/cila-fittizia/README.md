@@ -325,7 +325,10 @@ assent already obtained (the Soprintendenza's, on a bene culturale) is attached 
 liberi, no longer listed. The cases that took the old reading changed: `answers-direttore-atti`
 and `answers-elenchi-lunghi` (works to start, assents for the SUE: ASL, Vigili del Fuoco),
 `answers-bene-culturale` (nothing listed). Their 2026-10-30/11-01 runs below filled the old
-values; the portal's own wording of the two lists is still to be read on a draft.
+values; all three filled again with the new ones on 2026-11-03 (`runs.json`). The portal's own
+wording, read on that day's draft: "2 - ALTRE COMUNICAZIONI, SEGNALAZIONI, ASSEVERAZIONI ETC. [...]
+che si presentano contestualmente alla CILA" and "3 - ATTI DI ASSENSO DA ACQUISIRE [...] per cui si
+richiede la loro acquisizione d'ufficio sulla base della documentazione allegata".
 
 ## Clean reruns (2026-10-29)
 

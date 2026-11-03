@@ -42,8 +42,8 @@ def states():
     box = next(b for b in bx if b["section"].startswith("c) Qualificazione") and sb.norm(b["label"]).startswith(sb.norm("senza opere (o con opere")))
     runs = {who for *_, who in TICKS}
     assert sb.status(box, TICKS, MAPPED, LEAVES, bx, runs)[0] == "filled"
-    # Works finished in part: a case ticks it since 2026-11-03 (the planimetria under Allegati
-    # liberi), not yet run; before, the recipe refused it and the box was only mapped.
+    # Works finished in part: a case ticks it since 2026-11-03 (the planimetria in its own slot);
+    # before, the recipe refused it and the box was only mapped.
     st, who = state("fine-lavori", "", "in forma parziale")
     assert st == "case" and "fine-lavori-fittizia" in who, (st, who)
     # The land register: a case ticks it since 2026-11-02 (the permesso's plot), not yet run.

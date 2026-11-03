@@ -165,8 +165,8 @@ def _():
     names = [s["section"] for s in steps["sections"]]
     assert "ubicazione dell'immobile" in names and "comunicazione di fine lavori" in names, names
     slots = next(s for s in steps["sections"] if s["section"] == "Gestione degli allegati")["fields"]
-    # The planimetria of works finished in part goes under Allegati liberi (2026-11-03).
-    assert [f["label"][:20] for f in slots] == ["Fotocopia di un docu", "Copia dei documenti ", "Dichiarazione di ass", "Allegati liberi"], slots
+    # Works finished in part add the planimetria's own slot (read on a partial draft, 2026-11-03).
+    assert [f["label"][:20] for f in slots] == ["Fotocopia di un docu", "Copia dei documenti ", "Dichiarazione di ass", "Copia di elaborato p"], slots
 
 
 @case("a section the dictionary doesn't have stops it, nothing written")
