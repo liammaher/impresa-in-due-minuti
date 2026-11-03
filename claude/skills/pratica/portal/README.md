@@ -120,8 +120,13 @@ that also cites a Comune page may only confirm a national one there.
   two lists were filled for a week as filings "already made" and assents "already obtained", and
   their words, past that point, say filings "che si presentano contestualmente alla CILA" and
   "atti di assenso da acquisire" (2026-11-03). From Pratiche in bozza, APRI opens the draft on
-  Allega documenti; the "COMPILAZIONE PRATICA" breadcrumb goes back to the sections, a section's
-  title link opens it, ANNULLA leaves it unsaved.
+  Allega documenti (its `.content-title` "GESTIONE DEGLI ALLEGATI"); the "COMPILAZIONE PRATICA"
+  breadcrumb goes back to the sections, a section's title link opens it, ANNULLA leaves it unsaved.
+  The draft's step menu is a list of `li.title-list` items, Compilazione Pratica, Dati
+  Dichiarazioni, Allega Documenti (each an `a` link; the open one `selected`, an unfinished one
+  `complete-false`), then Firma and Invio with no link until everything is in. The address is
+  `/fnsuap/cmd/home?execution=eNsM`, a key that moves on with every page, so a draft is reached
+  again by its name in Pratiche in bozza, never by an address kept from an earlier visit.
 - **A calendar left open.** A date box opens jQuery UI's calendar (`div#ui-datepicker-div`), which
   a person's click elsewhere closes and a script's `click()` doesn't: it covered the next box (the
   permesso's sanatoria quadro, 2026-11-02). `closeLists` closes it, with the suggestion lists,
@@ -244,7 +249,9 @@ that also cites a Comune page may only confirm a national one there.
   which the runner retried twice as a slow portal, filing the draft wrong each time). Where the form's own choice can't say both, it's a portal
   defect (`defects.yaml`, `pdc-aree-fuoco`): left unticked and in `yours`, never filled around.
 - **A portal document's box reads "Scarica il documento"** (the procura, the DSC), once the
-  declarations are ticked: before, the slot is an empty upload box (2026-11-03). The attachments
+  declarations are ticked: before, the slot is an empty upload box like any other, "Tipologie
+  ammesse: jpg.p7m;pdf.p7m Allega Max: 9,77 MB Il valore è obbligatorio" for the procura, the same
+  with every type for the CIL's "Quadro riepilogativo della documentazione C.I.L." (2026-11-03). The attachments
   screen's `theirs` names it, so its "required" isn't the first run's error, and the second run
   attaches it (below, Signed files and the second run); nor is the "required" under a slot that
   takes only signed files (.p7m), which the person signs and Claude attaches. A stop's
@@ -310,9 +317,14 @@ and DD 603 are PAdES-signed and read as such, and are not PDF/A; the veraPDF cor
 
 ## Signed files and the second run
 
-The portal checks every digital signature on upload: a made-up `.p7m` (a self-signed certificate)
-is refused in a growl that fades in seconds, "Il documento non è stato accettato. Una o più firme
-digitali presenti sul documento non sono valide" (2026-11-03, on a made-up CIL draft; nothing kept).
+The portal checks every file on upload and refuses it in a PrimeFaces warning growl
+(`.ui-growl-item-container.ui-growl-warn`: `.ui-growl-title` "Il documento non è stato accettato",
+the reason in its `<p>`) that fades in about two seconds and leaves the slot empty, no message under
+it. Seen 2026-11-03 on a made-up CIL draft, in its signed-only "copia attestazione versamento":
+a `.p7m` signed with a self-signed certificate, "Una o più firme digitali presenti sul documento non
+sono valide"; bytes that aren't a PKCS#7 named `.pdf.p7m`, "Il tipo di documento non corrisponde
+alle tipologie ammesse". So the portal reads the envelope and validates the certificate at upload,
+not only at Firma.
 So a slot that takes only signed files gets the person's own signed file: gen.py maps it where an
 entry names it, with the slot's `accepts`, pre-flight refuses a plain copy and reads who signed, and
 inpage.js `attach` watches for the growl and stops on it, naming the slot and the portal's words. A
