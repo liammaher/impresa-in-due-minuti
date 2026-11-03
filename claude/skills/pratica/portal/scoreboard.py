@@ -237,10 +237,16 @@ OPEN_BEYOND = [
     "refusal is proven; a real signed file, never yet. The second run after the declarations ran on the portal "
     "with made-up annexes (the Allegato A and the Modello DP under Allegati liberi, the DSC, 2026-11-03); the "
     "procura, signed only, never.",
-    "Terre e rocce: the piano di utilizzo, the dichiarazione di utilizzo and the DAU are wizard tick boxes "
-    "that go with a building title in one pratica, but only each alone is crawled; no title with them is, and "
-    "the rules table doesn't say when works need one. Which pairs of operations the wizard allows isn't "
-    "recorded (wizard.js tries each alone; the crawled combinations are the title with a landscape procedure).",
+    "Terre e rocce (DPR 120/2017): the wizard takes every two operations of different groups (sue-wizard.json "
+    "`pairs`, all 190 probed 2026-11-03, none refused), and the rules table routes a title with the dichiarazione di "
+    "utilizzo (art. 21: sites up to 6,000 m³, or larger ones with no VIA/AIA) to its combination, mapped for the CIL, "
+    "CILA, SCIA, SCIA alternativa and permesso. The piano di utilizzo (art. 9, sites under VIA/AIA) goes apart to the "
+    "VIA authority (the Regione's Staff Valutazioni Ambientali), never with a title; the DAU (art. 7) apart once the "
+    "soil is used. Not in the table: edilizia libera that digs (its dichiarazione alone, the standalone rehearsal), "
+    "works in sanatoria (the dichiarazione comes before the excavation), soil reused on the site (art. 24, no filing). "
+    "A title, its landscape authorization and the dichiarazione are three operations in one pratica, mapped too: all 15 "
+    "combinations filled on the portal with made-up data (2026-11-03); the dichiarazione itself is the portal's "
+    "document, signed, so its slot is proven only empty and required, never with a real signed file.",
     "Drift: the check compares the 27 single operations' sections as they show before any choice (last "
     "2026-11-02); the combinations and what a choice opens are checked only by the runner's label checks.",
     "Portal defects (docs/portal-defects.md): none reported yet to InfoCamere or the Comune; two of them "

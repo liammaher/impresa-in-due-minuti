@@ -17,6 +17,9 @@
     catalogue.py pane DIR                                  the pane's scripts: install.js stores wizard.js
                                                            and crawl.js in localStorage, load.js runs them
                                                            (an op with `like`: against that pratica, into same.json)
+    catalogue.py pairs DIR --bundle FILE                   the SUE wizard's operations two at a time (wizard.js
+                                                           `pairs`): does the portal take them together
+    catalogue.py pairs-import EXPORT|-                     those results into sue-wizard.json `pairs`
     catalogue.py pane DIR --bundle FILE --ops OPS.json     a batch as one file the person picks (pick.js),
         [--draft NAME] [--depth 3] [--fresh|--forget-known] [--check]   (--check: a drift check, today's)
                                                            status.js to poll, export.js to save the results
@@ -191,13 +194,23 @@ def read_export(source, what="imported"):
         if hashlib.sha256(rest.encode()).hexdigest() != head.strip():
             sys.exit(f"not the text the script printed (its sha256 differs): nothing {what}")
         text = rest
-    return json.loads(text)
+    data = json.loads(text)
+    if isinstance(data, dict) and data.get("format") == "strings-v1":
+        # print.js's compact form: every string over 12 characters listed once in `strings`, each
+        # use {"$": index} (2026-11-03: ten crawls of a combination, 14 KB each, in one print).
+        strings = data["strings"]
+        def expand(v):
+            if isinstance(v, dict):
+                return strings[v["$"]] if set(v) == {"$"} else {k: expand(x) for k, x in v.items()}
+            return [expand(x) for x in v] if isinstance(v, list) else v
+        data = expand(data["data"])
+    return data
 
 
 def cmd_import(args):
     """Each pratica of an export (localStorage `crawl:op:*`) to sections/<name>.json."""
     data = read_export(args.export)
-    out = []
+    out, known = [], None
     for key, r in sorted(data.items()):
         if not key.startswith("crawl:op:"):
             continue
@@ -225,6 +238,16 @@ def cmd_import(args):
         for k in ("refused", "pratica", "screens", "variants"):
             if k in r:
                 doc["generated" if k == "pratica" else k] = r[k]
+        # A section seen in the pane under an op that never came to the repo (a deeper recrawl,
+        # `d4-scia-alt`, grafted into the repo's crawls) is named by the repo crawl that holds its
+        # fingerprint (2026-11-03: ten of the SCIA alternativa's with the dichiarazione).
+        for s in r["sections"]:
+            if s.get("same_as") and not (SECTIONS / f"{s['same_as'].split('#')[0]}.json").exists():
+                known = known or cmd_known(None)
+                if s.get("fingerprint") not in known:
+                    sys.exit(f"{r['name']}: {s['section']} is the same as {s['same_as']}, which isn't in the repo, "
+                             "and no stored crawl holds its fingerprint: not imported")
+                s["same_as"] = known[s["fingerprint"]]
         doc["sections"] = r["sections"]
         if r.get("slots"):
             # Read on an empty draft: the slots its answers add are missing, so the main
@@ -556,11 +579,19 @@ document.body.appendChild(a); a.click(); a.remove();
 ({{ file: {json.dumps(name)}, pratiche: Object.keys(out).length, of: opts.ops.length, bytes: blob.size }})
 """)
     (out / "print.js").write_text("""// A small batch's results as text (a combination, its sections all known): sha256 first, for
-// `catalogue.py import -`, which refuses a copy that arrived changed. A big one: export.js.
+// `catalogue.py import -`, which refuses a copy that arrived changed. Over 40 KB, each string over 12
+// characters goes once in `strings` and is {"$": index} where used. Too big still: export.js.
 const opts = JSON.parse(localStorage.getItem("crawl:batch")), unsaved = window.__crawlUnsaved || {};
 const out = {};
 for (const o of opts.ops) { const k = "crawl:op:" + o.name, v = unsaved[k] || localStorage.getItem(k); if (v) out[k] = JSON.parse(v); }
-const text = JSON.stringify(out);
+let text = JSON.stringify(out);
+if (text.length > 40000) {
+  const strings = [], at = new Map();
+  const pack = (v) => typeof v === "string" && v.length > 12 ? { $: at.has(v) ? at.get(v) : (at.set(v, strings.length), strings.push(v), strings.length - 1) }
+    : Array.isArray(v) ? v.map(pack) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, pack(x)])) : v;
+  const data = pack(out);
+  text = JSON.stringify({ format: "strings-v1", strings, data });
+}
 const sha = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
 text.length > 40000 ? `${text.length} characters: too big to print, save it with export.js` : sha + "\\n" + text
 """)
@@ -598,6 +629,144 @@ text.length > 40000 ? `${text.length} characters: name fewer pratiche` : sha + "
                if args.check else f"export.js (saves {name}, once they agree), print.js (a small batch's results as text)")]
 
 
+def wizard_group(key):
+    """An operation's group in the SUE's tree: the titles and other adempimenti (0_0), terre e
+    rocce (0_1), the landscape procedures (0_2_0), the exemption parere (0_2_1)."""
+    return next(g for g in ("0_0", "0_1", "0_2_0", "0_2_1") if key == g or key.startswith(g + "_"))
+
+
+def sue_pairs():
+    """Every two operations of different groups, both tick boxes of one group, and one pair a
+    radio group: whether its radios exclude each other (the tree's own check)."""
+    w = json.loads((CAT / "sue-wizard.json").read_text())
+    ops, out, radio_seen = w["operations"], [], set()
+    for i, a in enumerate(ops):
+        for b in ops[i + 1:]:
+            g = wizard_group(a["key"])
+            if g == wizard_group(b["key"]) and "RAD" in (a["type"], b["type"]):
+                if g in radio_seen:
+                    continue
+                radio_seen.add(g)
+            out.append([{"key": a["key"], "label": a["label"]}, {"key": b["key"], "label": b["label"]}])
+    return w, out
+
+
+def cmd_pairs(args):
+    """The pairs probe as one file the person picks in the pane (pick.js), with status.js and
+    print.js (the results as text, sha256 first, for `pairs-import -`)."""
+    out = Path(args.dir)
+    out.mkdir(parents=True, exist_ok=True)
+    w, pairs = sue_pairs()
+    if args.only:
+        pairs = [p for p in pairs if any(k in (p[0]["key"], p[1]["key"]) for k in args.only)]
+    src = (HERE / "wizard.js").read_text()
+    opts = {"draft": args.draft, "sector": w["sector"], "pairs": pairs}
+    text = ("(() => {\n  if (window.__wizard && (window.__wizard.report() || {}).done === false) return \"a probe already runs in this tab\";\n"
+            f"  const src = {json.dumps(src)};\n  localStorage.setItem(\"pv-wizard\", src);\n  (0, eval)(src);\n"
+            f"  const opts = {json.dumps(opts, ensure_ascii=False)};\n"
+            "  localStorage.setItem(\"wizard:pairs\", JSON.stringify(opts));\n"
+            + ("  for (const [a, b] of opts.pairs) localStorage.removeItem(`wizard:pair:${a.key}+${b.key}`);\n" if args.fresh else "")
+            + "  return window.__wizard.pairs(opts) + `: ${opts.pairs.length} pairs`;\n})()\n")
+    path = Path(args.bundle).expanduser()
+    path.write_text(text)
+    sha = hashlib.sha256(text.encode()).hexdigest()
+    (out / "pick.js").write_text(f"""document.querySelectorAll("iframe, #pv-pick").forEach((x) => x.remove());
+const box = document.createElement("div"); box.id = "pv-pick";
+box.style.cssText = "position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#fff;border:3px solid #1a4fd6;padding:16px 20px;font:16px sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3);border-radius:8px;max-width:520px";
+box.innerHTML = '<b>Choose <code>{path.name}</code> (once)</b><br><input type="file" accept=".js" style="margin-top:10px"><div style="margin-top:8px;color:#444"></div>';
+document.body.appendChild(box);
+const [input, msg] = [box.querySelector("input"), box.querySelector("div")];
+input.addEventListener("change", async () => {{
+  const text = await input.files[0].text();
+  const got = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
+  if (got !== "{sha}") {{ msg.textContent = "Not that file (its sha256 differs): nothing loaded."; return; }}
+  input.disabled = true;
+  try {{ window.pvBundle = String((0, eval)(text)); msg.textContent = window.pvBundle; setTimeout(() => box.remove(), 5000); }}
+  catch (e) {{ window.pvBundle = "error " + e.message; msg.textContent = window.pvBundle; }}
+}});
+"box shown: pick the file once, then poll status.js"
+""")
+    (out / "status.js").write_text("""if (!document.hidden) await new Promise((r) => setTimeout(r, 38000));
+const r = window.__wizard ? await window.__wizard.wait(300) : null;
+JSON.stringify(r && r.pairs ? { done: r.done, done_ops: r.done_ops, skipped: r.skipped, of: r.pairs, current: r.current,
+  errors: r.errors, stopped: r.stopped, error: r.error } : "no probe in this tab")
+""")
+    # Section and adempimento names once, each pair a row of indices: 190 pairs in 33 KB, under the
+    # 40 KB a print goes through the conversation in (2026-11-03: by name, 51 KB).
+    (out / "print.js").write_text("""// The probe's results as text, sha256 first, for `catalogue.py pairs-import -`: each pair
+// [key, key, together, adempimenti [[adempimento, amministrazione]], sections, refused, error], names by index.
+const opts = JSON.parse(localStorage.getItem("wizard:pairs")), names = [], ix = (s) => { let i = names.indexOf(s); if (i < 0) { names.push(s); i = names.length - 1; } return i; };
+const pairs = [];
+for (const [a, b] of opts.pairs) {
+  const v = JSON.parse(localStorage.getItem(`wizard:pair:${a.key}+${b.key}`) || "null");
+  if (!v) continue;
+  pairs.push([v.keys[0], v.keys[1], v.together ? 1 : 0, v.accepted ? v.accepted.adempimenti.map((x) => [ix(x.adempimento), ix(x.amministrazione)]) : null, v.accepted ? v.accepted.sections.map(ix) : null, v.refused || null, v.error || null]);
+}
+const text = JSON.stringify({ format: "pairs-v2", names, pairs });
+const sha = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
+text.length > 40000 ? `${text.length} characters: too big to print` : sha + "\\n" + text
+""")
+    return [f"{path} ({path.stat().st_size // 1024} KB, {len(pairs)} pairs) and, in {out}: pick.js, status.js, print.js"]
+
+
+def cmd_pairs_import(args):
+    """The probe's results into sue-wizard.json `pairs`: each pair by its keys, with whether the
+    tree holds both, and if so whether the portal accepted them (the pratica's adempimenti and
+    sections, as indices into `sections`, a new section added there) or refused them."""
+    data = read_export(args.export)
+    private = os.environ.get("CATALOGUE_PRIVATE")
+    if private and re.search(private, json.dumps(data, ensure_ascii=False), re.I):
+        sys.exit("the results hold the login's name or CF: not imported")
+    path = CAT / "sue-wizard.json"
+    w = json.loads(path.read_text())
+    sections = w["sections"]
+    def index(name):
+        if name not in sections:
+            sections.append(name)
+        return sections.index(name)
+    _, wanted = sue_pairs()
+    if data.get("format") != "pairs-v2":
+        sys.exit("not print.js's output (format pairs-v2)")
+    names, got, out, errors = data["names"], {}, [], []
+    for ka, kb, together, adem, secs, refused, error in data["pairs"]:
+        r = {"keys": [ka, kb], "together": bool(together)}
+        if adem is not None:
+            r["accepted"] = {"adempimenti": [{"adempimento": names[a], "amministrazione": names[m]} for a, m in adem],
+                             "sections": [names[i] for i in secs]}
+        if refused:
+            r["refused"] = refused
+        if error:
+            r["error"] = error
+        got[(ka, kb)] = r
+    for a, b in wanted:
+        r = got.get((a["key"], b["key"]))
+        if not r or r.get("error"):
+            errors.append(f"{a['key']}+{b['key']}: " + (r["error"] if r else "not probed"))
+            continue
+        e = {"keys": r["keys"], "together": r["together"]}
+        if r.get("accepted"):
+            e["accepted"] = True
+            e["adempimenti"] = r["accepted"]["adempimenti"]
+            e["sections"] = [index(s) for s in r["accepted"]["sections"]]
+        elif r.get("refused"):
+            e["accepted"] = False
+            e["refused"] = r["refused"]
+        out.append(e)
+    if errors and not args.partial:
+        sys.exit("not imported: " + "; ".join(errors[:10]) + (f" (+{len(errors) - 10})" if len(errors) > 10 else "")
+                 + "\n(--partial imports the rest)")
+    w["pairs_note"] = ("Each two operations of different groups (and both terre e rocce boxes, and one pair per radio "
+                       "group), selected together on the operations screen, then forward with the defaults (wizard.js "
+                       "`pairs`). `together`: the tree holds both (false: one radio group); `accepted`: the portal "
+                       "generated a pratica (its adempimenti, its sections as indices), else `refused` (the screen it "
+                       "stayed on, its words). Probed " + datetime.date.today().isoformat() + ".")
+    w["pairs"] = out
+    path.write_text(json.dumps(w, ensure_ascii=False, indent=1) + "\n")
+    return [f"{len(out)} pairs into {path.name}: {sum(1 for e in out if e.get('accepted'))} accepted, "
+            f"{sum(1 for e in out if e.get('accepted') is False)} refused, {sum(1 for e in out if not e['together'])} not together"
+            + (f"; {len(errors)} left out: " + "; ".join(errors[:5]) if errors else "")]
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -623,6 +792,15 @@ def main():
     p = sub.add_parser("drift")
     p.add_argument("export")
     p.add_argument("--digests", action="store_true", help="EXPORT is digest.js's output")
+    p = sub.add_parser("pairs")
+    p.add_argument("dir")
+    p.add_argument("--bundle", required=True, help="the file the person picks in the pane")
+    p.add_argument("--draft", default="PROVA NON INVIARE - catalogo sue")
+    p.add_argument("--only", action="append", help="only the pairs with this operation key; repeat it")
+    p.add_argument("--fresh", action="store_true", help="probe again the pairs stored in the pane")
+    p = sub.add_parser("pairs-import")
+    p.add_argument("export")
+    p.add_argument("--partial", action="store_true", help="import the pairs probed, naming those that aren't")
     p = sub.add_parser("pane")
     p.add_argument("dir")
     p.add_argument("--bundle", help="also a batch as one file the person picks (with --ops)")
@@ -633,7 +811,7 @@ def main():
     p.add_argument("--forget-known", action="store_true", help="--bundle: --fresh, and read every section again")
     p.add_argument("--check", action="store_true", help="--bundle: a drift check (fingerprints only), redoing checks of other days")
     args = ap.parse_args()
-    res = globals()["cmd_" + args.cmd](args)
+    res = globals()["cmd_" + args.cmd.replace("-", "_")](args)
     if isinstance(res, list) and res and isinstance(res[0], str):
         print("\n".join(res))
     else:

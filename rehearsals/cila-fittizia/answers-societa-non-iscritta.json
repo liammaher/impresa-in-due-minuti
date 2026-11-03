@@ -39,5 +39,6 @@
  "cliente_carica": "amministratore unico",
  "cliente_registro": "non ancora iscritta",
  "progettista_altro": false,
- "diritti_esente": false
+ "diritti_esente": false,
+ "terre_rocce": "no"
 }

@@ -103,5 +103,6 @@
  "dl_strutture": "true",
  "vvf_variante": "false",
  "progettista_altro": false,
- "diritti_esente": false
+ "diritti_esente": false,
+ "terre_rocce": "no"
 }

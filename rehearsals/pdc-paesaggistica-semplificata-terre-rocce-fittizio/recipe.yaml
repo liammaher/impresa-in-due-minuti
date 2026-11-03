@@ -1,0 +1,33 @@
+# Permesso di costruire con autorizzazione paesaggistica semplificata and a dichiarazione di utilizzo delle terre e rocce da scavo
+# (art. 21 DPR 120/2017), three operations in one pratica on Napoli's SUE: rehearsals/pdc-paesaggistica-semplificata-fittizio's case
+# with excavated soil that leaves a small site as a by-product. The dichiarazione adds two adempimenti
+# and no section (catalogue/F839/sue-wizard.json `pairs`); the crawl is catalogue/F839/sections/sue-combo-pdc-paesaggistica-semplificata-dichiarazione-utilizzo.json.
+# Everything else is pdc-paesaggistica-semplificata-fittizio's recipe and what the dichiarazione adds (parts/dichiarazione-utilizzo-terre.yaml).
+extends: [pdc-paesaggistica-semplificata-fittizio, parts/dichiarazione-utilizzo-terre]
+procedure: napoli/comune/permesso-di-costruire-con-paesaggistica-semplificata-e-dichiarazione-utilizzo-terre
+title: "Permesso di costruire con autorizzazione paesaggistica semplificata e dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
+comune: F839
+sportello: sue
+crawl: sue-combo-pdc-paesaggistica-semplificata-dichiarazione-utilizzo
+operation:
+  - "Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001"
+  - "Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)"
+  - "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
+asks:
+  descrizione: {default: "PROVA NON INVIARE - PdC sempl. e terre e rocce {{c:identity.last_name}}"}
+# pdc-paesaggistica-semplificata-fittizio's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
+yours:
+  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
+  - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request"
+  - "The asseverazione's \"non interessa aree percorse dal fuoco\" (qualità terreni) is one choice with the soil statement on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md); state it in the relazione tecnica if the SUE wants it"
+  - "The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal's document on Allega documenti once the declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at least 15 days after sending"
+  - "When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017) on the SUE"
+  - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
+  - "The landscape authorization comes before the permesso (art. 146 c. 4 D.Lgs. 42/2004): the works start only once both are in"
+  - "Once the permesso is issued: collect it (paying the contributo, if due, as quadro f) says), name the structural designer and the direttori dei lavori, and file the comunicazione di inizio lavori with the energy report and the structural filings"
+# `rules` merge key by key: both pratiche filed with the main one.
+rules:
+  handles: [napoli/comune/autorizzazione-paesaggistica-semplificata, napoli/comune/utilizzo-materiale-scavo-fuori-sito]
+answers:
+  descrizione: PROVA NON INVIARE - PdC sempl. e terre e rocce P6
