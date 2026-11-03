@@ -439,6 +439,28 @@ def _():
     assert "allegato_b" in steps["groups"]
 
 
+@case("every SUE pratica's attachments screen names each slot its crawl read, or leaves it to the person")
+def _():
+    # A fresh crawl marks no slot required (the portal flags one only once it has checked the
+    # screen), so gen.py's "required slot in no entry" can't see one nobody named: the standalone
+    # ordinaria's relazione paesaggistica was found by a run that stopped on it (2026-11-03).
+    import json
+    starts = lambda title, labels: any(gen.norm(title).startswith(gen.norm(l)) for l in labels)
+    for d in sorted(REH.iterdir()):
+        f = d / "portal-steps.generated.yaml"
+        if not f.is_file() or gen.load_yaml(d / "recipe.yaml").get("sportello") != "sue":
+            continue
+        steps = gen.load_yaml(f)
+        crawl = steps["generated"].split()[2]
+        slots = json.loads((ROOT / "claude/skills/pratica/portal/catalogue/F839/sections" / f"{crawl}.json").read_text())["slots"]
+        screen = next(s for s in steps["sections"] if s["section"] == "Gestione degli allegati")
+        named = [x["label"] for x in screen["fields"]] + screen.get("theirs", [])
+        # Allegati liberi is optional everywhere; an ID copy for whoever doesn't sign digitally, here never.
+        left = [s["title"][:70] for s in slots["Gestione degli allegati"] if not starts(s["title"], named)
+                and not s["title"].startswith("Allegati liberi") and "solo per chi non firma" not in s["title"]]
+        assert not left, (d.name, left)
+
+
 @case("a slot that takes only signed files takes the person's signed file, never a plain copy, and a rehearsal leaves it (SCIA stato legittimo)")
 def _():
     import run
