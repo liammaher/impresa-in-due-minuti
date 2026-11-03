@@ -135,6 +135,18 @@ entry says what to report and how it was checked, without personal data.
 - **Checked**: 2026-10-31 (the voltura's runs), 2026-11-02 (the cambio d'intestazione's co-holder).
 - **To report**: one group, M or F.
 
+## Voltura and cambio d'intestazione: the co-holders' section holds one person
+
+- **Where**: the co-holders' section ("Informazioni su eventuali altri aventi titolo", opened by the
+  wizard's "ci sono cointestatari") of both pratiche.
+- **What happens**: the section has one person's boxes (name, birth, residence, citizenship, sex,
+  codice fiscale) and no "+" to add another.
+- **What the law asks**: the permesso passes to the successors in title (art. 11 c. 2 DPR 380/2001),
+  however many; the voltura names each of them.
+- **Effect**: a title passing to three or more holders can name only one co-holder on the portal.
+- **Checked**: 2026-10-28, the batch crawl of both pratiche (one person's 14 boxes, no "+").
+- **To report**: a "+" on the section, as the CILA's and SCIA's lists of technicians and firms have.
+
 ## Agibilità: the art. 24 exceptions are marked required
 
 - **Where**: the agibilità's "Attestazione tecnica - Agibilità".

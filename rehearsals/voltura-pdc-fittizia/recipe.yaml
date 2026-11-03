@@ -14,8 +14,9 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 asks:
   descrizione: {default: "PROVA NON INVIARE - voltura PdC {{c:identity.last_name}}"}
 supports:
-  # The co-holders' section holds one person and has no "+" (crawled 2026-10-28).
-  - {if: "{{ask.cointestatario}}", when: "{{ask.altri_cointestatari|not}}", else: "The portal's co-holders section (the wizard's ci sono cointestatari) holds one person: more than one co-holder isn't mapped."}
+  # The co-holders' section holds one person and has no "+" (crawled 2026-10-28): a portal
+  # defect, not a mapping gap.
+  - {if: "{{ask.cointestatario}}", when: "{{ask.altri_cointestatari|not}}", defect: coholders-one, else: "The portal's co-holders section (the wizard's ci sono cointestatari) holds one person and has no \"+\": a voltura to more than one co-holder can't be filed complete on the portal (the permesso passes to every successor in title, art. 11 c. 2 DPR 380/2001)."}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and the acknowledgements in the client's name"

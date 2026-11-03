@@ -18,8 +18,9 @@ asks:
   cambio_dl: {type: yes_no, question: "Is a new direttore dei lavori taking over?"}
   cambio_ditta: {type: yes_no, question: "Is a new firm taking over the works?"}
 supports:
-  # The co-holders' section holds one person and has no "+" (crawled 2026-10-28).
-  - {if: "{{ask.cointestatario}}", when: "{{ask.altri_cointestatari|not}}", else: "The portal's co-holders section (the wizard's ci sono cointestatari) holds one person: more than one co-holder isn't mapped."}
+  # The co-holders' section holds one person and has no "+" (crawled 2026-10-28): a portal
+  # defect, not a mapping gap.
+  - {if: "{{ask.cointestatario}}", when: "{{ask.altri_cointestatari|not}}", defect: coholders-one, else: "The portal's co-holders section (the wizard's ci sono cointestatari) holds one person and has no \"+\": a change of holder to more than one co-holder can't be filed complete on the portal, which must name each new holder."}
   - {if: "{{ask.soggetti_cambiati}} {{ask.cambio_dl|not}}", when: "{{ask.cambio_ditta}}", else: "The direttore or the firm changes: say which (a new direttore dei lavori, a new firm, or both)."}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"

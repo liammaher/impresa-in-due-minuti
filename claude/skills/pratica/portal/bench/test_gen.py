@@ -165,7 +165,8 @@ def _():
     names = [s["section"] for s in steps["sections"]]
     assert "ubicazione dell'immobile" in names and "comunicazione di fine lavori" in names, names
     slots = next(s for s in steps["sections"] if s["section"] == "Gestione degli allegati")["fields"]
-    assert [f["label"][:20] for f in slots] == ["Fotocopia di un docu", "Copia dei documenti ", "Dichiarazione di ass"], slots
+    # The planimetria of works finished in part goes under Allegati liberi (2026-11-03).
+    assert [f["label"][:20] for f in slots] == ["Fotocopia di un docu", "Copia dei documenti ", "Dichiarazione di ass", "Allegati liberi"], slots
 
 
 @case("a section the dictionary doesn't have stops it, nothing written")
@@ -827,7 +828,7 @@ def _():
         assert "radiotelevisivi" in labels and "di protezione antincendio" in labels, name
 
 
-@case("the CILA's technicians: another direttore dei lavori, another technician (G2, the SCIA's H2 too), filings and assents already made")
+@case("the CILA's technicians: another direttore dei lavori, another technician (G2, the SCIA's H2 too), filings presented with it and assents for the SUE")
 def _():
     import json
     import run
@@ -840,7 +841,7 @@ def _():
     steps, v, r = check("cila-fittizia", "answers-direttore-atti.json")
     assert r["ready"], r
     plan = [(p["label"] or "", str(p.get("value") or "")) for p in run.plan(steps, v)]
-    assert ("Cognome", "ESEMPIO") in plan and ("Tipologia di atto", "Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004)") in plan
+    assert ("Cognome", "ESEMPIO") in plan and ("Tipologia di atto", "Deroga ai requisiti igienico-sanitari dei locali (inventata)") in plan
     assert [x for l, x in plan if l == "Autorità competente"] == ["ASL Napoli 1 Centro", "Comune di Napoli"], plan
     for name in ("cila-fittizia", "scia-fittizia"):
         steps, v, r = check(name, "answers-altri-tecnici.json")

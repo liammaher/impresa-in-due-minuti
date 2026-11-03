@@ -85,24 +85,25 @@ asks:
   toll_silenzio_protocollo: {type: text, question: Its prot. n., when: '{{ask.toll_sismica|is_silenzio_assenso}}'}
   toll_decorso: {type: yes_no, question: 'Has the regional control term for this tolerance run out, with no request for more documents left unanswered and no negative outcome of the checks (the form''s
       declaration)?', when: '{{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}}'}
-  altri_atti: {type: yes_no, question: 'Do the works need other filings or assents not yet made or obtained, that this pratica doesn''t file (the Soprintendenza, ASL, fire brigade, a landscape authorization
-      not in this pratica)?', propose: 'false'}
-  comunicazioni_presentate: {type: yes_no, question: 'Were other filings already made for these works (a comunicazione or segnalazione to another office)?', propose: 'false'}
+  comunicazioni_contestuali: {type: yes_no, question: 'Are other filings presented together with this pratica (a segnalazione, comunicazione or notifica to another office that the works need)?', propose: 'false'}
   comunicazioni_quante: {type: number, question: 'How many?'}
-  comunicazione_1: {type: text, question: 'The first: what was filed (e.g. notifica preliminare ASL)?'}
-  comunicazione_1_autorita: {type: text, question: Its authority (e.g. ASL Napoli 1 Centro)}
-  comunicazione_2: {type: text, question: 'Filing 2: what was filed?'}
-  comunicazione_#K: {type: text, question: 'Filing #K: what was filed?'}
+  comunicazione_1: {type: text, question: 'The first: what is filed with it (e.g. SCIA antincendio)?'}
+  comunicazione_1_autorita: {type: text, question: Its authority (e.g. Comando provinciale dei Vigili del Fuoco di Napoli)}
+  comunicazione_2: {type: text, question: 'Filing 2: what is filed with it?'}
+  comunicazione_#K: {type: text, question: 'Filing #K: what is filed with it?'}
   comunicazione_2_autorita: {type: text, question: 'Filing 2: its authority'}
   comunicazione_#K_autorita: {type: text, question: 'Filing #K: its authority'}
-  atti_acquisiti: {type: yes_no, question: 'Were other assents already obtained for these works (a nulla osta, an authorization)?', propose: 'false'}
+  comunicazioni_doc: {type: file, question: 'The documents those filings need, in one PDF (the slot ''Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni'')'}
+  atti_da_acquisire: {type: yes_no, question: 'Do the works need assents not yet obtained (a nulla osta, an authorization, a deroga) that the SUE is to acquire from documents you attach (art. 23-bis DPR
+      380/2001)? The works then start only once the SUE says they are in. An assent already obtained isn''t one: it is attached', propose: 'false'}
   atti_quanti: {type: number, question: 'How many?'}
-  atto_1: {type: text, question: 'The first: which act (e.g. autorizzazione della Soprintendenza, art. 21 D.Lgs. 42/2004)?'}
-  atto_1_autorita: {type: text, question: 'Who issued it (e.g. Soprintendenza ABAP per il Comune di Napoli)?'}
+  atto_1: {type: text, question: 'The first: which act (e.g. parere igienico-sanitario, deroga)?'}
+  atto_1_autorita: {type: text, question: 'Who issues it (e.g. ASL Napoli 1 Centro)?'}
   atto_2: {type: text, question: 'Assent 2: which act?'}
   atto_#K: {type: text, question: 'Assent #K: which act?'}
-  atto_2_autorita: {type: text, question: 'Assent 2: who issued it?'}
-  atto_#K_autorita: {type: text, question: 'Assent #K: who issued it?'}
+  atto_2_autorita: {type: text, question: 'Assent 2: who issues it?'}
+  atto_#K_autorita: {type: text, question: 'Assent #K: who issues it?'}
+  atti_doc: {type: file, question: 'The documents the SUE needs to acquire those assents, in one PDF (the slot ''Documentazione necessaria per il rilascio di atti di assenso obbligatori'')'}
   oggetto: {type: text, question: The works in one sentence (300 characters)}
   data_inizio_lavori: {type: date, question: 'When the works start, or started'}
   ricevuta_sanzione: {type: file, question: 'The penalty receipt (PDF): 333 € for works under way, 1,000 € for works already done'}
@@ -228,15 +229,16 @@ supports:
   else: 'On a bene culturale the works need the Soprintendenza''s authorization first (art. 21 c. 4 D.Lgs. 42/2004), and Napoli''s SUE portal has no procedure to ask for it with this pratica: request it
     from the Soprintendenza ABAP per il Comune di Napoli (by PEC to sabap-na@pec.cultura.gov.it, on its form ''Istanza per opere su immobili vincolati'', 16 euro bollo; up to 120 days, art. 22), then file
     this.'
-- if: '{{ask.intervento|in_manutenzione_straordinaria__restauro}} {{ask.cila_stato|is_da_iniziare}} {{ask.bene_culturale}} {{ask.soprintendenza_autorizzata}}'
-  value: '{{ask.atti_acquisiti}}'
+- if: '{{ask.cila_stato|is_da_iniziare}} {{ask.atti_da_acquisire}}'
+  value: '{{ask.inizio_dopo_assensi}}'
   in:
   - 'true'
-  else: 'The CILA''s relazione lists the Soprintendenza''s authorization among the assents already obtained (Tipologia di atto, Autorità competente al rilascio): answer that assents were obtained, and name
-    it.'
-- when: '{{ask.altri_atti|not}}'
-  else: 'Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its semplificata): those combinations
-    aren''t mapped yet. Those already made or obtained go in the relazione.'
+  else: 'With assents for the SUE to acquire, the works start only once the SUE says they are in (art. 23-bis c. 2 DPR 380/2001): answer that the works start after its communication, not on a date.'
+- if: '{{ask.cila_stato|is_da_iniziare|not}}'
+  value: '{{ask.atti_da_acquisire}}'
+  in:
+  - 'false'
+  else: 'Works already under way or done can''t have assents still to be acquired (art. 23-bis c. 2 DPR 380/2001: works start only once they are in): ask the SUE how to regularize them.'
 - when: '{{ask.vincolo|is_art_134|not}}'
   else: 'The ordinaria''s form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose.'
 - when: '{{ask.titolo|is_locatario|not}}'
@@ -933,22 +935,22 @@ sections:
   - {id: 'r20c1p26reg:chk', kind: checkbox, when: '{{ask.cila_altri}}', label: Altri interventi non riconducibili}
   - {id: 'r22c1p28reg:txt', kind: text, value: '{{ask.cila_altri_tipo}}', when: '{{ask.cila_altri}}', max: 200, label: specificare il tipo di intervento}
   - {id: 'r24c1p30reg:txta', kind: text, value: '{{ask.dettaglio_intervento}}', max: 500, label: e che consistono in}
-  - {id: 'r31c1p39reg:txt', kind: text, value: '{{ask.comunicazione_1}}', when: '{{ask.comunicazioni_presentate}}', max: 200, label: 'Comunicazioni, segnalazioni'}
-  - {id: 'r31c2p41reg:txt', kind: text, value: '{{ask.comunicazione_1_autorita}}', when: '{{ask.comunicazioni_presentate}}', max: 200, label: Autorità competente}
-  - {id: 'r33c1p43reg:txt', kind: text, value: '{{ask.comunicazione_2}}', when: '{{ask.comunicazioni_presentate}} {{ask.comunicazioni_quante|atleast_2}}', max: 200, label: 'Comunicazioni, segnalazioni',
+  - {id: 'r31c1p39reg:txt', kind: text, value: '{{ask.comunicazione_1}}', when: '{{ask.comunicazioni_contestuali}}', max: 200, label: 'Comunicazioni, segnalazioni'}
+  - {id: 'r31c2p41reg:txt', kind: text, value: '{{ask.comunicazione_1_autorita}}', when: '{{ask.comunicazioni_contestuali}}', max: 200, label: Autorità competente}
+  - {id: 'r33c1p43reg:txt', kind: text, value: '{{ask.comunicazione_2}}', when: '{{ask.comunicazioni_contestuali}} {{ask.comunicazioni_quante|atleast_2}}', max: 200, label: 'Comunicazioni, segnalazioni',
     nth: 2}
-  - {id: 'r33c2p45reg:txt', kind: text, value: '{{ask.comunicazione_2_autorita}}', when: '{{ask.comunicazioni_presentate}} {{ask.comunicazioni_quante|atleast_2}}', max: 200, label: Autorità competente,
+  - {id: 'r33c2p45reg:txt', kind: text, value: '{{ask.comunicazione_2_autorita}}', when: '{{ask.comunicazioni_contestuali}} {{ask.comunicazioni_quante|atleast_2}}', max: 200, label: Autorità competente,
     nth: 2}
-  - {kind: add, anchor: 'Comunicazioni, segnalazioni', block: '#N', each: {count: '{{ask.comunicazioni_quante}}', from: 3}, when: '{{ask.comunicazioni_presentate}}'}
-  - {kind: text, label: 'Comunicazioni, segnalazioni', value: '{{ask.comunicazione_#K}}', anchor: 'Comunicazioni, segnalazioni', block: '#N', when: '{{ask.comunicazioni_presentate}}'}
-  - {kind: text, label: Autorità competente, value: '{{ask.comunicazione_#K_autorita}}', anchor: 'Comunicazioni, segnalazioni', block: '#N', when: '{{ask.comunicazioni_presentate}}'}
-  - {kind: text, value: '{{ask.atto_1}}', when: '{{ask.atti_acquisiti}}', max: 200, label: Tipologia di atto}
-  - {kind: text, value: '{{ask.atto_1_autorita}}', when: '{{ask.atti_acquisiti}}', max: 200, label: Autorità competente al rilascio}
-  - {kind: text, value: '{{ask.atto_2}}', when: '{{ask.atti_acquisiti}} {{ask.atti_quanti|atleast_2}}', max: 200, label: Tipologia di atto, nth: 2}
-  - {kind: text, value: '{{ask.atto_2_autorita}}', when: '{{ask.atti_acquisiti}} {{ask.atti_quanti|atleast_2}}', max: 200, label: Autorità competente al rilascio, nth: 2}
-  - {kind: add, anchor: Tipologia di atto, block: '#N', each: {count: '{{ask.atti_quanti}}', from: 3}, when: '{{ask.atti_acquisiti}}'}
-  - {kind: text, label: Tipologia di atto, value: '{{ask.atto_#K}}', anchor: Tipologia di atto, block: '#N', when: '{{ask.atti_acquisiti}}'}
-  - {kind: text, label: Autorità competente al rilascio, value: '{{ask.atto_#K_autorita}}', anchor: Tipologia di atto, block: '#N', when: '{{ask.atti_acquisiti}}'}
+  - {kind: add, anchor: 'Comunicazioni, segnalazioni', block: '#N', each: {count: '{{ask.comunicazioni_quante}}', from: 3}, when: '{{ask.comunicazioni_contestuali}}'}
+  - {kind: text, label: 'Comunicazioni, segnalazioni', value: '{{ask.comunicazione_#K}}', anchor: 'Comunicazioni, segnalazioni', block: '#N', when: '{{ask.comunicazioni_contestuali}}'}
+  - {kind: text, label: Autorità competente, value: '{{ask.comunicazione_#K_autorita}}', anchor: 'Comunicazioni, segnalazioni', block: '#N', when: '{{ask.comunicazioni_contestuali}}'}
+  - {kind: text, value: '{{ask.atto_1}}', when: '{{ask.atti_da_acquisire}}', max: 200, label: Tipologia di atto}
+  - {kind: text, value: '{{ask.atto_1_autorita}}', when: '{{ask.atti_da_acquisire}}', max: 200, label: Autorità competente al rilascio}
+  - {kind: text, value: '{{ask.atto_2}}', when: '{{ask.atti_da_acquisire}} {{ask.atti_quanti|atleast_2}}', max: 200, label: Tipologia di atto, nth: 2}
+  - {kind: text, value: '{{ask.atto_2_autorita}}', when: '{{ask.atti_da_acquisire}} {{ask.atti_quanti|atleast_2}}', max: 200, label: Autorità competente al rilascio, nth: 2}
+  - {kind: add, anchor: Tipologia di atto, block: '#N', each: {count: '{{ask.atti_quanti}}', from: 3}, when: '{{ask.atti_da_acquisire}}'}
+  - {kind: text, label: Tipologia di atto, value: '{{ask.atto_#K}}', anchor: Tipologia di atto, block: '#N', when: '{{ask.atti_da_acquisire}}'}
+  - {kind: text, label: Autorità competente al rilascio, value: '{{ask.atto_#K_autorita}}', anchor: Tipologia di atto, block: '#N', when: '{{ask.atti_da_acquisire}}'}
   - {id: 'r27c3p35reg:radio:1_clone', kind: radio, when: '{{ask.tolleranze|not}}', label: 'no'}
   - {id: 'r27c2p34reg:radio:0_clone', kind: radio, when: '{{ask.tolleranze}}', label: si}
   - {id: 'r29c1p37reg:chk', kind: checkbox, when: '{{ask.tolleranze}} {{ask.toll_34bis_1}}', label: 'TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER'}
@@ -1027,4 +1029,6 @@ sections:
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
   - {kind: file, label: Prospetto di calcolo preventivo del contributo, value: '{{ask.prospetto_contributo}}', when: '{{ask.cila_onerosa}}'}
   - {kind: file, label: Ricevuta di versamento del contributo, value: '{{ask.ricevuta_contributo}}', when: '{{ask.cila_onerosa}} {{ask.contributo_pagato}}'}
+  - {kind: file, label: 'Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni', value: '{{ask.comunicazioni_doc}}', when: '{{ask.comunicazioni_contestuali}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Documentazione necessaria per il rilascio di atti di assenso obbligatori, value: '{{ask.atti_doc}}', when: '{{ask.atti_da_acquisire}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Relazione paesaggistica (redatta ai sensi del D.P.C.M, value: '{{ask.relazione_paesaggistica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
