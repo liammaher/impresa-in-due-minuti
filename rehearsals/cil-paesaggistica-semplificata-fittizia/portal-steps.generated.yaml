@@ -35,8 +35,17 @@ asks:
       Firma e invio'}
   lavori_in_proprio: {type: yes_no, question: 'Are the works so minor that the client does them without a firm (opere di modesta entità, eseguite in proprio)?', propose: 'false'}
   impresa_dopo: {type: yes_no, question: 'Is the building firm still to be chosen (named before the works start, with the comunicazione di nomina dell''impresa esecutrice)?', propose: 'false'}
-  altri_atti: {type: yes_no, question: 'Do the works need other filings or assents not yet made or obtained, that this pratica doesn''t file (the Soprintendenza, ASL, fire brigade, a landscape authorization
-      not in this pratica)?', propose: 'false'}
+  comunicazioni_contestuali: {type: yes_no, question: 'Are other filings presented together with this pratica (a segnalazione, comunicazione or notifica to another office that the works need)?', propose: 'false',
+    yours: 'Attach the documents of the filings named in quadro e under Allegati liberi, signed digitally (.p7m): the CIL has no slot of its own for them'}
+  comunicazioni_quante: {type: number, question: 'How many?'}
+  comunicazione_1: {type: text, question: 'The first: what is filed with it (e.g. SCIA antincendio)?'}
+  comunicazione_1_autorita: {type: text, question: Its authority (e.g. Comando provinciale dei Vigili del Fuoco di Napoli)}
+  comunicazione_2: {type: text, question: 'Filing 2: what is filed with it?'}
+  comunicazione_#K: {type: text, question: 'Filing #K: what is filed with it?'}
+  comunicazione_2_autorita: {type: text, question: 'Filing 2: its authority'}
+  comunicazione_#K_autorita: {type: text, question: 'Filing #K: its authority'}
+  atti_da_acquisire: {type: yes_no, question: 'Do the works need assents not yet obtained (a nulla osta, an authorization, a deroga) that the SUE is to acquire from documents you attach (art. 23-bis DPR
+      380/2001)? The works then start only once the SUE says they are in. An assent already obtained isn''t one: it is attached', propose: 'false'}
   oggetto: {type: text, question: The works in one sentence (300 characters)}
   data_inizio_lavori: {type: date, question: When the works will start}
   dettaglio_intervento: {type: text, question: What the temporary works are and when they'll be removed (500 characters)}
@@ -192,8 +201,9 @@ supports:
   else: 'On a bene culturale the works need the Soprintendenza''s authorization first (art. 21 c. 4 D.Lgs. 42/2004), and Napoli''s SUE portal has no procedure to ask for it with this pratica: request it
     from the Soprintendenza ABAP per il Comune di Napoli (by PEC to sabap-na@pec.cultura.gov.it, on its form ''Istanza per opere su immobili vincolati'', 16 euro bollo; up to 120 days, art. 22), then file
     this.'
-- when: '{{ask.altri_atti|not}}'
-  else: 'Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren''t mapped yet.'
+- when: '{{ask.atti_da_acquisire|not}}'
+  else: 'The CIL''s form has no request for assents for the SUE to acquire (only filings presented with it, quadro e): obtain them first (a nulla osta, an authorization), then file the CIL and attach them
+    under Allegati liberi.'
 - if: '{{ask.bollo_esenzione|is_onlus}}'
   when: '{{ask.bollo_onlus_esercizio}}'
   else: 'The ONLUS exemption ended with the ONLUS regime on 1 January 2026, except for a tax year begun before then: an ex-ONLUS in the RUNTS is exempt as an ets.'
@@ -557,7 +567,15 @@ sections:
   - {id: r2c1p2reg, kind: select, value: '{{c:immobile.destinazione_uso|destinazione}}', label: L'intervento interessa l'immobile}
   - {id: 'r4c1p4reg:txt', kind: text, value: '{{c:immobile.destinazione_uso}}', when: '{{c:immobile.destinazione_uso|destinazione_is_altro}}', max: 100, label: specificare}
 - section: e) Altre comunicazioni, segnalazioni e asseverazioni eventualmente necessarie alla realizzazione delle opere presentate contestualmente alla comunicazione di inizio lavori
-  fields: []
+  fields:
+  - {id: 'r2c1p2reg:txt', kind: text, value: '{{ask.comunicazione_1}}', when: '{{ask.comunicazioni_contestuali}}', max: 200, label: 'Comunicazioni, segnalazioni'}
+  - {id: 'r2c2p4reg:txt', kind: text, value: '{{ask.comunicazione_1_autorita}}', when: '{{ask.comunicazioni_contestuali}}', max: 200, label: Autorità competente}
+  - {id: 'r4c1p6reg:txt', kind: text, value: '{{ask.comunicazione_2}}', when: '{{ask.comunicazioni_contestuali}} {{ask.comunicazioni_quante|atleast_2}}', max: 200, label: 'Comunicazioni, segnalazioni',
+    nth: 2}
+  - {id: 'r4c2p8reg:txt', kind: text, value: '{{ask.comunicazione_2_autorita}}', when: '{{ask.comunicazioni_contestuali}} {{ask.comunicazioni_quante|atleast_2}}', max: 200, label: Autorità competente, nth: 2}
+  - {kind: add, anchor: 'Comunicazioni, segnalazioni', block: '#N', each: {count: '{{ask.comunicazioni_quante}}', from: 3}, when: '{{ask.comunicazioni_contestuali}}'}
+  - {kind: text, label: 'Comunicazioni, segnalazioni', value: '{{ask.comunicazione_#K}}', anchor: 'Comunicazioni, segnalazioni', block: '#N', when: '{{ask.comunicazioni_contestuali}}'}
+  - {kind: text, label: Autorità competente, value: '{{ask.comunicazione_#K_autorita}}', anchor: 'Comunicazioni, segnalazioni', block: '#N', when: '{{ask.comunicazioni_contestuali}}'}
 - section: f) Impresa esecutrice dei lavori
   fields:
   - {id: 'r1c1p1reg:radio:0_clone', kind: radio, when: '{{ask.lavori_in_proprio}}', label: in quanto opere di modesta entità}

@@ -7,8 +7,8 @@
   "f2": "impianti"
  },
  "descrizione": "PROVA NON INVIARE - CILA bene culturale",
- "comunicazioni_presentate": false,
- "atti_acquisiti": true,
+ "comunicazioni_contestuali": false,
+ "atti_da_acquisire": false,
  "titolo": "locatario",
  "oggetto": "Manutenzione straordinaria non strutturale in un appartamento di un palazzo vincolato (bene culturale): nuova distribuzione di cucina e bagno, impianti, autorizzata dalla Soprintendenza.",
  "data_inizio_lavori": "2026-11-16",
@@ -27,7 +27,6 @@
  "cila_stato": "da iniziare",
  "direttore_lavori": "progettista",
  "altri_tecnici": false,
- "altri_atti": false,
  "cila_onerosa": false,
  "tolleranze": false,
  "cila_interventi": [
@@ -41,9 +40,6 @@
  ],
  "inizio_dopo_assensi": false,
  "soprintendenza_autorizzata": "true",
- "atti_quanti": "uno",
- "atto_1": "Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004), prot. 0000 del 15/09/2026 (inventato)",
- "atto_1_autorita": "Soprintendenza ABAP per il Comune di Napoli",
  "altri_tecnici_dopo": "false",
  "impresa_dopo": "false",
  "progettista_altro": false,

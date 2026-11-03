@@ -8,12 +8,10 @@
   "d": "davide"
  },
  "descrizione": "PROVA NON INVIARE - CILA direttore e assensi",
- "comunicazioni_presentate": true,
- "atti_acquisiti": true,
+ "comunicazioni_contestuali": true,
+ "atti_da_acquisire": true,
  "titolo": "locatario",
  "oggetto": "Manutenzione straordinaria non strutturale in appartamento: demolizione e ricostruzione di due tramezzi interni con nuova distribuzione di cucina e bagno, nuovo bagno, rifacimento degli impianti idrico ed elettrico.",
- "data_inizio_lavori": "2026-10-19",
- "ricevuta_sanzione": "rehearsals/cila-fittizia/files/ricevuta-sanzione.pdf",
  "dettaglio_intervento": "Demolizione e ricostruzione di due tramezzi interni con nuova distribuzione di cucina e bagno; nuovo bagno; rifacimento degli impianti idrico ed elettrico della cucina e del bagno. Opere interne non strutturali, senza modifiche di volume, superficie o destinazione d'uso.",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
  "assenso_proprietario": "rehearsals/cila-fittizia/files/assenso-immobiliare-fittizia.pdf",
@@ -26,10 +24,9 @@
  "titolo_esclusivo": false,
  "parti_comuni": "nessuna",
  "lavori_in_proprio": false,
- "cila_stato": "in corso",
+ "cila_stato": "da iniziare",
  "direttore_lavori": "altro tecnico",
  "altri_tecnici": false,
- "altri_atti": false,
  "cila_onerosa": false,
  "tolleranze": false,
  "cila_interventi": [
@@ -40,8 +37,8 @@
  "paesaggio": "no",
  "fatti": [],
  "atti_quanti": "1",
- "atto_1": "Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004)",
- "atto_1_autorita": "Soprintendenza ABAP per il Comune di Napoli",
+ "atto_1": "Deroga ai requisiti igienico-sanitari dei locali (inventata)",
+ "atto_1_autorita": "ASL Napoli 1 Centro",
  "comunicazioni_quante": "2",
  "comunicazione_1": "Notifica preliminare (art. 99 D.Lgs. 81/2008)",
  "comunicazione_1_autorita": "ASL Napoli 1 Centro",
@@ -50,5 +47,8 @@
  "altri_tecnici_dopo": "false",
  "impresa_dopo": "false",
  "progettista_altro": false,
- "diritti_esente": false
+ "diritti_esente": false,
+ "inizio_dopo_assensi": "true",
+ "comunicazioni_doc": "rehearsals/cila-fittizia/files/documentazione-comunicazioni.pdf",
+ "atti_doc": "rehearsals/cila-fittizia/files/documentazione-assensi.pdf"
 }

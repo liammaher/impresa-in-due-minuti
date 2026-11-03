@@ -192,7 +192,9 @@ def end_to_end():
     carried = ("c:immobile.", "c:identity.codice_fiscale", "c:identity.date_of_birth", "c:identity.sex",
                "o:business.denominazione", "o:business.codice_fiscale", "o:business.partita_iva")
     assert not [m for m in with_docs["missing"] if m["field"].startswith(carried)], with_docs["missing"]
-    assert all(f["exists"] for f in with_docs["files"] if "sismica" not in f["for"]), with_docs["files"]
+    # Files under a question still open (the proposed "no other filings" too) are listed, not missing.
+    assert all(f["exists"] for f in with_docs["files"]
+               if "sismica" not in f["for"] and "altre comunicazioni" not in f["for"]), with_docs["files"]
     baseline = dict(r["answers"], people={"c": "luca", "o": "immobiliare", "r": "giulia", "f1": "edil", "f2": "impianti"})
     (work / "baseline.json").write_text(json.dumps(baseline))
     without = cli(run_py, "preflight", "--steps", r["steps"], "--answers", work / "baseline.json",
@@ -203,10 +205,10 @@ def end_to_end():
           f"{len(without['missing'])} vault fields without the documents; {count(with_docs)}, "
           f"{len(with_docs['proposals'])} and {len(with_docs['missing'])} with them")
     assert count(with_docs) == 0 and count(without) >= 20, (count(with_docs), count(without))
-    # Left to confirm: only the steps file's own defaults, which no document answers (no other
-    # filings or assents made; no firm or technicians still to be named, since 2026-11-01; the
-    # architect is the designer, since 2026-11-02).
-    assert {p["key"] for p in with_docs["proposals"]} <= {"comunicazioni_presentate", "atti_acquisiti",
+    # Left to confirm: only the steps file's own defaults, which no document answers (no filings
+    # presented with it, no assents to acquire; no firm or technicians still to be named, since
+    # 2026-11-01; the architect is the designer, since 2026-11-02).
+    assert {p["key"] for p in with_docs["proposals"]} <= {"comunicazioni_contestuali", "atti_da_acquisire",
                                                         "impresa_dopo", "altri_tecnici_dopo", "progettista_altro"}, with_docs["proposals"]
     # The lease carries no citizenship: the Scheda anagrafica's Cittadinanza is asked of the vault
     # (since 2026-11-02; before, every client went as the portal's preset ITALIA).

@@ -5,8 +5,8 @@
   "f1": "edil"
  },
  "descrizione": "PROVA NON INVIARE - CILA societa iscritta",
- "comunicazioni_presentate": false,
- "atti_acquisiti": false,
+ "comunicazioni_contestuali": false,
+ "atti_da_acquisire": false,
  "titolo": "proprietario",
  "titolo_esclusivo": true,
  "parti_comuni": "nessuna",
@@ -16,7 +16,6 @@
  "cila_onerosa": false,
  "direttore_lavori": "da nominare",
  "altri_tecnici": false,
- "altri_atti": false,
  "lavori_in_proprio": false,
  "dlgs81": true,
  "sotto_200": true,

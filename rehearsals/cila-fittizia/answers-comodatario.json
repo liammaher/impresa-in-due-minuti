@@ -4,8 +4,8 @@
   "r": "paolo"
  },
  "descrizione": "PROVA NON INVIARE - CILA comodatario",
- "comunicazioni_presentate": false,
- "atti_acquisiti": false,
+ "comunicazioni_contestuali": false,
+ "atti_da_acquisire": false,
  "titolo": "comodatario",
  "titolo_esclusivo": false,
  "parti_comuni": "art 1102",
@@ -16,7 +16,6 @@
  "contributo_pagato": false,
  "direttore_lavori": "progettista",
  "altri_tecnici": false,
- "altri_atti": false,
  "lavori_in_proprio": true,
  "dlgs81": false,
  "cila_interventi": [

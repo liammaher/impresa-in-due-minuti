@@ -524,6 +524,8 @@ def scelte_follow_the_case():
         assert [q["key"] for q in r["proposals"]] == ["cointestatario"] and not r["ready"], r["proposals"]
         r = run.preflight(steps, v(p6 | {"altri_cointestatari": True}), made_up=True)
         assert any("holds one person" in u for u in r["unsupported"]), r["unsupported"]
+        # The portal's limit, not a mapping gap: the person hears the defect and their choices.
+        assert [d["title"] for d in r.get("defects", [])] == ["Voltura and cambio d'intestazione: the co-holders' section holds one person"], r.get("defects")
 
         steps, v = load("cambio-intestazione-fittizio")
         assert len(ticks(steps, v("p6"))) == 1
@@ -534,6 +536,51 @@ def scelte_follow_the_case():
 
         steps, v = load("proroga-paesaggistica-fittizia")
         assert len(ticks(steps, v("p6"))) == 1 and len(ticks(steps, v("assenso"))) == 2
+    finally:
+        os.chdir(here)
+
+
+def assents_and_filings():
+    """The CILA relazione's lists as the national form words them (2026-11-03): filings presented
+    with it and assents the SUE acquires (art. 23-bis DPR 380/2001), each with its slot; assents
+    to acquire mean no start date, and works under way can't wait for one. The CIL lists filings
+    only. A partial fine lavori attaches its planimetria under Allegati liberi."""
+    root = HERE.parents[4] / "rehearsals"
+    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+
+    def case(name, answers):
+        steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
+        return steps, (lambda a: values(a, fields, steps)), json.loads((root / name / f"answers-{answers}.json").read_text())
+
+    def attached(r):  # what the case attaches, each "section: slot", and the file
+        return [(f["for"], Path(f["path"]).name) for f in r["files"]]
+    try:
+        steps, v, a = case("cila-fittizia", "direttore-atti")
+        r = run.preflight(steps, v(a), made_up=True)
+        got = attached(r)
+        assert r["ready"] and ("Gestione degli allegati: Documentazione necessaria per il rilascio di atti di assenso obbligatori", "documentazione-assensi.pdf") in got, got
+        assert ("Gestione degli allegati: Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni", "documentazione-comunicazioni.pdf") in got, got
+        r = run.preflight(steps, v(a | {"inizio_dopo_assensi": "false", "data_inizio_lavori": "2026-12-01"}), made_up=True)
+        assert any("start after its communication" in u for u in r["unsupported"]), r["unsupported"]
+        r = run.preflight(steps, v(a | {"cila_stato": "in corso", "ricevuta_sanzione": "rehearsals/cila-fittizia/files/ricevuta-sanzione.pdf"}), made_up=True)
+        assert any("can't have assents still to be acquired" in u for u in r["unsupported"]), r["unsupported"]
+        # An authorization already obtained isn't one to acquire: the bene culturale lists none.
+        steps, v, a = case("cila-fittizia", "bene-culturale")
+        assert a["atti_da_acquisire"] is False and run.preflight(steps, v(a), made_up=True)["ready"]
+
+        steps, v, a = case("cil-fittizia", "comunicazioni")
+        r = run.preflight(steps, v(a), made_up=True)
+        assert r["ready"] and any("quadro e" in y for y in r["yours"]), r["yours"]
+        r = run.preflight(steps, v(a | {"atti_da_acquisire": True}), made_up=True)
+        assert any("no request for assents" in u for u in r["unsupported"]), r["unsupported"]
+
+        steps, v, a = case("fine-lavori-fittizia", "parziale")
+        r = run.preflight(steps, v(a), made_up=True)
+        assert r["ready"] and ("Gestione degli allegati: Allegati liberi", "planimetria-parte-ultimata.pdf") in attached(r), attached(r)
+        steps, v, a = case("fine-lavori-fittizia", "p6")
+        assert not [x for x in attached(run.preflight(steps, v(a), made_up=True)) if x[1] == "planimetria-parte-ultimata.pdf"]
     finally:
         os.chdir(here)
 
@@ -762,7 +809,8 @@ CASES = [
     ("a landscape variant, a renewal with changes (refused for a semplificata), an architect born abroad", group_two_choices),
     ("every SUE case is ready but those refused on purpose; only the registered company can't pass on made-up data", every_sue_case_ready),
     ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
-    ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused", scelte_follow_the_case),
+    ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused (a portal defect)", scelte_follow_the_case),
+    ("the CILA's filings presented with it and assents for the SUE (art. 23-bis), the CIL's filings, a partial fine lavori's planimetria", assents_and_filings),
     ("the bollo and diritti exemptions, the virtual bollo, the permesso's altro, the SCIA alternativa's regional works, a studio's other architect", exemptions_and_other_kinds),
     ("a value the vault has but the form can't take (a Carica for a named architect who isn't the titolare) is reported, not crashed on", carica_not_crash),
 ]
