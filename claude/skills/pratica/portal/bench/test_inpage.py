@@ -82,6 +82,9 @@ class Handler(BaseHTTPRequestHandler):
                                     b'        <td><input type="text" id="form:r4c1:dynaForm:impresa_txt"></td></tr>', b"")
                 assert b"impresa_txt" not in html, "the bench page changed: update the flaky cut"
             self.send(html, "text/html; charset=utf-8")
+        elif path == "/fnsuap/cmd/home":  # Pratiche in bozza: one draft, opened on its attachments
+            self.send(b"<!doctype html><title>Bozze</title><table><tr><td>PROVA NON INVIARE - seconda</td>"
+                      b"<td><a title='Apri' href='/portal.html?screens=1&more=1'>APRI</a></td></tr></table>", "text/html")
         elif path == "/sso":  # the sign-in's origin, sending the frame back, as an SSO does
             back = parse_qs(self.path.split("?", 1)[1])["back"][0]
             self.send(b"<!doctype html><title>SSO</title><script>setTimeout(() => location.replace("
@@ -409,6 +412,32 @@ def main():
             assert r["result"] == "filled", r
             assert [f["box"].rsplit(":", 1)[-1] for f in PORTAL.files] == ["ricevuta_input"], PORTAL.files
         case("the second run reaches the attachments screen by its step and attaches only what waited", after_declarations)
+
+        def after_declarations_reopened():
+            # The second run as run.py starts it: the draft by its name from Pratiche in bozza, then
+            # Allegati liberi, whose first box the first run filled: the file goes in a new box ("+").
+            PORTAL.reset()
+            PORTAL.files.append({"name": "relazione-tecnica.pdf", "type": "application/pdf", "sha256": "",
+                                 "box": "form:r21c1:dynaForm:liberi1_input"})
+            st = {"procedure": "test/seconda", "start": base + "/portal.html", "logged_in": base + "/", "wizard": [],
+                  "sections": [{"section": "Gestione degli allegati", "go": "Prosegui", "step": "Allega Documenti",
+                                "fields": [{"kind": "file", "label": "Allegati liberi", "value": "{{ask.ricevuta}}",
+                                            "describe": "Allegato A", "after_declarations": True},
+                                           {"kind": "file", "label": "Allegati liberi", "value": "{{ask.planimetria}}",
+                                            "describe": "Modello DP", "after_declarations": True}]}]}
+            dp = tmp / "modello-dp.pdf"
+            dp.write_bytes(b"%PDF-1.4 dp\n")
+            two = small | {"planimetria": str(dp)}
+            r = fill(browser, base, st, two, resume={"reopen": "PROVA NON INVIARE - seconda", "from": {"section": 0}})
+            assert r["result"] == "filled", r
+            boxes = [f["box"].rsplit(":", 1)[-1] for f in PORTAL.files]
+            # Each its own new box: the second never replaces the first (an upload into a box that
+            # holds a file replaces it, on the portal).
+            assert boxes == ["liberi1_input", "liberi2_input", "liberi3_input"], boxes
+            # The same run again (a retry after a stop): what is there already is left, nothing twice.
+            r = fill(browser, base, st, two, resume={"reopen": "PROVA NON INVIARE - seconda", "from": {"section": 0}})
+            assert r["result"] == "filled" and len(PORTAL.files) == 3, (r, PORTAL.files)
+        case("the second run reopens the draft by its name and takes a slot's next empty box", after_declarations_reopened)
 
         def twin_slots():
             # The screen's `theirs` names the signed-only "Relazione Paesaggistica Semplificata";

@@ -3617,7 +3617,9 @@
     "id": "r28c1p32reg:upload1_input",
     "title": "copia attestazione versamento oneri, diritti e spese",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "accepts_read": "2026-11-03, on a filled draft: the crawl, on an empty one, had no types for it"
    },
    {
     "id": "r33c1p38reg:upload1_input",
@@ -3636,13 +3638,17 @@
     "id": "r41c1p48reg:upload1_input",
     "title": "Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "accepts_read": "2026-11-03, on a filled draft: the crawl, on an empty one, had no types for it"
    },
    {
     "id": "r45c1p53reg:upload1_input",
     "title": "Documentazione necessaria per il rilascio di atti di assenso obbligatori ai sensi delle normative di settore",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "accepts_read": "2026-11-03, on a filled draft: the crawl, on an empty one, had no types for it"
    },
    {
     "id": "r49c1p58reg:upload1_input",
