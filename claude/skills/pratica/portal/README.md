@@ -107,6 +107,13 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
 
 ## What the portal does that bit us
 
+- **A section's text past 3,000 characters isn't in its crawl** (crawl.js keeps that much), so a
+  long section's own wording, not just its box labels, is read on a draft: the CILA relazione's
+  two lists were filled for a week as filings "already made" and assents "already obtained", and
+  their words, past that point, say filings "che si presentano contestualmente alla CILA" and
+  "atti di assenso da acquisire" (2026-11-03). From Pratiche in bozza, APRI opens the draft on
+  Allega documenti; the "COMPILAZIONE PRATICA" breadcrumb goes back to the sections, a section's
+  title link opens it, ANNULLA leaves it unsaved.
 - **A calendar left open.** A date box opens jQuery UI's calendar (`div#ui-datepicker-div`), which
   a person's click elsewhere closes and a script's `click()` doesn't: it covered the next box (the
   permesso's sanatoria quadro, 2026-11-02). `closeLists` closes it, with the suggestion lists,
@@ -356,6 +363,8 @@ A hidden pane slows the page's timers, so a script waiting inside the page outla
 call limit (2026-11-01): `results.js` and catalogue.py's `status.js` wait only while the page
 shows and otherwise answer at once, so while it's hidden, wait between polls outside the page
 (the pane's `wait` actions in one batch, then `results.js`).
+The pane's profile, and so the SPID session, is the same for every session of the app: before a
+batch, check that no other chat is running the portal (2026-11-03: one was, with its own batches).
 One batch per tab: `loop.js` refuses a second while one runs (two would drive one runner and
 file each other's results), and `pick.js` refuses to clear the page during one. A bundle clears
 the tab's earlier results first: `loop.js` skips a name it finds there, to resume after a reload.
@@ -445,3 +454,10 @@ coverage.md Level 3) is settled by reading a filled draft's slots (`slotsOf`, no
 each case's `descrizione` names its draft, so keep it distinct per case, and the newest draft of
 a name is read) and writing what the box adds in the dictionary, `slot:` on the box (the slot's
 title, or why it adds none).
+
+A choice that opens nothing in its section can still add a required slot: the fine lavori's "in
+forma parziale come da planimetria allegata" adds "Copia di elaborato planimetrico del progetto
+con eventuali varianti [...] opere parzialmente concluse", and a first run with the planimetria
+under Allegati liberi stopped on it (2026-11-03). Map a file under Allegati liberi only once a
+filled draft shows its answer adds no slot. Every slot's "+" takes more files ("Il pulsante (+)
+permette di allegare documenti suddivisi in file multipli", the screen's own note).
