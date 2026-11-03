@@ -20,5 +20,6 @@
  "intervento": "opere_temporanee",
  "paesaggio": "no",
  "fatti": [],
- "diritti_esente": false
+ "diritti_esente": false,
+ "terre_rocce": "no"
 }

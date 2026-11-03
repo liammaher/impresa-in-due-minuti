@@ -105,5 +105,6 @@
  "progettista_altro": false,
  "diritti_esente": false,
  "intervento_tipo": "Intervento previsto da legge regionale (dato inventato per la prova)",
- "bollo_esenzione": "no"
+ "bollo_esenzione": "no",
+ "terre_rocce": "no"
 }
