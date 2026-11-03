@@ -195,10 +195,14 @@
   const widgets = () => Object.values((win().PrimeFaces || {}).widgets || {}); // none: a plain form
   const widgetOf = (e) => widgets().find((w) => w && w.input && w.input[0] === e);
 
+  // A frame on another origin (the sign-in's) can't be read: busy, until it comes back or idle()
+  // says signed out.
   const busy = () => {
-    const w = win(), d = doc();
-    return !d || d.readyState !== "complete" || (w.jQuery && w.jQuery.active > 0) ||
-      !!(w.PrimeFaces && w.PrimeFaces.ajax && !w.PrimeFaces.ajax.Queue.isEmpty());
+    try {
+      const w = win(), d = doc();
+      return !d || d.readyState !== "complete" || (w.jQuery && w.jQuery.active > 0) ||
+        !!(w.PrimeFaces && w.PrimeFaces.ajax && !w.PrimeFaces.ajax.Queue.isEmpty());
+    } catch (e) { return true; }
   };
 
   // An expired sign-in sends the frame to the identity provider (another origin: no document
@@ -221,7 +225,10 @@
     const end = performance.now() + ms;
     let loads = 0, leaving = null;
     const onload = () => { loads++; };
-    const watch = () => win().addEventListener("beforeunload", () => { leaving = loads; });
+    // A load can land the frame on the sign-in's origin on its way back to the portal (2026-11-03:
+    // "Blocked a frame with origin" stopped a run): no window to watch there, so wait for the next
+    // load. One that never comes fails, as signed out.
+    const watch = () => { try { win().addEventListener("beforeunload", () => { leaving = loads; }); } catch (e) { leaving = loads; } };
     frame.addEventListener("load", onload);
     watch();
     click();
@@ -1006,7 +1013,9 @@
       try { showReview(); } catch (e) { /* the draft is saved; the person can still read it in the portal */ }
     } catch (e) {
       report.result = "stopped";
-      report.error = e instanceof StepError ? e.message : `${e.name}: ${e.message}`;
+      // Any other read of a frame left on the sign-in's origin throws a SecurityError of its own.
+      report.error = e instanceof StepError ? e.message : frame && signedOut()
+        ? `signed out: the portal sent the page to its sign-in (${e.name}); sign in again, then rerun` : `${e.name}: ${e.message}`;
       try { report.snapshot = look(); } catch (x) { /* the page is gone */ }
     } finally {
       report.total_seconds = secs();

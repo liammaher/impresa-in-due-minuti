@@ -239,6 +239,19 @@ def sanatoria_zona_a():
     assert r["pratica"] == "pdc-sanatoria-fittizio", r
 
 
+def sanatoria_titoli():
+    """The last sanatorie (2026-11-02): an urban restructuring needed the permesso, so the permesso
+    in sanatoria; a variant to a SCIA, never filed, is works in difformità from the SCIA, so the
+    SCIA in sanatoria; temporary works have no sanatoria in the law, and say why."""
+    base = {"cambio_uso": "no", "paesaggio": "no", "fatti": ["sanatoria"]}
+    r = route.route(TABLE, {**base, "intervento": "ristrutturazione_urbanistica"}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+    r = route.route(TABLE, {**base, "intervento": "variante_scia"}, REHEARSALS)
+    assert r["pratica"] == "scia-sanatoria-fittizia", r
+    r = route.route(TABLE, {**base, "intervento": "opere_temporanee"}, REHEARSALS)
+    assert not r["routed"] and "180 giorni" in r["unsupported"][0], r
+
+
 def rehearsal_cases_come_home():
     """Each rehearsal's answers files, read as its steps file reads the facts, route back to it
     (a case its own rules refuse is left out: it tests the refusal)."""
@@ -330,7 +343,7 @@ def plugin_layout():
 def main():
     tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, as_a_conversation,
              wrong_answers, gated_items_stay_unknown, own_words_kept_only_if_they_agree, missing_answers_file,
-             cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso, sanatoria_zona_a,
+             cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso, sanatoria_zona_a, sanatoria_titoli,
              rehearsal_cases_come_home, asks_as_the_table_asks, refusals_say_why, apart_is_the_persons,
              one_steps_file_per_combination, plugin_layout]
     for t in tests:

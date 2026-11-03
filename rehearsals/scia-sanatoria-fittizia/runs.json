@@ -58,5 +58,11 @@
   "answers": "answers-cambio-uso.json",
   "result": "filled",
   "seconds": 170.8
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-variante-scia.json",
+  "result": "filled",
+  "seconds": 161.4
  }
 ]
