@@ -60,6 +60,7 @@ asks:
   bollo_data: {type: date, question: Its date}
   bollo_seriale_2: {type: text, question: 'The marca da bollo for the authorization the Comune issues: its serial number (14 digits)'}
   bollo_data_2: {type: date, question: Its date}
+  relazione_paesaggistica: {type: file, question: 'The relazione paesaggistica (DPCM 12/12/2005), for the autorizzazione paesaggistica ordinaria (PDF)'}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
@@ -468,3 +469,4 @@ sections:
   - {kind: file, label: documentazione fotografica a colori del contesto, value: '{{ask.foto_paesaggistiche}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
   - {kind: file, label: copia della precedente autorizzazione paesaggistica, value: '{{ask.paes_variante_doc}}', when: '{{ask.paes_variante}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
   - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}
+  - {kind: file, label: Relazione paesaggistica (redatta ai sensi del D.P.C.M, value: '{{ask.relazione_paesaggistica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
