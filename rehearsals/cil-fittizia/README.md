@@ -18,6 +18,11 @@ works (art. 21 c. 4 D.Lgs. 42/2004), requested apart and first (the rules table'
 `soprintendenza-cil`): the CIL's quadro e lists only filings made with it, not assents, so the
 authorization isn't written in the CIL. `answers-bene-culturale.json`.
 
+Quadro e lists the other filings presented with the CIL (since 2026-11-03: `comunicazioni_contestuali`,
+two rows and more by "+", as on the CILA). Their documents go under Allegati liberi, the person's (no
+slot of their own). Assents still to obtain are refused: the CIL's form, national and Napoli's,
+asks the SUE for none. `answers-comunicazioni.json`: three filings, never run on the portal.
+
 ## Runs
 
 | Date | Browser | Login → draft | Result |

@@ -32,11 +32,8 @@ asks:
   titolo_data: {type: date, question: Its protocol date}
   documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
   assenso_proprietario: {type: file, question: The owner's signed assent to the works (PDF)}
-supports:
-- value: '{{ask.fine_completa}}'
-  in:
-  - 'true'
-  else: Works finished in part need a planimetria of the finished part, not mapped yet.
+  planimetria_parziale: {type: file, question: 'The planimetria of the part finished (PDF), signed digitally by the direttore dei lavori', when: '{{ask.fine_completa|not}}'}
+supports: []
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
 wizard:
@@ -310,3 +307,4 @@ sections:
   - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}
   - {kind: file, label: Copia dei documenti d'identità del/i titolare/i, value: '{{ask.documento_identita_cliente}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Dichiarazione di assenso dei terzi titolari, value: '{{ask.assenso_proprietario}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Allegati liberi, value: '{{ask.planimetria_parziale}}', describe: Planimetria della parte ultimata, when: '{{ask.fine_completa|not}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}

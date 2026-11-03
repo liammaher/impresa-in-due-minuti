@@ -20,6 +20,8 @@ asks:
   diritti_euro: {default: "100", why: "Line SUE 14 of the Comune's 2026 table of diritti: 100 € for a CIL."}
   data_inizio_lavori: {question: "When the works will start"}
   dettaglio_intervento: {question: "What the temporary works are and when they'll be removed (500 characters)"}
+  # Quadro e's filings: their documents have no slot of their own on the CIL's screen.
+  comunicazioni_contestuali: {yours: "Attach the documents of the filings named in quadro e under Allegati liberi, signed digitally (.p7m): the CIL has no slot of its own for them"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
@@ -40,5 +42,7 @@ supports:
   - {if: "{{ask.lavori_in_proprio|not}}", value: "{{ask.impresa_dopo}}", in: ["false"], defect: cila-impresa-dopo, else: "The CIL names its building firm: its quadro f) has no line for a firm still to be chosen, and the portal requires the firm's details (seen 2026-11-01). File the CIL once the firm is chosen."}
   # A bene culturale: the Soprintendenza's authorization first, obtained apart (rules: soprintendenza-cil).
   - {if: "{{ask.intervento|is_opere_temporanee}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "On a bene culturale the works need the Soprintendenza's authorization first (art. 21 c. 4 D.Lgs. 42/2004), and Napoli's SUE portal has no procedure to ask for it with this pratica: request it from the Soprintendenza ABAP per il Comune di Napoli (by PEC to sabap-na@pec.cultura.gov.it, on its form 'Istanza per opere su immobili vincolati', 16 euro bollo; up to 120 days, art. 22), then file this."}
-  - when: "{{ask.altri_atti|not}}"
-    else: "Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet."
+  # Filings presented with the CIL go in quadro e. Assents still to obtain have no line: the CIL's
+  # form (national and Napoli's) asks the SUE for none, unlike the CILA's relazione (art. 23-bis).
+  - when: "{{ask.atti_da_acquisire|not}}"
+    else: "The CIL's form has no request for assents for the SUE to acquire (only filings presented with it, quadro e): obtain them first (a nulla osta, an authorization), then file the CIL and attach them under Allegati liberi."

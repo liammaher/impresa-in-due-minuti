@@ -60,28 +60,19 @@ SUE pratiche not yet fillable:
 Measured today:
 
 - Level 1: 40 of 40 pratiche fully in the dictionary. 13 of them are two operations in one pratica (`sue-combo-*`).
-- Which pratiche a case needs: of the 13546 cases the rules table decides, **2040 reach a steps file**, 11506 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
-- Level 2: **16 refusals across 15 recipes**, 7 distinct messages.
+- Which pratiche a case needs: of the 13294 cases the rules table decides, **2006 reach a steps file**, 11288 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
+- Level 2: **7 refusals across 6 recipes**, 3 distinct messages.
 - Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot. A box read on a filled draft says what it adds (the dictionary's `slot`).
 - Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
 | `parere-esonero-fittizio` | 2 |
-| `cambio-intestazione-fittizio` | 1 |
-| `cil-fittizia` | 1 |
-| `cil-paesaggistica-ordinaria-fittizia` | 1 |
-| `cil-paesaggistica-semplificata-fittizia` | 1 |
-| `cila-fittizia` | 1 |
-| `cila-paesaggistica-fittizia` | 1 |
-| `cila-paesaggistica-ordinaria-fittizia` | 1 |
-| `fine-lavori-fittizia` | 1 |
 | `pdc-fittizio` | 1 |
 | `pdc-paesaggistica-ordinaria-fittizio` | 1 |
 | `pdc-paesaggistica-semplificata-fittizio` | 1 |
 | `pdc-sanatoria-accertamento-fittizio` | 1 |
 | `pdc-sanatoria-fittizio` | 1 |
-| `voltura-pdc-fittizia` | 1 |
 
 Pratiche filed together, mapped (a steps file each):
 
@@ -106,12 +97,8 @@ Pratiche filed together, not mapped yet (the cases that need them, most first):
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
 - 5×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
-- 3×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
-- 3×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
-- 2×: The portal's co-holders section (the wizard's ci sono cointestatari) holds one person: more than one co-holder isn't mapped.
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
-- 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
 
 Ticked "si allega" boxes with no attachment slot under their condition (gen.py `unslotted`; some only in cases a recipe refuses, some with no slot on the portal: a filled draft's slots tell):
 

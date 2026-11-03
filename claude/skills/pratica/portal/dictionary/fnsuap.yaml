@@ -251,24 +251,25 @@ asks:
     type: yes_no
     question: "Has the regional control term for this tolerance run out, with no request for more documents left unanswered and no negative outcome of the checks (the form's declaration)?"
     when: "{{ask.toll_classe|in_minore_rilevanza__privo_di_rilevanza}}"
-  altri_atti:
-    type: yes_no
-    question: "Do the works need other filings or assents not yet made or obtained, that this pratica doesn't file (the Soprintendenza, ASL, fire brigade, a landscape authorization not in this pratica)?"
-    propose: "false"
-  # The CILA relazione's two lists: filings already made, assents already obtained (two rows each
-  # on the page, more by "+": the national form's altre_comunicazioni and atti_di_assenso are unbounded).
-  comunicazioni_presentate: {type: yes_no, question: "Were other filings already made for these works (a comunicazione or segnalazione to another office)?", propose: "false"}
+  # The CILA relazione's two lists, as the national form words them (Accordo 4 May 2017, CILA
+  # relazione items 2 and 3): other filings presented with this CILA, and assents the SUE is to
+  # acquire from the documents attached (art. 23-bis c. 1-3 DPR 380/2001); each has its slot on
+  # Allega documenti. Two rows each on the page, more by "+" (the national form's
+  # altre_comunicazioni and atti_di_assenso are unbounded). The CIL's quadro e is the first list.
+  comunicazioni_contestuali: {type: yes_no, question: "Are other filings presented together with this pratica (a segnalazione, comunicazione or notifica to another office that the works need)?", propose: "false"}
   comunicazioni_quante: {type: number, question: "How many?"}
-  comunicazione_1: {type: text, question: "The first: what was filed (e.g. notifica preliminare ASL)?"}
-  comunicazione_1_autorita: {type: text, question: "Its authority (e.g. ASL Napoli 1 Centro)"}
-  comunicazione_#K: {type: text, question: "Filing #K: what was filed?"}
+  comunicazione_1: {type: text, question: "The first: what is filed with it (e.g. SCIA antincendio)?"}
+  comunicazione_1_autorita: {type: text, question: "Its authority (e.g. Comando provinciale dei Vigili del Fuoco di Napoli)"}
+  comunicazione_#K: {type: text, question: "Filing #K: what is filed with it?"}
   comunicazione_#K_autorita: {type: text, question: "Filing #K: its authority"}
-  atti_acquisiti: {type: yes_no, question: "Were other assents already obtained for these works (a nulla osta, an authorization)?", propose: "false"}
+  comunicazioni_doc: {type: file, question: "The documents those filings need, in one PDF (the slot 'Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni')"}
+  atti_da_acquisire: {type: yes_no, question: "Do the works need assents not yet obtained (a nulla osta, an authorization, a deroga) that the SUE is to acquire from documents you attach (art. 23-bis DPR 380/2001)? The works then start only once the SUE says they are in. An assent already obtained isn't one: it is attached", propose: "false"}
   atti_quanti: {type: number, question: "How many?"}
-  atto_1: {type: text, question: "The first: which act (e.g. autorizzazione della Soprintendenza, art. 21 D.Lgs. 42/2004)?"}
-  atto_1_autorita: {type: text, question: "Who issued it (e.g. Soprintendenza ABAP per il Comune di Napoli)?"}
+  atto_1: {type: text, question: "The first: which act (e.g. parere igienico-sanitario, deroga)?"}
+  atto_1_autorita: {type: text, question: "Who issues it (e.g. ASL Napoli 1 Centro)?"}
   atto_#K: {type: text, question: "Assent #K: which act?"}
-  atto_#K_autorita: {type: text, question: "Assent #K: who issued it?"}
+  atto_#K_autorita: {type: text, question: "Assent #K: who issues it?"}
+  atti_doc: {type: file, question: "The documents the SUE needs to acquire those assents, in one PDF (the slot 'Documentazione necessaria per il rilascio di atti di assenso obbligatori')"}
   oggetto:
     type: text
     question: "The works in one sentence (300 characters)"
@@ -1838,28 +1839,28 @@ sections:
       - {kind: checkbox, label: Altri interventi non riconducibili, when: "{{ask.cila_altri}}"}
       - {kind: text, label: specificare il tipo di intervento, value: "{{ask.cila_altri_tipo}}", when: "{{ask.cila_altri}}"}
       - {kind: textarea, label: e che consistono in, value: "{{ask.dettaglio_intervento}}"}
-      # Filings already made and assents already obtained, two rows each on the page and more
-      # by "+" (the national form's altre_comunicazioni and atti_di_assenso). "Autorità
+      # Filings presented with the CILA and assents for the SUE to acquire (items 2 and 3 of the
+      # national form's relazione), two rows each on the page and more by "+". "Autorità
       # competente" also starts the assents' "… al rilascio": the filings' are its first two.
-      - {kind: text, label: "Comunicazioni, segnalazioni", value: "{{ask.comunicazione_1}}", when: "{{ask.comunicazioni_presentate}}"}
-      - {kind: text, label: Autorità competente, value: "{{ask.comunicazione_1_autorita}}", when: "{{ask.comunicazioni_presentate}}"}
-      - {kind: text, label: "Comunicazioni, segnalazioni", nth: 2, value: "{{ask.comunicazione_2}}", when: "{{ask.comunicazioni_presentate}} {{ask.comunicazioni_quante|atleast_2}}"}
-      - {kind: text, label: Autorità competente, nth: 2, value: "{{ask.comunicazione_2_autorita}}", when: "{{ask.comunicazioni_presentate}} {{ask.comunicazioni_quante|atleast_2}}"}
+      - {kind: text, label: "Comunicazioni, segnalazioni", value: "{{ask.comunicazione_1}}", when: "{{ask.comunicazioni_contestuali}}"}
+      - {kind: text, label: Autorità competente, value: "{{ask.comunicazione_1_autorita}}", when: "{{ask.comunicazioni_contestuali}}"}
+      - {kind: text, label: "Comunicazioni, segnalazioni", nth: 2, value: "{{ask.comunicazione_2}}", when: "{{ask.comunicazioni_contestuali}} {{ask.comunicazioni_quante|atleast_2}}"}
+      - {kind: text, label: Autorità competente, nth: 2, value: "{{ask.comunicazione_2_autorita}}", when: "{{ask.comunicazioni_contestuali}} {{ask.comunicazioni_quante|atleast_2}}"}
       - kind: each
         count: "{{ask.comunicazioni_quante}}"
-        when: "{{ask.comunicazioni_presentate}}"
+        when: "{{ask.comunicazioni_contestuali}}"
         first: 3
         on_page: 2
         block:
           - {kind: text, label: "Comunicazioni, segnalazioni", value: "{{ask.comunicazione_#K}}"}
           - {kind: text, label: Autorità competente, value: "{{ask.comunicazione_#K_autorita}}"}
-      - {kind: text, label: Tipologia di atto, value: "{{ask.atto_1}}", when: "{{ask.atti_acquisiti}}"}
-      - {kind: text, label: Autorità competente al rilascio, value: "{{ask.atto_1_autorita}}", when: "{{ask.atti_acquisiti}}"}
-      - {kind: text, label: Tipologia di atto, nth: 2, value: "{{ask.atto_2}}", when: "{{ask.atti_acquisiti}} {{ask.atti_quanti|atleast_2}}"}
-      - {kind: text, label: Autorità competente al rilascio, nth: 2, value: "{{ask.atto_2_autorita}}", when: "{{ask.atti_acquisiti}} {{ask.atti_quanti|atleast_2}}"}
+      - {kind: text, label: Tipologia di atto, value: "{{ask.atto_1}}", when: "{{ask.atti_da_acquisire}}"}
+      - {kind: text, label: Autorità competente al rilascio, value: "{{ask.atto_1_autorita}}", when: "{{ask.atti_da_acquisire}}"}
+      - {kind: text, label: Tipologia di atto, nth: 2, value: "{{ask.atto_2}}", when: "{{ask.atti_da_acquisire}} {{ask.atti_quanti|atleast_2}}"}
+      - {kind: text, label: Autorità competente al rilascio, nth: 2, value: "{{ask.atto_2_autorita}}", when: "{{ask.atti_da_acquisire}} {{ask.atti_quanti|atleast_2}}"}
       - kind: each
         count: "{{ask.atti_quanti}}"
-        when: "{{ask.atti_acquisiti}}"
+        when: "{{ask.atti_da_acquisire}}"
         first: 3
         on_page: 2
         block:
@@ -1921,10 +1922,23 @@ sections:
       - {kind: date, label: i lavori termineranno in data, value: "{{ask.data_fine_prevista|date_it}}"}
       - {kind: textarea, label: le opere consistono in, value: "{{ask.dettaglio_intervento}}"}
 
-  # Other permits filed with it: none mapped, left empty.
+  # CIL quadro e: other filings presented with it, two rows on the page and more by "+" as on the
+  # CILA's relazione (the same list of the national form). The CIL has no request for assents.
   - section: Altre comunicazioni, segnalazioni e asseverazioni
     leave: [Comunicazioni, Autorità competente]
-    fields: []
+    fields:
+      - {kind: text, label: "Comunicazioni, segnalazioni", value: "{{ask.comunicazione_1}}", when: "{{ask.comunicazioni_contestuali}}"}
+      - {kind: text, label: Autorità competente, value: "{{ask.comunicazione_1_autorita}}", when: "{{ask.comunicazioni_contestuali}}"}
+      - {kind: text, label: "Comunicazioni, segnalazioni", nth: 2, value: "{{ask.comunicazione_2}}", when: "{{ask.comunicazioni_contestuali}} {{ask.comunicazioni_quante|atleast_2}}"}
+      - {kind: text, label: Autorità competente, nth: 2, value: "{{ask.comunicazione_2_autorita}}", when: "{{ask.comunicazioni_contestuali}} {{ask.comunicazioni_quante|atleast_2}}"}
+      - kind: each
+        count: "{{ask.comunicazioni_quante}}"
+        when: "{{ask.comunicazioni_contestuali}}"
+        first: 3
+        on_page: 2
+        block:
+          - {kind: text, label: "Comunicazioni, segnalazioni", value: "{{ask.comunicazione_#K}}"}
+          - {kind: text, label: Autorità competente, value: "{{ask.comunicazione_#K_autorita}}"}
 
   # Inizio lavori after a permesso di costruire: the permit, the date, its holder (the client),
   # where the works are.

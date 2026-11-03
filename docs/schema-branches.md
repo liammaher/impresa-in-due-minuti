@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (191 cases in all, 190 with a recorded filled run).
+  case (191 cases in all, 188 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -30,9 +30,9 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 | Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | CILA | 43 | 33 | 0 | 1 | 1 | 7 | 17 |
-| Fine lavori | 2 | 1 | 0 | 1 | 0 | 0 | 6 |
+| Fine lavori | 2 | 1 | 1 | 0 | 0 | 0 | 6 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 0 |
-| Permesso di costruire | 153 | 114 | 0 | 13 | 7 | 14 | 110 |
+| Permesso di costruire | 153 | 114 | 0 | 13 | 7 | 14 | 111 |
 | SCIA | 150 | 131 | 0 | 4 | 1 | 10 | 41 |
 | SCIA alternativa | 128 | 111 | 0 | 6 | 2 | 8 | 47 |
 | Agibilità (SCA) | 36 | 31 | 0 | 0 | 0 | 5 | 10 |
@@ -42,7 +42,6 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 Mapped, no case yet (an answers file away):
 
 - CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
-- Fine lavori: `comunicazioni/fine_lavori` → `stato_lavori_parziale` (in forma parziale come da planimetria allegata)
 - Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `immobile_non_obbligatorio` (si tratta di immobile realizzato in un’epoca in cui non era obbligato…)
 - Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `non_disponibile_titolo` (non sono disponibili la copia o gli estremi del titolo abilitativo, m…)
 - Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `tolleranza_costruttiva` (che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/…)
@@ -97,7 +96,7 @@ On the portal, not mapped (dictionary work first):
 | `comunicazioni/presentazione_inizio_lavori/[interventi_sogge…` | `comunicazioni_certificate` | portal section c) has no such option | h | no portal box |  |
 | `comunicazioni/presentazione_inizio_lavori/[interventi_sogge…` | `domanda_contestuale_cila` | portal section c) has no such option | h | no portal box |  |
 | `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `data_inizio_lavori` | i lavori avranno inizio in data | h | filled on the portal | 1 |
-| `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `inizio_lavori_comunicazione_suap` | i lavori avranno inizio dopo la comunicazione, da parte dello sportel… | h | filled on the portal | 1 |
+| `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `inizio_lavori_comunicazione_suap` | i lavori avranno inizio dopo la comunicazione, da parte dello sportel… | h | filled on the portal | 2 |
 | `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `intervento_corso_di_esecuzione_data_inizio_lavori` | intervento in corso di esecuzione (art. 6-bis, comma 5 del d.P.R. n.… | h | filled on the portal | 3 |
 | `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `intervento_con_sanzione_data_lavori` | intervento realizzato (art. 6-bis, comma 5 del d.P.R. n. 380/2001) co… | m | filled on the portal | 1 |
 | `comunicazioni/qualificazione_intervento/[qualificazione_int…` | `procedimento_automatizzato` | portal has no automated/ordinary procedure box in the CILA | h | no portal box |  |
@@ -156,7 +155,7 @@ Portal boxes of the CILA no schema alternative matched and no case ticks:
 | Schema choice | Alternative | Portal box | Match | State | Rehearsals |
 |---|---|---|---|---|---:|
 | `comunicazioni/fine_lavori` | `stato_lavori_completati` | completamente | h | filled on the portal | 1 |
-| `comunicazioni/fine_lavori` | `stato_lavori_parziale` | in forma parziale come da planimetria allegata | h | mapped, no case yet |  |
+| `comunicazioni/fine_lavori` | `stato_lavori_parziale` | in forma parziale come da planimetria allegata | h | a case, no recorded run | 1 |
 
 Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 
@@ -380,6 +379,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata nella… (mapped)
 - e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata agli at… (mapped)
 - j) Diritti di terzi: dichiara di essere consapevole che il permesso di costruire non comporta limitazione dei… (not mapped)
+- Asseverazione PdC - Dati progettista e…: Interventi di ristrutturazione urbanistica articolo 3, comma 1, lettera f) del d.P.R. n.… (mapped)
 - Asseverazione PdC - Dati progettista e…: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa) (not mapped)
 - Asseverazione PdC - Dati progettista e…: urbanizzazione primaria e secondaria realizzati da soggetti diversi dal Comune (mapped)
 - Asseverazione PdC - Dati progettista e…: realizzazione di infrastrutture e di impianti, anche per pubblici servizi, che comporti l… (mapped)
@@ -482,8 +482,8 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_permesso_di_costruire_nr_protocollo` | variante in corso d'opera a permesso di costruire che non incide sui… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_permesso_di_costruire_data_protocollo` | variante in corso d'opera a permesso di costruire che non incide sui… | m | filled on the portal | 1 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_scia_nr_protocollo` | variante in corso d’opera a SCIA che non costituisce variazione essen… | m | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_scia_data_protocollo` | variante in corso d’opera a SCIA che non costituisce variazione essen… | m | filled on the portal | 2 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_scia_nr_protocollo` | variante in corso d’opera a SCIA che non costituisce variazione essen… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_scia_data_protocollo` | variante in corso d’opera a SCIA che non costituisce variazione essen… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_variazione_essenziale` | variante in corso d’opera a SCIA che si configura come variazione ess… | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `senza_opere_categoria_singola_unita` | senza opere (o con opere riconducibili agli interventi di cui all'art… | h | filled on the portal | 2 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `senza_opere_tra_categorie_singola_unita` | senza opere (o con opere riconducibili agli interventi di cui all'art… | h | filled on the portal | 1 |
