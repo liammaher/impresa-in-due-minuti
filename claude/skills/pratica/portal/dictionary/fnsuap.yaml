@@ -664,8 +664,8 @@ asks:
     propose: "{{ask.intervento,ask.strutture,ask.prospetti,ask.cambio_uso|sue_scia_tipo}}"
   scia_cambio_uso:
     type: choice
-    question: "Do the works change the use? no; stessa categoria (one unit, within the same functional category); tra categorie (one unit in a building in zone A, B or C of DM 1444/1968, to another category: art. 23-ter c. 1-ter); intero immobile (a whole building, within the same category: art. 23-ter c. 3)"
-    options: ["no", stessa categoria, tra categorie, intero immobile]
+    question: "Do the works change the use? no; stessa categoria (one unit, within the same functional category); tra categorie (one unit in a building in zone A, B or C of DM 1444/1968, among the residential, tourist, productive and directional, commercial categories: art. 23-ter c. 1-ter, or on the ground floor under Campania's law); intero immobile (a whole building, within the same category: art. 23-ter c. 3); altro (a change the national forms have no line for: a whole building to another category, a unit outside zones A, B and C, to or from the rural category)"
+    options: ["no", stessa categoria, tra categorie, intero immobile, altro]
     propose: "{{ask.cambio_uso|sue_scia_cambio_uso}}"
   cambio_uso_tipo:
     type: choice
@@ -3416,6 +3416,9 @@ sections:
     fields: []
 
   - section: Qualificazione dell'intervento
+    # Its change-of-use line, required, has no row for Campania's own SCIA alternativa changes.
+    supports:
+      - {value: "{{ask.scia_cambio_uso}}", in: ["no", stessa categoria, tra categorie, intero immobile], defect: cambio-uso-regionale, else: "The national form's change-of-use line (required) names only art. 23-ter's cases: one unit within its category, one unit in zone A, B or C among categories a) to c), a whole building within its category. A change Campania's law gives this title for (a whole building to another category, a unit outside zones A, B and C, to or from the rural category) has no line that states it truly: a defect of the form (docs/portal-defects.md); ask the SUE."}
     fields:
       - {kind: checkbox, label: interventi per i quali è possibile presentare la SCIA alternativa}
       - {kind: radio, label: non comporta mutamento di destinazione d’uso, when: "{{ask.scia_cambio_uso|is_no}}"}
@@ -3668,7 +3671,7 @@ sections:
     law: ["piano casa, ai sensi della l.r. n. 19/2009", interventi di ampliamento (articolo 4), interventi di demolizione e ricostruzione (articolo 5), interventi edilizi in zona agricola, riqualificazione di aree urbane degradate (articolo 7)]
     supports:
       - {value: "{{ask.pdc_tipo}}", in: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, facolta scia, variante essenziale, variante sagoma, sottotetti, parcheggi, mutamento uso, altro], else: "The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then). A variant to a permesso issued under it isn't mapped."}
-      - {if: "{{ask.pdc_tipo|is_mutamento_uso}}", value: "{{ask.scia_cambio_uso}}", in: [stessa categoria, tra categorie, intero immobile], else: "A change of use under art. 2 L.R. 19/2001 changes the use: say which (stessa categoria, tra categorie or intero immobile)."}
+      - {if: "{{ask.pdc_tipo|is_mutamento_uso}}", value: "{{ask.scia_cambio_uso}}", in: [stessa categoria, tra categorie, intero immobile, altro], else: "A change of use under art. 2 L.R. 19/2001 changes the use: say which (stessa categoria, tra categorie, intero immobile or altro)."}
       - {if: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}}", value: "{{ask.deroga_densita,ask.deroga_altezza,ask.deroga_distanza,ask.deroga_destinazione|any}}", in: ["true"], else: "A permesso in deroga (art. 14 DPR 380/2001) derogates from at least one limit: density, height, distance or use."}
       - {if: "{{ask.pdc_tipo|is_altro}}", value: "{{ask.pdc_procedura}}", in: [ordinaria], else: "Works no other line names are asked under art. 10 as such: not as a convenzionato or in deroga."}
       # A change of use that needed a SCIA alternativa or a permesso, done without it, is legalized by
@@ -3884,6 +3887,10 @@ sections:
 
   - section: Asseverazione PdC - Dati progettista
     leave: [che i lavori riguardano l'immobile individuato]
+    # Its change-of-use line, required, as the SCIA alternativa's (cambio-uso-regionale).
+    supports:
+      - {value: "{{ask.scia_cambio_uso}}", in: ["no", stessa categoria, tra categorie, intero immobile], defect: cambio-uso-regionale, else: "The national form's change-of-use line (required) names only art. 23-ter's cases: one unit within its category, one unit in zone A, B or C among categories a) to c), a whole building within its category. A change Campania's law gives this title for (a whole building to another category, a unit outside zones A, B and C, to or from the rural category) has no line that states it truly: a defect of the form (docs/portal-defects.md); ask the SUE."}
+
     # The piano casa: closed to new requests (quadro a's note).
     law: ["Opere edilizie straordinarie di cui alla l.r. n. 19/2009", interventi straordinari di ampliamento, ampliamento fino al venti per cento, modifica della destinazione d'uso da volumetria esistente non residenziale, realizzazione di opere interne finalizzate all'utilizzo dei volumi esistenti, interventi straordinari di demolizione e ricostruzione, aumento entro il limite del trentacinque per cento, ricostruzione a parità di volume, interventi edilizi in zona agricola (articolo 6-bis), mutamento di destinazione d'uso di immobili o loro parti per uso residenziale, realizzazione di nuove costruzioni ad uso produttivo, riqualificazione di aree urbane degradate (articolo 7), mutamento di destinazione d'uso ai fini abitativi, ricostruzione in sito di edifici diruti]
     fields:

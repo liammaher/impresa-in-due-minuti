@@ -240,7 +240,7 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `no_mutamento_destinazione_uso` | non comportano mutamento di destinazione d’uso di una singola unità i… | h | filled on the portal | 4 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_stessa_categoria` | comportano mutamento di destinazione d’uso di una singola unità immob… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_tra_categorie` | comportano mutamento di destinazione d’uso di una singola unità immob… | m | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_intero_immobile_stessa_categoria` | comportano mutamento di destinazione d’uso di un intero immobile all’… | h | filled on the portal | 2 |
+| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_intero_immobile_stessa_categoria` | comportano mutamento di destinazione d’uso di un intero immobile all’… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_oltre_500_mq` | 2%, per le U.I. > 500 mq di superficie utile ; | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_500_a_300_mq` | 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; | h | mapped, no case yet |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_300_a_100_mq` | 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; | h | mapped, no case yet |  |
@@ -470,15 +470,15 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/presentazione` | `scia_condizionata` | portal section b has only a "per presa visione" checkbox; no choice a… | h | no portal box |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | m | filled on the portal | 7 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | m | filled on the portal | 7 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | m | filled on the portal | 7 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_permesso_di_costruire_nr_protocollo` | variante in corso d'opera a permesso di costruire che non incide sui… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_permesso_di_costruire_data_protocollo` | variante in corso d'opera a permesso di costruire che non incide sui… | m | filled on the portal | 1 |
@@ -669,7 +669,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `dichiarazioni/presentazione/[presentazione_scia_alternativa…` | `scia_condizionata` | no portal option; P011 is only an acknowledgement | m | no portal box |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `noMutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | h | filled on the portal | 7 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoCategoriaSingolaUnita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoTraCategorieSingolaUnita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoTraCategorieSingolaUnita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | filled on the portal | 2 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoCategoriaInteroImmobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `procedimentoAutomatizzato` | portal has no such option (P012 only states the SCIA alt. eligibility) | m | no portal box |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `procedimentoOrdinario` | portal has no such option | m | no portal box |  |
