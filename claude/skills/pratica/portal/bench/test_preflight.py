@@ -181,7 +181,8 @@ PDFA_CONTENT = (b"%PDF-1.7\n<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF><rdf:
 def napoli_filing():
     """Napoli's SUE (DD 501/2026): a file the run attaches must be PDF/A, signed digitally (a
     .p7m, or the PDF's own PAdES signature) and plainly named, else the pratica is irricevibile;
-    made-up files are only warned about. A SUAP pratica isn't checked."""
+    made-up files are only warned about; the person is told how Firma e invio goes. A SUAP pratica
+    isn't checked."""
     import shutil
     if not shutil.which("openssl"):
         return
@@ -203,6 +204,8 @@ def napoli_filing():
     assert not r["ready"] and all(w in f["problem"] for w in ("this name", "PDF/A", "signed digitally")), f
     assert any(y.startswith("Napoli's SUE takes only PDF/A") for y in r["yours"]), r["yours"]
     assert any("c/c postale 57060964" in y for y in r["yours"]), r["yours"]
+    # Firma e invio is the person's (the portal opens it only with every signature valid): how to sign.
+    assert any(y.startswith("On Firma e invio") and "distinta" in y for y in r["yours"]), r["yours"]
     # The same file with made-up data: ready, each refusal noted, and a warning never to send it.
     r, f = check(plain, made_up=True)
     assert r["ready"] and len(f["filing"]) == 3 and "problem" not in f, f

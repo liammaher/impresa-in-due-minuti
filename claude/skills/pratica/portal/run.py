@@ -1238,6 +1238,14 @@ FILING = {
             "Servizio Tesoreria Edilizia Privata), sanzioni and contributo by bonifico to IBAN "
             "IT95X0306903496100000046118, causale N1051_SUE – tipo pratica, identificativo, anno (before it "
             "has one: the titolare's name and the property's address). Paid any other way, it is irricevibile",
+            # The portal's Firma e invio (InfoCamere's Manuale funzioni di compilazione pratica, pp. 55-62):
+            # it opens only once every required attachment is in, each signature valid, so never on
+            # made-up data; the runner stops before it.
+            "On Firma e invio, with your own firma digitale (you file it as the procuratore, so the signer is "
+            "you): sign the pratica's PDF, then the distinta the portal makes next. Firma online needs the "
+            "device, InfoCamere's signing client and your PIN; firma offline: download each file, sign it "
+            "without opening and saving it or renaming it (the portal refuses a changed file), upload it. "
+            "Then Invio: the result page gives the codice pratica, and the receipt comes to the PEC in a few minutes",
         ],
         # The building titles of DD 603/2025's forms (the CILA, the SCIA, the SCIA alternativa,
         # the permesso, their sanatorie and landscape combinations), whose attachment tables

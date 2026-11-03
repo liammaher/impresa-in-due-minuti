@@ -298,6 +298,20 @@ the tests pass `made_up=True` for the rehearsals' files. Seen on 2026-10-31: the
 and DD 603 are PAdES-signed and read as such, and are not PDF/A; the veraPDF corpus's PDF/A-1b and
 2b files declare it both ways (`part="2"`, `<pdfaid:part>2<`).
 
+## Firma e invio: the person's
+
+The runs stop at Allega documenti, and the last screens stay the person's for a reason the portal
+makes. Its menu's "Firma" and "Invio" are not links until Compilazione Pratica and Allega
+Documenti are complete: the declarations ticked (the dichiarante's) and every required slot in,
+each digital signature checked for validity, the procura's by the procuratore too (InfoCamere's
+*Manuale funzioni di compilazione pratica*, pp. 55-62, the portal's "Manuale utente"; seen
+2026-11-03 on a made-up draft). So they can't be reached on made-up data. On them the procuratore
+signs the pratica's PDF and then a "distinta" (online, with a firma digitale device, InfoCamere's
+signing client and the PIN; or offline: download, sign unopened and unrenamed, upload), then
+sends; the result page gives the codice pratica and the receipt goes to the PEC. Every one of
+those is signing or sending, so nothing there is the runner's: `FILING`'s `yours` says it, and
+`FORBIDDEN` keeps the runner off any control named firma, invia or paga.
+
 ## What the person reads before they declare
 
 The person reads the portal's own words, not Claude's summary, and in the window where they tick. A
