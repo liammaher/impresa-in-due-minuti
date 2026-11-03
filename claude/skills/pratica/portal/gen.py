@@ -23,7 +23,9 @@ Sections are matched without their quadro letter (the CIL's f) is the CILA's h))
 first dictionary entry that fits the crawled section wins. A field under a `when` lives in
 its own branch of the section; a field outside it that such a choice moves goes by label,
 and so does a box whose own tick renumbers it (it opens rows above itself). An attachments
-slot that takes only signed files (.p7m) is left to the person.
+slot that takes only signed files (.p7m) takes the person's signed file where an entry names it,
+and is left to the person where none does; a document the portal makes ("Scarica il documento":
+the procura) waits for the run after the declarations (`after_declarations`).
 
 A dictionary entry's `supports` (the cases its boxes can't state) joins the recipe's in every
 pratica that shows the section.
@@ -816,18 +818,24 @@ def generate(recipe, base=HERE):
                     for t in ASKED.findall(json.dumps(d)):
                         asks_used.add(t)
                 continue  # this pratica has no such slot
-            if slot.get("accepts") and all(t.endswith(".p7m") for t in slot["accepts"].split(";")):
-                # Signed files only: the person's to sign and attach, never a plain copy.
+            # What the slot takes, so pre-flight can refuse a file it wouldn't (a plain copy where
+            # only a signed .p7m goes: the person signs, Claude attaches what they signed).
+            field = dict(d) | ({"accepts": slot["accepts"]} if slot.get("accepts") else {})
+            if slot.get("portal_document") or d.get("after_declarations"):
+                # The portal makes it from the pratica once the declarations are ticked ("Scarica il
+                # documento": the procura), or it comes last (the diritti receipt): a second run
+                # attaches it (run.py --after-declarations), and until then its empty slot is the
+                # person's, not the first run's error.
+                field["after_declarations"] = True
                 out["theirs"] = out.get("theirs", []) + [d["label"]]
-                continue
-            # What the slot takes, so pre-flight can refuse a file it wouldn't.
-            fields.append(dict(d) | ({"accepts": slot["accepts"]} if slot.get("accepts") else {}))
+            fields.append(field)
             for t in ASKED.findall(json.dumps(d)):
                 asks_used.add(t)
         if slots is not None:
-            # Every slot that takes only signed files is the person's, named or not.
+            # A slot that takes only signed files and no entry names is the person's.
             for s in slots:
-                if s.get("accepts") and all(t.endswith(".p7m") for t in s["accepts"].split(";")):
+                if s.get("accepts") and all(t.endswith(".p7m") for t in s["accepts"].split(";")) \
+                        and not any(norm(s["title"]).startswith(norm(d["label"])) for d in fields):
                     title = s["title"][:60]
                     if not any(norm(title).startswith(norm(t)) or norm(t).startswith(norm(title)) for t in out.get("theirs", [])):
                         out["theirs"] = out.get("theirs", []) + [title]
@@ -840,6 +848,8 @@ def generate(recipe, base=HERE):
                              for t in entry.get("theirs", []) + out.get("theirs", []))
                 if s.get("required") and not hit and not theirs:
                     problems.append(f"{name}: required slot {s['title'][:70]!r} is in no dictionary entry")
+        if out.get("theirs"):
+            out["theirs"] = list(dict.fromkeys(out["theirs"]))
         out["fields"] = fields
         if entry.get("note"):
             out["note"] = entry["note"]

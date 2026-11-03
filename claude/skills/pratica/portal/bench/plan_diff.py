@@ -30,7 +30,7 @@ def git(*args):
 def plan(steps, answers):
     """run.py plan's lines, or its error as one line."""
     r = subprocess.run([sys.executable, str(RUN), "plan", "--steps", steps, "--answers", answers,
-                        "--values", FIXTURE], cwd=ROOT, capture_output=True, text=True)
+                        "--values", FIXTURE, "--made-up"], cwd=ROOT, capture_output=True, text=True)
     return r.stdout.splitlines() if r.returncode == 0 else [f"(no plan: {(r.stderr or r.stdout).strip().splitlines()[-1:]})"]
 
 

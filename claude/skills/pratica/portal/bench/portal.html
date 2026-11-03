@@ -21,7 +21,10 @@
      and the rows saved come back on a load; ?onefield=1 adds two rows that are one radio field
      (the art. 34-ter dating and oblazione), each opening its own box only while it's the one ticked;
      ?pec=1 adds a PEC box with the portal's warning beside it, "Indirizzo Pec non valido", as the
-     landscape technician's reads for any address that isn't a real one. -->
+     landscape technician's reads for any address that isn't a real one; ?refuse=1 refuses what
+     Ricevuta ASL is given, in a warning growl that fades in 2 s and stores nothing, as the portal
+     refuses a made-up digital signature; ?screens=1 shows a screen title ("PAGAMENTO ONERI") until
+     the menu's "Allega Documenti" step is pressed, as a draft reopened from Pratiche in bozza. -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -235,6 +238,16 @@ fetch("/state").then((r) => r.json()).then((st) => {
 const sends = (box) => box.addEventListener("change", () => {
   const f = box.files[0];
   if (!f) return;
+  if (location.search.includes("refuse=1") && box.id.endsWith("ricevuta_input")) {
+    const g = document.createElement("div");
+    g.className = "ui-growl ui-widget";
+    g.innerHTML = '<div class="ui-growl-item-container ui-growl-warn"><div role="alert" class="ui-growl-item">' +
+      '<div class="ui-growl-message"><span class="ui-growl-title">Il documento non è stato accettato</span>' +
+      '<p>Una o più firme digitali presenti sul documento non sono valide</p></div></div></div>';
+    setTimeout(() => { document.body.append(g); setTimeout(() => g.remove(), 2000); }, 300);
+    box.value = "";
+    return;
+  }
   const fd = new FormData();
   fd.append(box.id, f, f.name);
   fetch("/upload", { method: "POST", body: fd }).then(() => { list(f.name); box.value = ""; box.after(" " + f.name + " Rimuovi"); });
@@ -259,6 +272,17 @@ if (location.search.includes("more=1")) {
   body.append(head, plusRow);
   add();
   plusRow.querySelector("button").addEventListener("click", add);
+}
+if (location.search.includes("screens=1")) {
+  const title = document.createElement("div");
+  title.className = "content-title";
+  title.textContent = "PAGAMENTO ONERI";
+  const step = document.createElement("a");
+  step.href = "#";
+  step.textContent = "Allega Documenti";
+  step.addEventListener("click", (e) => { e.preventDefault(); title.textContent = "GESTIONE DEGLI ALLEGATI"; });
+  document.querySelector("nav").append(step);
+  document.body.prepend(title);
 }
 for (const box of document.querySelectorAll("input[type=file]")) if (!/liberi\d+_input$/.test(box.id)) sends(box);
 document.getElementById("salva").addEventListener("click", () => {

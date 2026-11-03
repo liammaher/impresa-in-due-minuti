@@ -15,6 +15,9 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 attachments:
   Gestione degli allegati:
+    # The sanatoria's own drawings: a slot that takes only signed files, which its answer adds (the
+    # title as read on a filled draft; not in the crawl, made on an empty one).
+    - {kind: file, label: Elaborati richiesti per la sanatoria, value: "{{ask.elaborati_sanatoria}}", accepts: "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", on_page: true}
     # The asseverazione's "allega l’autorizzazione sismica" (a structural tolerance relevant for
     # public safety) adds this required slot; plain PDFs are taken (seen on the SCIA 2026-10-30).
     - {kind: file, label: Autorizzazione sismica, value: "{{ask.toll_sismica_doc}}", when: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}", on_page: true}
@@ -86,9 +89,7 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
-  - "On Allega documenti: the Elaborati richiesti per la sanatoria (stato legittimo, stato di fatto and the comparison, the difformità in red as the SUE's guidelines ask), signed digitally (.p7m only)"
   - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
-  - "On Allega documenti: the portal's procura signed by the client, the stato legittimo documents (signed files only), then everything signed digitally (.p7m)"
   - "A SCIA that asks for assents (the Soprintendenza, a park, a vincolo): no start date; the works start once the SUE says the assents are in"
   - "For works on structures: the autorizzazione sismica in sanatoria from the Genio Civile di Napoli on S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983), with the strutturista's attestation that the works met the technical rules in force when they were done (art. 36-bis c. 3-bis DPR 380/2001); its documents go in this pratica's slot"
   - "Works done in a protected area (art. 36-bis c. 4): on Allega documenti, the documents for the binding parere on their landscape compatibility go in \"Documentazione necessaria ai fini del rilascio del parere vincolante\", signed digitally (.p7m only)"

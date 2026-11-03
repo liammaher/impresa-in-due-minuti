@@ -7,9 +7,7 @@ yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
 - 'As progettista, check every asseverazione on this page: they are yours, signed with the pratica'
-- 'On Allega documenti: the Elaborati richiesti per la sanatoria (stato legittimo, stato di fatto and the comparison, the difformità in red as the SUE''s guidelines ask), signed digitally (.p7m only)'
 - Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina
-- 'On Allega documenti: the portal''s procura signed by the client, the stato legittimo documents (signed files only), then everything signed digitally (.p7m)'
 - 'A SCIA that asks for assents (the Soprintendenza, a park, a vincolo): no start date; the works start once the SUE says the assents are in'
 - 'For works on structures: the autorizzazione sismica in sanatoria from the Genio Civile di Napoli on S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983), with the strutturista''s attestation that the works met the
   technical rules in force when they were done (art. 36-bis c. 3-bis DPR 380/2001); its documents go in this pratica''s slot'
@@ -388,6 +386,13 @@ asks:
   elaborati_grafici: {type: file, question: 'The drawings: stato di fatto, progetto, comparativo (PDF)'}
   relazione_tecnica: {type: file, question: The relazione tecnica (PDF)}
   documentazione_fotografica: {type: file, question: Photos of the state of the premises (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  dsc_firmato: {type: file, question: 'The pratica''s Quadro riepilogativo della documentazione (DSC: the portal''s, Scarica il documento once the declarations are ticked, or the one fill.py fills for a
+      CILA), completed and signed digitally (.p7m)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
+  elaborati_sanatoria: {type: file, question: 'The drawings the sanatoria asks for: stato legittimo, stato di fatto and their comparison, the difformità in red as the SUE''s guidelines ask, signed digitally
+      (.p7m)'}
+  stato_legittimo_doc: {type: file, question: 'The documents proving the stato legittimo (the building''s titles; for one with no title on file, the other documents: photos, maps, archive records; PDF)'}
   intervento: {type: choice, question: 'Che lavori sono, secondo le definizioni dell''art. 3 DPR 380/2001?', options: [edilizia_libera, opere_temporanee, nessuna_opera, manutenzione_straordinaria, restauro,
       ristrutturazione, ristrutturazione_pesante, nuova_costruzione, ristrutturazione_urbanistica, variante_pdc, variante_essenziale_pdc, variante_scia, altro], labels: {edilizia_libera: 'Lavori senza titolo
         dell''art. 6 c. 1: manutenzione ordinaria (riparare, rinnovare e sostituire finiture, tenere in efficienza gli impianti), barriere architettoniche senza ascensori esterni né modifiche della sagoma,
@@ -1747,18 +1752,25 @@ sections:
   fields: []
 - section: Gestione degli allegati
   go: Prosegui
+  step: Allega Documenti
   theirs:
   - Procura speciale
   - Quadro riepilogativo della documentazione
   - Scarica il documento
-  - Documentazione dimostrativa dello stato legittimo
+  - copia attestazione versamento oneri, diritti e spese
   fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', after_declarations: true}
+  - {kind: file, label: Quadro riepilogativo della documentazione, value: '{{ask.dsc_firmato}}', after_declarations: true}
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true}
+  - {kind: file, label: Copia del documento di identità del/i titolare/i e/o del tecnico, value: '{{ask.documento_identita_cliente}}'}
   - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}'}
   - {kind: file, label: Copia dei documenti d'identità del/i titolare/i, value: '{{ask.documento_identita_cliente}}', when: '{{ask.titolo_esclusivo|not}}'}
   - {kind: file, label: Dichiarazione di assenso dei terzi titolari, value: '{{ask.assenso_proprietario}}', when: '{{ask.titolo_esclusivo|not}}'}
   - {kind: file, label: Notifica preliminare, value: '{{ask.notifica_preliminare}}', when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}'}
   - {kind: file, label: 'Elaborati grafici dello stato di fatto, di progetto e comparativi', value: '{{ask.elaborati_grafici}}'}
   - {kind: file, label: Documentazione fotografica dello stato di fatto, value: '{{ask.documentazione_fotografica}}'}
+  - {kind: file, label: Documentazione dimostrativa dello stato legittimo, value: '{{ask.stato_legittimo_doc}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Elaborati richiesti per la sanatoria, value: '{{ask.elaborati_sanatoria}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
   - {kind: file, label: Autorizzazione sismica, value: '{{ask.toll_sismica_doc}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
   - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: '{{ask.sanzione_ricevuta}}', when: '{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}'}
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica}

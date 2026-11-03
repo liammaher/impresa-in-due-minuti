@@ -26,5 +26,6 @@
  "cliente_carica": "legale rappresentante",
  "cliente_registro": "non ancora iscritta",
  "bollo_esenzione": "virtuale",
- "bollo_virtuale_autorizzazione": "rehearsals/scia-fittizia/files/dichiarazione-bollo-virtuale.pdf"
+ "bollo_virtuale_autorizzazione": "rehearsals/scia-fittizia/files/dichiarazione-bollo-virtuale.pdf",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
 }

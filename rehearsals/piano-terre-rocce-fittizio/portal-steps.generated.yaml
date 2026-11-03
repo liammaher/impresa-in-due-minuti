@@ -6,7 +6,6 @@ generated: gen.py from sue-trasmissione-del-piano-di-utilizzo-delle-terre-e-rocc
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client''s name'
-- 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it, with the pratica''s other documents'
 - 'No imposta di bollo to pay on this form: the portal''s form for this pratica has no bollo section or slot'
 - Sign and send (Firma e invio); keep the receipt
 asks:
@@ -21,6 +20,9 @@ asks:
   oggetto: {type: text, question: The works in one sentence (300 characters)}
   domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   domicilio_inipec: {type: yes_no, question: 'Is the client company''s PEC (business.pec) its domicilio digitale in INI-PEC, to be communicated on the form?', default: 'false'}
+  documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  modulo_portale_firmato: {type: file, question: 'The portal''s own form of this filing (Allega documenti, Scarica il documento, once the declarations are ticked), signed digitally (.p7m)'}
 supports: []
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
@@ -247,3 +249,19 @@ sections:
   - {id: 'r5c2p15reg:txt', kind: text, value: '{{c:immobile.catasto_sezione}}', optional: true, when: '{{ask.catasto_terreni|not}}', max: 3, label: sezione Urbana}
   - {id: r8c1p23reg, kind: select, value: '{{c:immobile.catasto_categoria|categoria}}', when: '{{ask.catasto_terreni|not}}', label: categoria}
   - {id: 'r6c1p17reg:txt', kind: text, value: '{{c:immobile.catasto_sezione}}', optional: true, when: '{{ask.catasto_terreni}}', max: 1, label: sezione Censuaria}
+- section: Pagamento degli oneri
+  go: Prosegui
+  save: false
+  fields: []
+- section: Gestione degli allegati
+  go: Prosegui
+  step: Allega Documenti
+  theirs:
+  - Procura speciale
+  - Quadro riepilogativo della documentazione
+  - Scarica il documento
+  - Allegato 5 al DPR 210/2017
+  fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: Allegato 5 al DPR 210/2017, value: '{{ask.modulo_portale_firmato}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}

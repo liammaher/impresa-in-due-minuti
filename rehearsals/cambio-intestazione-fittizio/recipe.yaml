@@ -13,6 +13,7 @@ scelte:
   - {option: ci sono cointestatari, when: "{{ask.cointestatario}}"}
   - IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
+after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
   descrizione: {default: "PROVA NON INVIARE - cambio intestazione {{c:identity.last_name}}"}
   cambio_dl: {type: yes_no, question: "Is a new direttore dei lavori taking over?"}
@@ -25,6 +26,5 @@ supports:
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and the acknowledgements in the client's name"
-  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
   - "No imposta di bollo to pay on this form: the portal's form for this pratica has no bollo section or slot"
   - "Sign and send (Firma e invio); keep the receipt"
