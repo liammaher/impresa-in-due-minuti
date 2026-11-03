@@ -1206,7 +1206,9 @@ def preflight(steps, values, urls=None, made_up=False, after=False):
     report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + filing_yours(steps, sportello)
                        + asked_yours(steps, values) + apart(steps, values))
     if later:
-        report["yours"].append(
+        # Before signing and sending: the second run comes after the declarations, before Firma e invio.
+        at = next((i for i, y in enumerate(report["yours"]) if "Firma e invio" in y), len(report["yours"]))
+        report["yours"].insert(at,
             f"Tick the declarations; then on Allega documenti download what the portal makes from the pratica only then "
             f"(Scarica il documento): {'; '.join(later)}. Have the client sign the procura, sign each digitally (.p7m), "
             "and give them to Claude, who attaches them to this draft in a second run (run.py --after-declarations)")
