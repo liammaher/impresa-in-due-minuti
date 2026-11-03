@@ -99,8 +99,20 @@ def _():
     assert by["centro-storico-a1-a2"]["level"] == "+napoli"  # the Comune's variante, D.C.C. 129/2026
     assert by["sanatoria-titolo"]["level"] == "national"  # art. 6 DPR 380/2001 only
     assert by["permesso-sanatoria-zona-a-tutela"]["level"] == "national" and by["permesso-sanatoria-zona-a-tutela"]["portal"]
+    # A rule citing nothing is not national by default (no works, no change of use: nothing to file).
+    assert by["nessuna-opera-nessun-cambio"]["level"] == "uncited"
     text = portability.render(CHOICES, rs, levels)
-    assert f"**{len(rs)} rules**" in text and "`lr13-2022`" in text
+    assert f"**{len(rs)} rules**" in text and "`lr13-2022`" in text and "`nessuna-opera-nessun-cambio` (uncited)" in text
+
+
+@case("a source is its procedure's: one id under two procedures keeps each one's level")
+def _():
+    rs = [{"id": "x", "level": "+napoli", "portal": False, "refuses": False,
+           "cites": [{"procedure": "a", "source": "pagina", "level": "national"},
+                     {"procedure": "b", "source": "pagina", "level": "napoli"}]}]
+    text = portability.render(CHOICES, rs, {("a", "pagina"): "national", ("b", "pagina"): "napoli"})
+    assert "| national | `pagina` | 1 |" in text and "| napoli | `pagina` | 1 |" in text, text[-400:]
+    assert "- `x` (+napoli): `pagina`" in text
 
 
 @case("the page renders without the library, saying the rules weren't counted")
