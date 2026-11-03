@@ -311,10 +311,14 @@ def sue_asks_and_apart():
     # Then, in one message, the facts the rules for those works still wait on. The CILA's works
     # are under way, a sanatoria: the seismic filing is never asked, it can only be the
     # autorizzazione (art. 4 c. 1 e L.R. 9/1983).
+    # A listed building's Soprintendenza authorization (#182) is asked with them, each marked as
+    # hanging on the checklist's bene_culturale.
     r = sue("cila-fittizia", fatti=None, paesaggio=None, cambio_uso=None)
-    assert [q["key"] for q in r["questions"]] == ["fatti", "cambio_uso", "paesaggio"], r["questions"]
-    assert [i["key"] for i in r["questions"][0]["items"]] == ["strutture", "prospetti", "uso_ammesso_prg", "verso_a2_tavola_7a",
-                                                               "paesaggio_eseguiti", "bene_culturale"], r["questions"][0]
+    qs = {q["key"]: q for q in r["questions"]}
+    assert list(qs) == ["soprintendenza_autorizzata", "fatti", "cambio_uso", "paesaggio", "soprintendenza_autorizzazione"], list(qs)
+    assert all("bene_culturale" in qs[k]["only_if"] for k in ("soprintendenza_autorizzata", "soprintendenza_autorizzazione"))
+    assert [i["key"] for i in qs["fatti"]["items"]] == ["strutture", "prospetti", "uso_ammesso_prg", "verso_a2_tavola_7a",
+                                                        "paesaggio_eseguiti", "bene_culturale"], qs["fatti"]
     assert "permesso_per_scelta" not in str(r["questions"])  # the recipe's: a CILA is no choice
     # The seismic filing is the person's, at the Genio Civile: in their steps, never a refusal.
     r = sue("scia-fittizia", "answers-strutture.json")
