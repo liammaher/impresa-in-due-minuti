@@ -362,7 +362,9 @@ the tab's earlier results first: `loop.js` skips a name it finds there, to resum
 `results.js` lists each run's `moved` ids and `loose` labels, what a gen.py change is checked by.
 A run that stops in ~20 s on "the portal stayed busy" with no section opened is most likely a
 sign-in that expired: the runner's frame lands on the login page (2026-10-30). Since 2026-10-31
-the run says "signed out" instead, and isn't retried.
+the run says "signed out" instead, and isn't retried. A load can also pass through the sign-in's
+origin on its way back to the portal: a run stopped on "Blocked a frame with origin" (2026-11-03).
+The runner now waits for the load that brings the frame back, and says "signed out" if none comes.
 A run that never reaches the portal ("the page didn't load", "the portal stayed busy", "signed
 out") is kept out of the results, and two in a row halt the batch (`halted` in results.js): once
 the portal stuck in its wizard after a 10-minute busy run, and each later run, a new frame each,

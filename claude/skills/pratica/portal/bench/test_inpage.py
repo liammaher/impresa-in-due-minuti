@@ -23,6 +23,7 @@ from email.parser import BytesParser
 from email.policy import default
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import parse_qs, quote
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
@@ -36,10 +37,13 @@ DEN, IMPRESA = "form:r0c1:dynaForm:den_txt", "form:r4c1:dynaForm:impresa_txt"
 class Portal:
     """What the fake portal stored. drop: it shows Denominazione after Salva but never stores it.
     slow: the next that many loads of ?flaky=1 come without the second section's box, as
-    the real portal sometimes shows a section before its boxes."""
+    the real portal sometimes shows a section before its boxes. bounce: the draft's second load
+    passes through another origin (localhost for 127.0.0.1) and back, as the portal's sign-in
+    can (2026-11-03)."""
 
-    def reset(self, drop=False, slow=0):
+    def reset(self, drop=False, slow=0, bounce=False):
         self.fields, self.files, self.drop, self.sent, self.slow = {}, [], drop, False, slow
+        self.bounce, self.loads = bounce, 0
 
 
 PORTAL = Portal()
@@ -63,6 +67,14 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/":
             self.send(b"<!doctype html><title>bench</title>", "text/html")
         elif path == "/portal.html":
+            PORTAL.loads += 1
+            if PORTAL.bounce and PORTAL.loads == 2:
+                port = self.server.server_port
+                self.send_response(302)
+                self.send_header("Location", f"http://localhost:{port}/sso?back=" + quote(f"http://127.0.0.1:{port}{self.path}", safe=""))
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+                return
             html = (HERE / "portal.html").read_bytes()
             if "flaky=1" in self.path and PORTAL.slow > 0:
                 PORTAL.slow -= 1
@@ -70,6 +82,10 @@ class Handler(BaseHTTPRequestHandler):
                                     b'        <td><input type="text" id="form:r4c1:dynaForm:impresa_txt"></td></tr>', b"")
                 assert b"impresa_txt" not in html, "the bench page changed: update the flaky cut"
             self.send(html, "text/html; charset=utf-8")
+        elif path == "/sso":  # the sign-in's origin, sending the frame back, as an SSO does
+            back = parse_qs(self.path.split("?", 1)[1])["back"][0]
+            self.send(b"<!doctype html><title>SSO</title><script>setTimeout(() => location.replace("
+                      + json.dumps(back).encode() + b"), 300)</script>", "text/html")
         elif path == "/login":  # where an expired sign-in lands (the portal's identity provider)
             self.send(b"<!doctype html><title>Accedi</title><p>Entra con SPID", "text/html")
         elif path == "/anteprima.pdf":
@@ -231,6 +247,16 @@ def main():
             assert r["result"] == "stopped" and r["error"].startswith("signed out"), r.get("error")
             assert not r.get("retries"), r.get("retries")
         case("an expired sign-in stops the run saying so, not as the portal staying busy", signed_out)
+
+        def sso_bounce():
+            # The fresh load of the draft passes through the sign-in's origin and back: the run
+            # waits for the portal again instead of stopping on "Blocked a frame with origin".
+            PORTAL.reset(bounce=True)
+            r = fill(browser, base, steps(base), answers)
+            assert r["result"] == "filled", r.get("error")
+            assert PORTAL.loads >= 3, f"no bounce: {PORTAL.loads} loads"
+            assert r.get("verify_seconds") is not None, "no fresh load of the draft"
+        case("a load that passes through another origin and back is waited for, not a stop", sso_bounce)
 
         def anchored():
             # A block's start is a box the anchor is the own label of: the "(specificare)" box
