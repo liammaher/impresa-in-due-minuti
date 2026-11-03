@@ -1922,8 +1922,8 @@ sections:
       - {kind: date, label: i lavori termineranno in data, value: "{{ask.data_fine_prevista|date_it}}"}
       - {kind: textarea, label: le opere consistono in, value: "{{ask.dettaglio_intervento}}"}
 
-  # CIL quadro e: other filings presented with it, two rows on the page and more by "+" as on the
-  # CILA's relazione (the same list of the national form). The CIL has no request for assents.
+  # CIL quadro e: other filings presented with it, two rows on the page and more by "+" (three
+  # filled on the portal, 2026-11-03). The CIL has no request for assents.
   - section: Altre comunicazioni, segnalazioni e asseverazioni
     leave: [Comunicazioni, Autorità competente]
     fields:
