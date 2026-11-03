@@ -575,7 +575,10 @@ def assents_and_filings():
 
         steps, v, a = case("cil-fittizia", "comunicazioni")
         r = run.preflight(steps, v(a), made_up=True)
-        assert r["ready"] and any("quadro e" in y for y in r["yours"]), r["yours"]
+        # Their documents under Allegati liberi, the runner's since 2026-11-03 (a slot named again
+        # takes its next box), no longer the person's.
+        assert r["ready"] and ("Gestione degli allegati: Allegati liberi", "documentazione-comunicazioni.pdf") in attached(r), attached(r)
+        assert not any("quadro e" in y for y in r["yours"]), r["yours"]
         r = run.preflight(steps, v(a | {"atti_da_acquisire": True}), made_up=True)
         assert any("no request for assents" in u for u in r["unsupported"]), r["unsupported"]
 

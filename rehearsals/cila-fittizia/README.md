@@ -322,7 +322,8 @@ segnalazioni", "... per il rilascio di atti di assenso obbligatori"). So the ask
 `atti_doc`); with assents to acquire, quadro d) says the works start after the SUE's
 communication. That lifts the refusal of "filings or assents still to be made or requested". An
 assent already obtained (the Soprintendenza's, on a bene culturale) is attached under Allegati
-liberi, no longer listed. The cases that took the old reading changed: `answers-direttore-atti`
+liberi, in the box after the relazione's (the slot's "+": the run's since 2026-11-03, filled in
+114.6 s), no longer listed. The cases that took the old reading changed: `answers-direttore-atti`
 and `answers-elenchi-lunghi` (works to start, assents for the SUE: ASL, Vigili del Fuoco),
 `answers-bene-culturale` (nothing listed). Their 2026-10-30/11-01 runs below filled the old
 values; all three filled again with the new ones on 2026-11-03 (`runs.json`). The portal's own
