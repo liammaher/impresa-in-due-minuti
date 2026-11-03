@@ -105,6 +105,14 @@ from an answer (a dropdown), the person's, or unmapped, most shared sections fir
 opened that the crawl never tried itself counts too, marked `not_tried` (what it opens is unknown:
 the art. 94-bis class under a structural tolerance). It flags a section at the 30-choice limit.
 
+## National or Napoli's: `portability.py`
+
+A rough split of the SUE mapping for another comune or region, in `docs/portability.md`: each
+of branches.py's choices as a national form's alternative, a choice naming a Campania law or
+Napoli, or neither; each rule of `rules/sue-napoli.yaml` by where its cited sources are published
+(the library's URLs: `PRATICHE_NAPOLI_DIR`, needed for `--write`). Counted, not read: a rule
+that also cites a Comune page may only confirm a national one there.
+
 ## What the portal does that bit us
 
 - **A section's text past 3,000 characters isn't in its crawl** (crawl.js keeps that much), so a
