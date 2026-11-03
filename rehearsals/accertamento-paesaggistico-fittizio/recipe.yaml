@@ -13,6 +13,8 @@ scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUN
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
+  # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
+  modello_dp: {default: "true"}
   descrizione: {default: "PROVA NON INVIARE - accertamento paesaggistico {{c:identity.last_name}}"}
   oggetto: {question: "The works in one sentence (300 characters)"}
 yours:

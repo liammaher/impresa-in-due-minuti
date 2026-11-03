@@ -232,9 +232,10 @@ OPEN_BEYOND = [
     "set only for the CIL (100 €) and the CILA (151 €); the other pratiche ask it, though the Comune's 2026 "
     "table has them.",
     "Signed files: the portal checks every digital signature on upload and refuses a made-up one (2026-11-03), "
-    "so the slots that take only signed files, and the second run after the declarations (the procura and the "
-    "portal's other documents, --after-declarations), can't be filled with made-up data: on the portal only "
-    "the refusal is proven; a real signed file, never yet.",
+    "so the slots that take only signed files can't be filled with made-up data: on the portal only the "
+    "refusal is proven; a real signed file, never yet. The second run after the declarations ran on the portal "
+    "with made-up annexes (the Allegato A and the Modello DP under Allegati liberi, the DSC, 2026-11-03); the "
+    "procura, signed only, never.",
     "Terre e rocce: the piano di utilizzo, the dichiarazione di utilizzo and the DAU are wizard tick boxes "
     "that go with a building title in one pratica, but only each alone is crawled; no title with them is, and "
     "the rules table doesn't say when works need one. Which pairs of operations the wizard allows isn't "

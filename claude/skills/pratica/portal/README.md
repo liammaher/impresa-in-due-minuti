@@ -339,6 +339,17 @@ that Claude attaches them. The second run, `run.py preflight|page|run --after-de
 same answers and those files, reopens the draft by its name from Pratiche in bozza (the person's
 clicks have moved its address on), goes to Allega documenti by the menu's "Allega Documenti" step
 (the dictionary's `step`) and attaches those alone: no section, declaration or other slot is touched.
+Napoli's own annexes go with it: the Allegato A Programma 100 and the Modello DP, which fill.py fills
+from the library's CILA entry (the same Comune forms for every title; a recipe sets `napoli_allegato_a`,
+`modello_dp`), have no slot, so they go under Allegati liberi. There each file takes the slot's first
+empty box, or a new one ("+"): an upload into a box that holds a file replaces it (2026-11-03, the
+Allegato A lost under the Modello DP on a first try), and a file the slot already shows is left, so a
+retry attaches nothing twice. A slot of one box with no "+" takes the new file in place of the old.
+Checked on the portal 2026-11-03 with made-up files on the CILA P6 draft: reopened by its name,
+Allega Documenti reached by its step, the annexes in Allegati liberi after the first run's relazione,
+the DSC in its slot. The receipt slot ("copia attestazione versamento oneri, diritti e spese") refused a
+plain PDF ("Il tipo di documento non corrisponde alle tipologie ammesse"): it takes only signed files,
+which the CILA's crawl, made on an empty draft, hadn't recorded (`accepts_read` in its slot now).
 
 ## Firma e invio: the person's
 
@@ -523,4 +534,8 @@ the last one, and moves every later row down one) and attaches there. A file's "
 its box is a `span.input-label` too, once a file is in (2026-11-03: a first run read it as the next
 slot's title and found no "+"), so a slot ends at its "+" row or at a row holding only a title.
 Files are read back by name, never by box. The CIL's Allegati liberi takes plain PDFs (its
-notifica preliminare, filings and the Soprintendenza's authorization go there, 2026-11-03).
+notifica preliminare, filings and the Soprintendenza's authorization go there, 2026-11-03), and so
+does the CILA's (the made-up Allegato A and Modello DP of the second run, 2026-11-03); the landscape
+authorizations' take only signed files (their crawls). A slot whose crawl has no types (the old
+crawls of the CILA and the SCIA, made on empty drafts, before crawl.js read them) counts as taking
+plain files: a filled draft's read (`accepts_read`) settles it, as the CILA's receipt slot showed.

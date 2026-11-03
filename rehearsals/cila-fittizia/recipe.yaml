@@ -29,6 +29,9 @@ attachments:
     - {kind: file, label: "Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni", value: "{{ask.comunicazioni_doc}}", when: "{{ask.comunicazioni_contestuali}}"}
     - {kind: file, label: Documentazione necessaria per il rilascio di atti di assenso obbligatori, value: "{{ask.atti_doc}}", when: "{{ask.atti_da_acquisire}}"}
 asks:
+  # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
+  napoli_allegato_a: {default: "true"}
+  modello_dp: {default: "true"}
   # In the facts checklist, as the rules table asks it: the supports read it too (the
   # Soprintendenza's authorization first).
   bene_culturale: {group: fatti, item: "L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?"}

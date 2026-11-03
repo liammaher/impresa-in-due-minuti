@@ -1330,10 +1330,12 @@ FILING = {
                            "napoli/comune/scia-alternativa-pdc", "napoli/comune/permesso-di-costruire",
                            "napoli/comune/scia-in-sanatoria", "napoli/comune/permesso-in-sanatoria"],
             "yours": [
-                "Attach Napoli's two declarations, always required with this pratica (DD 603/2025), each signed "
-                "digitally: the Allegato A Nuovo Programma 100 (the titolare's sworn statement on what they owe "
-                "the Comune) and the Modello DP (the professionals' statement that the client paid their fees, "
-                "L.R. Campania 59/2018)",
+                "Napoli's two declarations, always required with this pratica (DD 603/2025): the Allegato A "
+                "Nuovo Programma 100 (the titolare's sworn statement on what they owe the Comune) and the Modello "
+                "DP (your statement that the client paid your fees, L.R. Campania 59/2018). fill.py fills both "
+                "(napoli/comune/cila-lavori-edilizi, forms allegato-a-programma-100 and modello-dp, the same for "
+                "every title); the client signs the Allegato A, you both sign the DP, each digitally, and the "
+                "second run attaches them under Allegati liberi with the procura",
                 "For works on an existing building, the drawings include a Stato Comparativo sheet: the current "
                 "and the project plans overlaid, demolitions in yellow and new construction in red (green and "
                 "blue for works dropped in progress), black on white elsewhere (DD 501/2026 Linee Guida §9)",

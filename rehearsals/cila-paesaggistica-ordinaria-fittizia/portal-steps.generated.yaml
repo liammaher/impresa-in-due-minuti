@@ -158,6 +158,11 @@ asks:
   notifica_preliminare: {type: file, question: The notifica preliminare already sent (PDF)}
   elaborati_grafici: {type: file, question: 'The drawings: stato di fatto, progetto, comparativo (PDF)'}
   relazione_tecnica: {type: file, question: The relazione tecnica (PDF)}
+  napoli_allegato_a: {type: yes_no, default: 'true', question: 'Does this pratica take Napoli''s Allegato A Programma 100 (every building title, DD 603/2025)?'}
+  napoli_allegato_a_firmato: {type: file, question: 'The client''s Allegato A Programma 100 (fill.py fills it: napoli/comune/cila-lavori-edilizi, form allegato-a-programma-100), signed digitally (.p7m)'}
+  modello_dp: {type: yes_no, default: 'true', question: 'Does this pratica take Napoli''s Modello DP (titles, agibilità, landscape authorizations: L.R. Campania 59/2018)?'}
+  modello_dp_firmato: {type: file, question: 'The Modello DP (fill.py fills it: napoli/comune/cila-lavori-edilizi, form modello-dp), signed digitally by you and by the client (.p7m), with the engagement
+      letter or contract'}
   procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
   dsc_firmato: {type: file, question: 'The pratica''s Quadro riepilogativo della documentazione (DSC: the portal''s, Scarica il documento once the declarations are ticked, or the one fill.py fills for a
       CILA), completed and signed digitally (.p7m)'}
@@ -1024,9 +1029,12 @@ sections:
   - Procura speciale
   - Quadro riepilogativo della documentazione
   - Scarica il documento
+  - Allegati liberi
   - copia attestazione versamento oneri, diritti e spese
   fields:
   - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: Allegati liberi, value: '{{ask.napoli_allegato_a_firmato}}', describe: Allegato A Programma 100, when: '{{ask.napoli_allegato_a}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
+  - {kind: file, label: Allegati liberi, value: '{{ask.modello_dp_firmato}}', describe: Modello DP (L.R. Campania 59/2018), when: '{{ask.modello_dp}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
   - {kind: file, label: Quadro riepilogativo della documentazione, value: '{{ask.dsc_firmato}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m, after_declarations: true}
   - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
   - {kind: file, label: Copia del documento di identità del/i titolare/i e/o del tecnico, value: '{{ask.documento_identita_cliente}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
