@@ -10,6 +10,7 @@ crawl: sue-proroga-inizio-lavori
 operation: Proroga inizio lavori
 scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
+after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
   descrizione: {default: "PROVA NON INVIARE - proroga inizio {{c:identity.last_name}}"}
   titolo: {question: "The permit holder's title to the property (proprietario, locatario, ...)"}
@@ -18,7 +19,6 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
   - "Sign and send (Firma e invio); keep the receipt"
 supports:
   - when: "{{ask.titolo_tipo|is_permesso_di_costruire}}"

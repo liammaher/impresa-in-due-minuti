@@ -52,6 +52,13 @@ field). `page` or `run` with --resume REPORT picks it up on the same draft, from
 section, with --fix FIX for what the page really has there; DIR/drift.json records the
 fixes, and the fresh load at the end still checks every section.
 
+What the portal makes from the pratica only once the declarations are ticked (the procura, which
+the client signs: a steps field's `after_declarations`) waits for a second run: preflight, page or
+run with --after-declarations reopens the draft by its name from Pratiche in bozza and attaches
+those files alone; the first run's `yours` says so. A slot that takes only signed files is filled
+with the person's signed file (the portal checks each signature on upload, and the runner stops
+on its refusal); with --made-up (a rehearsal) such slots are left empty.
+
 STEPS.yaml is a portal's steps file (rehearsals/*/portal-steps.yaml). Values come from
 the vault, VAULT as for plan. --values - takes what `pvault get` printed for the steps'
 categories (`pvault get 'business.*' 'locale.*' '*:identity.*' ...`, piped in: one Touch ID
@@ -929,14 +936,71 @@ def portal_changed(steps):
             "(crawl.js) and steps file (gen.py) first."] if diff else []
 
 
-def preflight(steps, values, urls=None, made_up=False):
+def signed_only(f):
+    """A file field whose slot takes only signed files (.p7m)."""
+    takes = [t for t in f.get("accepts", "").split(";") if t]
+    return f["kind"] == "file" and bool(takes) and all(t.endswith(".p7m") for t in takes)
+
+
+def applies(f, values):
+    """Whether a field is filled in this case: no word of its `when` false (an unknown one isn't)."""
+    return "when" not in f or not any(v is not None and not truthy(v) for v in
+                                      map(values.render, re.findall(r"\{\{.+?\}\}", f["when"])))
+
+
+def phase(steps, after=False, made_up=False):
+    """The steps of one run. A document the portal makes from the pratica only once the
+    declarations are ticked (the procura, for the client to sign: `after_declarations`) can't go
+    with the first run, so a second one (after=True, --after-declarations) attaches those alone, on
+    the same draft. With made_up (a rehearsal's files) no slot that takes only signed files is
+    filled: the portal checks each signature on upload and refuses a made-up one (2026-11-03)."""
+    def keep(s, f):
+        if made_up and signed_only(f):
+            return False
+        return not s.get("go") or bool(f.get("after_declarations")) == after
+    asked = lambda fs: {r[4:] for f in fs for k in ("when", "value") for r, _ in refs_in(f.get(k, "")) if r.startswith("ask.")}
+    out = steps | {"sections": [s | {"fields": [f for f in s["fields"] if keep(s, f)]} for s in steps["sections"]]}
+    # A question only the left-out fields read isn't this run's.
+    left = asked(f for s in steps["sections"] for f in s["fields"] if not keep(s, f))
+    still = {r[4:] for where, t, _ in templates(out) if where != "yours" for r, _ in refs_in(t) if r.startswith("ask.")}
+    if "asks" in steps:
+        out["asks"] = {k: v for k, v in steps["asks"].items() if k not in left - still}
+    return out
+
+
+def rehearsal(steps, values):
+    """The steps a rehearsal's run fills, its files made up: the first run's (phase)."""
+    return phase(expand(steps, values), made_up=True)
+
+
+def after_declarations(steps, values):
+    """The labels of what this case's second run attaches (phase's `after_declarations`)."""
+    return [f.get("label") or f.get("id") for s in steps["sections"] for f in s["fields"]
+            if f.get("after_declarations") and applies(f, values)]
+
+
+def reopening(steps):
+    """How the second run starts: the draft opened from Pratiche in bozza by its name (the
+    person's clicks since have moved its address on), then the attachments screen alone."""
+    at = next((i for i, s in enumerate(steps["sections"]) if s.get("go") and s["fields"]), None)
+    if at is None:
+        raise StepError("nothing in this pratica waits for the declarations: no second run")
+    return {"reopen": True, "from": {"section": at}, "kept": [], "fixes": []}
+
+
+def preflight(steps, values, urls=None, made_up=False, after=False):
     """Everything a run needs, settled before any browser opens: why this case isn't
     supported, the questions still to ask, the vault fields missing or expired, the files
     to attach, and the person's own steps. ready: nothing is left before the run. urls: the
     files sent by link (page --file-urls), which don't count to the pane's 256 KB. A file the
     sportello would refuse (FILING) is a problem, or with made_up (a rehearsal's made-up data,
-    never sent) only its `filing` and a warning."""
+    never sent) only its `filing` and a warning, and no slot that takes only signed files is
+    filled (phase). after: the second run's, after the declarations (phase)."""
     steps = expand(steps, values)
+    later = [] if after else after_declarations(steps, values)
+    unsigned = [f.get("label") for s in steps["sections"] for f in s["fields"]
+                if made_up and signed_only(f) and applies(f, values)]
+    steps = phase(steps, after, made_up)
     links, sportello = file_links(urls), filing_rules(steps)
     order = check_asks(steps)
     asks = steps.get("asks", {})
@@ -1137,9 +1201,19 @@ def preflight(steps, values, urls=None, made_up=False):
                     report["warnings"].append(f"made-up data: {sec['section']}: {f['made_up']}")
                     if f.get("made_up_stops"):
                         report["made_up_stops"].append(f"{sec['section']}: {f['made_up']}")
+    if unsigned:
+        report["warnings"].append(f"made-up data: {len(unsigned)} slot(s) that take only signed files left empty "
+                                  "(the portal refuses a made-up signature on upload); a real case attaches them")
     report["pane_ok"] = sum(x["bytes"] or 0 for x in report["files"] if "link" not in x) <= PAGE_FILES_LIMIT
     report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + filing_yours(steps, sportello)
                        + asked_yours(steps, values) + apart(steps, values))
+    if later:
+        report["yours"].append(
+            f"Tick the declarations; then on Allega documenti download what the portal makes from the pratica only then "
+            f"(Scarica il documento): {'; '.join(later)}. Have the client sign the procura, sign each digitally (.p7m), "
+            "and give them to Claude, who attaches them to this draft in a second run (run.py --after-declarations)")
+    if after:
+        report["second_run"] = after_declarations(steps, values)
     report["ready"] = not (report["questions"] or report["proposals"] or report["missing"]
                            or any(not x["exists"] or x.get("problem") for x in report["files"] if x["path"]))
     return report
@@ -1469,6 +1543,7 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=N
                      | ({"save": s["save"]} if "save" in s else {})
                      | ({"theirs": s["theirs"]} if "theirs" in s else {})
                      | ({"go": s["go"]} if "go" in s else {})
+                     | ({"step": s["step"]} if "step" in s else {})
                      | {"fields": [{k: f[k] for k in ("id", "css", "kind", "label", "anchor", "block", "nth", "describe", "if_present") if k in f}
                                    for f in s["fields"]]}
                      for s in steps["sections"]],
@@ -1742,7 +1817,10 @@ def main():
     ap.add_argument("--profile", type=Path, default=Path.home() / ".cache/pratica-portal/profile")
     ap.add_argument("--close", action="store_true")
     ap.add_argument("--plain", action="store_true", help="page: run.js carries the values in the clear, through the conversation")
-    ap.add_argument("--made-up", action="store_true", help="preflight: made-up files, never sent: the sportello's refusals are warnings")
+    ap.add_argument("--made-up", action="store_true", help="made-up files, never sent: preflight takes the sportello's "
+                    "refusals as warnings, and no slot that takes only signed files is filled")
+    ap.add_argument("--after-declarations", action="store_true", help="the second run, once the person has ticked the "
+                    "declarations: only what the portal makes then (the procura, signed), on the draft reopened by its name")
     ap.add_argument("--resume", type=Path, help="page/run: a stopped run's report.json, to pick it up where it stopped")
     ap.add_argument("--file-urls", type=Path, help="preflight/page: JSON {path: https URL}, files the page fetches by link")
     ap.add_argument("--fix", type=Path, help="with --resume: JSON list of {section, field, set: {id|label|css}}")
@@ -1771,7 +1849,13 @@ def main():
                 ap.error(f"{a.server} has no token {a.token!r}")
             values = Values(answers, vault=vaults[a.token if a.server else "prepare"], asks=asks)
         steps = expand(steps, values)
+        if a.command != "preflight":
+            steps = phase(steps, a.after_declarations, a.made_up)
         resume = None
+        if a.after_declarations and a.command in ("page", "run"):
+            if a.resume:
+                ap.error("--after-declarations opens the draft by its name: no --resume")
+            resume = reopening(steps)
         if a.resume:
             earlier = json.loads(a.resume.read_text())
             kept = a.resume.parent / "private" / "kept.json"
@@ -1780,12 +1864,11 @@ def main():
             resume = resumption(earlier, json.loads(a.fix.read_text()) if a.fix else None)
         if a.fix and not a.resume:
             ap.error("--fix needs --resume")
-        if a.made_up and a.command != "preflight":
-            ap.error("--made-up is for preflight")
         if a.plain and a.command != "page":
             ap.error("--plain is for page: run keeps the values out of the conversation without it")
         if a.command == "preflight":
-            report = preflight(steps, values, json.loads(a.file_urls.read_text()) if a.file_urls else None, a.made_up)
+            report = preflight(steps, values, json.loads(a.file_urls.read_text()) if a.file_urls else None, a.made_up,
+                               a.after_declarations)
             print(json.dumps(report, indent=2, ensure_ascii=False))
             return 0 if report["ready"] else 3
         if a.command == "plan":

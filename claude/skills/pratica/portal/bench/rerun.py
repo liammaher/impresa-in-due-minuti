@@ -183,7 +183,8 @@ def main():
             failed.append(f"{label}: made-up data can't pass {'; '.join(stops)}")
             continue
         try:
-            files, parts = run.page_bundle(steps, values, urls=urls)
+            # Made-up files: no slot that takes only signed files (the portal refuses the signature).
+            files, parts = run.page_bundle(run.phase(run.expand(steps, values), made_up=True), values, urls=urls)
         except run.StepError as e:
             failed.append(f"{label}: {e}")
             continue

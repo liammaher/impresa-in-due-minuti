@@ -24,9 +24,8 @@ yours:
   - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
   - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
-  - "On Allega documenti: the portal's procura signed by the client, the stato legittimo documents (signed files only), the relazione paesaggistica semplificata (DPR 31/2017, Allegato D) with its drawings and photos, then everything signed digitally (.p7m)"
   - "No start date: the works start once the SUE says the landscape authorization (and any other assent) is in"
-  - "Pay the diritti; upload the receipt"
+  - "Pay the diritti before the second run (after the declarations): its receipt, signed, goes with it"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "Sign and send (Firma e invio); keep the receipt"
 rules:

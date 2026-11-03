@@ -21,6 +21,7 @@ asks:
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
   diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
   tipo_struttura: {type: choice, question: 'What kind of lodging is it?', options: [Affittacamere, Bed and breakfast]}
   imprenditoriale: {type: yes_no, question: 'Is it run as a business (forma imprenditoriale)?', propose: 'true'}
   denominazione_struttura: {type: text, question: The lodging's name, default: '{{business.denominazione}}'}
@@ -242,10 +243,12 @@ sections:
   fields: []
 - section: Gestione degli allegati
   go: Prosegui
+  step: Allega Documenti
   theirs:
   - Procura speciale
   - Quadro riepilogativo della documentazione
   - Scarica il documento
-  - sezione dati per la determinazione del CURS
   - copia attestazione versamento oneri, diritti e spese
-  fields: []
+  - sezione dati per la determinazione del CURS
+  fields:
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}

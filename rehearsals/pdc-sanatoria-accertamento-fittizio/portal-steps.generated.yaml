@@ -11,9 +11,6 @@ yours:
   ticks none of its three procedures: the compatibility is the accertamento filed with it (state so in the relazione tecnica)'
 - 'The asseverazione''s "non interessa aree percorse dal fuoco" (qualità terreni) is one choice with the soil statement on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md);
   state it in the relazione tecnica if the SUE wants it'
-- 'On Allega documenti: the portal''s procura signed by the client and the Quadro riepilogativo (PdC DSC), the Elaborati richiesti per la sanatoria (stato legittimo, stato di fatto and the comparison, the
-  difformità in red as the SUE''s guidelines ask), the relazione paesaggistica (DPCM 12/12/2005), the drawings of the state as it is with the materials and the photos of the context, the scheda professionisti
-  e imprese, then everything signed digitally (.p7m)'
 - '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
 - Sign and send (Firma e invio); keep the receipt
 - 'The Comune decides the compatibility first, with the Soprintendenza''s binding parere: if it''s found, pay the sum it sets (art. 167 c. 5 D.Lgs. 42/2004, the greater of the damage and the profit); if
@@ -55,6 +52,7 @@ asks:
   parti_comuni: {type: choice, question: 'Do the works touch common parts of the building? nessuna; condominio (common parts of a condominium); comproprieta (a building of several owners that isn''t a condominium,
       with their approval); art 1102 (common parts used at the client''s expense without changing their purpose, art. 1102 c.c.: no assent needed)', options: [nessuna, condominio, comproprieta, art 1102],
     propose: nessuna}
+  prospetto_contributo: {type: file, question: The prospetto di calcolo preventivo of the contributo di costruzione (PDF)}
   progettista_altro: {type: yes_no, question: 'Is the architectural designer (progettista) another technician than the architect presenting the pratica? If so, they are `p:` in the job''s people: the form
       names them as the progettista and their asseverazione', propose: 'false', yours: 'The asseverazione is the designer''s (`p:`): have them sign the pratica digitally too, besides the procuratore, before
       Firma e invio'}
@@ -254,6 +252,7 @@ asks:
       pagato, prima dei lavori, rateizzazione, in corso d'opera]}
   contributo_calcolo: {type: choice, question: 'Who works the contributo out: prospetto (the progettista''s prospetto di calcolo preventivo, attached); sportello (the SUE, from the technical documents attached)',
     options: [prospetto, sportello]}
+  documentazione_calcolo_contributo: {type: file, question: The technical documents the SUE needs to work out the contributo (PDF)}
   stato_legittimo: {type: choice, question: 'How does quadro e) show the building''s stato legittimo? The form takes one: titoli (from its building titles or pratiche: you''ll list them); epoca (built when
       no title was required: the catasto''s primo impianto or other documents); prova (its title is lost or unknown, but there is documentary proof of it); sanzioni (pecuniary sanctions under artt. 33,
       34, 37 or 38 DPR 380/2001 were imposed and fully paid); tolleranze (construction tolerance declarations, art. 34-bis or 34-ter c. 4); area libera (a new construction on free land: no building yet)',
@@ -439,6 +438,7 @@ asks:
   paesaggio: {type: choice, question: 'Is the property under landscape protection (D.Lgs. 42/2004 parte III: art. 136, art. 142 or the piano paesaggistico), and what do the works need? no (not protected);
       senza autorizzazione (protected, but the works don''t alter the place or the buildings'' look, or need no authorization: art. 149, DPR 31/2017 Allegato A); semplificata (DPR 31/2017 Allegato B); ordinaria
       (art. 146)', options: ['no', senza autorizzazione, semplificata, ordinaria]}
+  relazione_paesaggistica: {type: file, question: 'The relazione paesaggistica (DPCM 12/12/2005), for the autorizzazione paesaggistica ordinaria (PDF)'}
   sanatoria_paesaggio: {type: yes_no, question: 'Is this a sanatoria, so works that needed a landscape authorization go through art. 36-bis c. 4?', default: 'false'}
   paesaggio_accertamento: {type: yes_no, question: 'Is the landscape compatibility of the works already done asked with this pratica, as the accertamento of art. 167 D.Lgs. 42/2004?', default: 'true'}
   bene_culturale: {type: yes_no, question: 'Is the building itself a protected bene culturale (D.Lgs. 42/2004 parte II: listed, so the works need the Soprintendenza''s authorization, art. 21)?'}
@@ -493,6 +493,18 @@ asks:
   elaborati_grafici: {type: file, question: 'The drawings: stato di fatto, progetto, comparativo (PDF)'}
   relazione_tecnica: {type: file, question: The relazione tecnica (PDF)}
   documentazione_fotografica: {type: file, question: Photos of the state of the premises (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  dsc_firmato: {type: file, question: 'The pratica''s Quadro riepilogativo della documentazione (DSC: the portal''s, Scarica il documento once the declarations are ticked, or the one fill.py fills for a
+      CILA), completed and signed digitally (.p7m)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
+  elaborati_paesaggistici: {type: file, question: 'The landscape drawings: stato attuale, progetto and the works, with the context (signed digitally, .p7m)'}
+  foto_paesaggistiche: {type: file, question: 'Colour photos of the building and landscape context, near and far (signed digitally, .p7m)'}
+  scheda_professionisti: {type: file, question: 'The scheda professionisti e imprese: who designed and who built the works (PDF)'}
+  banda_ultralarga: {type: yes_no, question: 'Is it a new building or a heavy renovation (art. 10 c. 1 c), so it carries the broadband infrastructure drawing (art. 135-bis DPR 380/2001)?'}
+  banda_ultralarga_doc: {type: file, question: 'The drawing of the building''s passive broadband infrastructure (art. 135-bis DPR 380/2001), signed digitally (.p7m)'}
+  elaborati_sanatoria: {type: file, question: 'The drawings the sanatoria asks for: stato legittimo, stato di fatto and their comparison, the difformità in red as the SUE''s guidelines ask, signed digitally
+      (.p7m)'}
+  stato_legittimo_doc: {type: file, question: 'The documents proving the stato legittimo (the building''s titles; for one with no title on file, the other documents: photos, maps, archive records; PDF)'}
   elaborati_barriere: {type: file, question: The drawings showing how the project meets the barriers rules (artt. 77-82 DPR 380/2001) (PDF)}
   intervento: {type: choice, question: 'Che lavori sono, secondo le definizioni dell''art. 3 DPR 380/2001?', options: [edilizia_libera, opere_temporanee, nessuna_opera, manutenzione_straordinaria, restauro,
       ristrutturazione, ristrutturazione_pesante, nuova_costruzione, ristrutturazione_urbanistica, variante_pdc, variante_essenziale_pdc, variante_scia, altro], labels: {edilizia_libera: 'Lavori senza titolo
@@ -2159,21 +2171,29 @@ sections:
   fields: []
 - section: Gestione degli allegati
   go: Prosegui
+  step: Allega Documenti
   theirs:
   - Procura speciale
   - Quadro riepilogativo della documentazione
   - Scarica il documento
-  - Documentazione dimostrativa dello stato legittimo
-  - Elaborato dimostrativo dell'equipaggiamento di infrastruttur
   - copia attestazione versamento oneri, diritti e spese
-  - elaborati grafici comprensivi di stato attuale progetto ed i
-  - 'documentazione fotografica a colori del contesto edilizio e '
   fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: Quadro riepilogativo della documentazione, value: '{{ask.dsc_firmato}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m, after_declarations: true}
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Copia del documento di identità del/i titolare/i e/o del tecnico, value: '{{ask.documento_identita_cliente}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: elaborati grafici comprensivi di stato attuale, value: '{{ask.elaborati_paesaggistici}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: documentazione fotografica a colori del contesto, value: '{{ask.foto_paesaggistiche}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: relazione dettagliata relativa all'inserimento dell'intervento, value: '{{ask.relazione_paesaggistica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: scheda professionisti e imprese, value: '{{ask.scheda_professionisti}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Elaborato dimostrativo dell'equipaggiamento di infrastruttura fisica, value: '{{ask.banda_ultralarga_doc}}', when: '{{ask.banda_ultralarga}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
   - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}
   - {kind: file, label: Copia dei documenti d'identità del/i titolare/i, value: '{{ask.documento_identita_cliente}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Dichiarazione di assenso dei terzi titolari, value: '{{ask.assenso_proprietario}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: 'Elaborati grafici dello stato di fatto, di progetto e comparativi', value: '{{ask.elaborati_grafici}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Documentazione fotografica dello stato di fatto, value: '{{ask.documentazione_fotografica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Documentazione dimostrativa dello stato legittimo, value: '{{ask.stato_legittimo_doc}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Elaborati richiesti per la sanatoria, value: '{{ask.elaborati_sanatoria}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
   - {kind: file, label: 'Progetto dell''impianto di produzione, trasformazione', value: '{{ask.progetto_elettrico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_elettrico}}'}
   - {kind: file, label: Progetto degli impianti radiotelevisivi, value: '{{ask.progetto_radiotv_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_radiotv}}'}
   - {kind: file, label: Progetto dell'impianto di riscaldamento, value: '{{ask.progetto_termico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_termico}}'}
@@ -2189,6 +2209,10 @@ sections:
   - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in pubblica fognatura, value: '{{ask.scarico_doc}}', when: '{{ask.scarichi|is_fognatura_da_richiedere}}'}
   - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in acque, value: '{{ask.scarico_doc}}', when: '{{ask.scarichi|is_superficiali_da_richiedere}}'}
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
+  - {kind: file, label: Allegati liberi, value: '{{ask.prospetto_contributo}}', describe: Prospetto di calcolo preventivo del contributo di costruzione, when: '{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}',
+    accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
+  - {kind: file, label: Allegati liberi, value: '{{ask.documentazione_calcolo_contributo}}', describe: Documentazione per la determinazione del contributo di costruzione, when: '{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_sportello}}',
+    accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
   - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: '{{ask.elaborati_barriere}}', when: '{{ask.barriere}} {{ask.barriere_deroga|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Piano di lavoro di demolizione o rimozione dell'amianto, value: '{{ask.amianto_piano}}', when: '{{ask.amianto}} {{ask.amianto_piano_allegato}}'}
   - {kind: file, label: Denuncia dei lavori, value: '{{ask.denuncia_art65}}', when: '{{ask.strutture}} {{ask.cemento_armato}} {{ask.strutture_allegate}}'}

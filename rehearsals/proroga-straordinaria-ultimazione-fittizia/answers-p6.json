@@ -19,5 +19,6 @@
  "fine_termine": "2029-03-15",
  "titolo_tipo": "permesso di costruire",
  "titolo_con_paesaggistica": false,
- "titolo_esclusivo": true
+ "titolo_esclusivo": true,
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
 }

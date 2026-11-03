@@ -8,8 +8,6 @@ yours:
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
 - 'As progettista, check every asseverazione on this page: they are yours, signed with the pratica'
 - Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina
-- 'On Allega documenti: the portal''s procura signed by the client and the Quadro riepilogativo (SCIA alternativa DSC), the ordinaria''s drawings and photos (signed files only), then everything signed digitally
-  (.p7m)'
 - Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt
 - The 30 days before the works may start run from the landscape authorization's release, not from filing (art. 23 c. 3 DPR 380/2001); the contributo, if due, is paid as quadro g) says
 groups:
@@ -92,6 +90,7 @@ asks:
   notifica_allegata: {type: yes_no, question: 'Is the notifica preliminare (art. 99 D.Lgs. 81/2008) attached now, rather than sent before the works start?'}
   vincolo: {type: choice, question: 'What protects the property''s landscape? (art. 136: a declaration by D.M./D.G.R.; art. 142: by law, e.g. the coast; art. 134: the piano paesaggistico only)', options: [
       art 136, art 142, art 136 and 142, art 134]}
+  paes_variante: {type: yes_no, question: 'Is this a variant of a landscape authorization already issued?', propose: 'false'}
   atto_notaio: {type: text, question: The notary's name}
   atto_notaio_sede: {type: text, question: The notary's town}
   atto_repertorio: {type: text, question: Repertorio number}
@@ -411,6 +410,14 @@ asks:
   elaborati_grafici: {type: file, question: 'The drawings: stato di fatto, progetto, comparativo (PDF)'}
   relazione_tecnica: {type: file, question: The relazione tecnica (PDF)}
   documentazione_fotografica: {type: file, question: Photos of the state of the premises (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  dsc_firmato: {type: file, question: 'The pratica''s Quadro riepilogativo della documentazione (DSC: the portal''s, Scarica il documento once the declarations are ticked, or the one fill.py fills for a
+      CILA), completed and signed digitally (.p7m)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
+  elaborati_paesaggistici: {type: file, question: 'The landscape drawings: stato attuale, progetto and the works, with the context (signed digitally, .p7m)'}
+  foto_paesaggistiche: {type: file, question: 'Colour photos of the building and landscape context, near and far (signed digitally, .p7m)'}
+  paes_variante_doc: {type: file, question: 'The landscape authorization this varies (signed digitally, .p7m)'}
+  stato_legittimo_doc: {type: file, question: 'The documents proving the stato legittimo (the building''s titles; for one with no title on file, the other documents: photos, maps, archive records; PDF)'}
   intervento: {type: choice, question: 'Che lavori sono, secondo le definizioni dell''art. 3 DPR 380/2001?', options: [edilizia_libera, opere_temporanee, nessuna_opera, manutenzione_straordinaria, restauro,
       ristrutturazione, ristrutturazione_pesante, nuova_costruzione, ristrutturazione_urbanistica, variante_pdc, variante_essenziale_pdc, variante_scia, altro], labels: {edilizia_libera: 'Lavori senza titolo
         dell''art. 6 c. 1: manutenzione ordinaria (riparare, rinnovare e sostituire finiture, tenere in efficienza gli impianti), barriere architettoniche senza ascensori esterni né modifiche della sagoma,
@@ -1754,21 +1761,26 @@ sections:
   fields: []
 - section: Gestione degli allegati
   go: Prosegui
+  step: Allega Documenti
   theirs:
   - Procura speciale
   - Quadro riepilogativo della documentazione
   - Scarica il documento
-  - Documentazione dimostrativa dello stato legittimo
   - copia attestazione versamento oneri, diritti e spese
-  - 'copia della precedente autorizzazione paesaggistica (per le '
-  - elaborati grafici comprensivi di stato attuale progetto ed i
-  - 'documentazione fotografica a colori del contesto edilizio e '
   fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: Quadro riepilogativo della documentazione, value: '{{ask.dsc_firmato}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m, after_declarations: true}
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Copia del documento di identità del/i titolare/i e/o del tecnico, value: '{{ask.documento_identita_cliente}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: elaborati grafici comprensivi di stato attuale, value: '{{ask.elaborati_paesaggistici}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: documentazione fotografica a colori del contesto, value: '{{ask.foto_paesaggistiche}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: copia della precedente autorizzazione paesaggistica, value: '{{ask.paes_variante_doc}}', when: '{{ask.paes_variante}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
   - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}
   - {kind: file, label: Copia dei documenti d'identità del/i titolare/i, value: '{{ask.documento_identita_cliente}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Dichiarazione di assenso dei terzi titolari, value: '{{ask.assenso_proprietario}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: 'Elaborati grafici dello stato di fatto, di progetto e comparativi', value: '{{ask.elaborati_grafici}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Documentazione fotografica dello stato di fatto, value: '{{ask.documentazione_fotografica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Documentazione dimostrativa dello stato legittimo, value: '{{ask.stato_legittimo_doc}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
   - {kind: file, label: 'Progetto dell''impianto di produzione, trasformazione', value: '{{ask.progetto_elettrico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_elettrico}}'}
   - {kind: file, label: Progetto degli impianti radiotelevisivi, value: '{{ask.progetto_radiotv_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_radiotv}}'}
   - {kind: file, label: Progetto dell'impianto di riscaldamento, value: '{{ask.progetto_termico_doc}}', when: '{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_termico}}'}

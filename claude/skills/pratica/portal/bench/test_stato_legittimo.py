@@ -55,7 +55,7 @@ def boxes(a, recipe="scia-fittizia"):
     steps = STEPS[recipe]
     r = run.preflight(steps, values(steps, a), made_up=True)
     assert r["ready"], {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]}
-    return {p["id"]: p["value"] for p in run.plan(steps, values(steps, a)) if "precedenti edilizi" in p["section"].lower()}
+    return {p["id"]: p["value"] for p in run.plan(run.rehearsal(steps, values(steps, a)), values(steps, a)) if "precedenti edilizi" in p["section"].lower()}
 
 
 def rows(a, recipe="scia-fittizia"):
@@ -65,7 +65,7 @@ def rows(a, recipe="scia-fittizia"):
     steps = STEPS[recipe]
     r = run.preflight(steps, values(steps, a), made_up=True)
     assert r["ready"], {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]}
-    return [(p["label"] or "", p["value"]) for p in run.plan(steps, values(steps, a)) if "precedenti edilizi" in p["section"].lower()]
+    return [(p["label"] or "", p["value"]) for p in run.plan(run.rehearsal(steps, values(steps, a)), values(steps, a)) if "precedenti edilizi" in p["section"].lower()]
 
 
 def has(rs, start):
@@ -121,7 +121,7 @@ def _():
     assert ("specificare", "denuncia di inizio attività") in rs and ("specificare", "condono edilizio") in rs, rs
     assert {"2004/88", "2009/412", "95/1207", "PG/2017/5531", "20/11/2017"} <= {v for _, v in rs if v}, rs
     steps = STEPS["scia-fittizia"]
-    plan = [p for p in run.plan(steps, values(steps, a)) if "precedenti edilizi" in p["section"].lower()]
+    plan = [p for p in run.plan(run.rehearsal(steps, values(steps, a)), values(steps, a)) if "precedenti edilizi" in p["section"].lower()]
     adds = [p for p in plan if p["kind"] == "add"]
     assert len(adds) == 2, adds
     # Three lines in all, as the count says: no fourth.
@@ -134,7 +134,7 @@ def _():
     assert has(rs, "che per l’immobile") and has(rs, "si allega la relativa ricevuta")
     assert not has(rs, "si forniscono gli estremi") and not has(rs, "di Euro")
     steps = STEPS["scia-fittizia"]
-    slot = [p for p in run.plan(steps, values(steps, answers("stato-sanzioni-ricevuta"))) if p["kind"] == "file"
+    slot = [p for p in run.plan(run.rehearsal(steps, values(steps, answers("stato-sanzioni-ricevuta"))), values(steps, answers("stato-sanzioni-ricevuta"))) if p["kind"] == "file"
             and (p["label"] or "").startswith("Ricevuta/e di versamento")]
     assert slot and slot[0]["value"].endswith("ricevuta-sanzione.pdf"), slot
     rs = rows(answers("stato-sanzioni-estremi"))

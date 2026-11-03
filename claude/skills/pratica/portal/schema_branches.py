@@ -248,7 +248,7 @@ def ticked():
             try:
                 if not run.preflight(steps, values, made_up=True)["ready"]:
                     continue
-                planned = run.plan(steps, values)
+                planned = run.plan(run.rehearsal(steps, values), values)
             except Exception:  # a case pre-flight can't plan offline counts as not taken
                 continue
             for f in planned:
@@ -437,7 +437,7 @@ def required():
             try:
                 if not run.preflight(steps, values, made_up=True)["ready"]:
                     continue
-                planned = run.plan(steps, values)
+                planned = run.plan(run.rehearsal(steps, values), values)
                 sections = [norm(x["section"]) for x in run.expand(steps, values)["sections"]]
             except Exception:
                 continue

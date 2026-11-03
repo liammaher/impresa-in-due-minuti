@@ -16,5 +16,6 @@
  "diritti_euro": "0",
  "proroga_data_prevista": "2028-09-15",
  "titolo_tipo": "permesso di costruire",
- "titolo_esclusivo": false
+ "titolo_esclusivo": false,
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
 }

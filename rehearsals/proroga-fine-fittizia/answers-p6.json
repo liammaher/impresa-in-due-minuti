@@ -21,5 +21,6 @@
  "proroga_motivo": "Ritardo nella consegna dei materiali da parte del fornitore, per cause non imputabili al titolare.",
  "titolo_tipo": "permesso di costruire",
  "diritti_esente": false,
- "bollo_esenzione": "no"
+ "bollo_esenzione": "no",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
 }

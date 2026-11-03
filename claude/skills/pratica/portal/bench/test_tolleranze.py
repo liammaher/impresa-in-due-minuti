@@ -65,7 +65,7 @@ def labels(recipe, a):
     r = preflight(recipe, a)
     assert r["ready"], {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]}
     steps = STEPS[recipe]
-    return [gen.norm(p["label"] or "") for p in run.plan(steps, values(steps, a))
+    return [gen.norm(p["label"] or "") for p in run.plan(run.rehearsal(steps, values(steps, a)), values(steps, a))
             if p["section"].lower().startswith("asseverazione") and "stato legittimo" in p["section"].lower()]
 
 
@@ -128,7 +128,7 @@ def _():
         a = answers(recipe, name)
         r = run.preflight(steps, values(steps, a), made_up=True)
         assert r["ready"], (name, {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]})
-        ls = [gen.norm(p["label"] or "") for p in run.plan(steps, values(steps, a))]
+        ls = [gen.norm(p["label"] or "") for p in run.plan(run.rehearsal(steps, values(steps, a)), values(steps, a))]
         assert has(ls, "ha rilevanza strutturale") and not has(ls, "non ha rilevanza strutturale"), (name, ls)
         for x in labels_:
             assert has(ls, x), (name, x)

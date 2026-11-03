@@ -243,9 +243,11 @@ that also cites a Comune page may only confirm a national one there.
   the next row's tick hid it (until 2026-11-02 that stop read as a lookup's "fields with this label",
   which the runner retried twice as a slow portal, filing the draft wrong each time). Where the form's own choice can't say both, it's a portal
   defect (`defects.yaml`, `pdc-aree-fuoco`): left unticked and in `yours`, never filled around.
-- **A portal document's box reads "Scarica il documento"** (the procura, the DSC): the
-  attachments screen's `theirs` names it, so its "required" isn't the run's error; nor is one
-  under any slot that takes only signed files (.p7m), the person's to sign and attach. A stop's
+- **A portal document's box reads "Scarica il documento"** (the procura, the DSC), once the
+  declarations are ticked: before, the slot is an empty upload box (2026-11-03). The attachments
+  screen's `theirs` names it, so its "required" isn't the first run's error, and the second run
+  attaches it (below, Signed files and the second run); nor is the "required" under a slot that
+  takes only signed files (.p7m), which the person signs and Claude attaches. A stop's
   snapshot names each slot by its title, with the types it takes, whether it's required and
   whether it holds a file. An upload widget's wrapper has a title of its own (the portal's message
   once the screen is checked, else "false" or "true"), which is never the slot's; a slot is
@@ -305,6 +307,26 @@ rules: nothing found says they need more. The 200 DPI the Linee Guida ask for is
 the tests pass `made_up=True` for the rehearsals' files. Seen on 2026-10-31: the Comune's own DD 501
 and DD 603 are PAdES-signed and read as such, and are not PDF/A; the veraPDF corpus's PDF/A-1b and
 2b files declare it both ways (`part="2"`, `<pdfaid:part>2<`).
+
+## Signed files and the second run
+
+The portal checks every digital signature on upload: a made-up `.p7m` (a self-signed certificate)
+is refused in a growl that fades in seconds, "Il documento non è stato accettato. Una o più firme
+digitali presenti sul documento non sono valide" (2026-11-03, on a made-up CIL draft; nothing kept).
+So a slot that takes only signed files gets the person's own signed file: gen.py maps it where an
+entry names it, with the slot's `accepts`, pre-flight refuses a plain copy and reads who signed, and
+inpage.js `attach` watches for the growl and stops on it, naming the slot and the portal's words. A
+rehearsal can't fill such a slot: `--made-up` (preflight, page, run; `bench/rerun.py` always) leaves
+every one out and says how many.
+
+What the portal makes from the pratica only once the declarations are ticked (gen.py marks a slot
+the crawl calls a `portal_document`: the procura, the DSC, the Relazione Paesaggistica Semplificata,
+the terre e rocce forms) and the diritti receipt (paid before sending; the dictionary marks it) carry
+`after_declarations`. The first run leaves them, and its `yours` says what to download, who signs, and
+that Claude attaches them. The second run, `run.py preflight|page|run --after-declarations` with the
+same answers and those files, reopens the draft by its name from Pratiche in bozza (the person's
+clicks have moved its address on), goes to Allega documenti by the menu's "Allega Documenti" step
+(the dictionary's `step`) and attaches those alone: no section, declaration or other slot is touched.
 
 ## Firma e invio: the person's
 
