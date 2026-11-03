@@ -13,10 +13,9 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 attachments:
   Gestione degli allegati:
-    # Works finished in part: the comunicazione says "in forma parziale come da planimetria
-    # allegata". The screen read on a complete case has no slot for it, so it goes under Allegati
-    # liberi, described; a filled partial draft shows whether the answer adds a slot of its own.
-    - {kind: file, label: Allegati liberi, value: "{{ask.planimetria_parziale}}", describe: Planimetria della parte ultimata, when: "{{ask.fine_completa|not}}"}
+    # Works finished in part ("in forma parziale come da planimetria allegata") add this required
+    # slot; plain PDFs are taken (read on a partial draft, 2026-11-03).
+    - {kind: file, label: Copia di elaborato planimetrico del progetto con eventuali varianti, value: "{{ask.planimetria_parziale}}", when: "{{ask.fine_completa|not}}", on_page: true}
 asks:
   descrizione: {default: "PROVA NON INVIARE - fine lavori {{c:identity.last_name}}"}
   oggetto: {question: "The pratica in one sentence (300 characters), e.g. the end of the works of the CILA"}
