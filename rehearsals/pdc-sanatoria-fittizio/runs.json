@@ -64,5 +64,11 @@
   "answers": "answers-zona-a.json",
   "result": "filled",
   "seconds": 153.5
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-ristrutturazione-urbanistica.json",
+  "result": "filled",
+  "seconds": 165.2
  }
 ]
