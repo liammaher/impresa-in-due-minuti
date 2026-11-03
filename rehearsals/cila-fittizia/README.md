@@ -310,6 +310,23 @@ resumed on the same draft from that section.
   The next step tests building the portal map from the schema plus a crawler instead of walking
   each screen by hand.
 
+### 2026-11-03: the relazione's two lists read as the national form words them
+
+The relazione's lists were filled as filings already made and assents already obtained. The
+national CILA form (Accordo 4 May 2017, relazione items 2 and 3) words them as filings
+**presented with** the CILA and assents **the SUE is to acquire** from the documents attached
+(art. 23-bis c. 1-3 DPR 380/2001, c. 3 for the CILA), and the portal's two slots on Allega documenti
+carry those very titles ("Documentazione necessaria per la presentazione di altre comunicazioni,
+segnalazioni", "... per il rilascio di atti di assenso obbligatori"). So the asks are now
+`comunicazioni_contestuali` and `atti_da_acquisire`, each with its slot (`comunicazioni_doc`,
+`atti_doc`); with assents to acquire, quadro d) says the works start after the SUE's
+communication. That lifts the refusal of "filings or assents still to be made or requested". An
+assent already obtained (the Soprintendenza's, on a bene culturale) is attached under Allegati
+liberi, no longer listed. The cases that took the old reading changed: `answers-direttore-atti`
+and `answers-elenchi-lunghi` (works to start, assents for the SUE: ASL, Vigili del Fuoco),
+`answers-bene-culturale` (nothing listed). Their 2026-10-30/11-01 runs below filled the old
+values; the portal's own wording of the two lists is still to be read on a draft.
+
 ## Clean reruns (2026-10-29)
 
 In the pane, from run.py's install.js and run.js, nothing touched between runs: first filled in 107.5 s; second, with the runner waiting for a section to open, **filled** in 148.5 s, read back on a fresh load.

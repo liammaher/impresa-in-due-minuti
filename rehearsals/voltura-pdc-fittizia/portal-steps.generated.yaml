@@ -65,7 +65,22 @@ asks:
 supports:
 - if: '{{ask.cointestatario}}'
   when: '{{ask.altri_cointestatari|not}}'
-  else: 'The portal''s co-holders section (the wizard''s ci sono cointestatari) holds one person: more than one co-holder isn''t mapped.'
+  defect:
+    id: coholders-one
+    title: 'Voltura and cambio d''intestazione: the co-holders'' section holds one person'
+    portal: 'Napoli''s SUE on impresainungiorno: the co-holders'' section ("Informazioni su eventuali altri aventi titolo", opened by the wizard''s "ci sono cointestatari") of the voltura del permesso and
+      of the cambio d''intestazione of a CILA, SCIA or DIA'
+    what: The section has one person's boxes and no "+" to add another, so a title passing to three or more holders (the dichiarante and two co-holders or more) can name only one co-holder.
+    law: 'The permesso passes to the successors in title (art. 11 c. 2 DPR 380/2001), however many: the voltura names each of them.'
+    checked: '2026-10-28, the batch crawl of both pratiche (catalogue/F839/sections/sue-voltura-intestazione-permesso-di-costruire.json, sue-cambio-intestazione-cia-scia-dia.json): one person''s 14 boxes,
+      no "+"'
+    choices:
+    - 'Ask the SUE how they want the other co-holders named: for instance the first in the section and every one in the attached dichiarazione sostitutiva of the right to the title, signed by each.'
+    - 'Report the defect to the portal''s operator (InfoCamere''s impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked.'
+    - 'File it on the portal yourself, by hand, as the SUE tells you: Claude doesn''t fill this case.'
+    report: docs/portal-defects.md
+  else: 'The portal''s co-holders section (the wizard''s ci sono cointestatari) holds one person and has no "+": a voltura to more than one co-holder can''t be filed complete on the portal (the permesso
+    passes to every successor in title, art. 11 c. 2 DPR 380/2001).'
 - if: '{{ask.bollo_esenzione|is_onlus}}'
   when: '{{ask.bollo_onlus_esercizio}}'
   else: 'The ONLUS exemption ended with the ONLUS regime on 1 January 2026, except for a tax year begun before then: an ex-ONLUS in the RUNTS is exempt as an ets.'

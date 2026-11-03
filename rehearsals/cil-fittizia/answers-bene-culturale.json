@@ -21,7 +21,8 @@
  "titolo_esclusivo": false,
  "parti_comuni": "nessuna",
  "lavori_in_proprio": false,
- "altri_atti": false,
+ "atti_da_acquisire": false,
+ "comunicazioni_contestuali": false,
  "intervento": "opere_temporanee",
  "paesaggio": "no",
  "fatti": [
