@@ -27,5 +27,6 @@
  "cointestatario": true,
  "altri_cointestatari": false,
  "diritti_esente": false,
- "bollo_esenzione": "no"
+ "bollo_esenzione": "no",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
 }

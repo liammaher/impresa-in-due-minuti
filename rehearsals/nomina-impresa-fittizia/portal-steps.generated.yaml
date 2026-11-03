@@ -6,7 +6,6 @@ generated: gen.py from sue-comunicazione-al-comune-di-nomina-impresa-esecutrice 
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client''s name'
-- 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it, with the pratica''s other documents'
 - 'No imposta di bollo to pay on this form: the portal''s form for this pratica has no bollo section or slot'
 - Sign and send (Firma e invio); keep the receipt
 asks:
@@ -19,12 +18,20 @@ asks:
       an association, an ente)?', options: [non ancora iscritta, non necessita], propose: '{{c:business.forma_giuridica|registro_proposto}}'}
   catasto_terreni: {type: yes_no, question: 'Is the property only in the Catasto Terreni (a plot to build on, with no subalterno or categoria), rather than the Catasto Fabbricati?', default: '{{c:immobile.catasto_categoria|filled|not}}'}
   oggetto: {type: text, question: The works in one sentence (300 characters)}
+  notifica_dovuta: {type: yes_no, question: 'Is a notifica preliminare due (more than one firm on site, or over 200 uomini-giorno)?'}
   pdc_numero: {type: text, question: The permesso di costruire's number}
   pdc_anno: {type: text, question: Its protocollo generale year}
   titolo_tipo: {type: choice, question: 'The works'' title: what was filed or issued', options: [permesso di costruire, SCIA, DIA, CILA, variante, autorizzazione paesaggistica], propose: permesso di costruire}
   nomina_aggiunta: {type: yes_no, question: 'Is the firm named alongside an earlier one (rather than the first named)?', propose: 'false'}
   domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   domicilio_inipec: {type: yes_no, question: 'Is the client company''s PEC (business.pec) its domicilio digitale in INI-PEC, to be communicated on the form?', default: 'false'}
+  diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
+  documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
+  notifica_preliminare: {type: file, question: The notifica preliminare already sent (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
+  verifica_impresa_dsan: {type: file, question: 'The client''s dichiarazione sostitutiva that the firm''s papers were checked (art. 90 c. 9 a-b D.Lgs. 81/2008: its technical fitness, its DURC and staff),
+      with an ID copy, signed digitally (.p7m)'}
 supports: []
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
@@ -272,3 +279,21 @@ sections:
   fields:
   - {id: 'r2c1p3reg:radio:0_clone', kind: radio, when: '{{ask.nomina_aggiunta|not}}', label: prima nomina dell'impresa esecutrice}
   - {id: 'r3c1p5reg:radio:1_clone', kind: radio, when: '{{ask.nomina_aggiunta}}', label: nomina in aggiunta alla precedente impresa}
+- section: Pagamento degli oneri
+  go: Prosegui
+  save: false
+  fields: []
+- section: Gestione degli allegati
+  go: Prosegui
+  step: Allega Documenti
+  theirs:
+  - Procura speciale
+  - Quadro riepilogativo della documentazione
+  - Scarica il documento
+  - copia attestazione versamento oneri, diritti e spese
+  fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Copia notifica preliminare all'ASL, value: '{{ask.notifica_preliminare}}', when: '{{ask.notifica_dovuta}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: 'Dichiarazione sostitutiva dell''atto di notorietà, attestante l''avvenuta verifica', value: '{{ask.verifica_impresa_dsan}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}

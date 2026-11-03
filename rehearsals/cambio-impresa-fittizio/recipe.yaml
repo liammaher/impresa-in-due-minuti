@@ -11,12 +11,12 @@ scelte:
   - {option: "Se l'intervento ricade nell'ambito di applicazione del d.lgs. n.81/2008 e la notifica E' STATA già trasmessa (ai sensi dell'art. 99 del d.lgs. n.81/2008)", when: "{{ask.notifica_trasmessa}}"}
   - IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
+after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
   descrizione: {default: "PROVA NON INVIARE - cambio impresa {{c:identity.last_name}}"}
   notifica_trasmessa: {type: yes_no, question: "Does the site fall under D.Lgs. 81/2008, with its notifica preliminare (art. 99) already sent?"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client's name"
-  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it, with the pratica's other documents"
   - "No imposta di bollo to pay on this form: the portal's form for this pratica has no bollo section or slot"
   - "Sign and send (Firma e invio); keep the receipt"

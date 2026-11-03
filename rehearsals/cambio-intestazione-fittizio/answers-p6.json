@@ -26,5 +26,6 @@
  "attivita_svolta": "impiegato",
  "soggetti_cambiati": "false",
  "cointestatario": false,
- "diritti_esente": false
+ "diritti_esente": false,
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
 }

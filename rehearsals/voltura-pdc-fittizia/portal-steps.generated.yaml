@@ -6,7 +6,6 @@ generated: gen.py from sue-voltura-intestazione-permesso-di-costruire (2026-10-3
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and the acknowledgements in the client''s name'
-- 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it'
 - '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
 - Sign and send (Firma e invio); keep the receipt
 asks:
@@ -62,6 +61,13 @@ asks:
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
   diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
+  documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
+  atto_trasferimento: {type: file, question: 'The deed by which the title passed (sale, gift, succession), with its registration details, signed digitally (.p7m)'}
+  rate_residue: {type: yes_no, question: 'Are instalments of the contributo di costruzione still due, which the new holder guarantees?', propose: 'false'}
+  polizza_rate_residue: {type: file, question: 'The guarantee (polizza fidejussoria) for the contributo''s instalments still due, signed digitally (.p7m)'}
+  titolo_subentrante_dsan: {type: file, question: 'The new holder''s dichiarazione sostitutiva of their real right to the title, with an ID copy, signed digitally (.p7m)'}
 supports:
 - if: '{{ask.cointestatario}}'
   when: '{{ask.altri_cointestatari|not}}'
@@ -407,3 +413,22 @@ sections:
   - {id: 'r10c2p26reg:radio:0_clone', kind: radio, label: 'sesso: M', when: '{{ask.cointestatario}}'}
   - {id: 'r10c3p28reg:radio:1_clone', kind: radio, label: 'sesso: F', when: '{{ask.cointestatario}}'}
   - {id: 'r12c1p30reg:txt', kind: text, value: '{{a:identity.codice_fiscale}}', max: 16, label: codice fiscale, when: '{{ask.cointestatario}}'}
+- section: Pagamento degli oneri
+  go: Prosegui
+  save: false
+  fields: []
+- section: Gestione degli allegati
+  go: Prosegui
+  step: Allega Documenti
+  theirs:
+  - Procura speciale
+  - Quadro riepilogativo della documentazione
+  - Scarica il documento
+  - copia attestazione versamento oneri, diritti e spese
+  fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: fotocopia con estremi di registrazione dell'atto di alienazione, value: '{{ask.atto_trasferimento}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: polizza fidejussoria a garanzia del pagamento delle quote residue, value: '{{ask.polizza_rate_residue}}', when: '{{ask.rate_residue}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: dichiarazione sostitutiva dell'atto di notorietà corredata da copia di documento di identità, value: '{{ask.titolo_subentrante_dsan}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}

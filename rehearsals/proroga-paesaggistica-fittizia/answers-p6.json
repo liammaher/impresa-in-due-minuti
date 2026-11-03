@@ -20,5 +20,6 @@
  "proroga_data_prevista": "2029-05-10",
  "proroga_tipo_lavori": "sostituzione infissi",
  "titolo_esclusivo": true,
- "diritti_esente": false
+ "diritti_esente": false,
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
 }

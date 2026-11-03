@@ -6,7 +6,6 @@ generated: gen.py from sue-comunicazione-integrativa-proroga-straordinaria-trent
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client''s name'
-- 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it, with the pratica''s other documents'
 - 'No imposta di bollo to pay on this form: the portal''s form for this pratica has no bollo section or slot'
 - Sign and send (Firma e invio); keep the receipt
 asks:
@@ -33,6 +32,10 @@ asks:
   fine_termine: {type: date, question: The date the permit said the works must end by}
   domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   domicilio_inipec: {type: yes_no, question: 'Is the client company''s PEC (business.pec) its domicilio digitale in INI-PEC, to be communicated on the form?', default: 'false'}
+  diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
+  documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
 supports: []
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
@@ -285,3 +288,20 @@ sections:
   - {kind: text, value: '{{c:identity.first_name,c:identity.last_name,c:business.denominazione|intestatario}}', max: 50, label: intestato a}
   - {kind: date, value: '{{ask.fine_termine|date_it}}', label: la cui data di fine lavori dovrebbe essere entro il}
   - {kind: date, value: '{{ask.proroga_data_prevista|date_it}}', label: ed è invece prevista per}
+- section: Pagamento degli oneri
+  go: Prosegui
+  save: false
+  fields: []
+- section: Gestione degli allegati
+  go: Prosegui
+  step: Allega Documenti
+  theirs:
+  - Procura speciale
+  - Quadro riepilogativo della documentazione
+  - Scarica il documento
+  - copia attestazione versamento oneri, diritti e spese
+  - copia del documento d'identità in corso di validità ai sensi
+  fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}

@@ -6,7 +6,6 @@ generated: gen.py from sue-proroga-autorizzazione-paesaggistica (2026-10-31) and
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client''s name'
-- 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it, with the pratica''s other documents'
 - 'No imposta di bollo to pay on this form: the portal''s form for this pratica has no bollo section or slot'
 - Sign and send (Firma e invio); keep the receipt
 asks:
@@ -33,6 +32,9 @@ asks:
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
   diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
+  documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
 supports: []
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
@@ -284,3 +286,20 @@ sections:
   - {id: 'r5c1p8reg:radio:3_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: sono dovuti oneri quali diritti o spese}
   - {id: 'r7c1p10reg:real', kind: number, value: '{{ask.diritti_euro}}', when: '{{ask.diritti_euro|positive}}', max: 11, label: per un totale di Euro}
   - {id: 'r8c1p13reg:radio:4_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: pagamento on line}
+- section: Pagamento degli oneri
+  go: Prosegui
+  save: false
+  fields: []
+- section: Gestione degli allegati
+  go: Prosegui
+  step: Allega Documenti
+  theirs:
+  - Procura speciale
+  - Quadro riepilogativo della documentazione
+  - Scarica il documento
+  - copia attestazione versamento oneri, diritti e spese
+  - copia del documento d'identità in corso di validità ai sensi
+  fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}

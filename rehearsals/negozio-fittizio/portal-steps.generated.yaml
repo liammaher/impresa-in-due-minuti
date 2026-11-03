@@ -23,6 +23,7 @@ asks:
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
   diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
   solo_distributori: {type: yes_no, question: 'Will it sell only through vending machines?', propose: 'false'}
   anche_ingrosso: {type: yes_no, question: 'Will it also sell wholesale (not only to the public)?', propose: 'false'}
   superficie_vendita_mq: {type: number, question: 'The sales area in m² (where customers shop, not stores or toilets)'}
@@ -246,9 +247,11 @@ sections:
   fields: []
 - section: Gestione degli allegati
   go: Prosegui
+  step: Allega Documenti
   theirs:
   - Procura speciale
   - Quadro riepilogativo della documentazione
   - Scarica il documento
   - copia attestazione versamento oneri, diritti e spese
-  fields: []
+  fields:
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}

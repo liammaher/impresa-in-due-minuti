@@ -378,6 +378,38 @@ def main():
             assert ".pdf" not in json.dumps(r["snapshot"]), "a file's name in the snapshot"
         case("a required slot taking only signed files is the person's; a plain one stops, named by its title", signed_slot)
 
+        def refused_upload():
+            # A file the portal refuses on upload (a made-up digital signature, 2026-11-03) shows
+            # only in a growl that fades: the run stops on it, naming the slot and the portal's words.
+            PORTAL.reset()
+            r = fill(browser, base, steps(base, start="/portal.html?refuse=1"), answers)
+            stops(r, "Ricevuta ASL: the portal refused")
+            assert "firme digitali" in r["error"] and "ricevuta-asl" not in json.dumps(PORTAL.files), r
+        case("a file the portal refuses on upload, in a growl that fades, stops the run with its words", refused_upload)
+
+        def after_declarations():
+            # The second run: the first two sections' fields stay as filled, the attachments
+            # screen is reached from the menu's step on a reopened draft, and only what waits
+            # for the declarations is attached.
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?screens=1")
+            st["sections"][1]["fields"][0]["after_declarations"] = True  # not on a go screen: kept
+            go = {"section": "Gestione degli allegati", "go": "Prosegui", "step": "Allega Documenti", "fields": [
+                {"id": "planimetria_input", "kind": "file", "label": "Planimetria quotata", "value": "{{ask.planimetria}}"},
+                {"id": "ricevuta_input", "kind": "file", "label": "Ricevuta ASL", "value": "{{ask.ricevuta}}",
+                 "accepts": "pdf.p7m", "after_declarations": True}]}
+            st["sections"].append(go)
+            first, second = run.phase(st), run.phase(st, after=True)
+            assert [f["label"] for f in first["sections"][2]["fields"]] == ["Planimetria quotata"]
+            assert [f["label"] for f in second["sections"][2]["fields"]] == ["Ricevuta ASL"]
+            assert len(second["sections"][1]["fields"]) == 1, "a section before the screens lost a field"
+            assert run.reopening(second)["from"] == {"section": 2}
+            assert not run.phase(st, after=True, made_up=True)["sections"][2]["fields"], "made-up: a signed-only slot kept"
+            r = fill(browser, base, second, small, resume={"url": base + "/portal.html?screens=1", "from": {"section": 2}})
+            assert r["result"] == "filled", r
+            assert [f["box"].rsplit(":", 1)[-1] for f in PORTAL.files] == ["ricevuta_input"], PORTAL.files
+        case("the second run reaches the attachments screen by its step and attaches only what waited", after_declarations)
+
         def twin_slots():
             # The screen's `theirs` names the signed-only "Relazione Paesaggistica Semplificata";
             # the plain slot whose title starts with it is Claude's: left empty, it stops the run.

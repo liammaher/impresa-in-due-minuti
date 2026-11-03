@@ -16,6 +16,8 @@
 //
 //   __pv.start(procedure, values[, resume])  starts a run, returns at once. resume picks a
 //                                  stopped run up: {url, from, kept, fixes} (run.py --resume);
+//                                  {reopen: true, from} opens the draft named by the wizard's
+//                                  first value from Pratiche in bozza (run.py --after-declarations);
 //                                  a stop on the portal's own error goes on by itself (`retries`)
 //   await __pv.wait(ms)            the run's report once it ends, or after ms
 //   __pv.last()                    the last run's report, kept in the tab (sessionStorage: it
@@ -549,13 +551,26 @@
     const w = win(), bytes = v.url ? await fetched(v) : Uint8Array.from(w.atob(v.b64), (c) => c.charCodeAt(0));
     const dt = new w.DataTransfer();
     dt.items.add(new w.File([bytes], v.name, { type: v.type }));
+    // The portal refuses a file on upload in a growl that fades in seconds: "Il documento non è
+    // stato accettato", with why (a digital signature it finds invalid, as a made-up .p7m's; a
+    // type the slot doesn't take; 2026-11-03). Watched while the upload runs.
+    const refused = [];
+    const seen = () => { for (const g of doc().querySelectorAll(".ui-growl-item")) {
+      const t = g.textContent.replace(/\s+/g, " ").trim();
+      if (/non è stato accettato/i.test(t) && !refused.includes(t)) refused.push(t);
+    } };
+    const watch = new w.MutationObserver(seen);
+    watch.observe(doc().body, { childList: true, subtree: true });
     e.files = dt.files;
     fire(e);
     await idle();
     // An upload that isn't jQuery's doesn't show as busy: give it until its list names
     // the file. A portal that names it only after Salva costs these 10 s once.
-    for (const end = performance.now() + 10000; performance.now() < end &&
+    for (const end = performance.now() + 10000; performance.now() < end && !refused.length &&
       !norm(doc().body.innerText).includes(norm(v.name));) await sleep(100);
+    seen();
+    watch.disconnect();
+    if (refused.length) fail(`${f.label}: the portal refused ${v.name}: ${refused.join("; ")}`);
     // Some slots ("Allegati liberi") want a description next to the uploaded file: a box
     // with no id of its own in the slot's cell.
     if (f.describe) {
@@ -771,6 +786,11 @@
       // A screen after the form (Pagamento oneri, Allega documenti): reached with its button,
       // unless a resumed draft is already on it.
       const here = () => norm((doc().querySelector(".content-title") || {}).innerText).includes(norm(sec.section));
+      // A draft reopened from Pratiche in bozza shows the step it was left on: the screen's own
+      // step in the menu at the top ("Allega Documenti") reaches it from any other.
+      const step = () => sec.step && report.resumed &&
+        [...doc().querySelectorAll("a")].filter((x) => x.offsetParent && norm(x.textContent) === norm(sec.step)).pop();
+      for (let t = 0; t < 2 && !here() && step(); t++) await act(() => press(step(), sec.step));
       if (!here()) await act(() => press(button(sec.go), sec.go));
       if (!here()) fail(`expected the screen ${sec.section}`);
     } else if (sec.open !== false) {
@@ -1009,15 +1029,21 @@
     const t0 = performance.now();
     const secs = () => +((performance.now() - t0) / 1000).toFixed(1);
     try {
-      frame = document.createElement("iframe");
-      frame.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;border:0;z-index:2147483647;background:#fff";
-      frame.dataset.pv = "runner";
-      const loaded = new Promise((r) => frame.addEventListener("load", r, { once: true }));
-      // A resumed run opens the draft it stopped on; a new one starts a new pratica.
-      frame.src = resume.url || steps.start;
-      document.body.append(frame);
-      await loaded;
-      await idle();
+      if (resume.reopen) {
+        // After the declarations (run.py --after-declarations): the draft by its name, from
+        // Pratiche in bozza, since the person's own clicks have moved its address on.
+        await reopen(values.wizard[0], new URL(steps.logged_in).origin + "/fnsuap/cmd/home");
+      } else {
+        frame = document.createElement("iframe");
+        frame.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;border:0;z-index:2147483647;background:#fff";
+        frame.dataset.pv = "runner";
+        const loaded = new Promise((r) => frame.addEventListener("load", r, { once: true }));
+        // A resumed run opens the draft it stopped on; a new one starts a new pratica.
+        frame.src = resume.url || steps.start;
+        document.body.append(frame);
+        await loaded;
+        await idle();
+      }
       if (!doc().location.href.startsWith(steps.logged_in)) fail("not logged in to the portal");
       if (/\/cmd\/error/.test(doc().location.href)) fail("the draft's address has expired: open it again from Pratiche in bozza");
       const from = resume.from || {};
@@ -1190,7 +1216,7 @@
       // A fix is what Claude found the page really has for one field (a moved id, a renamed
       // label): this run uses it, and run.py writes it down for the steps file.
       for (const x of resume.fixes || []) Object.assign(steps.sections[x.section].fields[x.field], x.set);
-      report = { procedure, result: "running", sections: [], at: null, resumed: !!resume.url };
+      report = { procedure, result: "running", sections: [], at: null, resumed: !!(resume.url || resume.reopen) };
       kept = [];
       attempt(values, resume);
       return "started";

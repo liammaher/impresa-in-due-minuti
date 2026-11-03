@@ -6,8 +6,6 @@ generated: gen.py from sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizz
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali'
-- 'On Allega documenti: the drawings (stato attuale, progetto, tavola interventi) and the photos of the state as it is, signed digitally'
-- 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it'
 - '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
 - Sign and send (Firma e invio); keep the receipt
 groups:
@@ -64,6 +62,12 @@ asks:
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
   diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
+  documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
+  documentazione_fotografica: {type: file, question: Photos of the state of the premises (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  elaborati_paesaggistici: {type: file, question: 'The landscape drawings: stato attuale, progetto and the works, with the context (signed digitally, .p7m)'}
+  atti_assenso_acquisiti: {type: yes_no, question: 'Have other assents for the works already been obtained (a nulla osta, a parere)?', propose: 'false'}
+  atti_assenso_acquisiti_doc: {type: file, question: 'Those assents, with their details, in one file signed digitally (.p7m)'}
   intervento: {type: choice, question: 'Che lavori sono, secondo le definizioni dell''art. 3 DPR 380/2001?', options: [edilizia_libera, opere_temporanee, nessuna_opera, manutenzione_straordinaria, restauro,
       ristrutturazione, ristrutturazione_pesante, nuova_costruzione, ristrutturazione_urbanistica, variante_pdc, variante_essenziale_pdc, variante_scia, altro], labels: {edilizia_libera: 'Lavori senza titolo
         dell''art. 6 c. 1: manutenzione ordinaria (riparare, rinnovare e sostituire finiture, tenere in efficienza gli impianti), barriere architettoniche senza ascensori esterni né modifiche della sagoma,
@@ -417,3 +421,20 @@ sections:
   - {kind: file, value: '{{ask.bollo_virtuale_autorizzazione}}', when: '{{ask.bollo_esenzione|is_virtuale}}', label: dichiarazione relativa all'assolvimento dell'imposta di bollo}
   - {kind: radio, when: '{{ask.bollo_esenzione|bollo_esente}}', label: Il pagamento non è dovuto poiché esentati}
   - {kind: select, value: '{{ask.bollo_esenzione|bollo_motivo}}', when: '{{ask.bollo_esenzione|bollo_esente}}', label: per la seguente motivazione}
+- section: Pagamento degli oneri
+  go: Prosegui
+  save: false
+  fields: []
+- section: Gestione degli allegati
+  go: Prosegui
+  step: Allega Documenti
+  theirs:
+  - Procura speciale
+  - Quadro riepilogativo della documentazione
+  - Scarica il documento
+  fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: elaborati grafici comprensivi di stato attuale, value: '{{ask.elaborati_paesaggistici}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: estremi di atti assenso già acquisiti, value: '{{ask.atti_assenso_acquisiti_doc}}', when: '{{ask.atti_assenso_acquisiti}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}
+  - {kind: file, label: Documentazione fotografica dello stato di fatto, value: '{{ask.documentazione_fotografica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}

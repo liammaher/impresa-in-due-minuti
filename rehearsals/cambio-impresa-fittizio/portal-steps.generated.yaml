@@ -6,7 +6,6 @@ generated: gen.py from sue-comunicazione-al-comune-di-cambio-dell-impresa-esecut
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client''s name'
-- 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it, with the pratica''s other documents'
 - 'No imposta di bollo to pay on this form: the portal''s form for this pratica has no bollo section or slot'
 - Sign and send (Firma e invio); keep the receipt
 asks:
@@ -24,6 +23,10 @@ asks:
   titolo_tipo: {type: choice, question: 'The works'' title: what was filed or issued', options: [permesso di costruire, SCIA, DIA, CILA, variante, autorizzazione paesaggistica], propose: permesso di costruire}
   domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   domicilio_inipec: {type: yes_no, question: 'Is the client company''s PEC (business.pec) its domicilio digitale in INI-PEC, to be communicated on the form?', default: 'false'}
+  documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  verifica_impresa_dsan: {type: file, question: 'The client''s dichiarazione sostitutiva that the firm''s papers were checked (art. 90 c. 9 a-b D.Lgs. 81/2008: its technical fitness, its DURC and staff),
+      with an ID copy, signed digitally (.p7m)'}
   notifica_trasmessa: {type: yes_no, question: 'Does the site fall under D.Lgs. 81/2008, with its notifica preliminare (art. 99) already sent?'}
 supports: []
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
@@ -271,3 +274,18 @@ sections:
   - {id: 'r13c1p30reg:txt', kind: text, value: '{{f1:business.pec}}', max: 50, label: PEC}
   - {id: 'r15c1p34reg:txt', kind: text, value: '{{f1:business.cciaa|provincia_nome}}', max: 50, label: iscritta alla Camera di Commercio di}
   - {id: 'r15c2p36reg:number', kind: text, value: '{{f1:business.rea|rea_num}}', max: 20, label: n. REA}
+- section: Pagamento degli oneri
+  go: Prosegui
+  save: false
+  fields: []
+- section: Gestione degli allegati
+  go: Prosegui
+  step: Allega Documenti
+  theirs:
+  - Procura speciale
+  - Quadro riepilogativo della documentazione
+  - Scarica il documento
+  fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: 'Dichiarazione sostitutiva dell''atto di notorietà, attestante l''avvenuta verifica', value: '{{ask.verifica_impresa_dsan}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}
