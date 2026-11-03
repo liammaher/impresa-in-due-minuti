@@ -149,7 +149,8 @@ asks:
   relazione_paesaggistica: {type: file, question: 'The relazione paesaggistica (DPCM 12/12/2005), for the autorizzazione paesaggistica ordinaria (PDF)'}
   soprintendenza_autorizzata: {type: yes_no, question: 'Has the Soprintendenza already authorized these works (art. 21 c. 4 D.Lgs. 42/2004)?'}
   soprintendenza_autorizzazione: {type: file, question: 'The Soprintendenza''s authorization already obtained (PDF, signed digitally as Napoli''s SUE takes every file)', when: '{{ask.soprintendenza_autorizzata}}'}
-  diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due), default: '151'}
+  diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due), default: '{{ask.cila_stato|diritti_cila}}', why: 'Line SUE 13 of the Comune''s 2026 table of SUE
+      diritti (G.C. 239/2026): 151 € for a CILA; SUE 15: 166 € for one filed once the works started (mancata CILA)'}
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
   diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}

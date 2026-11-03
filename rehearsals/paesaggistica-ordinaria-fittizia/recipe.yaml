@@ -17,6 +17,7 @@ attachments:
     # empty and stopped there, 2026-11-03). The combinations take it from parts/paesaggistica-ordinaria.
     - {kind: file, label: Relazione paesaggistica (redatta ai sensi del D.P.C.M, value: "{{ask.relazione_paesaggistica}}"}
 asks:
+  diritti_euro: {default: "401", why: "Line SUE 2 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 401 € for a landscape authorization asked on its own"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   modello_dp: {default: "true"}
   descrizione: {default: "PROVA NON INVIARE - paesaggistica ordinaria {{c:identity.last_name}}"}

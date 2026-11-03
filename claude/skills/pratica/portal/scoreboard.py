@@ -228,9 +228,10 @@ OPEN_BEYOND = [
     "The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.",
     "Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots "
     "may be missing (the catalogue notes this for the pratiche read on an empty draft). The \"Elaborati richiesti "
-    "per la sanatoria\" slot is mapped by the title a filled draft showed, never crawled. The diritti amount is "
-    "set only for the CIL (100 €) and the CILA (151 €); the other pratiche ask it, though the Comune's 2026 "
-    "table has them.",
+    "per la sanatoria\" slot is mapped by the title a filled draft showed, never crawled. The diritti come from the Comune's 2026 "
+    "table (G.C. 239/2026), by the case's facts; it can't say an onerous SCIA's, an onerous permesso's or SCIA "
+    "alternativa's bracket (no ask holds the contributo's amount), a car park's (its floor area), works under "
+    "way in sanatoria (art. 37 c. 5), the art. 10-septies proroghe or a landscape renewal: those are asked.",
     "Signed files: the portal checks every digital signature on upload and refuses a made-up one (2026-11-03), "
     "so the slots that take only signed files can't be filled with made-up data: on the portal only the "
     "refusal is proven; a real signed file, never yet. The second run after the declarations ran on the portal "

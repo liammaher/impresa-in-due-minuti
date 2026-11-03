@@ -29,6 +29,7 @@ attachments:
     - {kind: file, label: "Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni", value: "{{ask.comunicazioni_doc}}", when: "{{ask.comunicazioni_contestuali}}"}
     - {kind: file, label: Documentazione necessaria per il rilascio di atti di assenso obbligatori, value: "{{ask.atti_doc}}", when: "{{ask.atti_da_acquisire}}"}
 asks:
+  diritti_euro: {default: "{{ask.cila_stato|diritti_cila}}", why: "Line SUE 13 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 151 € for a CILA; SUE 15: 166 € for one filed once the works started (mancata CILA)"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}
@@ -36,11 +37,10 @@ asks:
   # Soprintendenza's authorization first).
   bene_culturale: {group: fatti, item: "L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?"}
   descrizione: {default: "PROVA NON INVIARE - CILA {{c:identity.last_name}}"}
-  diritti_euro: {default: "151"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Pay the 151 € diritti before the second run (after the declarations; how Napoli takes them is below): its receipt, signed, goes with it. A late CILA's penalty is paid before the first run: its receipt is in quadro d)"
+  - "Pay the {{ask.diritti_euro}} € diritti before the second run (after the declarations; how Napoli takes them is below): its receipt, signed, goes with it. A late CILA's penalty is paid before the first run: its receipt is in quadro d)"
   - "The CILA DSC may be the one fill.py fills (form quadro-riepilogativo-dsc: a box per document uploaded) instead of the portal's: signed, as PDF/A, it goes with the second run"
   - "On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); its authorization is attached under Allegati liberi: keep it with the pratica"
   - "Sign and send (Firma e invio); keep the receipt"

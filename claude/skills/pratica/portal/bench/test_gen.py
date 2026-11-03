@@ -466,6 +466,34 @@ def _():
         assert not left, (d.name, left)
 
 
+@case("the SUE's diritti, from the Comune's 2026 table: proposed by the case's facts, asked where the table needs what no ask holds")
+def _():
+    import json
+    import run
+    fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
+
+    def diritti(name, **answers):
+        steps = generated(name)
+        a = steps["asks"]["diritti_euro"]
+        return run.Values(answers, fields=fields, asks=steps["asks"]).render(a.get("default") or a["propose"])
+    assert diritti("cila-fittizia", cila_stato="da iniziare") == "151"  # SUE 13
+    assert diritti("cila-fittizia", cila_stato="in corso") == diritti("cila-fittizia", cila_stato="realizzato") == "166"  # SUE 15
+    assert diritti("scia-fittizia", scia_onerosa="false") == "401" and diritti("scia-fittizia", scia_onerosa="true") == ""
+    assert diritti("scia-alternativa-fittizia", scia_onerosa="false") == "401"  # SUE 10
+    assert diritti("scia-alternativa-fittizia", scia_onerosa="true") == ""  # SUE 7-9: the contributo's bracket
+    assert diritti("pdc-fittizio", pdc_tipo="nuova costruzione", scia_onerosa="false") == "401"
+    assert diritti("pdc-fittizio", pdc_tipo="variante essenziale", scia_onerosa="true") == "501"  # SUE 11
+    assert diritti("pdc-fittizio", pdc_tipo="parcheggi", scia_onerosa="false") == ""  # SUE 4-6: the floor area
+    assert diritti("scia-sanatoria-fittizia", sanatoria_caso="doppia conformita") == "441"  # SUE 16
+    assert diritti("scia-sanatoria-fittizia", sanatoria_caso="in corso") == ""  # art. 37 c. 5: not in the table
+    assert diritti("proroga-inizio-fittizia", titolo_tipo="permesso di costruire") == "501"
+    assert diritti("proroga-fine-fittizia", titolo_tipo="SCIA") == ""
+    for name, want in (("pdc-sanatoria-fittizio", "441"), ("agibilita-fittizia", "401"), ("paesaggistica-ordinaria-fittizia", "401"),
+                       ("accertamento-paesaggistico-fittizio", "441"), ("voltura-pdc-fittizia", "501"), ("cil-fittizia", "100"),
+                       ("inizio-lavori-fittizia", "0"), ("nomina-impresa-fittizia", "0")):
+        assert diritti(name) == want, (name, diritti(name))
+
+
 @case("a slot that takes only signed files takes the person's signed file, never a plain copy, and a rehearsal leaves it (SCIA stato legittimo)")
 def _():
     import run

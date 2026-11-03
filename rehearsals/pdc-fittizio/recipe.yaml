@@ -101,6 +101,7 @@ attachments:
     # Soil analysed, no remediation: their results' required slot (read on the permesso's screen 2026-11-01).
     - {kind: file, label: Risultati delle analisi ambientali sulla qualità dei terreni, value: "{{ask.indagini_analisi_doc}}", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}", on_page: true}
 asks:
+  diritti_euro: {question: "The SUE's diritti in euro. Onerous, by the contributo di costruzione (oneri di urbanizzazione + costo di costruzione, as the prospetto works it out), lines SUE 7-9 of the 2026 table: 1003 up to 5,000 €, 1505 up to 30,000 €, 1998 above", propose: "{{ask.pdc_tipo,ask.scia_onerosa|diritti_pdc}}", why: "Lines of the Comune's 2026 table of SUE diritti (G.C. 239/2026): SUE 10, 401 € for a permesso free of the contributo; SUE 11, 501 € for a variant to one issued; onerous, SUE 7-9 by the contributo (1,003 € up to 5,000 €, 1,505 € up to 30,000 €, 1,998 € above); car parks (L. 122/89), SUE 4-6 by floor area"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}

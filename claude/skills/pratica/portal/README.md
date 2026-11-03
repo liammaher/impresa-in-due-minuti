@@ -536,6 +536,9 @@ slot's title and found no "+"), so a slot ends at its "+" row or at a row holdin
 Files are read back by name, never by box. The CIL's Allegati liberi takes plain PDFs (its
 notifica preliminare, filings and the Soprintendenza's authorization go there, 2026-11-03), and so
 does the CILA's (the made-up Allegato A and Modello DP of the second run, 2026-11-03); the landscape
-authorizations' take only signed files (their crawls). A slot whose crawl has no types (the old
-crawls of the CILA and the SCIA, made on empty drafts, before crawl.js read them) counts as taking
-plain files: a filled draft's read (`accepts_read`) settles it, as the CILA's receipt slot showed.
+authorizations' take only signed files (their crawls). A slot shows its types ("Tipologie ammesse")
+only while it is empty, and its file box has no `accept` of its own: once it holds a file, the cell
+shows the file. A slot whose crawl has no types counts as taking plain files; the old crawls of the
+CILA and the SCIA lacked them, and a read of their filled drafts (2026-11-03, `accepts_read`) found
+each receipt slot ("copia attestazione versamento oneri, diritti e spese") taking only signed files,
+the SCIA's procura signed only and its DSC any type, and the slots holding the runs' plain PDFs plain.

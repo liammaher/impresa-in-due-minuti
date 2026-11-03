@@ -83,6 +83,7 @@ attachments:
     - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: "{{ask.igienico_deroga_doc}}", when: "{{ask.igienico_conforme|not}}", on_page: true}
     - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: "{{ask.cimiteriale_doc}}", when: "{{ask.fascia_cimiteriale|is_non_consentito}}", on_page: true}
 asks:
+  diritti_euro: {propose: "{{ask.scia_onerosa|diritti_gratuito}}", why: "Line SUE 10 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 401 € for a SCIA free of the contributo; an onerous SCIA isn't in the table: ask the SUE"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}

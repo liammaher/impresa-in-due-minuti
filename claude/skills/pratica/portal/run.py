@@ -372,6 +372,17 @@ FILTERS = Filters({
     # changes the forms have no line for are "altro" (defect cambio-uso-regionale).
     "sue_scia_cambio_uso": lambda v: {"no": "no", "intero_immobile": "intero immobile", "piano_terra": "tra categorie",
                                       "intero_tra_categorie": "altro", "altro": "altro", **SUE_CAMBIO}.get(str(v), ""),
+    # Napoli SUE's diritti (tabella G.C. 239/2026) where its line depends on the case: the amount to
+    # propose, or "" where the table needs what no ask holds (an onerous title's contributo bracket,
+    # a car park's floor area), so the question stays.
+    "diritti_cila": lambda v: {"da iniziare": "151", "in corso": "166", "realizzato": "166"}.get(str(v).strip(), ""),
+    "diritti_gratuito": lambda v: "401" if v is not None and not truthy(v) else "",
+    "diritti_pdc": lambda v: ("501" if _facts(v, 2)[0] in ("variante essenziale", "variante sagoma") else ""
+                              if _facts(v, 2)[0] == "parcheggi" or truthy(_facts(v, 2)[1]) else "401"),
+    # A SCIA in sanatoria: line SUE 16 names the accertamenti (art. 36-bis) and the regularizations
+    # (art. 34-ter), not the works still under way (art. 37 c. 5).
+    "diritti_sanatoria_scia": lambda v: "" if str(v).strip() in ("", "in corso") else "441",
+    "diritti_proroga_pdc": lambda v: "501" if str(v).strip() == "permesso di costruire" else "",
     "sue_scia_alt_tipo": lambda v: {"ristrutturazione_pesante": "ristrutturazione edilizia",
                                     "ristrutturazione_urbanistica": "nuova costruzione piano attuativo"}.get(str(v), ""),
 })

@@ -17,6 +17,7 @@ attachments:
     # slot; plain PDFs are taken (read on a partial draft, 2026-11-03).
     - {kind: file, label: Copia di elaborato planimetrico del progetto con eventuali varianti, value: "{{ask.planimetria_parziale}}", when: "{{ask.fine_completa|not}}", on_page: true}
 asks:
+  diritti_euro: {default: "0", why: "Not in the Comune's 2026 table of SUE diritti (G.C. 239/2026): no diritti (non previsti dal tariffario)"}
   descrizione: {default: "PROVA NON INVIARE - fine lavori {{c:identity.last_name}}"}
   oggetto: {question: "The pratica in one sentence (300 characters), e.g. the end of the works of the CILA"}
   planimetria_parziale: {type: file, question: "The planimetria of the part finished (PDF), signed digitally by the direttore dei lavori", when: "{{ask.fine_completa|not}}"}
