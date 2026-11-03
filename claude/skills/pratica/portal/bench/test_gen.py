@@ -189,8 +189,13 @@ def _():
     slots = first(run.phase(steps))
     # Works finished in part add the planimetria's own slot (read on a partial draft, 2026-11-03).
     assert [f["label"][:20] for f in slots] == ["Fotocopia di un docu", "Copia dei documenti ", "Dichiarazione di ass", "Copia di elaborato p"], slots
-    # What the portal makes once the declarations are ticked, and the diritti receipt: the second run's.
-    assert [f["label"][:20] for f in first(run.phase(steps, after=True))] == ["Procura speciale", "Quadro riepilogativo", "copia attestazione v"]
+    # What the portal makes once the declarations are ticked, the diritti receipt and Napoli's annexes
+    # (under Allegati liberi, each when its pratica takes it: the fine lavori takes neither): the second run's.
+    second = first(run.phase(steps, after=True))
+    assert [f["label"][:20] for f in second] == ["Procura speciale", "Allegati liberi", "Allegati liberi", "Quadro riepilogativo",
+                                                 "copia attestazione v"], second
+    assert [f["when"] for f in second if f["label"] == "Allegati liberi"] == ["{{ask.napoli_allegato_a}}", "{{ask.modello_dp}}"]
+    assert steps["asks"]["napoli_allegato_a"]["default"] == steps["asks"]["modello_dp"]["default"] == "false"
 
 
 @case("a section the dictionary doesn't have stops it, nothing written")

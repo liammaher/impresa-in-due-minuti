@@ -229,8 +229,10 @@ fetch("/state").then((r) => r.json()).then((st) => {
   for (const t of texts()) t.value = st.fields[t.id] || "";
   for (const c of document.querySelectorAll("input[type=checkbox]")) c.checked = st.fields[c.id] === "on";
   st.files.forEach(list);
-  // As the portal does, a slot's cell names the file in it.
+  // As the portal does, a slot's cell names the file in it, each "+" box a file went in drawn again.
   for (const [id, name] of Object.entries(st.boxes || {})) {
+    const more = /liberi(\d+)_input$/.exec(id);
+    while (more && window.pvAddLiberi && !document.getElementById(id)) window.pvAddLiberi();
     const box = document.getElementById(id);
     if (box) box.after(" " + name + " Rimuovi");
   }
@@ -271,6 +273,7 @@ if (location.search.includes("more=1")) {
   };
   body.append(head, plusRow);
   add();
+  window.pvAddLiberi = add;
   plusRow.querySelector("button").addEventListener("click", add);
 }
 if (location.search.includes("screens=1")) {
@@ -283,6 +286,11 @@ if (location.search.includes("screens=1")) {
   step.addEventListener("click", (e) => { e.preventDefault(); title.textContent = "GESTIONE DEGLI ALLEGATI"; });
   document.querySelector("nav").append(step);
   document.body.prepend(title);
+  // The open section, as a draft reopened from Pratiche in bozza marks it.
+  const cur = document.createElement("li");
+  cur.id = "corrente";
+  cur.textContent = "Allega Documenti";
+  document.querySelector("nav").append(cur);
 }
 for (const box of document.querySelectorAll("input[type=file]")) if (!/liberi\d+_input$/.test(box.id)) sends(box);
 document.getElementById("salva").addEventListener("click", () => {

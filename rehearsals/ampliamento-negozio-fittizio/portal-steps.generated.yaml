@@ -22,6 +22,11 @@ asks:
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
   diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
+  napoli_allegato_a: {type: yes_no, default: 'false', question: 'Does this pratica take Napoli''s Allegato A Programma 100 (every building title, DD 603/2025)?'}
+  napoli_allegato_a_firmato: {type: file, question: 'The client''s Allegato A Programma 100 (fill.py fills it: napoli/comune/cila-lavori-edilizi, form allegato-a-programma-100), signed digitally (.p7m)'}
+  modello_dp: {type: yes_no, default: 'false', question: 'Does this pratica take Napoli''s Modello DP (titles, agibilità, landscape authorizations: L.R. Campania 59/2018)?'}
+  modello_dp_firmato: {type: file, question: 'The Modello DP (fill.py fills it: napoli/comune/cila-lavori-edilizi, form modello-dp), signed digitally by you and by the client (.p7m), with the engagement
+      letter or contract'}
   ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
   superficie_vendita_mq: {type: number, question: 'The sales area in m² (where customers shop, not stores or toilets)'}
   superficie_alimentare_mq: {type: number, question: 'Of that, m² for food', propose: '0'}
@@ -228,6 +233,9 @@ sections:
   - Procura speciale
   - Quadro riepilogativo della documentazione
   - Scarica il documento
+  - Allegati liberi
   - copia attestazione versamento oneri, diritti e spese
   fields:
+  - {kind: file, label: Allegati liberi, value: '{{ask.napoli_allegato_a_firmato}}', describe: Allegato A Programma 100, when: '{{ask.napoli_allegato_a}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
+  - {kind: file, label: Allegati liberi, value: '{{ask.modello_dp_firmato}}', describe: Modello DP (L.R. Campania 59/2018), when: '{{ask.modello_dp}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
   - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
