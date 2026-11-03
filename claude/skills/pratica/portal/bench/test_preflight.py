@@ -544,7 +544,7 @@ def assents_and_filings():
     """The CILA relazione's lists as the national form words them (2026-11-03): filings presented
     with it and assents the SUE acquires (art. 23-bis DPR 380/2001), each with its slot; assents
     to acquire mean no start date, and works under way can't wait for one. The CIL lists filings
-    only. A partial fine lavori attaches its planimetria under Allegati liberi."""
+    only. A partial fine lavori attaches its planimetria in the slot the answer adds."""
     root = HERE.parents[4] / "rehearsals"
     fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
     here = os.getcwd()
@@ -578,7 +578,7 @@ def assents_and_filings():
 
         steps, v, a = case("fine-lavori-fittizia", "parziale")
         r = run.preflight(steps, v(a), made_up=True)
-        assert r["ready"] and ("Gestione degli allegati: Allegati liberi", "planimetria-parte-ultimata.pdf") in attached(r), attached(r)
+        assert r["ready"] and ("Gestione degli allegati: Copia di elaborato planimetrico del progetto con eventuali varianti", "planimetria-parte-ultimata.pdf") in attached(r), attached(r)
         steps, v, a = case("fine-lavori-fittizia", "p6")
         assert not [x for x in attached(run.preflight(steps, v(a), made_up=True)) if x[1] == "planimetria-parte-ultimata.pdf"]
     finally:
