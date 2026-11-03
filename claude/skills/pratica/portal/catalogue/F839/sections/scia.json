@@ -13494,57 +13494,71 @@
    {
     "title": "Procura speciale",
     "required": false,
-    "portal_document": true
+    "portal_document": true,
+    "accepts": "jpg.p7m;pdf.p7m",
+    "accepts_read": "2026-11-03, on a filled draft: the crawl, on an empty one, had no types for it"
    },
    {
     "title": "Quadro riepilogativo della documentazione già disponibile e allegata - SCIA DSC",
     "required": false,
-    "portal_document": true
+    "portal_document": true,
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "accepts_read": "2026-11-03, on a filled draft: the crawl, on an empty one, had no types for it"
    },
    {
     "title": "Copia del documento di identità del/i titolare/i e/o del tecnico",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts_read": "2026-11-03, on a filled draft: it held a made-up plain PDF, so it takes plain files (its types show only while empty)"
    },
    {
     "title": "Fotocopia di un documento di identita' del soggetto che conferisce la procura speciale",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts_read": "2026-11-03, on a filled draft: it held a made-up plain PDF, so it takes plain files (its types show only while empty)"
    },
    {
     "title": "Dichiarazione di assenso dei terzi titolari di altri diritti reali o obbligatori",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts_read": "2026-11-03, on a filled draft: it held a made-up plain PDF, so it takes plain files (its types show only while empty)"
    },
    {
     "title": "Copia dei documenti d'identità del/i titolare/i, comproprietario/i",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts_read": "2026-11-03, on a filled draft: it held a made-up plain PDF, so it takes plain files (its types show only while empty)"
    },
    {
     "title": "Notifica preliminare (articolo 99 del d.lgs. n. 81/2008)",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts_read": "2026-11-03, on a filled draft: it held a made-up plain PDF, so it takes plain files (its types show only while empty)"
    },
    {
     "title": "copia attestazione versamento oneri, diritti e spese",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "accepts_read": "2026-11-03, on a filled draft: the crawl, on an empty one, had no types for it"
    },
    {
     "title": "Elaborati grafici dello stato di fatto, di progetto e comparativi",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts_read": "2026-11-03, on a filled draft: it held a made-up plain PDF, so it takes plain files (its types show only while empty)"
    },
    {
     "title": "Documentazione fotografica dello stato di fatto",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts_read": "2026-11-03, on a filled draft: it held a made-up plain PDF, so it takes plain files (its types show only while empty)"
    },
    {
     "title": "Allegati liberi",
     "required": false,
-    "portal_document": false
+    "portal_document": false,
+    "accepts_read": "2026-11-03, on a filled draft: it held a made-up plain PDF, so it takes plain files (its types show only while empty)"
    }
   ]
  },

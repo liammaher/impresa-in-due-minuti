@@ -478,7 +478,10 @@ asks:
   fascia_militare_doc: {type: file, question: 'The military fascia''s document: the self-certification, or the request for its assent (PDF)'}
   fascia_aeroportuale_doc: {type: file, question: 'The airport fascia''s document: the self-certification, or the request for its assent (PDF)'}
   fascia_altro_doc: {type: file, question: 'The other fascia''s document: the self-certification, or the request for its assent (PDF)'}
-  diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
+  diritti_euro: {type: number, question: 'The SUE''s diritti in euro. Onerous, by the contributo di costruzione (oneri di urbanizzazione + costo di costruzione, as the prospetto works it out), lines SUE
+      7-9 of the 2026 table: 1003 up to 5,000 €, 1505 up to 30,000 €, 1998 above', propose: '{{ask.pdc_tipo,ask.scia_onerosa|diritti_pdc}}', why: 'Lines of the Comune''s 2026 table of SUE diritti (G.C.
+      239/2026): SUE 10, 401 € for a permesso free of the contributo; SUE 11, 501 € for a variant to one issued; onerous, SUE 7-9 by the contributo (1,003 € up to 5,000 €, 1,505 € up to 30,000 €, 1,998
+      € above); car parks (L. 122/89), SUE 4-6 by floor area'}
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
   diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
