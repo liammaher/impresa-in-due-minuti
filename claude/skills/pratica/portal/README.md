@@ -474,4 +474,11 @@ forma parziale come da planimetria allegata" adds "Copia di elaborato planimetri
 con eventuali varianti [...] opere parzialmente concluse", and a first run with the planimetria
 under Allegati liberi stopped on it (2026-11-03). Map a file under Allegati liberi only once a
 filled draft shows its answer adds no slot. Every slot's "+" takes more files ("Il pulsante (+)
-permette di allegare documenti suddivisi in file multipli", the screen's own note).
+permette di allegare documenti suddivisi in file multipli", the screen's own note). A slot named
+again in a recipe takes its next box: inpage.js `slotBox` finds the slot's boxes by the rows under
+its title (`span.input-label`) down to its "+" row, presses "+" (it adds a box with no label under
+the last one, and moves every later row down one) and attaches there. A file's "Descrizione" beside
+its box is a `span.input-label` too, once a file is in (2026-11-03: a first run read it as the next
+slot's title and found no "+"), so a slot ends at its "+" row or at a row holding only a title.
+Files are read back by name, never by box. The CIL's Allegati liberi takes plain PDFs (its
+notifica preliminare, filings and the Soprintendenza's authorization go there, 2026-11-03).

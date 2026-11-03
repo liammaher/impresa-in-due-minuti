@@ -27,5 +27,6 @@
  "paesaggio": "no",
  "fatti": [],
  "impresa_dopo": "false",
- "diritti_esente": false
+ "diritti_esente": false,
+ "notifica_preliminare": "rehearsals/cila-fittizia/files/notifica-preliminare.pdf"
 }

@@ -545,7 +545,7 @@
   async function attach(f, v) {
     const e = (f.css ? doc().querySelector(f.css) : el(f.id)) || fail(`${f.css || f.id}: no file box`);
     if (e.type !== "file") fail(`${f.css || f.id}: not a file box`);
-    checkLabel(e, f.label);
+    if (!f.slotted) checkLabel(e, f.label); // a box "+" added has no label: its slot's rows named it
     const w = win(), bytes = v.url ? await fetched(v) : Uint8Array.from(w.atob(v.b64), (c) => c.charCodeAt(0));
     const dt = new w.DataTransfer();
     dt.items.add(new w.File([bytes], v.name, { type: v.type }));
@@ -572,6 +572,12 @@
   // sanatoria's art. 34-ter dating and oblazione, 2026-11-02). That's a value not kept, never the
   // portal being slow: as a lookup's "fields with this label" it was retried twice into the same misfill.
   function readBack(f, own) {
+    if (f.kind === "file") {
+      // An upload widget empties its box once it has sent the file; its list names it. So no box
+      // is looked up (a slot's second box has no label to find it by).
+      const got = norm(doc().body.innerText).includes(norm(f.typed)) ? f.typed : null;
+      return { label: f.label || f.css || f.id, want: f.typed, got, ok: got !== null };
+    }
     if (f.spec) {
       try { f = { ...f, id: resolve(f.spec).id }; } // rows added since may have renumbered it
       catch (e) {
@@ -580,11 +586,6 @@
       }
     }
     else if (f.id && f.label) f = { ...f, id: located({ kind: f.kind, label: f.label, nth: f.nth, id: f.id }).id }; // as when it was filled
-    if (f.kind === "file") {
-      // An upload widget empties its box once it has sent the file; its list names it.
-      const got = norm(doc().body.innerText).includes(norm(f.typed)) ? f.typed : null;
-      return { label: f.label || f.css || f.id, want: f.typed, got, ok: got !== null };
-    }
     if (f.kind === "radio" || f.kind === "checkbox") {
       const got = el(f.id) && el(f.id).checked ? "checked" : "unchecked";
       return { label: f.label, want: "checked", got, ok: got === "checked" };
@@ -692,6 +693,39 @@
     const e = hits[(f.nth || 1) - 1] || fail(`${f.label}: ${hits.length} fields with this label${f.anchor ? ` in block ${f.block || 1}` : ""}`);
     return { ...f, id: e.id.split("dynaForm:")[1].replace(/:combo_input$/, "") };
   }
+  // A slot's upload boxes and its "+", from the rows under its title (span.input-label) to the
+  // next title. "+" adds a box under the slot's last one, with no label of its own, and moves
+  // every later row down one (seen 2026-11-03), so the slot's n-th file goes by its place there.
+  function slotRows(title) {
+    const heads = [...doc().querySelectorAll("span.input-label")].filter((x) => startsLabel(x.textContent, title));
+    const head = heads.find((x) => norm(x.textContent) === norm(title)) || heads[0];
+    if (!head || !head.closest("tr")) fail(`${title}: no such slot`);
+    // The slot ends at its "+" row, or at the next title's row (a label with no box in its row): a
+    // file's "Descrizione" beside it is a label too (the CILA's, 2026-11-03), with its box.
+    const files = [];
+    for (let tr = head.closest("tr").nextElementSibling; tr; tr = tr.nextElementSibling) {
+      const plus = [...tr.querySelectorAll("button")].find((b) => b.textContent.trim() === "+");
+      if (plus) return { files, plus };
+      if (tr.querySelector("span.input-label") && !tr.querySelector("input, select, textarea")) break;
+      files.push(...tr.querySelectorAll("input[type=file]"));
+    }
+    return { files, plus: null };
+  }
+  // A slot named again in a screen takes its next box (the Allegati liberi's relazione, then an
+  // authorization): its "+" pressed until the slot has that many. A resumed draft may have them.
+  async function slotBox(f) {
+    let s = slotRows(f.label);
+    while (s.files.length < f.nth) {
+      if (!s.plus) fail(`${f.label}: no + to add a file`);
+      const before = s.files.length;
+      press(s.plus, `+ ${f.label}`);
+      await idle();
+      s = slotRows(f.label);
+      if (s.files.length !== before + 1) fail(`${f.label}: + didn't add a file box`);
+    }
+    return { ...f, id: s.files[f.nth - 1].id.split("dynaForm:")[1], slotted: true };
+  }
+
   async function addBlock(f) {
     const count = () => blockStarts(inputs(), f.anchor).length;
     const before = count();
@@ -744,7 +778,7 @@
       if (a) await openSection(a, sec.section);
       else if (!isOpen(sec.section)) fail(`no section ${sec.section}`);
     }
-    const done = [];
+    const done = [], attached = {};
     for (let [i, f] of sec.fields.entries()) {
       const v = values[i];
       if (v === false) continue; // its `when` is false for this pratica
@@ -752,10 +786,11 @@
       report.at.label = f.label || f.id || f.css;
       let typed;
       if (f.kind === "add") { await addBlock(f); continue; }
+      if (f.kind === "file" && !f.id && attached[norm(f.label)] && v !== null && v !== "") f = await slotBox({ ...f, nth: attached[norm(f.label)] + 1 });
       // An id a combination of choices moved (one the crawl didn't try together) is found
       // again by its label, held to the same checks: when it is gone, and when the box it
       // names now is another one (an earlier choice in the section shifted the rows).
-      if (f.id && f.label) f = located(f);
+      if (f.id && f.label && !f.slotted) f = located(f);
       if (!f.id && !f.css && f.if_present) {
         // A box only some pratiche show: skipped where this one doesn't.
         try { f = { ...resolve(f), spec: f }; } catch (e) { if (e instanceof StepError) continue; throw e; }
@@ -766,7 +801,7 @@
       else if (v === null || v === "") continue;
       else if (f.kind === "select") typed = await select(f, v);
       else if (f.kind === "lookup") typed = await lookup(f, v);
-      else if (f.kind === "file") typed = await attach(f, v);
+      else if (f.kind === "file") { typed = await attach(f, v); attached[norm(f.label)] = (attached[norm(f.label)] || 0) + 1; }
       else typed = await text(f, v);
       done.push({ ...f, kind: f.kind === "date" ? "text" : f.kind, typed, field: i });
     }

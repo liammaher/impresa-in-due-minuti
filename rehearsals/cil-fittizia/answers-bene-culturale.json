@@ -30,5 +30,6 @@
  ],
  "soprintendenza_autorizzata": "true",
  "impresa_dopo": "false",
- "diritti_esente": false
+ "diritti_esente": false,
+ "soprintendenza_autorizzazione": "rehearsals/cila-fittizia/files/autorizzazione-soprintendenza.pdf"
 }
