@@ -466,7 +466,8 @@ The portal runner has offline tests on a fake portal: `claude/skills/pratica/por
 run with the pratica venv's Python (`~/.cache/pratica-portal/venv`, Playwright's Chromium, headless; no
 network, vault or model); `bench/test_preflight.py` tests pre-flight on the SCIA rehearsal's files, `bench/test_gen.py`
 gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the SUE choice count
-(`branches.py --write` writes `docs/sue-branches.md`), `bench/test_tolleranze.py` the asseverazioni's
+(`branches.py --write` writes `docs/sue-branches.md`), `bench/test_portability.py` the national/Campania/Napoli
+split (`portability.py --write`, `docs/portability.md`), `bench/test_tolleranze.py` the asseverazioni's
 tolerances, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
 the same bytes as the library's; its every-case walk takes minutes), `bench/plan_diff.py` each case's fill plan
 before and after a change, `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
