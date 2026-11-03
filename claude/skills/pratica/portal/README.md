@@ -34,7 +34,10 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    **Two operations in one pratica** (a building pratica with its landscape authorization): the
    recipe `extends: [<main pratica's rehearsal>, parts/<the other's part>]` and states only what is
    its own (procedure, title, crawl, operation list, `descrizione`, `yours`, `rules.main`). Later
-   ones win key by key; `attachments`, `supports` and `sections` add up; `asks` and `rules` merge;
+   ones win key by key; `attachments`, `supports` and `sections` add up; `asks` and `rules` merge,
+   each of their keys replaced whole (three operations state both `handles`); `yours` is replaced,
+   so a recipe restates its main pratica's (2026-11-03: without it the draft's name, whose ask only
+   the main pratica's `yours` used, wasn't asked, and pre-flight stopped);
    a null drops what came before (`data_inizio_lavori: null`); a slot `{label, drop: true}` drops
    one a part adds that this form never opens (the ordinaria's second relazione slot comes from the
    SCIA's and the permesso's "Si allega" box: a CILA or CIL has none, 2026-10-31). Then a slot or a
@@ -474,6 +477,18 @@ can't keep stays in the tab, the batch stops saying so, and export.js still save
 tries 80 choices a section (the semplificata's Allegato B list has 41); a section with more says
 `truncated`.
 
+Which two operations the wizard takes together is recorded in `sue-wizard.json` `pairs` (wizard.js
+`pairs`, catalogue/README.md). Probed 2026-11-03, all 190: the wizard takes any two of different
+groups (a title or other adempimento, a terre e rocce box, a landscape procedure, the exemption
+parere) and the terre e rocce boxes with each other; two titles, or two landscape procedures, are one
+radio group and can't be selected together. None was refused. The pratica's adempimenti are always
+both operations' (a terre e rocce box adds two: the SUE's and ARPA Campania's), and its sections are
+theirs with nothing new, but a section both have under another title is kept once: the location, the
+land register, the diritti, the bollo (a CILA, SCIA, SCIA alternativa or permesso with a terre e rocce
+box takes the box's lower-case "localizzazione dell'intervento" and "dati catastali", not its own;
+`bench/test_gen.py` holds the rule). So a combination's sections come from its crawl, never from
+joining the two operations' lists.
+
 A combination (two operations in one pratica) is one op: `catalogue.py ops sue --combo NAME MAIN
 OTHER` (labels as in `sue-wizard.json`) tries only the procura scelta, as recipes take it, and reads
 the attachments screen on the way (crawl.js `also`, `scelte`, `slots`); repeat `--combo` for
@@ -533,6 +548,9 @@ its title (`span.input-label`) down to its "+" row, presses "+" (it adds a box w
 the last one, and moves every later row down one) and attaches there. A file's "Descrizione" beside
 its box is a `span.input-label` too, once a file is in (2026-11-03: a first run read it as the next
 slot's title and found no "+"), so a slot ends at its "+" row or at a row holding only a title.
+`slotsOf` names a slot's second box by the slot's title too, never by the row of the box above it
+(a permesso draft's second Allegati liberi box read "relazione-tecnica.pdf Rimuovi Allega 716,00 B
+Descrizione" until 2026-11-03).
 Files are read back by name, never by box. The CIL's Allegati liberi takes plain PDFs (its
 notifica preliminare, filings and the Soprintendenza's authorization go there, 2026-11-03), and so
 does the CILA's (the made-up Allegato A and Modello DP of the second run, 2026-11-03); the landscape

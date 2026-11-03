@@ -20,12 +20,12 @@ branch no rehearsal took.
 
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
-| SUE (building works) | 40 | 40 | 38 | 27 checked, 0 changed |
+| SUE (building works) | 55 | 55 | 53 | 27 checked, 0 changed |
 | SUAP (businesses) | 278 | 112 | 13 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
-- SUE: 40 pratiche, 128 distinct sections, 125 in the dictionary; 784 of 784 uses (100%)
+- SUE: 55 pratiche, 128 distinct sections, 125 in the dictionary; 1210 of 1210 uses (100%)
 - SUAP: 278 pratiche, 477 distinct sections, 77 in the dictionary; 2432 of 3365 uses (72%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
@@ -59,43 +59,52 @@ SUE pratiche not yet fillable:
 
 Measured today:
 
-- Level 1: 40 of 40 pratiche fully in the dictionary. 13 of them are two operations in one pratica (`sue-combo-*`).
-- Which pratiche a case needs: of the 14857 cases the rules table decides, **2656 reach a steps file**, 12201 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
-- Level 2: **16 refusals across 15 recipes**, 7 distinct messages.
+- Level 1: 55 of 55 pratiche fully in the dictionary. 28 of them are two operations in one pratica (`sue-combo-*`).
+- Which pratiche a case needs: of the 30635 cases the rules table decides, **6584 reach a steps file**, 24051 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
+- Level 2: **10 refusals across 9 recipes**, 3 distinct messages.
 - Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot. A box read on a filled draft says what it adds (the dictionary's `slot`).
 - Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
 | `parere-esonero-fittizio` | 2 |
-| `cambio-intestazione-fittizio` | 1 |
-| `cil-fittizia` | 1 |
-| `cil-paesaggistica-ordinaria-fittizia` | 1 |
-| `cil-paesaggistica-semplificata-fittizia` | 1 |
-| `cila-fittizia` | 1 |
-| `cila-paesaggistica-fittizia` | 1 |
-| `cila-paesaggistica-ordinaria-fittizia` | 1 |
-| `fine-lavori-fittizia` | 1 |
 | `pdc-fittizio` | 1 |
 | `pdc-paesaggistica-ordinaria-fittizio` | 1 |
+| `pdc-paesaggistica-ordinaria-terre-rocce-fittizio` | 1 |
 | `pdc-paesaggistica-semplificata-fittizio` | 1 |
+| `pdc-paesaggistica-semplificata-terre-rocce-fittizio` | 1 |
 | `pdc-sanatoria-accertamento-fittizio` | 1 |
 | `pdc-sanatoria-fittizio` | 1 |
-| `voltura-pdc-fittizia` | 1 |
+| `pdc-terre-rocce-fittizio` | 1 |
 
 Pratiche filed together, mapped (a steps file each):
 
 - cil-opere-temporanee + autorizzazione-paesaggistica-ordinaria
+- cil-opere-temporanee + autorizzazione-paesaggistica-ordinaria + utilizzo-materiale-scavo-fuori-sito
 - cil-opere-temporanee + autorizzazione-paesaggistica-semplificata
+- cil-opere-temporanee + autorizzazione-paesaggistica-semplificata + utilizzo-materiale-scavo-fuori-sito
+- cil-opere-temporanee + utilizzo-materiale-scavo-fuori-sito
 - cila-lavori-edilizi + autorizzazione-paesaggistica-ordinaria
+- cila-lavori-edilizi + autorizzazione-paesaggistica-ordinaria + utilizzo-materiale-scavo-fuori-sito
 - cila-lavori-edilizi + autorizzazione-paesaggistica-semplificata
+- cila-lavori-edilizi + autorizzazione-paesaggistica-semplificata + utilizzo-materiale-scavo-fuori-sito
+- cila-lavori-edilizi + utilizzo-materiale-scavo-fuori-sito
 - permesso-di-costruire + autorizzazione-paesaggistica-ordinaria
+- permesso-di-costruire + autorizzazione-paesaggistica-ordinaria + utilizzo-materiale-scavo-fuori-sito
 - permesso-di-costruire + autorizzazione-paesaggistica-semplificata
+- permesso-di-costruire + autorizzazione-paesaggistica-semplificata + utilizzo-materiale-scavo-fuori-sito
+- permesso-di-costruire + utilizzo-materiale-scavo-fuori-sito
 - permesso-in-sanatoria + accertamento-compatibilita-paesaggistica
 - scia-alternativa-pdc + autorizzazione-paesaggistica-ordinaria
+- scia-alternativa-pdc + autorizzazione-paesaggistica-ordinaria + utilizzo-materiale-scavo-fuori-sito
 - scia-alternativa-pdc + autorizzazione-paesaggistica-semplificata
+- scia-alternativa-pdc + autorizzazione-paesaggistica-semplificata + utilizzo-materiale-scavo-fuori-sito
+- scia-alternativa-pdc + utilizzo-materiale-scavo-fuori-sito
 - scia-edilizia + autorizzazione-paesaggistica-ordinaria
+- scia-edilizia + autorizzazione-paesaggistica-ordinaria + utilizzo-materiale-scavo-fuori-sito
 - scia-edilizia + autorizzazione-paesaggistica-semplificata
+- scia-edilizia + autorizzazione-paesaggistica-semplificata + utilizzo-materiale-scavo-fuori-sito
+- scia-edilizia + utilizzo-materiale-scavo-fuori-sito
 - scia-in-sanatoria + autorizzazione-paesaggistica-ordinaria
 - scia-in-sanatoria + autorizzazione-paesaggistica-semplificata
 
@@ -105,13 +114,9 @@ Pratiche filed together, not mapped yet (the cases that need them, most first):
 
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
-- 5×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
-- 3×: Filings or assents still to be made or requested (Soprintendenza, ASL, fire brigade) are their own procedures, selected with the CILA in the wizard (as the CILA with its 
-- 3×: Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet.
-- 2×: The portal's co-holders section (the wizard's ci sono cointestatari) holds one person: more than one co-holder isn't mapped.
+- 8×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
-- 1×: Works finished in part need a planimetria of the finished part, not mapped yet.
 
 Ticked "si allega" boxes with no attachment slot under their condition (gen.py `unslotted`; some only in cases a recipe refuses, some with no slot on the portal: a filled draft's slots tell):
 
@@ -125,7 +130,7 @@ Open items no recipe shows:
 - The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.
 - Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots may be missing (the catalogue notes this for the pratiche read on an empty draft). The "Elaborati richiesti per la sanatoria" slot is mapped by the title a filled draft showed, never crawled. The diritti come from the Comune's 2026 table (G.C. 239/2026), by the case's facts; it can't say an onerous SCIA's, an onerous permesso's or SCIA alternativa's bracket (no ask holds the contributo's amount), a car park's (its floor area), works under way in sanatoria (art. 37 c. 5), the art. 10-septies proroghe or a landscape renewal: those are asked.
 - Signed files: the portal checks every digital signature on upload and refuses a made-up one (2026-11-03), so the slots that take only signed files can't be filled with made-up data: on the portal only the refusal is proven; a real signed file, never yet. The second run after the declarations ran on the portal with made-up annexes (the Allegato A and the Modello DP under Allegati liberi, the DSC, 2026-11-03); the procura, signed only, never.
-- Terre e rocce: the piano di utilizzo, the dichiarazione di utilizzo and the DAU are wizard tick boxes that go with a building title in one pratica, but only each alone is crawled; no title with them is, and the rules table doesn't say when works need one. Which pairs of operations the wizard allows isn't recorded (wizard.js tries each alone; the crawled combinations are the title with a landscape procedure).
+- Terre e rocce (DPR 120/2017): the wizard takes every two operations of different groups (sue-wizard.json `pairs`, all 190 probed 2026-11-03, none refused), and the rules table routes a title with the dichiarazione di utilizzo (art. 21: sites up to 6,000 m³, or larger ones with no VIA/AIA) to its combination, mapped for the CIL, CILA, SCIA, SCIA alternativa and permesso. The piano di utilizzo (art. 9, sites under VIA/AIA) goes apart to the VIA authority (the Regione's Staff Valutazioni Ambientali), never with a title; the DAU (art. 7) apart once the soil is used. Not in the table: edilizia libera that digs (its dichiarazione alone, the standalone rehearsal), works in sanatoria (the dichiarazione comes before the excavation), soil reused on the site (art. 24, no filing). A title, its landscape authorization and the dichiarazione are three operations in one pratica: their pairs are accepted, the three together are counted above until crawled.
 - Drift: the check compares the 27 single operations' sections as they show before any choice (last 2026-11-02); the combinations and what a choice opens are checked only by the runner's label checks.
 - Portal defects (docs/portal-defects.md): none reported yet to InfoCamere or the Comune; two of them refuse common cases (a permesso with no energy incentive, a CILA or CIL before the firm is chosen).
 - Firma e invio is the person's (unreachable on made-up data; FILING's yours says how). After filing, nothing in the repo maps the portal: integration requests, the codice pratica and receipt, the status in Pratiche inviate.
@@ -137,7 +142,7 @@ What a Napoli architect or pratiche agency files again and again, so what has to
 
 **SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, extensions, voltura, DL and contractor changes, the landscape authorizations), all of them.
 
-- 40 of 40 fillable, 38 run on the portal.
+- 55 of 55 fillable, 53 run on the portal.
 
 **SUAP: nine sectors × seven operations.** Each cell is one pratica on the portal:
 

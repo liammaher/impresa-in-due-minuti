@@ -1,0 +1,12 @@
+# What the dichiarazione di utilizzo delle terre e rocce da scavo (art. 21 DPR 120/2017) adds to the
+# building pratica it's filed with, the two selected together in the wizard: a combination's recipe
+# `extends` its main pratica's rehearsal, then this. The wizard adds two adempimenti (the SUE's and
+# ARPA Campania's) and no section of its own (catalogue/F839/sue-wizard.json `pairs`, 2026-11-03):
+# the dichiarazione itself is the portal's document on the attachments screen, signed after the
+# declarations (the dictionary's slot), and its data are the person's there.
+rules:
+  handles: [napoli/comune/utilizzo-materiale-scavo-fuori-sito]
+# The case it adds to the main pratica's P6 answers: excavated soil leaving a small site as a
+# by-product. Each combination's recipe adds its works (`gen.py --answers`).
+answers:
+  terre_rocce: dichiarazione

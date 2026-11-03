@@ -121,6 +121,11 @@ asks:
     how: La zona si legge nella tavola di zonizzazione del PRG di Napoli.}
   piano_planovolumetrico: {group: fatti, type: yes_no, item: 'La nuova costruzione o la ristrutturazione urbanistica è disciplinata da un piano attuativo con precise disposizioni plano-volumetriche dichiarate
       dal Comune, o (per una nuova costruzione) è in diretta esecuzione di uno strumento urbanistico generale che le contiene?'}
+  terre_rocce: {type: choice, question: 'Le terre e rocce scavate escono dal cantiere per essere usate altrove come sottoprodotti (non come rifiuti)?', options: ['no', dichiarazione, piano], labels: {'no': 'No:
+        non si scava, o le terre si riusano nello stesso sito, o si smaltiscono come rifiuti', dichiarazione: 'Sì, da un cantiere che ne produce fino a 6.000 m³ (dalle sezioni di progetto), o di più ma
+        per opere non soggette a VIA né ad AIA', piano: 'Sì, da un cantiere che ne produce oltre 6.000 m³ per opere soggette a VIA o ad AIA'}, how: 'Lo stabilisce il tecnico dal progetto: i metri cubi si
+      calcolano dalle sezioni di progetto, e la VIA o l''AIA sono quelle della Parte II del D.Lgs. 152/2006 (art. 2 c. 1 t, u, v D.P.R. 120/2017). Le terre riusate nello stesso sito seguono l''art. 24 e
+      non chiedono una pratica.'}
 supports:
 - when: '{{ask.vincolo|is_art_134|not}}'
   else: 'The form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose.'
@@ -149,6 +154,7 @@ rules:
     demolizione_zona_a: '{{ask.demolizione_zona_a}}'
     piano_planovolumetrico: '{{ask.piano_planovolumetrico}}'
     permesso_per_scelta: 'false'
+    terre_rocce: '{{ask.terre_rocce}}'
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839&tipoSportello=E
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
 wizard:

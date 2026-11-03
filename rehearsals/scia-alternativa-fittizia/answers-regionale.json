@@ -96,5 +96,6 @@
  "scomputo": "false",
  "progettista_altro": false,
  "diritti_esente": false,
- "intervento_tipo": "Intervento individuato da legge regionale (dato inventato per la prova)"
+ "intervento_tipo": "Intervento individuato da legge regionale (dato inventato per la prova)",
+ "terre_rocce": "no"
 }

@@ -6,6 +6,7 @@
 
 import copy
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -1362,6 +1363,46 @@ def _():
         plan = [(p["section"], p["label"], p["value"]) for p in rehearsal_plan(steps, v)]
         assert (("Asseverazione SCIA - Tipologia di intervento", "Cognome", "Disegno") in plan) == signs, answers
 
+
+
+@case("every two of a combination's operations are a pair the SUE's wizard took together (sue-wizard.json `pairs`), and every pair is recorded")
+def _():
+    import json
+    import catalogue
+    w = json.loads((catalogue.CAT / "sue-wizard.json").read_text())
+    key = {o["label"]: o["key"] for o in w["operations"]}
+    order = [o["key"] for o in w["operations"]]  # a pair's keys in the wizard's order, as sue_pairs()
+    pairs = {tuple(p["keys"]): p for p in w["pairs"]}
+    assert set(pairs) == {(a["key"], b["key"]) for a, b in catalogue.sue_pairs()[1]}, "probe the missing pairs (catalogue.py pairs)"
+    for d in sorted(ROOT.glob("rehearsals/*/recipe.yaml")):
+        r = gen.load_yaml(d)
+        if r.get("sportello") != "sue" or not isinstance(r.get("operation"), list):
+            continue
+        ks = sorted((key[o] for o in r["operation"]), key=order.index)
+        # Three operations (a title, its landscape authorization, the dichiarazione): each two of them.
+        for i, a in enumerate(ks):
+            for b in ks[i + 1:]:
+                p = pairs.get((a, b))
+                assert p and p["together"] and p.get("accepted"), (d.parent.name, a, b, p)
+
+
+@case("two operations in one pratica: the adempimenti are both's, every section one of theirs, a location, land register, diritti or bollo section kept once (sue-wizard.json `pairs`, probed 2026-11-03)")
+def _():
+    import json
+    import catalogue
+    w = json.loads((catalogue.CAT / "sue-wizard.json").read_text())
+    S, ops = w["sections"], {o["key"]: o for o in w["operations"]}
+    dup = re.compile(r"(?i)ubicazione|localizzazione|sede dell|dati catastali|diritti di segreteria|imposta di bollo|tipologia lavori")
+    for p in w["pairs"]:
+        if not p.get("accepted"):
+            continue
+        a, b = (ops[k] for k in p["keys"])
+        union = {S[i] for i in a["sections"]} | {S[i] for i in b["sections"]}
+        got = {S[i] for i in p["sections"]}
+        assert got <= union, (p["keys"], got - union)
+        assert all(dup.search(x) for x in union - got), (p["keys"], union - got)
+        ad = lambda o: {(x["adempimento"], x["amministrazione"]) for x in o["adempimenti"]}
+        assert ad(p) == ad(a) | ad(b), p["keys"]
 
 
 @case("every steps file and combination's answers are as the dictionary, recipes and crawls write them now (regen.py --check)")

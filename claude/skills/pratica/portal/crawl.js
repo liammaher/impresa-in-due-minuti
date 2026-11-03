@@ -509,6 +509,9 @@
       for (let r = row && row.previousElementSibling; r; r = r.previousElementSibling) {
         const t = r.innerText.replace(/\s+/g, " ").trim();
         if (/^Scarica il documento$/.test(t)) { portal = true; continue; }
+        // A slot's earlier box is no title: its row holds a file ("relazione-tecnica.pdf Rimuovi
+        // Allega 716,00 B Descrizione", a second box under Allegati liberi, 2026-11-03).
+        if (r.querySelector("input[type=file]") || /\bRimuovi\b/.test(t)) continue;
         if (t) { title = t; break; }
       }
       const cell = e.closest("td");
