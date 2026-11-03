@@ -405,6 +405,32 @@ def main():
             assert "pec.example" not in json.dumps(r), "a value in the report"
         case("the portal's warning beside a box it kept is reported, by label and without the value, never a stop", flagged)
 
+        def more_files():
+            # A slot named again takes its next box: its "+" adds one with no label under the last
+            # (the portal's Allegati liberi, 2026-11-03); each file goes in its own box, described,
+            # the fresh load finds them all by name, and a file a case doesn't attach takes no box.
+            extra, third = tmp / "autorizzazione.pdf", tmp / "comunicazioni.pdf"
+            extra.write_bytes(b"%PDF-1.4 autorizzazione\n")
+            third.write_bytes(b"%PDF-1.4 comunicazioni\n")
+            st = steps(base, start="/portal.html?more=1")
+            st["sections"] = st["sections"][:1]
+            st["sections"][0]["fields"] += [
+                {"kind": "file", "label": "Allegati liberi", "value": "{{ask.rel}}", "describe": "Relazione tecnica"},
+                {"kind": "file", "label": "Allegati liberi", "value": "{{ask.none}}", "describe": "Nulla", "optional": True},
+                {"kind": "file", "label": "Allegati liberi", "value": "{{ask.extra}}", "describe": "Autorizzazione"},
+                {"kind": "file", "label": "Allegati liberi", "value": "{{ask.third}}", "describe": "Comunicazioni"}]
+            PORTAL.reset()
+            r = fill(browser, base, st, {**small, "rel": str(tiny), "extra": str(extra), "third": str(third)})
+            assert r["result"] == "filled", r.get("error")
+            boxes = {f["box"]: f["name"] for f in PORTAL.files}
+            assert [boxes.get(f"form:r2{n}c1:dynaForm:liberi{n}_input") for n in (1, 2, 3)] == \
+                ["tiny.pdf", "autorizzazione.pdf", "comunicazioni.pdf"], boxes
+            got = {k: v for k, v in PORTAL.fields.items() if k.endswith("_desc")}
+            assert got == {f"form:r2{n}c1:dynaForm:liberi{n}_desc": d for n, d in
+                           ((1, "Relazione tecnica"), (2, "Autorizzazione"), (3, "Comunicazioni"))}, got
+            assert "loose" not in r and "moved" not in r, (r.get("loose"), r.get("moved"))
+        case("a slot named again takes its next box: its + adds each, each described, all kept", more_files)
+
         def theirs():
             PORTAL.reset()
             stops(fill(browser, base, steps(base, save="Firma e invio"), answers), "refused to click")

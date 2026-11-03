@@ -17,6 +17,9 @@ attachments:
     # public safety) adds this required slot; plain PDFs are taken (seen on the SCIA 2026-10-30).
     - {kind: file, label: Autorizzazione sismica, value: "{{ask.toll_sismica_doc}}", when: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
+    # On a bene culturale, the Soprintendenza's authorization already obtained, in the same slot's
+    # next box (its "+"): the relazione's assents list is for assents still to acquire.
+    - {kind: file, label: Allegati liberi, value: "{{ask.soprintendenza_autorizzazione}}", describe: Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004), when: "{{ask.bene_culturale}} {{ask.soprintendenza_autorizzata}}"}
     # An onerosa CILA's screen adds two slots: the contributo's prospetto di calcolo, and its
     # receipt once paid (quadro f's "allega la ricevuta di versamento").
     - {kind: file, label: Prospetto di calcolo preventivo del contributo, value: "{{ask.prospetto_contributo}}", when: "{{ask.cila_onerosa}}", on_page: true}
@@ -37,7 +40,7 @@ yours:
   - "Upload the receipt of the 151 € diritti on Pagamento oneri (how Napoli takes them is below; a late CILA's penalty is paid before the run: its receipt is in quadro d)"
   - "On Allega documenti, once the declarations are ticked (the portal gives the procura only then): download the procura (Scarica il documento), have the client sign it, sign it digitally (.p7m) and attach it"
   - "Attach the CILA DSC that fill.py filled (form quadro-riepilogativo-dsc: a box per document uploaded) in its slot, as PDF/A signed digitally"
-  - "On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); attach its authorization under Allegati liberi, signed digitally (.p7m), and keep it with the pratica"
+  - "On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); its authorization is attached under Allegati liberi: keep it with the pratica"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -50,8 +53,8 @@ supports:
   # firm's details whatever its site-safety quadro says (a CILA case stopped on them, 2026-11-01).
   - {if: "{{ask.lavori_in_proprio|not}}", value: "{{ask.impresa_dopo}}", in: ["false"], defect: cila-impresa-dopo, else: "The CILA names its building firm: its quadro h) has no line for a firm still to be chosen, and the portal requires the firm's details (seen 2026-11-01). File the CILA once the firm is chosen."}
   # A bene culturale: the Soprintendenza's authorization first, obtained apart (rules:
-  # soprintendenza-cila-*), then attached. The relazione's assents list is for assents the SUE is
-  # still to acquire (art. 23-bis), so an authorization already obtained isn't listed there.
+  # soprintendenza-cila-*), then attached under Allegati liberi. The relazione's assents list is
+  # for assents the SUE is still to acquire (art. 23-bis), so one already obtained isn't listed.
   - {if: "{{ask.intervento|in_manutenzione_straordinaria__restauro}} {{ask.cila_stato|is_da_iniziare}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "On a bene culturale the works need the Soprintendenza's authorization first (art. 21 c. 4 D.Lgs. 42/2004), and Napoli's SUE portal has no procedure to ask for it with this pratica: request it from the Soprintendenza ABAP per il Comune di Napoli (by PEC to sabap-na@pec.cultura.gov.it, on its form 'Istanza per opere su immobili vincolati', 16 euro bollo; up to 120 days, art. 22), then file this."}
   # Assents the SUE acquires (art. 23-bis c. 2-3 DPR 380/2001): the works start only once it says
   # they are in, so quadro d) gives no start date.

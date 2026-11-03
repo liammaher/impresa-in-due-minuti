@@ -1040,6 +1040,7 @@ asks:
   # The CILA and the CIL have no procedure on Napoli's SUE portal to ask for it with them: it is
   # obtained first, from the Soprintendenza (the rules table's soprintendenza-* rules).
   soprintendenza_autorizzata: {type: yes_no, question: "Has the Soprintendenza already authorized these works (art. 21 c. 4 D.Lgs. 42/2004)?"}
+  soprintendenza_autorizzazione: {type: file, question: "The Soprintendenza's authorization already obtained (PDF, signed digitally as Napoli's SUE takes every file)", when: "{{ask.soprintendenza_autorizzata}}"}
   area_protetta:
     type: choice
     question: "Is the property in a protected natural area (a park or reserve, L. 394/1991 or regional law)? no; senza alterazione (inside, but the works don't alter the place or the buildings' look); nulla osta (the park authority's nulla osta is needed: its documents attached)"
@@ -1800,7 +1801,7 @@ sections:
       - {kind: tick, label: dichiara che l'intervento è soggetto all'invio, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}"}
       # The CIL's and the CILA's notifica has no slot of its own: Allegati liberi, which on the CIL
       # takes only signed files (read on a filled CIL draft 2026-11-01; the CILA 2026-10-28).
-      - {kind: tick, label: allega alla presente comunicazione la notifica, if_present: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}", slot: "none of its own: Allegati liberi (signed files only on the CIL: the person's)"}
+      - {kind: tick, label: allega alla presente comunicazione la notifica, if_present: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}", slot: "none of its own: Allegati liberi, the notifica in its own box (the CIL's recipe)"}
       - {kind: checkbox, label: e allega alla presente segnalazione la notifica, if_present: true, on_page: true, when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}"}
       # The permesso and the SCIA alternativa: the notifica attached now (its slot is the recipe's,
       # read on the portal 2026-11-01), or sent before the works start (a permesso's once issued).

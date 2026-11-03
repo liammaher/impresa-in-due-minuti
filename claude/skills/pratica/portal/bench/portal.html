@@ -9,6 +9,7 @@
      ?fade=1 opens a suggestion list over Impresa esecutrice as Dati tecnici opens, whose
      widget's hide() fades it out slowly, as PrimeFaces 11's does; ?slot=signed (or =plain) adds
      an attachments slot the portal says is required, taking only signed files (or plain ones);
+     ?more=1 a slot as the portal draws it, with its "+" for more files;
      ?off=1 switches Impresa esecutrice off, greyed until a choice the steps don't make; ?deroga=1
      adds two tick boxes, each with a box of no text of its own beside it, titled "(specificare)",
      as the permesso's deroga draws them: the cell before it is the tick box's label; ?req=1 adds
@@ -231,15 +232,35 @@ fetch("/state").then((r) => r.json()).then((st) => {
     if (box) box.after(" " + name + " Rimuovi");
   }
 });
-for (const box of document.querySelectorAll("input[type=file]")) {
-  box.addEventListener("change", () => {
-    const f = box.files[0];
-    if (!f) return;
-    const fd = new FormData();
-    fd.append(box.id, f, f.name);
-    fetch("/upload", { method: "POST", body: fd }).then(() => { list(f.name); box.value = ""; box.after(" " + f.name + " Rimuovi"); });
-  });
+const sends = (box) => box.addEventListener("change", () => {
+  const f = box.files[0];
+  if (!f) return;
+  const fd = new FormData();
+  fd.append(box.id, f, f.name);
+  fetch("/upload", { method: "POST", body: fd }).then(() => { list(f.name); box.value = ""; box.after(" " + f.name + " Rimuovi"); });
+});
+// ?more=1: a slot as the portal draws it (2026-11-03): its title's row, a row per upload box (a
+// description beside it), then its "+" row; "+" adds a box with no label under the last one.
+if (location.search.includes("more=1")) {
+  const body = document.querySelector("#allega + table").tBodies[0];
+  const head = document.createElement("tr");
+  head.innerHTML = '<td colspan="2" class="pe-dynaform-cell labelDynaFormControl"><div><span class="input-label">Allegati liberi</span></div></td>';
+  const plusRow = document.createElement("tr");
+  plusRow.innerHTML = '<td colspan="2"><button type="button" id="form:r30c1:dynaForm:j_idt292:0:controlBut">+</button></td>';
+  let n = 0;
+  const add = () => {
+    n += 1;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="2" class="pe-dynaform-cell"><input type="file" id="form:r2${n}c1:dynaForm:liberi${n}_input">` +
+      ` Tipologie ammesse: pdf;pdf.p7m <input type="text" id="form:r2${n}c1:dynaForm:liberi${n}_desc"></td>`;
+    plusRow.before(tr);
+    sends(tr.querySelector("input[type=file]"));
+  };
+  body.append(head, plusRow);
+  add();
+  plusRow.querySelector("button").addEventListener("click", add);
 }
+for (const box of document.querySelectorAll("input[type=file]")) if (!/liberi\d+_input$/.test(box.id)) sends(box);
 document.getElementById("salva").addEventListener("click", () => {
   const fields = Object.fromEntries(texts().map((t) => [t.id, t.value]));
   for (const c of document.querySelectorAll("input[type=checkbox]")) if (c.checked) fields[c.id] = "on";

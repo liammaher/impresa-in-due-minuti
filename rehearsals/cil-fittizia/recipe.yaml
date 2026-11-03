@@ -12,6 +12,13 @@ scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUN
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 firms: [f1]
 after: [Pagamento degli oneri, Gestione degli allegati]
+attachments:
+  Gestione degli allegati:
+    # The CIL has no slot of its own for these: each goes under Allegati liberi, in its own box
+    # (a slot named again takes its next, by its "+"), described.
+    - {kind: file, label: Allegati liberi, value: "{{ask.notifica_preliminare}}", describe: Notifica preliminare (art. 99 D.Lgs. 81/2008), when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}"}
+    - {kind: file, label: Allegati liberi, value: "{{ask.comunicazioni_doc}}", describe: Documentazione delle comunicazioni del quadro e, when: "{{ask.comunicazioni_contestuali}}"}
+    - {kind: file, label: Allegati liberi, value: "{{ask.soprintendenza_autorizzazione}}", describe: Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004), when: "{{ask.bene_culturale}} {{ask.soprintendenza_autorizzata}}"}
 asks:
   # In the facts checklist, as the rules table asks it: the supports read it too (the
   # Soprintendenza's authorization first).
@@ -20,15 +27,12 @@ asks:
   diritti_euro: {default: "100", why: "Line SUE 14 of the Comune's 2026 table of diritti: 100 € for a CIL."}
   data_inizio_lavori: {question: "When the works will start"}
   dettaglio_intervento: {question: "What the temporary works are and when they'll be removed (500 characters)"}
-  # Quadro e's filings: their documents have no slot of their own on the CIL's screen.
-  comunicazioni_contestuali: {yours: "Attach the documents of the filings named in quadro e under Allegati liberi, signed digitally (.p7m): the CIL has no slot of its own for them"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
   - "Pay the {{ask.diritti_euro}} € diritti before sending, and attach the receipt (copia attestazione versamento) on Allega documenti"
-  - "On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); keep its authorization with the pratica"
-  - "If a notifica preliminare is due (art. 99 D.Lgs. 81/2008): attach it under Allegati liberi, signed digitally (.p7m only): the CIL has no slot of its own for it"
+  - "On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); its authorization is attached under Allegati liberi: keep it with the pratica"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
