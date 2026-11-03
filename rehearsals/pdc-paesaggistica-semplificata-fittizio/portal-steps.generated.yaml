@@ -201,8 +201,9 @@ asks:
   sanatoria_catasto_protocollo: {type: text, question: The DOCFA's protocol number, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}'}
   sanatoria_catasto_data: {type: date, question: The DOCFA's date, when: '{{ask.sanatoria_titolo|in_scia__permesso}} {{ask.sanatoria_catasto|is_presentata}}'}
   scia_cambio_uso: {type: choice, question: 'Do the works change the use? no; stessa categoria (one unit, within the same functional category); tra categorie (one unit in a building in zone A, B or C of
-      DM 1444/1968, to another category: art. 23-ter c. 1-ter); intero immobile (a whole building, within the same category: art. 23-ter c. 3)', options: ['no', stessa categoria, tra categorie, intero immobile],
-    propose: '{{ask.cambio_uso|sue_scia_cambio_uso}}'}
+      DM 1444/1968, among the residential, tourist, productive and directional, commercial categories: art. 23-ter c. 1-ter, or on the ground floor under Campania''s law); intero immobile (a whole building,
+      within the same category: art. 23-ter c. 3); altro (a change the national forms have no line for: a whole building to another category, a unit outside zones A, B and C, to or from the rural category)',
+    options: ['no', stessa categoria, tra categorie, intero immobile, altro], propose: '{{ask.cambio_uso|sue_scia_cambio_uso}}'}
   pdc_tipo: {type: choice, question: 'What does the permesso di costruire ask for? nuova costruzione (art. 3 c. 1 e); ristrutturazione urbanistica (f); ristrutturazione edilizia (one of art. 10 c. 1 c:
       a different building with more volume, a change of use in zone A, or new shape, volume or facades on a protected building); facolta scia (works a SCIA could file, asked as a permesso by choice, art.
       22 c. 7); variante essenziale (a variant in corso d''opera to a permesso, SCIA alternativa or titolo unico that is an essential variation); variante sagoma (a variant to a permesso changing the shape
@@ -541,11 +542,11 @@ asks:
       intero_immobile, intero_tra_categorie, altro], labels: {'no': 'No', zona_agricola: 'Sì, in una zona agricola (zona E del PRG)', non_rilevante: 'Sì, ma il cambio non aumenta il fabbisogno di standard
         urbanistici (aree per servizi e parcheggi): in Campania non è urbanisticamente rilevante', stessa_categoria: 'Sì, di una singola unità, restando nella stessa categoria funzionale', tra_categorie: 'Sì,
         di una singola unità in un immobile delle zone A, B o C del D.M. 1444/1968, tra le categorie residenziale, turistico-ricettiva, produttiva e direzionale, commerciale (art. 23-ter c. 1-ter), non
-        al piano terra né seminterrata', piano_terra: 'Sì, di una singola unità al piano terra (primo piano fuori terra) o seminterrata, verso un''altra categoria funzionale', intero_immobile: 'Sì, di un
-        intero immobile, restando nella stessa categoria funzionale', intero_tra_categorie: 'Sì, di un intero immobile, verso un''altra categoria funzionale', altro: 'Sì, in un altro modo: un''unità fuori
-        delle zone A, B e C (o equipollenti) verso un''altra categoria, o verso o dalla categoria rurale fuori della zona E'}, how: 'Le categorie funzionali sono quelle dell''art. 23-ter c. 1 DPR 380/2001
-      (residenziale, turistico-ricettiva, produttiva e direzionale, commerciale, rurale). Il fabbisogno di standard lo stabilisce il tecnico dalle dotazioni che il PRG chiede per la nuova destinazione (art.
-      2 c. 4 L.R. Campania 13/2022, art. 27 c. 2 L.R. 31/2021).'}
+        al piano terra né seminterrata', piano_terra: 'Sì, di una singola unità al piano terra (primo piano fuori terra) o seminterrata, in un immobile delle zone A, B o C, tra le categorie residenziale,
+        turistico-ricettiva, produttiva e direzionale, commerciale', intero_immobile: 'Sì, di un intero immobile, restando nella stessa categoria funzionale', intero_tra_categorie: 'Sì, di un intero immobile,
+        verso un''altra categoria funzionale', altro: 'Sì, in un altro modo: un''unità (anche al piano terra) fuori delle zone A, B e C (o equipollenti) verso un''altra categoria, o verso o dalla categoria
+        rurale fuori della zona E'}, how: 'Le categorie funzionali sono quelle dell''art. 23-ter c. 1 DPR 380/2001 (residenziale, turistico-ricettiva, produttiva e direzionale, commerciale, rurale). Il
+      fabbisogno di standard lo stabilisce il tecnico dalle dotazioni che il PRG chiede per la nuova destinazione (art. 2 c. 4 L.R. Campania 13/2022, art. 27 c. 2 L.R. 31/2021).'}
   uso_ammesso_prg: {group: fatti, type: yes_no, item: 'La nuova destinazione d''uso è tra quelle che il PRG ammette in quella zona?'}
   verso_a2_tavola_7a: {group: fatti, type: yes_no, item: 'Il cambio porta un''abitazione ordinaria (a.1) a B&B, affittacamere, casa o appartamento per vacanze o locazione breve non imprenditoriale (a.2),
       in un edificio dell''area della tavola 7a del centro storico?', how: 'Le sottocategorie sono quelle dell''art. 21 delle norme della Variante generale come modificato dalla D.C.C. 129/2026; l''area
@@ -604,7 +605,8 @@ supports:
   - stessa categoria
   - tra categorie
   - intero immobile
-  else: 'A change of use under art. 2 L.R. 19/2001 changes the use: say which (stessa categoria, tra categorie or intero immobile).'
+  - altro
+  else: 'A change of use under art. 2 L.R. 19/2001 changes the use: say which (stessa categoria, tra categorie, intero immobile or altro).'
 - if: '{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}}'
   value: '{{ask.deroga_densita,ask.deroga_altezza,ask.deroga_distanza,ask.deroga_destinazione|any}}'
   in:
@@ -644,6 +646,31 @@ supports:
   in:
   - 'true'
   else: A stato legittimo from tolerance declarations needs where they were made.
+- value: '{{ask.scia_cambio_uso}}'
+  in:
+  - 'no'
+  - stessa categoria
+  - tra categorie
+  - intero immobile
+  defect:
+    id: cambio-uso-regionale
+    title: 'SCIA alternativa and permesso: no line for a change of use Campania''s law gives that title for'
+    portal: 'Napoli''s SUE on impresainungiorno: the SCIA alternativa''s quadro c) (Qualificazione dell''intervento) and the permesso''s quadro a) and asseverazione (opere in progetto), from the national
+      forms'
+    what: 'The required change-of-use choice has four lines, all art. 23-ter DPR 380/2001''s: no change; one unit within its category; one unit in zone A, B or C among categories a) to c); a whole building
+      within its category (c. 3). A whole building to another category, a unit outside zones A, B and C, or a change to or from the rural category has no line, and any line ticked states something else.'
+    law: In Campania those changes take the SCIA alternativa al permesso (art. 2 c. 6 L.R. 13/2022; circolare regionale CI/2025/3, d), or the permesso, which the forms are filed for; art. 23-ter doesn't
+      give their title, so the national forms, written for it, don't name them.
+    checked: '2026-11-03, from the forms'' labels as crawled (catalogue/F839/sections), the national schema''s choices (schema/sue-choices.json: scia_alternativa 002, permesso_di_costruire 000 and 019,
+      none optional) and the Comune''s own Mod. SCIA/PDC of 23/06/2025 (quadro c, the same four lines); not tried on a draft'
+    choices:
+    - Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) which line they want ticked for this change, or whether the change is stated in the relazione and the line left as the portal allows.
+    - 'Report the defect to the portal''s operator (InfoCamere''s impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked.'
+    - 'File it on the portal yourself, by hand, as the SUE tells you: Claude doesn''t fill this case.'
+    report: docs/portal-defects.md
+  else: 'The national form''s change-of-use line (required) names only art. 23-ter''s cases: one unit within its category, one unit in zone A, B or C among categories a) to c), a whole building within its
+    category. A change Campania''s law gives this title for (a whole building to another category, a unit outside zones A, B and C, to or from the rural category) has no line that states it truly: a defect
+    of the form (docs/portal-defects.md); ask the SUE.'
 - if: '{{ask.tolleranze}}'
   value: '{{ask.toll_34bis_1,ask.toll_34bis_1bis,ask.toll_34bis_2,ask.toll_34bis_2bis,ask.toll_34ter_4|any}}'
   in:

@@ -172,7 +172,9 @@ def sue_rehearsals_ready():
                # The Comune gives no attestation of the exclusion (its landscape directive, § 3.2).
                ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia",
                # The portal requires the CILA's firm, "si riserva" or not (a run stopped on it, 2026-11-01).
-               ("cila-fittizia", "answers-impresa-dopo.json"): "The CILA names its building firm"}
+               ("cila-fittizia", "answers-impresa-dopo.json"): "The CILA names its building firm",
+               # No change-of-use line states a whole building to another category (cambio-uso-regionale).
+               ("pdc-sanatoria-fittizio", "answers-cambio-intero.json"): "The national form's change-of-use line"}
     for name in names:
         for f in sorted((REHEARSALS / name).glob("answers*.json")):
             r = sue(name, f.name)
@@ -295,8 +297,11 @@ def sue_another_pratica():
     # (D.C.C. 129/2026), whose 70% threshold has no verified checking mechanism yet.
     a2 = sue("scia-fittizia", "answers-cambio-unita-senza-stessa.json", fatti=["uso_ammesso_prg", "verso_a2_tavola_7a"])
     assert len(a2["unsupported"]) == 1 and "tavola 7a" in a2["unsupported"][0] and "70%" in a2["unsupported"][0], a2
-    ground = sue("scia-fittizia", cambio_uso="piano_terra", **unit)["unsupported"]
-    assert len(ground) == 1 and "1-quater" in ground[0] and "va chiesto al SUE" in ground[0], ground
+    # A ground-floor unit (art. 23-ter c. 1-quater) or one outside zones A, B and C: Campania's
+    # SCIA alternativa (art. 2 c. 6 L.R. 13/2022), as a whole building's change (2026-11-03).
+    for c in ("piano_terra", "altro"):
+        assert sue("scia-fittizia", cambio_uso=c, **unit)["unsupported"][0].startswith(
+            other + "napoli/comune/scia-alternativa-pdc"), c
 
 
 def sue_asks_and_apart():

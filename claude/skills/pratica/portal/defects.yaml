@@ -121,3 +121,15 @@ pdc-36-paesaggio:
     - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
     - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
   report: docs/portal-defects.md
+
+cambio-uso-regionale:
+  title: "SCIA alternativa and permesso: no line for a change of use Campania's law gives that title for"
+  portal: "Napoli's SUE on impresainungiorno: the SCIA alternativa's quadro c) (Qualificazione dell'intervento) and the permesso's quadro a) and asseverazione (opere in progetto), from the national forms"
+  what: "The required change-of-use choice has four lines, all art. 23-ter DPR 380/2001's: no change; one unit within its category; one unit in zone A, B or C among categories a) to c); a whole building within its category (c. 3). A whole building to another category, a unit outside zones A, B and C, or a change to or from the rural category has no line, and any line ticked states something else."
+  law: "In Campania those changes take the SCIA alternativa al permesso (art. 2 c. 6 L.R. 13/2022; circolare regionale CI/2025/3, d), or the permesso, which the forms are filed for; art. 23-ter doesn't give their title, so the national forms, written for it, don't name them."
+  checked: "2026-11-03, from the forms' labels as crawled (catalogue/F839/sections), the national schema's choices (schema/sue-choices.json: scia_alternativa 002, permesso_di_costruire 000 and 019, none optional) and the Comune's own Mod. SCIA/PDC of 23/06/2025 (quadro c, the same four lines); not tried on a draft"
+  choices:
+    - "Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) which line they want ticked for this change, or whether the change is stated in the relazione and the line left as the portal allows."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+    - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
+  report: docs/portal-defects.md

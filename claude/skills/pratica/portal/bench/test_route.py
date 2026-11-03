@@ -252,6 +252,25 @@ def sanatoria_titoli():
     assert not r["routed"] and "180 giorni" in r["unsupported"][0], r
 
 
+def cambio_uso_fuori_23ter():
+    """A change of use art. 23-ter doesn't give a title for (one unit on the ground floor, or
+    outside zones A, B and C: 2026-11-03) takes Campania's, as a whole building's does: free
+    without works, else the SCIA alternativa; done without it, the permesso in sanatoria. The
+    a.1 to a.2 change in the centro storico stays the SUE's, saying what it lacks."""
+    base = {"intervento": "manutenzione_straordinaria", "cambio_uso": "piano_terra", "paesaggio": "no",
+            "fatti": ["uso_ammesso_prg"]}
+    r = route.route(TABLE, base, REHEARSALS)
+    assert r["pratica"] == "scia-alternativa-fittizia", r
+    r = route.route(TABLE, {**base, "cambio_uso": "altro"}, REHEARSALS)
+    assert r["pratica"] == "scia-alternativa-fittizia", r
+    r = route.route(TABLE, {**base, "intervento": "nessuna_opera", "cambio_uso": "altro"}, REHEARSALS)
+    assert not r["routed"] and r["unsupported"][0].startswith("This case needs no pratica"), r
+    r = route.route(TABLE, {**base, "fatti": ["uso_ammesso_prg", "sanatoria"]}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+    r = route.route(TABLE, {**base, "cambio_uso": "stessa_categoria", "fatti": ["uso_ammesso_prg", "verso_a2_tavola_7a"]}, REHEARSALS)
+    assert not r["routed"] and "Giunta" in r["unsupported"][0], r
+
+
 def rehearsal_cases_come_home():
     """Each rehearsal's answers files, read as its steps file reads the facts, route back to it
     (a case its own rules refuse is left out: it tests the refusal)."""
@@ -343,7 +362,7 @@ def plugin_layout():
 def main():
     tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, as_a_conversation,
              wrong_answers, gated_items_stay_unknown, own_words_kept_only_if_they_agree, missing_answers_file,
-             cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso, sanatoria_zona_a, sanatoria_titoli,
+             cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso, sanatoria_zona_a, sanatoria_titoli, cambio_uso_fuori_23ter,
              rehearsal_cases_come_home, asks_as_the_table_asks, refusals_say_why, apart_is_the_persons,
              one_steps_file_per_combination, plugin_layout]
     for t in tests:
