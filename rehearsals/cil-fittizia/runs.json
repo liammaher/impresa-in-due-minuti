@@ -22,5 +22,11 @@
   "answers": "answers-notifica.json",
   "result": "filled",
   "seconds": 76.7
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-comunicazioni.json",
+  "result": "filled",
+  "seconds": 82.3
  }
 ]

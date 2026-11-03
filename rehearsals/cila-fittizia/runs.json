@@ -148,5 +148,23 @@
   "answers": "answers-procuratore-estero.json",
   "result": "filled",
   "seconds": 89.3
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-direttore-atti.json",
+  "result": "filled",
+  "seconds": 118.3
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-elenchi-lunghi.json",
+  "result": "filled",
+  "seconds": 829.1
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-bene-culturale.json",
+  "result": "filled",
+  "seconds": 115.4
  }
 ]

@@ -27,9 +27,10 @@ C.I.L.A. with an invented protocol (PG/2026/0999999 of 20/10/2026), no diritti (
 Napoli's tariff charges for a fine lavori is the person's answer, not known here).
 
 `answers-parziale.json` (since 2026-11-03): works finished in part, "in forma parziale come da
-planimetria allegata", the planimetria under Allegati liberi with its description. The screen read
-on a complete case has no slot for it; whether the answer adds one is for a run to show. Never run
-on the portal.
+planimetria allegata". The answer adds a required slot, "Copia di elaborato planimetrico del
+progetto con eventuali varianti depositato in Comune con individuazione delle opere parzialmente
+concluse" (plain PDF taken): the first run, with the planimetria under Allegati liberi, stopped on
+it (2026-11-03).
 
 ## Runs
 
