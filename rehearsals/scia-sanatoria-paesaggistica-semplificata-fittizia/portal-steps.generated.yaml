@@ -440,7 +440,9 @@ asks:
   fascia_militare_doc: {type: file, question: 'The military fascia''s document: the self-certification, or the request for its assent (PDF)'}
   fascia_aeroportuale_doc: {type: file, question: 'The airport fascia''s document: the self-certification, or the request for its assent (PDF)'}
   fascia_altro_doc: {type: file, question: 'The other fascia''s document: the self-certification, or the request for its assent (PDF)'}
-  diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
+  diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due), propose: '{{ask.sanatoria_caso|diritti_sanatoria_scia}}', why: 'Line SUE 16 of the Comune''s 2026
+      table of SUE diritti (G.C. 239/2026): 441 € at filing for an accertamento di conformità (art. 36-bis) or a regularization (art. 34-ter), the rest once determined; art. 36-bis c. 5 b, SUE 17-18. Works
+      still under way (art. 37 c. 5) aren''t in the table: ask the SUE'}
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
   diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
