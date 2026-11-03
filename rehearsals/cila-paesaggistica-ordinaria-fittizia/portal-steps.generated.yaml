@@ -6,9 +6,8 @@ generated: gen.py from sue-combo-cila-paesaggistica-ordinaria (2026-10-31) and d
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
-- Pay the diritti (and the CILA's late-filing penalty if due) and the bollo; upload the receipts
-- 'On Allega documenti: the CILA''s documents (procura, CILA DSC summary, IDs, drawings, relazione tecnica) and the ordinaria''s drawings and photos (signed files only), signed digitally, and for a structural
-  tolerance relevant for public safety the Genio Civile''s seismic authorization (Autorizzazione sismica)'
+- 'Pay the diritti before the second run (after the declarations): its receipt, signed, goes with it; the bollo before sending. A late CILA''s penalty is paid before the first run: its receipt is in quadro
+  d)'
 - The pergola is built only once the SUE says the landscape authorization is in
 - Sign and send (Firma e invio); keep the receipt
 groups:
@@ -113,6 +112,7 @@ asks:
   notifica_dovuta: {type: yes_no, question: 'Is a notifica preliminare due (more than one firm on site, or over 200 uomini-giorno)?'}
   vincolo: {type: choice, question: 'What protects the property''s landscape? (art. 136: a declaration by D.M./D.G.R.; art. 142: by law, e.g. the coast; art. 134: the piano paesaggistico only)', options: [
       art 136, art 142, art 136 and 142, art 134]}
+  paes_variante: {type: yes_no, question: 'Is this a variant of a landscape authorization already issued?', propose: 'false'}
   atto_notaio: {type: text, question: The notary's name}
   atto_notaio_sede: {type: text, question: The notary's town}
   atto_repertorio: {type: text, question: Repertorio number}
@@ -158,6 +158,13 @@ asks:
   notifica_preliminare: {type: file, question: The notifica preliminare already sent (PDF)}
   elaborati_grafici: {type: file, question: 'The drawings: stato di fatto, progetto, comparativo (PDF)'}
   relazione_tecnica: {type: file, question: The relazione tecnica (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  dsc_firmato: {type: file, question: 'The pratica''s Quadro riepilogativo della documentazione (DSC: the portal''s, Scarica il documento once the declarations are ticked, or the one fill.py fills for a
+      CILA), completed and signed digitally (.p7m)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
+  elaborati_paesaggistici: {type: file, question: 'The landscape drawings: stato attuale, progetto and the works, with the context (signed digitally, .p7m)'}
+  foto_paesaggistiche: {type: file, question: 'Colour photos of the building and landscape context, near and far (signed digitally, .p7m)'}
+  paes_variante_doc: {type: file, question: 'The landscape authorization this varies (signed digitally, .p7m)'}
   intervento: {type: choice, question: 'Che lavori sono, secondo le definizioni dell''art. 3 DPR 380/2001?', options: [edilizia_libera, opere_temporanee, nessuna_opera, manutenzione_straordinaria, restauro,
       ristrutturazione, ristrutturazione_pesante, nuova_costruzione, ristrutturazione_urbanistica, variante_pdc, variante_essenziale_pdc, variante_scia, altro], labels: {edilizia_libera: 'Lavori senza titolo
         dell''art. 6 c. 1: manutenzione ordinaria (riparare, rinnovare e sostituire finiture, tenere in efficienza gli impianti), barriere architettoniche senza ascensori esterni né modifiche della sagoma,
@@ -1012,15 +1019,20 @@ sections:
   fields: []
 - section: Gestione degli allegati
   go: Prosegui
+  step: Allega Documenti
   theirs:
   - Procura speciale
   - Quadro riepilogativo della documentazione
   - Scarica il documento
   - copia attestazione versamento oneri, diritti e spese
-  - 'copia della precedente autorizzazione paesaggistica (per le '
-  - elaborati grafici comprensivi di stato attuale progetto ed i
-  - 'documentazione fotografica a colori del contesto edilizio e '
   fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: Quadro riepilogativo della documentazione, value: '{{ask.dsc_firmato}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m, after_declarations: true}
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Copia del documento di identità del/i titolare/i e/o del tecnico, value: '{{ask.documento_identita_cliente}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: elaborati grafici comprensivi di stato attuale, value: '{{ask.elaborati_paesaggistici}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: documentazione fotografica a colori del contesto, value: '{{ask.foto_paesaggistiche}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: copia della precedente autorizzazione paesaggistica, value: '{{ask.paes_variante_doc}}', when: '{{ask.paes_variante}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
   - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}
   - {kind: file, label: Copia dei documenti d'identità del/i titolare/i, value: '{{ask.documento_identita_cliente}}', when: '{{ask.titolo_esclusivo|not}}'}
   - {kind: file, label: Dichiarazione di assenso dei terzi titolari, value: '{{ask.assenso_proprietario}}', when: '{{ask.titolo_esclusivo|not}}'}

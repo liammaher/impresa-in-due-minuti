@@ -27,6 +27,13 @@ FIELDS = dict(json.loads((REHEARSAL / "fixture.json").read_text())["fields"])
 ANSWERS = json.loads((REHEARSAL / "answers.json").read_text())
 
 
+def rehearsal_plan(steps, values):
+    """run.plan as a rehearsal's run takes it: made-up files, so no slot that takes only signed
+    files, and nothing that waits for the declarations (run.phase)."""
+    import run
+    return run.plan(run.rehearsal(steps, values), values)
+
+
 def values(answers=ANSWERS, fields=FIELDS, steps=STEPS):
     return run.Values(dict(answers), fields=dict(fields), asks=steps.get("asks"))
 
@@ -134,11 +141,14 @@ def files():
     r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(huge)}), made_up=True)
     assert not r["ready"] and "over the portal's 9.77 MB" in r["files"][0]["problem"], r["files"]
     steps["sections"][-1]["fields"][-1]["accepts"] = "pdf.p7m;jpg.p7m"
-    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}), made_up=True)
+    # A slot that takes only signed files (a real case's: a rehearsal leaves it out, run.phase).
+    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}))
     assert not r["ready"] and r["files"][0]["problem"] == "the slot takes only pdf.p7m, jpg.p7m", r["files"]
+    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}), made_up=True)
+    assert r["ready"] and not r["files"] and "1 slot(s) that take only signed files left empty" in r["warnings"][-1], r
     signed = tmp / "planimetria.pdf.p7m"
     signed.write_bytes(b"0")
-    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(signed)}), made_up=True)
+    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(signed)}))
     assert not r["ready"] and "not a readable .p7m" in r["files"][0]["problem"], r["files"]
     for f in (big, huge, signed):
         f.unlink()
@@ -456,7 +466,7 @@ def agibilita_slots():
     def filed(rehearsal, answers):
         steps = yaml.safe_load((root / rehearsal / "portal-steps.generated.yaml").read_text())
         a = json.loads((root / rehearsal / answers).read_text())
-        return {f["label"] for f in run.plan(steps, values(a, fields, steps)) if f["kind"] == "file"} & slots
+        return {f["label"] for f in rehearsal_plan(steps, values(a, fields, steps)) if f["kind"] == "file"} & slots
 
     here = os.getcwd()
     os.chdir(HERE.parents[4])
@@ -630,7 +640,7 @@ def group_two_choices():
         steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
         v = values(json.loads((root / name / f"answers-{a}.json").read_text()) if isinstance(a, str) else a, flds, steps)
         r = run.preflight(steps, v, made_up=True)
-        return r, [(p["label"], p["value"]) for p in run.plan(steps, v) if section is None or p["section"].startswith(section)] if r["ready"] else []
+        return r, [(p["label"], p["value"]) for p in rehearsal_plan(steps, v) if section is None or p["section"].startswith(section)] if r["ready"] else []
     try:
         _, b = labels("paesaggistica-semplificata-fittizia", "variante", section="Ambito")
         assert ("In caso di intervento in VARIANTE", None) in b and ("Num.", "PG/2025/0444444") in b, b
@@ -667,7 +677,7 @@ def exemptions_and_other_kinds():
         steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
         v = values(json.loads((root / name / f"answers-{a}.json").read_text()) if isinstance(a, str) else a, fields, steps)
         r = run.preflight(steps, v, made_up=True)
-        return r, ([(p["label"] or "", p["value"]) for p in run.plan(steps, v)] if r["ready"] else [])
+        return r, ([(p["label"] or "", p["value"]) for p in rehearsal_plan(steps, v)] if r["ready"] else [])
     semplificata = "paesaggistica-semplificata-fittizia"
     try:
         for a in ("p6", "bollo-virtuale"):

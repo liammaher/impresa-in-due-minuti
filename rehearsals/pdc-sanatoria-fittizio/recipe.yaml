@@ -16,6 +16,9 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 attachments:
   Gestione degli allegati:
+    # The sanatoria's own drawings: a slot that takes only signed files, which its answer adds (the
+    # title as read on a filled draft; not in the crawl, made on an empty one).
+    - {kind: file, label: Elaborati richiesti per la sanatoria, value: "{{ask.elaborati_sanatoria}}", accepts: "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", on_page: true}
     # The asseverazione's "allega i relativi elaborati" adds a required slot per system's
     # project, as on the SCIA (read there 2026-10-29): plain PDFs.
     - {kind: file, label: "Progetto dell'impianto di produzione, trasformazione", value: "{{ask.progetto_elettrico_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_elettrico}}", on_page: true}
@@ -41,6 +44,9 @@ attachments:
     - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in pubblica fognatura, value: "{{ask.scarico_doc}}", when: "{{ask.scarichi|is_fognatura_da_richiedere}}", on_page: true}
     - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in acque, value: "{{ask.scarico_doc}}", when: "{{ask.scarichi|is_superficiali_da_richiedere}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
+    # The permesso has no slot for the contributo's papers: they go under Allegati liberi, in its next box.
+    - {kind: file, label: Allegati liberi, value: "{{ask.prospetto_contributo}}", describe: Prospetto di calcolo preventivo del contributo di costruzione, when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}"}
+    - {kind: file, label: Allegati liberi, value: "{{ask.documentazione_calcolo_contributo}}", describe: Documentazione per la determinazione del contributo di costruzione, when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_sportello}}"}
     # Under the barriers rules, their drawings (a slot read on the P6 run's screen).
     - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: "{{ask.elaborati_barriere}}", when: "{{ask.barriere}} {{ask.barriere_deroga|not}}"}
     # The asseverazione's other "si allega" lines, by the SCIA's slot titles (each read on the
@@ -109,9 +115,7 @@ yours:
   - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request"
   - "The asseverazione's \"non interessa aree percorse dal fuoco\" (qualità terreni) is one choice with the soil statement on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md); state it in the relazione tecnica if the SUE wants it"
-  - "On Allega documenti: the portal's procura signed by the client and the Quadro riepilogativo (PdC DSC), the broadband infrastructure drawing (art. 135-bis DPR 380/2001: signed files only), the contributo's prospetto or the documents for the SUE to work it out (the permesso has no slot for them: under Allegati liberi), then everything signed digitally (.p7m)"
   - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
-  - "On Allega documenti: the Elaborati richiesti per la sanatoria (stato legittimo, stato di fatto and the comparison, the difformità in red as the SUE's guidelines ask), signed digitally (.p7m only)"
   - "For works on structures: the autorizzazione sismica in sanatoria from the Genio Civile di Napoli on S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983); its documents go in this pratica's slot"
   - "Once the SUE answers (within 60 days for art. 36, else it is refused): pay the oblazione it determines (twice the contributo di costruzione, art. 36 c. 2; art. 36-bis c. 5) and collect the permesso in sanatoria"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight

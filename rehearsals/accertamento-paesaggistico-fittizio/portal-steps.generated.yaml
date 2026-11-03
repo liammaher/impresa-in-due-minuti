@@ -6,9 +6,7 @@ generated: gen.py from sue-accertamento-di-compatibilita-paesaggistica (2026-10-
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali'
-- 'On Allega documenti: the relazione paesaggistica (DPCM 12/12/2005), the drawings of the state as it is and the photos, signed digitally, and the scheda professionisti e imprese'
 - 'If the Comune finds the works compatible: pay the sum it sets (art. 167 c. 5 D.Lgs. 42/2004, the greater of the damage and the profit)'
-- 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it'
 - '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
 - Sign and send (Firma e invio); keep the receipt
 groups:
@@ -62,10 +60,17 @@ asks:
   accertamento_descrizione: {type: text, question: 'The works already done, in a few lines (350 characters)'}
   accertamento_effetti: {type: text, question: What the works changed in the place and the building's look (200 characters)}
   accertamento_data: {type: date, question: When the works were done}
+  relazione_paesaggistica: {type: file, question: 'The relazione paesaggistica (DPCM 12/12/2005), for the autorizzazione paesaggistica ordinaria (PDF)'}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
   diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
+  documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
+  elaborati_paesaggistici: {type: file, question: 'The landscape drawings: stato attuale, progetto and the works, with the context (signed digitally, .p7m)'}
+  foto_paesaggistiche: {type: file, question: 'Colour photos of the building and landscape context, near and far (signed digitally, .p7m)'}
+  scheda_professionisti: {type: file, question: 'The scheda professionisti e imprese: who designed and who built the works (PDF)'}
   intervento: {type: choice, question: 'Che lavori sono, secondo le definizioni dell''art. 3 DPR 380/2001?', options: [edilizia_libera, opere_temporanee, nessuna_opera, manutenzione_straordinaria, restauro,
       ristrutturazione, ristrutturazione_pesante, nuova_costruzione, ristrutturazione_urbanistica, variante_pdc, variante_essenziale_pdc, variante_scia, altro], labels: {edilizia_libera: 'Lavori senza titolo
         dell''art. 6 c. 1: manutenzione ordinaria (riparare, rinnovare e sostituire finiture, tenere in efficienza gli impianti), barriere architettoniche senza ascensori esterni né modifiche della sagoma,
@@ -438,3 +443,23 @@ sections:
   - {kind: file, value: '{{ask.bollo_virtuale_autorizzazione}}', when: '{{ask.bollo_esenzione|is_virtuale}}', label: dichiarazione relativa all'assolvimento dell'imposta di bollo}
   - {kind: radio, when: '{{ask.bollo_esenzione|bollo_esente}}', label: Il pagamento non è dovuto poiché esentati}
   - {kind: select, value: '{{ask.bollo_esenzione|bollo_motivo}}', when: '{{ask.bollo_esenzione|bollo_esente}}', label: per la seguente motivazione}
+- section: Pagamento degli oneri
+  go: Prosegui
+  save: false
+  fields: []
+- section: Gestione degli allegati
+  go: Prosegui
+  step: Allega Documenti
+  theirs:
+  - Procura speciale
+  - Quadro riepilogativo della documentazione
+  - Scarica il documento
+  - copia attestazione versamento oneri, diritti e spese
+  fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: elaborati grafici comprensivi di stato attuale, value: '{{ask.elaborati_paesaggistici}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: documentazione fotografica a colori del contesto, value: '{{ask.foto_paesaggistiche}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: relazione dettagliata relativa all'inserimento dell'intervento, value: '{{ask.relazione_paesaggistica}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: scheda professionisti e imprese, value: '{{ask.scheda_professionisti}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}

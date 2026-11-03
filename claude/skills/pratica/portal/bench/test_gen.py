@@ -22,6 +22,13 @@ FINE = ROOT / "rehearsals" / "fine-lavori-fittizia"
 results = []
 
 
+def rehearsal_plan(steps, values):
+    """run.plan as a rehearsal's run takes it: made-up files, so no slot that takes only signed
+    files, and nothing that waits for the declarations (run.phase)."""
+    import run
+    return run.plan(run.rehearsal(steps, values), values)
+
+
 def case(name):
     def run(fn):
         try:
@@ -108,9 +115,22 @@ def p6_recipe():
     return gen.load_yaml(CILA / "recipe.yaml") | {"sections": P6_ONLY}
 
 
+# A slot the hand walk left empty, Claude's since 2026-11-03.
+NEW_SLOT = "Copia del documento di identità del/i titolare/i e/o del tecnico"
+
+
+def as_p6_ran(steps):
+    """A generated CILA as the P6 run took it: its first run with made-up files (run.phase),
+    without the slot the hand walk left empty."""
+    import run
+    steps = run.phase(steps, made_up=True)
+    return steps | {"sections": [s | {"fields": [f for f in s["fields"] if f.get("label") != NEW_SLOT]}
+                                 for s in steps["sections"]]}
+
+
 @case("the CILA comes out as the hand walk found it, field for field (P6's own entries)")
 def _():
-    diffs, _ = gen.check(gen.generate(p6_recipe()), gen.load_yaml(CILA / "portal-steps.yaml"))
+    diffs, _ = gen.check(as_p6_ran(gen.generate(p6_recipe())), gen.load_yaml(CILA / "portal-steps.yaml"))
     assert not diffs, diffs
 
 
@@ -138,7 +158,7 @@ def filled(steps, values):
     os.chdir(ROOT)  # answers name files from the repo's root
     try:
         out, v = {}, values(steps)
-        run.plan(steps, v)  # stops on a missing value
+        rehearsal_plan(steps, v)  # stops on a missing value
         for sec in steps["sections"]:
             for f in sec["fields"]:
                 # A box only some pratiche show is skipped where it isn't, so it isn't compared.
@@ -154,7 +174,7 @@ def filled(steps, values):
 @case("the dictionary's every-case CILA fills P6 with the hand walk's values, section for section")
 def _():
     v = p6_values("cila-fittizia")
-    hand, ours = filled(gen.load_yaml(CILA / "portal-steps.yaml"), v), filled(gen.generate(gen.load_yaml(CILA / "recipe.yaml")), v)
+    hand, ours = filled(gen.load_yaml(CILA / "portal-steps.yaml"), v), filled(as_p6_ran(gen.generate(gen.load_yaml(CILA / "recipe.yaml"))), v)
     for sec, vals in hand.items():
         assert ours.get(sec) == vals, (sec, vals, ours.get(sec))
 
@@ -164,9 +184,13 @@ def _():
     steps = gen.generate(gen.load_yaml(FINE / "recipe.yaml"))
     names = [s["section"] for s in steps["sections"]]
     assert "ubicazione dell'immobile" in names and "comunicazione di fine lavori" in names, names
-    slots = next(s for s in steps["sections"] if s["section"] == "Gestione degli allegati")["fields"]
+    import run
+    first = lambda st: next(s for s in st["sections"] if s["section"] == "Gestione degli allegati")["fields"]
+    slots = first(run.phase(steps))
     # Works finished in part add the planimetria's own slot (read on a partial draft, 2026-11-03).
     assert [f["label"][:20] for f in slots] == ["Fotocopia di un docu", "Copia dei documenti ", "Dichiarazione di ass", "Copia di elaborato p"], slots
+    # What the portal makes once the declarations are ticked, and the diritti receipt: the second run's.
+    assert [f["label"][:20] for f in first(run.phase(steps, after=True))] == ["Procura speciale", "Quadro riepilogativo", "copia attestazione v"]
 
 
 @case("a section the dictionary doesn't have stops it, nothing written")
@@ -415,11 +439,16 @@ def _():
     assert "allegato_b" in steps["groups"]
 
 
-@case("a slot that takes only signed files is the person's, never a plain copy (SCIA stato legittimo)")
+@case("a slot that takes only signed files takes the person's signed file, never a plain copy, and a rehearsal leaves it (SCIA stato legittimo)")
 def _():
+    import run
     s = section(generated("scia-fittizia"), "Gestione degli allegati")
-    assert "Documentazione dimostrativa dello stato legittimo" in s["theirs"]
-    assert not any(f["label"].startswith("Documentazione dimostrativa") for f in s["fields"])
+    f = field(s, "Documentazione dimostrativa dello stato legittimo")
+    # Its `accepts` lets pre-flight refuse a plain copy; the portal checks the signature on upload.
+    assert run.signed_only(f) and not f.get("after_declarations") and f["label"] not in s.get("theirs", []), f
+    assert not any(x["label"] == f["label"] for x in run.phase({"sections": [s]}, made_up=True)["sections"][0]["fields"])
+    # The portal's procura waits for the declarations; its empty slot is the person's until then.
+    assert field(s, "Procura speciale")["after_declarations"] and "Procura speciale" in s["theirs"]
 
 
 @case("one entry fills the SCIA's and the SCIA alternativa's shared quadri; boxes a choice opens are found on the page; every assent or deroga holds the start date back")
@@ -446,7 +475,7 @@ def _():
         v = run.Values(json.loads((REH / name / "answers-bassa-monostanza.json").read_text()), fields=fields, asks=steps.get("asks"))
         r = run.preflight(steps, v, made_up=True)
         assert r["ready"] and not r["unsupported"], (name, r)
-        plan = run.plan(steps, v)
+        plan = rehearsal_plan(steps, v)
         labels = [p["label"] or "" for p in plan]
         assert any(l.startswith("locali con un’altezza minima interna") for l in labels), name
         assert any(l.startswith(("alloggio monostanza per una persona", "alloggio mono-stanza")) for l in labels), name
@@ -702,7 +731,7 @@ def _():
         os.chdir(ROOT)
         try:
             v = p6_values("agibilita-fittizia", answers)(steps)
-            run.plan(steps, v)
+            rehearsal_plan(steps, v)
             return [(s["section"], f.get("label"), f.get("anchor"), f.get("nth"), v.render(f["value"]) if "value" in f else True)
                     for s in steps["sections"] for f in s["fields"]
                     if "when" not in f or run.truthy(v.render(f["when"]) or "")]
@@ -801,7 +830,7 @@ def _():
     r = run.preflight(steps, run.Values(a, fields=fields, asks=steps.get("asks")), made_up=True)
     assert [p["proposal"] for p in r["proposals"] if p["key"] == "bollo_marche"] == ["false"], r["proposals"]
     m = json.loads((REH / "paesaggistica-semplificata-fittizia" / "answers-marche.json").read_text())
-    plan = run.plan(steps, run.Values(m, fields=fields, asks=steps.get("asks")))
+    plan = rehearsal_plan(steps, run.Values(m, fields=fields, asks=steps.get("asks")))
     bollo = [(p["label"], p.get("value")) for p in plan if "bollo" in p["section"].lower()]
     # Both serial boxes are titled "numero seriale (1)" on the portal: the first, then the second.
     assert [v for l, v in bollo if l == "numero seriale (1)"] == ["01234567890123", "01234567890124"], bollo
@@ -822,7 +851,7 @@ def _():
         assert not any("Systems needing a project" in c.get("else", "") for c in steps["supports"]), name
         v = run.Values(json.loads((REH / name / "answers-impianti.json").read_text()), fields=fields, asks=steps.get("asks"))
         assert run.preflight(steps, v, made_up=True)["ready"], name
-        labels = [p["label"] or "" for p in run.plan(steps, v)]
+        labels = [p["label"] or "" for p in rehearsal_plan(steps, v)]
         assert any(l.startswith("è soggetto agli obblighi di presentazione del progetto") for l in labels), name
         assert any(l.startswith("Progetto degli impianti radiotelevisivi") for l in labels), name
         assert "radiotelevisivi" in labels and "di protezione antincendio" in labels, name
@@ -840,13 +869,13 @@ def _():
         return steps, v, run.preflight(steps, v, made_up=True)
     steps, v, r = check("cila-fittizia", "answers-direttore-atti.json")
     assert r["ready"], r
-    plan = [(p["label"] or "", str(p.get("value") or "")) for p in run.plan(steps, v)]
+    plan = [(p["label"] or "", str(p.get("value") or "")) for p in rehearsal_plan(steps, v)]
     assert ("Cognome", "ESEMPIO") in plan and ("Tipologia di atto", "Deroga ai requisiti igienico-sanitari dei locali (inventata)") in plan
     assert [x for l, x in plan if l == "Autorità competente"] == ["ASL Napoli 1 Centro", "Comune di Napoli"], plan
     for name in ("cila-fittizia", "scia-fittizia"):
         steps, v, r = check(name, "answers-altri-tecnici.json")
         assert r["ready"], (name, r)
-        labels = [p["label"] for p in run.plan(steps, v)]
+        labels = [p["label"] for p in rehearsal_plan(steps, v)]
         assert "Incaricato della" in labels and "Iscritto all'ordine/collegio" in labels, name
         assert not any((l or "").startswith("che gli altri tecnici incaricati saranno") for l in labels), name
     # As many as the case has (the national form sets no limit): ten technicians, three filings
@@ -854,10 +883,10 @@ def _():
     for name in ("cila-fittizia", "scia-fittizia"):
         steps, v, r = check(name, "answers-elenchi-lunghi.json")
         assert r["ready"] and not r["unsupported"], (name, r)
-        plan = run.plan(steps, v)
+        plan = rehearsal_plan(steps, v)
         tecnici = [p for p in plan if "Altri tecnici" in p["section"]]
         assert sum(p["kind"] == "add" for p in tecnici) == 9 and ("Cognome", "VENTO") in [(p["label"], p["value"]) for p in tecnici], name
-    rel = [(p["kind"], p["label"] or "", p["value"]) for p in run.plan(*check("cila-fittizia", "answers-elenchi-lunghi.json")[:2])
+    rel = [(p["kind"], p["label"] or "", p["value"]) for p in rehearsal_plan(*check("cila-fittizia", "answers-elenchi-lunghi.json")[:2])
            if p["section"].startswith("Relazione Tecnica")]
     c, t = "Comunicazioni, segnalazioni", "Tipologia di atto"
     assert [l or "+" for k, l, _ in rel if k == "add" or l.startswith((c, t))] == [c, c, "+", c, t, t, "+", t], rel
@@ -878,7 +907,7 @@ def _():
         v = run.Values(json.loads((REH / name / answers).read_text()), fields=fields, asks=steps.get("asks"))
         r = run.preflight(steps, v, made_up=True)
         assert r["ready"], (name, r)
-        planned = [p for p in run.plan(steps, v) if "Altri tecnici" in p["section"]]
+        planned = [p for p in rehearsal_plan(steps, v) if "Altri tecnici" in p["section"]]
         assert sum(p["kind"] == "add" for p in planned) == n - 1, name
         assert sum(p.get("label") == "Incaricato della" for p in planned) == n, name
         employed = any(p.get("label") == "Ragione sociale" and p.get("value") == "Impianti Fittizi S.n.c." for p in planned)
@@ -900,7 +929,7 @@ def _():
         a = json.loads((REH / name / answers).read_text()); a.update(change)
         v = run.Values(a, fields=fields, asks=steps.get("asks"))
         r = run.preflight(steps, v, made_up=True)
-        return r, ([(p["label"] or "", str(p.get("value") or "")) for p in run.plan(steps, v)] if r["ready"] else [])
+        return r, ([(p["label"] or "", str(p.get("value") or "")) for p in rehearsal_plan(steps, v)] if r["ready"] else [])
     has = lambda p, label: any(l.startswith(label) for l, _ in p)
     r, p = plan("pdc-fittizio", "answers-sottotetti.json")
     assert r["ready"] and has(p, "attività che rientrano nell'ambito del procedimento ordinario"), r
@@ -942,12 +971,14 @@ def _():
     import copy
     steps = generated("pdc-fittizio")
     assert gen.unslotted(steps) == [], gen.unslotted(steps)
-    # The permesso's prospetto box adds no slot (read 2026-11-01): without that read it is listed.
+    # The permesso's prospetto box adds no slot (read 2026-11-01; the prospetto goes under Allegati
+    # liberi): without that read, and without that file, it is listed.
     unread = copy.deepcopy(steps)
     for s in unread["sections"]:
         for f in s["fields"]:
             if f.get("label", "").startswith("allega il prospetto di calcolo"):
                 f.pop("slot")
+        s["fields"] = [f for f in s["fields"] if f.get("describe", "") != "Prospetto di calcolo preventivo del contributo di costruzione"]
     assert [l for _, l, _ in gen.unslotted(unread)] == ["allega il prospetto di calcolo preventivo"], gen.unslotted(unread)
 
 
@@ -982,12 +1013,12 @@ def _():
     fields = dict(json.loads((CILA / "fixture-p6.json").read_text())["fields"])
     name = "proroga-straordinaria-ultimazione-fittizia"
     steps = generated(name)
-    p = run.plan(steps, run.Values(json.loads((REH / name / "answers-paesaggistica.json").read_text()), fields=fields, asks=steps.get("asks")))
+    p = rehearsal_plan(steps, run.Values(json.loads((REH / name / "answers-paesaggistica.json").read_text()), fields=fields, asks=steps.get("asks")))
     got = [(x["label"], str(x.get("value") or "")) for x in p if x["section"].startswith("Riferimenti titolo")]
     assert ("e autorizzazione paesaggistica", "") in got and ("prot.n.", "PG/2025/0777777") in got and ("del", "10/12/2025") in got, got
     sec = section(steps, "Riferimenti titolo")
     assert [f.get("nth") for f in sec["fields"] if f.get("value") == "{{ask.paes_data|date_it}}" and "titolo_con_paesaggistica" in f["when"]] == [2, 2]
-    p = run.plan(steps, run.Values(json.loads((REH / name / "answers-p6.json").read_text()), fields=fields, asks=steps.get("asks")))
+    p = rehearsal_plan(steps, run.Values(json.loads((REH / name / "answers-p6.json").read_text()), fields=fields, asks=steps.get("asks")))
     assert not any(x["label"] == "e autorizzazione paesaggistica" for x in p)
 
 
@@ -1223,7 +1254,7 @@ def _():
         steps = generated(name)
         v = run.Values(json.loads((REH / name / answers).read_text()), fields=fields, asks=steps.get("asks"))
         assert run.preflight(steps, v, made_up=True)["ready"]
-        return [p["label"] for p in run.plan(steps, v) if p["kind"] == "file"]
+        return [p["label"] for p in rehearsal_plan(steps, v) if p["kind"] == "file"]
     pdc = slots("pdc-fittizio", "answers-strumenti-barriere.json")
     assert not any(l.startswith(("Documentazione per la richiesta di deroga", "Proposta di progetto")) for l in pdc), pdc
     alt = slots("scia-alternativa-fittizia", "answers-scomputo-pozzi.json")
@@ -1273,7 +1304,7 @@ def _():
         v = run.Values(json.loads((ROOT / "rehearsals/scia-fittizia" / answers).read_text()), fields=fields, asks=steps.get("asks"))
         r = run.preflight(steps, v, made_up=True)
         assert r["ready"] and any("designer's (`p:`)" in y for y in r["yours"]) == signs, (answers, r["yours"])
-        plan = [(p["section"], p["label"], p["value"]) for p in run.plan(steps, v)]
+        plan = [(p["section"], p["label"], p["value"]) for p in rehearsal_plan(steps, v)]
         assert (("Asseverazione SCIA - Tipologia di intervento", "Cognome", "Disegno") in plan) == signs, answers
 
 

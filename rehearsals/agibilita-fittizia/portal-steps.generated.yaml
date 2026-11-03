@@ -8,7 +8,6 @@ yours:
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
 - 'As direttore dei lavori (or professionista abilitato), check every attestation on this page: they are yours, signed with the pratica'
 - 'Attestazione tecnica - Agibilità: the portal requires one of the art. 24 c. 5-bis/5-ter or 5-quater boxes; Claude ticks the one the case is, and none when it is neither (then ask the SUE)'
-- 'On Allega documenti: the portal''s procura signed by the client, then everything signed digitally (.p7m)'
 - Sign and send (Firma e invio); keep the receipt
 groups:
   impianti_dichiarazione:
@@ -157,6 +156,12 @@ asks:
   titolo_data: {type: date, question: Its protocol date}
   documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
   assenso_proprietario: {type: file, question: The owner's signed assent to the works (PDF)}
+  procura_firmata: {type: file, question: 'The portal''s procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)'}
+  dsc_firmato: {type: file, question: 'The pratica''s Quadro riepilogativo della documentazione (DSC: the portal''s, Scarica il documento once the declarations are ticked, or the one fill.py fills for a
+      CILA), completed and signed digitally (.p7m)'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
+  banda_ultralarga: {type: yes_no, question: 'Is it a new building or a heavy renovation (art. 10 c. 1 c), so it carries the broadband infrastructure drawing (art. 135-bis DPR 380/2001)?'}
+  etichetta_banda_doc: {type: file, question: 'The attestation that the building carries the label "edificio predisposto alla banda ultralarga" (art. 135-bis DPR 380/2001), signed digitally (.p7m)'}
   dichiarazione_conformita: {type: file, question: The installers' dichiarazioni di conformità of the systems touched (PDF), when: '{{ask.impianti}}'}
   impianti_dichiarazioni: {type: yes_no, question: 'Is any system certified by a dichiarazione di conformità?', default: '{{ask.impianti_certificazione|is_dichiarazione}}/{{ask.impianto_elettrico_dichiarazione,ask.impianto_radiotv_dichiarazione,ask.impianto_termico_dichiarazione,ask.impianto_idrico_dichiarazione,ask.impianto_gas_dichiarazione,ask.impianto_ascensore_dichiarazione,ask.impianto_antincendio_dichiarazione,ask.impianto_scariche_dichiarazione,ask.impianto_linee_vita_dichiarazione,ask.impianto_altro_dichiarazione}}'}
   impianti_collaudo_doc: {type: file, question: 'The systems'' certificati di collaudo (art. 9 D.M. 37/2008), in one PDF'}
@@ -666,13 +671,18 @@ sections:
   fields: []
 - section: Gestione degli allegati
   go: Prosegui
+  step: Allega Documenti
   theirs:
   - Procura speciale
   - Quadro riepilogativo della documentazione
   - Scarica il documento
-  - Attestazione in merito all'apposizione dell'etichetta di "ed
   - copia attestazione versamento oneri, diritti e spese
   fields:
+  - {kind: file, label: Procura speciale, value: '{{ask.procura_firmata}}', accepts: jpg.p7m;pdf.p7m, after_declarations: true}
+  - {kind: file, label: Quadro riepilogativo della documentazione, value: '{{ask.dsc_firmato}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m, after_declarations: true}
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
+  - {kind: file, label: Copia del documento di identità del/i titolare/i e/o del tecnico, value: '{{ask.documento_identita_cliente}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Attestazione in merito all'apposizione dell'etichetta, value: '{{ask.etichetta_banda_doc}}', when: '{{ask.banda_ultralarga}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}
   - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}
   - {kind: file, label: Copia dei documenti d'identità del/i titolare/i, value: '{{ask.documento_identita_cliente}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Dichiarazione di assenso dei terzi titolari, value: '{{ask.assenso_proprietario}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}

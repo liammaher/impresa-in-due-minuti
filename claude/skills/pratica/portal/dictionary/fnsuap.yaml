@@ -1116,6 +1116,28 @@ asks:
   elaborati_grafici: {type: file, question: "The drawings: stato di fatto, progetto, comparativo (PDF)"}
   relazione_tecnica: {type: file, question: "The relazione tecnica (PDF)"}
   documentazione_fotografica: {type: file, question: "Photos of the state of the premises (PDF)"}
+  procura_firmata: {type: file, question: "The portal's procura speciale (Allega documenti, Scarica il documento, once the declarations are ticked), signed by the client by hand and by you digitally (.p7m)"}
+  dsc_firmato: {type: file, question: "The pratica's Quadro riepilogativo della documentazione (DSC: the portal's, Scarica il documento once the declarations are ticked, or the one fill.py fills for a CILA), completed and signed digitally (.p7m)"}
+  ricevuta_diritti: {type: file, question: "The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)"}
+  relazione_semplificata_firmata: {type: file, question: "The portal's Relazione Paesaggistica Semplificata (Allegato D DPR 31/2017, Scarica il documento once the declarations are ticked), signed digitally (.p7m)"}
+  elaborati_paesaggistici: {type: file, question: "The landscape drawings: stato attuale, progetto and the works, with the context (signed digitally, .p7m)"}
+  foto_paesaggistiche: {type: file, question: "Colour photos of the building and landscape context, near and far (signed digitally, .p7m)"}
+  paes_variante_doc: {type: file, question: "The landscape authorization this varies (signed digitally, .p7m)"}
+  scheda_professionisti: {type: file, question: "The scheda professionisti e imprese: who designed and who built the works (PDF)"}
+  banda_ultralarga: {type: yes_no, question: "Is it a new building or a heavy renovation (art. 10 c. 1 c), so it carries the broadband infrastructure drawing (art. 135-bis DPR 380/2001)?"}
+  banda_ultralarga_doc: {type: file, question: "The drawing of the building's passive broadband infrastructure (art. 135-bis DPR 380/2001), signed digitally (.p7m)"}
+  atto_trasferimento: {type: file, question: "The deed by which the title passed (sale, gift, succession), with its registration details, signed digitally (.p7m)"}
+  rate_residue: {type: yes_no, question: "Are instalments of the contributo di costruzione still due, which the new holder guarantees?", propose: "false"}
+  polizza_rate_residue: {type: file, question: "The guarantee (polizza fidejussoria) for the contributo's instalments still due, signed digitally (.p7m)"}
+  dl_rinuncia: {type: yes_no, question: "Did the previous direttore dei lavori resign (rather than being replaced by the client)?"}
+  rinuncia_dl: {type: file, question: "The previous direttore dei lavori's signed resignation (.p7m)"}
+  atti_assenso_acquisiti: {type: yes_no, question: "Have other assents for the works already been obtained (a nulla osta, a parere)?", propose: "false"}
+  atti_assenso_acquisiti_doc: {type: file, question: "Those assents, with their details, in one file signed digitally (.p7m)"}
+  verifica_impresa_dsan: {type: file, question: "The client's dichiarazione sostitutiva that the firm's papers were checked (art. 90 c. 9 a-b D.Lgs. 81/2008: its technical fitness, its DURC and staff), with an ID copy, signed digitally (.p7m)"}
+  titolo_subentrante_dsan: {type: file, question: "The new holder's dichiarazione sostitutiva of their real right to the title, with an ID copy, signed digitally (.p7m)"}
+  etichetta_banda_doc: {type: file, question: "The attestation that the building carries the label \"edificio predisposto alla banda ultralarga\" (art. 135-bis DPR 380/2001), signed digitally (.p7m)"}
+  elaborati_sanatoria: {type: file, question: "The drawings the sanatoria asks for: stato legittimo, stato di fatto and their comparison, the difformità in red as the SUE's guidelines ask, signed digitally (.p7m)"}
+  modulo_portale_firmato: {type: file, question: "The portal's own form of this filing (Allega documenti, Scarica il documento, once the declarations are ticked), signed digitally (.p7m)"}
   stato_legittimo_doc: {type: file, question: "The documents proving the stato legittimo (the building's titles; for one with no title on file, the other documents: photos, maps, archive records; PDF)"}
   dichiarazione_conformita: {type: file, question: "The installers' dichiarazioni di conformità of the systems touched (PDF)", when: "{{ask.impianti}}"}
   # Whether any of the agibilità's systems is certified by a dichiarazione: its slot is there
@@ -4973,15 +4995,49 @@ after:
     fields: []
 
   # What a pratica adds of its own (the CILA's relazione tecnica in Allegati liberi) is in its
-  # recipe's `attachments`. Not here, the person's: the portal's procura (download, the client signs, then .p7m), the
-  # Quadro riepilogativo (the national checklist, to complete and sign), the fee receipt
-  # (.p7m), the Allegato A and the Modello DP (signed).
-  # A document the portal makes (the procura, the DSC: "Scarica il documento" by its box) is the
-  # person's to download, sign and attach.
+  # recipe's `attachments`. A slot that takes only signed files takes the person's signed .p7m
+  # (the portal checks each signature on upload: a rehearsal's made-up ones are left out, run.py
+  # --made-up). A document the portal makes from the pratica once the declarations are ticked
+  # ("Scarica il documento" by its box: the procura, the DSC, the portal's own forms) is attached
+  # by the second run (run.py --after-declarations), as is the diritti receipt, paid before
+  # sending; gen.py marks the first kind from the crawl, the receipt is marked here.
+  # Still the person's: the Allegato A and the Modello DP (FILING's yours).
   - section: Gestione degli allegati
     go: Prosegui
+    step: Allega Documenti
     theirs: [Procura speciale, Quadro riepilogativo della documentazione, Scarica il documento]
     fields:
+      - {kind: file, label: Procura speciale, value: "{{ask.procura_firmata}}"}
+      - {kind: file, label: Quadro riepilogativo della documentazione, value: "{{ask.dsc_firmato}}"}
+      - {kind: file, label: "copia attestazione versamento oneri, diritti e spese", value: "{{ask.ricevuta_diritti}}", when: "{{ask.diritti_euro|positive}}", after_declarations: true}
+      - {kind: file, label: "Copia del documento di identità del/i titolare/i e/o del tecnico", value: "{{ask.documento_identita_cliente}}"}
+      # The landscape authorization's own documents (the ordinaria's, the semplificata's; each
+      # signed only), and the portal's Allegato D of a semplificata.
+      - {kind: file, label: Relazione Paesaggistica Semplificata, value: "{{ask.relazione_semplificata_firmata}}"}
+      - {kind: file, label: Elaborati di progetto individuati nell'Allegata Relazione Paesaggistica Semplificata, value: "{{ask.elaborati_paesaggistici}}"}
+      - {kind: file, label: elaborati grafici comprensivi di stato attuale, value: "{{ask.elaborati_paesaggistici}}"}
+      - {kind: file, label: documentazione fotografica a colori del contesto, value: "{{ask.foto_paesaggistiche}}"}
+      - {kind: file, label: copia della precedente autorizzazione paesaggistica, value: "{{ask.paes_variante_doc}}", when: "{{ask.paes_variante}}"}
+      - {kind: file, label: relazione dettagliata relativa all'inserimento dell'intervento, value: "{{ask.relazione_paesaggistica}}"}
+      - {kind: file, label: scheda professionisti e imprese, value: "{{ask.scheda_professionisti}}"}
+      # A new building or a heavy renovation carries the broadband drawing (art. 135-bis DPR 380/2001).
+      - {kind: file, label: Elaborato dimostrativo dell'equipaggiamento di infrastruttura fisica, value: "{{ask.banda_ultralarga_doc}}", when: "{{ask.banda_ultralarga}}"}
+      # A title passing to a new holder: the deed, and the guarantee for the contributo's
+      # instalments still due; a new direttore after the old one's resignation; a firm's notifica.
+      - {kind: file, label: fotocopia con estremi di registrazione dell'atto di alienazione, value: "{{ask.atto_trasferimento}}"}
+      - {kind: file, label: polizza fidejussoria a garanzia del pagamento delle quote residue, value: "{{ask.polizza_rate_residue}}", when: "{{ask.rate_residue}}"}
+      - {kind: file, label: dichiarazione di rinuncia del precedente direttore dei lavori, value: "{{ask.rinuncia_dl}}", when: "{{ask.dl_rinuncia}}"}
+      - {kind: file, label: Copia notifica preliminare all'ASL, value: "{{ask.notifica_preliminare}}", when: "{{ask.notifica_dovuta}}"}
+      # The committente's statement that the firm's papers were checked (art. 90 c. 9 a-b D.Lgs.
+      # 81/2008); the new holder's that they have the right to the title.
+      - {kind: file, label: "Dichiarazione sostitutiva dell'atto di notorietà, attestante l'avvenuta verifica", value: "{{ask.verifica_impresa_dsan}}"}
+      - {kind: file, label: "dichiarazione sostitutiva dell'atto di notorietà corredata da copia di documento di identità", value: "{{ask.titolo_subentrante_dsan}}"}
+      - {kind: file, label: "Attestazione in merito all'apposizione dell'etichetta", value: "{{ask.etichetta_banda_doc}}", when: "{{ask.banda_ultralarga}}"}
+      - {kind: file, label: estremi di atti assenso già acquisiti, value: "{{ask.atti_assenso_acquisiti_doc}}", when: "{{ask.atti_assenso_acquisiti}}"}
+      # The terre e rocce filings' own form, made by the portal from the pratica.
+      - {kind: file, label: Dichiarazione di utilizzo di cui all'art. 21, value: "{{ask.modulo_portale_firmato}}"}
+      - {kind: file, label: Allegato 5 al DPR 210/2017, value: "{{ask.modulo_portale_firmato}}"}
+      - {kind: file, label: Dichiarazione di avvenuto utilizzo delle terre e rocce, value: "{{ask.modulo_portale_firmato}}"}
       - {kind: file, label: "Fotocopia di un documento di identita' del soggetto che conferisce", value: "{{ask.documento_identita_cliente}}"}
       - {kind: file, label: "Copia dei documenti d'identità del/i titolare/i", value: "{{ask.documento_identita_cliente}}", when: "{{ask.titolo_esclusivo|not}}"}
       # The other holder's assent only without an exclusive title (a.2); the notifica only when due.
