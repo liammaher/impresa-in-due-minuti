@@ -20,8 +20,9 @@ Two layers, each counted from what the repository already holds:
                          Normattiva is national, the Regione Campania's sites Campania's, the
                          Comune's and the Soprintendenza for Napoli Napoli's, impresainungiorno
                          the portal (which operation to pick, not a law). A rule is `national`
-                         if it cites only national law (and the portal), else it names the
-                         levels it adds. A host not in HOSTS stops the count.
+                         if it cites only national law (and the portal), `uncited` if it cites
+                         nothing, else it names the levels it adds. A host not in HOSTS stops
+                         the count.
 
 A rule that also cites a Comune page may only confirm the national rule there; a national rule
 still holds only where the same portal (impresainungiorno's SUE front office) serves the comune.
@@ -68,7 +69,7 @@ HOSTS = {
     "sabap.na.it": "napoli",
 }
 CHOICE_LEVELS = ["national", "form", "campania-napoli"]
-RULE_LEVELS = ["national", "+napoli", "+campania", "+campania +napoli"]
+RULE_LEVELS = ["national", "+napoli", "+campania", "+campania +napoli", "uncited"]
 
 
 def matched():
@@ -125,10 +126,13 @@ def rules(lib):
     levels = sources(lib)
     out = []
     for r in yaml.safe_load(RULES.read_text())["rules"]:
-        cited = {levels[(c["procedure"], c["source"])]: c["source"] for c in r.get("cites") or []}
+        # A source is its procedure's: one id under two procedures may be two documents.
+        cites = sorted({(c["procedure"], c["source"]) for c in r.get("cites") or []})
+        cited = {levels[k] for k in cites}
         adds = [x for x in ("campania", "napoli") if x in cited]
-        out.append({"id": r["id"], "level": " ".join("+" + x for x in adds) or "national",
-                    "portal": "portal" in cited, "cites": sorted({c["source"] for c in r.get("cites") or []}),
+        level = " ".join("+" + x for x in adds) or ("national" if cites else "uncited")
+        out.append({"id": r["id"], "level": level, "portal": "portal" in cited,
+                    "cites": [{"procedure": p, "source": s, "level": levels[(p, s)]} for p, s in cites],
                     "refuses": "refuse" in r["then"]})
     return out, levels
 
@@ -185,20 +189,22 @@ def render(cs, rs, levels):
         f"| +napoli | {rc['+napoli']} | {pct(rc['+napoli'], len(rs))} | also a Comune or Soprintendenza source: a city rule, or a page confirming a national one |",
         f"| +campania | {rc['+campania']} | {pct(rc['+campania'], len(rs))} | also a Campania law or circular |",
         f"| +campania +napoli | {rc['+campania +napoli']} | {pct(rc['+campania +napoli'], len(rs))} | both |",
-        "", "Sources by level (rules citing each):", "",
+        f"| uncited | {rc['uncited']} | {pct(rc['uncited'], len(rs))} | cites no source (nothing to file, say) |",
+        "", "Sources by level (rules citing each; one id under two procedures shows once per level):", "",
         "| Level | Source | Rules |", "|---|---|---:|",
     ]
-    uses = collections.Counter(s for r in rs for s in r["cites"])
-    by_id = {}
-    for (_, sid), lv in levels.items():
-        by_id[sid] = lv
-    for lv in ("national", "portal", "campania", "napoli"):
-        for sid in sorted((s for s, l in by_id.items() if l == lv), key=lambda s: (-uses[s], s)):
-            lines.append(f"| {lv} | `{sid}` | {uses[sid]} |")
+    uses = collections.Counter()
+    for r in rs:
+        uses.update({(c["level"], c["source"]) for c in r["cites"]})
+    order = ["national", "portal", "campania", "napoli"]
+    for (lv, sid), n in sorted(uses.items(), key=lambda kv: (order.index(kv[0][0]), -kv[1], kv[0][1])):
+        lines.append(f"| {lv} | `{sid}` | {n} |")
     lines += ["", "Rules that aren't national:", ""]
     for r in rs:
-        if r["level"] != "national":
-            local = [s for s in r["cites"] if by_id[s] in ("campania", "napoli")]
+        if r["level"] == "uncited":
+            lines.append(f"- `{r['id']}` (uncited)")
+        elif r["level"] != "national":
+            local = sorted({c["source"] for c in r["cites"] if c["level"] in ("campania", "napoli")})
             lines.append(f"- `{r['id']}` ({r['level']}): " + ", ".join(f"`{s}`" for s in local))
     return "\n".join(lines) + "\n"
 
@@ -212,7 +218,10 @@ def main():
     if a.write and not lib:
         sys.exit("portability.py --write: set PRATICHE_NAPOLI_DIR (the rules' sources are in the library)")
     cs = choices()
-    rs, levels = rules(lib) if lib else (None, {})
+    try:
+        rs, levels = rules(lib) if lib else (None, {})
+    except (ValueError, OSError) as e:
+        sys.exit(f"portability.py: {e}")
     if a.json:
         json.dump({"choices": cs, "rules": rs}, sys.stdout, ensure_ascii=False, indent=1)
         print()
