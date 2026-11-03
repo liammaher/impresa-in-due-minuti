@@ -179,11 +179,11 @@ asks:
       intero_immobile, intero_tra_categorie, altro], labels: {'no': 'No', zona_agricola: 'Sì, in una zona agricola (zona E del PRG)', non_rilevante: 'Sì, ma il cambio non aumenta il fabbisogno di standard
         urbanistici (aree per servizi e parcheggi): in Campania non è urbanisticamente rilevante', stessa_categoria: 'Sì, di una singola unità, restando nella stessa categoria funzionale', tra_categorie: 'Sì,
         di una singola unità in un immobile delle zone A, B o C del D.M. 1444/1968, tra le categorie residenziale, turistico-ricettiva, produttiva e direzionale, commerciale (art. 23-ter c. 1-ter), non
-        al piano terra né seminterrata', piano_terra: 'Sì, di una singola unità al piano terra (primo piano fuori terra) o seminterrata, verso un''altra categoria funzionale', intero_immobile: 'Sì, di un
-        intero immobile, restando nella stessa categoria funzionale', intero_tra_categorie: 'Sì, di un intero immobile, verso un''altra categoria funzionale', altro: 'Sì, in un altro modo: un''unità fuori
-        delle zone A, B e C (o equipollenti) verso un''altra categoria, o verso o dalla categoria rurale fuori della zona E'}, how: 'Le categorie funzionali sono quelle dell''art. 23-ter c. 1 DPR 380/2001
-      (residenziale, turistico-ricettiva, produttiva e direzionale, commerciale, rurale). Il fabbisogno di standard lo stabilisce il tecnico dalle dotazioni che il PRG chiede per la nuova destinazione (art.
-      2 c. 4 L.R. Campania 13/2022, art. 27 c. 2 L.R. 31/2021).'}
+        al piano terra né seminterrata', piano_terra: 'Sì, di una singola unità al piano terra (primo piano fuori terra) o seminterrata, in un immobile delle zone A, B o C, tra le categorie residenziale,
+        turistico-ricettiva, produttiva e direzionale, commerciale', intero_immobile: 'Sì, di un intero immobile, restando nella stessa categoria funzionale', intero_tra_categorie: 'Sì, di un intero immobile,
+        verso un''altra categoria funzionale', altro: 'Sì, in un altro modo: un''unità (anche al piano terra) fuori delle zone A, B e C (o equipollenti) verso un''altra categoria, o verso o dalla categoria
+        rurale fuori della zona E'}, how: 'Le categorie funzionali sono quelle dell''art. 23-ter c. 1 DPR 380/2001 (residenziale, turistico-ricettiva, produttiva e direzionale, commerciale, rurale). Il
+      fabbisogno di standard lo stabilisce il tecnico dalle dotazioni che il PRG chiede per la nuova destinazione (art. 2 c. 4 L.R. Campania 13/2022, art. 27 c. 2 L.R. 31/2021).'}
   uso_ammesso_prg: {group: fatti, type: yes_no, item: 'La nuova destinazione d''uso è tra quelle che il PRG ammette in quella zona?'}
   verso_a2_tavola_7a: {group: fatti, type: yes_no, item: 'Il cambio porta un''abitazione ordinaria (a.1) a B&B, affittacamere, casa o appartamento per vacanze o locazione breve non imprenditoriale (a.2),
       in un edificio dell''area della tavola 7a del centro storico?', how: 'Le sottocategorie sono quelle dell''art. 21 delle norme della Variante generale come modificato dalla D.C.C. 129/2026; l''area

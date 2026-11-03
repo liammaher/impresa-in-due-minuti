@@ -130,5 +130,11 @@
   "answers": "answers-regionale.json",
   "result": "filled",
   "seconds": 203.6
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-piano-terra.json",
+  "result": "filled",
+  "seconds": 154.9
  }
 ]

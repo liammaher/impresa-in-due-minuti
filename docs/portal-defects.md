@@ -172,3 +172,25 @@ entry says what to report and how it was checked, without personal data.
 - **To report**: the two lines should be separate choices (the soil under D.Lgs. 152/2006, the
   burned areas under art. 10 c. 1 L. 353/2000).
 
+
+## SCIA alternativa and permesso: no line for Campania's own changes of use
+
+- **Where**: SCIA alternativa al permesso di costruire, quadro c) "Qualificazione dell'intervento";
+  permesso di costruire, quadro a) and the asseverazione's "opere in progetto". All three come from
+  the national forms (`schema/sue-choices.json`: scia_alternativa 002, permesso_di_costruire 000
+  and 019, each required).
+- **What happens**: the change-of-use choice offers "non comporta mutamento", "una singola unità
+  all'interno della stessa categoria", "una singola unità, ubicata in immobili ricompresi nelle zone
+  A), B) e C) [...] tra categorie funzionali [...] a), a-bis), b) e c)" and "un intero immobile
+  all'interno della stessa categoria funzionale nelle ipotesi di cui all'art. 23-ter, comma 3".
+- **Effect**: a whole building changed to another category, a unit outside zones A, B and C, or a
+  change to or from the rural category, which in Campania take the SCIA alternativa or the permesso
+  (art. 2 c. 6 L.R. 13/2022; regional circular CI/2025/3, d), has no line that states it, and any
+  line ticked states another change. Claude refuses these cases (`cambio-uso-regionale`). A
+  ground-floor unit in zone A, B or C among categories a) to c) is the third line, and is filled.
+- **Checked**: 2026-11-03, from the labels as crawled, the national schema and the Comune's own
+  Mod. SCIA/PDC of 23/06/2025 (quadro c, the same four lines); not tried on a draft. A whole building's change from offices to homes was filled on 2026-11-02 with the fourth
+  line ticked (`rehearsals/pdc-sanatoria-fittizio`, `answers-cambio-intero`): that run stated a
+  change within one category, and the case is refused since.
+- **To report**: the choice should have a line for a change of use the regional law gives this
+  title for (art. 23 c. 01 lets the regions add cases), or let it be stated in the relazione.

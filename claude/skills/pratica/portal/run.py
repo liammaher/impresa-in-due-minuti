@@ -361,7 +361,10 @@ FILTERS = Filters({
     "sue_scia_tipo": _sue_scia_tipo,
     "sue_cambio_uso_tipo": _sue_cambio_uso_tipo,
     "sue_pdc_tipo": _sue_pdc_tipo,
-    "sue_scia_cambio_uso": lambda v: {"no": "no", "intero_immobile": "intero immobile", **SUE_CAMBIO}.get(str(v), ""),
+    # A ground-floor unit in zone A, B or C is what the forms' A/B/C line says; the regional
+    # changes the forms have no line for are "altro" (defect cambio-uso-regionale).
+    "sue_scia_cambio_uso": lambda v: {"no": "no", "intero_immobile": "intero immobile", "piano_terra": "tra categorie",
+                                      "intero_tra_categorie": "altro", "altro": "altro", **SUE_CAMBIO}.get(str(v), ""),
     "sue_scia_alt_tipo": lambda v: {"ristrutturazione_pesante": "ristrutturazione edilizia",
                                     "ristrutturazione_urbanistica": "nuova costruzione piano attuativo"}.get(str(v), ""),
 })
