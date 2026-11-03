@@ -1,0 +1,19 @@
+{
+  "description": "What the studio's architect would answer to the Modello DP's ask rows, by label: designer and asseveratore of a client's CILA, paid by invoice.",
+  "answers": {
+    "A1.2 – in qualità di": "legale rappresentante",
+    "A1.3 – progettista": "sì",
+    "A1.3 – direttore dei lavori": "no",
+    "A1.3 – progettista strutturale": "no",
+    "A1.3 – professionista asseveratore": "sì",
+    "A1.3 – certificatore energetico": "no",
+    "A1.3 – geologo": "no",
+    "A1.3 – altro": "no",
+    "A1.3 – tipologia di lavori per i quali si è avuto l'incarico": "Manutenzione straordinaria dell'appartamento: rifacimento dei servizi igienici e degli impianti",
+    "Pratica edilizia": "CILA",
+    "fattura n.": "12/2026",
+    "fattura del": "2026-10-20",
+    "Firma del dichiarante – DATA": "2026-10-27",
+    "Firma del committente – DATA": "2026-10-27"
+  }
+}

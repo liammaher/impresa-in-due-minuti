@@ -728,8 +728,18 @@
   }
   // A slot named again in a screen takes its next box (the Allegati liberi's relazione, then an
   // authorization): its "+" pressed until the slot has that many. A resumed draft may have them.
+  // The second run (after the declarations) finds the slot as the first left it: its file goes in
+  // the first box that holds none, or a new one ("+").
   async function slotBox(f) {
     let s = slotRows(f.label);
+    if (f.empty) {
+      const cells = s.files.map((b) => (b.closest("td") || {}).innerText || "");
+      // Already there from an earlier try of this run: done, not attached twice.
+      if (cells.some((c) => norm(c).includes(norm(f.name)))) return { ...f, already: true };
+      const free = cells.findIndex((c) => !/\bRimuovi\b/.test(c));
+      // A slot of one box with no "+" takes the new file in place of the one it holds.
+      f = { ...f, nth: free >= 0 ? free + 1 : s.plus ? s.files.length + 1 : 1 };
+    }
     while (s.files.length < f.nth) {
       if (!s.plus) fail(`${f.label}: no + to add a file`);
       const before = s.files.length;
@@ -806,7 +816,17 @@
       report.at.label = f.label || f.id || f.css;
       let typed;
       if (f.kind === "add") { await addBlock(f); continue; }
-      if (f.kind === "file" && !f.id && attached[norm(f.label)] && v !== null && v !== "") f = await slotBox({ ...f, nth: attached[norm(f.label)] + 1 });
+      // A second run puts each file in the slot's first empty box: a box that holds a file takes a new
+      // one in its place (2026-11-03, an Allegato A replaced by the Modello DP after it).
+      if (f.kind === "file" && !f.id && report.reopened && v !== null && v !== "") {
+        f = await slotBox({ ...f, empty: true, name: v.name });
+        if (f.already) {
+          attached[norm(f.label)] = (attached[norm(f.label)] || 0) + 1;
+          done.push({ ...f, kind: "file", typed: v.name, field: i });
+          continue;
+        }
+      }
+      else if (f.kind === "file" && !f.id && attached[norm(f.label)] && v !== null && v !== "") f = await slotBox({ ...f, nth: attached[norm(f.label)] + 1 });
       // An id a combination of choices moved (one the crawl didn't try together) is found
       // again by its label, held to the same checks: when it is gone, and when the box it
       // names now is another one (an earlier choice in the section shifted the rows).
@@ -1032,7 +1052,7 @@
       if (resume.reopen) {
         // After the declarations (run.py --after-declarations): the draft by its name, from
         // Pratiche in bozza, since the person's own clicks have moved its address on.
-        await reopen(values.wizard[0], new URL(steps.logged_in).origin + "/fnsuap/cmd/home");
+        await reopen(resume.reopen === true ? values.wizard[0] : resume.reopen, new URL(steps.logged_in).origin + "/fnsuap/cmd/home");
       } else {
         frame = document.createElement("iframe");
         frame.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;border:0;z-index:2147483647;background:#fff";
@@ -1216,7 +1236,7 @@
       // A fix is what Claude found the page really has for one field (a moved id, a renamed
       // label): this run uses it, and run.py writes it down for the steps file.
       for (const x of resume.fixes || []) Object.assign(steps.sections[x.section].fields[x.field], x.set);
-      report = { procedure, result: "running", sections: [], at: null, resumed: !!(resume.url || resume.reopen) };
+      report = { procedure, result: "running", sections: [], at: null, resumed: !!(resume.url || resume.reopen), reopened: !!resume.reopen };
       kept = [];
       attempt(values, resume);
       return "started";
