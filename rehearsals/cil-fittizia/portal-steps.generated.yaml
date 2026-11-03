@@ -8,8 +8,7 @@ yours:
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
 - 'On Allega documenti: download the portal''s procura, have the client sign it, sign it digitally (.p7m) and attach it'
 - Pay the {{ask.diritti_euro}} € diritti before sending, and attach the receipt (copia attestazione versamento) on Allega documenti
-- 'On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); keep its authorization with the pratica'
-- 'If a notifica preliminare is due (art. 99 D.Lgs. 81/2008): attach it under Allegati liberi, signed digitally (.p7m only): the CIL has no slot of its own for it'
+- 'On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); its authorization is attached under Allegati liberi: keep it with the pratica'
 - Sign and send (Firma e invio); keep the receipt
 groups:
   fatti:
@@ -30,8 +29,7 @@ asks:
     propose: nessuna}
   lavori_in_proprio: {type: yes_no, question: 'Are the works so minor that the client does them without a firm (opere di modesta entità, eseguite in proprio)?', propose: 'false'}
   impresa_dopo: {type: yes_no, question: 'Is the building firm still to be chosen (named before the works start, with the comunicazione di nomina dell''impresa esecutrice)?', propose: 'false'}
-  comunicazioni_contestuali: {type: yes_no, question: 'Are other filings presented together with this pratica (a segnalazione, comunicazione or notifica to another office that the works need)?', propose: 'false',
-    yours: 'Attach the documents of the filings named in quadro e under Allegati liberi, signed digitally (.p7m): the CIL has no slot of its own for them'}
+  comunicazioni_contestuali: {type: yes_no, question: 'Are other filings presented together with this pratica (a segnalazione, comunicazione or notifica to another office that the works need)?', propose: 'false'}
   comunicazioni_quante: {type: number, question: 'How many?'}
   comunicazione_1: {type: text, question: 'The first: what is filed with it (e.g. SCIA antincendio)?'}
   comunicazione_1_autorita: {type: text, question: Its authority (e.g. Comando provinciale dei Vigili del Fuoco di Napoli)}
@@ -39,6 +37,7 @@ asks:
   comunicazione_#K: {type: text, question: 'Filing #K: what is filed with it?'}
   comunicazione_2_autorita: {type: text, question: 'Filing 2: its authority'}
   comunicazione_#K_autorita: {type: text, question: 'Filing #K: its authority'}
+  comunicazioni_doc: {type: file, question: 'The documents those filings need, in one PDF (the slot ''Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni'')'}
   atti_da_acquisire: {type: yes_no, question: 'Do the works need assents not yet obtained (a nulla osta, an authorization, a deroga) that the SUE is to acquire from documents you attach (art. 23-bis DPR
       380/2001)? The works then start only once the SUE says they are in. An assent already obtained isn''t one: it is attached', propose: 'false'}
   oggetto: {type: text, question: The works in one sentence (300 characters)}
@@ -52,12 +51,14 @@ asks:
   domicilio_inad: {type: yes_no, question: 'Is the client''s PEC (identity.pec) their domicilio digitale in INAD, to be communicated on the form?', default: 'false'}
   domicilio_inipec: {type: yes_no, question: 'Is the client company''s PEC (business.pec) its domicilio digitale in INI-PEC, to be communicated on the form?', default: 'false'}
   soprintendenza_autorizzata: {type: yes_no, question: 'Has the Soprintendenza already authorized these works (art. 21 c. 4 D.Lgs. 42/2004)?'}
+  soprintendenza_autorizzazione: {type: file, question: 'The Soprintendenza''s authorization already obtained (PDF, signed digitally as Napoli''s SUE takes every file)', when: '{{ask.soprintendenza_autorizzata}}'}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due), default: '100', why: 'Line SUE 14 of the Comune''s 2026 table of diritti: 100 € for a CIL.'}
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
   diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
   documento_identita_cliente: {type: file, question: The client's identity document (PDF)}
   assenso_proprietario: {type: file, question: The owner's signed assent to the works (PDF)}
+  notifica_preliminare: {type: file, question: The notifica preliminare already sent (PDF)}
   intervento: {type: choice, question: 'Che lavori sono, secondo le definizioni dell''art. 3 DPR 380/2001?', options: [edilizia_libera, opere_temporanee, nessuna_opera, manutenzione_straordinaria, restauro,
       ristrutturazione, ristrutturazione_pesante, nuova_costruzione, ristrutturazione_urbanistica, variante_pdc, variante_essenziale_pdc, variante_scia, altro], labels: {edilizia_libera: 'Lavori senza titolo
         dell''art. 6 c. 1: manutenzione ordinaria (riparare, rinnovare e sostituire finiture, tenere in efficienza gli impianti), barriere architettoniche senza ascensori esterni né modifiche della sagoma,
@@ -474,7 +475,7 @@ sections:
   - {id: 'r6c2p12reg:chk', kind: checkbox, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.verificato_idoneita}}', label: dichiara di aver verificato la documentazione}
   - {id: 'r8c2p18reg:radio:2_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta|not}}', label: dichiara che l'intervento non è soggetto all'invio}
   - {id: 'r9c2p21reg:radio:3_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}', label: dichiara che l'intervento è soggetto all'invio}
-  - {id: 'r10c2p24reg:chk', kind: checkbox, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}', slot: 'none of its own: Allegati liberi (signed files only on the CIL: the person''s)',
+  - {id: 'r10c2p24reg:chk', kind: checkbox, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}', slot: 'none of its own: Allegati liberi, the notifica in its own box (the CIL''s recipe)',
     label: allega alla presente comunicazione la notifica}
   - {kind: checkbox, label: e allega alla presente segnalazione la notifica, if_present: true, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}'}
 - section: Dichiarazione relativa ai diritti
@@ -501,3 +502,8 @@ sections:
   - {kind: file, label: Fotocopia di un documento di identita' del soggetto che conferisce, value: '{{ask.documento_identita_cliente}}', accepts: pdf;pdf.p7m}
   - {kind: file, label: Copia dei documenti d'identità del/i titolare/i, value: '{{ask.documento_identita_cliente}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Dichiarazione di assenso dei terzi titolari, value: '{{ask.assenso_proprietario}}', when: '{{ask.titolo_esclusivo|not}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
+  - {kind: file, label: Allegati liberi, value: '{{ask.notifica_preliminare}}', describe: Notifica preliminare (art. 99 D.Lgs. 81/2008), when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}',
+    accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
+  - {kind: file, label: Allegati liberi, value: '{{ask.comunicazioni_doc}}', describe: Documentazione delle comunicazioni del quadro e, when: '{{ask.comunicazioni_contestuali}}', accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
+  - {kind: file, label: Allegati liberi, value: '{{ask.soprintendenza_autorizzazione}}', describe: Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004), when: '{{ask.bene_culturale}} {{ask.soprintendenza_autorizzata}}',
+    accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}

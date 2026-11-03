@@ -28,5 +28,17 @@
   "answers": "answers-comunicazioni.json",
   "result": "filled",
   "seconds": 82.3
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-bene-culturale.json",
+  "result": "filled",
+  "seconds": 78
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-notifica.json",
+  "result": "filled",
+  "seconds": 78.6
  }
 ]

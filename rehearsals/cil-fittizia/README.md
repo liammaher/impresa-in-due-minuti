@@ -19,8 +19,10 @@ works (art. 21 c. 4 D.Lgs. 42/2004), requested apart and first (the rules table'
 authorization isn't written in the CIL. `answers-bene-culturale.json`.
 
 Quadro e lists the other filings presented with the CIL (since 2026-11-03: `comunicazioni_contestuali`,
-two rows and more by "+", as on the CILA). Their documents go under Allegati liberi, the person's (no
-slot of their own). Assents still to obtain are refused: the CIL's form, national and Napoli's,
+two rows and more by "+"). Their documents, the notifica preliminare and, on a bene culturale, the
+Soprintendenza's authorization go under Allegati liberi, each in its own box (the slot's "+"),
+attached by the run since 2026-11-03: that slot takes plain PDFs, not only signed ones as the
+2026-11-01 run below read it. Assents still to obtain are refused: the CIL's form, national and Napoli's,
 asks the SUE for none. `answers-comunicazioni.json`: three filings, never run on the portal.
 
 ## Runs

@@ -148,6 +148,7 @@ asks:
   bollo_data_2: {type: date, question: Its date}
   relazione_paesaggistica: {type: file, question: 'The relazione paesaggistica (DPCM 12/12/2005), for the autorizzazione paesaggistica ordinaria (PDF)'}
   soprintendenza_autorizzata: {type: yes_no, question: 'Has the Soprintendenza already authorized these works (art. 21 c. 4 D.Lgs. 42/2004)?'}
+  soprintendenza_autorizzazione: {type: file, question: 'The Soprintendenza''s authorization already obtained (PDF, signed digitally as Napoli''s SUE takes every file)', when: '{{ask.soprintendenza_autorizzata}}'}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due), default: '151'}
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
     propose: 'false'}
@@ -910,7 +911,7 @@ sections:
   - {id: 'r6c2p11reg:radio:3_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.sotto_200|not}}', label: dichiara che l'entità presunta del cantiere è pari o superiore}
   - {id: 'r8c2p15reg:radio:4_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta|not}}', label: dichiara che l'intervento non è soggetto all'invio}
   - {id: 'r9c2p18reg:radio:5_clone', kind: radio, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}', label: dichiara che l'intervento è soggetto all'invio}
-  - {id: 'r10c2p21reg:chk', kind: checkbox, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}', slot: 'none of its own: Allegati liberi (signed files only on the CIL: the person''s)',
+  - {id: 'r10c2p21reg:chk', kind: checkbox, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}', slot: 'none of its own: Allegati liberi, the notifica in its own box (the CIL''s recipe)',
     label: allega alla presente comunicazione la notifica}
   - {kind: checkbox, label: e allega alla presente segnalazione la notifica, if_present: true, when: '{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}'}
 - section: Relazione Tecnica di Asseverazione
@@ -1027,6 +1028,8 @@ sections:
   - {kind: file, label: Elaborati grafici dello stato di fatto e progetto, value: '{{ask.elaborati_grafici}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
   - {kind: file, label: Autorizzazione sismica, value: '{{ask.toll_sismica_doc}}', when: '{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}'}
   - {kind: file, label: Allegati liberi, value: '{{ask.relazione_tecnica}}', describe: Relazione tecnica, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
+  - {kind: file, label: Allegati liberi, value: '{{ask.soprintendenza_autorizzazione}}', describe: Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004), when: '{{ask.bene_culturale}} {{ask.soprintendenza_autorizzata}}',
+    accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
   - {kind: file, label: Prospetto di calcolo preventivo del contributo, value: '{{ask.prospetto_contributo}}', when: '{{ask.cila_onerosa}}'}
   - {kind: file, label: Ricevuta di versamento del contributo, value: '{{ask.ricevuta_contributo}}', when: '{{ask.cila_onerosa}} {{ask.contributo_pagato}}'}
   - {kind: file, label: 'Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni', value: '{{ask.comunicazioni_doc}}', when: '{{ask.comunicazioni_contestuali}}', accepts: xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m}
