@@ -6,12 +6,12 @@ A rough split of what the SUE mapping rests on, for a comune or region other tha
 
 ## The portal's choices
 
-**1162 choices** on Napoli's SUE (`branches.py`, the SUAP's own bollo options left out); 1147 (99%) name no Campania or Napoli rule.
+**1174 choices** on Napoli's SUE (`branches.py`, the SUAP's own bollo options left out); 1159 (99%) name no Campania or Napoli rule.
 
 | Level | Choices | Share | What it is |
 |---|---:|---:|---|
 | national | 384 | 33% | an alternative of a choice in InfoCamere's national forms |
-| form | 763 | 66% | the national forms' yes/no leaves and the portal's own boxes, no Campania or Napoli rule named |
+| form | 775 | 66% | the national forms' yes/no leaves and the portal's own boxes, no Campania or Napoli rule named |
 | campania-napoli | 15 | 1% | its text names a Campania law or Napoli |
 
 The CILA's fields, read one by one against the national form on 2026-10-28, were 133 of 152 in the form and 4 more asked elsewhere in it ([schema-vs-portal.md](../rehearsals/cila-fittizia/schema/schema-vs-portal.md)): most `form` choices are the national forms' own.
@@ -36,13 +36,13 @@ Choices naming Campania or Napoli:
 
 ## The rules table
 
-**94 rules** in `rules/sue-napoli.yaml`, each by the sources it cites, placed by where the library has them published.
+**97 rules** in `rules/sue-napoli.yaml`, each by the sources it cites, placed by where the library has them published.
 
 | Level | Rules | Share | What it rests on |
 |---|---:|---:|---|
-| national | 50 | 53% | national law only (17 also cite the portal, for which operation to pick) |
+| national | 52 | 54% | national law only (18 also cite the portal, for which operation to pick) |
 | +napoli | 17 | 18% | also a Comune or Soprintendenza source: a city rule, or a page confirming a national one |
-| +campania | 23 | 24% | also a Campania law or circular |
+| +campania | 24 | 25% | also a Campania law or circular |
 | +campania +napoli | 3 | 3% | both |
 | uncited | 1 | 1% | cites no source (nothing to file, say) |
 
@@ -67,9 +67,14 @@ Sources by level (rules citing each; one id under two procedures shows once per 
 | national | `dpr31-art3` | 2 |
 | national | `dpr380-art6bis` | 2 |
 | national | `dlgs42-art22` | 1 |
+| national | `dpr120-art2` | 1 |
+| national | `dpr120-art21` | 1 |
+| national | `dpr120-art22` | 1 |
+| national | `dpr120-art7` | 1 |
+| national | `dpr120-art9` | 1 |
 | national | `dpr380-art93` | 1 |
 | national | `dpr380-art94bis` | 1 |
-| portal | `portale-sue-operazioni` | 19 |
+| portal | `portale-sue-operazioni` | 20 |
 | campania | `lr13-2022` | 15 |
 | campania | `circolare-salva-casa-campania` | 9 |
 | campania | `competenza-napoli` | 3 |
@@ -77,6 +82,7 @@ Sources by level (rules citing each; one id under two procedures shows once per 
 | campania | `lr31-2021` | 2 |
 | campania | `lr31-2021-piano-casa` | 1 |
 | campania | `lr9-1983` | 1 |
+| campania | `procedurale-via-campania` | 1 |
 | napoli | `sabap-istanza` | 6 |
 | napoli | `pdc-modulo` | 3 |
 | napoli | `scia-modulo` | 3 |
@@ -134,3 +140,4 @@ Rules that aren't national:
 - `sismica-deposito` (+campania): `competenza-napoli`
 - `sismica-autorizzazione` (+campania): `competenza-napoli`
 - `sismica-sanatoria` (+campania): `competenza-napoli`, `lr9-1983`
+- `terre-rocce-piano` (+campania): `procedurale-via-campania`

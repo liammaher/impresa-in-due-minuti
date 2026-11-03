@@ -4,11 +4,11 @@
 
 Every choice the crawls of Napoli's SUE have seen (a radio, a tick box, a dropdown option), each counted once however many pratiche share its section, and what the dictionary does with it. A case that takes an **unmapped** choice can't be filled yet. The scoreboard (`coverage.md`) counts a section as filled even with these left unticked, so they don't show there.
 
-**1184 choices** in 96 sections that have any.
+**1196 choices** in 96 sections that have any.
 
 | State | Choices | Meaning |
 |---|---:|---|
-| ticked | 1017 | Claude takes it when the case does |
+| ticked | 1029 | Claude takes it when the case does |
 | answer | 65 | a dropdown filled from an answer (options reached not counted) |
 | theirs | 7 | the person's own (an acknowledgement, a declaration), never ticked |
 | left | 6 | left empty on purpose |

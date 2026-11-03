@@ -98,5 +98,6 @@
  "progettista_altro": false,
  "diritti_esente": false,
  "fatti": ["uso_ammesso_prg"],
- "cambio_uso_tipo": "unita opere 6bis stessa categoria"
+ "cambio_uso_tipo": "unita opere 6bis stessa categoria",
+ "terre_rocce": "no"
 }
