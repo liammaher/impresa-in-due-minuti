@@ -84,7 +84,8 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      box on the page, so they don't pass through the conversation, unless
                      `--plain`); reads every
                      field back, then again on a fresh load of the draft, attaches the files it
-                     names (the pane: 256 KB in all, bigger ones by an https link it fetches and checks by sha256,
+                     names (the pane: 256 KB in all in run.js; over that the person picks the files once in a box on
+                     the page, each checked by sha256, or an https link it fetches and checks the same way,
                      `--file-urls`; a signed-only slot takes the person's .p7m, which the portal checks on
                      upload, and what the portal makes once the declarations are ticked, the procura,
                      goes in a second run, `--after-declarations`), never declares, pays or sends; a filled run draws the declarations' own text, the

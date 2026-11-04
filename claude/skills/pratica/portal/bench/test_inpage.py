@@ -894,17 +894,111 @@ def main():
         browser.close()
 
     def pane_limit():
+        # Over 256 KB the pane's run.js carries what to pick, not bytes; a batch (pick=False),
+        # with no one to pick for each run, still refuses.
         values = run.Values(answers, fields={"x:ruolo.tipo": "titolare"})
+        _, run_js = run.page_scripts(steps(base), values)
+        assert len(run_js) < 10_000 and '"picked":true' in run_js, f"run.js is {len(run_js)} bytes"
         try:
-            run.page_scripts(steps(base), values)
+            run.page_scripts(steps(base), values, pick=False)
         except run.StepError as e:
             assert "256 KB" in str(e), str(e)
         else:
-            raise AssertionError("3 MB of files went into run.js for the pane")
-    case("the pane's run.js refuses more than 256 KB of files", pane_limit)
+            raise AssertionError("3 MB of files went into run.js for a batch")
+    case("over 256 KB the pane's run.js names the files to pick; a batch still refuses", pane_limit)
 
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
+
+        def pick_page():
+            values = run.Values(answers, fields={"x:ruolo.tipo": "titolare"})
+            install, run_js = run.page_scripts(steps(base), values)
+            page = browser.new_page()
+            page.goto(base + "/")
+            page.evaluate(install)
+            assert page.evaluate(run_js) == "waiting for the files"
+            first = page.evaluate("__pv.wait(300)")
+            assert first["result"] == "waiting" and "choose" in first["waiting"], first
+            return page
+
+        FILES = "[data-pv=files] input[type=file]:not([webkitdirectory])"
+
+        def picked_files():
+            # Too big for run.js: the person picks the files in the page. One with the right name
+            # and other bytes is refused, by name; the right ones attach byte-exact, and no
+            # storage of the tab holds them.
+            PORTAL.reset()
+            other = tmp / "other"
+            other.mkdir(exist_ok=True)
+            (other / planimetria.name).write_bytes(b"%PDF-1.4\n" + os.urandom(planimetria.stat().st_size - 9))
+            page = pick_page()
+            try:
+                page.set_input_files(FILES, str(other / planimetria.name))
+                page.wait_for_function("(document.querySelector('[data-pv=files]') || {}).textContent.includes('Not the file pre-flight checked')")
+                assert page.evaluate("__pv.wait(200)")["result"] == "waiting"
+                page.set_input_files(FILES, [str(planimetria), str(ricevuta)])
+                done = settle(page)
+                assert done["result"] == "filled", done.get("error")
+                assert {f["name"]: f["sha256"] for f in PORTAL.files} == sha, PORTAL.files
+                assert page.query_selector("[data-pv=files]") is None, "the files box stayed"
+                dump = page.evaluate("JSON.stringify([localStorage, sessionStorage]).length")
+                assert dump < 1_000_000, f"the tab's storage holds {dump} characters"
+            finally:
+                page.close()
+        case("files too big for run.js are picked in the page: a wrong one refused by name, the right ones byte-exact", picked_files)
+
+        def picked_folder():
+            # The job's folder chosen whole: its other files are passed over.
+            PORTAL.reset()
+            job = tmp / "pratica"
+            job.mkdir(exist_ok=True)
+            for f in (planimetria, ricevuta):
+                shutil.copy(f, job / f.name)
+            (job / "appunti.txt").write_text("non allegare")
+            page = pick_page()
+            try:
+                page.set_input_files("[data-pv=files] input[webkitdirectory]", str(job))
+                done = settle(page)
+                assert done["result"] == "filled", done.get("error")
+                assert {f["name"]: f["sha256"] for f in PORTAL.files} == sha, PORTAL.files
+            finally:
+                page.close()
+        case("the job's folder picked whole: its files attached, its others passed over", picked_folder)
+
+        def picked_bundle():
+            # run.py page --bundle: the runner, the steps and run.js in one file the person picks
+            # in pick.js's box, for a pane that lacks the runner (too big for one call).
+            PORTAL.reset()
+            values = run.Values(small, fields={"x:ruolo.tipo": "titolare"})
+            files = run.page_files(steps(base), values)
+            out = tmp / "bundle-out"
+            out.mkdir(exist_ok=True)
+            run.bundle(out, out / "pv-run.js", files)
+            page = browser.new_page()
+            try:
+                page.goto(base + "/")
+                assert "box shown" in page.evaluate((out / "pick.js").read_text())
+                page.set_input_files("#pv-pick input", str(out / "pv-run.js"))
+                page.wait_for_function("window.pvPicked")
+                assert page.evaluate("window.pvPicked") == "started", page.evaluate("window.pvPicked")
+                done = settle(page)
+                assert done["result"] == "filled", done.get("error")
+                assert PORTAL.fields.get(DEN) == small["den"], PORTAL.fields
+            finally:
+                page.close()
+        case("run.py page --bundle: runner, steps and run.js picked as one file start the run", picked_bundle)
+
+        def pick_stopped():
+            PORTAL.reset()
+            page = pick_page()
+            try:
+                page.click("[data-pv=files] button")
+                done = settle(page)
+                assert done["result"] == "stopped" and "weren't chosen" in done["error"], done
+                assert not PORTAL.fields and not PORTAL.files, "something was filled"
+            finally:
+                page.close()
+        case("Stop in the files box ends the run before anything is filled", pick_stopped)
 
         def by_link():
             PORTAL.reset()

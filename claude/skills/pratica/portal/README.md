@@ -142,8 +142,12 @@ that also cites a Comune page may only confirm a national one there.
   GRADINI, FONDACO, RAMPE, SUPPORTICO) is named by pre-flight. The location's "Via, Viale, Piazza"
   lookup lists the comune's streets each starting with its type, whatever it is. Until 2026-11-04
   both knew only the five: 1,240 of the 3,508 streets in Naples' stradario (`internal/napoli`)
-  would have stopped a run, and every rehearsal's address was a Via, so none did. Neither has been
-  seen on the portal with a Vico yet.
+  would have stopped a run, and every rehearsal's address was a Via, so none did. Seen on the
+  portal 2026-11-04 (`rehearsals/cila-fittizia/answers-comproprietaria-negozio`, filled): the
+  property on VICO CACCIOTTOLI, a street whose name the stradario also gives a Salita, a
+  Piazzetta and Gradini (the type tells them apart), and the client's home on a Vicoletto saved as ALTRO + VICOLETTO + "2° AVVOCATA", so
+  "Dettaglio DUG" takes the national list's words. The fixture's `marta`, `bruno` and `dario` live
+  and own on such streets (a Vicoletto, a Piazzetta; a Vico, a Cupa, a Traversa) to keep it tried.
 - **A section's text past 3,000 characters isn't in its crawl** (crawl.js keeps that much), so a
   long section's own wording, not just its box labels, is read on a draft: the CILA relazione's
   two lists were filled for a week as filings "already made" and assents "already obtained", and
@@ -382,6 +386,45 @@ the DSC in its slot. The receipt slot ("copia attestazione versamento oneri, dir
 plain PDF ("Il tipo di documento non corrisponde alle tipologie ammesse"): it takes only signed files,
 which the CILA's crawl, made on an empty draft, hadn't recorded (`accepts_read` in its slot now).
 
+## What InfoCamere's manuals say (read 2026-11-04, not yet seen on today's portal)
+
+Two public editions of the front office's user manual: *Manuale Operativo Funzioni di
+compilazione pratica* version 9 (December 2013, the portal's own "Manuale utente" link,
+`https://www.impresainungiorno.gov.it/dispatcher/help/manuale_utente.pdf`) and version 21 (April 2018,
+the I-SUAP front office the SUE uses; a copy at
+`https://benevento.ordingegneri.it/wp-content/uploads/sites/74/2022/03/Manuale_SUAP_Funzioni_di_compilazione_pratica.pdf`).
+Written for the SUAP; the SUE runs on the same front office. What they add, to check on the portal
+before any code relies on it:
+
+- **After Invio (v21 pp. 52-58).** "Vai alla Scrivania" on the sportello's home page opens MyPage,
+  "Le mie pratiche inviate": every open pratica and those closed less than a year ago, searchable by
+  the codice pratica the confirmation and the receipt give. A pratica's page has "Nuova
+  Comunicazione": "Seleziona un tipo di richiesta" (comunicazione, sent of one's own accord;
+  conformazione dell'attività or integrazione, when the office asked for one), files by "Sfoglia" and
+  "Salva Allegato", "Note di compilazione" up to 4,096 characters, then "Invia Comunicazione" (the
+  person's). The same file types as the pratica's. It makes an event on the office's Scrivania and a
+  receipt for the sender. Only the dichiarante, who signed the pratica (the procuratore), may send;
+  with a weak login every file must carry the dichiarante's signature. Not on a pratica the office
+  has put in "Archiviata". Integrations go this way, not by PEC. Mapping it needs a sent pratica:
+  none exists with made-up data.
+- **"Copia pratica" (v21 pp. 26-28).** At the start, "importa dati da pratica precedente" fills a new
+  pratica from one of one's own, sent or in bozza, searched by comune, codice pratica, the
+  dichiarante's codice fiscale or date; everything but the attachments, every section editable.
+- **Address and catasto checks (v21 pp. 24-25).** The orange "Indirizzo sconosciuto" and "Dati
+  catastali sconosciuti" are the office's stradario and catasto, checked when it has loaded them, and
+  never blocking. Made-up data always raises them (`alerts`); on a real case they say the address or
+  the cadastral data don't match the office's archive, which the person should see.
+- **The asseverazione is its own document (v21 pp. 29-30).** The front office writes the Relazione
+  Tecnica di Asseverazione from its sections and shows it on the signing page beside the pratica's
+  PDF (the MDA); the two may be signed by different people (the designer, the procuratore).
+- **Attachments (v21 p. 49).** The procura only as `pdf.p7m`; a document of several files by the
+  slot's "+"; one file per type of attachment, never several required documents in one file;
+  Allegati liberi only for documents no slot names.
+- **Drafts (v9 p. 43).** A draft signed but not sent reopens at its attachments and must be signed
+  again; a sent pratica leaves Pratiche in bozza (v21 p. 51).
+- **Signing (v9 p. 40).** The 2013 edition accepts the signed pratica only as `.p7m`, not a signed
+  PDF; the 2018 one doesn't repeat it.
+
 ## Firma e invio: the person's
 
 The runs stop at Allega documenti, and the last screens stay the person's for a reason the portal
@@ -427,6 +470,48 @@ name), a resumed run, the review in a narrow pane.
 portal's page: right for a real person's data, a nuisance for a rehearsal. Rehearsals with made-up
 data pass `--plain`; `bench/rerun.py` builds its scripts without a code. Where no window can open
 (a sandbox, a remote shell) `page` stops and says so.
+
+## Large files: the person picks them
+
+In the pane run.js carries at most 256 KB of files (`PAGE_FILES_LIMIT`). Over that, `run.py page`
+puts each of the run's files in run.js as `{name, type, size, sha256, picked: true}`, and pre-flight
+lists them under `pick`. The runner starts by drawing a box over the portal's page (`askFiles`,
+beside the code's `askCode`) that names them with their sizes, takes the files or the job's folder
+(`webkitdirectory`: its other files are passed over), and keeps a file only if its size and sha256
+are the ones pre-flight read: one with the right name and other bytes is named as "not the file
+pre-flight checked". Nothing is filled until every file is in; meanwhile the report says
+`waiting`. The bytes stay in the runner's memory, keyed by sha256, never in the tab's storage, so a
+runner loaded again asks again; Stop in the box ends the run before anything is filled. A batch
+(`bench/rerun.py`) passes `pick=False` and still refuses files over the limit: no one is there to
+pick for each run. On the portal 2026-11-04 (`rehearsals/cila-fittizia`, README runs): a CILA with a 5 MB
+and a 2 MB file filled in 127 s from a folder picked once; the browser asks before it hands a
+folder to the page. Offline tests: `bench/test_inpage.py` (a 3 MB file, a wrong one, a folder,
+Stop). The choice and its alternatives: docs/design/large-attachments.md.
+
+A pane without the runner (check.js names `runner.js`) can't take it in one call: it is about
+80 KB and a call about 40 KB (2026-11-04), and a long script copied through the conversation can
+arrive garbled (2026-10-30). `run.py page --bundle FILE` writes runner.js, steps.js and run.js as one
+file (in the person's Downloads) and `pick.js`, a box on the portal's page where the person picks
+it once; it is checked by sha256 and evaluated, which starts the run (then, with big files, the
+files box). The batches' `bench/rerun.py --bundle` does the same for many runs.
+
+## Writing new cases: `bench/new_case.py`, `bench/fake_pdf.py`
+
+A branch no case takes (schema_branches.py's "mapped, no case" and "Portal-only boxes untaken")
+gets a case: read the box's condition in a steps file (its `when`), then `bench/new_case.py
+REHEARSAL BASE NAME '{overrides}'` from a base answers file near the case, answering what
+pre-flight asks back until it says ready, and `--write`. A checklist group takes a list of its
+items' keys (`"fasce_funzionali": ["fascia_stradale"]`); the other items are then false. A use, a
+title or an address the fixture's people don't have is a new made-up person in
+`rehearsals/cila-fittizia/fixture-p6.json` (appended in its own one-line style, a codice fiscale
+with a valid check letter: the portal checks it). A file a new answer asks for is
+`bench/fake_pdf.py rehearsals/<r>/files/<name>.pdf "Title"`, in the layout of the others. The
+number boxes of the permesso's previous titles take 8 characters (pre-flight says so). 31 cases
+written this way on 2026-11-04 closed 150 of 159 untaken boxes; the nine left can't be a case: five
+are the SCIA's sanatoria rows the permesso's stato legittimo inherits by `same_as` and doesn't
+show (catalogue/README.md, Limits: a crawl of that section on a permesso draft would drop them),
+three the SCIA's whole-building change of use (it goes to the SCIA alternativa), one the agibilità
+director's sex (the made-up architect's own).
 
 ## Checking them all: `bench/rerun.py`
 

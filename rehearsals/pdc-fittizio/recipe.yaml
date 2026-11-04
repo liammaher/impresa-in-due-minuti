@@ -130,6 +130,10 @@ rules:
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "true", parere_esonero: "false"}
 supports:
+  # A permesso's stato legittimo looks like the SCIA's before any choice, so the crawl keeps one copy
+  # of it, and the SCIA's sanatoria rows came with it; on the permesso they aren't there (2026-11-04,
+  # a run stopped on "un intervento soggetto a SCIA"). Works in sanatoria are their own pratica.
+  - {value: "{{ask.sanatoria_titolo}}", in: [nessuna], else: "Works already done go by their own pratica: a permesso in sanatoria (the permesso with the wizard's sanatoria choice), or, for works that needed a SCIA, a SCIA in sanatoria."}
   # The portal requires one energy incentive claimed on every permesso, even with no energy
   # works or renewables (seen 2026-10-30): with none it can't be filed as is.
   - {value: "{{ask.incentivo_energetico}}", in: ["art 14 c6", "art 14 c7", "bonus volumetrico"], defect: pdc-incentivo-energetico, else: "The permesso's form on the portal wants one energy incentive claimed (art. 14 c. 6 or 7 D.Lgs. 102/2014, or the 5% bonus of D.Lgs. 28/2011) even with no energy works: a project with none can't be filed on it as is; ask the SUE."}

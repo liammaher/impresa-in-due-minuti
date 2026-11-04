@@ -173,7 +173,9 @@ price.
 the conversation, at most 256 KB in all (north-star question 7): Claude writes every byte of
 the call, so megabytes never go that way. A planimetria is 1–5 MB, and the portal takes up to
 9.77 MB a file. If the architect has to attach files by hand, the flow isn't all-or-nothing
-any more, so until this passes the skill refuses a case whose files don't fit. Test: whether
+any more. Since 2026-11-04 the Code tab's pane takes them by one pick in a box on the page
+(design/large-attachments.md); in Cowork that box needs its browser to let the person choose a
+file, or this test's tool instead. Test: whether
 Cowork's browser has a tool that puts a file from the folder into a page's file input (the
 test skill tries a 3 MB PDF). If it has, the runner pauses at each file slot for that tool. If
 not, question 7's fix: a small endpoint serves each file once at a short-lived `https` URL,

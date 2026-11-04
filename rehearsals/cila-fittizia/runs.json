@@ -184,5 +184,29 @@
   "answers": "answers-tolleranze-privo.json",
   "result": "filled",
   "seconds": 149.5
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-comproprietaria-negozio.json",
+  "result": "filled",
+  "seconds": 113.2
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-deposito-4.json",
+  "result": "filled",
+  "seconds": 193.8
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-usufruttuario-industriale.json",
+  "result": "filled",
+  "seconds": 97.9
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-vico-6.json",
+  "result": "filled",
+  "seconds": 98
  }
 ]

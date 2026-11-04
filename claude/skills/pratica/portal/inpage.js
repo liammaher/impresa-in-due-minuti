@@ -11,8 +11,10 @@
 // declaration or clicks what is the person's: payment, signing, sending.
 // A file is attached by building it in the page and handing it to the file box as a
 // drop would (DataTransfer): the pane can't type a path into one, and a public page
-// can't fetch from localhost, so its bytes come in run.js (run.py says how big), or a big
-// one by an https link the page fetches, checked against its sha256.
+// can't fetch from localhost, so its bytes come in run.js (run.py says how big), or, too big
+// for it, from the person's disk: they choose the run's files once in a box on the page and
+// each is checked against its sha256 (`picked`); or by an https link the page fetches, checked
+// the same way.
 //
 //   __pv.start(procedure, values[, resume])  starts a run, returns at once. resume picks a
 //                                  stopped run up: {url, from, kept, fixes} (run.py --resume);
@@ -179,6 +181,70 @@
       const done = () => { const code = clean(); input.value = ""; box.remove(); resolve(code); };
       input.addEventListener("input", () => { if (clean().length >= 15) done(); });
       input.addEventListener("keydown", (e) => { if (e.key === "Enter" && clean()) done(); });
+    });
+  }
+  // --- files the person chooses (run.py page: `picked`) --------------------------------
+  // Too big for run.js, a run's files come from the person's disk: a box on the top page names
+  // them, the person chooses them (the files, or the job's folder), and a file is kept only if its
+  // size and sha256 are the ones pre-flight read. Kept by sha256 in this runner's memory, never
+  // in storage: a runner loaded again asks again.
+  const picked = new Map();
+  const sha256 = async (bytes) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)))
+    .map((b) => b.toString(16).padStart(2, "0")).join("");
+  function wantedFiles(values) {
+    const out = new Map();
+    for (const s of values.sections || []) for (const v of s || []) {
+      if (v && typeof v === "object" && v.picked && !picked.has(v.sha256)) out.set(v.sha256, v);
+    }
+    return [...out.values()];
+  }
+  function askFiles(want) {
+    return new Promise((resolve, reject) => {
+      const box = document.createElement("div");
+      box.dataset.pv = "files";
+      box.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:#fff;display:flex;flex-direction:column;" +
+        "align-items:center;justify-content:center;gap:12px;font:16px system-ui,sans-serif;padding:24px";
+      const title = document.createElement("div");
+      title.textContent = "Choose these files from the job's folder: they go from your computer to the portal, nowhere else.";
+      const list = document.createElement("ul");
+      list.style.cssText = "margin:0;max-height:40vh;overflow:auto";
+      const pickFiles = document.createElement("input");
+      pickFiles.type = "file";
+      pickFiles.multiple = true;
+      const pickFolder = document.createElement("input");
+      pickFolder.type = "file";
+      pickFolder.webkitdirectory = true;
+      const labelled = (text, input) => { const l = document.createElement("label"); l.append(text, " ", input); return l; };
+      const note = document.createElement("div");
+      note.style.color = "#a00";
+      const stop = document.createElement("button");
+      stop.type = "button";
+      stop.textContent = "Stop the run";
+      const other = new Set();
+      const draw = () => {
+        list.replaceChildren(...want.map((w) => {
+          const li = document.createElement("li");
+          li.textContent = `${picked.has(w.sha256) ? "✓" : "…"} ${w.name} (${(w.size / 1024 / 1024).toFixed(1)} MB)`;
+          return li;
+        }));
+        note.textContent = other.size ? `Not the file pre-flight checked: ${[...other].join(", ")}. Choose the right one.` : "";
+      };
+      const take = async (chosen) => {
+        for (const f of chosen) {
+          const named = want.filter((w) => w.name === f.name && !picked.has(w.sha256));
+          if (!named.length) continue; // the folder's other files
+          const bytes = new Uint8Array(await f.arrayBuffer()), h = await sha256(bytes);
+          const same = named.find((w) => w.sha256 === h && w.size === bytes.length);
+          if (same) { picked.set(same.sha256, bytes); other.delete(f.name); } else other.add(f.name);
+        }
+        draw();
+        if (want.every((w) => picked.has(w.sha256))) { box.remove(); resolve(); }
+      };
+      for (const input of [pickFiles, pickFolder]) input.addEventListener("change", () => { take([...input.files]); input.value = ""; });
+      stop.addEventListener("click", () => { box.remove(); reject(new StepError("the run's files weren't chosen")); });
+      box.append(title, list, labelled("Files:", pickFiles), labelled("or the folder:", pickFolder), note, stop);
+      document.body.append(box);
+      draw();
     });
   }
   async function unlock(sealed) {
@@ -550,7 +616,8 @@
     const e = (f.css ? doc().querySelector(f.css) : el(f.id)) || fail(`${f.css || f.id}: no file box`);
     if (e.type !== "file") fail(`${f.css || f.id}: not a file box`);
     if (!f.slotted) checkLabel(e, f.label); // a box "+" added has no label: its slot's rows named it
-    const w = win(), bytes = v.url ? await fetched(v) : Uint8Array.from(w.atob(v.b64), (c) => c.charCodeAt(0));
+    const w = win(), bytes = v.picked ? picked.get(v.sha256) || fail(`${v.name}: not chosen in the page`)
+      : v.url ? await fetched(v) : Uint8Array.from(w.atob(v.b64), (c) => c.charCodeAt(0));
     const dt = new w.DataTransfer();
     dt.items.add(new w.File([bytes], v.name, { type: v.type }));
     // The portal refuses a file on upload in a growl that fades in seconds: "Il documento non è
@@ -1240,6 +1307,24 @@
       for (const x of resume.fixes || []) Object.assign(steps.sections[x.section].fields[x.field], x.set);
       report = { procedure, result: "running", sections: [], at: null, resumed: !!(resume.url || resume.reopen), reopened: !!resume.reopen };
       kept = [];
+      // Files too big for run.js: the person chooses them before anything is filled.
+      const want = wantedFiles(values);
+      if (want.length) {
+        report.result = "waiting";
+        report.waiting = "for the person to choose the run's files in the box on the portal page";
+        (async () => {
+          try {
+            await askFiles(want);
+            report.result = "running";
+            delete report.waiting;
+            attempt(values, resume);
+          } catch (e) {
+            report.result = "stopped";
+            report.error = e instanceof StepError ? e.message : `${e.name}: ${e.message}`;
+          }
+        })();
+        return "waiting for the files";
+      }
       attempt(values, resume);
       return "started";
     },

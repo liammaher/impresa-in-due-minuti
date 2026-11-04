@@ -310,5 +310,77 @@
   "answers": "answers-stato-sanzioni-ricevuta.json",
   "result": "filled",
   "seconds": 211.6
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-deroga-destinazione-condominio.json",
+  "result": "filled",
+  "seconds": 173.4
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-mutamento-agricola-deposito.json",
+  "result": "filled",
+  "seconds": 156.2
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-mutamento-sagoma-usufruttuario.json",
+  "result": "filled",
+  "seconds": 202
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-nuova-e2-fasce.json",
+  "result": "filled",
+  "seconds": 181.9
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-nuova-e3-assensi.json",
+  "result": "filled",
+  "seconds": 241.7
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-nuova-e4-bacino.json",
+  "result": "filled",
+  "seconds": 180
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-nuova-e5-costa.json",
+  "result": "filled",
+  "seconds": 179.2
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-nuova-e6-bonus.json",
+  "result": "filled",
+  "seconds": 248.1
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-nuova-e7.json",
+  "result": "filled",
+  "seconds": 187.2
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-precedenti-comproprietaria.json",
+  "result": "filled",
+  "seconds": 214.8
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-sanatoria-scia.json",
+  "result": "stopped",
+  "seconds": 0.4
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-tolleranze-silenzio.json",
+  "result": "filled",
+  "seconds": 229.7
  }
 ]

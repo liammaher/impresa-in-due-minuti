@@ -166,5 +166,23 @@
   "answers": "answers-tolleranze-5.json",
   "result": "filled",
   "seconds": 262.7
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-comproprietaria-negozio.json",
+  "result": "filled",
+  "seconds": 264.7
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-proprietario-deposito.json",
+  "result": "filled",
+  "seconds": 176
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-usufruttuario-industriale.json",
+  "result": "filled",
+  "seconds": 258.7
  }
 ]
