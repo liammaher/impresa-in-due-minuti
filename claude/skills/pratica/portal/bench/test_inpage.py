@@ -348,6 +348,22 @@ def main():
             assert r["result"] == "filled", r
         case("a suggestion list still fading out over the next box is closed, not a stop", fading_list)
 
+        def street_lookup():
+            # The street's first word is its type, whatever it is: until 2026-11-04 only VIA,
+            # VIALE, PIAZZA, CORSO and LARGO were, and a Vico (a third of Naples' streets aren't
+            # those five) matched nothing in the list.
+            VIA = "form:r11c1:dynaForm:via:txtws_input"
+            for value, chosen in (("VICO LUNGO GELSO", "VICO LUNGO GELSO"), ("VIA GELSO", "VIA GELSO"),
+                                  ("VIA FORIA", "VIA FORIA"), ("CUPA CAIAFA", "CUPA CAIAFA")):
+                PORTAL.reset()
+                st = steps(base, start="/portal.html?via=1")
+                st["sections"][0]["fields"].insert(0, {"id": "via:txtws_input", "kind": "lookup",
+                                                       "label": "Via, Viale, Piazza", "value": "{{ask.via}}"})
+                r = fill(browser, base, st, answers | {"via": value})
+                assert r["result"] == "filled", (value, r.get("error"))
+                assert PORTAL.fields.get(VIA) == chosen, (value, PORTAL.fields.get(VIA))
+        case("a street lookup takes a street of any type (a Vico, a Cupa), and the exact one among similar", street_lookup)
+
         def calendar_left_open():
             # A typed date leaves the calendar open over the next box; a person's click elsewhere
             # would close it, so the runner does (the permesso's sanatoria quadro, 2026-11-02).

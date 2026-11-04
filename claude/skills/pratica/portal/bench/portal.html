@@ -24,7 +24,8 @@
      landscape technician's reads for any address that isn't a real one; ?refuse=1 refuses what
      Ricevuta ASL is given, in a warning growl that fades in 2 s and stores nothing, as the portal
      refuses a made-up digital signature; ?screens=1 shows a screen title ("PAGAMENTO ONERI") until
-     the menu's "Allega Documenti" step is pressed, as a draft reopened from Pratiche in bozza. -->
+     the menu's "Allega Documenti" step is pressed, as a draft reopened from Pratiche in bozza;
+     ?via=1 adds the location's street lookup, listing streets of every type (VIA, VICO, CUPA). -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -214,6 +215,27 @@ if (location.search.includes("liste=1")) {
     plus.addEventListener("click", liste[k]);
     div.append(plus);
   }
+}
+// ?via=1: the location's street lookup ("Via, Viale, Piazza"), a PrimeFaces autocomplete:
+// search() lists the comune's streets holding the word, each starting with its type (VIA, VICO,
+// CUPA), and a click on one fills the box.
+if (location.search.includes("via=1")) {
+  const streets = ["VIA FORIA", "VIA SANTA MARIA AVVOCATA A FORIA", "VIA GELSO", "VICO LUNGO GELSO", "CUPA CAIAFA"];
+  const tr = document.createElement("tr");
+  tr.innerHTML = '<td><label class="labelDynaFormControl">Via, Viale, Piazza</label></td><td>' +
+    '<input type="text" id="form:r11c1:dynaForm:via:txtws_input">' +
+    '<div id="form:r11c1:dynaForm:via:txtws_panel" style="display:none"><ul></ul></div></td>';
+  document.querySelector("#allega + table").tBodies[0].append(tr);
+  const input = tr.querySelector("input"), panel = tr.querySelector("div"), items = panel.querySelector("ul");
+  window.PrimeFaces = { widgets: { via: { input: [input], panel: [panel],
+    search(q) {
+      items.innerHTML = streets.filter((s) => s.split(" ").includes(q.toUpperCase())).map((s) => `<li>${s}</li>`).join("");
+      panel.style.display = "block";
+    },
+    hide() { panel.style.display = "none"; } } } };
+  items.addEventListener("click", (e) => {
+    if (e.target.tagName === "LI") { input.value = e.target.textContent; panel.style.display = "none"; }
+  });
 }
 const texts = () => [...document.querySelectorAll("input[type=text]")];
 const list = (name) => {
