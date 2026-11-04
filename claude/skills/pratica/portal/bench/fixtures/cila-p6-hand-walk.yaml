@@ -1,6 +1,12 @@
+# The golden case of gen.py's tests (bench/test_gen.py): the CILA's P6 job as the first walk
+# on the portal (2026-10-28) found it, written by hand screen by screen, with no generator.
+# It was rehearsals/cila-fittizia/portal-steps.yaml until 2026-11-04 (the walk's screen notes,
+# portal-map.yaml, went then: the crawls in catalogue/ hold every screen). Never run: the
+# rehearsal runs its generated steps file. Kept as it was, so a generator change that leaves
+# P6's ids or values is caught.
+#
 # The CILA (Mod.CILA-23-06-2025 online modules) as steps a program runs:
-# claude/skills/pratica/portal/run.py. portal-map.yaml says what each screen is and why;
-# this file says exactly what to click and type, as the first walk (2026-10-28) found it.
+# claude/skills/pratica/portal/run.py, exactly what to click and type.
 #
 # The SUE is the SUAP's front office (fnsuap, PrimeFaces), so the ids, widgets and filters
 # are the SCIA's (rehearsals/pizzeria-fittizia/portal-steps.yaml). The user is the

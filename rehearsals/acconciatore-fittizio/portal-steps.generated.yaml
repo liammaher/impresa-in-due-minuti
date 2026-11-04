@@ -2,7 +2,7 @@
 # recipe and generate again.
 procedure: napoli/comune/scia-acconciatore-estetista
 title: Apertura di un'attività di acconciatore, SUAP Napoli (ditta individuale)
-generated: gen.py from acconciatore (2026-10-28) and dictionary/fnsuap.yaml
+generated: gen.py from suap-011-aprire-l-attivita-di-acconciatore-procura (2026-10-28) and dictionary/fnsuap.yaml
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the declarations yourself: the awareness box under the PEC, the antimafia declaration, consapevolezza (artt. 46-47), informativa privacy, altre dichiarazioni, tasse comunali, art. 75 DPR 445/2000'
