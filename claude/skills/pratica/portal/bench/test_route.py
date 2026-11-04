@@ -142,7 +142,7 @@ def wrong_answers():
     r = route.route(TABLE, {"intervento": {"a": 1}}, REHEARSALS)
     assert r["questions"][0]["error"], r
     r = route.route(TABLE, {"fatti": ["strutture"]}, REHEARSALS)  # a checklist before the works: read nothing
-    assert [q["key"] for q in r["questions"]] == ["intervento"], r
+    assert r["questions"][0]["key"] == "intervento" and not r["routed"], r
     try:
         route.route(TABLE, [], REHEARSALS)
     except run.StepError:
@@ -296,10 +296,16 @@ def rehearsal_cases_come_home():
 
 
 def asks_as_the_table_asks():
-    """The first fact alone; then the rest at once, yes/no ones as one checklist, the seismic
+    """One message: the works first, then every fact some kind of works needs, each one not
+    every kind needs saying for which (`only_for`); yes/no ones as one checklist, the seismic
     choice only under the structures; a wrong answer asked again with why."""
     r = route.route(TABLE, {}, REHEARSALS)
-    assert [q["key"] for q in r["questions"]] == ["intervento"] and not r["routed"]
+    qs = {q["key"]: q for q in r["questions"]}
+    assert r["questions"][0]["key"] == "intervento" and not r["routed"] and {"paesaggio", "fatti"} <= set(qs), list(qs)
+    items = {i["key"]: i for i in qs["fatti"]["items"]}
+    assert items["prospetti"]["only_for"] == {"intervento": ["manutenzione_straordinaria"]}, items["prospetti"]
+    assert "only_for" not in qs["paesaggio"], qs["paesaggio"]  # every kind of works asks it
+    assert "altro" not in str([q.get("only_for") for q in r["questions"]]), "a kind the table refuses needs nothing more"
     r = route.route(TABLE, {"intervento": "manutenzione_straordinaria"}, REHEARSALS)
     qs = {q["key"]: q for q in r["questions"]}
     assert set(qs) == {"sismica", "cambio_uso", "paesaggio", "terre_rocce", "fatti"}, set(qs)
@@ -307,7 +313,7 @@ def asks_as_the_table_asks():
     assert "strutture" in [i["key"] for i in qs["fatti"]["items"]]
     assert qs["fatti"]["question"] == route.CHECKLIST
     r = route.route(TABLE, {"intervento": "rifare il bagno"}, REHEARSALS)
-    assert [q["key"] for q in r["questions"]] == ["intervento"] and "error" in r["questions"][0]
+    assert r["questions"][0]["key"] == "intervento" and "error" in r["questions"][0]
     r = route.route(TABLE, {"intervento": "manutenzione_straordinaria", "fatti": "nessuna"}, REHEARSALS)
     assert "error" in {q["key"]: q for q in r["questions"]}["fatti"]
     # The options as a recipe words them ("senza autorizzazione") are the table's values.

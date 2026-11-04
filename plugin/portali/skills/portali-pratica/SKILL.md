@@ -96,7 +96,9 @@ python3 SKILL/portal/route.py --table sue-napoli --answers facts.json
 ```
 
 Start `facts.json` as `{}` (or from the intake). It asks the rules table's facts as pre-flight
-asks: the works first, alone, then the rest in one message. Write the replies into
+asks, **in one message**: the works first, then every other fact; one with `only_for` applies
+only to those kinds of works, so put it after the others as "solo per <the labels of those
+works>", and leave it out of the answers when the works are another kind. Write the replies into
 `facts.json` and run it again; if the answer about the works changes, keep only that one. Once
 it decides it names the pratica (`pratica`, its `steps`) and the `answers` to start
 `answers.json` with; `unsupported` is the reason none fits. Other pratiche (a proroga, a fine
@@ -150,7 +152,11 @@ this pratica needs. Pre-flight prints JSON and exits 0 only when `ready`.
   `checklist` is one question with its items as bullets ("spunti quelli che valgono, o
   nessuno"; usually none); an `only_if` question goes under its items ("se sì: …"). Proposals
   in the same message as "Userò: …", one line each; "ok" confirms them all, and one nobody
-  confirmed is never used. A `missing` field the tecnico gives you goes into the archive
+  confirmed is never used. A proposal that depends on another answer in the same message comes
+  with it, so there is no second message: `assumes` (worded from the proposals it names: it holds
+  once those are confirmed), or `cases` ("Userò: X se …, Y se …", each `if` an answer given in this
+  message) and `otherwise` (the answers with no proposal: ask its question under them). On "ok",
+  write the case that matches what they answered. A `missing` field the tecnico gives you goes into the archive
   (`pvault set`), never into a file. Write the other replies under each `key` (dates
   YYYY-MM-DD, files as paths) and run pre-flight again; an `error` says what didn't fit: ask
   only that again.

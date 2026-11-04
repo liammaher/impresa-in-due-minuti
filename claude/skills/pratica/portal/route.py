@@ -3,9 +3,10 @@
 
   route.py --table sue-napoli [--answers A.json] [--pratiche DIR]
 
-Asks the rules table's own facts (rules/<table>.yaml), as pre-flight would: the first fact
-(what the works are) alone, then every other one the case needs in one message, the yes/no
-ones as one checklist (`fatti`). Once the table decides, the case's pratiche (its main one
+Asks the rules table's own facts (rules/<table>.yaml) in one message, as pre-flight would: the
+first fact (what the works are), then every other one some kind of works needs, each one not
+every kind needs with `only_for` (the works' answers it is asked for), the yes/no ones as one
+checklist (`fatti`). Once the table decides, the case's pratiche (its main one
 and those filed with it) name exactly one steps file: the one whose `rules:` has that main
 (`main`, else its procedure) and those `handles`. Prints JSON and exits 0 only when `routed`:
 - `questions`: what to ask, in pre-flight's format (a checklist's reply is the list of the
@@ -37,7 +38,7 @@ sys.dont_write_bytecode = True
 import rules  # noqa: E402
 import run  # noqa: E402  (Values, ruled, refs_in: a steps file's own reading of its facts)
 
-CHECKLIST = "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+CHECKLIST = "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
 GROUP = "fatti"
 
 
@@ -178,11 +179,28 @@ def hangs(t, facts, name, ask):
     return sorted(g for g in need or () if g in ask and t["facts"][g]["type"] == "yes_no")
 
 
-def questions(t, ask, errors, checklist=CHECKLIST, facts=None):
+def works_and_facts(t, facts, first):
+    """The works' own question and every fact some kind of works then needs, for one message:
+    {fact: the kinds that need it} for the facts not every kind needs."""
+    needs, open_ = {}, 0
+    for kind in t["facts"][first]["values"]:
+        d = rules.decide(t, facts | {first: kind})
+        if not (d["refused"] or d["none"] or d["conflict"]):  # a kind decided at once needs nothing more
+            open_ += 1
+            for f in d["ask"]:
+                needs.setdefault(f, []).append(kind)
+    return {first} | set(needs), {f: k for f, k in needs.items() if len(k) < open_}
+
+
+def questions(t, ask, errors, checklist=CHECKLIST, facts=None, works=None):
     out, items = [], []
     for name in ask:
         fact = t["facts"][name]
         extra = {"how": fact["how"]} if "how" in fact else {}
+        if works and name in works:
+            # Asked only for those kinds of works (the first fact's answers: its labels name them).
+            first = next(iter(t["facts"]))
+            extra["only_for"] = {first: works[name]}
         under = hangs(t, facts, name, ask) if facts is not None else []
         if under:
             extra["only_if"] = under
@@ -258,11 +276,16 @@ def route(table, answers, root=None):
     # and a checklist answered wrong leaves its items unknown, so they are asked again whole.
     first = next(iter(t["facts"]))
     if d["ask"]:
-        ask = {first} if d["ask"][0] == first else set(d["ask"])  # which others matter depends on it
+        ask, works = set(d["ask"]), {}
+        if d["ask"][0] == first:
+            # Which others matter depends on the works: they are asked with it, in the same
+            # message, each fact some kinds of works don't need saying which do (`only_for`).
+            ask, works = works_and_facts(t, facts, first)
+
         # The recipes word the checklist (their rules.question, gen.py's groups.fatti).
         group = next((s["groups"][GROUP]["question"] for _, _, s in idx.values() if GROUP in s.get("groups", {})),
                      CHECKLIST)
-        report["questions"] = questions(t, [f for f in t["facts"] if f in ask], errors, group, facts)
+        report["questions"] = questions(t, [f for f in t["facts"] if f in ask], errors, group, facts, works)
         return report
     if d["none"]:
         report["unsupported"] = [f"Per questo caso non serve alcuna pratica: {d['none']['reason']}"]
