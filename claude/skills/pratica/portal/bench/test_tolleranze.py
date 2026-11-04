@@ -140,10 +140,10 @@ def _():
 def _():
     for recipe in CASES:
         r = preflight(recipe, answers(recipe, toll_strutturale=True, toll_classe="rilevante", toll_sismica="nessuno"))
-        assert any("seismic authorization" in u for u in r["unsupported"]), (recipe, r["unsupported"])
+        assert any("autorizzazione sismica" in u for u in r["unsupported"]), (recipe, r["unsupported"])
         for classe in ("minore rilevanza", "privo di rilevanza"):
             r = preflight(recipe, answers(recipe, toll_strutturale=True, toll_classe=classe, toll_decorso="false"))
-            assert any("control term has run out" in u for u in r["unsupported"]), (recipe, classe, r["unsupported"])
+            assert any("decorso il termine del controllo regionale" in u for u in r["unsupported"]), (recipe, classe, r["unsupported"])
     # Asked in order: the class only once structurally relevant, then its proof.
     r = preflight("scia-fittizia", answers("scia-fittizia", toll_strutturale=True))
     keys = {q["key"]: q.get("only_if") for q in r["questions"]}
@@ -155,7 +155,7 @@ def _():
 def _():
     for recipe in CASES:
         r = preflight(recipe, answers(recipe, tolleranze_tipi=[]))
-        assert any("at least one kind" in u for u in r["unsupported"]), (recipe, r["unsupported"])
+        assert any("almeno un tipo" in u for u in r["unsupported"]), (recipe, r["unsupported"])
 
 
 @case("the CILA's own tolerance case is still ready")

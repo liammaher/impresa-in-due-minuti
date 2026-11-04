@@ -1016,18 +1016,18 @@ def _():
     assert [v for l, v in p if l == "(specificare)"] == ["Indice fondiario 3,5 mc/mq invece di 3 (inventato)", "Altezza 14 m invece di 12 m (inventato)", "Distanza 8 m invece di 10 m (inventato)"], p
     assert has(p, "intervento in deroga alle previsioni") and not has(p, "alla destinazione d'uso")
     r, p = plan("pdc-fittizio", "answers-deroga.json", deroga_densita="false", deroga_altezza="false", deroga_distanza="false")
-    assert any("derogates from at least one limit" in u for u in r["unsupported"]), r
+    assert any("deroga ad almeno un limite" in u for u in r["unsupported"]), r
     for answers, radio in (("answers-variante-scia-alt.json", "segnalazione certificata/denuncia"), ("answers-variante-titolo-unico.json", "titolo unico"),
                            ("answers-variante-sagoma.json", "permesso di costruire")):
         r, p = plan("pdc-fittizio", answers)
         assert r["ready"] and has(p, "variazione essenziale e/o sostanziale") and has(p, radio) and ("n.", "4321") in p, (answers, p)
     r, p = plan("pdc-fittizio", "answers-p6.json", pdc_tipo="piano casa")
-    assert any("30 September 2022" in u for u in r["unsupported"]), r
+    assert any("30 settembre 2022" in u for u in r["unsupported"]), r
     # The sanatoria's quadro a) is art. 36's own radio, not art. 10's.
     r, p = plan("pdc-sanatoria-fittizio", "answers-p6.json")
     assert r["ready"] and has(p, "intervento realizzato, ai sensi dell'articolo 36") and not has(p, "interventi di cui all'articolo 10"), p
     r, _ = plan("pdc-sanatoria-fittizio", "answers-p6.json", pdc_procedura="deroga")
-    assert any("asked as such" in u for u in r["unsupported"]), r
+    assert any("si richiede come tale" in u for u in r["unsupported"]), r
     # A sewer connection to request adds its own required slot (read on the permesso 2026-10-31).
     for name, answers in (("pdc-fittizio", "answers-cambio-tra.json"), ("scia-alternativa-fittizia", "answers-condominio-strutture.json")):
         r, p = plan(name, answers)
@@ -1412,7 +1412,7 @@ def _():
     for answers, signs in (("answers-progettista.json", True), ("answers-direttori.json", False)):
         v = run.Values(json.loads((ROOT / "rehearsals/scia-fittizia" / answers).read_text()), fields=fields, asks=steps.get("asks"))
         r = run.preflight(steps, v, made_up=True)
-        assert r["ready"] and any("designer's (`p:`)" in y for y in r["yours"]) == signs, (answers, r["yours"])
+        assert r["ready"] and any("del progettista architettonico" in y for y in r["yours"]) == signs, (answers, r["yours"])
         plan = [(p["section"], p["label"], p["value"]) for p in rehearsal_plan(steps, v)]
         assert (("Asseverazione SCIA - Tipologia di intervento", "Cognome", "Disegno") in plan) == signs, answers
 
@@ -1487,6 +1487,22 @@ def _():
             assert gen.sha256((root / name / gen.STEPS).read_text()) == gen.read_lock()[name], name
         (root / "fine-lavori-fittizia" / gen.STEPS).write_text("stale\n")
         assert [p.parent.name for p in gen.ensure(root=root)] == ["fine-lavori-fittizia"]
+
+
+@case("what the tecnico reads is Italian: every question, checklist item, refusal and end step, no role codes")
+def _():
+    english = re.compile(r"\b(the|which|what|does|will|have|with|your|their|tick|every|must|before|after|only)\b", re.I)
+    bad = []
+    for d in sorted(p for p in REH.iterdir() if (p / "recipe.yaml").exists()):
+        steps = generated(d.name)
+        texts = [a.get(k) for a in steps.get("asks", {}).values() for k in ("question", "item", "how", "why")]
+        texts += [g.get("question") for g in steps.get("groups", {}).values()]
+        texts += [c.get("else") for c in steps.get("supports", [])] + list(steps.get("yours", []))
+        for t in filter(None, texts):
+            plain = re.sub(r"\{\{.*?\}\}|\"[^\"]*\"", "", str(t))  # templates and the portal's own quoted words
+            if english.search(plain) or "`" in plain:
+                bad.append((d.name, str(t)[:90]))
+    assert not bad, f"{len(bad)} English or coded texts, e.g. {bad[:3]}"
 
 
 @case("a steps file's own defaults never name a draft PROVA NON INVIARE: real users run them; rehearsals answer it")

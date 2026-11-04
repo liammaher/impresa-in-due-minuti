@@ -47,7 +47,7 @@ def every_case_routed_or_refused():
             continue
         k = route.key(d["main"]["procedure"], [a["procedure"] for a in d["also"]])
         if k not in idx:
-            assert not r["routed"] and r["unsupported"][0].startswith("Not mapped yet"), (facts, r)
+            assert not r["routed"] and r["unsupported"][0].startswith("Non ancora prevista"), (facts, r)
             unmapped[k] += 1
             continue
         assert r["routed"], (facts, r["unsupported"])
@@ -226,7 +226,7 @@ def sanatoria_cambio_uso():
     r = route.route(TABLE, {**base, "cambio_uso": "intero_tra_categorie"}, REHEARSALS)
     assert r["pratica"] == "pdc-sanatoria-fittizio", r
     r = route.route(TABLE, {**base, "intervento": "nessuna_opera", "cambio_uso": "tra_categorie"}, REHEARSALS)
-    assert not r["routed"] and r["unsupported"][0].startswith("This case needs no pratica"), r
+    assert not r["routed"] and r["unsupported"][0].startswith("Per questo caso non serve alcuna pratica"), r
     r = route.route(TABLE, {**base, "fatti": ["sanatoria"]}, REHEARSALS)
     assert not r["routed"] and "PRG" in r["unsupported"][0], r
 
@@ -269,7 +269,7 @@ def cambio_uso_fuori_23ter():
     r = route.route(TABLE, {**base, "cambio_uso": "altro"}, REHEARSALS)
     assert r["pratica"] == "scia-alternativa-fittizia", r
     r = route.route(TABLE, {**base, "intervento": "nessuna_opera", "cambio_uso": "altro"}, REHEARSALS)
-    assert not r["routed"] and r["unsupported"][0].startswith("This case needs no pratica"), r
+    assert not r["routed"] and r["unsupported"][0].startswith("Per questo caso non serve alcuna pratica"), r
     r = route.route(TABLE, {**base, "fatti": ["uso_ammesso_prg", "sanatoria"]}, REHEARSALS)
     assert r["pratica"] == "pdc-sanatoria-fittizio", r
     r = route.route(TABLE, {**base, "cambio_uso": "stessa_categoria", "fatti": ["uso_ammesso_prg", "verso_a2_tavola_7a"]}, REHEARSALS)
@@ -319,7 +319,7 @@ def asks_as_the_table_asks():
 def refusals_say_why():
     r = route.route(TABLE, {"intervento": "edilizia_libera", "cambio_uso": "no", "paesaggio": "no", "fatti": []},
                     REHEARSALS)
-    assert not r["routed"] and r["unsupported"][0].startswith("This case needs no pratica"), r
+    assert not r["routed"] and r["unsupported"][0].startswith("Per questo caso non serve alcuna pratica"), r
     r = route.route(TABLE, {"intervento": "altro"}, REHEARSALS)
     assert not r["routed"] and "proroghe" in r["unsupported"][0], r
     # Every combination has a steps file since 2026-10-31: one left out shows the message.
@@ -327,7 +327,7 @@ def refusals_say_why():
         shutil.copytree(REHEARSALS / "cila-fittizia", Path(tmp) / "cila-fittizia")
         r = route.route(TABLE, {"intervento": "manutenzione_straordinaria", "terre_rocce": "no", "cambio_uso": "no", "paesaggio": "ordinaria",
                                 "fatti": []}, Path(tmp))
-    assert r["unsupported"] == ["Not mapped yet: napoli/comune/cila-lavori-edilizi (comunicazione) filed with "
+    assert r["unsupported"] == ["Non ancora prevista: napoli/comune/cila-lavori-edilizi (comunicazione) presentata con "
                                 "napoli/comune/autorizzazione-paesaggistica-ordinaria."], r
 
 
@@ -337,7 +337,7 @@ def apart_is_the_persons():
         if d["apart"] and d["main"] and not d["refused"]:
             r = route.route(TABLE, facts, REHEARSALS)
             if r["routed"]:
-                assert r["apart"] and r["apart"][0].startswith("File apart"), r
+                assert r["apart"] and r["apart"][0].startswith("Da presentare a parte"), r
                 return
     raise AssertionError("no routed case files anything apart")
 

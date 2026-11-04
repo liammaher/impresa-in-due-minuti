@@ -11,13 +11,13 @@ asks:
   descrizione: {default: "CIL sempl. e terre e rocce {{c:identity.last_name}}"}
 # cil-paesaggistica-semplificata-fittizia's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Pay the {{ask.diritti_euro}} € diritti before the second run (after the declarations): its receipt, signed, goes with it; the bollo before sending"
-  - "The works start only once the SUE says the landscape authorization is in: the start date is the earliest"
-  - "If a notifica preliminare is due (art. 99 D.Lgs. 81/2008): attach it under Allegati liberi, signed digitally (.p7m only): the CIL has no slot of its own for it"
-  - "The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal's document on Allega documenti once the declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at least 15 days after sending"
-  - "When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017) on the SUE"
-  - "Sign and send (Firma e invio); keep the receipt"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella; il bollo prima dell'invio"
+  - "I lavori iniziano solo quando il SUE comunica che l'autorizzazione paesaggistica è stata acquisita: la data di inizio è la prima possibile"
+  - "Se è dovuta la notifica preliminare (art. 99 D.Lgs. 81/2008): la alleghi in Allegati liberi, firmata digitalmente (solo .p7m): la CIL non ha uno spazio di caricamento apposito"
+  - "La dichiarazione di utilizzo (Allegato 6 DPR 120/2017) è il documento del portale in Allega documenti dopo aver spuntato le dichiarazioni: la firma il produttore, Claude la allega nella seconda compilazione (dopo le dichiarazioni); lo scavo inizia almeno 15 giorni dopo l'invio"
+  - "Quando tutte le terre e rocce da scavo saranno state utilizzate, entro la validità della dichiarazione, presenti sul SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)"
+  - "Firmi e invii (Firma e invio); conservi la ricevuta"
 answers:
   descrizione: PROVA NON INVIARE - CIL sempl. e terre e rocce P6

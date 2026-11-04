@@ -234,11 +234,11 @@ def napoli_filing():
     plain = tmp / "relazione tecnica.pdf"
     plain.write_bytes(b"%PDF-1.4 non firmato\n")
     r, f = check(plain)
-    assert not r["ready"] and all(w in f["problem"] for w in ("this name", "PDF/A", "signed digitally")), f
-    assert any(y.startswith("Napoli's SUE takes only PDF/A") for y in r["yours"]), r["yours"]
+    assert not r["ready"] and all(w in f["problem"] for w in ("questo nome", "PDF/A", "firmati digitalmente")), f
+    assert any(y.startswith("Il SUE di Napoli accetta solo file PDF/A") for y in r["yours"]), r["yours"]
     assert any("c/c postale 57060964" in y for y in r["yours"]), r["yours"]
     # Firma e invio is the person's (the portal opens it only with every signature valid): how to sign.
-    assert any(y.startswith("On Firma e invio") and "distinta" in y for y in r["yours"]), r["yours"]
+    assert any(y.startswith("In Firma e invio") and "distinta" in y for y in r["yours"]), r["yours"]
     # The same file with made-up data: ready, each refusal noted, and a warning never to send it.
     r, f = check(plain, made_up=True)
     assert r["ready"] and len(f["filing"]) == 3 and "problem" not in f, f
@@ -247,7 +247,7 @@ def napoli_filing():
     unsigned = tmp / "Relazione_tecnica.pdf"
     unsigned.write_bytes(PDFA_CONTENT)
     r, f = check(unsigned)
-    assert not r["ready"] and "PDF/A" not in f["problem"] and "signed digitally" in f["problem"], f
+    assert not r["ready"] and "PDF/A" not in f["problem"] and "firmati digitalmente" in f["problem"], f
     # PDF/A signed in itself (PAdES), by the dichiarante: taken, its signer read as a .p7m's is.
     r, f = check(signed_file(tmp, "Relazione_firmata.pdf", own, content=PDFA_CONTENT, pades=True))
     assert r["ready"] and f["signers"] == 1 and f["signed_by_dichiarante"] is True, f
@@ -255,7 +255,7 @@ def napoli_filing():
     r, f = check(signed_file(tmp, "Relazione_tecnica.pdf.p7m", own, content=PDFA_CONTENT))
     assert r["ready"] and "problem" not in f, f
     r, f = check(signed_file(tmp, "Relazione_vecchia.pdf.p7m", own))
-    assert not r["ready"] and f["problem"].endswith("(export it again as PDF/A)"), f
+    assert not r["ready"] and f["problem"].endswith("(lo esporti di nuovo come PDF/A)"), f
     # A PDF that says it's signed and isn't readable as a signature: refused, as a bad .p7m is.
     broken = tmp / "Relazione_rotta.pdf"
     broken.write_bytes(PDFA_CONTENT + b"/ByteRange [0 1 2 3] /Contents <30" + b"AB" * 300 + b">")
@@ -320,8 +320,8 @@ def bollo_chosen():
     assert not run.review_shown(STEPS, values())["decisions"], "a pratica with no bollo section lists a decision"
     filled = {"procedure": "x", "result": "filled", "sections": [], "total_seconds": 1, "values": [], "yours": []}
     page = run.review.portal_review(filled | shown)
-    assert "Chosen in your name" in page and "tramite pagoPA" in page and "01234567890123" in page
-    assert "Chosen in your name" not in run.review.portal_review(filled | {"decisions": []})
+    assert "Scelto a suo nome" in page and "tramite pagoPA" in page and "01234567890123" in page
+    assert "Scelto a suo nome" not in run.review.portal_review(filled | {"decisions": []})
 
 
 def checklist_forms():
@@ -446,7 +446,7 @@ def gated_support():
         q = {x["key"]: x for x in pre(base)["questions"]}
         assert q["contributo_pagamento"]["only_if"] == ["scia_onerosa"], q.get("contributo_pagamento")
         r = pre(p6 | {"contributo_pagamento": "pagato"})
-        assert any("never before filing" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("mai prima della presentazione" in u for u in r["unsupported"]), r["unsupported"]
         assert pre(p6)["ready"]
     finally:
         os.chdir(here)
@@ -521,11 +521,11 @@ def sanatoria_cases():
         r = pre(p6 | {"sanatoria_prova": "ricevuta"})
         assert r["ready"] and not r["questions"], r["questions"]
         r = pre(p6 | {"sanatoria_caso": "conformita urbanistica"})
-        assert any("a defect of the portal" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("difetto del portale" in u for u in r["unsupported"]), r["unsupported"]
         # The known defect comes with it, for the person to choose (defects.yaml through gen.py).
         assert [d["id"] for d in r["defects"]] == ["scia-36bis-c1"] and len(r["defects"][0]["choices"]) == 3, r.get("defects")
         r = pre(p6 | {"sanatoria_caso": "variante pre 1977"})
-        assert any("art. 34-ter" in u and "a defect of the portal" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("art. 34-ter" in u and "difetto del portale" in u for u in r["unsupported"]), r["unsupported"]
         assert [d["id"] for d in r["defects"]] == ["scia-34ter"], r.get("defects")
     finally:
         os.chdir(here)
@@ -559,16 +559,16 @@ def scelte_follow_the_case():
         # Proposed (none) for the person to confirm, never assumed.
         assert [q["key"] for q in r["proposals"]] == ["cointestatario"] and not r["ready"], r["proposals"]
         r = run.preflight(steps, v(p6 | {"altri_cointestatari": True}), made_up=True)
-        assert any("holds one person" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("contiene una sola persona" in u for u in r["unsupported"]), r["unsupported"]
         # The portal's limit, not a mapping gap: the person hears the defect and their choices.
-        assert [d["title"] for d in r.get("defects", [])] == ["Voltura and cambio d'intestazione: the co-holders' section holds one person"], r.get("defects")
+        assert [d["title"] for d in r.get("defects", [])] == ["Voltura e cambio d'intestazione: la sezione dei cointestatari contiene una sola persona"], r.get("defects")
 
         steps, v = load("cambio-intestazione-fittizio")
         assert len(ticks(steps, v("p6"))) == 1
         assert len(ticks(steps, v("subentro"))) == 4 and run.preflight(steps, v("subentro"), made_up=True)["ready"]
         sub = json.loads((root / "cambio-intestazione-fittizio" / "answers-subentro.json").read_text())
         r = run.preflight(steps, v(sub | {"cambio_dl": False, "cambio_ditta": False}), made_up=True)
-        assert any("say which" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("indichi quale" in u for u in r["unsupported"]), r["unsupported"]
 
         steps, v = load("proroga-paesaggistica-fittizia")
         assert len(ticks(steps, v("p6"))) == 1 and len(ticks(steps, v("assenso"))) == 2
@@ -599,9 +599,9 @@ def assents_and_filings():
         assert r["ready"] and ("Gestione degli allegati: Documentazione necessaria per il rilascio di atti di assenso obbligatori", "documentazione-assensi.pdf") in got, got
         assert ("Gestione degli allegati: Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni", "documentazione-comunicazioni.pdf") in got, got
         r = run.preflight(steps, v(a | {"inizio_dopo_assensi": "false", "data_inizio_lavori": "2026-12-01"}), made_up=True)
-        assert any("start after its communication" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("iniziano dopo la sua comunicazione" in u for u in r["unsupported"]), r["unsupported"]
         r = run.preflight(steps, v(a | {"cila_stato": "in corso", "ricevuta_sanzione": "rehearsals/cila-fittizia/files/ricevuta-sanzione.pdf"}), made_up=True)
-        assert any("can't have assents still to be acquired" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("non possono avere assensi ancora da acquisire" in u for u in r["unsupported"]), r["unsupported"]
         # An authorization already obtained isn't one to acquire: the bene culturale lists none.
         steps, v, a = case("cila-fittizia", "bene-culturale")
         assert a["atti_da_acquisire"] is False and run.preflight(steps, v(a), made_up=True)["ready"]
@@ -613,7 +613,7 @@ def assents_and_filings():
         assert r["ready"] and ("Gestione degli allegati: Allegati liberi", "documentazione-comunicazioni.pdf") in attached(r), attached(r)
         assert not any("quadro e" in y for y in r["yours"]), r["yours"]
         r = run.preflight(steps, v(a | {"atti_da_acquisire": True}), made_up=True)
-        assert any("no request for assents" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("non prevede la richiesta di assensi" in u for u in r["unsupported"]), r["unsupported"]
 
         steps, v, a = case("fine-lavori-fittizia", "parziale")
         r = run.preflight(steps, v(a), made_up=True)
@@ -673,7 +673,7 @@ def group_two_choices():
         assert any(l == "sono richieste variazioni progettuali" for l, _ in b), b
         a = json.loads((root / "rinnovo-paesaggistica-fittizia" / "answers-p6.json").read_text())
         r, _ = labels("rinnovo-paesaggistica-fittizia", a | {"paes_rinnovo_variazioni": True})
-        assert any("has no box for design changes" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("non ha una casella per le modifiche progettuali" in u for u in r["unsupported"]), r["unsupported"]
         # The studio's titolare (chiara) born in Buenos Aires.
         abroad = fields | {"chiara:identity.birth_province": "EE", "chiara:identity.birth_country": "ARGENTINA",
                            "chiara:identity.birth_comune": "Buenos Aires"}
@@ -722,21 +722,21 @@ def exemptions_and_other_kinds():
         assert ("Il pagamento non è dovuto poiché esentati", None) in b and not any(l.startswith("Il pagamento è dovuto") for l, _ in b), b
         assert ("per la seguente motivazione", run.BOLLO_ESENZIONE["cooperativa sociale"]) in b, b
         assert ("poiché esentati", None) in b and any(l == "specificare la motivazione" and v for l, v in b), b
-        assert any(y.startswith("No imposta di bollo to pay") for y in r["yours"]) and not any("pagoPA" in y for y in r["yours"]), r["yours"]
+        assert any(y.startswith("Nessuna imposta di bollo da pagare") for y in r["yours"]) and not any("pagoPA" in y for y in r["yours"]), r["yours"]
         spaced = json.loads((root / semplificata / "answers-esenzioni.json").read_text()) | {"bollo_esenzione": "cooperativa sociale "}
         _, b2 = case(semplificata, spaced)
         assert [x for x in b2 if x[0].startswith(("Il pagamento", "per la seguente"))] == [x for x in b if x[0].startswith(("Il pagamento", "per la seguente"))], b2
         # An ONLUS only for a tax year begun before 2026, when the regime ended.
         onlus = json.loads((root / semplificata / "answers-esenzioni.json").read_text()) | {"bollo_esenzione": "onlus"}
         r, _ = case(semplificata, onlus | {"bollo_onlus_esercizio": False})
-        assert any("ONLUS exemption ended" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("esenzione ONLUS è cessata" in u for u in r["unsupported"]), r["unsupported"]
         r, b = case(semplificata, onlus | {"bollo_onlus_esercizio": True})
         assert ("per la seguente motivazione", run.BOLLO_ESENZIONE["onlus"]) in b, b
         r, b = case(semplificata, "bollo-virtuale")
         assert any(l.startswith("Per gli Enti autorizzati") for l, _ in b), b
         assert ("dichiarazione relativa all'assolvimento dell'imposta di bollo", "rehearsals/scia-fittizia/files/dichiarazione-bollo-virtuale.pdf") in b, b
         r, _ = case(semplificata, "p6")
-        assert "Pay the imposta di bollo on pagoPA as the portal asks" in r["yours"], r["yours"]
+        assert "Paghi l'imposta di bollo con pagoPA, come chiede il portale" in r["yours"], r["yours"]
         # The reason's box, wherever the crawl didn't see it (a SUAP draft), goes as the text box it reads as.
         for name in ("dehors-fittizio", "cila-fittizia"):
             steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
@@ -783,9 +783,9 @@ def materiali_di_risulta_agree():
     os.chdir(HERE.parents[4])
     try:
         assert pre(base)["ready"]
-        for change, words in (({"scavo": "nessuno"}, "must declare by-products"),
-                              ({"scavo_piano_utilizzo": "true"}, "not the asseverazione's large-site line"),
-                              ({"terre_rocce": "no"}, "files neither the dichiarazione")):
+        for change, words in (({"scavo": "nessuno"}, "devono essere dichiarati come sottoprodotti"),
+                              ({"scavo_piano_utilizzo": "true"}, "non la voce dell'asseverazione per i grandi cantieri"),
+                              ({"terre_rocce": "no"}, "non presenta né la dichiarazione")):
             r = pre({**base, **change})
             assert not r["ready"] and any(words in u for u in r["unsupported"]), (change, r["unsupported"])
         # Proposed from the table's answer, for a case that hasn't said.
@@ -804,14 +804,14 @@ def every_sue_case_ready():
     portal on made-up data (`made_up_stops`)."""
     root = HERE.parents[4] / "rehearsals"
     fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
-    refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "This case is another pratica",
-               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Only art. 36 ",
+    refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "Questo caso è un'altra pratica",
+               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "È gestito solo l'art. 36 (la",
                ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia",
-               ("cila-fittizia", "answers-impresa-dopo.json"): "The CILA names its building firm",
+               ("cila-fittizia", "answers-impresa-dopo.json"): "La CILA indica la sua impresa esecutrice",
                # The permesso's landscape quadro has no line for the art. 167 accertamento (pdc-36-paesaggio).
-               ("pdc-sanatoria-accertamento-fittizio", "answers-p6.json"): "The permesso's asseverazione on the portal requires one of three",
+               ("pdc-sanatoria-accertamento-fittizio", "answers-p6.json"): "L'asseverazione del permesso sul portale richiede una delle tre",
                # A whole building to another category: no change-of-use line states it (cambio-uso-regionale).
-               ("pdc-sanatoria-fittizio", "answers-cambio-intero.json"): "The national form's change-of-use line"}
+               ("pdc-sanatoria-fittizio", "answers-cambio-intero.json"): "La voce sul cambio di destinazione d'uso"}
     here, seen, stops = os.getcwd(), 0, set()
     os.chdir(HERE.parents[4])
     try:

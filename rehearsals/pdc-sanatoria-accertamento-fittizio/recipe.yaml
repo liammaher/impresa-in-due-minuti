@@ -15,21 +15,21 @@ crawl: sue-combo-pdc-sanatoria-accertamento
 asks:
   descrizione: {default: "PdC sanatoria e accertamento {{c:identity.last_name}}"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali, art. 75 DPR 445/2000"
-  - "As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request. Its landscape quadro says the works alter the place and ticks none of its three procedures: the compatibility is the accertamento filed with it (state so in the relazione tecnica)"
-  - "The asseverazione's \"non interessa aree percorse dal fuoco\" (qualità terreni) is one choice with the soil statement on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md); state it in the relazione tecnica if the SUE wants it"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma con la richiesta. Il suo quadro paesaggistico dichiara che i lavori alterano lo stato dei luoghi e non spunta nessuna delle tre procedure: la compatibilità è oggetto dell'accertamento presentato insieme (lo dichiari nella relazione tecnica)"
+  - "Nell'asseverazione, la voce \"non interessa aree percorse dal fuoco\" (qualità terreni) è sul portale un'unica scelta insieme alla dichiarazione sui terreni: Claude spunta la dichiarazione sui terreni e lascia non spuntata quella voce (un difetto del portale, docs/portal-defects.md); lo dichiari nella relazione tecnica se il SUE lo richiede"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "Sign and send (Firma e invio); keep the receipt"
-  - "The Comune decides the compatibility first, with the Soprintendenza's binding parere: if it's found, pay the sum it sets (art. 167 c. 5 D.Lgs. 42/2004, the greater of the damage and the profit); if not, the works must be removed and the permesso in sanatoria can't be issued"
-  - "Once the permesso is granted: pay the oblazione it determines (twice the contributo di costruzione, art. 36 c. 2) and collect the permesso in sanatoria"
+  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Il Comune decide prima sulla compatibilità, con il parere vincolante della Soprintendenza: se è accertata, paghi la somma che stabilisce (art. 167 c. 5 D.Lgs. 42/2004, la maggiore tra il danno arrecato e il profitto conseguito); in caso contrario, le opere devono essere rimosse e il permesso in sanatoria non può essere rilasciato"
+  - "Una volta concesso il permesso: paghi l'oblazione che il SUE determina (il doppio del contributo di costruzione, art. 36 c. 2) e ritiri il permesso in sanatoria"
 # The permesso's landscape quadro wants one of its three procedures once the works alter the place,
 # and none is the accertamento of art. 167 (the run of 2026-11-02 stopped there): a known defect,
 # refused with it. The rest of the pratica fills; the mapping stays for the day the quadro has the line.
 supports:
   - when: "{{ask.paesaggio_accertamento|not}}"
     defect: pdc-36-paesaggio
-    else: "The permesso's asseverazione on the portal requires one of three landscape procedures (semplificata, ordinaria, the accertamento of art. 36-bis) for works that alter the place, and none is the accertamento of art. 167 an art. 36 sanatoria needs: a defect of the portal (docs/portal-defects.md); ask the SUE."
+    else: "L'asseverazione del permesso sul portale richiede una delle tre procedure paesaggistiche (semplificata, ordinaria, l'accertamento dell'art. 36-bis) per opere che alterano lo stato dei luoghi, e nessuna è l'accertamento dell'art. 167 richiesto da una sanatoria ex art. 36: un difetto del portale (docs/portal-defects.md); chieda al SUE."
 # The case: the main pratica's P6 answers, the part's, then these (a null drops one);
 # `gen.py --answers` writes answers-p6.json.
 answers:
