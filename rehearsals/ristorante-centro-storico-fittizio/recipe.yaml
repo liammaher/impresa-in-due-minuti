@@ -43,8 +43,7 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Have your technician sign CS 1 (structural criteria) and CG 1 (the management score) and the acoustic documents, and attach them with the nota di condivisione"
   - "Tick the declarations yourself: consapevolezza (artt. 46-47), informativa privacy, Napoli's rules (normative comunali), requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
-  - "Pay the diritti di segreteria (€ {{ask.diritti_euro}}) with pagoPA, and the ASL tariffa forfettaria"
-  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
+  - "Pay the diritti di segreteria (€ {{ask.diritti_euro}}) and the imposta di bollo with pagoPA, and the ASL tariffa forfettaria"
   - "Sign and send (Firma e invio); don't open before the authorization arrives"
 # Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica or that needs a pratica this one doesn't file.

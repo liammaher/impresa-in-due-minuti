@@ -9,11 +9,11 @@ crawl: sue-proroga-del-termine-di-ultimazione-lavori
 operation: "Proroga del termine di ultimazione lavori (art. 10 septies, Legge 51/2022)"
 scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
-after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
   descrizione: {default: "PROVA NON INVIARE - proroga ultimazione {{c:identity.last_name}}"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client's name"
-  - "No imposta di bollo to pay on this form: the portal's form for this pratica has no bollo section or slot"
+  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it, with the pratica's other documents"
+  - "Pay any imposta di bollo as the portal asks"
   - "Sign and send (Firma e invio); keep the receipt"

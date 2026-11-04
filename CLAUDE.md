@@ -85,9 +85,7 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      `--plain`); reads every
                      field back, then again on a fresh load of the draft, attaches the files it
                      names (the pane: 256 KB in all, bigger ones by an https link it fetches and checks by sha256,
-                     `--file-urls`; a signed-only slot takes the person's .p7m, which the portal checks on
-                     upload, and what the portal makes once the declarations are ticked, the procura,
-                     goes in a second run, `--after-declarations`), never declares, pays or sends; a filled run draws the declarations' own text, the
+                     `--file-urls`), never declares, pays or sends; a filled run draws the declarations' own text, the
                      portal's PDF preview and every value over the portal (`run` also writes review.html); Claude never reads them. A label
                      names the boxes whose own text it is first (`nth` counts those), and a
                      section is read only once it is the open one. `run.py preflight` first: the steps file's
@@ -261,8 +259,6 @@ the page never copies a rule.
   and normalized (`italy.go`, `dates.go`, `housing.go`, `business.go`). Housing categories
   (`abitazione`, `locazione`, `utenze`, `tari`) describe the home at residenza/domicilio;
   the schema exports them as `kinds: [persona]` (set from `IsHousingCategory`).
-  A new field bumps the schema's `Version` (`make schema`); the library's copy
-  (`contract/vault-schema.json`, `npm run gen:fields`) follows in a PR merged after the vault's.
   New fields the pratiche-napoli library needs are added here, then dropped from its
   `contract/extensions.json`. `schema.json` is `pvault schema --json`, credential words
   included (`Credentials`, the expressions `IsCredentialField` compiles), and `values` for
@@ -461,18 +457,16 @@ tests compile the helper with `-D DEBUG`, which adds `describe-grant` and test e
 (`PVAULT_TOUCHID_TEST_*`). Keychain tests run only with `PVAULT_KEYCHAIN_TEST=1`. The fill
 pilot's synthetic vault (`TestPraticaPilotVault`) runs only with `PVAULT_PILOT_DIR`; run the
 pilots through `claude/skills/pratica/fill/pilot/regress.py` (`--keep DIR` keeps a case's
-output; it needs `PRATICHE_NAPOLI_DIR` and PyMuPDF, which the system `python3` has and the pratica venv lacks; `PILOT_FORM_PDF` gives the TARI Mod. 1
+output; it needs `PRATICHE_NAPOLI_DIR` and PyMuPDF; `PILOT_FORM_PDF` gives the TARI Mod. 1
 pilot's form from disk; the `sign` case needs a library whose layout has `signatures`).
 CI runs `regress.py` against the library's main (`fill.yml`); the library runs it on its own changes.
 The portal runner has offline tests on a fake portal: `claude/skills/pratica/portal/bench/test_inpage.py`,
 run with the pratica venv's Python (`~/.cache/pratica-portal/venv`, Playwright's Chromium, headless; no
 network, vault or model); `bench/test_preflight.py` tests pre-flight on the SCIA rehearsal's files, `bench/test_gen.py`
 gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the SUE choice count
-(`branches.py --write` writes `docs/sue-branches.md`), `bench/test_portability.py` the national/Campania/Napoli
-split (`portability.py --write`, `docs/portability.md`), `bench/test_tolleranze.py` the asseverazioni's
+(`branches.py --write` writes `docs/sue-branches.md`), `bench/test_tolleranze.py` the asseverazioni's
 tolerances, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
-the same bytes as the library's; its every-case walk takes about 45 minutes since the table's `terre_rocce`), `bench/plan_diff.py` each case's fill plan
-before and after a change, `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
+the same bytes as the library's), `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
 route.py on every case the SUE table decides (it prints the combinations not mapped yet), and
 `claude/skills/pratica/intake/bench/test_intake.py` the intake on a made-up dossier (`dossier.py`) against fixture-p6.json. On the real portal, `bench/rerun.py` reruns the rehearsals
 in the pane after a runner, dictionary or gen.py change (portal/README.md); `--record` files the results in each

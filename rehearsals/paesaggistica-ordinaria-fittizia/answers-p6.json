@@ -15,15 +15,9 @@
  "atti_gravanti": false,
  "vincolo": "art 136 and 142",
  "bollo_marche": false,
- "diritti_euro": "401",
+ "diritti_euro": "0",
  "intervento": "edilizia_libera",
  "cambio_uso": "no",
  "paesaggio": "ordinaria",
- "fatti": [],
- "progettista_altro": false,
- "diritti_esente": false,
- "bollo_esenzione": "no",
- "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
- "relazione_paesaggistica": "rehearsals/scia-fittizia/files/relazione-paesaggistica.pdf",
- "terre_rocce": "no"
+ "fatti": []
 }

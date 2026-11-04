@@ -80,17 +80,5 @@
  "notifica_dovuta": "false",
  "incentivo_energetico": "art 14 c6",
  "nuova_costruzione_tipo": "e1",
- "relazione_energetica": "rehearsals/scia-fittizia/files/relazione-energetica.pdf",
- "altri_tecnici_dopo": "false",
- "direttore_lavori": "da nominare",
- "impresa_dopo": "false",
- "vvf_variante": "false",
- "scomputo": "false",
- "strumenti_altri": "false",
- "igienico_24_5bis": "false",
- "barriere_art82": "false",
- "progettista_altro": false,
- "diritti_esente": false,
- "bollo_esenzione": "no",
- "terre_rocce": "no"
+ "relazione_energetica": "rehearsals/scia-fittizia/files/relazione-energetica.pdf"
 }

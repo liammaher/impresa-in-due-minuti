@@ -170,11 +170,7 @@ def sue_rehearsals_ready():
                # The portal's art. 36-bis asseverazione is one radio group (the library's discrepancies).
                ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Only art. 36 ",
                # The Comune gives no attestation of the exclusion (its landscape directive, § 3.2).
-               ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia",
-               # The portal requires the CILA's firm, "si riserva" or not (a run stopped on it, 2026-11-01).
-               ("cila-fittizia", "answers-impresa-dopo.json"): "The CILA names its building firm",
-               # No change-of-use line states a whole building to another category (cambio-uso-regionale).
-               ("pdc-sanatoria-fittizio", "answers-cambio-intero.json"): "The national form's change-of-use line"}
+               ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia"}
     for name in names:
         for f in sorted((REHEARSALS / name).glob("answers*.json")):
             r = sue(name, f.name)
@@ -217,13 +213,13 @@ def sue_another_pratica():
     assert sue("paesaggistica-ordinaria-fittizia", paesaggio="semplificata")["unsupported"][0].startswith(other + semplificata)
     # Works that need no title, work already done, and a Naples rule (DGC 454/2014).
     assert sue("paesaggistica-semplificata-fittizia", paesaggio="no")["unsupported"][0].startswith("This case needs no pratica: ")
-    # Works already done: the SCIA in sanatoria (facades, structures, ristrutturazione), its own
-    # pratica; a permesso's goes to the permesso in sanatoria.
+    # Works already done: the SCIA in sanatoria (facades, ristrutturazione without structures), its
+    # own pratica; on structures, in a protected area or a permesso's, refused.
     assert sue("scia-fittizia", fatti=["prospetti", "sanatoria"])["unsupported"][0].startswith(
         other + "napoli/comune/scia-in-sanatoria")
     assert sue("scia-sanatoria-fittizia", fatti=[])["unsupported"][0].startswith(other + cila)  # the late CILA
-    assert sue("scia-fittizia", "answers-strutture.json", fatti=["sanatoria", "uso_ammesso_prg"], sismica="autorizzazione")["unsupported"][0].startswith(
-        other + "napoli/comune/scia-in-sanatoria")
+    assert "3-bis" in sue("scia-sanatoria-fittizia", intervento="ristrutturazione", fatti=[],
+                          strutture="true", sismica="deposito")["unsupported"][0]
     # In a protected area the art. 36-bis sanatoria carries the landscape compatibility (c. 4),
     # new volumes too; the SCIA of works still under way doesn't.
     assert sue("scia-sanatoria-fittizia", paesaggio="semplificata", fatti=["prospetti", "paesaggio_eseguiti", "paesaggio_volumi"])["ready"]
@@ -237,19 +233,11 @@ def sue_another_pratica():
     assert sue("paesaggistica-ordinaria-fittizia", fatti=["paesaggio_eseguiti"])["unsupported"][0].startswith(other + accertamento)
     assert sue("accertamento-paesaggistico-fittizio", fatti=[])["unsupported"][0].startswith(other + ordinaria)
     assert "167 c. 4" in sue("accertamento-paesaggistico-fittizio", fatti=["paesaggio_eseguiti", "paesaggio_volumi"])["unsupported"][0]
-    # Works that needed the permesso, already done: the permesso in sanatoria.
+    # Works that needed the permesso, already done: the permesso in sanatoria; not on structures.
     pdcs = "napoli/comune/permesso-in-sanatoria"
     assert sue("pdc-fittizio", intervento="nuova_costruzione", strutture="false", fatti=["sanatoria"])["unsupported"][0].startswith(other + pdcs)
     assert sue("pdc-sanatoria-fittizio", intervento="variante_essenziale_pdc")["ready"]
-    # On structures, begun without the seismic filing: the autorizzazione at the Genio Civile,
-    # filed apart, never the deposito (art. 4 c. 1 e L.R. 9/1983); the SCIA's the same.
-    genio = "File apart, with its own office: napoli/genio-civile/deposito-autorizzazione-sismica (autorizzazione)"
-    for name in ("pdc-sanatoria-fittizio", "scia-sanatoria-fittizia"):
-        assert "L.R. 9/1983" in sue(name, "answers-strutture.json", sismica="deposito")["unsupported"][0]
-        assert genio in sue(name, "answers-strutture.json")["yours"]
-    assert genio in sue("scia-sanatoria-fittizia", "answers-ristrutturazione-strutture.json")["yours"]
-    # Under art. 36-bis c. 1 the case's defect still refuses it, structures or not.
-    assert sue("scia-sanatoria-fittizia", "answers-strutture.json", sanatoria_caso="conformita urbanistica")["defects"]
+    assert "sanatoria sismica" in sue("pdc-sanatoria-fittizio", strutture="true", sismica="deposito")["unsupported"][0]
     # The portal's permesso wants an energy incentive claimed even with no energy works.
     assert "energy incentive" in sue("pdc-sanatoria-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
     assert "energy incentive" in sue("pdc-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
@@ -283,42 +271,25 @@ def sue_another_pratica():
         other + cila)
     assert sue("cil-fittizia", paesaggio="semplificata")["unsupported"] == [
         f"This case also needs {semplificata} (autorizzazione), which this pratica doesn't file."]
-    # On a bene culturale the CIL and the CILA go once the Soprintendenza has authorized the works,
-    # apart and first: Napoli's SUE has no procedure to ask for it with them (art. 21 c. 4).
-    sop = "File apart, with its own office: napoli/soprintendenza/autorizzazione-beni-culturali (autorizzazione)"
-    assert "sabap-na@pec.cultura.gov.it" in sue("cil-fittizia", fatti=["bene_culturale"], soprintendenza_autorizzata="false")["unsupported"][0]
-    for name in ("cil-fittizia", "cila-fittizia"):
-        r = sue(name, "answers-bene-culturale.json")
-        assert r["ready"] and sop in r["yours"], r
-    # Works already under way on a bene culturale: no authorization after the fact (art. 169).
-    assert "art. 169" in sue("cila-fittizia", "answers-bene-culturale.json", cila_stato="in corso")["unsupported"][0]
+    assert "soprintendente" in sue("cil-fittizia", fatti=["bene_culturale"])["unsupported"][0]
     assert "sanatoria" in sue("cil-fittizia", fatti=["sanatoria"])["unsupported"][0]
     # Naples: an ordinary home turned B&B or short let in the centro storico's tavola 7a area
     # (D.C.C. 129/2026), whose 70% threshold has no verified checking mechanism yet.
     a2 = sue("scia-fittizia", "answers-cambio-unita-senza-stessa.json", fatti=["uso_ammesso_prg", "verso_a2_tavola_7a"])
     assert len(a2["unsupported"]) == 1 and "tavola 7a" in a2["unsupported"][0] and "70%" in a2["unsupported"][0], a2
-    # A ground-floor unit (art. 23-ter c. 1-quater) or one outside zones A, B and C: Campania's
-    # SCIA alternativa (art. 2 c. 6 L.R. 13/2022), as a whole building's change (2026-11-03).
-    for c in ("piano_terra", "altro"):
-        assert sue("scia-fittizia", cambio_uso=c, **unit)["unsupported"][0].startswith(
-            other + "napoli/comune/scia-alternativa-pdc"), c
+    ground = sue("scia-fittizia", cambio_uso="piano_terra", **unit)["unsupported"]
+    assert len(ground) == 1 and "1-quater" in ground[0] and "va chiesto al SUE" in ground[0], ground
 
 
 def sue_asks_and_apart():
     # What the works are is asked alone first: the other facts depend on it.
     r = sue("cila-fittizia", intervento=None, fatti=None, paesaggio=None, cambio_uso=None)
     assert [q["key"] for q in r["questions"]] == ["intervento"], r["questions"]
-    # Then, in one message, the facts the rules for those works still wait on. The CILA's works
-    # are under way, a sanatoria: the seismic filing is never asked, it can only be the
-    # autorizzazione (art. 4 c. 1 e L.R. 9/1983).
-    # A listed building's Soprintendenza authorization (#182) is asked with them, each marked as
-    # hanging on the checklist's bene_culturale.
+    # Then, in one message, the facts the rules for those works still wait on.
     r = sue("cila-fittizia", fatti=None, paesaggio=None, cambio_uso=None)
-    qs = {q["key"]: q for q in r["questions"]}
-    assert list(qs) == ["soprintendenza_autorizzata", "fatti", "cambio_uso", "paesaggio", "soprintendenza_autorizzazione"], list(qs)
-    assert all("bene_culturale" in qs[k]["only_if"] for k in ("soprintendenza_autorizzata", "soprintendenza_autorizzazione"))
-    assert [i["key"] for i in qs["fatti"]["items"]] == ["strutture", "prospetti", "uso_ammesso_prg", "verso_a2_tavola_7a",
-                                                        "paesaggio_eseguiti", "bene_culturale"], qs["fatti"]
+    assert [q["key"] for q in r["questions"]] == ["fatti", "sismica", "cambio_uso", "paesaggio"], r["questions"]
+    assert [i["key"] for i in r["questions"][0]["items"]] == ["strutture", "prospetti", "uso_ammesso_prg", "verso_a2_tavola_7a",
+                                                               "paesaggio_eseguiti", "bene_culturale"], r["questions"][0]
     assert "permesso_per_scelta" not in str(r["questions"])  # the recipe's: a CILA is no choice
     # The seismic filing is the person's, at the Genio Civile: in their steps, never a refusal.
     r = sue("scia-fittizia", "answers-strutture.json")

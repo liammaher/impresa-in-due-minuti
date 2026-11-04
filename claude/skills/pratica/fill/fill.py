@@ -425,11 +425,9 @@ def schema_category(ref):
 def person_categories(schema):
     """The categories a signer other than the owner brings their own of: the
     library's dichiarante (isPersonData in its validator), persona categories
-    each person has, ruolo, and immobile: the property a pratica is about is a
-    client's own (luca:immobile, the Modello DP's committente's), never the
-    studio's. business stays the vault's: the studio, on the DP's A1.2."""
+    each person has, and ruolo."""
     return {c["name"] for c in schema["categories"]
-            if c.get("scope") == "person" and (c.get("subject") == "persona" or c["name"] in ("ruolo", "immobile"))}
+            if c.get("scope") == "person" and (c.get("subject") == "persona" or c["name"] == "ruolo")}
 
 
 def signer_id(ref, signer, people):
@@ -1522,20 +1520,9 @@ def read_back(fitz, pdf_path, written, font):
     return results, stray
 
 
-def grid_rows(bands):
-    """The plain rows of a form drawn as a grid: under each shaded band, down to the next band
-    across the same columns (40 points at most)."""
-    rows = []
-    for b in bands:
-        below = [c.y0 for c in bands if c is not b and c.y0 >= b.y1 - 0.5 and c.x0 < b.x1 and c.x1 > b.x0]
-        rows.append(type(b)(b.x0, b.y1, b.x1, min(below + [b.y1 + 40])))
-    return rows
-
-
 def layout_problems(fitz, pdf_path, layout):
     """Boxes that don't sit on the blank form's own marks: a text box on its
-    underscores (or, on a form drawn as a grid, in a plain row under a shaded
-    band, clear of every band) and over no printed word or fillable field, a cell on its
+    underscores and over no printed word or fillable field, a cell on its
     underline, a checkbox on its square (drawn, or a box character of the
     form's font), a table's rows and columns on its lines, a fillable field
     that is there. The read-back can't see a misplaced box; this can."""
@@ -1553,12 +1540,6 @@ def layout_problems(fitz, pdf_path, layout):
                 "underscores": [b for b, c in chars if c == "_"],
                 "printed": [(b, c) for b, c in chars if c not in "_  "],
                 "shapes": [d["rect"] for d in page.get_drawings()],
-                # A grid form's shaded bands (labels), not its thin rules; and the span of rows its
-                # bands enclose, where the blanks are.
-                "bands": [d["rect"] for d in page.get_drawings() if d.get("fill") and d["fill"] != (1.0, 1.0, 1.0)
-                          and d["rect"].width > 3 and d["rect"].height > 3],
-                "rows": grid_rows([d["rect"] for d in page.get_drawings() if d.get("fill") and d["fill"] != (1.0, 1.0, 1.0)
-                                   and d["rect"].width > 3 and d["rect"].height > 3]),
                 "widgets": [(w.field_name, w.field_type_string, w.rect) for w in page.widgets()],
             }
         return pages[n]
@@ -1576,17 +1557,8 @@ def layout_problems(fitz, pdf_path, layout):
         width, end = 0.0, x0
         for a, b in covered:
             width, end = width + max(0.0, b - max(a, end)), max(end, b)
-        if covered and width < 0.8 * (x1 - x0):
+        if width < 0.8 * (x1 - x0):
             return "isn't on the form's blank line"
-        if not covered:
-            # A form drawn as a grid (the Comune's Modello DP): the blank is the plain row under a
-            # shaded row of labels, with no line to write on. It must clear every shaded band, the
-            # form's thin rules aside.
-            band = next((s for s in m["bands"] if fitz.Rect(rect).intersect(s).get_area() > 1.0), None)
-            if band is not None:
-                return f"isn't on the form's blank: it overlaps a shaded band {[round(v, 1) for v in band]}"
-            if not any(s.contains(fitz.Rect(rect)) or s.intersects(fitz.Rect(rect)) for s in m["rows"]):
-                return "isn't on the form's blank line, nor in a cell of its grid"
         over = "".join(c for b, c in m["printed"]
                        if x0 + 0.5 <= (b[0] + b[2]) / 2 <= x1 - 0.5 and top <= (b[1] + b[3]) / 2 <= bottom)
         return f"covers the printed {over!r}" if over else None
@@ -1641,12 +1613,7 @@ def layout_problems(fitz, pdf_path, layout):
             drawn = any(abs(r.x0 - x0) <= 1 and abs(r.x1 - x1) <= 1 and 0 <= r.y0 - box["baseline"] <= 3 for r in m["shapes"])
             typed = any(x0 - 0.5 <= (u[0] + u[2]) / 2 <= x1 + 0.5 and u[1] - 1 <= box["baseline"] <= u[3] + 1
                         for u in m["underscores"])
-            # Or boxed, as a grid form draws them: on each side a rule, or the edge of the grid's
-            # frame, across the baseline.
-            side = lambda x: any((abs(r.x0 - x) <= 1 or abs(r.x1 - x) <= 1) and r.y0 - 3 <= box["baseline"] <= r.y1 + 3
-                                 for r in m["shapes"])
-            boxed = side(x0) and side(x1)
-            if not drawn and not typed and not boxed:
+            if not drawn and not typed:
                 out.append(f"{name}: cell {x0}-{x1} has no underline")
         for square in box.get("choices", {}).values():
             if not any(near(r, square) for r in m["shapes"]) and not box_char(m, square):

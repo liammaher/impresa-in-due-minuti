@@ -105,13 +105,5 @@
  "progetto_ascensore_doc": "rehearsals/scia-fittizia/files/progetto-impianti.pdf",
  "progetto_antincendio_doc": "rehearsals/scia-fittizia/files/progetto-impianti.pdf",
  "relazione_energetica": "rehearsals/scia-fittizia/files/relazione-energetica.pdf",
- "strumenti_altri": "false",
- "altri_tecnici_dopo": "false",
- "direttore_lavori": "da nominare",
- "impresa_dopo": "false",
- "vvf_variante": "false",
- "progettista_altro": false,
- "diritti_esente": false,
- "bollo_esenzione": "no",
- "terre_rocce": "no"
+ "strumenti_altri": "false"
 }

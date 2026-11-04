@@ -106,23 +106,5 @@
   "answers": "answers-vale-fine-lavori.json",
   "result": "filled",
   "seconds": 90.3
- },
- {
-  "date": "2026-11-01",
-  "answers": "answers-bassa-monostanza.json",
-  "result": "filled",
-  "seconds": 98.3
- },
- {
-  "date": "2026-11-01",
-  "answers": "answers-professionista.json",
-  "result": "filled",
-  "seconds": 230.4
- },
- {
-  "date": "2026-11-02",
-  "answers": "answers-p6.json",
-  "result": "filled",
-  "seconds": 143.4
  }
 ]
