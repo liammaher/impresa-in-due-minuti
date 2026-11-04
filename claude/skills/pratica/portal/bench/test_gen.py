@@ -18,6 +18,8 @@ sys.dont_write_bytecode = True
 import gen  # noqa: E402
 import yaml  # noqa: E402
 
+gen.ensure()  # the rehearsals' steps files are built, never committed (steps.lock)
+
 CILA = ROOT / "rehearsals" / "cila-fittizia"
 # The golden case: the CILA P6 the first walk found by hand (2026-10-28), ids and values.
 HAND_WALK = HERE / "fixtures" / "cila-p6-hand-walk.yaml"
@@ -1427,12 +1429,35 @@ def _():
         assert ad(p) == ad(a) | ad(b), p["keys"]
 
 
-@case("every steps file and combination's answers are as the dictionary, recipes and crawls write them now (regen.py --check)")
+@case("every steps file is the one steps.lock names, and every combination's answers as the dictionary, recipes and crawls write them now (regen.py --check)")
 def _():
     import regen
     changed, refused = regen.regenerate(check=True)
     assert not refused, refused
-    assert not changed, "regenerate (bench/regen.py): " + ", ".join(str(p.relative_to(regen.REHEARSALS)) for p in changed)
+    assert not changed, "regenerate (bench/regen.py), then commit steps.lock: " + ", ".join(changed)
+    # Built, never committed: one hash per recipe, and nothing of them in git.
+    import subprocess
+    lock = gen.read_lock()
+    assert set(lock) == {p.parent.name for p in (ROOT / "rehearsals").glob("*/recipe.yaml")}, "steps.lock: one line per recipe"
+    tracked = subprocess.run(["git", "ls-files", "rehearsals/*/" + gen.STEPS], cwd=ROOT, capture_output=True, text=True).stdout
+    assert not tracked.strip(), "generated steps files are committed: " + tracked
+
+
+@case("gen.ensure builds a missing steps file and one the lock doesn't name, and leaves one it names")
+def _():
+    import shutil
+    import tempfile
+    with tempfile.TemporaryDirectory() as t:
+        root = Path(t)
+        for name in ("cila-fittizia", "fine-lavori-fittizia"):
+            shutil.copytree(ROOT / "rehearsals" / name, root / name, ignore=shutil.ignore_patterns(gen.STEPS))
+        shutil.copy(gen.LOCK, root / gen.LOCK.name)
+        assert sorted(p.parent.name for p in gen.ensure(root=root)) == ["cila-fittizia", "fine-lavori-fittizia"]
+        assert gen.ensure(root=root) == []
+        for name in ("cila-fittizia", "fine-lavori-fittizia"):
+            assert gen.sha256((root / name / gen.STEPS).read_text()) == gen.read_lock()[name], name
+        (root / "fine-lavori-fittizia" / gen.STEPS).write_text("stale\n")
+        assert [p.parent.name for p in gen.ensure(root=root)] == ["fine-lavori-fittizia"]
 
 
 print(f"{sum(results)}/{len(results)} passed")

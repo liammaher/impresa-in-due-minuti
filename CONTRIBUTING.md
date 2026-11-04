@@ -25,7 +25,9 @@ as issues and pull requests. First, read [responsible use](docs/responsible-use.
 the portal (`claude/skills/pratica/portal/catalogue/<comune>/sections/`), the shared dictionary
 (`dictionary/fnsuap.yaml`, each section's fields by label) and the pratica's recipe
 (`rehearsals/<name>/recipe.yaml`). A changed section is usually fixed by changing a dictionary entry or a
-recipe and regenerating. The rules tables in `claude/skills/pratica/portal/rules/` are copies of the
+recipe and regenerating (`make steps`): the steps files are built, never committed, and
+`rehearsals/steps.lock` holds their hashes, so commit the lock and `bench/plan_diff.py` shows what
+the change does to each case. The rules tables in `claude/skills/pratica/portal/rules/` are copies of the
 library's, byte for byte: change the library first. How to add a pratica is in
 [the runner's README](claude/skills/pratica/portal/README.md).
 
