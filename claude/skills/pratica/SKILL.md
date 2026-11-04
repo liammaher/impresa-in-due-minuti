@@ -341,8 +341,10 @@ win). A proposal nobody confirmed is never used.
    - `missing`: vault fields that are empty or expired. Ask for each in the same message,
      or have the user fill them in the vault (`pvault set`, the onboarding page).
    - `files`: each attachment, whether it exists, and `pane_ok` (all of them within the
-     pane's 256 KB): if not, send the big ones by https link (`run.py page --file-urls`),
-     use the Playwright window, or leave them to the user. A `.p7m` is read with openssl: one
+     pane's 256 KB). If not, `pick` lists the files the user will choose once, at the start
+     of the run, in a box the runner shows on the portal's page: tell them so with the
+     questions (from the job's folder; the bytes go from their disk to the portal and you
+     never see them). A `.p7m` is read with openssl: one
      that isn't a CAdES file is a `problem` (not ready: the user signs it again); one signed by
      someone other than the dichiarante, or carrying no codice fiscale, is a `warnings` entry
      (tell the user, it may be right: a technician signs their own relazione). It checks whose
@@ -422,7 +424,10 @@ win). A proposal nobody confirmed is never used.
      for the SUAP/SUE): the runner lives in that origin's storage, not www's.
    - `check.js` returns what to run next: `runner.js` and `steps.js` only when the pane's
      storage doesn't hold them byte for byte (each is tens of KB: never send one it doesn't
-     name), then `run.js`. `install.js` is both, for a pane that has neither.
+     name), then `run.js`. `install.js` is both, for a pane that has neither. The runner is
+     about 80 KB and a call takes about 40 KB: when check.js names `runner.js`, build with
+     `run.py page --bundle ~/Downloads/<name>.js` and run `pick.js` instead; the user picks
+     that file once in the box it shows, and it starts the run.
    - A call ends after 45 s: run.js returns at once; poll `await __pv.wait(40000)` until
      `result` is `filled` or `stopped`. `__pv.open()` shows the draft.
    - One run per login at a time, in any tab or window: the portal keeps one pratica in
@@ -456,10 +461,12 @@ win). A proposal nobody confirmed is never used.
    checks its name shows up on the page; a section whose files upload one by one, with no
    Salva, takes `save: false` (or `save: <button>`). A file the person must sign first
    (`.p7m`) is attached only once they've signed it. In the pane all of a run's files may
-   come to 256 KB (`run.py page` refuses more). A bigger one goes by an https link
-   (`--file-urls MAP.json`, {path: URL}): the page fetches it and checks its size and sha256
-   against the person's copy. Otherwise use the Playwright window for a planimetria, or leave
-   it to the person (docs/north-star.md, open question 7). Stop at what's left.
+   come to 256 KB in run.js. Over that, `run.py page` carries only each file's name, size and
+   sha256, and the run starts by showing a box on the portal's page where the person chooses
+   them (the files or the job's folder); a file whose bytes aren't the ones pre-flight read is
+   refused by name, and nothing is filled until all are in (the run's report says `waiting`
+   meanwhile: poll as usual). A file can also go by an https link (`--file-urls MAP.json`),
+   checked the same way (docs/design/large-attachments.md). Stop at what's left.
 4. **When the portal differs** (a screen, a label, a lookup with no single match), stop,
    correct the steps file and the map, and add the run to the README.
 

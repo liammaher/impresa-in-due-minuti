@@ -184,7 +184,7 @@ def main():
             continue
         try:
             # Made-up files: no slot that takes only signed files (the portal refuses the signature).
-            files, parts = run.page_bundle(run.phase(run.expand(steps, values), made_up=True), values, urls=urls)
+            files, parts = run.page_bundle(run.phase(run.expand(steps, values), made_up=True), values, urls=urls, pick=False)
         except run.StepError as e:
             failed.append(f"{label}: {e}")
             continue

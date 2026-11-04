@@ -145,7 +145,12 @@ the same are recorded, and the others are named; set `window.pvCheckNames` to th
 - One comune's view on one day: the portal changes, so a drift check (above) stops runs of a
   changed pratica. Between checks, the runner's label checks still stop a run on a moved box.
 - The fingerprint is the section before any choice: a change only inside a branch is caught by
-  the runner, not by the check.
+  the runner, not by the check. The same holds for `same_as`: two pratiche's sections with one
+  fingerprint are kept once, though a choice may open other rows in each. The permesso's "stato
+  legittimo, dichiarazione tolleranze, sanatoria" is kept as the SCIA's, whose sanatoria choice
+  opens the SCIA in sanatoria's rows; on the permesso those rows aren't there (2026-11-04, a run
+  stopped on "un intervento soggetto a SCIA: 0 fields"), so its recipes refuse that answer. A
+  section shared by `same_as` whose branches matter is read on the pratica's own draft first.
 - Operations are crawled one at a time; combinations (two operations in one pratica, an
   intervento eventuale) are only what each adds on its own, except the five above.
 - Crawls before 2026-10-30 didn't record switched-off boxes: a block greyed until its choice
