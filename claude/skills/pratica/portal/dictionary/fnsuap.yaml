@@ -118,6 +118,14 @@ asks:
     type: yes_no
     question: "L'immobile è censito solo al Catasto Terreni (un lotto da edificare, senza subalterno né categoria), anziché al Catasto Fabbricati?"
     default: "{{c:immobile.catasto_categoria|filled|not}}"
+  # The cadastral units the works touch (merging or splitting flats, a whole building, a plot of
+  # several particelle): the client's immobile, immobile2, immobile3 ... in the vault, one block
+  # each in Dati catastali. One unasked while the vault holds no second; with one, asked.
+  unita_catastali:
+    type: number
+    question: "How many cadastral units does the pratica name? (the client's `immobile` is the first, `immobile2` the second, and so on, all in the same catasto)"
+    default: "{{c:immobile2.catasto_foglio|empty|single_unit}}"
+    propose: "{{c:immobile.catasto_foglio,c:immobile2.catasto_foglio,c:immobile3.catasto_foglio,c:immobile4.catasto_foglio,c:immobile5.catasto_foglio,c:immobile6.catasto_foglio,c:immobile7.catasto_foglio,c:immobile8.catasto_foglio,c:immobile9.catasto_foglio|filled_count}}"
   # A voltura's or cambio d'intestazione's co-holders: the wizard's "ci sono cointestatari"
   # adds a section for one (`a:`); it has no "+" for more.
   cointestatario:
@@ -1517,17 +1525,31 @@ sections:
   # The property in the Catasto Fabbricati (NCEU: a unit with its subalterno and categoria), or a
   # plot only in the Catasto Terreni (NCT: a new building's land), whose one box of its own is the
   # sezione censuaria: the visura's sezione, which the vault keeps as catasto_sezione either way.
+  # The section is a list of groups, each a catasto (the radios) with a list of units: a unit's
+  # "+" (the first after its boxes) adds one with the same labels under the same catasto; the
+  # group's "+" below adds another group with its own radios (read on a CILA draft 2026-11-04,
+  # NCEU and NCT alike, cancelled unsaved). One group is mapped: every unit in one catasto.
   - section: Dati catastali
     leave: [sezione Amministrativa, classe]
+    supports:
+      - when: "{{ask.unita_catastali,c:immobile.catasto_categoria,c:immobile2.catasto_categoria,c:immobile3.catasto_categoria,c:immobile4.catasto_categoria,c:immobile5.catasto_categoria,c:immobile6.catasto_categoria,c:immobile7.catasto_categoria,c:immobile8.catasto_categoria,c:immobile9.catasto_categoria|one_catasto}}"
+        else: "The units are in both catasti (some with a categoria, in the Catasto Fabbricati, some without, in the Catasto Terreni): the section's second group, for the other catasto, isn't mapped yet. If a unit only lacks its categoria in the vault, add it."
     fields:
       - {kind: radio, label: Nuovo Catasto Edilizio Urbano, when: "{{ask.catasto_terreni|not}}"}
       - {kind: radio, label: Nuovo Catasto Terreni, when: "{{ask.catasto_terreni}}"}
-      - {kind: text, label: foglio, value: "{{c:immobile.catasto_foglio}}"}
-      - {kind: text, label: particella/mappale, value: "{{c:immobile.catasto_particella}}"}
-      - {kind: text, label: subalterno, value: "{{c:immobile.catasto_subalterno}}", when: "{{ask.catasto_terreni|not}}"}
-      - {kind: text, label: sezione Urbana, value: "{{c:immobile.catasto_sezione}}", optional: true, when: "{{ask.catasto_terreni|not}}"}
-      - {kind: select, label: categoria, value: "{{c:immobile.catasto_categoria|categoria}}", when: "{{ask.catasto_terreni|not}}"}
-      - {kind: text, label: sezione Censuaria, value: "{{c:immobile.catasto_sezione}}", optional: true, when: "{{ask.catasto_terreni}}"}
+      - kind: each
+        count: "{{ask.unita_catastali}}"
+        block:
+          - {kind: text, label: foglio, value: "{{c:immobile#N.catasto_foglio}}"}
+          - {kind: text, label: particella/mappale, value: "{{c:immobile#N.catasto_particella}}"}
+          # Found by its own title: the particella's texts (its title said twice) read
+          # "subalterno" from the next column as near as the subalterno's own, and by label the
+          # first box wins (a run typed the subalterno into the particella, 2026-11-04). The title
+          # is the portal's rule too: a unit with no subalterno takes 0, stored so in the vault.
+          - {kind: text, label: subalterno, title: se non presente indicare il numero 0, value: "{{c:immobile#N.catasto_subalterno}}", when: "{{ask.catasto_terreni|not}}"}
+          - {kind: text, label: sezione Urbana, value: "{{c:immobile#N.catasto_sezione}}", optional: true, when: "{{ask.catasto_terreni|not}}"}
+          - {kind: select, label: categoria, value: "{{c:immobile#N.catasto_categoria|categoria}}", when: "{{ask.catasto_terreni|not}}"}
+          - {kind: text, label: sezione Censuaria, value: "{{c:immobile#N.catasto_sezione}}", optional: true, when: "{{ask.catasto_terreni}}"}
 
   # The client's title. The dropdown's "altro" (a tenant, a comodatario: + specificare) adds a
   # row and renumbers the radios below it. Then the title held alone (a.1), or the assent of

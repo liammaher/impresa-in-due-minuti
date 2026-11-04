@@ -262,6 +262,23 @@ that also cites a Comune page may only confirm a national one there.
   count's steps apart (`procedure#hash`). Each "+" is the first after its list's last row (two in
   one section, 2026-11-01), and the boxes after it go by label. "Alle dipendenze di" opens more
   than the crawl saw: the firm's REA, seat and legale rappresentante (read 2026-10-31).
+- **Dati catastali is a list of lists** (read on a CILA draft 2026-11-04, cancelled unsaved): the
+  NCEU/NCT radios once, then the units, each foglio, particella/mappale, subalterno and the rest
+  under the same labels; the first "+" after a unit's boxes adds one more (with a "-" beside it),
+  and the "+" below that adds another group with its own radios. The units are the client's
+  `immobile`, `immobile2` ... (`unita_catastali`: unasked while the vault holds no `immobile2`,
+  else proposed from how many it holds); one group is mapped, so units in both catasti are
+  refused. A vault read must name each copy (`*:immobile2.*`: a scope matches a category whole).
+  The crawl's own "plus" pressed the last "+", the group's, which is why its `adds` looked odd
+  (crawl.js now notes how many "+" it saw, `of`). By label "subalterno" the first run typed the
+  subalterno into the particella box and left its own empty: the runner reads a box's first three
+  distinct texts, and the particella's title said twice (its own, the header above) lets the next
+  column's "subalterno" in, as near as the subalterno's own (whose title is "se non presente
+  indicare il numero 0"). The dictionary field's `title` is the text the run finds a block's box by,
+  its `label` still the crawl's (gen.py accounts for the box by it). The stop read "not kept:
+  particella/mappale different, subalterno different": two neighbouring boxes "different" after
+  Salva means one label found its neighbour; open the draft and read the boxes' values. The fake
+  portal's `?catasto=1` (test_inpage) keeps both: by title it fills, by label it doesn't.
 - **A choice's revealed boxes may repeat labels above them** (an employer's "Via, Piazza", "N.",
   "Cognome"): crawl.js counts reveals per label since 2026-10-31; crawls before then left those
   out, so a run can still find required boxes there (recrawl a section to see them).
@@ -575,6 +592,12 @@ are the SCIA's sanatoria rows the permesso's stato legittimo inherits by `same_a
 show (catalogue/README.md, Limits: a crawl of that section on a permesso draft would drop them),
 three the SCIA's whole-building change of use (it goes to the SCIA alternativa), one the agibilità
 director's sex (the made-up architect's own).
+A fixture person with a second property (`immobile2`) makes every case naming them ask how many
+cadastral units the pratica has: give such a property to a new person (2026-11-04: `gemma`, two
+flats being merged), never to one the existing cases use. The fixture is plain text, a blank line
+between people: append to it as text, never by loading and dumping the JSON (that rewrote 4,000
+lines once). A list of several units' values joined by "/" breaks on a categoria (A/2): run.py's
+`_categorie` reads them whole.
 
 ## Checking them all: `bench/rerun.py`
 
@@ -590,7 +613,12 @@ Hide the pane (Cmd+Shift+B) rather than close it: closing it ends the SPID sessi
 loaded bundle, so the person signs in and picks the file again (2026-11-01, twice).
 In the pane, on the portal's origin and logged in: `check.js` (it names which of `runner.js`
 and `steps/<name>.js` the pane lacks: send only those), the `queue-N.js` files, `loop.js`,
-then `results.js` until `done` equals `of`. A stopped one: rerun it alone, unchanged, before
+then `results.js` until `done` equals `of`. Where a steps file differs from main's in a few
+sections, check.js names `steps/<name>.patch.js` (run.py `patch_script`): only those sections, a
+few KB in place of 40-90, the rest taken from the pane's copy when it is main's; it stores the
+result only if its sha256 is the new file's, else it says to send the full `steps/<name>.js`
+(2026-11-04: the CILA's and the permesso's Dati catastali went this way, by hand, the first time).
+A stopped one: rerun it alone, unchanged, before
 calling it a bug (the portal is sometimes slow); twice the same is a bug. 2026-10-29: 20 of
 23 on the first pass, 23 of 23 once the runner waited for each section to open.
 

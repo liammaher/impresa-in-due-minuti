@@ -291,6 +291,19 @@ def _carica(v):
     raise ValueError(f"no portal carica for ruolo {v!r}")
 
 
+def _categorie(s):
+    """Several units' categorie joined by "/" (a/b/c, "" for a unit with none), where a categoria
+    itself may hold one (A/2): each read whole, in order."""
+    out = []
+    while s:
+        m = re.match(r"([A-Fa-f]\s*/?\s*\d{1,2}|[^/]*)(/|$)", s)
+        out.append(m[1])
+        s = s[m.end():]
+        if m[2] == "/" and not s:
+            out.append("")
+    return out
+
+
 def _split_street(v):
     """A street as the Scheda anagrafica takes it: its DUG, its "Dettaglio DUG" (the street type when
     the DUG is ALTRO, "" when it isn't, None for a type neither list has) and the name after it."""
@@ -494,6 +507,14 @@ FILTERS = Filters({
     "empty": lambda v: "true" if not v else "false",
     # Several yes/no answers at once ({{ask.a,ask.b|any}}): true when one is (a `when` has no "or").
     "any": lambda v: "true" if any(truthy(x) for x in str(v).split("/")) else "false",
+    # The cadastral units of a job: the client's immobile, immobile2 ... One unit when the vault
+    # holds no second ({{c:immobile2.x|empty|single_unit}}); with one, no value (None): the count
+    # is asked, proposed from how many are filled (`filled_count`). `one_catasto`: the count, then
+    # each unit's categoria, all filled (Fabbricati) or all empty (Terreni) among the first n.
+    "single_unit": lambda v: "1" if truthy(v) else None,
+    "filled_count": lambda v: str(sum(1 for x in str(v).split("/") if x.strip())),
+    "one_catasto": lambda v: (lambda n, cats: "true" if len({bool(c.strip()) for c in cats[:n]}) <= 1 else "false")(
+        int(float(v.split("/")[0] or 1)), _categorie(v.split("/", 1)[1] if "/" in v else "")),
     "not": lambda v: "false" if truthy(v) else "true",
     "positive": lambda v: "true" if float(str(v or 0).replace(",", ".")) > 0 else "false",
     # The SUE rules table's facts as the forms' own boxes (an ask's `propose`).
@@ -640,6 +661,8 @@ class Values:
                     raise KeyError(ref)
             for f in filters:
                 v = FILTERS[f](v)
+                if v is None:  # a filter that can't tell (single_unit): no value, as a missing field
+                    raise KeyError(ref)
             return v
         try:
             return re.sub(r"\{\{(.+?)\}\}", one, str(template))
@@ -2181,6 +2204,34 @@ def pane_parts(proc, skeleton):
     # JSON.stringify of that literal gives back these same bytes; the runner is stored as its source.
     stored = {"pv-runner": "(function () {\n" + runner + "})()", "pv-steps:" + proc: steps_json}
     return runner_js, steps_js, stored
+
+
+def patch_script(key, old_json, new_json, fallback):
+    """A steps script that sends only what changed: the new steps with each section the old ones
+    have the same left out, taken from what the pane holds (the old steps, if it holds them), and
+    stored only if the whole comes out byte for byte (sha256). Else it says to send `fallback`.
+    2026-11-04: a 43 KB and a 90 KB steps file, one section changed in each, went this way, where
+    pasting a long script can garble it. None when the two can't be patched section by section."""
+    old, new = json.loads(old_json), json.loads(new_json)
+    if old_json == new_json or len(old.get("sections", [])) != len(new.get("sections", [])):
+        return None
+    same = lambda i: json.dumps(old["sections"][i], ensure_ascii=False, separators=(",", ":")) == \
+        json.dumps(new["sections"][i], ensure_ascii=False, separators=(",", ":"))
+    lite = {**new, "sections": [None if same(i) else s for i, s in enumerate(new["sections"])]}
+    want = hashlib.sha256(new_json.encode()).hexdigest()
+    return ("(async () => {\n"
+            "  const sha = async (s) => Array.from(new Uint8Array(await crypto.subtle.digest(\"SHA-256\", new TextEncoder().encode(s)))).map((b) => b.toString(16).padStart(2, \"0\")).join(\"\");\n"
+            f"  const k = {json.dumps(key)}, cur = localStorage.getItem(k);\n"
+            f"  if (cur !== null && await sha(cur) === {json.dumps(want)}) return 'stored already';\n"
+            "  let s = null; try { s = JSON.parse(cur); } catch (e) {}\n"
+            f"  const n = {json.dumps(lite, ensure_ascii=False, separators=(',', ':'))};\n"
+            f"  if (!s || !Array.isArray(s.sections) || s.sections.length !== n.sections.length) return {json.dumps('send ' + fallback)};\n"
+            "  n.sections = n.sections.map((x, i) => x === null ? s.sections[i] : x);\n"
+            "  const txt = JSON.stringify(n);\n"
+            f"  if (await sha(txt) !== {json.dumps(want)}) return {json.dumps('the pane holds other steps: send ' + fallback)};\n"
+            "  localStorage.setItem(k, txt);\n"
+            "  return 'installed';\n"
+            "})()\n")
 
 
 def check_script(stored, origin, files=None, then="run.js"):

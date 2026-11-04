@@ -680,6 +680,43 @@ def catasto_terreni():
         os.chdir(here)
 
 
+def cadastral_units():
+    """Several units (the client's immobile, immobile2 ...): one unit unasked, as before; a second
+    in the vault proposes the count, never assumes it; each unit after the first takes its own
+    block by the unit's "+", the radios once; units in both catasti are refused."""
+    d = HERE.parents[4] / "rehearsals" / "cila-fittizia"
+    steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
+    fields = dict(json.loads((d / "fixture-p6.json").read_text())["fields"])
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+    try:
+        def catastali(a, flds=fields):
+            v = values(a, flds, steps)
+            sec = next(s for s in run.expand(steps, v)["sections"] if s["section"] == "Dati catastali")
+            return [(f["kind"], f.get("label"), v.render(f["value"]) if "value" in f else None, f.get("block"))
+                    for f in sec["fields"] if run.truthy(v.render(f.get("when", "true")) or "")]
+        one = json.loads((d / "answers-proprietario.json").read_text())
+        r = run.preflight(steps, values(one, fields, steps), made_up=True)
+        assert r["ready"] and "unita_catastali" not in str(r["proposals"]), r["proposals"]
+        assert [x for x in catastali(one) if x[0] == "add"] == [], catastali(one)
+        two = json.loads((d / "answers-accorpamento.json").read_text())
+        unasked = {k: x for k, x in two.items() if k != "unita_catastali"}
+        r = run.preflight(steps, values(unasked, fields, steps), made_up=True)
+        assert {"key": "unita_catastali", "proposal": "2"}.items() <= next(
+            p for p in r["proposals"] if p["key"] == "unita_catastali").items(), r["proposals"]
+        assert run.preflight(steps, values(two, fields, steps), made_up=True)["ready"]
+        rows = catastali(two)
+        assert [x[1] for x in rows].count("Nuovo Catasto Edilizio Urbano") == 1, rows
+        assert ("add", None, None, 2) in rows and ("text", "se non presente indicare il numero 0", "8", 2) in rows, rows
+        assert ("text", "se non presente indicare il numero 0", "7", 1) in rows, rows
+        # The second unit a plot, the first a flat: the section's other group isn't mapped.
+        mixed = {k: x for k, x in fields.items() if k != "gemma:immobile2.catasto_categoria"}
+        r = run.preflight(steps, values(two, mixed, steps), made_up=True)
+        assert any("both catasti" in u for u in r["unsupported"]), r["unsupported"]
+    finally:
+        os.chdir(here)
+
+
 def group_two_choices():
     """A variant to a landscape authorization ticks its box and gives that one's details; an
     ordinaria's renewal with design changes ticks its box, a semplificata's is refused (no box);
@@ -947,6 +984,7 @@ CASES = [
     ("a landscape variant, a renewal with changes (refused for a semplificata), an architect born abroad", group_two_choices),
     ("every SUE case is ready but those refused on purpose; only the registered company can't pass on made-up data", every_sue_case_ready),
     ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
+    ("cadastral units: one unasked, a second proposed, each after the first by its \"+\", both catasti refused", cadastral_units),
     ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused (a portal defect)", scelte_follow_the_case),
     ("the CILA's filings presented with it and assents for the SUE (art. 23-bis), the CIL's filings, a partial fine lavori's planimetria", assents_and_filings),
     ("the bollo and diritti exemptions, the virtual bollo, the permesso's altro, the SCIA alternativa's regional works, a studio's other architect", exemptions_and_other_kinds),
