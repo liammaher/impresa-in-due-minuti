@@ -25,3 +25,4 @@ declarations, payment, signing and sending.
 | Date | Browser | Result |
 |---|---|---|
 | 2026-11-03 | pane | P6, from scratch, `bench/rerun.py` bundle: **filled** in 224 s, every value read back on a fresh load; the portal's usual warnings on made-up data (the PEC, the address, the land register) |
+| 2026-11-03 | pane | P6 again, `bench/rerun.py` bundle, after the asseverazione's soil answers were made to agree with the terre e rocce filing (`scavo: sottoprodotti`, no piano di utilizzo; `run.py` filters `scavo_proposto`, `piano_proposto` and the dictionary's supports) | **filled**, every value read back on a fresh load |

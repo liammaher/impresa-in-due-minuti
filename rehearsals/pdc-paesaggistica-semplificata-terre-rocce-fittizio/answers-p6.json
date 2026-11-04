@@ -82,7 +82,7 @@
  "vvf_valutazione": "false",
  "cemento_armato": "true",
  "sismica": "deposito",
- "scavo": "riutilizzo in sito",
+ "scavo": "sottoprodotti",
  "indagini_ambientali": "false",
  "urbanizzazione": "true",
  "scarichi": "nessuna autorizzazione",
@@ -117,5 +117,6 @@
  "allegato_b": [
   "paes_b1"
  ],
- "nuova_costruzione_tipo": "e1"
+ "nuova_costruzione_tipo": "e1",
+ "scavo_piano_utilizzo": "false"
 }

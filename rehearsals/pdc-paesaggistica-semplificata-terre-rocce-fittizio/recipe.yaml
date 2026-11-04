@@ -31,3 +31,6 @@ rules:
   handles: [napoli/comune/autorizzazione-paesaggistica-semplificata, napoli/comune/utilizzo-materiale-scavo-fuori-sito]
 answers:
   descrizione: PROVA NON INVIARE - PdC sempl. e terre e rocce P6
+  # The asseverazione says what the dichiarazione files: by-products from a small site.
+  scavo: sottoprodotti
+  scavo_piano_utilizzo: "false"

@@ -461,7 +461,7 @@ tests compile the helper with `-D DEBUG`, which adds `describe-grant` and test e
 (`PVAULT_TOUCHID_TEST_*`). Keychain tests run only with `PVAULT_KEYCHAIN_TEST=1`. The fill
 pilot's synthetic vault (`TestPraticaPilotVault`) runs only with `PVAULT_PILOT_DIR`; run the
 pilots through `claude/skills/pratica/fill/pilot/regress.py` (`--keep DIR` keeps a case's
-output; it needs `PRATICHE_NAPOLI_DIR` and PyMuPDF; `PILOT_FORM_PDF` gives the TARI Mod. 1
+output; it needs `PRATICHE_NAPOLI_DIR` and PyMuPDF, which the system `python3` has and the pratica venv lacks; `PILOT_FORM_PDF` gives the TARI Mod. 1
 pilot's form from disk; the `sign` case needs a library whose layout has `signatures`).
 CI runs `regress.py` against the library's main (`fill.yml`); the library runs it on its own changes.
 The portal runner has offline tests on a fake portal: `claude/skills/pratica/portal/bench/test_inpage.py`,
@@ -471,7 +471,7 @@ gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the 
 (`branches.py --write` writes `docs/sue-branches.md`), `bench/test_portability.py` the national/Campania/Napoli
 split (`portability.py --write`, `docs/portability.md`), `bench/test_tolleranze.py` the asseverazioni's
 tolerances, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
-the same bytes as the library's; its every-case walk takes minutes), `bench/plan_diff.py` each case's fill plan
+the same bytes as the library's; its every-case walk takes about 45 minutes since the table's `terre_rocce`), `bench/plan_diff.py` each case's fill plan
 before and after a change, `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
 route.py on every case the SUE table decides (it prints the combinations not mapped yet), and
 `claude/skills/pratica/intake/bench/test_intake.py` the intake on a made-up dossier (`dossier.py`) against fixture-p6.json. On the real portal, `bench/rerun.py` reruns the rehearsals

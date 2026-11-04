@@ -43,6 +43,11 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    SCIA's and the permesso's "Si allega" box: a CILA or CIL has none, 2026-10-31). Then a slot or a
    refusal mapped on the main pratica reaches its combinations (2026-10-31: the SCIA's had missed
    eleven slots).
+   A part can say on its own what a box of the main form also says: the terre e rocce's
+   dichiarazione and the asseverazione's materiali di risulta (by-products, the small or the large
+   site). The fills don't catch a contradiction, so the dictionary's `supports` hold the two to one
+   answer and the box is `propose`d from the rules table's fact (2026-11-03: nine combinations filed
+   a dichiarazione while their asseverazione said "no excavation", every one "filled").
    Its case is `answers:` too: the main pratica's `answers-p6.json` changed by the part's
    `answers` (the protected property) and the recipe's own (the works, `descrizione`), a null
    dropping one; `gen.py RECIPE --answers` writes its `answers-p6.json` itself (stdout is still the
@@ -60,6 +65,15 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    Pre-flight refuses a case the table gives to another pratica, and adds to `yours` a
    pratica it needs from another office (the seismic filing at the Genio Civile).
    A recipe's `supports` keeps only what the table doesn't decide (an unmapped branch).
+   A new fact multiplies the table's cases by its values: with `terre_rocce` (three) the library's
+   validator walks 34 million combinations (8 minutes; it built them as one array and ran out of memory
+   until 2026-11-03) and `bench/test_rules.py` about 45 minutes; the existing cases then answer it as
+   they did before (`bench/add_answer.py`), and test_route's hand-written cases too. In the library a
+   rule's `regime` is a closed list (`contract/rules.schema.json`: a filing is `comunicazione`), its
+   procedures one folder per ente name (the site test), and every entry must parse with PyYAML as well
+   as the library's own parser: the vault's tools read them (an unquoted `ask: …?` in a flow mapping
+   broke portability.py, 2026-11-03). Work on the library in a worktree of its own: its Desktop
+   checkout is shared, and was switched back to main under a branch in progress (2026-11-03).
    A form's own box on the same thing (what the SCIA files, `scia_tipo`) is `propose`d from the
    table's answers, for the person to confirm: `{{ask.intervento,ask.strutture|sue_scia_tipo}}`
    reads several facts at once, and a proposal waits while a fact it reads is still asked.
@@ -83,7 +97,9 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    codice fiscale, looked up in the Registro Imprese): that case's run stops there by design.
 5. **Run in the pane** (the pratica skill, step 2) and record each run in the rehearsal's
    README (`| Date | Browser | Result |`): what stopped it and what fixed it, then the
-   filled run. Where a case fills blocks that share labels (technicians, firms), read its draft's
+   filled run. Both records count: coverage.md's "Run on the portal" reads the README's dated rows,
+   schema_branches.py the `runs.json` that `rerun.py --record` writes (2026-11-03: ten rehearsals
+   recorded only in runs.json read as never run). Where a case fills blocks that share labels (technicians, firms), read its draft's
    section after (`__crawl.sectionOf`): the read-back finds each box the way it was filled, so two
    blocks swapped read back as kept.
 6. **Tests:** `bench/test_gen.py` (add a case for what the pratica taught), `test_preflight.py`,
@@ -194,7 +210,9 @@ that also cites a Comune page may only confirm a national one there.
   either, so a new case runs to Allega documenti before it counts (2026-10-31).
   A sibling form's slot title is a guess: the same "si allega" may add a slot on one form and none
   on another (the permesso has none for a barriers deroga or a scomputo proposal, where the SCIA and
-  the SCIA alternativa have one, 2026-11-02). An `on_page` slot that isn't there stops the run ("0
+  the SCIA alternativa have one, 2026-11-02), or one under another title (the sanctions receipt is the
+  SCIA's "Ricevuta/e di versamento a titolo di sanzione" and the permesso's "Ricevuta di pagamento
+  della sanzione": a run stopped on it, the stop's `gaps` naming the real one, 2026-11-03). An `on_page` slot that isn't there stops the run ("0
   fields with this label"): read the draft's slots (`slotsOf`, *Attachments screens*) and write
   what the box adds, or why it adds none, as its `slot:`.
 - **Assents asked with a pratica.** On Napoli's SUE a SCIA condizionata (the Soprintendenza,
@@ -435,6 +453,13 @@ shows and otherwise answer at once, so while it's hidden, wait between polls out
 (the pane's `wait` actions in one batch, then `results.js`).
 The pane's profile, and so the SPID session, is the same for every session of the app: before a
 batch, check that no other chat is running the portal (2026-11-03: one was, with its own batches).
+Check the sign-in too: an old page keeps showing Pratiche in bozza after the session has ended, and a
+fresh load of `/fnsuap/cmd/home` lands on InfoCamere's "Apache Syncope Login" (`iasu.infocamere.it`)
+when it has (2026-11-03, after about three hours; a `fetch` of it from the page fails outright). The
+person signs in again; nothing else is needed. A closed pane reopens on that sign-in page, but the
+runner and steps stay in the portal's storage: read it only once the page is back on
+`suap.impresainungiorno.gov.it` (2026-11-04: read on the sign-in's origin, it looked empty). Times to plan by (2026-11-03): a CIL or CILA 1½-2 min, a
+SCIA 3-4, a SCIA alternativa or permesso 3-8 (one tolerance case 10); 27 runs took 2 h 10 min.
 One batch per tab: `loop.js` refuses a second while one runs (two would drive one runner and
 file each other's results), and `pick.js` refuses to clear the page during one. A bundle clears
 the tab's earlier results first: `loop.js` skips a name it finds there, to resume after a reload.
@@ -445,10 +470,14 @@ the run says "signed out" instead, and isn't retried. A load can also pass throu
 origin on its way back to the portal: a run stopped on "Blocked a frame with origin" (2026-11-03).
 The runner now waits for the load that brings the frame back, and says "signed out" if none comes.
 A run that never reaches the portal ("the page didn't load", "the portal stayed busy", "signed
-out") is kept out of the results, and two in a row halt the batch (`halted` in results.js): once
+out") is kept out of the results, listed apart (results.js `unreached`, since 2026-11-03, when a batch
+ended "done" at 26 of 27 without a word), and two in a row halt the batch (`halted` in results.js): once
 the portal stuck in its wizard after a 10-minute busy run, and each later run, a new frame each,
 failed in about a minute until the page was reloaded (2026-10-31). Then save `record.js`'s output,
 reload, and bundle what's left: a bundle clears the tab's results.
+One stop on a section the case's answers don't touch, which the batch's other runs of that pratica
+filled ("0 fields with this label" after its retries), is the portal's: rerun it before reading the
+mapping (2026-11-03: the SCIA's `answers-scavo-vvf` on the Scheda anagrafica; filled unchanged the next day).
 The queue goes into the bundle by number: each later run of a procedure is what differs from its
 first, so name order (queue-10 before queue-2) broke a batch of 14 pieces (2026-10-31).
 A stopped run lists its `gaps`: the empty boxes the portal wants, by label, from the runner's
@@ -505,7 +534,13 @@ fingerprints kept (2026-10-31: the two SCIA in sanatoria combinations). Save the
 results before, or name all of them in export.js: it reads the ops of `crawl:batch`.
 A batch whose sections were all seen before is small: `print.js` prints it with its sha256, and
 `catalogue.py import -` refuses a copy that arrived changed (no download to ask for), trailing
-newlines aside.
+newlines aside. Over 40 KB print.js packs it (`strings-v1`: each string once, used by index), which
+import unpacks; past what that saves (ten three-operation crawls, 64 KB packed, 2026-11-03) it's
+export.js and the person's yes to a download. Copy a print one combination at a time
+(`{"crawl:op:<name>": ...}` with its own sha256) rather than by hand-split halves. The declarations
+come back `skipped` (the person's, never crawled), not as new sections: a first look at a batch that
+counts them as new misreads it. A section's `same_as` can name an op that only ever lived in the pane
+(a deeper recrawl, `d4-scia-alt`): import names the repo crawl that holds its fingerprint instead.
 
 A choice deeper than the crawl went (branches.py's `not_tried`) is read by crawling only its
 section again, deeper: `__crawl.batch` with `recrawl: [section names]`, `depth: 8` and `variants:

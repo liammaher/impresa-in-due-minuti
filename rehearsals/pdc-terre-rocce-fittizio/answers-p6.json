@@ -82,7 +82,7 @@
  "vvf_valutazione": "false",
  "cemento_armato": "true",
  "sismica": "deposito",
- "scavo": "riutilizzo in sito",
+ "scavo": "sottoprodotti",
  "indagini_ambientali": "false",
  "urbanizzazione": "true",
  "scarichi": "nessuna autorizzazione",
@@ -107,5 +107,6 @@
  "progettista_altro": false,
  "diritti_esente": false,
  "bollo_esenzione": "no",
- "terre_rocce": "dichiarazione"
+ "terre_rocce": "dichiarazione",
+ "scavo_piano_utilizzo": "false"
 }

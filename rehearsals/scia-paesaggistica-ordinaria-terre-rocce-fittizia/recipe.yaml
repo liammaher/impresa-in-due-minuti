@@ -47,3 +47,6 @@ answers:
   contributo_normativa: art. 17, comma 3, d.P.R. 380/2001 (inventato per la prova)
   oggetto: "Manutenzione straordinaria non strutturale con modifica dei prospetti, pergola sul terrazzo in area vincolata e nuovo allaccio fognario nel cortile, con scavo di 40 m³ di terre portate a un altro cantiere come sottoprodotto (dati inventati per la prova)."
   dettaglio_intervento: "In facciata persiane e ringhiere di diverso disegno; pergola in legno di 45 m² sul terrazzo; nuovo allaccio fognario nel cortile con scavo di 40 m³. Opere non strutturali, senza modifiche di volume o destinazione d'uso. Dati inventati per la prova."
+  # The asseverazione says what the dichiarazione files: by-products from a small site.
+  scavo: sottoprodotti
+  scavo_piano_utilizzo: "false"

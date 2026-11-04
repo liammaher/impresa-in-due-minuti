@@ -29,3 +29,6 @@ rules:
 answers:
   descrizione: PROVA NON INVIARE - SCIA alt e terre e rocce P6
   oggetto: "Ristrutturazione edilizia con modifica dei prospetti, aumento di volumetria e un nuovo piano interrato, scavo di 900 m³ di terre portate a un altro cantiere come sottoprodotto (dati inventati per la prova)."
+  # The asseverazione says what the dichiarazione files: by-products from a small site.
+  scavo: sottoprodotti
+  scavo_piano_utilizzo: "false"
