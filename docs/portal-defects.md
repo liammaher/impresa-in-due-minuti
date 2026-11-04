@@ -1,12 +1,15 @@
 # Portal defects
 
+<!-- Drawn from claude/skills/pratica/portal/defects.yaml by defects.py --write; edit defects.yaml, not this page. -->
+
 Things Napoli's SUE on impresainungiorno does that a pratica can't work around: each blocks a case
-the law allows, so the recipe refuses it with the reason. Each is also a record in
+the law allows, so the recipe refuses it with the reason. Each is a record in
 `claude/skills/pratica/portal/defects.yaml`, which the refusal names (`defect:`): pre-flight then
-returns it under `defects`, and the person is told what the portal does and chooses what to do. Fixing them is the portal's operator's
-(InfoCamere, which runs impresainungiorno) or the Comune's (the SUE configures its forms). Each
-entry says what to report and how it was checked, without personal data. The reports to send, in
-Italian and one per recipient, with the channels: [`docs/defect-reports/`](defect-reports/README.md).
+returns it under `defects`, and the person is told what the portal does and chooses what to do.
+Fixing them is the portal's operator's (InfoCamere, which runs impresainungiorno) or the Comune's
+(the SUE configures its forms). Each entry says what to report and how it was checked, without
+personal data. The reports to send, in Italian and one per recipient, with the channels:
+[`docs/defect-reports/`](defect-reports/README.md).
 
 ## SCIA in sanatoria, art. 36-bis c. 1: dating, oblazione and works proposal saved as one field
 
@@ -27,18 +30,18 @@ Italian and one per recipient, with the channels: [`docs/defect-reports/`](defec
   `propone_interventi`); the dating and the oblazione are separate items.
 - **Effect**: the asseverazione can state one of the three, so a Salva Casa sanatoria of works done
   without a SCIA or in difformity from it can't be filed complete on the portal.
-- **Checked**: 2026-10-30 by hand; 2026-11-01 on a made-up draft ("PROVA NON INVIARE"): ticking
-  each row in turn left only that one ticked, and the four rows' inputs carry the values 1 to 4 of
-  one field. Nothing was saved.
+- **Checked**: 2026-10-30 by hand; 2026-11-01 on a made-up draft ("PROVA NON INVIARE"): ticking each
+  row in turn left only that one ticked, and the four rows' inputs carry the values 1 to 4 of one
+  field. Nothing was saved.
 - **Not part of it**: the case's seismic box below the four rows, "Quanto alla rilevanza sismica
   [...] ai sensi dell'art. 36-bis, comma 3-bis", works. Its choices are fields of their own: the
   zone (3 and 4, or 1 and 2), then for zones 1 and 2 whether the works have structural relevance,
   then the art. 94-bis class, and for a relevant one "allega l'autorizzazione sismica" or the
   silenzio assenso. Ticking them kept the dating row ticked (2026-11-01, same draft, not saved). So
   works on structures under c. 1 are blocked by this defect only. The box is offered only in this
-  case, as in InfoCamere's SCIA form (`schema/sue-choices.json` 033/034): with double conformity
-  and for works under way, structures go in the asseverazione's sismica quadro (the SCIA in
-  sanatoria maps them there).
+  case, as in InfoCamere's SCIA form (`schema/sue-choices.json` 033/034): with double conformity and
+  for works under way, structures go in the asseverazione's sismica quadro (the SCIA in sanatoria
+  maps them there).
 
 ## SCIA in sanatoria, art. 34-ter: a pre-1977 variant's dating and oblazione saved as one field
 
@@ -47,16 +50,16 @@ Italian and one per recipient, with the channels: [`docs/defect-reports/`](defec
   d'opera, in parziale difformità dal titolo, rilasciato prima della data di entrata in vigore della
   legge 28 gennaio 1977, n. 10 (articolo 34-ter DPR. n. 380)".
 - **What happens**: the case opens three rows, "dà atto che la data/epoca di realizzazione
-  dell'intervento" (with its date), "attesta che la data/epoca di realizzazione dell'intervento" (with
-  its date) and "determina l'oblazione dovuta [...]" (with the amount). Their inputs carry the values
-  1, 2 and 3 of one choice: ticking "dà atto" unticked the oblazione, ticking "attesta" unticked
-  "dà atto", so the form saves one of them.
+  dell'intervento" (with its date), "attesta che la data/epoca di realizzazione dell'intervento"
+  (with its date) and "determina l'oblazione dovuta [...]" (with the amount). Their inputs carry the
+  values 1, 2 and 3 of one choice: ticking "dà atto" unticked the oblazione, ticking "attesta"
+  unticked "dà atto", so the form saves one of them.
 - **What the law asks**: art. 34-ter c. 2 DPR 380/2001 (as the Salva Casa decree 69/2024 wrote it):
-  the variant's date is proven by the documents of art. 9-bis c. 1-bis, fourth and fifth periods, and
-  where they can't date it the technician attests it; c. 3: the SCIA goes with the payment of an
-  oblazione determined under art. 36-bis c. 5. The dating (one of two ways) and the oblazione are both
-  due. InfoCamere's national SCIA form (`schema/sue-choices.json`, 12 March 2026) has no pick-one
-  rule for this case at all.
+  the variant's date is proven by the documents of art. 9-bis c. 1-bis, fourth and fifth periods,
+  and where they can't date it the technician attests it; c. 3: the SCIA goes with the payment of an
+  oblazione determined under art. 36-bis c. 5. The dating (one of two ways) and the oblazione are
+  both due. InfoCamere's national SCIA form (`schema/sue-choices.json`, 12 March 2026) has no
+  pick-one rule for this case at all.
 - **Effect**: the asseverazione can state the variant's date or its oblazione, never both, so a
   regularization of a variant to a pre-1977 title can't be filed complete on the portal.
 - **Checked**: 2026-11-02 on a made-up draft ("PROVA NON INVIARE"), ticked in turn and cancelled
@@ -73,11 +76,11 @@ Italian and one per recipient, with the channels: [`docs/defect-reports/`](defec
 - **What happens**: the documents attached, the dating (documents or attestation) and the works
   proposal are one radio group, as on the SCIA (seen 2026-10-30). Art. 36 (works without the
   permesso) fills.
-- **Effect**: a permesso in sanatoria under art. 36-bis can't be filed complete on the portal.
-  What only that case opens goes with it, mapped by no recipe: the landscape compatibility of art.
-  36-bis c. 4 in the asseverazione's tutela quadro (works done without the landscape authorization),
-  and the sanatoria quadro's acknowledgment that the SUE may ask for structural works, which the
-  portal also keeps in one radio group with the oblazione's.
+- **Effect**: a permesso in sanatoria under art. 36-bis can't be filed complete on the portal. What
+  only that case opens goes with it, mapped by no recipe: the landscape compatibility of art. 36-bis
+  c. 4 in the asseverazione's tutela quadro (works done without the landscape authorization), and
+  the sanatoria quadro's acknowledgment that the SUE may ask for structural works, which the portal
+  also keeps in one radio group with the oblazione's.
 
 ## Permesso in sanatoria, art. 36, in a protected area: no line for the accertamento of art. 167
 
@@ -85,28 +88,28 @@ Italian and one per recipient, with the channels: [`docs/defect-reports/`](defec
   "Accertamento di compatibilità paesaggistica (artt. 167-181 D.Lgs. 42/2004 - Comune)"; the
   permesso's asseverazione, quadro 16 "Bene sottoposto ad autorizzazione paesaggistica".
 - **What happens**: "ricade in zona tutelata e le opere comportano alterazione" opens three
-  procedures (semplificato, ordinario, accertamento "di cui all'articolo 36-bis") and Salva wants one
-  ("il valore è obbligatorio" on each, seen 2026-11-02 on a made-up draft). None is the accertamento
-  of art. 167 the pratica's other operation asks for.
+  procedures (semplificato, ordinario, accertamento "di cui all'articolo 36-bis") and Salva wants
+  one ("il valore è obbligatorio" on each, seen 2026-11-02 on a made-up draft). None is the
+  accertamento of art. 167 the pratica's other operation asks for.
 - **Law**: works done without the permesso or in total difformity (art. 36 DPR 380/2001) in a
   protected area are legalized only with their landscape compatibility found (art. 146 c. 4 D.Lgs.
   42/2004), by the accertamento of art. 167 c. 4-5, which excludes new usable surfaces or volumes;
   art. 36-bis c. 4 is for partial difformity and essential variations only.
 - **Effect**: an art. 36 permesso in sanatoria in a protected area can't be filed on the portal
-  without stating a procedure that isn't the case's. The rules table sends the case to the
-  permesso with the accertamento (`rehearsals/pdc-sanatoria-accertamento-fittizio`), whose
-  recipe refuses it with this defect; every other section of the pratica fills.
+  without stating a procedure that isn't the case's. The rules table sends the case to the permesso
+  with the accertamento (`rehearsals/pdc-sanatoria-accertamento-fittizio`), whose recipe refuses it
+  with this defect; every other section of the pratica fills.
 - **Ask for**: a line "è assoggettato al procedimento di accertamento della compatibilità
   paesaggistica di cui agli artt. 167 e 181 del D.Lgs. 42/2004" beside the art. 36-bis one.
 
 ## CILA and CIL: a firm still to be chosen is offered, then refused
 
-- **Where**: the CILA's quadro "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi
-  di lavoro" (the CIL's g)), and the firm's quadro (the CILA's h), the CIL's f)).
-- **What happens**: the safety quadro offers "ricade nell'ambito di applicazione del d.lgs. 81/2008 ma
-  si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori", but
-  the firm's quadro has no line for a firm still to be chosen, and the portal requires the firm's
-  details (16 required boxes, the DURC ones among them) whatever the safety quadro says.
+- **Where**: the CILA's quadro "i) Rispetto degli obblighi in materia di salute e sicurezza nei
+  luoghi di lavoro" (the CIL's g)), and the firm's quadro (the CILA's h), the CIL's f)).
+- **What happens**: the safety quadro offers "ricade nell'ambito di applicazione del d.lgs. 81/2008
+  ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori",
+  but the firm's quadro has no line for a firm still to be chosen, and the portal requires the
+  firm's details (16 required boxes, the DURC ones among them) whatever the safety quadro says.
 - **What the law asks**: the firm's documents (DURC, the notifica preliminare, the check of its
   fitness) go to the Comune before the works start (art. 90 c. 9 c D.Lgs. 81/2008). On the same
   portal the permesso's and the SCIA's forms let the firm be named later. InfoCamere's national CILA
@@ -156,7 +159,8 @@ Italian and one per recipient, with the channels: [`docs/defect-reports/`](defec
   ticked, though an ordinary unit is neither.
 - **Effect**: an ordinary unit's draft carries the message; it kept its values on the runs. Whether
   sending accepts it isn't known (nothing is sent).
-- **Checked**: 2026-10-31, the four agibilità cases ticking neither (`rehearsals/agibilita-fittizia`).
+- **Checked**: 2026-10-31, the four agibilità cases ticking neither
+  (`rehearsals/agibilita-fittizia`).
 - **To report**: the exceptions should be optional.
 
 ## Permesso: the burned-area line is one choice with the soil statement
@@ -166,20 +170,19 @@ Italian and one per recipient, with the channels: [`docs/defect-reports/`](defec
   legge 353/2000".
 - **What happens**: the line is a radio of the same choice as the soil investigations' ("non
   richiede indagini ambientali preventive", "a seguito delle preventive analisi ambientali", "è
-  stata oggetto di bonifica"): ticking it unticks the soil statement (seen 2026-11-01, on a
-  made-up draft, cancelled without saving).
-- **Effect**: a permesso states either its soil or that the area wasn't burned, never both.
-  Claude ticks the soil statement and leaves the other (the steps' `yours` says so).
+  stata oggetto di bonifica"): ticking it unticks the soil statement (seen 2026-11-01, on a made-up
+  draft, cancelled without saving).
+- **Effect**: a permesso states either its soil or that the area wasn't burned, never both. Claude
+  ticks the soil statement and leaves the other (the steps' `yours` says so).
 - **To report**: the two lines should be separate choices (the soil under D.Lgs. 152/2006, the
   burned areas under art. 10 c. 1 L. 353/2000).
-
 
 ## SCIA alternativa and permesso: no line for Campania's own changes of use
 
 - **Where**: SCIA alternativa al permesso di costruire, quadro c) "Qualificazione dell'intervento";
   permesso di costruire, quadro a) and the asseverazione's "opere in progetto". All three come from
-  the national forms (`schema/sue-choices.json`: scia_alternativa 002, permesso_di_costruire 000
-  and 019, each required).
+  the national forms (`schema/sue-choices.json`: scia_alternativa 002, permesso_di_costruire 000 and
+  019, each required).
 - **What happens**: the change-of-use choice offers "non comporta mutamento", "una singola unità
   all'interno della stessa categoria", "una singola unità, ubicata in immobili ricompresi nelle zone
   A), B) e C) [...] tra categorie funzionali [...] a), a-bis), b) e c)" and "un intero immobile
@@ -189,9 +192,10 @@ Italian and one per recipient, with the channels: [`docs/defect-reports/`](defec
   (art. 2 c. 6 L.R. 13/2022; regional circular CI/2025/3, d), has no line that states it, and any
   line ticked states another change. Claude refuses these cases (`cambio-uso-regionale`). A
   ground-floor unit in zone A, B or C among categories a) to c) is the third line, and is filled.
-- **Checked**: 2026-11-03, from the labels as crawled, the national schema and the Comune's own
-  Mod. SCIA/PDC of 23/06/2025 (quadro c, the same four lines); not tried on a draft. A whole building's change from offices to homes was filled on 2026-11-02 with the fourth
-  line ticked (`rehearsals/pdc-sanatoria-fittizio`, `answers-cambio-intero`): that run stated a
-  change within one category, and the case is refused since.
-- **To report**: the choice should have a line for a change of use the regional law gives this
-  title for (art. 23 c. 01 lets the regions add cases), or let it be stated in the relazione.
+- **Checked**: 2026-11-03, from the labels as crawled, the national schema and the Comune's own Mod.
+  SCIA/PDC of 23/06/2025 (quadro c, the same four lines); not tried on a draft. A whole building's
+  change from offices to homes was filled on 2026-11-02 with the fourth line ticked
+  (`rehearsals/pdc-sanatoria-fittizio`, `answers-cambio-intero`): that run stated a change within
+  one category, and the case is refused since.
+- **To report**: the choice should have a line for a change of use the regional law gives this title
+  for (art. 23 c. 01 lets the regions add cases), or let it be stated in the relazione.

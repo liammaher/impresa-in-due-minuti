@@ -12,8 +12,9 @@ PRATICHE_NAPOLI_DIR=../pratiche-napoli ~/.cache/pratica-portal/venv/bin/python p
 writes `plugin/dist/portali/` and `plugin/dist/portali.plugin` (install it in Cowork
 from a file). The build:
 
-- copies `run.py`, `rules.py`, `inpage.js`, `catalogue.py` (for its drift refusal, with
-  `drift.json`), `fill.py`, `review.py` and `schema.json` into the skill unchanged;
+- copies `run.py`, `rules.py` (with `drift.json`, for its drift refusal), `inpage.js`,
+  `fill.py`, `review.py` and `schema.json` into the skill unchanged (no authoring code:
+  `catalogue.py` stays in the repo);
 - writes each rehearsal's steps file (the generated one first, as `bench/rerun.py` picks it)
   and the rules tables as JSON, which `shim/yaml.py` reads in PyYAML's place: Cowork runs
   the plugin with no packages;
@@ -29,4 +30,6 @@ design: script calls in Cowork's browser, a 3 MB attachment, a run's cost; it wr
 `portali-test-results.md` to bring back).
 
 Rebuild after a change to the runner, a steps file, the dictionary or the library, and bump
-`version` in `portali/.claude-plugin/plugin.json`.
+`version` in `portali/.claude-plugin/plugin.json`. The generated steps files are built here from
+their recipes (they are never committed), and the build stops unless each is the one
+`rehearsals/steps.lock` names.

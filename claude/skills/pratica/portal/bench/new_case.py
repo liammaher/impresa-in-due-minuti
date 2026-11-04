@@ -26,6 +26,7 @@ import yaml
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True
+import gen  # noqa: E402
 import run  # noqa: E402
 
 ROOT = HERE.parents[4]
@@ -33,6 +34,7 @@ FIXTURE = ROOT / "rehearsals" / "cila-fittizia" / "fixture-p6.json"
 
 
 def main():
+    gen.ensure()  # the rehearsals' steps files are built, never committed (steps.lock)
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("rehearsal")
     ap.add_argument("base")

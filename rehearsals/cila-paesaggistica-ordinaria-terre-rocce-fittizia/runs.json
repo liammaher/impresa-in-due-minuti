@@ -3,6 +3,8 @@
   "date": "2026-11-03",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 119.7
+  "seconds": 119.7,
+  "browser": "pane",
+  "note": "P6, from scratch, `bench/rerun.py` bundle: **filled** in 120 s, every value read back on a fresh load; the portal's usual warnings on made-up data (the PEC, the address, the land register)"
  }
 ]

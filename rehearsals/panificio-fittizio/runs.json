@@ -1,0 +1,7 @@
+[
+ {
+  "date": "2026-10-28",
+  "browser": "pane",
+  "note": "Stopped at the address: \"Via Foria\" is also inside \"Via Santa Maria Avvocata a Foria\". `inpage.js` now takes the street named exactly. Resumed on the draft: every value kept and read back on a fresh load."
+ }
+]

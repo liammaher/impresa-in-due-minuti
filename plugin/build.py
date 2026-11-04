@@ -32,6 +32,9 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
 PRATICA = REPO / "claude" / "skills" / "pratica"
 REHEARSALS = REPO / "rehearsals"
+sys.path.insert(0, str(PRATICA / "portal"))
+sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
+import gen  # noqa: E402  (the steps files, built; a combination's recipe, resolved)
 # The library's parts a Cowork session reads: its tools, reports backend and layouts
 # (PDF filling, which needs PyMuPDF) stay out of this version.
 LIBRARY_PARTS = ["procedures", "rules", "offices", "situations", "contract/signing.json",
@@ -42,12 +45,25 @@ COVERAGE = yaml.safe_load((HERE / "coverage.yaml").read_text())
 TEST_CASE = "cila-fittizia"
 
 
+_built = {}
+
+
 def steps_file(d):
-    """A rehearsal's steps file, as bench/rerun.py picks it: the generated one first."""
-    for name in ("portal-steps.generated.yaml", "portal-steps.yaml"):
-        if (d / name).is_file():
-            return d / name
-    return None
+    """A rehearsal's steps file, as bench/rerun.py picks it: the generated one first. That one is
+    built here from its recipe (never committed), and must be the one rehearsals/steps.lock names:
+    a lock that isn't stops the build, as the plugin would ship steps no one has reviewed."""
+    if (d / "recipe.yaml").is_file():
+        if d not in _built:
+            text = gen.dump(gen.generate(gen.load_yaml(d / "recipe.yaml")))
+            if gen.sha256(text) != gen.read_lock().get(d.name):
+                sys.exit(f"{d.name}: its steps file isn't the one rehearsals/steps.lock names: "
+                         "run claude/skills/pratica/portal/bench/regen.py and commit the lock")
+            f = d / gen.STEPS
+            if not f.is_file() or f.read_text() != text:
+                f.write_text(text)  # the self-check pre-flights it with the repo's runner
+            _built[d] = f
+        return _built[d]
+    return d / "portal-steps.yaml" if (d / "portal-steps.yaml").is_file() else None
 
 
 def notes(text):
@@ -80,11 +96,11 @@ def copy_library(library, skill):
 def copy_runner(skill):
     portal = skill / "portal"
     portal.mkdir(parents=True)
-    # catalogue.py for its drifted(): pre-flight refuses a pratica the last drift check found
-    # changed on the portal, so a plugin update carries the refusal (drift.json, not the crawls).
+    # rules.py's drifted(): pre-flight refuses a pratica the last drift check found changed on
+    # the portal, so a plugin update carries the refusal (drift.json, not the crawls).
     (skill / "intake").mkdir()
     shutil.copy2(PRATICA / "intake" / "intake.py", skill / "intake" / "intake.py")  # reads the job's documents
-    for name in ("run.py", "rules.py", "route.py", "inpage.js", "catalogue.py"):
+    for name in ("run.py", "rules.py", "route.py", "inpage.js"):
         shutil.copy2(PRATICA / "portal" / name, portal / name)
     (portal / "catalogue" / "F839").mkdir(parents=True)
     shutil.copy2(PRATICA / "portal" / "catalogue" / "F839" / "drift.json", portal / "catalogue" / "F839" / "drift.json")
@@ -112,7 +128,8 @@ def copy_pratiche(skill, library):
         steps = yaml.safe_load(text)
         out = skill / "pratiche" / f"{d.name}.json"
         out.write_text(as_json(steps))
-        recipe = yaml.safe_load((d / "recipe.yaml").read_text()) if (d / "recipe.yaml").is_file() else {}
+        # Resolved: a combination takes its comune and sportello from its main pratica.
+        recipe = gen.resolved(gen.load_yaml(d / "recipe.yaml")) if (d / "recipe.yaml").is_file() else {}
         proc = steps["procedure"]
         catalog.append({
             "name": d.name,

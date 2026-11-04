@@ -6,7 +6,7 @@ made-up data; the draft is "PROVA NON INVIARE" and stops before the declarations
 sending.
 
 `portal-steps.generated.yaml` is `gen.py`'s, from `recipe.yaml`: the SCIA's crawl
-(`catalogue/F839/sections/scia.json`, which tried the wizard's sanatoria scelta), `dictionary/fnsuap.yaml`,
+(`catalogue/F839/sections/sue-segnalazione-certificata-di-inizio-attivita-edilizia.json`, which tried the wizard's sanatoria scelta), `dictionary/fnsuap.yaml`,
 and the wizard's "Le opere ricadono nell'ambito della Sanatoria ...?" answered Sì, which adds the
 quadro "SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione".
 
@@ -77,14 +77,31 @@ paper; DD 501/2026 makes the portal the only channel from 1/7/2026, and the port
 
 ## Runs
 
-| Date | Browser | Answers | Result |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
 |---|---|---|---|
 | 2026-10-30 | pane | `answers-p6.json` (doppia conformità) | First try stopped on Tipologia: "presentata in sanatoria" ticked before the intervention type, whose id then landed on it (now ticked last, by label). Rerun from a blank draft: every section filled and read back on a fresh load (150.6 s, fresh load 24.7 s); then the sanatoria drawings slot turned out to take only .p7m (moved to the person's steps) and the attachments resumed on the same draft (7.9 s): **filled**, 7 files kept |
 | 2026-10-30 | pane | `answers-in-corso.json` (art. 37 c. 5) | **Filled** from a blank draft in 143.4 s, read back on a fresh load (24.2 s), 7 files kept |
 | 2026-10-30 | pane | `answers-p6.json`, after the sanatoria choice became `sanatoria_titolo` (shared with the permesso) | **Filled** from a blank draft in 149.2 s, read back on a fresh load (25.0 s), nothing moved or loose |
+| 2026-10-30 | pane | `answers-in-corso.json` | **filled** |
+| 2026-10-30 | pane | `answers-p6.json` | **filled** |
 | 2026-10-31 | pane | `answers-paesaggio`: works in a protected area, the art. 36-bis c. 4 route, `bench/rerun.py` bundle | **filled** in 140 s, nothing moved or loose |
 | 2026-11-01 | pane | `answers-strutture`: timber floor beams replaced, double conformity, the sismica quadro's autorizzazione and the strutturista, `bench/rerun.py` bundle | **filled** from a blank draft in 162 s, read back on a fresh load, nothing moved or loose |
 | 2026-11-01 | pane | `answers-ristrutturazione-strutture`: a roof rebuilt, works under way (art. 37 c. 5), same bundle | **filled** from a blank draft in 151 s, read back on a fresh load, nothing moved or loose |
+| 2026-11-02 | pane | `answers-in-corso-ricevuta`: works under way, the €516 sanction's receipt attached, `bench/rerun.py` bundle | **filled** in 153 s, read back on a fresh load, nothing moved or loose |
+| 2026-11-02 | pane | `answers-ricevuta`: double conformity, the oblazione's receipt | First try stopped: the receipt row's "di euro" is a decimal box, which read 516 back as 516,00 (now `kind: number`). Rerun: **filled** in 146 s, nothing moved or loose |
+| 2026-11-02 | pane | two art. 34-ter cases (title by estremi, dating by documents, payment by estremi; title by the art. 9-bis documents, dating attested, receipt) | Both stopped in the asseverazione on the dating's date box ("è: 0 fields with this label"), each retried twice by the runner as a slow portal. The saved draft held the oblazione ticked and the dating unticked: the read-back after Salva couldn't find the date box the oblazione's tick had hidden. The dating and the oblazione are one field: the case is refused as a portal defect (`scia-34ter`), the answers files dropped, and the runner now says "not kept … hidden by a later choice" and doesn't retry it |
+| 2026-11-02 | pane | `answers-cambio-uso`: one unit changed from a professional office to a tailor's workshop in 2021 without the SCIA (same category, art. 23-ter), with CILA-level works, double conformity, `bench/rerun.py` bundle | **filled** from a blank draft in 171 s, read back on a fresh load, nothing moved or loose |
+| 2026-11-02 | pane | `answers-ricevuta.json` | **stopped** in 105 s |
+| 2026-11-02 | pane | `answers-in-corso-ricevuta.json` | **filled** in 153 s |
+| 2026-11-02 | pane | `answers-ricevuta.json` | **filled** in 146 s |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 150 s |
+| 2026-11-02 | pane | `answers-cambio-uso.json` | **filled** in 171 s |
+| 2026-11-03 | pane | `answers-variante-scia`: a variant to a 2022 SCIA built without depositing it, double conformity, the varied SCIA's number and date, `bench/rerun.py` bundle | **filled** from a blank draft in 161 s, read back on a fresh load, nothing moved or loose |
+| 2026-11-04 | pane | `answers-catasto-dopo.json` | **filled** in 180 s |
+
+<!-- /runs -->
 
 Exploring by hand first (a blank draft with only the wizard, then ticking each case) showed the
 four cases' rows and the case-3 radio group. Opening the sanatoria quadro right after saving an
@@ -93,8 +110,3 @@ anagrafica, and in both runs, worked.
 
 The plain SCIA's P6 (rehearsals/scia-fittizia) on the steps regenerated with these entries: filled
 in 140 s, read back on a fresh load (23.4 s).
-| 2026-11-02 | pane | `answers-in-corso-ricevuta`: works under way, the €516 sanction's receipt attached, `bench/rerun.py` bundle | **filled** in 153 s, read back on a fresh load, nothing moved or loose |
-| 2026-11-02 | pane | `answers-ricevuta`: double conformity, the oblazione's receipt | First try stopped: the receipt row's "di euro" is a decimal box, which read 516 back as 516,00 (now `kind: number`). Rerun: **filled** in 146 s, nothing moved or loose |
-| 2026-11-02 | pane | two art. 34-ter cases (title by estremi, dating by documents, payment by estremi; title by the art. 9-bis documents, dating attested, receipt) | Both stopped in the asseverazione on the dating's date box ("è: 0 fields with this label"), each retried twice by the runner as a slow portal. The saved draft held the oblazione ticked and the dating unticked: the read-back after Salva couldn't find the date box the oblazione's tick had hidden. The dating and the oblazione are one field: the case is refused as a portal defect (`scia-34ter`), the answers files dropped, and the runner now says "not kept … hidden by a later choice" and doesn't retry it |
-| 2026-11-02 | pane | `answers-cambio-uso`: one unit changed from a professional office to a tailor's workshop in 2021 without the SCIA (same category, art. 23-ter), with CILA-level works, double conformity, `bench/rerun.py` bundle | **filled** from a blank draft in 171 s, read back on a fresh load, nothing moved or loose |
-| 2026-11-03 | pane | `answers-variante-scia`: a variant to a 2022 SCIA built without depositing it, double conformity, the varied SCIA's number and date, `bench/rerun.py` bundle | **filled** from a blank draft in 161 s, read back on a fresh load, nothing moved or loose |

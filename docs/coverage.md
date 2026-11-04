@@ -7,8 +7,8 @@ Three claims, each stricter than the last:
 - **Mapped**: the pratica is crawled (`catalogue/F839/sections/`): we know its sections and boxes.
 - **Fillable**: mapped, and the dictionary fills every section of it, so `gen.py` can write its
   steps file. Nothing has touched the portal yet.
-- **Run on the portal**: fillable, and a rehearsal generated from it has a dated run in its
-  README that says the draft was **filled**: every value read back on a fresh load, with made-up
+- **Run on the portal**: fillable, and a rehearsal generated from it has a run in its
+  `runs.json` (the README's run table) that **filled** the draft: every value read back on a fresh load, with made-up
   people. Never declared, paid, signed or sent: that is the person's, by design.
 
 "Drift-checked" counts the pratiche whose sections a drift check has compared with the live

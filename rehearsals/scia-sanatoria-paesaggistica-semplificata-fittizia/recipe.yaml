@@ -10,12 +10,7 @@
 extends: [scia-sanatoria-fittizia, parts/paesaggistica-semplificata]
 procedure: napoli/comune/scia-in-sanatoria-con-paesaggistica-semplificata
 title: "SCIA in sanatoria con autorizzazione paesaggistica semplificata, SUE Napoli (tecnico con procura)"
-comune: F839
-sportello: sue
 crawl: sue-combo-scia-sanatoria-paesaggistica-semplificata
-operation:
-  - Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)
-  - Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)
 asks:
   descrizione: {default: "SCIA in sanatoria e paesaggistica {{c:identity.last_name}}"}
   # The landscape works are still to come: the asseverazione names the semplificata procedure.
@@ -29,8 +24,6 @@ yours:
   - "Pay the €516 sanction (art. 37 c. 5) before the run, which attaches its receipt, and the diritti before the second run (after the declarations), which attaches theirs"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "Sign and send (Firma e invio); keep the receipt"
-rules:
-  main: napoli/comune/scia-in-sanatoria
 supports:
   # The authorization is only for works not yet done (art. 146 c. 4): a sanatoria of works all done
   # (art. 36-bis) has none left, and takes the landscape compatibility on its own.
