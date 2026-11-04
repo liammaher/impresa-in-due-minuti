@@ -472,7 +472,8 @@ gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the 
 (`branches.py --write` writes `docs/sue-branches.md`), `bench/test_portability.py` the national/Campania/Napoli
 split (`portability.py --write`, `docs/portability.md`), `bench/test_tolleranze.py` the asseverazioni's
 tolerances, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
-the same bytes as the library's; its every-case walk takes about 45 minutes since the table's `terre_rocce`), `bench/plan_diff.py` each case's fill plan
+the same bytes as the library's; the SUE table's every case walked as route.cases() asks the facts, seconds; the
+product of every fact's values, 34.5 million, is the library's validator's), `bench/plan_diff.py` each case's fill plan
 before and after a change, `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
 route.py on every case the SUE table decides (it prints the combinations not mapped yet), and
 `claude/skills/pratica/intake/bench/test_intake.py` the intake on a made-up dossier (`dossier.py`) against fixture-p6.json. On the real portal, `bench/rerun.py` reruns the rehearsals
