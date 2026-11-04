@@ -18,9 +18,13 @@ signing and sending.
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-28 | pane | Two stops, both the runner's: "Via Francesco Cilea" was searched by its longest word, and "Francesco" fills the portal's 20-street list without Cilea (now the next word is tried); and the rooms and beds totals share a header row, so the beds went into the rooms box (now a box's own title wins). Resumed on the draft: every value kept and read back on a fresh load. |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-28 | pane |  | Two stops, both the runner's: "Via Francesco Cilea" was searched by its longest word, and "Francesco" fills the portal's 20-street list without Cilea (now the next word is tried); and the rooms and beds totals share a header row, so the beds went into the rooms box (now a box's own title wins). Resumed on the draft: every value kept and read back on a fresh load. |
+
+<!-- /runs -->
 
 The attachments screen (read after the run): the CURS data sheet is a document the portal makes
 (download, fill, sign), the fee receipt takes only signed files, so both are the person's; the

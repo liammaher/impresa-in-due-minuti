@@ -19,9 +19,13 @@ generato" and stops before the declarations, payment, signing and sending.
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-28 | pane | Stopped in the shop's section: three Si/No pairs in a row, and the runner counted a "Si" as a "No" (its nearby texts include the "No" before it), so the factory outlet's "No" was never ticked. `inpage.js` now counts a box by its own label, as the crawl does. Resumed on the draft from "Oggetto della pratica": every value kept and read back on a fresh load (57 s). The Scheda anagrafica was read back after its own Salva in the first pass. |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-28 | pane |  | Stopped in the shop's section: three Si/No pairs in a row, and the runner counted a "Si" as a "No" (its nearby texts include the "No" before it), so the factory outlet's "No" was never ticked. `inpage.js` now counts a box by its own label, as the crawl does. Resumed on the draft from "Oggetto della pratica": every value kept and read back on a fresh load (57 s). The Scheda anagrafica was read back after its own Salva in the first pass. |
+
+<!-- /runs -->
 
 The attachments screen (read after the run): the fee receipt takes only signed files (`.p7m`),
 so it's the person's; "Allegati liberi" is optional.

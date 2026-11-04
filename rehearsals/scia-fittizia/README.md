@@ -73,6 +73,8 @@ box opens. Ready offline, **not yet run on the portal**:
 
 ## Runs
 
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
 | Date | Browser | Case | Result |
 |---|---|---|---|
 | 2026-10-28 | pane | P6 (plain) | several legs on one draft; 198 values and 7 attachments kept, every value read back on a fresh load |
@@ -89,7 +91,78 @@ box opens. Ready offline, **not yet run on the portal**:
 | 2026-10-29 | pane | batch of the five cases not yet run, from scratch, with the runner that retries the portal's own errors: a variant that is a variazione essenziale; a change of use alone, of a unit with no works (within its category, between categories) or with art. 6-bis works (within its category), and of a whole building with 6-bis works | **4 of 5 filled** (essential variant 275 s, unit without works within its category 207 s, unit with 6-bis works 202 s, whole building 307 s), each read back on a fresh load, none needing a retry; the unit between categories stopped on Localizzazione, a street's suggestion list still fading out over "scala" |
 | 2026-10-29 | pane | unit without works between categories, rerun with the runner that takes a fading list off the page | **filled** in 227 s, read back on a fresh load (62 s) |
 | 2026-10-29 | pane | P6 as now (manutenzione straordinaria that changes the facades, since internal works alone are a CILA's under the SUE rules table), `bench/rerun.py` with the CIL and the SCIA with its ordinaria | **filled**, read back on a fresh load (24 s); the portal's error page once at DOMICILIO ELETTRONICO, resumed by the runner (47.5 s after the resume) |
+| 2026-10-29 | pane | the technical quadri (answers-tecnici: a shop open to the public, systems with their projects, energy report, renewables, art. 14 c. 6, barriers art. 77 and 82, acoustics art. 8 and DPCM, VVF assessment, asbestos, art. 24 c. 5-bis) | every section through fire and acoustics filled first time; stopped on the 5-bis's three cases the crawl never saw (read, mapped); resumed past it, stopped on 13 new required slots (read, mapped) |
+| 2026-10-29 | pane | every deroga (answers-deroghe: barriers, fire, hygiene, a cemetery's fascia; gas and another system) | stopped on the other system's required "specificare" (mapped), then on 8 new required slots (read, mapped) |
+| 2026-10-29 | pane | every deroga, from scratch | **filled** in 153 s with 16 attachments; fresh load 22 s, every value read back; no start date accepted |
+| 2026-10-29 | pane | the technical quadri, from scratch | stopped on art. 24 c. 5-ter's conditions, which each 5-bis case opens below it (read; mapped, one case per pratica) |
+| 2026-10-29 | pane | the technical quadri, from scratch, with the 5-ter conditions | **filled** in 149 s with 20 attachments; fresh load 23 s, every value read back |
+| 2026-10-29 | pane | P6, structures and every protection, from scratch after the technical quadri's dictionary change (one batch) | **filled**: 186 s / 147 s / 161 s, every value read back; no retry |
+| 2026-10-30 | pane | P6, from scratch after the sanatoria choice (`sanatoria_titolo`) replaced `scia_sanatoria` (one batch with the PdC P6 and the SCIA sanatoria) | **filled** in 138 s; fresh load 24 s, every value read back |
+| 2026-10-30 | pane | Quadro f)'s stato legittimo, one batch of six (`answers-stato-*.json`, `bench/rerun.py scia-fittizia:<answers>`) | **filled**: all 13 kinds of title (148 s), sanctions with the payment's details (129 s), tolerance declarations (132 s), every value read back. **Stopped**, nothing wrong saved: built before titles and title lost on the primo impianto line's date ("covered by" its calendar: switched off), because two boxes with no text the crawl never saw choose its details (they switch n. and del on) or its copy, uploaded inside the quadro: both now refused until mapped. Sanctions with the receipt filled the form and stopped on Allega documenti's new required slot "Ricevuta/e di versamento a titolo di sanzione": now mapped (`ask.sanzione_ricevuta`), not yet rerun. |
+| 2026-10-30 | pane | every protection (`answers-tutele`) after gen.py's offset fix (the fasce's second "Specificare:" `r16c1p16reg:txt` → `r14c1p14reg:txt`), `bench/rerun.py` bundle | **filled** in 180 s, read back on a fresh load (25 s), nothing moved or loose: the new id is the box's |
+| 2026-10-30 | pane | asseverazione tolerances (`answers-tolleranze-asseverate`: 1-bis at 6% and c. 2, under 60 m², zone 2, not structural), `bench/rerun.py` bundle | stopped on "Asseverazione SCIA - Stato legittimo": the sanatoria's si/no left empty ("il valore è obbligatorio" twice). The runner's label "no" (nth 3) had matched "non ha rilevanza strutturale", which the tolerances show above it |
+| 2026-10-30 | pane | the same, rerun with a yes or a no read as a whole word (`startsLabel`) | **filled** in 152 s, read back on a fresh load (28 s), nothing moved or loose |
+| 2026-10-30 | pane | Quadro f)'s two former refusals after #129, one `bench/rerun.py` bundle of five: two titles of one kind (`answers-stato-titoli-ripetuti`: a second DIA, a second condono and a CILA on three "altro" lines, two "+"), built before titles and title lost, each with the primo impianto's details and with its copy (`answers-stato-{epoca,prova}[-copia]`) | **filled**, all five (137 s, 146 s, 136 s, 143 s, 132 s), read back on a fresh load, no retries, nothing moved or loose. The unlabeled boxes went by label and nth as mapped: the details box switched n. and del on, the copy box opened the upload in the quadro; the title-lost line's boxes, never crawled, were found on the page |
+| 2026-10-30 | pane | A structurally relevant tolerance's art. 94-bis class (boxes read on the page: the crawl stops at the three class radios), `bench/rerun.py` bundles: relevant with the Genio Civile's authorization (`answers-tolleranze-autorizzazione`) and with its silenzio assenso (`answers-tolleranze-silenzio`) | silenzio assenso **filled** (201 s). The authorization filled every section and stopped on Allega documenti's new required slot "Autorizzazione sismica" (plain PDFs taken): mapped (`ask.toll_sismica_doc`) in the 8 recipes that fill that screen, rerun **filled** (137 s), read back on a fresh load, nothing moved |
+| 2026-10-30 | pane | another technician appointed (`answers-altri-tecnici`: H2, the CILA's G2 block) | **filled** in 140 s, read back on a fresh load (22 s), nothing moved or loose |
+| 2026-10-30 | pane | `answers-altri-tecnici.json` | **filled** |
+| 2026-10-30 | pane | `answers-stato-titoli-ripetuti.json` | **filled** |
+| 2026-10-30 | pane | `answers-stato-titoli.json` | **filled** |
+| 2026-10-30 | pane | `answers-tolleranze-autorizzazione.json` | **filled** |
+| 2026-10-30 | pane | `answers-tolleranze-silenzio.json` | **filled** |
+| 2026-10-30 | pane | `answers-tutele.json` | **filled** |
 | 2026-10-31 | pane | the planning instruments (`answers-strumenti`), and the P6 again with the PRG rows found by label (`anchor: PRG`), `bench/rerun.py` bundle | **filled** both (137 s, 135 s), nothing moved or loose |
+| 2026-10-31 | pane | two other technicians (`answers-altri-tecnici-due`: H2 repeated by "+", the first a firm's employee) | **filled** in 169 s after the employer's boxes were mapped, read back on a fresh load (24 s), nothing moved or loose |
+| 2026-10-31 | pane | `answers-altri-tecnici-due.json` | **filled** |
+| 2026-10-31 | pane | `answers-altri-tecnici.json` | **filled** |
+| 2026-10-31 | pane | `answers-strumenti.json` | **filled** in 137 s |
+| 2026-10-31 | pane | `answers-p6.json` | **filled** in 134 s |
+| 2026-10-31 | pane | `answers-cambio-unita-6bis-stessa.json` | **filled** in 141 s |
+| 2026-10-31 | pane | `answers-stato-prova.json` | **filled** in 138 s |
+| 2026-10-31 | pane | `answers-stato-sanzioni-estremi.json` | **filled** in 142 s |
+| 2026-10-31 | pane | `answers-stato-sanzioni-ricevuta.json` | **filled** in 140 s |
+| 2026-10-31 | pane | `answers-stato-tolleranze.json` | **filled** in 143 s |
+| 2026-10-31 | pane | `answers-strutture.json` | **filled** in 153 s |
+| 2026-10-31 | pane | `answers-tecnici.json` | **filled** in 153 s |
+| 2026-10-31 | pane | `answers-cambio-unita-senza-stessa.json` | **filled** in 147 s |
+| 2026-10-31 | pane | `answers-cambio-unita-senza-tra.json` | **filled** in 150 s |
+| 2026-10-31 | pane | `answers-cambio-uso.json` | **filled** in 150 s |
+| 2026-10-31 | pane | `answers-deroghe.json` | **filled** in 159 s |
+| 2026-10-31 | pane | `answers-senza-impianti.json` | **filled** in 146 s |
+| 2026-10-31 | pane | `answers-stato-epoca-copia.json` | **filled** in 146 s |
+| 2026-10-31 | pane | `answers-stato-epoca.json` | **filled** in 149 s |
+| 2026-10-31 | pane | `answers-stato-prova-copia.json` | **filled** in 147 s |
+| 2026-10-31 | pane | `answers-tolleranze-asseverate.json` | **filled** in 150 s |
+| 2026-10-31 | pane | `answers-variante-essenziale.json` | **filled** in 148 s |
+| 2026-10-31 | pane | `answers-variante-pdc.json` | **filled** in 152 s |
+| 2026-10-31 | pane | `answers-variante.json` | **filled** in 168 s |
+| 2026-11-01 | pane | `answers-altri-tecnici-otto` and `answers-stato-titoli-dieci` (eight other technicians, ten "altro" title lines: limits raised from three and five), `bench/rerun.py` bundle | **filled** both (707 s, 152 s) |
+| 2026-11-01 | pane |  | `answers-direttori` (another architect directs, `d:` above the structural designer's block, which is then the second; the structural designer directs the structures; a firm with its Cassa edile; more technicians to come) **filled** (189 s); `answers-impresa-dopo` (the architect directs, the structural director and the firm named later, d.lgs. 81 "si riserva") **filled** (142 s), `bench/rerun.py` bundle, read back on a fresh load, nothing moved or loose |
+| 2026-11-01 | pane | `answers-altri-tecnici-otto.json` | **filled** in 706 s |
+| 2026-11-01 | pane | `answers-stato-titoli-dieci.json` | **filled** in 152 s |
+| 2026-11-01 | pane | `answers-elenchi-lunghi.json` | **filled** in 813 s |
+| 2026-11-01 | pane | `answers-bassa-monostanza.json` | **filled** in 150 s |
+| 2026-11-01 | pane | `answers-direttori.json` | **filled** in 189 s |
+| 2026-11-01 | pane | `answers-impresa-dopo.json` | **filled** in 142 s |
+| 2026-11-02 | pane | `answers-progettista`: another architectural designer (`p:`), another director (`d:`) and the structural designer (`s:`), `bench/rerun.py` bundle | **filled** in 191 s; h1 read on the draft after: the designer's block first, then the director's, then the structural designer's (blocks 1, 2, 3); the asseverazione's progettista is the designer. `answers-direttori` rerun unchanged: **filled** |
+| 2026-11-02 | pane |  | The runner reads the portal's warnings beside kept boxes (`.alert-message-text`, which it never read): first as stops, a batch of 10 pratiche stopped on the domicilio's made-up PEC, then (once marked `made_up`) on "Indirizzo sconosciuto", which the Comune's own Piazza Municipio 1 also gets. Now never a stop, listed in the report's `alerts`: `answers-p6` here and in 7 other pratiche, plus the two landscape designer cases, all **filled**; each run listed the domicilio PEC, the address and the cadastral data (and the landscape technician's PEC) |
+| 2026-11-02 | pane | `answers-scavo-vvf.json` | **filled** in 149 s |
+| 2026-11-02 | pane | `answers-progettista.json` | **filled** in 191 s |
+| 2026-11-02 | pane | `answers-direttori.json` | **filled** in 182 s |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 139 s |
+| 2026-11-03 | pane | Tolerances in the stato legittimo: minor (`answers-tolleranze-minore`) and a building with no title (`answers-tolleranze-privo`), `bench/rerun.py` bundle; `answers-scavo-vvf` with its excavation as waste (`scavo: rifiuti`) | **filled** the two tolerances (236 s, 191 s). `answers-scavo-vvf` stopped on the Scheda anagrafica: "PERSONA (Privato)" found no box after two retries, a section its answers don't touch, while the batch's other SCIA runs filled it |
+| 2026-11-03 | pane | `answers-p6.json` | **filled** in 178 s |
+| 2026-11-03 | pane | `answers-scavo-vvf.json` | **stopped** in 0 s |
+| 2026-11-03 | pane | `answers-tolleranze-minore.json` | **filled** in 236 s |
+| 2026-11-03 | pane | `answers-tolleranze-privo.json` | **filled** in 191 s |
+| 2026-11-04 | pane | `answers-scavo-vvf` unchanged, `bench/rerun.py` bundle | **filled** in 203 s: the earlier stop was the portal's, not the mapping's |
+| 2026-11-04 | pane | `answers-scavo-vvf.json` | **filled** in 202 s |
+| 2026-11-04 | pane | `answers-comproprietaria-negozio.json` | **filled** in 212 s |
+| 2026-11-04 | pane | `answers-proprietario-deposito.json` | **filled** in 148 s |
+| 2026-11-04 | pane | `answers-tolleranza-5.json` | **filled** in 170 s |
+| 2026-11-04 | pane | `answers-usufruttuario-industriale.json` | **filled** in 166 s |
+
+<!-- /runs -->
 
 What the 2026-10-28 stops taught (each fixed for every pratica):
 
@@ -109,24 +182,3 @@ Still the person's: the "Documentazione dimostrativa dello stato legittimo" slot
 files only, `.p7m`), the procura and the "Quadro riepilogativo - SCIA DSC" (portal
 documents), naming the direttore dei lavori (and the structures' one), the declarations,
 signing and sending.
-| 2026-10-29 | pane | the technical quadri (answers-tecnici: a shop open to the public, systems with their projects, energy report, renewables, art. 14 c. 6, barriers art. 77 and 82, acoustics art. 8 and DPCM, VVF assessment, asbestos, art. 24 c. 5-bis) | every section through fire and acoustics filled first time; stopped on the 5-bis's three cases the crawl never saw (read, mapped); resumed past it, stopped on 13 new required slots (read, mapped) |
-| 2026-10-29 | pane | every deroga (answers-deroghe: barriers, fire, hygiene, a cemetery's fascia; gas and another system) | stopped on the other system's required "specificare" (mapped), then on 8 new required slots (read, mapped) |
-| 2026-10-29 | pane | every deroga, from scratch | **filled** in 153 s with 16 attachments; fresh load 22 s, every value read back; no start date accepted |
-| 2026-10-29 | pane | the technical quadri, from scratch | stopped on art. 24 c. 5-ter's conditions, which each 5-bis case opens below it (read; mapped, one case per pratica) |
-| 2026-10-29 | pane | the technical quadri, from scratch, with the 5-ter conditions | **filled** in 149 s with 20 attachments; fresh load 23 s, every value read back |
-| 2026-10-29 | pane | P6, structures and every protection, from scratch after the technical quadri's dictionary change (one batch) | **filled**: 186 s / 147 s / 161 s, every value read back; no retry |
-| 2026-10-30 | pane | P6, from scratch after the sanatoria choice (`sanatoria_titolo`) replaced `scia_sanatoria` (one batch with the PdC P6 and the SCIA sanatoria) | **filled** in 138 s; fresh load 24 s, every value read back |
-| 2026-10-30 | pane | Quadro f)'s stato legittimo, one batch of six (`answers-stato-*.json`, `bench/rerun.py scia-fittizia:<answers>`) | **filled**: all 13 kinds of title (148 s), sanctions with the payment's details (129 s), tolerance declarations (132 s), every value read back. **Stopped**, nothing wrong saved: built before titles and title lost on the primo impianto line's date ("covered by" its calendar: switched off), because two boxes with no text the crawl never saw choose its details (they switch n. and del on) or its copy, uploaded inside the quadro: both now refused until mapped. Sanctions with the receipt filled the form and stopped on Allega documenti's new required slot "Ricevuta/e di versamento a titolo di sanzione": now mapped (`ask.sanzione_ricevuta`), not yet rerun. |
-| 2026-10-30 | pane | every protection (`answers-tutele`) after gen.py's offset fix (the fasce's second "Specificare:" `r16c1p16reg:txt` → `r14c1p14reg:txt`), `bench/rerun.py` bundle | **filled** in 180 s, read back on a fresh load (25 s), nothing moved or loose: the new id is the box's |
-| 2026-10-30 | pane | asseverazione tolerances (`answers-tolleranze-asseverate`: 1-bis at 6% and c. 2, under 60 m², zone 2, not structural), `bench/rerun.py` bundle | stopped on "Asseverazione SCIA - Stato legittimo": the sanatoria's si/no left empty ("il valore è obbligatorio" twice). The runner's label "no" (nth 3) had matched "non ha rilevanza strutturale", which the tolerances show above it |
-| 2026-10-30 | pane | the same, rerun with a yes or a no read as a whole word (`startsLabel`) | **filled** in 152 s, read back on a fresh load (28 s), nothing moved or loose |
-| 2026-10-30 | pane | Quadro f)'s two former refusals after #129, one `bench/rerun.py` bundle of five: two titles of one kind (`answers-stato-titoli-ripetuti`: a second DIA, a second condono and a CILA on three "altro" lines, two "+"), built before titles and title lost, each with the primo impianto's details and with its copy (`answers-stato-{epoca,prova}[-copia]`) | **filled**, all five (137 s, 146 s, 136 s, 143 s, 132 s), read back on a fresh load, no retries, nothing moved or loose. The unlabeled boxes went by label and nth as mapped: the details box switched n. and del on, the copy box opened the upload in the quadro; the title-lost line's boxes, never crawled, were found on the page |
-| 2026-10-30 | pane | A structurally relevant tolerance's art. 94-bis class (boxes read on the page: the crawl stops at the three class radios), `bench/rerun.py` bundles: relevant with the Genio Civile's authorization (`answers-tolleranze-autorizzazione`) and with its silenzio assenso (`answers-tolleranze-silenzio`) | silenzio assenso **filled** (201 s). The authorization filled every section and stopped on Allega documenti's new required slot "Autorizzazione sismica" (plain PDFs taken): mapped (`ask.toll_sismica_doc`) in the 8 recipes that fill that screen, rerun **filled** (137 s), read back on a fresh load, nothing moved |
-| 2026-10-30 | pane | another technician appointed (`answers-altri-tecnici`: H2, the CILA's G2 block) | **filled** in 140 s, read back on a fresh load (22 s), nothing moved or loose |
-| 2026-10-31 | pane | two other technicians (`answers-altri-tecnici-due`: H2 repeated by "+", the first a firm's employee) | **filled** in 169 s after the employer's boxes were mapped, read back on a fresh load (24 s), nothing moved or loose |
-| 2026-11-01 | pane | `answers-altri-tecnici-otto` and `answers-stato-titoli-dieci` (eight other technicians, ten "altro" title lines: limits raised from three and five), `bench/rerun.py` bundle | **filled** both (707 s, 152 s) |
-| 2026-11-01 | pane | `answers-direttori` (another architect directs, `d:` above the structural designer's block, which is then the second; the structural designer directs the structures; a firm with its Cassa edile; more technicians to come) **filled** (189 s); `answers-impresa-dopo` (the architect directs, the structural director and the firm named later, d.lgs. 81 "si riserva") **filled** (142 s), `bench/rerun.py` bundle, read back on a fresh load, nothing moved or loose |
-| 2026-11-02 | pane | `answers-progettista`: another architectural designer (`p:`), another director (`d:`) and the structural designer (`s:`), `bench/rerun.py` bundle | **filled** in 191 s; h1 read on the draft after: the designer's block first, then the director's, then the structural designer's (blocks 1, 2, 3); the asseverazione's progettista is the designer. `answers-direttori` rerun unchanged: **filled** |
-| 2026-11-02 | pane | The runner reads the portal's warnings beside kept boxes (`.alert-message-text`, which it never read): first as stops, a batch of 10 pratiche stopped on the domicilio's made-up PEC, then (once marked `made_up`) on "Indirizzo sconosciuto", which the Comune's own Piazza Municipio 1 also gets. Now never a stop, listed in the report's `alerts`: `answers-p6` here and in 7 other pratiche, plus the two landscape designer cases, all **filled**; each run listed the domicilio PEC, the address and the cadastral data (and the landscape technician's PEC) |
-| 2026-11-03 | pane | Tolerances in the stato legittimo: minor (`answers-tolleranze-minore`) and a building with no title (`answers-tolleranze-privo`), `bench/rerun.py` bundle; `answers-scavo-vvf` with its excavation as waste (`scavo: rifiuti`) | **filled** the two tolerances (236 s, 191 s). `answers-scavo-vvf` stopped on the Scheda anagrafica: "PERSONA (Privato)" found no box after two retries, a section its answers don't touch, while the batch's other SCIA runs filled it |
-| 2026-11-04 | pane | `answers-scavo-vvf` unchanged, `bench/rerun.py` bundle | **filled** in 203 s: the earlier stop was the portal's, not the mapping's |

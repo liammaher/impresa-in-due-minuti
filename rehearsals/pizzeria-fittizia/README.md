@@ -104,14 +104,18 @@ Fittizia"), load the business into a real vault, `~/.pvault-fittizia`: `load.py`
 
 ## Runs
 
-| Date | Walked by | Reached | Broke on | Fixed |
-|---|---|---|---|---|
-| 2026-10-27 | Claude, Liam logged in | Allega documenti: 21 screens, every factual section saved | The attachments gate: two required files must be CAdES-signed (.p7m); the seven declarations are the person's | Map rewritten from what the portal showed |
-| 2026-10-27 | Claude from `portal-steps.yaml`, in the Claude browser (already logged in) | Every factual section saved and read back; stopped before the declarations and payment | Nothing in the map; two mechanics: a dropdown filter matches substrings, and a click on a fresh panel misses | The filter-and-arrow recipe, in the map and in `run.py` |
-| 2026-10-27 | Benchmark: 3 timed runs from the steps file, bigger batches | Every factual section saved and read back, each run | Run 1: a re-render after Forma giuridica wiped CF and P.IVA; run 3: it wiped Denominazione | Forma giuridica now comes before Denominazione in `portal-steps.yaml` |
-| 2026-10-27 | `inpage.js` in the Claude browser, one call to start it | Every factual section saved and read back, in 53 s | Four things the first tries found: the pane slows page timers, dropdowns build their list on first open, the last wizard screen loads twice, labels sit above or left of their box | All four in `inpage.js` and the shared label check |
-| 2026-10-28 | `do.py scia`: `run.py run` in a Playwright window, Liam logged in there | Every factual section saved and read back, 45 s after the login | Nothing | |
-| 2026-10-28 | `run.py run --vault-dir ~/.pvault-fittizia`: the real business vault, as the pratica skill does it | Every factual section saved and read back, 58 s | A window left open by the last run held the profile ("Opening in existing browser session") | Ran with `--profile` on a new folder |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-27 | Claude, Liam logged in |  | Reached: Allega documenti: 21 screens, every factual section saved; Broke on: The attachments gate: two required files must be CAdES-signed (.p7m); the seven declarations are the person's; Fixed: Map rewritten from what the portal showed |
+| 2026-10-27 | Claude from `portal-steps.yaml`, in the Claude browser (already logged in) |  | Reached: Every factual section saved and read back; stopped before the declarations and payment; Broke on: Nothing in the map; two mechanics: a dropdown filter matches substrings, and a click on a fresh panel misses; Fixed: The filter-and-arrow recipe, in the map and in `run.py` |
+| 2026-10-27 | Benchmark: 3 timed runs from the steps file, bigger batches |  | Reached: Every factual section saved and read back, each run; Broke on: Run 1: a re-render after Forma giuridica wiped CF and P.IVA; run 3: it wiped Denominazione; Fixed: Forma giuridica now comes before Denominazione in `portal-steps.yaml` |
+| 2026-10-27 | `inpage.js` in the Claude browser, one call to start it |  | Reached: Every factual section saved and read back, in 53 s; Broke on: Four things the first tries found: the pane slows page timers, dropdowns build their list on first open, the last wizard screen loads twice, labels sit above or left of their box; Fixed: All four in `inpage.js` and the shared label check |
+| 2026-10-28 | `do.py scia`: `run.py run` in a Playwright window, Liam logged in there |  | Reached: Every factual section saved and read back, 45 s after the login; Broke on: Nothing |
+| 2026-10-28 | `run.py run --vault-dir ~/.pvault-fittizia`: the real business vault, as the pratica skill does it |  | Reached: Every factual section saved and read back, 58 s; Broke on: A window left open by the last run held the profile ("Opening in existing browser session"); Fixed: Ran with `--profile` on a new folder |
+
+<!-- /runs -->
 
 Time: about an hour for the first walk, **14 min 51 s** for the second (7 wizard screens in
 about 4 minutes, the 9 sections in about 11), with the steps known and every value computed

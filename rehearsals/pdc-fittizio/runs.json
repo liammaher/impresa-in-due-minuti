@@ -1,386 +1,568 @@
 [
  {
-  "date": "2026-10-31",
-  "answers": "answers-altri-tecnici.json",
-  "result": "filled",
-  "from": "README"
+  "date": "2026-10-29",
+  "browser": "pane",
+  "case": "P6 (plain), first legs on one draft",
+  "note": "sections 0-14 filled first time (a), f), g1) included); then stopped six times, each fixed for every pratica and resumed on the same draft: the firm's opening radio worded \"saranno eseguiti\" (a fourth `if_present` variant), the safety notifica sent before the works (an `on_page` radio), the asseverazione's two opening radios kept as one by the portal, the energy rules requiring an incentive claimed, then two on the attachments screen (the slots the answers add, read and recorded in the crawl; the procura's box named \"Scarica il documento\")"
  },
  {
-  "date": "2026-10-31",
-  "answers": "answers-cambio-tra.json",
-  "result": "filled",
-  "from": "README"
+  "date": "2026-10-29",
+  "browser": "pane",
+  "case": "P6 (plain), from scratch, in a batch with the SCIA alternativa",
+  "note": "**filled** in 213 s with 7 attachments; fresh load 33 s, every value read back; no retry"
  },
  {
-  "date": "2026-10-31",
-  "answers": "answers-convenzionato.json",
-  "result": "filled",
-  "from": "README"
+  "date": "2026-10-29",
+  "browser": "pane",
+  "case": "P6, from scratch after the shared acoustic/fire and ecological quadri changed",
+  "note": "**filled** in 141 s; fresh load 23 s, every value read back; no retry"
  },
  {
-  "date": "2026-10-31",
-  "answers": "answers-deroga.json",
-  "result": "filled",
-  "from": "README"
+  "date": "2026-10-30",
+  "browser": "pane",
+  "case": "P6, from scratch after the sanatoria choice and the project radios went by label (one batch with the SCIA P6 and sanatoria)",
+  "note": "**filled** in 156 s; fresh load 26 s, every value read back; no retry"
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "case": "asseverazione tolerances (`answers-tolleranze`), `bench/rerun.py` bundle",
+  "note": "stopped on \"Asseverazione PdC - stato legittimo\" as the SCIA's: the sanatoria's si/no left empty (\"no\" matched \"non ha rilevanza strutturale\")"
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "case": "the same, rerun with a yes or a no read as a whole word",
+  "note": "**filled** in 161 s, read back on a fresh load (27 s), nothing moved or loose"
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "case": "structural tolerance of no relevance for public safety (`answers-tolleranze-privo`: the regional control term run out), then relevant with the Genio Civile's authorization and its \"Autorizzazione sismica\" slot (`answers-tolleranze-autorizzazione`)",
+  "note": "**filled** both (195 s, 169 s), read back on a fresh load, nothing moved or loose"
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "case": "systems needing a project (`answers-impianti`: six systems, each project in its own slot), `bench/rerun.py` bundle",
+  "note": "**filled** in 147 s, read back on a fresh load (25 s), nothing moved or loose"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-impianti.json",
   "result": "filled",
-  "from": "README"
- },
- {
-  "date": "2026-10-31",
-  "answers": "answers-mutamento-lr.json",
-  "result": "filled",
-  "from": "README"
- },
- {
-  "date": "2026-10-31",
-  "answers": "answers-parcheggi.json",
-  "result": "filled",
-  "from": "README"
- },
- {
-  "date": "2026-10-31",
-  "answers": "answers-sottotetti.json",
-  "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-tolleranze-autorizzazione.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-tolleranze-privo.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-tolleranze.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "case": "Campania's kinds and the other permessi (`bench/rerun.py` bundle of nine): `answers-sottotetti`, `-parcheggi`, `-convenzionato`, `-variante-sagoma`, `-variante-scia-alt`, `-variante-titolo-unico`",
+  "note": "**filled** all six (151, 141, 144, 168, 150, 142 s), read back on a fresh load (23-27 s), nothing moved or loose"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "case": "`answers-deroga`",
+  "note": "stopped on quadro a): the \"(specificare)\" box beside each limit has no text of its own and reads the limit from the cell before, so it started a block of its own; inpage.js now starts a block where the anchor is a box's best label"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "case": "`answers-mutamento-lr`, built on `answers-cambio-tra`",
+  "note": "stopped on the attachments: a required slot empty, from that case's other answers (`answers-cambio-tra` had never run); rebuilt on P6"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "case": "after the runner's fix: `answers-deroga`; `answers-mutamento-lr` rebuilt on P6; `answers-cambio-tra` alone (with the CILA's direttore and the SCIA's other technician, anchored blocks, as checks)",
+  "note": "**filled** the deroga (142 s: each limit's line by its own box) and the change of use (142 s), read back on a fresh load, nothing moved; `answers-cambio-tra` stopped on the attachments: \"Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura\", required once the sewer connection is to be requested, was in no recipe: now mapped (plain PDFs)"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "case": "`answers-cambio-tra` with the sewer slot mapped",
+  "note": "**filled** in 140 s, read back on a fresh load (22 s), nothing moved or loose"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "case": "two other technicians (`answers-altri-tecnici`: g2 by \"+\", the second a firm's employee; the permesso's g2 first run)",
+  "note": "**filled** in 174 s, read back on a fresh load (24 s), nothing moved or loose"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-altri-tecnici.json",
+  "result": "filled",
+  "from": "README",
+  "browser": "pane"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-cambio-tra.json",
+  "result": "filled",
+  "from": "README",
+  "browser": "pane"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-convenzionato.json",
+  "result": "filled",
+  "from": "README",
+  "browser": "pane"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-deroga.json",
+  "result": "filled",
+  "from": "README",
+  "browser": "pane"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-mutamento-lr.json",
+  "result": "filled",
+  "from": "README",
+  "browser": "pane"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-parcheggi.json",
+  "result": "filled",
+  "from": "README",
+  "browser": "pane"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-sottotetti.json",
+  "result": "filled",
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-variante-sagoma.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-variante-scia-alt.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-variante-titolo-unico.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-cambio-stessa.json",
   "result": "filled",
-  "seconds": 146.5
+  "seconds": 146.5,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-intero-vincoli.json",
   "result": "stopped",
-  "seconds": 148
+  "seconds": 148,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 158.7
+  "seconds": 158.7,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-per-scelta.json",
   "result": "stopped",
-  "seconds": 48.9
+  "seconds": 48.9,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-rir-deroga-antincendio.json",
   "result": "stopped",
-  "seconds": 150.4
+  "seconds": 150.4,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-rir-fuori-area.json",
   "result": "filled",
-  "seconds": 148
+  "seconds": 148,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-variante-essenziale.json",
   "result": "filled",
-  "seconds": 163.1
+  "seconds": 163.1,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-10-31, 11-01",
+  "browser": "pane",
+  "note": "the never-run cases, `bench/rerun.py` bundles: `cambio-stessa`, `rir-fuori-area`, `variante-essenziale`, P6 **filled**; `intero-vincoli` and `rir-deroga-antincendio` stopped on the Soprintendenza and fire-deroga slots, mapped, then **filled**; `per-scelta` stopped twice on the opere a scomputo's NO, disabled for a free permesso, fixed, then **filled** (164 s)"
+ },
+ {
+  "date": "2026-11-01",
+  "browser": "pane",
+  "case": "`answers-acustica-vvf-igiene` (acoustics, the Vigili del Fuoco's review, the hygiene deroga) **filled** (154 s); `answers-terreni-urbanizzazione` (soil analysed, no urbanisation works under a convenzione, the cemetery deroga) stopped on the results' slot, mapped, then **filled** (148 s)",
+  "note": ""
+ },
+ {
+  "date": "2026-11-01",
+  "browser": "pane",
+  "note": "`answers-direttori` (another architect directs, the notifica attached in its own slot, a Cassa edile firm) **filled** (197 s); `answers-impresa-dopo` (the architect directs, the firm named later, \"si riserva\") **filled** (170 s), `bench/rerun.py` bundle"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-intero-vincoli.json",
   "result": "filled",
-  "seconds": 153.8
+  "seconds": 153.8,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-per-scelta.json",
   "result": "stopped",
-  "seconds": 52.7
+  "seconds": 52.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-rir-deroga-antincendio.json",
   "result": "filled",
-  "seconds": 148
+  "seconds": 148,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-per-scelta.json",
   "result": "filled",
-  "seconds": 164.2
+  "seconds": 164.2,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-acustica-vvf-igiene.json",
   "result": "filled",
-  "seconds": 154
+  "seconds": 154,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-terreni-urbanizzazione.json",
   "result": "stopped",
-  "seconds": 165.9
+  "seconds": 165.9,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-terreni-urbanizzazione.json",
   "result": "filled",
-  "seconds": 147.9
+  "seconds": 147.9,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-altri-tecnici.json",
   "result": "filled",
-  "seconds": 188.3
+  "seconds": 188.3,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-direttori.json",
   "result": "filled",
-  "seconds": 196.5
+  "seconds": 196.5,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-impresa-dopo.json",
   "result": "filled",
-  "seconds": 169.9
+  "seconds": 169.9,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-02",
+  "browser": "pane",
+  "case": "`answers-progettista`: another architectural designer (`p:`) besides `answers-igiene-direttori`'s director and structural designer, `bench/rerun.py` bundle",
+  "note": "**filled** in 222 s; g1 read on the draft after: the designer's block (under its radio, below the director and structural ticks) first, then the director's, then the structural designer's"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-strumenti-barriere.json",
   "result": "stopped",
-  "seconds": 4
+  "seconds": 4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-amianto-strutture.json",
   "result": "filled",
-  "seconds": 166.3
+  "seconds": 166.3,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-igiene-direttori.json",
   "result": "stopped",
-  "seconds": 56.6
+  "seconds": 56.6,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-scavo-vvf.json",
   "result": "filled",
-  "seconds": 157.7
+  "seconds": 157.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-piano-utilizzo-pozzi.json",
   "result": "stopped",
-  "seconds": 147.7
+  "seconds": 147.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-strumenti-barriere.json",
   "result": "filled",
-  "seconds": 169.4
+  "seconds": 169.4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-igiene-direttori.json",
   "result": "filled",
-  "seconds": 213.3
+  "seconds": 213.3,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-piano-utilizzo-pozzi.json",
   "result": "filled",
-  "seconds": 153.4
+  "seconds": 153.4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-progettista.json",
   "result": "filled",
-  "seconds": 222.2
+  "seconds": 222.2,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 146.5
+  "seconds": 146.5,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-terreno.json",
   "result": "stopped",
-  "seconds": 32.2
+  "seconds": 32.2,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-terreno.json",
   "result": "filled",
-  "seconds": 142.7
+  "seconds": 142.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-altro.json",
   "result": "filled",
-  "seconds": 168.5
+  "seconds": 168.5,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-03",
+  "browser": "pane",
+  "case": "Quadro f)'s stato legittimo branches no case had taken, one `bench/rerun.py` bundle: built before 1967 with a bonifica (`answers-stato-epoca-bonifica`), the primo impianto proved by a document (`answers-stato-prova`), sanctions by their details (`answers-stato-sanzioni-estremi`), tolerances declared (`answers-stato-tolleranze`); and `answers-scavo-vvf` with its excavation as waste (`scavo: rifiuti`, since by-products need the terre e rocce filing)",
+  "note": "**filled**, all five (225 s, 239 s, 397 s, 463 s, 270 s). `answers-stato-sanzioni-ricevuta` stopped on Allega documenti: the permesso calls the receipt's slot \"Ricevuta di pagamento della sanzione\", not the SCIA's \"Ricevuta/e di versamento a titolo di sanzione\" (the stop's empty-slot list named it); recipe fixed"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 154.6
+  "seconds": 154.6,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-scavo-vvf.json",
   "result": "filled",
-  "seconds": 269.7
+  "seconds": 269.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-stato-epoca-bonifica.json",
   "result": "filled",
-  "seconds": 224.9
+  "seconds": 224.9,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-stato-prova.json",
   "result": "filled",
-  "seconds": 238.9
+  "seconds": 238.9,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-stato-sanzioni-ricevuta.json",
   "result": "stopped",
-  "seconds": 9.8
+  "seconds": 9.8,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-stato-sanzioni-estremi.json",
   "result": "filled",
-  "seconds": 397.4
+  "seconds": 397.4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-stato-tolleranze.json",
   "result": "filled",
-  "seconds": 463.5
+  "seconds": 463.5,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-04",
+  "browser": "pane",
+  "case": "`answers-stato-sanzioni-ricevuta` with the slot's own title, `bench/rerun.py` bundle",
+  "note": "**filled** in 212 s"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-stato-sanzioni-ricevuta.json",
   "result": "filled",
-  "seconds": 211.6
+  "seconds": 211.6,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-deroga-destinazione-condominio.json",
   "result": "filled",
-  "seconds": 173.4
+  "seconds": 173.4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-mutamento-agricola-deposito.json",
   "result": "filled",
-  "seconds": 156.2
+  "seconds": 156.2,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-mutamento-sagoma-usufruttuario.json",
   "result": "filled",
-  "seconds": 202
+  "seconds": 202,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-nuova-e2-fasce.json",
   "result": "filled",
-  "seconds": 181.9
+  "seconds": 181.9,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-nuova-e3-assensi.json",
   "result": "filled",
-  "seconds": 241.7
+  "seconds": 241.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-nuova-e4-bacino.json",
   "result": "filled",
-  "seconds": 180
+  "seconds": 180,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-nuova-e5-costa.json",
   "result": "filled",
-  "seconds": 179.2
+  "seconds": 179.2,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-nuova-e6-bonus.json",
   "result": "filled",
-  "seconds": 248.1
+  "seconds": 248.1,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-nuova-e7.json",
   "result": "filled",
-  "seconds": 187.2
+  "seconds": 187.2,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-precedenti-comproprietaria.json",
   "result": "filled",
-  "seconds": 214.8
+  "seconds": 214.8,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-sanatoria-scia.json",
   "result": "stopped",
-  "seconds": 0.4
+  "seconds": 0.4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-tolleranze-silenzio.json",
   "result": "filled",
-  "seconds": 229.7
+  "seconds": 229.7,
+  "browser": "pane"
  }
 ]

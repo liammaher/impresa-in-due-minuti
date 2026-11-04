@@ -11,9 +11,15 @@ boxes: four dictionary entries.
 
 ## Runs
 
-| Date | Browser | Login → draft | Result |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
 |---|---|---|---|
-| 2026-10-28 | pane | 87.9 s to the end of the form (wizard 14.1, 10 sections, fresh load 15.8), then 5.3 s for 1 attachment | First run, no stop: 52 values and the client's ID kept, every value read back on a fresh load |
+| 2026-10-28 | pane |  | First run, no stop: 52 values and the client's ID kept, every value read back on a fresh load; Login → draft: 87.9 s to the end of the form (wizard 14.1, 10 sections, fresh load 15.8), then 5.3 s for 1 attachment |
+| 2026-10-31 | pane | `answers-p6.json` | **filled** in 50 s |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 53 s |
+
+<!-- /runs -->
 
 ## Clean reruns (2026-10-29)
 

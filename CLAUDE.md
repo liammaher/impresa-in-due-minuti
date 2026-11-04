@@ -477,7 +477,8 @@ before and after a change, `bench/test_schema_branches.py` schema_branches.py an
 route.py on every case the SUE table decides (it prints the combinations not mapped yet), and
 `claude/skills/pratica/intake/bench/test_intake.py` the intake on a made-up dossier (`dossier.py`) against fixture-p6.json. On the real portal, `bench/rerun.py` reruns the rehearsals
 in the pane after a runner, dictionary or gen.py change (portal/README.md); `--record` files the results in each
-rehearsal's `runs.json`, which schema_branches.py counts as filled on the portal.
+rehearsal's `runs.json`, the one run record: schema_branches.py and scoreboard.py count it, and each README's run
+table is drawn from it (`portal/runs.py --write`; test_gen checks every table).
 
 ```go
 // Pattern: create temp vault, run test
