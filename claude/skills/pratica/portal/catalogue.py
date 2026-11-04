@@ -464,14 +464,6 @@ def cmd_drift(args):
     return out
 
 
-def drifted(name):
-    """The differences the last check found in a pratica's crawl, or []."""
-    path = CAT / "drift.json"
-    if not path.exists():
-        return []
-    return json.loads(path.read_text())["pratiche"].get(name, {}).get("differences", [])
-
-
 def cmd_pane(args):
     """wizard.js and crawl.js for the pane, kept in its localStorage (pv-wizard, pv-crawl) so a
     page that navigates doesn't lose them: install.js (gzip, base64: a third of the size) checks

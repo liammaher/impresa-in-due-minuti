@@ -1,74 +1,140 @@
 [
  {
   "date": "2026-10-30",
+  "browser": "pane",
+  "case": "`answers-p6.json` (art. 36)",
+  "note": "**Filled** from a blank draft in 211.8 s, read back on a fresh load (23.8 s), 7 files kept (the energy report included), nothing moved or loose"
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "case": "`answers-parziale.json` (art. 36-bis)",
+  "note": "Stopped on \"Asseverazione PdC - stato legittimo\": 7 required rows unmapped. Ticking them by hand showed the four (documents, the two datings, the works proposal) are one radio group: now refused at pre-flight"
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "case": "`answers-p6.json` after gen.py's offset fix (the new-construction lines get ids, `r14c2p21reg:chk` for this case's), `bench/rerun.py` bundle",
+  "note": "**Filled** in 156.2 s, read back on a fresh load (27.4 s), nothing moved or loose: the id is the box's"
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "case": "systems needing a project (`answers-impianti`: six systems, each project in its own slot), `bench/rerun.py` bundle",
+  "note": "**filled** in 170 s, read back on a fresh load (25 s), nothing moved or loose"
+ },
+ {
+  "date": "2026-10-30",
   "answers": "answers-impianti.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-p6.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "case": "`answers-p6.json` with quadro a)'s art. 36 radio, `bench/rerun.py` bundle",
+  "note": "**filled** in 149 s, read back on a fresh load (24 s), nothing moved or loose"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-catasto-invariato.json",
   "result": "filled",
-  "seconds": 154.1
+  "seconds": 154.1,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-catasto-presentata.json",
   "result": "filled",
-  "seconds": 154.1
+  "seconds": 154.1,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-strutture.json",
   "result": "filled",
-  "seconds": 143.9
+  "seconds": 143.9,
+  "browser": "pane",
+  "case": "`answers-strutture`: the room on a timber frame, the sismica quadro's autorizzazione, `bench/rerun.py` bundle",
+  "note": "**filled** from a blank draft in 144 s, read back on a fresh load, nothing moved or loose"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-tutela.json",
   "result": "filled",
-  "seconds": 144.6
+  "seconds": 144.6,
+  "browser": "pane",
+  "case": "`answers-tutela`: the underground room, in a protected area but with nothing above ground (DPR 31/2017 Allegato A.15), the landscape quadro's \"non comportano alterazione\", `bench/rerun.py` bundle",
+  "note": "**filled** from a blank draft in 145 s, read back on a fresh load, nothing moved or loose"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-cambio-intero.json",
   "result": "stopped",
-  "seconds": 37.6
+  "seconds": 37.6,
+  "browser": "pane",
+  "case": "`answers-cambio-intero`: a whole building changed from offices to homes in 2021 without the SCIA alternativa (L.R. 13/2022), with maintenance works, as an art. 36 sanatoria (\"altro\" in the asseverazione), `bench/rerun.py` bundle",
+  "note": "Stopped on \"a) Qualificazione pratica dell'intervento\": the art. 36 line was ticked only for art. 10 works. Now ticked for every permesso in sanatoria"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-cambio-intero.json",
   "result": "filled",
-  "seconds": 171.8
+  "seconds": 171.8,
+  "browser": "pane",
+  "case": "`answers-cambio-intero`, the same, rerun with the fix, `bench/rerun.py` bundle",
+  "note": "**filled** from a blank draft in 172 s, read back on a fresh load, nothing moved or loose"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-zona-a.json",
   "result": "stopped",
-  "seconds": 81.6
+  "seconds": 81.6,
+  "browser": "pane",
+  "case": "`answers-zona-a`: a storage building in a zona A courtyard demolished and rebuilt in 2018 with the same shape and volume, no title (DGC 454/2014: no SCIA in zona A), \"altro\" in the asseverazione, the autorizzazione sismica apart, `bench/rerun.py` bundle",
+  "note": "Stopped on the sanatoria quadro's \"allega la documentazione necessaria indicata nel quadro riepilogativo\": covered by the calendar the date above it left open (`div#ui-datepicker-div`). The runner now closes it before each box and Salva (inpage.js `closeLists`)"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-zona-a.json",
   "result": "filled",
-  "seconds": 153.5
+  "seconds": 153.5,
+  "browser": "pane",
+  "case": "`answers-zona-a`, the same, with the runner fixed, `bench/rerun.py` bundle",
+  "note": "**filled** from a blank draft in 154 s, read back on a fresh load, nothing moved or loose"
+ },
+ {
+  "date": "2026-11-03",
+  "browser": "pane",
+  "case": "`answers-ristrutturazione-urbanistica`: a ristrutturazione urbanistica (art. 10 c. 1 c) finished in 2017 without a title, as an art. 36 sanatoria, `bench/rerun.py` bundle",
+  "note": "First try stopped after 40 s on \"SecurityError … cross-origin frame\". Rerun after signing in: **filled** from a blank draft in 165 s, read back on a fresh load, nothing moved or loose"
+ },
+ {
+  "date": "2026-11-03",
+  "browser": "none (offline)",
+  "case": "`answers-cambio-intero`, reread",
+  "note": "The 2026-11-02 run ticked the asseverazione's \"un intero immobile all'interno della stessa categoria funzionale (art. 23-ter c. 3)\" for a change from offices to homes: a change within one category, which this isn't. The national form has no line for a whole building to another category: the case is refused since (defect `cambio-uso-regionale`, docs/portal-defects.md), its answer `scia_cambio_uso: altro`"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-ristrutturazione-urbanistica.json",
   "result": "filled",
-  "seconds": 165.2
+  "seconds": 165.2,
+  "browser": "pane"
  }
 ]

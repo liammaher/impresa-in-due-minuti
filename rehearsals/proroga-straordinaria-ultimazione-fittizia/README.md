@@ -10,9 +10,16 @@ INVIARE" and stops before the declarations, the attachments, any bollo, signing 
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-29 | pane | A first try stopped on the first screen: the draft's name was 65 characters, the box takes 60 (run.py now refuses a longer one before the run). |
-| 2026-10-29 | pane | **Filled**: every section in 46 s, every value read back on a fresh load of the draft. |
-| 2026-10-29 | pane | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 47.6 s; second, with the runner waiting for a section to open, **filled** in 68.7 s, read back on a fresh load. |
-| 2026-11-01 | pane | `answers-paesaggistica` (the permesso went with a landscape authorization: "e autorizzazione paesaggistica", its prot. n. and date, crawled the same day), `bench/rerun.py` bundle: **filled** in 45.2 s, read back on a fresh load. |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-29 | pane |  | A first try stopped on the first screen: the draft's name was 65 characters, the box takes 60 (run.py now refuses a longer one before the run). |
+| 2026-10-29 | pane |  | **Filled**: every section in 46 s, every value read back on a fresh load of the draft. |
+| 2026-10-29 | pane |  | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 47.6 s; second, with the runner waiting for a section to open, **filled** in 68.7 s, read back on a fresh load. |
+| 2026-10-29 | pane | `answers-p6.json` | **filled** |
+| 2026-11-01 | pane | `answers-paesaggistica.json` | `answers-paesaggistica` (the permesso went with a landscape authorization: "e autorizzazione paesaggistica", its prot. n. and date, crawled the same day), `bench/rerun.py` bundle: **filled** in 45.2 s, read back on a fresh load. |
+| 2026-11-02 | pane | `answers-assenso.json` | **filled** in 48 s |
+| 2026-11-03 | pane | `answers-p6.json` | **filled** in 59 s |
+
+<!-- /runs -->
