@@ -1,242 +1,254 @@
 ---
 name: portali-pratica
-description: Prepare a Comune di Napoli pratica on impresainungiorno (the SUE and SUAP front office) from a client's documents - CILA, CIL, SCIA, agibilità, autorizzazione paesaggistica, inizio and fine lavori, proroghe, volture, dehors, a shop or restaurant opening - as a checked draft that stops before the architect's declarations, signature, payment and sending. Also answers which pratica a Naples case needs, with what documents, costs and timelines. Use when an architect or geometra asks to prepare, fill, draft or file a pratica for a client in Napoli, or asks what a case needs.
+description: Prepara una pratica del Comune di Napoli su impresainungiorno (SUE e SUAP) a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti. Use when an architect, geometra or ingegnere asks (in Italian or English) to prepare, fill, draft or file a pratica for a client in Napoli ("prepara una CILA", "compila la SCIA"), or asks what a case needs.
 ---
 
-# Napoli pratiche
+# Pratiche a Napoli
 
-The user is an architect (or geometra) in Naples filing for clients with a procura. You
-prepare the draft on impresainungiorno; they log in with their own SPID, then make the
-declarations, sign, pay and send.
+The user is a **tecnico** (architetto, geometra, ingegnere) filing for clients in Napoli with a
+procura. You prepare the draft on impresainungiorno; they log in with their own SPID, then make
+the declarations, sign, pay and send.
 
-If they would rather keep their own or their clients' details in an encrypted vault on their
-own computer than in a folder of files, the `portali-setup` skill installs it.
+## How you speak
 
-Every path below is relative to this skill's base directory: write it out in full in each
-command (`SKILL` below stands for it). Run scripts with `python3`; they need no packages (each finds its own folder's modules first).
+- **Always Italian**, whatever language these instructions are in. Address the tecnico as
+  **Lei**. Short sentences, one idea each.
+- Building-law words are theirs and stay: CILA, SCIA, asseverazione, titolo abilitativo,
+  art. 6-bis DPR 380/2001, diritti di segreteria, procura, elaborati grafici.
+- **Software words never reach them.** Say instead:
 
-- `catalog.json`: each pratica with a steps file: `name`, `procedure`, `title`, `sportello`,
-  `refuses` (the cases it doesn't cover, and why), `notes` (the steps file's own notes: who
-  the roles are) and `steps_sha256`.
-- `coverage.json`: every pratica's `status` when this plugin was built (`built`), and the
-  library procedures it can only advise on.
-- `pratiche/<name>.json`: its steps file.
-- `library/`: the pratiche-napoli library. `procedures/` says what the law asks for each
-  procedure (documents, costs, deadlines, offices, with sources), `rules/` which pratica a
-  case is, `offices/` where to go.
-- `reference/schema.json`: every field id, with what it means.
-- `check.py`, `portal/run.py`, `review.py`: the scripts.
+  | Never | Say |
+  |---|---|
+  | vault, pvault | il suo archivio (Portali's private archive on this computer) |
+  | steps file, pre-flight, runner, run.js, check.js, script | (nothing: say what happens) |
+  | draft | bozza |
+  | run, fill | compilazione, compilo |
+  | token, scope, grant, approval | conferma (con Touch ID / Windows Hello) |
+  | slug, field id, JSON, hash, sha256, .js | (never) |
+  | review.html | la pagina di riepilogo |
+  | unsupported, refused | non posso prepararla, perché … |
+
+- Questions come from the tools in English: **say them in Italian**, plainly, keeping their
+  meaning, options and any law they cite. Never show a field id or a role code (`c:`, `cr:`):
+  say "il committente", "la società committente", "il proprietario", "l'impresa esecutrice".
+- A pratica's status: `available` = disponibile; `mapped` / `coming` = in arrivo (non ancora
+  provata sul portale); `guide` = solo indicazioni; `paused` = sospesa (il portale è cambiato).
 
 ## Rules that never bend
 
-- **All or nothing.** Between the login and the architect's own steps the run does
+- **All or nothing.** Between the login and the tecnico's own steps the compilation does
   everything, or the case is refused before anything opens. Never fill a box by hand to get
   past a stop, and never call a half-filled draft done.
-- **The architect's taps stay theirs.** Never tick a declaration, press pagoPA, Invia or
-  Firma, sign or send. The runner refuses them; don't do them by hand.
-- **No credentials.** Never ask for, read or write a password, PIN or SPID/CIE login, the
-  architect's or a client's. The architect logs in to the portal themselves.
-- **No guesses.** Every value comes from a document in the folder or from the architect.
-- **The data stays in the folder.** Write values only into the job's folder; send them
-  nowhere but the portal, through the run.
-- **The built-in browser.** Use Cowork's own browser for the portal, never Claude in
-  Chrome. If the browser setting points at Chrome, ask the architect to switch it.
+- **Their taps stay theirs.** Never tick a declaration, press pagoPA, Invia or Firma, sign or
+  send. The runner refuses them; don't do them by hand.
+- **No credentials.** Never ask for, read or write a password, PIN or SPID/CIE login, theirs
+  or a client's. They log in to the portal themselves.
+- **You never see their data.** Values go from the archive and the documents to the portal
+  without passing through this conversation: never print `pvault get`'s output, never open the
+  documents, `run/intake/private/`, `run/private/` or `run/review.html`. You read only what the
+  tools print for you (which fields exist or are missing, never their values).
+- **No guesses.** Every value comes from the archive, a document or the tecnico.
+- **The built-in browser** of the Claude desktop app, never Claude in Chrome.
 
-## The folder
+## What this skill has
 
-The folder the architect opened in Cowork holds:
+Every path is relative to this skill's base directory (`SKILL` below): write it out in full in
+each command. Scripts run with `python3` and need no packages.
 
-- `studio.json` at its root: the studio and the architect, kept for every job. `business.*`
-  is the studio; the architect is a person with a slug (`rossi:`): `rossi:ruolo.tipo` is
-  `titolare`, then `rossi:identity.*`, `rossi:residenza.*`, `rossi:albo.*`. None yet: build
-  it from what they have (codice fiscale, tessera dell'ordine, the studio's visura) and ask
-  for the rest in one message.
-- a subfolder per job, with the client's documents. You write there: `values.json` (this
-  job's people), `answers.json` and `run/`.
+- `catalog.json`: each pratica with a steps file (`name`, `procedure`, `title`, `sportello`,
+  `refuses`, `notes`: who the roles are, `steps_sha256`); `coverage.json`: every pratica's
+  `status`; `pratiche/<name>.json`: its steps file.
+- `library/`: what the law asks for each procedure (`procedures/`), which pratica a case is
+  (`rules/`), where to go (`offices/`). `reference/schema.json`: every field.
+- `portal/run.py`, `portal/route.py`, `intake/intake.py`, `review.py`, `check.py`.
 
-## What's supported, and the Portali connector
+## 0. The archive
 
-A pratica's status says what you may do with it:
+The tecnico's details, their studio's, and each client's live in their archive (pvault, a
+business vault: the studio is the business, the tecnico a person with `ruolo.tipo` `titolare`,
+each client a person with `ruolo.tipo` `cliente`). Run `pvault status` (or the `PVAULT_PATH`
+that `portali-setup` printed):
 
-- `available`: run on the real portal and unchanged since. Prepare it.
-- `paused`: the portal changed it; pre-flight refuses it until it's mapped again.
-- `mapped`: its steps exist but it hasn't run on the portal yet. It's coming soon: don't run
-  it for a client.
-- `guide`: the library says what it needs and where; it can't be filled automatically.
-- `coming`: being worked on.
+- not found, or "not initialized": the `portali-setup` skill sets it up. Say in one line that
+  the archive keeps their and their clients' details on this computer, encrypted, and that you
+  never see them.
+- "locked": ask them to open it ("Apra l'archivio: in Terminale scriva `pvault unlock` e la
+  password"), then go on.
+- confirmations off (`pvault touchid status`; Windows: `pvault hello status`): `portali-setup`
+  turns them on. Without them you can't read the archive at all, since its password is typed
+  only in a terminal.
+- no shell on their computer (Cowork's sandbox): **The folder, without the archive** at the end.
 
-The plugin may bring the **Portali connector** (its `coverage`, `find_pratica`, `get_pratica`
-and `get_procedure` tools). It holds no one's data and must get none: describe a case to it
-by its facts only (the works, the activity, the size), never by a name, codice fiscale or
-address. When it's connected, its statuses are the current ones; use it for "what can you
-do?" (`coverage`, with the user's comune and role) and to find the pratica. When it isn't,
-use `coverage.json` and say its `built` date.
+The first time, the studio's details may be missing (pre-flight lists them under `missing`):
+ask for them once, in one message, and save each with `pvault set <id> <value>` (one
+confirmation each) or have them type them in the archive's page (`pvault ui`).
 
 ## 1. Which pratica
 
-Read the request and the job's documents. Works needing a building title (a CILA, SCIA,
-permesso, sanatoria or landscape authorization at the SUE) are routed by their facts:
+Works needing a building title (CILA, SCIA, permesso, a sanatoria, a landscape authorization)
+are chosen by their facts, not their name. With the job's documents, read them first (step 2,
+facts only), then:
 
 ```sh
 python3 SKILL/portal/route.py --table sue-napoli --answers facts.json
 ```
 
-Start `facts.json` as `{}`. It asks the rules table's facts as pre-flight asks (the works alone
-first, then the rest in one message, the yes/no ones as the checklist `fatti`); write the replies
-into `facts.json` and run it again. If the answer about the works changes, keep only it and run
-again (the checklist was another case's). Once they decide, it names the one pratica (`pratica`)
-and the `answers` to start `answers.json` with; `unsupported` is the reason none fits. Other
-pratiche: `find_pratica` with the case's facts, else `catalog.json` and `coverage.json`; a case
-can need two (a restaurant and its dehors). Then, with the connector, call `get_pratica` with its `name` and the
-`steps_sha256` from `catalog.json`:
+Start `facts.json` as `{}` (or from the intake). It asks the rules table's facts as pre-flight
+asks: the works first, alone, then the rest in one message. Write the replies into
+`facts.json` and run it again; if the answer about the works changes, keep only that one. Once
+it decides it names the pratica (`pratica`, its `steps`) and the `answers` to start
+`answers.json` with; `unsupported` is the reason none fits. Other pratiche (a proroga, a fine
+lavori, a voltura): `catalog.json`, or the Portali connector's `find_pratica` when it is there
+(describe a case to it by its facts only, never by a name, codice fiscale or address).
 
-- a status other than `available`: tell the architect in one line what it means and stop.
-- `copy: stale`: the portal map changed after this plugin was built. Call it again with
-  `include_steps`, save the steps file it returns as `run/steps.json`, use that path in
-  place of `SKILL/pratiche/<name>.json` below, and tell the architect to update the plugin.
+- Status other than `available` (`coverage.json`, or the connector's `get_pratica`): say in one
+  line what it means and stop.
+- None fits: say which pratica it is and that Portali can't prepare it yet, give what the
+  library says it needs, and stop. Don't open the portal.
 
-Read its `library` file (or `get_procedure`) for what the law asks. Many entries have none yet (the
-runner fills more pratiche than the library describes): then the entry's `notes`,
-`refuses` and its steps file's `asks` and `yours` are all this plugin knows, so say that
-rather than filling in the law from memory. When none fits, say in one line which pratica
-it is and that this plugin can't prepare it yet, give what the library says it needs, and
-stop: don't open the portal. When two could fit, ask once, with the difference in a
-sentence.
+## 2. The documents
 
-## 2. The values, from the documents
-
-The steps file reads field ids. `t:` is the architect (the titolare in `studio.json`); the
-job's other people are roles, which `answers.json` names under `people` (the entry's
-`notes` say which: `{"people": {"c": "bianchi", "o": "immobiliare"}}` makes `c:` the client
-`bianchi`). Write each person's fields into `values.json` as `"bianchi:identity.first_name":
-"Mario"`, with their `bianchi:ruolo.tipo` (`cliente`, `impresa_esecutrice`, ...). Slugs are
-lower case, letters, digits and hyphens. `reference/schema.json` says what each field is.
-
-Start from the intake when the job's folder has the documents (`docs/`: the visura, the lease or
-deed, the relazione tecnica, the drawings, the receipts):
+The job's folder holds the client's documents (`docs/`: visura, atto or contratto, relazione
+tecnica, elaborati, ricevute, documento d'identità). Read them with the intake, never yourself:
 
 ```sh
 python3 SKILL/intake/intake.py scan docs --out run/intake --steps SKILL/pratiche/<name>.json
 ```
 
-It writes the fields it reads off them to `run/intake/private/values.json` (start `values.json`
-from it, and add what it lacks) and proposes answers in `run/intake/intake.json`, each with its
-document and words. Show them grouped by document; on "ok", `python3 SKILL/intake/intake.py accept
-run/intake --into answers.json`. Don't read the documents or `private/` into the conversation.
+Read only `run/intake/intake.json`: each file's kind, the fields filled (ids, not values),
+`unread` files (scans and photos: their facts are asked instead), `notes`, and `proposals` with
+the document and words each comes from. Show the proposals in one message, grouped by document,
+in Italian ("Dalla relazione tecnica: manutenzione straordinaria, nessun intervento
+strutturale, inizio lavori 19/10/2026"). On "ok": `python3 SKILL/intake/intake.py accept
+run/intake --into answers.json` (it adds the client's and the owner's roles to `people`).
+Without `--steps` and with `--part facts`, the same before step 1.
 
-Then check and merge, from the job's folder:
+The roles: `t:` is the tecnico; the others are people that `answers.json` names under
+`people` (the entry's `notes` say which: `{"people": {"c": "bianchi"}}` makes the client
+`bianchi`). A client the archive doesn't hold yet is added by the values the intake read.
+
+## 3. Pre-flight, before anything opens
+
+The values come from one confirmation:
+
+```sh
+pvault get $(python3 SKILL/portal/run.py scope --steps SKILL/pratiche/<name>.json) \
+  | python3 SKILL/portal/run.py preflight --steps SKILL/pratiche/<name>.json \
+      --answers answers.json --values - --values run/intake/private/values.json
+```
+
+Leave out `--values run/intake/private/values.json` when the intake didn't run (here and
+below). Say first, in one line, that Touch ID (or Windows Hello) will ask to read the details
+this pratica needs. Pre-flight prints JSON and exits 0 only when `ready`.
+
+- `unsupported`: say why in one line and stop. With `defects`, the law allows the case but the
+  portal can't take it as the law asks: say what the portal does, what the law asks, and give
+  its `choices` as a numbered list.
+- `questions`, `proposals`, `missing`: **one short message**, numbered, in Italian. A
+  `checklist` is one question with its items as bullets ("spunti quelli che valgono, o
+  nessuno"; usually none); an `only_if` question goes under its items ("se sì: …"). Proposals
+  in the same message as "Userò: …", one line each; "ok" confirms them all, and one nobody
+  confirmed is never used. A `missing` field the tecnico gives you goes into the archive
+  (`pvault set`), never into a file. Write the other replies under each `key` (dates
+  YYYY-MM-DD, files as paths) and run pre-flight again; an `error` says what didn't fit: ask
+  only that again.
+- `files`: when `pick` is there, say they'll choose the pratica's files once, on the portal's
+  page, at the start ("All'inizio le chiederò di scegliere la cartella dei documenti").
+  A file's `problem` is what the sportello would refuse (at Napoli's SUE, DD 501/2026: not
+  PDF/A, not signed digitally, or a name with spaces, accents or signs): say which and how to
+  fix it.
+- `yours` and `second_run`: tell them now what they will do at the end, so nothing surprises
+  them.
+
+Only when it says `ready` go on. From here they hear nothing from you but the login, the code
+and the review page.
+
+## 4. The compilation
+
+```sh
+pvault get $(python3 SKILL/portal/run.py scope --steps SKILL/pratiche/<name>.json) \
+  | python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json \
+      --answers answers.json --values - --values run/intake/private/values.json --out run
+```
+
+1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser:
+   "Acceda con SPID nella finestra del browser; quando vede la pagina del portale mi scriva
+   «fatto»." Wait until the page is the portal's own, past the login.
+2. `page` opened a small window with a code on their screen. You never see it: never ask for
+   it or look for it. Say: "Sullo schermo c'è una finestra con un codice. Tra poco sul portale
+   compare un riquadro: lo scriva lì (non serve dirmelo) e lasci aperta la finestra fino alla
+   fine."
+3. Run each script as **one** JavaScript call on the portal's page, its text exactly as the
+   file has it: `run/check.js` first. It returns what to run next: `runner.js` and `steps.js`
+   only when it names them, then `run.js`. When it names `runner.js` and the call is too big,
+   build with `--bundle ~/Downloads/portali-<name>.js` and run `pick.js` instead: they choose
+   that file once in the box it shows.
+4. `run.js` returns at once: call `await __pv.wait(40000)` until `result` is `filled` or
+   `stopped`. `waiting` means the code or the files aren't in yet: say so once, gently.
+5. Save `JSON.stringify(__pv.last())` to `run/report.json`, then `python3 SKILL/review.py run`
+   writes `run/review.html`.
+
+Never read, screenshot or take the text of a page the compilation has filled, and take none
+while the code box is up. One compilation per login at a time: the portal keeps one pratica
+open per login.
+
+**If it stops, recover it without the tecnico.** `__pv.last()` has `error`, `at` (the
+wizard screen, or the section and field) and `snapshot` (the page with no value in it);
+`__pv.look()` gives it again. Use those and nothing else. "0 fields with this label" usually
+means the section wasn't open yet: check `__pv.look()` first. Work out the fix for that one
+field (its new `id`, `css` or `label`) and call `__pv.resume({fixes: [{"section": i, "field":
+k, "set": {"label": "..."}}]})`. A draft whose address expired (`/cmd/error`, "errore
+inatteso", a 503): `url = await __pv.reopen("<draft name>")`, then `__pv.resume({url})`. Ask
+the tecnico only for a fact nothing holds, in one plain question. Budget: two fixes or about
+three minutes; then stop, leave the draft saved, and say plainly what's left.
+
+## 5. Hand over
+
+Send `run/review.html` (show it, never open it): what's left for them, every check, every value
+as it went on the portal, the declarations' own words. A report's `alerts` (the portal's
+warnings beside boxes it kept) are each one line for them to check. Then list their steps
+(`yours`) once more, in order, in Italian, and stop: they review, declare, sign, pay and send.
+
+## 6. The second compilation, after the declarations
+
+What the portal makes only once the declarations are ticked (the procura for the client to
+sign, the quadro riepilogativo) goes in a second compilation, when they say they have signed
+("Ho firmato"):
+
+```sh
+pvault get $(python3 SKILL/portal/run.py scope --steps SKILL/pratiche/<name>.json) \
+  | python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json --answers answers.json \
+      --values - --values run/intake/private/values.json --after-declarations --out run2
+```
+
+Write the signed files' paths into `answers.json` first (pre-flight with `--after-declarations`
+says which keys). It opens the draft by its name and attaches those files alone. It carries no
+other value, so there is **no code** this time: they choose the signed files once in the box on
+the page. Same calls as step 4, from `check.js`.
+
+## The folder, without the archive
+
+Only where the archive can't be reached (Cowork's sandbox, until it can): the job's values go
+in files in the job's folder instead, and they pass through this conversation, so say so once.
+`studio.json` at the folder's root holds the studio (`business.*`) and the tecnico (a slug with
+`ruolo.tipo` `titolare`); each job's `values.json` its people (`"bianchi:identity.first_name"`;
+start it from `run/intake/private/values.json`). Check and merge, then the same steps with
+`--values run/values.json` in place of the `pvault get` pipe, and `page --plain` (Cowork can't
+show the code window):
 
 ```sh
 python3 SKILL/check.py ../studio.json values.json --out run/values.json
 ```
 
-Each line it prints is a value to fix: read the document again, or ask.
-
-## 3. Pre-flight, before anything opens
-
-```sh
-python3 SKILL/portal/run.py preflight --steps SKILL/pratiche/<name>.json \
-  --answers answers.json --values run/values.json
-```
-
-It prints JSON and exits 0 only when `ready`. Write file answers as paths from the job's
-folder.
-
-- `unsupported`: this case isn't covered (the reason is given). Tell the architect in one
-  line and stop.
-- `missing`: fields not in the values. Look for them in the documents first.
-- `questions` and `proposals`: ask everything still open **in one short message**,
-  numbered, each `question` as written (with its `options`; a `how` as a short hint), plus
-  the missing fields no document gives. A `checklist` is one question with its items as
-  bullets (usually "none": write the ticked keys as a list under its `key`, `[]` for none);
-  an `only_if` question goes under its items. Proposals go in the same message as "I'll
-  use: ...", one line each; "ok" confirms them all. Never use a proposal nobody confirmed.
-  Write the replies under each `key` (dates YYYY-MM-DD) and run pre-flight again; an
-  `error` says why an answer didn't fit, so ask only that again.
-- `files`: each attachment. When all of them fit in 256 KB (`pane_ok`) the run carries them;
-  when they don't, `pick` lists the files the architect chooses once, at the start of the run,
-  in a box shown on the portal's page (the job's folder or the files; each is checked against
-  the one pre-flight read, and the bytes go from their disk to the portal). Tell them so with
-  the questions. A file's `problem` says what the sportello would refuse: at Napoli's SUE (DD 501/2026) a file
-  not in PDF/A, not signed digitally (a .p7m or the PDF's own signature), or named with spaces,
-  accents or other signs makes the pratica irricevibile. Tell the architect which files and why.
-- `yours`: tell the architect now what they'll do at the end (at Napoli's SUE: the same file
-  rules for their own files, and the diritti paid before sending, to its postal account only).
-
-Only when it says `ready` go on. From here the architect hears nothing more from you until
-the review page, except the login.
-
-## 4. The run
-
-```sh
-python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json \
-  --answers answers.json --values run/values.json --out run --plain
-```
-
-`--plain` because in this version you wrote `run/values.json` from the intake's values and
-the architect's replies, so the values are in this conversation already, and Cowork's
-sandbox has no window to show a code in (`page` without it seals `run.js` under a code the
-person types, and refuses when it can't show one).
-
-1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser and
-   ask the architect to log in with SPID there (the login stays for later sessions). Wait
-   until the page is the portal's own, past the login.
-2. Run each script as **one** JavaScript call on that page, its text exactly as the file
-   has it: `run/check.js` first. It returns what to run next: `runner.js` and `steps.js`
-   only when the browser doesn't hold them already (never send one it doesn't name), then
-   `run.js`.
-3. A call ends after about 45 s, so `run.js` returns at once: call `await __pv.wait(40000)`
-   until `result` is `filled` or `stopped`.
-4. Save the report: the value of `JSON.stringify(__pv.last())`, written to
-   `run/report.json`. Then `python3 SKILL/review.py run` writes `run/review.html`.
-
-One run per login at a time: the portal keeps one pratica open per login, so a second run
-in another tab moves the first one's draft.
-
-**If it stops, recover it without the architect:**
-
-1. `__pv.last()` has `error` (what differed), `at` (the wizard screen, or the section and
-   field) and `snapshot`, the page with no value in it (each visible box's id, label and
-   whether it holds anything); `__pv.look()` gives it again. Use those and nothing else:
-   never read, screenshot or take the text of a page the run has filled, and never open
-   `run/review.html` yourself (show it). A failed read-back says `empty`, `different` or
-   `missing`, never what was typed.
-2. "0 fields with this label" usually means the section wasn't open yet, not that the label
-   changed: check `__pv.look()` before fixing anything.
-3. Work out the fix for that one field: its new `id` or `css`, or the `label` the page now
-   shows, and call `__pv.resume({fixes: [{"section": i, "field": k, "set": {"label": "..."}}]})`.
-   It carries on on the same draft and checks every section again at the end.
-4. A draft whose address expired (`/cmd/error`): `url = await __pv.reopen("<draft name>")`,
-   then `__pv.resume({url})`. The portal's own errors ("errore inatteso", a 503) are the same.
-5. Ask the architect only when the page wants a fact the documents don't hold: one plain
-   question, then resume. Never fill a guess.
-6. Budget: two fixes or about three minutes. Past that, stop, leave the draft saved, and
-   say plainly what's left. Tell them which fix you made, so it can be reported.
-
-## 5. Hand over
-
-Show `run/review.html`: what's left for them, every check, every value as it went on the
-portal. `__pv.open()` shows the draft. List their steps (`yours`) once more, in order. Then
-nothing else: they review, declare, sign, pay and send.
-
 ## Beyond this plugin
 
-When the architect wants more than this plugin does, tell them once, in one line, that
-they can write to liampmaher1996@gmail.com to have it built for their studio. For example:
+When they want more than this plugin does (their other tools, many jobs at once, another ente
+or comune, a pratica not covered yet), say once, in one line, after the hand-over or a refusal,
+that they can write to liampmaher1996@gmail.com to have it built. Give the address only: never
+write or send the email, never put the client's details in it.
 
-- linking it to their other tools (a gestionale, CRM, Drive or Dropbox, PEC, invoicing,
-  their client list);
-- many jobs at once, or the same pratica on a schedule;
-- another ente or comune (catasto, Genio Civile, ASL), or a pratica refused above as not
-  covered yet;
-- "can you also...?" about anything outside these steps.
+## Questions with no compilation
 
-Say it after the hand-over or after the refusal, never during pre-flight or a run, and at
-most once in a conversation. Give the address only: don't write or send the email, and
-never put the client's details in it.
-
-## Questions with no run
-
-"What does a CILA in the centro storico need?", "Is this a CILA or a SCIA?": answer from
-`get_procedure` (else `library/procedures`) and `library/rules`, naming the source each fact cites. Say when the
-library doesn't cover it rather than filling the gap from memory.
+"Cosa serve per una CILA in centro storico?", "È una CILA o una SCIA?": answer from
+`get_procedure` (else `library/procedures`) and `library/rules`, naming the source each fact
+cites. Say when the library doesn't cover it rather than filling the gap from memory.

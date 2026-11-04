@@ -47,8 +47,6 @@ class Portal:
 
 
 PORTAL = Portal()
-# Files the bench serves by link (/files/<name>), as an https host would for the real portal.
-LINKED = {}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -93,8 +91,6 @@ class Handler(BaseHTTPRequestHandler):
             self.send(b"<!doctype html><title>Accedi</title><p>Entra con SPID", "text/html")
         elif path == "/anteprima.pdf":
             self.send(b"%PDF-1.4\nl'anteprima del portale finto\n", "application/pdf")
-        elif path.startswith("/files/") and path[7:] in LINKED:
-            self.send(LINKED[path[7:]], "application/pdf")
         elif path == "/state":
             self.send(json.dumps({"fields": PORTAL.fields, "files": [f["name"] for f in PORTAL.files],
                                   "boxes": {f["box"]: f["name"] for f in PORTAL.files}}).encode())
@@ -132,9 +128,13 @@ def steps(base, start="/portal.html", **over):
             "sections": [sec, tecnici]}
 
 
-def fill(browser, base, st, answers, files_limit=None, resume=None, urls=None, sizes=None, held=None):
+FILES = "[data-pv=files] input[type=file]:not([webkitdirectory])"
+
+
+def fill(browser, base, st, answers, files_limit=None, resume=None, sizes=None, held=None, pick=None):
+    """pick: the files the person chooses in the page's box (a second run's are always picked)."""
     values = run.Values(answers, fields={"x:ruolo.tipo": "titolare"})
-    install, run_js = run.page_scripts(st, values, files_limit, resume=resume, urls=urls)
+    install, run_js = run.page_scripts(st, values, files_limit, resume=resume)
     if sizes is not None:
         sizes.append(len(run_js))
     page = browser.new_page()
@@ -142,6 +142,9 @@ def fill(browser, base, st, answers, files_limit=None, resume=None, urls=None, s
         page.goto(base + "/")
         page.evaluate(install)
         page.evaluate(run_js)
+        if pick:
+            page.wait_for_selector(FILES, state="attached")
+            page.set_input_files(FILES, [str(p) for p in pick])
         while (report := page.evaluate("__pv.wait(5000)"))["result"] == "running":
             pass
         if held is not None:  # what the report leaves out, as run.py reads it for the person
@@ -444,16 +447,33 @@ def main():
             dp = tmp / "modello-dp.pdf"
             dp.write_bytes(b"%PDF-1.4 dp\n")
             two = small | {"planimetria": str(dp)}
-            r = fill(browser, base, st, two, resume={"reopen": "PROVA NON INVIARE - seconda", "from": {"section": 0}})
+            r = fill(browser, base, st, two, resume={"reopen": "PROVA NON INVIARE - seconda", "from": {"section": 0}},
+                     pick=[tiny, dp])
             assert r["result"] == "filled", r
             boxes = [f["box"].rsplit(":", 1)[-1] for f in PORTAL.files]
             # Each its own new box: the second never replaces the first (an upload into a box that
             # holds a file replaces it, on the portal).
             assert boxes == ["liberi1_input", "liberi2_input", "liberi3_input"], boxes
             # The same run again (a retry after a stop): what is there already is left, nothing twice.
-            r = fill(browser, base, st, two, resume={"reopen": "PROVA NON INVIARE - seconda", "from": {"section": 0}})
+            r = fill(browser, base, st, two, resume={"reopen": "PROVA NON INVIARE - seconda", "from": {"section": 0}},
+                     pick=[tiny, dp])
             assert r["result"] == "filled" and len(PORTAL.files) == 3, (r, PORTAL.files)
         case("the second run reopens the draft by its name and takes a slot's next empty box", after_declarations_reopened)
+
+        def second_run_carries_nothing():
+            # One code a pratica: the second run's run.js carries none of the first run's values,
+            # isn't sealed, and names its files only (picked in the page, never in the conversation).
+            st = steps(base, start="/portal.html?screens=1")
+            st["sections"].append({"section": "Gestione degli allegati", "go": "Prosegui", "step": "Allega Documenti",
+                                   "fields": [{"id": "ricevuta_input", "kind": "file", "label": "Ricevuta ASL",
+                                               "value": "{{ask.ricevuta}}", "after_declarations": True}]})
+            second = run.phase(st, after=True)
+            values = run.Values(small, fields={"x:ruolo.tipo": "titolare"})
+            run_js = run.page_files(second, values, resume=run.reopening(second))["run.js"]
+            assert small["den"] not in run_js and small["impresa"] not in run_js, run_js
+            assert "startSealed" not in run_js and '"picked":true' in run_js, run_js
+            assert base64.b64encode(tiny.read_bytes()).decode() not in run_js, "a file's bytes in run.js"
+        case("the second run carries no value and no file's bytes, so it needs no code", second_run_carries_nothing)
 
         def twin_slots():
             # The screen's `theirs` names the signed-only "Relazione Paesaggistica Semplificata";
@@ -921,8 +941,6 @@ def main():
             assert first["result"] == "waiting" and "choose" in first["waiting"], first
             return page
 
-        FILES = "[data-pv=files] input[type=file]:not([webkitdirectory])"
-
         def picked_files():
             # Too big for run.js: the person picks the files in the page. One with the right name
             # and other bytes is refused, by name; the right ones attach byte-exact, and no
@@ -1000,37 +1018,8 @@ def main():
                 page.close()
         case("Stop in the files box ends the run before anything is filled", pick_stopped)
 
-        def by_link():
-            PORTAL.reset()
-            LINKED["planimetria.pdf"] = planimetria.read_bytes()
-            sizes = []
-            r = fill(browser, base, steps(base), answers, files_limit=run.PAGE_FILES_LIMIT, sizes=sizes,
-                     urls={str(planimetria): base + "/files/planimetria.pdf"})
-            assert r["result"] == "filled", r.get("error")
-            assert {f["name"]: f["sha256"] for f in PORTAL.files} == sha, PORTAL.files
-            assert sizes[0] < 10_000, f"run.js is {sizes[0]} bytes"
-        case("a big file by link: fetched in the page, checked, attached byte-exact; run.js stays small", by_link)
-
-        def other_bytes():
-            PORTAL.reset()
-            LINKED["planimetria.pdf"] = b"%PDF-1.4 not the person's file"
-            r = fill(browser, base, steps(base), answers, files_limit=run.PAGE_FILES_LIMIT,
-                     urls={str(planimetria): base + "/files/planimetria.pdf"})
-            stops(r, "the link served other bytes")
-            assert not PORTAL.files or all(f["name"] != "planimetria.pdf" for f in PORTAL.files), PORTAL.files
-        case("a link that serves other bytes stops the run before attaching", other_bytes)
-
         browser.close()
 
-    def not_https():
-        values = run.Values(answers, fields={"x:ruolo.tipo": "titolare"})
-        try:
-            run.page_scripts(steps(base), values, urls={str(planimetria): "http://example.com/p.pdf"})
-        except run.StepError as e:
-            assert "isn't https" in str(e), str(e)
-        else:
-            raise AssertionError("a plain-http link was accepted")
-    case("a file link must be https", not_https)
 
     def sealing():
         code = run.new_code()
