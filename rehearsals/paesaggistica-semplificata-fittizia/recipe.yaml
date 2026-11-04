@@ -12,16 +12,16 @@ scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUN
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
-  diritti_euro: {default: "401", why: "Line SUE 2 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 401 € for a landscape authorization asked on its own"}
+  diritti_euro: {default: "401", why: "Voce SUE 2 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 401 € per un'autorizzazione paesaggistica richiesta autonomamente"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   modello_dp: {default: "true"}
   descrizione: {default: "paesaggistica {{c:identity.last_name}}"}
-  oggetto: {question: "The works in one sentence (300 characters)"}
+  oggetto: {question: "I lavori in una frase (300 caratteri)"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "Sign and send (Firma e invio); keep the receipt"
+  - "Firmi e invii (Firma e invio); conservi la ricevuta"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
 rules:

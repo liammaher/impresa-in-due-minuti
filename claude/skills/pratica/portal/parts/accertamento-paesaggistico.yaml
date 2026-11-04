@@ -12,9 +12,9 @@ rules:
   handles: [napoli/comune/accertamento-compatibilita-paesaggistica]
 supports:
   - when: "{{ask.vincolo|is_art_134|not}}"
-    else: "The accertamento's form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose."
+    else: "Il modulo dell'accertamento indica solo l'art. 136 e l'art. 142: per un immobile tutelato dal solo piano paesaggistico (art. 134) deve scegliere una persona."
   - when: "{{ask.titolo|is_locatario|not}}"
-    else: "The accertamento's form offers only ownership, co-ownership, the condominio's administrator or another real right: a tenant isn't one."
+    else: "Il modulo dell'accertamento prevede solo proprietà, comproprietà, amministratore del condominio o altro diritto reale: un conduttore (inquilino) non rientra in nessuno di questi."
 # The case it adds to the main pratica's P6 answers (a null drops one): a property under art. 136
 # and 142, the client as owner by deed (the form takes no tenant), works done that altered it.
 answers:

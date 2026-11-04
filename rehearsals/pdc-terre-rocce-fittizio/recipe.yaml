@@ -12,14 +12,14 @@ asks:
   descrizione: {default: "PdC e terre e rocce {{c:identity.last_name}}"}
 # Its main pratica's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request"
-  - "The asseverazione's \"non interessa aree percorse dal fuoco\" (qualità terreni) is one choice with the soil statement on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md); state it in the relazione tecnica if the SUE wants it"
-  - "The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal's document on Allega documenti once the declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at least 15 days after sending"
-  - "When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017) on the SUE"
-  - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
-  - "Once the permesso is issued: collect it (paying the contributo, if due, as quadro f) says), name the structural designer and whoever else the permesso leaves to be named (the direttori dei lavori, the firm), and file the comunicazione di inizio lavori with the energy report and the structural filings"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma con la richiesta"
+  - "Nell'asseverazione, la voce \"non interessa aree percorse dal fuoco\" (qualità terreni) è sul portale un'unica scelta insieme alla dichiarazione sui terreni: Claude spunta la dichiarazione sui terreni e lascia non spuntata quella voce (un difetto del portale, docs/portal-defects.md); lo dichiari nella relazione tecnica se il SUE lo richiede"
+  - "La dichiarazione di utilizzo (Allegato 6 DPR 120/2017) è il documento del portale in Allega documenti dopo aver spuntato le dichiarazioni: la firma il produttore, Claude la allega nella seconda compilazione (dopo le dichiarazioni); lo scavo inizia almeno 15 giorni dopo l'invio"
+  - "Quando tutte le terre e rocce da scavo saranno state utilizzate, entro la validità della dichiarazione, presenti sul SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)"
+  - "Paghi il bollo come chiede il portale, poi firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Una volta rilasciato il permesso: lo ritiri (pagando il contributo, se dovuto, come indica il quadro f)), nomini il progettista strutturale e chiunque altro il permesso lasci da nominare (i direttori dei lavori, l'impresa), e presenti la comunicazione di inizio lavori con la relazione energetica e i depositi strutturali"
 answers:
   descrizione: PROVA NON INVIARE - PdC e terre e rocce P6
   oggetto: "Ristrutturazione edilizia con demolizione e ricostruzione di un edificio residenziale di tre piani con aumento di volumetria e un nuovo piano interrato, scavo di 2.500 m³ di terre portate a un altro cantiere come sottoprodotto, opera non soggetta a VIA (dati inventati per la prova)."

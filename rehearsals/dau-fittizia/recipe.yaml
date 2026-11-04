@@ -13,7 +13,7 @@ after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
   descrizione: {default: "DAU {{c:identity.last_name}}"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client's name"
-  - "No imposta di bollo to pay on this form: the portal's form for this pratica has no bollo section or slot"
-  - "Sign and send (Firma e invio); keep the receipt"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+  - "Nessuna imposta di bollo da pagare con questo modulo: il modulo del portale per questa pratica non ha una sezione né uno spazio per il bollo"
+  - "Firmi e invii (Firma e invio); conservi la ricevuta"

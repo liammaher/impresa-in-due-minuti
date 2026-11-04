@@ -28,9 +28,10 @@ the declarations, sign, pay and send.
   | review.html | la pagina di riepilogo |
   | unsupported, refused | non posso prepararla, perché … |
 
-- Questions come from the tools in English: **say them in Italian**, plainly, keeping their
-  meaning, options and any law they cite. Never show a field id or a role code (`c:`, `cr:`):
-  say "il committente", "la società committente", "il proprietario", "l'impresa esecutrice".
+- The tools' questions, refusals, defects and the tecnico's end steps (`yours`) are already in
+  Italian, addressed as Lei: **give them as written** (their options and the law they cite
+  too). Only the runner's own reasons for a stop (`error` in a report) are English: they are
+  for you to fix, never to quote. Never show a field id or a role code (`c:`, `cr:`).
 - A pratica's status: `available` = disponibile; `mapped` / `coming` = in arrivo (non ancora
   provata sul portale); `guide` = solo indicazioni; `paused` = sospesa (il portale è cambiato).
 
