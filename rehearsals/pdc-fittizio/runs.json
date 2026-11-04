@@ -268,5 +268,47 @@
   "answers": "answers-p6.json",
   "result": "filled",
   "seconds": 154.6
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-scavo-vvf.json",
+  "result": "filled",
+  "seconds": 269.7
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-stato-epoca-bonifica.json",
+  "result": "filled",
+  "seconds": 224.9
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-stato-prova.json",
+  "result": "filled",
+  "seconds": 238.9
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-stato-sanzioni-ricevuta.json",
+  "result": "stopped",
+  "seconds": 9.8
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-stato-sanzioni-estremi.json",
+  "result": "filled",
+  "seconds": 397.4
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-stato-tolleranze.json",
+  "result": "filled",
+  "seconds": 463.5
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-stato-sanzioni-ricevuta.json",
+  "result": "filled",
+  "seconds": 211.6
  }
 ]

@@ -81,7 +81,7 @@
  "vvf_valutazione": "false",
  "cemento_armato": "true",
  "sismica": "deposito",
- "scavo": "riutilizzo in sito",
+ "scavo": "sottoprodotti",
  "indagini_ambientali": "false",
  "urbanizzazione": "true",
  "scarichi": "nessuna autorizzazione",
@@ -119,5 +119,6 @@
  "zona_prg": "zona B",
  "prg_nta": "art. 33",
  "paes_interessa": "immobile",
- "relazione_paesaggistica": "rehearsals/scia-fittizia/files/relazione-paesaggistica.pdf"
+ "relazione_paesaggistica": "rehearsals/scia-fittizia/files/relazione-paesaggistica.pdf",
+ "scavo_piano_utilizzo": "false"
 }

@@ -324,6 +324,12 @@ FILTERS = Filters({
     "qualita_altro": lambda v: v.strip().capitalize(),
     "titolo_pratica": _titolo_pratica,
     "titolo_is_altro": lambda v: "true" if _titolo_pratica(v) == "altro" else "false",
+    # The asseverazione's materiali di risulta from the rules table's terre_rocce: soil leaving the
+    # site is a by-product, filed with the dichiarazione or the piano; otherwise nothing to declare
+    # (on-site reuse or waste are the person's to say). 2026-11-03: the terre e rocce combinations
+    # declared "nessuno" while filing a dichiarazione.
+    "scavo_proposto": lambda v: "sottoprodotti" if v.strip() in ("dichiarazione", "piano") else "nessuno",
+    "piano_proposto": lambda v: "true" if v.strip() == "piano" else "false",
     # A title usually held alone (a.1): the proposal pre-flight asks to confirm.
     "titolo_solo": lambda v: "true" if v.strip().lower() in ("proprietario", "usufruttuario", "amministratore di condominio") else "false",
     "destinazione": _destinazione,

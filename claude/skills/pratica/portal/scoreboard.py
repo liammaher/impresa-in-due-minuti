@@ -225,7 +225,10 @@ OPEN_BEYOND = [
     "(2026-11-02); works that do go with the accertamento of art. 167 in the same pratica, refused because the "
     "permesso's landscape quadro wants one of three procedures and none is that one (pdc-36-paesaggio, checked "
     "2026-11-02); new usable surface or volume is refused by law (art. 167 c. 4).",
-    "The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.",
+    "The landscape vincolo alone: art. 136 (with the semplificata) and art. 142 (with the ordinaria) filled on the "
+    "portal 2026-11-03, art. 134 (with the semplificata) on 2026-11-04; the ordinaria and the accertamento refuse art. 134 alone (their forms name only "
+    "136 and 142). The parere di esonero's two mapping refusals (several previous titles, several Allegato A items) "
+    "stay: the rules table refuses the parere in Napoli by law, so there is nothing to file them on.",
     "Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots "
     "may be missing (the catalogue notes this for the pratiche read on an empty draft). The \"Elaborati richiesti "
     "per la sanatoria\" slot is mapped by the title a filled draft showed, never crawled. The diritti come from the Comune's 2026 "

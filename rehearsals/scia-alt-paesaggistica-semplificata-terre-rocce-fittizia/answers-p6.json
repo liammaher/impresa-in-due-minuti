@@ -74,7 +74,7 @@
  "cemento_armato": "false",
  "sismica": "autorizzazione",
  "sismica_doc": "rehearsals/scia-fittizia/files/autorizzazione-sismica.pdf",
- "scavo": "nessuno",
+ "scavo": "sottoprodotti",
  "indagini_ambientali": "false",
  "urbanizzazione": "true",
  "scarichi": "nessuna autorizzazione",
@@ -110,5 +110,6 @@
  "allegato_b": [
   "paes_b1",
   "paes_b3"
- ]
+ ],
+ "scavo_piano_utilizzo": "false"
 }

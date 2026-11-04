@@ -7,6 +7,10 @@
 rules:
   handles: [napoli/comune/utilizzo-materiale-scavo-fuori-sito]
 # The case it adds to the main pratica's P6 answers: excavated soil leaving a small site as a
-# by-product. Each combination's recipe adds its works (`gen.py --answers`).
+# by-product. Each combination's recipe adds its works (`gen.py --answers`), and where the main form has
+# the asseverazione's materiali di risulta (SCIA, SCIA alternativa, permesso) states them as by-products
+# (the dictionary refuses a case where the two disagree). Works already done are a sanatoria, which the
+# rules table never asks this for (the dichiarazione comes before the excavation): the P6 CILA is a late
+# one, so the CILA combinations make it "da iniziare".
 answers:
   terre_rocce: dichiarazione
