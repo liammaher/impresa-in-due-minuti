@@ -509,10 +509,17 @@ FILTERS = Filters({
     "any": lambda v: "true" if any(truthy(x) for x in str(v).split("/")) else "false",
     # The cadastral units of a job: the client's immobile, immobile2 ... One unit when the vault
     # holds no second ({{c:immobile2.x|empty|single_unit}}); with one, no value (None): the count
-    # is asked, proposed from how many are filled (`filled_count`). `one_catasto`: the count, then
-    # each unit's categoria, all filled (Fabbricati) or all empty (Terreni) among the first n.
+    # is asked, proposed from how many are filled (`filled_count`). `two_groups` takes the count, then
+    # each unit's categoria (filled: Fabbricati, empty: Terreni), and is true when the
+    # first n change catasto at most once (Dati catastali's two groups, one per catasto).
+    # `differ`: two yes/no answers apart ({{ask.a#N,ask.a#P|differ}}: this unit starts a group).
     "single_unit": lambda v: "1" if truthy(v) else None,
     "filled_count": lambda v: str(sum(1 for x in str(v).split("/") if x.strip())),
+    "two_groups": lambda v: (lambda n, cats: "true" if sum(
+        bool(a.strip()) != bool(b.strip()) for a, b in zip(cats[:n], cats[1:n])) <= 1 else "false")(
+        int(float(v.split("/")[0] or 1)), _categorie(v.split("/", 1)[1] if "/" in v else "")),
+    "differ": lambda v: "true" if len({truthy(x) for x in str(v).split("/")}) > 1 else "false",
+    # Steps written before the second group (2026-11-04) still name it: all one catasto.
     "one_catasto": lambda v: (lambda n, cats: "true" if len({bool(c.strip()) for c in cats[:n]}) <= 1 else "false")(
         int(float(v.split("/")[0] or 1)), _categorie(v.split("/", 1)[1] if "/" in v else "")),
     "not": lambda v: "false" if truthy(v) else "true",
@@ -674,8 +681,11 @@ class Values:
 
 def nth_block(obj, n):
     """A template block's field or ask for its n-th repeat: #N is "" in the first and n after
-    (role a, a2; ask altro_tecnico_..., altro_tecnico2_...), #K is n always (comunicazione_3)."""
-    return json.loads(json.dumps(obj, ensure_ascii=False).replace("#N", str(n) if n > 1 else "").replace("#K", str(n)))
+    (role a, a2; ask altro_tecnico_..., altro_tecnico2_...), #K is n always (comunicazione_3), #P the
+    block before's #N (immobile#P: the unit before, to tell where a new catasto group starts)."""
+    prev = str(n - 1) if n > 2 else ""
+    return json.loads(json.dumps(obj, ensure_ascii=False).replace("#N", str(n) if n > 1 else "")
+                      .replace("#K", str(n)).replace("#P", prev))
 
 
 def leaves(w):
@@ -751,7 +761,11 @@ def expand(steps, values):
             # The first block it adds is there even when the count says none: it holds the
             # count's question (asked first), and its own `when` keeps it off the page.
             for n in range(each["from"], max(each["from"], count or 0) + 1):
-                fields.append({**{k: x for k, x in f.items() if k != "each"}, "block": n, "when": when(f, n)})
+                # The "+" itself may have a condition per block (`each.when`: the unit's "+" only
+                # within a group; the group's "+", a block field, where a new catasto starts).
+                own = nth_block(each["when"], n) if each.get("when") else ""
+                fields.append({**{k: x for k, x in f.items() if k != "each"}, "block": n,
+                               "when": " ".join(x for x in (when(f, n), own) if x)})
                 fields += [{**g, "block": n, "when": when(g, n)} for g in map(lambda b: nth_block(b, n), body)]
         out["sections"].append({**sec, "fields": fields})
     used = {r[4:] for _, t, _ in templates(out) for r, _ in refs_in(t) if r.startswith("ask.")}
@@ -2133,7 +2147,9 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=N
                      | ({"theirs": s["theirs"]} if "theirs" in s else {})
                      | ({"go": s["go"]} if "go" in s else {})
                      | ({"step": s["step"]} if "step" in s else {})
-                     | {"fields": [{k: f[k] for k in ("id", "css", "kind", "label", "anchor", "block", "nth", "describe", "if_present") if k in f}
+                     # Only these keys reach the page: a new one inpage.js reads goes here too
+                     # (`last` didn't, 2026-11-04, and the run ticked the first group's radio).
+                     | {"fields": [{k: f[k] for k in ("id", "css", "kind", "label", "anchor", "block", "nth", "last", "describe", "if_present") if k in f}
                                    for f in s["fields"]]}
                      for s in steps["sections"]],
         "forbidden": FORBIDDEN.pattern, "declarations": DECLARATIONS.pattern,

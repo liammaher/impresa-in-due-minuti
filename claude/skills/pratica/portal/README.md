@@ -260,15 +260,34 @@ that also cites a Comune page may only confirm a national one there.
   (`comunicazione_3`). gen.py writes the blocks on the page and one template (`block: "#N"` after an
   `add` with `each`); run.py's `expand` makes as many as the count says, and the pane keeps each
   count's steps apart (`procedure#hash`). Each "+" is the first after its list's last row (two in
-  one section, 2026-11-01), and the boxes after it go by label. "Alle dipendenze di" opens more
+  one section, 2026-11-01), and the boxes after it go by label; an `add` with `nth` presses a
+  later one (a list of lists: Dati catastali's group "+", below). The `each` may take `anchor`,
+  `add_when` (the "+" only where it holds, per block) and `free` block fields (found in the whole
+  section, not in the block); `#P` is the block before's `#N`. A field key inpage.js reads must
+  also be in the keys run.py sends the page (`page_bundle`'s list): `last` wasn't at first, and
+  the run ticked the first group's radio. A filter a steps file names stays in run.py once
+  renamed (`one_catasto`): plan_diff and a patch run main's steps through this run.py, and an
+  unknown filter reads as a missing value, never an error (test_gen checks every name, main's too). "Alle dipendenze di" opens more
   than the crawl saw: the firm's REA, seat and legale rappresentante (read 2026-10-31).
 - **Dati catastali is a list of lists** (read on a CILA draft 2026-11-04, cancelled unsaved): the
   NCEU/NCT radios once, then the units, each foglio, particella/mappale, subalterno and the rest
   under the same labels; the first "+" after a unit's boxes adds one more (with a "-" beside it),
   and the "+" below that adds another group with its own radios. The units are the client's
   `immobile`, `immobile2` ... (`unita_catastali`: unasked while the vault holds no `immobile2`,
-  else proposed from how many it holds); one group is mapped, so units in both catasti are
-  refused. A vault read must name each copy (`*:immobile2.*`: a scope matches a category whole).
+  else proposed from how many it holds), each with its own catasto (`catasto_terreni#N`, from its
+  categoria, asked when it has none). Units count across groups (unit n is the n-th "foglio"), so
+  one list of blocks fills both groups: within a catasto the unit's "+" (`add_when` on the
+  `each`), and where the catasto changes the group's "+" (a block field `kind: add`, `nth: 2`:
+  the second "+" after the last unit) and that group's radio (`free`, found in the whole section,
+  `last`: it sits above the group's first unit). The radios' long names ("Nuovo Catasto
+  Terreni") are only their titles: once the portal has checked the section (any "+" does) every
+  radio, the first group's too, is titled "Il valore è obbligatorio" and reads NCEU or NCT, so
+  the new group's is the page's last "NCT" (by its long name, none found: the first run stopped
+  there, 2026-11-04). The first group's keeps its crawl id, which the run trusts when its label
+  has gone (`loose` in the report). Filled on the portal 2026-11-04: a flat and its garden plot. `#P` in a block is the
+  block before's `#N`. A third group (back to the first catasto) is refused: store the units of
+  one catasto one after the other. A vault read must name each copy (`*:immobile2.*`: a scope
+  matches a category whole).
   The crawl's own "plus" pressed the last "+", the group's, which is why its `adds` looked odd
   (crawl.js now notes how many "+" it saw, `of`). By label "subalterno" the first run typed the
   subalterno into the particella box and left its own empty: the runner reads a box's first three
@@ -278,7 +297,8 @@ that also cites a Comune page may only confirm a national one there.
   its `label` still the crawl's (gen.py accounts for the box by it). The stop read "not kept:
   particella/mappale different, subalterno different": two neighbouring boxes "different" after
   Salva means one label found its neighbour; open the draft and read the boxes' values. The fake
-  portal's `?catasto=1` (test_inpage) keeps both: by title it fills, by label it doesn't.
+  portal's `?catasto=1` (test_inpage) keeps both: by title it fills, by label it doesn't; and a
+  flat then two plots: the group's "+", its own radio, then the second group's own unit "+".
 - **A choice's revealed boxes may repeat labels above them** (an employer's "Via, Piazza", "N.",
   "Cognome"): crawl.js counts reveals per label since 2026-10-31; crawls before then left those
   out, so a run can still find required boxes there (recrawl a section to see them).
@@ -618,6 +638,8 @@ sections, check.js names `steps/<name>.patch.js` (run.py `patch_script`): only t
 few KB in place of 40-90, the rest taken from the pane's copy when it is main's; it stores the
 result only if its sha256 is the new file's, else it says to send the full `steps/<name>.js`
 (2026-11-04: the CILA's and the permesso's Dati catastali went this way, by hand, the first time).
+The patch is main's steps run through this run.py, so none is written when they no longer plan
+here (a filter they name was renamed, a case they refused): then the whole file, or the bundle.
 A stopped one: rerun it alone, unchanged, before
 calling it a bug (the portal is sometimes slow); twice the same is a bug. 2026-10-29: 20 of
 23 on the first pass, 23 of 23 once the runner waited for each section to open.

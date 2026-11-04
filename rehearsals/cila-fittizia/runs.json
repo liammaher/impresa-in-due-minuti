@@ -376,5 +376,12 @@
   "result": "filled",
   "seconds": 95.6,
   "browser": "pane"
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-catasti-misti.json",
+  "result": "filled",
+  "seconds": 26.2,
+  "browser": "pane"
  }
 ]

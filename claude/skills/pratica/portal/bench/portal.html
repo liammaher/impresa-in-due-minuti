@@ -26,7 +26,7 @@
      refuses a made-up digital signature; ?screens=1 shows a screen title ("PAGAMENTO ONERI") until
      the menu's "Allega Documenti" step is pressed, as a draft reopened from Pratiche in bozza;
      ?via=1 adds the location's street lookup, listing streets of every type (VIA, VICO, CUPA);
-     ?catasto=1 adds Dati catastali's units, each "+" a unit, then the group's "+". -->
+     ?catasto=1 adds Dati catastali's groups and units: each group's "+" a unit, the last "+" a group. -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -217,39 +217,51 @@ if (location.search.includes("liste=1")) {
     div.append(plus);
   }
 }
-// ?catasto=1: Dati catastali as the SUE draws it (read 2026-11-04): per unit, a row of headers
-// (foglio, particella/mappale, subalterno) over a row of boxes, each box titled (the subalterno's
-// title is "se non presente indicare il numero 0") with the catasto's warning in its cell; the
-// unit's "+" first, then the group's "+", which adds a group (here a row of its own, no foglio).
+// ?catasto=1: Dati catastali as the SUE draws it (read 2026-11-04): groups, each its NCEU/NCT
+// radios and its units; per unit, a row of headers (foglio, particella/mappale, subalterno) over a
+// row of boxes, each box titled (the subalterno's title is "se non presente indicare il numero 0")
+// with the catasto's warning in its cell; after each group's units its own "+", and after the
+// last group the group's "+", which adds a group with one unit. Units are numbered across groups.
 // By label, "subalterno" is as near the particella's box as its own: a run typed it there.
-let addUnit = null;
+let addUnit = null, addGroup = null;
 if (location.search.includes("catasto=1")) {
   const div = document.createElement("div");
   div.id = "form:r7c1:dynaForm:catasto";
   document.querySelector("#tecnici + table").after(div);
-  const t = document.createElement("table");
-  div.append(t);
-  let n = 0;
-  addUnit = () => {
-    n += 1;
-    const head = t.insertRow(), row = t.insertRow();
-    head.innerHTML = ["foglio", "particella/mappale", "subalterno"].map((l) => `<td><label class="labelDynaFormControl">${l}</label></td>`).join("");
-    row.innerHTML = [["fog", "foglio"], ["par", "particella/mappale"], ["sub", "se non presente indicare il numero 0"]].map(([k, title]) =>
-      `<td><input type="text" title="${title}" id="form:r7c1:dynaForm:cat${n}_${k}"><span>Attenzione! Dati catastali sconosciuti</span></td>`).join("");
-  };
-  addUnit();
-  const unitPlus = document.createElement("button");
-  unitPlus.type = "button";
-  unitPlus.textContent = "+";
-  unitPlus.addEventListener("click", addUnit);
+  let n = 0, groups = 0;
+  const tables = [];
   const groupPlus = document.createElement("button");
   groupPlus.type = "button";
   groupPlus.textContent = "+";
-  groupPlus.addEventListener("click", () => {
-    const g = t.insertRow();
-    g.innerHTML = '<td><label class="labelDynaFormControl">Nuovo Catasto Terreni</label></td><td><input type="text" id="form:r9c1:dynaForm:gruppo_txt"></td>';
-  });
-  div.append(unitPlus, groupPlus);
+  addUnit = (g) => {
+    n += 1;
+    const t = tables[g - 1], head = t.insertRow(), row = t.insertRow();
+    head.innerHTML = ["foglio", "particella/mappale", "subalterno"].map((l) => `<td><label class="labelDynaFormControl">${l}</label></td>`).join("");
+    row.innerHTML = [["fog", "foglio"], ["par", "particella/mappale"], ["sub", "se non presente indicare il numero 0"]].map(([k, title]) =>
+      `<td><input type="text" title="${title}" id="form:r7c1:dynaForm:cat${n}g${g}_${k}"><span>Attenzione! Dati catastali sconosciuti</span></td>`).join("");
+  };
+  addGroup = () => {
+    groups += 1;
+    const g = groups, t = document.createElement("table");
+    tables.push(t);
+    const radios = t.insertRow();
+    // As the portal draws them: the long name only as the cell's title, the cell reading NCEU or
+    // NCT; once the section is checked (any "+"), every title is "Il valore è obbligatorio".
+    radios.innerHTML = [["nceu", "NCEU", "Nuovo Catasto Edilizio Urbano"], ["nct", "NCT", "Nuovo Catasto Terreni"]].map(([k, l, title]) =>
+      `<td title="${title}"><input type="radio" name="catg${g}" id="form:r7c1:dynaForm:catg${g}_${k}"> ${l}</td>`).join("");
+    const plus = document.createElement("button");
+    plus.type = "button";
+    plus.textContent = "+";
+    plus.addEventListener("click", () => addUnit(g));
+    groupPlus.before(t, plus);
+    addUnit(g);
+  };
+  div.addEventListener("click", (e) => {
+    if (e.target.textContent === "+") div.querySelectorAll("td[title]").forEach((td) => { td.title = "Il valore è obbligatorio"; });
+  }, true);
+  div.append(groupPlus);
+  groupPlus.addEventListener("click", addGroup);
+  addGroup();
 }
 // ?via=1: the location's street lookup ("Via, Viale, Piazza"), a PrimeFaces autocomplete:
 // search() lists the comune's streets holding the word, each starting with its type (VIA, VICO,
@@ -282,10 +294,13 @@ fetch("/state").then((r) => r.json()).then((st) => {
   for (const id of Object.keys(st.fields)) {
     const m = id.match(/dynaForm:(com|atto)(\d+)_txt$/);
     while (m && liste[m[1]] && !document.getElementById(id)) liste[m[1]]();
-    while (/dynaForm:cat\d+_/.test(id) && addUnit && !document.getElementById(id)) addUnit();
+    const cat = /dynaForm:cat\d+g(\d+)_/.exec(id);
+    while (cat && addUnit && !document.getElementById(id)) {
+      if (!document.querySelector(`[id$="catg${cat[1]}_nceu"]`)) addGroup(); else addUnit(+cat[1]);
+    }
   }
   for (const t of texts()) t.value = st.fields[t.id] || "";
-  for (const c of document.querySelectorAll("input[type=checkbox]")) c.checked = st.fields[c.id] === "on";
+  for (const c of document.querySelectorAll("input[type=checkbox], input[type=radio]")) c.checked = st.fields[c.id] === "on";
   st.files.forEach(list);
   // As the portal does, a slot's cell names the file in it, each "+" box a file went in drawn again.
   for (const [id, name] of Object.entries(st.boxes || {})) {
@@ -353,7 +368,7 @@ if (location.search.includes("screens=1")) {
 for (const box of document.querySelectorAll("input[type=file]")) if (!/liberi\d+_input$/.test(box.id)) sends(box);
 document.getElementById("salva").addEventListener("click", () => {
   const fields = Object.fromEntries(texts().map((t) => [t.id, t.value]));
-  for (const c of document.querySelectorAll("input[type=checkbox]")) if (c.checked) fields[c.id] = "on";
+  for (const c of document.querySelectorAll("input[type=checkbox], input[type=radio]")) if (c.checked) fields[c.id] = "on";
   fetch("/save", { method: "POST", body: JSON.stringify({ fields }) })
     .then(() => { document.getElementById("saved").textContent = "Dati salvati"; });
 });

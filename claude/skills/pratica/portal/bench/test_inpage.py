@@ -321,13 +321,36 @@ def main():
                 return fill(browser, base, st, answers | vals)
             r = run_with("se non presente indicare il numero 0")
             assert r["result"] == "filled", r.get("error")
-            got = {k.split(":")[-1]: v for k, v in PORTAL.fields.items() if ":dynaForm:cat" in k}
-            assert got == {"cat1_fog": "12", "cat1_par": "345", "cat1_sub": "7", "cat2_fog": "12", "cat2_par": "345", "cat2_sub": "8"}, got
-            assert not any("gruppo" in k for k in PORTAL.fields), "pressed the group's +"
+            got = {k.split(":")[-1]: v for k, v in PORTAL.fields.items() if ":dynaForm:cat" in k and "_" in k and v != "on"}
+            assert got == {"cat1g1_fog": "12", "cat1g1_par": "345", "cat1g1_sub": "7", "cat2g1_fog": "12", "cat2g1_par": "345", "cat2g1_sub": "8"}, got
+            assert not any("catg2" in k for k in PORTAL.fields), "pressed the group's +"
             # By the label the crawl gives it, the subalterno lands in another box: never filled.
             r = run_with("subalterno")
             assert r["result"] != "filled", "the subalterno by label filled: the tie is gone, the title may not be needed"
-        case("cadastral units: each unit by its own \"+\", the subalterno by its title (by label it lands elsewhere)", cadastral_units)
+
+            # A flat, then two plots: the group's "+" (the second after the last unit) where the
+            # catasto changes, the new group's own NCT (the page's last: every radio reads NCEU or
+            # NCT once a "+" has checked the section), and the
+            # third unit by the first "+" after the second, which is now the second group's own.
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?catasto=1")
+            box = lambda label, n, v: {"kind": "text", "label": label, "anchor": "foglio", "block": n, "value": v}
+            st["sections"][1]["fields"] += [
+                # By id, as the steps file has it: after a "+" its long name is gone from the page.
+                {"id": "catg1_nceu", "kind": "radio", "label": "Nuovo Catasto Edilizio Urbano"},
+                box("foglio", 1, "12"), box("particella/mappale", 1, "678"), box("se non presente indicare il numero 0", 1, "3"),
+                {"kind": "add", "anchor": "foglio", "block": 2, "nth": 2},
+                {"kind": "radio", "label": "NCT", "last": True},
+                box("foglio", 2, "12"), box("particella/mappale", 2, "679"),
+                {"kind": "add", "anchor": "foglio", "block": 3},
+                box("foglio", 3, "12"), box("particella/mappale", 3, "680")]
+            r = fill(browser, base, st, answers)
+            assert r["result"] == "filled", r.get("error")
+            got = {k.split(":")[-1]: v for k, v in PORTAL.fields.items() if ":dynaForm:cat" in k}
+            assert got == {"catg1_nceu": "on", "cat1g1_fog": "12", "cat1g1_par": "678", "cat1g1_sub": "3", "catg2_nct": "on",
+                           "cat2g2_fog": "12", "cat2g2_par": "679", "cat2g2_sub": "", "cat3g2_fog": "12", "cat3g2_par": "680",
+                           "cat3g2_sub": ""}, got
+        case("cadastral units: each unit by its own \"+\", a new catasto by the group's, the subalterno by its title", cadastral_units)
 
         def crawl_reveals():
             # A choice that opens an employer's block repeating labels above it (Cognome, Via):

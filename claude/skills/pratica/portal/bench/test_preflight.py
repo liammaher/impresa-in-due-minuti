@@ -683,7 +683,8 @@ def catasto_terreni():
 def cadastral_units():
     """Several units (the client's immobile, immobile2 ...): one unit unasked, as before; a second
     in the vault proposes the count, never assumes it; each unit after the first takes its own
-    block by the unit's "+", the radios once; units in both catasti are refused."""
+    block by the unit's "+", the radios once; a unit in the other catasto by the group's "+" and
+    that group's own radio; a third group refused."""
     d = HERE.parents[4] / "rehearsals" / "cila-fittizia"
     steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
     fields = dict(json.loads((d / "fixture-p6.json").read_text())["fields"])
@@ -693,7 +694,7 @@ def cadastral_units():
         def catastali(a, flds=fields):
             v = values(a, flds, steps)
             sec = next(s for s in run.expand(steps, v)["sections"] if s["section"] == "Dati catastali")
-            return [(f["kind"], f.get("label"), v.render(f["value"]) if "value" in f else None, f.get("block"))
+            return [(f["kind"], f.get("label"), v.render(f["value"]) if "value" in f else f.get("nth"), f.get("block"))
                     for f in sec["fields"] if run.truthy(v.render(f.get("when", "true")) or "")]
         one = json.loads((d / "answers-proprietario.json").read_text())
         r = run.preflight(steps, values(one, fields, steps), made_up=True)
@@ -707,12 +708,25 @@ def cadastral_units():
         assert run.preflight(steps, values(two, fields, steps), made_up=True)["ready"]
         rows = catastali(two)
         assert [x[1] for x in rows].count("Nuovo Catasto Edilizio Urbano") == 1, rows
-        assert ("add", None, None, 2) in rows and ("text", "se non presente indicare il numero 0", "8", 2) in rows, rows
+        assert ("add", None, None, 2) in rows and ("add", None, 2, 2) not in rows, rows
+        assert ("text", "se non presente indicare il numero 0", "8", 2) in rows, rows
         assert ("text", "se non presente indicare il numero 0", "7", 1) in rows, rows
-        # The second unit a plot, the first a flat: the section's other group isn't mapped.
-        mixed = {k: x for k, x in fields.items() if k != "gemma:immobile2.catasto_categoria"}
-        r = run.preflight(steps, values(two, mixed, steps), made_up=True)
-        assert any("both catasti" in u for u in r["unsupported"]), r["unsupported"]
+        # A flat, then its garden plot: the group's "+" (the second), its Catasto Terreni radio
+        # (the page's last NCT), the plot's foglio and particella, no subalterno or categoria.
+        mixed = json.loads((d / "answers-catasti-misti.json").read_text())
+        assert run.preflight(steps, values(mixed, fields, steps), made_up=True)["ready"]
+        rows = catastali(mixed)
+        assert ("add", None, 2, 2) in rows and ("add", None, None, 2) not in rows, rows
+        assert ("radio", "NCT", None, 2) in rows, rows
+        assert [x for x in rows if x[3] == 2 and x[0] == "text"] == [
+            ("text", "foglio", "12", 2), ("text", "particella/mappale", "679", 2), ("text", "sezione Censuaria", None, 2)], rows
+        # Asked, not assumed: a unit with no categoria in the vault may be a flat missing it.
+        r = run.preflight(steps, values({k: x for k, x in mixed.items() if k != "catasto_terreni2"}, fields, steps), made_up=True)
+        assert "catasto_terreni2" in [q["key"] for q in r["questions"]], r["questions"]
+        # A flat, a plot, a flat again: three groups, refused.
+        three = {**fields, **{k.replace("immobile.", "immobile3."): x for k, x in fields.items() if k.startswith("piero:immobile.")}}
+        r = run.preflight(steps, values(mixed | {"unita_catastali": 3}, three, steps), made_up=True)
+        assert any("one catasto to the other more than once" in u for u in r["unsupported"]), r["unsupported"]
     finally:
         os.chdir(here)
 

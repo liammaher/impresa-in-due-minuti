@@ -487,20 +487,25 @@ def fill(entry, as_name, c, recipe, name):
     # `add` with `each`, then the block's fields with `block: "#N"`). `#N` in a field is "" in
     # the first block, then "2", "3" (role a, a2, a3), `#K` the block's number always; each block
     # after the first waits for its count. `when` is every block's; a field keeps its own after it.
+    # `add_when`: the "+" pressed only where it holds, per block (#N, #P: this unit, the one
+    # before). `free` on a block field: found in the whole section, not inside its block (a
+    # group's own radios, above its first unit), by label and `nth` as the page shows it.
     def each(e):
-        anchor = e.get("anchor", e["block"][0]["label"])
+        anchor = e.get("anchor") or e["block"][0]["label"]
         first, on_page = e.get("first", 1), e.get("on_page", 1)
         joined = lambda *ws: {"when": " ".join(w for w in ws if w)} if any(ws) else {}
+        placed = lambda b, block: ({"on_page": True, "by_label": True, "block": block} if b.get("free") else {"anchor": anchor, "block": block})
+        bare = lambda b: {k: v for k, v in b.items() if k not in ("when", "free")}
         out = []
         for n in range(first, on_page + 1):
             gate = e["count"][:-2] + f"|atleast_{n}}}}}" if n > 1 else ""
             for b in e["block"]:
                 g = run.nth_block(b, n)
-                out.append({**g, "anchor": anchor, "block": n, **joined(e.get("when", ""), gate, g.pop("when", ""))})
-        out.append({"kind": "add", "anchor": anchor, "block": "#N", "each": {"count": e["count"], "from": max(first, on_page + 1)},
+                out.append({**bare(g), **placed(b, n), **joined(e.get("when", ""), gate, g.get("when", ""))})
+        out.append({"kind": "add", "anchor": anchor, "block": "#N",
+                    "each": {"count": e["count"], "from": max(first, on_page + 1), **({"when": e["add_when"]} if e.get("add_when") else {})},
                     **joined(e.get("when", ""))})
-        out += [{**{k: v for k, v in b.items() if k != "when"}, "anchor": anchor, "block": "#N",
-                 **joined(e.get("when", ""), b.get("when", ""))} for b in e["block"]]
+        out += [{**bare(b), **placed(b, "#N"), **joined(e.get("when", ""), b.get("when", ""))} for b in e["block"]]
         return out
     dfields = [g for d in entry.get("fields", []) for g in (each(d) if d["kind"] == "each" else [d])]
     # `branches`: conditions of a choice made first that renumbers every box below it (a
@@ -941,7 +946,9 @@ def generate(recipe, base=HERE):
     for t in ASKED.findall(json.dumps([recipe.get("yours"), supports, recipe.get("rules"), scelta_when])):
         asks_used.add(t)
     # The dictionary's questions, the recipe's wording over them; a question only this pratica
-    # asks (one `supports` or `rules` reads) is the recipe's alone.
+    # asks (one `supports` or `rules` reads) is the recipe's alone. A block's #P (the block
+    # before) is the same template question as its #N.
+    asks_used = {u.replace("#P", "#N") for u in asks_used}
     asks = {}
     for k, v in list(dictionary["asks"].items()) + [(k, {}) for k in recipe.get("asks", {}) if k not in dictionary["asks"]]:
         # A "+" block's question: one for each block written out (on the page), then the
