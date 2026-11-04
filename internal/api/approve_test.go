@@ -88,7 +88,7 @@ func TestApprove_ScopedGrantIsWhatThePromptSaid(t *testing.T) {
 	if got["scope"] != "identity.full_name" || got["access"] != "read" {
 		t.Fatalf("echo: %v", got)
 	}
-	want := "pvault wants to read identity.full_name from your vault for 2 minutes."
+	want := "Portali chiede di leggere dal suo archivio, per 2 minuti: il campo identity.full_name."
 	if msgs := f.asked(); len(msgs) != 1 || msgs[0] != want {
 		t.Fatalf("prompt %q, want %q", msgs, want)
 	}
@@ -116,7 +116,7 @@ func TestApprove_FullAccess(t *testing.T) {
 	if w.Code != 200 {
 		t.Fatalf("%d %s", w.Code, w.Body)
 	}
-	want := "pvault wants to get full access to your vault, including settings and agent tokens, for 2 minutes."
+	want := "Portali chiede di avere accesso completo al suo archivio, impostazioni e chiavi degli agenti comprese, per 2 minuti."
 	if msgs := f.asked(); len(msgs) != 1 || msgs[0] != want {
 		t.Fatalf("prompt %q", msgs)
 	}
@@ -132,7 +132,7 @@ func TestApprove_AppendAndTTLAreWorded(t *testing.T) {
 	if w.Code != 200 {
 		t.Fatalf("%d %s", w.Code, w.Body)
 	}
-	want := "pvault wants to read and add new entries to all of leo's cie fields and documents in your vault for 5 minutes."
+	want := "Portali chiede di leggere e completare, senza cambiare ciò che c'è, nel suo archivio, per 5 minuti: i dati di carta d'identità di leo (documenti compresi)."
 	if msgs := f.asked(); msgs[0] != want {
 		t.Fatalf("prompt %q", msgs[0])
 	}
@@ -262,7 +262,7 @@ func TestApprove_SignReview(t *testing.T) {
 	if got["sign"] != info.ID {
 		t.Fatalf("echo: %v", got)
 	}
-	want := "pvault wants to " + vault.SignPrompt("your vault", info.Name, info.Pages, info.SHA256[:8], info.Requester, vault.SignGrantTTL) + "."
+	want := "Portali chiede di " + vault.SignPrompt("suo archivio", info.Name, info.Pages, info.SHA256[:8], info.Requester, vault.SignGrantTTL) + "."
 	if msgs := f.asked(); len(msgs) != 1 || msgs[0] != want || !strings.Contains(msgs[0], "mod-1.pdf") {
 		t.Fatalf("prompt %q, want %q", msgs, want)
 	}

@@ -23,6 +23,7 @@ type promptFixture struct {
 	}
 	RefusedScopes  []string
 	AcceptedScopes []string
+	CategoryLabels map[string]string
 }
 
 func loadPromptFixture(t *testing.T) promptFixture {
@@ -64,6 +65,25 @@ func TestGrantPrompt_Fixture(t *testing.T) {
 	}
 }
 
+// Each schema category has its Italian name in prompts, the same the Touch ID
+// helper uses (prompts.json categoryLabels).
+func TestPromptCategories_Fixture(t *testing.T) {
+	want := loadPromptFixture(t).CategoryLabels
+	if len(want) != len(PromptCategories) {
+		t.Fatalf("prompts.json names %d categories, PromptCategories %d", len(want), len(PromptCategories))
+	}
+	for c, l := range want {
+		if PromptCategories[c] != l {
+			t.Errorf("%s: PromptCategories says %q, prompts.json %q", c, PromptCategories[c], l)
+		}
+	}
+	for _, c := range RecommendedSchema.Categories {
+		if _, ok := PromptCategories[c.Name]; !ok {
+			t.Errorf("schema category %s has no name in prompts", c.Name)
+		}
+	}
+}
+
 func TestSignPrompt_Fixture(t *testing.T) {
 	for _, c := range loadPromptFixture(t).Signs {
 		if got := SignPrompt(fixtureLabel(c.Vault), c.Name, c.Pages, c.Hash8, c.Requester, SignGrantTTL); got != c.Want {
@@ -101,7 +121,7 @@ func TestGrantPrompt_RefusesWhatItCantWord(t *testing.T) {
 		{",", ""},
 		{"cie.*\n", "read"},
 	} {
-		if got, err := GrantPrompt("your vault", c.scope, c.access, time.Minute); err == nil {
+		if got, err := GrantPrompt("suo archivio", c.scope, c.access, time.Minute); err == nil {
 			t.Errorf("%q %q accepted: %q", c.scope, c.access, got)
 		}
 	}
@@ -110,12 +130,12 @@ func TestGrantPrompt_RefusesWhatItCantWord(t *testing.T) {
 // Durations are never understated, whatever the precision.
 func TestPromptDuration_RoundsUp(t *testing.T) {
 	for d, want := range map[time.Duration]string{
-		500 * time.Millisecond: "1 second",
-		59*time.Second + 1:     "1 minute",
-		61 * time.Second:       "2 minutes",
-		10 * time.Minute:       "10 minutes",
-		10*time.Minute + 1:     "11 minutes",
-		time.Hour:              "60 minutes",
+		500 * time.Millisecond: "1 secondo",
+		59*time.Second + 1:     "1 minuto",
+		61 * time.Second:       "2 minuti",
+		10 * time.Minute:       "10 minuti",
+		10*time.Minute + 1:     "11 minuti",
+		time.Hour:              "60 minuti",
 	} {
 		if got := promptDuration(d); got != want {
 			t.Errorf("%v: got %q, want %q", d, got, want)

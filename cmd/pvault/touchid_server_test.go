@@ -128,7 +128,7 @@ func TestTouchIDHelper_SignGrant(t *testing.T) {
 	if err != nil {
 		t.Fatalf("sign: %v\n%s", err, out)
 	}
-	if want := `would ask to review and sign "mod-1.pdf" (1 page, hash ` + info.SHA256[:8] + `), filed by session`; !strings.Contains(out, want) {
+	if want := `would ask to rivedere e firmare «mod-1.pdf» (1 pagina, codice ` + info.SHA256[:8] + `), inviato da session`; !strings.Contains(out, want) {
 		t.Fatalf("the prompt wasn't worded from the request, want %q in:\n%s", want, out)
 	}
 	lines := strings.Split(strings.TrimSpace(out), "\n")

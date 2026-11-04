@@ -95,6 +95,35 @@ func TestTouchIDHelper_PromptWording(t *testing.T) {
 	}
 }
 
+// The helper names each category as the vault does (prompts.json categoryLabels).
+func TestTouchIDHelper_CategoryLabels(t *testing.T) {
+	helper := buildDebugHelper(t)
+	out, err := describe(t, helper, "", "describe-categories")
+	if err != nil {
+		t.Fatalf("%v\n%s", err, out)
+	}
+	var got map[string]string
+	if err := json.Unmarshal([]byte(out), &got); err != nil {
+		t.Fatalf("%v: %s", err, out)
+	}
+	data, err := os.ReadFile(filepath.Join("..", "..", "internal", "vault", "testdata", "prompts.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var f struct{ CategoryLabels map[string]string }
+	if err := json.Unmarshal(data, &f); err != nil {
+		t.Fatal(err)
+	}
+	if len(got) != len(f.CategoryLabels) {
+		t.Fatalf("the helper names %d categories, prompts.json %d", len(got), len(f.CategoryLabels))
+	}
+	for c, l := range f.CategoryLabels {
+		if got[c] != l {
+			t.Errorf("%s: the helper says %q, prompts.json %q", c, got[c], l)
+		}
+	}
+}
+
 // A signing review's prompt says it signs, names the document as the vault
 // reports it (made harmless), and never understates what the grant does.
 func TestTouchIDHelper_SignPromptWording(t *testing.T) {
