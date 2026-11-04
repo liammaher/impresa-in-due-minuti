@@ -22,6 +22,10 @@ declarations, payment, signing and sending.
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-11-03 | pane | P6, from scratch, `bench/rerun.py` bundle: **filled** in 91 s, every value read back on a fresh load; the portal's usual warnings on made-up data (the PEC, the address, the land register) |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-11-03 | pane | `answers-p6.json` | P6, from scratch, `bench/rerun.py` bundle: **filled** in 91 s, every value read back on a fresh load; the portal's usual warnings on made-up data (the PEC, the address, the land register) |
+
+<!-- /runs -->

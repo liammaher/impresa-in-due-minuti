@@ -28,9 +28,13 @@ labels ("di essere Responsabile tecnico?"); wording them for a person is still t
 
 ## Runs
 
-| Date | Browser | Login → draft | Result |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
 |---|---|---|---|
-| 2026-10-28 | pane | 50.8 s (wizard 9.8, 10 sections, fresh load 7.3), then the attachments screen | First run, no stop: 53 values, every one read back on a fresh load |
+| 2026-10-28 | pane |  | First run, no stop: 53 values, every one read back on a fresh load; Login → draft: 50.8 s (wizard 9.8, 10 sections, fresh load 7.3), then the attachments screen |
+
+<!-- /runs -->
 
 Every attachments slot (planimetria quotata, relazione descrittiva, the fee receipt) takes
 only signed files (`.p7m`): the person's. `gen.py` now leaves every signed-only slot to the

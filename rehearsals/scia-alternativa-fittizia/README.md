@@ -55,6 +55,8 @@ box opens. Ready offline, **not yet run on the portal**:
 
 ## Runs
 
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
 | Date | Browser | Case | Result |
 |---|---|---|---|
 | 2026-10-29 | pane | P6 (plain), first legs on one draft | sections 0-19 filled first time; stopped on the description box (named by its counter: now by "e che consistono in"), then on "specificare il tipo di intervento" (the 4th tipologia's: left), then every asseverazione filled and read back on a fresh load (32 s); stopped on the attachments screen's required slots (read and recorded in the crawl, the energy report mapped) |
@@ -63,11 +65,44 @@ box opens. Ready offline, **not yet run on the portal**:
 | 2026-10-30 | pane | asseverazione tolerances (`answers-tolleranze`: 1-bis at 6% and c. 2, under 60 m², zone 2, not structural), `bench/rerun.py` bundle | **filled** in 172 s, read back on a fresh load (27 s), nothing moved or loose (no sanatoria question on this page) |
 | 2026-10-30 | pane | structural tolerance of minor relevance (`answers-tolleranze-minore`), then relevant with the Genio Civile's authorization and its "Autorizzazione sismica" slot (`answers-tolleranze-autorizzazione`) | **filled** both (155 s, 187 s), read back on a fresh load, nothing moved or loose |
 | 2026-10-30 | pane | systems needing a project (`answers-impianti`: six systems, each project in its own slot), `bench/rerun.py` bundle | **filled** in 188 s, read back on a fresh load (28 s), nothing moved or loose |
+| 2026-10-30 | pane | `answers-impianti.json` | **filled** |
+| 2026-10-30 | pane | `answers-tolleranze-autorizzazione.json` | **filled** |
+| 2026-10-30 | pane | `answers-tolleranze-minore.json` | **filled** |
+| 2026-10-30 | pane | `answers-tolleranze.json` | **filled** |
 | 2026-10-31 | pane | `answers-condominio-strutture` with the sewer connection's slot ("Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura", read on the permesso) mapped | **filled** in 148 s, read back on a fresh load (23 s), nothing moved or loose |
 | 2026-10-31 | pane | the planning instruments (`answers-strumenti`), `bench/rerun.py` bundle | **filled** in 151 s, nothing moved or loose |
-| 2026-10-31, 11-01 | pane | the never-run cases, `bench/rerun.py` bundles: P6, `rir-fuori-area`, `vincoli` **filled**; `variante-sismica` stopped on the fire-deroga slot, mapped, then **filled** (153 s) |
-| 2026-11-01 | pane | `answers-acustica-vvf-igiene` (acoustics, the Vigili del Fuoco, the hygiene deroga, barriers) **filled** (164 s); `answers-terreni-urbanizzazione` (remediated soil, asbestos, the cemetery deroga) stopped on "stipulata in data", which the portal requires with "non è dotata": the Comune's three years refused, the case moved to a convenzione, then **filled** (222 s) | |
-| 2026-11-01 | pane | `answers-notifica-allegata` (the architect directs, the structural designer the structures, the notifica attached) **filled** (212 s), `bench/rerun.py` bundle |
+| 2026-10-31 | pane | `answers-condominio-strutture.json` | **filled** |
+| 2026-10-31 | pane | `answers-strumenti.json` | **filled** in 151 s |
+| 2026-10-31 | pane | `answers-p6.json` | **filled** in 164 s |
+| 2026-10-31 | pane | `answers-rir-fuori-area.json` | **filled** in 169 s |
+| 2026-10-31 | pane | `answers-variante-sismica.json` | **stopped** in 159 s |
+| 2026-10-31 | pane | `answers-vincoli.json` | **filled** in 151 s |
+| 2026-10-31, 11-01 | pane |  | the never-run cases, `bench/rerun.py` bundles: P6, `rir-fuori-area`, `vincoli` **filled**; `variante-sismica` stopped on the fire-deroga slot, mapped, then **filled** (153 s) |
+| 2026-11-01 | pane | `answers-acustica-vvf-igiene` (acoustics, the Vigili del Fuoco, the hygiene deroga, barriers) **filled** (164 s); `answers-terreni-urbanizzazione` (remediated soil, asbestos, the cemetery deroga) stopped on "stipulata in data", which the portal requires with "non è dotata": the Comune's three years refused, the case moved to a convenzione, then **filled** (222 s) |  |
+| 2026-11-01 | pane |  | `answers-notifica-allegata` (the architect directs, the structural designer the structures, the notifica attached) **filled** (212 s), `bench/rerun.py` bundle |
+| 2026-11-01 | pane | `answers-variante-sismica.json` | **filled** in 153 s |
+| 2026-11-01 | pane | `answers-acustica-vvf-igiene.json` | **filled** in 164 s |
+| 2026-11-01 | pane | `answers-terreni-urbanizzazione.json` | **stopped** in 108 s |
+| 2026-11-01 | pane | `answers-terreni-urbanizzazione.json` | **filled** in 222 s |
+| 2026-11-01 | pane | `answers-notifica-allegata.json` | **filled** in 212 s |
 | 2026-11-02 | pane | `answers-progettista`: another architectural designer (`p:`) who also directs ("diverso dal progettista": no), `bench/rerun.py` bundle | **filled** in 191 s, nothing moved or loose; the asseverazione's Dati progettista are the designer's |
+| 2026-11-02 | pane | `answers-scomputo-pozzi.json` | **stopped** in 152 s |
+| 2026-11-02 | pane | `answers-scarico-superficiali.json` | **stopped** in 156 s |
+| 2026-11-02 | pane | `answers-scomputo-pozzi.json` | **filled** in 159 s |
+| 2026-11-02 | pane | `answers-scarico-superficiali.json` | **filled** in 175 s |
+| 2026-11-02 | pane | `answers-progettista.json` | **filled** in 191 s |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 154 s |
+| 2026-11-02 | pane | `answers-regionale.json` | **filled** in 204 s |
 | 2026-11-03 | pane | `answers-piano-terra`: one ground-floor unit in zone B changed from commercial to residential with CILA-level works (art. 23-ter c. 1-quater, so Campania's SCIA alternativa, art. 2 c. 6 L.R. 13/2022): quadro c)'s A/B/C line, "4. Altri interventi individuati dalla legislazione regionale", `bench/rerun.py` bundle | **filled** from a blank draft in 155 s, read back on a fresh load, nothing moved or loose |
 | 2026-11-03 | pane | The asseverazione's tolerance branches (`answers-tolleranze-{2,3,4,5}`; 3 with the soil analysis's slot) and `answers-scomputo-pozzi` with its excavation as waste (`scavo: rifiuti`), `bench/rerun.py` bundle | **filled**, all five (402 s, 605 s, 109 s, 263 s, 235 s) |
+| 2026-11-03 | pane | `answers-piano-terra.json` | **filled** in 155 s |
+| 2026-11-03 | pane | `answers-scomputo-pozzi.json` | **filled** in 235 s |
+| 2026-11-03 | pane | `answers-tolleranze-2.json` | **filled** in 402 s |
+| 2026-11-03 | pane | `answers-tolleranze-3.json` | **filled** in 605 s |
+| 2026-11-03 | pane | `answers-tolleranze-4.json` | **filled** in 109 s |
+| 2026-11-03 | pane | `answers-tolleranze-5.json` | **filled** in 263 s |
+| 2026-11-04 | pane | `answers-comproprietaria-negozio.json` | **filled** in 265 s |
+| 2026-11-04 | pane | `answers-proprietario-deposito.json` | **filled** in 176 s |
+| 2026-11-04 | pane | `answers-usufruttuario-industriale.json` | **filled** in 259 s |
+
+<!-- /runs -->

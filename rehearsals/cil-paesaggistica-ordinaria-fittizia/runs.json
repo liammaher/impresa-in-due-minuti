@@ -3,12 +3,16 @@
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "stopped",
-  "seconds": 1.2
+  "seconds": 1.2,
+  "browser": "pane",
+  "note": "P6, from scratch: stopped at Allega documenti on the ordinaria's second relazione slot, which only the SCIA's and the permesso's \"Si allega\" box opens; dropped (`drop: true`)"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 723
+  "seconds": 723,
+  "browser": "pane",
+  "note": "P6 again, on the slot dropped, `bench/rerun.py` bundle: **filled** (723 s: the form in about 2 minutes, then about 10 minutes before the run ended, after the declarations were read)"
  }
 ]

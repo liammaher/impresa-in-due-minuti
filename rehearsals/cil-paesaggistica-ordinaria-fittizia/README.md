@@ -15,7 +15,11 @@ the declarations, payment, signing and sending.
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-31 | pane | P6, from scratch: stopped at Allega documenti on the ordinaria's second relazione slot, which only the SCIA's and the permesso's "Si allega" box opens; dropped (`drop: true`) |
-| 2026-10-31 | pane | P6 again, on the slot dropped, `bench/rerun.py` bundle: **filled** (723 s: the form in about 2 minutes, then about 10 minutes before the run ended, after the declarations were read) |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-31 | pane | `answers-p6.json` | P6, from scratch: stopped at Allega documenti on the ordinaria's second relazione slot, which only the SCIA's and the permesso's "Si allega" box opens; dropped (`drop: true`) |
+| 2026-10-31 | pane | `answers-p6.json` | P6 again, on the slot dropped, `bench/rerun.py` bundle: **filled** (723 s: the form in about 2 minutes, then about 10 minutes before the run ended, after the declarations were read) |
+
+<!-- /runs -->
