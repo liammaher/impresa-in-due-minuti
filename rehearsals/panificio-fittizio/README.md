@@ -17,9 +17,13 @@ panificio generato" and stops before the declarations, payment, signing and send
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-28 | pane | Stopped at the address: "Via Foria" is also inside "Via Santa Maria Avvocata a Foria". `inpage.js` now takes the street named exactly. Resumed on the draft: every value kept and read back on a fresh load. |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-28 | pane |  | Stopped at the address: "Via Foria" is also inside "Via Santa Maria Avvocata a Foria". `inpage.js` now takes the street named exactly. Resumed on the draft: every value kept and read back on a fresh load. |
+
+<!-- /runs -->
 
 The attachments screen (read after the run): the ASL tariff receipt and the fee receipt take
 only signed files (`.p7m`), so they're the person's; "Allegati liberi" is optional.

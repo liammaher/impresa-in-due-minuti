@@ -48,21 +48,11 @@ SECTIONS = CAT / "sections"
 SAME = CAT / "same.json"
 DECLARATIONS = re.compile(r"consapevolezza|informativa sulla privacy|requisiti di o|altre dichiarazioni|"
                           r"dichiarazioni ai sensi dell'art\. 6|rispetto sulle tasse|art\. ?75", re.I)
-# The SUE's pratiche crawled one by one before the batch, by the names recipes use.
-SUE_NAMES = {
-    "Comunicazione di Inizio Lavori per opere temporanee (C.I.L.)": "cil",
-    "Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)": "cila",
-    "Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)": "scia",
-    "Comunicazione inizio lavori": "inizio-lavori",
-    "Comunicazione di fine lavori": "fine-lavori",
-    "Segnalazione Certificata per l'Agibilità": "agibilita",
-}
 
 
 def sportello(name):
-    """A crawl's sportello, by its name: the batch's start with it, the first ones are SUE's
-    but for the hairdresser's."""
-    return "suap" if name.startswith("suap") or name == "acconciatore" else "sue"
+    """A crawl's sportello, by its name's prefix."""
+    return "suap" if name.startswith("suap") else "sue"
 
 
 def fingerprint(fields):
@@ -112,8 +102,9 @@ PROCURA = "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO M
 
 
 def sue_name(label):
-    """A SUE operation's crawl, by the name recipes use."""
-    return SUE_NAMES.get(label) or "sue-" + slug(label, 72)
+    """A SUE operation's crawl, by the name recipes use (the first six, crawled one by one
+    before the batch, had short names of their own until 2026-11-04)."""
+    return "sue-" + slug(label, 72)
 
 
 def ops_of(args):
@@ -471,14 +462,6 @@ def cmd_drift(args):
     path.write_text(json.dumps(drift, ensure_ascii=False, indent=1) + "\n")
     SAME.write_text(json.dumps(same, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
     return out
-
-
-def drifted(name):
-    """The differences the last check found in a pratica's crawl, or []."""
-    path = CAT / "drift.json"
-    if not path.exists():
-        return []
-    return json.loads(path.read_text())["pratiche"].get(name, {}).get("differences", [])
 
 
 def cmd_pane(args):

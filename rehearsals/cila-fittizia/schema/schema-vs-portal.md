@@ -3,7 +3,8 @@
 Compared on 2026-10-28: InfoCamere's `mod_cila_v1.0.7.xsd` (repository
 `InfoCamereSCpA/Sistema-Informatico-degli-Sportelli-Unici-Moduli-PA`, commit `fc13e08`, 12 March
 2026), flattened by `flatten.py` into `mod_cila_v1.0.7-fields.json`, against every field seen on
-the SUE of Napoli in the first walk (`../portal-map.yaml`), up to quadro h). Matching is by
+the SUE of Napoli in the first walk (its screen notes, `portal-map.yaml`, removed 2026-11-04; the
+walk's steps are `claude/skills/pratica/portal/bench/fixtures/cila-p6-hand-walk.yaml`), up to quadro h). Matching is by
 meaning, done by hand: "same" means the schema has a field asking the same thing with the same
 choices, wherever it sits in the schema.
 

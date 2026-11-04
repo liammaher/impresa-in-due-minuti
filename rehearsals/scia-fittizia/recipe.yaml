@@ -3,7 +3,7 @@
 # in corso d'opera, or a change of use alone; the contributo free or due; on structures (with its seismic
 # filing and another technician as structural designer, the `s:` person) or not, every
 # protection the progettista's asseverazione names, and its technical quadri (systems, energy,
-# barriers, acoustics, fire, asbestos, hygiene) with each deroga or assent they ask. Crawl catalogue/F839/sections/scia.json
+# barriers, acoustics, fire, asbestos, hygiene) with each deroga or assent they ask. Crawl catalogue/F839/sections/sue-segnalazione-certificata-di-inizio-attivita-edilizia.json
 # (36 sections, 319 choices), every field from dictionary/fnsuap.yaml. The CILA rehearsal's
 # people (rehearsals/cila-fittizia): the architect with a procura designs and presents, the
 # tenant client, the owner company, two firms; and Davide Esempio, the structural engineer.
@@ -11,7 +11,7 @@ procedure: napoli/comune/scia-edilizia
 title: "SCIA edilizia, SUE Napoli (tecnico con procura)"
 comune: F839
 sportello: sue
-crawl: scia
+crawl: sue-segnalazione-certificata-di-inizio-attivita-edilizia
 operation: Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)
 scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
 si_no: {"Le opere ricadono nell'ambito della Sanatoria": "No"}

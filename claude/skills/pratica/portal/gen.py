@@ -53,6 +53,7 @@ in one checklist); run.py preflight then refuses a case the table gives to anoth
 import argparse
 import collections
 import copy
+import hashlib
 import json
 import re
 import sys
@@ -302,12 +303,53 @@ def _mapping(loader, node, deep=False):
 _Unique.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _mapping)
 
 
+# Every rehearsal's steps file is gen.py's output, built here, never committed (2026-11-04: 70,000
+# lines of them were): rehearsals/steps.lock holds one sha256 per steps file, as `shasum -a 256 -c`
+# reads it, so a change to the dictionary, a recipe or a crawl shows as the pratiche it changes.
+STEPS = "portal-steps.generated.yaml"
+
+
+def sha256(text):
+    return hashlib.sha256(text.encode()).hexdigest()
+
+
+def read_lock(path=None):
+    """{rehearsal: sha256 of its steps file}, from steps.lock."""
+    path = path or LOCK
+    out = {}
+    for line in path.read_text().splitlines() if path.is_file() else []:
+        digest, _, name = line.partition("  ")
+        out[name.split("/")[0]] = digest
+    return out
+
+
+def lock_text(digests):
+    return "".join(f"{d}  {name}/{STEPS}\n" for name, d in sorted(digests.items()))
+
+
+def ensure(names=None, root=None):
+    """Write every rehearsal's steps file that is missing or isn't the one steps.lock names (a
+    fresh clone, a pull), from its recipe; the paths written. One the lock names is left as it
+    is: after a change to the dictionary, a recipe or a crawl, bench/regen.py writes them all and
+    the lock (test_gen fails until it has)."""
+    root = Path(root or REHEARSALS)
+    lock, written = read_lock(root / LOCK.name), []
+    for d in sorted(p for p in root.iterdir() if (p / "recipe.yaml").is_file() and (not names or p.name in names)):
+        f = d / STEPS
+        if f.is_file() and sha256(f.read_text()) == lock.get(d.name):
+            continue
+        f.write_text(dump(generate(load_yaml(d / "recipe.yaml"))))
+        written.append(f)
+    return written
+
+
 def load_yaml(p):
     with open(p, encoding="utf-8") as f:  # the file's name in an error's mark
         return yaml.load(f, Loader=_Unique)
 
 
 REHEARSALS = HERE.parents[3] / "rehearsals"
+LOCK = REHEARSALS / "steps.lock"
 
 
 def resolved(recipe, seen=()):
@@ -316,20 +358,36 @@ def resolved(recipe, seen=()):
     main pratica's recipe plus the other's part, so a slot or a refusal mapped on one reaches the
     other (2026-10-31: the SCIA's combinations had missed eleven of the SCIA's slots). Later ones
     win key by key; `attachments` (per screen), `supports` and `sections` add up; `asks` and
-    `rules` merge by key; a null drops what an earlier one set. `answers` merge by key, nulls
-    kept (combo_answers)."""
+    `rules` merge by key, `rules.handles` adding up; a null drops what an earlier one set.
+    `answers` merge by key, nulls kept (combo_answers).
+
+    What a combination is follows from its main pratica and its parts, unless it says otherwise:
+    its `operation`s are the main pratica's then each part's (the wizard's order), and its
+    rules table's `main` is the main pratica's (its `procedure` is the combination's)."""
     parents = recipe.get("extends") or []
     if not parents:
         return recipe
-    out = {}
+    out, main, ops = {}, None, []
     for name in [parents] if isinstance(parents, str) else parents:
         if name in seen:
             raise GenError(f"{name}: extends goes round")
         path = HERE / f"{name}.yaml" if name.startswith("parts/") else REHEARSALS / name / "recipe.yaml"
         if not path.exists():
             raise GenError(f"extends {name}: no {path}")
-        merge_recipe(out, resolved(load_yaml(path), seen + (name,)))
-    merge_recipe(out, {k: v for k, v in recipe.items() if k != "extends"})
+        parent = resolved(load_yaml(path), seen + (name,))
+        if name.startswith("parts/"):
+            ops += [parent.pop("operation")] if parent.get("operation") else []
+        elif main is None:
+            main = parent
+            ops = list(parent["operation"]) if isinstance(parent.get("operation"), list) else [parent.get("operation")]
+        merge_recipe(out, parent)
+    own = {k: v for k, v in recipe.items() if k != "extends"}
+    if main is not None and "operation" not in own:
+        own["operation"] = ops
+    if main is not None and out.get("rules") and own.get("procedure", main.get("procedure")) != main.get("procedure") \
+            and "main" not in (own.get("rules") or {}):
+        out["rules"].setdefault("main", (main.get("rules") or {}).get("main", main.get("procedure")))
+    merge_recipe(out, own)
     return out
 
 
@@ -381,6 +439,8 @@ def merge_recipe(out, r):
             for kk, vv in v.items():
                 if vv is None:
                     merged.pop(kk, None)
+                elif k == "rules" and kk == "handles":
+                    merged[kk] = add(merged.get(kk), vv)  # a part's pratica, beside the main one's
                 else:
                     merged[kk] = vv
             out[k] = merged
@@ -868,7 +928,8 @@ def generate(recipe, base=HERE):
             defects = defects or load_yaml(HERE / "defects.yaml")
             if c["defect"] not in defects:
                 raise GenError(f"supports names the defect {c['defect']!r}, not in defects.yaml")
-            supports[i] = {**c, "defect": {"id": c["defect"], **defects[c["defect"]]}}
+            # Its `page` is docs/portal-defects.md's section (defects.py), not the person's.
+            supports[i] = {**c, "defect": {"id": c["defect"], **{k: v for k, v in defects[c["defect"]].items() if k != "page"}}}
     for t in ASKED.findall(json.dumps([recipe.get("yours"), supports, recipe.get("rules"), scelta_when])):
         asks_used.add(t)
     # The dictionary's questions, the recipe's wording over them; a question only this pratica

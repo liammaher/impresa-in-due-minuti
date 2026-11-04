@@ -1,50 +1,98 @@
 [
  {
+  "date": "2026-10-28",
+  "browser": "pane",
+  "note": "Not run: impresainungiorno answered 503 (maintenance) at 23:50. Pre-flight ready with `answers-p6.json` and the P6 fixture's values."
+ },
+ {
+  "date": "2026-10-29",
+  "browser": "pane",
+  "note": "Stopped at Ambito: the art. 136 tick renumbered itself, which gen.py didn't yet send by label (fixed: `Section.moves_itself`)."
+ },
+ {
+  "date": "2026-10-29",
+  "browser": "pane",
+  "note": "**Filled**, a new draft: 12 sections in 54 s (wizard 9 s), every value read back on a fresh load of the draft (8 s). Run with art. 136 and 142 together; 136 alone and 134 alone not run."
+ },
+ {
+  "date": "2026-10-29",
+  "browser": "pane",
+  "note": "Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 53.3 s; second, with the runner waiting for a section to open, **filled** in 59 s, read back on a fresh load."
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "note": "the bollo with two marche (`answers-marche`), `bench/rerun.py` bundle: stopped on the bollo: no box labelled \"numero seriale (2)\". Read on the page: the authorization's marca line copies the first's, its serial box titled \"numero seriale (1)\" too"
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "note": "the same, the second marca as the second \"numero seriale (1)\" and \"data\": **filled** in 51 s, read back on a fresh load (9 s), nothing moved or loose"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "note": "the client's PEC as their INAD domicilio digitale (`answers-inad`), `bench/rerun.py` bundle: **filled** in 51 s, nothing moved or loose"
+ },
+ {
   "date": "2026-10-31",
   "answers": "answers-inad.json",
   "result": "filled",
-  "seconds": 51.1
+  "seconds": 51.1,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-marche.json",
   "result": "filled",
-  "seconds": 55.9
+  "seconds": 55.9,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 51.7
+  "seconds": 51.7,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-02",
+  "browser": "pane",
+  "note": "`answers-progettista`: the tecnico is another architect (`p:`): \"non è colui che presenta la pratica\", their name, codice fiscale, studio and albo, `bench/rerun.py` bundle: **filled** in 59 s. The PEC box then reads \"Indirizzo Pec non valido\" under the made-up address (kept on Salva; a real public PEC cleared it): `made_up`"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-progettista.json",
   "result": "filled",
-  "seconds": 58.7
+  "seconds": 58.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-variante.json",
   "result": "filled",
-  "seconds": 57.7
+  "seconds": 57.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-esenzioni.json",
   "result": "filled",
-  "seconds": 62.5
+  "seconds": 62.5,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-bollo-virtuale.json",
   "result": "filled",
-  "seconds": 63.7
+  "seconds": 63.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 68.2
+  "seconds": 68.2,
+  "browser": "pane"
  }
 ]

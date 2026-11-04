@@ -3,12 +3,16 @@
   "date": "2026-10-30",
   "answers": "answers-p6.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane",
+  "case": "`answers-p6.json`",
+  "note": "**Filled** from a blank draft in 72.3 s, first try, read back on a fresh load (12.4 s); no id moved or loose"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 68.1
+  "seconds": 68.1,
+  "browser": "pane"
  }
 ]
