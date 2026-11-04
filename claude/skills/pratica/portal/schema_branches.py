@@ -44,13 +44,13 @@ FIXTURE = REHEARSALS / "cila-fittizia" / "fixture-p6.json"
 
 # Each national SUE form and the crawl of the pratica built from it.
 FORMS = {
-    "cila": "cila",
-    "scia": "scia",
+    "cila": "sue-comunicazione-inizio-lavoro-asseverata",
+    "scia": "sue-segnalazione-certificata-di-inizio-attivita-edilizia",
     "permesso_di_costruire": "sue-permesso-di-costruire-art-10-d-p-r-380-2001",
     "scia_alternativa": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost",
-    "segnalazione_certificata_agibilita": "agibilita",
-    "comunicazione_inizio_lavori": "inizio-lavori",
-    "comunicazione_fine_lavori": "fine-lavori",
+    "segnalazione_certificata_agibilita": "sue-segnalazione-certificata-per-l-agibilita",
+    "comunicazione_inizio_lavori": "sue-comunicazione-inizio-lavori",
+    "comunicazione_fine_lavori": "sue-comunicazione-di-fine-lavori",
 }
 # The wizard's operation each form is (sue-wizard.json): a form's choices apply only to cases that
 # file it. Two forms share section names ("h) Impresa esecutrice dei lavori" is the CILA's and the

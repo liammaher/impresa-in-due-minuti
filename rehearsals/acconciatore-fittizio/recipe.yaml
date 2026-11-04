@@ -1,5 +1,5 @@
 # The SUAP's opening of a hairdresser's (acconciatore), as gen.py writes its steps file. The
-# first SUAP pratica generated: crawl catalogue/F839/sections/acconciatore.json; its three own
+# first SUAP pratica generated: crawl catalogue/F839/sections/suap-011-aprire-l-attivita-di-acconciatore-procura.json; its three own
 # sections drafted from the national schema by draft.py (mod_acconciatori_estetisti_apertura)
 # and used as drafted; the business's shared sections from the pizzeria walk. The business
 # itself declares (`subject: impresa`): a made-up ditta individuale and its titolare.
@@ -7,7 +7,7 @@ procedure: napoli/comune/scia-acconciatore-estetista
 title: "Apertura di un'attività di acconciatore, SUAP Napoli (ditta individuale)"
 comune: F839
 sportello: suap
-crawl: acconciatore
+crawl: suap-011-aprire-l-attivita-di-acconciatore-procura
 subject: impresa
 operation: Aprire l'attività di acconciatore
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839

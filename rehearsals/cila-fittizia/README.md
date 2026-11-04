@@ -158,8 +158,8 @@ walk must settle and record here:
 
 ## What the first walk settled (2026-10-28)
 
-`portal-map.yaml` has every screen up to the attachments; `schema/schema-vs-portal.md` the
-official schema against it.
+The walk's screen notes (`portal-map.yaml`) went on 2026-11-04: the crawl in the catalogue has
+every screen; `schema/schema-vs-portal.md` the official schema against what the walk saw.
 
 - **Who may log in:** anyone with SPID. Liam (not an architect) walked it all. The procuratore's
   section opens with the logged-in name and CF but takes another person's (a made-up architect)
@@ -260,9 +260,10 @@ description) and Salva kept them all. Left, as the stop point says, to the perso
 
 `portal-steps.generated.yaml` is no longer written by hand: `claude/skills/pratica/portal/gen.py`
 wrote it from `recipe.yaml` (the operation, the scelta, the person's steps, `supports`), the
-crawl of an empty CILA draft (`catalogue/F839/sections/cila.json`, 282 s, every section, every
-choice tried) and the shared field dictionary (`dictionary/fnsuap.yaml`). `gen.py --check
-portal-steps.yaml` finds it the same as the hand walk, field for field: every id, including the
+crawl of an empty CILA draft (`catalogue/F839/sections/sue-comunicazione-inizio-lavoro-asseverata.json`, 282 s, every section, every
+choice tried) and the shared field dictionary (`dictionary/fnsuap.yaml`). `gen.py --check` against
+the hand walk's steps (since 2026-11-04 the golden case of gen.py's tests,
+`claude/skills/pratica/portal/bench/fixtures/cila-p6-hand-walk.yaml`) finds them the same, field for field: every id, including the
 21 of a) where two choices (title "altro", non-exclusive title) shift each other's rows, which
 the crawl tried apart and `gen.py` adds up by their offsets. It adds one case the walk didn't
 cover: diritti not due (0 €), from the amount.
