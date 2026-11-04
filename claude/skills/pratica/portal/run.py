@@ -366,7 +366,12 @@ class Filters(dict):
     is n or more (the 20 m² the historic centre's Piano requires)."""
     def __missing__(self, name):
         if name.startswith("atleast_") and name[8:].isdigit():
-            return lambda v: "true" if float(str(v or 0).replace(",", ".")) >= int(name[8:]) else "false"
+            def atleast(v):
+                try:
+                    return "true" if float(str(v or 0).replace(",", ".")) >= int(name[8:]) else "false"
+                except ValueError:
+                    return "false"  # not a number: pre-flight says so (check_answer)
+            return atleast
         answer = lambda v: re.sub(r"[^a-z0-9]+", "_", str(v).strip().lower()).strip("_")
         if name.startswith("in_"):
             return lambda v: "true" if answer(v) in name[3:].split("__") else "false"
