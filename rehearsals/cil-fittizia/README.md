@@ -6,7 +6,7 @@ a procura, the tenant client, one firm. Made-up data; the draft is "PROVA NON IN
 stops before the declarations, signing and sending.
 
 `portal-steps.generated.yaml` is `gen.py`'s, from `recipe.yaml`, the crawl of an empty draft
-(`catalogue/F839/sections/cil.json`: 176 s, 79 choices) and `dictionary/fnsuap.yaml`. Its
+(`catalogue/F839/sections/sue-comunicazione-di-inizio-lavori-per-opere-temporanee.json`: 176 s, 79 choices) and `dictionary/fnsuap.yaml`. Its
 quadri are the CILA's under other letters (b = b, d = e, f = h, g = i), matched without the
 letter. New in the dictionary: quadro c) (the dates and what the works are) and the empty
 "altre comunicazioni". The safety quadro shows the "under 200 uomini-giorno" choice as a
@@ -27,12 +27,21 @@ asks the SUE for none. `answers-comunicazioni.json`: three filings, never run on
 
 ## Runs
 
-| Date | Browser | Login → draft | Result |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
 |---|---|---|---|
-| 2026-10-28 | pane | 112.2 s to the end of the form (wizard 10.4, 15 sections, fresh load 14.9), then 14.5 s for 3 attachments | First run, no stop: 106 values and 3 attachments kept, every value read back on a fresh load |
-| 2026-10-29 | pane | 70.9 s, fresh load 11.1 s (`bench/rerun.py` with two SCIAs) | **Filled** with the Comune's 100 € diritti: the "sono dovuti oneri" branch, its total and "pagamento on line", walked for the first time; every value read back on a fresh load |
-| 2026-11-01 | pane | `answers-bene-culturale` (a listed building, the Soprintendenza's authorization obtained first), `bench/rerun.py` bundle | **Filled** from a blank draft in 75.6 s, read back on a fresh load, nothing moved; one `loose`, the impresa quadro's "lavori sono/saranno eseguiti dall…" (the CILA's base case has it too) |
-| 2026-11-01 | pane | `answers-notifica` (a notifica preliminare due: "allega alla presente comunicazione la notifica" ticked), `bench/rerun.py` bundle | **filled** in 76.7 s; its draft's Allega documenti read after: no slot for the notifica, only Allegati liberi (signed files only on the CIL), so it is the person's |
+| 2026-10-28 | pane |  | First run, no stop: 106 values and 3 attachments kept, every value read back on a fresh load; Login → draft: 112.2 s to the end of the form (wizard 10.4, 15 sections, fresh load 14.9), then 14.5 s for 3 attachments |
+| 2026-10-29 | pane |  | **Filled** with the Comune's 100 € diritti: the "sono dovuti oneri" branch, its total and "pagamento on line", walked for the first time; every value read back on a fresh load; Login → draft: 70.9 s, fresh load 11.1 s (`bench/rerun.py` with two SCIAs) |
+| 2026-10-31 | pane | `answers-p6.json` | **filled** in 78 s |
+| 2026-10-31 | pane | `answers-proprietario.json` | **filled** in 63 s |
+| 2026-11-01 | pane | `answers-bene-culturale.json` | **Filled** from a blank draft in 75.6 s, read back on a fresh load, nothing moved; one `loose`, the impresa quadro's "lavori sono/saranno eseguiti dall…" (the CILA's base case has it too); Login → draft: `answers-bene-culturale` (a listed building, the Soprintendenza's authorization obtained first), `bench/rerun.py` bundle |
+| 2026-11-01 | pane | `answers-notifica.json` | **filled** in 76.7 s; its draft's Allega documenti read after: no slot for the notifica, only Allegati liberi (signed files only on the CIL), so it is the person's; Login → draft: `answers-notifica` (a notifica preliminare due: "allega alla presente comunicazione la notifica" ticked), `bench/rerun.py` bundle |
+| 2026-11-03 | pane | `answers-comunicazioni.json` | **filled** in 82 s |
+| 2026-11-03 | pane | `answers-bene-culturale.json` | **filled** in 78 s |
+| 2026-11-03 | pane | `answers-notifica.json` | **filled** in 79 s |
+
+<!-- /runs -->
 
 Left to the person: the procura and the "Quadro riepilogativo della documentazione C.I.L."
 (portal documents, signed), the declarations, signing and sending. Diritti: 100 € (line SUE 14

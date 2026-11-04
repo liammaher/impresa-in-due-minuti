@@ -8,12 +8,7 @@
 extends: [cila-fittizia, parts/paesaggistica-ordinaria]
 procedure: napoli/comune/cila-con-paesaggistica-ordinaria
 title: "CILA con autorizzazione paesaggistica ordinaria, SUE Napoli (tecnico con procura)"
-comune: F839
-sportello: sue
 crawl: sue-combo-cila-paesaggistica-ordinaria
-operation:
-  - Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)
-  - Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)
 asks:
   descrizione: {default: "CILA e paesaggistica {{c:identity.last_name}}"}
 yours:
@@ -27,8 +22,6 @@ attachments:
     # The ordinaria's second relazione slot opens from the SCIA's and the permesso's asseverazione
     # ("Si allega la relazione paesaggistica e la documentazione"): this form has no such box.
     - {label: Relazione paesaggistica e documentazione per il rilascio, drop: true}
-rules:
-  main: napoli/comune/cila-lavori-edilizi
 # The case: the main pratica's P6 answers, the part's, then these (a null drops one);
 # `gen.py --answers` writes answers-p6.json.
 answers:

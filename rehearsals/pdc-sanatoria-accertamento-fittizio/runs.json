@@ -3,6 +3,9 @@
   "date": "2026-11-02",
   "answers": "answers-p6.json",
   "result": "stopped",
-  "seconds": 100.5
+  "seconds": 100.5,
+  "browser": "pane",
+  "case": "`answers-p6.json`, `bench/rerun.py` bundle",
+  "note": "Stopped on \"Asseverazione PdC - tutela storico ambientale\": with \"le opere comportano alterazione\" ticked and no procedure, Salva answered \"il valore è obbligatorio\" on all three. Every section before it saved. Now refused at pre-flight"
  }
 ]

@@ -7,12 +7,7 @@
 extends: [pdc-fittizio, parts/dichiarazione-utilizzo-terre]
 procedure: napoli/comune/permesso-di-costruire-con-dichiarazione-utilizzo-terre
 title: "Permesso di costruire con dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
-comune: F839
-sportello: sue
 crawl: sue-combo-pdc-dichiarazione-utilizzo
-operation:
-  - Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001
-  - "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
 asks:
   descrizione: {default: "PdC e terre e rocce {{c:identity.last_name}}"}
 # Its main pratica's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
@@ -25,8 +20,6 @@ yours:
   - "When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017) on the SUE"
   - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
   - "Once the permesso is issued: collect it (paying the contributo, if due, as quadro f) says), name the structural designer and whoever else the permesso leaves to be named (the direttori dei lavori, the firm), and file the comunicazione di inizio lavori with the energy report and the structural filings"
-rules:
-  main: napoli/comune/permesso-di-costruire
 answers:
   descrizione: PROVA NON INVIARE - PdC e terre e rocce P6
   oggetto: "Ristrutturazione edilizia con demolizione e ricostruzione di un edificio residenziale di tre piani con aumento di volumetria e un nuovo piano interrato, scavo di 2.500 m³ di terre portate a un altro cantiere come sottoprodotto, opera non soggetta a VIA (dati inventati per la prova)."

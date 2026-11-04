@@ -19,13 +19,19 @@ The case: an owner's change of use of a whole building within its category, no w
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-29 | pane | First run: every section filled; stopped at Allega documenti on two required slots that take a plain PDF, the ordinaria's relazione paesaggistica and a second one the SCIA's "Si allega la relazione paesaggistica" adds. Both now take the architect's relazione (`relazione_paesaggistica`). |
-| 2026-10-29 | pane | Rerun: the portal's "errore inatteso" page mid-run; rerun unchanged after 20 s. |
-| 2026-10-29 | pane | **Filled** from scratch in 182 s, every value read back on a fresh load (31 s): an owner's change of use of a whole building, the contributo during the works worked out by the SUE. |
-| 2026-10-29 | pane | As now, a single unit within its category with no works (a whole building's is a SCIA alternativa in Campania): first run stopped on the portal's error page at DOMICILIO ELETTRONICO, the draft not reopening; rerun alone, unchanged, **filled** in 142 s, read back on a fresh load (24 s). |
-| 2026-10-29 | pane | P6, from scratch after the SCIA's technical quadri changed (the combo still refuses them) | **filled** in 142 s; fresh load 25 s, every value read back; no retry |
-| 2026-10-30 | pane | systems needing a project (`answers-impianti`: six systems, each project in its own slot, the energy report's slot too), `bench/rerun.py` bundle | **filled** in 186 s, read back on a fresh load (31 s), nothing moved or loose |
-| 2026-10-31 | pane | P6 and systems needing a project (`answers-impianti`), `bench/rerun.py` bundle, after the recipe became `extends: [scia-fittizia, parts/paesaggistica-ordinaria]` (it gained the SCIA's 12 slots it had missed, and lost 6 refusals the SCIA had closed) | **filled** both (138.5 s, 150.3 s), read back on a fresh load (25 s, 25 s), nothing moved or loose |
-| 2026-11-03 | pane | The landscape vincolo of art. 142 alone (`answers-vincolo-142`), `bench/rerun.py` bundle | **filled** in 200 s |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-29 | pane |  | First run: every section filled; stopped at Allega documenti on two required slots that take a plain PDF, the ordinaria's relazione paesaggistica and a second one the SCIA's "Si allega la relazione paesaggistica" adds. Both now take the architect's relazione (`relazione_paesaggistica`). |
+| 2026-10-29 | pane |  | Rerun: the portal's "errore inatteso" page mid-run; rerun unchanged after 20 s. |
+| 2026-10-29 | pane |  | **Filled** from scratch in 182 s, every value read back on a fresh load (31 s): an owner's change of use of a whole building, the contributo during the works worked out by the SUE. |
+| 2026-10-29 | pane |  | As now, a single unit within its category with no works (a whole building's is a SCIA alternativa in Campania): first run stopped on the portal's error page at DOMICILIO ELETTRONICO, the draft not reopening; rerun alone, unchanged, **filled** in 142 s, read back on a fresh load (24 s). |
+| 2026-10-29 | pane |  | P6, from scratch after the SCIA's technical quadri changed (the combo still refuses them): **filled** in 142 s; fresh load 25 s, every value read back; no retry |
+| 2026-10-30 | pane | `answers-impianti.json` | systems needing a project (`answers-impianti`: six systems, each project in its own slot, the energy report's slot too), `bench/rerun.py` bundle: **filled** in 186 s, read back on a fresh load (31 s), nothing moved or loose |
+| 2026-10-31 | pane |  | P6 and systems needing a project (`answers-impianti`), `bench/rerun.py` bundle, after the recipe became `extends: [scia-fittizia, parts/paesaggistica-ordinaria]` (it gained the SCIA's 12 slots it had missed, and lost 6 refusals the SCIA had closed): **filled** both (138.5 s, 150.3 s), read back on a fresh load (25 s, 25 s), nothing moved or loose |
+| 2026-10-31 | pane | `answers-p6.json` | **filled** in 138 s |
+| 2026-10-31 | pane | `answers-impianti.json` | **filled** in 150 s |
+| 2026-11-03 | pane | `answers-vincolo-142.json` | The landscape vincolo of art. 142 alone (`answers-vincolo-142`), `bench/rerun.py` bundle: **filled** in 200 s |
+
+<!-- /runs -->

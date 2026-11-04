@@ -18,7 +18,11 @@ sys.dont_write_bytecode = True
 import gen  # noqa: E402
 import yaml  # noqa: E402
 
+gen.ensure()  # the rehearsals' steps files are built, never committed (steps.lock)
+
 CILA = ROOT / "rehearsals" / "cila-fittizia"
+# The golden case: the CILA P6 the first walk found by hand (2026-10-28), ids and values.
+HAND_WALK = HERE / "fixtures" / "cila-p6-hand-walk.yaml"
 FINE = ROOT / "rehearsals" / "fine-lavori-fittizia"
 results = []
 
@@ -131,7 +135,7 @@ def as_p6_ran(steps):
 
 @case("the CILA comes out as the hand walk found it, field for field (P6's own entries)")
 def _():
-    diffs, _ = gen.check(as_p6_ran(gen.generate(p6_recipe())), gen.load_yaml(CILA / "portal-steps.yaml"))
+    diffs, _ = gen.check(as_p6_ran(gen.generate(p6_recipe())), gen.load_yaml(HAND_WALK))
     assert not diffs, diffs
 
 
@@ -175,7 +179,7 @@ def filled(steps, values):
 @case("the dictionary's every-case CILA fills P6 with the hand walk's values, section for section")
 def _():
     v = p6_values("cila-fittizia")
-    hand, ours = filled(gen.load_yaml(CILA / "portal-steps.yaml"), v), filled(as_p6_ran(gen.generate(gen.load_yaml(CILA / "recipe.yaml"))), v)
+    hand, ours = filled(gen.load_yaml(HAND_WALK), v), filled(as_p6_ran(gen.generate(gen.load_yaml(CILA / "recipe.yaml"))), v)
     for sec, vals in hand.items():
         assert ours.get(sec) == vals, (sec, vals, ours.get(sec))
 
@@ -363,7 +367,7 @@ def _():
 @case("a drift check's digests: catalogue.py computes what the pane's digest.js computed on the live portal (2026-11-02)")
 def _():
     import catalogue
-    assert catalogue.digest(catalogue.stored_fingerprints("cil")) == "041974574c75"
+    assert catalogue.digest(catalogue.stored_fingerprints("sue-comunicazione-di-inizio-lavori-per-opere-temporanee")) == "041974574c75"
     assert catalogue.digest(catalogue.stored_fingerprints("sue-permesso-di-costruire-art-10-d-p-r-380-2001")) == "6e4da66eda5f"
 
 
@@ -378,7 +382,7 @@ def _():
     assert steps["wizard"][3]["tree"] == ["Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)",
                                           "Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)"]
     recipe = gen.load_yaml(REH / "cila-paesaggistica-fittizia" / "recipe.yaml")
-    recipe["crawl"] = "cila"  # a crawl of the CILA alone is not of both
+    recipe["crawl"] = "sue-comunicazione-inizio-lavoro-asseverata"  # a crawl of the CILA alone is not of both
     try:
         gen.generate(recipe)
         assert False, "generated from the wrong crawl"
@@ -393,6 +397,19 @@ def _():
     assert "Relazione paesaggistica e documentazione per il rilascio" in scia
     assert "Relazione paesaggistica e documentazione per il rilascio" not in cila
     assert "Relazione paesaggistica (redatta ai sensi del D.P.C.M" in cila
+
+
+@case("docs/portal-defects.md is drawn from defects.yaml, the one defect record, whose `page` stays out of steps files")
+def _():
+    import defects
+    assert (ROOT / "docs" / "portal-defects.md").read_text() == defects.render(), "defects.py --write"
+    carried = 0
+    for f in sorted((ROOT / "rehearsals").glob("*/portal-steps.generated.yaml")):
+        for c in yaml.safe_load(f.read_text()).get("supports", []):
+            if isinstance(c.get("defect"), dict):
+                carried += 1
+                assert "page" not in c["defect"] and c["defect"]["title"], (f, c["defect"]["id"])
+    assert carried, "no steps file carries a defect"
 
 
 @case("a refusal naming a known portal defect carries its record into the steps file; an unknown one is an error")
@@ -454,7 +471,7 @@ def _():
     starts = lambda title, labels: any(gen.norm(title).startswith(gen.norm(l)) for l in labels)
     for d in sorted(REH.iterdir()):
         f = d / "portal-steps.generated.yaml"
-        if not f.is_file() or gen.load_yaml(d / "recipe.yaml").get("sportello") != "sue":
+        if not f.is_file() or gen.resolved(gen.load_yaml(d / "recipe.yaml")).get("sportello") != "sue":
             continue
         steps = gen.load_yaml(f)
         crawl = steps["generated"].split()[2]
@@ -550,7 +567,7 @@ def _():
 @case("draft.py drafts the hairdresser's own sections from the national schema, every box with its meaning")
 def _():
     import draft
-    crawl = gen.json.loads((HERE.parent / "catalogue/F839/sections/acconciatore.json").read_text())
+    crawl = gen.json.loads((HERE.parent / "catalogue/F839/sections/suap-011-aprire-l-attivita-di-acconciatore-procura.json").read_text())
     schema = gen.json.loads((HERE.parent / "schema/mod_acconciatori_estetisti_apertura_v1.0.7-fields.json").read_text())
     sec = lambda name: next(x for x in crawl["sections"] if x["section"].startswith(name))
     e, asks, n, missed = draft.draft_section(sec("Dati sull"), schema)
@@ -573,12 +590,12 @@ def batch_copy(tmp):
     base = Path(tmp)
     shutil.copytree(HERE.parent / "catalogue", base / "catalogue")
     shutil.copytree(HERE.parent / "dictionary", base / "dictionary")
-    fine = gen.json.loads((base / "catalogue/F839/sections/fine-lavori.json").read_text())
+    fine = gen.json.loads((base / "catalogue/F839/sections/sue-comunicazione-di-fine-lavori.json").read_text())
     for s in fine["sections"]:
         if s.get("fields") is not None:
             for k in [k for k in s if k != "section"]:
                 del s[k]
-            s["same_as"] = f"fine-lavori#{s['section']}"
+            s["same_as"] = f"sue-comunicazione-di-fine-lavori#{s['section']}"
     (base / "catalogue/F839/sections/fine-batch.json").write_text(gen.json.dumps(fine))
     return base
 
@@ -613,22 +630,22 @@ def _():
     with tempfile.TemporaryDirectory() as tmp:
         base = batch_copy(tmp)
         (base / "catalogue/F839/drift.json").write_text(gen.json.dumps(
-            {"pratiche": {"fine-lavori": {"checked": "2026-10-28", "differences": ["changed: Dati catastali"]}}}))
+            {"pratiche": {"sue-comunicazione-di-fine-lavori": {"checked": "2026-10-28", "differences": ["changed: Dati catastali"]}}}))
         try:
             gen.generate(gen.load_yaml(FINE / "recipe.yaml"), base=base)
             raise AssertionError("generated")
         except gen.GenError as e:
             assert "changed: Dati catastali" in str(e), e
-        import catalogue
-        old = catalogue.CAT
-        catalogue.CAT = base / "catalogue/F839"
+        import rules
+        old = rules.DRIFT
+        rules.DRIFT = base / "catalogue/F839/drift.json"
         try:
             import run
             steps = gen.load_yaml(FINE / "portal-steps.generated.yaml")
             assert "Dati catastali" in run.portal_changed(steps)[0]
-            assert run.portal_changed(gen.load_yaml(CILA / "portal-steps.yaml")) == []  # hand-written
+            assert run.portal_changed(gen.load_yaml(HAND_WALK)) == []  # hand-written
         finally:
-            catalogue.CAT = old
+            rules.DRIFT = old
 
 
 @case("draft.py drafts a restaurant's opening from two national forms (its SCIA and the Reg. 852 notifica)")
@@ -697,15 +714,15 @@ def _():
         catalogue.CAT = base / "catalogue/F839"
         catalogue.SECTIONS, catalogue.SAME = catalogue.CAT / "sections", catalogue.CAT / "same.json"
         try:
-            fps = catalogue.stored_fingerprints("fine-lavori")
-            check = lambda name, change: {"name": name, "like": "fine-lavori", "crawled": "2026-10-28T00:00:00Z", "sections":
+            fps = catalogue.stored_fingerprints("sue-comunicazione-di-fine-lavori")
+            check = lambda name, change: {"name": name, "like": "sue-comunicazione-di-fine-lavori", "crawled": "2026-10-28T00:00:00Z", "sections":
                 [{"section": k, "fingerprint": ("0" * 16 if k == change else v)} for k, v in fps.items()]}
             export = base / "export.json"
             export.write_text(gen.json.dumps({"crawl:check:suap-001-x": check("suap-001-x", None),
                                               "crawl:check:suap-002-x": check("suap-002-x", "Oggetto della pratica")}))
             out = catalogue.cmd_drift(type("a", (), {"export": str(export)}))
             same = gen.json.loads(catalogue.SAME.read_text())
-            assert same["same"] == {"suap-001-x": "fine-lavori"}, out
+            assert same["same"] == {"suap-001-x": "sue-comunicazione-di-fine-lavori"}, out
             assert same["different"]["suap-002-x"]["differences"] == ["changed: Oggetto della pratica"], out
             assert not (catalogue.CAT / "drift.json").exists() or "suap-001-x" not in (catalogue.CAT / "drift.json").read_text()
         finally:
@@ -858,7 +875,7 @@ def _():
 
 @case("a choice the crawl tried apart moves its reveals by the earlier choices' offsets, not by its own (SCIA tolerances)")
 def _():
-    crawl = gen.json.loads((HERE.parent / "catalogue" / "F839" / "sections" / "scia.json").read_text())
+    crawl = gen.json.loads((HERE.parent / "catalogue" / "F839" / "sections" / "sue-segnalazione-certificata-di-inizio-attivita-edilizia.json").read_text())
     s = gen.Section(next(x for x in crawl["sections"] if x["section"].startswith("Asseverazione SCIA - Stato legittimo")))
     s.choose(s.find("radio", "si")[0])     # the state: one row more from r7c13
     s.choose(s.find("radio", "si", 2)[0])  # the tolerances, crawled apart: 20 rows more from r7c13
@@ -1089,14 +1106,30 @@ def _():
         before, rerun.REHEARSALS = rerun.REHEARSALS, Path(t)
         try:
             (Path(t) / "pdc-fittizio").mkdir()
+            (Path(t) / "pdc-fittizio" / "README.md").write_text("# PdC\n\n## Runs\n\nProse stays.\n")
             done = [{"name": "pdc-fittizio/answers-deroga", "result": "filled", "total_seconds": 142.4},
                     {"name": "pdc-fittizio", "result": "stopped"}]
             rerun.record(done, "answers-p6.json", "2026-10-31")
             rerun.record(done, "answers-p6.json", "2026-10-31")
             runs = json.loads((Path(t) / "pdc-fittizio" / "runs.json").read_text())
+            readme = (Path(t) / "pdc-fittizio" / "README.md").read_text()
         finally:
             rerun.REHEARSALS = before
     assert [(r["answers"], r["result"]) for r in runs] == [("answers-deroga.json", "filled"), ("answers-p6.json", "stopped")], runs
+    assert "| 2026-10-31 | pane | `answers-deroga.json` | **filled** in 142 s |\n" in readme, readme
+    assert readme.count("| 2026-10-31 |") == 2 and readme.endswith("<!-- /runs -->\n\nProse stays.\n"), readme
+
+
+@case("every README's run table is drawn from its runs.json, the one run record (runs.py --write)")
+def _():
+    import runs
+    assert not runs.stale(), f"run tables out of date (runs.py --write): {runs.stale()}"
+    for d in sorted(p for p in runs.REHEARSALS.iterdir() if p.is_dir()):
+        readme = d / "README.md"
+        text = readme.read_text() if readme.is_file() else ""
+        # no dated row left outside the drawn table
+        outside = text.split(runs.START)[0] + (text.split(runs.END, 1)[1] if runs.END in text else "")
+        assert not re.search(r"^\|\s*20\d\d-\d\d", outside, re.M), d.name
 
 
 
@@ -1108,7 +1141,7 @@ def _():
     import tempfile
     with tempfile.TemporaryDirectory() as t:
         t = Path(t)
-        (t / "ops.json").write_text(json.dumps([{"name": "cila", "sector": "S", "path": "P"}]))
+        (t / "ops.json").write_text(json.dumps([{"name": "sue-comunicazione-inizio-lavoro-asseverata", "sector": "S", "path": "P"}]))
         subprocess.run([sys.executable, str(HERE.parent / "catalogue.py"), "pane", str(t / "out"), "--bundle",
                         str(t / "pv-prova.js"), "--ops", str(t / "ops.json"), "--fresh"], check=True, capture_output=True)
         text = (t / "pv-prova.js").read_text()
@@ -1191,6 +1224,26 @@ def _():
         raise AssertionError("a missing part went unnoticed")
     except gen.GenError:
         pass
+
+
+@case("a combination states only what is its own: its operations, comune, sportello and rules main follow from its main pratica and parts")
+def _():
+    n = 0
+    for f in sorted(REH.glob("*/recipe.yaml")):
+        own = gen.load_yaml(f)
+        if not own.get("extends"):
+            continue
+        n += 1
+        assert not {"operation", "comune", "sportello"} & set(own) and "main" not in (own.get("rules") or {}), f.parent.name
+        main, *parts = own["extends"]
+        m = gen.resolved(gen.load_yaml(REH / main / "recipe.yaml"))
+        r = gen.resolved(own)
+        mops = m["operation"] if isinstance(m["operation"], list) else [m["operation"]]
+        assert r["operation"] == mops + [gen.load_yaml(HERE.parent / f"{p}.yaml")["operation"] for p in parts], f.parent.name
+        assert (r["comune"], r["sportello"]) == (m["comune"], m["sportello"]), f.parent.name
+        assert r["rules"]["main"] == m["rules"].get("main", m["procedure"]), f.parent.name
+        assert set(m["rules"].get("handles", [])) < set(r["rules"]["handles"]), f.parent.name
+    assert n == 28, n
 
 
 @case("a combination carries its main pratica's slots and refusals, and its part's (2026-10-31: the SCIA's had drifted)")
@@ -1282,7 +1335,7 @@ def _():
     d = gen.load_yaml(HERE.parent / "dictionary" / "fnsuap.yaml")
     e = next(x for x in d["sections"] if x["section"] == "Tecnici incaricati" and x.get("aliases"))
     next(f for f in e["fields"] if f.get("label") == "si")["when"] = "{{ask.direttore_lavori|is_altro_tecnico}}"
-    crawl = json.loads((HERE.parent / "catalogue" / "F839" / "sections" / "scia.json").read_text())
+    crawl = json.loads((HERE.parent / "catalogue" / "F839" / "sections" / "sue-segnalazione-certificata-di-inizio-attivita-edilizia.json").read_text())
     c = next(s for s in crawl["sections"] if s["section"].startswith("h1)"))
     recipe = gen.resolved(gen.load_yaml(ROOT / "rehearsals" / "scia-fittizia" / "recipe.yaml"))
     probs = gen.fill(e, "h1) Tecnici incaricati", c, recipe, "h1)")[1]
@@ -1375,7 +1428,7 @@ def _():
     pairs = {tuple(p["keys"]): p for p in w["pairs"]}
     assert set(pairs) == {(a["key"], b["key"]) for a, b in catalogue.sue_pairs()[1]}, "probe the missing pairs (catalogue.py pairs)"
     for d in sorted(ROOT.glob("rehearsals/*/recipe.yaml")):
-        r = gen.load_yaml(d)
+        r = gen.resolved(gen.load_yaml(d))
         if r.get("sportello") != "sue" or not isinstance(r.get("operation"), list):
             continue
         ks = sorted((key[o] for o in r["operation"]), key=order.index)
@@ -1405,23 +1458,50 @@ def _():
         assert ad(p) == ad(a) | ad(b), p["keys"]
 
 
-@case("every steps file and combination's answers are as the dictionary, recipes and crawls write them now (regen.py --check)")
+@case("every steps file is the one steps.lock names, and every combination's answers as the dictionary, recipes and crawls write them now (regen.py --check)")
 def _():
     import regen
     changed, refused = regen.regenerate(check=True)
     assert not refused, refused
-    assert not changed, "regenerate (bench/regen.py): " + ", ".join(str(p.relative_to(regen.REHEARSALS)) for p in changed)
+    assert not changed, "regenerate (bench/regen.py), then commit steps.lock: " + ", ".join(changed)
+    # Built, never committed: one hash per recipe, and nothing of them in git.
+    import subprocess
+    lock = gen.read_lock()
+    assert set(lock) == {p.parent.name for p in (ROOT / "rehearsals").glob("*/recipe.yaml")}, "steps.lock: one line per recipe"
+    tracked = subprocess.run(["git", "ls-files", "rehearsals/*/" + gen.STEPS], cwd=ROOT, capture_output=True, text=True).stdout
+    assert not tracked.strip(), "generated steps files are committed: " + tracked
+
+
+@case("gen.ensure builds a missing steps file and one the lock doesn't name, and leaves one it names")
+def _():
+    import shutil
+    import tempfile
+    with tempfile.TemporaryDirectory() as t:
+        root = Path(t)
+        for name in ("cila-fittizia", "fine-lavori-fittizia"):
+            shutil.copytree(ROOT / "rehearsals" / name, root / name, ignore=shutil.ignore_patterns(gen.STEPS))
+        shutil.copy(gen.LOCK, root / gen.LOCK.name)
+        assert sorted(p.parent.name for p in gen.ensure(root=root)) == ["cila-fittizia", "fine-lavori-fittizia"]
+        assert gen.ensure(root=root) == []
+        for name in ("cila-fittizia", "fine-lavori-fittizia"):
+            assert gen.sha256((root / name / gen.STEPS).read_text()) == gen.read_lock()[name], name
+        (root / "fine-lavori-fittizia" / gen.STEPS).write_text("stale\n")
+        assert [p.parent.name for p in gen.ensure(root=root)] == ["fine-lavori-fittizia"]
 
 
 @case("a steps file's own defaults never name a draft PROVA NON INVIARE: real users run them; rehearsals answer it")
 def _():
-    import regen
-    for d in sorted(regen.REHEARSALS.iterdir()):
-        for f in (d / "portal-steps.generated.yaml", d / "portal-steps.yaml"):
-            if f.exists():
-                asks = yaml.safe_load(f.read_text()).get("asks", {})
-                default = str(asks.get("descrizione", {}).get("default", ""))
-                assert "PROVA" not in default, (f.relative_to(regen.REHEARSALS), default)
+    # Built from each recipe, as regen.py builds them (the steps files aren't committed), and
+    # the hand-written ones as they are.
+    for d in sorted(p for p in REH.iterdir() if p.is_dir()):
+        if (d / "recipe.yaml").exists():
+            steps = generated(d.name)
+        elif (d / "portal-steps.yaml").exists():
+            steps = yaml.safe_load((d / "portal-steps.yaml").read_text())
+        else:
+            continue
+        default = str(steps.get("asks", {}).get("descrizione", {}).get("default", ""))
+        assert "PROVA" not in default, (d.name, default)
 
 
 print(f"{sum(results)}/{len(results)} passed")

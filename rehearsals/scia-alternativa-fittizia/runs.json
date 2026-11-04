@@ -1,188 +1,301 @@
 [
  {
-  "date": "2026-10-31",
-  "answers": "answers-condominio-strutture.json",
-  "result": "filled",
-  "from": "README"
+  "date": "2026-10-29",
+  "browser": "pane",
+  "case": "P6 (plain), first legs on one draft",
+  "note": "sections 0-19 filled first time; stopped on the description box (named by its counter: now by \"e che consistono in\"), then on \"specificare il tipo di intervento\" (the 4th tipologia's: left), then every asseverazione filled and read back on a fresh load (32 s); stopped on the attachments screen's required slots (read and recorded in the crawl, the energy report mapped)"
+ },
+ {
+  "date": "2026-10-29",
+  "browser": "pane",
+  "case": "P6 (plain), from scratch, in a batch after the permesso",
+  "note": "**filled** in 194 s with 9 attachments; fresh load 33 s, every value read back; no retry"
+ },
+ {
+  "date": "2026-10-29",
+  "browser": "pane",
+  "case": "P6, from scratch after the SCIA's technical quadri joined this pratica's dictionary entries",
+  "note": "**filled** in 159 s; fresh load 24 s, every value read back; no retry"
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "case": "asseverazione tolerances (`answers-tolleranze`: 1-bis at 6% and c. 2, under 60 m², zone 2, not structural), `bench/rerun.py` bundle",
+  "note": "**filled** in 172 s, read back on a fresh load (27 s), nothing moved or loose (no sanatoria question on this page)"
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "case": "structural tolerance of minor relevance (`answers-tolleranze-minore`), then relevant with the Genio Civile's authorization and its \"Autorizzazione sismica\" slot (`answers-tolleranze-autorizzazione`)",
+  "note": "**filled** both (155 s, 187 s), read back on a fresh load, nothing moved or loose"
+ },
+ {
+  "date": "2026-10-30",
+  "browser": "pane",
+  "case": "systems needing a project (`answers-impianti`: six systems, each project in its own slot), `bench/rerun.py` bundle",
+  "note": "**filled** in 188 s, read back on a fresh load (28 s), nothing moved or loose"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-impianti.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-tolleranze-autorizzazione.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-tolleranze-minore.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-tolleranze.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "case": "`answers-condominio-strutture` with the sewer connection's slot (\"Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura\", read on the permesso) mapped",
+  "note": "**filled** in 148 s, read back on a fresh load (23 s), nothing moved or loose"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "case": "the planning instruments (`answers-strumenti`), `bench/rerun.py` bundle",
+  "note": "**filled** in 151 s, nothing moved or loose"
+ },
+ {
+  "date": "2026-10-31",
+  "answers": "answers-condominio-strutture.json",
+  "result": "filled",
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-strumenti.json",
   "result": "filled",
-  "seconds": 150.6
+  "seconds": 150.6,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 163.6
+  "seconds": 163.6,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-rir-fuori-area.json",
   "result": "filled",
-  "seconds": 169.1
+  "seconds": 169.1,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-variante-sismica.json",
   "result": "stopped",
-  "seconds": 159.2
+  "seconds": 159.2,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-vincoli.json",
   "result": "filled",
-  "seconds": 151.3
+  "seconds": 151.3,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-10-31, 11-01",
+  "browser": "pane",
+  "note": "the never-run cases, `bench/rerun.py` bundles: P6, `rir-fuori-area`, `vincoli` **filled**; `variante-sismica` stopped on the fire-deroga slot, mapped, then **filled** (153 s)"
+ },
+ {
+  "date": "2026-11-01",
+  "browser": "pane",
+  "case": "`answers-acustica-vvf-igiene` (acoustics, the Vigili del Fuoco, the hygiene deroga, barriers) **filled** (164 s); `answers-terreni-urbanizzazione` (remediated soil, asbestos, the cemetery deroga) stopped on \"stipulata in data\", which the portal requires with \"non è dotata\": the Comune's three years refused, the case moved to a convenzione, then **filled** (222 s)",
+  "note": ""
+ },
+ {
+  "date": "2026-11-01",
+  "browser": "pane",
+  "note": "`answers-notifica-allegata` (the architect directs, the structural designer the structures, the notifica attached) **filled** (212 s), `bench/rerun.py` bundle"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-variante-sismica.json",
   "result": "filled",
-  "seconds": 153.1
+  "seconds": 153.1,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-acustica-vvf-igiene.json",
   "result": "filled",
-  "seconds": 163.7
+  "seconds": 163.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-terreni-urbanizzazione.json",
   "result": "stopped",
-  "seconds": 108.1
+  "seconds": 108.1,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-terreni-urbanizzazione.json",
   "result": "filled",
-  "seconds": 222
+  "seconds": 222,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-notifica-allegata.json",
   "result": "filled",
-  "seconds": 211.5
+  "seconds": 211.5,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-02",
+  "browser": "pane",
+  "case": "`answers-progettista`: another architectural designer (`p:`) who also directs (\"diverso dal progettista\": no), `bench/rerun.py` bundle",
+  "note": "**filled** in 191 s, nothing moved or loose; the asseverazione's Dati progettista are the designer's"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-scomputo-pozzi.json",
   "result": "stopped",
-  "seconds": 152
+  "seconds": 152,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-scarico-superficiali.json",
   "result": "stopped",
-  "seconds": 155.7
+  "seconds": 155.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-scomputo-pozzi.json",
   "result": "filled",
-  "seconds": 158.7
+  "seconds": 158.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-scarico-superficiali.json",
   "result": "filled",
-  "seconds": 174.8
+  "seconds": 174.8,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-progettista.json",
   "result": "filled",
-  "seconds": 190.7
+  "seconds": 190.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 153.9
+  "seconds": 153.9,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-regionale.json",
   "result": "filled",
-  "seconds": 203.6
+  "seconds": 203.6,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-03",
+  "browser": "pane",
+  "case": "`answers-piano-terra`: one ground-floor unit in zone B changed from commercial to residential with CILA-level works (art. 23-ter c. 1-quater, so Campania's SCIA alternativa, art. 2 c. 6 L.R. 13/2022): quadro c)'s A/B/C line, \"4. Altri interventi individuati dalla legislazione regionale\", `bench/rerun.py` bundle",
+  "note": "**filled** from a blank draft in 155 s, read back on a fresh load, nothing moved or loose"
+ },
+ {
+  "date": "2026-11-03",
+  "browser": "pane",
+  "case": "The asseverazione's tolerance branches (`answers-tolleranze-{2,3,4,5}`; 3 with the soil analysis's slot) and `answers-scomputo-pozzi` with its excavation as waste (`scavo: rifiuti`), `bench/rerun.py` bundle",
+  "note": "**filled**, all five (402 s, 605 s, 109 s, 263 s, 235 s)"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-piano-terra.json",
   "result": "filled",
-  "seconds": 154.9
+  "seconds": 154.9,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-scomputo-pozzi.json",
   "result": "filled",
-  "seconds": 234.6
+  "seconds": 234.6,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-tolleranze-2.json",
   "result": "filled",
-  "seconds": 402.1
+  "seconds": 402.1,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-tolleranze-3.json",
   "result": "filled",
-  "seconds": 605.4
+  "seconds": 605.4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-tolleranze-4.json",
   "result": "filled",
-  "seconds": 108.7
+  "seconds": 108.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-tolleranze-5.json",
   "result": "filled",
-  "seconds": 262.7
+  "seconds": 262.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-comproprietaria-negozio.json",
   "result": "filled",
-  "seconds": 264.7
+  "seconds": 264.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-proprietario-deposito.json",
   "result": "filled",
-  "seconds": 176
+  "seconds": 176,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-usufruttuario-industriale.json",
   "result": "filled",
-  "seconds": 258.7
+  "seconds": 258.7,
+  "browser": "pane"
  }
 ]

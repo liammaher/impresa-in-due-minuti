@@ -7,12 +7,7 @@
 extends: [cila-fittizia, parts/paesaggistica-semplificata]
 procedure: napoli/comune/cila-con-paesaggistica-semplificata
 title: "CILA con autorizzazione paesaggistica semplificata, SUE Napoli (tecnico con procura)"
-comune: F839
-sportello: sue
 crawl: sue-combo-cila-paesaggistica-semplificata
-operation:
-  - Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)
-  - Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)
 asks:
   descrizione: {default: "CILA e paesaggistica {{c:identity.last_name}}"}
 yours:
@@ -25,8 +20,6 @@ attachments:
     # The semplificata's second relazione slot opens from the SCIA's and the permesso's asseverazione
     # ("Si allega la relazione paesaggistica semplificata"): the CILA has no such box.
     - {label: Relazione paesaggistica semplificata e documentazione necessaria, drop: true}
-rules:
-  main: napoli/comune/cila-lavori-edilizi
 # The case: the main pratica's P6 answers, the part's, then these (a null drops one);
 # `gen.py --answers` writes answers-p6.json.
 answers:

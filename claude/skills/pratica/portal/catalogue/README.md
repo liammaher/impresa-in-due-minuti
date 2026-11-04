@@ -17,8 +17,12 @@ catastale (`F839` is Napoli).
   crawl (`sue-*`, `suap-NNN-*` for sector NNN of `suap-wizard.json`) also holds the pratica the
   portal generated (`generated`: adempimenti and sections), the wizard's screens and each
   scelta's sections (`scelta`); a section seen before is only a reference (`same_as:
-  "<pratica>#<section>"`), which `gen.py` follows. The first ones, by hand: `cila`, `cil`,
-  `scia`, `inizio-lavori`, `fine-lavori`, `agibilita`, `acconciatore`.
+  "<pratica>#<section>"`), which `gen.py` follows. Every crawl is named as the batch names it,
+  `sue-` and the operation's slug (`catalogue.py` `sue_name`) or `suap-NNN-` and the
+  operation's, so its sportello is its prefix. The first seven, crawled one by one, had short
+  names until 2026-11-04 (`cila` is `sue-comunicazione-inizio-lavoro-asseverata`; the
+  hairdresser's `acconciatore`, with the procura scelta, is
+  `suap-011-aprire-l-attivita-di-acconciatore-procura`).
 - `<comune>/drift.json`: what the last drift check found changed, per pratica (below).
 - `sue-wizard.json` `pairs`: which two operations the SUE's wizard takes in one pratica (wizard.js
   `pairs`, `catalogue.py pairs DIR --bundle FILE`, then `pairs-import` of print.js's text). Every two
