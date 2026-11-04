@@ -61,21 +61,65 @@ Measured today:
 
 - Level 1: 55 of 55 pratiche fully in the dictionary. 28 of them are two operations in one pratica (`sue-combo-*`).
 - Which pratiche a case needs: of the 30635 cases the rules table decides, **6584 reach a steps file**, 24051 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
-- Level 2: **10 refusals across 9 recipes**, 3 distinct messages.
+- Level 2: **63 refusals across 53 recipes**, 4 distinct messages.
 - Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot. A box read on a filled draft says what it adds (the dictionary's `slot`).
 - Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
 |---|---:|
-| `parere-esonero-fittizio` | 2 |
-| `pdc-fittizio` | 1 |
-| `pdc-paesaggistica-ordinaria-fittizio` | 1 |
-| `pdc-paesaggistica-ordinaria-terre-rocce-fittizio` | 1 |
-| `pdc-paesaggistica-semplificata-fittizio` | 1 |
-| `pdc-paesaggistica-semplificata-terre-rocce-fittizio` | 1 |
-| `pdc-sanatoria-accertamento-fittizio` | 1 |
-| `pdc-sanatoria-fittizio` | 1 |
-| `pdc-terre-rocce-fittizio` | 1 |
+| `parere-esonero-fittizio` | 3 |
+| `pdc-fittizio` | 2 |
+| `pdc-paesaggistica-ordinaria-fittizio` | 2 |
+| `pdc-paesaggistica-ordinaria-terre-rocce-fittizio` | 2 |
+| `pdc-paesaggistica-semplificata-fittizio` | 2 |
+| `pdc-paesaggistica-semplificata-terre-rocce-fittizio` | 2 |
+| `pdc-sanatoria-accertamento-fittizio` | 2 |
+| `pdc-sanatoria-fittizio` | 2 |
+| `pdc-terre-rocce-fittizio` | 2 |
+| `accertamento-paesaggistico-fittizio` | 1 |
+| `agibilita-fittizia` | 1 |
+| `cambio-impresa-fittizio` | 1 |
+| `cambio-intestazione-fittizio` | 1 |
+| `cil-fittizia` | 1 |
+| `cil-paesaggistica-ordinaria-fittizia` | 1 |
+| `cil-paesaggistica-ordinaria-terre-rocce-fittizia` | 1 |
+| `cil-paesaggistica-semplificata-fittizia` | 1 |
+| `cil-paesaggistica-semplificata-terre-rocce-fittizia` | 1 |
+| `cil-terre-rocce-fittizia` | 1 |
+| `cila-fittizia` | 1 |
+| `cila-paesaggistica-fittizia` | 1 |
+| `cila-paesaggistica-ordinaria-fittizia` | 1 |
+| `cila-paesaggistica-ordinaria-terre-rocce-fittizia` | 1 |
+| `cila-paesaggistica-semplificata-terre-rocce-fittizia` | 1 |
+| `cila-terre-rocce-fittizia` | 1 |
+| `dau-fittizia` | 1 |
+| `nomina-impresa-fittizia` | 1 |
+| `nuovo-dl-fittizio` | 1 |
+| `paesaggistica-ordinaria-fittizia` | 1 |
+| `paesaggistica-semplificata-fittizia` | 1 |
+| `piano-terre-rocce-fittizio` | 1 |
+| `proroga-paesaggistica-fittizia` | 1 |
+| `proroga-straordinaria-inizio-fittizia` | 1 |
+| `proroga-straordinaria-ultimazione-fittizia` | 1 |
+| `proroga-ultimazione-fittizia` | 1 |
+| `rinnovo-paesaggistica-fittizia` | 1 |
+| `scavo-fuori-sito-fittizio` | 1 |
+| `scia-alt-paesaggistica-ordinaria-fittizia` | 1 |
+| `scia-alt-paesaggistica-ordinaria-terre-rocce-fittizia` | 1 |
+| `scia-alt-paesaggistica-semplificata-fittizia` | 1 |
+| `scia-alt-paesaggistica-semplificata-terre-rocce-fittizia` | 1 |
+| `scia-alt-terre-rocce-fittizia` | 1 |
+| `scia-alternativa-fittizia` | 1 |
+| `scia-fittizia` | 1 |
+| `scia-paesaggistica-ordinaria-fittizia` | 1 |
+| `scia-paesaggistica-ordinaria-terre-rocce-fittizia` | 1 |
+| `scia-paesaggistica-semplificata-fittizia` | 1 |
+| `scia-paesaggistica-semplificata-terre-rocce-fittizia` | 1 |
+| `scia-sanatoria-fittizia` | 1 |
+| `scia-sanatoria-paesaggistica-ordinaria-fittizia` | 1 |
+| `scia-sanatoria-paesaggistica-semplificata-fittizia` | 1 |
+| `scia-terre-rocce-fittizia` | 1 |
+| `voltura-pdc-fittizia` | 1 |
 
 Pratiche filed together, mapped (a steps file each):
 
@@ -114,6 +158,7 @@ Pratiche filed together, not mapped yet (the cases that need them, most first):
 
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
+- 53×: The units are in both catasti (some with a categoria, in the Catasto Fabbricati, some without, in the Catasto Terreni): the section's second group, for the other catasto,
 - 8×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
@@ -135,6 +180,10 @@ Open items no recipe shows:
 - Portal defects (docs/portal-defects.md): none reported yet to InfoCamere or the Comune, the reports ready to send in docs/defect-reports/; two of them refuse common cases (a permesso with no energy incentive, a CILA or CIL before the firm is chosen).
 - Firma e invio is the person's (unreachable on made-up data; FILING's yours says how). After filing, nothing in the repo maps the portal: integration requests, the codice pratica and receipt, the status in Pratiche inviate. InfoCamere's manual describes them (MyPage, "Nuova Comunicazione": portal/README.md), but only a sent pratica shows them, and made-up data sends none.
 - No real case has been checked by an architect who files these pratiche (level 5).
+- Which pratica a case needs: the rules table routes the building titles only. The 15 lifecycle operations (inizio and fine lavori, agibilità, proroghe, voltura, a new direttore dei lavori or firm, the landscape renewal and proroga, the DAU) have library entries and steps files but no rules: the table's "altro" refuses proroghe and volture, so the person names the pratica.
+- Operations in one pratica: the wizard takes 188 pairs (sue-wizard.json `pairs`); the 28 combinations mapped are a title with its landscape procedure and/or the dichiarazione di utilizzo. A lifecycle operation with another (the inizio lavori with the dichiarazione di utilizzo, a proroga with the landscape proroga) is neither researched nor crawled; each alone is mapped, so nothing is blocked.
+- Several cadastral units are mapped (one group of Dati catastali, 2026-11-04); units in both catasti (the section's second group) are refused. The title's other holders take one row: more go in the assent's attachment, and the voltura's co-holders one person (portal defect coholders-one).
+- Napoli's SUE wants every file PDF/A and signed (DD 501/2026), so on a real case every slot takes a signed file, and no real signed file has been uploaded yet: the attachments of a real pratica rest on that. InfoCamere's "Copia pratica" (a new pratica from one sent before) is read in its manual, never used.
 
 ## The wedge
 

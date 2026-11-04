@@ -257,6 +257,21 @@ OPEN_BEYOND = [
     "in Pratiche inviate. InfoCamere's manual describes them (MyPage, \"Nuova Comunicazione\": portal/README.md), "
     "but only a sent pratica shows them, and made-up data sends none.",
     "No real case has been checked by an architect who files these pratiche (level 5).",
+    # The audit of 2026-11-04 (what it found that no count above shows).
+    "Which pratica a case needs: the rules table routes the building titles only. The 15 lifecycle "
+    "operations (inizio and fine lavori, agibilità, proroghe, voltura, a new direttore dei lavori or firm, "
+    "the landscape renewal and proroga, the DAU) have library entries and steps files but no rules: the "
+    "table's \"altro\" refuses proroghe and volture, so the person names the pratica.",
+    "Operations in one pratica: the wizard takes 188 pairs (sue-wizard.json `pairs`); the 28 combinations "
+    "mapped are a title with its landscape procedure and/or the dichiarazione di utilizzo. A lifecycle "
+    "operation with another (the inizio lavori with the dichiarazione di utilizzo, a proroga with the "
+    "landscape proroga) is neither researched nor crawled; each alone is mapped, so nothing is blocked.",
+    "Several cadastral units are mapped (one group of Dati catastali, 2026-11-04); units in both catasti "
+    "(the section's second group) are refused. The title's other holders take one row: more go in the "
+    "assent's attachment, and the voltura's co-holders one person (portal defect coholders-one).",
+    "Napoli's SUE wants every file PDF/A and signed (DD 501/2026), so on a real case every slot takes a signed "
+    "file, and no real signed file has been uploaded yet: the attachments of a real pratica rest on that. "
+    "InfoCamere's \"Copia pratica\" (a new pratica from one sent before) is read in its manual, never used.",
 ]
 
 

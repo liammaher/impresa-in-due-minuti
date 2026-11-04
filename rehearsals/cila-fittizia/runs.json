@@ -362,5 +362,19 @@
   "result": "filled",
   "seconds": 98,
   "browser": "pane"
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-accorpamento.json",
+  "result": "filled",
+  "seconds": 122.1,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-proprietario.json",
+  "result": "filled",
+  "seconds": 95.6,
+  "browser": "pane"
  }
 ]

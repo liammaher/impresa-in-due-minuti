@@ -565,7 +565,15 @@ def fill(entry, as_name, c, recipe, name):
             sec.added = True
             if d["kind"] == "add" and d["anchor"] not in pluses:
                 pluses.append(d["anchor"])
-            fields.append(dict(d))
+            # `title`: the box's own text the run finds it by, where its label (the crawl's, which
+            # accounts for it here) is as near another box (Dati catastali's subalterno, 2026-11-04).
+            # A block's box keeps the crawl's length, as one by id does (run.py refuses a longer
+            # value): the units by label lost it once (foglio 5, subalterno 4). Only a label the
+            # section has once: a repeated one ("Comune italiano") may be another box's.
+            same = [x for x in sec.fields if d["kind"] != "add" and matches(x, d["kind"], d["label"])]
+            crawled = same[0] if len(same) == 1 else None
+            fields.append({k: v for k, v in d.items() if k != "title"} | ({"label": d["title"]} if "title" in d else {})
+                          | ({"max": crawled["max"]} if crawled and crawled.get("max") and "max" not in d else {}))
             continue
         look = sec
         if "via" in d:

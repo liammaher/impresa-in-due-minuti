@@ -164,3 +164,6 @@ the same are recorded, and the others are named; set `window.pvCheckNames` to th
   branches until crawled again (depth 3 for the stato legittimo's sub-choices).
 - Names aren't identity: two sections with different titles can hold the same fields, which
   the section crawl settles.
+- A section's "+" is tried once, the last one: a list of lists (Dati catastali's unit "+" before its
+  group's "+") or two lists show only the last one's `plus` (`of` counts them since 2026-11-04). What
+  the others add is read on a draft, pressed and cancelled with Annulla, which saves nothing.

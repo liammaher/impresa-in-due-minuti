@@ -233,7 +233,10 @@
     const disabled = now.filter((f) => was.has(key(f)) && !was.get(key(f)).disabled && f.disabled);
     if (enabled.length) node.enables = enabled.map((f) => f.id);
     if (disabled.length) node.disables = disabled.map((f) => f.id);
-    // A "+" open in this state repeats a block: press it once, note what it adds.
+    // A "+" open in this state repeats a block: press it once, note what it adds. Only the last
+    // one is pressed: where there are more (two lists, or a list of lists: Dati catastali's
+    // unit "+" before its group's "+", 2026-11-04), `of` says so and what the others add is read
+    // on a draft. The last there was the group's: its `adds` looked like no unit at all.
     if (depth > 1) {
       const plus = [...doc().querySelectorAll('[id*="dynaForm"] button')].filter((b) => b.offsetParent && b.textContent.trim() === "+");
       if (plus.length) {
@@ -241,7 +244,7 @@
         const after = snap();
         const had = new Set(now.map(key));
         const adds = after.filter((f) => !had.has(key(f)) || after.filter((g) => key(g) === key(f)).length > now.filter((g) => key(g) === key(f)).length);
-        node.plus = { anchor: (adds.find((f) => f.kind !== "message") || {}).label, adds: adds.length };
+        node.plus = { anchor: (adds.find((f) => f.kind !== "message") || {}).label, adds: adds.length, of: plus.length };
       }
     }
     out.push(node);

@@ -127,10 +127,13 @@ NEW_SLOT = "Copia del documento di identità del/i titolare/i e/o del tecnico"
 
 def as_p6_ran(steps):
     """A generated CILA as the P6 run took it: its first run with made-up files (run.phase),
-    without the slot the hand walk left empty."""
+    without the slot the hand walk left empty, and one cadastral unit (no "+" template: P6's
+    count of other technicians is none too)."""
     import run
     steps = run.phase(steps, made_up=True)
-    return steps | {"sections": [s | {"fields": [f for f in s["fields"] if f.get("label") != NEW_SLOT]}
+    unit_plus = lambda f: f.get("anchor") == "foglio" and f.get("block") == "#N"
+    return steps | {"sections": [s | {"fields": [f for f in s["fields"] if f.get("label") != NEW_SLOT
+                                                 and not (s["section"] == "Dati catastali" and unit_plus(f))]}
                                  for s in steps["sections"]]}
 
 
@@ -293,7 +296,12 @@ def _():
         assert 'querySelectorAll(\'[data-pv="review"]' in loop, "the batch leaves the review over the portal"
         queue = (t / "out" / "queue-0.js").read_text()
         check = (t / "out" / "check.js").read_text()
-        assert all(f'"steps/{n}.js"' in check for n in names) and '"runner.js"' in check
+        # Each steps file by name; one that differs from main's in some sections by its patch first,
+        # the whole file named as what the patch asks for when it can't apply.
+        assert all(f'"steps/{n}.js"' in check or f'"steps/{n}.patch.js (it says if steps/{n}.js is needed instead)"' in check
+                   for n in names) and '"runner.js"' in check
+        assert all((t / "out" / "steps" / f"{n}.js").exists() for n in names)
+        assert all((t / "out" / "steps" / f"{n}.patch.js").exists() == (f"{n}.patch.js" in check) for n in names)
         # The piece's values as a string it checks before adding them (a garbled copy throws): its
         # length and FNV-1a hash as the page computes them.
         line = next(x for x in queue.splitlines() if x.strip().startswith("const raw = "))

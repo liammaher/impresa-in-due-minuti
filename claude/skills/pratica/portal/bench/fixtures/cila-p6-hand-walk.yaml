@@ -152,14 +152,17 @@ sections:
       - {id: "r7c2p21reg:txtws_input", kind: text, label: piano, value: "{{c:immobile.piano}}", optional: true}
       - {id: "r7c3p23reg:txtws_input", kind: text, label: interno, value: "{{c:immobile.interno}}", optional: true}
 
+  # The walk's ids (r3c1p5reg ...) were the first unit's. Since 2026-11-04 the units go by
+  # label in blocks (a unit's "+" adds the next), the subalterno by its own title: the same
+  # boxes and values, filled on the portal that day (one unit and two).
   - section: Dati catastali
     fields:
       - {id: "r1c1p1reg:radio:0_clone", kind: radio, label: NCEU}
-      - {id: "r3c1p5reg:number", kind: text, label: foglio, value: "{{c:immobile.catasto_foglio}}"}
-      - {id: "r3c2p7reg:txt", kind: text, label: particella/mappale, value: "{{c:immobile.catasto_particella}}"}
-      - {id: "r3c3p9reg:number", kind: text, label: subalterno, value: "{{c:immobile.catasto_subalterno}}"}
-      - {id: "r5c2p15reg:txt", kind: text, label: sezione Urbana, value: "{{c:immobile.catasto_sezione}}", optional: true}
-      - {id: "r8c1p23reg", kind: select, label: categoria, value: "{{c:immobile.catasto_categoria|categoria}}"}
+      - {kind: text, label: foglio, anchor: foglio, block: 1, value: "{{c:immobile.catasto_foglio}}"}
+      - {kind: text, label: particella/mappale, anchor: foglio, block: 1, value: "{{c:immobile.catasto_particella}}"}
+      - {kind: text, label: se non presente indicare il numero 0, anchor: foglio, block: 1, value: "{{c:immobile.catasto_subalterno}}"}
+      - {kind: text, label: sezione Urbana, anchor: foglio, block: 1, value: "{{c:immobile.catasto_sezione}}", optional: true}
+      - {kind: select, label: categoria, anchor: foglio, block: 1, value: "{{c:immobile.catasto_categoria|categoria}}"}
 
   # A tenant: "altro" + locatario, and the non-exclusive title, which opens the owner's
   # row (the terzo titolare who gave assent). `o:` is the owner company's person in the

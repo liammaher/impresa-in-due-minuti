@@ -12,6 +12,8 @@ and its answers file) goes through run.py's page_files, as `run.py page` would. 
                 byte), so only those are sent; run it first, on the portal's origin
   runner.js     inpage.js, as install.js stores it
   steps/*.js    each rehearsal's steps (no personal data)
+  steps/*.patch.js  where they differ from main's in some sections: only those, applied to the
+                pane's copy and stored only if the result is the new file's sha256 (check.js names it)
   queue-N.js    the runs' values, in pieces of at most 40 KB (a message the pane takes in one call):
                 a procedure's first run whole, each later one as what differs from it (the
                 sections it changes, its wizard), so six cases of one pratica cost one and a bit
@@ -38,6 +40,7 @@ repo's fixture wouldn't give that run again).
 import argparse
 from datetime import date
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -145,6 +148,21 @@ def record(done, default, day):
         print(f"{name}: {entry['answers']} {entry['result']}")
 
 
+def main_patch(steps_file, values, urls, key, new_json, fallback):
+    """The patch from main's version of these steps to these (run.patch_script), or None: no
+    such file on main, the same steps, another key (a "+" count), or not patchable by section."""
+    root = REHEARSALS.parent
+    try:
+        old = subprocess.run(["git", "-C", str(root), "show", f"HEAD:{steps_file.relative_to(root)}"],
+                             capture_output=True, text=True, check=True).stdout
+        old_steps = yaml.safe_load(old)
+        v = run.Values(values.answers, fields=values.fields, asks=old_steps.get("asks"))
+        _, parts = run.page_bundle(run.phase(run.expand(old_steps, v), made_up=True), v, urls=urls, pick=False)
+    except (subprocess.CalledProcessError, run.StepError, KeyError, ValueError):
+        return None
+    return parts.get(key) and run.patch_script(key, parts[key], new_json, fallback)
+
+
 def main():
     gen.ensure()  # the rehearsals' steps files are built, never committed (steps.lock)
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
@@ -198,6 +216,13 @@ def main():
         (a.out / js).write_text(files["steps.js"] + "'installed'\n")
         stored |= parts
         sources |= {"pv-runner": "runner.js", f"pv-steps:{proc}": js}
+        # The same steps as main has them: if the pane holds those, a patch of the sections
+        # that changed is enough (run.patch_script), a few KB in place of 40-90.
+        patch = main_patch(steps_file, values, urls, f"pv-steps:{proc}", parts[f"pv-steps:{proc}"], js)
+        if patch:
+            pjs = js[:-3] + ".patch.js"
+            (a.out / pjs).write_text(patch)
+            sources[f"pv-steps:{proc}"] = f"{pjs} (it says if {js} is needed instead)"
         origin = origin or run.re.match(r"https?://[^/]+", steps["logged_in"])[0]
         queue.append([label, proc, json.loads(values_of(files["run.js"], proc))])
     if failed:
