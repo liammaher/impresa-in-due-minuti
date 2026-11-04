@@ -36,7 +36,7 @@
  "amianto": "false",
  "igienico_conforme": "true",
  "strutture": "false",
- "diritti_euro": "151",
+ "diritti_euro": "401",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
  "assenso_proprietario": "rehearsals/cila-fittizia/files/assenso-immobiliare-fittizia.pdf",
  "notifica_preliminare": "rehearsals/cila-fittizia/files/notifica-preliminare.pdf",
@@ -86,5 +86,12 @@
  "prova_catasto_modo": "copia",
  "prova_catasto_copia": "rehearsals/scia-fittizia/files/accatastamento-primo-impianto.pdf",
  "tolleranze": false,
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "vvf_variante": "false",
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "terre_rocce": "no"
 }

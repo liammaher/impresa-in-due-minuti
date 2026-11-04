@@ -19,7 +19,9 @@
  "prec_permesso_numero": "1234",
  "prec_permesso_data": "1965-05-12",
  "stato_legittimo": "titoli",
- "precedenti": ["prec_permesso"],
+ "precedenti": [
+  "prec_permesso"
+ ],
  "tolleranze": false,
  "superficie_mq": "85",
  "volume_mc": "255",
@@ -41,7 +43,7 @@
  "amianto": "false",
  "igienico_conforme": "true",
  "strutture": "true",
- "diritti_euro": "151",
+ "diritti_euro": "401",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
  "assenso_proprietario": "rehearsals/cila-fittizia/files/assenso-immobiliare-fittizia.pdf",
  "notifica_preliminare": "rehearsals/cila-fittizia/files/notifica-preliminare.pdf",
@@ -113,5 +115,12 @@
  "scavo": "nessuno",
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "vvf_variante": "false",
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "terre_rocce": "no"
 }

@@ -36,7 +36,7 @@
  "amianto": "false",
  "igienico_conforme": "true",
  "strutture": "false",
- "diritti_euro": "151",
+ "diritti_euro": "401",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
  "assenso_proprietario": "rehearsals/cila-fittizia/files/assenso-immobiliare-fittizia.pdf",
  "notifica_preliminare": "rehearsals/cila-fittizia/files/notifica-preliminare.pdf",
@@ -88,5 +88,12 @@
  "toll_prec_pratica_data": "2021-02-15",
  "toll_prec_atto_numero": "4321/1T",
  "toll_prec_atto_data": "2022-09-30",
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "vvf_variante": "false",
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "terre_rocce": "no"
 }

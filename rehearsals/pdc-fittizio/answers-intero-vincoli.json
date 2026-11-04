@@ -95,5 +95,21 @@
  "idraulico_doc": "rehearsals/scia-fittizia/files/documentazione-idraulico.pdf",
  "vinca_doc": "rehearsals/scia-fittizia/files/documentazione-vinca.pdf",
  "rir_doc": "rehearsals/scia-fittizia/files/documentazione-rir.pdf",
- "soprintendenza_doc": "rehearsals/scia-fittizia/files/documentazione-soprintendenza.pdf"
+ "soprintendenza_doc": "rehearsals/scia-fittizia/files/documentazione-soprintendenza.pdf",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false",
+ "barriere_deroga": "false",
+ "rinnovabili_obblighi": "rispettati",
+ "vvf_variante": "false",
+ "scomputo": "false",
+ "strumenti_altri": "false",
+ "igienico_24_5bis": "false",
+ "strutture_allegate": "false",
+ "barriere_art82": "false",
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "terre_rocce": "no"
 }

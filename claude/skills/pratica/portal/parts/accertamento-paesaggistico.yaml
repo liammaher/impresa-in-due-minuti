@@ -1,0 +1,37 @@
+# What the accertamento di compatibilità paesaggistica (artt. 167-181 D.Lgs. 42/2004 - Comune) adds
+# to the permesso in sanatoria it's filed with, the two selected together in the wizard: works done
+# without the permesso (art. 36 DPR 380/2001) that altered a protected place, with no new usable
+# surface or volume (art. 167 c. 4). The building sanatoria holds only with the compatibility found
+# (art. 146 c. 4 D.Lgs. 42/2004; Cass. pen. Sez. III n. 15726/2026). The permesso's asseverazione
+# says the works alter the place and ticks none of its three procedures (`paesaggio_accertamento`).
+asks:
+  paesaggio_accertamento: {default: "true"}
+rules:
+  handles: [napoli/comune/accertamento-compatibilita-paesaggistica]
+supports:
+  - when: "{{ask.vincolo|is_art_134|not}}"
+    else: "The accertamento's form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose."
+  - when: "{{ask.titolo|is_locatario|not}}"
+    else: "The accertamento's form offers only ownership, co-ownership, the condominio's administrator or another real right: a tenant isn't one."
+# The case it adds to the main pratica's P6 answers (a null drops one): a property under art. 136
+# and 142, the client as owner by deed (the form takes no tenant), works done that altered it.
+answers:
+  paesaggio: ordinaria
+  fatti: [paesaggio_eseguiti]
+  bollo_marche: false
+  bollo_esenzione: "no"
+  vincolo: art 136 and 142
+  vincolo_136_lettera: c) e d)
+  vincolo_136_provvedimento: D.M. fittizio PROVA NON INVIARE del 01/01/1960
+  vincolo_142_lettera: a)
+  titolo: proprietario
+  titolo_esclusivo: true
+  assenso_proprietario: null
+  titolo_atto: rogito
+  atto_notaio: Mario Fittizio
+  atto_notaio_sede: Napoli
+  atto_repertorio: '12345'
+  atti_gravanti: false
+  zona_prg: zona B
+  prg_nta: art. 33
+  paes_interessa: immobile

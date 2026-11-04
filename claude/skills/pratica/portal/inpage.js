@@ -16,6 +16,8 @@
 //
 //   __pv.start(procedure, values[, resume])  starts a run, returns at once. resume picks a
 //                                  stopped run up: {url, from, kept, fixes} (run.py --resume);
+//                                  {reopen: true, from} opens the draft named by the wizard's
+//                                  first value from Pratiche in bozza (run.py --after-declarations);
 //                                  a stop on the portal's own error goes on by itself (`retries`)
 //   await __pv.wait(ms)            the run's report once it ends, or after ms
 //   __pv.last()                    the last run's report, kept in the tab (sessionStorage: it
@@ -86,7 +88,7 @@
   }
   const scrub = (s) => secrets.reduce((t, rx) => t.replace(rx, "‹value›"), String(s));
   // Why a read-back failed, without what it wanted or found.
-  const redact = (c) => ({ label: c.label, why: c.got === null ? "missing" : c.got === "" || c.got === "unchecked" ? "empty" : "different" });
+  const redact = (c) => ({ label: c.label, why: c.hidden ? "hidden by a later choice" : c.got === null ? "missing" : c.got === "" || c.got === "unchecked" ? "empty" : "different" });
   function publicReport() {
     const out = { ...report };
     delete out.kept;
@@ -195,10 +197,14 @@
   const widgets = () => Object.values((win().PrimeFaces || {}).widgets || {}); // none: a plain form
   const widgetOf = (e) => widgets().find((w) => w && w.input && w.input[0] === e);
 
+  // A frame on another origin (the sign-in's) can't be read: busy, until it comes back or idle()
+  // says signed out.
   const busy = () => {
-    const w = win(), d = doc();
-    return !d || d.readyState !== "complete" || (w.jQuery && w.jQuery.active > 0) ||
-      !!(w.PrimeFaces && w.PrimeFaces.ajax && !w.PrimeFaces.ajax.Queue.isEmpty());
+    try {
+      const w = win(), d = doc();
+      return !d || d.readyState !== "complete" || (w.jQuery && w.jQuery.active > 0) ||
+        !!(w.PrimeFaces && w.PrimeFaces.ajax && !w.PrimeFaces.ajax.Queue.isEmpty());
+    } catch (e) { return true; }
   };
 
   // An expired sign-in sends the frame to the identity provider (another origin: no document
@@ -221,7 +227,10 @@
     const end = performance.now() + ms;
     let loads = 0, leaving = null;
     const onload = () => { loads++; };
-    const watch = () => win().addEventListener("beforeunload", () => { leaving = loads; });
+    // A load can land the frame on the sign-in's origin on its way back to the portal (2026-11-03:
+    // "Blocked a frame with origin" stopped a run): no window to watch there, so wait for the next
+    // load. One that never comes fails, as signed out.
+    const watch = () => { try { win().addEventListener("beforeunload", () => { leaving = loads; }); } catch (e) { leaving = loads; } };
     frame.addEventListener("load", onload);
     watch();
     click();
@@ -254,29 +263,57 @@
   }
 
   // An attachments slot, as its box's own texts tell: its title, the types it takes
-  // ("Tipologie ammesse: pdf.p7m;..."), whether the portal says it's required. Never the name of
-  // a file in it (a cell with one reads "<name> Rimuovi").
+  // ("Tipologie ammesse: pdf.p7m;..."), whether the portal says it's required, whether it holds a
+  // file. Never the name of a file in it (a cell with one reads "<name> Rimuovi"). The upload
+  // widget's wrapper has a title of its own: the portal's message once it has checked the screen,
+  // else "false" (or "true"), which named every unflagged slot "false" (2026-11-02). Required is
+  // the message only: the broadband slot's title reads "(OBBLIGATORIO per nuove costruzioni…)".
   function slotOf(box) {
     const texts = win().eval(`(${steps.label_js})`)(box);
     const types = texts.map((t) => /Tipologie ammesse:\s*([\w.;]+)/i.exec(t)).find(Boolean);
     const accepts = types ? types[1].split(";").filter(Boolean) : [];
-    const title = texts.find((t) => t && !/^(il valore|la descrizione|tipologie ammesse|scarica il documento)/.test(norm(t)) &&
+    const title = texts.find((t) => t && !/^(il valore|la descrizione|tipologie ammesse|scarica il documento|true$|false$)/.test(norm(t)) &&
       !/rimuovi|\.(pdf|p7m|jpe?g|png|dwf|svg|xml|zip|tiff?)\b/i.test(t)) || "";
+    const cell = box.closest("td");
     return { title, accepts, signed_only: accepts.length > 0 && accepts.every((x) => x.endsWith(".p7m")),
-      required: texts.some((t) => /obbligatori/.test(norm(t))) };
+      required: texts.some((t) => MESSAGE.test(norm(t))), holds: !!cell && /\bRimuovi\b/.test(cell.innerText) };
   }
 
   // ".error-message-text" is the portal's message under a field ("Il valore è obbligatorio").
   // `theirs`: a section's fields the person fills (a statement in their name); the
   // portal's "required" under one of them isn't the run's error, nor under a slot that takes
-  // only signed files (.p7m): the person signs and attaches those.
-  const errors = (theirs = []) => [...doc().querySelectorAll(".ui-message-error, .ui-messages-error, .ui-growl-message-error, [id*=\"dynaForm\"] .error-message-text")]
+  // only signed files (.p7m): the person signs and attaches those. A slot is the person's by its
+  // title's start, unless the entry is another slot's whole title: "Relazione Paesaggistica
+  // Semplificata" (signed only) is not "Relazione paesaggistica semplificata e documentazione…"
+  // (a plain PDF, Claude's), whose empty required slot four runs passed as filled (2026-11-01).
+  const errors = (theirs = []) => {
+    const titles = [...doc().querySelectorAll("input[type=file]")].map((b) => norm(slotOf(b).title));
+    const owns = (title, t) => norm(title).startsWith(norm(t)) && (norm(title) === norm(t) || !titles.includes(norm(t)));
+    return [...doc().querySelectorAll(".ui-message-error, .ui-messages-error, .ui-growl-message-error, [id*=\"dynaForm\"] .error-message-text")]
+      .filter((e) => e.getClientRects().length && norm(e.textContent))
+      .filter((e) => { const box = e.closest("td") && e.closest("td").querySelector("input, select, textarea");
+        if (box && (slotOf(box) || {}).signed_only) return false;
+        if (box && box.type === "file") return !theirs.some((t) => box.id.endsWith("dynaForm:" + t) || owns(slotOf(box).title, t));
+        return !(box && theirs.some((t) => box.id.endsWith("dynaForm:" + t) ||
+          win().eval(`(${steps.label_js})`)(box).some((x) => norm(x).includes(norm(t))))); })
+      .map((e) => norm(e.textContent));
+  };
+
+  // ".alert-message-text" is the portal's warning beside a box it looked up at Salva and kept
+  // anyway, which errors() never read (2026-11-02): a PEC that isn't a real one ("Indirizzo Pec non
+  // valido"), cadastral data it doesn't know, and an address it doesn't know, which every address
+  // gets, the Comune's own (Piazza Municipio 1) too. So it's never a stop: the report lists each
+  // by section and the box's label (no value), and the person's review shows them.
+  const alerts = () => [...doc().querySelectorAll(".alert-message-text")]
     .filter((e) => e.getClientRects().length && norm(e.textContent))
-    .filter((e) => { const box = e.closest("td") && e.closest("td").querySelector("input, select, textarea");
-      if (box && (slotOf(box) || {}).signed_only) return false;
-      return !(box && theirs.some((t) => box.id.endsWith("dynaForm:" + t) ||
-        win().eval(`(${steps.label_js})`)(box).some((x) => norm(x).includes(norm(t))))); })
-    .map((e) => norm(e.textContent));
+    .map((e) => {
+      const box = e.closest("td") && e.closest("td").querySelector("input, select, textarea");
+      const text = e.textContent.replace(/\s+/g, " ").trim();
+      // The warning sits in the box's cell, so it's among the box's texts: not its label.
+      const own = box ? [box.title, ...win().eval(`(${steps.label_js})`)(box)].map(norm)
+        .filter((x) => x && x !== norm(text) && !MESSAGE.test(x)) : [];
+      return { id: box ? box.id.split("dynaForm:")[1].replace(/:combo_input$/, "") : null, label: own[0] || null, text };
+    });
 
   function checkLabel(e, label) {
     if (!label) return;
@@ -391,7 +428,16 @@
       if (w && w.hide) w.hide();
       p.style.display = "none"; // PrimeFaces 11's hide() only starts a fade, still over the next box
     }
-    if (open.length) await idle();
+    // A date typed leaves jQuery UI's calendar open: a person's click elsewhere closes it, a
+    // script's click doesn't, so it covered the next box (the permesso's sanatoria quadro, 2026-11-02).
+    const cal = doc().getElementById("ui-datepicker-div");
+    const calOpen = cal && cal.getClientRects().length > 0; // fixed or absolute alike
+    if (calOpen) {
+      const jq = win().jQuery;
+      if (jq && jq.datepicker && jq.datepicker._hideDatepicker) jq.datepicker._hideDatepicker();
+      cal.style.display = "none";
+    }
+    if (open.length || calOpen) await idle();
   }
 
   async function text(f, value) {
@@ -451,9 +497,11 @@
   }
 
   async function lookup(f, value) {
+    // The street's first word is its type, whatever it is: the comune's list names its streets
+    // VIA, VICO, TRAVERSA, CUPA, GRADINI... first (a third of Naples' aren't a VIA, VIALE, PIAZZA,
+    // CORSO or LARGO).
     const parts = value.split(/\s+/);
-    const [dug, street] = parts.length > 1 && steps.dug.includes(parts[0].toUpperCase())
-      ? [parts[0].toUpperCase(), parts.slice(1).join(" ")] : ["ALTRO", value];
+    const [dug, street] = parts.length > 1 ? [parts[0].toUpperCase(), parts.slice(1).join(" ")] : ["", value];
     const words = street.toUpperCase().split(/\W+/).filter((w) => w.length > 2);
     const e = el(f.id) || fail(`${f.id}: no field`);
     checkLabel(e, f.label);
@@ -501,17 +549,30 @@
   async function attach(f, v) {
     const e = (f.css ? doc().querySelector(f.css) : el(f.id)) || fail(`${f.css || f.id}: no file box`);
     if (e.type !== "file") fail(`${f.css || f.id}: not a file box`);
-    checkLabel(e, f.label);
+    if (!f.slotted) checkLabel(e, f.label); // a box "+" added has no label: its slot's rows named it
     const w = win(), bytes = v.url ? await fetched(v) : Uint8Array.from(w.atob(v.b64), (c) => c.charCodeAt(0));
     const dt = new w.DataTransfer();
     dt.items.add(new w.File([bytes], v.name, { type: v.type }));
+    // The portal refuses a file on upload in a growl that fades in seconds: "Il documento non è
+    // stato accettato", with why (a digital signature it finds invalid, as a made-up .p7m's; a
+    // type the slot doesn't take; 2026-11-03). Watched while the upload runs.
+    const refused = [];
+    const seen = () => { for (const g of doc().querySelectorAll(".ui-growl-item")) {
+      const t = g.textContent.replace(/\s+/g, " ").trim();
+      if (/non è stato accettato/i.test(t) && !refused.includes(t)) refused.push(t);
+    } };
+    const watch = new w.MutationObserver(seen);
+    watch.observe(doc().body, { childList: true, subtree: true });
     e.files = dt.files;
     fire(e);
     await idle();
     // An upload that isn't jQuery's doesn't show as busy: give it until its list names
     // the file. A portal that names it only after Salva costs these 10 s once.
-    for (const end = performance.now() + 10000; performance.now() < end &&
+    for (const end = performance.now() + 10000; performance.now() < end && !refused.length &&
       !norm(doc().body.innerText).includes(norm(v.name));) await sleep(100);
+    seen();
+    watch.disconnect();
+    if (refused.length) fail(`${f.label}: the portal refused ${v.name}: ${refused.join("; ")}`);
     // Some slots ("Allegati liberi") want a description next to the uploaded file: a box
     // with no id of its own in the slot's cell.
     if (f.describe) {
@@ -523,14 +584,25 @@
     return v.name;
   }
 
-  function readBack(f) {
-    if (f.spec) f = { ...f, id: resolve(f.spec).id }; // rows added since may have renumbered it
-    else if (f.id && f.label) f = { ...f, id: located({ kind: f.kind, label: f.label, nth: f.nth, id: f.id }).id }; // as when it was filled
+  // `own`: the section's own read-back, right after its Salva. A box filled there that is gone now
+  // was hidden by a later choice in the section: rows the portal keeps as one field (the SCIA in
+  // sanatoria's art. 34-ter dating and oblazione, 2026-11-02). That's a value not kept, never the
+  // portal being slow: as a lookup's "fields with this label" it was retried twice into the same misfill.
+  function readBack(f, own) {
     if (f.kind === "file") {
-      // An upload widget empties its box once it has sent the file; its list names it.
+      // An upload widget empties its box once it has sent the file; its list names it. So no box
+      // is looked up (a slot's second box has no label to find it by).
       const got = norm(doc().body.innerText).includes(norm(f.typed)) ? f.typed : null;
       return { label: f.label || f.css || f.id, want: f.typed, got, ok: got !== null };
     }
+    if (f.spec) {
+      try { f = { ...f, id: resolve(f.spec).id }; } // rows added since may have renumbered it
+      catch (e) {
+        if (own && e instanceof StepError && /fields with this label/.test(e.message)) return { label: f.label || f.id, want: f.typed, got: null, ok: false, hidden: true };
+        throw e;
+      }
+    }
+    else if (f.id && f.label) f = { ...f, id: located({ kind: f.kind, label: f.label, nth: f.nth, id: f.id }).id }; // as when it was filled
     if (f.kind === "radio" || f.kind === "checkbox") {
       const got = el(f.id) && el(f.id).checked ? "checked" : "unchecked";
       return { label: f.label, want: "checked", got, ok: got === "checked" };
@@ -574,6 +646,22 @@
     return texts.filter((t, i) => !t || texts.indexOf(t) === i).slice(0, 3).findIndex((t) => startsLabel(t, label));
   }
   const labelled = (e, label) => labelRank(e, label) >= 0;
+  // A box's own label: its title, else its first text that isn't a validation message. A
+  // dropdown's cell lists its options, never its label: once the portal flags it required (the
+  // SUE Scheda anagrafica's sede, after Forma giuridica re-renders the block, 2026-11-02), that
+  // list came next, and the sede's Provincia stopped counting as one.
+  const OPTIONS = /^selezionare un valore/;
+  const ownLabel = (e) => [e.title, ...win().eval(`(${steps.label_js})`)(e)].find((t) => norm(t) && !MESSAGE.test(norm(t))
+    && !(e.tagName === "SELECT" && OPTIONS.test(norm(t))));
+  // Where each repeat of a group starts: the boxes the anchor names best, and the boxes of no
+  // text of their own under it (the CILA relazione's rows after the first read the column's
+  // header, 2026-11-01). A box with its own text beside the anchor (the deroga's
+  // "(specificare)", which reads it from the cell before) isn't one.
+  function blockStarts(list, anchor) {
+    const ranks = list.map((e) => labelRank(e, anchor));
+    const best = Math.min(...ranks.filter((r) => r >= 0));
+    return ranks.map((r, i) => (r === best || r > 0 && startsLabel(ownLabel(list[i]), anchor) ? i : -1)).filter((i) => i >= 0);
+  }
   // A steps file's id is the row the crawl saw; a choice made earlier in the section can
   // have moved it onto another box, which a click would then tick in silence. The box must
   // be of the field's kind and carry its label as the lookup reads labels; else the field
@@ -600,11 +688,7 @@
     if (f.id || f.css) return f;
     let list = inputs();
     if (f.anchor) {
-      // A block starts at the boxes the anchor names best: a box of no text of its own beside
-      // the anchor (the deroga's "(specificare)") reads it from the cell before, and isn't one.
-      const ranks = list.map((e) => labelRank(e, f.anchor));
-      const best = Math.min(...ranks.filter((r) => r >= 0));
-      const starts = ranks.map((r, i) => (r === best ? i : -1)).filter((i) => i >= 0);
+      const starts = blockStarts(list, f.anchor);
       const b = (f.block || 1) - 1;
       if (b >= starts.length) fail(`${f.label}: no block ${f.block} of ${f.anchor} (found ${starts.length})`);
       list = list.slice(starts[b], starts[b + 1]);
@@ -614,7 +698,6 @@
     // A box is counted by its own label (its title, else its cell), as the crawl counts it: a
     // "Si" whose nearby texts include the "No" before it is not a "No" (three Si/No pairs in a
     // row); the beds total under a shared header is not the rooms total.
-    const ownLabel = (e) => [e.title, ...win().eval(`(${steps.label_js})`)(e)].find((t) => norm(t) && !MESSAGE.test(norm(t)));
     const own = hits.filter((e) => startsLabel(ownLabel(e), f.label));
     if (own.length >= (f.nth || 1)) hits = own; // else a box labelled from above ("Provincia" of birth) counts too
     else if (hits.length > 1) {
@@ -627,14 +710,61 @@
     const e = hits[(f.nth || 1) - 1] || fail(`${f.label}: ${hits.length} fields with this label${f.anchor ? ` in block ${f.block || 1}` : ""}`);
     return { ...f, id: e.id.split("dynaForm:")[1].replace(/:combo_input$/, "") };
   }
+  // A slot's upload boxes and its "+", from the rows under its title (span.input-label) to the
+  // next title. "+" adds a box under the slot's last one, with no label of its own, and moves
+  // every later row down one (seen 2026-11-03), so the slot's n-th file goes by its place there.
+  function slotRows(title) {
+    const heads = [...doc().querySelectorAll("span.input-label")].filter((x) => startsLabel(x.textContent, title));
+    const head = heads.find((x) => norm(x.textContent) === norm(title)) || heads[0];
+    if (!head || !head.closest("tr")) fail(`${title}: no such slot`);
+    // The slot ends at its "+" row, or at the next title's row (a label with no box in its row): a
+    // file's "Descrizione" beside it is a label too (the CILA's, 2026-11-03), with its box.
+    const files = [];
+    for (let tr = head.closest("tr").nextElementSibling; tr; tr = tr.nextElementSibling) {
+      const plus = [...tr.querySelectorAll("button")].find((b) => b.textContent.trim() === "+");
+      if (plus) return { files, plus };
+      if (tr.querySelector("span.input-label") && !tr.querySelector("input, select, textarea")) break;
+      files.push(...tr.querySelectorAll("input[type=file]"));
+    }
+    return { files, plus: null };
+  }
+  // A slot named again in a screen takes its next box (the Allegati liberi's relazione, then an
+  // authorization): its "+" pressed until the slot has that many. A resumed draft may have them.
+  // The second run (after the declarations) finds the slot as the first left it: its file goes in
+  // the first box that holds none, or a new one ("+").
+  async function slotBox(f) {
+    let s = slotRows(f.label);
+    if (f.empty) {
+      const cells = s.files.map((b) => (b.closest("td") || {}).innerText || "");
+      // Already there from an earlier try of this run: done, not attached twice.
+      if (cells.some((c) => norm(c).includes(norm(f.name)))) return { ...f, already: true };
+      const free = cells.findIndex((c) => !/\bRimuovi\b/.test(c));
+      // A slot of one box with no "+" takes the new file in place of the one it holds.
+      f = { ...f, nth: free >= 0 ? free + 1 : s.plus ? s.files.length + 1 : 1 };
+    }
+    while (s.files.length < f.nth) {
+      if (!s.plus) fail(`${f.label}: no + to add a file`);
+      const before = s.files.length;
+      press(s.plus, `+ ${f.label}`);
+      await idle();
+      s = slotRows(f.label);
+      if (s.files.length !== before + 1) fail(`${f.label}: + didn't add a file box`);
+    }
+    return { ...f, id: s.files[f.nth - 1].id.split("dynaForm:")[1], slotted: true };
+  }
+
   async function addBlock(f) {
-    const count = () => inputs().filter((e) => labelled(e, f.anchor)).length;
+    const count = () => blockStarts(inputs(), f.anchor).length;
     const before = count();
     // `block`: the block this "+" is for. A resumed draft may have it already.
     if (f.block && before >= f.block) return `block ${f.block}`;
     const plus = [...doc().querySelectorAll('[id*="dynaForm"] button')].filter((b) => shown(b) && b.textContent.trim() === "+");
     if (!plus.length) fail(`no + to add a block of ${f.anchor}`);
-    press(plus[plus.length - 1], `+ ${f.anchor}`);
+    // The first "+" after the anchor's last block is its own: a section can have one per list
+    // (the CILA relazione's filings, then its assents).
+    const last = inputs()[blockStarts(inputs(), f.anchor).pop()];
+    const own = last && plus.find((b) => last.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    press(own || plus[plus.length - 1], `+ ${f.anchor}`);
     await idle();
     if (count() !== before + 1) fail(`+ didn't add a block of ${f.anchor}`);
     return `block ${before + 1}`;
@@ -668,6 +798,11 @@
       // A screen after the form (Pagamento oneri, Allega documenti): reached with its button,
       // unless a resumed draft is already on it.
       const here = () => norm((doc().querySelector(".content-title") || {}).innerText).includes(norm(sec.section));
+      // A draft reopened from Pratiche in bozza shows the step it was left on: the screen's own
+      // step in the menu at the top ("Allega Documenti") reaches it from any other.
+      const step = () => sec.step && report.resumed &&
+        [...doc().querySelectorAll("a")].filter((x) => x.offsetParent && norm(x.textContent) === norm(sec.step)).pop();
+      for (let t = 0; t < 2 && !here() && step(); t++) await act(() => press(step(), sec.step));
       if (!here()) await act(() => press(button(sec.go), sec.go));
       if (!here()) fail(`expected the screen ${sec.section}`);
     } else if (sec.open !== false) {
@@ -675,7 +810,7 @@
       if (a) await openSection(a, sec.section);
       else if (!isOpen(sec.section)) fail(`no section ${sec.section}`);
     }
-    const done = [];
+    const done = [], attached = {};
     for (let [i, f] of sec.fields.entries()) {
       const v = values[i];
       if (v === false) continue; // its `when` is false for this pratica
@@ -683,29 +818,49 @@
       report.at.label = f.label || f.id || f.css;
       let typed;
       if (f.kind === "add") { await addBlock(f); continue; }
+      // A second run puts each file in the slot's first empty box: a box that holds a file takes a new
+      // one in its place (2026-11-03, an Allegato A replaced by the Modello DP after it).
+      if (f.kind === "file" && !f.id && report.reopened && v !== null && v !== "") {
+        f = await slotBox({ ...f, empty: true, name: v.name });
+        if (f.already) {
+          attached[norm(f.label)] = (attached[norm(f.label)] || 0) + 1;
+          done.push({ ...f, kind: "file", typed: v.name, field: i });
+          continue;
+        }
+      }
+      else if (f.kind === "file" && !f.id && attached[norm(f.label)] && v !== null && v !== "") f = await slotBox({ ...f, nth: attached[norm(f.label)] + 1 });
       // An id a combination of choices moved (one the crawl didn't try together) is found
       // again by its label, held to the same checks: when it is gone, and when the box it
       // names now is another one (an earlier choice in the section shifted the rows).
-      if (f.id && f.label) f = located(f);
+      if (f.id && f.label && !f.slotted) f = located(f);
       if (!f.id && !f.css && f.if_present) {
         // A box only some pratiche show: skipped where this one doesn't.
         try { f = { ...resolve(f), spec: f }; } catch (e) { if (e instanceof StepError) continue; throw e; }
       }
       f = f.id || f.css ? f : { ...resolve(f), spec: f };
+      await closeLists();
       if (f.kind === "radio" || f.kind === "checkbox") typed = await tick(f);
       else if (v === null || v === "") continue;
       else if (f.kind === "select") typed = await select(f, v);
       else if (f.kind === "lookup") typed = await lookup(f, v);
-      else if (f.kind === "file") typed = await attach(f, v);
+      else if (f.kind === "file") { typed = await attach(f, v); attached[norm(f.label)] = (attached[norm(f.label)] || 0) + 1; }
       else typed = await text(f, v);
       done.push({ ...f, kind: f.kind === "date" ? "text" : f.kind, typed, field: i });
     }
     delete report.at.field;
     delete report.at.label;
     // An attachments screen may keep each file as it uploads, with no Salva (save: false).
+    await closeLists();
     if (sec.save !== false) await act(() => press(button(sec.save || "Salva"), sec.save || "Salva"));
     const errs = errors(sec.theirs);
-    const checks = done.map(readBack);
+    for (const a of alerts()) {
+      // A warning that echoes a value is scrubbed, as an error is.
+      // A box this section filled goes by its steps label; another by the page's text.
+      const label = (done.find((d) => d.id === a.id) || {}).label || a.label;
+      const x = { section: sec.section, label: label && scrub(label), text: scrub(a.text) };
+      if (!(report.alerts = report.alerts || []).some((y) => y.section === x.section && y.label === x.label && y.text === x.text)) report.alerts.push(x);
+    }
+    const checks = done.map((f) => readBack(f, true));
     const bad = checks.filter((c) => !c.ok);
     details.push(...bad.map((c) => ({ section: sec.section, ...c })));
     const gone = bad.map(redact);
@@ -846,6 +1001,13 @@
         "them before you tick any: you make them in your own name, and a false one is a crime (DPR 445/2000, art. 76)."),
       btn("Show the draft", () => host.remove()),
       note);
+    // The portal's warnings beside boxes it kept (alerts()): the person checks those values.
+    if ((report.alerts || []).length) {
+      page.append(el("h2", "font-size:17px;margin:24px 0 8px", "What the portal flagged"),
+        el("p", "margin:0 0 8px", "The portal kept these values but warned about them. Check each one; " +
+          "\"Indirizzo sconosciuto\" shows for every address, the Comune's own too."),
+        el("ul", "margin:0 0 8px 20px", null, ...report.alerts.map((a) => el("li", "", `${a.section}, ${a.label || "a box"}: ${a.text}`))));
+    }
     page.append(el("h2", "font-size:17px;margin:24px 0 8px", "The declarations you will tick"));
     if (!declared.length) {
       page.append(el("p", "color:GrayText", "Not copied" + (report.declarations_note ? ` (${report.declarations_note})` : "") +
@@ -889,15 +1051,21 @@
     const t0 = performance.now();
     const secs = () => +((performance.now() - t0) / 1000).toFixed(1);
     try {
-      frame = document.createElement("iframe");
-      frame.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;border:0;z-index:2147483647;background:#fff";
-      frame.dataset.pv = "runner";
-      const loaded = new Promise((r) => frame.addEventListener("load", r, { once: true }));
-      // A resumed run opens the draft it stopped on; a new one starts a new pratica.
-      frame.src = resume.url || steps.start;
-      document.body.append(frame);
-      await loaded;
-      await idle();
+      if (resume.reopen) {
+        // After the declarations (run.py --after-declarations): the draft by its name, from
+        // Pratiche in bozza, since the person's own clicks have moved its address on.
+        await reopen(resume.reopen === true ? values.wizard[0] : resume.reopen, new URL(steps.logged_in).origin + "/fnsuap/cmd/home");
+      } else {
+        frame = document.createElement("iframe");
+        frame.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;border:0;z-index:2147483647;background:#fff";
+        frame.dataset.pv = "runner";
+        const loaded = new Promise((r) => frame.addEventListener("load", r, { once: true }));
+        // A resumed run opens the draft it stopped on; a new one starts a new pratica.
+        frame.src = resume.url || steps.start;
+        document.body.append(frame);
+        await loaded;
+        await idle();
+      }
       if (!doc().location.href.startsWith(steps.logged_in)) fail("not logged in to the portal");
       if (/\/cmd\/error/.test(doc().location.href)) fail("the draft's address has expired: open it again from Pratiche in bozza");
       const from = resume.from || {};
@@ -928,7 +1096,9 @@
       try { showReview(); } catch (e) { /* the draft is saved; the person can still read it in the portal */ }
     } catch (e) {
       report.result = "stopped";
-      report.error = e instanceof StepError ? e.message : `${e.name}: ${e.message}`;
+      // Any other read of a frame left on the sign-in's origin throws a SecurityError of its own.
+      report.error = e instanceof StepError ? e.message : frame && signedOut()
+        ? `signed out: the portal sent the page to its sign-in (${e.name}); sign in again, then rerun` : `${e.name}: ${e.message}`;
       try { report.snapshot = look(); } catch (x) { /* the page is gone */ }
     } finally {
       report.total_seconds = secs();
@@ -960,7 +1130,7 @@
       .map((e) => {
         const kind = kindOf(e);
         const state = kind === "radio" || kind === "checkbox" ? (e.checked ? "checked" : "unchecked")
-          : kind === "file" ? "file" : e.value ? "filled" : "empty";
+          : kind === "file" ? (slotOf(e).holds ? "filled" : "empty") : e.value ? "filled" : "empty";
         // A slot's box is named by its title, never by its cell: that reads "<file name> Rimuovi"
         // once a file is in, and its first text is the portal's "required".
         const slot = kind === "file" || /file_dropzone/.test(e.id) ? slotOf(e) : null;
@@ -978,8 +1148,10 @@
   // to show its boxes, a busy queue. A run stopped by one picks itself up on the same draft,
   // as a person would by reloading (at most `retries` times, 2 by default); anything else (a
   // value the portal refuses or doesn't keep, a label it renamed) still stops, so a real
-  // change is never retried into a misfill. Each retry is in the report's `retries`.
-  const TRANSIENT = /didn't open|stayed busy|fields with this label|expected the screen|no section |error page|has expired/;
+  // change is never retried into a misfill. Each retry is in the report's `retries`. A lookup
+  // that finds no box is a section still showing; one that finds some, but not the nth, is the
+  // page as it is (the sede's Provincia read as no "Provincia", retried twice, 2026-11-02).
+  const TRANSIENT = /didn't open|stayed busy|\b0 fields with this label|expected the screen|no section |error page|has expired/;
   async function attempt(values, resume) {
     for (let n = 0; ; n++) {
       await run(values, resume);
@@ -1066,7 +1238,7 @@
       // A fix is what Claude found the page really has for one field (a moved id, a renamed
       // label): this run uses it, and run.py writes it down for the steps file.
       for (const x of resume.fixes || []) Object.assign(steps.sections[x.section].fields[x.field], x.set);
-      report = { procedure, result: "running", sections: [], at: null, resumed: !!resume.url };
+      report = { procedure, result: "running", sections: [], at: null, resumed: !!(resume.url || resume.reopen), reopened: !!resume.reopen };
       kept = [];
       attempt(values, resume);
       return "started";

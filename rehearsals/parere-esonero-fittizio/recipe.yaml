@@ -13,15 +13,14 @@ crawl: sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggis
 operation: "Domanda di parere per esonero dall’obbligo di autorizzazione paesaggistica"
 scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
+after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
   descrizione: {default: "PROVA NON INVIARE - parere esonero {{c:identity.last_name}}"}
   oggetto: {question: "The works in one sentence (300 characters)"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
-  - "On Allega documenti: the drawings (stato attuale, progetto, tavola interventi) and the photos of the state as it is, signed digitally"
-  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
-  - "Pay the imposta di bollo as the portal asks"
+  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides; its
 # parere-esonero rule refuses the request in Napoli, with the reason.

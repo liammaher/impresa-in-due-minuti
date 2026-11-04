@@ -7,7 +7,8 @@ yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - Have a technician sign the dehors project (plans and report) and attach it
 - 'Tick the declarations and commitments yourself: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, the certified mounting, the canone'
-- Pay the diritti di segreteria (€ {{ask.diritti_euro}}) and the imposta di bollo with pagoPA
+- Pay the diritti di segreteria (€ {{ask.diritti_euro}}) with pagoPA
+- '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
 - Sign and send (Firma e invio); once granted, pay the canone unico with the notice the Comune sends
 groups:
   extras:
@@ -15,7 +16,16 @@ groups:
 asks:
   descrizione: {type: text, question: A name for the draft in the portal's Pratiche in bozza, default: 'PROVA NON INVIARE - dehors {{business.denominazione}}'}
   oggetto: {type: text, question: The pratica in one sentence (300 characters)}
-  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', propose: 'false'}
+  bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', default: '{{ask.bollo_esenzione|bollo_non_dovuto}}', propose: '{{ask.bollo_esenzione|is_no|not}}'}
+  bollo_esenzione: {type: choice, question: 'Is the client exempt from the imposta di bollo, or authorized to pay it virtually? no (it pays it); ets (an ente del Terzo settore in the RUNTS: art. 82 c. 5
+      D.Lgs. 117/2017); cooperativa sociale (the same article''s own words); pubblica (the State, a Regione, Provincia, Comune or their consorzi: All. B art. 16 DPR 642/1972); sportiva (a CONI-recognized
+      non-profit sports body: All. B art. 27-bis); onlus (the ONLUS regime ended on 1 January 2026: only one whose tax year began before then); partito (a political party, for obligations of law: art. 27-ter);
+      contadina (piccola proprietà contadina: art. 21); virtuale (authorized by the Agenzia delle Entrate to pay it virtually: D.M. 10/11/2011, art. 15 DPR 642/1972)', options: ['no', ets, cooperativa sociale,
+      pubblica, sportiva, onlus, partito, contadina, virtuale], propose: 'no'}
+  bollo_onlus_esercizio: {type: yes_no, question: 'Did the ONLUS''s current tax year begin before 1 January 2026 (a tax year that isn''t the calendar year)? The ONLUS regime ended then (D.Lgs. 117/2017
+      art. 102 c. 2 and art. 104 c. 2): an ex-ONLUS in the RUNTS is an ets', propose: 'false'}
+  bollo_virtuale_autorizzazione: {type: file, question: 'The client''s dichiarazione relativa all''assolvimento dell''imposta di bollo: that it pays it virtually, with the Agenzia delle Entrate''s authorization
+      (number and date), signed (PDF)'}
   bollo_seriale: {type: text, question: 'The marca da bollo for the application: its serial number (14 digits)'}
   bollo_data: {type: date, question: Its date}
   bollo_seriale_2: {type: text, question: 'The marca da bollo for the authorization the Comune issues: its serial number (14 digits)'}
@@ -24,6 +34,9 @@ asks:
   stagionale: {type: yes_no, question: 'Will it open only for part of the year (a season)?', propose: 'false'}
   notifica_852_data: {type: date, question: Its date}
   diritti_euro: {type: number, question: The SUAP fees in euro, default: '250', why: The 2026 table's line for suolo pubblico annesso a pubblici esercizi (DGC 239/2026).}
+  diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
+    propose: 'false'}
+  diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
   orario_dalle: {type: text, question: 'Opening time, the same every open day (hh:mm)'}
   orario_alle: {type: text, question: 'Closing time (hh:mm)'}
   giorno_chiusura: {type: text, question: The weekly closing day ('nessuno' if none), propose: nessuno}
@@ -59,6 +72,9 @@ supports:
   else: A dehors in the historic centre isn't supported yet.
 - when: '{{ask.nuovo_852|not}}'
   else: 'Filing the Reg. 852 notifica with the dehors isn''t supported yet: file the business''s opening first.'
+- if: '{{ask.bollo_esenzione|is_onlus}}'
+  when: '{{ask.bollo_onlus_esercizio}}'
+  else: 'The ONLUS exemption ended with the ONLUS regime on 1 January 2026, except for a tax year begun before then: an ex-ONLUS in the RUNTS is exempt as an ets.'
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
 logged_in: https://suap.impresainungiorno.gov.it/fnsuap/
 wizard:
@@ -110,6 +126,7 @@ sections:
   - {id: r26c1p67reg, kind: select, value: '{{t:residenza.comune|upper}}', when: '{{business.rea|empty}}', label: Comune, nth: 2}
   - {id: r32c1p81reg, kind: select, value: '{{t:residenza.indirizzo|dug}}', when: '{{business.rea|empty|not}}', label: Toponimo (DUG)}
   - {id: r29c1p73reg, kind: select, value: '{{t:residenza.indirizzo|dug}}', when: '{{business.rea|empty}}', label: Toponimo (DUG)}
+  - {kind: select, value: '{{t:residenza.indirizzo|dug_dettaglio}}', when: '{{t:residenza.indirizzo|dug_altro}}', label: da compilare obbligatoriamente}
   - {id: 'r34c1p87reg:txt', kind: text, value: '{{t:residenza.indirizzo|street|upper}}', when: '{{business.rea|empty|not}}', max: 60, label: Denominazione stradale}
   - {id: 'r31c1p79reg:txt', kind: text, value: '{{t:residenza.indirizzo|street|upper}}', when: '{{business.rea|empty}}', max: 60, label: Denominazione stradale}
   - {id: 'r36c1p91reg:txt', kind: text, value: '{{t:residenza.civico}}', when: '{{business.rea|empty|not}}', max: 20, label: Numero civico}
@@ -136,6 +153,8 @@ sections:
   - {id: r46c1p117reg, kind: select, value: '{{business.sede_legale_comune|upper}}', when: '{{business.rea|empty}}', label: Comune, nth: 3}
   - {id: r52c1p131reg, kind: select, value: '{{business.sede_legale_indirizzo|dug}}', when: '{{business.rea|empty|not}}', label: Toponimo (DUG), nth: 2}
   - {id: r49c1p123reg, kind: select, value: '{{business.sede_legale_indirizzo|dug}}', when: '{{business.rea|empty}}', label: Toponimo (DUG), nth: 2}
+  - {kind: select, value: '{{business.sede_legale_indirizzo|dug_dettaglio}}', when: '{{business.sede_legale_indirizzo|dug_altro}} {{t:residenza.indirizzo|dug_altro|not}}', label: da compilare obbligatoriamente}
+  - {kind: select, label: da compilare obbligatoriamente, nth: 2, value: '{{business.sede_legale_indirizzo|dug_dettaglio}}', when: '{{business.sede_legale_indirizzo|dug_altro}} {{t:residenza.indirizzo|dug_altro}}'}
   - {id: 'r54c1p137reg:txt', kind: text, value: '{{business.sede_legale_indirizzo|street|upper}}', when: '{{business.rea|empty|not}}', max: 60, label: Denominazione stradale, nth: 2}
   - {id: 'r51c1p129reg:txt', kind: text, value: '{{business.sede_legale_indirizzo|street|upper}}', when: '{{business.rea|empty}}', max: 60, label: Denominazione stradale, nth: 2}
   - {id: 'r54c2p139reg:txt', kind: text, value: '{{business.sede_legale_civico}}', when: '{{business.rea|empty|not}}', max: 20, label: Numero civico, nth: 2}
@@ -211,17 +230,24 @@ sections:
 - section: Dichiarazione relativa ai diritti
   fields:
   - {id: 'r2c1p2reg:radio:0_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: non sono dovuti oneri}
-  - {id: 'r3c1p3reg:radio:1_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: poiché non previsti dal tariffario}
+  - {id: 'r3c1p3reg:radio:1_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente|not}}', label: poiché non previsti dal tariffario}
+  - {id: 'r3c2p4reg:radio:2_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente}}', label: poiché esentati}
+  - {kind: text, label: specificare la motivazione, value: '{{ask.diritti_esenzione_motivo}}', when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente}}'}
   - {id: 'r5c1p8reg:radio:3_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: sono dovuti oneri quali diritti o spese}
   - {id: 'r7c1p10reg:real', kind: number, value: '{{ask.diritti_euro}}', when: '{{ask.diritti_euro|positive}}', max: 11, label: per un totale di Euro}
   - {id: 'r8c1p13reg:radio:4_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: pagamento on line}
 - section: Dichiarazione relativa all'assolvimento dell'imposta di bollo
   fields:
-  - {id: 'r3c1p3reg:radio:0_clone', kind: radio, when: '{{ask.bollo_marche|not}}', label: Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digitale pagoPA}
-  - {id: 'r5c2p7reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche|not}}', label: 'Due marche da €16,00 ciascuna'}
-  - {id: 'r8c1p14reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche}}', label: Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo}
-  - {id: 'r13c2p30reg:radio:2_clone', kind: radio, when: '{{ask.bollo_marche}}', label: 'Marca da €16,00 per l''autorizzazione'}
-  - {kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1)}
-  - {kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}}', label: data}
-  - {id: 'r15c2p34reg:txt', kind: text, value: '{{ask.bollo_seriale_2}}', on_page: true, when: '{{ask.bollo_marche}}', max: 14, label: numero seriale (1), nth: 2}
-  - {id: 'r15c3p36reg:calendar_input', kind: date, value: '{{ask.bollo_data_2|date_it}}', on_page: true, when: '{{ask.bollo_marche}}', label: data, nth: 2}
+  - {id: 'r3c1p3reg:radio:0_clone', kind: radio, when: '{{ask.bollo_marche|not}} {{ask.bollo_esenzione|is_no}}', label: Il pagamento è dovuto e si intende assolvere l'obbligo tramite il circuito digitale
+      pagoPA}
+  - {id: 'r5c2p7reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche|not}} {{ask.bollo_esenzione|is_no}}', label: 'Due marche da €16,00 ciascuna'}
+  - {id: 'r8c1p14reg:radio:1_clone', kind: radio, when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', label: Il pagamento è dovuto e si intende assolvere l'obbligo con marche da bollo}
+  - {id: 'r13c2p30reg:radio:2_clone', kind: radio, when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', label: 'Marca da €16,00 per l''autorizzazione'}
+  - {kind: text, value: '{{ask.bollo_seriale}}', when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', max: 14, label: numero seriale (1)}
+  - {kind: date, value: '{{ask.bollo_data|date_it}}', when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', label: data}
+  - {id: 'r15c2p34reg:txt', kind: text, value: '{{ask.bollo_seriale_2}}', on_page: true, when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', max: 14, label: numero seriale (1), nth: 2}
+  - {id: 'r15c3p36reg:calendar_input', kind: date, value: '{{ask.bollo_data_2|date_it}}', on_page: true, when: '{{ask.bollo_marche}} {{ask.bollo_esenzione|is_no}}', label: data, nth: 2}
+  - {kind: radio, when: '{{ask.bollo_esenzione|is_virtuale}}', label: 'Per gli Enti autorizzati, l''imposta di bollo è assolta in modo virtuale'}
+  - {kind: file, value: '{{ask.bollo_virtuale_autorizzazione}}', when: '{{ask.bollo_esenzione|is_virtuale}}', label: dichiarazione relativa all'assolvimento dell'imposta di bollo}
+  - {kind: radio, when: '{{ask.bollo_esenzione|bollo_esente}}', label: Il pagamento non è dovuto poiché esentati}
+  - {kind: select, value: '{{ask.bollo_esenzione|bollo_motivo}}', when: '{{ask.bollo_esenzione|bollo_esente}}', label: per la seguente motivazione}

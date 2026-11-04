@@ -7,13 +7,16 @@ comune: F839
 sportello: sue
 crawl: sue-comunicazione-integrativa-proroga-straordinaria-trenta-mesi-ultimazione
 operation: "Comunicazione integrativa proroga straordinaria trenta mesi ultimazione lavori (art. 10 septies, Legge 51/2022)"
-scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
+scelte:
+  - {option: "in assenza di titolarità esclusiva all'esecuzione dell'intervento edilizio, si dispone della dichiarazione di assenso dei terzi titolari di altri diritti reali o obbligatori", when: "{{ask.titolo_esclusivo|not}}"}
+  - IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
+after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
   descrizione: {default: "PROVA NON INVIARE - proroga 30 mesi ultimazione {{c:identity.last_name}}"}
+  titolo_esclusivo: {question: "Does the client hold the title alone? If not, the extension states that the assent of the other holders of rights (dichiarazione di assenso dei terzi titolari) is in hand"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and any acknowledgement in the client's name"
-  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it, with the pratica's other documents"
-  - "Pay any imposta di bollo as the portal asks"
+  - "No imposta di bollo to pay on this form: the portal's form for this pratica has no bollo section or slot"
   - "Sign and send (Firma e invio); keep the receipt"

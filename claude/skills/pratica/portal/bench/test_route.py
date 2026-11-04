@@ -86,7 +86,12 @@ def answers_carry_into_preflight():
         for k, v in r["answers"].items():
             assert k in asks and run.check_answer(asks[k], v) is None, (r["pratica"], k, v)
         _, waiting = run.ruled(steps, run.Values(r["answers"], fields={}, asks=asks))
-        assert set(waiting) <= {x["fact"] for x in r["asked_again"]}, (r["pratica"], facts, waiting)
+        again = {x["fact"] for x in r["asked_again"]}
+        # A fact the table never needed for this case may wait behind one asked again: the CILA's
+        # sanatoria comes from "have the works started?", and until then the terre e rocce rule,
+        # which wants no sanatoria, is open (2026-11-03). Answered, it no longer waits.
+        assert set(waiting) <= again | ({f for f in waiting if f not in facts} if again else set()), \
+            (r["pratica"], facts, waiting)
         for name in facts:  # a fact the person answered here is never asked there again
             tmpl = steps["rules"]["facts"][name]
             if tmpl == "{{ask.%s}}" % name:
@@ -121,7 +126,7 @@ def as_a_conversation():
 
 def wrong_answers():
     """Asked again with why when the case needs them; malformed ones refused, never a crash."""
-    base = {"intervento": "manutenzione_straordinaria", "cambio_uso": "no", "paesaggio": "no"}
+    base = {"intervento": "manutenzione_straordinaria", "cambio_uso": "no", "paesaggio": "no", "terre_rocce": "no"}
     r = route.route(TABLE, {**base, "fatti": ["intervento"]}, REHEARSALS)  # not a checklist item
     assert {q["key"]: q for q in r["questions"]}["fatti"]["error"], r
     r = route.route(TABLE, {**base, "fatti": [["x"]]}, REHEARSALS)
@@ -151,7 +156,7 @@ def gated_items_stay_unknown():
     taken for a no while that one is unticked: the form reads it (the Soprintendenza's
     tutela), so its pre-flight asks it. Nor an item the checklist didn't show (the sanatoria
     answered no before it)."""
-    case = {"intervento": "ristrutturazione", "cambio_uso": "no", "paesaggio": "no"}
+    case = {"intervento": "ristrutturazione", "terre_rocce": "no", "cambio_uso": "no", "paesaggio": "no"}
     second = route.route(TABLE, {"intervento": "ristrutturazione"}, REHEARSALS)
     items = {i["key"]: i for q in second["questions"] for i in q.get("items", [])}
     assert items["bene_culturale"]["only_if"] == ["sanatoria"], items["bene_culturale"]
@@ -166,7 +171,7 @@ def gated_items_stay_unknown():
 def own_words_kept_only_if_they_agree():
     """cila_stato given by the person is kept when it says what the facts say, else asked
     again with what was given, never overwritten."""
-    base = {"intervento": "manutenzione_straordinaria", "cambio_uso": "no", "paesaggio": "no"}
+    base = {"intervento": "manutenzione_straordinaria", "cambio_uso": "no", "paesaggio": "no", "terre_rocce": "no"}
     r = route.route(TABLE, {**base, "fatti": ["sanatoria"], "cila_stato": "in corso"}, REHEARSALS)
     assert r["answers"]["cila_stato"] == "in corso" and not r["asked_again"], r
     for given in ("da iniziare", "bogus"):
@@ -183,13 +188,92 @@ def missing_answers_file():
 
 def cila_reads_sanatoria_its_way():
     """The CILA reads `sanatoria` from cila_stato: one option fits "no", two fit "yes"."""
-    base = {"intervento": "manutenzione_straordinaria", "cambio_uso": "no", "paesaggio": "no", "fatti": []}
+    base = {"intervento": "manutenzione_straordinaria", "terre_rocce": "no", "cambio_uso": "no", "paesaggio": "no", "fatti": []}
     r = route.route(TABLE, base, REHEARSALS)
     assert r["pratica"] == "cila-fittizia" and r["answers"]["cila_stato"] == "da iniziare", r
     assert "sanatoria" not in r["answers"]
     r = route.route(TABLE, {**base, "fatti": ["sanatoria"]}, REHEARSALS)
     assert r["pratica"] == "cila-fittizia", r
     assert r["asked_again"] == [{"fact": "sanatoria", "ask": "cila_stato", "fits": ["in corso", "realizzato"]}], r
+
+
+def sanatoria_in_tutela():
+    """Works that needed the permesso, done without it in a protected area (2026-11-02): no
+    alteration is the plain permesso in sanatoria; a new volume can't have its compatibility found
+    (art. 167 c. 4); otherwise the permesso with the accertamento, whose landscape quadro the
+    portal can't state (pdc-36-paesaggio)."""
+    base = {"intervento": "ristrutturazione_pesante", "terre_rocce": "no", "cambio_uso": "no", "paesaggio": "ordinaria",
+            "fatti": ["sanatoria", "paesaggio_eseguiti"]}
+    r = route.route(TABLE, {**base, "paesaggio": "senza_autorizzazione", "fatti": ["sanatoria"]}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+    r = route.route(TABLE, {**base, "fatti": base["fatti"] + ["paesaggio_volumi"]}, REHEARSALS)
+    assert not r["routed"] and "art. 167 c. 4" in r["unsupported"][0], r
+    r = route.route(TABLE, base, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-accertamento-fittizio", r
+    r = route.route(TABLE, {**base, "fatti": ["sanatoria"]}, REHEARSALS)
+    assert not r["routed"] and "dopo la sanatoria" in r["unsupported"][0], r
+
+
+def sanatoria_cambio_uso():
+    """A change of use done without a title (2026-11-02) is legalized by the title it needed: one
+    unit's by the SCIA in sanatoria (art. 36-bis c. 1), a whole building's by the permesso in
+    sanatoria (art. 36 names the SCIA alternativa); without works between compatible categories
+    it is free, and a use the PRG doesn't allow is refused."""
+    base = {"intervento": "manutenzione_straordinaria", "terre_rocce": "no", "cambio_uso": "stessa_categoria", "paesaggio": "no",
+            "fatti": ["sanatoria", "uso_ammesso_prg"]}
+    r = route.route(TABLE, base, REHEARSALS)
+    assert r["pratica"] == "scia-sanatoria-fittizia", r
+    r = route.route(TABLE, {**base, "cambio_uso": "intero_tra_categorie"}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+    r = route.route(TABLE, {**base, "intervento": "nessuna_opera", "cambio_uso": "tra_categorie"}, REHEARSALS)
+    assert not r["routed"] and r["unsupported"][0].startswith("This case needs no pratica"), r
+    r = route.route(TABLE, {**base, "fatti": ["sanatoria"]}, REHEARSALS)
+    assert not r["routed"] and "PRG" in r["unsupported"][0], r
+
+
+def sanatoria_zona_a():
+    """A demolition and reconstruction in zona A, done without a title (2026-11-02): it needed the
+    permesso in Naples, so the permesso in sanatoria (art. 36); in a protected area the same
+    landscape rules as any permesso in sanatoria."""
+    base = {"intervento": "ristrutturazione", "terre_rocce": "no", "cambio_uso": "no", "paesaggio": "no", "fatti": ["sanatoria", "demolizione_zona_a"]}
+    r = route.route(TABLE, base, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+    r = route.route(TABLE, {**base, "paesaggio": "ordinaria", "fatti": base["fatti"] + ["paesaggio_eseguiti"]}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-accertamento-fittizio", r
+    r = route.route(TABLE, {**base, "intervento": "ristrutturazione_pesante"}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+
+
+def sanatoria_titoli():
+    """The last sanatorie (2026-11-02): an urban restructuring needed the permesso, so the permesso
+    in sanatoria; a variant to a SCIA, never filed, is works in difformità from the SCIA, so the
+    SCIA in sanatoria; temporary works have no sanatoria in the law, and say why."""
+    base = {"terre_rocce": "no", "cambio_uso": "no", "paesaggio": "no", "fatti": ["sanatoria"]}
+    r = route.route(TABLE, {**base, "intervento": "ristrutturazione_urbanistica"}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+    r = route.route(TABLE, {**base, "intervento": "variante_scia"}, REHEARSALS)
+    assert r["pratica"] == "scia-sanatoria-fittizia", r
+    r = route.route(TABLE, {**base, "intervento": "opere_temporanee"}, REHEARSALS)
+    assert not r["routed"] and "180 giorni" in r["unsupported"][0], r
+
+
+def cambio_uso_fuori_23ter():
+    """A change of use art. 23-ter doesn't give a title for (one unit on the ground floor, or
+    outside zones A, B and C: 2026-11-03) takes Campania's, as a whole building's does: free
+    without works, else the SCIA alternativa; done without it, the permesso in sanatoria. The
+    a.1 to a.2 change in the centro storico stays the SUE's, saying what it lacks."""
+    base = {"intervento": "manutenzione_straordinaria", "terre_rocce": "no", "cambio_uso": "piano_terra", "paesaggio": "no",
+            "fatti": ["uso_ammesso_prg"]}
+    r = route.route(TABLE, base, REHEARSALS)
+    assert r["pratica"] == "scia-alternativa-fittizia", r
+    r = route.route(TABLE, {**base, "cambio_uso": "altro"}, REHEARSALS)
+    assert r["pratica"] == "scia-alternativa-fittizia", r
+    r = route.route(TABLE, {**base, "intervento": "nessuna_opera", "cambio_uso": "altro"}, REHEARSALS)
+    assert not r["routed"] and r["unsupported"][0].startswith("This case needs no pratica"), r
+    r = route.route(TABLE, {**base, "fatti": ["uso_ammesso_prg", "sanatoria"]}, REHEARSALS)
+    assert r["pratica"] == "pdc-sanatoria-fittizio", r
+    r = route.route(TABLE, {**base, "cambio_uso": "stessa_categoria", "fatti": ["uso_ammesso_prg", "verso_a2_tavola_7a"]}, REHEARSALS)
+    assert not r["routed"] and "Giunta" in r["unsupported"][0], r
 
 
 def rehearsal_cases_come_home():
@@ -218,7 +302,7 @@ def asks_as_the_table_asks():
     assert [q["key"] for q in r["questions"]] == ["intervento"] and not r["routed"]
     r = route.route(TABLE, {"intervento": "manutenzione_straordinaria"}, REHEARSALS)
     qs = {q["key"]: q for q in r["questions"]}
-    assert set(qs) == {"sismica", "cambio_uso", "paesaggio", "fatti"}, set(qs)
+    assert set(qs) == {"sismica", "cambio_uso", "paesaggio", "terre_rocce", "fatti"}, set(qs)
     assert qs["sismica"]["only_if"] == ["strutture"]
     assert "strutture" in [i["key"] for i in qs["fatti"]["items"]]
     assert qs["fatti"]["question"] == route.CHECKLIST
@@ -227,7 +311,7 @@ def asks_as_the_table_asks():
     r = route.route(TABLE, {"intervento": "manutenzione_straordinaria", "fatti": "nessuna"}, REHEARSALS)
     assert "error" in {q["key"]: q for q in r["questions"]}["fatti"]
     # The options as a recipe words them ("senza autorizzazione") are the table's values.
-    r = route.route(TABLE, {"intervento": "manutenzione straordinaria", "cambio_uso": "no",
+    r = route.route(TABLE, {"intervento": "manutenzione straordinaria", "terre_rocce": "no", "cambio_uso": "no",
                             "paesaggio": "senza autorizzazione", "fatti": []}, REHEARSALS)
     assert r["pratica"] == "cila-fittizia", r
 
@@ -241,7 +325,7 @@ def refusals_say_why():
     # Every combination has a steps file since 2026-10-31: one left out shows the message.
     with tempfile.TemporaryDirectory() as tmp:
         shutil.copytree(REHEARSALS / "cila-fittizia", Path(tmp) / "cila-fittizia")
-        r = route.route(TABLE, {"intervento": "manutenzione_straordinaria", "cambio_uso": "no", "paesaggio": "ordinaria",
+        r = route.route(TABLE, {"intervento": "manutenzione_straordinaria", "terre_rocce": "no", "cambio_uso": "no", "paesaggio": "ordinaria",
                                 "fatti": []}, Path(tmp))
     assert r["unsupported"] == ["Not mapped yet: napoli/comune/cila-lavori-edilizi (comunicazione) filed with "
                                 "napoli/comune/autorizzazione-paesaggistica-ordinaria."], r
@@ -283,7 +367,7 @@ def plugin_layout():
 def main():
     tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, as_a_conversation,
              wrong_answers, gated_items_stay_unknown, own_words_kept_only_if_they_agree, missing_answers_file,
-             cila_reads_sanatoria_its_way,
+             cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso, sanatoria_zona_a, sanatoria_titoli, cambio_uso_fuori_23ter,
              rehearsal_cases_come_home, asks_as_the_table_asks, refusals_say_why, apart_is_the_persons,
              one_steps_file_per_combination, plugin_layout]
     for t in tests:

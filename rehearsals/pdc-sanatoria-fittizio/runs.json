@@ -28,5 +28,47 @@
   "answers": "answers-catasto-presentata.json",
   "result": "filled",
   "seconds": 154.1
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-strutture.json",
+  "result": "filled",
+  "seconds": 143.9
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-tutela.json",
+  "result": "filled",
+  "seconds": 144.6
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-cambio-intero.json",
+  "result": "stopped",
+  "seconds": 37.6
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-cambio-intero.json",
+  "result": "filled",
+  "seconds": 171.8
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-zona-a.json",
+  "result": "stopped",
+  "seconds": 81.6
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-zona-a.json",
+  "result": "filled",
+  "seconds": 153.5
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-ristrutturazione-urbanistica.json",
+  "result": "filled",
+  "seconds": 165.2
  }
 ]

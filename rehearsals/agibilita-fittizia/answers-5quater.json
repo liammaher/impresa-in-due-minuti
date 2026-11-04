@@ -26,7 +26,7 @@
  "docfa_data": "2026-10-27",
  "civici_variazione": "false",
  "antincendio_variazione": "false",
- "diritti_euro": "0",
+ "diritti_euro": "401",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
  "assenso_proprietario": "rehearsals/cila-fittizia/files/assenso-immobiliare-fittizia.pdf",
  "dichiarazione_conformita": "rehearsals/agibilita-fittizia/files/dichiarazione-conformita-impianti.pdf",
@@ -44,5 +44,7 @@
  "impianto_altro": "false",
  "igienico_24_5bis": "false",
  "igienico_5quater": "true",
- "igienico_5quater_atto": "L.R. Campania 28 novembre 2000, n. 15 (recupero abitativo dei sottotetti)"
+ "igienico_5quater_atto": "L.R. Campania 28 novembre 2000, n. 15 (recupero abitativo dei sottotetti)",
+ "agibilita_attestante": "direttore dei lavori",
+ "diritti_esente": false
 }

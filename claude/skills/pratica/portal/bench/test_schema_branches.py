@@ -42,9 +42,37 @@ def states():
     box = next(b for b in bx if b["section"].startswith("c) Qualificazione") and sb.norm(b["label"]).startswith(sb.norm("senza opere (o con opere")))
     runs = {who for *_, who in TICKS}
     assert sb.status(box, TICKS, MAPPED, LEAVES, bx, runs)[0] == "filled"
-    # Works finished in part: the fine lavori's recipe refuses it (its planimetria isn't mapped).
-    assert state("fine-lavori", "", "in forma parziale")[0] == "mapped"
-    assert state("scia", "Dati catastali", "Nuovo Catasto Terreni")[0] == "none"
+    # Works finished in part: a case ticks it since 2026-11-03 (the planimetria in its own slot);
+    # before, the recipe refused it and the box was only mapped.
+    st, who = state("fine-lavori", "", "in forma parziale")
+    assert st == "case" and "fine-lavori-fittizia" in who, (st, who)
+    # The land register: a case ticks it since 2026-11-02 (the permesso's plot), not yet run.
+    assert state("scia", "Dati catastali", "Nuovo Catasto Terreni")[0] == "case"
+    # The procuratore born abroad: a CILA case ticks it since 2026-11-02 (the shared section).
+    st, who = state("scia", "Qualifica e dati del procuratore", "all'Estero")
+    assert st == "case" and "cila-fittizia" in who, (st, who)
+
+
+def required_choices():
+    """No ready case states none of a required choice; and the report catches the free land's
+    conformity (choice 011 of the permesso) when its tick is taken away, as it was until a portal
+    run stopped on it (2026-11-02)."""
+    assert sb.required() == []
+    real = sb.sue_steps
+
+    def without_conformity():
+        for d, steps in real():
+            if d.name == "pdc-fittizio":
+                steps = {**steps, "sections": [{**sec, "fields": [f for f in sec["fields"]
+                         if not sb.norm(f.get("label")).startswith(sb.norm("pienamente conforme alla documentazione"))]}
+                         for sec in steps["sections"]]}
+            yield d, steps
+    sb.sue_steps = without_conformity
+    try:
+        flagged = {(i, r, a) for _, i, _, r, a in sb.required()}
+    finally:
+        sb.sue_steps = real
+    assert ("011", "pdc-fittizio", "answers-terreno.json") in flagged, sorted(flagged)[:5]
 
 
 def deeper_boxes():
@@ -88,7 +116,7 @@ def table_current():
 
 
 def main():
-    tests = [labels_alike, states, deeper_boxes, every_alternative_matched, table_current]
+    tests = [labels_alike, states, deeper_boxes, every_alternative_matched, required_choices, table_current]
     for t in tests:
         t()
         print(f"ok  {t.__name__}")

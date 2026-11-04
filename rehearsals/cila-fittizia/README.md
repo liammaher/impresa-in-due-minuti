@@ -59,7 +59,7 @@ are clients of the same studio: architetto Chiara Fittizia, Studio Fittizio, Nap
 | P2 | Bar Fittizio s.r.l., works in its own premises in the Arenella (the company is the titolare, its legale rappresentante signs) | A company as titolare, `business.*` data, "in qualità di" | Draft at the stop point |
 | P3 | Luca Fittizio, a tenant, with the landlord's written assent | Non-exclusive title (a.2) and the assenso dei terzi attachment | Draft at the stop point |
 | P4 | Anna and Paolo Fittizi, co-owners | Two titolari in "Soggetti coinvolti" | Draft at the stop point |
-| P5 | A flat in a listed building in the centro storico (zona A, bene culturale) | A branch we don't support: Soprintendenza assent, the zona A attestation | **Refused at pre-flight** with a plain reason; the portal never opens |
+| P5 | A flat in a listed building in the centro storico (zona A, bene culturale) | The Soprintendenza's authorization (art. 21 c. 4 D.Lgs. 42/2004) | Since 2026-11-01: **refused at pre-flight** until the Soprintendenza has authorized the works (Napoli's SUE has no procedure to ask for it with a CILA: it is requested apart, first, by PEC on the Soprintendenza's form), then a draft at the stop point with the authorization in the relazione's assents (`answers-bene-culturale.json`); works already under way on it are refused (no authorization after the fact, art. 169) |
 | P6 | **The hard case** (`dossier-p6.md`): Luca Fittizio, a tenant, renovating a flat in the Arenella owned by Immobiliare Fittizia S.r.l.; works already started (a late CILA, d.2, with the reduced penalty); two firms on site, so the notifica preliminare | Every complication at once: non-exclusive title with the owner company's assent, works in progress, two impresa esecutrici, D.Lgs. 81 | Draft at the stop point, or refused at pre-flight if the first walk shows the late CILA can't be done online |
 
 The fixtures (`fixture-p1.json` … `fixture-p5.json`, the studio's vault plus that client) and
@@ -275,6 +275,13 @@ resumed on the same draft from that section.
 
 ## Changes
 
+- 2026-11-01: a bene culturale. The CILA goes once the Soprintendenza has authorized the works,
+  obtained apart and first (the rules table's `soprintendenza-cila-*`), listed in the relazione
+  among the assents already obtained; `soprintendenza_autorizzata` asks it, and
+  `bene_culturale` stays in the facts checklist. A late CILA on one is refused: the Codice has
+  no authorization after the fact, and the Soprintendenza's form takes only works to come,
+  ripristino or condono.
+
 - 2026-10-28, before any mapping: added P6, the hard case, to put the flow under the most
   strain one CILA can carry. It goes first: `fixture-p6.json` (loaded through every vault
   rule with `TestPraticaPilotVault`), `dossier-p6.md` (what the key, the baseline and the run
@@ -302,6 +309,27 @@ resumed on the same draft from that section.
   `mod_cila_v1.0.7.xsd`) holds 137 of the 152 portal fields walked (`schema/schema-vs-portal.md`).
   The next step tests building the portal map from the schema plus a crawler instead of walking
   each screen by hand.
+
+### 2026-11-03: the relazione's two lists read as the national form words them
+
+The relazione's lists were filled as filings already made and assents already obtained. The
+national CILA form (Accordo 4 May 2017, relazione items 2 and 3) words them as filings
+**presented with** the CILA and assents **the SUE is to acquire** from the documents attached
+(art. 23-bis c. 1-3 DPR 380/2001, c. 3 for the CILA), and the portal's two slots on Allega documenti
+carry those very titles ("Documentazione necessaria per la presentazione di altre comunicazioni,
+segnalazioni", "... per il rilascio di atti di assenso obbligatori"). So the asks are now
+`comunicazioni_contestuali` and `atti_da_acquisire`, each with its slot (`comunicazioni_doc`,
+`atti_doc`); with assents to acquire, quadro d) says the works start after the SUE's
+communication. That lifts the refusal of "filings or assents still to be made or requested". An
+assent already obtained (the Soprintendenza's, on a bene culturale) is attached under Allegati
+liberi, in the box after the relazione's (the slot's "+": the run's since 2026-11-03, filled in
+114.6 s), no longer listed. The cases that took the old reading changed: `answers-direttore-atti`
+and `answers-elenchi-lunghi` (works to start, assents for the SUE: ASL, Vigili del Fuoco),
+`answers-bene-culturale` (nothing listed). Their 2026-10-30/11-01 runs below filled the old
+values; all three filled again with the new ones on 2026-11-03 (`runs.json`). The portal's own
+wording, read on that day's draft: "2 - ALTRE COMUNICAZIONI, SEGNALAZIONI, ASSEVERAZIONI ETC. [...]
+che si presentano contestualmente alla CILA" and "3 - ATTI DI ASSENSO DA ACQUISIRE [...] per cui si
+richiede la loro acquisizione d'ufficio sulla base della documentazione allegata".
 
 ## Clean reruns (2026-10-29)
 
@@ -339,3 +367,9 @@ contributo to pay, in proprio, "altri interventi").
 Not run on the portal: a destinazione other than residenziale (the fixture's flat is
 residenziale; pre-flight and the generator cover it), a terzo titolare company other than P6's,
 two tolerances other than 1-bis and c. 2.
+| 2026-11-01 | pane | `answers-altri-tecnici-otto` (eight other technicians, the limit raised from three), `bench/rerun.py` bundle | **filled** in 522 s (each "+" from the seventh takes a few seconds), read back on a fresh load |
+| 2026-11-01 | pane | `answers-bene-culturale` (a listed building, works to come, the Soprintendenza's authorization in the relazione's assents), `bench/rerun.py` bundle | **Filled** from a blank draft in 99.5 s, read back on a fresh load, nothing moved; the base case's one `loose` (h)'s "lavori sono/saranno eseguiti dall…") |
+| 2026-11-01 | pane | `answers-impresa-dopo` (the firm still to be chosen: the CILA has no line for it, so the firm's radio with no block and the safety quadro's "si riserva") stopped at h): the portal requires the firm's details (16 "obbligatorio", the DURC boxes). The recipe now refuses the case, the CIL's too |
+| 2026-11-02 | pane | Clients other than a private person, `bench/rerun.py` bundle: a company in the Registro delle imprese (`answers-societa`: `c:` Immobiliare Fittizia, `cr:` Giulia Esempio, its legale rappresentante, INI-PEC), one not yet registered (`answers-societa-non-iscritta`), a condominium (`answers-condominio`: `cr:` its administrator, NON NECESSITA DI ISCRIZIONE, ALTRE FORME, AMMINISTRATORE), a client born in Albania with a permesso di soggiorno (`answers-non-ue`) | First pass: the non-EU client **filled** (86 s); the three companies stopped on the sede's Provincia ("2 fields with this label"): Forma giuridica re-renders the block and flags its empty boxes, and a flagged dropdown's own label read as its option list (inpage.js fixed). ISCRITTA's Camera di commercio also opens "Numero REA" and "Data", required. Second pass: not yet registered, condominium and non-EU **filled** (92, 94, 86 s), nothing moved or loose; the registered company stopped at Salva on the portal's own check, "Attenzione! Il CF inserito non è presente nel RI!": it looks the codice fiscale up in the Registro Imprese, so ISCRITTA is filled only for a real company, never a made-up one (no other error on the section) |
+| 2026-11-02 | pane | Another architectural designer (`p:` Valerio Disegno, `progettista_altro`), `bench/rerun.py` bundle: `answers-progettista` (the designer directs: G1's "non è colui che presenta la pratica", their block, "incaricato anche come direttore"; the relazione's progettista is theirs) and `answers-progettista-dl` (`d:` Elena Prova directs: her block is the second, below the designer's) | Both **filled** (125 s, 119 s), read back on a fresh load, nothing moved or loose; the draft's G1 read after: each person under their own heading. `answers-p6` rerun unchanged: **filled** |
+| 2026-11-03 | pane | A building with no title under the tolerances (`answers-tolleranze-privo`), `bench/rerun.py` bundle | **filled** in 150 s |

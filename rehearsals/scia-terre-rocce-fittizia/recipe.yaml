@@ -1,0 +1,35 @@
+# SCIA edilizia con dichiarazione di utilizzo delle terre e rocce da scavo in one pratica on Napoli's SUE: the scia-fittizia rehearsal's case with excavated soil that leaves the site
+# as a by-product (a small site: art. 21 DPR 120/2017). Two operations selected together in the
+# wizard; the dichiarazione adds two adempimenti (the SUE's, ARPA Campania's) and no section, so the
+# combination's crawl (catalogue/F839/sections/sue-combo-scia-dichiarazione-utilizzo.json) has the main pratica's sections and the
+# dichiarazione's slot. Everything else is scia-fittizia's recipe and what the dichiarazione adds
+# (parts/dichiarazione-utilizzo-terre.yaml): a slot or a refusal mapped on either reaches this one.
+extends: [scia-fittizia, parts/dichiarazione-utilizzo-terre]
+procedure: napoli/comune/scia-con-dichiarazione-utilizzo-terre
+title: "SCIA edilizia con dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
+comune: F839
+sportello: sue
+crawl: sue-combo-scia-dichiarazione-utilizzo
+operation:
+  - Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)
+  - "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
+asks:
+  descrizione: {default: "PROVA NON INVIARE - SCIA e terre e rocce {{c:identity.last_name}}"}
+# Its main pratica's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
+yours:
+  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
+  - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
+  - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
+  - "A SCIA that asks for assents (the Soprintendenza, a park, a vincolo): no start date; the works start once the SUE says the assents are in"
+  - "The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal's document on Allega documenti once the declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at least 15 days after sending"
+  - "When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017) on the SUE"
+  - "Sign and send (Firma e invio); keep the receipt"
+rules:
+  main: napoli/comune/scia-edilizia
+answers:
+  descrizione: PROVA NON INVIARE - SCIA e terre e rocce P6
+  oggetto: "Manutenzione straordinaria non strutturale con modifica dei prospetti (persiane e ringhiere in facciata), nuovo bagno e nuovo allaccio fognario nel cortile, con scavo di 40 m³ di terre portate a un altro cantiere come sottoprodotto (dati inventati per la prova)."
+  # The asseverazione says what the dichiarazione files: by-products from a small site.
+  scavo: sottoprodotti
+  scavo_piano_utilizzo: "false"

@@ -39,9 +39,15 @@ user's folder at the end, even when a test fails.
    (Without `--plain` it tries to show a code in a window on the host: record whether
    that works from Cowork's sandbox, and what it says.)
 2. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser and
-   ask the user to log in with SPID. Wait until they're in.
+   ask the user to log in with SPID. Wait until they're in. A page that says only "Forbidden"
+   or lands on an error usually means another browser or session has a pratica open on the
+   same login (the portal keeps one per login): record it and ask the user to close the
+   other one, rather than clearing cookies.
 3. Run `run/check.js` as one JavaScript call on the page, then what it names
    (`runner.js`, `steps.js`), then `run/run.js`, each file's text exactly as written.
+   If a call fails with "await is only valid in async functions", the tool has no top-level
+   `await`: wrap that script as `(async () => { ... })()` returning its last line, and record
+   that you had to (a detail, not a failure).
    Record, for each call: whether it ran, what it returned, any error or size limit. A tool
    that refuses a script this size is the answer to this test: record its exact message,
    try `install.js` once in its place, and if that fails too, go to test 2.
@@ -67,7 +73,24 @@ portal takes up to 9.77 MB a file). A run carries files through the conversation
    name then shows on the page with its size. Don't save anything else.
 3. If you have none: record that, and whether the JavaScript tool could read a file from
    the user's folder in any way you have (don't invent one).
-4. Leave the draft as it is. Never press Invia, pagoPA or Firma.
+4. With a file tool, also into a box of the runner's own, read in the page. This says whether
+   the runner can take any file, and a run's values, from a file you place without reading
+   it. Run this as one JavaScript call:
+   ```js
+   (() => { const i = document.createElement("input"); i.type = "file"; i.id = "pv-probe";
+     i.style.cssText = "position:fixed;top:8px;left:8px;z-index:99999"; document.body.append(i); return "ready"; })()
+   ```
+   put `planimetria-3mb.pdf` into `#pv-probe` with the file tool, then run:
+   ```js
+   (async () => { const f = document.getElementById("pv-probe").files[0]; if (!f) return { file: false };
+     const d = await crypto.subtle.digest("SHA-256", await f.arrayBuffer());
+     return { file: true, name: f.name, bytes: f.size,
+       sha256: Array.from(new Uint8Array(d)).map((b) => b.toString(16).padStart(2, "0")).join("") }; })()
+   ```
+   and compare `bytes` and `sha256` with the file's own:
+   `python3 -c "import hashlib,os,sys; p=sys.argv[1]; print(os.path.getsize(p), hashlib.sha256(open(p,'rb').read()).hexdigest())" planimetria-3mb.pdf`.
+   Then remove the box: `document.getElementById("pv-probe").remove()`. Record each result.
+5. Leave the draft as it is. Never press Invia, pagoPA or Firma.
 
 ## 3. What it cost
 
@@ -86,6 +109,7 @@ Write `portali-test-results.md` in the user's folder:
 | 0. Environment | | Python version, browser tools by name, browser setting |
 | 1. Scripts in the built-in browser | pass / fail | each call; result, total_seconds, fixes |
 | 2. A 3 MB attachment | pass / fail | the tool used, what the page showed |
+| 2b. A file in the runner's own box | pass / fail | bytes and sha256 in the page against the file's |
 | 3. Cost | | usage before and after, minutes, tool calls |
 
 ## Outputs
@@ -93,4 +117,5 @@ check.py, pre-flight and run.py page as printed; the report's result, error and 
 ```
 
 Then attach `portali-test-results.md` and `portali-test/run/report.json`, and tell the user to
-send both back.
+send both back. The draft "PROVA NON INVIARE - CILA Cowork test" stays in their Pratiche in
+bozza: tell them it's there, for them to delete when they like.

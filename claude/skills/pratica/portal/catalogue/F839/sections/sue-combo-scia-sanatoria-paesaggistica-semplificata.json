@@ -7939,6 +7939,301 @@
            "r29c3p47reg:radio:9_clone",
            "r32c3p50reg:radio:12_clone"
           ]
+         ],
+         "then": [
+          {
+           "choice": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :",
+           "id": "r24c1p30reg:radio:8_clone",
+           "kind": "radio",
+           "reveals": [
+            {
+             "id": "r25c2p32reg:radio:9_clone",
+             "kind": "radio",
+             "label": "allega l’autorizzazione sismica",
+             "group": "r25c2p32reg:radio"
+            },
+            {
+             "id": "r27c2p39reg:radio:10_clone",
+             "kind": "radio",
+             "label": "attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso dei termini del procedimento,",
+             "group": "r27c2p39reg:radio"
+            }
+           ],
+           "moved": [
+            [
+             "r32c2p49reg:radio:11_clone",
+             "r3c2p5reg:radio:0_clone"
+            ],
+            [
+             "r32c3p50reg:radio:12_clone",
+             "r3c3p6reg:radio:1_clone"
+            ],
+            [
+             "r32c2p49reg:radio:11_clone",
+             "r5c2p9reg:radio:2_clone"
+            ],
+            [
+             "r32c3p50reg:radio:12_clone",
+             "r5c3p10reg:radio:3_clone"
+            ],
+            [
+             "r29c1p45reg:radio:9_clone",
+             "r29c1p45reg:radio:11_clone"
+            ],
+            [
+             "r30c1p46reg:radio:10_clone",
+             "r30c1p46reg:radio:12_clone"
+            ],
+            [
+             "r32c2p49reg:radio:11_clone",
+             "r32c2p49reg:radio:13_clone"
+            ],
+            [
+             "r32c3p50reg:radio:12_clone",
+             "r32c3p50reg:radio:14_clone"
+            ]
+           ],
+           "then": [
+            {
+             "choice": "allega l’autorizzazione sismica",
+             "id": "r25c2p32reg:radio:9_clone",
+             "kind": "radio",
+             "reveals": [
+              {
+               "id": "r27c2p37reg:calendar_input",
+               "kind": "date",
+               "label": "rilasciata in data"
+              },
+              {
+               "id": "r27c3p39reg:txt",
+               "kind": "text",
+               "label": "prot. n.",
+               "max": 9999
+              }
+             ],
+             "moved": [
+              [
+               "r32c2p49reg:radio:13_clone",
+               "r3c2p5reg:radio:0_clone"
+              ],
+              [
+               "r32c3p50reg:radio:14_clone",
+               "r3c3p6reg:radio:1_clone"
+              ],
+              [
+               "r32c2p49reg:radio:13_clone",
+               "r5c2p9reg:radio:2_clone"
+              ],
+              [
+               "r32c3p50reg:radio:14_clone",
+               "r5c3p10reg:radio:3_clone"
+              ],
+              [
+               "r27c2p39reg:radio:10_clone",
+               "r28c2p43reg:radio:10_clone"
+              ],
+              [
+               "r29c1p45reg:radio:11_clone",
+               "r30c1p49reg:radio:11_clone"
+              ],
+              [
+               "r30c1p46reg:radio:12_clone",
+               "r31c1p50reg:radio:12_clone"
+              ],
+              [
+               "r32c2p49reg:radio:13_clone",
+               "r33c2p53reg:radio:13_clone"
+              ],
+              [
+               "r32c3p50reg:radio:14_clone",
+               "r33c3p54reg:radio:14_clone"
+              ]
+             ]
+            },
+            {
+             "choice": "attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso dei termini del procedimento,",
+             "id": "r27c2p39reg:radio:10_clone",
+             "kind": "radio",
+             "reveals": [
+              {
+               "id": "r29c2p44reg:calendar_input",
+               "kind": "date",
+               "label": "in data"
+              },
+              {
+               "id": "r29c3p46reg:txt",
+               "kind": "text",
+               "label": "prot. n.",
+               "max": 9999
+              }
+             ],
+             "moved": [
+              [
+               "r32c2p49reg:radio:13_clone",
+               "r3c2p5reg:radio:0_clone"
+              ],
+              [
+               "r32c3p50reg:radio:14_clone",
+               "r3c3p6reg:radio:1_clone"
+              ],
+              [
+               "r32c2p49reg:radio:13_clone",
+               "r5c2p9reg:radio:2_clone"
+              ],
+              [
+               "r32c3p50reg:radio:14_clone",
+               "r5c3p10reg:radio:3_clone"
+              ],
+              [
+               "r29c1p45reg:radio:11_clone",
+               "r30c1p49reg:radio:11_clone"
+              ],
+              [
+               "r30c1p46reg:radio:12_clone",
+               "r31c1p50reg:radio:12_clone"
+              ],
+              [
+               "r32c2p49reg:radio:13_clone",
+               "r33c2p53reg:radio:13_clone"
+              ],
+              [
+               "r32c3p50reg:radio:14_clone",
+               "r33c3p54reg:radio:14_clone"
+              ]
+             ]
+            }
+           ]
+          },
+          {
+           "choice": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:",
+           "id": "r29c1p45reg:radio:9_clone",
+           "kind": "radio",
+           "reveals": [
+            {
+             "id": "r30c1p46reg:chk",
+             "kind": "checkbox",
+             "label": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito"
+            }
+           ],
+           "moved": [
+            [
+             "r32c2p49reg:radio:11_clone",
+             "r3c2p5reg:radio:0_clone"
+            ],
+            [
+             "r32c3p50reg:radio:12_clone",
+             "r3c3p6reg:radio:1_clone"
+            ],
+            [
+             "r32c2p49reg:radio:11_clone",
+             "r5c2p9reg:radio:2_clone"
+            ],
+            [
+             "r32c3p50reg:radio:12_clone",
+             "r5c3p10reg:radio:3_clone"
+            ],
+            [
+             "r30c1p46reg:radio:10_clone",
+             "r31c1p47reg:radio:10_clone"
+            ],
+            [
+             "r32c2p49reg:radio:11_clone",
+             "r33c2p50reg:radio:11_clone"
+            ],
+            [
+             "r32c3p50reg:radio:12_clone",
+             "r33c3p51reg:radio:12_clone"
+            ]
+           ],
+           "then": [
+            {
+             "choice": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito",
+             "id": "r30c1p46reg:chk",
+             "kind": "checkbox",
+             "moved": [
+              [
+               "r33c2p50reg:radio:11_clone",
+               "r3c2p5reg:radio:0_clone"
+              ],
+              [
+               "r33c3p51reg:radio:12_clone",
+               "r3c3p6reg:radio:1_clone"
+              ],
+              [
+               "r33c2p50reg:radio:11_clone",
+               "r5c2p9reg:radio:2_clone"
+              ],
+              [
+               "r33c3p51reg:radio:12_clone",
+               "r5c3p10reg:radio:3_clone"
+              ]
+             ]
+            }
+           ]
+          },
+          {
+           "choice": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:",
+           "id": "r30c1p46reg:radio:10_clone",
+           "kind": "radio",
+           "reveals": [
+            {
+             "id": "r31c1p47reg:chk",
+             "kind": "checkbox",
+             "label": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito"
+            }
+           ],
+           "moved": [
+            [
+             "r32c2p49reg:radio:11_clone",
+             "r3c2p5reg:radio:0_clone"
+            ],
+            [
+             "r32c3p50reg:radio:12_clone",
+             "r3c3p6reg:radio:1_clone"
+            ],
+            [
+             "r32c2p49reg:radio:11_clone",
+             "r5c2p9reg:radio:2_clone"
+            ],
+            [
+             "r32c3p50reg:radio:12_clone",
+             "r5c3p10reg:radio:3_clone"
+            ],
+            [
+             "r32c2p49reg:radio:11_clone",
+             "r33c2p50reg:radio:11_clone"
+            ],
+            [
+             "r32c3p50reg:radio:12_clone",
+             "r33c3p51reg:radio:12_clone"
+            ]
+           ],
+           "then": [
+            {
+             "choice": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito",
+             "id": "r31c1p47reg:chk",
+             "kind": "checkbox",
+             "moved": [
+              [
+               "r33c2p50reg:radio:11_clone",
+               "r3c2p5reg:radio:0_clone"
+              ],
+              [
+               "r33c3p51reg:radio:12_clone",
+               "r3c3p6reg:radio:1_clone"
+              ],
+              [
+               "r33c2p50reg:radio:11_clone",
+               "r5c2p9reg:radio:2_clone"
+              ],
+              [
+               "r33c3p51reg:radio:12_clone",
+               "r5c3p10reg:radio:3_clone"
+              ]
+             ]
+            }
+           ]
+          }
          ]
         }
        ]
@@ -8691,6 +8986,54 @@
            "r27c1p44reg:radio:12_clone",
            "r29c1p46reg:radio:14_clone"
           ]
+         ],
+         "then": [
+          {
+           "choice": "non prevede interventi;",
+           "id": "r21c1p35reg:radio:10_clone",
+           "kind": "radio",
+           "moved": [
+            [
+             "r7c2p13reg:radio:4_clone",
+             "r3c2p5reg:radio:0_clone"
+            ],
+            [
+             "r7c3p14reg:radio:5_clone",
+             "r3c3p6reg:radio:1_clone"
+            ],
+            [
+             "r7c2p13reg:radio:4_clone",
+             "r5c2p9reg:radio:2_clone"
+            ],
+            [
+             "r7c3p14reg:radio:5_clone",
+             "r5c3p10reg:radio:3_clone"
+            ]
+           ]
+          },
+          {
+           "choice": "propone la realizzazione di interventi anche strutturali necessari relativi alla sicurezza e/o la rimozione di opere che non possono essere sanate, a cui lo Spo",
+           "id": "r22c1p36reg:radio:11_clone",
+           "kind": "radio",
+           "moved": [
+            [
+             "r7c2p13reg:radio:4_clone",
+             "r3c2p5reg:radio:0_clone"
+            ],
+            [
+             "r7c3p14reg:radio:5_clone",
+             "r3c3p6reg:radio:1_clone"
+            ],
+            [
+             "r7c2p13reg:radio:4_clone",
+             "r5c2p9reg:radio:2_clone"
+            ],
+            [
+             "r7c3p14reg:radio:5_clone",
+             "r5c3p10reg:radio:3_clone"
+            ]
+           ]
+          }
          ]
         },
         {
@@ -8740,6 +9083,475 @@
            "r27c1p44reg:radio:12_clone",
            "r33c1p60reg:radio:14_clone"
           ]
+         ],
+         "then": [
+          {
+           "choice": "dà atto che l’immobile interessato dall’intervento è ubicato in zona sismica a bassa sismicità (zone 3 e 4)",
+           "id": "r23c1p37reg:radio:10_clone",
+           "kind": "radio",
+           "moved": [
+            [
+             "r7c2p13reg:radio:4_clone",
+             "r3c2p5reg:radio:0_clone"
+            ],
+            [
+             "r7c3p14reg:radio:5_clone",
+             "r3c3p6reg:radio:1_clone"
+            ],
+            [
+             "r7c2p13reg:radio:4_clone",
+             "r5c2p9reg:radio:2_clone"
+            ],
+            [
+             "r7c3p14reg:radio:5_clone",
+             "r5c3p10reg:radio:3_clone"
+            ]
+           ]
+          },
+          {
+           "choice": "trattandosi di immobile ubicato in zona sismica a media o alta sismicità (zone 1 e 2), di cui all'articolo 83, attesta che l’intervento sopra indicato :",
+           "id": "r24c1p38reg:radio:11_clone",
+           "kind": "radio",
+           "reveals": [
+            {
+             "id": "r25c1p39reg:radio:12_clone",
+             "kind": "radio",
+             "label": "non ha rilevanza strutturale;",
+             "group": "r25c1p39reg:radio"
+            },
+            {
+             "id": "r26c1p40reg:radio:13_clone",
+             "kind": "radio",
+             "label": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che il medesimo costituisce:",
+             "group": "r26c1p40reg:radio"
+            }
+           ],
+           "moved": [
+            [
+             "r7c2p13reg:radio:4_clone",
+             "r3c2p5reg:radio:0_clone"
+            ],
+            [
+             "r7c3p14reg:radio:5_clone",
+             "r3c3p6reg:radio:1_clone"
+            ],
+            [
+             "r7c2p13reg:radio:4_clone",
+             "r5c2p9reg:radio:2_clone"
+            ],
+            [
+             "r7c3p14reg:radio:5_clone",
+             "r5c3p10reg:radio:3_clone"
+            ],
+            [
+             "r30c1p55reg:radio:12_clone",
+             "r32c1p57reg:radio:14_clone"
+            ],
+            [
+             "r31c1p56reg:radio:13_clone",
+             "r33c1p58reg:radio:15_clone"
+            ],
+            [
+             "r33c1p60reg:radio:14_clone",
+             "r35c1p62reg:radio:16_clone"
+            ]
+           ],
+           "then": [
+            {
+             "choice": "non ha rilevanza strutturale;",
+             "id": "r25c1p39reg:radio:12_clone",
+             "kind": "radio",
+             "moved": [
+              [
+               "r7c2p13reg:radio:4_clone",
+               "r3c2p5reg:radio:0_clone"
+              ],
+              [
+               "r7c3p14reg:radio:5_clone",
+               "r3c3p6reg:radio:1_clone"
+              ],
+              [
+               "r7c2p13reg:radio:4_clone",
+               "r5c2p9reg:radio:2_clone"
+              ],
+              [
+               "r7c3p14reg:radio:5_clone",
+               "r5c3p10reg:radio:3_clone"
+              ]
+             ]
+            },
+            {
+             "choice": "ha rilevanza strutturale, rispetta le norme tecniche per le costruzioni vigenti al momento della realizzazione dell’intervento e che il medesimo costituisce:",
+             "id": "r26c1p40reg:radio:13_clone",
+             "kind": "radio",
+             "reveals": [
+              {
+               "id": "r27c1p41reg:radio:14_clone",
+               "kind": "radio",
+               "label": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :",
+               "group": "r27c1p41reg:radio"
+              },
+              {
+               "id": "r32c1p56reg:radio:15_clone",
+               "kind": "radio",
+               "label": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:",
+               "group": "r32c1p56reg:radio"
+              },
+              {
+               "id": "r33c1p57reg:radio:16_clone",
+               "kind": "radio",
+               "label": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:",
+               "group": "r33c1p57reg:radio"
+              }
+             ],
+             "moved": [
+              [
+               "r7c2p13reg:radio:4_clone",
+               "r3c2p5reg:radio:0_clone"
+              ],
+              [
+               "r7c3p14reg:radio:5_clone",
+               "r3c3p6reg:radio:1_clone"
+              ],
+              [
+               "r7c2p13reg:radio:4_clone",
+               "r5c2p9reg:radio:2_clone"
+              ],
+              [
+               "r7c3p14reg:radio:5_clone",
+               "r5c3p10reg:radio:3_clone"
+              ],
+              [
+               "r32c1p57reg:radio:14_clone",
+               "r35c1p60reg:radio:17_clone"
+              ],
+              [
+               "r33c1p58reg:radio:15_clone",
+               "r36c1p61reg:radio:18_clone"
+              ],
+              [
+               "r35c1p62reg:radio:16_clone",
+               "r38c1p65reg:radio:19_clone"
+              ]
+             ],
+             "then": [
+              {
+               "choice": "intervento rilevante nei riguardi della pubblica incolumità di cui al comma 1, lettera a), dell’art. 94-bis, e pertanto :",
+               "id": "r27c1p41reg:radio:14_clone",
+               "kind": "radio",
+               "reveals": [
+                {
+                 "id": "r28c2p43reg:radio:15_clone",
+                 "kind": "radio",
+                 "label": "allega l’autorizzazione sismica",
+                 "group": "r28c2p43reg:radio"
+                },
+                {
+                 "id": "r30c2p50reg:radio:16_clone",
+                 "kind": "radio",
+                 "label": "attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso dei termini del procedimento,",
+                 "group": "r30c2p50reg:radio"
+                }
+               ],
+               "moved": [
+                [
+                 "r7c2p13reg:radio:4_clone",
+                 "r3c2p5reg:radio:0_clone"
+                ],
+                [
+                 "r7c3p14reg:radio:5_clone",
+                 "r3c3p6reg:radio:1_clone"
+                ],
+                [
+                 "r7c2p13reg:radio:4_clone",
+                 "r5c2p9reg:radio:2_clone"
+                ],
+                [
+                 "r7c3p14reg:radio:5_clone",
+                 "r5c3p10reg:radio:3_clone"
+                ],
+                [
+                 "r32c1p56reg:radio:15_clone",
+                 "r32c1p56reg:radio:17_clone"
+                ],
+                [
+                 "r33c1p57reg:radio:16_clone",
+                 "r33c1p57reg:radio:18_clone"
+                ],
+                [
+                 "r35c1p60reg:radio:17_clone",
+                 "r35c1p60reg:radio:19_clone"
+                ],
+                [
+                 "r36c1p61reg:radio:18_clone",
+                 "r36c1p61reg:radio:20_clone"
+                ],
+                [
+                 "r38c1p65reg:radio:19_clone",
+                 "r38c1p65reg:radio:21_clone"
+                ]
+               ],
+               "then": [
+                {
+                 "choice": "allega l’autorizzazione sismica",
+                 "id": "r28c2p43reg:radio:15_clone",
+                 "kind": "radio",
+                 "reveals": [
+                  {
+                   "id": "r30c2p48reg:calendar_input",
+                   "kind": "date",
+                   "label": "rilasciata in data"
+                  },
+                  {
+                   "id": "r30c3p50reg:txt",
+                   "kind": "text",
+                   "label": "prot. n.",
+                   "max": 9999
+                  }
+                 ],
+                 "moved": [
+                  [
+                   "r7c2p13reg:radio:4_clone",
+                   "r3c2p5reg:radio:0_clone"
+                  ],
+                  [
+                   "r7c3p14reg:radio:5_clone",
+                   "r3c3p6reg:radio:1_clone"
+                  ],
+                  [
+                   "r7c2p13reg:radio:4_clone",
+                   "r5c2p9reg:radio:2_clone"
+                  ],
+                  [
+                   "r7c3p14reg:radio:5_clone",
+                   "r5c3p10reg:radio:3_clone"
+                  ],
+                  [
+                   "r30c2p50reg:radio:16_clone",
+                   "r31c2p54reg:radio:16_clone"
+                  ],
+                  [
+                   "r32c1p56reg:radio:17_clone",
+                   "r33c1p60reg:radio:17_clone"
+                  ],
+                  [
+                   "r33c1p57reg:radio:18_clone",
+                   "r34c1p61reg:radio:18_clone"
+                  ],
+                  [
+                   "r35c1p60reg:radio:19_clone",
+                   "r36c1p64reg:radio:19_clone"
+                  ],
+                  [
+                   "r36c1p61reg:radio:20_clone",
+                   "r37c1p65reg:radio:20_clone"
+                  ],
+                  [
+                   "r38c1p65reg:radio:21_clone",
+                   "r39c1p69reg:radio:21_clone"
+                  ]
+                 ]
+                },
+                {
+                 "choice": "attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso dei termini del procedimento,",
+                 "id": "r30c2p50reg:radio:16_clone",
+                 "kind": "radio",
+                 "reveals": [
+                  {
+                   "id": "r32c2p55reg:calendar_input",
+                   "kind": "date",
+                   "label": "in data"
+                  },
+                  {
+                   "id": "r32c3p57reg:txt",
+                   "kind": "text",
+                   "label": "prot. n.",
+                   "max": 9999
+                  }
+                 ],
+                 "moved": [
+                  [
+                   "r7c2p13reg:radio:4_clone",
+                   "r3c2p5reg:radio:0_clone"
+                  ],
+                  [
+                   "r7c3p14reg:radio:5_clone",
+                   "r3c3p6reg:radio:1_clone"
+                  ],
+                  [
+                   "r7c2p13reg:radio:4_clone",
+                   "r5c2p9reg:radio:2_clone"
+                  ],
+                  [
+                   "r7c3p14reg:radio:5_clone",
+                   "r5c3p10reg:radio:3_clone"
+                  ],
+                  [
+                   "r32c1p56reg:radio:17_clone",
+                   "r33c1p60reg:radio:17_clone"
+                  ],
+                  [
+                   "r33c1p57reg:radio:18_clone",
+                   "r34c1p61reg:radio:18_clone"
+                  ],
+                  [
+                   "r35c1p60reg:radio:19_clone",
+                   "r36c1p64reg:radio:19_clone"
+                  ],
+                  [
+                   "r36c1p61reg:radio:20_clone",
+                   "r37c1p65reg:radio:20_clone"
+                  ],
+                  [
+                   "r38c1p65reg:radio:21_clone",
+                   "r39c1p69reg:radio:21_clone"
+                  ]
+                 ]
+                }
+               ]
+              },
+              {
+               "choice": "intervento di minore rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera b), dell’art. 94-bis, e pertanto:",
+               "id": "r32c1p56reg:radio:15_clone",
+               "kind": "radio",
+               "reveals": [
+                {
+                 "id": "r33c1p57reg:chk",
+                 "kind": "checkbox",
+                 "label": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito"
+                }
+               ],
+               "moved": [
+                [
+                 "r7c2p13reg:radio:4_clone",
+                 "r3c2p5reg:radio:0_clone"
+                ],
+                [
+                 "r7c3p14reg:radio:5_clone",
+                 "r3c3p6reg:radio:1_clone"
+                ],
+                [
+                 "r7c2p13reg:radio:4_clone",
+                 "r5c2p9reg:radio:2_clone"
+                ],
+                [
+                 "r7c3p14reg:radio:5_clone",
+                 "r5c3p10reg:radio:3_clone"
+                ],
+                [
+                 "r33c1p57reg:radio:16_clone",
+                 "r34c1p58reg:radio:16_clone"
+                ],
+                [
+                 "r35c1p60reg:radio:17_clone",
+                 "r36c1p61reg:radio:17_clone"
+                ],
+                [
+                 "r36c1p61reg:radio:18_clone",
+                 "r37c1p62reg:radio:18_clone"
+                ],
+                [
+                 "r38c1p65reg:radio:19_clone",
+                 "r39c1p66reg:radio:19_clone"
+                ]
+               ],
+               "then": [
+                {
+                 "choice": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito",
+                 "id": "r33c1p57reg:chk",
+                 "kind": "checkbox",
+                 "moved": [
+                  [
+                   "r7c2p13reg:radio:4_clone",
+                   "r3c2p5reg:radio:0_clone"
+                  ],
+                  [
+                   "r7c3p14reg:radio:5_clone",
+                   "r3c3p6reg:radio:1_clone"
+                  ],
+                  [
+                   "r7c2p13reg:radio:4_clone",
+                   "r5c2p9reg:radio:2_clone"
+                  ],
+                  [
+                   "r7c3p14reg:radio:5_clone",
+                   "r5c3p10reg:radio:3_clone"
+                  ]
+                 ]
+                }
+               ]
+              },
+              {
+               "choice": "intervento privo di rilevanza nei riguardi della pubblica incolumità di cui al comma 1, lettera c), dell’art. 94-bis, e pertanto:",
+               "id": "r33c1p57reg:radio:16_clone",
+               "kind": "radio",
+               "reveals": [
+                {
+                 "id": "r34c1p58reg:chk",
+                 "kind": "checkbox",
+                 "label": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito"
+                }
+               ],
+               "moved": [
+                [
+                 "r7c2p13reg:radio:4_clone",
+                 "r3c2p5reg:radio:0_clone"
+                ],
+                [
+                 "r7c3p14reg:radio:5_clone",
+                 "r3c3p6reg:radio:1_clone"
+                ],
+                [
+                 "r7c2p13reg:radio:4_clone",
+                 "r5c2p9reg:radio:2_clone"
+                ],
+                [
+                 "r7c3p14reg:radio:5_clone",
+                 "r5c3p10reg:radio:3_clone"
+                ],
+                [
+                 "r35c1p60reg:radio:17_clone",
+                 "r36c1p61reg:radio:17_clone"
+                ],
+                [
+                 "r36c1p61reg:radio:18_clone",
+                 "r37c1p62reg:radio:18_clone"
+                ],
+                [
+                 "r38c1p65reg:radio:19_clone",
+                 "r39c1p66reg:radio:19_clone"
+                ]
+               ],
+               "then": [
+                {
+                 "choice": "dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di richieste di integrazione documentale o istruttorie inevase e di esito",
+                 "id": "r34c1p58reg:chk",
+                 "kind": "checkbox",
+                 "moved": [
+                  [
+                   "r7c2p13reg:radio:4_clone",
+                   "r3c2p5reg:radio:0_clone"
+                  ],
+                  [
+                   "r7c3p14reg:radio:5_clone",
+                   "r3c3p6reg:radio:1_clone"
+                  ],
+                  [
+                   "r7c2p13reg:radio:4_clone",
+                   "r5c2p9reg:radio:2_clone"
+                  ],
+                  [
+                   "r7c3p14reg:radio:5_clone",
+                   "r5c3p10reg:radio:3_clone"
+                  ]
+                 ]
+                }
+               ]
+              }
+             ]
+            }
+           ]
+          }
          ]
         }
        ]
@@ -8856,7 +9668,9 @@
      ]
     }
    ],
-   "seconds": 44.5
+   "seconds": 89.4,
+   "depth": 8,
+   "recrawled": "2026-11-01"
   },
   {
    "section": "Asseverazione SCIA - Dati immobile, strumentazione urbanistica, barriere architettoniche",

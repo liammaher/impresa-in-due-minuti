@@ -1,6 +1,7 @@
 # The Portali plugin for Cowork
 
-What an architect in Naples installs in Cowork, on a Pro plan: the portal runner, the
+What an architect in Naples installs in Cowork, on a Team or Enterprise plan (client data
+needs Anthropic's DPA, which consumer plans lack): the portal runner, the
 rehearsals' steps files and the pratiche-napoli library, with no server and no vault
 (`docs/design/packaging.md`). `portali/` is what's written by hand; `build.py` adds the rest.
 

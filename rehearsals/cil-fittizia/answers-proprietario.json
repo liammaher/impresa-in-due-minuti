@@ -14,9 +14,12 @@
  "titolo_esclusivo": true,
  "parti_comuni": "comproprieta",
  "lavori_in_proprio": true,
- "altri_atti": false,
+ "atti_da_acquisire": false,
+ "comunicazioni_contestuali": false,
  "sotto_200": "true",
  "intervento": "opere_temporanee",
  "paesaggio": "no",
- "fatti": []
+ "fatti": [],
+ "diritti_esente": false,
+ "terre_rocce": "no"
 }
