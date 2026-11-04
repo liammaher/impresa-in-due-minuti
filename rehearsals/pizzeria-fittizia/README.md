@@ -62,21 +62,12 @@ route and takes a handwritten signature scanned with an ID copy, so no firma dig
 - **No real third party's data.** The titolare is Gennaro Fittizio. If the portal ties the titolare
   to whoever is logged in, record it, and use Liam's own identity for that walk.
 
-## Doing it in one command
+## Running it
 
-```sh
-rehearsals/pizzeria-fittizia/do.py scia     # the SCIA on the SUAP portal, to a saved draft
-PRATICHE_NAPOLI_DIR=<library> rehearsals/pizzeria-fittizia/do.py tari   # the TARI Mod. 5, filled
-```
-
-Each serves the made-up vault, reads what the pratica needs and stops the vault. `scia`
-opens a Playwright window (log in there with SPID), runs `run.py run` and leaves the draft
-open at the person's steps. `tari` fills the Mod. 5 with `fill.py`, reads all 70 values back,
-opens it for review and prints the route: sign it, then send it with the ID copy and the
-planimetria from the business's PEC. Output: `~/.cache/pratica-rehearsal/pizzeria-fittizia/`.
-
-To try them as with a real business, from a fresh Claude session ("do the SCIA for Pizzeria
-Fittizia"), load the business into a real vault, `~/.pvault-fittizia`: `load.py` says how.
+The SCIA runs like every rehearsal, from its steps file in the browser pane (`run.py page`,
+`claude/skills/pratica/portal/README.md`); the TARI Mod. 5 is the fill pilot's `mod-5` case
+(`claude/skills/pratica/fill/pilot/regress.py`). The one-command scripts of 2026-10-28 (`do.py`,
+and `load.py` for a real business vault) were removed on 2026-11-04: the pane is the one way runs go.
 
 ## How a walk runs
 

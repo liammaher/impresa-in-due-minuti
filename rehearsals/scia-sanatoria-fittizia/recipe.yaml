@@ -7,7 +7,7 @@ procedure: napoli/comune/scia-in-sanatoria
 title: "SCIA in sanatoria, SUE Napoli (tecnico con procura)"
 comune: F839
 sportello: sue
-crawl: scia
+crawl: sue-segnalazione-certificata-di-inizio-attivita-edilizia
 operation: Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)
 scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
 si_no: {"Le opere ricadono nell'ambito della Sanatoria": "Sì"}
