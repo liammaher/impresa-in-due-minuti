@@ -273,202 +273,22 @@ both when the form asks for files; `read` only shows or downloads something.
 
 ### Filling a portal from a steps file
 
-A portal someone has walked has a steps file in a folder of the vault repository's
-`rehearsals/` (`portal-steps.generated.yaml`, else `portal-steps.yaml`; called
-`portal-steps.yaml` below), next to its README with the runs. Find one for the entry with
+A portal someone has walked has a steps file in `rehearsals/<name>/`
+(`portal-steps.generated.yaml`, else `portal-steps.yaml`). Find one for the entry with
 `grep -l "procedure: <entry id>" "$(cd ~/.claude/skills/pratica && pwd -P)"/../../../rehearsals/*/portal-steps*.yaml`.
-When there is one, follow it instead of exploring the portal.
 
-**Works needing a building title (SUE: CILA, SCIA, permesso, a sanatoria, a landscape
-authorization) are routed first**, because the case's facts decide which of these it is,
-not its name. `~/.cache/pratica-portal/venv/bin/python -I ~/.claude/skills/pratica/portal/route.py
---table sue-napoli [--answers <facts.json>]` asks the rules table's facts as pre-flight asks its
-questions (the same format; write the replies into facts.json and run it again): the works
-first, alone, then the rest in one message (the yes/no ones as a checklist, `fatti`). If the
-answer about the works changes, keep only it and run again: the checklist was another case's.
-Once the table decides, it prints the one
-steps file that files the case (`steps`) and the `answers` to start its answers file with,
-so pre-flight doesn't ask them again (`asked_again`: the facts that steps file asks its own
-way). `unsupported` (refused by the table, no pratica needed, or a combination not mapped
-yet): tell the user the reason in one line and stop. Pratiche the person names (a proroga,
-fine lavori, a voltura) are found by their entry id, as above.
-
-**When the user hands over the job's documents** (a folder: the visura, the lease or deed, the
-relazione tecnica, the drawings, the receipts), read them with the intake before asking anything:
-`~/.cache/pratica-portal/venv/bin/python -I ~/.claude/skills/pratica/intake/intake.py scan <folder>
---out <dir>` (`intake/README.md`). Never open the documents or `<dir>/private/` yourself: they
-hold people's data, which goes from the files to `private/values.json` without passing through
-the conversation. Read only `<dir>/intake.json`: each file's kind, the field ids filled, the
-`unread` files (scans: their facts are asked as before), `notes` (the titles the deed names, the
-planimetria's date, a receipt paid to the wrong account), and `proposals`, each with the document
-and words it comes from. Show the proposals in one message, grouped by document ("From the
-relazione tecnica: manutenzione straordinaria, nothing structural, works started 2026-10-19…").
-On "ok": `intake.py accept <dir> --into <facts.json> --part facts`, then route.py. Scan again with
-`--steps <the routed steps file>` and, on "ok", `accept <dir> --into <answers.json>` (it adds the
-client's and the owner's roles to `people`, never replacing an answer). Pre-flight then takes the
-vault's values and the documents': `--values - --values <dir>/private/values.json` (the vault's
-win). A proposal nobody confirmed is never used.
-
-1. **Pre-flight first, before anything opens.** `run.py preflight --steps <folder>/portal-steps.yaml
-   [--answers <answers.json>]` with the same values as step 2 (the `pvault get` piped in,
-   or `--vault-dir`) prints JSON and exits 0 only when `ready`:
-   - `unsupported`: this case isn't mapped (the steps file's `supports:`), or the law makes
-     it another pratica or adds one this pratica doesn't file (its `rules:`). Tell the user
-     the reason in one line and stop: don't open the portal, don't ask anything else.
-     With `defects` beside it, the case is one the law allows but the portal can't take as
-     the law asks (a known defect, `portal/defects.yaml`). Tell the user in a few lines: the
-     `title`, what the portal does (`what`), what the law asks (`law`), when it was `checked`,
-     then its `choices` as a numbered list, and let them choose. Never fill around a defect
-     (no hidden box ticked, no state the page itself can't make), and never contact the SUE
-     or the portal's support for them: the report (`docs/portal-defects.md`) is theirs to send.
-   - `questions`: only what this case needs (pre-flight leaves out a question no field of
-     this case reads, and one with a default). Ask all of them **in one short message**, in
-     that order, numbered, each `question` as written:
-     - a `checklist` is one question with its `items` as bullets ("tick any that apply, or
-       none"): the usual answer is "none". Write the reply as the list of the ticked items'
-       `key`s under the checklist's `key` (`[]` for none);
-     - an `only_if` question applies only when those items are ticked: put it under them
-       ("if so: …"), never as a question of its own;
-     - give `options` when there are some (with their `labels`), and a `how` (where to find
-       the answer) as a short hint; never explain `why` unless asked;
-     - `proposals` go in the same message as "I'll use: …", one line each, with the
-       `proposal` as written. "ok" confirms them all: write each one under its `key`. An
-       answer that changes one replaces it. Never use a proposal nobody confirmed.
-
-     Write the other replies under each `key` (dates YYYY-MM-DD, files as paths) and run
-     pre-flight again; an `error` says why an answer didn't fit, so ask only that again. A
-     reply that makes the case unsupported ends it there, as above.
-   - `missing`: vault fields that are empty or expired. Ask for each in the same message,
-     or have the user fill them in the vault (`pvault set`, the onboarding page).
-   - `files`: each attachment, whether it exists, and `pane_ok` (all of them within the
-     pane's 256 KB). If not, `pick` lists the files the user will choose once, at the start
-     of the run, in a box the runner shows on the portal's page: tell them so with the
-     questions (from the job's folder; the bytes go from their disk to the portal and you
-     never see them). A `.p7m` is read with openssl: one
-     that isn't a CAdES file is a `problem` (not ready: the user signs it again); one signed by
-     someone other than the dichiarante, or carrying no codice fiscale, is a `warnings` entry
-     (tell the user, it may be right: a technician signs their own relazione). It checks whose
-     name is on the signature, not that the signature holds: the portal does that. A PDF signed
-     in itself (PAdES) is read the same way. At Napoli's SUE (DD 501/2026) every file must also
-     be PDF/A, signed and named with letters, digits and underscores only, or the pratica is
-     irricevibile: a file that isn't is a `problem` saying which (have the user export it as
-     PDF/A, sign it, rename it), and `yours` says the same for their own files and how Napoli
-     takes the diritti (before sending, its postal account only); for a building title (CILA,
-     SCIA, SCIA alternativa, permesso) also Napoli's annexes: the Programma 100 and the Modello
-     DP, the Stato Comparativo sheet, and in zona A or for a frazionamento their own. A rehearsal with made-up
-     files passes `--made-up`: then these are only each file's `filing` and a warning.
-   - `yours`: tell the user now what they'll do at the end, so nothing surprises them,
-     including a pratica the case needs from another office ("File apart, …": the seismic
-     filing at the Genio Civile), which they file themselves.
-
-   Only when it says `ready` go on: the user hears nothing more from you until the review
-   page, except the login. A steps file without `asks:` (an older one) fails pre-flight
-   with "no question in asks: for …": add them before using it.
-2. **Run it with one command** (run in the background: it waits for the login). With Touch
-   ID on, the values come from one `pvault get` of the folder's `needs.json` scope (its
-   patterns, without `pratiche.*`), piped in: one fingerprint, no token, nothing on disk:
-   ```sh
-   pvault --vault <name> get 'business.*' 'locale.*' '*:identity.*' '*:residenza.*' '*:ruolo.*' \
-     | ~/.cache/pratica-portal/venv/bin/python -I ~/.claude/skills/pratica/portal/run.py run \
-       --steps <folder>/portal-steps.yaml --answers <answers.json> --values - --out <dir>
-   ```
-   Say first what the fingerprint prompt will ask, and that a separate window ("Chrome for
-   Testing") opens where the user logs in with SPID; its profile
-   (`~/.cache/pratica-portal/profile`) keeps the login while the portal does. Touch ID off:
-   `--vault-dir ~/.pvault-<name>` in place of the get and `--values -`, with a token of that
-   scope saved where fill.py looks (`pvault --vault <name> create-service-token pratica-fill
-   --scope '<scope>' --access append --ttl 1h --keychain pvault-<name>-pratica-fill`, which the
-   user runs). The answers are the `{{ask.x}}` replies as JSON. It runs `inpage.js`: the wizard
-   and every section in about a minute, each field read back after Salva, then the draft
-   loaded again from its address and every value read once more (only then `filled`: a
-   section can re-render an earlier one, or show a value the portal never stored). It then
-   shows the draft, prints a line per section and a JSON result, and writes
-   `<dir>/review.html`: show it to the user (SendUserFile, `display: render`; send it, don't
-   open it yourself) as the place to check the draft, with step 5's list. `run` also copies
-   the declarations' text and the portal's PDF preview into it (a failure of either is a
-   note on the page, never a stop); it lists every value we typed, and the declarations and
-   the preview are what the person actually swears to. A report's `alerts` are the portal's
-   warnings beside boxes it kept ("Indirizzo Pec non valido", "Dati catastali sconosciuti"):
-   never a stop, so tell the user each one (section and box, as listed) to check; the address's
-   "Indirizzo sconosciuto" shows for every address, the Comune's own too.
-   No environment yet: `python3 -m venv ~/.cache/pratica-portal/venv`, then its `pip install
-   pyyaml playwright` and `python -m playwright install chromium` (ask first).
-   **If it stops, recover it without the user** (they hear nothing about the page):
-   1. `report.json`'s `error` says what differed and `at` exactly where (the wizard screen,
-      or the section and field); its `snapshot` is the page with no value in it (each visible
-      box's id, label and whether it holds anything, the portal's messages). Read those next
-      to the map's entry for it, and nothing else: **never read, screenshot or take the text
-      of a page a run has filled** (`read_page`, `get_page_text`, a screenshot, the Playwright
-      CLI's snapshot), and never open `<dir>/private/` or `<dir>/review.html`, which hold the
-      person's values for them. No report has a value in it (a failed read-back says
-      `empty`, `different` or `missing`), so a field you need to know more about is a
-      question for the person, or a fix to try, never a look at what they typed.
-   2. Work out the fix for that one field: its new `id` or `css`, or the `label` the page
-      now shows. Write `[{"section": i, "field": k, "set": {"label": "…"}}]` to a fix file.
-   3. Resume on the same draft: the same command with `--resume <dir>/report.json --fix
-      <fix file>` (and a new `--out`). It redoes only that section, then the rest, and the
-      fresh load at the end checks every section, the earlier ones included.
-      `<out>/drift.json` records the fix: fold it into the steps file and the map afterwards.
-   4. Ask the user only when the page wants a fact the vault and the answers don't hold
-      (a new required field): one plain question, then resume. Never fill a guess.
-   5. Budget: two fixes or about three minutes. Past that, stop, leave the draft saved, and
-      tell the user plainly what's left. A run that never resumes can't be reported as done.
-
-   By hand, the map's header has the portal's mechanics (dropdown filters, lookups that
-   need real key presses).
-
-   In the built-in browser instead (the user is logged in there, or asks): `run.py page`
-   (same arguments, `--out DIR`) writes the scripts, each run on the portal's page with one
-   `javascript_tool` call:
-   - First go to the portal's own origin (`https://suap.impresainungiorno.gov.it/fnsuap/cmd/home`
-     for the SUAP/SUE): the runner lives in that origin's storage, not www's.
-   - `check.js` returns what to run next: `runner.js` and `steps.js` only when the pane's
-     storage doesn't hold them byte for byte (each is tens of KB: never send one it doesn't
-     name), then `run.js`. `install.js` is both, for a pane that has neither. The runner is
-     about 80 KB and a call takes about 40 KB: when check.js names `runner.js`, build with
-     `run.py page --bundle ~/Downloads/<name>.js` and run `pick.js` instead; the user picks
-     that file once in the box it shows, and it starts the run.
-   - A call ends after 45 s: run.js returns at once; poll `await __pv.wait(40000)` until
-     `result` is `filled` or `stopped`. `__pv.open()` shows the draft.
-   - One run per login at a time, in any tab or window: the portal keeps one pratica in
-     progress per login, so a second run (or a crawl) moves the first one's draft back a
-     screen or shows its error page. A batch (`bench/rerun.py`) runs them one after another.
-   - `run.py page` seals the values: `run.js` holds them encrypted, and a window on the
-     user's screen shows the code. It is not printed anywhere you can read: never ask for it,
-     never look for it. Before the first call tell the user that a window with a code is
-     open, that the portal's page will show a box when `run.js` runs, to type the code there
-     (no need to tell you), and to leave the window open until the run is done. `run.js`
-     returns "waiting for the code": poll `__pv.wait(40000)`; `result: "waiting"` means
-     they haven't typed it yet, so say so. Take no screenshot and read no page while the box
-     is up. After a reload of the runner `__pv.resume()` asks for the code again.
-     `--plain` carries the values in the clear instead, through this conversation: only for
-     made-up data (rehearsals) or a user who has been told so, and the only choice where no
-     window can open (it says so). `run` needs no code: its window is not yours at all.
-   - Stopped: `__pv.last()` is the report (kept in the tab, so it outlives a reload of the
-     runner), `__pv.look()` the page with no value in it; work out the fix as above and `__pv.resume({fixes: [...]})` carries on on the
-     same draft, with the same values. Write the fix into the steps file (or the dictionary
-     and regenerate) afterwards. A draft whose address has expired (`/cmd/error`): `url =
-     await __pv.reopen("<the draft's name>")` opens it from Pratiche in bozza, then
-     `__pv.resume({url})`.
-   - "0 fields with this label" usually means the section wasn't on the page yet or another
-     one was open, not that the label changed: check `__pv.look()` before fixing anything.
-   - After a change to inpage.js, the dictionary or gen.py, rerun the rehearsals that use it
-     with `bench/rerun.py` (check.js, the queue files, loop.js, results.js: portal/README.md).
-3. **Never** tick a declaration (the sections the steps file leaves out), press pagoPA or
-   Invia, or sign: the code refuses them in `run.py`, and you don't do them by hand.
-   Attachments: a field `{id: ..., kind: file, label: ..., value: "{{ask.x}}"}` (or `css:`
-   in place of `id`) attaches the file at that path, built in the page as a drop would, and
-   checks its name shows up on the page; a section whose files upload one by one, with no
-   Salva, takes `save: false` (or `save: <button>`). A file the person must sign first
-   (`.p7m`) is attached only once they've signed it. In the pane all of a run's files may
-   come to 256 KB in run.js. Over that, `run.py page` carries only each file's name, size and
-   sha256, and the run starts by showing a box on the portal's page where the person chooses
-   them (the files or the job's folder); a file whose bytes aren't the ones pre-flight read is
-   refused by name, and nothing is filled until all are in (the run's report says `waiting`
-   meanwhile: poll as usual). A file can also go by an https link (`--file-urls MAP.json`),
-   checked the same way (docs/design/large-attachments.md). Stop at what's left.
-4. **When the portal differs** (a screen, a label, a lookup with no single match), stop,
-   correct the steps file and the map, and add the run to the README.
+**Follow `plugin/portali/skills/portali-pratica/SKILL.md`**: the one set of instructions for a
+portal pratica, the same the plugin ships (how to speak to the person, the archive, routing,
+the intake, pre-flight, the compilation in the browser pane, the hand-over, the second
+compilation). In this repo its `SKILL/` is `~/.claude/skills/pratica/` (`portal/`, `intake/`,
+`review.py`), `SKILL/pratiche/<name>.json` is that steps file, and `python3` is the pratica
+venv's (`~/.cache/pratica-portal/venv/bin/python -I`; none yet: `python3 -m venv` it, then
+`pip install pyyaml playwright`, asking first). A pratica for a person of this vault (not a
+client of a studio) reads the same way. For contributors: the Playwright window (`run.py run`),
+batch reruns after a runner, dictionary or gen.py change (`bench/rerun.py`), and the portal's
+quirks are in `portal/README.md`. When the portal differs (a screen, a label, a lookup with no
+single match), correct the steps file (or the dictionary, then regenerate) and add the run to
+the rehearsal's README.
 
 **A portal with no steps file** is explored with the Playwright CLI (the `playwright-cli`
 skill: `playwright-cli open --headed --persistent <url>`, then `snapshot`, `click`, `fill`),

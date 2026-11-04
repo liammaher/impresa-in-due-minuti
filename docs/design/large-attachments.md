@@ -25,7 +25,7 @@ checked by sha256 before it is used).
 | A | **The person picks the job's files once, in a box the runner shows** | any (the portal's 9.77 MB a file) | no | no: run.js carries names, sizes, sha256 | one pick, like typing the run's code | not built; its parts are (below) |
 | B | The Playwright window (`run.py run`) | any | no | no | a second browser and a second SPID login | built, used by the first rehearsals |
 | C | Cowork's own file tool, if it can fill a page's file box | any | no | no | none | untested (packaging.md, test 2) |
-| D | A short-lived `https` URL per file (`--file-urls`) | any | **yes**, to whatever serves it | no | none | runner side built and proven with a public gist (2026-10-29); a host of ours is out (no server, no cost: north-star "What doesn't bend" 1) |
+| D | A short-lived `https` URL per file (`--file-urls`) | any | **yes**, to whatever serves it | no | none | proven with a public gist (2026-10-29), then **removed** (2026-11-04): the client's files would leave the computer, and a host of ours is out (north-star "What doesn't bend" 1) |
 | E | The architect attaches the big files by hand | any | no | no | every big slot, mid-run | possible today; breaks all-or-nothing |
 | F | The bytes through the conversation in pieces | 256 KB a call | no | **yes**, and 5 MB is about 7 million base64 characters | none | not viable |
 

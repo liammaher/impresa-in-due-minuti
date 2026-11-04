@@ -13,6 +13,10 @@
       person's own steps. Exits 0 when `ready`, 3 when not. --made-up (a rehearsal's made-up
       files, never sent) reports the sportello's refusals as warnings instead.
 
+  run.py scope --steps STEPS.yaml
+      Prints the `pvault get` patterns for every vault field the steps read (a role's as
+      everyone's category, and every person's ruolo): one approval, nothing else read.
+
   run.py plan --steps STEPS.yaml --answers A.json
               (--values - [--values FILE] | --server S.json --token NAME | --vault-dir DIR [--keychain SERVICE])
       Resolves every value the steps need and prints what goes where. No browser.
@@ -55,7 +59,8 @@ fixes, and the fresh load at the end still checks every section.
 What the portal makes from the pratica only once the declarations are ticked (the procura, which
 the client signs: a steps field's `after_declarations`) waits for a second run: preflight, page or
 run with --after-declarations reopens the draft by its name from Pratiche in bozza and attaches
-those files alone; the first run's `yours` says so. A slot that takes only signed files is filled
+those files alone; the first run's `yours` says so. It carries no other value, its files are
+always picked in the page, and so `page` seals nothing and shows no code: one code a pratica. A slot that takes only signed files is filled
 with the person's signed file (the portal checks each signature on upload, and the runner stops
 on its refusal); with --made-up (a rehearsal) such slots are left empty.
 
@@ -78,10 +83,7 @@ run's files together may be at most 256 KB (PAGE_FILES_LIMIT); `run` evaluates r
 itself and takes any size. Over that, `page` carries each file's name, size and sha256
 instead (`picked`): before the run starts the runner shows a box on the portal's page where
 the person chooses them, and keeps only those whose bytes are the ones pre-flight read, so
-they go from the person's disk to the portal and nowhere else. `page --file-urls MAP.json`
-({path: https URL}) sends a file by link instead: run.js carries its URL, size and sha256,
-and the runner fetches it in the portal's page and stops if the link serves other bytes;
-such files don't count to 256 KB.
+they go from the person's disk to the portal and nowhere else.
 
 No model is called during a run. A step that doesn't match what the steps file expects
 (a label, a lookup with no single answer, a value the portal didn't keep) stops the run:
@@ -97,6 +99,7 @@ import mimetypes
 import os
 import re
 import secrets
+import shlex
 import shutil
 import subprocess
 import sys
@@ -816,6 +819,20 @@ def templates(steps):
         yield "rules", v, {}
 
 
+def scope(steps):
+    """The `pvault get` patterns for every vault field the steps read: a role's (`c:identity.x`)
+    as everyone's category (`*:identity.*`), the vault owner's own as its category, and every
+    person's ruolo, by which the roles are found. One approval reads them all; nothing else."""
+    cats, own = {"ruolo"}, set()
+    for _, t, _ in templates(steps):
+        for r, _ in refs_in(t):
+            head, dot, _ = r.partition(".")
+            if not dot or head == "ask":
+                continue
+            (cats if ":" in head else own).add(head.rpartition(":")[2])
+    return sorted(f"{c}.*" for c in own) + sorted(f"*:{c}.*" for c in cats)
+
+
 def check_asks(steps):
     """The asks block itself, and the order to ask in. Every ask a field reads has its
     question, and every question is read by a field, a wizard screen or `supports`: one
@@ -1130,11 +1147,10 @@ def reopening(steps):
     return {"reopen": True, "from": {"section": at}, "kept": [], "fixes": []}
 
 
-def preflight(steps, values, urls=None, made_up=False, after=False):
+def preflight(steps, values, made_up=False, after=False):
     """Everything a run needs, settled before any browser opens: why this case isn't
     supported, the questions still to ask, the vault fields missing or expired, the files
-    to attach, and the person's own steps. ready: nothing is left before the run. urls: the
-    files sent by link (page --file-urls), which don't count to the pane's 256 KB. A file the
+    to attach, and the person's own steps. ready: nothing is left before the run. A file the
     sportello would refuse (FILING) is a problem, or with made_up (a rehearsal's made-up data,
     never sent) only its `filing` and a warning, and no slot that takes only signed files is
     filled (phase). after: the second run's, after the declarations (phase)."""
@@ -1143,7 +1159,7 @@ def preflight(steps, values, urls=None, made_up=False, after=False):
     unsigned = [f.get("label") for s in steps["sections"] for f in s["fields"]
                 if made_up and signed_only(f) and applies(f, values)]
     steps = phase(steps, after, made_up)
-    links, sportello = file_links(urls), filing_rules(steps)
+    sportello = filing_rules(steps)
     order = check_asks(steps)
     asks = steps.get("asks", {})
     report = {"ready": False, "unsupported": [], "proposals": [], "questions": [], "missing": [], "files": [],
@@ -1287,8 +1303,6 @@ def preflight(steps, values, urls=None, made_up=False, after=False):
                 p = Path(path).expanduser() if path else None
                 entry = {"for": f"{sec['section']}: {f.get('label') or f.get('id')}", "path": path,
                          "exists": bool(p and p.is_file()), "bytes": p.stat().st_size if p and p.is_file() else None}
-                if p and p.resolve() in links:
-                    entry["link"] = links[p.resolve()]
                 if entry["exists"]:
                     takes = [t for t in f.get("accepts", "").lower().split(";") if t]
                     if entry["bytes"] > SLOT_MAX_BYTES:
@@ -1349,11 +1363,11 @@ def preflight(steps, values, urls=None, made_up=False, after=False):
     if unsigned:
         report["warnings"].append(f"made-up data: {len(unsigned)} slot(s) that take only signed files left empty "
                                   "(the portal refuses a made-up signature on upload); a real case attaches them")
-    report["pane_ok"] = sum(x["bytes"] or 0 for x in report["files"] if "link" not in x) <= PAGE_FILES_LIMIT
+    report["pane_ok"] = sum(x["bytes"] or 0 for x in report["files"]) <= PAGE_FILES_LIMIT
     # Over the pane's limit, `page` has the person choose the files in the portal's page at the
     # start of the run (`picked`): the names they'll be asked for, once.
     if not report["pane_ok"]:
-        report["pick"] = sorted({Path(x["path"]).name for x in report["files"] if x["exists"] and "link" not in x})
+        report["pick"] = sorted({Path(x["path"]).name for x in report["files"] if x["exists"]})
     report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + filing_yours(steps, sportello)
                        + asked_yours(steps, values) + apart(steps, values))
     if later:
@@ -1542,29 +1556,13 @@ def filing_problems(p, raw, rules):
     return out
 
 
-def attachment(path, url=None):
-    """A file as run.js carries it to inpage.js: its bytes, or a link to them with the size
-    and sha256 the page holds what it fetches to."""
+def attachment(path):
+    """A file as run.js carries it to inpage.js: its bytes."""
     p = Path(path).expanduser()
     kind = FILE_TYPES.get(p.suffix.lower()) or mimetypes.guess_type(p.name)[0] or "application/octet-stream"
-    data = p.read_bytes()
-    if url:
-        return {"name": p.name, "type": kind, "url": url, "size": len(data), "sha256": hashlib.sha256(data).hexdigest()}
-    return {"name": p.name, "type": kind, "b64": base64.b64encode(data).decode()}
+    return {"name": p.name, "type": kind, "b64": base64.b64encode(p.read_bytes()).decode()}
 
 
-# A file's link is fetched by the portal's page: https only (loopback for the bench).
-FILE_URL = re.compile(r"https://|http://(127\.0\.0\.1|localhost)[:/]")
-
-
-def file_links(urls):
-    """{path: URL} keyed by the file each path names, every URL checked."""
-    out = {}
-    for path, url in (urls or {}).items():
-        if not FILE_URL.match(str(url)):
-            raise StepError(f"file link for {path}: {url!r} isn't https")
-        out[Path(path).expanduser().resolve()] = url
-    return out
 
 
 def bundle(out, path, files):
@@ -1608,16 +1606,16 @@ def resumption(report, fixes=None):
             "kept": report.get("kept", []), "fixes": fixes or []}
 
 
-def page_scripts(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=None, code=None, pick=True):
+def page_scripts(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=None, pick=True):
     """install.js (inpage.js and the steps, no personal data) and run.js (the values)."""
-    files = page_files(steps, values, files_limit, resume, urls, code, pick)
+    files = page_files(steps, values, files_limit, resume, code, pick)
     return files["install.js"], files["run.js"]
 
 
-def page_files(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=None, code=None, pick=True):
+def page_files(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=None, pick=True):
     """Every file `run.py page` writes, by name: install.js is runner.js and steps.js, and
     check.js says which of those two the pane's storage lacks."""
-    return page_bundle(steps, values, files_limit, resume, urls, code, pick)[0]
+    return page_bundle(steps, values, files_limit, resume, code, pick)[0]
 
 
 # --- sealing run.js ---------------------------------------------------------------
@@ -1706,15 +1704,12 @@ def show_code(code, give_up=None):
     return child
 
 
-def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=None, code=None, pick=True):
-    """page_files, and what runner.js and steps.js leave in the pane's localStorage. urls:
-    {path: https URL}, files the page fetches itself instead of run.js carrying them.
-    code: seal the values under it (see above); None carries them in the clear. pick: files
+def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=None, pick=True):
+    """page_files, and what runner.js and steps.js leave in the pane's localStorage. code: seal the values under it (see above); None carries them in the clear. pick: files
     over files_limit are chosen by the person in the page (`picked`); False refuses them (a
     batch has no one to pick for each run)."""
     expanded = expand(steps, values)
     blocks, steps = expanded is not steps, expanded
-    links = file_links(urls)
     require_supported(steps, values)
     plan(steps, values)  # stops on a missing required value
     skeleton = {
@@ -1741,19 +1736,26 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=N
             return True
         v = values.render(f["value"])
         if f["kind"] == "file" and v:
-            return attachment(v, links.get(Path(v).expanduser().resolve()))
+            return attachment(v)
         return v
 
+    # The second run (after the declarations) opens the draft by its name and attaches the signed
+    # files alone: it carries no other value, and its files are always picked in the page, so it
+    # needs no code (one code a pratica) and nothing of the person's passes through the conversation.
+    second = bool(resume and resume.get("reopen"))
+    start = (resume or {}).get("from", {}).get("section", 0) if second else 0
     vals = {
         "wizard": [values.render(w["fill"]["value"]) if "fill" in w else None for w in steps["wizard"]],
-        "sections": [[value(f) for f in s["fields"]] for s in steps["sections"]],
+        "sections": [[value(f) if i >= start else None for f in s["fields"]] for i, s in enumerate(steps["sections"])],
     }
+    if second:
+        files_limit, pick = 0, True
     if files_limit is not None:
         files = [v for s in vals["sections"] for v in s if isinstance(v, dict) and "b64" in v]
         size = sum(len(f["b64"]) * 3 // 4 for f in files)
         if size > files_limit and not pick:
             raise StepError(f"the attachments come to {size // 1024} KB, more than the {files_limit // 1024} KB "
-                            "run.js can carry in the pane: send the big ones by link (--file-urls) or use `run`")
+                            "run.js can carry in the pane: let the person pick them in the page, or use `run`")
         if size > files_limit:
             # Too big to carry: every file the run attaches is chosen in the page, so the person
             # picks them all once, from the job's folder, and none is in the conversation.
@@ -1990,10 +1992,10 @@ def run(steps, values, out, cdp=None, profile=None, close=False, resume=None):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("command", choices=["preflight", "plan", "page", "run"])
+    ap.add_argument("command", choices=["preflight", "plan", "page", "run", "scope"])
     ap.add_argument("--steps", required=True, type=Path)
     ap.add_argument("--answers", type=Path, help="the asks' answers as JSON (none yet: preflight lists them all)")
-    src = ap.add_mutually_exclusive_group(required=True)
+    src = ap.add_mutually_exclusive_group()
     src.add_argument("--server", type=Path)
     src.add_argument("--vault-dir")
     src.add_argument("--values", action="append", help="- or a file: pvault get's JSON of the fields the steps read; "
@@ -2010,12 +2012,16 @@ def main():
     ap.add_argument("--after-declarations", action="store_true", help="the second run, once the person has ticked the "
                     "declarations: only what the portal makes then (the procura, signed), on the draft reopened by its name")
     ap.add_argument("--resume", type=Path, help="page/run: a stopped run's report.json, to pick it up where it stopped")
-    ap.add_argument("--file-urls", type=Path, help="preflight/page: JSON {path: https URL}, files the page fetches by link")
     ap.add_argument("--fix", type=Path, help="with --resume: JSON list of {section, field, set: {id|label|css}}")
     ap.add_argument("--bundle", type=Path, help="page: also write runner.js, steps.js and run.js as this one file "
                     "(in the person's Downloads), and pick.js, a box where the person picks it once")
     a = ap.parse_args()
     steps = yaml.safe_load(a.steps.read_text())
+    if a.command == "scope":
+        print(" ".join(shlex.quote(p) for p in scope(steps)))
+        return 0
+    if not (a.server or a.vault_dir or a.values):
+        ap.error("one of --server, --vault-dir or --values is required")
     try:
         answers = json.loads(a.answers.read_text()) if a.answers else {}
         asks = steps.get("asks")
@@ -2057,7 +2063,7 @@ def main():
         if a.plain and a.command != "page":
             ap.error("--plain is for page: run keeps the values out of the conversation without it")
         if a.command == "preflight":
-            report = preflight(steps, values, json.loads(a.file_urls.read_text()) if a.file_urls else None, a.made_up,
+            report = preflight(steps, values, a.made_up,
                                a.after_declarations)
             print(json.dumps(report, indent=2, ensure_ascii=False))
             return 0 if report["ready"] else 3
@@ -2071,9 +2077,9 @@ def main():
             ap.error(f"{a.command} needs --out")
         if a.command == "page":
             a.out.mkdir(parents=True, exist_ok=True)
-            urls = json.loads(a.file_urls.read_text()) if a.file_urls else None
-            code = None if a.plain else new_code()
-            files = page_files(steps, values, resume=resume, urls=urls, code=code)
+            # The second run carries no values (page_bundle), so it is never sealed: one code a pratica.
+            code = None if a.plain or a.after_declarations else new_code()
+            files = page_files(steps, values, resume=resume, code=code)
             drift(a.out, steps, resume)
             for name, text in files.items():
                 (a.out / name).write_text(text)
@@ -2093,8 +2099,11 @@ def main():
                 print("run.js is sealed. A window with its code is open on the person's screen: tell them it is "
                       "for the box the portal's page will show when run.js runs, to leave the window open until "
                       "the run is done, and never to tell you the code.")
-            else:
+            elif a.plain:
                 print("--plain: run.js carries the values in the clear, so they pass through this conversation.")
+            else:
+                print("The second run carries no value and no file's bytes (the person picks the signed files in "
+                      "the page's box), so there is no code to type.")
             print(f"{a.out}: check.js first (which of runner.js, steps.js the pane lacks), then run.js; "
                   f"install.js is both. Save __pv.last() as report.json here, then review.py {a.out}. "
                   + ", ".join(f"{n} {len(t)} bytes" for n, t in files.items()))

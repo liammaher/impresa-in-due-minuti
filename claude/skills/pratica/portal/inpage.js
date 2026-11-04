@@ -596,28 +596,14 @@
     return hits[0];
   }
 
-  // A file too big for run.js comes by link ({name, type, url, size, sha256}): fetched here,
-  // in the portal's page, and held to the size and hash run.py read from the person's copy.
-  async function fetched(v) {
-    let res;
-    try { res = await fetch(v.url, { credentials: "omit", cache: "no-store" }); }
-    catch (e) { fail(`${v.name}: couldn't fetch ${v.url} (${e.message})`); }
-    if (!res.ok) fail(`${v.name}: ${v.url} answered ${res.status}`);
-    const bytes = new Uint8Array(await res.arrayBuffer());
-    const sha = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)))
-      .map((b) => b.toString(16).padStart(2, "0")).join("");
-    if (bytes.length !== v.size || sha !== v.sha256) fail(`${v.name}: the link served other bytes (${bytes.length} B)`);
-    return bytes;
-  }
-
-  // v is {name, type, b64} or a link (fetched above). The portal's own change handler then
-  // uploads it, as when a person picks the file.
+  // v is {name, type, b64}, or one the person picked in the page (askFiles). The portal's own
+  // change handler then uploads it, as when a person picks the file.
   async function attach(f, v) {
     const e = (f.css ? doc().querySelector(f.css) : el(f.id)) || fail(`${f.css || f.id}: no file box`);
     if (e.type !== "file") fail(`${f.css || f.id}: not a file box`);
     if (!f.slotted) checkLabel(e, f.label); // a box "+" added has no label: its slot's rows named it
     const w = win(), bytes = v.picked ? picked.get(v.sha256) || fail(`${v.name}: not chosen in the page`)
-      : v.url ? await fetched(v) : Uint8Array.from(w.atob(v.b64), (c) => c.charCodeAt(0));
+      : Uint8Array.from(w.atob(v.b64), (c) => c.charCodeAt(0));
     const dt = new w.DataTransfer();
     dt.items.add(new w.File([bytes], v.name, { type: v.type }));
     // The portal refuses a file on upload in a growl that fades in seconds: "Il documento non è
