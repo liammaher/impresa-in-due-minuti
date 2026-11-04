@@ -1,0 +1,94 @@
+# SCIA alternativa e rinnovo paesaggistica e terre e rocce: 3 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: scia-alt-paesaggistica-semplificata-terre-rocce-fittizia's, with what rinnovo-paesaggistica-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+extends:
+- scia-alt-paesaggistica-semplificata-terre-rocce-fittizia
+- rinnovo-paesaggistica-fittizia
+procedure: napoli/comune/scia-alternativa-pdc-con-rinnovo-autorizzazione-paesaggistica-semplificata-e-utilizzo-materiale-scavo-fuori-sito
+title: SCIA alternativa e rinnovo paesaggistica e terre e rocce in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-scia-alt-rinnovo-paesaggistica-dichiarazione-utilizzo
+operation:
+- Segnalazione Certificata Inizio Attività alternativa al Permesso di Costruire (S.C.I.A. alternativa P.d.C.)
+- Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune)
+- Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017
+  (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PROVA NON INVIARE - SCIA alt. + rinnovo paes. + terre {{c:identity.last_name}}
+  diritti_euro:
+    question: 'The SUE''s diritti in euro. Onerous, by the contributo di costruzione (oneri di urbanizzazione +
+      costo di costruzione, as the prospetto works it out), lines SUE 7-9 of the 2026 table: 1003 up to 5,000 €,
+      1505 up to 30,000 €, 1998 above'
+    propose: '{{ask.scia_onerosa|diritti_gratuito}}'
+    why: 'Line SUE 10 of the Comune''s 2026 table of SUE diritti (G.C. 239/2026): 401 € when free of the contributo;
+      onerous, SUE 7-9 by the contributo (urbanizzazione + costo di costruzione): 1,003 € up to 5,000 €, 1,505 €
+      up to 30,000 €, 1,998 € above'
+  strutture:
+    type: yes_no
+    question: I lavori toccano le parti strutturali dell'edificio?
+  sismica:
+    type: choice
+    question: Per le opere strutturali, che cosa chiede la normativa sismica?
+    options:
+    - deposito
+    - autorizzazione
+    - variante
+    labels:
+      deposito: Il deposito del progetto (interventi di minore rilevanza o privi di rilevanza, art. 94-bis c. 1
+        b e c)
+      autorizzazione: L'autorizzazione preventiva (interventi rilevanti, art. 94-bis c. 1 a)
+      variante: Una variante non sostanziale a un progetto strutturale già depositato o autorizzato
+  bene_culturale:
+    type: yes_no
+    question: L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?
+  terre_rocce:
+    type: choice
+    question: Le terre e rocce scavate escono dal cantiere per essere usate altrove come sottoprodotti (non come
+      rifiuti)?
+    options:
+    - 'no'
+    - dichiarazione
+    - piano
+    labels:
+      'no': 'No: non si scava, o le terre si riusano nello stesso sito, o si smaltiscono come rifiuti'
+      dichiarazione: Sì, da un cantiere che ne produce fino a 6.000 m³ (dalle sezioni di progetto), o di più ma
+        per opere non soggette a VIA né ad AIA
+      piano: Sì, da un cantiere che ne produce oltre 6.000 m³ per opere soggette a VIA o ad AIA
+yours:
+- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
+- 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi,
+  consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
+- 'As progettista, check every asseverazione on this page: they are yours, signed with the pratica'
+- Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural
+  one, the firm) with the SUE's comunicazione di nomina
+- 'The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal''s document on Allega documenti once the
+  declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at
+  least 15 days after sending'
+- When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo
+  (art. 7 DPR 120/2017) on the SUE
+- Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt
+- The 30 days before the works may start run from the landscape authorization's release, not from filing (art. 23
+  c. 3 DPR 380/2001); the contributo, if due, is paid as quadro g) says
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
+  the acknowledgements in the client''s name'
+- Sign and send (Firma e invio); keep the receipt
+rules:
+  table: null
+  question: null
+  facts: null
+  main: napoli/comune/scia-alternativa-pdc
+  handles:
+  - napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata
+  - napoli/comune/utilizzo-materiale-scavo-fuori-sito
+answers:
+  descrizione: PROVA NON INVIARE - SCIA alt. + rinnovo paes. + terre P6

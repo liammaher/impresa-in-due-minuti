@@ -1,0 +1,430 @@
+{
+ "crawled": "2026-11-04T19:16:30.976Z",
+ "by": "crawl.js batch, depth 3",
+ "pratica": "SUE: 3 operations in one pratica: Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001 + Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune) + Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo), with the scelta IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+ "seconds": 76.9,
+ "note": "Every section is one of the operations' own, the same fingerprint: the combination is their union, in this order. A recipe names every operation and extends the main one's.",
+ "also": [
+  "EDILIZIA › Beni Paesaggistici › Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune)",
+  "EDILIZIA › Terre e rocce da scavo › Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
+ ],
+ "generated": {
+  "interventi": "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione per i cantieri di piccole dimensioni (<6000 mc) e per quelli di grandi dimensioni (>6000 mc) non soggetti a VIA/AIA, ai sensi dell'art. 21 del DPR n. 120/2017",
+  "adempimenti": [
+   {
+    "adempimento": "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017",
+    "amministrazione": "ARPA Campania Dipartimento Provinciale di Napoli"
+   },
+   {
+    "adempimento": "Richiesta di Permesso di Costruire (art. 20, d.P.R. 6 giugno 2001, n. 380 – artt. 7, d.P.R. 7 settembre 2010, n. 160)",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   },
+   {
+    "adempimento": "Autorizzazione Paesaggistica Semplificata ex DPR 31/2017 (Ente Comune)",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   },
+   {
+    "adempimento": "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   }
+  ],
+  "sections": [
+   "Scheda anagrafica",
+   "Oggetto della pratica",
+   "DOMICILIO DIGITALE",
+   "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "localizzazione dell'intervento",
+   "dati catastali",
+   "a) Qualificazione pratica dell'intervento",
+   "Qualificazione dell'intervento di rinnovo",
+   "b) Titolarità dell'intervento",
+   "c) Destinazione d'uso dell'immobile",
+   "d) Opere su parti comuni o modifiche esterne",
+   "e) Regolarità urbanistica e precedenti edilizi",
+   "f) Calcolo del contributo di costruzione",
+   "g1) Tecnici incaricati",
+   "g2) Altri tecnici incaricati",
+   "h) Impresa esecutrice dei lavori",
+   "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+   "j) Diritti di terzi",
+   "dati relativi al nome del tecnico",
+   "Note",
+   "Asseverazione PdC - Dati progettista e descrizione opere",
+   "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+   "Asseverazione PdC - Dati immobile, strumentazione urbanistica, barriere architettoniche",
+   "Asseverazione PdC - sicurezza impianti e consumi energetici",
+   "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+   "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+   "Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi",
+   "Asseverazione PdC - tutela storico ambientale",
+   "Asseverazione PdC - tutela ecologica ambientale",
+   "Asseverazione PdC - aree a rischio e altri vincoli di tutela ecologica",
+   "Asseverazione PdC - tutela funzionale",
+   "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "dichiarazione ai sensi dell' art. 75 del d.P.R. n° 445/2000",
+   "Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "Dichiarazione relativa all'assolvimento dell'imposta di bollo"
+  ]
+ },
+ "screens": [
+  {
+   "screen": "scelta del destinatario della pratica",
+   "options": [
+    {
+     "label": "",
+     "checked": false
+    },
+    {
+     "label": "",
+     "checked": true
+    }
+   ]
+  },
+  {
+   "screen": "scelte eventuali",
+   "options": [
+    {
+     "key": "0",
+     "type": "SIN",
+     "label": "Le opere ricadono nell'ambito della Sanatoria ?"
+    },
+    {
+     "key": "1",
+     "type": "CHK",
+     "label": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+     "selected": true
+    }
+   ]
+  }
+ ],
+ "variants": [
+  {
+   "option": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+   "type": "CHK",
+   "adds": [
+    "Qualifica e dati del procuratore"
+   ],
+   "drops": []
+  }
+ ],
+ "sections": [
+  {
+   "section": "Scheda anagrafica",
+   "fingerprint": "4dd844db9cdb76ff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Scheda anagrafica",
+   "seconds": 0
+  },
+  {
+   "section": "Oggetto della pratica",
+   "fingerprint": "b9828eee09a1f50f",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Oggetto della pratica",
+   "seconds": 0.8
+  },
+  {
+   "section": "DOMICILIO DIGITALE",
+   "fingerprint": "5978ae29f079ce08",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO DIGITALE",
+   "seconds": 0.7
+  },
+  {
+   "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "fingerprint": "c282ef61bee9ea4d",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "localizzazione dell'intervento",
+   "fingerprint": "1ae79e0eb7308899",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione ubicazione dell'intervento",
+   "seconds": 0.8
+  },
+  {
+   "section": "dati catastali",
+   "fingerprint": "bd17e4e186aa5dc9",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati catastali",
+   "seconds": 0.8
+  },
+  {
+   "section": "a) Qualificazione pratica dell'intervento",
+   "fingerprint": "dc49cc88f1d6a390",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#a) Qualificazione pratica dell'intervento",
+   "seconds": 0.8
+  },
+  {
+   "section": "Qualificazione dell'intervento di rinnovo",
+   "fingerprint": "dba88e495dd96ac1",
+   "same_as": "sue-combo-cil-rinnovo-paesaggistica#Qualificazione dell'intervento di rinnovo",
+   "seconds": 0.8
+  },
+  {
+   "section": "b) Titolarità dell'intervento",
+   "fingerprint": "3e5d5f463d6964d8",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#a) Titolarità dell'intervento",
+   "seconds": 0.7
+  },
+  {
+   "section": "c) Destinazione d'uso dell'immobile",
+   "fingerprint": "167628390a2f0298",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#e) Destinazione d'uso",
+   "seconds": 0.7
+  },
+  {
+   "section": "d) Opere su parti comuni o modifiche esterne",
+   "fingerprint": "a9ea4400694734ae",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#b) Opere su parti comuni o modifiche esterne",
+   "seconds": 0.7
+  },
+  {
+   "section": "e) Regolarità urbanistica e precedenti edilizi",
+   "fingerprint": "ca832149b36ccb80",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#e) Regolarità urbanistica e precedenti edilizi",
+   "seconds": 0.8
+  },
+  {
+   "section": "f) Calcolo del contributo di costruzione",
+   "fingerprint": "621156ce90ac1c92",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#f) Calcolo del contributo di costruzione",
+   "seconds": 0.8
+  },
+  {
+   "section": "g1) Tecnici incaricati",
+   "fingerprint": "c484d4ee4026e5a3",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#g1) Tecnici incaricati",
+   "seconds": 0.7
+  },
+  {
+   "section": "g2) Altri tecnici incaricati",
+   "fingerprint": "124292a24c7f627e",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#G2) Altri tecnici incaricati",
+   "seconds": 0.7
+  },
+  {
+   "section": "h) Impresa esecutrice dei lavori",
+   "fingerprint": "1ee6eb3ad4b6682f",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#h) Impresa esecutrice dei lavori",
+   "seconds": 0.7
+  },
+  {
+   "section": "i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+   "fingerprint": "bb06968f5abe825f",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#i) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+   "seconds": 0.7
+  },
+  {
+   "section": "j) Diritti di terzi",
+   "fingerprint": "1f30cc7b54504df6",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#j) Diritti di terzi",
+   "seconds": 0.7
+  },
+  {
+   "section": "dati relativi al nome del tecnico",
+   "fingerprint": "ffddb90f4d2ab273",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati relativi al nome del tecnico",
+   "seconds": 0.7
+  },
+  {
+   "section": "Note",
+   "fingerprint": "e84721ea696ebe15",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#Note",
+   "seconds": 0.7
+  },
+  {
+   "section": "Asseverazione PdC - Dati progettista e descrizione opere",
+   "fingerprint": "dd0cdc7067087e4d",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#Asseverazione PdC - Dati progettista e descrizione opere",
+   "seconds": 0.7
+  },
+  {
+   "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
+   "fingerprint": "adf0f783fad89f7b",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+   "seconds": 0.8
+  },
+  {
+   "section": "Asseverazione PdC - Dati immobile, strumentazione urbanistica, barriere architettoniche",
+   "fingerprint": "26ef27b057f8590d",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#Asseverazione PdC - Dati immobile, strumentazione urbanistica, barriere architettoniche",
+   "seconds": 0.7
+  },
+  {
+   "section": "Asseverazione PdC - sicurezza impianti e consumi energetici",
+   "fingerprint": "5f51155b52ba0f46",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#Asseverazione PdC - sicurezza impianti e consumi energetici",
+   "seconds": 0.7
+  },
+  {
+   "section": "Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+   "fingerprint": "e640479fa7a5e776",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#Asseverazione PdC - inquinamento acustico, materiali di risulta, prevenzione incendi",
+   "seconds": 0.7
+  },
+  {
+   "section": "Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+   "fingerprint": "dc4befc56711dbf6",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#Asseverazione PdC - amianto, conformità igienico sanitaria, sismica",
+   "seconds": 0.8
+  },
+  {
+   "section": "Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi",
+   "fingerprint": "fe93a6f4fa7b1c25",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#Asseverazione PdC - qualità terreni, opere di urbanizzazione, scarichi",
+   "seconds": 0.7
+  },
+  {
+   "section": "Asseverazione PdC - tutela storico ambientale",
+   "fingerprint": "a0ae6e6555f55ef1",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#Asseverazione PdC - tutela storico ambientale",
+   "seconds": 0.8
+  },
+  {
+   "section": "Asseverazione PdC - tutela ecologica ambientale",
+   "fingerprint": "fa7117438628ca9b",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#Asseverazione PdC - tutela ecologica ambientale",
+   "seconds": 0.7
+  },
+  {
+   "section": "Asseverazione PdC - aree a rischio e altri vincoli di tutela ecologica",
+   "fingerprint": "4bd03e493b47b3b7",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#Asseverazione PdC - aree a rischio e altri vincoli di tutela ecologica",
+   "seconds": 0.8
+  },
+  {
+   "section": "Asseverazione PdC - tutela funzionale",
+   "fingerprint": "e37e8f5a67a676f4",
+   "same_as": "sue-combo-pdc-sanatoria-accertamento#Asseverazione PdC - tutela funzionale",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione ai sensi dell' art. 75 del d.P.R. n° 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "fingerprint": "52afb47e165ec4c7",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.7
+  },
+  {
+   "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "fingerprint": "869752d2cea5aef3",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "seconds": 0.7
+  },
+  {
+   "section": "Qualifica e dati del procuratore",
+   "fingerprint": "2ebe54198e212bff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Qualifica e dati del procuratore",
+   "seconds": 0.8,
+   "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
+  }
+ ],
+ "slots": {
+  "Gestione degli allegati": [
+   {
+    "title": "Dichiarazione di utilizzo di cui all'art. 21 del DPR n. 120/2017 per i cantieri di piccole dimensioni e per quelli di grandi dimensioni non sottoposti a VIA o A",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Procura speciale",
+    "accepts": "jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Quadro riepilogativo della documentazione già disponibile ed allegata - PdC DSC",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Copia del documento di identità del/i titolare/i e/o del tecnico",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Elaborato dimostrativo dell'equipaggiamento di infrastruttura fisica multiservizio passiva interna all'edificio, costituita da adeguati spazi installativi e da ",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Fotocopia di un documento di identita' del soggetto che conferisce la procura speciale",
+    "accepts": "pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese o autocertificazione di esenzione",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Elaborati grafici dello stato di fatto, di progetto e comparativi",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Documentazione fotografica dello stato di fatto",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Allegati liberi",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Documentazione dimostrativa dello stato legittimo",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": true,
+    "portal_document": false
+   },
+   {
+    "title": "Dichiarazione di assenso dei terzi titolari di altri diritti reali o obbligatori",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": true,
+    "portal_document": false
+   },
+   {
+    "title": "Copia dei documenti d'identità del/i titolare/i, comproprietario/i",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": true,
+    "portal_document": false
+   },
+   {
+    "title": "Elaborati relativi al superamento delle barriere architettoniche (art. 77 e seguenti del d.P.R. n. 380/2001)",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": true,
+    "portal_document": false
+   }
+  ]
+ },
+ "slots_note": "read 2026-11-04 on the empty draft (crawl.js `slots`), plus the 4 its answers add from sue-permesso-di-costruire-art-10-d-p-r-380-2001's own screen"
+}

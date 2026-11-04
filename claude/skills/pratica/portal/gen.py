@@ -89,6 +89,12 @@ def rules_block(spec, asks, groups):
     recipe's value or `{{ask.<fact>}}`, adding the ask from the table's question when the
     pratica has none (its yes/no facts as one checklist, worded by `question`). Changes asks
     and groups in place."""
+    if not spec.get("table"):
+        # A combination no table routes yet: what it files, for route.py and FILING's titles,
+        # and nothing asked (2026-11-04: the follow-ups with a landscape or terre e rocce one).
+        if set(spec) - {"main", "handles"} or not spec.get("main"):
+            raise GenError("rules: without a table, only main (required) and handles")
+        return {k: spec[k] for k in ("main", "handles") if spec.get(k)}
     try:
         t = rules.table(spec["table"])
     except ValueError as e:
@@ -394,15 +400,24 @@ def resolved(recipe, seen=()):
 def combo_answers(recipe):
     """A combination's P6 answers: its main pratica's (the rehearsal it `extends`), changed by the
     `answers` its parts and the recipe itself set (a null drops one), so the case can't drift
-    from the main pratica's (2026-10-31: written by hand from a diff). None without `answers`."""
-    changes = resolved(recipe).get("answers")
-    if not changes:
-        return None
+    from the main pratica's (2026-10-31: written by hand from a diff). None without `answers`.
+    A combination of two pratiche each rehearsed alone (a proroga with the landscape proroga)
+    extends both: the first is the main, and the other's answers fill what the main's don't say
+    (its own section's), the people being the same P6 ones (2026-11-04)."""
+    changes = resolved(recipe).get("answers") or {}
     parents = recipe.get("extends") or []
     mains = [n for n in ([parents] if isinstance(parents, str) else parents) if not n.startswith("parts/")]
-    if len(mains) != 1:
-        raise GenError(f"answers: needs one main rehearsal in extends, not {mains}")
+    if not changes and len(mains) < 2:
+        return None
+    if not mains:
+        raise GenError("answers: needs a main rehearsal in extends")
     out = json.loads((REHEARSALS / mains[0] / "answers-p6.json").read_text())
+    for other in mains[1:]:
+        for k, v in json.loads((REHEARSALS / other / "answers-p6.json").read_text()).items():
+            if k == "people":  # the other's roles too (a DAU names the firm), the main's kept
+                out["people"] = {**v, **out.get("people", {})}
+            else:
+                out.setdefault(k, v)
     for k, v in changes.items():
         out.pop(k, None) if v is None else out.__setitem__(k, v)
     return out
@@ -769,16 +784,36 @@ def generate(recipe, base=HERE):
         # Several operations in one pratica (a CILA with its landscape authorization): each one's
         # sections with its scelte, and the pratica is their union.
         labels = recipe["operation"] if isinstance(recipe["operation"], list) else [recipe["operation"]]
-        idx = []
+        ops = []
         for label in labels:
             o = next((o for o in catalogue["operations"] if o["label"] == label), None)
             if not o:
                 raise GenError(f"no operation {label!r} in the catalogue")
+            ops.append(o)
+        # A scelta one operation offers and the other doesn't (the landscape proroga's third-party
+        # assent, filed with a proroga of the title): the wizard shows both's on one screen, and
+        # each applies to its own operation (2026-11-04).
+        for s in scelte:
+            if not any(x["option"] == s for o in ops for x in o.get("scelte", [])):
+                raise GenError(f"no scelta {s!r} for {' + '.join(labels)}")
+        # The combination's own wizard, where its crawl read it, is what the run meets: it can
+        # leave out a scelta one operation offers alone (the landscape proroga's third-party
+        # assent, gone when filed with a title: two runs stopped on it, 2026-11-04).
+        offered = [o["label"] for x in crawl.get("screens") or [] if norm(x.get("screen")) == "scelte eventuali"
+                   for o in x.get("options", [])]
+        if len(labels) > 1 and offered:
+            for s in scelte:
+                if s not in offered:
+                    raise GenError(f"the wizard of {' + '.join(labels)} doesn't offer the scelta {s!r} "
+                                   f"(its crawl's scelte eventuali: {offered})")
+        idx = []
+        for label, o in zip(labels, ops):
             # Each scelta drops and adds by index, so a second one keeps what the first added.
             own = list(o["sections"])
             for s in scelte:
-                sc = next((x for x in o.get("scelte", []) if x["option"] == s), None) or \
-                    (_ for _ in ()).throw(GenError(f"no scelta {s!r} for {label}"))
+                sc = next((x for x in o.get("scelte", []) if x["option"] == s), None)
+                if sc is None:
+                    continue
                 if s in scelta_when:
                     if sc.get("drops"):
                         raise GenError(f"the scelta {s!r} drops sections: it can't depend on the case (`when`)")
@@ -958,7 +993,7 @@ def generate(recipe, base=HERE):
         if k in asks_used:
             asks[k] = {**v, **recipe.get("asks", {}).get(k, {})}
     missing = (asks_used - set(asks)) | {k for k, a in asks.items() if "type" not in a}
-    if recipe.get("rules"):
+    if (recipe.get("rules") or {}).get("table"):
         # A fact of the rules table is asked from the table (rules_block), so a `supports` may
         # gate on it: what the works are, before whether the building is listed.
         try:

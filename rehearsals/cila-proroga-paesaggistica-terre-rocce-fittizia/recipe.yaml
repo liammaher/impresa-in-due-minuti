@@ -1,0 +1,98 @@
+# CILA e proroga paesaggistica e terre e rocce: 3 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: cila-paesaggistica-semplificata-terre-rocce-fittizia's, with what proroga-paesaggistica-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+extends:
+- cila-paesaggistica-semplificata-terre-rocce-fittizia
+- proroga-paesaggistica-fittizia
+procedure: napoli/comune/cila-lavori-edilizi-con-proroga-autorizzazione-paesaggistica-e-utilizzo-materiale-scavo-fuori-sito
+title: CILA e proroga paesaggistica e terre e rocce in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-cila-proroga-paesaggistica-dichiarazione-utilizzo
+operation:
+- Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)
+- Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022 - Comune)
+- Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017
+  (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PROVA NON INVIARE - CILA + proroga paes. + terre e rocce {{c:identity.last_name}}
+  diritti_euro:
+    default: '{{ask.cila_stato|diritti_cila}}'
+    why: 'Line SUE 13 of the Comune''s 2026 table of SUE diritti (G.C. 239/2026): 151 € for a CILA; SUE 15: 166
+      € for one filed once the works started (mancata CILA)'
+  intervento:
+    type: choice
+    question: Che lavori sono, secondo le definizioni dell'art. 3 DPR 380/2001?
+    options:
+    - edilizia_libera
+    - opere_temporanee
+    - nessuna_opera
+    - manutenzione_straordinaria
+    - restauro
+    - ristrutturazione
+    - ristrutturazione_pesante
+    - nuova_costruzione
+    - ristrutturazione_urbanistica
+    - variante_pdc
+    - variante_essenziale_pdc
+    - variante_scia
+    - altro
+    labels:
+      edilizia_libera: 'Lavori senza titolo dell''art. 6 c. 1: manutenzione ordinaria (riparare, rinnovare e sostituire
+        finiture, tenere in efficienza gli impianti), barriere architettoniche senza ascensori esterni né modifiche
+        della sagoma, VEPA, tende e pergole a telo retrattile, pavimentazioni esterne e simili'
+      opere_temporanee: Opere stagionali o per esigenze contingenti e temporanee, da rimuovere entro 180 giorni,
+        montaggio e smontaggio compresi (art. 6 c. 1 e-bis)
+      nessuna_opera: 'Nessun lavoro: solo un cambio di destinazione d''uso'
+      manutenzione_straordinaria: 'Manutenzione straordinaria (art. 3 c. 1 b): rinnovare e sostituire parti dell''edificio,
+        servizi igienici e impianti, frazionare o accorpare unità'
+      restauro: Restauro e risanamento conservativo (art. 3 c. 1 c)
+      ristrutturazione: Ristrutturazione edilizia (art. 3 c. 1 d) che non è uno dei casi dell'art. 10 c. 1 c
+      ristrutturazione_pesante: 'Ristrutturazione edilizia dell''art. 10 c. 1 c: un organismo in parte o del tutto
+        diverso con più volume, o con cambio d''uso in zona omogenea A, o che cambia sagoma, volume o prospetti
+        di un immobile tutelato, o la demolizione e ricostruzione in un''area tutelata (artt. 136 c. 1 c e d, 142)
+        con modifiche'
+      nuova_costruzione: Nuova costruzione (art. 3 c. 1 e), compresi gli ampliamenti fuori sagoma
+      ristrutturazione_urbanistica: Ristrutturazione urbanistica (art. 3 c. 1 f)
+      variante_pdc: Variante in corso d'opera a un permesso di costruire che non è una variazione essenziale
+      variante_essenziale_pdc: Variante in corso d'opera a un permesso di costruire che è una variazione essenziale
+      variante_scia: Variante in corso d'opera a una SCIA (essenziale o no)
+      altro: 'Altro: il Piano casa (L.R. 19/2009), proroghe e volture. Il permesso in deroga (art. 14), il permesso
+        convenzionato (art. 28-bis), i sottotetti (L.R. 15/2000), i parcheggi e i cambi d''uso della L.R. 19/2001
+        sono i lavori che fanno: scegli la loro voce dell''art. 3'
+yours:
+- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
+- 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE,
+  consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
+- 'Pay the diritti before the second run (after the declarations): its receipt, signed, goes with it; the bollo
+  before sending. A late CILA''s penalty is paid before the first run: its receipt is in quadro d)'
+- 'The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal''s document on Allega documenti once the
+  declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at
+  least 15 days after sending'
+- When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo
+  (art. 7 DPR 120/2017) on the SUE
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
+  any acknowledgement in the client''s name'
+- Sign and send (Firma e invio); keep the receipt
+rules:
+  table: null
+  question: null
+  facts: null
+  main: napoli/comune/cila-lavori-edilizi
+  handles:
+  - napoli/comune/proroga-autorizzazione-paesaggistica
+  - napoli/comune/utilizzo-materiale-scavo-fuori-sito
+answers:
+  descrizione: PROVA NON INVIARE - CILA + proroga paes. + terre e rocce P6
+groups:
+  fatti:
+    question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.

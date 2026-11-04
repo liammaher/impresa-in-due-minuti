@@ -131,6 +131,20 @@ recipe is routed once its steps file is generated; two steps files for one combi
 combination, read the same way there, or be refused with the reason. It prints the combinations
 no steps file files yet ("to map"), most cases first: the SUE's mapping still to do.
 
+## Operations filed together: `catalogue/F839/sue-pairs.yaml`
+
+Which of the wizard's pairs a case files in one pratica, and why, is `sue-pairs.yaml` (catalogue/README.md);
+`bench/test_pairs.py` lists any filed together with no steps file. A combination of two pratiche each
+rehearsed alone (a proroga with the landscape proroga) `extends` both: the first is the main pratica, and
+gen.py's `combo_answers` fills from the other's answers what the main's don't say (its own section's), the
+people of both kept. Its `scelte` are only those the combination's crawled wizard offers (gen.py refuses
+another: filed with a title, the landscape proroga's third-party assent isn't there, 2026-11-04). A recipe
+built on a combination's recipe states `first` and `after` itself: copied as null from a recipe that inherits
+them they drop the payment and attachments screens (twenty did, 2026-11-04; `test_pairs.py` checks every
+combination opens with the Scheda anagrafica and reaches the attachments screen). No rules table routes the
+follow-up combinations yet: their `rules:` name `main` and `handles` only (no `table`), so pre-flight decides
+nothing and the person names the pratica; the table's facts a title's checks read are asked as plain questions.
+
 ## Every choice: `branches.py`
 
 gen.py passes a radio or tick box the dictionary doesn't name (the run leaves it unticked), so a

@@ -1,0 +1,99 @@
+# PdC e rinnovo paesaggistica e terre e rocce: 3 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: pdc-paesaggistica-semplificata-terre-rocce-fittizio's, with what rinnovo-paesaggistica-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+extends:
+- pdc-paesaggistica-semplificata-terre-rocce-fittizio
+- rinnovo-paesaggistica-fittizia
+procedure: napoli/comune/permesso-di-costruire-con-rinnovo-autorizzazione-paesaggistica-semplificata-e-utilizzo-materiale-scavo-fuori-sito
+title: PdC e rinnovo paesaggistica e terre e rocce in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-pdc-rinnovo-paesaggistica-dichiarazione-utilizzo
+operation:
+- Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001
+- Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune)
+- Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017
+  (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PROVA NON INVIARE - PdC + rinnovo paes. + terre e rocce {{c:identity.last_name}}
+  diritti_euro:
+    question: 'The SUE''s diritti in euro. Onerous, by the contributo di costruzione (oneri di urbanizzazione +
+      costo di costruzione, as the prospetto works it out), lines SUE 7-9 of the 2026 table: 1003 up to 5,000 €,
+      1505 up to 30,000 €, 1998 above'
+    propose: '{{ask.pdc_tipo,ask.scia_onerosa|diritti_pdc}}'
+    why: 'Lines of the Comune''s 2026 table of SUE diritti (G.C. 239/2026): SUE 10, 401 € for a permesso free of
+      the contributo; SUE 11, 501 € for a variant to one issued; onerous, SUE 7-9 by the contributo (1,003 € up
+      to 5,000 €, 1,505 € up to 30,000 €, 1,998 € above); car parks (L. 122/89), SUE 4-6 by floor area'
+  strutture:
+    type: yes_no
+    question: I lavori toccano le parti strutturali dell'edificio?
+  sismica:
+    type: choice
+    question: Per le opere strutturali, che cosa chiede la normativa sismica?
+    options:
+    - deposito
+    - autorizzazione
+    - variante
+    labels:
+      deposito: Il deposito del progetto (interventi di minore rilevanza o privi di rilevanza, art. 94-bis c. 1
+        b e c)
+      autorizzazione: L'autorizzazione preventiva (interventi rilevanti, art. 94-bis c. 1 a)
+      variante: Una variante non sostanziale a un progetto strutturale già depositato o autorizzato
+  bene_culturale:
+    type: yes_no
+    question: L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?
+  terre_rocce:
+    type: choice
+    question: Le terre e rocce scavate escono dal cantiere per essere usate altrove come sottoprodotti (non come
+      rifiuti)?
+    options:
+    - 'no'
+    - dichiarazione
+    - piano
+    labels:
+      'no': 'No: non si scava, o le terre si riusano nello stesso sito, o si smaltiscono come rifiuti'
+      dichiarazione: Sì, da un cantiere che ne produce fino a 6.000 m³ (dalle sezioni di progetto), o di più ma
+        per opere non soggette a VIA né ad AIA
+      piano: Sì, da un cantiere che ne produce oltre 6.000 m³ per opere soggette a VIA o ad AIA
+yours:
+- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
+- 'Tick the dichiarante''s declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt.
+  46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
+- 'As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione
+  you sign with the request'
+- 'The asseverazione''s "non interessa aree percorse dal fuoco" (qualità terreni) is one choice with the soil statement
+  on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md); state
+  it in the relazione tecnica if the SUE wants it'
+- 'The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal''s document on Allega documenti once the
+  declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at
+  least 15 days after sending'
+- When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo
+  (art. 7 DPR 120/2017) on the SUE
+- Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt
+- 'The landscape authorization comes before the permesso (art. 146 c. 4 D.Lgs. 42/2004): the works start only once
+  both are in'
+- 'Once the permesso is issued: collect it (paying the contributo, if due, as quadro f) says), name the structural
+  designer and the direttori dei lavori, and file the comunicazione di inizio lavori with the energy report and
+  the structural filings'
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
+  the acknowledgements in the client''s name'
+- Sign and send (Firma e invio); keep the receipt
+rules:
+  table: null
+  question: null
+  facts: null
+  main: napoli/comune/permesso-di-costruire
+  handles:
+  - napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata
+  - napoli/comune/utilizzo-materiale-scavo-fuori-sito
+answers:
+  descrizione: PROVA NON INVIARE - PdC + rinnovo paes. + terre e rocce P6

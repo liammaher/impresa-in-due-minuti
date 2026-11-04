@@ -1,0 +1,38 @@
+{
+ "people": {
+  "c": "luca",
+  "f1": "edil"
+ },
+ "descrizione": "PROVA NON INVIARE - pror. straord. inizio + paes. sempl. P6",
+ "oggetto": "Comunicazione integrativa della proroga straordinaria di trenta mesi del termine di inizio lavori.",
+ "titolo": "proprietario",
+ "pdc_numero": "999/2026",
+ "pdc_anno": "2026",
+ "pdc_data": "2026-03-15",
+ "pdc_protocollo": "PG/2026/0888888",
+ "titolo_id_pratica": "FTTLCU91L02F839F-15032026-1012",
+ "pdc_interventi": "ampliamento di un locale accessorio",
+ "bollo_marche": false,
+ "diritti_euro": "0",
+ "proroga_data_prevista": "2028-09-15",
+ "titolo_tipo": "permesso di costruire",
+ "titolo_esclusivo": true,
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "allegato_b": [
+  "paes_b3",
+  "paes_b7"
+ ],
+ "vincolo": "art 136 and 142",
+ "vincolo_136_lettera": "c) e d)",
+ "vincolo_136_provvedimento": "D.M. fittizio PROVA NON INVIARE del 01/01/1960",
+ "vincolo_142_lettera": "a)",
+ "paes_variante": false,
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "semplificata",
+ "fatti": [],
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "terre_rocce": "no"
+}

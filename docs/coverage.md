@@ -20,22 +20,63 @@ branch no rehearsal took.
 
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
-| SUE (building works) | 55 | 55 | 53 | 27 checked, 0 changed |
+| SUE (building works) | 102 | 102 | 59 | 27 checked, 0 changed |
 | SUAP (businesses) | 278 | 112 | 13 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
-- SUE: 55 pratiche, 128 distinct sections, 125 in the dictionary; 1210 of 1210 uses (100%)
+- SUE: 102 pratiche, 128 distinct sections, 125 in the dictionary; 2159 of 2159 uses (100%)
 - SUAP: 278 pratiche, 477 distinct sections, 77 in the dictionary; 2432 of 3365 uses (72%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
 
+- `cil-proroga-paesaggistica-fittizia`
+- `cil-proroga-paesaggistica-terre-rocce-fittizia`
+- `cila-proroga-paesaggistica-fittizia`
+- `cila-proroga-paesaggistica-terre-rocce-fittizia`
 - `dehors-fittizio`
+- `inizio-lavori-terre-rocce-fittizia`
 - `negozio-insegna-fittizio`
+- `paesaggistica-ordinaria-terre-rocce-fittizia`
+- `paesaggistica-semplificata-terre-rocce-fittizia`
 - `parere-esonero-fittizio`
+- `pdc-proroga-paesaggistica-fittizio`
+- `pdc-proroga-paesaggistica-terre-rocce-fittizio`
+- `pdc-rinnovo-paesaggistica-fittizio`
+- `pdc-rinnovo-paesaggistica-terre-rocce-fittizio`
 - `pdc-sanatoria-accertamento-fittizio`
+- `proroga-fine-paesaggistica-ordinaria-fittizia`
+- `proroga-fine-paesaggistica-semplificata-fittizia`
+- `proroga-fine-proroga-paesaggistica-fittizia`
+- `proroga-fine-rinnovo-paesaggistica-fittizia`
+- `proroga-inizio-paesaggistica-ordinaria-fittizia`
+- `proroga-inizio-paesaggistica-semplificata-fittizia`
+- `proroga-inizio-proroga-paesaggistica-fittizia`
+- `proroga-inizio-rinnovo-paesaggistica-fittizia`
+- `proroga-paesaggistica-terre-rocce-fittizia`
+- `proroga-straordinaria-inizio-paesaggistica-ordinaria-fittizia`
+- `proroga-straordinaria-inizio-paesaggistica-semplificata-fittizia`
+- `proroga-straordinaria-inizio-proroga-paesaggistica-fittizia`
+- `proroga-straordinaria-inizio-rinnovo-paesaggistica-fittizia`
+- `proroga-straordinaria-ultimazione-paesaggistica-ordinaria-fittizia`
+- `proroga-straordinaria-ultimazione-paesaggistica-semplificata-fittizia`
+- `proroga-straordinaria-ultimazione-proroga-paesaggistica-fittizia`
+- `proroga-straordinaria-ultimazione-rinnovo-paesaggistica-fittizia`
+- `proroga-ultimazione-paesaggistica-ordinaria-fittizia`
+- `proroga-ultimazione-paesaggistica-semplificata-fittizia`
+- `proroga-ultimazione-proroga-paesaggistica-fittizia`
+- `proroga-ultimazione-rinnovo-paesaggistica-fittizia`
+- `rinnovo-paesaggistica-terre-rocce-fittizia`
 - `ristorante-alcolici-fittizio`
 - `ristorante-centro-storico-fittizio`
+- `scia-alt-proroga-paesaggistica-fittizia`
+- `scia-alt-proroga-paesaggistica-terre-rocce-fittizia`
+- `scia-alt-rinnovo-paesaggistica-fittizia`
+- `scia-alt-rinnovo-paesaggistica-terre-rocce-fittizia`
+- `scia-proroga-paesaggistica-fittizia`
+- `scia-proroga-paesaggistica-terre-rocce-fittizia`
+- `scia-rinnovo-paesaggistica-fittizia`
+- `scia-rinnovo-paesaggistica-terre-rocce-fittizia`
 - `sospensione-srl-fittizia`
 - `variazione-negozio-fittizio`
 
@@ -59,10 +100,11 @@ SUE pratiche not yet fillable:
 
 Measured today:
 
-- Level 1: 55 of 55 pratiche fully in the dictionary. 28 of them are two operations in one pratica (`sue-combo-*`).
+- Level 1: 102 of 102 pratiche fully in the dictionary. 75 of them are two operations in one pratica (`sue-combo-*`).
 - Which pratiche a case needs: of the 30635 cases the rules table decides, **6584 reach a steps file**, 24051 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
-- Level 2: **10 refusals across 9 recipes**, 3 distinct messages.
+- Level 2: **14 refusals across 13 recipes**, 3 distinct messages.
 - Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot. A box read on a filled draft says what it adds (the dictionary's `slot`).
+- Operations in one pratica: of the 188 pairs the wizard takes and 20 triples a case needs, **73 are filed together**: 73 with a steps file, 31 of those run on the portal, **0 still to map** (`bench/test_pairs.py` lists them). The others are decided: 44 apart, 57 each alone, 4 never, 26 refused, 4 rules.
 - Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
@@ -73,6 +115,10 @@ Measured today:
 | `pdc-paesaggistica-ordinaria-terre-rocce-fittizio` | 1 |
 | `pdc-paesaggistica-semplificata-fittizio` | 1 |
 | `pdc-paesaggistica-semplificata-terre-rocce-fittizio` | 1 |
+| `pdc-proroga-paesaggistica-fittizio` | 1 |
+| `pdc-proroga-paesaggistica-terre-rocce-fittizio` | 1 |
+| `pdc-rinnovo-paesaggistica-fittizio` | 1 |
+| `pdc-rinnovo-paesaggistica-terre-rocce-fittizio` | 1 |
 | `pdc-sanatoria-accertamento-fittizio` | 1 |
 | `pdc-sanatoria-fittizio` | 1 |
 | `pdc-terre-rocce-fittizio` | 1 |
@@ -114,7 +160,7 @@ Pratiche filed together, not mapped yet (the cases that need them, most first):
 
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
-- 8×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
+- 12×: The piano casa (L.R. Campania 19/2009) takes no new requests since 30 September 2022 (L.R. 31/2021 art. 28 c. 6; L.R. 13/2022 art. 4 c. 17 decides only those pending then
 - 1×: Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet.
 - 1×: The form takes one item of Allegato A: works under several items aren't mapped.
 
@@ -136,7 +182,7 @@ Open items no recipe shows:
 - Firma e invio is the person's (unreachable on made-up data; FILING's yours says how). After filing, nothing in the repo maps the portal: integration requests, the codice pratica and receipt, the status in Pratiche inviate. InfoCamere's manual describes them (MyPage, "Nuova Comunicazione": portal/README.md), but only a sent pratica shows them, and made-up data sends none.
 - No real case has been checked by an architect who files these pratiche (level 5).
 - Which pratica a case needs: the rules table routes the building titles only. The 15 lifecycle operations (inizio and fine lavori, agibilità, proroghe, voltura, a new direttore dei lavori or firm, the landscape renewal and proroga, the DAU) have library entries and steps files but no rules: the table's "altro" refuses proroghe and volture, so the person names the pratica.
-- Operations in one pratica: the wizard takes 188 pairs (sue-wizard.json `pairs`); the 28 combinations mapped are a title with its landscape procedure and/or the dichiarazione di utilizzo. A lifecycle operation with another (the inizio lavori with the dichiarazione di utilizzo, a proroga with the landscape proroga) is neither researched nor crawled; each alone is mapped, so nothing is blocked.
+- Operations in one pratica: catalogue/F839/sue-pairs.yaml says, for each pair the wizard takes, whether a case files them together and why (counted above). Its `reading` reasons (two filings due at one moment: a title or its extension with what keeps the landscape authorization in force, the end of works with the DAU) are for an architect to confirm; the rules table routes none of the follow-up combinations yet, so the person names them.
 - Several cadastral units are mapped, in both catasti (Dati catastali's two groups, 2026-11-04); a third group (back to the first catasto) is refused. The title's other holders take one row: more go in the assent's attachment, and the voltura's co-holders one person (portal defect coholders-one).
 - Napoli's SUE wants every file PDF/A and signed (DD 501/2026), so on a real case every slot takes a signed file, and no real signed file has been uploaded yet: the attachments of a real pratica rest on that. InfoCamere's "Copia pratica" (a new pratica from one sent before) is read in its manual, never used.
 
@@ -146,7 +192,7 @@ What a Napoli architect or pratiche agency files again and again, so what has to
 
 **SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, extensions, voltura, DL and contractor changes, the landscape authorizations), all of them.
 
-- 55 of 55 fillable, 53 run on the portal.
+- 102 of 102 fillable, 59 run on the portal.
 
 **SUAP: nine sectors × seven operations.** Each cell is one pratica on the portal:
 

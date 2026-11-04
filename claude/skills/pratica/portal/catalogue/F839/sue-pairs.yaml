@@ -1,0 +1,368 @@
+# Every two operations Napoli's SUE wizard accepts in one pratica (sue-wizard.json `pairs`, probed
+# 2026-11-03), and whether a case files them together, from the law. bench/test_pairs.py holds it to
+# the wizard (every accepted pair once) and to the rehearsals (a `together` pair's rehearsals select
+# exactly those operations; none listed means it is still to map). Verdicts:
+#   together    a case files both in one pratica: a steps file each (rehearsals)
+#   apart       the law sends one elsewhere or at another time: each alone (or elsewhere)
+#   never       no case needs both
+#   refused     the law refuses one of them in Napoli
+#   rules       the rules table decides the cases another way
+#   each_alone  nothing ties them: each goes alone, and each alone is mapped
+# A reason's status: `verified` restates the library's verified claims; `reading` is this file's reading
+# of them (when two filings fall due at one moment), for an architect to confirm.
+comune: F839
+sportello: sue
+updated: 2026-11-04
+ops:
+  cil: "Comunicazione di Inizio Lavori per opere temporanee (C.I.L.)"
+  cila: "Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)"
+  scia: "Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)"
+  scia-alternativa: "Segnalazione Certificata Inizio Attività alternativa al Permesso di Costruire (S.C.I.A. alternativa P.d.C.)"
+  permesso: "Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001"
+  nuovo-dl: "Comunicazione al Comune di nomina del nuovo direttore dei lavori"
+  nomina-impresa: "Comunicazione al Comune di nomina impresa esecutrice"
+  cambio-impresa: "Comunicazione al Comune di cambio dell'impresa esecutrice (da utilizzare in caso di cessazione della precedente impresa)"
+  voltura-permesso: "Voltura intestazione Permesso di costruire"
+  cambio-intestazione: "Cambio intestazione CIA / SCIA / DIA"
+  inizio-lavori: "Comunicazione inizio lavori"
+  proroga-inizio: "Proroga inizio lavori"
+  fine-lavori: "Comunicazione di fine lavori"
+  proroga-fine: "Proroga fine lavori"
+  proroga-ultimazione: "Proroga del termine di ultimazione lavori (art. 10 septies, Legge 51/2022)"
+  proroga-straordinaria-inizio: "Comunicazione integrativa proroga straordinaria trenta mesi inizio lavori (art. 10 septies, Legge 51/2022)"
+  proroga-straordinaria-ultimazione: "Comunicazione integrativa proroga straordinaria trenta mesi ultimazione lavori (art. 10 septies, Legge 51/2022)"
+  agibilita: "Segnalazione Certificata per l'Agibilità"
+  piano-utilizzo: "Trasmissione del Piano di utilizzo delle terre e rocce da scavo ai sensi dell'art. 9 del DPR n. 120/2017 (da trasmettere almeno novanta giorni prima dell'inizio dei lavori e, in ogni caso, prima della conclusione dell'eventuale procedimento di VIA o AIA)"
+  dichiarazione-utilizzo: "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
+  dau: "Dichiarazione di avvenuto utilizzo (D.A.U.) ai sensi dell'art. 7 del DPR n. 120/2017"
+  paesaggistica-ordinaria: "Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)"
+  paesaggistica-semplificata: "Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)"
+  rinnovo-paesaggistica: "Rinnovo Autorizzazione Paesaggistica Semplificata (DPR 31/2017 - Comune)"
+  accertamento-paesaggistico: "Accertamento di compatibilità paesaggistica (artt. 167-181 D.Lgs. 42/2004 - Comune)"
+  proroga-paesaggistica: "Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022 - Comune)"
+  parere-esonero: "Domanda di parere per esonero dall’obbligo di autorizzazione paesaggistica"
+reasons:
+  parere-refused:
+    verdict: refused
+    status: verified
+    why: "Napoli's Comune doesn't issue the exemption parere (direttiva sul paesaggio, D.D. 154/2024 § 3.2: the technician asseverates the exclusion in the building pratica): the rules table refuses it, so it goes with nothing."
+    cites:
+      - {procedure: napoli/comune/parere-esonero-autorizzazione-paesaggistica, source: direttiva-paesaggio}
+  piano-apart:
+    verdict: apart
+    status: verified
+    why: "The piano di utilizzo goes to the VIA authority (in Campania the Regione's Staff Valutazioni Ambientali) before the VIA ends (art. 9 DPR 120/2017), never in a SUE pratica."
+    cites:
+      - {procedure: napoli/valutazioni-ambientali/piano-utilizzo-terre-rocce, source: dpr120-art9}
+      - {procedure: napoli/valutazioni-ambientali/piano-utilizzo-terre-rocce, source: procedurale-via-campania}
+  piano-or-dichiarazione:
+    verdict: never
+    status: verified
+    why: "A site takes one or the other: the dichiarazione for sites up to 6,000 m³ or larger ones with no VIA or AIA (artt. 21-22 DPR 120/2017), the piano for larger ones under VIA or AIA (art. 9)."
+    cites:
+      - {procedure: napoli/comune/utilizzo-materiale-scavo-fuori-sito, source: dpr120-art2}
+      - {procedure: napoli/comune/utilizzo-materiale-scavo-fuori-sito, source: dpr120-art21}
+      - {procedure: napoli/comune/utilizzo-materiale-scavo-fuori-sito, source: dpr120-art22}
+  dau-after:
+    verdict: apart
+    status: verified
+    why: "The DAU attests the soil's use once it is over, within the dichiarazione's or the piano's validity (art. 7 DPR 120/2017): it comes after the title, the dichiarazione and the start of works, never with them."
+    cites:
+      - {procedure: napoli/comune/dichiarazione-avvenuto-utilizzo-terre, source: dpr120-art7}
+  dau-at-the-end:
+    verdict: together
+    status: reading
+    why: "The DAU is due when the soil's use is over (art. 7 DPR 120/2017), and the end of works (art. 23 c. 7 DPR 380/2001) or the agibilità (art. 24) is the filing at that moment: one pratica carries both. The law doesn't require them together."
+    cites:
+      - {procedure: napoli/comune/dichiarazione-avvenuto-utilizzo-terre, source: dpr120-art7}
+      - {procedure: napoli/comune/fine-lavori, source: dpr380-art23}
+      - {procedure: napoli/comune/agibilita, source: dpr380-art24}
+  dau-no-tie:
+    verdict: each_alone
+    status: reading
+    why: "No rule ties the DAU (art. 7 DPR 120/2017) to this filing: each goes alone, and each alone is mapped."
+    cites:
+      - {procedure: napoli/comune/dichiarazione-avvenuto-utilizzo-terre, source: dpr120-art7}
+  dichiarazione-with-title:
+    verdict: together
+    status: verified
+    why: "The dichiarazione goes at least 15 days before the excavation (art. 21 c. 1 DPR 120/2017), and the SUE takes it in the title's pratica (the rules table, terre-rocce-dichiarazione)."
+    cites:
+      - {procedure: napoli/comune/utilizzo-materiale-scavo-fuori-sito, source: dpr120-art21}
+      - {procedure: napoli/comune/utilizzo-materiale-scavo-fuori-sito, source: portale-sue-operazioni}
+  dichiarazione-with-start:
+    verdict: together
+    status: reading
+    why: "The dichiarazione goes at least 15 days before the excavation (art. 21 c. 1 DPR 120/2017), and a permesso's works start with the comunicazione di inizio lavori (art. 15 DPR 380/2001): a dichiarazione not filed with the permesso goes with the start of works."
+    cites:
+      - {procedure: napoli/comune/utilizzo-materiale-scavo-fuori-sito, source: dpr120-art21}
+      - {procedure: napoli/comune/inizio-lavori-pdc, source: dpr380-art15}
+  dichiarazione-no-title:
+    verdict: together
+    status: reading
+    why: "Works that need no building title in a protected area take the landscape procedure alone (artt. 146, 149 D.Lgs. 42/2004); if they dig and the soil leaves the site, the dichiarazione is due before the excavation too (art. 21 c. 1 DPR 120/2017): one pratica carries both."
+    cites:
+      - {procedure: napoli/comune/autorizzazione-paesaggistica-semplificata, source: dlgs42-art149}
+      - {procedure: napoli/comune/utilizzo-materiale-scavo-fuori-sito, source: dpr120-art21}
+  dichiarazione-before:
+    verdict: never
+    status: verified
+    why: "The dichiarazione precedes the excavation (art. 21 c. 1 DPR 120/2017): never with works that are over or already done."
+    cites:
+      - {procedure: napoli/comune/utilizzo-materiale-scavo-fuori-sito, source: dpr120-art21}
+  dichiarazione-no-tie:
+    verdict: each_alone
+    status: reading
+    why: "No rule ties the dichiarazione (art. 21 DPR 120/2017) to this communication about a title held: it goes with the title or the start of works, or alone; each alone is mapped."
+    cites:
+      - {procedure: napoli/comune/utilizzo-materiale-scavo-fuori-sito, source: dpr120-art21}
+  authorization-with-title:
+    verdict: together
+    status: verified
+    why: "The landscape authorization goes in the title's pratica (the rules table: the title with its semplificata or ordinaria)."
+    cites:
+      - {procedure: napoli/comune/autorizzazione-paesaggistica-semplificata, source: portale-sue-operazioni}
+      - {procedure: napoli/comune/autorizzazione-paesaggistica-ordinaria, source: portale-sue-operazioni}
+  authorization-keeps-pace:
+    verdict: together
+    status: reading
+    why: "The landscape authorization lasts five years from the building title's efficacy, plus one to finish works begun (art. 146 c. 4 D.Lgs. 42/2004); a new title or an extension of a title's terms doesn't extend it. When the works' new term passes the authorization's, the filing that sets it carries what keeps the authorization in force: its art. 10-septies extension, before it expires; its renewal (art. 7 DPR 31/2017), expired no more than a year, the works unchanged and not or only partly done; or a new authorization, past that."
+    cites:
+      - {procedure: napoli/comune/proroga-autorizzazione-paesaggistica, source: dlgs42-art146}
+      - {procedure: napoli/comune/proroga-autorizzazione-paesaggistica, source: dl21-art10septies}
+      - {procedure: napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata, source: dpr31-art7}
+  accertamento-with-permesso:
+    verdict: together
+    status: verified
+    why: "Works done in a protected area that needed a permesso: the permesso in sanatoria and the accertamento in one pratica (the rules table, accertamento-permesso-sanatoria)."
+    cites:
+      - {procedure: napoli/comune/accertamento-compatibilita-paesaggistica, source: dlgs42-art167}
+  accertamento-rules:
+    verdict: rules
+    status: verified
+    why: "The rules table decides every case of works done in a protected area (the SCIA in sanatoria takes the compatibility within itself, art. 36-bis c. 4 DPR 380/2001; works with no title take the accertamento alone), and none sends this title with the accertamento."
+    cites:
+      - {procedure: napoli/comune/accertamento-compatibilita-paesaggistica, source: dlgs42-art167}
+  accertamento-first:
+    verdict: apart
+    status: reading
+    why: "Works done against the landscape rules are regularized by the accertamento (art. 167 D.Lgs. 42/2004) with the building sanatoria they need (the rules table), before any communication about the title held: an extension, the end of works or the agibilità presume the works lawful."
+    cites:
+      - {procedure: napoli/comune/accertamento-compatibilita-paesaggistica, source: dlgs42-art167}
+  authorization-not-a-communication:
+    verdict: each_alone
+    status: reading
+    why: "A landscape procedure goes with the title of the works or the extension of its terms (authorization-keeps-pace), or alone; this communication about a title held (its firm, its direttore dei lavori, its holder, its start or end) carries none. Each alone is mapped."
+    cites:
+      - {procedure: napoli/comune/proroga-autorizzazione-paesaggistica, source: dlgs42-art146}
+pairs:
+  - {ops: [cil, piano-utilizzo], reason: piano-apart}
+  - {ops: [cil, dichiarazione-utilizzo], reason: dichiarazione-with-title, rehearsals: [cil-terre-rocce-fittizia]}
+  - {ops: [cil, dau], reason: dau-after}
+  - {ops: [cil, paesaggistica-ordinaria], reason: authorization-with-title, rehearsals: [cil-paesaggistica-ordinaria-fittizia]}
+  - {ops: [cil, paesaggistica-semplificata], reason: authorization-with-title, rehearsals: [cil-paesaggistica-semplificata-fittizia]}
+  - {ops: [cil, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [cil-rinnovo-paesaggistica-fittizia]}
+  - {ops: [cil, accertamento-paesaggistico], reason: accertamento-rules}
+  - {ops: [cil, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [cil-proroga-paesaggistica-fittizia]}
+  - {ops: [cil, parere-esonero], reason: parere-refused}
+  - {ops: [cila, piano-utilizzo], reason: piano-apart}
+  - {ops: [cila, dichiarazione-utilizzo], reason: dichiarazione-with-title, rehearsals: [cila-terre-rocce-fittizia]}
+  - {ops: [cila, dau], reason: dau-after}
+  - {ops: [cila, paesaggistica-ordinaria], reason: authorization-with-title, rehearsals: [cila-paesaggistica-ordinaria-fittizia]}
+  - {ops: [cila, paesaggistica-semplificata], reason: authorization-with-title, rehearsals: [cila-paesaggistica-fittizia]}
+  - {ops: [cila, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [cila-rinnovo-paesaggistica-fittizia]}
+  - {ops: [cila, accertamento-paesaggistico], reason: accertamento-rules}
+  - {ops: [cila, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [cila-proroga-paesaggistica-fittizia]}
+  - {ops: [cila, parere-esonero], reason: parere-refused}
+  - {ops: [scia, piano-utilizzo], reason: piano-apart}
+  - {ops: [scia, dichiarazione-utilizzo], reason: dichiarazione-with-title, rehearsals: [scia-terre-rocce-fittizia]}
+  - {ops: [scia, dau], reason: dau-after}
+  - {ops: [scia, paesaggistica-ordinaria], reason: authorization-with-title, rehearsals: [scia-paesaggistica-ordinaria-fittizia, scia-sanatoria-paesaggistica-ordinaria-fittizia]}
+  - {ops: [scia, paesaggistica-semplificata], reason: authorization-with-title, rehearsals: [scia-paesaggistica-semplificata-fittizia, scia-sanatoria-paesaggistica-semplificata-fittizia]}
+  - {ops: [scia, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [scia-rinnovo-paesaggistica-fittizia]}
+  - {ops: [scia, accertamento-paesaggistico], reason: accertamento-rules}
+  - {ops: [scia, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [scia-proroga-paesaggistica-fittizia]}
+  - {ops: [scia, parere-esonero], reason: parere-refused}
+  - {ops: [scia-alternativa, piano-utilizzo], reason: piano-apart}
+  - {ops: [scia-alternativa, dichiarazione-utilizzo], reason: dichiarazione-with-title, rehearsals: [scia-alt-terre-rocce-fittizia]}
+  - {ops: [scia-alternativa, dau], reason: dau-after}
+  - {ops: [scia-alternativa, paesaggistica-ordinaria], reason: authorization-with-title, rehearsals: [scia-alt-paesaggistica-ordinaria-fittizia]}
+  - {ops: [scia-alternativa, paesaggistica-semplificata], reason: authorization-with-title, rehearsals: [scia-alt-paesaggistica-semplificata-fittizia]}
+  - {ops: [scia-alternativa, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [scia-alt-rinnovo-paesaggistica-fittizia]}
+  - {ops: [scia-alternativa, accertamento-paesaggistico], reason: accertamento-rules}
+  - {ops: [scia-alternativa, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [scia-alt-proroga-paesaggistica-fittizia]}
+  - {ops: [scia-alternativa, parere-esonero], reason: parere-refused}
+  - {ops: [permesso, piano-utilizzo], reason: piano-apart}
+  - {ops: [permesso, dichiarazione-utilizzo], reason: dichiarazione-with-title, rehearsals: [pdc-terre-rocce-fittizio]}
+  - {ops: [permesso, dau], reason: dau-after}
+  - {ops: [permesso, paesaggistica-ordinaria], reason: authorization-with-title, rehearsals: [pdc-paesaggistica-ordinaria-fittizio]}
+  - {ops: [permesso, paesaggistica-semplificata], reason: authorization-with-title, rehearsals: [pdc-paesaggistica-semplificata-fittizio]}
+  - {ops: [permesso, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [pdc-rinnovo-paesaggistica-fittizio]}
+  - {ops: [permesso, accertamento-paesaggistico], reason: accertamento-with-permesso, rehearsals: [pdc-sanatoria-accertamento-fittizio]}
+  - {ops: [permesso, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [pdc-proroga-paesaggistica-fittizio]}
+  - {ops: [permesso, parere-esonero], reason: parere-refused}
+  - {ops: [nuovo-dl, piano-utilizzo], reason: piano-apart}
+  - {ops: [nuovo-dl, dichiarazione-utilizzo], reason: dichiarazione-no-tie}
+  - {ops: [nuovo-dl, dau], reason: dau-no-tie}
+  - {ops: [nuovo-dl, paesaggistica-ordinaria], reason: authorization-not-a-communication}
+  - {ops: [nuovo-dl, paesaggistica-semplificata], reason: authorization-not-a-communication}
+  - {ops: [nuovo-dl, rinnovo-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [nuovo-dl, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [nuovo-dl, proroga-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [nuovo-dl, parere-esonero], reason: parere-refused}
+  - {ops: [nomina-impresa, piano-utilizzo], reason: piano-apart}
+  - {ops: [nomina-impresa, dichiarazione-utilizzo], reason: dichiarazione-no-tie}
+  - {ops: [nomina-impresa, dau], reason: dau-no-tie}
+  - {ops: [nomina-impresa, paesaggistica-ordinaria], reason: authorization-not-a-communication}
+  - {ops: [nomina-impresa, paesaggistica-semplificata], reason: authorization-not-a-communication}
+  - {ops: [nomina-impresa, rinnovo-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [nomina-impresa, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [nomina-impresa, proroga-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [nomina-impresa, parere-esonero], reason: parere-refused}
+  - {ops: [cambio-impresa, piano-utilizzo], reason: piano-apart}
+  - {ops: [cambio-impresa, dichiarazione-utilizzo], reason: dichiarazione-no-tie}
+  - {ops: [cambio-impresa, dau], reason: dau-no-tie}
+  - {ops: [cambio-impresa, paesaggistica-ordinaria], reason: authorization-not-a-communication}
+  - {ops: [cambio-impresa, paesaggistica-semplificata], reason: authorization-not-a-communication}
+  - {ops: [cambio-impresa, rinnovo-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [cambio-impresa, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [cambio-impresa, proroga-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [cambio-impresa, parere-esonero], reason: parere-refused}
+  - {ops: [voltura-permesso, piano-utilizzo], reason: piano-apart}
+  - {ops: [voltura-permesso, dichiarazione-utilizzo], reason: dichiarazione-no-tie}
+  - {ops: [voltura-permesso, dau], reason: dau-no-tie}
+  - {ops: [voltura-permesso, paesaggistica-ordinaria], reason: authorization-not-a-communication}
+  - {ops: [voltura-permesso, paesaggistica-semplificata], reason: authorization-not-a-communication}
+  - {ops: [voltura-permesso, rinnovo-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [voltura-permesso, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [voltura-permesso, proroga-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [voltura-permesso, parere-esonero], reason: parere-refused}
+  - {ops: [cambio-intestazione, piano-utilizzo], reason: piano-apart}
+  - {ops: [cambio-intestazione, dichiarazione-utilizzo], reason: dichiarazione-no-tie}
+  - {ops: [cambio-intestazione, dau], reason: dau-no-tie}
+  - {ops: [cambio-intestazione, paesaggistica-ordinaria], reason: authorization-not-a-communication}
+  - {ops: [cambio-intestazione, paesaggistica-semplificata], reason: authorization-not-a-communication}
+  - {ops: [cambio-intestazione, rinnovo-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [cambio-intestazione, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [cambio-intestazione, proroga-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [cambio-intestazione, parere-esonero], reason: parere-refused}
+  - {ops: [inizio-lavori, piano-utilizzo], reason: piano-apart}
+  - {ops: [inizio-lavori, dichiarazione-utilizzo], reason: dichiarazione-with-start, rehearsals: [inizio-lavori-terre-rocce-fittizia]}
+  - {ops: [inizio-lavori, dau], reason: dau-after}
+  - {ops: [inizio-lavori, paesaggistica-ordinaria], reason: authorization-not-a-communication}
+  - {ops: [inizio-lavori, paesaggistica-semplificata], reason: authorization-not-a-communication}
+  - {ops: [inizio-lavori, rinnovo-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [inizio-lavori, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [inizio-lavori, proroga-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [inizio-lavori, parere-esonero], reason: parere-refused}
+  - {ops: [proroga-inizio, piano-utilizzo], reason: piano-apart}
+  - {ops: [proroga-inizio, dichiarazione-utilizzo], reason: dichiarazione-no-tie}
+  - {ops: [proroga-inizio, dau], reason: dau-no-tie}
+  - {ops: [proroga-inizio, paesaggistica-ordinaria], reason: authorization-keeps-pace, rehearsals: [proroga-inizio-paesaggistica-ordinaria-fittizia]}
+  - {ops: [proroga-inizio, paesaggistica-semplificata], reason: authorization-keeps-pace, rehearsals: [proroga-inizio-paesaggistica-semplificata-fittizia]}
+  - {ops: [proroga-inizio, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [proroga-inizio-rinnovo-paesaggistica-fittizia]}
+  - {ops: [proroga-inizio, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [proroga-inizio, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [proroga-inizio-proroga-paesaggistica-fittizia]}
+  - {ops: [proroga-inizio, parere-esonero], reason: parere-refused}
+  - {ops: [fine-lavori, piano-utilizzo], reason: piano-apart}
+  - {ops: [fine-lavori, dichiarazione-utilizzo], reason: dichiarazione-before}
+  - {ops: [fine-lavori, dau], reason: dau-at-the-end, rehearsals: [fine-lavori-dau-fittizia]}
+  - {ops: [fine-lavori, paesaggistica-ordinaria], reason: authorization-not-a-communication}
+  - {ops: [fine-lavori, paesaggistica-semplificata], reason: authorization-not-a-communication}
+  - {ops: [fine-lavori, rinnovo-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [fine-lavori, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [fine-lavori, proroga-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [fine-lavori, parere-esonero], reason: parere-refused}
+  - {ops: [proroga-fine, piano-utilizzo], reason: piano-apart}
+  - {ops: [proroga-fine, dichiarazione-utilizzo], reason: dichiarazione-no-tie}
+  - {ops: [proroga-fine, dau], reason: dau-no-tie}
+  - {ops: [proroga-fine, paesaggistica-ordinaria], reason: authorization-keeps-pace, rehearsals: [proroga-fine-paesaggistica-ordinaria-fittizia]}
+  - {ops: [proroga-fine, paesaggistica-semplificata], reason: authorization-keeps-pace, rehearsals: [proroga-fine-paesaggistica-semplificata-fittizia]}
+  - {ops: [proroga-fine, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [proroga-fine-rinnovo-paesaggistica-fittizia]}
+  - {ops: [proroga-fine, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [proroga-fine, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [proroga-fine-proroga-paesaggistica-fittizia]}
+  - {ops: [proroga-fine, parere-esonero], reason: parere-refused}
+  - {ops: [proroga-ultimazione, piano-utilizzo], reason: piano-apart}
+  - {ops: [proroga-ultimazione, dichiarazione-utilizzo], reason: dichiarazione-no-tie}
+  - {ops: [proroga-ultimazione, dau], reason: dau-no-tie}
+  - {ops: [proroga-ultimazione, paesaggistica-ordinaria], reason: authorization-keeps-pace, rehearsals: [proroga-ultimazione-paesaggistica-ordinaria-fittizia]}
+  - {ops: [proroga-ultimazione, paesaggistica-semplificata], reason: authorization-keeps-pace, rehearsals: [proroga-ultimazione-paesaggistica-semplificata-fittizia]}
+  - {ops: [proroga-ultimazione, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [proroga-ultimazione-rinnovo-paesaggistica-fittizia]}
+  - {ops: [proroga-ultimazione, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [proroga-ultimazione, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [proroga-ultimazione-proroga-paesaggistica-fittizia]}
+  - {ops: [proroga-ultimazione, parere-esonero], reason: parere-refused}
+  - {ops: [proroga-straordinaria-inizio, piano-utilizzo], reason: piano-apart}
+  - {ops: [proroga-straordinaria-inizio, dichiarazione-utilizzo], reason: dichiarazione-no-tie}
+  - {ops: [proroga-straordinaria-inizio, dau], reason: dau-no-tie}
+  - {ops: [proroga-straordinaria-inizio, paesaggistica-ordinaria], reason: authorization-keeps-pace, rehearsals: [proroga-straordinaria-inizio-paesaggistica-ordinaria-fittizia]}
+  - {ops: [proroga-straordinaria-inizio, paesaggistica-semplificata], reason: authorization-keeps-pace, rehearsals: [proroga-straordinaria-inizio-paesaggistica-semplificata-fittizia]}
+  - {ops: [proroga-straordinaria-inizio, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [proroga-straordinaria-inizio-rinnovo-paesaggistica-fittizia]}
+  - {ops: [proroga-straordinaria-inizio, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [proroga-straordinaria-inizio, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [proroga-straordinaria-inizio-proroga-paesaggistica-fittizia]}
+  - {ops: [proroga-straordinaria-inizio, parere-esonero], reason: parere-refused}
+  - {ops: [proroga-straordinaria-ultimazione, piano-utilizzo], reason: piano-apart}
+  - {ops: [proroga-straordinaria-ultimazione, dichiarazione-utilizzo], reason: dichiarazione-no-tie}
+  - {ops: [proroga-straordinaria-ultimazione, dau], reason: dau-no-tie}
+  - {ops: [proroga-straordinaria-ultimazione, paesaggistica-ordinaria], reason: authorization-keeps-pace, rehearsals: [proroga-straordinaria-ultimazione-paesaggistica-ordinaria-fittizia]}
+  - {ops: [proroga-straordinaria-ultimazione, paesaggistica-semplificata], reason: authorization-keeps-pace, rehearsals: [proroga-straordinaria-ultimazione-paesaggistica-semplificata-fittizia]}
+  - {ops: [proroga-straordinaria-ultimazione, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [proroga-straordinaria-ultimazione-rinnovo-paesaggistica-fittizia]}
+  - {ops: [proroga-straordinaria-ultimazione, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [proroga-straordinaria-ultimazione, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [proroga-straordinaria-ultimazione-proroga-paesaggistica-fittizia]}
+  - {ops: [proroga-straordinaria-ultimazione, parere-esonero], reason: parere-refused}
+  - {ops: [agibilita, piano-utilizzo], reason: piano-apart}
+  - {ops: [agibilita, dichiarazione-utilizzo], reason: dichiarazione-before}
+  - {ops: [agibilita, dau], reason: dau-at-the-end, rehearsals: [agibilita-dau-fittizia]}
+  - {ops: [agibilita, paesaggistica-ordinaria], reason: authorization-not-a-communication}
+  - {ops: [agibilita, paesaggistica-semplificata], reason: authorization-not-a-communication}
+  - {ops: [agibilita, rinnovo-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [agibilita, accertamento-paesaggistico], reason: accertamento-first}
+  - {ops: [agibilita, proroga-paesaggistica], reason: authorization-not-a-communication}
+  - {ops: [agibilita, parere-esonero], reason: parere-refused}
+  - {ops: [piano-utilizzo, dichiarazione-utilizzo], reason: piano-or-dichiarazione}
+  - {ops: [piano-utilizzo, dau], reason: piano-apart}
+  - {ops: [piano-utilizzo, paesaggistica-ordinaria], reason: piano-apart}
+  - {ops: [piano-utilizzo, paesaggistica-semplificata], reason: piano-apart}
+  - {ops: [piano-utilizzo, rinnovo-paesaggistica], reason: piano-apart}
+  - {ops: [piano-utilizzo, accertamento-paesaggistico], reason: piano-apart}
+  - {ops: [piano-utilizzo, proroga-paesaggistica], reason: piano-apart}
+  - {ops: [piano-utilizzo, parere-esonero], reason: parere-refused}
+  - {ops: [dichiarazione-utilizzo, dau], reason: dau-after}
+  - {ops: [dichiarazione-utilizzo, paesaggistica-ordinaria], reason: dichiarazione-no-title, rehearsals: [paesaggistica-ordinaria-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, paesaggistica-semplificata], reason: dichiarazione-no-title, rehearsals: [paesaggistica-semplificata-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, rinnovo-paesaggistica], reason: dichiarazione-no-title, rehearsals: [rinnovo-paesaggistica-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, accertamento-paesaggistico], reason: dichiarazione-before}
+  - {ops: [dichiarazione-utilizzo, proroga-paesaggistica], reason: dichiarazione-no-title, rehearsals: [proroga-paesaggistica-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, parere-esonero], reason: parere-refused}
+  - {ops: [dau, paesaggistica-ordinaria], reason: dau-no-tie}
+  - {ops: [dau, paesaggistica-semplificata], reason: dau-no-tie}
+  - {ops: [dau, rinnovo-paesaggistica], reason: dau-no-tie}
+  - {ops: [dau, accertamento-paesaggistico], reason: dau-no-tie}
+  - {ops: [dau, proroga-paesaggistica], reason: dau-no-tie}
+  - {ops: [dau, parere-esonero], reason: parere-refused}
+  - {ops: [paesaggistica-ordinaria, parere-esonero], reason: parere-refused}
+  - {ops: [paesaggistica-semplificata, parere-esonero], reason: parere-refused}
+  - {ops: [rinnovo-paesaggistica, parere-esonero], reason: parere-refused}
+  - {ops: [accertamento-paesaggistico, parere-esonero], reason: parere-refused}
+  - {ops: [proroga-paesaggistica, parere-esonero], reason: parere-refused}
+# Three operations: a title, a landscape procedure and the dichiarazione (the wizard takes one of each group).
+triples:
+  - {ops: [cil, dichiarazione-utilizzo, paesaggistica-ordinaria], reason: authorization-with-title, rehearsals: [cil-paesaggistica-ordinaria-terre-rocce-fittizia]}
+  - {ops: [cil, dichiarazione-utilizzo, paesaggistica-semplificata], reason: authorization-with-title, rehearsals: [cil-paesaggistica-semplificata-terre-rocce-fittizia]}
+  - {ops: [cil, dichiarazione-utilizzo, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [cil-proroga-paesaggistica-terre-rocce-fittizia]}
+  - {ops: [cil, dichiarazione-utilizzo, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [cil-rinnovo-paesaggistica-terre-rocce-fittizia]}
+  - {ops: [cila, dichiarazione-utilizzo, paesaggistica-ordinaria], reason: authorization-with-title, rehearsals: [cila-paesaggistica-ordinaria-terre-rocce-fittizia]}
+  - {ops: [cila, dichiarazione-utilizzo, paesaggistica-semplificata], reason: authorization-with-title, rehearsals: [cila-paesaggistica-semplificata-terre-rocce-fittizia]}
+  - {ops: [cila, dichiarazione-utilizzo, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [cila-proroga-paesaggistica-terre-rocce-fittizia]}
+  - {ops: [cila, dichiarazione-utilizzo, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [cila-rinnovo-paesaggistica-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, paesaggistica-ordinaria, permesso], reason: authorization-with-title, rehearsals: [pdc-paesaggistica-ordinaria-terre-rocce-fittizio]}
+  - {ops: [dichiarazione-utilizzo, paesaggistica-ordinaria, scia], reason: authorization-with-title, rehearsals: [scia-paesaggistica-ordinaria-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, paesaggistica-ordinaria, scia-alternativa], reason: authorization-with-title, rehearsals: [scia-alt-paesaggistica-ordinaria-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, paesaggistica-semplificata, permesso], reason: authorization-with-title, rehearsals: [pdc-paesaggistica-semplificata-terre-rocce-fittizio]}
+  - {ops: [dichiarazione-utilizzo, paesaggistica-semplificata, scia], reason: authorization-with-title, rehearsals: [scia-paesaggistica-semplificata-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, paesaggistica-semplificata, scia-alternativa], reason: authorization-with-title, rehearsals: [scia-alt-paesaggistica-semplificata-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, permesso, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [pdc-proroga-paesaggistica-terre-rocce-fittizio]}
+  - {ops: [dichiarazione-utilizzo, permesso, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [pdc-rinnovo-paesaggistica-terre-rocce-fittizio]}
+  - {ops: [dichiarazione-utilizzo, proroga-paesaggistica, scia], reason: authorization-keeps-pace, rehearsals: [scia-proroga-paesaggistica-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, proroga-paesaggistica, scia-alternativa], reason: authorization-keeps-pace, rehearsals: [scia-alt-proroga-paesaggistica-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, rinnovo-paesaggistica, scia], reason: authorization-keeps-pace, rehearsals: [scia-rinnovo-paesaggistica-terre-rocce-fittizia]}
+  - {ops: [dichiarazione-utilizzo, rinnovo-paesaggistica, scia-alternativa], reason: authorization-keeps-pace, rehearsals: [scia-alt-rinnovo-paesaggistica-terre-rocce-fittizia]}

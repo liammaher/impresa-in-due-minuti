@@ -969,7 +969,9 @@ def _decision(steps, values):
     """The rules table's decision of this case (steps `rules:`), or None without one. Each
     fact is the recipe's value or an ask's answer."""
     r = steps.get("rules")
-    if not r:
+    if not r or not r.get("table"):
+        # A combination no table routes yet (a proroga with the landscape one): `main` and
+        # `handles` only, filed when the person names it.
         return None
     t = rules.table(r["table"])
     facts = {}
@@ -1583,7 +1585,7 @@ def preflight(steps, values, made_up=False, after=False):
                                    | ({"error": why} if v is not None else {}))
     report["proposals"] += conditional_proposals(pending, report, values, need)
     held_need = assumed_proposals(steps, values, report)
-    if steps.get("rules"):
+    if (steps.get("rules") or {}).get("table"):
         # While the table's first fact (what the works are) is asked, it is asked alone, as the
         # rules table's own questions are: which others matter depends on it, even one no field
         # hangs on it formally (a CILA's listed building, read by its Soprintendenza attachment

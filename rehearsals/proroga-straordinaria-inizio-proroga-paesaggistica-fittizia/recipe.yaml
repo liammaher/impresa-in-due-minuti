@@ -1,0 +1,44 @@
+# proroga straordinaria inizio e proroga paesaggistica: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: proroga-straordinaria-inizio-fittizia's, with what proroga-paesaggistica-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+extends:
+- proroga-straordinaria-inizio-fittizia
+- proroga-paesaggistica-fittizia
+procedure: napoli/comune/proroga-straordinaria-inizio-lavori-con-proroga-autorizzazione-paesaggistica
+title: Proroga straordinaria inizio e proroga paesaggistica in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-proroga-straordinaria-inizio-proroga-paesaggistica
+operation:
+- Comunicazione integrativa proroga straordinaria trenta mesi inizio lavori (art. 10 septies, Legge 51/2022)
+- Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022 - Comune)
+scelte:
+- option: in assenza di titolarità esclusiva all'esecuzione dell'intervento edilizio, si dispone della dichiarazione
+    di assenso dei terzi titolari di altri diritti reali o obbligatori
+  when: '{{ask.titolo_esclusivo|not}}'
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PROVA NON INVIARE - pror. straord. inizio + proroga paes. {{c:identity.last_name}}
+  diritti_euro: null
+yours:
+- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
+  any acknowledgement in the client''s name'
+- 'No imposta di bollo to pay on this form: the portal''s form for this pratica has no bollo section or slot'
+- Sign and send (Firma e invio); keep the receipt
+rules:
+  table: null
+  question: null
+  facts: null
+  main: napoli/comune/proroga-straordinaria-inizio-lavori
+  handles:
+  - napoli/comune/proroga-autorizzazione-paesaggistica
+answers:
+  descrizione: PROVA NON INVIARE - pror. straord. inizio + proroga paes. P6

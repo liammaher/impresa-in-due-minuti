@@ -1,0 +1,212 @@
+{
+ "crawled": "2026-11-04T19:02:07.454Z",
+ "by": "crawl.js batch, depth 3",
+ "pratica": "SUE: 2 operations in one pratica: Comunicazione integrativa proroga straordinaria trenta mesi ultimazione lavori (art. 10 septies, Legge 51/2022) + Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022 - Comune), with the scelta IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+ "seconds": 55.7,
+ "note": "Every section is one of the operations' own, the same fingerprint: the combination is their union, in this order. A recipe names every operation and extends the main one's.",
+ "also": [
+  "EDILIZIA › Beni Paesaggistici › Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022 - Comune)"
+ ],
+ "generated": {
+  "interventi": "Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022)",
+  "adempimenti": [
+   {
+    "adempimento": "Comunicazione di proroga dell'efficacia dell'autorizzazione paesaggistica ai sensi dell' art. 10 septies, Legge 51/2022",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   },
+   {
+    "adempimento": "Comunicazione integrativa di proroga del termine di ultimazione lavori",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   }
+  ],
+  "sections": [
+   "Scheda anagrafica",
+   "Oggetto della pratica",
+   "DOMICILIO DIGITALE",
+   "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "ubicazione dell'attività",
+   "dati catastali",
+   "PERIODO DI PROROGA",
+   "RIFERIMENTI AUTORIZZAZIONE PAESAGGISTICA E DATA SCADENZA EFFICACIA",
+   "richiesta della proroga di ultimazione dei lavori",
+   "Riferimenti titolo edilizio e/o paesaggistico e data prevista della fine dei lavori",
+   "Altre dichiarazioni",
+   "Altre dichiarazioni",
+   "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "Dichiarazione relativa ai diritti di segreteria/istruttori"
+  ]
+ },
+ "screens": [
+  {
+   "screen": "scelta del destinatario della pratica",
+   "options": [
+    {
+     "label": "",
+     "checked": false
+    },
+    {
+     "label": "",
+     "checked": true
+    }
+   ]
+  },
+  {
+   "screen": "scelte eventuali",
+   "options": [
+    {
+     "key": "0",
+     "type": "CHK",
+     "label": "in assenza di titolarità esclusiva all'esecuzione dell'intervento edilizio, si dispone della dichiarazione di assenso dei terzi titolari di altri diritti reali o obbligatori"
+    },
+    {
+     "key": "1",
+     "type": "CHK",
+     "label": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+     "selected": true
+    }
+   ]
+  }
+ ],
+ "variants": [
+  {
+   "option": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+   "type": "CHK",
+   "adds": [
+    "Qualifica e dati del procuratore"
+   ],
+   "drops": []
+  }
+ ],
+ "sections": [
+  {
+   "section": "Scheda anagrafica",
+   "fingerprint": "4dd844db9cdb76ff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Scheda anagrafica",
+   "seconds": 0
+  },
+  {
+   "section": "Oggetto della pratica",
+   "fingerprint": "b9828eee09a1f50f",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Oggetto della pratica",
+   "seconds": 0.9
+  },
+  {
+   "section": "DOMICILIO DIGITALE",
+   "fingerprint": "5978ae29f079ce08",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO DIGITALE",
+   "seconds": 0.7
+  },
+  {
+   "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "fingerprint": "c282ef61bee9ea4d",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "ubicazione dell'attività",
+   "fingerprint": "1ae79e0eb7308899",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione ubicazione dell'intervento",
+   "seconds": 0.7
+  },
+  {
+   "section": "dati catastali",
+   "fingerprint": "bd17e4e186aa5dc9",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati catastali",
+   "seconds": 0.7
+  },
+  {
+   "section": "PERIODO DI PROROGA",
+   "fingerprint": "086272835dc216c1",
+   "same_as": "sue-proroga-autorizzazione-paesaggistica#PERIODO DI PROROGA",
+   "seconds": 0.7
+  },
+  {
+   "section": "RIFERIMENTI AUTORIZZAZIONE PAESAGGISTICA E DATA SCADENZA EFFICACIA",
+   "fingerprint": "1010675355ff76f7",
+   "same_as": "sue-proroga-autorizzazione-paesaggistica#RIFERIMENTI AUTORIZZAZIONE PAESAGGISTICA E DATA SCADENZA EFFICACIA",
+   "seconds": 0.7
+  },
+  {
+   "section": "richiesta della proroga di ultimazione dei lavori",
+   "fingerprint": "10395948f398f904",
+   "same_as": "sue-proroga-fine-lavori#richiesta della proroga di ultimazione dei lavori",
+   "seconds": 0.7
+  },
+  {
+   "section": "Riferimenti titolo edilizio e/o paesaggistico e data prevista della fine dei lavori",
+   "fingerprint": "92c3dab3ff9e2869",
+   "same_as": "sue-comunicazione-integrativa-proroga-straordinaria-trenta-mesi-ultimazione#Riferimenti titolo edilizio e/o paesaggistico e data prevista della fine dei lavori",
+   "seconds": 0.7
+  },
+  {
+   "section": "Altre dichiarazioni",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Altre dichiarazioni",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "fingerprint": "52afb47e165ec4c7",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.7
+  },
+  {
+   "section": "Qualifica e dati del procuratore",
+   "fingerprint": "2ebe54198e212bff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Qualifica e dati del procuratore",
+   "seconds": 0.8,
+   "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
+  }
+ ],
+ "slots": {
+  "Gestione degli allegati": [
+   {
+    "title": "copia del documento d'identità in corso di validità ai sensi del DPR 445/2000 (solo per chi non firma digitalmente)",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Procura speciale",
+    "accepts": "jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Fotocopia di un documento di identita' del soggetto che conferisce la procura speciale",
+    "accepts": "pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Allegati liberi",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg",
+    "required": false,
+    "portal_document": false
+   }
+  ]
+ },
+ "slots_note": "read 2026-11-04 on the empty draft (crawl.js `slots`)"
+}

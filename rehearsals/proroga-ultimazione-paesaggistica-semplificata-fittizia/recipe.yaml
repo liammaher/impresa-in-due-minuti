@@ -1,0 +1,42 @@
+# proroga ultimazione e paesaggistica semplificata: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: proroga-ultimazione-fittizia's, with what paesaggistica-semplificata-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+extends:
+- proroga-ultimazione-fittizia
+- paesaggistica-semplificata-fittizia
+procedure: napoli/comune/proroga-ultimazione-lavori-10-septies-con-autorizzazione-paesaggistica-semplificata
+title: Proroga ultimazione e paesaggistica semplificata in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-proroga-ultimazione-paesaggistica-semplificata
+operation:
+- Proroga del termine di ultimazione lavori (art. 10 septies, Legge 51/2022)
+- Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PROVA NON INVIARE - pror. ult. + paes. semplificata {{c:identity.last_name}}
+  diritti_euro: null
+yours:
+- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
+  any acknowledgement in the client''s name'
+- 'No imposta di bollo to pay on this form: the portal''s form for this pratica has no bollo section or slot'
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali'
+- Sign and send (Firma e invio); keep the receipt
+rules:
+  table: null
+  question: null
+  facts: null
+  main: napoli/comune/proroga-ultimazione-lavori-10-septies
+  handles:
+  - napoli/comune/autorizzazione-paesaggistica-semplificata
+answers:
+  descrizione: PROVA NON INVIARE - pror. ult. + paes. semplificata P6
