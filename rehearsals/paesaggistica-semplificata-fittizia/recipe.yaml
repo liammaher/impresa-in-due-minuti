@@ -26,5 +26,5 @@ yours:
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
 rules:
   table: sue-napoli
-  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}
