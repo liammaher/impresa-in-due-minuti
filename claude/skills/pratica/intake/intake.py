@@ -321,6 +321,12 @@ TITOLI = r"(licenza edilizia|concessione edilizia|permesso di costruire|concessi
          r"d\.?i\.?a\.?|s\.?c\.?i\.?a\.?|c\.?i\.?l\.?a\.?|condono edilizio)"
 
 
+# A title the deed names, as the stato legittimo's checklist lists it (the dictionary's `precedenti`).
+PRECEDENTI = [(r"concessione in sanatoria|condono", "prec_condono"), (r"permesso in sanatoria", "prec_pdc_sanatoria"),
+              (r"(licenza|concessione) edilizia|permesso di costruire", "prec_permesso"),
+              (r"dia\b", "prec_dia"), (r"scia\b", "prec_scia")]
+
+
 def read_deed(text):
     """The menzioni urbanistiche: the titles the building was built or changed under, or that
     it predates 1 September 1967 (art. 46 DPR 380/2001, art. 40 L. 47/1985)."""
@@ -521,12 +527,29 @@ def scan(dossier, steps=None, client=None):
         for t in titoli:
             report["notes"].append({"from": "atto", "note": f"{t['titolo']} n. {t['numero']} del {t['data']}"})
         if titoli:
-            first = titoli[0]
-            propose("answers", "stato_legittimo", "titoli", "atto (menzioni urbanistiche)")
-            if re.match(r"(licenza|concessione) edilizia|permesso di costruire", first["titolo"]):
-                propose("answers", "prec_permesso", True, "atto (menzioni urbanistiche)")
-                propose("answers", "prec_permesso_numero", first["numero"], "atto (menzioni urbanistiche)")
-                propose("answers", "prec_permesso_data", first["data"], "atto (menzioni urbanistiche)")
+            src = "atto (menzioni urbanistiche)"
+            propose("answers", "stato_legittimo", "titoli", src)
+            # The whole checklist of the stato legittimo's titles, as the deed names them: each kind's
+            # first on its own line with its number and date; a kind the form has no line for, or a
+            # second of a kind, on the "altro" rows (the first, then #2, #3: prec_altro_quanti).
+            items, extra = [], []
+            for t in titoli:
+                item = next((i for pat, i in PRECEDENTI if re.match(pat, t["titolo"])), None)
+                if item is None or item in items:
+                    extra.append(t)
+                    continue
+                items.append(item)
+                propose("answers", f"{item}_numero", t["numero"], src)
+                propose("answers", f"{item}_data", t["data"], src)
+            for n, t in enumerate(extra, 1):
+                row = "prec_altro" if n == 1 else f"prec_altro_{n}"
+                propose("answers", f"{row}_quale", t["titolo"], src)
+                propose("answers", f"{row}_numero", t["numero"], src)
+                propose("answers", f"{row}_data", t["data"], src)
+            if extra:
+                items.append("prec_altro")
+                propose("answers", "prec_altro_quanti", str(len(extra)), src)
+            propose("answers", "precedenti", items, src)
         if ante67:
             report["notes"].append({"from": "atto", "note": "built before 1 September 1967"})
 

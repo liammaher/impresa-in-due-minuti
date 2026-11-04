@@ -41,7 +41,7 @@ def resolve(proposal, values):
 def main():
     fields = dict(json.loads((REH / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
     names = sorted(d.name for d in REH.iterdir() if (d / "recipe.yaml").exists() and (d / "answers-p6.json").exists())
-    here, bad = os.getcwd(), []
+    here, bad, seconds = os.getcwd(), [], 0
     os.chdir(ROOT)  # the answers name their files from the repo's root
     try:
         for name in names:
@@ -59,19 +59,38 @@ def main():
             for k in asked:
                 if k in full:
                     answers[k] = full[k]
+            corrected = []
             for p in r["proposals"]:
                 v = resolve(p, values())
                 if p["key"] in full or v is not None:
                     answers[p["key"]] = full.get(p["key"], v)
+                    if p["key"] in full and v is not None and str(full[p["key"]]) != str(v):
+                        corrected.append(p["key"])
             again = run.preflight(steps, values(), made_up=True)
-            if not again["ready"]:
-                left = [q["key"] for q in again["questions"]] + [p["key"] for p in again["proposals"]]
-                bad.append(f"{name}: a second message for {left or again['unsupported'] or again['missing']}")
+            if again["ready"]:
+                continue
+            left = [q["key"] for q in again["questions"]] + [i["key"] for q in again["questions"] for i in q.get("items", [])] \
+                + [p["key"] for p in again["proposals"]]
+            # Changing a proposal may open what it was holding (`if_changed`, and what that opens in
+            # turn): one more message then, never without a change.
+            if not corrected:
+                bad.append(f"{name}: a second message for {left or again['unsupported'] or again['missing']}"
+                           + (f" (corrected {corrected})" if corrected else ""))
+                continue
+            seconds += 1
+            for k in left:
+                if k in full:
+                    answers[k] = full[k]
+            for p in again["proposals"]:
+                answers[p["key"]] = full.get(p["key"], resolve(p, values()))
+            if not run.preflight(steps, values(), made_up=True)["ready"]:
+                bad.append(f"{name}: not ready after the follow-ups of the corrected {corrected}")
     finally:
         os.chdir(here)
     for b in bad:
         print("FAIL ", b)
-    print(f"{len(names) - len(bad)}/{len(names)} rehearsals ready after one message")
+    print(f"{len(names) - len(bad)}/{len(names)} rehearsals ready after one message"
+          f" ({seconds} after one more, each because the rehearsal changed a proposal)")
     return 1 if bad else 0
 
 

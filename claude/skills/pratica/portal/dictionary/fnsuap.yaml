@@ -887,7 +887,7 @@ asks:
   toll_prec_pratica_data: {type: date, question: "La sua data", when: "{{ask.toll_prec_pratica}}"}
   toll_prec_atto_numero: {type: text, question: "Il numero di registrazione dell'atto", when: "{{ask.toll_prec_atto}}"}
   toll_prec_atto_data: {type: date, question: "La sua data di registrazione", when: "{{ask.toll_prec_atto}}"}
-  superficie_mq: {type: number, question: "La superficie dell'unità in m²"}
+  superficie_mq: {type: number, question: "La superficie dell'unità in m²", propose: "{{c:immobile.superficie_mq}}"}
   volume_mc: {type: number, question: "Il suo volume in m³"}
   piani_n: {type: number, question: "Il numero di piani dell'edificio"}
   prg_specificare: {type: text, question: "Lo strumento urbanistico vigente", default: "Variante generale al PRG"}
