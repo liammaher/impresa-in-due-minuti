@@ -5,16 +5,27 @@
 <!-- A fake portal for test_inpage.py: two sections in a dynaForm-style form, upload boxes
      that send a file as soon as it's chosen, a Salva that stores every text box on the
      server, and what was stored shown again on every load. ?banner=1 puts a consent banner
-     over everything; ?rename=1 renames the second section's label, as a portal update would;
+     over everything; ?calendar=1 a calendar a text box opens over the page; ?rename=1 renames the second section's label, as a portal update would;
      ?fade=1 opens a suggestion list over Impresa esecutrice as Dati tecnici opens, whose
      widget's hide() fades it out slowly, as PrimeFaces 11's does; ?slot=signed (or =plain) adds
      an attachments slot the portal says is required, taking only signed files (or plain ones);
+     ?more=1 a slot as the portal draws it, with its "+" for more files;
      ?off=1 switches Impresa esecutrice off, greyed until a choice the steps don't make; ?deroga=1
      adds two tick boxes, each with a box of no text of its own beside it, titled "(specificare)",
      as the permesso's deroga draws them: the cell before it is the tick box's label; ?req=1 adds
      an empty box the portal flags, its title and cell "Il valore è obbligatorio"; ?offradio=1 adds
      a radio drawn as PrimeFaces draws one, greyed (its input disabled, its drawn box ignoring the
-     mouse), as the permesso's opere a scomputo until "a titolo oneroso". -->
+     mouse), as the permesso's opere a scomputo until "a titolo oneroso"; ?liste=1 adds two lists
+     to Dati tecnici, each with its own "+" after its rows (the CILA relazione's filings, then its
+     assents): a "+" adds a row to its own list, a row after the first has no text of its own,
+     and the rows saved come back on a load; ?onefield=1 adds two rows that are one radio field
+     (the art. 34-ter dating and oblazione), each opening its own box only while it's the one ticked;
+     ?pec=1 adds a PEC box with the portal's warning beside it, "Indirizzo Pec non valido", as the
+     landscape technician's reads for any address that isn't a real one; ?refuse=1 refuses what
+     Ricevuta ASL is given, in a warning growl that fades in 2 s and stores nothing, as the portal
+     refuses a made-up digital signature; ?screens=1 shows a screen title ("PAGAMENTO ONERI") until
+     the menu's "Allega Documenti" step is pressed, as a draft reopened from Pratiche in bozza;
+     ?via=1 adds the location's street lookup, listing streets of every type (VIA, VICO, CUPA). -->
 <nav>
   <a class="linkmenu" href="#allega">Allega documenti</a>
   <a class="linkmenu" href="#tecnici">Dati tecnici</a>
@@ -47,6 +58,17 @@
 </div>
 <script>
 if (location.search.includes("banner=1")) document.getElementById("consenso").hidden = false;
+// ?calendar=1: a text box opens a calendar over the page, as jQuery UI's datepicker does, closed
+// only by a mouse press elsewhere (a script's click() sends none).
+if (location.search.includes("calendar=1")) {
+  const cal = document.createElement("div");
+  cal.id = "ui-datepicker-div";
+  cal.style.cssText = "position:fixed;inset:0;background:#fff;z-index:10;display:none";
+  cal.textContent = "gen feb mar apr mag giu lug ago set ott nov dic";
+  document.body.append(cal);
+  document.addEventListener("focusin", (e) => { if (e.target.type === "text") cal.style.display = "block"; });
+  document.addEventListener("mousedown", (e) => { if (!cal.contains(e.target)) cal.style.display = "none"; });
+}
 // By its label's row: the server's ?flaky=1 cut checks that box's id is gone from the whole page.
 if (location.search.includes("off=1")) document.getElementById("impresa-label").closest("tr").querySelector("input").disabled = true;
 if (location.search.includes("rename=1")) document.getElementById("impresa-label").textContent = "Ditta esecutrice";
@@ -67,6 +89,28 @@ if (location.search.includes("offradio=1")) {
     '<label>NO</label></div></td>';
   document.querySelector("#tecnici + table").tBodies[0].append(tr);
 }
+if (location.search.includes("onefield=1")) {
+  const body = document.querySelector("#tecnici + table").tBodies[0];
+  const rows = [["data", "dà atto che la data/epoca di realizzazione dell’intervento", "è"], ["obl", "determina l’oblazione dovuta", "in euro"]];
+  const boxes = rows.map(([k, label, box], i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td><input type="radio" name="form:r8c1:dynaForm:epoca:radio" value="${i + 1}" id="form:r8c${i}:dynaForm:${k}:radio:${i}_clone"> ${label}</td>`;
+    const open = document.createElement("tr");
+    open.style.display = "none";
+    open.innerHTML = `<td>${box}</td><td><input type="text" id="form:r9c${i}:dynaForm:${k}_txt"></td>`;
+    body.append(tr, open);
+    return open;
+  });
+  for (const r of document.querySelectorAll('input[name="form:r8c1:dynaForm:epoca:radio"]'))
+    r.addEventListener("change", () => boxes.forEach((b, i) => { b.style.display = document.querySelectorAll('input[name="form:r8c1:dynaForm:epoca:radio"]')[i].checked ? "" : "none"; }));
+}
+if (location.search.includes("pec=1")) {
+  const tr = document.createElement("tr");
+  tr.innerHTML = '<td><label class="labelDynaFormControl">Posta elettronica certificata</label></td><td class="pe-dynaform-cell">' +
+    '<input type="text" id="form:r10c1:dynaForm:pec_txt"><div class="alert-message-text"><span title="">Indirizzo Pec non valido</span>' +
+    '<div id="form:r10c1:dynaForm:j_idt329" class="ui-message"></div></div></td>';
+  document.querySelector("#allega + table").tBodies[0].append(tr);
+}
 if (location.search.includes("req=1")) {
   const tr = document.createElement("tr");
   tr.innerHTML = '<td><label class="labelDynaFormControl">Ragione sociale</label></td><td><input type="text" ' +
@@ -76,10 +120,29 @@ if (location.search.includes("req=1")) {
 const slot = new URLSearchParams(location.search).get("slot");
 if (slot) {
   const tr = document.createElement("tr");
-  tr.innerHTML = '<td><label class="labelDynaFormControl">Procura speciale</label></td><td><div id="form:r3c1:dynaForm:procura">' +
+  // As the portal does, an upload widget's wrapper carries a title of its own: the message once
+  // the screen is checked, else "false". The second slot holds a file and isn't flagged, though its
+  // title says "OBBLIGATORIO" (the broadband one's, 2026-11-02).
+  tr.innerHTML = '<td><label class="labelDynaFormControl">Procura speciale</label></td><td><div id="form:r3c1:dynaForm:procura" title="Il valore è obbligatorio">' +
     '<input type="file" id="form:r3c1:dynaForm:procura_input"> Tipologie ammesse: ' + (slot === "signed" ? "jpg.p7m;pdf.p7m" : "pdf;pdf.p7m") +
     ' <span class="error-message-text">Il valore è obbligatorio</span></div></td>';
-  document.querySelector("#allega + table").tBodies[0].append(tr);
+  const held = document.createElement("tr");
+  held.innerHTML = '<td><label class="labelDynaFormControl">Elaborato dimostrativo della fibra ottica (OBBLIGATORIO per nuove costruzioni)</label></td>' +
+    '<td><div id="form:r4c1:dynaForm:fibra" title="false"><input type="file" id="form:r4c1:dynaForm:fibra_input"> Tipologie ammesse: pdf;pdf.p7m' +
+    ' fibra.pdf Rimuovi</div></td>';
+  document.querySelector("#allega + table").tBodies[0].append(tr, held);
+}
+// ?twins=1: two required slots whose titles share a start, the signed-only one's the other's
+// prefix (the semplificata's, 2026-11-01): only the signed one is the person's.
+if (location.search.includes("twins=1")) {
+  for (const [id, title, types] of [["rps", "Relazione Paesaggistica Semplificata", "jpg.p7m;pdf.p7m"],
+                                    ["rpsdoc", "Relazione paesaggistica semplificata e documentazione necessaria per il rilascio", "pdf;pdf.p7m"]]) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td><label class="labelDynaFormControl">${title}</label></td><td><div id="form:r9c1:dynaForm:${id}" title="Il valore è obbligatorio">` +
+      `<input type="file" id="form:r9c1:dynaForm:${id}_input"> Tipologie ammesse: ${types}` +
+      ' <span class="error-message-text">Il valore è obbligatorio</span></div></td>';
+    document.querySelector("#allega + table").tBodies[0].append(tr);
+  }
 }
 if (location.search.includes("fade=1")) {
   const panel = document.createElement("div");
@@ -129,6 +192,51 @@ if (location.search.includes("decl=1")) {
   preview.addEventListener("click", () => window.open("/anteprima.pdf"));
   document.getElementById("form").append(preview);
 }
+const liste = {};
+if (location.search.includes("liste=1")) {
+  const div = document.createElement("div");
+  div.id = "form:r6c1:dynaForm:liste";
+  document.querySelector("#tecnici + table").after(div);
+  for (const [k, label] of [["com", "Comunicazioni"], ["atto", "Tipologia di atto"]]) {
+    const t = document.createElement("table");
+    div.append(t);
+    // As the portal draws them: the first row's box is titled by the column, the later rows'
+    // have no text of their own and read the header above.
+    liste[k] = () => {
+      const tr = t.insertRow();
+      const first = t.rows.length === 1;
+      tr.innerHTML = `<td>${first ? `<label class="labelDynaFormControl">${label}</label>` : ""}</td>` +
+        `<td><input type="text"${first ? ` title="${label}"` : ""} id="form:r6c1:dynaForm:${k}${t.rows.length}_txt"></td>`;
+    };
+    liste[k]();
+    const plus = document.createElement("button");
+    plus.type = "button";
+    plus.textContent = "+";
+    plus.addEventListener("click", liste[k]);
+    div.append(plus);
+  }
+}
+// ?via=1: the location's street lookup ("Via, Viale, Piazza"), a PrimeFaces autocomplete:
+// search() lists the comune's streets holding the word, each starting with its type (VIA, VICO,
+// CUPA), and a click on one fills the box.
+if (location.search.includes("via=1")) {
+  const streets = ["VIA FORIA", "VIA SANTA MARIA AVVOCATA A FORIA", "VIA GELSO", "VICO LUNGO GELSO", "CUPA CAIAFA"];
+  const tr = document.createElement("tr");
+  tr.innerHTML = '<td><label class="labelDynaFormControl">Via, Viale, Piazza</label></td><td>' +
+    '<input type="text" id="form:r11c1:dynaForm:via:txtws_input">' +
+    '<div id="form:r11c1:dynaForm:via:txtws_panel" style="display:none"><ul></ul></div></td>';
+  document.querySelector("#allega + table").tBodies[0].append(tr);
+  const input = tr.querySelector("input"), panel = tr.querySelector("div"), items = panel.querySelector("ul");
+  window.PrimeFaces = { widgets: { via: { input: [input], panel: [panel],
+    search(q) {
+      items.innerHTML = streets.filter((s) => s.split(" ").includes(q.toUpperCase())).map((s) => `<li>${s}</li>`).join("");
+      panel.style.display = "block";
+    },
+    hide() { panel.style.display = "none"; } } } };
+  items.addEventListener("click", (e) => {
+    if (e.target.tagName === "LI") { input.value = e.target.textContent; panel.style.display = "none"; }
+  });
+}
 const texts = () => [...document.querySelectorAll("input[type=text]")];
 const list = (name) => {
   const li = document.createElement("li");
@@ -136,24 +244,77 @@ const list = (name) => {
   document.getElementById("uploaded").append(li);
 };
 fetch("/state").then((r) => r.json()).then((st) => {
+  for (const id of Object.keys(st.fields)) {
+    const m = id.match(/dynaForm:(com|atto)(\d+)_txt$/);
+    while (m && liste[m[1]] && !document.getElementById(id)) liste[m[1]]();
+  }
   for (const t of texts()) t.value = st.fields[t.id] || "";
   for (const c of document.querySelectorAll("input[type=checkbox]")) c.checked = st.fields[c.id] === "on";
   st.files.forEach(list);
-  // As the portal does, a slot's cell names the file in it.
+  // As the portal does, a slot's cell names the file in it, each "+" box a file went in drawn again.
   for (const [id, name] of Object.entries(st.boxes || {})) {
+    const more = /liberi(\d+)_input$/.exec(id);
+    while (more && window.pvAddLiberi && !document.getElementById(id)) window.pvAddLiberi();
     const box = document.getElementById(id);
     if (box) box.after(" " + name + " Rimuovi");
   }
 });
-for (const box of document.querySelectorAll("input[type=file]")) {
-  box.addEventListener("change", () => {
-    const f = box.files[0];
-    if (!f) return;
-    const fd = new FormData();
-    fd.append(box.id, f, f.name);
-    fetch("/upload", { method: "POST", body: fd }).then(() => { list(f.name); box.value = ""; box.after(" " + f.name + " Rimuovi"); });
-  });
+const sends = (box) => box.addEventListener("change", () => {
+  const f = box.files[0];
+  if (!f) return;
+  if (location.search.includes("refuse=1") && box.id.endsWith("ricevuta_input")) {
+    const g = document.createElement("div");
+    g.className = "ui-growl ui-widget";
+    g.innerHTML = '<div class="ui-growl-item-container ui-growl-warn"><div role="alert" class="ui-growl-item">' +
+      '<div class="ui-growl-message"><span class="ui-growl-title">Il documento non è stato accettato</span>' +
+      '<p>Una o più firme digitali presenti sul documento non sono valide</p></div></div></div>';
+    setTimeout(() => { document.body.append(g); setTimeout(() => g.remove(), 2000); }, 300);
+    box.value = "";
+    return;
+  }
+  const fd = new FormData();
+  fd.append(box.id, f, f.name);
+  fetch("/upload", { method: "POST", body: fd }).then(() => { list(f.name); box.value = ""; box.after(" " + f.name + " Rimuovi"); });
+});
+// ?more=1: a slot as the portal draws it (2026-11-03): its title's row, a row per upload box (a
+// description beside it), then its "+" row; "+" adds a box with no label under the last one.
+if (location.search.includes("more=1")) {
+  const body = document.querySelector("#allega + table").tBodies[0];
+  const head = document.createElement("tr");
+  head.innerHTML = '<td colspan="2" class="pe-dynaform-cell labelDynaFormControl"><div><span class="input-label">Allegati liberi</span></div></td>';
+  const plusRow = document.createElement("tr");
+  plusRow.innerHTML = '<td colspan="2"><button type="button" id="form:r30c1:dynaForm:j_idt292:0:controlBut">+</button></td>';
+  let n = 0;
+  const add = () => {
+    n += 1;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="2" class="pe-dynaform-cell"><input type="file" id="form:r2${n}c1:dynaForm:liberi${n}_input">` +
+      ` Tipologie ammesse: pdf;pdf.p7m <input type="text" id="form:r2${n}c1:dynaForm:liberi${n}_desc"></td>`;
+    plusRow.before(tr);
+    sends(tr.querySelector("input[type=file]"));
+  };
+  body.append(head, plusRow);
+  add();
+  window.pvAddLiberi = add;
+  plusRow.querySelector("button").addEventListener("click", add);
 }
+if (location.search.includes("screens=1")) {
+  const title = document.createElement("div");
+  title.className = "content-title";
+  title.textContent = "PAGAMENTO ONERI";
+  const step = document.createElement("a");
+  step.href = "#";
+  step.textContent = "Allega Documenti";
+  step.addEventListener("click", (e) => { e.preventDefault(); title.textContent = "GESTIONE DEGLI ALLEGATI"; });
+  document.querySelector("nav").append(step);
+  document.body.prepend(title);
+  // The open section, as a draft reopened from Pratiche in bozza marks it.
+  const cur = document.createElement("li");
+  cur.id = "corrente";
+  cur.textContent = "Allega Documenti";
+  document.querySelector("nav").append(cur);
+}
+for (const box of document.querySelectorAll("input[type=file]")) if (!/liberi\d+_input$/.test(box.id)) sends(box);
 document.getElementById("salva").addEventListener("click", () => {
   const fields = Object.fromEntries(texts().map((t) => [t.id, t.value]));
   for (const c of document.querySelectorAll("input[type=checkbox]")) if (c.checked) fields[c.id] = "on";

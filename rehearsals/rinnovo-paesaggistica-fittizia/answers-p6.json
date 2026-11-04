@@ -10,5 +10,10 @@
  "paes_protocollo": "PG/2021/0777777",
  "paes_data": "2021-09-01",
  "paes_scadenza": "2026-09-01",
- "paes_rinnovo_di": "semplificata"
+ "paes_rinnovo_di": "semplificata",
+ "progettista_altro": false,
+ "paes_rinnovo_variazioni": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
 }

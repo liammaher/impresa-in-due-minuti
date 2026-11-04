@@ -1,0 +1,135 @@
+# Known defects of a portal: a case the law allows that the portal can't take as the law asks.
+# A recipe's refusal names one (`supports: - {..., defect: <id>}`); gen.py copies the entry into
+# the steps file, and pre-flight returns it under `defects` beside the refusal, so the person
+# hears what the portal does and chooses what to do. Never filled around (no hidden boxes ticked,
+# no state the page itself can't make). What to report and how each was checked:
+# docs/portal-defects.md.
+
+scia-36bis-c1:
+  title: "SCIA in sanatoria, art. 36-bis c. 1 (Salva Casa): the portal saves one of three statements"
+  portal: "Napoli's SUE on impresainungiorno: the SCIA's asseverazione, sanatoria quadro"
+  what: "The case's four rows (the date of the works proven by documents, the date attested, the oblazione, the works proposal) are one field: the portal keeps only the one ticked last."
+  law: "Art. 36-bis DPR 380/2001 and the national form ask for all three together: when the works were done, the oblazione the technician determines (c. 5), and whether works are proposed (c. 2)."
+  checked: "2026-11-01, on a made-up draft; the case's seismic box (art. 36-bis c. 3-bis) works and is not part of it"
+  choices:
+    - "Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) how they want this sanatoria filed while the portal can't take it: by PEC, or on the portal with the date and the oblazione stated in the attached relazione tecnica asseverata."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+    - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
+  report: docs/portal-defects.md
+
+pdc-36bis:
+  title: "Permesso in sanatoria, art. 36-bis: the portal saves one of the statements"
+  portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, sanatoria quadro"
+  what: "The documents attached, the date of the works (documents or attestation) and the works proposal are one radio group: ticking one unticks the others."
+  law: "Art. 36-bis DPR 380/2001 asks for the date of the works, the oblazione and whether works are proposed, together."
+  checked: "2026-10-30, by hand on a made-up draft"
+  choices:
+    - "Ask the SUE how they want this permesso in sanatoria filed while the portal can't take it."
+    - "Report the defect to the portal's operator or the SUE: docs/portal-defects.md says what."
+    - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
+  report: docs/portal-defects.md
+
+cila-impresa-dopo:
+  title: "CILA and CIL: the firm can't be left to be named later, though the form offers it"
+  portal: "Napoli's SUE on impresainungiorno: the CILA's quadro i) and the CIL's quadro g) (salute e sicurezza), and their firm's quadro (h, f)"
+  what: "The safety quadro offers \"ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori\", yet the firm's quadro has no line for a firm still to be chosen and the portal requires the firm's details (16 required boxes, the DURC ones among them) whatever the safety quadro says."
+  law: "The committente sends the firm's documents (DURC, the notifica preliminare, the check of the firm's fitness) before the works start (art. 90 c. 9 c D.Lgs. 81/2008), not necessarily with the filing; the permesso's and the SCIA's forms on the same portal let the firm be named later."
+  checked: "2026-11-01, a run of a made-up CILA in the pane (rehearsals/cila-fittizia, answers-impresa-dopo) stopped on the firm's required boxes; InfoCamere's national CILA form has no such reservation (schema/sue-choices.json 009-012)"
+  choices:
+    - "File the CILA or CIL once the firm is chosen: Claude fills it then."
+    - "Ask the SUE whether a CILA may be filed before the firm is chosen, and how."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+  report: docs/portal-defects.md
+
+pdc-incentivo-energetico:
+  title: "Permesso: an energy incentive must be claimed, even for a project with none"
+  portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, quadro sicurezza impianti e consumi energetici"
+  what: "The quadro requires one of the energy incentives (art. 14 c. 6 or c. 7 D.Lgs. 102/2014, or the 5% volume bonus of D.Lgs. 28/2011) to be ticked: it offers no line for a project that claims none."
+  law: "The incentives are options the designer may use (art. 14 D.Lgs. 102/2014: thicker walls and roofs not counted, distances and heights in derogation; the 5% bonus of D.Lgs. 28/2011 for renewables beyond the minimum), not a requirement of every permesso."
+  checked: "2026-10-29, the permesso's first runs in the pane (rehearsals/pdc-fittizio): the quadro saved only with an incentive ticked"
+  choices:
+    - "Ask the SUE how a permesso with no energy incentive is filed while the portal requires one."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+  report: docs/portal-defects.md
+
+coholder-sesso:
+  title: "Voltura and cambio d'intestazione: the co-holder's sex is two required boxes"
+  portal: "Napoli's SUE on impresainungiorno: the co-holders' section (\"ci sono cointestatari\") of the voltura del permesso and of the cambio d'intestazione of a CILA, SCIA or DIA"
+  what: "\"sesso: M\" and \"sesso: F\" are two radio groups, each required: the section saves only with both ticked, so it states both sexes."
+  law: "A person has one sex on their codice fiscale; the form should take one."
+  checked: "2026-10-31, the voltura's runs in the pane (rehearsals/voltura-pdc-fittizia); the cambio d'intestazione's co-holder 2026-11-02, the same section"
+  choices:
+    - "Claude ticks both, as the portal saves it no other way, and says so in the person's steps; the codice fiscale says which."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+  report: docs/portal-defects.md
+
+coholders-one:
+  title: "Voltura and cambio d'intestazione: the co-holders' section holds one person"
+  portal: "Napoli's SUE on impresainungiorno: the co-holders' section (\"Informazioni su eventuali altri aventi titolo\", opened by the wizard's \"ci sono cointestatari\") of the voltura del permesso and of the cambio d'intestazione of a CILA, SCIA or DIA"
+  what: "The section has one person's boxes and no \"+\" to add another, so a title passing to three or more holders (the dichiarante and two co-holders or more) can name only one co-holder."
+  law: "The permesso passes to the successors in title (art. 11 c. 2 DPR 380/2001), however many: the voltura names each of them."
+  checked: "2026-10-28, the batch crawl of both pratiche (catalogue/F839/sections/sue-voltura-intestazione-permesso-di-costruire.json, sue-cambio-intestazione-cia-scia-dia.json): one person's 14 boxes, no \"+\""
+  choices:
+    - "Ask the SUE how they want the other co-holders named: for instance the first in the section and every one in the attached dichiarazione sostitutiva of the right to the title, signed by each."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+    - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
+  report: docs/portal-defects.md
+
+agibilita-art24:
+  title: "Agibilità: the art. 24 exceptions are marked required"
+  portal: "Napoli's SUE on impresainungiorno: the agibilità's Attestazione tecnica - Agibilità"
+  what: "The boxes for art. 24 c. 5-bis and 5-ter (small or low units) and c. 5-quater (a derogation another law allows) show \"deve essere selezionata almeno un'opzione\" when neither is ticked, though most units are neither."
+  law: "Art. 24 c. 5-bis, 5-ter and 5-quater DPR 380/2001 are exceptions to the minimum heights and surfaces, for the units they name; an ordinary unit meets the minimums and states neither."
+  checked: "2026-10-31, the agibilità's runs in the pane (rehearsals/agibilita-fittizia): the four cases ticking neither showed the message, and the drafts kept their values"
+  choices:
+    - "Claude ticks the exception the case is, and none for an ordinary unit; the message is left for the direttore dei lavori, whose attestation it is, and the SUE if sending is refused."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+  report: docs/portal-defects.md
+
+pdc-aree-fuoco:
+  title: "Permesso: \"non interessa aree percorse dal fuoco\" unticks the soil statement"
+  portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, quadro qualità terreni, opere di urbanizzazione, scarichi"
+  what: "The line that the area isn't one burned by a fire (art. 10 L. 353/2000) is one radio choice with the soil investigations' lines (none needed, analyses done, remediated): ticking it unticks the soil statement, and the other way round."
+  law: "The two are separate statements: the soil's environmental quality (D.Lgs. 152/2006) and the ten-year ban on building on burned woods and pastures (art. 10 c. 1 L. 353/2000)."
+  checked: "2026-11-01, on a made-up draft, ticked and cancelled without saving"
+  choices:
+    - "Claude ticks the soil statement and leaves the burned-area line; state it in the relazione tecnica if the SUE wants it, or ask the SUE how they want both stated."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+  report: docs/portal-defects.md
+
+
+scia-34ter:
+  title: "SCIA in sanatoria, art. 34-ter (a variant to a pre-1977 title): the portal saves the dating or the oblazione"
+  portal: "Napoli's SUE on impresainungiorno: the SCIA's asseverazione, sanatoria quadro"
+  what: "The case's three rows (the date of the variant proven by documents, the date attested, the oblazione) are one field: the portal keeps only the one ticked last."
+  law: "Art. 34-ter c. 2 and 3 DPR 380/2001 ask for both: the variant's date (by the documents of art. 9-bis c. 1-bis, else the technician's attestation) and the oblazione of art. 36-bis c. 5 the SCIA is subject to."
+  checked: "2026-11-02, on a made-up draft, ticked and cancelled without saving; the sanatoria quadro's own rows (the varied title, the payment) are two fields and work"
+  choices:
+    - "Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) how they want this sanatoria filed while the portal can't take it: by PEC, or on the portal with the date or the oblazione stated in the attached relazione tecnica asseverata."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+    - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
+  report: docs/portal-defects.md
+
+pdc-36-paesaggio:
+  title: "Permesso in sanatoria (art. 36) in a protected area: the landscape quadro has no line for the accertamento of art. 167"
+  portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, quadro 16 (bene sottoposto ad autorizzazione paesaggistica), in the pratica that selects the permesso, its sanatoria and the accertamento di compatibilità paesaggistica together"
+  what: "For works that alter the place the quadro requires one of three procedures (semplificata, ordinaria, the accertamento of art. 36-bis), none of which is the accertamento of art. 167 that works done without the permesso need, though the portal lets that accertamento be selected with the permesso in the same pratica."
+  law: "Works done without the permesso (art. 36 DPR 380/2001) in a protected area are legalized only with their landscape compatibility found (art. 146 c. 4 D.Lgs. 42/2004), by the accertamento of art. 167 c. 4-5; the binding parere of art. 36-bis c. 4 is for partial difformity and essential variations only."
+  checked: "2026-11-02, a made-up run in the pane (rehearsals/pdc-sanatoria-accertamento-fittizio): with the alteration ticked and no procedure, Salva answered \"il valore è obbligatorio\" on all three"
+  choices:
+    - "Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) how they want the permesso's landscape quadro stated for an art. 36 sanatoria with the accertamento filed in the same pratica."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+    - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
+  report: docs/portal-defects.md
+
+cambio-uso-regionale:
+  title: "SCIA alternativa and permesso: no line for a change of use Campania's law gives that title for"
+  portal: "Napoli's SUE on impresainungiorno: the SCIA alternativa's quadro c) (Qualificazione dell'intervento) and the permesso's quadro a) and asseverazione (opere in progetto), from the national forms"
+  what: "The required change-of-use choice has four lines, all art. 23-ter DPR 380/2001's: no change; one unit within its category; one unit in zone A, B or C among categories a) to c); a whole building within its category (c. 3). A whole building to another category, a unit outside zones A, B and C, or a change to or from the rural category has no line, and any line ticked states something else."
+  law: "In Campania those changes take the SCIA alternativa al permesso (art. 2 c. 6 L.R. 13/2022; circolare regionale CI/2025/3, d), or the permesso, which the forms are filed for; art. 23-ter doesn't give their title, so the national forms, written for it, don't name them."
+  checked: "2026-11-03, from the forms' labels as crawled (catalogue/F839/sections), the national schema's choices (schema/sue-choices.json: scia_alternativa 002, permesso_di_costruire 000 and 019, none optional) and the Comune's own Mod. SCIA/PDC of 23/06/2025 (quadro c, the same four lines); not tried on a draft"
+  choices:
+    - "Ask the SUE (Comune di Napoli, Sportello Unico Edilizia) which line they want ticked for this change, or whether the change is stated in the relazione and the line left as the portal allows."
+    - "Report the defect to the portal's operator (InfoCamere's impresainungiorno support) or the SUE: docs/portal-defects.md says what and how it was checked."
+    - "File it on the portal yourself, by hand, as the SUE tells you: Claude doesn't fill this case."
+  report: docs/portal-defects.md

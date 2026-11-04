@@ -24,5 +24,11 @@
  ],
  "accertamento_descrizione": "Pergola in legno a falde aperte sul terrazzo di copertura (m 4 x 3, senza coperture né chiusure laterali) e sostituzione della pavimentazione esterna in cotto con gres effetto pietra. Nessuna nuova superficie utile né volume.",
  "accertamento_effetti": "La pergola è visibile dalla strada sopra il parapetto; il colore della pavimentazione cambia la vista dall'alto.",
- "accertamento_data": "2022-06-15"
+ "accertamento_data": "2022-06-15",
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "relazione_paesaggistica": "rehearsals/scia-fittizia/files/relazione-paesaggistica.pdf",
+ "scheda_professionisti": "rehearsals/accertamento-paesaggistico-fittizio/files/scheda-professionisti-imprese.pdf",
+ "terre_rocce": "no"
 }

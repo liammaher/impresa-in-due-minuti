@@ -7,8 +7,8 @@
   "f2": "impianti"
  },
  "descrizione": "PROVA NON INVIARE - CILA paes. inizio dopo assensi",
- "comunicazioni_presentate": false,
- "atti_acquisiti": false,
+ "comunicazioni_contestuali": false,
+ "atti_da_acquisire": false,
  "titolo": "locatario",
  "oggetto": "Manutenzione straordinaria non strutturale in appartamento: demolizione e ricostruzione di due tramezzi interni con nuova distribuzione di cucina e bagno, nuovo bagno, rifacimento degli impianti idrico ed elettrico; installazione di un'unità esterna di climatizzazione sul balcone.",
  "dettaglio_intervento": "Demolizione e ricostruzione di due tramezzi interni con nuova distribuzione di cucina e bagno; nuovo bagno; rifacimento degli impianti idrico ed elettrico della cucina e del bagno. Opere interne non strutturali, senza modifiche di volume, superficie o destinazione d'uso.",
@@ -35,7 +35,6 @@
  "cila_stato": "da iniziare",
  "direttore_lavori": "progettista",
  "altri_tecnici": false,
- "altri_atti": false,
  "cila_onerosa": false,
  "tolleranze": false,
  "cila_interventi": [
@@ -45,5 +44,11 @@
  "cambio_uso": "no",
  "paesaggio": "semplificata",
  "fatti": [],
- "inizio_dopo_assensi": "true"
+ "inizio_dopo_assensi": "true",
+ "altri_tecnici_dopo": "false",
+ "impresa_dopo": "false",
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "terre_rocce": "no"
 }

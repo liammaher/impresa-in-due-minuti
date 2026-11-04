@@ -15,5 +15,7 @@
  "bollo_marche": false,
  "diritti_euro": "0",
  "data_nomina": "2026-11-02",
- "titolo_tipo": "permesso di costruire"
+ "titolo_tipo": "permesso di costruire",
+ "diritti_esente": false,
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
 }

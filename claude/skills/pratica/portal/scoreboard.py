@@ -18,6 +18,8 @@ import re
 import sys
 from pathlib import Path
 
+import yaml
+
 import catalogue as cat
 import gen
 import route
@@ -215,14 +217,47 @@ OPEN_BEYOND = [
     "through the art. 36-bis c. 4 compatibility, works under way (art. 37 c. 5) with the authorization for the "
     "landscape works still to come; partly done landscape works under way are refused (art. 146 c. 4). "
     "The combinations of pratiche still to map are counted above, from the rules table.",
-    "SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal's dating, oblazione "
-    "and works-proposal radios behave as one group.",
-    "The SCIA vincolo cases that stand alone (art. 136, art. 134) were never run on the portal.",
+    "SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal saves its dating, "
+    "oblazione and works proposal as one field with four values (checked 2026-11-01): a portal defect "
+    "(docs/portal-defects.md), as is the permesso's under art. 36-bis. So is a variant to a pre-1977 title "
+    "(art. 34-ter): its dating and oblazione are one field (checked 2026-11-02).",
+    "PdC in sanatoria under art. 36 in a protected area: works that don't alter the place are filled "
+    "(2026-11-02); works that do go with the accertamento of art. 167 in the same pratica, refused because the "
+    "permesso's landscape quadro wants one of three procedures and none is that one (pdc-36-paesaggio, checked "
+    "2026-11-02); new usable surface or volume is refused by law (art. 167 c. 4).",
+    "The landscape vincolo alone: art. 136 (with the semplificata) and art. 142 (with the ordinaria) filled on the "
+    "portal 2026-11-03, art. 134 (with the semplificata) on 2026-11-04; the ordinaria and the accertamento refuse art. 134 alone (their forms name only "
+    "136 and 142). The parere di esonero's two mapping refusals (several previous titles, several Allegato A items) "
+    "stay: the rules table refuses the parere in Napoli by law, so there is nothing to file them on.",
     "Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots "
-    "may be missing (the catalogue notes this for the pratiche read on an empty draft); the diritti amount per "
-    "pratica is unknown.",
-    "The screens after the attachments (the declarations' signing, the sending) and everything after filing "
-    "(integration requests, the receipt, the status): nothing in the repo maps them.",
+    "may be missing (the catalogue notes this for the pratiche read on an empty draft). The \"Elaborati richiesti "
+    "per la sanatoria\" slot is mapped by the title a filled draft showed, never crawled. The diritti come from the Comune's 2026 "
+    "table (G.C. 239/2026), by the case's facts; it can't say an onerous SCIA's, an onerous permesso's or SCIA "
+    "alternativa's bracket (no ask holds the contributo's amount), a car park's (its floor area), works under "
+    "way in sanatoria (art. 37 c. 5), the art. 10-septies proroghe or a landscape renewal: those are asked.",
+    "Signed files: the portal checks every digital signature on upload and refuses a made-up one (2026-11-03), "
+    "so the slots that take only signed files can't be filled with made-up data: on the portal only the "
+    "refusal is proven; a real signed file, never yet. The second run after the declarations ran on the portal "
+    "with made-up annexes (the Allegato A and the Modello DP under Allegati liberi, the DSC, 2026-11-03); the "
+    "procura, signed only, never.",
+    "Terre e rocce (DPR 120/2017): the wizard takes every two operations of different groups (sue-wizard.json "
+    "`pairs`, all 190 probed 2026-11-03, none refused), and the rules table routes a title with the dichiarazione di "
+    "utilizzo (art. 21: sites up to 6,000 m³, or larger ones with no VIA/AIA) to its combination, mapped for the CIL, "
+    "CILA, SCIA, SCIA alternativa and permesso. The piano di utilizzo (art. 9, sites under VIA/AIA) goes apart to the "
+    "VIA authority (the Regione's Staff Valutazioni Ambientali), never with a title; the DAU (art. 7) apart once the "
+    "soil is used. Not in the table: edilizia libera that digs (its dichiarazione alone, the standalone rehearsal), "
+    "works in sanatoria (the dichiarazione comes before the excavation), soil reused on the site (art. 24, no filing). "
+    "A title, its landscape authorization and the dichiarazione are three operations in one pratica, mapped too: all 15 "
+    "combinations filled on the portal with made-up data (2026-11-03); the dichiarazione itself is the portal's "
+    "document, signed, so its slot is proven only empty and required, never with a real signed file.",
+    "Drift: the check compares the 27 single operations' sections as they show before any choice (last "
+    "2026-11-02); the combinations and what a choice opens are checked only by the runner's label checks.",
+    "Portal defects (docs/portal-defects.md): none reported yet to InfoCamere or the Comune; two of them "
+    "refuse common cases (a permesso with no energy incentive, a CILA or CIL before the firm is chosen).",
+    "Firma e invio is the person's (unreachable on made-up data; FILING's yours says how). After filing, "
+    "nothing in the repo maps the portal: integration requests, the codice pratica and receipt, the status "
+    "in Pratiche inviate.",
+    "No real case has been checked by an architect who files these pratiche (level 5).",
 ]
 
 
@@ -236,7 +271,8 @@ def sue_completeness(reh, status):
         if v["sportello"] != "sue":
             continue
         text = (REHEARSALS / name / "recipe.yaml").read_text()
-        msgs = [m.group(1) for m in re.finditer(r'else:\s*"((?:[^"\\]|\\.)*)"', text)]
+        # As YAML reads them: an escaped quote left raw counted one refusal twice (2026-11-02).
+        msgs = [yaml.safe_load('"' + m.group(1) + '"') for m in re.finditer(r'else:\s*"((?:[^"\\]|\\.)*)"', text)]
         try:
             steps = gen.generate(gen.load_yaml(REHEARSALS / name / "recipe.yaml"))
             msgs += [c["else"] for c in steps["supports"] if "else" in c and c["else"] not in msgs]
@@ -269,7 +305,8 @@ def sue_completeness(reh, status):
         f"file yet**: {len(c['unmapped'])} combinations of pratiche, listed below (`bench/test_route.py`).",
         f"- Level 2: **{sum(per.values())} refusals across {len(per)} recipes**, {len(refusals)} distinct messages.",
         f"- Level 3, in part: **{len(slots)} ticked \"si allega\" boxes with no attachment slot** under their"
-        " condition (listed below): each may add a required slot a run would stop on.",
+        " condition (listed below): each may add a required slot. A box read on a filled draft says what it adds"
+        " (the dictionary's `slot`).",
         "- Levels 4 and 5: not measured yet (see the open items).", "",
         "| Recipe | Refusals left |", "|---|---:|"]
     out += [f"| `{n}` | {k} |" for n, k in sorted(per.items(), key=lambda kv: (-kv[1], kv[0]))]
@@ -281,7 +318,7 @@ def sue_completeness(reh, status):
     for msg, rs in sorted(refusals.items(), key=lambda kv: (-len(kv[1]), kv[0])):
         out.append(f"- {len(rs)}×: {msg[:170]}")
     out += ["", "Ticked \"si allega\" boxes with no attachment slot under their condition (gen.py `unslotted`; "
-            "some only in cases a recipe refuses, some with no slot on the portal: a run tells):", ""]
+            "some only in cases a recipe refuses, some with no slot on the portal: a filled draft's slots tell):", ""]
     out += [f"- {len(rs)}×: {sec[:50]}: {label[:100]}" for (sec, label), rs in sorted(slots.items(), key=lambda kv: (-len(kv[1]), kv[0]))] or ["- none"]
     out += ["", "Open items no recipe shows:", ""] + [f"- {x}" for x in OPEN_BEYOND] + [""]
     return out

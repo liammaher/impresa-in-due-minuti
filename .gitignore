@@ -19,3 +19,6 @@ examples/*/node_modules/
 
 # fill.py, imported by its pilots
 __pycache__/
+
+# iCloud Desktop sync copies a file it saw change ("answers-p6 2.json"): never the repo's
+* 2.*

@@ -23,10 +23,10 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
-  - "Name the direttore dei lavori (and, for works on structures, the direttore dei lavori delle strutture) before the works start"
-  - "On Allega documenti: the portal's procura signed by the client, the stato legittimo documents (signed files only), the ordinaria's drawings and photos (signed files only), then everything signed digitally (.p7m)"
+  - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
   - "No start date: the works start once the SUE says the landscape authorization (and any other assent) is in"
-  - "Pay the imposta di bollo and the diritti; upload the receipts"
+  - "Pay the diritti before the second run (after the declarations): its receipt, signed, goes with it"
+  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "Sign and send (Firma e invio); keep the receipt"
 rules:
   main: napoli/comune/scia-edilizia

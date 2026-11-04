@@ -49,7 +49,7 @@
  "amianto": "false",
  "igienico_conforme": "true",
  "strutture": "false",
- "diritti_euro": "151",
+ "diritti_euro": "401",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
  "assenso_proprietario": "rehearsals/cila-fittizia/files/assenso-immobiliare-fittizia.pdf",
  "notifica_preliminare": "rehearsals/cila-fittizia/files/notifica-preliminare.pdf",
@@ -96,5 +96,12 @@
  "toll_sismica_data": "2023-04-18",
  "toll_sismica_protocollo": "GC/2023/45210",
  "toll_sismica_doc": "rehearsals/scia-fittizia/files/autorizzazione-sismica-rilasciata.pdf",
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "vvf_variante": "false",
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "terre_rocce": "no"
 }

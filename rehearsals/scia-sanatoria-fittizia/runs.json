@@ -16,5 +16,53 @@
   "answers": "answers-paesaggio.json",
   "result": "filled",
   "seconds": 139.7
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-strutture.json",
+  "result": "filled",
+  "seconds": 162.2
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-ristrutturazione-strutture.json",
+  "result": "filled",
+  "seconds": 151
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-ricevuta.json",
+  "result": "stopped",
+  "seconds": 105.2
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-in-corso-ricevuta.json",
+  "result": "filled",
+  "seconds": 152.8
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-ricevuta.json",
+  "result": "filled",
+  "seconds": 145.8
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 150.1
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-cambio-uso.json",
+  "result": "filled",
+  "seconds": 170.8
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-variante-scia.json",
+  "result": "filled",
+  "seconds": 161.4
  }
 ]

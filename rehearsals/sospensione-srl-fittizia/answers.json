@@ -9,5 +9,6 @@
  "notifica_852_data": "2021-05-03",
  "sospensione_dal": "2027-01-10",
  "sospensione_al": "2027-02-28",
- "diritti_euro": "0"
+ "diritti_euro": "0",
+ "diritti_esente": false
 }

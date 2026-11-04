@@ -10,5 +10,23 @@
   "answers": "answers-p6.json",
   "result": "filled",
   "seconds": 66.5
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-senza-cointestatari.json",
+  "result": "filled",
+  "seconds": 55.7
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 59.3
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 86.7
  }
 ]

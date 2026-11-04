@@ -24,5 +24,8 @@
  "pdc_data": "2026-03-15",
  "pdc_protocollo": "PG/2026/0666666",
  "attivita_svolta": "impiegato",
- "soggetti_cambiati": "false"
+ "soggetti_cambiati": "false",
+ "cointestatario": false,
+ "diritti_esente": false,
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
 }

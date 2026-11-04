@@ -1,0 +1,35 @@
+# SCIA alternativa al permesso di costruire con autorizzazione paesaggistica ordinaria and a dichiarazione di utilizzo delle terre e rocce da scavo
+# (art. 21 DPR 120/2017), three operations in one pratica on Napoli's SUE: rehearsals/scia-alt-paesaggistica-ordinaria-fittizia's case
+# with excavated soil that leaves a small site as a by-product. The dichiarazione adds two adempimenti
+# and no section (catalogue/F839/sue-wizard.json `pairs`); the crawl is catalogue/F839/sections/sue-combo-scia-alt-paesaggistica-ordinaria-dichiarazione-utilizzo.json.
+# Everything else is scia-alt-paesaggistica-ordinaria-fittizia's recipe and what the dichiarazione adds (parts/dichiarazione-utilizzo-terre.yaml).
+extends: [scia-alt-paesaggistica-ordinaria-fittizia, parts/dichiarazione-utilizzo-terre]
+procedure: napoli/comune/scia-alternativa-pdc-con-paesaggistica-ordinaria-e-dichiarazione-utilizzo-terre
+title: "SCIA alternativa al permesso di costruire con autorizzazione paesaggistica ordinaria e dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
+comune: F839
+sportello: sue
+crawl: sue-combo-scia-alt-paesaggistica-ordinaria-dichiarazione-utilizzo
+operation:
+  - "Segnalazione Certificata Inizio Attività alternativa al Permesso di Costruire (S.C.I.A. alternativa P.d.C.)"
+  - "Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)"
+  - "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
+asks:
+  descrizione: {default: "PROVA NON INVIARE - SCIA alt ord. e terre e rocce {{c:identity.last_name}}"}
+# scia-alt-paesaggistica-ordinaria-fittizia's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
+yours:
+  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
+  - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
+  - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
+  - "The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal's document on Allega documenti once the declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at least 15 days after sending"
+  - "When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017) on the SUE"
+  - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
+  - "The 30 days before the works may start run from the landscape authorization's release, not from filing (art. 23 c. 3 DPR 380/2001); the contributo, if due, is paid as quadro g) says"
+# `rules` merge key by key: both pratiche filed with the main one.
+rules:
+  handles: [napoli/comune/autorizzazione-paesaggistica-ordinaria, napoli/comune/utilizzo-materiale-scavo-fuori-sito]
+answers:
+  descrizione: PROVA NON INVIARE - SCIA alt ord. e terre e rocce P6
+  # The asseverazione says what the dichiarazione files: by-products from a small site.
+  scavo: sottoprodotti
+  scavo_piano_utilizzo: "false"

@@ -64,5 +64,107 @@
   "answers": "answers-variante-sismica.json",
   "result": "filled",
   "seconds": 153.1
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-acustica-vvf-igiene.json",
+  "result": "filled",
+  "seconds": 163.7
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-terreni-urbanizzazione.json",
+  "result": "stopped",
+  "seconds": 108.1
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-terreni-urbanizzazione.json",
+  "result": "filled",
+  "seconds": 222
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-notifica-allegata.json",
+  "result": "filled",
+  "seconds": 211.5
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-scomputo-pozzi.json",
+  "result": "stopped",
+  "seconds": 152
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-scarico-superficiali.json",
+  "result": "stopped",
+  "seconds": 155.7
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-scomputo-pozzi.json",
+  "result": "filled",
+  "seconds": 158.7
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-scarico-superficiali.json",
+  "result": "filled",
+  "seconds": 174.8
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-progettista.json",
+  "result": "filled",
+  "seconds": 190.7
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 153.9
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-regionale.json",
+  "result": "filled",
+  "seconds": 203.6
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-piano-terra.json",
+  "result": "filled",
+  "seconds": 154.9
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-scomputo-pozzi.json",
+  "result": "filled",
+  "seconds": 234.6
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-2.json",
+  "result": "filled",
+  "seconds": 402.1
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-3.json",
+  "result": "filled",
+  "seconds": 605.4
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-4.json",
+  "result": "filled",
+  "seconds": 108.7
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-5.json",
+  "result": "filled",
+  "seconds": 262.7
  }
 ]

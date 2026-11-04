@@ -4,7 +4,8 @@
   run.py preflight --steps STEPS.yaml [--answers A.json] VAULT [--made-up]
       Before anything opens: prints JSON with why this case isn't supported (the steps
       file's `supports:`, and its `rules:` table, which says whether the case is this pratica
-      at all), the answers it proposes for the person to confirm (an ask's
+      at all; a refusal behind a known portal defect also under `defects`, with the person's
+      choices, defects.yaml), the answers it proposes for the person to confirm (an ask's
       `propose:`), the questions still to ask (its `asks:`, branch questions first), the
       vault fields missing or expired, the files to attach (each within the portal's 9.77 MB,
       of a type its slot takes, and as its sportello takes them: Napoli's SUE refuses a file
@@ -50,6 +51,13 @@ A run that stops says where (report.json `at`: the wizard screen, or the section
 field). `page` or `run` with --resume REPORT picks it up on the same draft, from that
 section, with --fix FIX for what the page really has there; DIR/drift.json records the
 fixes, and the fresh load at the end still checks every section.
+
+What the portal makes from the pratica only once the declarations are ticked (the procura, which
+the client signs: a steps field's `after_declarations`) waits for a second run: preflight, page or
+run with --after-declarations reopens the draft by its name from Pratiche in bozza and attaches
+those files alone; the first run's `yours` says so. A slot that takes only signed files is filled
+with the person's signed file (the portal checks each signature on upload, and the runner stops
+on its refusal); with --made-up (a rehearsal) such slots are left empty.
 
 STEPS.yaml is a portal's steps file (rehearsals/*/portal-steps.yaml). Values come from
 the vault, VAULT as for plan. --values - takes what `pvault get` printed for the steps'
@@ -114,7 +122,37 @@ CF = re.compile(r"\b[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]\b")
 # how the imposta di bollo is settled (pagoPA, or marche whose serial numbers go in the form).
 DECIDED = re.compile(r"imposta di bollo", re.I)
 
+# The Scheda anagrafica's "Toponimo (DUG)" list (crawled: these and ALTRO). Any other street type
+# is ALTRO, and the portal then requires it in "Dettaglio DUG": a list of 190 that is the national
+# toponimo list (InfoCamere's `specie`, 194 in schema/mod_acconciatori_estetisti_apertura_v1.0.7-fields.json:
+# one the portal lacks stops the run on that box). Naples' own CUPA, GRADINI, FONDACO, RAMPE and
+# SUPPORTICO are in neither: pre-flight names them instead of guessing a type.
 DUG = {"VIA", "VIALE", "PIAZZA", "CORSO", "LARGO"}
+DUG_DETTAGLIO = frozenset((
+    "ACCESSO|ACCORCIATOIA|AIA|ANDRONE|ARCO|ARZERE|ATRIO|AUTOSTRADA|BAGLIO|BANCHINA|BASTIONE|"
+    "BASTIONI|BELVEDERE|BROLO|CALATA|CALLE|CAPO DI PIAZZA|CARRAIA|CARRARA|CARRARETTO|CARRARO|"
+    "CARRARONE|CASA SPARSA|CAVALCAFERROVIA|CAVALCAVIA|CHIASSO|CHIOSTRA|CHIOSTRO|CIRCONVALLAZIONE|"
+    "CLAUSTRO|CLIVO|CONTRADELLA|CORSO|CORTE|CORTILE|CROSA|CROSINO|DIGA|DISCESA|DISTACCO|ERTA|"
+    "FORESE|GALLERIA|GRADINATA|GRADINATE|GRANVIALE|INTERRATO|ISOLA|ISOLATO|LARGHETTO|LARGO|"
+    "LITORANEA|LOGGIA|LUNGARGINE|LUNGO|LUNGOCANALE|LUNGOFIUME|LUNGOLAGO|LUNGOMARE|LUNGOMOLO|"
+    "LUNGOPARCO|LUNGOPORTO|LUNGOTORRENTE|MOLO|OTTAGONO|PARCHEGGIO|PASSAGGIO|PASSEGGIATA|"
+    "PASSERELLA|PASSETTO|PASSO|PASSO DI PIAZZA|PENDICE|PENDINO|PERCORSO|PERCORSO CICLABILE|"
+    "PERCORSO CICLOPEDONALE|PERCORSO PEDONALE|PIAGGIA|PIAZZA|PIAZZA INFERIORE|PIAZZA SUPERIORE|"
+    "PIAZZALE|PIAZZETTA|PISTA CICLABILE|POGGIO|PONTE|PONTE LONGO|PONTILE|PRATO|PROLUNGAMENTO|"
+    "PUNTA|QUADRATO|RACCORDO|RAMPA|RATTO|RIO TERA'|RIVALE|RIVETTA|RONCO|RONDO'|ROTATORIA|ROTONDA|"
+    "ROTTA|SACCA|SAIA|SALITA|SALITA INFERIORE|SALITA SUPERIORE|SCALEA|SCALETTO|SCALINATA|SCALO|"
+    "SCESA|SCIVOLA|SENTIERO|SESTIERE|SLARGO|SORTITA|SOTOPORTEGO|SOTTOPASSO|SOVRAPPASSO|SPIANATA|"
+    "SPIAZZO|STRADA|STRADA ANTICA|STRADA COMUNALE|STRADA CONSORTILE|STRADA ESTERNA|STRADA NUOVA|"
+    "STRADA PANORAMICA|STRADA PODERALE|STRADA PRIVATA|STRADA PROVINCIALE|STRADA REGIONALE|"
+    "STRADA STATALE|STRADA VECCHIA|STRADA VICINALE|STRADALE|STRADELLA|STRADELLO|STRADONE|"
+    "SVINCOLO|TANGENZIALE|TERRAZZA|TRAVERSA|TRAVERSA A MARE|TRAVERSALE|TRONCO|TROZO|VALLONE|"
+    "VARCO|VENULA|VIA|VIA ANTICA|VIA CARRARA|VIA COMUNALE|VIA ESTERNA|VIA INFERIORE|"
+    "VIA NAZIONALE|VIA NUOVA|VIA PANORAMICA|VIA PRIVATA|VIA PROVINCIALE|VIA SUPERIORE|"
+    "VIA VECCHIA|VIA VICINALE|VIALE|VIALETTO|VIAZZA|VIAZZOLA|VIAZZOLO|VICO|VICO CHIUSO|"
+    "VICO CIECO|VICO DRITTO|VICO INFERIORE|VICO PRIVATO|VICO STRETTO|VICO SUPERIORE|VICOLETTO|"
+    "VICOLO|VICOLO CHIUSO|VICOLO CIECO|VICOLO PRIVATO|VICOLOZZO|VIELLA|VIETTA|VIONE|VIOTTOLA|"
+    "VIOTTOLO|VIOTTOLONE|VIUCCIOLO|VIUZZO"
+).split("|"))
 # run.js for the pane is one tool call's text: a receipt or a small scan, not a planimetria.
 # Larger files need another route into the page (docs/north-star.md, open question 7).
 PAGE_FILES_LIMIT = 256 * 1024
@@ -129,7 +167,110 @@ FORMA = {
     "snc": "SOCIETA' IN NOME COLLETTIVO",
     "sas": "SOCIETA' IN ACCOMANDITA SEMPLICE",
     "spa": "SOCIETA' PER AZIONI",
+    "sapa": "SOCIETA' IN ACCOMANDITA PER AZIONI",
+    "cooperativa": "SOCIETA' COOPERATIVA",
 }
+# A client company's dichiarante (asks.cliente_carica) as the Scheda anagrafica's Carica list (the
+# Registro Imprese's) names it. That list and the Forma giuridica one have no condominium: its
+# administrator is AMMINISTRATORE of ALTRE FORME, NON NECESSITA DI ISCRIZIONE (read 2026-11-02).
+CARICA_CLIENTE = {"legale rappresentante": "LEGALE RAPPRESENTANTE", "amministratore unico": "AMMINISTRATORE UNICO",
+                  "amministratore delegato": "AMMINISTRATORE DELEGATO",
+                  "presidente cda": "PRESIDENTE CONSIGLIO AMMINISTRAZIONE",
+                  "amministratore di condominio": "AMMINISTRATORE"}
+# identity.citizenship (an adjective, "italiana") as the Scheda anagrafica's Cittadinanza list names
+# the country: first the ones cases have needed, then the rest of the EU and the countries many
+# people in Naples come from, in Italian as the list writes the first ones, but never read on it:
+# one it words otherwise stops the run on that box. A country's own name is taken too. Anything
+# else is named by pre-flight, not guessed.
+CITTADINANZA = {"italiana": "ITALIA", "francese": "FRANCIA", "tedesca": "GERMANIA",
+                "spagnola": "SPAGNA", "rumena": "ROMANIA", "romena": "ROMANIA",
+                "polacca": "POLONIA", "britannica": "REGNO UNITO",
+                "statunitense": "STATI UNITI D'AMERICA", "albanese": "ALBANIA",
+                "ucraina": "UCRAINA", "marocchina": "MAROCCO", "cinese": "CINA",
+                "srilankese": "SRI LANKA", "bangladese": "BANGLADESH", "filippina": "FILIPPINE",
+                "senegalese": "SENEGAL", "nigeriana": "NIGERIA", "egiziana": "EGITTO",
+                "tunisina": "TUNISIA", "russa": "RUSSIA", "indiana": "INDIA",
+                "pakistana": "PAKISTAN", "brasiliana": "BRASILE", "peruviana": "PERÙ",
+                "austriaca": "AUSTRIA", "belga": "BELGIO", "bulgara": "BULGARIA",
+                "croata": "CROAZIA", "cipriota": "CIPRO", "ceca": "REPUBBLICA CECA",
+                "danese": "DANIMARCA", "estone": "ESTONIA", "finlandese": "FINLANDIA",
+                "greca": "GRECIA", "ungherese": "UNGHERIA", "irlandese": "IRLANDA",
+                "lettone": "LETTONIA", "lituana": "LITUANIA", "lussemburghese": "LUSSEMBURGO",
+                "maltese": "MALTA", "olandese": "PAESI BASSI", "portoghese": "PORTOGALLO",
+                "slovacca": "SLOVACCHIA", "slovena": "SLOVENIA", "svedese": "SVEZIA",
+                "norvegese": "NORVEGIA", "islandese": "ISLANDA", "svizzera": "SVIZZERA",
+                "moldava": "MOLDAVIA", "georgiana": "GEORGIA", "serba": "SERBIA",
+                "kosovara": "KOSOVO", "macedone": "MACEDONIA DEL NORD",
+                "bosniaca": "BOSNIA-ERZEGOVINA", "montenegrina": "MONTENEGRO",
+                "bielorussa": "BIELORUSSIA", "turca": "TURCHIA", "algerina": "ALGERIA",
+                "libica": "LIBIA", "ghanese": "GHANA", "ivoriana": "COSTA D'AVORIO",
+                "camerunese": "CAMERUN", "eritrea": "ERITREA", "etiope": "ETIOPIA",
+                "somala": "SOMALIA", "maliana": "MALI", "gambiana": "GAMBIA",
+                "guineana": "GUINEA", "burkinabe": "BURKINA FASO", "capoverdiana": "CAPO VERDE",
+                "sudanese": "SUDAN", "nepalese": "NEPAL", "afghana": "AFGHANISTAN",
+                "iraniana": "IRAN", "irachena": "IRAQ", "siriana": "SIRIA", "libanese": "LIBANO",
+                "israeliana": "ISRAELE", "giapponese": "GIAPPONE", "sudcoreana": "COREA DEL SUD",
+                "vietnamita": "VIETNAM", "thailandese": "THAILANDIA", "indonesiana": "INDONESIA",
+                "canadese": "CANADA", "messicana": "MESSICO", "argentina": "ARGENTINA",
+                "colombiana": "COLOMBIA", "venezuelana": "VENEZUELA", "ecuadoriana": "ECUADOR",
+                "cubana": "CUBA", "dominicana": "REPUBBLICA DOMINICANA", "cilena": "CILE",
+                "boliviana": "BOLIVIA", "uruguaiana": "URUGUAY", "paraguaiana": "PARAGUAY",
+                "australiana": "AUSTRALIA", "neozelandese": "NUOVA ZELANDA"}
+
+
+def _cittadinanza(v):
+    v = " ".join(v.strip().lower().split())
+    # A masculine adjective ("rumeno") as the feminine the list holds ("rumena").
+    for k in (v, v[:-1] + "a" if v.endswith("o") else v):
+        if k in CITTADINANZA:
+            return CITTADINANZA[k]
+    if v.upper() in CITTADINANZA.values():
+        return v.upper()
+    raise ValueError(f"no Cittadinanza for {v!r}: the portal's list names the country, and this one isn't mapped yet")
+
+
+# A client exempt from the imposta di bollo (ask bollo_esenzione), as the SUE form's "per la
+# seguente motivazione" words it. Its two art. 82 c. 5 lines are one law: an ETS in the RUNTS,
+# and the article's own words, which name the cooperative sociali.
+BOLLO_ESENZIONE = {
+    "ets": "ai sensi dell'art.82, c.5, d.Lgs. n.117/2017 (Enti del Terzo settore iscritti nel registro unico "
+           "nazionale del Terzo settore ai sensi dell'art. 4, legge 117/2017)",
+    "cooperativa sociale": "ai sensi del Decreto Legislativo 03/07/2017, n. 117, art. 82 comma 5 (enti del Terzo "
+                           "settore comprese le cooperative sociali ed escluse le imprese sociali costituite in forma di società)",
+    "pubblica": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 16 (amministrazioni dello Stato, Regioni, "
+                "Province, Comuni, loro consorzi ed associazioni, nonchè Comunità montane)",
+    "contadina": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 21 (piccola proprietà contadina)",
+    "sportiva": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (federazioni sportive, enti di "
+                "promozione sportiva ed associazioni e società sportive dilettantistiche senza fine di lucro riconosciuti dal CONI)",
+    "onlus": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-bis (organizzazioni non lucrative di utilità sociale - ONLUS)",
+    "partito": "ai sensi del D.P.R. 26/10/1972, n. 642, allegato B, art. 27-ter (movimenti o partiti politici "
+               "limitatamente all'adempimento di obblighi derivanti da disposizioni legislative o regolamentari)",
+}
+
+
+def _bollo(v):
+    """An answer to bollo_esenzione as check_answer and `is_` read it: case and spaces aside."""
+    return " ".join(str(v).lower().split())
+
+
+def _bollo_non_dovuto(v):
+    """bollo_marche's default: no marche or pagoPA question for a client exempt or paying
+    virtually ("false", unasked); for one who pays, render's None, so it is proposed."""
+    if _bollo(v) in BOLLO_ESENZIONE or _bollo(v) == "virtuale":
+        return "false"
+    raise KeyError("a client who pays the bollo")
+
+
+def _bollo_yours(v):
+    """The person's bollo step, from {{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}."""
+    marche, esenzione = _facts(v, 2)
+    if _bollo(esenzione) in BOLLO_ESENZIONE:
+        return "No imposta di bollo to pay: the client is exempt, and the form gives the reason"
+    if _bollo(esenzione) == "virtuale":
+        return "No marche or pagoPA for the imposta di bollo: the client pays it virtually (the form carries its dichiarazione)"
+    if truthy(marche):
+        return "Cancel the marche da bollo whose serial numbers the form carries, and keep the originals"
+    return "Pay the imposta di bollo on pagoPA as the portal asks"
 
 
 def _carica(v):
@@ -140,16 +281,51 @@ def _carica(v):
 
 
 def _split_street(v):
+    """A street as the Scheda anagrafica takes it: its DUG, its "Dettaglio DUG" (the street type when
+    the DUG is ALTRO, "" when it isn't, None for a type neither list has) and the name after it."""
     words = v.split()
     if len(words) > 1 and words[0].upper() in DUG:
-        return words[0].upper(), " ".join(words[1:])
-    return "ALTRO", v
+        return words[0].upper(), "", " ".join(words[1:])
+    # The shortest type the street starts with ("VICO CHIUSO SAN ..." is a VICO), up to the
+    # list's three words ("CAPO DI PIAZZA").
+    for n in range(1, min(3, len(words) - 1) + 1):
+        if " ".join(words[:n]).upper() in DUG_DETTAGLIO:
+            return "ALTRO", " ".join(words[:n]).upper(), " ".join(words[n:])
+    return "ALTRO", None, v
 
 
-# The province names the portal's free-text boxes want ("Iscritto all'ordine di ..."): the
-# ones a run has needed so far; another stops the run (a KeyError) instead of guessing.
-PROVINCE = {"NA": "NAPOLI", "CE": "CASERTA", "SA": "SALERNO", "AV": "AVELLINO", "BN": "BENEVENTO",
-            "RM": "ROMA", "MI": "MILANO", "TO": "TORINO"}
+def _dug_dettaglio(v):
+    d = _split_street(v)[1]
+    if d is None:
+        raise ValueError(f"the street {v!r} starts with no street type the portal lists (Toponimo or Dettaglio DUG)")
+    return d
+
+
+# The province names the portal wants for a sigla: the free-text "Iscritto all'ordine di ..." and
+# a client company's "Camera di commercio di:" dropdown. All 107, in ISTAT's words in capitals; the
+# dropdown has been read only at NAPOLI, so a province it words otherwise stops the run on that box.
+PROVINCE = {"AG": "AGRIGENTO", "AL": "ALESSANDRIA", "AN": "ANCONA", "AO": "AOSTA", "AP": "ASCOLI PICENO",
+            "AQ": "L'AQUILA", "AR": "AREZZO", "AT": "ASTI", "AV": "AVELLINO", "BA": "BARI",
+            "BG": "BERGAMO", "BI": "BIELLA", "BL": "BELLUNO", "BN": "BENEVENTO", "BO": "BOLOGNA",
+            "BR": "BRINDISI", "BS": "BRESCIA", "BT": "BARLETTA-ANDRIA-TRANI", "BZ": "BOLZANO",
+            "CA": "CAGLIARI", "CB": "CAMPOBASSO", "CE": "CASERTA", "CH": "CHIETI", "CL": "CALTANISSETTA",
+            "CN": "CUNEO", "CO": "COMO", "CR": "CREMONA", "CS": "COSENZA", "CT": "CATANIA",
+            "CZ": "CATANZARO", "EN": "ENNA", "FC": "FORLI'-CESENA", "FE": "FERRARA", "FG": "FOGGIA",
+            "FI": "FIRENZE", "FM": "FERMO", "FR": "FROSINONE", "GE": "GENOVA", "GO": "GORIZIA",
+            "GR": "GROSSETO", "IM": "IMPERIA", "IS": "ISERNIA", "KR": "CROTONE", "LC": "LECCO",
+            "LE": "LECCE", "LI": "LIVORNO", "LO": "LODI", "LT": "LATINA", "LU": "LUCCA",
+            "MB": "MONZA E DELLA BRIANZA", "MC": "MACERATA", "ME": "MESSINA", "MI": "MILANO",
+            "MN": "MANTOVA", "MO": "MODENA", "MS": "MASSA-CARRARA", "MT": "MATERA", "NA": "NAPOLI",
+            "NO": "NOVARA", "NU": "NUORO", "OR": "ORISTANO", "PA": "PALERMO", "PC": "PIACENZA",
+            "PD": "PADOVA", "PE": "PESCARA", "PG": "PERUGIA", "PI": "PISA", "PN": "PORDENONE",
+            "PO": "PRATO", "PR": "PARMA", "PT": "PISTOIA", "PU": "PESARO E URBINO", "PV": "PAVIA",
+            "PZ": "POTENZA", "RA": "RAVENNA", "RC": "REGGIO CALABRIA", "RE": "REGGIO EMILIA",
+            "RG": "RAGUSA", "RI": "RIETI", "RM": "ROMA", "RN": "RIMINI", "RO": "ROVIGO", "SA": "SALERNO",
+            "SI": "SIENA", "SO": "SONDRIO", "SP": "LA SPEZIA", "SR": "SIRACUSA", "SS": "SASSARI",
+            "SU": "SUD SARDEGNA", "SV": "SAVONA", "TA": "TARANTO", "TE": "TERAMO", "TN": "TRENTO",
+            "TO": "TORINO", "TP": "TRAPANI", "TR": "TERNI", "TS": "TRIESTE", "TV": "TREVISO",
+            "UD": "UDINE", "VA": "VARESE", "VB": "VERBANO-CUSIO-OSSOLA", "VC": "VERCELLI", "VE": "VENEZIA",
+            "VI": "VICENZA", "VR": "VERONA", "VT": "VITERBO", "VV": "VIBO VALENTIA"}
 # The Scheda anagrafica's "In qualità di" for the title the person holds (a tenant is
 # "Altro" + "Locatario").
 QUALITA = {"proprietario": "Proprietario", "comproprietario": "Comproprietario", "usufruttuario": "Usufruttuario",
@@ -190,7 +366,12 @@ class Filters(dict):
     is n or more (the 20 m² the historic centre's Piano requires)."""
     def __missing__(self, name):
         if name.startswith("atleast_") and name[8:].isdigit():
-            return lambda v: "true" if float(str(v or 0).replace(",", ".")) >= int(name[8:]) else "false"
+            def atleast(v):
+                try:
+                    return "true" if float(str(v or 0).replace(",", ".")) >= int(name[8:]) else "false"
+                except ValueError:
+                    return "false"  # not a number: pre-flight says so (check_answer)
+            return atleast
         answer = lambda v: re.sub(r"[^a-z0-9]+", "_", str(v).strip().lower()).strip("_")
         if name.startswith("in_"):
             return lambda v: "true" if answer(v) in name[3:].split("__") else "false"
@@ -256,6 +437,12 @@ FILTERS = Filters({
     "qualita_altro": lambda v: v.strip().capitalize(),
     "titolo_pratica": _titolo_pratica,
     "titolo_is_altro": lambda v: "true" if _titolo_pratica(v) == "altro" else "false",
+    # The asseverazione's materiali di risulta from the rules table's terre_rocce: soil leaving the
+    # site is a by-product, filed with the dichiarazione or the piano; otherwise nothing to declare
+    # (on-site reuse or waste are the person's to say). 2026-11-03: the terre e rocce combinations
+    # declared "nessuno" while filing a dichiarazione.
+    "scavo_proposto": lambda v: "sottoprodotti" if v.strip() in ("dichiarazione", "piano") else "nessuno",
+    "piano_proposto": lambda v: "true" if v.strip() == "piano" else "false",
     # A title usually held alone (a.1): the proposal pre-flight asks to confirm.
     "titolo_solo": lambda v: "true" if v.strip().lower() in ("proprietario", "usufruttuario", "amministratore di condominio") else "false",
     "destinazione": _destinazione,
@@ -265,9 +452,33 @@ FILTERS = Filters({
     "date_it": lambda v: "/".join(reversed(v.split("-"))),
     "phone_it": lambda v: re.sub(r"^\+39|\s", "", v),
     "dug": lambda v: _split_street(v)[0],
-    "street": lambda v: _split_street(v)[1],
+    "dug_altro": lambda v: "true" if _split_street(v)[0] == "ALTRO" else "false",
+    "dug_dettaglio": _dug_dettaglio,
+    "street": lambda v: _split_street(v)[2],
     "carica": _carica,
     "forma": lambda v: FORMA[v],
+    # A client that is a company or a condominium (c:business.*), from {{c:business.denominazione,
+    # c:business.rea|...}}: in the Registro delle imprese (a REA), or not (yet).
+    "impresa_iscritta": lambda v: "true" if all(_facts(v, 2)) else "false",
+    "impresa_non_iscritta": lambda v: "true" if _facts(v, 2)[0] and not _facts(v, 2)[1] else "false",
+    "carica_cliente": lambda v: CARICA_CLIENTE[v.strip().lower()],
+    # From c:business.forma_giuridica: a condominium is ALTRE FORME, its administrator declares,
+    # and it is never in the Registro delle imprese.
+    "forma_cliente": lambda v: "ALTRE FORME" if v == "condominio" else FORMA[v],
+    "carica_proposta": lambda v: "amministratore di condominio" if v == "condominio" else "legale rappresentante",
+    "registro_proposto": lambda v: "non necessita" if v == "condominio" else "",
+    # The first of several fields that is set (a company's codice fiscale, else its partita IVA).
+    "first": lambda v: next((x for x in v.split("/") if x), ""),
+    # The holder a title is in the name of: a company's name, else the person's (first/last/company).
+    "intestatario": lambda v: (_facts(v, 3)[2] or f"{_facts(v, 3)[0]} {_facts(v, 3)[1]}").upper(),
+    "cittadinanza": _cittadinanza,
+    "straniera": lambda v: "false" if v.strip().lower() in ("italiana", "italiano", "italia") else "true",
+    # Born abroad: identity.birth_province is EE.
+    "estero": lambda v: "true" if v.strip().upper() == "EE" else "false",
+    "bollo_esente": lambda v: "true" if _bollo(v) in BOLLO_ESENZIONE else "false",
+    "bollo_motivo": lambda v: BOLLO_ESENZIONE[_bollo(v)],
+    "bollo_yours": _bollo_yours,
+    "bollo_non_dovuto": _bollo_non_dovuto,
     "categoria": lambda v: re.sub(r"^([A-F])/?(\d)$", r"\g<1>0\2", v.replace(" ", "").upper()),
     "empty": lambda v: "true" if not v else "false",
     # Several yes/no answers at once ({{ask.a,ask.b|any}}): true when one is (a `when` has no "or").
@@ -278,7 +489,21 @@ FILTERS = Filters({
     "sue_scia_tipo": _sue_scia_tipo,
     "sue_cambio_uso_tipo": _sue_cambio_uso_tipo,
     "sue_pdc_tipo": _sue_pdc_tipo,
-    "sue_scia_cambio_uso": lambda v: {"no": "no", "intero_immobile": "intero immobile", **SUE_CAMBIO}.get(str(v), ""),
+    # A ground-floor unit in zone A, B or C is what the forms' A/B/C line says; the regional
+    # changes the forms have no line for are "altro" (defect cambio-uso-regionale).
+    "sue_scia_cambio_uso": lambda v: {"no": "no", "intero_immobile": "intero immobile", "piano_terra": "tra categorie",
+                                      "intero_tra_categorie": "altro", "altro": "altro", **SUE_CAMBIO}.get(str(v), ""),
+    # Napoli SUE's diritti (tabella G.C. 239/2026) where its line depends on the case: the amount to
+    # propose, or "" where the table needs what no ask holds (an onerous title's contributo bracket,
+    # a car park's floor area), so the question stays.
+    "diritti_cila": lambda v: {"da iniziare": "151", "in corso": "166", "realizzato": "166"}.get(str(v).strip(), ""),
+    "diritti_gratuito": lambda v: "401" if v is not None and not truthy(v) else "",
+    "diritti_pdc": lambda v: ("501" if _facts(v, 2)[0] in ("variante essenziale", "variante sagoma") else ""
+                              if _facts(v, 2)[0] == "parcheggi" or truthy(_facts(v, 2)[1]) else "401"),
+    # A SCIA in sanatoria: line SUE 16 names the accertamenti (art. 36-bis) and the regularizations
+    # (art. 34-ter), not the works still under way (art. 37 c. 5).
+    "diritti_sanatoria_scia": lambda v: "" if str(v).strip() in ("", "in corso") else "441",
+    "diritti_proroga_pdc": lambda v: "501" if str(v).strip() == "permesso di costruire" else "",
     "sue_scia_alt_tipo": lambda v: {"ristrutturazione_pesante": "ristrutturazione edilizia",
                                     "ristrutturazione_urbanistica": "nuova costruzione piano attuativo"}.get(str(v), ""),
 })
@@ -340,7 +565,13 @@ class Values:
         return self.cache[cat]
 
     def _titolare(self):
+        # A studio's other architect presents the pratica when the job names them ("people" t).
+        named = (self.answers.get("people") or {}).get("t")
         ids = list(self.fields) if self.fields is not None else [f["id"] for f in self._get("/vault/fields")]
+        if named:
+            if not any(i.startswith(named + ":") for i in ids):
+                raise StepError(f"the architect named in people (t: {named}) has nothing in the vault")
+            return named
         slugs = sorted({i.split(":")[0] for i in ids if i.endswith(":ruolo.tipo")})
         found = [s for s in slugs if "titolare" in self.category(s + ":ruolo").get(s + ":ruolo.tipo", "")
                  or "legale_rappresentante" in self.category(s + ":ruolo").get(s + ":ruolo.tipo", "")]
@@ -405,8 +636,114 @@ class Values:
             return None
 
 
+# --- "+" blocks, as many as the case has --------------------------------------------
+
+def nth_block(obj, n):
+    """A template block's field or ask for its n-th repeat: #N is "" in the first and n after
+    (role a, a2; ask altro_tecnico_..., altro_tecnico2_...), #K is n always (comunicazione_3)."""
+    return json.loads(json.dumps(obj, ensure_ascii=False).replace("#N", str(n) if n > 1 else "").replace("#K", str(n)))
+
+
+def leaves(w):
+    """A wizard screen's tree as a list: each a label, a {leaf, nth}, or a {leaf, when}."""
+    t = w.get("tree", [])
+    return t if isinstance(t, list) else [t]
+
+
+def chosen(steps, values):
+    """The steps for this case's "Scelte eventuali": a tick a recipe takes only for some cases
+    ({leaf, when}: there are co-holders) is ticked when its `when` holds for this case, and the
+    sections it adds (each with the same `when`) are gone when it doesn't. An unanswered `when`
+    counts as not taken; pre-flight asks it first: the steps keep each such `when` (`chosen`)."""
+    conditional = any(isinstance(x, dict) and "when" in x for w in steps.get("wizard", []) for x in leaves(w)) \
+        or any("when" in s for s in steps["sections"])
+    if not conditional:
+        return steps
+    taken = lambda x: truthy(values.render(x["when"]) or "")
+
+    def bare(x):
+        rest = {k: v for k, v in x.items() if k != "when"}
+        return rest["leaf"] if set(rest) == {"leaf"} else rest
+    wizard = []
+    for w in steps.get("wizard", []):
+        if "tree" not in w:
+            wizard.append(w)
+            continue
+        tree = [bare(x) if isinstance(x, dict) and "when" in x else x
+                for x in leaves(w) if not (isinstance(x, dict) and "when" in x) or taken(x)]
+        wizard.append({k: (tree[0] if len(tree) == 1 else tree) if k == "tree" else v for k, v in w.items() if k != "tree" or tree})
+    sections = [{k: v for k, v in s.items() if k != "when"} for s in steps["sections"] if "when" not in s or taken(s)]
+    whens = [x["when"] for w in steps.get("wizard", []) for x in leaves(w) if isinstance(x, dict) and "when" in x]
+    return {**steps, "wizard": wizard, "sections": sections, "chosen": list(dict.fromkeys(whens))}
+
+
+def expand(steps, values):
+    """The steps for this case's count of each "+" block. gen.py writes a block the national
+    form lets repeat without limit (other technicians, "altro" titles, filings) once, as a
+    template: an `add` with `each` (the count, the first block it adds), then its fields with
+    `block: "#N"`. Each block also waits for its count (`atleast_n`), so before the count is
+    answered one block shows what will be asked. An ask named with #N or #K becomes one per
+    block (values.asks too). Steps with no template come back as they are, after `chosen`."""
+    steps = chosen(steps, values)
+    if not any(f.get("block") == "#N" for s in steps["sections"] for f in s["fields"]):
+        return steps
+    out = {**steps, "sections": []}
+    for sec in steps["sections"]:
+        fields, fs, i = [], sec["fields"], 0
+        while i < len(fs):
+            f, i = fs[i], i + 1
+            if not (f["kind"] == "add" and "each" in f):
+                fields.append(f)
+                continue
+            body = []
+            while i < len(fs) and fs[i].get("block") == "#N":
+                body.append(fs[i])
+                i += 1
+            each = f["each"]
+            v = values.render(each["count"])
+            try:
+                count = int(float(v.replace(",", "."))) if v is not None else None
+            except ValueError:
+                count = None  # pre-flight says it isn't a number
+            gate = lambda n: each["count"][:-2] + f"|atleast_{n}}}}}"
+            base = f.get("when", "")
+
+            def when(g, n):
+                # The count right after the block's own condition: a field's own words (is the
+                # second technician an employee?) are asked only for a block there is.
+                w = g.get("when", "")
+                rest = w[len(base):] if base and w.startswith(base) else w
+                return " ".join(x for x in (base, gate(n), rest.strip()) if x)
+            # The first block it adds is there even when the count says none: it holds the
+            # count's question (asked first), and its own `when` keeps it off the page.
+            for n in range(each["from"], max(each["from"], count or 0) + 1):
+                fields.append({**{k: x for k, x in f.items() if k != "each"}, "block": n, "when": when(f, n)})
+                fields += [{**g, "block": n, "when": when(g, n)} for g in map(lambda b: nth_block(b, n), body)]
+        out["sections"].append({**sec, "fields": fields})
+    used = {r[4:] for _, t, _ in templates(out) for r, _ in refs_in(t) if r.startswith("ask.")}
+    asks = {}
+    for k, a in steps.get("asks", {}).items():
+        if "#N" not in k and "#K" not in k:
+            asks[k] = a
+        for n, u in block_asks(k, used):
+            asks.setdefault(u, nth_block(a, n))
+    out["asks"] = values.asks = asks
+    return out
+
+
+def block_asks(key, used):
+    """The asks in `used` that are blocks of the template ask `key` (named with #N or #K), with
+    each one's block number, in order; none for an ask that isn't a template."""
+    if "#N" not in key and "#K" not in key:
+        return []
+    pattern = re.compile("^" + "".join(r"(\d*)" if p == "#N" else r"(\d+)" if p == "#K" else re.escape(p)
+                                       for p in re.split("(#N|#K)", key)) + "$")
+    return sorted((int(next((g for g in m.groups() if g), "1")), u) for u in used if (m := pattern.match(u)))
+
+
 def plan(steps, values):
     """Each field with its value; raises on a missing required value."""
+    steps = expand(steps, values)
     out, missing = [], []
     for w in steps.get("wizard", []):
         v = values.render(w["fill"]["value"]) if "fill" in w else None
@@ -416,8 +753,14 @@ def plan(steps, values):
         for f in sec["fields"]:
             if "when" in f and not truthy(values.render(f["when"]) or ""):
                 continue
-            v = values.render(f["value"]) if "value" in f else None
             name = f.get("label") or f.get("id") or f.get("css")
+            try:
+                v = values.render(f["value"]) if "value" in f else None
+            except ValueError as e:
+                # A vault value the form can't take (a street type the portal lists nowhere): what
+                # pre-flight names, said here too when `page` or `run` comes without it.
+                missing.append(f"{sec['section']}: {name}: {e}")
+                continue
             if "value" in f and v is None and not f.get("optional"):
                 missing.append(f"{sec['section']}: {name} ({f['value']})")
             if f["kind"] == "file" and v and not Path(v).expanduser().is_file():
@@ -448,6 +791,11 @@ def templates(steps):
     for w in steps.get("wizard", []):
         if "fill" in w:
             yield f"wizard: {w['screen']}", w["fill"]["value"], {}
+        for x in leaves(w):
+            if isinstance(x, dict) and "when" in x:
+                yield f"wizard: {w['screen']}: {x['leaf']}", x["when"], {}
+    for w in steps.get("chosen", []):
+        yield "wizard: Scelte eventuali", w, {}
     for sec in steps["sections"]:
         for f in sec["fields"]:
             for k in ("when", "value"):
@@ -537,6 +885,11 @@ def needed(steps, values):
     for w in steps.get("wizard", []):
         if "fill" in w:
             add(asked(w["fill"]["value"]))
+        for x in leaves(w):
+            if isinstance(x, dict) and "when" in x:
+                gate(x["when"])  # a scelta ticked only for some cases: its question
+    for w in steps.get("chosen", []):
+        gate(w)
     for sec in steps["sections"]:
         for f in sec["fields"]:
             deps = ()
@@ -620,9 +973,25 @@ def apart(steps, values):
     return [f"File apart, with its own office: {a['procedure']} ({a['regime']})" for a in d["apart"]]
 
 
+def asked_yours(steps, values):
+    """The person's steps an answer brings (an ask's `yours`, said when it's answered yes: the
+    other designer's signature)."""
+    return [a["yours"] for k, a in steps.get("asks", {}).items()
+            if a.get("yours") and truthy(values.field("ask." + k) or "")]
+
+
 def supported(steps, values):
     """Why this case isn't mapped, and the asks still needed to tell."""
+    out, need, _ = refusals(steps, values)
+    return out, need
+
+
+def refusals(steps, values):
+    """supported(), and the known portal defects behind its refusals (a `supports` entry's
+    `defect`, from defects.yaml through gen.py): the person is told what the portal does and
+    chooses what to do."""
     out, waiting = ruled(steps, values)
+    defects = []
     need = []
     for f in waiting:
         tmpl = steps["rules"]["facts"][f]
@@ -655,7 +1024,9 @@ def supported(steps, values):
         ok = v is not None and (truthy(v) if "when" in c else v in [str(x) for x in c["in"]])
         if not ok:
             out.append(values.render(c["else"]) or c["else"])
-    return out, need
+            if isinstance(c.get("defect"), dict) and c["defect"] not in defects:
+                defects.append(c["defect"])
+    return out, need, defects
 
 
 def require_supported(steps, values):
@@ -703,13 +1074,71 @@ def portal_changed(steps):
             "(crawl.js) and steps file (gen.py) first."] if diff else []
 
 
-def preflight(steps, values, urls=None, made_up=False):
+def signed_only(f):
+    """A file field whose slot takes only signed files (.p7m)."""
+    takes = [t for t in f.get("accepts", "").split(";") if t]
+    return f["kind"] == "file" and bool(takes) and all(t.endswith(".p7m") for t in takes)
+
+
+def applies(f, values):
+    """Whether a field is filled in this case: no word of its `when` false (an unknown one isn't)."""
+    return "when" not in f or not any(v is not None and not truthy(v) for v in
+                                      map(values.render, re.findall(r"\{\{.+?\}\}", f["when"])))
+
+
+def phase(steps, after=False, made_up=False):
+    """The steps of one run. A document the portal makes from the pratica only once the
+    declarations are ticked (the procura, for the client to sign: `after_declarations`) can't go
+    with the first run, so a second one (after=True, --after-declarations) attaches those alone, on
+    the same draft. With made_up (a rehearsal's files) no slot that takes only signed files is
+    filled: the portal checks each signature on upload and refuses a made-up one (2026-11-03)."""
+    def keep(s, f):
+        if made_up and signed_only(f):
+            return False
+        return not s.get("go") or bool(f.get("after_declarations")) == after
+    asked = lambda fs: {r[4:] for f in fs for k in ("when", "value") for r, _ in refs_in(f.get(k, "")) if r.startswith("ask.")}
+    out = steps | {"sections": [s | {"fields": [f for f in s["fields"] if keep(s, f)]} for s in steps["sections"]]}
+    # A question only the left-out fields read isn't this run's.
+    left = asked(f for s in steps["sections"] for f in s["fields"] if not keep(s, f))
+    still = {r[4:] for where, t, _ in templates(out) if where != "yours" for r, _ in refs_in(t) if r.startswith("ask.")}
+    if "asks" in steps:
+        out["asks"] = {k: v for k, v in steps["asks"].items() if k not in left - still}
+    return out
+
+
+def rehearsal(steps, values):
+    """The steps a rehearsal's run fills, its files made up: the first run's (phase)."""
+    return phase(expand(steps, values), made_up=True)
+
+
+def after_declarations(steps, values):
+    """The labels of what this case's second run attaches (phase's `after_declarations`)."""
+    return [f.get("label") or f.get("id") for s in steps["sections"] for f in s["fields"]
+            if f.get("after_declarations") and applies(f, values)]
+
+
+def reopening(steps):
+    """How the second run starts: the draft opened from Pratiche in bozza by its name (the
+    person's clicks since have moved its address on), then the attachments screen alone."""
+    at = next((i for i, s in enumerate(steps["sections"]) if s.get("go") and s["fields"]), None)
+    if at is None:
+        raise StepError("nothing in this pratica waits for the declarations: no second run")
+    return {"reopen": True, "from": {"section": at}, "kept": [], "fixes": []}
+
+
+def preflight(steps, values, urls=None, made_up=False, after=False):
     """Everything a run needs, settled before any browser opens: why this case isn't
     supported, the questions still to ask, the vault fields missing or expired, the files
     to attach, and the person's own steps. ready: nothing is left before the run. urls: the
     files sent by link (page --file-urls), which don't count to the pane's 256 KB. A file the
     sportello would refuse (FILING) is a problem, or with made_up (a rehearsal's made-up data,
-    never sent) only its `filing` and a warning."""
+    never sent) only its `filing` and a warning, and no slot that takes only signed files is
+    filled (phase). after: the second run's, after the declarations (phase)."""
+    steps = expand(steps, values)
+    later = [] if after else after_declarations(steps, values)
+    unsigned = [f.get("label") for s in steps["sections"] for f in s["fields"]
+                if made_up and signed_only(f) and applies(f, values)]
+    steps = phase(steps, after, made_up)
     links, sportello = file_links(urls), filing_rules(steps)
     order = check_asks(steps)
     asks = steps.get("asks", {})
@@ -721,7 +1150,9 @@ def preflight(steps, values, urls=None, made_up=False):
         except StepError as e:  # nobody is titolare yet: a missing field like any other
             report["missing"].append({"field": "*:ruolo.tipo", "why": str(e)})
             return report
-    report["unsupported"], _ = supported(steps, values)
+    report["unsupported"], _, defects = refusals(steps, values)
+    if defects:
+        report["defects"] = defects
     report["unsupported"] += portal_changed(steps)
     if report["unsupported"]:
         return report
@@ -730,7 +1161,8 @@ def preflight(steps, values, urls=None, made_up=False):
         if k not in need:
             continue
         a, v = asks[k], values.raw(k)
-        if v is None and "default" in a:
+        # A default answers it, unless it reads a vault field that's empty: then it's asked.
+        if v is None and "default" in a and values.field("ask." + k) is not None:
             continue
         hangs = {"only_if": sorted(need[k])} if need[k] else {}
         if v is None and "propose" in a:
@@ -758,6 +1190,14 @@ def preflight(steps, values, urls=None, made_up=False):
         report["questions"].append({"key": k, "type": a["type"], "question": a["question"]}
                                    | {x: a[x] for x in ("options", "labels", "how", "why") if x in a} | hangs
                                    | ({"error": why} if v is not None else {}))
+    if steps.get("rules"):
+        # While the table's first fact (what the works are) is asked, it is asked alone, as the
+        # rules table's own questions are: which others matter depends on it, even one no field
+        # hangs on it formally (a CILA's listed building, read by its Soprintendenza attachment
+        # whatever the works, 2026-11-03).
+        first = next(iter(rules.table(steps["rules"]["table"])["facts"]))
+        if any(q["key"] == first for q in report["questions"]):
+            report["questions"] = [q for q in report["questions"] if q["key"] == first]
     for g in groups:
         ticked = values.answers.get(g)
         members = [k for k, a in asks.items() if a.get("group") == g]
@@ -771,13 +1211,20 @@ def preflight(steps, values, urls=None, made_up=False):
     for where, tmpl, f in templates(steps):
         if where in ("supports", "rules", "yours") or (f.get("optional") and tmpl == f.get("value")):
             continue
-        if f and tmpl == f.get("value") and "when" in f:
+        if f and tmpl in (f.get("value"), f.get("when")) and "when" in f:
             # One false word is enough, whatever a later one would say (no other technicians:
-            # whether the second is an employee is never asked).
-            if any(w is not None and not truthy(w) for w in map(values.render, re.findall(r"\{\{.+?\}\}", f["when"]))):
+            # whether the second is an employee is never asked), for the `when`'s own fields too
+            # (a person client's citizenship, under a company client's branch).
+            words = list(map(values.render, re.findall(r"\{\{.+?\}\}", f["when"])))
+            if any(w is not None and not truthy(w) for w in words):
                 continue  # this field isn't filled for this case
+            if tmpl == f.get("value") and None in words:
+                continue  # not known yet whether it is: the `when`'s own missing fields are asked
+                # (born abroad: the birth province first, then the country)
+        # Several fields read at once ({{a,b|f}}) take an empty one as "" (a company with no REA).
+        several = {r.strip() for m in re.findall(r"\{\{([^}|]*,[^}|]*)", tmpl) for r in m.split(",")}
         for ref, filters in refs_in(tmpl):
-            if ref.startswith("ask."):
+            if ref.startswith("ask.") or ref in several:
                 continue
             full = values.titolare + ":" + ref[2:] if ref.startswith("t:") else ref
             read.add(full.rsplit(".", 1)[0])
@@ -809,6 +1256,17 @@ def preflight(steps, values, urls=None, made_up=False):
                                                 "error": why})
             else:
                 missing.setdefault(f["value"], {"field": f["value"], "why": why, "for": sec["section"]})
+    # A vault value the form can't take (a ruolo with no Carica on the portal, for an architect
+    # named in `people` who isn't the titolare) is named here, not met by the run as a crash.
+    for sec in steps["sections"]:
+        for f in sec["fields"]:
+            if "value" not in f or any(r.startswith("ask.") for r, _ in refs_in(f["value"])):
+                continue
+            try:
+                if "when" not in f or truthy(values.render(f["when"]) or ""):
+                    values.render(f["value"])
+            except ValueError as e:
+                missing.setdefault(f["value"], {"field": f["value"], "why": f"{sec['section']}: {e}", "for": sec["section"]})
     report["missing"] = list(missing.values())
     for sec in steps["sections"]:
         for f in sec["fields"]:
@@ -867,9 +1325,33 @@ def preflight(steps, values, urls=None, made_up=False):
         # A rehearsal's made-up files: filled into a draft that is never sent.
         report["warnings"].append(f"made-up data: {sum('filing' in x for x in report['files'])} file(s) "
                                   f"{sportello['office']} would refuse (each one's `filing`): never send this draft")
+    if made_up:
+        # A box the portal checks against a real register (a company's codice fiscale in the
+        # Registro Imprese): made-up data stops there, whatever the mapping (`made_up` in the dictionary).
+        # Ready all the same (a real case passes there), but a batch of rehearsals skips it
+        # (bench/rerun.py): one was sent and stopped there (2026-11-02).
+        report["made_up_stops"] = []
+        for sec in steps["sections"]:
+            for f in sec["fields"]:
+                if f.get("made_up") and truthy(values.render(f.get("when", "true")) or ""):
+                    report["warnings"].append(f"made-up data: {sec['section']}: {f['made_up']}")
+                    if f.get("made_up_stops"):
+                        report["made_up_stops"].append(f"{sec['section']}: {f['made_up']}")
+    if unsigned:
+        report["warnings"].append(f"made-up data: {len(unsigned)} slot(s) that take only signed files left empty "
+                                  "(the portal refuses a made-up signature on upload); a real case attaches them")
     report["pane_ok"] = sum(x["bytes"] or 0 for x in report["files"] if "link" not in x) <= PAGE_FILES_LIMIT
     report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + filing_yours(steps, sportello)
-                       + apart(steps, values))
+                       + asked_yours(steps, values) + apart(steps, values))
+    if later:
+        # Before signing and sending: the second run comes after the declarations, before Firma e invio.
+        at = next((i for i, y in enumerate(report["yours"]) if "Firma e invio" in y), len(report["yours"]))
+        report["yours"].insert(at,
+            f"Tick the declarations; then on Allega documenti download what the portal makes from the pratica only then "
+            f"(Scarica il documento): {'; '.join(later)}. Have the client sign the procura, sign each digitally (.p7m), "
+            "and give them to Claude, who attaches them to this draft in a second run (run.py --after-declarations)")
+    if after:
+        report["second_run"] = after_declarations(steps, values)
     report["ready"] = not (report["questions"] or report["proposals"] or report["missing"]
                            or any(not x["exists"] or x.get("problem") for x in report["files"] if x["path"]))
     return report
@@ -968,6 +1450,14 @@ FILING = {
             "Servizio Tesoreria Edilizia Privata), sanzioni and contributo by bonifico to IBAN "
             "IT95X0306903496100000046118, causale N1051_SUE – tipo pratica, identificativo, anno (before it "
             "has one: the titolare's name and the property's address). Paid any other way, it is irricevibile",
+            # The portal's Firma e invio (InfoCamere's Manuale funzioni di compilazione pratica, pp. 55-62):
+            # it opens only once every required attachment is in, each signature valid, so never on
+            # made-up data; the runner stops before it.
+            "On Firma e invio, with your own firma digitale (you file it as the procuratore, so the signer is "
+            "you): sign the pratica's PDF, then the distinta the portal makes next. Firma online needs the "
+            "device, InfoCamere's signing client and your PIN; firma offline: download each file, sign it "
+            "without opening and saving it or renaming it (the portal refuses a changed file), upload it. "
+            "Then Invio: the result page gives the codice pratica, and the receipt comes to the PEC in a few minutes",
         ],
         # The building titles of DD 603/2025's forms (the CILA, the SCIA, the SCIA alternativa,
         # the permesso, their sanatorie and landscape combinations), whose attachment tables
@@ -978,10 +1468,12 @@ FILING = {
                            "napoli/comune/scia-alternativa-pdc", "napoli/comune/permesso-di-costruire",
                            "napoli/comune/scia-in-sanatoria", "napoli/comune/permesso-in-sanatoria"],
             "yours": [
-                "Attach Napoli's two declarations, always required with this pratica (DD 603/2025), each signed "
-                "digitally: the Allegato A Nuovo Programma 100 (the titolare's sworn statement on what they owe "
-                "the Comune) and the Modello DP (the professionals' statement that the client paid their fees, "
-                "L.R. Campania 59/2018)",
+                "Napoli's two declarations, always required with this pratica (DD 603/2025): the Allegato A "
+                "Nuovo Programma 100 (the titolare's sworn statement on what they owe the Comune) and the Modello "
+                "DP (your statement that the client paid your fees, L.R. Campania 59/2018). fill.py fills both "
+                "(napoli/comune/cila-lavori-edilizi, forms allegato-a-programma-100 and modello-dp, the same for "
+                "every title); the client signs the Allegato A, you both sign the DP, each digitally, and the "
+                "second run attaches them under Allegati liberi with the procura",
                 "For works on an existing building, the drawings include a Stato Comparativo sheet: the current "
                 "and the project plans overlaid, demolitions in yellow and new construction in red (green and "
                 "blue for works dropped in progress), black on white elsewhere (DD 501/2026 Linee Guida §9)",
@@ -1178,6 +1670,8 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=N
     """page_files, and what runner.js and steps.js leave in the pane's localStorage. urls:
     {path: https URL}, files the page fetches itself instead of run.js carrying them.
     code: seal the values under it (see above); None carries them in the clear."""
+    expanded = expand(steps, values)
+    blocks, steps = expanded is not steps, expanded
     links = file_links(urls)
     require_supported(steps, values)
     plan(steps, values)  # stops on a missing required value
@@ -1189,11 +1683,12 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=N
                      | ({"save": s["save"]} if "save" in s else {})
                      | ({"theirs": s["theirs"]} if "theirs" in s else {})
                      | ({"go": s["go"]} if "go" in s else {})
+                     | ({"step": s["step"]} if "step" in s else {})
                      | {"fields": [{k: f[k] for k in ("id", "css", "kind", "label", "anchor", "block", "nth", "describe", "if_present") if k in f}
                                    for f in s["fields"]]}
                      for s in steps["sections"]],
         "forbidden": FORBIDDEN.pattern, "declarations": DECLARATIONS.pattern,
-        "dug": sorted(DUG), "label_js": LABEL_JS,
+        "label_js": LABEL_JS,
     } | ({"preview_url": steps["preview_url"]} if "preview_url" in steps else {})
 
     def value(f):
@@ -1218,6 +1713,10 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=N
             raise StepError(f"the attachments come to {size // 1024} KB, more than the {files_limit // 1024} KB "
                             "run.js can carry in the pane: send the big ones by link (--file-urls) or use `run`")
     proc = steps["procedure"]
+    if blocks:
+        # Its "+" blocks as this case counts them: a case with other counts has other steps, so
+        # they are stored apart in the pane (the same counts, the same key).
+        proc += "#" + hashlib.sha256(json.dumps(skeleton["sections"], sort_keys=True).encode()).hexdigest()[:8]
     runner_js, steps_js, stored = pane_parts(proc, skeleton)
     load = "if (!window.__pv) (0, eval)(localStorage.getItem('pv-runner'));\n"
     if code:
@@ -1296,13 +1795,14 @@ def drift(out, steps, resume):
 def review_shown(steps, values):
     """What the review page shows besides the run: each value, the choices made in the person's
     name (DECIDED), and the person's own steps."""
+    steps = expand(steps, values)
     rows = plan(steps, values)
     decisions = {}
     for v in rows:
         if DECIDED.search(v["section"]):
             what = v["label"] or v["id"]
             decisions.setdefault(v["section"], []).append(what if v["value"] is None else f"{what}: {v['value']}")
-    return {"title": steps.get("title"), "yours": [values.render(y) for y in steps.get("yours", [])] + apart(steps, values),
+    return {"title": steps.get("title"), "yours": [values.render(y) for y in steps.get("yours", [])] + asked_yours(steps, values) + apart(steps, values),
             "decisions": [{"section": s, "choices": c} for s, c in decisions.items()],
             "values": [{"section": v["section"], "label": v["label"] or v["id"],
                         "value": "chosen" if v["value"] is None
@@ -1359,6 +1859,7 @@ def run(steps, values, out, cdp=None, profile=None, close=False, resume=None):
     the pane's 45 s call limit and slowed timers. A window behind others keeps full speed
     with no call of ours: Playwright turns on focus emulation for each page it drives
     (--cdp too) and launches Chromium with background throttling off."""
+    steps = expand(steps, values)
     from playwright.sync_api import sync_playwright
     # page.evaluate runs run.js here, not through the conversation, so files of any size.
     install, run_js = page_scripts(steps, values, files_limit=None, resume=resume)
@@ -1456,7 +1957,10 @@ def main():
     ap.add_argument("--profile", type=Path, default=Path.home() / ".cache/pratica-portal/profile")
     ap.add_argument("--close", action="store_true")
     ap.add_argument("--plain", action="store_true", help="page: run.js carries the values in the clear, through the conversation")
-    ap.add_argument("--made-up", action="store_true", help="preflight: made-up files, never sent: the sportello's refusals are warnings")
+    ap.add_argument("--made-up", action="store_true", help="made-up files, never sent: preflight takes the sportello's "
+                    "refusals as warnings, and no slot that takes only signed files is filled")
+    ap.add_argument("--after-declarations", action="store_true", help="the second run, once the person has ticked the "
+                    "declarations: only what the portal makes then (the procura, signed), on the draft reopened by its name")
     ap.add_argument("--resume", type=Path, help="page/run: a stopped run's report.json, to pick it up where it stopped")
     ap.add_argument("--file-urls", type=Path, help="preflight/page: JSON {path: https URL}, files the page fetches by link")
     ap.add_argument("--fix", type=Path, help="with --resume: JSON list of {section, field, set: {id|label|css}}")
@@ -1484,7 +1988,14 @@ def main():
             if a.server and a.token not in vaults:
                 ap.error(f"{a.server} has no token {a.token!r}")
             values = Values(answers, vault=vaults[a.token if a.server else "prepare"], asks=asks)
+        steps = expand(steps, values)
+        if a.command != "preflight":
+            steps = phase(steps, a.after_declarations, a.made_up)
         resume = None
+        if a.after_declarations and a.command in ("page", "run"):
+            if a.resume:
+                ap.error("--after-declarations opens the draft by its name: no --resume")
+            resume = reopening(steps)
         if a.resume:
             earlier = json.loads(a.resume.read_text())
             kept = a.resume.parent / "private" / "kept.json"
@@ -1493,12 +2004,11 @@ def main():
             resume = resumption(earlier, json.loads(a.fix.read_text()) if a.fix else None)
         if a.fix and not a.resume:
             ap.error("--fix needs --resume")
-        if a.made_up and a.command != "preflight":
-            ap.error("--made-up is for preflight")
         if a.plain and a.command != "page":
             ap.error("--plain is for page: run keeps the values out of the conversation without it")
         if a.command == "preflight":
-            report = preflight(steps, values, json.loads(a.file_urls.read_text()) if a.file_urls else None, a.made_up)
+            report = preflight(steps, values, json.loads(a.file_urls.read_text()) if a.file_urls else None, a.made_up,
+                               a.after_declarations)
             print(json.dumps(report, indent=2, ensure_ascii=False))
             return 0 if report["ready"] else 3
         if a.command == "plan":

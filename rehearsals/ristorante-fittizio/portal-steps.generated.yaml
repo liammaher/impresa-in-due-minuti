@@ -35,6 +35,15 @@ asks:
   manifestazioni: {type: yes_no, group: attivita_852, item: Food service at fairs and events}
   home_restaurant: {type: yes_no, group: attivita_852, item: A home restaurant}
   diritti_euro: {type: number, question: The SUAP fees in euro, default: '120', why: The 2026 table's line for a bar or restaurant with the notifica sanitaria outside the protected zones.}
+  diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',
+    propose: 'false'}
+  diritti_esenzione_motivo: {type: text, question: 'Why no diritti are due: the exemption and the rule of the Comune''s tariff that gives it (at most 300 characters)'}
+  napoli_allegato_a: {type: yes_no, default: 'false', question: 'Does this pratica take Napoli''s Allegato A Programma 100 (every building title, DD 603/2025)?'}
+  napoli_allegato_a_firmato: {type: file, question: 'The client''s Allegato A Programma 100 (fill.py fills it: napoli/comune/cila-lavori-edilizi, form allegato-a-programma-100), signed digitally (.p7m)'}
+  modello_dp: {type: yes_no, default: 'false', question: 'Does this pratica take Napoli''s Modello DP (titles, agibilità, landscape authorizations: L.R. Campania 59/2018)?'}
+  modello_dp_firmato: {type: file, question: 'The Modello DP (fill.py fills it: napoli/comune/cila-lavori-edilizi, form modello-dp), signed digitally by you and by the client (.p7m), with the engagement
+      letter or contract'}
+  ricevuta_diritti: {type: file, question: 'The receipt of the diritti paid (before sending, as the sportello takes them), signed digitally (.p7m)'}
   forno: {type: yes_no, group: attivita_852, item: 'Bread, pizza, pastry, ice cream or ready meals made on the premises'}
   pane: {type: yes_no, group: attivita_852, item: 'Bread, pizza and other baked goods'}
   pasticceria: {type: yes_no, group: attivita_852, item: Pastry}
@@ -144,6 +153,7 @@ sections:
   - {id: r26c1p67reg, kind: select, value: '{{t:residenza.comune|upper}}', when: '{{business.rea|empty}}', label: Comune, nth: 2}
   - {id: r32c1p81reg, kind: select, value: '{{t:residenza.indirizzo|dug}}', when: '{{business.rea|empty|not}}', label: Toponimo (DUG)}
   - {id: r29c1p73reg, kind: select, value: '{{t:residenza.indirizzo|dug}}', when: '{{business.rea|empty}}', label: Toponimo (DUG)}
+  - {kind: select, value: '{{t:residenza.indirizzo|dug_dettaglio}}', when: '{{t:residenza.indirizzo|dug_altro}}', label: da compilare obbligatoriamente}
   - {id: 'r34c1p87reg:txt', kind: text, value: '{{t:residenza.indirizzo|street|upper}}', when: '{{business.rea|empty|not}}', max: 60, label: Denominazione stradale}
   - {id: 'r31c1p79reg:txt', kind: text, value: '{{t:residenza.indirizzo|street|upper}}', when: '{{business.rea|empty}}', max: 60, label: Denominazione stradale}
   - {id: 'r36c1p91reg:txt', kind: text, value: '{{t:residenza.civico}}', when: '{{business.rea|empty|not}}', max: 20, label: Numero civico}
@@ -170,6 +180,8 @@ sections:
   - {id: r46c1p117reg, kind: select, value: '{{business.sede_legale_comune|upper}}', when: '{{business.rea|empty}}', label: Comune, nth: 3}
   - {id: r52c1p131reg, kind: select, value: '{{business.sede_legale_indirizzo|dug}}', when: '{{business.rea|empty|not}}', label: Toponimo (DUG), nth: 2}
   - {id: r49c1p123reg, kind: select, value: '{{business.sede_legale_indirizzo|dug}}', when: '{{business.rea|empty}}', label: Toponimo (DUG), nth: 2}
+  - {kind: select, value: '{{business.sede_legale_indirizzo|dug_dettaglio}}', when: '{{business.sede_legale_indirizzo|dug_altro}} {{t:residenza.indirizzo|dug_altro|not}}', label: da compilare obbligatoriamente}
+  - {kind: select, label: da compilare obbligatoriamente, nth: 2, value: '{{business.sede_legale_indirizzo|dug_dettaglio}}', when: '{{business.sede_legale_indirizzo|dug_altro}} {{t:residenza.indirizzo|dug_altro}}'}
   - {id: 'r54c1p137reg:txt', kind: text, value: '{{business.sede_legale_indirizzo|street|upper}}', when: '{{business.rea|empty|not}}', max: 60, label: Denominazione stradale, nth: 2}
   - {id: 'r51c1p129reg:txt', kind: text, value: '{{business.sede_legale_indirizzo|street|upper}}', when: '{{business.rea|empty}}', max: 60, label: Denominazione stradale, nth: 2}
   - {id: 'r54c2p139reg:txt', kind: text, value: '{{business.sede_legale_civico}}', when: '{{business.rea|empty|not}}', max: 20, label: Numero civico, nth: 2}
@@ -248,7 +260,9 @@ sections:
 - section: Dichiarazione relativa ai diritti
   fields:
   - {id: 'r2c1p2reg:radio:0_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: non sono dovuti oneri}
-  - {id: 'r3c1p3reg:radio:1_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}}', label: poiché non previsti dal tariffario}
+  - {id: 'r3c1p3reg:radio:1_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente|not}}', label: poiché non previsti dal tariffario}
+  - {id: 'r3c2p4reg:radio:2_clone', kind: radio, when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente}}', label: poiché esentati}
+  - {kind: text, label: specificare la motivazione, value: '{{ask.diritti_esenzione_motivo}}', when: '{{ask.diritti_euro|positive|not}} {{ask.diritti_esente}}'}
   - {id: 'r5c1p8reg:radio:3_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: sono dovuti oneri quali diritti o spese}
   - {id: 'r7c1p10reg:real', kind: number, value: '{{ask.diritti_euro}}', when: '{{ask.diritti_euro|positive}}', max: 11, label: per un totale di Euro}
   - {id: 'r8c1p13reg:radio:4_clone', kind: radio, when: '{{ask.diritti_euro|positive}}', label: pagamento on line}
@@ -258,11 +272,16 @@ sections:
   fields: []
 - section: Gestione degli allegati
   go: Prosegui
+  step: Allega Documenti
   theirs:
   - Procura speciale
   - Quadro riepilogativo della documentazione
   - Scarica il documento
+  - Allegati liberi
+  - copia attestazione versamento oneri, diritti e spese
   - Planimetria quotata dei locali
   - Ricevuta di pagamento della tariffa sanitaria forfettaria, p
-  - copia attestazione versamento oneri, diritti e spese
-  fields: []
+  fields:
+  - {kind: file, label: Allegati liberi, value: '{{ask.napoli_allegato_a_firmato}}', describe: Allegato A Programma 100, when: '{{ask.napoli_allegato_a}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
+  - {kind: file, label: Allegati liberi, value: '{{ask.modello_dp_firmato}}', describe: Modello DP (L.R. Campania 59/2018), when: '{{ask.modello_dp}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg}
+  - {kind: file, label: 'copia attestazione versamento oneri, diritti e spese', value: '{{ask.ricevuta_diritti}}', when: '{{ask.diritti_euro|positive}}', after_declarations: true, accepts: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m}

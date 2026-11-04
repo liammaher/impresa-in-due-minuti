@@ -96,5 +96,17 @@
  "progetto_termico_doc": "rehearsals/scia-fittizia/files/progetto-impianti.pdf",
  "progetto_idrico_doc": "rehearsals/scia-fittizia/files/progetto-impianti.pdf",
  "progetto_ascensore_doc": "rehearsals/scia-fittizia/files/progetto-impianti.pdf",
- "progetto_antincendio_doc": "rehearsals/scia-fittizia/files/progetto-impianti.pdf"
+ "progetto_antincendio_doc": "rehearsals/scia-fittizia/files/progetto-impianti.pdf",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "vvf_variante": "false",
+ "scomputo": "false",
+ "strumenti_altri": "false",
+ "igienico_24_5bis": "false",
+ "barriere_art82": "false",
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "terre_rocce": "no"
 }

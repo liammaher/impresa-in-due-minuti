@@ -12,5 +12,6 @@
  "titolo_attivita_data": "2026-03-02",
  "ateco_descrizione": "56.10.11 Ristorazione con somministrazione",
  "diritti_euro": "0",
- "alcol_con_scia": "false"
+ "alcol_con_scia": "false",
+ "diritti_esente": false
 }

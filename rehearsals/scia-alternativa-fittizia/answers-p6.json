@@ -87,5 +87,14 @@
  "impianto_ascensore": "false",
  "impianto_antincendio": "false",
  "impianto_altro": "false",
- "strumenti_altri": "false"
+ "strumenti_altri": "false",
+ "altri_tecnici_dopo": "false",
+ "direttore_lavori": "da nominare",
+ "impresa_dopo": "false",
+ "notifica_allegata": "false",
+ "vvf_variante": "false",
+ "scomputo": "false",
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "terre_rocce": "no"
 }

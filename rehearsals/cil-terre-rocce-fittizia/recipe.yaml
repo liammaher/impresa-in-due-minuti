@@ -1,0 +1,31 @@
+# CIL opere temporanee con dichiarazione di utilizzo delle terre e rocce da scavo in one pratica on Napoli's SUE: the cil-fittizia rehearsal's case with excavated soil that leaves the site
+# as a by-product (a small site: art. 21 DPR 120/2017). Two operations selected together in the
+# wizard; the dichiarazione adds two adempimenti (the SUE's, ARPA Campania's) and no section, so the
+# combination's crawl (catalogue/F839/sections/sue-combo-cil-dichiarazione-utilizzo.json) has the main pratica's sections and the
+# dichiarazione's slot. Everything else is cil-fittizia's recipe and what the dichiarazione adds
+# (parts/dichiarazione-utilizzo-terre.yaml): a slot or a refusal mapped on either reaches this one.
+extends: [cil-fittizia, parts/dichiarazione-utilizzo-terre]
+procedure: napoli/comune/cil-con-dichiarazione-utilizzo-terre
+title: "CIL opere temporanee con dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
+comune: F839
+sportello: sue
+crawl: sue-combo-cil-dichiarazione-utilizzo
+operation:
+  - Comunicazione di Inizio Lavori per opere temporanee (C.I.L.)
+  - "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
+asks:
+  descrizione: {default: "PROVA NON INVIARE - CIL e terre e rocce {{c:identity.last_name}}"}
+# Its main pratica's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
+yours:
+  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
+  - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "Pay the {{ask.diritti_euro}} € diritti before the second run (after the declarations): its receipt, signed, goes with it"
+  - "On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); its authorization is attached under Allegati liberi: keep it with the pratica"
+  - "The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal's document on Allega documenti once the declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at least 15 days after sending"
+  - "When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017) on the SUE"
+  - "Sign and send (Firma e invio); keep the receipt"
+rules:
+  main: napoli/comune/cil-opere-temporanee
+answers:
+  descrizione: PROVA NON INVIARE - CIL e terre e rocce P6
+  oggetto: "Installazione temporanea di una tensostruttura nel cortile, per 150 giorni, con scavo di 20 m³ per le fondazioni a plinti: le terre vanno a un altro cantiere come sottoprodotto (dati inventati per la prova)."

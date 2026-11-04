@@ -172,5 +172,95 @@
   "answers": "answers-variante.json",
   "result": "filled",
   "seconds": 167.5
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-altri-tecnici-otto.json",
+  "result": "filled",
+  "seconds": 706.5
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-stato-titoli-dieci.json",
+  "result": "filled",
+  "seconds": 151.6
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-elenchi-lunghi.json",
+  "result": "filled",
+  "seconds": 812.9
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-bassa-monostanza.json",
+  "result": "filled",
+  "seconds": 150.1
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-direttori.json",
+  "result": "filled",
+  "seconds": 188.6
+ },
+ {
+  "date": "2026-11-01",
+  "answers": "answers-impresa-dopo.json",
+  "result": "filled",
+  "seconds": 142.3
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-scavo-vvf.json",
+  "result": "filled",
+  "seconds": 148.7
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-progettista.json",
+  "result": "filled",
+  "seconds": 191.1
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-direttori.json",
+  "result": "filled",
+  "seconds": 182.5
+ },
+ {
+  "date": "2026-11-02",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 138.8
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 177.5
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-scavo-vvf.json",
+  "result": "stopped",
+  "seconds": 0.2
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-minore.json",
+  "result": "filled",
+  "seconds": 236.4
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-privo.json",
+  "result": "filled",
+  "seconds": 191
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-scavo-vvf.json",
+  "result": "filled",
+  "seconds": 202.5
  }
 ]

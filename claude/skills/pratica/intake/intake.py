@@ -358,7 +358,7 @@ RELAZIONE = [
     ("piu_imprese", True, r"(due|tre|piu) imprese"),
     ("tolleranze", False, r"(non (sussistono|si dichiarano|sono dichiarate|vengono dichiarate)|nessuna) tolleranz"),
     ("tolleranze", True, r"si dichiarano (le seguenti )?tolleranz"),
-    ("altri_atti", False, r"non sono necessari altri (atti di assenso|pareri|nulla osta)"),
+    ("atti_da_acquisire", False, r"non sono necessari altri (atti di assenso|pareri|nulla osta)"),
     ("altri_tecnici", False, r"non sono (stati )?incaricati altri tecnici"),
     ("direttore_lavori", "progettista", r"direttore dei lavori:? (e )?(il sottoscritto|lo stesso) progettista"),
     ("frazionamento", False, r"(senza|non comporta\w*|nessun) (alcun )?frazionament"),
@@ -550,7 +550,7 @@ def scan(dossier, steps=None, client=None):
             propose("answers", "lavori_in_proprio", False, src, found["imprese"][1])
         if "piu_imprese" in found:
             propose("answers", "notifica_dovuta", True, src, found["piu_imprese"][1])
-        for key in ("tolleranze", "altri_atti", "altri_tecnici", "direttore_lavori"):
+        for key in ("tolleranze", "atti_da_acquisire", "altri_tecnici", "direttore_lavori"):
             if key in found:
                 propose("answers", key, found[key][0], src, found[key][1])
         if found.get("intervento", (None,))[0] in CILA_INTERVENTI:

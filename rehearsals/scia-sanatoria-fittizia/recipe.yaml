@@ -15,6 +15,9 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 attachments:
   Gestione degli allegati:
+    # The sanatoria's own drawings: a slot that takes only signed files, which its answer adds (the
+    # title as read on a filled draft; not in the crawl, made on an empty one).
+    - {kind: file, label: Elaborati richiesti per la sanatoria, value: "{{ask.elaborati_sanatoria}}", accepts: "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", on_page: true}
     # The asseverazione's "allega l’autorizzazione sismica" (a structural tolerance relevant for
     # public safety) adds this required slot; plain PDFs are taken (seen on the SCIA 2026-10-30).
     - {kind: file, label: Autorizzazione sismica, value: "{{ask.toll_sismica_doc}}", when: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}", on_page: true}
@@ -79,6 +82,10 @@ attachments:
     - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: "{{ask.igienico_deroga_doc}}", when: "{{ask.igienico_conforme|not}}", on_page: true}
     - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: "{{ask.cimiteriale_doc}}", when: "{{ask.fascia_cimiteriale|is_non_consentito}}", on_page: true}
 asks:
+  diritti_euro: {propose: "{{ask.sanatoria_caso|diritti_sanatoria_scia}}", why: "Line SUE 16 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 441 € at filing for an accertamento di conformità (art. 36-bis) or a regularization (art. 34-ter), the rest once determined; art. 36-bis c. 5 b, SUE 17-18. Works still under way (art. 37 c. 5) aren't in the table: ask the SUE"}
+  # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
+  napoli_allegato_a: {default: "true"}
+  modello_dp: {default: "true"}
   descrizione: {default: "PROVA NON INVIARE - SCIA in sanatoria {{c:identity.last_name}}"}
   sanatoria_titolo: {default: scia}
   sanatoria_paesaggio: {default: "true"}
@@ -86,10 +93,11 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
-  - "On Allega documenti: the Elaborati richiesti per la sanatoria (stato legittimo, stato di fatto and the comparison, the difformità in red as the SUE's guidelines ask), signed digitally (.p7m only)"
-  - "Name the direttore dei lavori (and, for works on structures, the direttore dei lavori delle strutture) before the works start"
-  - "On Allega documenti: the portal's procura signed by the client, the stato legittimo documents (signed files only), then everything signed digitally (.p7m)"
+  - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
   - "A SCIA that asks for assents (the Soprintendenza, a park, a vincolo): no start date; the works start once the SUE says the assents are in"
+  - "For works on structures: the autorizzazione sismica in sanatoria from the Genio Civile di Napoli on S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983), with the strutturista's attestation that the works met the technical rules in force when they were done (art. 36-bis c. 3-bis DPR 380/2001); its documents go in this pratica's slot"
+  - "Works done in a protected area (art. 36-bis c. 4): on Allega documenti, the documents for the binding parere on their landscape compatibility go in \"Documentazione necessaria ai fini del rilascio del parere vincolante\", signed digitally (.p7m only)"
+  - "A sanction or oblazione whose receipt the sanatoria quadro attaches: on Allega documenti, the receipt in \"copia attestazione versamento oneri, diritti e spese\", signed (.p7m only): the quadro adds no slot of its own"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -99,12 +107,32 @@ rules:
   main: napoli/comune/scia-in-sanatoria
   facts: {permesso_per_scelta: "false", sanatoria: "true", parere_esonero: "false"}
 supports:
+  # The SCIA's form has no line for a large site under VIA or AIA (its Piano di Utilizzo line is
+  # for sites up to 6000 m³, under the repealed DM 161/2012).
+  - {if: "{{ask.scavo|is_sottoprodotti}}", value: "{{ask.scavo_piano_utilizzo}}", in: ["false"], else: "The SCIA's form has no line for excavated earth over 6000 m³ under VIA or AIA, used as by-products under a Piano di Utilizzo (DPR 120/2017 art. 9): works of that size go by permesso di costruire; ask the SUE."}
+  # Works done without a permesso di costruire (or a SCIA alternativa) are regularized by the
+  # permesso in sanatoria the Comune issues (art. 36 DPR 380/2001), never by a SCIA: the asseverazione's
+  # "in assenza" row is the permesso's (rehearsals/pdc-sanatoria-fittizio). Partial difformity from a
+  # permesso can go by SCIA (art. 36-bis c. 1).
+  - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_sanatoria_caso}}", in: [parziale], else: "Works done without a permesso di costruire (or a SCIA alternativa) are regularized by the permesso in sanatoria (art. 36 DPR 380/2001), not by a SCIA: file the permesso in sanatoria."}
   # Works already done that needed a landscape authorization: their compatibility goes with the
   # art. 36-bis sanatoria (c. 4), not with the SCIA of works still under way (art. 37 c. 5). Landscape
   # works still to come take the authorization with the sanatoria (rehearsals/scia-sanatoria-paesaggistica-*).
   - {if: "{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}", value: "{{ask.sanatoria_caso}}", in: [doppia conformita], else: "Works already done that needed the landscape authorization are mapped only in the art. 36-bis sanatoria: the Sportello asks for the binding parere on their landscape compatibility (art. 36-bis c. 4). Works still under way whose landscape works are partly done can't have the authorization any more (art. 146 c. 4 D.Lgs. 42/2004): ask the SUE."}
+  # Art. 36-bis c. 1 (Salva Casa): the portal saves its dating, oblazione and works proposal as one
+  # field. A known defect: pre-flight tells the person and lists their choices (defects.yaml).
   - value: "{{ask.sanatoria_caso}}"
-    in: [in corso, doppia conformita]
-    else: "Only works still under way (art. 37 c. 5) and works with double conformity (art. 36-bis) are mapped. For the conformity of art. 36-bis c. 1 the portal's asseverazione makes the date of the works, the oblazione and the works proposal one radio choice, so it can't state the case in full: ask the SUE. Variants to pre-1977 titles (art. 34-ter) aren't mapped."
-  - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_5bis_caso}}", in: ["altezza", "monostanza uno", "monostanza due"], else: "More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions."}
+    in: [in corso, doppia conformita, variante pre 1977]
+    defect: scia-36bis-c1
+    else: "For the conformity of art. 36-bis c. 1 the portal's asseverazione saves the date of the works, the oblazione and the works proposal as one field (one of the three), so it can't state the case in full: a defect of the portal (docs/portal-defects.md); ask the SUE."
+  # Art. 34-ter (a variant to a pre-1977 title): the asseverazione saves its dating and its oblazione
+  # as one field (read 2026-11-02); the sanatoria quadro's title and payment rows work.
+  - value: "{{ask.sanatoria_caso}}"
+    in: [in corso, doppia conformita, conformita urbanistica]
+    defect: scia-34ter
+    else: "For a variant to a pre-1977 title (art. 34-ter) the portal's asseverazione saves the variant's date (by documents or attested) and the oblazione as one field, so it can't state both, as art. 34-ter c. 2 and 3 ask: a defect of the portal (docs/portal-defects.md); ask the SUE."
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}
+  # Works on structures begun without the seismic filing always need the autorizzazione sismica
+  # in Campania (art. 4 c. 1 e L.R. 9/1983): the asseverazione's sismica row says so, and the
+  # authorization is filed apart with the Genio Civile (the rules table's sismica-sanatoria).
+  - {if: "{{ask.strutture}}", value: "{{ask.sismica}}", in: [autorizzazione], else: "Works on structures begun without the seismic filing always need the autorizzazione sismica in Campania, never the deposito or a variant filing (art. 4 c. 1 e L.R. 9/1983): the sismica answer is autorizzazione, filed with the Genio Civile."}

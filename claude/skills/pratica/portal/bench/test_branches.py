@@ -55,9 +55,25 @@ def _():
     assert one("Asseverazione SCIA - Sicurezza impianti", "idrici e sanitari")["state"] == "ticked"
 
 
-@case("a choice no entry names is unmapped (the land register)")
+@case("a choice is ticked as gen.py finds it: a label inside its text where none of the section starts with it")
 def _():
-    assert one("Dati catastali", "Nuovo Catasto Terreni")["state"] == "unmapped"
+    # The CILA's "che i lavori sono/saranno eseguiti dall'impresa": the dictionary's "lavori
+    # sono/saranno eseguiti dall" starts no box there.
+    assert one("h) Impresa esecutrice", "che i lavori sono/saranno eseguiti")["state"] == "ticked"
+    # The permesso's g1 is filled by its own entry, not the SCIA's h1 one: its structural boxes
+    # are, and its "tecnico incaricato" (a designer who isn't the one presenting, since 2026-11-02).
+    assert one("g1) Tecnici incaricati", "Progettista delle opere strutturali")["state"] == "ticked"
+    assert one("g1) Tecnici incaricati", "tecnico incaricato")["state"] == "ticked"
+
+
+@case("a choice no entry names is unmapped (made up: none is left since 2026-11-02); one under an answer is ticked (the land register, the procuratore born abroad)")
+def _():
+    n = {"id": "r9c3p23reg:radio:1_clone", "kind": "radio", "choice": "all'Estero"}
+    f = {"id": n["id"], "kind": "radio", "label": "all'Estero"}
+    entry = {"section": "Qualifica e dati del procuratore", "fields": [{"kind": "radio", "label": "in Italia"}]}
+    assert branches.state(n, f, "Qualifica e dati del procuratore", [(entry, None)]) == "unmapped"
+    assert one("Qualifica e dati del procuratore", "all'Estero")["state"] == "ticked"
+    assert one("Dati catastali", "Nuovo Catasto Terreni")["state"] == "ticked"
     assert one("Dati catastali", "Nuovo Catasto Edilizio Urbano")["state"] == "ticked"
 
 
@@ -80,11 +96,16 @@ def _():
     assert r["state"] != "theirs", r["state"]
 
 
-@case("a box a choice opened but the crawl never tried counts, marked not_tried (art. 94-bis's class)")
+@case("a box a choice opened but the crawl never tried counts, marked not_tried; the art. 94-bis class, recrawled deeper, is tried")
 def _():
-    # Mapped since from the page (what it opens was read there), so ticked, and still not_tried.
+    opened = {"id": "r2c1p2reg:radio:0_clone", "kind": "radio", "label": "una classe"}
+    nodes = [{"id": "r1c1p1reg:radio:0_clone", "kind": "radio", "choice": "una scelta", "reveals": [opened]}]
+    walked = [(n, d) for n, _, d, _ in branches.walk(nodes, [])]
+    assert [(n["id"], n.get("not_tried"), d) for n, d in walked] == [(nodes[0]["id"], None, 1), (opened["id"], True, 2)], walked
+    # Recrawled at depth 8 (2026-11-01): tried, and it opens the authorization or its silenzio assenso.
     r = one("Relazione Tecnica di Asseverazione C.I.L.A.", "intervento rilevante nei riguardi della pubblica")
-    assert r.get("not_tried") and r["state"] == "ticked" and r["under"].startswith("ha rilevanza strutturale"), r
+    assert not r.get("not_tried") and r["state"] == "ticked" and r["opens"] == 2 and r["under"].startswith("ha rilevanza strutturale"), r
+    assert all(x["state"] == "law" for x in branches.rows() if x.get("not_tried"))
 
 
 @case("the weakest title decides: ticked under one title, not the other, is unmapped")
@@ -96,6 +117,16 @@ def _():
     assert branches.state(n, f, "A", yes) == "ticked"
     assert branches.state(n, f, "B", no) == "unmapped"
     assert max(["ticked", "unmapped"], key=branches.STATES.index) == "unmapped"
+
+
+@case("a case a portal defect blocks counts as defect, not a gap: art. 34-ter's rows; its payment receipts, mapped, are ticked")
+def _():
+    r = one("SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione", "regolarizzazione di interventi realizzati come variante")
+    assert r["state"] == "defect", r
+    r = one("Asseverazione PdC", "una variante in corso d'opera, in parziale difformità")
+    assert r["state"] == "defect", r
+    r = one("SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione", "si allega la ricevuta del pagamento di € 516")
+    assert r["state"] == "ticked", r
 
 
 @case("the page renders with its counts")
