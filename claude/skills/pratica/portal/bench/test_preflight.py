@@ -824,6 +824,50 @@ def linked_files():
         assert r["pane_ok"] and any(f.get("link") for f in r["files"]), r["files"]
 
 
+def streets_and_lists():
+    """A street that isn't a Via, Viale, Piazza, Corso or Largo (a third of Naples') is ALTRO with
+    its type in "Dettaglio DUG", the name after it; a type the portal lists nowhere (Naples' cupe) is
+    named by pre-flight. Citizenship takes a masculine adjective and a country's name; any of the
+    107 province sigle has its name (2026-11-04)."""
+    root = HERE.parents[4] / "rehearsals" / "cila-fittizia"
+    fields = dict(json.loads((root / "fixture-p6.json").read_text())["fields"])
+    a = json.loads((root / "answers-p6.json").read_text())
+    steps = yaml.safe_load((root / "portal-steps.generated.yaml").read_text())
+    client = a["people"]["c"]
+
+    def street(addr):
+        v = values(a, fields | {f"{client}:residenza.indirizzo": addr}, steps)
+        r = run.preflight(steps, v, made_up=True)
+        if not r["ready"]:
+            return r, None
+        boxes = ("Toponimo (DUG)", "da compilare obbligatoriamente", "Denominazione stradale")
+        return r, [(x["label"], x["value"]) for x in rehearsal_plan(steps, v)
+                   if x["section"] == "Scheda anagrafica" and x["label"] in boxes][:3]
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+    try:
+        _, got = street("Via Toledo")
+        assert got == [("Toponimo (DUG)", "VIA"), ("Denominazione stradale", "TOLEDO")], got
+        _, got = street("Vico Lungo Gelso")
+        assert got == [("Toponimo (DUG)", "ALTRO"), ("da compilare obbligatoriamente", "VICO"),
+                       ("Denominazione stradale", "LUNGO GELSO")], got
+        _, got = street("Capo di Piazza Mercato")
+        assert got[1] == ("da compilare obbligatoriamente", "CAPO DI PIAZZA") and got[2][1] == "MERCATO", got
+        r, _ = street("Cupa Caiafa")
+        assert not r["ready"] and "no street type the portal lists" in r["missing"][0]["why"], r["missing"]
+        # `page` without pre-flight says the same and stops, not a traceback.
+        cupa = values(a, fields | {f"{client}:residenza.indirizzo": "Cupa Caiafa"}, steps)
+        raises(lambda: run.page_files(run.rehearsal(steps, cupa), cupa), "no street type the portal lists")
+        for cit, country in (("moldavo", "MOLDAVIA"), ("Moldavia", "MOLDAVIA"), ("britannica", "REGNO UNITO")):
+            assert run.FILTERS["cittadinanza"](cit) == country, cit
+        r = run.preflight(steps, values(a, fields | {f"{client}:identity.citizenship": "tagika"}, steps), made_up=True)
+        assert not r["ready"] and "no Cittadinanza for 'tagika'" in r["missing"][0]["why"], r["missing"]
+    finally:
+        os.chdir(here)
+    assert len(run.PROVINCE) == 107 and run.FILTERS["provincia_nome"]("ba") == "BARI"
+    assert run.FILTERS["straniera"]("Italia") == "false" and run.FILTERS["straniera"]("moldava") == "true"
+
+
 CASES = [
     ("the SCIA with its answers is ready", ready),
     ("no answers: one checklist, branch items first, then two questions, no defaults", all_questions),
@@ -860,6 +904,7 @@ CASES = [
     ("the bollo and diritti exemptions, the virtual bollo, the permesso's altro, the SCIA alternativa's regional works, a studio's other architect", exemptions_and_other_kinds),
     ("the materiali di risulta agree with the terre e rocce filings, and are proposed from them", materiali_di_risulta_agree),
     ("a value the vault has but the form can't take (a Carica for a named architect who isn't the titolare) is reported, not crashed on", carica_not_crash),
+    ("a street of any type (a Vico, a Capo di Piazza; a Cupa named), a citizenship by adjective or country, every province", streets_and_lists),
 ]
 
 

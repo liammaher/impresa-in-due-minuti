@@ -1333,6 +1333,7 @@ sections:
       - {kind: select, label: Provincia, by_label: true, value: "{{c:residenza.provincia}}", when: "{{c:business.denominazione|empty}} {{c:identity.birth_province|estero}}"}
       - {kind: select, label: Comune, by_label: true, value: "{{c:residenza.comune|upper}}", when: "{{c:business.denominazione|empty}} {{c:identity.birth_province|estero}}"}
       - {kind: select, label: "Toponimo (DUG)", value: "{{c:residenza.indirizzo|dug}}", when: "{{c:business.denominazione|empty}}"}
+      - {kind: select, label: "da compilare obbligatoriamente", via: ALTRO, value: "{{c:residenza.indirizzo|dug_dettaglio}}", when: "{{c:business.denominazione|empty}} {{c:residenza.indirizzo|dug_altro}}"}
       - {kind: text, label: Denominazione stradale, value: "{{c:residenza.indirizzo|street|upper}}", when: "{{c:business.denominazione|empty}}"}
       - {kind: text, label: Numero civico, value: "{{c:residenza.civico}}", when: "{{c:business.denominazione|empty}}"}
       - {kind: text, label: CAP, value: "{{c:residenza.cap}}", when: "{{c:business.denominazione|empty}}"}
@@ -1373,6 +1374,7 @@ sections:
       - {kind: select, label: Provincia, by_label: true, value: "{{cr:residenza.provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
       - {kind: select, label: Comune, by_label: true, value: "{{cr:residenza.comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
       - {kind: select, label: "Toponimo (DUG)", value: "{{cr:residenza.indirizzo|dug}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: select, label: "da compilare obbligatoriamente", via: ALTRO, value: "{{cr:residenza.indirizzo|dug_dettaglio}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:residenza.indirizzo|dug_altro}}"}
       - {kind: text, label: Denominazione stradale, value: "{{cr:residenza.indirizzo|street|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: text, label: Numero civico, value: "{{cr:residenza.civico}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: text, label: CAP, value: "{{cr:residenza.cap}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
@@ -1391,6 +1393,7 @@ sections:
       - {kind: select, label: Provincia, nth: 2, by_label: true, value: "{{c:business.sede_legale_provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
       - {kind: select, label: Comune, nth: 2, by_label: true, value: "{{c:business.sede_legale_comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{cr:identity.birth_province|estero}}"}
       - {kind: select, label: "Toponimo (DUG)", nth: 2, value: "{{c:business.sede_legale_indirizzo|dug}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
+      - {kind: select, label: "da compilare obbligatoriamente", via: ALTRO, value: "{{c:business.sede_legale_indirizzo|dug_dettaglio}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}} {{c:business.sede_legale_indirizzo|dug_altro}}"}
       - {kind: text, label: Denominazione stradale, nth: 2, value: "{{c:business.sede_legale_indirizzo|street|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: text, label: Numero civico, nth: 2, value: "{{c:business.sede_legale_civico}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
       - {kind: text, label: CAP, nth: 2, value: "{{c:business.sede_legale_cap}}", when: "{{c:business.denominazione,c:business.rea|impresa_iscritta}}"}
@@ -1420,6 +1423,7 @@ sections:
       - {kind: select, label: Provincia, by_label: true, value: "{{cr:residenza.provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero}}"}
       - {kind: select, label: Comune, by_label: true, value: "{{cr:residenza.comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero}}"}
       - {kind: select, label: "Toponimo (DUG)", value: "{{cr:residenza.indirizzo|dug}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: select, label: "da compilare obbligatoriamente", via: ALTRO, value: "{{cr:residenza.indirizzo|dug_dettaglio}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:residenza.indirizzo|dug_altro}}"}
       - {kind: text, label: Denominazione stradale, value: "{{cr:residenza.indirizzo|street|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
       - {kind: text, label: Numero civico, value: "{{cr:residenza.civico}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
       - {kind: text, label: CAP, value: "{{cr:residenza.cap}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
@@ -1436,6 +1440,7 @@ sections:
       - {kind: select, label: Provincia, nth: 2, by_label: true, value: "{{c:business.sede_legale_provincia}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero}}"}
       - {kind: select, label: Comune, nth: 2, by_label: true, value: "{{c:business.sede_legale_comune|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{cr:identity.birth_province|estero}}"}
       - {kind: select, label: "Toponimo (DUG)", nth: 2, value: "{{c:business.sede_legale_indirizzo|dug}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
+      - {kind: select, label: "da compilare obbligatoriamente", via: ALTRO, value: "{{c:business.sede_legale_indirizzo|dug_dettaglio}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}} {{c:business.sede_legale_indirizzo|dug_altro}}"}
       - {kind: text, label: Denominazione stradale, nth: 2, value: "{{c:business.sede_legale_indirizzo|street|upper}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
       - {kind: text, label: Numero civico, nth: 2, value: "{{c:business.sede_legale_civico}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
       - {kind: text, label: CAP, nth: 2, value: "{{c:business.sede_legale_cap}}", when: "{{c:business.denominazione,c:business.rea|impresa_non_iscritta}}"}
@@ -4234,6 +4239,7 @@ sections:
       - {kind: select, label: Provincia, nth: 2, value: "{{t:residenza.provincia}}"}
       - {kind: select, label: Comune, nth: 2, value: "{{t:residenza.comune|upper}}"}
       - {kind: select, label: Toponimo (DUG), value: "{{t:residenza.indirizzo|dug}}"}
+      - {kind: select, label: "da compilare obbligatoriamente", via: ALTRO, value: "{{t:residenza.indirizzo|dug_dettaglio}}", when: "{{t:residenza.indirizzo|dug_altro}}"}
       - {kind: text, label: Denominazione stradale, value: "{{t:residenza.indirizzo|street|upper}}"}
       - {kind: text, label: Numero civico, value: "{{t:residenza.civico}}"}
       - {kind: text, label: CAP, value: "{{t:residenza.cap}}"}
@@ -4248,6 +4254,10 @@ sections:
       - {kind: select, label: Provincia, nth: 3, value: "{{business.sede_legale_provincia}}"}
       - {kind: select, label: Comune, nth: 3, value: "{{business.sede_legale_comune|upper}}"}
       - {kind: select, label: Toponimo (DUG), nth: 2, value: "{{business.sede_legale_indirizzo|dug}}"}
+      # Found by label (the rows above renumber with the REA): the seat's is the second box of that
+      # label when the titolare's home is ALTRO too, a state the crawl never saw.
+      - {kind: select, label: "da compilare obbligatoriamente", via: ALTRO, value: "{{business.sede_legale_indirizzo|dug_dettaglio}}", when: "{{business.sede_legale_indirizzo|dug_altro}} {{t:residenza.indirizzo|dug_altro|not}}"}
+      - {kind: select, label: "da compilare obbligatoriamente", nth: 2, on_page: true, value: "{{business.sede_legale_indirizzo|dug_dettaglio}}", when: "{{business.sede_legale_indirizzo|dug_altro}} {{t:residenza.indirizzo|dug_altro}}"}
       - {kind: text, label: Denominazione stradale, nth: 2, value: "{{business.sede_legale_indirizzo|street|upper}}"}
       - {kind: text, label: Numero civico, nth: 2, value: "{{business.sede_legale_civico}}"}
       - {kind: text, label: CAP, nth: 2, value: "{{business.sede_legale_cap}}"}

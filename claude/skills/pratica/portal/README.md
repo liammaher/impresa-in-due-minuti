@@ -134,6 +134,16 @@ that also cites a Comune page may only confirm a national one there.
 
 ## What the portal does that bit us
 
+- **Street types.** The Scheda anagrafica's "Toponimo (DUG)" offers only ALTRO, CORSO, LARGO,
+  PIAZZA, VIA and VIALE; ALTRO opens "Dettaglio DUG" ("da compilare obbligatoriamente nel caso si
+  sia selezionato 'ALTRO'"), a list of 190 street types that the crawl recorded only as a count:
+  run.py takes it to be InfoCamere's national toponimo list (194, `schema/`), never read option by
+  option. So a Vico is ALTRO + VICO + the name after it, and a type in neither list (Naples' CUPA,
+  GRADINI, FONDACO, RAMPE, SUPPORTICO) is named by pre-flight. The location's "Via, Viale, Piazza"
+  lookup lists the comune's streets each starting with its type, whatever it is. Until 2026-11-04
+  both knew only the five: 1,240 of the 3,508 streets in Naples' stradario (`internal/napoli`)
+  would have stopped a run, and every rehearsal's address was a Via, so none did. Neither has been
+  seen on the portal with a Vico yet.
 - **A section's text past 3,000 characters isn't in its crawl** (crawl.js keeps that much), so a
   long section's own wording, not just its box labels, is read on a draft: the CILA relazione's
   two lists were filled for a week as filings "already made" and assents "already obtained", and

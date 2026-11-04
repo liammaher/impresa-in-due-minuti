@@ -497,9 +497,11 @@
   }
 
   async function lookup(f, value) {
+    // The street's first word is its type, whatever it is: the comune's list names its streets
+    // VIA, VICO, TRAVERSA, CUPA, GRADINI... first (a third of Naples' aren't a VIA, VIALE, PIAZZA,
+    // CORSO or LARGO).
     const parts = value.split(/\s+/);
-    const [dug, street] = parts.length > 1 && steps.dug.includes(parts[0].toUpperCase())
-      ? [parts[0].toUpperCase(), parts.slice(1).join(" ")] : ["ALTRO", value];
+    const [dug, street] = parts.length > 1 ? [parts[0].toUpperCase(), parts.slice(1).join(" ")] : ["", value];
     const words = street.toUpperCase().split(/\W+/).filter((w) => w.length > 2);
     const e = el(f.id) || fail(`${f.id}: no field`);
     checkLabel(e, f.label);
