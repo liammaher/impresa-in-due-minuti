@@ -7,7 +7,7 @@ FAC-SIMILE documents in `files/`); each draft is "PROVA NON INVIARE" and stops b
 declarations, signing and sending.
 
 `portal-steps.generated.yaml` is `gen.py`'s, from `recipe.yaml`, the crawl of an empty draft
-(`catalogue/F839/sections/scia.json`: 36 sections, 319 choices) and `dictionary/fnsuap.yaml`.
+(`catalogue/F839/sections/sue-segnalazione-certificata-di-inizio-attivita-edilizia.json`: 36 sections, 319 choices) and `dictionary/fnsuap.yaml`.
 The wizard's required Si/No (sanatoria) is answered No (`si_no` in the recipe).
 
 ## What it maps

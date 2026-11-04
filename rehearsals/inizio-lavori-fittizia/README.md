@@ -5,7 +5,7 @@ invented permesso di costruire (999/2026). Made-up data; the draft is "PROVA NON
 stops before the declarations, signing and sending.
 
 `portal-steps.generated.yaml` is `gen.py`'s, from `recipe.yaml`, the crawl of an empty draft
-(`catalogue/F839/sections/inizio-lavori.json`: 137 s) and `dictionary/fnsuap.yaml`. Its own
+(`catalogue/F839/sections/sue-comunicazione-inizio-lavori.json`: 137 s) and `dictionary/fnsuap.yaml`. Its own
 four sections (the permit, the date, the permit's holder, where the works are) are plain text
 boxes: four dictionary entries.
 

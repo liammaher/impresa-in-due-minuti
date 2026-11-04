@@ -19,6 +19,8 @@ import gen  # noqa: E402
 import yaml  # noqa: E402
 
 CILA = ROOT / "rehearsals" / "cila-fittizia"
+# The golden case: the CILA P6 the first walk found by hand (2026-10-28), ids and values.
+HAND_WALK = HERE / "fixtures" / "cila-p6-hand-walk.yaml"
 FINE = ROOT / "rehearsals" / "fine-lavori-fittizia"
 results = []
 
@@ -131,7 +133,7 @@ def as_p6_ran(steps):
 
 @case("the CILA comes out as the hand walk found it, field for field (P6's own entries)")
 def _():
-    diffs, _ = gen.check(as_p6_ran(gen.generate(p6_recipe())), gen.load_yaml(CILA / "portal-steps.yaml"))
+    diffs, _ = gen.check(as_p6_ran(gen.generate(p6_recipe())), gen.load_yaml(HAND_WALK))
     assert not diffs, diffs
 
 
@@ -175,7 +177,7 @@ def filled(steps, values):
 @case("the dictionary's every-case CILA fills P6 with the hand walk's values, section for section")
 def _():
     v = p6_values("cila-fittizia")
-    hand, ours = filled(gen.load_yaml(CILA / "portal-steps.yaml"), v), filled(as_p6_ran(gen.generate(gen.load_yaml(CILA / "recipe.yaml"))), v)
+    hand, ours = filled(gen.load_yaml(HAND_WALK), v), filled(as_p6_ran(gen.generate(gen.load_yaml(CILA / "recipe.yaml"))), v)
     for sec, vals in hand.items():
         assert ours.get(sec) == vals, (sec, vals, ours.get(sec))
 
@@ -363,7 +365,7 @@ def _():
 @case("a drift check's digests: catalogue.py computes what the pane's digest.js computed on the live portal (2026-11-02)")
 def _():
     import catalogue
-    assert catalogue.digest(catalogue.stored_fingerprints("cil")) == "041974574c75"
+    assert catalogue.digest(catalogue.stored_fingerprints("sue-comunicazione-di-inizio-lavori-per-opere-temporanee")) == "041974574c75"
     assert catalogue.digest(catalogue.stored_fingerprints("sue-permesso-di-costruire-art-10-d-p-r-380-2001")) == "6e4da66eda5f"
 
 
@@ -378,7 +380,7 @@ def _():
     assert steps["wizard"][3]["tree"] == ["Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)",
                                           "Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)"]
     recipe = gen.load_yaml(REH / "cila-paesaggistica-fittizia" / "recipe.yaml")
-    recipe["crawl"] = "cila"  # a crawl of the CILA alone is not of both
+    recipe["crawl"] = "sue-comunicazione-inizio-lavoro-asseverata"  # a crawl of the CILA alone is not of both
     try:
         gen.generate(recipe)
         assert False, "generated from the wrong crawl"
@@ -563,7 +565,7 @@ def _():
 @case("draft.py drafts the hairdresser's own sections from the national schema, every box with its meaning")
 def _():
     import draft
-    crawl = gen.json.loads((HERE.parent / "catalogue/F839/sections/acconciatore.json").read_text())
+    crawl = gen.json.loads((HERE.parent / "catalogue/F839/sections/suap-011-aprire-l-attivita-di-acconciatore-procura.json").read_text())
     schema = gen.json.loads((HERE.parent / "schema/mod_acconciatori_estetisti_apertura_v1.0.7-fields.json").read_text())
     sec = lambda name: next(x for x in crawl["sections"] if x["section"].startswith(name))
     e, asks, n, missed = draft.draft_section(sec("Dati sull"), schema)
@@ -586,12 +588,12 @@ def batch_copy(tmp):
     base = Path(tmp)
     shutil.copytree(HERE.parent / "catalogue", base / "catalogue")
     shutil.copytree(HERE.parent / "dictionary", base / "dictionary")
-    fine = gen.json.loads((base / "catalogue/F839/sections/fine-lavori.json").read_text())
+    fine = gen.json.loads((base / "catalogue/F839/sections/sue-comunicazione-di-fine-lavori.json").read_text())
     for s in fine["sections"]:
         if s.get("fields") is not None:
             for k in [k for k in s if k != "section"]:
                 del s[k]
-            s["same_as"] = f"fine-lavori#{s['section']}"
+            s["same_as"] = f"sue-comunicazione-di-fine-lavori#{s['section']}"
     (base / "catalogue/F839/sections/fine-batch.json").write_text(gen.json.dumps(fine))
     return base
 
@@ -626,7 +628,7 @@ def _():
     with tempfile.TemporaryDirectory() as tmp:
         base = batch_copy(tmp)
         (base / "catalogue/F839/drift.json").write_text(gen.json.dumps(
-            {"pratiche": {"fine-lavori": {"checked": "2026-10-28", "differences": ["changed: Dati catastali"]}}}))
+            {"pratiche": {"sue-comunicazione-di-fine-lavori": {"checked": "2026-10-28", "differences": ["changed: Dati catastali"]}}}))
         try:
             gen.generate(gen.load_yaml(FINE / "recipe.yaml"), base=base)
             raise AssertionError("generated")
@@ -639,7 +641,7 @@ def _():
             import run
             steps = gen.load_yaml(FINE / "portal-steps.generated.yaml")
             assert "Dati catastali" in run.portal_changed(steps)[0]
-            assert run.portal_changed(gen.load_yaml(CILA / "portal-steps.yaml")) == []  # hand-written
+            assert run.portal_changed(gen.load_yaml(HAND_WALK)) == []  # hand-written
         finally:
             rules.DRIFT = old
 
@@ -710,15 +712,15 @@ def _():
         catalogue.CAT = base / "catalogue/F839"
         catalogue.SECTIONS, catalogue.SAME = catalogue.CAT / "sections", catalogue.CAT / "same.json"
         try:
-            fps = catalogue.stored_fingerprints("fine-lavori")
-            check = lambda name, change: {"name": name, "like": "fine-lavori", "crawled": "2026-10-28T00:00:00Z", "sections":
+            fps = catalogue.stored_fingerprints("sue-comunicazione-di-fine-lavori")
+            check = lambda name, change: {"name": name, "like": "sue-comunicazione-di-fine-lavori", "crawled": "2026-10-28T00:00:00Z", "sections":
                 [{"section": k, "fingerprint": ("0" * 16 if k == change else v)} for k, v in fps.items()]}
             export = base / "export.json"
             export.write_text(gen.json.dumps({"crawl:check:suap-001-x": check("suap-001-x", None),
                                               "crawl:check:suap-002-x": check("suap-002-x", "Oggetto della pratica")}))
             out = catalogue.cmd_drift(type("a", (), {"export": str(export)}))
             same = gen.json.loads(catalogue.SAME.read_text())
-            assert same["same"] == {"suap-001-x": "fine-lavori"}, out
+            assert same["same"] == {"suap-001-x": "sue-comunicazione-di-fine-lavori"}, out
             assert same["different"]["suap-002-x"]["differences"] == ["changed: Oggetto della pratica"], out
             assert not (catalogue.CAT / "drift.json").exists() or "suap-001-x" not in (catalogue.CAT / "drift.json").read_text()
         finally:
@@ -871,7 +873,7 @@ def _():
 
 @case("a choice the crawl tried apart moves its reveals by the earlier choices' offsets, not by its own (SCIA tolerances)")
 def _():
-    crawl = gen.json.loads((HERE.parent / "catalogue" / "F839" / "sections" / "scia.json").read_text())
+    crawl = gen.json.loads((HERE.parent / "catalogue" / "F839" / "sections" / "sue-segnalazione-certificata-di-inizio-attivita-edilizia.json").read_text())
     s = gen.Section(next(x for x in crawl["sections"] if x["section"].startswith("Asseverazione SCIA - Stato legittimo")))
     s.choose(s.find("radio", "si")[0])     # the state: one row more from r7c13
     s.choose(s.find("radio", "si", 2)[0])  # the tolerances, crawled apart: 20 rows more from r7c13
@@ -1137,7 +1139,7 @@ def _():
     import tempfile
     with tempfile.TemporaryDirectory() as t:
         t = Path(t)
-        (t / "ops.json").write_text(json.dumps([{"name": "cila", "sector": "S", "path": "P"}]))
+        (t / "ops.json").write_text(json.dumps([{"name": "sue-comunicazione-inizio-lavoro-asseverata", "sector": "S", "path": "P"}]))
         subprocess.run([sys.executable, str(HERE.parent / "catalogue.py"), "pane", str(t / "out"), "--bundle",
                         str(t / "pv-prova.js"), "--ops", str(t / "ops.json"), "--fresh"], check=True, capture_output=True)
         text = (t / "pv-prova.js").read_text()
@@ -1331,7 +1333,7 @@ def _():
     d = gen.load_yaml(HERE.parent / "dictionary" / "fnsuap.yaml")
     e = next(x for x in d["sections"] if x["section"] == "Tecnici incaricati" and x.get("aliases"))
     next(f for f in e["fields"] if f.get("label") == "si")["when"] = "{{ask.direttore_lavori|is_altro_tecnico}}"
-    crawl = json.loads((HERE.parent / "catalogue" / "F839" / "sections" / "scia.json").read_text())
+    crawl = json.loads((HERE.parent / "catalogue" / "F839" / "sections" / "sue-segnalazione-certificata-di-inizio-attivita-edilizia.json").read_text())
     c = next(s for s in crawl["sections"] if s["section"].startswith("h1)"))
     recipe = gen.resolved(gen.load_yaml(ROOT / "rehearsals" / "scia-fittizia" / "recipe.yaml"))
     probs = gen.fill(e, "h1) Tecnici incaricati", c, recipe, "h1)")[1]
