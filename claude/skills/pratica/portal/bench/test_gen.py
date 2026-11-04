@@ -395,6 +395,19 @@ def _():
     assert "Relazione paesaggistica (redatta ai sensi del D.P.C.M" in cila
 
 
+@case("docs/portal-defects.md is drawn from defects.yaml, the one defect record, whose `page` stays out of steps files")
+def _():
+    import defects
+    assert (ROOT / "docs" / "portal-defects.md").read_text() == defects.render(), "defects.py --write"
+    carried = 0
+    for f in sorted((ROOT / "rehearsals").glob("*/portal-steps.generated.yaml")):
+        for c in yaml.safe_load(f.read_text()).get("supports", []):
+            if isinstance(c.get("defect"), dict):
+                carried += 1
+                assert "page" not in c["defect"] and c["defect"]["title"], (f, c["defect"]["id"])
+    assert carried, "no steps file carries a defect"
+
+
 @case("a refusal naming a known portal defect carries its record into the steps file; an unknown one is an error")
 def _():
     steps = generated("scia-sanatoria-fittizia")

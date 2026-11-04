@@ -36,4 +36,5 @@ energy incentive.
 Add `reported: {date: YYYY-MM-DD, to: infocamere | comune, channel: ...}` to each defect in
 `defects.yaml`, and an answer when one comes, so pre-flight can tell the person a defect is reported
 and what the office said. A defect fixed on the portal is checked on a made-up draft, then removed
-from `defects.yaml` and `docs/portal-defects.md`, and its recipe's refusal lifted.
+from `defects.yaml` (and `docs/portal-defects.md` drawn again, `defects.py --write`), and its
+recipe's refusal lifted.

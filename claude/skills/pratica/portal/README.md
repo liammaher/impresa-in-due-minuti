@@ -287,6 +287,8 @@ that also cites a Comune page may only confirm a national one there.
   the next row's tick hid it (until 2026-11-02 that stop read as a lookup's "fields with this label",
   which the runner retried twice as a slow portal, filing the draft wrong each time). Where the form's own choice can't say both, it's a portal
   defect (`defects.yaml`, `pdc-aree-fuoco`): left unticked and in `yours`, never filled around.
+  `defects.yaml` is the one defect record: each entry's `page` is its section of
+  `docs/portal-defects.md`, which `defects.py --write` draws (test_gen fails on a page that differs).
 - **A portal document's box reads "Scarica il documento"** (the procura, the DSC), once the
   declarations are ticked: before, the slot is an empty upload box like any other, "Tipologie
   ammesse: jpg.p7m;pdf.p7m Allega Max: 9,77 MB Il valore è obbligatorio" for the procura, the same
