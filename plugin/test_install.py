@@ -74,6 +74,14 @@ def main():
         release = tmp / "release" / f"v{VERSION}"
         release.mkdir(parents=True)
         pack(built, release / asset)
+        # The Touch ID helper, as release.yml's touchid job packs it (a Mac only: Swift).
+        helper_asset = build.TOUCHID_ASSET.format(version=VERSION)
+        if os_ == "darwin":
+            helper = tmp / "pvault-touchid"
+            subprocess.run(["swiftc", "-O", "-swift-version", "5", "cmd/pvault-touchid/main.swift", "-o", str(helper)],
+                           cwd=REPO, check=True)
+            with tarfile.open(release / helper_asset, "w:gz") as t:
+                t.add(helper, arcname="pvault-touchid")
 
         # build.py wants all six archives in the checksums; the five that aren't this machine's are made up.
         sums = tmp / "checksums.txt"
@@ -81,6 +89,7 @@ def main():
         for o, a, ext in build.PVAULT_TARGETS:
             name = f"pvault_{VERSION}_{o}_{a}.{ext}"
             lines.append(f"{sha(release / asset) if name == asset else hashlib.sha256(name.encode()).hexdigest()}  {name}\n")
+        lines.append(f"{sha(release / helper_asset) if os_ == 'darwin' else hashlib.sha256(b'h').hexdigest()}  {helper_asset}\n")
         lines.append(f"{hashlib.sha256(b'x').hexdigest()}  something_else.txt\n")
         sums.write_text("".join(lines))
 
@@ -117,6 +126,10 @@ def main():
             out = subprocess.run([str(dest / "pvault"), "version"], capture_output=True, text=True).stdout.strip()
             assert out == f"pvault {VERSION}", out
             assert os.access(dest / "pvault", os.X_OK)
+            if os_ == "darwin":
+                assert os.access(dest / "pvault-touchid", os.X_OK), "no Touch ID helper next to pvault"
+                signed = subprocess.run(["codesign", "-dv", str(dest / "pvault-touchid")], capture_output=True, text=True)
+                assert "flags=0x10002(adhoc,runtime)" in signed.stderr, signed.stderr
             again = install(skill_dir("s1b"), dest)
             assert again.returncode == 0 and "already installed" in again.stdout, again.stdout + again.stderr
         case("downloads the release, checks it, installs pvault and runs it", installs)
@@ -171,7 +184,7 @@ def main():
             build.write_pvault_release(d, VERSION, sums)
             assert (d / "pvault.version").read_text() == VERSION + "\n"
             pinned = (d / "pvault-checksums.txt").read_text().splitlines()
-            assert len(pinned) == 6 and all(l.split()[1].startswith("pvault_") for l in pinned), pinned
+            assert len(pinned) == 7 and all(l.split()[1].startswith(("pvault_", "pvault-touchid_")) for l in pinned), pinned
             for bad in ("0.1", "v1.0.0", "1.0.0; rm -rf"):
                 try:
                     build.write_pvault_release(d, bad, sums)
@@ -186,7 +199,21 @@ def main():
                 assert "lacks" in str(e), e
             else:
                 raise AssertionError("build.py took checksums missing an archive")
-        case("build.py pins the six archives' checksums and refuses a short or odd set", pins)
+        case("build.py pins the six archives' and the Touch ID helper's checksums and refuses a short or odd set", pins)
+
+        def tampered_helper():
+            if os_ != "darwin":
+                return
+            real = (release / helper_asset).read_bytes()
+            (release / helper_asset).write_bytes(real + b"x")
+            try:
+                dest = tmp / "bin7"
+                r = install(skill_dir("s7"), dest)
+                assert r.returncode != 0 and "checksum mismatch for pvault-touchid" in r.stderr, r.stderr
+                assert not (dest / "pvault-touchid").exists(), "a helper that didn't match was installed"
+            finally:
+                (release / helper_asset).write_bytes(real)
+        case("a Touch ID helper that doesn't match its checksum isn't installed", tampered_helper)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     print(f"{len(ran) - len(failed)}/{len(ran)} passed")

@@ -28,6 +28,7 @@ go test -race ./internal/vault/   # One layer: crypto, store, vault, api
 
 ```sh
 pvault init [--impresa] | onboard        # Create new vault (~/.pvault/); --impresa: a business vault
+pvault setup [--impresa]                 # The same in a browser page, no terminal: create or open, Touch ID/Hello
 pvault --vault <name> <command>          # Any command on another vault (~/.pvault-<name>)
 pvault unlock | lock | serve             # Background server / stop it, zero keys / foreground
 pvault set <category.field> <value>      # Set encrypted field
@@ -164,6 +165,13 @@ Profile Password + Secret Key (128-bit)
   browser can't use a socket). The page is self-contained under a hash-pinned CSP
   (`pageCSP`), and never shows a secret again: the page asks for category reads with `?omit=` the
   password inputs, which come back `redacted` and read "saved".
+- `pvault setup` (`cmd_setup.go`) is the other: a page this command serves on a random loopback
+  port (not the vault server: there may be none yet) where the person creates the vault, opens a
+  locked one and turns on Touch ID or Hello. It takes a loopback Host only, and POSTs only as JSON
+  with its own Origin (another page can't send one); it holds the typed password in memory until
+  the page is done (15 minutes at most), closes after five wrong ones, shows the secret key once
+  and prints nothing secret. Turning on an approver there needs the password, as in a terminal:
+  a caller who knew it could do that anyway, and every approval still needs the person.
 - On Windows the channel is a named pipe (`transport_windows.go`). Pipe names are machine-wide
   and any account can make one, so the server picks a random name, writes it to
   `<vault dir>\run\pipe` (a `RestrictDir` folder) and holds that file open while it serves;

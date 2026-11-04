@@ -32,8 +32,13 @@ archives:
 checksum:
   name_template: checksums.txt
   algorithm: sha256
+  # The Touch ID helper, built on macOS by release.yml's touchid job, is checked like the rest.
+  extra_files:
+    - glob: ./touchid/pvault-touchid_*.tar.gz
 
 release:
   github:
     owner: liammaher
     name: portali
+  extra_files:
+    - glob: ./touchid/pvault-touchid_*.tar.gz

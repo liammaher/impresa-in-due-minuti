@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portali · Il suo archivio</title>
+<style>
+:root { --bg: #f7f6f2; --card: #ffffff; --ink: #1d1d1b; --muted: #5f5e58; --line: #dedcd3; --accent: #1f5f4a; --accent-ink: #ffffff; --warn: #8a3b12; }
+@media (prefers-color-scheme: dark) { :root { --bg: #161614; --card: #22221f; --ink: #ecebe6; --muted: #a8a69d; --line: #3a3934; --accent: #5fb393; --accent-ink: #10201a; --warn: #f0a27a; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.5 -apple-system, "Segoe UI", system-ui, sans-serif; }
+main { max-width: 34rem; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
+h1 { font-size: 1.5rem; margin: 0 0 .25rem; }
+.lead { color: var(--muted); margin: 0 0 2rem; }
+section { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem 1.25rem 1.5rem; margin-bottom: 1rem; }
+section[hidden] { display: none; }
+h2 { font-size: 1.1rem; margin: 0 0 .5rem; }
+p { margin: .5rem 0; }
+label { display: block; margin: 1rem 0 .25rem; font-weight: 600; }
+input { width: 100%; padding: .65rem .75rem; font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
+button { margin-top: 1.25rem; padding: .7rem 1.2rem; font: inherit; font-weight: 600; border: 0; border-radius: 8px; background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+button.quiet { background: transparent; color: var(--accent); border: 1px solid var(--line); margin-left: .5rem; }
+button:disabled { opacity: .6; cursor: wait; }
+.key { font: 1.15rem/1.6 ui-monospace, Menlo, Consolas, monospace; letter-spacing: .04em; word-break: break-all; padding: .75rem; border: 1px dashed var(--line); border-radius: 8px; margin: .75rem 0; user-select: all; }
+.error { color: var(--warn); font-weight: 600; min-height: 1.5em; margin-top: .75rem; }
+.small { color: var(--muted); font-size: .92rem; }
+.small[hidden] { display: none; }
+#create-busy { margin-top: .75rem; }
+@media print { body { background: #fff; color: #000; } main > *:not(#key) { display: none !important; } #key { border: 0; } #key button { display: none; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Il suo archivio Portali</h1>
+  <p class="lead">Qui Portali tiene, cifrati, i dati suoi, dello studio e dei suoi clienti. Restano su questo computer: Claude non li vede mai, li riceve solo il portale.</p>
+
+  <section id="create" hidden>
+    <h2>Scelga una password</h2>
+    <p class="small">Almeno 8 caratteri. La scriverà solo qui, mai nella conversazione con Claude.</p>
+    <label for="pw1">Password</label>
+    <input id="pw1" type="password" autocomplete="new-password">
+    <label for="pw2">La riscriva</label>
+    <input id="pw2" type="password" autocomplete="new-password">
+    <button id="create-go">Crea l'archivio</button>
+    <div class="small" id="create-busy" hidden>Creo l'archivio: qualche secondo…</div>
+    <div class="error" id="create-error"></div>
+  </section>
+
+  <section id="key" hidden>
+    <h2>La sua chiave di recupero</h2>
+    <p>Le servirà solo per ripristinare l'archivio su un altro computer, insieme alla password. La stampi o la conservi in un posto sicuro: non verrà mostrata di nuovo.</p>
+    <div class="key" id="key-text"></div>
+    <button id="key-print">Stampa</button><button class="quiet" id="key-done">L'ho conservata</button>
+  </section>
+
+  <section id="open" hidden>
+    <h2 id="open-title">Apra l'archivio</h2>
+    <p class="small" id="open-note">Scriva la password dell'archivio.</p>
+    <label for="pw">Password</label>
+    <input id="pw" type="password" autocomplete="current-password">
+    <button id="open-go">Apri</button>
+    <div class="error" id="open-error"></div>
+  </section>
+
+  <section id="approvals" hidden>
+    <h2 id="approvals-title">Attivi Touch ID</h2>
+    <p id="approvals-note">Da ora, quando Portali deve leggere i dati di una pratica, le chiederà l'impronta invece della password. Il riquadro dice sempre esattamente cosa viene letto.</p>
+    <button id="approvals-go">Attiva</button>
+    <div class="error" id="approvals-error"></div>
+  </section>
+
+  <section id="done" hidden>
+    <h2>Fatto</h2>
+    <p>L'archivio è pronto. Può chiudere questa pagina e tornare a Claude.</p>
+  </section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const sections = ["create", "key", "open", "approvals", "done"];
+let state = null, finished = false;
+
+function show(id) { for (const s of sections) $(s).hidden = s !== id; }
+
+async function post(path, body) {
+  const r = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body || {}) });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.error || "Qualcosa non ha funzionato.");
+  return data;
+}
+
+async function refresh() {
+  state = await (await fetch("/state")).json();
+  const name = state.approver_name;
+  $("approvals-title").textContent = "Attivi " + name;
+  $("approvals-go").textContent = "Attiva " + name;
+  if (state.approver === "hello") {
+    $("approvals-note").textContent = "Da ora, quando Portali deve leggere i dati di una pratica, Windows Hello le chiederà il volto, l'impronta o il PIN invece della password. Il riquadro dice sempre esattamente cosa viene letto.";
+  }
+  if (!state.exists) return show("create");
+  const wantsApprovals = state.can_approve && !state.approver_on;
+  if (!state.unlocked || (wantsApprovals && !state.has_password)) {
+    $("open-title").textContent = state.unlocked ? "Confermi la password" : "Apra l'archivio";
+    $("open-note").textContent = state.unlocked
+      ? "Per attivare " + name + " serve la password dell'archivio, una volta."
+      : "L'archivio è chiuso: scriva la sua password per aprirlo.";
+    show("open");
+    return $("pw").focus();
+  }
+  if (wantsApprovals) return show("approvals");
+  show("done");
+  if (!finished) { finished = true; post("/done").catch(() => {}); }
+}
+
+function busy(button, on) { button.disabled = on; }
+
+$("create-go").onclick = async () => {
+  const b = $("create-go"); $("create-error").textContent = "";
+  if ($("pw1").value.length < 8) return ($("create-error").textContent = "La password deve avere almeno 8 caratteri.");
+  if ($("pw1").value !== $("pw2").value) return ($("create-error").textContent = "Le due password non coincidono.");
+  busy(b, true); $("create-busy").hidden = false;
+  try {
+    const r = await post("/create", { password: $("pw1").value, confirm: $("pw2").value });
+    $("pw1").value = $("pw2").value = "";
+    $("key-text").textContent = r.secret_key;
+    show("key");
+  } catch (e) { $("create-error").textContent = e.message; }
+  busy(b, false); $("create-busy").hidden = true;
+};
+
+$("key-print").onclick = () => window.print();
+$("key-done").onclick = () => { $("key-text").textContent = ""; refresh(); };
+
+$("open-go").onclick = async () => {
+  const b = $("open-go"); $("open-error").textContent = "";
+  busy(b, true);
+  try { await post("/open", { password: $("pw").value }); $("pw").value = ""; await refresh(); }
+  catch (e) { $("open-error").textContent = e.message; }
+  busy(b, false);
+};
+$("pw").addEventListener("keydown", (e) => { if (e.key === "Enter") $("open-go").click(); });
+
+$("approvals-go").onclick = async () => {
+  const b = $("approvals-go"); $("approvals-error").textContent = "";
+  busy(b, true);
+  try { await post("/approvals"); await refresh(); }
+  catch (e) { $("approvals-error").textContent = e.message; }
+  busy(b, false);
+};
+
+refresh().catch(() => { document.querySelector(".lead").textContent = "La pagina di configurazione non risponde: chieda a Claude di riaprirla."; });
+</script>
+</body>
+</html>

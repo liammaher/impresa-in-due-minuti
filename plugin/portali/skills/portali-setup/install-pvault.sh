@@ -35,7 +35,8 @@ case "$(uname -m)" in
 esac
 asset="pvault_${version}_${os}_${arch}.tar.gz"
 
-if [ -x "$dest_dir/pvault" ] && [ "$("$dest_dir/pvault" version 2>/dev/null || true)" = "pvault $version" ]; then
+if [ -x "$dest_dir/pvault" ] && [ "$("$dest_dir/pvault" version 2>/dev/null || true)" = "pvault $version" ] &&
+   { [ "$os" != darwin ] || [ -x "$dest_dir/pvault-touchid" ]; }; then
   echo "pvault $version is already installed"
   echo "PVAULT_PATH=$dest_dir/pvault"
   exit 0
@@ -84,6 +85,29 @@ fi
 [ "$("$dest_dir/pvault" version 2>/dev/null || true)" = "pvault $version" ] ||
   die "the installed pvault doesn't report version $version"
 echo "installed pvault $version"
+
+# On a Mac, the Touch ID helper next to it, checked the same way: approvals by fingerprint,
+# and the archive opened by fingerprint, with nothing to build.
+if [ "$os" = darwin ]; then
+  helper="pvault-touchid_${version}_darwin_universal.tar.gz"
+  want=$(awk -v a="$helper" '$2 == a { print $1 }' "$here/pvault-checksums.txt")
+  case "$want" in
+    *[!0-9a-f]*|"") die "no checksum for $helper in pvault-checksums.txt" ;;
+  esac
+  echo "downloading $helper"
+  curl -fsSL --proto "$proto" --tlsv1.2 -o "$tmp/$helper" "$base/v$version/$helper" ||
+    die "the download failed ($base/v$version/$helper)"
+  got=$(shasum -a 256 "$tmp/$helper" | awk '{ print $1 }')
+  [ "$got" = "$want" ] || die "checksum mismatch for $helper: pvault is installed, the Touch ID helper isn't"
+  tar -xzf "$tmp/$helper" -C "$tmp" pvault-touchid || die "$helper has no pvault-touchid in it"
+  rm -f "$dest_dir/pvault-touchid"
+  cp "$tmp/pvault-touchid" "$dest_dir/pvault-touchid"
+  chmod 755 "$dest_dir/pvault-touchid"
+  xattr -d com.apple.quarantine "$dest_dir/pvault-touchid" 2>/dev/null || true
+  codesign -s - -f -o runtime "$dest_dir/pvault-touchid" 2>/dev/null ||
+    echo "install-pvault: could not sign pvault-touchid (codesign); Touch ID won't be offered" >&2
+  echo "installed pvault-touchid $version"
+fi
 case ":$PATH:" in
   *":$dest_dir:"*) ;;
   *) echo "note: $dest_dir is not on your PATH; run it as $dest_dir/pvault" ;;
