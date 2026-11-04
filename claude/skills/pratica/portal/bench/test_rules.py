@@ -20,6 +20,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
 import gen  # noqa: E402
+import route  # noqa: E402
 import rules  # noqa: E402
 import run  # noqa: E402
 
@@ -148,15 +149,22 @@ def sue(name, answers="answers-p6.json", **changes):
 
 
 def sue_every_case_decided_once():
-    """The SUE table as the library's validator holds it: every combination of the facts is
-    decided by one main rule, by "none needed", or refused."""
-    domains = [list(f["values"]) if f["type"] == "choice" else [True, False] for f in SUE["facts"].values()]
+    """Every case of the SUE table is decided by one main rule, by "none needed", or refused.
+
+    The walk is route.cases(): each fact as decide() asks it (seconds). The product of every
+    fact's values (34.5 million, 45 minutes here) is the library's validator's
+    (tools/lib/rules.ts, validateRules). Both hold the same cases: once decide() asks nothing,
+    every rule has a false condition or has fired, so no fact left unset can change the
+    decision. That is what this checks at each leaf, which the product did by setting them all:
+    a fact decide() fails to ask would leave a rule open here."""
     n = 0
-    for combo in itertools.product(*domains):
-        d = rules.decide(SUE, dict(zip(SUE["facts"], combo)))
-        assert not d["conflict"] and (d["main"] or d["none"] or d["refused"]), (combo, d)
+    for facts, d in route.cases("sue-napoli"):
+        assert not d["conflict"] and (d["main"] or d["none"] or d["refused"]), (facts, d)
+        for r in SUE["rules"]:
+            held = [rules._holds(c, facts.get(name)) for name, c in r["when"].items()]
+            assert False in held or None not in held, (facts, r["id"])
         n += 1
-    assert n > 100000, n
+    assert n > 1000, n
 
 
 def sue_rehearsals_ready():
