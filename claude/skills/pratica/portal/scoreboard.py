@@ -8,7 +8,7 @@ Three levels, each a stricter claim than the last (docs/coverage.md says them in
 
   mapped    a stored crawl of the pratica (catalogue/F839/sections/)
   fillable  mapped, and the dictionary fills every section of it (gen.py's own test)
-  run       fillable, and a rehearsal recipe generated from it has a README with a dated run
+  run       fillable, and a rehearsal recipe generated from it has a filled run in its runs.json
 
 Run it with the pratica venv's Python (it imports gen.py, which needs PyYAML).
 """
@@ -23,6 +23,7 @@ import yaml
 import catalogue as cat
 import gen
 import route
+import runs
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[3]
@@ -47,20 +48,16 @@ def pratica_status(stored, alias, dictionary):
 
 
 def rehearsal_status():
-    """Each recipe: the crawl it was generated from, and whether its README records a run."""
+    """Each recipe: the crawl it was generated from, and whether its runs.json records a filled run."""
     out = {}
     for d in sorted(p for p in REHEARSALS.iterdir() if p.is_dir()):
         recipe = d / "recipe.yaml"
         if not recipe.exists():
             continue
         r = gen.resolved(gen.load_yaml(recipe))
-        readme = d / "README.md"
-        text = readme.read_text() if readme.exists() else ""
-        # A run is a dated row of the README's table that says the draft was filled: read back
-        # on a fresh load, or taken to the end of the form (a row that only stopped doesn't count).
-        run = bool(re.search(r"^\|\s*20\d\d-\d\d-\d\d\s*\|.*(filled|read back|to the end of the form)",
-                             text, re.M | re.I))
-        out[d.name] = {"crawl": r.get("crawl"), "sportello": r.get("sportello"), "run": run, "readme": readme.exists()}
+        # A run that filled the draft, from its runs.json (a run that only stopped doesn't count).
+        out[d.name] = {"crawl": r.get("crawl"), "sportello": r.get("sportello"), "run": runs.filled(runs.load(d)),
+                       "readme": (d / "README.md").exists()}
     return out
 
 
@@ -335,8 +332,8 @@ Three claims, each stricter than the last:
 - **Mapped**: the pratica is crawled (`catalogue/F839/sections/`): we know its sections and boxes.
 - **Fillable**: mapped, and the dictionary fills every section of it, so `gen.py` can write its
   steps file. Nothing has touched the portal yet.
-- **Run on the portal**: fillable, and a rehearsal generated from it has a dated run in its
-  README that says the draft was **filled**: every value read back on a fresh load, with made-up
+- **Run on the portal**: fillable, and a rehearsal generated from it has a run in its
+  `runs.json` (the README's run table) that **filled** the draft: every value read back on a fresh load, with made-up
   people. Never declared, paid, signed or sent: that is the person's, by design.
 
 "Drift-checked" counts the pratiche whose sections a drift check has compared with the live

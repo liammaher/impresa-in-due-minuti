@@ -1,0 +1,7 @@
+[
+ {
+  "date": "2026-10-28",
+  "browser": "pane",
+  "note": "Stopped at \"Superficie di somministrazione\": the box's title and cell both say \"mq\", which took two of the three texts the runner reads, so the label beside it wasn't seen. `inpage.js` now counts a repeated text once. Resumed on the same draft: 53 values in 10 sections, every one read back on a fresh load (48 s, then 25 s)."
+ }
+]

@@ -17,8 +17,16 @@ attachments (the relazione paesaggistica, DPCM 12/12/2005), the bollo, signing a
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-29 | pane | Stopped twice in its own section: the vincolo's "sì" by label found the "no" above it; then "in zona di PRG" named the "ad uso" box too (the page's nearest label before each box in a row is the last column's). Fixed in the dictionary and in inpage.js (a box whose own text is the label comes first). |
-| 2026-10-29 | pane | **Filled**, resumed on the same draft: all 11 sections read back on a fresh load (8 s). Run as owner, rogito, building, no deeds, art. 136 and 142. |
-| 2026-10-29 | pane | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 53.4 s; second, with the runner waiting for a section to open, **filled** in 58.2 s, read back on a fresh load. |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-29 | pane |  | Stopped twice in its own section: the vincolo's "sì" by label found the "no" above it; then "in zona di PRG" named the "ad uso" box too (the page's nearest label before each box in a row is the last column's). Fixed in the dictionary and in inpage.js (a box whose own text is the label comes first). |
+| 2026-10-29 | pane |  | **Filled**, resumed on the same draft: all 11 sections read back on a fresh load (8 s). Run as owner, rogito, building, no deeds, art. 136 and 142. |
+| 2026-10-29 | pane |  | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 53.4 s; second, with the runner waiting for a section to open, **filled** in 58.2 s, read back on a fresh load. |
+| 2026-10-29 | pane | `answers-p6.json` | **filled** |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 49 s |
+| 2026-11-03 | pane | `answers-p6.json` | **stopped** in 61 s |
+| 2026-11-03 | pane | `answers-p6.json` | **filled** in 65 s |
+
+<!-- /runs -->

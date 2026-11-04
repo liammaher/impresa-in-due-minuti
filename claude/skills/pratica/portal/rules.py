@@ -6,6 +6,7 @@ the tables: every combination of facts decided once, every rule citing a verifie
 bench/test_rules.py holds the two to the same answers and the copy to the library's.
 """
 
+import json
 import re
 from pathlib import Path
 
@@ -13,7 +14,18 @@ import yaml
 
 HERE = Path(__file__).resolve().parent
 TABLES = HERE / "rules"
+# What the last drift check (catalogue.py drift) found changed on the portal, per pratica.
+DRIFT = HERE / "catalogue" / "F839" / "drift.json"
 _tables = {}
+
+
+def drifted(name):
+    """The differences the last drift check found in a pratica's crawl, or []: pre-flight
+    refuses such a pratica (run.py portal_changed). Here so the runtime imports no authoring
+    code: the plugin ships rules.py and drift.json, not catalogue.py."""
+    if not DRIFT.exists():
+        return []
+    return json.loads(DRIFT.read_text())["pratiche"].get(name, {}).get("differences", [])
 
 
 def table(name):

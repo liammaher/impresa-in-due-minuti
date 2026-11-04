@@ -1,14 +1,21 @@
 [
  {
+  "date": "2026-10-28",
+  "browser": "pane",
+  "note": "First run, no stop: 52 values and the client's ID kept, every value read back on a fresh load; Login → draft: 87.9 s to the end of the form (wizard 14.1, 10 sections, fresh load 15.8), then 5.3 s for 1 attachment"
+ },
+ {
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 50.4
+  "seconds": 50.4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 53
+  "seconds": 53,
+  "browser": "pane"
  }
 ]

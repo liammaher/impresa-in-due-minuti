@@ -1,5 +1,5 @@
 # The Segnalazione Certificata per l'Agibilità after the CILA rehearsal's works, as gen.py writes
-# its steps file. Never walked: crawl catalogue/F839/sections/agibilita.json, every field from
+# its steps file. Never walked: crawl catalogue/F839/sections/sue-segnalazione-certificata-per-l-agibilita.json, every field from
 # dictionary/fnsuap.yaml. The architect attests, as direttore dei lavori or, where none was named,
 # as professionista abilitato (art. 24 c. 5 DPR 380/2001); the client is
 # the tenant of the CILA (rehearsals/cila-fittizia). Works on structures (collaudo statico or
@@ -10,7 +10,7 @@ procedure: napoli/comune/agibilita
 title: "Segnalazione certificata per l'agibilità, SUE Napoli (tecnico con procura)"
 comune: F839
 sportello: sue
-crawl: agibilita
+crawl: sue-segnalazione-certificata-per-l-agibilita
 operation: Segnalazione Certificata per l'Agibilità
 scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
 first: [Scheda anagrafica, Qualifica e dati del procuratore]

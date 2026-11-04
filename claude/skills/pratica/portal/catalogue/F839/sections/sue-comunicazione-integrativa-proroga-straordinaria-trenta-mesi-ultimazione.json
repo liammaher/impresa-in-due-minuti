@@ -77,25 +77,25 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "cil#Scheda anagrafica",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "cil#Oggetto della pratica",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#Oggetto della pratica",
    "seconds": 0.8
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "cil#DOMICILIO DIGITALE",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#DOMICILIO DIGITALE",
    "seconds": 0.7
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "seconds": 0.6
   },
   {
@@ -109,13 +109,13 @@
   {
    "section": "Ubicazione dell'attività",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "cil#Localizzazione dell'intervento",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#Localizzazione dell'intervento",
    "seconds": 0.7
   },
   {
    "section": "Dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "cil#Dati catastali",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#Dati catastali",
    "seconds": 0.6
   },
   {
@@ -436,7 +436,7 @@
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "cil#Qualifica e dati del procuratore",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#Qualifica e dati del procuratore",
    "seconds": 0.9,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }

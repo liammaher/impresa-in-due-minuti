@@ -1,0 +1,32 @@
+[
+ {
+  "date": "2026-10-27",
+  "browser": "Claude, Liam logged in",
+  "note": "Reached: Allega documenti: 21 screens, every factual section saved; Broke on: The attachments gate: two required files must be CAdES-signed (.p7m); the seven declarations are the person's; Fixed: Map rewritten from what the portal showed"
+ },
+ {
+  "date": "2026-10-27",
+  "browser": "Claude from `portal-steps.yaml`, in the Claude browser (already logged in)",
+  "note": "Reached: Every factual section saved and read back; stopped before the declarations and payment; Broke on: Nothing in the map; two mechanics: a dropdown filter matches substrings, and a click on a fresh panel misses; Fixed: The filter-and-arrow recipe, in the map and in `run.py`"
+ },
+ {
+  "date": "2026-10-27",
+  "browser": "Benchmark: 3 timed runs from the steps file, bigger batches",
+  "note": "Reached: Every factual section saved and read back, each run; Broke on: Run 1: a re-render after Forma giuridica wiped CF and P.IVA; run 3: it wiped Denominazione; Fixed: Forma giuridica now comes before Denominazione in `portal-steps.yaml`"
+ },
+ {
+  "date": "2026-10-27",
+  "browser": "`inpage.js` in the Claude browser, one call to start it",
+  "note": "Reached: Every factual section saved and read back, in 53 s; Broke on: Four things the first tries found: the pane slows page timers, dropdowns build their list on first open, the last wizard screen loads twice, labels sit above or left of their box; Fixed: All four in `inpage.js` and the shared label check"
+ },
+ {
+  "date": "2026-10-28",
+  "browser": "`do.py scia`: `run.py run` in a Playwright window, Liam logged in there",
+  "note": "Reached: Every factual section saved and read back, 45 s after the login; Broke on: Nothing"
+ },
+ {
+  "date": "2026-10-28",
+  "browser": "`run.py run --vault-dir ~/.pvault-fittizia`: the real business vault, as the pratica skill does it",
+  "note": "Reached: Every factual section saved and read back, 58 s; Broke on: A window left open by the last run held the profile (\"Opening in existing browser session\"); Fixed: Ran with `--profile` on a new folder"
+ }
+]

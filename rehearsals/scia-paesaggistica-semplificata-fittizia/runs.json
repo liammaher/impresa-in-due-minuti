@@ -1,38 +1,58 @@
 [
  {
+  "date": "2026-10-29",
+  "browser": "pane",
+  "note": "First run, from scratch, in a batch of eight: **filled** in 177 s, every value read back on a fresh load (28 s); variant to a SCIA, contributo in instalments with the prospetto attached, no start date."
+ },
+ {
   "date": "2026-10-30",
   "answers": "answers-impianti.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane",
+  "note": "systems needing a project (`answers-impianti`: six systems, each project in its own slot, the energy report's slot too), `bench/rerun.py` bundle: **filled** in 157 s, read back on a fresh load (25 s), nothing moved or loose"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "note": "P6 and systems needing a project (`answers-impianti`), `bench/rerun.py` bundle, after the recipe became `extends: [scia-fittizia, parts/paesaggistica-semplificata]` (it gained the SCIA's 12 slots it had missed, and lost 6 refusals the SCIA had closed): **filled** both (146.9 s, 152.8 s), read back on a fresh load (25 s, 25 s), nothing moved or loose"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 146.9
+  "seconds": 146.9,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-impianti.json",
   "result": "filled",
-  "seconds": 152.8
+  "seconds": 152.8,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 153.1
+  "seconds": 153.1,
+  "browser": "pane",
+  "note": "P6, `bench/rerun.py` bundle, after the semplificata's \"Si allega\" box got its slot (\"Relazione paesaggistica semplificata e documentazione necessaria\": required, plain PDF; read on the earlier filled draft, whose run had left it empty: the runner took the portal's \"required\" under it for the person's signed-only \"Relazione Paesaggistica Semplificata\", whose title starts it; fixed in inpage.js): **filled** in 153.1 s, the slot holding its file."
  },
  {
   "date": "2026-11-03",
   "answers": "answers-vincolo-136.json",
   "result": "filled",
-  "seconds": 288.8
+  "seconds": 288.8,
+  "browser": "pane",
+  "note": "The landscape vincolo of art. 136 alone (`answers-vincolo-136`), `bench/rerun.py` bundle: **filled** in 289 s. `answers-vincolo-134` never reached the portal (\"the page didn't load\" at the domicilio digitale) and the batch dropped it without a word: `loop.js` now lists such runs (`unreached`)"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-vincolo-134.json",
   "result": "filled",
-  "seconds": 238.1
+  "seconds": 238.1,
+  "browser": "pane",
+  "note": "`answers-vincolo-134` (art. 134 alone), `bench/rerun.py` bundle: **filled** in 238 s"
  }
 ]

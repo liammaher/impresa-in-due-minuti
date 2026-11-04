@@ -1,0 +1,7 @@
+[
+ {
+  "date": "2026-10-28",
+  "browser": "pane",
+  "note": "Stopped once in the wizard: this pratica has no \"interventi eventuali\" screen, which the batch crawl had recorded and the recipe didn't use (`gen.py` now drops a recipe's wizard step for a screen the crawl didn't see). Resumed on the draft: 51 values, every one read back on a fresh load."
+ }
+]
