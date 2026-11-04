@@ -10,7 +10,7 @@ Nobody walked this pratica's screens. Its steps file, `portal-steps.generated.ya
 from `claude/skills/pratica/portal/gen.py`:
 
 - `recipe.yaml`: the operation and scelta, the person's own steps, the cases it supports.
-- `catalogue/F839/sections/fine-lavori.json`: `crawl.js` on an empty draft (134 s: 13 sections,
+- `catalogue/F839/sections/sue-comunicazione-di-fine-lavori.json`: `crawl.js` on an empty draft (134 s: 13 sections,
   57 choices tried, the attachments screen's 7 slots).
 - `dictionary/fnsuap.yaml`: what goes in each field, by section and label, shared with the
   CILA.

@@ -3,7 +3,7 @@
 Compared on 2026-10-30: InfoCamere's `mod_scia_v1.0.7.xsd` (repository
 `InfoCamereSCpA/Sistema-Informatico-degli-Sportelli-Unici-Moduli-PA`, commit `fc13e08`, 12 March
 2026), flattened by `../../cila-fittizia/schema/flatten.py`, against every box the SUE of Napoli
-showed on a SCIA draft in `claude/skills/pratica/portal/catalogue/F839/sections/scia.json`: the
+showed on a SCIA draft in `claude/skills/pratica/portal/catalogue/F839/sections/sue-segnalazione-certificata-di-inizio-attivita-edilizia.json`: the
 boxes of each section, those a choice reveals, and the two sections that only appear after a choice
 (the procuratore, the sanatoria). Matching is by meaning, as in the CILA comparison
 (`../../cila-fittizia/schema/schema-vs-portal.md`), but done by a subagent, not by hand; a person

@@ -8,7 +8,7 @@ sending.
 
 How its steps file was made (`portal-steps.generated.yaml`, by `gen.py`):
 
-- **Crawl**: an empty draft, 91 s (`catalogue/F839/sections/acconciatore.json`). 9 sections
+- **Crawl**: an empty draft, 91 s (`catalogue/F839/sections/suap-011-aprire-l-attivita-di-acconciatore-procura.json`). 9 sections
   to fill; the rest are the person's declarations.
 - **Shared sections** (Scheda anagrafica, domicili, the premises, catasto, oggetto, diritti):
   the dictionary's, in their business version (`subject: impresa`), written from the

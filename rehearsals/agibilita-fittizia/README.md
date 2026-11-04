@@ -6,7 +6,7 @@ dichiarazione di conformità in `files/`); the draft is "PROVA NON INVIARE" and 
 the declarations, signing and sending.
 
 `portal-steps.generated.yaml` is `gen.py`'s, from `recipe.yaml`, the crawl of an empty draft
-(`catalogue/F839/sections/agibilita.json`: 255 s, 117 choices) and `dictionary/fnsuap.yaml`.
+(`catalogue/F839/sections/sue-segnalazione-certificata-per-l-agibilita.json`: 255 s, 117 choices) and `dictionary/fnsuap.yaml`.
 The attestations (impianti, statics, energy, barriers, catasto, house numbers, fire, lifts)
 are pre-flight's questions.
 

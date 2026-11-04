@@ -6,7 +6,7 @@ made-up data; the draft is "PROVA NON INVIARE" and stops before the declarations
 sending.
 
 `portal-steps.generated.yaml` is `gen.py`'s, from `recipe.yaml`: the SCIA's crawl
-(`catalogue/F839/sections/scia.json`, which tried the wizard's sanatoria scelta), `dictionary/fnsuap.yaml`,
+(`catalogue/F839/sections/sue-segnalazione-certificata-di-inizio-attivita-edilizia.json`, which tried the wizard's sanatoria scelta), `dictionary/fnsuap.yaml`,
 and the wizard's "Le opere ricadono nell'ambito della Sanatoria ...?" answered Sì, which adds the
 quadro "SANATORIA e regolarizzazioni per interventi già realizzati e in corso di esecuzione".
 

@@ -6,7 +6,7 @@ a procura, the tenant client, one firm. Made-up data; the draft is "PROVA NON IN
 stops before the declarations, signing and sending.
 
 `portal-steps.generated.yaml` is `gen.py`'s, from `recipe.yaml`, the crawl of an empty draft
-(`catalogue/F839/sections/cil.json`: 176 s, 79 choices) and `dictionary/fnsuap.yaml`. Its
+(`catalogue/F839/sections/sue-comunicazione-di-inizio-lavori-per-opere-temporanee.json`: 176 s, 79 choices) and `dictionary/fnsuap.yaml`. Its
 quadri are the CILA's under other letters (b = b, d = e, f = h, g = i), matched without the
 letter. New in the dictionary: quadro c) (the dates and what the works are) and the empty
 "altre comunicazioni". The safety quadro shows the "under 200 uomini-giorno" choice as a
