@@ -5,7 +5,7 @@ procedure: napoli/comune/cila-lavori-edilizi
 title: "CILA: lavori interni non strutturali, SUE Napoli (tecnico con procura)"
 comune: F839
 sportello: sue
-crawl: cila
+crawl: sue-comunicazione-inizio-lavoro-asseverata
 operation: Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)
 scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
 # The portal lists the procuratore's section last; the run fills the dichiarante first.

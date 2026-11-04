@@ -35,21 +35,21 @@ def labels_alike():
 
 def states():
     """A box a run took, one only the dictionary maps, one nothing maps."""
-    st, who = state("scia", "c) Qualificazione", "senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di singola unità immobiliare all")
+    st, who = state("sue-segnalazione-certificata-di-inizio-attivita-edilizia", "c) Qualificazione", "senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di singola unità immobiliare all")
     assert st == "case" and "scia-fittizia" in who, (st, who)
     # The same box once a run of a case that ticks it is recorded as filled (runs.json).
-    bx = sb.boxes("scia")
+    bx = sb.boxes("sue-segnalazione-certificata-di-inizio-attivita-edilizia")
     box = next(b for b in bx if b["section"].startswith("c) Qualificazione") and sb.norm(b["label"]).startswith(sb.norm("senza opere (o con opere")))
     runs = {who for *_, who in TICKS}
     assert sb.status(box, TICKS, MAPPED, LEAVES, bx, runs)[0] == "filled"
     # Works finished in part: a case ticks it since 2026-11-03 (the planimetria in its own slot);
     # before, the recipe refused it and the box was only mapped.
-    st, who = state("fine-lavori", "", "in forma parziale")
+    st, who = state("sue-comunicazione-di-fine-lavori", "", "in forma parziale")
     assert st == "case" and "fine-lavori-fittizia" in who, (st, who)
     # The land register: a case ticks it since 2026-11-02 (the permesso's plot), not yet run.
-    assert state("scia", "Dati catastali", "Nuovo Catasto Terreni")[0] == "case"
+    assert state("sue-segnalazione-certificata-di-inizio-attivita-edilizia", "Dati catastali", "Nuovo Catasto Terreni")[0] == "case"
     # The procuratore born abroad: a CILA case ticks it since 2026-11-02 (the shared section).
-    st, who = state("scia", "Qualifica e dati del procuratore", "all'Estero")
+    st, who = state("sue-segnalazione-certificata-di-inizio-attivita-edilizia", "Qualifica e dati del procuratore", "all'Estero")
     assert st == "case" and "cila-fittizia" in who, (st, who)
 
 
