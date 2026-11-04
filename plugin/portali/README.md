@@ -1,52 +1,53 @@
 # Portali
 
-Prepares a Comune di Napoli pratica on impresainungiorno (SUE and SUAP) from your client's
-documents, and stops where your part begins: the declarations, your firma digitale, the
-payment and sending. Free; it works on a Claude Pro plan in Cowork.
+Prepara una pratica del Comune di Napoli su impresainungiorno (SUE e SUAP) partendo dai documenti
+del suo cliente, e si ferma dove comincia la sua parte: le dichiarazioni, la firma digitale, il
+pagamento e l'invio. Gratuito e open source.
 
-## Install
+## Installazione
 
-In Claude Code, one command adds the marketplace and installs the plugin:
+Nell'app Claude per computer, un solo comando aggiunge e installa Portali:
 
 ```
 /plugin install portali --marketplace liammaher/portali
 ```
 
-Then say "set me up" if you want the private vault (`portali-setup`), or just ask for a pratica.
-See `docs/install.md` in the repository for what is checked and what is not.
+Poi scriva «Configura Portali»: Claude prepara il suo archivio privato, cifrato, su questo
+computer. Lì restano i dati suoi, dello studio e dei clienti; Claude non li vede mai.
 
-## Use it
+## Come si usa
 
-1. Open a folder in Cowork, with one subfolder per job holding the client's documents
-   (visura, documento d'identità, elaborati, relazione).
-2. Write one line: "CILA per il cliente in Bianchi/, lavori interni, via ...".
-3. Answer the one message of questions Claude sends, log in with SPID in Cowork's own
-   browser, and read the review page when the draft is ready.
+1. Metta i documenti di ogni lavoro in una cartella: visura, atto o contratto, documento
+   d'identità, relazione tecnica, elaborati.
+2. Scriva una riga: «CILA per il signor Bianchi, i documenti sono nella cartella Bianchi».
+3. Risponda all'unico messaggio di domande, confermi con Touch ID (o Windows Hello), acceda con
+   SPID nel browser dell'app e scriva sul portale il codice che compare sullo schermo.
+4. Quando la bozza è pronta, legga la pagina di riepilogo: cosa resta da fare a lei, ogni
+   controllo fatto, ogni valore inserito.
 
-The first time, Claude asks for your studio's details once and keeps them in `studio.json`.
+## Dove vanno i dati dei suoi clienti
 
-## Where your clients' data goes
+Nel suo archivio su questo computer e sul portale. Da nessun'altra parte: Portali non ha un
+server. Lei è titolare del trattamento dei dati dei suoi clienti: in Claude disattivi «Aiuta a
+migliorare Claude» (Impostazioni → Privacy) e usi il browser dell'app, non Claude in Chrome.
 
-Into your folder and your Claude conversation, and onto the portal. Nowhere else: this
-plugin has no server. You are the controller of your clients' data: turn off "Help improve
-Claude" in Settings → Privacy, and use Cowork's built-in browser, not Claude in Chrome.
+## Cosa contiene
 
-## What's in it
+- La compilazione automatica dell'intera pratica sul portale, con la rilettura di ogni valore.
+- La biblioteca pratiche-napoli: cosa chiede ogni ufficio di Napoli per ogni procedimento, con
+  le fonti.
+- I casi che una pratica non copre ancora: vengono rifiutati prima di aprire il portale.
 
-- The runner that fills a whole pratica on the portal and reads every value back.
-- The pratiche-napoli library: what Naples's offices ask for each procedure, with sources.
-- The cases each pratica doesn't cover yet: those are refused before anything opens.
+Claude non spunta mai una dichiarazione, non firma, non paga e non invia.
 
-Claude never ticks a declaration, signs, pays or sends.
+## Prima di usarlo
 
-## Before you use it
+Legga l'[uso responsabile](https://github.com/liammaher/portali/blob/main/docs/responsible-use.md):
+lei firma e risponde della pratica, una pratica alla volta con il suo SPID, nessun dato personale
+in una segnalazione. Per chiedere una pratica o segnalare un portale cambiato apra una
+[segnalazione](https://github.com/liammaher/portali/issues/new/choose).
 
-Read [responsible use](https://github.com/liammaher/portali/blob/main/docs/responsible-use.md)
-(Italian and English): you sign and answer for the pratica, one pratica at a time with your own
-SPID, and no personal data in a report. To ask for a pratica or report a portal that changed, open
-an [issue](https://github.com/liammaher/portali/issues/new/choose).
+## Per qualcosa in più
 
-## More than this
-
-To connect it to your other tools, run it across many jobs, or automate another workflow,
-write to liampmaher1996@gmail.com.
+Per collegarlo agli altri strumenti dello studio, usarlo su molti lavori insieme o automatizzare
+altro, scriva a liampmaher1996@gmail.com.
