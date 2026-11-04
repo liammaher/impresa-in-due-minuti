@@ -67,7 +67,9 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    A recipe's `supports` keeps only what the table doesn't decide (an unmapped branch).
    A new fact multiplies the table's cases by its values: with `terre_rocce` (three) the library's
    validator walks 34 million combinations (8 minutes; it built them as one array and ran out of memory
-   until 2026-11-03) and `bench/test_rules.py` about 45 minutes; the existing cases then answer it as
+   until 2026-11-03). `bench/test_rules.py` walks only the cases `route.cases()` reaches, each fact as
+   the table asks it (30,635, seconds; it took 45 minutes as the product until 2026-11-04), and checks
+   each leaf leaves no rule open, so the two hold the same cases; the existing cases then answer it as
    they did before (`bench/add_answer.py`), and test_route's hand-written cases too. In the library a
    rule's `regime` is a closed list (`contract/rules.schema.json`: a filing is `comunicazione`), its
    procedures one folder per ente name (the site test), and every entry must parse with PyYAML as well
