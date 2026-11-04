@@ -4,6 +4,8 @@
 # ARPA Campania's) and no section of its own (catalogue/F839/sue-wizard.json `pairs`, 2026-11-03):
 # the dichiarazione itself is the portal's document on the attachments screen, signed after the
 # declarations (the dictionary's slot), and its data are the person's there.
+# Its operation in the SUE's wizard: a combination's operations are its main pratica's, then this.
+operation: "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
 rules:
   handles: [napoli/comune/utilizzo-materiale-scavo-fuori-sito]
 # The case it adds to the main pratica's P6 answers: excavated soil leaving a small site as a

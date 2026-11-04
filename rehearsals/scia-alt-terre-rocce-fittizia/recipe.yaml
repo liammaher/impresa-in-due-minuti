@@ -7,12 +7,7 @@
 extends: [scia-alternativa-fittizia, parts/dichiarazione-utilizzo-terre]
 procedure: napoli/comune/scia-alternativa-pdc-con-dichiarazione-utilizzo-terre
 title: "SCIA alternativa al permesso di costruire con dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
-comune: F839
-sportello: sue
 crawl: sue-combo-scia-alt-dichiarazione-utilizzo
-operation:
-  - Segnalazione Certificata Inizio Attività alternativa al Permesso di Costruire (S.C.I.A. alternativa P.d.C.)
-  - "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
 asks:
   descrizione: {default: "SCIA alt e terre e rocce {{c:identity.last_name}}"}
 # Its main pratica's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
@@ -24,8 +19,6 @@ yours:
   - "The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal's document on Allega documenti once the declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at least 15 days after sending"
   - "When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017) on the SUE"
   - "Sign and send (Firma e invio); keep the receipt. The works may start 30 days after filing, once the assents the SCIA asks for (if any) are in; the contributo, if due, is paid as quadro g) says"
-rules:
-  main: napoli/comune/scia-alternativa-pdc
 answers:
   descrizione: PROVA NON INVIARE - SCIA alt e terre e rocce P6
   oggetto: "Ristrutturazione edilizia con modifica dei prospetti, aumento di volumetria e un nuovo piano interrato, scavo di 900 m³ di terre portate a un altro cantiere come sottoprodotto (dati inventati per la prova)."

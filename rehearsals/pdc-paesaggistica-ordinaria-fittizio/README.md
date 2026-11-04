@@ -18,7 +18,11 @@ signing and sending.
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-31 | pane | P6, from scratch: stopped on Gestione degli allegati, "il valore è obbligatorio": the slot the asseverazione's "Si allega la relazione paesaggistica" adds wasn't mapped (the SCIA's combination had it). Now in `parts/paesaggistica-ordinaria.yaml`, for both |
-| 2026-10-31 | pane | P6, from scratch, with that slot: **filled** in 140 s, every value read back on a fresh load (23 s), nothing moved or loose, no retry |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-31 | pane | `answers-p6.json` | P6, from scratch: stopped on Gestione degli allegati, "il valore è obbligatorio": the slot the asseverazione's "Si allega la relazione paesaggistica" adds wasn't mapped (the SCIA's combination had it). Now in `parts/paesaggistica-ordinaria.yaml`, for both |
+| 2026-10-31 | pane | `answers-p6.json` | P6, from scratch, with that slot: **filled** in 140 s, every value read back on a fresh load (23 s), nothing moved or loose, no retry |
+
+<!-- /runs -->

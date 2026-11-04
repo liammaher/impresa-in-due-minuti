@@ -1,44 +1,63 @@
 [
  {
+  "date": "2026-10-28",
+  "browser": "pane",
+  "note": "First run, no stop: 106 values and 3 attachments kept, every value read back on a fresh load; Login → draft: 112.2 s to the end of the form (wizard 10.4, 15 sections, fresh load 14.9), then 14.5 s for 3 attachments"
+ },
+ {
+  "date": "2026-10-29",
+  "browser": "pane",
+  "note": "**Filled** with the Comune's 100 € diritti: the \"sono dovuti oneri\" branch, its total and \"pagamento on line\", walked for the first time; every value read back on a fresh load; Login → draft: 70.9 s, fresh load 11.1 s (`bench/rerun.py` with two SCIAs)"
+ },
+ {
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 77.7
+  "seconds": 77.7,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-proprietario.json",
   "result": "filled",
-  "seconds": 62.8
+  "seconds": 62.8,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-bene-culturale.json",
   "result": "filled",
-  "seconds": 75.6
+  "seconds": 75.6,
+  "browser": "pane",
+  "note": "**Filled** from a blank draft in 75.6 s, read back on a fresh load, nothing moved; one `loose`, the impresa quadro's \"lavori sono/saranno eseguiti dall…\" (the CILA's base case has it too); Login → draft: `answers-bene-culturale` (a listed building, the Soprintendenza's authorization obtained first), `bench/rerun.py` bundle"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-notifica.json",
   "result": "filled",
-  "seconds": 76.7
+  "seconds": 76.7,
+  "browser": "pane",
+  "note": "**filled** in 76.7 s; its draft's Allega documenti read after: no slot for the notifica, only Allegati liberi (signed files only on the CIL), so it is the person's; Login → draft: `answers-notifica` (a notifica preliminare due: \"allega alla presente comunicazione la notifica\" ticked), `bench/rerun.py` bundle"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-comunicazioni.json",
   "result": "filled",
-  "seconds": 82.3
+  "seconds": 82.3,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-bene-culturale.json",
   "result": "filled",
-  "seconds": 78
+  "seconds": 78,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-notifica.json",
   "result": "filled",
-  "seconds": 78.6
+  "seconds": 78.6,
+  "browser": "pane"
  }
 ]

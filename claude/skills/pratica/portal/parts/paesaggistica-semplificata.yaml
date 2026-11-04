@@ -3,6 +3,8 @@
 # `extends` its main pratica's rehearsal, then this. The asseverazione names the procedure from
 # `paesaggio`; the relazione and its drawings take only signed files, so they are the person's
 # (each recipe's `yours`).
+# Its operation in the SUE's wizard: a combination's operations are its main pratica's, then this.
+operation: "Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)"
 asks:
   paesaggio: {default: "semplificata"}
 rules:

@@ -3,6 +3,8 @@
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 151.8
+  "seconds": 151.8,
+  "browser": "pane",
+  "note": "P6, from scratch: **filled** in 152 s, every value read back on a fresh load (24 s), nothing moved or loose, no retry"
  }
 ]

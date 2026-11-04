@@ -12,7 +12,15 @@ the attachments, the bollo, signing and sending.
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-29 | pane | **Filled** on the first try: 11 sections in 48 s, every value read back on a fresh load. |
-| 2026-10-29 | pane | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 54.3 s; second, with the runner waiting for a section to open, **filled** in 53.8 s, read back on a fresh load. |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-29 | pane |  | **Filled** on the first try: 11 sections in 48 s, every value read back on a fresh load. |
+| 2026-10-29 | pane |  | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 54.3 s; second, with the runner waiting for a section to open, **filled** in 53.8 s, read back on a fresh load. |
+| 2026-10-29 | pane | `answers-p6.json` | **filled** |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 52 s |
+| 2026-11-02 | pane | `answers-variazioni.json` | **filled** in 50 s |
+| 2026-11-03 | pane | `answers-p6.json` | **filled** in 68 s |
+
+<!-- /runs -->

@@ -20,6 +20,7 @@ make build                        # Build bin/pvault (+ bin/pvault-touchid on ma
 make touchid                      # Rebuild only the Touch ID helper
 make test                         # Go tests with race detector (not the MCP ones)
 make schema                       # Regenerate schema.json after a schema change (a test checks)
+make steps                        # Build the rehearsals' steps files and rehearsals/steps.lock (commit the lock)
 make clean                        # Remove build artifacts
 go test -race ./internal/vault/   # One layer: crypto, store, vault, api
 ```
@@ -110,11 +111,13 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      by fingerprint), `wizard.js` a comune's whole wizard (`catalogue/<comune>/`);
                      catalogue.py imports a batch, counts sections and records drift, which
                      gen.py and pre-flight refuse.
-                     gen.py writes a steps file from a crawl, `dictionary/fnsuap.yaml` (each
+                     gen.py writes a steps file (a build output: rehearsals/steps.lock holds their hashes,
+                     gen.ensure builds a missing one, `make steps` all) from a crawl, `dictionary/fnsuap.yaml` (each
                      section's fields by label, shared by every pratica) and a recipe
                      (rehearsals/*/recipe.yaml; `operation` may be a list, the union of their
                      sections, and such a recipe `extends` its main pratica's and the other's
-                     `parts/` file, so neither drifts); it writes nothing if a field is unaccounted for. Adding a pratica,
+                     `parts/` file, so neither drifts: its operations, comune, sportello and
+                     rules table's main follow from them); it writes nothing if a field is unaccounted for. Adding a pratica,
                      the portal's quirks and clean batch reruns (`bench/rerun.py`): portal/README.md.
                      draft.py drafts dictionary entries for a new section from the national
                      schema (`schema/`, InfoCamere's forms flattened), for a person to check;
@@ -480,12 +483,14 @@ gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the 
 (`branches.py --write` writes `docs/sue-branches.md`), `bench/test_portability.py` the national/Campania/Napoli
 split (`portability.py --write`, `docs/portability.md`), `bench/test_tolleranze.py` the asseverazioni's
 tolerances, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
-the same bytes as the library's; its every-case walk takes about 45 minutes since the table's `terre_rocce`), `bench/plan_diff.py` each case's fill plan
+the same bytes as the library's; the SUE table's every case walked as route.cases() asks the facts, seconds; the
+product of every fact's values, 34.5 million, is the library's validator's), `bench/plan_diff.py` each case's fill plan
 before and after a change, `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
 route.py on every case the SUE table decides (it prints the combinations not mapped yet), and
 `claude/skills/pratica/intake/bench/test_intake.py` the intake on a made-up dossier (`dossier.py`) against fixture-p6.json. On the real portal, `bench/rerun.py` reruns the rehearsals
 in the pane after a runner, dictionary or gen.py change (portal/README.md); `--record` files the results in each
-rehearsal's `runs.json`, which schema_branches.py counts as filled on the portal.
+rehearsal's `runs.json`, the one run record: schema_branches.py and scoreboard.py count it, and each README's run
+table is drawn from it (`portal/runs.py --write`; test_gen checks every table).
 
 ```go
 // Pattern: create temp vault, run test

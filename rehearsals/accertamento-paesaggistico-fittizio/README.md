@@ -31,6 +31,11 @@ them), signing and sending, and later the sum the Comune sets (the greater of da
 
 ## Runs
 
-| Date | Browser | Answers | Result |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
 |---|---|---|---|
 | 2026-10-30 | pane | `answers-p6.json` | **Filled** from a blank draft in 72.3 s, first try, read back on a fresh load (12.4 s); no id moved or loose |
+| 2026-11-03 | pane | `answers-p6.json` | **filled** in 68 s |
+
+<!-- /runs -->

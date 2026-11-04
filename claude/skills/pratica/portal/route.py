@@ -19,7 +19,8 @@ and those filed with it) name exactly one steps file: the one whose `rules:` has
 
 DIR holds the steps files: rehearsals/ (each folder's portal-steps.generated.yaml, else
 portal-steps.yaml) or the plugin's pratiche/ (<name>.json). The default is whichever is
-next to this skill. Two steps files for one combination is an error: the index is read
+next to this skill. In the repo the generated ones are gen.py's build outputs, never committed:
+a missing one (a fresh clone, a pull) is generated first (gen.ensure). Two steps files for one combination is an error: the index is read
 from them every time, so a new recipe is routed once its steps file is generated.
 """
 
@@ -47,6 +48,9 @@ def default_dir():
 
 def steps_files(root):
     """(name, path) of each steps file under root, as bench/rerun.py and plugin/build.py pick them."""
+    if (root / "steps.lock").is_file():  # the repo's rehearsals: their steps files are built
+        import gen  # noqa: E402  (beside this file in the repo; the plugin has no rehearsals)
+        gen.ensure(root=root)
     for p in sorted(root.iterdir()):
         if p.is_dir():
             for n in ("portal-steps.generated.yaml", "portal-steps.yaml"):

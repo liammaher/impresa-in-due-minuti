@@ -2,6 +2,8 @@
 # building pratica it's filed with, the two selected together in the wizard: a combination's
 # recipe `extends` its main pratica's rehearsal, then this. The asseverazione names the
 # procedure from `paesaggio`.
+# Its operation in the SUE's wizard: a combination's operations are its main pratica's, then this.
+operation: "Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)"
 asks:
   paesaggio: {default: "ordinaria"}
 rules:

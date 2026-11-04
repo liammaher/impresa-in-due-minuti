@@ -6,13 +6,7 @@
 extends: [scia-paesaggistica-ordinaria-fittizia, parts/dichiarazione-utilizzo-terre]
 procedure: napoli/comune/scia-con-paesaggistica-ordinaria-e-dichiarazione-utilizzo-terre
 title: "SCIA edilizia con autorizzazione paesaggistica ordinaria e dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
-comune: F839
-sportello: sue
 crawl: sue-combo-scia-paesaggistica-ordinaria-dichiarazione-utilizzo
-operation:
-  - "Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)"
-  - "Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)"
-  - "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
 asks:
   descrizione: {default: "SCIA ord. e terre e rocce {{c:identity.last_name}}"}
 # scia-paesaggistica-ordinaria-fittizia's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
@@ -27,9 +21,6 @@ yours:
   - "The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal's document on Allega documenti once the declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at least 15 days after sending"
   - "When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017) on the SUE"
   - "Sign and send (Firma e invio); keep the receipt"
-# `rules` merge key by key: both pratiche filed with the main one.
-rules:
-  handles: [napoli/comune/autorizzazione-paesaggistica-ordinaria, napoli/comune/utilizzo-materiale-scavo-fuori-sito]
 answers:
   descrizione: PROVA NON INVIARE - SCIA ord. e terre e rocce P6
   # Works, not the landscape case's change of use without works (nothing would be dug): the SCIA's

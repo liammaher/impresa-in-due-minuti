@@ -25,9 +25,13 @@ generated file also fills the oggetto, scala and piano, and has the branches the
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-28 | pane | Stopped at "Superficie di somministrazione": the box's title and cell both say "mq", which took two of the three texts the runner reads, so the label beside it wasn't seen. `inpage.js` now counts a repeated text once. Resumed on the same draft: 53 values in 10 sections, every one read back on a fresh load (48 s, then 25 s). |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-28 | pane |  | Stopped at "Superficie di somministrazione": the box's title and cell both say "mq", which took two of the three texts the runner reads, so the label beside it wasn't seen. `inpage.js` now counts a repeated text once. Resumed on the same draft: 53 values in 10 sections, every one read back on a fresh load (48 s, then 25 s). |
+
+<!-- /runs -->
 
 The attachments screen (read after the run): the planimetria, the ASL tariff receipt and the
 fee receipt take only signed files (`.p7m`), so they're the person's; "Allegati liberi" is

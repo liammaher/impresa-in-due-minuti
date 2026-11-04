@@ -193,25 +193,25 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Oggetto della pratica",
    "seconds": 0.9
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#DOMICILIO DIGITALE",
    "seconds": 0.8
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "seconds": 0.7
   },
   {
@@ -225,13 +225,13 @@
   {
    "section": "indirizzo dell'attività",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#ubicazione dell'attività",
    "seconds": 0.7
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Dati catastali",
    "seconds": 0.7
   },
   {
@@ -1000,7 +1000,7 @@
   {
    "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Dichiarazione relativa ai diritti di segreteria/istruttori",
    "seconds": 0.7
   }
  ]

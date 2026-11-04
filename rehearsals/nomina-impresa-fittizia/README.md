@@ -10,7 +10,14 @@ INVIARE" and stops before the declarations, the attachments, any bollo, signing 
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-29 | pane | **Filled**: every section in 49 s, every value read back on a fresh load of the draft. |
-| 2026-10-29 | pane | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first stopped on the fresh load ("PERSONA (Privato): 0 fields with this label": the section wasn't open yet; the same run unchanged then filled); second, with the runner waiting for a section to open, **filled** in 45.8 s, read back on a fresh load. |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-29 | pane |  | **Filled**: every section in 49 s, every value read back on a fresh load of the draft. |
+| 2026-10-29 | pane |  | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first stopped on the fresh load ("PERSONA (Privato): 0 fields with this label": the section wasn't open yet; the same run unchanged then filled); second, with the runner waiting for a section to open, **filled** in 45.8 s, read back on a fresh load. |
+| 2026-10-29 | pane | `answers-p6.json` | **filled** |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 47 s |
+| 2026-11-03 | pane | `answers-p6.json` | **filled** in 57 s |
+
+<!-- /runs -->
