@@ -740,11 +740,12 @@ asks:
     type: choice
     question: "Do the works produce excavated earth? nessuno (no excavation subject to the rules); sottoprodotti (used elsewhere as by-products, DPR 120/2017); riutilizzo in sito (reused where it is dug); rifiuti (handled as waste)"
     options: [nessuno, sottoprodotti, riutilizzo in sito, rifiuti]
-    propose: "nessuno"
+    # By-products are what the rules table's terre_rocce files a dichiarazione or a piano for.
+    propose: "{{ask.terre_rocce|scavo_proposto}}"
   # By-products: a large site (over 6000 m³) under VIA or AIA has its Piano di Utilizzo approved
   # with them (DPR 120/2017 art. 9); any other site files the dichiarazione di utilizzo (artt. 21-22),
   # a small one even under VIA or AIA (art. 2 c. 1 t).
-  scavo_piano_utilizzo: {type: yes_no, question: "Is it a large site (over 6000 m³ of excavated earth) subject to VIA or AIA, so the earth is used under the Piano di Utilizzo approved with them (DPR 120/2017 art. 9)? If not, the dichiarazione di utilizzo (artt. 21-22) covers it", when: "{{ask.scavo|is_sottoprodotti}}"}
+  scavo_piano_utilizzo: {type: yes_no, question: "Is it a large site (over 6000 m³ of excavated earth) subject to VIA or AIA, so the earth is used under the Piano di Utilizzo approved with them (DPR 120/2017 art. 9)? If not, the dichiarazione di utilizzo (artt. 21-22) covers it", when: "{{ask.scavo|is_sottoprodotti}}", propose: "{{ask.terre_rocce|piano_proposto}}"}
   scavo_via_ente: {type: text, question: "Who issued the VIA or AIA approving the Piano di Utilizzo (e.g. Regione Campania)?"}
   scavo_via_protocollo: {type: text, question: "Its protocol number"}
   scavo_via_data: {type: date, question: "Its date"}
@@ -3589,6 +3590,14 @@ sections:
     # di utilizzo even under VIA or AIA (art. 2 c. 1 t, art. 21). The permesso's line is the
     # large site's.
     law: ["le opere comportano la produzione di materiali da scavo per un volume inferiore o uguale a 6000", si comunicano gli estremi del provvedimento di VIA o AIA]
+    # The materiali di risulta and the terre e rocce filings say the same thing (DPR 120/2017): soil
+    # leaving the site as a by-product is filed (the dichiarazione with the title, the piano apart),
+    # and a filing is for by-products.
+    supports:
+      - {if: "{{ask.scavo|is_sottoprodotti}}", value: "{{ask.terre_rocce}}", in: [dichiarazione, piano], else: "The asseverazione declares by-products, but the case files neither the dichiarazione di utilizzo nor the piano (terre_rocce is no): soil leaving the site is a by-product only with its filing (DPR 120/2017 artt. 9, 21)."}
+      - {if: "{{ask.terre_rocce|in_dichiarazione__piano}}", value: "{{ask.scavo}}", in: [sottoprodotti], else: "The case files the terre e rocce's dichiarazione or piano, so the asseverazione's materiali di risulta must declare by-products (sottoprodotti)."}
+      - {if: "{{ask.scavo|is_sottoprodotti}} {{ask.terre_rocce|is_piano}}", value: "{{ask.scavo_piano_utilizzo}}", in: ["true"], else: "A piano di utilizzo is a site over 6000 m³ under VIA or AIA: the asseverazione's large-site line."}
+      - {if: "{{ask.scavo|is_sottoprodotti}} {{ask.terre_rocce|is_dichiarazione}}", value: "{{ask.scavo_piano_utilizzo}}", in: ["false"], else: "The dichiarazione di utilizzo is for a site up to 6000 m³ or one with no VIA/AIA: not the asseverazione's large-site line."}
     fields:
       - {kind: radio, label: Non rientra nell'ambito di applicazione dell'articolo 8, when: "{{ask.acustica|not}}"}
       - {kind: radio, label: Rientra nell'ambito di applicazione dell'articolo 8, when: "{{ask.acustica}}"}

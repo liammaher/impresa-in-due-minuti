@@ -166,9 +166,9 @@ asks:
   vvf_parere_protocollo: {type: text, question: 'The Vigili del Fuoco''s parere on the project: its protocol number'}
   vvf_parere_data: {type: date, question: Its date}
   scavo: {type: choice, question: 'Do the works produce excavated earth? nessuno (no excavation subject to the rules); sottoprodotti (used elsewhere as by-products, DPR 120/2017); riutilizzo in sito (reused
-      where it is dug); rifiuti (handled as waste)', options: [nessuno, sottoprodotti, riutilizzo in sito, rifiuti], propose: nessuno}
+      where it is dug); rifiuti (handled as waste)', options: [nessuno, sottoprodotti, riutilizzo in sito, rifiuti], propose: '{{ask.terre_rocce|scavo_proposto}}'}
   scavo_piano_utilizzo: {type: yes_no, question: 'Is it a large site (over 6000 m³ of excavated earth) subject to VIA or AIA, so the earth is used under the Piano di Utilizzo approved with them (DPR 120/2017
-      art. 9)? If not, the dichiarazione di utilizzo (artt. 21-22) covers it', when: '{{ask.scavo|is_sottoprodotti}}'}
+      art. 9)? If not, the dichiarazione di utilizzo (artt. 21-22) covers it', when: '{{ask.scavo|is_sottoprodotti}}', propose: '{{ask.terre_rocce|piano_proposto}}'}
   scavo_via_ente: {type: text, question: 'Who issued the VIA or AIA approving the Piano di Utilizzo (e.g. Regione Campania)?'}
   scavo_via_protocollo: {type: text, question: Its protocol number}
   scavo_via_data: {type: date, question: Its date}
@@ -550,6 +550,28 @@ supports:
   - 'true'
   else: 'A structural tolerance of minor or no relevance for public safety can be declared only once the regional control term has run out, with no open requests and no negative outcome: art. 34-bis c.
     3-bis DPR 380/2001.'
+- if: '{{ask.scavo|is_sottoprodotti}}'
+  value: '{{ask.terre_rocce}}'
+  in:
+  - dichiarazione
+  - piano
+  else: 'The asseverazione declares by-products, but the case files neither the dichiarazione di utilizzo nor the piano (terre_rocce is no): soil leaving the site is a by-product only with its filing (DPR
+    120/2017 artt. 9, 21).'
+- if: '{{ask.terre_rocce|in_dichiarazione__piano}}'
+  value: '{{ask.scavo}}'
+  in:
+  - sottoprodotti
+  else: The case files the terre e rocce's dichiarazione or piano, so the asseverazione's materiali di risulta must declare by-products (sottoprodotti).
+- if: '{{ask.scavo|is_sottoprodotti}} {{ask.terre_rocce|is_piano}}'
+  value: '{{ask.scavo_piano_utilizzo}}'
+  in:
+  - 'true'
+  else: 'A piano di utilizzo is a site over 6000 m³ under VIA or AIA: the asseverazione''s large-site line.'
+- if: '{{ask.scavo|is_sottoprodotti}} {{ask.terre_rocce|is_dichiarazione}}'
+  value: '{{ask.scavo_piano_utilizzo}}'
+  in:
+  - 'false'
+  else: 'The dichiarazione di utilizzo is for a site up to 6000 m³ or one with no VIA/AIA: not the asseverazione''s large-site line.'
 - if: '{{ask.urbanizzazione|not}}'
   value: '{{ask.urbanizzazione_attuazione}}'
   in:

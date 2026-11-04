@@ -22,6 +22,7 @@ import yaml
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
+sys.path.insert(0, str(HERE))  # regen.py: -I leaves the script's folder off the path (2026-11-03)
 sys.dont_write_bytecode = True
 import gen  # noqa: E402
 import regen  # noqa: E402

@@ -76,7 +76,7 @@
  "barriere_deroga": "false",
  "incentivo_energetico": "nessuno",
  "vvf_valutazione": "false",
- "scavo": "nessuno",
+ "scavo": "sottoprodotti",
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
  "strumenti_altri": "false",
@@ -103,5 +103,6 @@
  "scia_variata_data": "2026-09-01",
  "contributo_pagamento": "rateizzazione",
  "contributo_calcolo": "prospetto",
- "prospetto_contributo": "rehearsals/cila-fittizia/files/prospetto-contributo.pdf"
+ "prospetto_contributo": "rehearsals/cila-fittizia/files/prospetto-contributo.pdf",
+ "scavo_piano_utilizzo": "false"
 }

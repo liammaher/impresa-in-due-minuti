@@ -33,8 +33,9 @@ attachments:
     # The asseverazione's "allega l’autorizzazione sismica" (a structural tolerance relevant for
     # public safety) adds this required slot; plain PDFs are taken (seen on the SCIA 2026-10-30).
     - {kind: file, label: Autorizzazione sismica, value: "{{ask.toll_sismica_doc}}", when: "{{ask.tolleranze}} {{ask.toll_strutturale}} {{ask.toll_classe|is_rilevante}} {{ask.toll_sismica|is_autorizzazione}}", on_page: true}
-    # Quadro f)/e)'s "si allega la relativa ricevuta" adds this required slot (seen on the SCIA 2026-10-30).
-    - {kind: file, label: Ricevuta/e di versamento a titolo di sanzione, value: "{{ask.sanzione_ricevuta}}", when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}", on_page: true}
+    # Quadro e)'s "si allega la relativa ricevuta" adds this required slot. The permesso's title isn't
+    # the SCIA's "Ricevuta/e di versamento a titolo di sanzione" (a run stopped on it, 2026-11-03).
+    - {kind: file, label: Ricevuta di pagamento della sanzione, value: "{{ask.sanzione_ricevuta}}", when: "{{ask.stato_legittimo|is_sanzioni}} {{ask.sanzione_prova|is_ricevuta}}", on_page: true}
     # The asseverazione's sewer connection to request adds this required slot (read on the
     # permesso's attachments screen 2026-10-31): plain PDFs.
     - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura, value: "{{ask.allaccio_doc}}", when: "{{ask.scarichi|is_allaccio_da_richiedere}}", on_page: true}

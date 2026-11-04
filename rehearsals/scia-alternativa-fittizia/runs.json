@@ -136,5 +136,35 @@
   "answers": "answers-piano-terra.json",
   "result": "filled",
   "seconds": 154.9
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-scomputo-pozzi.json",
+  "result": "filled",
+  "seconds": 234.6
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-2.json",
+  "result": "filled",
+  "seconds": 402.1
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-3.json",
+  "result": "filled",
+  "seconds": 605.4
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-4.json",
+  "result": "filled",
+  "seconds": 108.7
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-5.json",
+  "result": "filled",
+  "seconds": 262.7
  }
 ]

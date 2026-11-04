@@ -745,6 +745,34 @@ def carica_not_crash():
     assert r["ready"], r
 
 
+def materiali_di_risulta_agree():
+    """The asseverazione's materiali di risulta say what the terre e rocce filings file (2026-11-03:
+    the SCIA with its dichiarazione declared "nessuno"): by-products with the dichiarazione or the
+    piano, and the small-site line with the dichiarazione, the large one with the piano."""
+    root = HERE.parents[4] / "rehearsals"
+    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+    d = root / "scia-terre-rocce-fittizia"
+    steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
+    base = json.loads((d / "answers-p6.json").read_text())
+    pre = lambda a: run.preflight(steps, run.Values(a, fields=fields, asks=steps["asks"]), made_up=True)
+    # The steps name their files from the repo's root.
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+    try:
+        assert pre(base)["ready"]
+        for change, words in (({"scavo": "nessuno"}, "must declare by-products"),
+                              ({"scavo_piano_utilizzo": "true"}, "not the asseverazione's large-site line"),
+                              ({"terre_rocce": "no"}, "files neither the dichiarazione")):
+            r = pre({**base, **change})
+            assert not r["ready"] and any(words in u for u in r["unsupported"]), (change, r["unsupported"])
+        # Proposed from the table's answer, for a case that hasn't said.
+        a = {k: v for k, v in base.items() if k not in ("scavo", "scavo_piano_utilizzo")}
+        props = {p["key"]: p["proposal"] for p in pre(a)["proposals"]}
+        assert props.get("scavo") == "sottoprodotti", props
+    finally:
+        os.chdir(here)
+
+
 def every_sue_case_ready():
     """Every SUE rehearsal's every answers file pre-flights ready, but those refused on purpose: a
     case that stops being ready drops out of the counts without a word (schema_branches.py skips
@@ -830,6 +858,7 @@ CASES = [
     ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused (a portal defect)", scelte_follow_the_case),
     ("the CILA's filings presented with it and assents for the SUE (art. 23-bis), the CIL's filings, a partial fine lavori's planimetria", assents_and_filings),
     ("the bollo and diritti exemptions, the virtual bollo, the permesso's altro, the SCIA alternativa's regional works, a studio's other architect", exemptions_and_other_kinds),
+    ("the materiali di risulta agree with the terre e rocce filings, and are proposed from them", materiali_di_risulta_agree),
     ("a value the vault has but the form can't take (a Carica for a named architect who isn't the titolare) is reported, not crashed on", carica_not_crash),
 ]
 
