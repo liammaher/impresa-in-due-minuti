@@ -118,16 +118,16 @@ def refused_by_the_table():
     assert shop(superficie_vendita_mq="300")["unsupported"] == [
         next(r["then"]["refuse"] for r in TABLE["rules"] if r["id"] == "vicinato-oltre-250-mq")]
     assert "Agenzia delle Dogane" in shop(fatti=["alcolici"])["unsupported"][0]
-    assert restaurant(zona="a")["unsupported"][0].startswith("This case is another pratica: "
-                                                             "napoli/comune/scia-somministrazione-alimenti-bevande (autorizzazione) at "
+    assert restaurant(zona="a")["unsupported"][0].startswith("Questo caso è un'altra pratica: "
+                                                             "napoli/comune/scia-somministrazione-alimenti-bevande (autorizzazione) in "
                                                              "Esercizio di somministrazione di alimenti e bevande in zone tutelate")
 
 
 def other_pratiche():
     assert shop(fatti=["insegna"])["unsupported"] == [
-        "This case also needs napoli/comune/insegna-esercizio (scia), which this pratica doesn't file."]
+        "Questo caso richiede anche napoli/comune/insegna-esercizio (scia), che questa pratica non presenta."]
     assert case("negozio-insegna-fittizio", "negozio-fittizio", fatti=[])["unsupported"] == [
-        "This pratica also files napoli/comune/insegna-esercizio, which this case doesn't need."]
+        "Questa pratica presenta anche napoli/comune/insegna-esercizio, che a questo caso non serve."]
     assert "concessione-suolo-pubblico-dehors" in restaurant(fatti=["dehors"])["unsupported"][0]
 
 
@@ -175,15 +175,15 @@ def sue_rehearsals_ready():
              "parere-esonero-fittizio"]
     # A whole building's change of use with CILA works: the national SCIA form has a box for it,
     # but in Campania it is a SCIA alternativa (art. 2 c. 6 L.R. 13/2022).
-    refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "This case is another pratica: napoli/comune/scia-alternativa-pdc",
+    refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "Questo caso è un'altra pratica: napoli/comune/scia-alternativa-pdc",
                # The portal's art. 36-bis asseverazione is one radio group (the library's discrepancies).
-               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Only art. 36 ",
+               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "È gestito solo l'art. 36 (la",
                # The Comune gives no attestation of the exclusion (its landscape directive, § 3.2).
                ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia",
                # The portal requires the CILA's firm, "si riserva" or not (a run stopped on it, 2026-11-01).
-               ("cila-fittizia", "answers-impresa-dopo.json"): "The CILA names its building firm",
+               ("cila-fittizia", "answers-impresa-dopo.json"): "La CILA indica la sua impresa esecutrice",
                # No change-of-use line states a whole building to another category (cambio-uso-regionale).
-               ("pdc-sanatoria-fittizio", "answers-cambio-intero.json"): "The national form's change-of-use line"}
+               ("pdc-sanatoria-fittizio", "answers-cambio-intero.json"): "La voce sul cambio di destinazione d'uso"}
     for name in names:
         for f in sorted((REHEARSALS / name).glob("answers*.json")):
             r = sue(name, f.name)
@@ -196,7 +196,7 @@ def sue_rehearsals_ready():
 def sue_another_pratica():
     """Each building recipe refuses a case the table gives to another pratica, or one that
     needs (or doesn't need) the landscape authorization it files with it."""
-    other = "This case is another pratica: "
+    other = "Questo caso è un'altra pratica: "
     cila, scia = "napoli/comune/cila-lavori-edilizi", "napoli/comune/scia-edilizia"
     later = "answers-proprietario.json"  # works not started yet: no sanatoria
     semplificata = "napoli/comune/autorizzazione-paesaggistica-semplificata"
@@ -205,16 +205,16 @@ def sue_another_pratica():
     assert sue("cila-fittizia", later, cambio_uso="stessa_categoria", fatti=["uso_ammesso_prg"])["unsupported"][0].startswith(
         other + scia)
     assert sue("cila-fittizia", later, paesaggio="semplificata")["unsupported"] == [
-        f"This case also needs {semplificata} (autorizzazione), which this pratica doesn't file."]
+        f"Questo caso richiede anche {semplificata} (autorizzazione), che questa pratica non presenta."]
     assert sue("cila-paesaggistica-fittizia", paesaggio="no")["unsupported"] == [
-        f"This pratica also files {semplificata}, which this case doesn't need."]
+        f"Questa pratica presenta anche {semplificata}, che a questo caso non serve."]
     # The SCIA's P6 job before it touched the facades: internal works, a CILA's.
     assert sue("scia-fittizia", fatti=[])["unsupported"][0].startswith(other + cila)
     assert sue("scia-fittizia", paesaggio="semplificata")["unsupported"] == [
-        f"This case also needs {semplificata} (autorizzazione), which this pratica doesn't file."]
+        f"Questo caso richiede anche {semplificata} (autorizzazione), che questa pratica non presenta."]
     assert set(sue("scia-paesaggistica-semplificata-fittizia", paesaggio="ordinaria")["unsupported"]) == {
-        f"This case also needs {ordinaria} (autorizzazione), which this pratica doesn't file.",
-        f"This pratica also files {semplificata}, which this case doesn't need."}
+        f"Questo caso richiede anche {ordinaria} (autorizzazione), che questa pratica non presenta.",
+        f"Questa pratica presenta anche {semplificata}, che a questo caso non serve."}
     assert sue("scia-paesaggistica-ordinaria-fittizia", intervento="ristrutturazione_pesante")["unsupported"][0].startswith(
         other + "napoli/comune/scia-alternativa-pdc")
     assert sue("pdc-fittizio", intervento="manutenzione_straordinaria", fatti=[], strutture="false",
@@ -225,7 +225,7 @@ def sue_another_pratica():
         other + cila)
     assert sue("paesaggistica-ordinaria-fittizia", paesaggio="semplificata")["unsupported"][0].startswith(other + semplificata)
     # Works that need no title, work already done, and a Naples rule (DGC 454/2014).
-    assert sue("paesaggistica-semplificata-fittizia", paesaggio="no")["unsupported"][0].startswith("This case needs no pratica: ")
+    assert sue("paesaggistica-semplificata-fittizia", paesaggio="no")["unsupported"][0].startswith("Per questo caso non serve alcuna pratica: ")
     # Works already done: the SCIA in sanatoria (facades, structures, ristrutturazione), its own
     # pratica; a permesso's goes to the permesso in sanatoria.
     assert sue("scia-fittizia", fatti=["prospetti", "sanatoria"])["unsupported"][0].startswith(
@@ -252,7 +252,7 @@ def sue_another_pratica():
     assert sue("pdc-sanatoria-fittizio", intervento="variante_essenziale_pdc")["ready"]
     # On structures, begun without the seismic filing: the autorizzazione at the Genio Civile,
     # filed apart, never the deposito (art. 4 c. 1 e L.R. 9/1983); the SCIA's the same.
-    genio = "File apart, with its own office: napoli/genio-civile/deposito-autorizzazione-sismica (autorizzazione)"
+    genio = "Da presentare a parte, al suo ufficio: napoli/genio-civile/deposito-autorizzazione-sismica (autorizzazione)"
     for name in ("pdc-sanatoria-fittizio", "scia-sanatoria-fittizia"):
         assert "L.R. 9/1983" in sue(name, "answers-strutture.json", sismica="deposito")["unsupported"][0]
         assert genio in sue(name, "answers-strutture.json")["yours"]
@@ -260,14 +260,14 @@ def sue_another_pratica():
     # Under art. 36-bis c. 1 the case's defect still refuses it, structures or not.
     assert sue("scia-sanatoria-fittizia", "answers-strutture.json", sanatoria_caso="conformita urbanistica")["defects"]
     # The portal's permesso wants an energy incentive claimed even with no energy works.
-    assert "energy incentive" in sue("pdc-sanatoria-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
-    assert "energy incentive" in sue("pdc-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
+    assert "incentivo energetico" in sue("pdc-sanatoria-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
+    assert "incentivo energetico" in sue("pdc-fittizio", incentivo_energetico="nessuno")["unsupported"][0]
     # The parere di esonero: refused in Napoli; works needing an authorization are that pratica,
     # and a property under no protection needs nothing.
     esonero = sue("parere-esonero-fittizio")["unsupported"]
     assert "D.D. 1072I/2024/154" in esonero[0], esonero
     assert sue("parere-esonero-fittizio", paesaggio="semplificata")["unsupported"][0].startswith(other + semplificata)
-    assert sue("parere-esonero-fittizio", paesaggio="no")["unsupported"][0].startswith("This case needs no pratica: ")
+    assert sue("parere-esonero-fittizio", paesaggio="no")["unsupported"][0].startswith("Per questo caso non serve alcuna pratica: ")
     # The other recipes never ask for it: a CILA in a protected area with works of Allegato A.
     assert sue("cila-fittizia", later, paesaggio="senza_autorizzazione")["ready"]
     assert sue("scia-fittizia", "answers-variante-pdc.json", fatti=["demolizione_zona_a"])["unsupported"][0].startswith(
@@ -276,7 +276,7 @@ def sue_another_pratica():
     # Changes of use under Campania's laws (circolare regionale CI/2025/3).
     unit = {"fatti": ["uso_ammesso_prg"]}
     assert sue("scia-fittizia", "answers-cambio-unita-senza-tra.json", intervento="nessuna_opera")["unsupported"][0].startswith(
-        "This case needs no pratica: ")  # art. 2 c. 5 L.R. 19/2001
+        "Per questo caso non serve alcuna pratica: ")  # art. 2 c. 5 L.R. 19/2001
     assert sue("scia-fittizia", cambio_uso="non_rilevante", fatti=["prospetti", "uso_ammesso_prg"])["ready"]  # the facades: a SCIA
     assert sue("scia-fittizia", cambio_uso="intero_immobile", **unit)["unsupported"][0].startswith(
         other + "napoli/comune/scia-alternativa-pdc")
@@ -291,10 +291,10 @@ def sue_another_pratica():
     assert sue("cil-fittizia", intervento="manutenzione_straordinaria", fatti=[], cambio_uso="no")["unsupported"][0].startswith(
         other + cila)
     assert sue("cil-fittizia", paesaggio="semplificata")["unsupported"] == [
-        f"This case also needs {semplificata} (autorizzazione), which this pratica doesn't file."]
+        f"Questo caso richiede anche {semplificata} (autorizzazione), che questa pratica non presenta."]
     # On a bene culturale the CIL and the CILA go once the Soprintendenza has authorized the works,
     # apart and first: Napoli's SUE has no procedure to ask for it with them (art. 21 c. 4).
-    sop = "File apart, with its own office: napoli/soprintendenza/autorizzazione-beni-culturali (autorizzazione)"
+    sop = "Da presentare a parte, al suo ufficio: napoli/soprintendenza/autorizzazione-beni-culturali (autorizzazione)"
     assert "sabap-na@pec.cultura.gov.it" in sue("cil-fittizia", fatti=["bene_culturale"], soprintendenza_autorizzata="false")["unsupported"][0]
     for name in ("cil-fittizia", "cila-fittizia"):
         r = sue(name, "answers-bene-culturale.json")
@@ -331,9 +331,9 @@ def sue_asks_and_apart():
     assert "permesso_per_scelta" not in str(r["questions"])  # the recipe's: a CILA is no choice
     # The seismic filing is the person's, at the Genio Civile: in their steps, never a refusal.
     r = sue("scia-fittizia", "answers-strutture.json")
-    assert r["ready"] and r["yours"][-1] == ("File apart, with its own office: "
+    assert r["ready"] and r["yours"][-1] == ("Da presentare a parte, al suo ufficio: "
                                              "napoli/genio-civile/deposito-autorizzazione-sismica (deposito)"), r["yours"]
-    assert not [y for y in sue("scia-fittizia")["yours"] if y.startswith("File apart")]
+    assert not [y for y in sue("scia-fittizia")["yours"] if y.startswith("Da presentare a parte")]
 
 
 def sue_proposals():

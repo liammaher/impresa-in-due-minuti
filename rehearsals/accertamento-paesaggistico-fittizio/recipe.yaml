@@ -13,17 +13,17 @@ scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUN
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
-  diritti_euro: {default: "441", why: "Line SUE 3 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 441 € for a landscape authorization in sanatoria asked on its own"}
+  diritti_euro: {default: "441", why: "Voce SUE 3 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 441 € per un'autorizzazione paesaggistica in sanatoria richiesta autonomamente"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   modello_dp: {default: "true"}
   descrizione: {default: "accertamento paesaggistico {{c:identity.last_name}}"}
-  oggetto: {question: "The works in one sentence (300 characters)"}
+  oggetto: {question: "I lavori in una frase (300 caratteri)"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali"
-  - "If the Comune finds the works compatible: pay the sum it sets (art. 167 c. 5 D.Lgs. 42/2004, the greater of the damage and the profit)"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali"
+  - "Se il Comune ritiene le opere compatibili: paghi la somma che stabilisce (art. 167 c. 5 D.Lgs. 42/2004, la maggiore tra il danno arrecato e il profitto conseguito)"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "Sign and send (Firma e invio); keep the receipt"
+  - "Firmi e invii (Firma e invio); conservi la ricevuta"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
 rules:
@@ -32,6 +32,6 @@ rules:
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
   - when: "{{ask.vincolo|is_art_134|not}}"
-    else: "The form names only art. 136 and art. 142: a property protected by the piano paesaggistico alone (art. 134) needs a person to choose."
+    else: "Il modulo indica solo l'art. 136 e l'art. 142: per un immobile tutelato dal solo piano paesaggistico (art. 134) deve scegliere una persona."
   - when: "{{ask.titolo|is_locatario|not}}"
-    else: "The form offers only ownership, co-ownership, the condominio's administrator or another real right: a tenant isn't one."
+    else: "Il modulo prevede solo proprietà, comproprietà, amministratore del condominio o altro diritto reale: un conduttore (inquilino) non rientra in nessuno di questi."

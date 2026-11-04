@@ -102,26 +102,26 @@ attachments:
     # Soil analysed, no remediation: their results' required slot (read on the permesso's screen 2026-11-01).
     - {kind: file, label: Risultati delle analisi ambientali sulla qualità dei terreni, value: "{{ask.indagini_analisi_doc}}", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}", on_page: true}
 asks:
-  diritti_euro: {question: "The SUE's diritti in euro. Onerous, by the contributo di costruzione (oneri di urbanizzazione + costo di costruzione, as the prospetto works it out), lines SUE 7-9 of the 2026 table: 1003 up to 5,000 €, 1505 up to 30,000 €, 1998 above", propose: "{{ask.pdc_tipo,ask.scia_onerosa|diritti_pdc}}", why: "Lines of the Comune's 2026 table of SUE diritti (G.C. 239/2026): SUE 10, 401 € for a permesso free of the contributo; SUE 11, 501 € for a variant to one issued; onerous, SUE 7-9 by the contributo (1,003 € up to 5,000 €, 1,505 € up to 30,000 €, 1,998 € above); car parks (L. 122/89), SUE 4-6 by floor area"}
+  diritti_euro: {question: "I diritti del SUE in euro. Pratica onerosa: in base al contributo di costruzione (oneri di urbanizzazione + costo di costruzione, come risulta dal prospetto), righe SUE 7-9 della tabella 2026: 1003 fino a 5.000 €, 1505 fino a 30.000 €, 1998 oltre", propose: "{{ask.pdc_tipo,ask.scia_onerosa|diritti_pdc}}", why: "Voci del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): SUE 10, 401 € per un permesso non soggetto al contributo; SUE 11, 501 € per una variante a un permesso rilasciato; se oneroso, SUE 7-9 in base al contributo (1.003 € fino a 5.000 €, 1.505 € fino a 30.000 €, 1.998 € oltre); parcheggi (L. 122/89), SUE 4-6 in base alla superficie"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}
   descrizione: {default: "PdC {{c:identity.last_name}}"}
   # The permesso's quadro e) also takes a new construction on free land.
   stato_legittimo:
-    question: "How does quadro e) show the building's stato legittimo? The form takes one: titoli (from its building titles or pratiche: you'll list them); epoca (built when no title was required: the catasto's primo impianto or other documents); prova (its title is lost or unknown, but there is documentary proof of it); sanzioni (pecuniary sanctions under artt. 33, 34, 37 or 38 DPR 380/2001 were imposed and fully paid); tolleranze (construction tolerance declarations, art. 34-bis or 34-ter c. 4); area libera (a new construction on free land: no building yet)"
+    question: "Come dimostra il quadro e) lo stato legittimo dell'edificio? Il modulo ne ammette una sola modalità: titoli (dai titoli edilizi o dalle pratiche dell'edificio: li elencherà); epoca (costruito quando non era richiesto alcun titolo: il catasto di primo impianto o altri documenti); prova (il titolo è andato perduto o è sconosciuto, ma ne esiste una prova documentale); sanzioni (sono state irrogate e interamente pagate sanzioni pecuniarie ai sensi degli artt. 33, 34, 37 o 38 DPR 380/2001); tolleranze (dichiarazioni di tolleranze costruttive, art. 34-bis o 34-ter c. 4); area libera (nuova costruzione su area libera: ancora nessun edificio)"
     options: [titoli, epoca, prova, sanzioni, tolleranze, area libera]
-  elaborati_barriere: {type: file, question: "The drawings showing how the project meets the barriers rules (artt. 77-82 DPR 380/2001) (PDF)"}
-  superficie_mq: {question: "The building's superficie lorda di pavimento (s.l.p.) in m²"}
-  volume_mc: {question: "The building's volume in m³"}
-  acustica: {question: "Does art. 8 of L. 447/1995 apply (an acoustic impact or clima acustico report: e.g. homes next to a main road, a railway or an airport)?"}
+  elaborati_barriere: {type: file, question: "Gli elaborati grafici che mostrano come il progetto rispetta le norme sulle barriere architettoniche (artt. 77-82 DPR 380/2001) (PDF)"}
+  superficie_mq: {question: "La superficie lorda di pavimento (s.l.p.) dell'edificio in m²"}
+  volume_mc: {question: "Il volume dell'edificio in m³"}
+  acustica: {question: "Si applica l'art. 8 della L. 447/1995 (documentazione di impatto acustico o di clima acustico: ad es. abitazioni vicino a una strada principale, una ferrovia o un aeroporto)?"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request"
-  - "The asseverazione's \"non interessa aree percorse dal fuoco\" (qualità terreni) is one choice with the soil statement on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md); state it in the relazione tecnica if the SUE wants it"
-  - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
-  - "Once the permesso is issued: collect it (paying the contributo, if due, as quadro f) says), name the structural designer and whoever else the permesso leaves to be named (the direttori dei lavori, the firm), and file the comunicazione di inizio lavori with the energy report and the structural filings"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma con la richiesta"
+  - "Nell'asseverazione, la voce \"non interessa aree percorse dal fuoco\" (qualità terreni) è sul portale un'unica scelta insieme alla dichiarazione sui terreni: Claude spunta la dichiarazione sui terreni e lascia non spuntata quella voce (un difetto del portale, docs/portal-defects.md); lo dichiari nella relazione tecnica se il SUE lo richiede"
+  - "Paghi il bollo come chiede il portale, poi firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Una volta rilasciato il permesso: lo ritiri (pagando il contributo, se dovuto, come indica il quadro f)), nomini il progettista strutturale e chiunque altro il permesso lasci da nominare (i direttori dei lavori, l'impresa), e presenti la comunicazione di inizio lavori con la relazione energetica e i depositi strutturali"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
 # The permesso is the choice where the law lets SCIA works be asked as one (art. 22 c. 7).
@@ -133,8 +133,8 @@ supports:
   # A permesso's stato legittimo looks like the SCIA's before any choice, so the crawl keeps one copy
   # of it, and the SCIA's sanatoria rows came with it; on the permesso they aren't there (2026-11-04,
   # a run stopped on "un intervento soggetto a SCIA"). Works in sanatoria are their own pratica.
-  - {value: "{{ask.sanatoria_titolo}}", in: [nessuna], else: "Works already done go by their own pratica: a permesso in sanatoria (the permesso with the wizard's sanatoria choice), or, for works that needed a SCIA, a SCIA in sanatoria."}
+  - {value: "{{ask.sanatoria_titolo}}", in: [nessuna], else: "I lavori già eseguiti seguono una pratica a sé: un permesso in sanatoria (il permesso con la scelta sanatoria nella procedura guidata del portale), oppure, per lavori che richiedevano una SCIA, una SCIA in sanatoria."}
   # The portal requires one energy incentive claimed on every permesso, even with no energy
   # works or renewables (seen 2026-10-30): with none it can't be filed as is.
-  - {value: "{{ask.incentivo_energetico}}", in: ["art 14 c6", "art 14 c7", "bonus volumetrico"], defect: pdc-incentivo-energetico, else: "The permesso's form on the portal wants one energy incentive claimed (art. 14 c. 6 or 7 D.Lgs. 102/2014, or the 5% bonus of D.Lgs. 28/2011) even with no energy works: a project with none can't be filed on it as is; ask the SUE."}
-  - {if: "{{ask.scia_onerosa}}", value: "{{ask.contributo_pagamento}}", in: ["prima dei lavori", "rateizzazione", "in corso d'opera"], else: "A permesso's contributo is paid when it's collected, in instalments or during the works: never before filing."}
+  - {value: "{{ask.incentivo_energetico}}", in: ["art 14 c6", "art 14 c7", "bonus volumetrico"], defect: pdc-incentivo-energetico, else: "Il modulo del permesso sul portale richiede di dichiarare un incentivo energetico (art. 14 c. 6 o 7 D.Lgs. 102/2014, o il bonus del 5% del D.Lgs. 28/2011) anche senza opere energetiche: un progetto che non ne prevede non può essere presentato così com'è; chieda al SUE."}
+  - {if: "{{ask.scia_onerosa}}", value: "{{ask.contributo_pagamento}}", in: ["prima dei lavori", "rateizzazione", "in corso d'opera"], else: "Il contributo del permesso si paga al ritiro, a rate o in corso d'opera: mai prima della presentazione."}

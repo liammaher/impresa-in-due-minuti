@@ -100,7 +100,7 @@ attachments:
     # Soil analysed, no remediation: their results' required slot (read on the permesso's screen 2026-11-01).
     - {kind: file, label: Risultati delle analisi ambientali sulla qualità dei terreni, value: "{{ask.indagini_analisi_doc}}", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}", on_page: true}
 asks:
-  diritti_euro: {default: "441", why: "Line SUE 16 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 441 € at filing for an accertamento di conformità (artt. 36, 36-bis), the rest by the contributo's bracket once determined; art. 36-bis c. 5 b, SUE 17-18"}
+  diritti_euro: {default: "441", why: "Voce SUE 16 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 441 € alla presentazione per un accertamento di conformità (artt. 36, 36-bis), il resto secondo lo scaglione del contributo una volta determinato; art. 36-bis c. 5 b, SUE 17-18"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}
@@ -108,20 +108,20 @@ asks:
   sanatoria_titolo: {default: permesso}
   # The permesso's quadro e) also takes a new construction on free land.
   stato_legittimo:
-    question: "How does quadro e) show the building's stato legittimo? The form takes one: titoli (from its building titles or pratiche: you'll list them); epoca (built when no title was required: the catasto's primo impianto or other documents); prova (its title is lost or unknown, but there is documentary proof of it); sanzioni (pecuniary sanctions under artt. 33, 34, 37 or 38 DPR 380/2001 were imposed and fully paid); tolleranze (construction tolerance declarations, art. 34-bis or 34-ter c. 4); area libera (a new construction on free land: no building yet)"
+    question: "Come dimostra il quadro e) lo stato legittimo dell'edificio? Il modulo ne ammette una sola modalità: titoli (dai titoli edilizi o dalle pratiche dell'edificio: li elencherà); epoca (costruito quando non era richiesto alcun titolo: il catasto di primo impianto o altri documenti); prova (il titolo è andato perduto o è sconosciuto, ma ne esiste una prova documentale); sanzioni (sono state irrogate e interamente pagate sanzioni pecuniarie ai sensi degli artt. 33, 34, 37 o 38 DPR 380/2001); tolleranze (dichiarazioni di tolleranze costruttive, art. 34-bis o 34-ter c. 4); area libera (nuova costruzione su area libera: ancora nessun edificio)"
     options: [titoli, epoca, prova, sanzioni, tolleranze, area libera]
-  elaborati_barriere: {type: file, question: "The drawings showing how the project meets the barriers rules (artt. 77-82 DPR 380/2001) (PDF)"}
-  superficie_mq: {question: "The building's superficie lorda di pavimento (s.l.p.) in m²"}
-  volume_mc: {question: "The building's volume in m³"}
-  acustica: {question: "Does art. 8 of L. 447/1995 apply (an acoustic impact or clima acustico report: e.g. homes next to a main road, a railway or an airport)?"}
+  elaborati_barriere: {type: file, question: "Gli elaborati grafici che mostrano come il progetto rispetta le norme sulle barriere architettoniche (artt. 77-82 DPR 380/2001) (PDF)"}
+  superficie_mq: {question: "La superficie lorda di pavimento (s.l.p.) dell'edificio in m²"}
+  volume_mc: {question: "Il volume dell'edificio in m³"}
+  acustica: {question: "Si applica l'art. 8 della L. 447/1995 (documentazione di impatto acustico o di clima acustico: ad es. abitazioni vicino a una strada principale, una ferrovia o un aeroporto)?"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request"
-  - "The asseverazione's \"non interessa aree percorse dal fuoco\" (qualità terreni) is one choice with the soil statement on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md); state it in the relazione tecnica if the SUE wants it"
-  - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
-  - "For works on structures: the autorizzazione sismica in sanatoria from the Genio Civile di Napoli on S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983); its documents go in this pratica's slot"
-  - "Once the SUE answers (within 60 days for art. 36, else it is refused): pay the oblazione it determines (twice the contributo di costruzione, art. 36 c. 2; art. 36-bis c. 5) and collect the permesso in sanatoria"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma con la richiesta"
+  - "Nell'asseverazione, la voce \"non interessa aree percorse dal fuoco\" (qualità terreni) è sul portale un'unica scelta insieme alla dichiarazione sui terreni: Claude spunta la dichiarazione sui terreni e lascia non spuntata quella voce (un difetto del portale, docs/portal-defects.md); lo dichiari nella relazione tecnica se il SUE lo richiede"
+  - "Paghi il bollo come chiede il portale, poi firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Per opere sulle strutture: l'autorizzazione sismica in sanatoria del Genio Civile di Napoli su S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983); i relativi documenti vanno nell'apposito spazio di caricamento di questa pratica"
+  - "Quando il SUE risponde (entro 60 giorni per l'art. 36, altrimenti la richiesta si intende respinta): paghi l'oblazione che determina (il doppio del contributo di costruzione, art. 36 c. 2; art. 36-bis c. 5) e ritiri il permesso in sanatoria"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
 # The permesso is the choice where the law lets SCIA works be asked as one (art. 22 c. 7).
@@ -133,15 +133,15 @@ rules:
 supports:
   # Works that needed a SCIA are regularized by a SCIA in sanatoria, filed apart: the permesso's
   # form has none of its rows (2026-11-04).
-  - {value: "{{ask.sanatoria_titolo}}", in: [permesso], else: "Works that needed a SCIA are regularized by a SCIA in sanatoria, its own pratica: not in the permesso in sanatoria."}
+  - {value: "{{ask.sanatoria_titolo}}", in: [permesso], else: "I lavori che richiedevano una SCIA si regolarizzano con una SCIA in sanatoria, che è una pratica a sé: non nel permesso in sanatoria."}
   # The portal requires one energy incentive claimed on every permesso, even with no energy
   # works or renewables (seen 2026-10-30): with none it can't be filed as is.
-  - {value: "{{ask.incentivo_energetico}}", in: ["art 14 c6", "art 14 c7", "bonus volumetrico"], else: "The permesso's form on the portal wants one energy incentive claimed (art. 14 c. 6 or 7 D.Lgs. 102/2014, or the 5% bonus of D.Lgs. 28/2011) even with no energy works: a project with none can't be filed on it as is; ask the SUE."}
+  - {value: "{{ask.incentivo_energetico}}", in: ["art 14 c6", "art 14 c7", "bonus volumetrico"], else: "Il modulo del permesso sul portale richiede di dichiarare un incentivo energetico (art. 14 c. 6 o 7 D.Lgs. 102/2014, o il bonus del 5% del D.Lgs. 28/2011) anche senza opere energetiche: un progetto che non ne prevede non può essere presentato così com'è; chieda al SUE."}
   # Under art. 36-bis the portal makes the documents, the dating (documents or attestation) and
   # the works proposal one radio group (seen 2026-10-30), as in the SCIA's case 4.4.
-  - {value: "{{ask.pdc_sanatoria_caso}}", in: ["assenza"], defect: pdc-36bis, else: "Only art. 36 (works without the permesso or in total difformity) is mapped. Under art. 36-bis the portal's asseverazione makes the documents attached, the date of the works and the works proposal one radio choice, so it can't state the case in full: a defect of the portal (docs/portal-defects.md); ask the SUE."}
-  - {if: "{{ask.scia_onerosa}}", value: "{{ask.contributo_pagamento}}", in: ["prima dei lavori"], else: "In sanatoria the release is subordinate to paying the oblazione (art. 36 c. 2, art. 36-bis c. 5): it's paid when the permesso is collected, not in instalments or during works already done."}
+  - {value: "{{ask.pdc_sanatoria_caso}}", in: ["assenza"], defect: pdc-36bis, else: "È gestito solo l'art. 36 (lavori senza permesso o in totale difformità). Per l'art. 36-bis l'asseverazione del portale riunisce in un'unica scelta alternativa i documenti allegati, la data dei lavori e la proposta di interventi, per cui non consente di descrivere il caso per intero: è un difetto del portale (docs/portal-defects.md); chieda al SUE."}
+  - {if: "{{ask.scia_onerosa}}", value: "{{ask.contributo_pagamento}}", in: ["prima dei lavori"], else: "In sanatoria il rilascio è subordinato al pagamento dell'oblazione (art. 36 c. 2, art. 36-bis c. 5): si paga al ritiro del permesso, non a rate né in corso d'opera, trattandosi di opere già realizzate."}
   # Works on structures begun without the seismic filing always need the autorizzazione sismica
   # in Campania (art. 4 c. 1 e L.R. 9/1983): the asseverazione's sismica row says so, and the
   # authorization is filed apart with the Genio Civile (the rules table's sismica-sanatoria).
-  - {if: "{{ask.strutture}}", value: "{{ask.sismica}}", in: [autorizzazione], else: "Works on structures begun without the seismic filing always need the autorizzazione sismica in Campania, never the deposito or a variant filing (art. 4 c. 1 e L.R. 9/1983): the sismica answer is autorizzazione, filed with the Genio Civile."}
+  - {if: "{{ask.strutture}}", value: "{{ask.sismica}}", in: [autorizzazione], else: "I lavori sulle strutture iniziati senza la pratica sismica richiedono sempre, in Campania, l'autorizzazione sismica, mai il deposito o una variante (art. 4 c. 1 e L.R. 9/1983): alla domanda sulla pratica sismica si risponde autorizzazione, da presentare al Genio Civile."}

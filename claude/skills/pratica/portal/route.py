@@ -265,19 +265,19 @@ def route(table, answers, root=None):
         report["questions"] = questions(t, [f for f in t["facts"] if f in ask], errors, group, facts)
         return report
     if d["none"]:
-        report["unsupported"] = [f"This case needs no pratica: {d['none']['reason']}"]
+        report["unsupported"] = [f"Per questo caso non serve alcuna pratica: {d['none']['reason']}"]
         return report
     m = d["main"]
     if not m:
-        report["unsupported"] = [f"The rules table {table} names no pratica for this case."]
+        report["unsupported"] = [f"La tabella delle regole ({table}) non indica alcuna pratica per questo caso."]
         return report
     also = [a["procedure"] for a in d["also"]]
     report["main"], report["also"] = m["procedure"], also
-    report["apart"] = [f"File apart, with its own office: {a['procedure']} ({a['regime']})" for a in d["apart"]]
+    report["apart"] = [f"Da presentare a parte, al suo ufficio: {a['procedure']} ({a['regime']})" for a in d["apart"]]
     hit = idx.get(key(m["procedure"], also))
     if not hit:
-        report["unsupported"] = [f"Not mapped yet: {m['procedure']} ({m['regime']})"
-                                 + (f" filed with {', '.join(also)}" if also else "") + "."]
+        report["unsupported"] = [f"Non ancora prevista: {m['procedure']} ({m['regime']})"
+                                 + (f" presentata con {', '.join(also)}" if also else "") + "."]
         return report
     name, path, steps = hit
     carried, again = carry(t, steps, facts, answers)

@@ -13,7 +13,7 @@ after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
   descrizione: {default: "rinnovo paesaggistica {{c:identity.last_name}}"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and the acknowledgements in the client's name"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "Sign and send (Firma e invio); keep the receipt"
+  - "Firmi e invii (Firma e invio); conservi la ricevuta"
