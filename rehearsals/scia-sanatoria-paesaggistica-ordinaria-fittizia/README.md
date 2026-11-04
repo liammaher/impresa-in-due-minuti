@@ -22,6 +22,10 @@ payment, signing and sending.
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-31 | pane | P6, from scratch, `bench/rerun.py` bundle: **filled** in 149 s |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-31 | pane | `answers-p6.json` | P6, from scratch, `bench/rerun.py` bundle: **filled** in 149 s |
+
+<!-- /runs -->

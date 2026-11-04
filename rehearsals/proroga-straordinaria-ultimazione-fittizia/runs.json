@@ -1,26 +1,46 @@
 [
  {
   "date": "2026-10-29",
+  "browser": "pane",
+  "note": "A first try stopped on the first screen: the draft's name was 65 characters, the box takes 60 (run.py now refuses a longer one before the run)."
+ },
+ {
+  "date": "2026-10-29",
+  "browser": "pane",
+  "note": "**Filled**: every section in 46 s, every value read back on a fresh load of the draft."
+ },
+ {
+  "date": "2026-10-29",
+  "browser": "pane",
+  "note": "Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 47.6 s; second, with the runner waiting for a section to open, **filled** in 68.7 s, read back on a fresh load."
+ },
+ {
+  "date": "2026-10-29",
   "answers": "answers-p6.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-paesaggistica.json",
   "result": "filled",
-  "seconds": 45.2
+  "seconds": 45.2,
+  "browser": "pane",
+  "note": "`answers-paesaggistica` (the permesso went with a landscape authorization: \"e autorizzazione paesaggistica\", its prot. n. and date, crawled the same day), `bench/rerun.py` bundle: **filled** in 45.2 s, read back on a fresh load."
  },
  {
   "date": "2026-11-02",
   "answers": "answers-assenso.json",
   "result": "filled",
-  "seconds": 48.2
+  "seconds": 48.2,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 58.9
+  "seconds": 58.9,
+  "browser": "pane"
  }
 ]

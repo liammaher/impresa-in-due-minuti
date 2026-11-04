@@ -45,6 +45,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True
 import run  # noqa: E402
+import runs as runs_record  # noqa: E402
 import yaml  # noqa: E402
 
 REHEARSALS = HERE.parents[4] / "rehearsals"
@@ -125,7 +126,8 @@ def compact(queue):
 
 def record(done, default, day):
     """Each run of a batch (record.js: "pdc-fittizio/answers-deroga", or a rehearsal alone for its
-    default answers file) into rehearsals/<name>/runs.json, once per date, case and result."""
+    default answers file) into rehearsals/<name>/runs.json, once per date, case and result, and
+    the README's run table drawn again from it (runs.py)."""
     for d in done:
         if "@" in d["name"]:
             print(f"{d['name']}: {d['result']}, on other values than the fixture's: not recorded")
@@ -134,10 +136,11 @@ def record(done, default, day):
         f = REHEARSALS / name / "runs.json"
         runs = json.loads(f.read_text()) if f.is_file() else []
         entry = {"date": day, "answers": f"{stem}.json" if stem else default, "result": d["result"],
-                 **({"seconds": d["total_seconds"]} if d.get("total_seconds") else {})}
+                 **({"seconds": d["total_seconds"]} if d.get("total_seconds") else {}), "browser": "pane"}
         if not any(all(r.get(k) == entry[k] for k in ("date", "answers", "result")) for r in runs):
             runs.append(entry)
-            f.write_text(json.dumps(runs, indent=1) + "\n")
+            f.write_text(json.dumps(runs, indent=1, ensure_ascii=False) + "\n")
+            runs_record.write(f.parent)  # the README's run table, drawn from it
         print(f"{name}: {entry['answers']} {entry['result']}")
 
 

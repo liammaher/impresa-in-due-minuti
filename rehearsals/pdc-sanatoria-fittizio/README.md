@@ -62,13 +62,20 @@ form no case took. Each passes pre-flight offline; **none has been run on the po
 
 ## Runs
 
-| Date | Browser | Answers | Result |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
 |---|---|---|---|
 | 2026-10-30 | pane | `answers-p6.json` (art. 36) | **Filled** from a blank draft in 211.8 s, read back on a fresh load (23.8 s), 7 files kept (the energy report included), nothing moved or loose |
 | 2026-10-30 | pane | `answers-parziale.json` (art. 36-bis) | Stopped on "Asseverazione PdC - stato legittimo": 7 required rows unmapped. Ticking them by hand showed the four (documents, the two datings, the works proposal) are one radio group: now refused at pre-flight |
 | 2026-10-30 | pane | `answers-p6.json` after gen.py's offset fix (the new-construction lines get ids, `r14c2p21reg:chk` for this case's), `bench/rerun.py` bundle | **Filled** in 156.2 s, read back on a fresh load (27.4 s), nothing moved or loose: the id is the box's |
 | 2026-10-30 | pane | systems needing a project (`answers-impianti`: six systems, each project in its own slot), `bench/rerun.py` bundle | **filled** in 170 s, read back on a fresh load (25 s), nothing moved or loose |
+| 2026-10-30 | pane | `answers-impianti.json` | **filled** |
+| 2026-10-30 | pane | `answers-p6.json` | **filled** |
 | 2026-10-31 | pane | `answers-p6.json` with quadro a)'s art. 36 radio, `bench/rerun.py` bundle | **filled** in 149 s, read back on a fresh load (24 s), nothing moved or loose |
+| 2026-10-31 | pane | `answers-p6.json` | **filled** |
+| 2026-10-31 | pane | `answers-catasto-invariato.json` | **filled** in 154 s |
+| 2026-10-31 | pane | `answers-catasto-presentata.json` | **filled** in 154 s |
 | 2026-11-01 | pane | `answers-strutture`: the room on a timber frame, the sismica quadro's autorizzazione, `bench/rerun.py` bundle | **filled** from a blank draft in 144 s, read back on a fresh load, nothing moved or loose |
 | 2026-11-02 | pane | `answers-tutela`: the underground room, in a protected area but with nothing above ground (DPR 31/2017 Allegato A.15), the landscape quadro's "non comportano alterazione", `bench/rerun.py` bundle | **filled** from a blank draft in 145 s, read back on a fresh load, nothing moved or loose |
 | 2026-11-02 | pane | `answers-cambio-intero`: a whole building changed from offices to homes in 2021 without the SCIA alternativa (L.R. 13/2022), with maintenance works, as an art. 36 sanatoria ("altro" in the asseverazione), `bench/rerun.py` bundle | Stopped on "a) Qualificazione pratica dell'intervento": the art. 36 line was ticked only for art. 10 works. Now ticked for every permesso in sanatoria |
@@ -77,3 +84,6 @@ form no case took. Each passes pre-flight offline; **none has been run on the po
 | 2026-11-02 | pane | `answers-zona-a`, the same, with the runner fixed, `bench/rerun.py` bundle | **filled** from a blank draft in 154 s, read back on a fresh load, nothing moved or loose |
 | 2026-11-03 | pane | `answers-ristrutturazione-urbanistica`: a ristrutturazione urbanistica (art. 10 c. 1 c) finished in 2017 without a title, as an art. 36 sanatoria, `bench/rerun.py` bundle | First try stopped after 40 s on "SecurityError … cross-origin frame". Rerun after signing in: **filled** from a blank draft in 165 s, read back on a fresh load, nothing moved or loose |
 | 2026-11-03 | none (offline) | `answers-cambio-intero`, reread | The 2026-11-02 run ticked the asseverazione's "un intero immobile all'interno della stessa categoria funzionale (art. 23-ter c. 3)" for a change from offices to homes: a change within one category, which this isn't. The national form has no line for a whole building to another category: the case is refused since (defect `cambio-uso-regionale`, docs/portal-defects.md), its answer `scia_cambio_uso: altro` |
+| 2026-11-03 | pane | `answers-ristrutturazione-urbanistica.json` | **filled** in 165 s |
+
+<!-- /runs -->

@@ -1,0 +1,7 @@
+[
+ {
+  "date": "2026-10-28",
+  "browser": "pane",
+  "note": "First run, no stop: 53 values, every one read back on a fresh load; Login → draft: 50.8 s (wizard 9.8, 10 sections, fresh load 7.3), then the attachments screen"
+ }
+]
