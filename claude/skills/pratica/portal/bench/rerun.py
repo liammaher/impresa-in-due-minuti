@@ -149,7 +149,6 @@ def main():
     ap.add_argument("--out", type=Path)
     ap.add_argument("--record", type=Path, help="record.js's output: add each run to its rehearsal's runs.json, and stop")
     ap.add_argument("--date", default=date.today().isoformat(), help="--record: the batch's date")
-    ap.add_argument("--file-urls", type=Path, help="JSON {path: https URL}: files the page fetches by link")
     ap.add_argument("--bundle", type=Path, help="also write everything the pane needs as one file here (pick.js loads it)")
     a = ap.parse_args()
     if a.record:
@@ -159,7 +158,6 @@ def main():
     names = a.rehearsals or sorted(d.name for d in REHEARSALS.iterdir()
                                    if (d / "portal-steps.generated.yaml").exists() and (d / a.answers).exists())
     fields = run.fields_of(a.values.read_text())
-    urls = json.loads(a.file_urls.read_text()) if a.file_urls else None
     (a.out / "steps").mkdir(parents=True, exist_ok=True)
     stored, sources, origin, queue, failed = {}, {}, None, [], []
     for item in names:
@@ -178,13 +176,13 @@ def main():
                             asks=steps.get("asks"))
         # A box the portal checks against a real register (a company in the Registro Imprese)
         # refuses made-up data: such a run only stops there (2026-11-02, one did).
-        stops = run.preflight(steps, values, urls, made_up=True)["made_up_stops"]
+        stops = run.preflight(steps, values, made_up=True)["made_up_stops"]
         if stops:
             failed.append(f"{label}: made-up data can't pass {'; '.join(stops)}")
             continue
         try:
             # Made-up files: no slot that takes only signed files (the portal refuses the signature).
-            files, parts = run.page_bundle(run.phase(run.expand(steps, values), made_up=True), values, urls=urls, pick=False)
+            files, parts = run.page_bundle(run.phase(run.expand(steps, values), made_up=True), values, pick=False)
         except run.StepError as e:
             failed.append(f"{label}: {e}")
             continue
