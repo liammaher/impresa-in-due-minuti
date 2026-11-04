@@ -160,7 +160,7 @@ func idWords(s string) []string {
 // errCredentialTier is returned when a credential would be stored below
 // TierPersonal.
 func errCredentialTier(field string) error {
-	return &ValidationError{Field: field, Msg: "login secrets (PIN, password, ...) can only be stored as personal (never readable by agents)"}
+	return &ValidationError{Field: field, Msg: "i codici di accesso (PIN, password, ...) si salvano solo come riservati, al livello personal: mai leggibili da Claude o da altri programmi"}
 }
 
 var (
@@ -251,45 +251,45 @@ func NormalizeAndValidate(id, value string) (string, error) {
 			return r
 		}, value)
 		if !reCIECode.MatchString(v) {
-			return "", &ValidationError{Field: id, Msg: "CIE PIN and PUK are 8 digits (both halves together)"}
+			return "", &ValidationError{Field: id, Msg: "PIN e PUK della CIE sono di 8 cifre (le due metà insieme)"}
 		}
 		return v, nil
 	case category == "cie" && name == "numero":
 		n := normalizeCode(value)
 		if !reCIENumber.MatchString(n) {
-			return "", &ValidationError{Field: id, Msg: "CIE number must look like CA12345AB (2 letters, 5 digits, 2 letters)"}
+			return "", &ValidationError{Field: id, Msg: "il numero della CIE è come CA12345AB (2 lettere, 5 cifre, 2 lettere)"}
 		}
 		return n, nil
 	case addressPart(category, name, "cap"):
 		v := strings.TrimSpace(value)
 		if !reCAP.MatchString(v) {
-			return "", &ValidationError{Field: id, Msg: "CAP must be 5 digits"}
+			return "", &ValidationError{Field: id, Msg: "il CAP è di 5 cifre"}
 		}
 		return v, nil
 	case addressPart(category, name, "interno"):
 		v := strings.TrimSpace(reInternoPrefix.ReplaceAllString(value, ""))
 		if v == "" || len(v) > 10 {
-			return "", &ValidationError{Field: id, Msg: "interno is the flat number, e.g. 13 or 4B"}
+			return "", &ValidationError{Field: id, Msg: "l'interno è il numero dell'appartamento, per esempio 13 o 4B"}
 		}
 		return v, nil
 	case addressPart(category, name, "provincia"),
 		category == "identity" && name == "birth_province":
 		v := normalizeCode(value)
 		if !reProvincia.MatchString(v) {
-			return "", &ValidationError{Field: id, Msg: "provincia must be a 2-letter sigla (e.g. NA)"}
+			return "", &ValidationError{Field: id, Msg: "la provincia è la sigla di 2 lettere (per esempio NA)"}
 		}
 		return v, nil
 	case category == "identity" && name == "birth_country":
 		v := strings.TrimSpace(value)
 		if isItaly(v) {
-			return "", &ValidationError{Field: id, Msg: "birth_country is only for births abroad; for Italy set identity.birth_comune and birth_province"}
+			return "", &ValidationError{Field: id, Msg: "lo stato di nascita serve solo per chi è nato all'estero; per l'Italia indichi comune e provincia di nascita"}
 		}
 		return v, nil
 	case addressPart(category, name, "stato"):
 		// Empty means Italia, so a form's "stato" box needs nothing stored.
 		v := strings.TrimSpace(value)
 		if isItaly(v) {
-			return "", &ValidationError{Field: id, Msg: "the stato is only for an address abroad; leave it empty for Italia"}
+			return "", &ValidationError{Field: id, Msg: "lo stato serve solo per un indirizzo all'estero; per l'Italia lo lasci vuoto"}
 		}
 		return v, nil
 	case IsDateField(name):
@@ -353,12 +353,12 @@ var cfDigitPositions = []int{6, 7, 9, 10, 12, 13, 14}
 func ValidateCodiceFiscale(cf string) error {
 	if len(cf) == 11 {
 		if err := ValidatePartitaIVA(cf); err != nil {
-			return errors.New("11-digit codice fiscale has an invalid check digit")
+			return errors.New("il codice fiscale di 11 cifre ha l'ultima cifra sbagliata: controlli che non ci sia un errore di battitura")
 		}
 		return nil
 	}
 	if len(cf) != 16 {
-		return fmt.Errorf("codice fiscale must be 16 characters (or 11 digits), got %d", len(cf))
+		return fmt.Errorf("il codice fiscale ha 16 caratteri (o 11 cifre); qui ce ne sono %d", len(cf))
 	}
 
 	// Resolve omocodia so date/place checks see real digits.
@@ -370,19 +370,19 @@ func ValidateCodiceFiscale(cf string) error {
 		}
 		idx := strings.IndexByte(cfOmocodia, c)
 		if idx < 0 {
-			return fmt.Errorf("unexpected character %q at position %d", c, i+1)
+			return fmt.Errorf("carattere non previsto %q in posizione %d", c, i+1)
 		}
 		resolved[i] = byte('0' + idx)
 	}
 
 	for i := 0; i < 6; i++ {
 		if !isUpperLetter(cf[i]) {
-			return errors.New("first 6 characters (surname and name) must be letters")
+			return errors.New("i primi 6 caratteri (cognome e nome) devono essere lettere")
 		}
 	}
 	month := strings.IndexByte(cfMonthLetters, cf[8])
 	if month < 0 {
-		return fmt.Errorf("invalid month letter %q", cf[8])
+		return fmt.Errorf("la lettera del mese %q non esiste nel codice fiscale", cf[8])
 	}
 	day := int(resolved[9]-'0')*10 + int(resolved[10]-'0')
 	if day > 40 {
@@ -396,17 +396,17 @@ func ValidateCodiceFiscale(cf string) error {
 		maxDay = 29
 	}
 	if day < 1 || day > maxDay {
-		return errors.New("invalid day of birth")
+		return errors.New("il giorno di nascita non è valido")
 	}
 	if !isUpperLetter(cf[11]) {
-		return errors.New("birthplace code must start with a letter")
+		return errors.New("il codice del luogo di nascita deve iniziare con una lettera")
 	}
 	if !isUpperLetter(cf[15]) {
-		return errors.New("check character must be a letter")
+		return errors.New("l'ultimo carattere deve essere una lettera")
 	}
 
 	if want := codiceFiscaleCheckChar(cf[:15]); cf[15] != want {
-		return errors.New("check character does not match")
+		return errors.New("l'ultimo carattere non torna: controlli che non ci sia un errore di battitura")
 	}
 	return nil
 }
@@ -432,7 +432,7 @@ func codiceFiscaleCheckChar(first15 string) byte {
 // ValidatePartitaIVA checks an 11-digit partita IVA using its Luhn-style check digit.
 func ValidatePartitaIVA(piva string) error {
 	if !rePartitaIVA.MatchString(piva) {
-		return errors.New("partita IVA must be 11 digits")
+		return errors.New("la partita IVA è di 11 cifre")
 	}
 	sum := 0
 	for i := 0; i < 10; i++ {
@@ -446,11 +446,11 @@ func ValidatePartitaIVA(piva string) error {
 		sum += d
 	}
 	if check := (10 - sum%10) % 10; check != int(piva[10]-'0') {
-		return errors.New("partita IVA check digit does not match")
+		return errors.New("l'ultima cifra della partita IVA non torna: controlli che non ci sia un errore di battitura")
 	}
 	// Digits 8-10 are the issuing office, never 000 (so 00000000000 fails).
 	if piva[7:10] == "000" {
-		return errors.New("partita IVA office code (digits 8-10) can't be 000")
+		return errors.New("nella partita IVA le cifre dalla 8 alla 10 non possono essere 000")
 	}
 	return nil
 }
@@ -459,10 +459,10 @@ func ValidatePartitaIVA(piva string) error {
 // ISO 13616 mod-97 check digits.
 func ValidateIBAN(iban string) error {
 	if !reIBAN.MatchString(iban) {
-		return errors.New("IBAN must be a country code, 2 check digits and the account number (e.g. IT60X0542811101000000123456)")
+		return errors.New("l'IBAN è il codice del paese, 2 cifre di controllo e il numero del conto (per esempio IT60X0542811101000000123456)")
 	}
 	if strings.HasPrefix(iban, "IT") && len(iban) != 27 {
-		return fmt.Errorf("an Italian IBAN has 27 characters, got %d", len(iban))
+		return fmt.Errorf("un IBAN italiano ha 27 caratteri; qui ce ne sono %d", len(iban))
 	}
 	// Move the first four characters to the end, map letters to 10..35 and
 	// compute the remainder mod 97 digit by digit.
@@ -478,7 +478,7 @@ func ValidateIBAN(iban string) error {
 		}
 	}
 	if rem != 1 {
-		return errors.New("IBAN check digits do not match — check for a typo")
+		return errors.New("le cifre di controllo dell'IBAN non tornano: controlli che non ci sia un errore di battitura")
 	}
 	return nil
 }

@@ -85,29 +85,29 @@ func normalizeBusiness(id, category, name, value string) (out string, handled bo
 	case key == "business.cciaa":
 		v := strings.ToUpper(strings.TrimSpace(value))
 		if !reProvincia.MatchString(v) {
-			return fail("must be the provincia's 2-letter sigla (e.g. NA)")
+			return fail("è la sigla della provincia, di 2 lettere (per esempio NA)")
 		}
 		return v, true, nil
 	case key == "business.capitale_sociale":
 		v, ok := normalizeEuro(value)
 		if !ok {
-			return fail("must be an amount in euro (e.g. 10.000,00 or 10000)")
+			return fail("dev'essere un importo in euro (per esempio 10.000,00 o 10000)")
 		}
 		return v, true, nil
 	case key == "business.qualita_dichiarante":
 		if q, ok := qualitaDichiarante[normalizeChoice(value)]; ok {
 			return q, true, nil
 		}
-		return fail("must be titolare or legale_rappresentante")
+		return fail("può essere titolare o legale_rappresentante")
 	case key == "locale.titolo":
 		if t, ok := localeTitoli[strings.ToLower(strings.TrimSpace(value))]; ok {
 			return t, true, nil
 		}
-		return fail("must be proprietario, locatario, comodatario, usufruttuario or altro")
+		return fail("può essere proprietario, locatario, comodatario, usufruttuario o altro")
 	case category == "locale" && hasFieldSuffix(name, "mq"):
 		v, ok := normalizeDecimal(value)
 		if !ok {
-			return fail("must be a positive number (e.g. 45 or 45.5)")
+			return fail("dev'essere un numero positivo (per esempio 45 o 45,5)")
 		}
 		return v, true, nil
 	}
