@@ -193,7 +193,8 @@ Profile Password + Secret Key (128-bit)
   build; the helper checks Touch ID itself, sends the password only over the socket to the
   enrolled pvault (audit token → valid hardened code with the enrolled cdhash), and returns
   only a token. Rebuilding the helper or moving pvault means `pvault touchid enable` again.
-- The prompt is worded from the exact scope it requests and never understates it.
+- The prompt is worded from the exact scope it requests and never understates it. It is
+  Italian (Portali's users are), each category named as `PromptCategories` names it.
   Patterns are anchored with `\A`/`\z`. Its parser is held to `internal/vault/testdata/scopes.json`,
   its wording to `prompts.json`, as is the vault's own (`approval_prompt.go`, for Windows Hello).
 - `touchid enable`/`disable` refuse without a terminal, so a script can't switch them; an
@@ -206,7 +207,7 @@ Profile Password + Secret Key (128-bit)
 - The vault server asks itself: `POST /vault/session` with `approve: "hello"` (private channel
   only, never with a password, only once the session turned it on with `POST /vault/hello`,
   itself private-channel only; meta `hello`, which backups clear, so a restore starts with it
-  off) shows a prompt `pvault wants to <reason>.`, the reason from `GrantPrompt` for
+  off) shows a prompt `Portali chiede di <reason>.`, the reason from `GrantPrompt` for
   the validated request or `SignPrompt` from the vault's own summary, and issues exactly that
   grant (`CreateApprovedGrant`, `CreateApprovedSignGrant`; audited `via: hello`). Nothing
   secret is stored for it, and `unlock` keeps the password.
