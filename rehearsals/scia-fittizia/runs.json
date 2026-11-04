@@ -238,5 +238,29 @@
   "answers": "answers-p6.json",
   "result": "filled",
   "seconds": 177.5
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-scavo-vvf.json",
+  "result": "stopped",
+  "seconds": 0.2
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-minore.json",
+  "result": "filled",
+  "seconds": 236.4
+ },
+ {
+  "date": "2026-11-03",
+  "answers": "answers-tolleranze-privo.json",
+  "result": "filled",
+  "seconds": 191
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-scavo-vvf.json",
+  "result": "filled",
+  "seconds": 202.5
  }
 ]

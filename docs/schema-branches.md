@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (208 cases in all, 207 with a recorded filled run).
+  case (223 cases in all, 222 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -29,42 +29,22 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 33 | 0 | 1 | 1 | 7 | 17 |
+| CILA | 43 | 34 | 0 | 0 | 1 | 7 | 17 |
 | Fine lavori | 2 | 2 | 0 | 0 | 0 | 0 | 6 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 0 |
-| Permesso di costruire | 153 | 114 | 0 | 13 | 7 | 14 | 110 |
-| SCIA | 150 | 131 | 0 | 4 | 1 | 10 | 41 |
-| SCIA alternativa | 128 | 111 | 0 | 6 | 2 | 8 | 47 |
+| Permesso di costruire | 153 | 125 | 0 | 2 | 7 | 14 | 104 |
+| SCIA | 150 | 133 | 0 | 2 | 1 | 10 | 39 |
+| SCIA alternativa | 128 | 117 | 0 | 0 | 2 | 8 | 45 |
 | Agibilità (SCA) | 36 | 31 | 0 | 0 | 0 | 5 | 10 |
 
 ## Next cases
 
 Mapped, no case yet (an answers file away):
 
-- CILA: `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `immobile_non_obbligatorio` (si tratta di immobile realizzato in un’epoca in cui non era obbligato…)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `non_disponibile_titolo` (non sono disponibili la copia o gli estremi del titolo abilitativo, m…)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]` → `tolleranza_costruttiva` (che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/…)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]/sanzioni_pecuniarie` → `allega_ricevuta` (si allega la relativa ricevuta)
-- Permesso di costruire: `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistica_pdc_ctype]/sanzioni_pecuniarie` → `estremi_pagamenti` (si forniscono gli estremi del pagamento)
-- Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_oltre_500_mq` (2%, per le U.I. > 500 mq di superficie utile ;)
-- Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_500_a_300_mq` (3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile;)
-- Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_300_a_100_mq` (4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;)
-- Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_100_a_60_mq` (5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;)
-- Permesso di costruire: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_minore_rilevanza` (intervento di minore rilevanza nei riguardi della pubblica incolumità…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita` → `disciplina_urbanistica` (che risulta conforme alla disciplina urbanistica vigente al momento d…)
 - Permesso di costruire: `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseverazione_ctype]/intervento_in_parziale_difformita` → `disciplina_urbanistica_edilizia` (che risulta conforme alla disciplina urbanistica e edilizia vigente s…)
-- Permesso di costruire: `relazione_tecnica_asseverazione/qualita_ambientale_terreni/[qualita_ambientale_terreni_ctype]` → `avvenuta_bonifica` (è stata oggetto di bonifica dei terreni con obiettivi compatibili con…)
 - SCIA: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/mutamento_destinazione_uso_intero_immobile` → `con_opere` (con opere riconducibili agli interventi di cui di cui all'articolo 6-…)
 - SCIA: `dichiarazioni/qualificazione_intervento/[qualificazione_intervento_ctype]/mutamento_destinazione_uso_intero_immobile` → `senza_opere` (senza opere (o con opere riconducibili agli interventi di cui all'art…)
-- SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_minore_rilevanza` (intervento di minore rilevanza nei riguardi della pubblica incolumità…)
-- SCIA: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
-- SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_oltre_500_mq` (2%, per le U.I. > 500 mq di superficie utile ;)
-- SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_500_a_300_mq` (3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile;)
-- SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_300_a_100_mq` (4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile;)
-- SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_limiti_superficie` → `tolleranza_da_100_a_60_mq` (5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile;)
-- SCIA alternativa: `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[dichiarazioni_tolleranze_ctype]/tolleranza_zona_sismica_alta/tolleranza_strutturale` → `tolleranza_priva_rilevanza` (intervento privo di rilevanza nei riguardi della pubblica incolumità…)
-- SCIA alternativa: `relazione_tecnica_asseverazione/qualita_ambientale_terreni/[qualita_ambientale_terreni_ctype]` → `non_necessita_bonifica` (a seguito delle preventive analisi ambientali effettuate, non necessi…)
 
 On the portal, not mapped (dictionary work first):
 
@@ -126,7 +106,7 @@ On the portal, not mapped (dictionary work first):
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | filled on the portal | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | filled on the portal | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | filled on the portal | 1 |
-| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
+| `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | filled on the portal | 1 |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `allega_autorizzazione_sismica` | no box in worksheet | h | no portal box |  |
 | `dichiarazioni_progettista/dichiarazioni_tolleranze/[dichiar…` | `silenzio_assenso_autorizzazione` | no box in worksheet | h | no portal box |  |
 
@@ -216,11 +196,11 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `nuova_costruzione_area_libera_check` | che le opere riguardano un intervento di nuova costruzione su area li… | h | filled on the portal | 1 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `(nothing)` | absence: leave P037 unticked | h | no portal box |  |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `oggetto_titolo_pratiche_edilizie` | che l’immobile/U.I. è stato oggetto del/i seguente/i titolo/i o prati… | h | filled on the portal | 7 |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | mapped, no case yet |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | mapped, no case yet |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | mapped, no case yet |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | mapped, no case yet |  |
-| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | mapped, no case yet |  |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `immobile_non_obbligatorio` | si tratta di immobile realizzato in un’epoca in cui non era obbligato… | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `non_disponibile_titolo` | non sono disponibili la copia o gli estremi del titolo abilitativo, m… | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `tolleranza_costruttiva` | che l’immobile/U.I. è stato oggetto della/e seguente/i dichiarazione/… | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `allega_ricevuta` | si allega la relativa ricevuta | h | filled on the portal | 1 |
+| `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `estremi_pagamenti` | si forniscono gli estremi del pagamento | h | filled on the portal | 1 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `pienamente_conforme` | pienamente conforme alla documentazione dello stato legittimo o di fa… | h | filled on the portal | 6 |
 | `dichiarazioni/regolarita_urbanistica/[regolarita_urbanistic…` | `conforme_documentazione` | conforme alla documentazione dello stato legittimo o di fatto legitti… | h | filled on the portal | 1 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `titolo_gratuito` | è a titolo gratuito | h | filled on the portal | 1 |
@@ -240,18 +220,18 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `no_mutamento_destinazione_uso` | non comportano mutamento di destinazione d’uso di una singola unità i… | h | filled on the portal | 7 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_stessa_categoria` | comportano mutamento di destinazione d’uso di una singola unità immob… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_tra_categorie` | comportano mutamento di destinazione d’uso di una singola unità immob… | m | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_intero_immobile_stessa_categoria` | comportano mutamento di destinazione d’uso di un intero immobile all’… | h | filled on the portal | 2 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_oltre_500_mq` | 2%, per le U.I. > 500 mq di superficie utile ; | h | mapped, no case yet |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_500_a_300_mq` | 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; | h | mapped, no case yet |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_300_a_100_mq` | 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; | h | mapped, no case yet |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_100_a_60_mq` | 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile; | h | mapped, no case yet |  |
+| `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_intero_immobile_stessa_categoria` | comportano mutamento di destinazione d’uso di un intero immobile all’… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_oltre_500_mq` | 2%, per le U.I. > 500 mq di superficie utile ; | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_500_a_300_mq` | 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_300_a_100_mq` | 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_100_a_60_mq` | 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile; | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_sotto_60_mq` | 6%, per le U.I. < 60 mq di superficie utile; | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | left empty |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `allega_autorizzazione_sismica` | no box in worksheet | h | no portal box |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `silenzio_assenso_autorizzazione` | no box in worksheet | h | no portal box |  |
@@ -290,7 +270,7 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_art_8` | Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_1997_12_05` | non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_1997_12_05` | rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 7 |
-| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_sup_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_prevenzione_incendi` | non è soggetto alle norme di prevenzione incendi | h | filled on the portal | 7 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_prevenzione_incendi` | è soggetto alle norme tecniche di prevenzione incendi e le stesse son… | h | filled on the portal | 1 |
@@ -313,7 +293,7 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 2 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `non_richiede_indagini` | non richiede indagini ambientali preventive in relazione alle attivit… | h | filled on the portal | 7 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `non_necessita_bonifica` | a seguito delle preventive analisi ambientali effettuate, non necessi… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `avvenuta_bonifica` | è stata oggetto di bonifica dei terreni con obiettivi compatibili con… | h | mapped, no case yet |  |
+| `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `avvenuta_bonifica` | è stata oggetto di bonifica dei terreni con obiettivi compatibili con… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/opere_urbanizzazione_primar…` | `dotata` | è dotata delle opere di urbanizzazione primaria | h | filled on the portal | 7 |
 | `relazione_tecnica_asseverazione/opere_urbanizzazione_primar…` | `non_dotata` | non è dotata delle opere di urbanizzazione primaria e la loro attuazi… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/scarichi_idrici/[scarichi_i…` | `non_necessita_autorizzazione` | non necessita di autorizzazione allo scarico | h | filled on the portal | 7 |
@@ -373,11 +353,6 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - e) Regolarità urbanistica e precedenti…: SCIA in sanatoria di cui all’art. 36-bis d.P.R. n. 380/2001 (mapped)
 - e) Regolarità urbanistica e precedenti…: SCIA in sanatoria per variante in corso d’opera realizzata costituente parziale difformit… (mapped)
 - e) Regolarità urbanistica e precedenti…: altro (mapped)
-- e) Regolarità urbanistica e precedenti…: copia accatastamento di primo impianto o si forniscono i relativi estremi (mapped)
-- e) Regolarità urbanistica e precedenti…: altri documenti probanti (riprese fotografiche, estratti cartografici, documenti di archi… (mapped)
-- e) Regolarità urbanistica e precedenti…: che per l’immobile/U.I. sono state irrogate le seguenti sanzioni pecuniarie, previste dag… (mapped)
-- e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, presentata nella… (mapped)
-- e) Regolarità urbanistica e precedenti…: dichiarazione delle tolleranze di cui all’art. 34-bis o 34-ter, comma 4, allegata agli at… (mapped)
 - j) Diritti di terzi: dichiara di essere consapevole che il permesso di costruire non comporta limitazione dei… (not mapped)
 - Asseverazione PdC - Dati progettista e…: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa) (not mapped)
 - Asseverazione PdC - Dati progettista e…: urbanizzazione primaria e secondaria realizzati da soggetti diversi dal Comune (mapped)
@@ -422,7 +397,6 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - sicurezza impianti…: si allega la valutazione della sostenibilità energetico-ambientale degli edifici redatta… (not mapped)
 - Asseverazione PdC - inquinamento acusti…: dichiarazione sostitutiva dell'atto di notorietà, a firma del titolare, relativa al rispe… (mapped)
 - Asseverazione PdC - inquinamento acusti…: (art. 4, commi 1 e 2, d.P.R. 227/2011) a documentazione di previsione di impatto acustico… (mapped)
-- Asseverazione PdC - inquinamento acusti…: comportano la produzione di materiali da scavo che saranno gestiti dall'interessato come… (mapped)
 - Asseverazione PdC - tutela storico ambi…: si allega documentazione necessaria ai fini del rilascio del parere vincolante (vedi quad… (not mapped)
 - Asseverazione PdC - aree a rischio e al…: fascia di rispetto dei depuratori (punto 1.2, allegato 4 della deliberazione 4 febbraio 1… (mapped)
 - Asseverazione PdC - aree a rischio e al…: Altro (mapped)
@@ -469,15 +443,15 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/presentazione` | `scia_condizionata` | portal section b has only a "per presa visione" checkbox; no choice a… | h | no portal box |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | m | filled on the portal | 12 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | m | filled on the portal | 12 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `no_mutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | m | filled on the portal | 12 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_tra_categorie_singola_unita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | m | filled on the portal | 2 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamento_categoria_intero_immobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_permesso_di_costruire_nr_protocollo` | variante in corso d'opera a permesso di costruire che non incide sui… | m | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `variante_in_corso_dopera_permesso_di_costruire_data_protocollo` | variante in corso d'opera a permesso di costruire che non incide sui… | m | filled on the portal | 1 |
@@ -544,8 +518,8 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_non_strutturale` | non ha rilevanza strutturale; | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `allega_autorizzazione_sismica` | sub-option inside P127 text; no separate box in worksheet | l | no portal box |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `silenzio_assenso_autorizzazione` | sub-option inside P127 text; no separate box in worksheet | l | no portal box |  |
 | `relazione_tecnica_asseverazione/sanatoria/[sanatoria_asseve…` | `no_interventi` | non prevede interventi; | h | left empty |  |
@@ -566,7 +540,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_art_8` | Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_1997_12_05` | non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 9 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_1997_12_05` | rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_sup_6000` | le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo… | l | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_prevenzione_incendi` | non è soggetto alle norme di prevenzione incendi | h | filled on the portal | 9 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_prevenzione_incendi` | è soggetto alle norme tecniche di prevenzione incendi e le stesse son… | h | filled on the portal | 1 |
@@ -630,7 +604,6 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Asseverazione SCIA - Stato legittimo, D…: 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; (mapped)
 - Asseverazione SCIA - Stato legittimo, D…: 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; (mapped)
 - Asseverazione SCIA - Stato legittimo, D…: 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile; (mapped)
-- Asseverazione SCIA - Stato legittimo, D…: dichiara il decorso del termine del procedimento per i controlli regionali, in assenza di… (mapped)
 - Asseverazione SCIA - Stato legittimo, D…: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della… (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: si impegna a presentare la dichiarazione per l’iscrizione al catasto successivamente all’… (mapped)
 - Asseverazione SCIA - Stato legittimo, D…: dà atto che la data/epoca di realizzazione dell’intervento (not mapped)
@@ -647,7 +620,6 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 - Asseverazione SCIA - Sicurezza impianti…: si certifica nella relazione tecnica una copertura dei consumi di calore, di elettricità… (mapped)
 - Asseverazione SCIA - Inquinamento acust…: la documentazione di previsione di impatto acusticocon l'indicazione delle misure previst… (not mapped)
 - Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno riutilizzati nello stesso luog… (mapped)
-- Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno gestiti dall'interessato come… (mapped)
 - Asseverazione SCIA - Amianto, conformit…: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA - Amianto, conformit…: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di… (mapped)
 - SANATORIA e regolarizzazioni per interv…: sanatoria di intervento soggetto a SCIA, in assenza della SCIA o in difformità da essa, c… (not mapped)
@@ -668,7 +640,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `dichiarazioni/presentazione/[presentazione_scia_alternativa…` | `scia_condizionata` | no portal option; P011 is only an acknowledgement | m | no portal box |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `noMutamento` | non comporta mutamento di destinazione d’uso di una singola unità imm… | h | filled on the portal | 12 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoCategoriaSingolaUnita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | filled on the portal | 2 |
-| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoTraCategorieSingolaUnita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | filled on the portal | 1 |
+| `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoTraCategorieSingolaUnita` | comporta mutamento di destinazione d’uso di una singola unità immobil… | h | filled on the portal | 2 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `mutamentoCategoriaInteroImmobile` | comporta mutamento di destinazione d’uso di un intero immobile all’in… | h | filled on the portal | 1 |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `procedimentoAutomatizzato` | portal has no such option (P012 only states the SCIA alt. eligibility) | m | no portal box |  |
 | `dichiarazioni/qualificazione_intervento/[qualificazione_int…` | `procedimentoOrdinario` | portal has no such option | m | no portal box |  |
@@ -709,10 +681,10 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_nuova_costruzione` | comporta mutamento di destinazione d’uso | m | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `no_mutamento_destinazione_uso_altri_interventi` | non comporta mutamento di destinazione d’uso | m | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/tipo_interventi_opere/[tipo…` | `si_mutamento_destinazione_uso_altri_interventi` | comporta mutamento di destinazione d’uso | m | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_oltre_500_mq` | 2%, per le U.I. > 500 mq di superficie utile ; | h | mapped, no case yet |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_500_a_300_mq` | 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; | h | mapped, no case yet |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_300_a_100_mq` | 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; | h | mapped, no case yet |  |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_100_a_60_mq` | 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile; | h | mapped, no case yet |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_oltre_500_mq` | 2%, per le U.I. > 500 mq di superficie utile ; | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_500_a_300_mq` | 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_300_a_100_mq` | 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; | h | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_da_100_a_60_mq` | 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile; | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_sotto_60_mq` | 6%, per le U.I. < 60 mq di superficie utile; | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_bassa` | dà atto che l’immobile interessato dalla tolleranza è ubicato in zona… | h | left empty |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_zona_sismica_alta` | trattandosi di immobile ubicato in zona sismica a media o alta sismic… | h | filled on the portal | 1 |
@@ -720,7 +692,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_strutturale` | ha rilevanza strutturale, rispetta le norme tecniche per le costruzio… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_pubblica_incolumita` | intervento rilevante nei riguardi della pubblica incolumità di cui al… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_minore_rilevanza` | intervento di minore rilevanza nei riguardi della pubblica incolumità… | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | mapped, no case yet |  |
+| `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `tolleranza_priva_rilevanza` | intervento privo di rilevanza nei riguardi della pubblica incolumità… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `allega_autorizzazione_sismica` | no such box in the worksheet | l | no portal box |  |
 | `relazione_tecnica_asseverazione/dichiarazioni_tolleranze/[d…` | `silenzio_assenso_autorizzazione` | no such box in the worksheet | l | no portal box |  |
 | `relazione_tecnica_asseverazione/sicurezza_impianti` | `non_comporta_impianti` | Non comporta l'installazione, la trasformazione o l'ampliamento di im… | h | filled on the portal | 1 |
@@ -735,7 +707,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_art_8` | Rientra nell'ambito di applicazione dell'articolo 8 della l. n. 447/1… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `non_rientra_1997_12_05` | non rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/tutela_inquinamento_acustic…` | `rientra_1997_12_05` | rientra nell'ambito dell'applicazione del d.P.C.M. 5 dicembre 1997 | h | filled on the portal | 1 |
-| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | filled on the portal | 1 |
+| `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_inf_ugu_6000` | le opere comportano la produzione di materiali da scavo per un volume… | m | filled on the portal | 3 |
 | `relazione_tecnica_asseverazione/materiali_risulta/[material…` | `vol_sup_6000` | le opere comportano la produzione di materiali da scavo per un volume…; si comunicano gli estremi del provvedimento di VIA o AIA, comprensivo… | l | on the portal, not mapped |  |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `non_soggetto_prevenzione_incendi` | non è soggetto alle norme di prevenzione incendi | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/prevenzione_incendi` | `soggetto_prevenzione_incendi` | è soggetto alle norme tecniche di prevenzione incendi e le stesse son… | h | filled on the portal | 1 |
@@ -757,7 +729,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_normativa_regionale` | prevede opere in zona sismica da denunciare ai sensi dell'articolo 93… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/intervento_zona_sismica/[in…` | `previste_opere_strutturali` | prevede opere strutturali soggette ad autorizzazione sismica ai sensi… | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `non_richiede_indagini` | non richiede indagini ambientali preventive in relazione alle attivit… | h | filled on the portal | 6 |
-| `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `non_necessita_bonifica` | a seguito delle preventive analisi ambientali effettuate, non necessi… | h | mapped, no case yet |  |
+| `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `non_necessita_bonifica` | a seguito delle preventive analisi ambientali effettuate, non necessi… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/qualita_ambientale_terreni/…` | `avvenuta_bonifica` | è stata oggetto di bonifica dei terreni con obiettivi compatibili con… | h | filled on the portal | 1 |
 | `relazione_tecnica_asseverazione/opere_urbanizzazione_primar…` | `dotata` | è dotata delle opere di urbanizzazione primaria | h | filled on the portal | 6 |
 | `relazione_tecnica_asseverazione/opere_urbanizzazione_primar…` | `non_dotata` | non è dotata delle opere di urbanizzazione primaria e la loro attuazi… | h | filled on the portal | 1 |
@@ -822,11 +794,9 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 - Asseverazione SCIA alternativa - Inquin…: dichiarazione sostitutiva dell'atto di notorietà, a firma del titolare, relativa al rispe… (mapped)
 - Asseverazione SCIA alternativa - Inquin…: la documentazione di previsione di impatto acusticocon l'indicazione delle misure previst… (not mapped)
 - Asseverazione SCIA alternativa - Inquin…: comportano la produzione di materiali da scavo che saranno riutilizzati nello stesso luog… (mapped)
-- Asseverazione SCIA alternativa - Inquin…: comportano la produzione di materiali da scavo che saranno gestiti dall'interessato come… (mapped)
 - Asseverazione SCIA Alternativa - Amiant…: alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA Alternativa - Amiant…: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferio… (mapped)
 - Asseverazione SCIA Alternativa - Amiant…: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di… (mapped)
-- Asseverazione SCIA Alternativa - Qualit…: si allegano i risultati delle analisi ambientali dei terreni (mapped)
 - Asseverazione SCIA Alternativa - Altri…: fascia di rispetto dei depuratori (punto 1.2, allegato 4 della deliberazione 4 febbraio 1… (mapped)
 - Asseverazione SCIA Alternativa - Altri…: Altro (mapped)
 - Asseverazione SCIA Alternativa - Altri…: si allegano le autocertificazioni relative alla conformità dell'intervento per i relativi… (mapped)

@@ -82,7 +82,7 @@
  "barriere_deroga": "false",
  "incentivo_energetico": "nessuno",
  "vvf_valutazione": "false",
- "scavo": "nessuno",
+ "scavo": "sottoprodotti",
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
  "strumenti_altri": "false",
@@ -92,5 +92,6 @@
  "vvf_variante": "false",
  "progettista_altro": false,
  "diritti_esente": false,
- "terre_rocce": "dichiarazione"
+ "terre_rocce": "dichiarazione",
+ "scavo_piano_utilizzo": "false"
 }

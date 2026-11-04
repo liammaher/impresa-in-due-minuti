@@ -30,3 +30,6 @@ rules:
 answers:
   descrizione: PROVA NON INVIARE - PdC e terre e rocce P6
   oggetto: "Ristrutturazione edilizia con demolizione e ricostruzione di un edificio residenziale di tre piani con aumento di volumetria e un nuovo piano interrato, scavo di 2.500 m³ di terre portate a un altro cantiere come sottoprodotto, opera non soggetta a VIA (dati inventati per la prova)."
+  # The asseverazione says what the dichiarazione files: by-products from a small site.
+  scavo: sottoprodotti
+  scavo_piano_utilizzo: "false"

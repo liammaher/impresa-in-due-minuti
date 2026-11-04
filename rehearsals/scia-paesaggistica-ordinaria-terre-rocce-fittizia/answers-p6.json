@@ -78,7 +78,7 @@
  "barriere_deroga": "false",
  "incentivo_energetico": "nessuno",
  "vvf_valutazione": "false",
- "scavo": "nessuno",
+ "scavo": "sottoprodotti",
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
  "strumenti_altri": "false",
@@ -105,5 +105,6 @@
  "paes_interessa": "immobile",
  "relazione_paesaggistica": "rehearsals/scia-fittizia/files/relazione-paesaggistica.pdf",
  "contributo_normativa": "art. 17, comma 3, d.P.R. 380/2001 (inventato per la prova)",
- "scia_cambio_uso": "no"
+ "scia_cambio_uso": "no",
+ "scavo_piano_utilizzo": "false"
 }

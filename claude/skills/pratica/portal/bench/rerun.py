@@ -250,6 +250,10 @@ if (!pvAlready) window.pvBatchRun = (async () => {
     __pv.start(proc, values);
     let r; do { r = await __pv.wait(30000); } while (r.result === "running");
     if (r.result !== "filled" && /^(the page didn't load|the portal stayed busy|signed out)/.test(r.error || "")) {
+      // Listed apart (`unreached`), so a batch that ends one short says which and why (2026-11-03:
+      // 26 of 27 "done", the last one's page hadn't loaded).
+      const un = JSON.parse(sessionStorage.getItem("pv-batch-unreached") || "[]").filter((u) => u.name !== name);
+      sessionStorage.setItem("pv-batch-unreached", JSON.stringify([...un, { name, error: r.error, section: r.at && r.at.section }]));
       if (++unreached >= 2) { window.pvBatchHalted = `${name}: ${r.error}`; break; }
       continue;
     }
@@ -280,6 +284,8 @@ pvAlready ? "a batch is already running in this tab: nothing started" : `started
 const done = JSON.parse(sessionStorage.getItem("pv-batch") || "[]");
 JSON.stringify({ done: done.length, of: (window.pvBatch || []).length, running: !!window.pvBatchBusy,
   halted: window.pvBatchHalted || null,
+  // Runs that never reached the portal and aren't in done: rerun them (a bundle of what's left).
+  unreached: JSON.parse(sessionStorage.getItem("pv-batch-unreached") || "[]").filter((u) => !done.some((d) => d.name === u.name)),
   filled: done.filter((d) => d.result === "filled").length,
   stopped: done.filter((d) => d.result !== "filled").map((d) => [d.name, d.error, d.at && d.at.section, d.gaps || []]),
   moved: done.filter((d) => (d.moved || []).length).map((d) => [d.name, d.moved]),
@@ -290,7 +296,7 @@ JSON.stringify({ done: done.length, of: (window.pvBatch || []).length, running: 
 """)
     (a.out / "record.js").write_text('JSON.stringify(JSON.parse(sessionStorage.getItem("pv-batch") || "[]")'
                                       '.map((d) => ({ name: d.name, result: d.result, total_seconds: d.total_seconds })))\n')
-    (a.out / "fresh.js").write_text('sessionStorage.removeItem("pv-batch"); "cleared"\n')
+    (a.out / "fresh.js").write_text('sessionStorage.removeItem("pv-batch"); sessionStorage.removeItem("pv-batch-unreached"); "cleared"\n')
     if a.bundle:
         write_bundle(a.out, a.bundle)
     print(f"{a.out}: {len(names)} rehearsals, {len(chunks)} queue file(s). In the pane, on {origin}: "
