@@ -104,7 +104,7 @@ asks:
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}
-  descrizione: {default: "PROVA NON INVIARE - PdC in sanatoria {{c:identity.last_name}}"}
+  descrizione: {default: "PdC in sanatoria {{c:identity.last_name}}"}
   sanatoria_titolo: {default: permesso}
   # The permesso's quadro e) also takes a new construction on free land.
   stato_legittimo:

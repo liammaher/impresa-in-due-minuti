@@ -14,7 +14,7 @@ groups:
   fatti:
     question: Quali di queste cose valgono per l'attività? Spunta quelle vere, anche nessuna.
 asks:
-  descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'PROVA NON INVIARE - acconciatore {{business.denominazione}}'}
+  descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'acconciatore {{business.denominazione}}'}
   oggetto: {type: text, question: The pratica in one sentence (300 characters)}
   diritti_euro: {type: number, question: The SUE's diritti for this pratica in euro (0 when none are due)}
   diritti_esente: {type: yes_no, question: 'No diritti are due: is that because the client or the works are exempt under the Comune''s tariff, rather than because the tariff has none for this pratica?',

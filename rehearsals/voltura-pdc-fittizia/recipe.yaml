@@ -14,7 +14,7 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
   diritti_euro: {default: "501", why: "Line SUE 11 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 501 € for a voltura of a permesso di costruire"}
-  descrizione: {default: "PROVA NON INVIARE - voltura PdC {{c:identity.last_name}}"}
+  descrizione: {default: "voltura PdC {{c:identity.last_name}}"}
 supports:
   # The co-holders' section holds one person and has no "+" (crawled 2026-10-28): a portal
   # defect, not a mapping gap.

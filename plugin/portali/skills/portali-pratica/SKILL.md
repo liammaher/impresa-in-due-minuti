@@ -153,10 +153,11 @@ folder.
   use: ...", one line each; "ok" confirms them all. Never use a proposal nobody confirmed.
   Write the replies under each `key` (dates YYYY-MM-DD) and run pre-flight again; an
   `error` says why an answer didn't fit, so ask only that again.
-- `files`: each attachment. In this version a run carries its files through the
-  conversation, so all of them together must fit in 256 KB (`pane_ok`). When they don't,
-  stop: tell the architect in one line that files that size can't go in automatically yet.
-  A file's `problem` says what the sportello would refuse: at Napoli's SUE (DD 501/2026) a file
+- `files`: each attachment. When all of them fit in 256 KB (`pane_ok`) the run carries them;
+  when they don't, `pick` lists the files the architect chooses once, at the start of the run,
+  in a box shown on the portal's page (the job's folder or the files; each is checked against
+  the one pre-flight read, and the bytes go from their disk to the portal). Tell them so with
+  the questions. A file's `problem` says what the sportello would refuse: at Napoli's SUE (DD 501/2026) a file
   not in PDF/A, not signed digitally (a .p7m or the PDF's own signature), or named with spaces,
   accents or other signs makes the pratica irricevibile. Tell the architect which files and why.
 - `yours`: tell the architect now what they'll do at the end (at Napoli's SUE: the same file
@@ -172,8 +173,8 @@ python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json \
   --answers answers.json --values run/values.json --out run --plain
 ```
 
-`--plain` because in this version you read the architect's documents and wrote
-`run/values.json` yourself, so the values are in this conversation already, and Cowork's
+`--plain` because in this version you wrote `run/values.json` from the intake's values and
+the architect's replies, so the values are in this conversation already, and Cowork's
 sandbox has no window to show a code in (`page` without it seals `run.js` under a code the
 person types, and refuses when it can't show one).
 

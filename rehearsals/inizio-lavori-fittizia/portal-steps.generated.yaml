@@ -8,7 +8,7 @@ yours:
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali'
 - Sign and send (Firma e invio); keep the receipt
 asks:
-  descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'PROVA NON INVIARE - inizio lavori {{c:identity.last_name}}'}
+  descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'inizio lavori {{c:identity.last_name}}'}
   titolo: {type: text, question: 'The permit holder''s title to the property (proprietario, locatario, ...)', propose: '{{c:immobile.titolo}}'}
   cliente_carica: {type: choice, question: 'What is the person declaring for the client company (`cr:`) to it? legale rappresentante; amministratore unico; amministratore delegato; presidente cda (presidente
       del consiglio di amministrazione); amministratore di condominio (a condominium''s administrator)', options: [legale rappresentante, amministratore unico, amministratore delegato, presidente cda, amministratore

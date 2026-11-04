@@ -9,7 +9,7 @@ yours:
 - '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
 - Sign and send (Firma e invio); keep the receipt
 asks:
-  descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'PROVA NON INVIARE - proroga fine lavori {{c:identity.last_name}}'}
+  descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'proroga fine lavori {{c:identity.last_name}}'}
   titolo: {type: text, question: 'The client''s title to the property, in one word (proprietario, comproprietario, usufruttuario, amministratore di condominio, locatario, comodatario, ...)', propose: '{{c:immobile.titolo}}'}
   cliente_carica: {type: choice, question: 'What is the person declaring for the client company (`cr:`) to it? legale rappresentante; amministratore unico; amministratore delegato; presidente cda (presidente
       del consiglio di amministrazione); amministratore di condominio (a condominium''s administrator)', options: [legale rappresentante, amministratore unico, amministratore delegato, presidente cda, amministratore

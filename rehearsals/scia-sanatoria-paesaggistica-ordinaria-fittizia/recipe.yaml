@@ -17,7 +17,7 @@ operation:
   - Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)
   - Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)
 asks:
-  descrizione: {default: "PROVA NON INVIARE - SCIA in sanatoria e paesaggistica {{c:identity.last_name}}"}
+  descrizione: {default: "SCIA in sanatoria e paesaggistica {{c:identity.last_name}}"}
   # The landscape works are still to come: the asseverazione names the ordinaria procedure.
   sanatoria_paesaggio: {default: "false"}
 yours:

@@ -15,7 +15,7 @@ scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUN
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
-  descrizione: {default: "PROVA NON INVIARE - parere esonero {{c:identity.last_name}}"}
+  descrizione: {default: "parere esonero {{c:identity.last_name}}"}
   oggetto: {question: "The works in one sentence (300 characters)"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"

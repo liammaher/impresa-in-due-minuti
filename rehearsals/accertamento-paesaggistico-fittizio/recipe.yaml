@@ -16,7 +16,7 @@ asks:
   diritti_euro: {default: "441", why: "Line SUE 3 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 441 € for a landscape authorization in sanatoria asked on its own"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   modello_dp: {default: "true"}
-  descrizione: {default: "PROVA NON INVIARE - accertamento paesaggistico {{c:identity.last_name}}"}
+  descrizione: {default: "accertamento paesaggistico {{c:identity.last_name}}"}
   oggetto: {question: "The works in one sentence (300 characters)"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"

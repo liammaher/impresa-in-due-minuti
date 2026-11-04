@@ -36,7 +36,7 @@ asks:
   # In the facts checklist, as the rules table asks it: the supports read it too (the
   # Soprintendenza's authorization first).
   bene_culturale: {group: fatti, item: "L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?"}
-  descrizione: {default: "PROVA NON INVIARE - CILA {{c:identity.last_name}}"}
+  descrizione: {default: "CILA {{c:identity.last_name}}"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"

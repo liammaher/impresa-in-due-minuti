@@ -32,7 +32,9 @@ library's, byte for byte: change the library first. How to add a pratica is in
 **Made-up data only.** Never map, test or rehearse with a real person's or business's data, and never
 with a real pratica. Use the fixtures (`rehearsals/cila-fittizia/fixture-p6.json` and the rehearsals'
 `answers-*.json`). Name scratch drafts "PROVA NON INVIARE - ..." and never send them. Delete them when
-you're done.
+you're done. The name goes in the rehearsal's answers (`descrizione`), never in a recipe's or the
+dictionary's default: those are the names real users' drafts get. Pre-flight with `--made-up` refuses
+a draft name without it.
 
 **What never changes.** The runner never ticks a declaration, pays, signs or sends, and a case it can't
 fill all the way is refused before anything opens. A pratica is called `available` only after it has
