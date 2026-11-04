@@ -15,8 +15,9 @@ Windows (*What is not done*). Work merged since is in the next release, not in 0
    (or `claude plugin marketplace add liammaher/portali`, then
    `claude plugin install portali@portali`).
 2. **Say "set me up"** if you want the private vault. Claude asks before it downloads anything.
-3. **Choose a password and save the secret key** `pvault init` prints, in a terminal. This is the one
-   step that is yours alone: neither is ever typed or shown in the conversation.
+3. **Choose a password and keep the recovery key** on the page `pvault setup` opens in your browser,
+   then turn on Touch ID there. This is the one step that is yours alone: neither is ever typed or
+   shown in the conversation.
 
 Pratiche that don't use the vault need no step 2 or 3: the folder-and-`values.json` way works as soon as
 the plugin is installed.
@@ -45,9 +46,14 @@ install-pvault.sh | .ps1  downloads  pvault_<version>_<os>_<arch>  and refuses i
   file fetched with `curl` is not quarantined, so Gatekeeper should not block it, and this needs no
   Apple developer account; that is **untried on a clean Mac**. On Windows the script is **untried**, and
   SmartScreen behaviour is unknown.
-- **Touch ID** needs the Swift helper, which is built only by `make build`; installed this way you use the
-  password.
-- **Creating the vault still needs a terminal** (stage two: `pvault setup` in your browser).
+- **Touch ID**: release.yml builds the Swift helper on macOS (one universal binary) and the installer
+  puts it next to pvault, checked like the rest and signed ad-hoc on the Mac; **untried from a real
+  release** (the installer's test builds the helper itself).
+- **No terminal (stage two, built)**: `pvault setup` opens a page in the default browser that creates the
+  vault (or opens a locked one), shows the recovery key once and turns on Touch ID or Windows Hello. On
+  a Mac with Touch ID a closed vault opens by fingerprint (`pvault unlock`); on Windows it is the page
+  again. Creating, opening and the refusals are tested end to end on a Mac (`TestSetup_*`); the Touch ID
+  and Windows Hello buttons are untried, since they need a person's fingerprint or face.
 - **Running a pratica still needs Python** on your own computer (stage three), except in Cowork, whose
   sandbox has it.
 - **A listing in Anthropic's directory** (stage four) would make step 1 a single "Add".

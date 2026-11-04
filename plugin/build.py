@@ -270,15 +270,19 @@ def self_check(plugin):
 
 PVAULT_TARGETS = [("darwin", "amd64", "tar.gz"), ("darwin", "arm64", "tar.gz"), ("linux", "amd64", "tar.gz"),
                   ("linux", "arm64", "tar.gz"), ("windows", "amd64", "zip"), ("windows", "arm64", "zip")]
+# The Touch ID helper, built on macOS by release.yml (one universal binary): installed next to
+# pvault on a Mac, so Touch ID needs no `make build`.
+TOUCHID_ASSET = "pvault-touchid_{version}_darwin_universal.tar.gz"
 
 
 def write_pvault_release(setup, version, checksums):
     """The release the setup skill installs: its version and the SHA-256 of each of its six
-    archives (goreleaser's checksums.txt), shipped in the plugin so the installer checks a
-    download against what the plugin says, not against what the download says."""
+    archives and the Touch ID helper's (goreleaser's checksums.txt), shipped in the plugin so the
+    installer checks a download against what the plugin says, not against what the download says."""
     if not re.fullmatch(r"\d+\.\d+\.\d+([-+][0-9A-Za-z.-]+)?", version):
         sys.exit(f"--pvault-version {version!r} isn't a version like 0.1.0")
     wanted = {f"pvault_{version}_{os_}_{arch}.{ext}" for os_, arch, ext in PVAULT_TARGETS}
+    wanted.add(TOUCHID_ASSET.format(version=version))
     lines = {}
     for line in checksums.read_text().splitlines():
         parts = line.split()

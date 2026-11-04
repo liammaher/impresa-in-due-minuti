@@ -14,6 +14,20 @@ func cmdUI() {
 		fatal("%v", err)
 	}
 
+	if openBrowser(url) {
+		fmt.Println("Opened vault UI in your browser — enter your profile password there.")
+		return
+	}
+
+	// Fallback: print URL
+	fmt.Println("Open this URL in your browser:")
+	fmt.Println()
+	fmt.Println("  " + url)
+	fmt.Println()
+}
+
+// openBrowser opens url in the default browser, reporting whether it could.
+func openBrowser(url string) bool {
 	var cmd *exec.Cmd
 	switch runtime.GOOS {
 	case "darwin":
@@ -23,19 +37,7 @@ func cmdUI() {
 	case "windows":
 		cmd = exec.Command("rundll32", "url.dll,FileProtocolHandler", url)
 	}
-
-	if cmd != nil {
-		if err := cmd.Start(); err == nil {
-			fmt.Println("Opened vault UI in your browser — enter your profile password there.")
-			return
-		}
-	}
-
-	// Fallback: print URL
-	fmt.Println("Open this URL in your browser:")
-	fmt.Println()
-	fmt.Println("  " + url)
-	fmt.Println()
+	return cmd != nil && cmd.Start() == nil
 }
 
 // uiURL returns the onboarding page's address once this vault's own server

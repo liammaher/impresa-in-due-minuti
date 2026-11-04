@@ -72,11 +72,12 @@ that `portali-setup` printed):
 - not found, or "not initialized": the `portali-setup` skill sets it up. Say in one line that
   the archive keeps their and their clients' details on this computer, encrypted, and that you
   never see them.
-- "locked": ask them to open it ("Apra l'archivio: in Terminale scriva `pvault unlock` e la
-  password"), then go on.
-- confirmations off (`pvault touchid status`; Windows: `pvault hello status`): `portali-setup`
-  turns them on. Without them you can't read the archive at all, since its password is typed
-  only in a terminal.
+- "locked" (it closes itself after 30 minutes unused): on a Mac with Touch ID, `pvault unlock`
+  opens it with their fingerprint (say so first: "Le chiedo l'impronta per aprire l'archivio").
+  Otherwise `pvault setup` opens a page in their browser where they type the password
+  (`portali-setup`, step 3).
+- confirmations off (`pvault touchid status`; Windows: `pvault hello status`): `pvault setup`
+  turns them on, on the same page. Without them you can't read the archive at all.
 - no shell on their computer (Cowork's sandbox): **The folder, without the archive** at the end.
 
 The first time, the studio's details may be missing (pre-flight lists them under `missing`):

@@ -1,65 +1,77 @@
 ---
 name: portali-setup
-description: Sets up the private vault (pvault) on this computer: installs the program from the project's release, checked against a checksum this plugin carries, and helps the person create their vault. Use when the user asks to set up, install or update the vault or pvault, or when a pratica needs their saved details and `pvault` isn't installed.
+description: Configura Portali su questo computer - installa l'archivio cifrato (pvault, verificato con il checksum che il plugin porta con sé), lo crea o lo apre in una pagina del browser e attiva Touch ID o Windows Hello, senza terminale. Use when the user says "configura Portali", "set me up", asks to set up, install, open or update the archive (vault, pvault), or when a pratica needs the archive and it isn't installed, created, open or confirmable.
 ---
 
-# Setting up pvault
+# Configurare Portali
 
-pvault is the encrypted vault that keeps a person's details on their own computer, so a
-portal can be filled from it without the details passing through this conversation. This
-skill gets the program onto the computer and a vault created. It needs a shell on the
-person's own computer (the Code tab, a terminal); in a sandbox with no access to their
-computer (Cowork's, for one) say so in one line and stop: the folder-and-`values.json` way in
-`portali-pratica` is what that setup can do.
+The archive (pvault) keeps the tecnico's, the studio's and the clients' details on their own
+computer, encrypted, so a portal is filled from it without the details passing through this
+conversation. This skill installs it, has the tecnico create it (or open it) in a page of their
+browser, and turns on Touch ID (Mac) or Windows Hello (Windows). It needs a shell on their own
+computer (the Claude desktop app's Code tab); in a sandbox with no access to it (Cowork's) say so
+in one line and stop: `portali-pratica` then works from a folder.
 
-## 1. Is it already there?
+Speak Italian to the tecnico, as Lei, with no software words: "l'archivio", "la pagina", "la
+password", "la chiave di recupero", "Touch ID". Never "vault", "pvault", "server", "checksum",
+"PATH", "token".
 
-Run `pvault version`. If the command isn't found, try `~/.local/bin/pvault version`
-(macOS, Linux) or `%LOCALAPPDATA%\Programs\pvault\pvault.exe version` (Windows). It prints
-`pvault <version>`. If that is the version in `pvault.version` next to this file, go to step 3.
-A `dev` version is a build from source: leave it alone and go to step 3.
+## 1. Is it installed?
 
-## 2. Install it, with the person's yes
+Run `pvault version`; if it isn't found, `~/.local/bin/pvault version` (macOS, Linux) or
+`%LOCALAPPDATA%\Programs\pvault\pvault.exe version` (Windows). If it prints the version in
+`pvault.version` next to this file, go to step 3 (a `dev` version is a build from source: leave it
+alone). On a Mac, `pvault touchid status` saying the helper isn't installed also means step 2.
 
-A download needs their explicit yes. Ask once, saying what it is:
+## 2. Install it, with their yes
 
-> I'll download pvault <version> for <macOS or Windows or Linux>, <chip>, from
-> github.com/liammaher/portali (its releases page), a single file of some tens
-> of MB. I check it against a checksum that came with this plugin before anything is
-> installed, then put it in your user folder (`~/.local/bin`, or `%LOCALAPPDATA%\Programs\pvault`).
-> No admin rights, and nothing else on the computer changes. OK?
+A download needs their explicit yes. Ask once, in Italian, saying what it is:
 
-On yes, run the script that sits next to this file, as it is:
+> Scarico il programma dell'archivio (pvault <version>, per <Mac / Windows / Linux>) dalla pagina
+> ufficiale del progetto su GitHub: qualche decina di MB. Prima di installarlo controllo che sia
+> identico a quello atteso, poi lo metto nella sua cartella utente. Non servono permessi di
+> amministratore e non cambia nient'altro sul computer. Procedo?
 
-- macOS, Linux: `sh install-pvault.sh`
+On yes, run the script next to this file, as it is:
+
+- macOS, Linux: `sh install-pvault.sh` (on a Mac it also installs the Touch ID helper)
 - Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File install-pvault.ps1`
 
-Its last line is `PVAULT_PATH=<where it is>`. Use that path from here on if `pvault` isn't on
-the PATH; don't edit the PATH or a shell profile unless the person asks (Windows: the script's
-`-AddToPath` does it for new terminals).
+Its last line is `PVAULT_PATH=<where it is>`: use that path from here on if `pvault` isn't on the
+PATH. Don't edit the PATH or a shell profile unless they ask.
 
-If it says `checksum mismatch`, **stop**: tell the person plainly that the download didn't
-match and nothing was installed. Don't retry from another place, don't skip the check, don't
-download by hand. If it says there is no release to install from, this copy of the plugin was
-built from source: say so; building pvault (`make build`) is the developer's way.
+If it says `checksum mismatch`, **stop**: tell them plainly that the download wasn't the expected
+one and nothing was installed. Don't retry from elsewhere, don't skip the check, don't download by
+hand. If it says there is no release to install from, this copy was built from source: say so.
 
-## 3. The vault
+## 3. Create or open it, in their browser
 
-Run `pvault status`. If it says the vault isn't initialized, the person creates it themselves:
-the profile password and the secret key it prints are theirs alone.
+Run `pvault setup --impresa` (a studio's archive: the studio, the tecnico and the clients). It
+opens a page in their default browser and waits until they finish there (at most 15 minutes), so
+run it in the background and tell them first:
 
-- Open a terminal for them if you have a way to (the app's Terminal panel), or tell them to open
-  Terminal (macOS) or PowerShell (Windows).
-- They run `pvault init` there: they choose the password and **save the secret key it shows**
-  (without both, the vault can't be opened). Tell them that before they start.
-- **Never** ask them to type or paste the password or the key into this conversation, never run
-  `pvault init` or `pvault unlock` for them, and never read the key.
+> Si è aperta una pagina nel suo browser. Lì sceglie la password dell'archivio (o la scrive, se
+> l'archivio c'è già), conserva la chiave di recupero e attiva Touch ID. Quando la pagina dice
+> «Fatto», torni qui.
 
-Then `pvault unlock` (they type the password) and `pvault ui` opens the page where they enter
-their details: you see nothing of it. When they say they're done, `pvault list` shows which
-fields exist (not their values).
+- Never open that page in the Claude browser pane, never read it, and never ask them to type the
+  password, the key or anything from that page into this conversation.
+- When it ends it prints `Vault: created`, `Open: true` and whether Touch ID (or Windows Hello)
+  is `on`: nothing secret. If it closed with the archive still closed or Touch ID off, run it
+  again once they're ready.
+- A closed archive later (it closes itself after 30 minutes unused): on a Mac with Touch ID,
+  `pvault unlock` opens it with their fingerprint; on Windows, `pvault setup` again, where they
+  type the password.
 
-## 4. Say what's next
+## 4. Their details
 
-One line: what a pratica will now use from the vault, and that you'll only ever see which
-fields exist, not what is in them.
+The studio's details (denominazione, partita IVA, sede, PEC) and the tecnico's (dati anagrafici,
+albo, residenza) go in once. Run `pvault ui`: it opens the archive's page in their browser, where
+they type them (it asks the password once more). You see nothing of it; `pvault list` then shows
+which fields exist, not their values. Or leave it: the first pratica's pre-flight lists what's
+missing, and they can fill it then.
+
+## 5. Say what's next
+
+One line, in Italian: the archive is ready, each pratica will ask Touch ID once to read what it
+needs, and you will only ever see which details exist, never what they are.

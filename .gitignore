@@ -23,5 +23,7 @@ __pycache__/
 # iCloud Desktop sync copies a file it saw change ("answers-p6 2.json"): never the repo's
 * 2.*
 
+# The release workflow puts the Touch ID helper it built on macOS here, for goreleaser
+/touchid/
 # Built by gen.py (bench/regen.py, gen.ensure): rehearsals/steps.lock holds their hashes
 rehearsals/*/portal-steps.generated.yaml
