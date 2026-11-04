@@ -619,16 +619,16 @@ def _():
             raise AssertionError("generated")
         except gen.GenError as e:
             assert "changed: Dati catastali" in str(e), e
-        import catalogue
-        old = catalogue.CAT
-        catalogue.CAT = base / "catalogue/F839"
+        import rules
+        old = rules.DRIFT
+        rules.DRIFT = base / "catalogue/F839/drift.json"
         try:
             import run
             steps = gen.load_yaml(FINE / "portal-steps.generated.yaml")
             assert "Dati catastali" in run.portal_changed(steps)[0]
             assert run.portal_changed(gen.load_yaml(CILA / "portal-steps.yaml")) == []  # hand-written
         finally:
-            catalogue.CAT = old
+            rules.DRIFT = old
 
 
 @case("draft.py drafts a restaurant's opening from two national forms (its SCIA and the Reg. 852 notifica)")

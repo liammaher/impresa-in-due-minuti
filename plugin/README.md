@@ -12,8 +12,9 @@ PRATICHE_NAPOLI_DIR=../pratiche-napoli ~/.cache/pratica-portal/venv/bin/python p
 writes `plugin/dist/portali/` and `plugin/dist/portali.plugin` (install it in Cowork
 from a file). The build:
 
-- copies `run.py`, `rules.py`, `inpage.js`, `catalogue.py` (for its drift refusal, with
-  `drift.json`), `fill.py`, `review.py` and `schema.json` into the skill unchanged;
+- copies `run.py`, `rules.py` (with `drift.json`, for its drift refusal), `inpage.js`,
+  `fill.py`, `review.py` and `schema.json` into the skill unchanged (no authoring code:
+  `catalogue.py` stays in the repo);
 - writes each rehearsal's steps file (the generated one first, as `bench/rerun.py` picks it)
   and the rules tables as JSON, which `shim/yaml.py` reads in PyYAML's place: Cowork runs
   the plugin with no packages;
