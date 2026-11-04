@@ -122,7 +122,37 @@ CF = re.compile(r"\b[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]\b")
 # how the imposta di bollo is settled (pagoPA, or marche whose serial numbers go in the form).
 DECIDED = re.compile(r"imposta di bollo", re.I)
 
+# The Scheda anagrafica's "Toponimo (DUG)" list (crawled: these and ALTRO). Any other street type
+# is ALTRO, and the portal then requires it in "Dettaglio DUG": a list of 190 that is the national
+# toponimo list (InfoCamere's `specie`, 194 in schema/mod_acconciatori_estetisti_apertura_v1.0.7-fields.json:
+# one the portal lacks stops the run on that box). Naples' own CUPA, GRADINI, FONDACO, RAMPE and
+# SUPPORTICO are in neither: pre-flight names them instead of guessing a type.
 DUG = {"VIA", "VIALE", "PIAZZA", "CORSO", "LARGO"}
+DUG_DETTAGLIO = frozenset((
+    "ACCESSO|ACCORCIATOIA|AIA|ANDRONE|ARCO|ARZERE|ATRIO|AUTOSTRADA|BAGLIO|BANCHINA|BASTIONE|"
+    "BASTIONI|BELVEDERE|BROLO|CALATA|CALLE|CAPO DI PIAZZA|CARRAIA|CARRARA|CARRARETTO|CARRARO|"
+    "CARRARONE|CASA SPARSA|CAVALCAFERROVIA|CAVALCAVIA|CHIASSO|CHIOSTRA|CHIOSTRO|CIRCONVALLAZIONE|"
+    "CLAUSTRO|CLIVO|CONTRADELLA|CORSO|CORTE|CORTILE|CROSA|CROSINO|DIGA|DISCESA|DISTACCO|ERTA|"
+    "FORESE|GALLERIA|GRADINATA|GRADINATE|GRANVIALE|INTERRATO|ISOLA|ISOLATO|LARGHETTO|LARGO|"
+    "LITORANEA|LOGGIA|LUNGARGINE|LUNGO|LUNGOCANALE|LUNGOFIUME|LUNGOLAGO|LUNGOMARE|LUNGOMOLO|"
+    "LUNGOPARCO|LUNGOPORTO|LUNGOTORRENTE|MOLO|OTTAGONO|PARCHEGGIO|PASSAGGIO|PASSEGGIATA|"
+    "PASSERELLA|PASSETTO|PASSO|PASSO DI PIAZZA|PENDICE|PENDINO|PERCORSO|PERCORSO CICLABILE|"
+    "PERCORSO CICLOPEDONALE|PERCORSO PEDONALE|PIAGGIA|PIAZZA|PIAZZA INFERIORE|PIAZZA SUPERIORE|"
+    "PIAZZALE|PIAZZETTA|PISTA CICLABILE|POGGIO|PONTE|PONTE LONGO|PONTILE|PRATO|PROLUNGAMENTO|"
+    "PUNTA|QUADRATO|RACCORDO|RAMPA|RATTO|RIO TERA'|RIVALE|RIVETTA|RONCO|RONDO'|ROTATORIA|ROTONDA|"
+    "ROTTA|SACCA|SAIA|SALITA|SALITA INFERIORE|SALITA SUPERIORE|SCALEA|SCALETTO|SCALINATA|SCALO|"
+    "SCESA|SCIVOLA|SENTIERO|SESTIERE|SLARGO|SORTITA|SOTOPORTEGO|SOTTOPASSO|SOVRAPPASSO|SPIANATA|"
+    "SPIAZZO|STRADA|STRADA ANTICA|STRADA COMUNALE|STRADA CONSORTILE|STRADA ESTERNA|STRADA NUOVA|"
+    "STRADA PANORAMICA|STRADA PODERALE|STRADA PRIVATA|STRADA PROVINCIALE|STRADA REGIONALE|"
+    "STRADA STATALE|STRADA VECCHIA|STRADA VICINALE|STRADALE|STRADELLA|STRADELLO|STRADONE|"
+    "SVINCOLO|TANGENZIALE|TERRAZZA|TRAVERSA|TRAVERSA A MARE|TRAVERSALE|TRONCO|TROZO|VALLONE|"
+    "VARCO|VENULA|VIA|VIA ANTICA|VIA CARRARA|VIA COMUNALE|VIA ESTERNA|VIA INFERIORE|"
+    "VIA NAZIONALE|VIA NUOVA|VIA PANORAMICA|VIA PRIVATA|VIA PROVINCIALE|VIA SUPERIORE|"
+    "VIA VECCHIA|VIA VICINALE|VIALE|VIALETTO|VIAZZA|VIAZZOLA|VIAZZOLO|VICO|VICO CHIUSO|"
+    "VICO CIECO|VICO DRITTO|VICO INFERIORE|VICO PRIVATO|VICO STRETTO|VICO SUPERIORE|VICOLETTO|"
+    "VICOLO|VICOLO CHIUSO|VICOLO CIECO|VICOLO PRIVATO|VICOLOZZO|VIELLA|VIETTA|VIONE|VIOTTOLA|"
+    "VIOTTOLO|VIOTTOLONE|VIUCCIOLO|VIUZZO"
+).split("|"))
 # run.js for the pane is one tool call's text: a receipt or a small scan, not a planimetria.
 # Larger files need another route into the page (docs/north-star.md, open question 7).
 PAGE_FILES_LIMIT = 256 * 1024
@@ -147,15 +177,58 @@ CARICA_CLIENTE = {"legale rappresentante": "LEGALE RAPPRESENTANTE", "amministrat
                   "amministratore delegato": "AMMINISTRATORE DELEGATO",
                   "presidente cda": "PRESIDENTE CONSIGLIO AMMINISTRAZIONE",
                   "amministratore di condominio": "AMMINISTRATORE"}
-# identity.citizenship as the Scheda anagrafica's Cittadinanza list names the country: the ones a
-# case has needed so far; another stops the run (a KeyError) instead of guessing.
-CITTADINANZA = {"italiana": "ITALIA", "francese": "FRANCIA", "tedesca": "GERMANIA", "spagnola": "SPAGNA",
-                "rumena": "ROMANIA", "romena": "ROMANIA", "polacca": "POLONIA", "britannica": "REGNO UNITO",
-                "statunitense": "STATI UNITI D'AMERICA", "albanese": "ALBANIA", "ucraina": "UCRAINA",
-                "marocchina": "MAROCCO", "cinese": "CINA", "srilankese": "SRI LANKA", "bangladese": "BANGLADESH",
-                "filippina": "FILIPPINE", "senegalese": "SENEGAL", "nigeriana": "NIGERIA", "egiziana": "EGITTO",
-                "tunisina": "TUNISIA", "russa": "RUSSIA", "indiana": "INDIA", "pakistana": "PAKISTAN",
-                "brasiliana": "BRASILE", "peruviana": "PERÙ"}
+# identity.citizenship (an adjective, "italiana") as the Scheda anagrafica's Cittadinanza list names
+# the country: first the ones cases have needed, then the rest of the EU and the countries many
+# people in Naples come from, in Italian as the list writes the first ones, but never read on it:
+# one it words otherwise stops the run on that box. A country's own name is taken too. Anything
+# else is named by pre-flight, not guessed.
+CITTADINANZA = {"italiana": "ITALIA", "francese": "FRANCIA", "tedesca": "GERMANIA",
+                "spagnola": "SPAGNA", "rumena": "ROMANIA", "romena": "ROMANIA",
+                "polacca": "POLONIA", "britannica": "REGNO UNITO",
+                "statunitense": "STATI UNITI D'AMERICA", "albanese": "ALBANIA",
+                "ucraina": "UCRAINA", "marocchina": "MAROCCO", "cinese": "CINA",
+                "srilankese": "SRI LANKA", "bangladese": "BANGLADESH", "filippina": "FILIPPINE",
+                "senegalese": "SENEGAL", "nigeriana": "NIGERIA", "egiziana": "EGITTO",
+                "tunisina": "TUNISIA", "russa": "RUSSIA", "indiana": "INDIA",
+                "pakistana": "PAKISTAN", "brasiliana": "BRASILE", "peruviana": "PERÙ",
+                "austriaca": "AUSTRIA", "belga": "BELGIO", "bulgara": "BULGARIA",
+                "croata": "CROAZIA", "cipriota": "CIPRO", "ceca": "REPUBBLICA CECA",
+                "danese": "DANIMARCA", "estone": "ESTONIA", "finlandese": "FINLANDIA",
+                "greca": "GRECIA", "ungherese": "UNGHERIA", "irlandese": "IRLANDA",
+                "lettone": "LETTONIA", "lituana": "LITUANIA", "lussemburghese": "LUSSEMBURGO",
+                "maltese": "MALTA", "olandese": "PAESI BASSI", "portoghese": "PORTOGALLO",
+                "slovacca": "SLOVACCHIA", "slovena": "SLOVENIA", "svedese": "SVEZIA",
+                "norvegese": "NORVEGIA", "islandese": "ISLANDA", "svizzera": "SVIZZERA",
+                "moldava": "MOLDAVIA", "georgiana": "GEORGIA", "serba": "SERBIA",
+                "kosovara": "KOSOVO", "macedone": "MACEDONIA DEL NORD",
+                "bosniaca": "BOSNIA-ERZEGOVINA", "montenegrina": "MONTENEGRO",
+                "bielorussa": "BIELORUSSIA", "turca": "TURCHIA", "algerina": "ALGERIA",
+                "libica": "LIBIA", "ghanese": "GHANA", "ivoriana": "COSTA D'AVORIO",
+                "camerunese": "CAMERUN", "eritrea": "ERITREA", "etiope": "ETIOPIA",
+                "somala": "SOMALIA", "maliana": "MALI", "gambiana": "GAMBIA",
+                "guineana": "GUINEA", "burkinabe": "BURKINA FASO", "capoverdiana": "CAPO VERDE",
+                "sudanese": "SUDAN", "nepalese": "NEPAL", "afghana": "AFGHANISTAN",
+                "iraniana": "IRAN", "irachena": "IRAQ", "siriana": "SIRIA", "libanese": "LIBANO",
+                "israeliana": "ISRAELE", "giapponese": "GIAPPONE", "sudcoreana": "COREA DEL SUD",
+                "vietnamita": "VIETNAM", "thailandese": "THAILANDIA", "indonesiana": "INDONESIA",
+                "canadese": "CANADA", "messicana": "MESSICO", "argentina": "ARGENTINA",
+                "colombiana": "COLOMBIA", "venezuelana": "VENEZUELA", "ecuadoriana": "ECUADOR",
+                "cubana": "CUBA", "dominicana": "REPUBBLICA DOMINICANA", "cilena": "CILE",
+                "boliviana": "BOLIVIA", "uruguaiana": "URUGUAY", "paraguaiana": "PARAGUAY",
+                "australiana": "AUSTRALIA", "neozelandese": "NUOVA ZELANDA"}
+
+
+def _cittadinanza(v):
+    v = " ".join(v.strip().lower().split())
+    # A masculine adjective ("rumeno") as the feminine the list holds ("rumena").
+    for k in (v, v[:-1] + "a" if v.endswith("o") else v):
+        if k in CITTADINANZA:
+            return CITTADINANZA[k]
+    if v.upper() in CITTADINANZA.values():
+        return v.upper()
+    raise ValueError(f"no Cittadinanza for {v!r}: the portal's list names the country, and this one isn't mapped yet")
+
+
 # A client exempt from the imposta di bollo (ask bollo_esenzione), as the SUE form's "per la
 # seguente motivazione" words it. Its two art. 82 c. 5 lines are one law: an ETS in the RUNTS,
 # and the article's own words, which name the cooperative sociali.
@@ -208,16 +281,51 @@ def _carica(v):
 
 
 def _split_street(v):
+    """A street as the Scheda anagrafica takes it: its DUG, its "Dettaglio DUG" (the street type when
+    the DUG is ALTRO, "" when it isn't, None for a type neither list has) and the name after it."""
     words = v.split()
     if len(words) > 1 and words[0].upper() in DUG:
-        return words[0].upper(), " ".join(words[1:])
-    return "ALTRO", v
+        return words[0].upper(), "", " ".join(words[1:])
+    # The shortest type the street starts with ("VICO CHIUSO SAN ..." is a VICO), up to the
+    # list's three words ("CAPO DI PIAZZA").
+    for n in range(1, min(3, len(words) - 1) + 1):
+        if " ".join(words[:n]).upper() in DUG_DETTAGLIO:
+            return "ALTRO", " ".join(words[:n]).upper(), " ".join(words[n:])
+    return "ALTRO", None, v
 
 
-# The province names the portal's free-text boxes want ("Iscritto all'ordine di ..."): the
-# ones a run has needed so far; another stops the run (a KeyError) instead of guessing.
-PROVINCE = {"NA": "NAPOLI", "CE": "CASERTA", "SA": "SALERNO", "AV": "AVELLINO", "BN": "BENEVENTO",
-            "RM": "ROMA", "MI": "MILANO", "TO": "TORINO"}
+def _dug_dettaglio(v):
+    d = _split_street(v)[1]
+    if d is None:
+        raise ValueError(f"the street {v!r} starts with no street type the portal lists (Toponimo or Dettaglio DUG)")
+    return d
+
+
+# The province names the portal wants for a sigla: the free-text "Iscritto all'ordine di ..." and
+# a client company's "Camera di commercio di:" dropdown. All 107, in ISTAT's words in capitals; the
+# dropdown has been read only at NAPOLI, so a province it words otherwise stops the run on that box.
+PROVINCE = {"AG": "AGRIGENTO", "AL": "ALESSANDRIA", "AN": "ANCONA", "AO": "AOSTA", "AP": "ASCOLI PICENO",
+            "AQ": "L'AQUILA", "AR": "AREZZO", "AT": "ASTI", "AV": "AVELLINO", "BA": "BARI",
+            "BG": "BERGAMO", "BI": "BIELLA", "BL": "BELLUNO", "BN": "BENEVENTO", "BO": "BOLOGNA",
+            "BR": "BRINDISI", "BS": "BRESCIA", "BT": "BARLETTA-ANDRIA-TRANI", "BZ": "BOLZANO",
+            "CA": "CAGLIARI", "CB": "CAMPOBASSO", "CE": "CASERTA", "CH": "CHIETI", "CL": "CALTANISSETTA",
+            "CN": "CUNEO", "CO": "COMO", "CR": "CREMONA", "CS": "COSENZA", "CT": "CATANIA",
+            "CZ": "CATANZARO", "EN": "ENNA", "FC": "FORLI'-CESENA", "FE": "FERRARA", "FG": "FOGGIA",
+            "FI": "FIRENZE", "FM": "FERMO", "FR": "FROSINONE", "GE": "GENOVA", "GO": "GORIZIA",
+            "GR": "GROSSETO", "IM": "IMPERIA", "IS": "ISERNIA", "KR": "CROTONE", "LC": "LECCO",
+            "LE": "LECCE", "LI": "LIVORNO", "LO": "LODI", "LT": "LATINA", "LU": "LUCCA",
+            "MB": "MONZA E DELLA BRIANZA", "MC": "MACERATA", "ME": "MESSINA", "MI": "MILANO",
+            "MN": "MANTOVA", "MO": "MODENA", "MS": "MASSA-CARRARA", "MT": "MATERA", "NA": "NAPOLI",
+            "NO": "NOVARA", "NU": "NUORO", "OR": "ORISTANO", "PA": "PALERMO", "PC": "PIACENZA",
+            "PD": "PADOVA", "PE": "PESCARA", "PG": "PERUGIA", "PI": "PISA", "PN": "PORDENONE",
+            "PO": "PRATO", "PR": "PARMA", "PT": "PISTOIA", "PU": "PESARO E URBINO", "PV": "PAVIA",
+            "PZ": "POTENZA", "RA": "RAVENNA", "RC": "REGGIO CALABRIA", "RE": "REGGIO EMILIA",
+            "RG": "RAGUSA", "RI": "RIETI", "RM": "ROMA", "RN": "RIMINI", "RO": "ROVIGO", "SA": "SALERNO",
+            "SI": "SIENA", "SO": "SONDRIO", "SP": "LA SPEZIA", "SR": "SIRACUSA", "SS": "SASSARI",
+            "SU": "SUD SARDEGNA", "SV": "SAVONA", "TA": "TARANTO", "TE": "TERAMO", "TN": "TRENTO",
+            "TO": "TORINO", "TP": "TRAPANI", "TR": "TERNI", "TS": "TRIESTE", "TV": "TREVISO",
+            "UD": "UDINE", "VA": "VARESE", "VB": "VERBANO-CUSIO-OSSOLA", "VC": "VERCELLI", "VE": "VENEZIA",
+            "VI": "VICENZA", "VR": "VERONA", "VT": "VITERBO", "VV": "VIBO VALENTIA"}
 # The Scheda anagrafica's "In qualità di" for the title the person holds (a tenant is
 # "Altro" + "Locatario").
 QUALITA = {"proprietario": "Proprietario", "comproprietario": "Comproprietario", "usufruttuario": "Usufruttuario",
@@ -339,7 +447,9 @@ FILTERS = Filters({
     "date_it": lambda v: "/".join(reversed(v.split("-"))),
     "phone_it": lambda v: re.sub(r"^\+39|\s", "", v),
     "dug": lambda v: _split_street(v)[0],
-    "street": lambda v: _split_street(v)[1],
+    "dug_altro": lambda v: "true" if _split_street(v)[0] == "ALTRO" else "false",
+    "dug_dettaglio": _dug_dettaglio,
+    "street": lambda v: _split_street(v)[2],
     "carica": _carica,
     "forma": lambda v: FORMA[v],
     # A client that is a company or a condominium (c:business.*), from {{c:business.denominazione,
@@ -356,8 +466,8 @@ FILTERS = Filters({
     "first": lambda v: next((x for x in v.split("/") if x), ""),
     # The holder a title is in the name of: a company's name, else the person's (first/last/company).
     "intestatario": lambda v: (_facts(v, 3)[2] or f"{_facts(v, 3)[0]} {_facts(v, 3)[1]}").upper(),
-    "cittadinanza": lambda v: CITTADINANZA[v.strip().lower()],
-    "straniera": lambda v: "false" if v.strip().lower() in ("italiana", "italiano") else "true",
+    "cittadinanza": _cittadinanza,
+    "straniera": lambda v: "false" if v.strip().lower() in ("italiana", "italiano", "italia") else "true",
     # Born abroad: identity.birth_province is EE.
     "estero": lambda v: "true" if v.strip().upper() == "EE" else "false",
     "bollo_esente": lambda v: "true" if _bollo(v) in BOLLO_ESENZIONE else "false",
@@ -638,8 +748,14 @@ def plan(steps, values):
         for f in sec["fields"]:
             if "when" in f and not truthy(values.render(f["when"]) or ""):
                 continue
-            v = values.render(f["value"]) if "value" in f else None
             name = f.get("label") or f.get("id") or f.get("css")
+            try:
+                v = values.render(f["value"]) if "value" in f else None
+            except ValueError as e:
+                # A vault value the form can't take (a street type the portal lists nowhere): what
+                # pre-flight names, said here too when `page` or `run` comes without it.
+                missing.append(f"{sec['section']}: {name}: {e}")
+                continue
             if "value" in f and v is None and not f.get("optional"):
                 missing.append(f"{sec['section']}: {name} ({f['value']})")
             if f["kind"] == "file" and v and not Path(v).expanduser().is_file():
@@ -1567,7 +1683,7 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=N
                                    for f in s["fields"]]}
                      for s in steps["sections"]],
         "forbidden": FORBIDDEN.pattern, "declarations": DECLARATIONS.pattern,
-        "dug": sorted(DUG), "label_js": LABEL_JS,
+        "label_js": LABEL_JS,
     } | ({"preview_url": steps["preview_url"]} if "preview_url" in steps else {})
 
     def value(f):
