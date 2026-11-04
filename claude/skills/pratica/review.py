@@ -65,15 +65,15 @@ def page(title, subtitle, ok, status, yours, facts, checks, groups, extra="", to
            f"<h1>{esc(title)}</h1><p class='sub'>{esc(subtitle)}</p>",
            f"<span class='status {'ok' if ok else 'bad'}'>{esc(status)}</span>"]
     if yours:
-        out.append("<h2>What's left for you</h2><div class='you'><ol>"
+        out.append("<h2>Cosa resta da fare a lei</h2><div class='you'><ol>"
                    + "".join(f"<li>{esc(y)}</li>" for y in yours) + "</ol></div>")
     out.append(top)
     if facts:
-        out.append("<h2>Where it goes</h2><dl class='facts'>"
+        out.append("<h2>Dove va</h2><dl class='facts'>"
                    + "".join(f"<dt>{esc(k)}</dt><dd>{esc(v)}</dd>" for k, v in facts if v) + "</dl>")
-    out.append("<h2>What was checked</h2><ul class='checks'>"
+    out.append("<h2>Cosa è stato controllato</h2><ul class='checks'>"
                + "".join(f"<li class='{'' if c_ok else 'bad'}'>{esc(c)}</li>" for c, c_ok in checks) + "</ul>")
-    out.append("<h2>Every value</h2>")
+    out.append("<h2>Ogni valore</h2>")
     for name, rows in groups:
         out.append(f"<details open><summary>{esc(name)}</summary><table>"
                    + "".join(f"<tr><td>{esc(label)}</td><td{' class=blank' if blank else ''}>{esc(value)}</td></tr>"
@@ -93,23 +93,23 @@ def form_review(out, report, route):
     checks = report["checks"]
     ok = all(c["ok"] for c in checks)
     rows = [(r["label"], text(r.get("value")) if r["status"] in ("value", "answered") else
-             f"left blank ({r.get('reason', 'nothing to write')})", r["status"] not in ("value", "answered"))
+             f"lasciato vuoto ({r.get('reason', 'niente da scrivere')})", r["status"] not in ("value", "answered"))
             for r in report["rows"]]
     yours, facts = [], []
     if route:
         # Every step but filling in the form, which the library words "Compilare ..." and
         # fill.py just did; a step for anyone (the planimetria, the F24) is still to do.
         yours = [s["do"] for s in route["steps"] if not s["do"].startswith("Compilare")]
-        facts = [("Route", route["route"]), ("Send to", "; ".join(w.get("address", "") for w in route.get("where", []))),
-                 ("Signing", "; ".join(s["text"] for s in route.get("signing", []))),
-                 ("Attach", "; ".join(route.get("attach", []))), ("Deadline", route.get("deadline"))]
+        facts = [("Canale", route["route"]), ("Destinatario", "; ".join(w.get("address", "") for w in route.get("where", []))),
+                 ("Firma", "; ".join(s["text"] for s in route.get("signing", []))),
+                 ("Allegati", "; ".join(route.get("attach", []))), ("Scadenza", route.get("deadline"))]
     pages = "".join(f"<img class='page' alt='{esc(p.name)}' src='data:image/png;base64,"
                     f"{base64.b64encode(p.read_bytes()).decode()}'>" for p in sorted(out.glob("page-*.png")))
     return page(route["title"] if route else report["entry"], f"{report['entry']} · {report['form']}", ok,
-                "Ready for your review: every check passed" if ok else "Not ready: a check failed",
+                "Pronto da rivedere: ogni controllo è andato bene" if ok else "Non pronto: un controllo non è andato",
                 yours, facts, [(c["check"] + (f": {c['detail']}" if c.get("detail") and not c["ok"] else ""), c["ok"])
                                for c in checks],
-                [("Form fields", rows)], f"<h2>The filled form</h2>{pages}" if pages else "")
+                [("Campi del modulo", rows)], f"<h2>Il modulo compilato</h2>{pages}" if pages else "")
 
 
 def decisions(report):
@@ -118,8 +118,8 @@ def decisions(report):
     items = report.get("decisions") or []
     if not items:
         return ""
-    out = ["<h2>Chosen in your name</h2><p class='sub'>The form was filled with these. Each states how you will "
-           "meet an obligation: check that it is what you will do.</p><div class='you'><ul>"]
+    out = ["<h2>Scelto a suo nome</h2><p class='sub'>Il modulo è stato compilato con queste scelte. Ognuna dice "
+           "come adempirà a un obbligo: controlli che sia ciò che farà.</p><div class='you'><ul>"]
     for d in items:
         out.append(f"<li><b>{esc(d['section'])}</b><ul>" + "".join(f"<li>{esc(c)}</li>" for c in d["choices"])
                    + "</ul></li>")
@@ -135,24 +135,23 @@ def declarations(report, folder):
     checks = []
     if items:
         ticked = [i["section"] for i in items if any(b["ticked"] for b in i["boxes"])]
-        checks.append((f"Declarations: {len(items)} copied word for word from the portal; none ticked" if not ticked
-                       else "Declarations already ticked before you opened them (not by this run): "
+        checks.append((f"Dichiarazioni: {len(items)} copiate parola per parola dal portale; nessuna spuntata" if not ticked
+                       else "Dichiarazioni già spuntate prima che lei le aprisse (non da questa compilazione): "
                        + "; ".join(ticked), not ticked))
     elif items is not None and not note:
-        checks.append(("Declarations: none in the portal's menu; read each one there before you tick it", False))
+        checks.append(("Dichiarazioni: nessuna nel menu del portale; le legga lì una per una prima di spuntarle", False))
     elif items is None:
-        checks.append(("Declarations: not copied in this run" + (" (read in the pane, but kept in its tab: they would "
-                       "pass through the conversation)" if report.get("declarations_read") else "")
-                       + "; read each one in the portal before you tick it", False))
+        checks.append(("Dichiarazioni: non copiate in questa compilazione; le legga nel portale una per una prima di "
+                       "spuntarle", False))
     if note:
-        checks.append((f"Declarations: not all copied ({note}); read the rest in the portal", False))
+        checks.append(("Dichiarazioni: non tutte copiate; legga le altre nel portale", False))
     if not items:
         return "", checks
-    out = ["<h2>The declarations you will tick</h2><p class='sub'>The portal's own words, copied by the program, "
-           "not a summary. Read them before you tick: you make them under your own name, and a false one is "
-           "a crime (DPR 445/2000, art. 76).</p>"]
+    out = ["<h2>Le dichiarazioni che spunterà</h2><p class='sub'>Le parole del portale, copiate così come sono, "
+           "non un riassunto. Le legga prima di spuntarle: le rende a suo nome, e una dichiarazione falsa è "
+           "un reato (DPR 445/2000, art. 76).</p>"]
     for i in items:
-        boxes = "".join(f"<li class='{'on' if b['ticked'] else ''}'>{'☑ already ticked' if b['ticked'] else '☐'} "
+        boxes = "".join(f"<li class='{'on' if b['ticked'] else ''}'>{'☑ già spuntata' if b['ticked'] else '☐'} "
                         f"{esc(b['label'])}</li>" for b in i["boxes"])
         out.append(f"<details open><summary>{esc(i['section'])}</summary><div class='decl'>{esc(i['text'])}"
                    + (f"<ul>{boxes}</ul>" if boxes else "") + "</div></details>")
@@ -164,46 +163,46 @@ def preview(report, folder):
     there, always a download. (html, checks)."""
     f = folder / "anteprima.pdf" if folder else None
     if not (f and f.exists()):
-        why = report.get("preview_note")
-        return "", [("The portal's PDF preview " + (f"couldn't be copied ({why})" if why else "was not copied in this run")
-                     + ": open Visualizza anteprima in the portal and read it before you sign", False)]
+        return "", [("L'anteprima PDF del portale non è stata copiata: apra Visualizza anteprima nel portale e la "
+                     "legga prima di firmare", False)]
     data = f.read_bytes()
-    out = ["<h2>The portal's preview</h2><p class='sub'>The document the portal will file, as it renders it.</p>",
+    out = ["<h2>L'anteprima del portale</h2><p class='sub'>Il documento che il portale depositerà, così come lo mostra.</p>",
            f"<a class='dl' download='anteprima.pdf' href='data:application/pdf;base64,"
-           f"{base64.b64encode(data).decode()}'>Download the PDF</a>"]
+           f"{base64.b64encode(data).decode()}'>Scarica il PDF</a>"]
     try:
         import fitz  # noqa: PLC0415  (optional, as in fill.py)
         with fitz.open(stream=data, filetype="pdf") as doc:
             for n, pg in enumerate(doc):
                 if n == 20:
-                    out.append(f"<p class='sub'>{len(doc) - 20} more pages in the PDF.</p>")
+                    out.append(f"<p class='sub'>Altre {len(doc) - 20} pagine nel PDF.</p>")
                     break
                 png = pg.get_pixmap(matrix=fitz.Matrix(1.4, 1.4)).tobytes("png")
-                out.append(f"<img class='page' alt='page {n + 1}' src='data:image/png;base64,"
+                out.append(f"<img class='page' alt='pagina {n + 1}' src='data:image/png;base64,"
                            f"{base64.b64encode(png).decode()}'>")
     except Exception:
-        out.append("<p class='sub'>(Open the PDF to read it: this page can't draw it without PyMuPDF.)</p>")
-    return "".join(out), [("The portal's own PDF preview copied", True)]
+        out.append("<p class='sub'>(Apra il PDF per leggerlo.)</p>")
+    return "".join(out), [("L'anteprima PDF del portale copiata", True)]
 
 
 def portal_review(report, out=None):
     ok = report.get("result") == "filled"
-    checks = [(f"{s['section']}: saved, every field read back ({s['seconds']} s)"
-               if not s["errors"] and not s["bad"] else f"{s['section']}: {s['errors'] or s['bad']}",
+    # The runner's own reasons are for Claude, who recovers a stop; the person reads where.
+    checks = [(f"{s['section']}: salvata, ogni campo riletto ({s['seconds']} s)"
+               if not s["errors"] and not s["bad"] else f"{s['section']}: un valore non è rimasto come doveva",
                not s["errors"] and not s["bad"]) for s in report.get("sections", [])]
     if report.get("wizard_seconds") is not None:
-        checks.insert(0, (f"Wizard: every screen confirmed ({report['wizard_seconds']} s)", True))
+        checks.insert(0, (f"Procedura guidata: ogni schermata confermata ({report['wizard_seconds']} s)", True))
     if report.get("verify_seconds") is not None:
-        checks.append((f"Draft loaded again from the portal: every value still there ({report['verify_seconds']} s)"
-                       if ok else "Draft loaded again from the portal: a value didn't stay (see Stopped)", ok))
+        checks.append((f"Bozza riaperta dal portale: ogni valore è ancora lì ({report['verify_seconds']} s)"
+                       if ok else "Bozza riaperta dal portale: un valore non è rimasto", ok))
     if report.get("error"):
-        checks.append((f"Stopped: {report['error']}", False))
+        checks.append(("La compilazione si è fermata prima della fine: Claude sa dove e perché", False))
     # The portal's warnings beside boxes it kept (inpage.js alerts()): the person checks each.
     for a in report.get("alerts", []):
-        checks.append((f"{a['section']}, {a.get('label') or 'a box'}: the portal warns \"{a['text']}\" (kept: check it)", False))
+        checks.append((f"{a['section']}, {a.get('label') or 'una casella'}: il portale segnala «{a['text']}» (valore salvato: lo controlli)", False))
     # The report says only why a read-back failed; the person sees what it wanted and found.
     for d in report.get("details", []):
-        checks.append((f"{d['section']}, {d['label']}: wanted {d['want']!r}, the portal had {d['got']!r}", False))
+        checks.append((f"{d['section']}, {d['label']}: doveva essere «{d['want']}», il portale ha «{d['got']}»", False))
     groups = {}
     for v in report.get("values", []):
         groups.setdefault(v["section"], []).append((v["label"], v["value"], False))
@@ -212,9 +211,9 @@ def portal_review(report, out=None):
     decl_html, decl_checks = declarations(report, folder) if ok else ("", [])
     prev_html, prev_checks = preview(report, folder) if ok else ("", [])
     checks += decl_checks + prev_checks
-    return page(report.get("title") or report["procedure"], f"{report['procedure']} · draft on the portal", ok,
-                f"Draft saved in {report.get('total_seconds')} s: ready for your review" if ok
-                else "Stopped before the end: see below", report.get("yours", []), [("Draft", report.get("url"))],
+    return page(report.get("title") or report["procedure"], "Bozza sul portale", ok,
+                f"Bozza salvata in {report.get('total_seconds')} s: pronta da rivedere" if ok
+                else "Si è fermata prima della fine", report.get("yours", []), [("Bozza", report.get("url"))],
                 checks, list(groups.items()), prev_html, decisions(report) + decl_html)
 
 
