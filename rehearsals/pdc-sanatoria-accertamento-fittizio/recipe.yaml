@@ -11,12 +11,7 @@
 extends: [pdc-sanatoria-fittizio, parts/accertamento-paesaggistico]
 procedure: napoli/comune/permesso-in-sanatoria-con-accertamento-paesaggistico
 title: "Permesso di costruire in sanatoria con accertamento di compatibilità paesaggistica, SUE Napoli (tecnico con procura)"
-comune: F839
-sportello: sue
 crawl: sue-combo-pdc-sanatoria-accertamento
-operation:
-  - Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001
-  - Accertamento di compatibilità paesaggistica (artt. 167-181 D.Lgs. 42/2004 - Comune)
 asks:
   descrizione: {default: "PROVA NON INVIARE - PdC sanatoria e accertamento {{c:identity.last_name}}"}
 yours:
@@ -28,8 +23,6 @@ yours:
   - "Sign and send (Firma e invio); keep the receipt"
   - "The Comune decides the compatibility first, with the Soprintendenza's binding parere: if it's found, pay the sum it sets (art. 167 c. 5 D.Lgs. 42/2004, the greater of the damage and the profit); if not, the works must be removed and the permesso in sanatoria can't be issued"
   - "Once the permesso is granted: pay the oblazione it determines (twice the contributo di costruzione, art. 36 c. 2) and collect the permesso in sanatoria"
-rules:
-  main: napoli/comune/permesso-in-sanatoria
 # The permesso's landscape quadro wants one of its three procedures once the works alter the place,
 # and none is the accertamento of art. 167 (the run of 2026-11-02 stopped there): a known defect,
 # refused with it. The rest of the pratica fills; the mapping stays for the day the quadro has the line.

@@ -113,7 +113,8 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      section's fields by label, shared by every pratica) and a recipe
                      (rehearsals/*/recipe.yaml; `operation` may be a list, the union of their
                      sections, and such a recipe `extends` its main pratica's and the other's
-                     `parts/` file, so neither drifts); it writes nothing if a field is unaccounted for. Adding a pratica,
+                     `parts/` file, so neither drifts: its operations, comune, sportello and
+                     rules table's main follow from them); it writes nothing if a field is unaccounted for. Adding a pratica,
                      the portal's quirks and clean batch reruns (`bench/rerun.py`): portal/README.md.
                      draft.py drafts dictionary entries for a new section from the national
                      schema (`schema/`, InfoCamere's forms flattened), for a person to check;
