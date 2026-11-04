@@ -11,7 +11,7 @@ branch no rehearsal has taken: the next cases to write.
   and the rehearsal's `runs.json` records a filled run of it (`bench/rerun.py --record`).
 - **a case, no recorded run**: such a case ticks it, but no filled run is recorded: never run,
   stopped, or run before 2026-10-31 and described in its README in words that don't name the
-  case (223 cases in all, 222 with a recorded filled run).
+  case (254 cases in all, 253 with a recorded filled run).
 - **mapped, no case yet**: the dictionary can tick it, under answers no case gives. Next: an
   answers file, then a run.
 - **on the portal, not mapped**: no steps file ever ticks it. Next: a dictionary entry.
@@ -29,13 +29,13 @@ parent) isn't told apart. Rehearsals counts the rehearsals whose cases tick the 
 
 | Form | Alternatives | Filled on the portal | A case, no recorded run | Mapped, no case | Not mapped | No portal box | Portal-only boxes untaken |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| CILA | 43 | 34 | 0 | 0 | 1 | 7 | 17 |
-| Fine lavori | 2 | 2 | 0 | 0 | 0 | 0 | 6 |
+| CILA | 43 | 34 | 0 | 0 | 1 | 7 | 2 |
+| Fine lavori | 2 | 2 | 0 | 0 | 0 | 0 | 1 |
 | Inizio lavori | 16 | 0 | 0 | 0 | 0 | 16 | 0 |
-| Permesso di costruire | 153 | 125 | 0 | 2 | 7 | 14 | 104 |
-| SCIA | 150 | 133 | 0 | 2 | 1 | 10 | 39 |
-| SCIA alternativa | 128 | 117 | 0 | 0 | 2 | 8 | 45 |
-| Agibilità (SCA) | 36 | 31 | 0 | 0 | 0 | 5 | 10 |
+| Permesso di costruire | 153 | 125 | 0 | 2 | 7 | 14 | 52 |
+| SCIA | 150 | 133 | 0 | 2 | 1 | 10 | 17 |
+| SCIA alternativa | 128 | 117 | 0 | 0 | 2 | 8 | 3 |
+| Agibilità (SCA) | 36 | 31 | 0 | 0 | 0 | 5 | 2 |
 
 ## Next cases
 
@@ -66,7 +66,7 @@ On the portal, not mapped (dictionary work first):
 
 | Schema choice | Alternative | Portal box | Match | State | Rehearsals |
 |---|---|---|---|---|---:|
-| `dichiarazioni/titolo_possesso` | `titolare_esclusivo` | avere titolarità esclusiva all'esecuzione dell'intervento | h | filled on the portal | 11 |
+| `dichiarazioni/titolo_possesso` | `titolare_esclusivo` | avere titolarità esclusiva all'esecuzione dell'intervento | h | filled on the portal | 13 |
 | `dichiarazioni/titolo_possesso` | `non_titolare_esclusivo` | non avere titolarità esclusiva all'esecuzione dell'intervento, ma di… | h | filled on the portal | 18 |
 | `dichiarazioni/opere_previste/[opere_previste_ctype]` | `no_parti_comuni` | non riguardano parti comuni | h | filled on the portal | 12 |
 | `dichiarazioni/opere_previste/[opere_previste_ctype]` | `parti_comuni_condominio` | riguardano le parti comuni di un fabbricato condominiale (1) | h | filled on the portal | 1 |
@@ -112,23 +112,8 @@ On the portal, not mapped (dictionary work first):
 
 Portal boxes of the CILA no schema alternative matched and no case ticks:
 
-- a) Titolarità dell'intervento: comproprietario (mapped)
 - c) Presentazione della comunicazione di…: PER PRESA VISIONE (not mapped)
-- e) Destinazione d'uso: industriale (mapped)
-- e) Destinazione d'uso: commerciale (mapped)
 - i) Rispetto degli obblighi in materia d…: ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dich… (not mapped)
-- Relazione Tecnica di Asseverazione C.I.…: Interventi di eliminazione delle barriere architettoniche che comportino la realizzazione… (mapped)
-- Relazione Tecnica di Asseverazione C.I.…: Opere temporanee per attività di ricerca nel sottosuolo che abbiano carattere geognostico… (mapped)
-- Relazione Tecnica di Asseverazione C.I.…: Movimenti di terra non strettamente pertinenti all'esercizio dell'attività agricola e all… (mapped)
-- Relazione Tecnica di Asseverazione C.I.…: Serre mobili stagionali funzionali allo svolgimento dell'attività agricola che presentino… (mapped)
-- Relazione Tecnica di Asseverazione C.I.…: Realizzazione di pertinenze minori che le norme tecniche degli strumenti urbanistici, in… (mapped)
-- Relazione Tecnica di Asseverazione C.I.…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (mapped)
-- Relazione Tecnica di Asseverazione C.I.…: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (mapped)
-- Relazione Tecnica di Asseverazione C.I.…: 2%, per le U.I. > 500 mq di superficie utile ; (mapped)
-- Relazione Tecnica di Asseverazione C.I.…: 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; (mapped)
-- Relazione Tecnica di Asseverazione C.I.…: 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; (mapped)
-- Relazione Tecnica di Asseverazione C.I.…: 6%, per le U.I. < 60 mq di superficie utile; (mapped)
-- Relazione Tecnica di Asseverazione C.I.…: attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso… (mapped)
 
 ### Fine lavori
 
@@ -139,11 +124,6 @@ Portal boxes of the CILA no schema alternative matched and no case ticks:
 
 Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 
-- Titolarità dell'intervento: proprietario (mapped)
-- Titolarità dell'intervento: comproprietario (mapped)
-- Titolarità dell'intervento: usufruttuario (mapped)
-- Titolarità dell'intervento: amministratore di condominio (mapped)
-- Titolarità dell'intervento: avere titolarità esclusiva all'esecuzione dell'intervento (mapped)
 - Titolarità dell'intervento: Maschio (not mapped)
 
 ### Inizio lavori
@@ -327,40 +307,14 @@ Portal boxes of the Fine lavori no schema alternative matched and no case ticks:
 
 Portal boxes of the Permesso di costruire no schema alternative matched and no case ticks:
 
-- a) Qualificazione pratica dell'interven…: alla destinazione d'uso (mapped)
 - a) Qualificazione pratica dell'interven…: piano casa, ai sensi della l.r. n. 19/2009 (not mapped)
 - a) Qualificazione pratica dell'interven…: interventi di ampliamento (articolo 4) (not mapped)
 - a) Qualificazione pratica dell'interven…: interventi di demolizione e ricostruzione (articolo 5) (not mapped)
 - a) Qualificazione pratica dell'interven…: interventi edilizi in zona agricola ( art. 6-bis) (not mapped)
 - a) Qualificazione pratica dell'interven…: riqualificazione di aree urbane degradate (articolo 7) (not mapped)
-- b) Titolarità dell'intervento: comproprietario (mapped)
-- b) Titolarità dell'intervento: usufruttuario (mapped)
-- b) Titolarità dell'intervento: amministratore di condominio (mapped)
 - b) Titolarità dell'intervento: Maschio (not mapped)
-- c) Destinazione d'uso dell'immobile: industriale (mapped)
-- c) Destinazione d'uso dell'immobile: commerciale (mapped)
-- c) Destinazione d'uso dell'immobile: altro (mapped)
-- e) Regolarità urbanistica e precedenti…: titolo unico (SUAP) (mapped)
-- e) Regolarità urbanistica e precedenti…: autorizzazione edilizia (mapped)
-- e) Regolarità urbanistica e precedenti…: comunicazione edilizia (art. 26 l. n. 47/1985) (mapped)
-- e) Regolarità urbanistica e precedenti…: denuncia di inizio attività (mapped)
-- e) Regolarità urbanistica e precedenti…: DIA/SCIA alternativa al permesso di costruire (mapped)
-- e) Regolarità urbanistica e precedenti…: segnalazione certificata di inizio attività (mapped)
-- e) Regolarità urbanistica e precedenti…: comunicazione edilizia libera (mapped)
-- e) Regolarità urbanistica e precedenti…: titolo edilizio in sanatoria con il pagamento della relativa oblazione ed in particolare: (mapped)
-- e) Regolarità urbanistica e precedenti…: condono edilizio (mapped)
-- e) Regolarità urbanistica e precedenti…: permesso di costruire in sanatoria di cui agli artt. 36 o 36-bis del d.P.R. n. 380/2001 (mapped)
-- e) Regolarità urbanistica e precedenti…: SCIA in sanatoria di cui all’art. 36-bis d.P.R. n. 380/2001 (mapped)
-- e) Regolarità urbanistica e precedenti…: SCIA in sanatoria per variante in corso d’opera realizzata costituente parziale difformit… (mapped)
-- e) Regolarità urbanistica e precedenti…: altro (mapped)
 - j) Diritti di terzi: dichiara di essere consapevole che il permesso di costruire non comporta limitazione dei… (not mapped)
 - Asseverazione PdC - Dati progettista e…: Opere edilizie straordinarie di cui alla l.r. n. 19/2009 (piano casa) (not mapped)
-- Asseverazione PdC - Dati progettista e…: urbanizzazione primaria e secondaria realizzati da soggetti diversi dal Comune (mapped)
-- Asseverazione PdC - Dati progettista e…: realizzazione di infrastrutture e di impianti, anche per pubblici servizi, che comporti l… (mapped)
-- Asseverazione PdC - Dati progettista e…: installazione di torri e tralicci per impianti radio-ricetrasmittenti e di ripetitori per… (mapped)
-- Asseverazione PdC - Dati progettista e…: installazione di manufatti leggeri, anche prefabbricati, e di strutture di qualsiasi gene… (mapped)
-- Asseverazione PdC - Dati progettista e…: interventi pertinenziali che le norme tecniche degli strumenti urbanistici, in relazione… (mapped)
-- Asseverazione PdC - Dati progettista e…: realizzazione di depositi di merci o di materiali, la realizzazione di impianti per attiv… (mapped)
 - Asseverazione PdC - Dati progettista e…: interventi straordinari di ampliamento (articolo 4) e in particolare: (not mapped)
 - Asseverazione PdC - Dati progettista e…: interventi straordinari di demolizione e ricostruzione (articolo 5) e in particolare: (not mapped)
 - Asseverazione PdC - Dati progettista e…: interventi edilizi in zona agricola (articolo 6-bis) e in particolare: (not mapped)
@@ -376,11 +330,6 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - Dati progettista e…: mutamento di destinazione d'uso ai fini abitativi di un edificio non superiore a 10.000 m… (not mapped)
 - Asseverazione PdC - Dati progettista e…: mutamento di destinazione d'uso ai fini abitativi per singoli edifici non superiori a die… (not mapped)
 - Asseverazione PdC - Dati progettista e…: ricostruzione in sito di edifici diruti e ruderi con l'obbligo destinazione del manufatto… (not mapped)
-- Asseverazione PdC - Dati progettista e…: con opere che incidano sulla sagoma, sui volumi e sulle superfici, con passaggio di categ… (mapped)
-- Asseverazione PdC - Dati progettista e…: nelle zone agricole – zone E, ai sensi dell'art. 2 comma 8 della l.r. n. 19/2001 e suo re… (mapped)
-- Asseverazione PdC - stato legittimo, di…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (mapped)
-- Asseverazione PdC - stato legittimo, di…: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (mapped)
-- Asseverazione PdC - stato legittimo, di…: attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso… (mapped)
 - Asseverazione PdC - stato legittimo, di…: un intervento soggetto a SCIA in corso di esecuzione (mapped)
 - Asseverazione PdC - stato legittimo, di…: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della… (not mapped)
 - Asseverazione PdC - stato legittimo, di…: un intervento soggetto a SCIA (mapped)
@@ -388,30 +337,9 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 - Asseverazione PdC - stato legittimo, di…: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguag… (mapped)
 - Asseverazione PdC - stato legittimo, di…: determina l’oblazione dovuta, dando atto che la stessa sarà soggetta ad eventuale conguag… (mapped)
 - Asseverazione PdC - stato legittimo, di…: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla S… (not mapped)
-- Asseverazione PdC - Dati immobile, stru…: accessibilità (mapped)
-- Asseverazione PdC - sicurezza impianti…: per la distribuzione e l'utilizzazione di gas di qualsiasi tipo, comprese le opere di eva… (mapped)
-- Asseverazione PdC - sicurezza impianti…: altre tipologie di impianti, anche definite dalla corrispondente normativa regionale (mapped)
-- Asseverazione PdC - sicurezza impianti…: ricade nell'articolo 12, comma 1, del d.lgs. n. 28/2011 in merito al bonus volumetrico de… (mapped)
-- Asseverazione PdC - sicurezza impianti…: si certifica nella relazione tecnica una copertura dei consumi di calore, di elettricità… (mapped)
 - Asseverazione PdC - sicurezza impianti…: rientra tra quelli previsti dalla l.r. n. 19/2009, pertanto: (not mapped)
 - Asseverazione PdC - sicurezza impianti…: si allega la valutazione della sostenibilità energetico-ambientale degli edifici redatta… (not mapped)
-- Asseverazione PdC - inquinamento acusti…: dichiarazione sostitutiva dell'atto di notorietà, a firma del titolare, relativa al rispe… (mapped)
-- Asseverazione PdC - inquinamento acusti…: (art. 4, commi 1 e 2, d.P.R. 227/2011) a documentazione di previsione di impatto acustico… (mapped)
 - Asseverazione PdC - tutela storico ambi…: si allega documentazione necessaria ai fini del rilascio del parere vincolante (vedi quad… (not mapped)
-- Asseverazione PdC - aree a rischio e al…: fascia di rispetto dei depuratori (punto 1.2, allegato 4 della deliberazione 4 febbraio 1… (mapped)
-- Asseverazione PdC - aree a rischio e al…: Altro (mapped)
-- Asseverazione PdC - aree a rischio e al…: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso (mapped)
-- Asseverazione PdC - aree a rischio e al…: l'immobile è assoggettato ai seguenti vincoli (mapped)
-- Asseverazione PdC - aree a rischio e al…: rispetto alle misure di salvaguardia della costa la situazione vincolistica è la seguente (mapped)
-- Asseverazione PdC - tutela funzionale: stradale (d.m. n. 1404/1968, d.P.R. n. 495/92) (mapped)
-- Asseverazione PdC - tutela funzionale: ferroviario (d.P.R. n. 753/1980) (mapped)
-- Asseverazione PdC - tutela funzionale: elettrodotto (d.P.C.M. 8 luglio 2003) (mapped)
-- Asseverazione PdC - tutela funzionale: gasdotto (d.m. 24 novembre 1984 e d.m. 16 aprile 2008) (mapped)
-- Asseverazione PdC - tutela funzionale: militare (d.lgs. n. 66/2010) (mapped)
-- Asseverazione PdC - tutela funzionale: aeroportuale (piano di rischio ai sensi dell'art. 707 del Codice della navigazione, speci… (mapped)
-- Asseverazione PdC - tutela funzionale: Altro (mapped)
-- Asseverazione PdC - tutela funzionale: si allegano le autocertificazioni relative alla conformità dell'intervento per i relativi… (mapped)
-- Asseverazione PdC - tutela funzionale: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso (mapped)
 - Dichiarazione relativa all'assolvimento…: Solo la marca da €16,00 per la domanda; non è richiesta alcuna marca da bollo per l'autor… (not mapped)
 - Dichiarazione relativa all'assolvimento…: adesione all'autorizzazione generale per le emissioni in atmosfera di cui al D.Lgs n. 152… (not mapped)
 - Dichiarazione relativa all'assolvimento…: domanda per prima classificazione / rinnovo o modifica di classificazione di strutture ri… (not mapped)
@@ -436,7 +364,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 
 | Schema choice | Alternative | Portal box | Match | State | Rehearsals |
 |---|---|---|---|---|---:|
-| `dichiarazioni/titolo_possesso` | `titolare_esclusivo` | avere titolarità esclusiva all'esecuzione dell'intervento | h | filled on the portal | 11 |
+| `dichiarazioni/titolo_possesso` | `titolare_esclusivo` | avere titolarità esclusiva all'esecuzione dell'intervento | h | filled on the portal | 13 |
 | `dichiarazioni/titolo_possesso` | `non_titolare_esclusivo` | non avere titolarità esclusiva all'esecuzione dell'intervento, ma di… | h | filled on the portal | 18 |
 | `dichiarazioni/presentazione` | `scia` | portal section b has only a "per presa visione" checkbox; no choice a… | h | no portal box |  |
 | `dichiarazioni/presentazione` | `scia_unica` | portal section b has only a "per presa visione" checkbox; no choice a… | h | no portal box |  |
@@ -495,7 +423,7 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `chiede_rateizzazione` | chiede la rateizzazione del contributo di costruzione secondo le moda… | h | filled on the portal | 8 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `corrisponde_in_corso` | si impegna a corrispondere il costo di costruzione in corso di esecuz… | h | filled on the portal | 1 |
 | `dichiarazioni/imprese_esecutrici` | `da_soggetti_coinvolti` | i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata… | h | filled on the portal | 15 |
-| `dichiarazioni/imprese_esecutrici` | `(nothing)` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp… | l | filled on the portal | 1 |
+| `dichiarazioni/imprese_esecutrici` | `(nothing)` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp… | l | filled on the portal | 2 |
 | `dichiarazioni/obblighi_salute_sicurezza` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza` | `(nothing)` | ricade nell'ambito di applicazione delle norme in materia di salute e… | l | filled on the portal | 15 |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `inf200ggUomo` | dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-… | h | filled on the portal | 15 |
@@ -589,39 +517,17 @@ Portal boxes of the Permesso di costruire no schema alternative matched and no c
 
 Portal boxes of the SCIA no schema alternative matched and no case ticks:
 
-- a) Titolarità dell'intervento: comproprietario (mapped)
 - b) Presentazione della SCIA/SCIA Unica/…: PER PRESA VISIONE (not mapped)
 - c) Qualificazione dell'intervento: mutamento di destinazione d'uso, di un intero immobile all’interno della stessa categoria… (mapped)
-- d) Destinazione d'uso dell'immobile: industriale (mapped)
-- d) Destinazione d'uso dell'immobile: commerciale (mapped)
-- d) Destinazione d'uso dell'immobile: altro (mapped)
 - m) Diritti di terzi: dichiara di essere consapevole che la presente segnalazione non può comportare limitazion… (not mapped)
 - Asseverazione SCIA - Tipologia di inter…: senza opere (o con opere riconducibili agli interventi di cui all'articolo 6) di un inter… (mapped)
 - Asseverazione SCIA - Tipologia di inter…: con opere riconducibili agli interventi di cui all'articolo 6-bis di un intero immobile a… (mapped)
-- Asseverazione SCIA - Stato legittimo, D…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (mapped)
-- Asseverazione SCIA - Stato legittimo, D…: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (mapped)
-- Asseverazione SCIA - Stato legittimo, D…: 2%, per le U.I. > 500 mq di superficie utile ; (mapped)
-- Asseverazione SCIA - Stato legittimo, D…: 3%, per le U.I. da ≤ 500 mq a ≥ 300 mq di superficie utile; (mapped)
-- Asseverazione SCIA - Stato legittimo, D…: 4%, per le U.I. da < 300 mq a ≥ 100 mq di superficie utile; (mapped)
-- Asseverazione SCIA - Stato legittimo, D…: 5%, per le U.I. da < 100 mq a ≥ 60 mq di superficie utile; (mapped)
 - Asseverazione SCIA - Stato legittimo, D…: una variante in corso d'opera, in parziale difformità dal titolo, rilasciato prima della… (not mapped)
-- Asseverazione SCIA - Stato legittimo, D…: si impegna a presentare la dichiarazione per l’iscrizione al catasto successivamente all’… (mapped)
 - Asseverazione SCIA - Stato legittimo, D…: dà atto che la data/epoca di realizzazione dell’intervento (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: attesta che la data/epoca di realizzazione dell’intervento (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: ai fini della sanatoria, la presente SCIA: (not mapped)
 - Asseverazione SCIA - Stato legittimo, D…: Quanto alla rilevanza sismica degli interventi realizzati in assenza o difformità dalla S… (not mapped)
-- Asseverazione SCIA - Dati immobile, str…: P.I.P. (mapped)
-- Asseverazione SCIA - Dati immobile, str…: P.E.E.P. (mapped)
-- Asseverazione SCIA - Dati immobile, str…: ALTRO (mapped)
-- Asseverazione SCIA - Dati immobile, str…: adattabilità (mapped)
-- Asseverazione SCIA - Sicurezza impianti…: ricade nell'articolo 14, comma 7, del d.lgs. n. 102/2014 in merito alle deroga alle dista… (mapped)
-- Asseverazione SCIA - Sicurezza impianti…: si certifica nella relazione tecnica una riduzione minima del 10 per cento del limite di… (mapped)
-- Asseverazione SCIA - Sicurezza impianti…: ricade nell'articolo 12, comma 1, del d.lgs. n. 28/2011 in merito al bonus volumetrico de… (mapped)
-- Asseverazione SCIA - Sicurezza impianti…: si certifica nella relazione tecnica una copertura dei consumi di calore, di elettricità… (mapped)
 - Asseverazione SCIA - Inquinamento acust…: la documentazione di previsione di impatto acusticocon l'indicazione delle misure previst… (not mapped)
-- Asseverazione SCIA - Inquinamento acust…: comportano la produzione di materiali da scavo che saranno riutilizzati nello stesso luog… (mapped)
-- Asseverazione SCIA - Amianto, conformit…: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferio… (mapped)
-- Asseverazione SCIA - Amianto, conformit…: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di… (mapped)
 - SANATORIA e regolarizzazioni per interv…: sanatoria di intervento soggetto a SCIA, in assenza della SCIA o in difformità da essa, c… (not mapped)
 - SANATORIA e regolarizzazioni per interv…: regolarizzazione di interventi realizzati come variante in corso d'opera che costituiscon… (not mapped)
 - SANATORIA e regolarizzazioni per interv…: si indicano gli estremi del titolo edilizio variato (not mapped)
@@ -633,7 +539,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 
 | Schema choice | Alternative | Portal box | Match | State | Rehearsals |
 |---|---|---|---|---|---:|
-| `dichiarazioni/titolo_possesso` | `titolare_esclusivo` | avere titolarità esclusiva all'esecuzione dell'intervento | h | filled on the portal | 11 |
+| `dichiarazioni/titolo_possesso` | `titolare_esclusivo` | avere titolarità esclusiva all'esecuzione dell'intervento | h | filled on the portal | 13 |
 | `dichiarazioni/titolo_possesso` | `non_titolare_esclusivo` | non avere titolarità esclusiva all'esecuzione dell'intervento, ma di… | h | filled on the portal | 18 |
 | `dichiarazioni/presentazione/[presentazione_scia_alternativa…` | `scia_alternativa` | P011 is only a "per presa visione" acknowledgement, not a choice | m | no portal box |  |
 | `dichiarazioni/presentazione/[presentazione_scia_alternativa…` | `scia_unica` | no portal option; P011 is only an acknowledgement | m | no portal box |  |
@@ -666,7 +572,7 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `chiede_rateizzazione` | chiede la rateizzazione del contributo di costruzione secondo le moda… | h | filled on the portal | 8 |
 | `dichiarazioni/calcolo_contributo_costruzione/[calcolo_contr…` | `corrisponde_in_corso` | si impegna a corrispondere il costo di costruzione in corso di esecuz… | h | filled on the portal | 1 |
 | `dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_d…` | `da_soggetti_coinvolti` | i lavori sono eseguiti/sono stati eseguiti dalla/e impresa/e indicata… | h | filled on the portal | 15 |
-| `dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_d…` | `(nothing)` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp… | l | filled on the portal | 1 |
+| `dichiarazioni/imprese_esecutrici/[scia_imprese_esecutrici_d…` | `(nothing)` | l'impresa esecutrice/imprese esecutrici dei lavori sarà/saranno indiv…; i lavori, in quanto opere di modesta entità che non interessano le sp… | l | filled on the portal | 2 |
 | `dichiarazioni/obblighi_salute_sicurezza` | `non_ricade` | non ricade nell'ambito di applicazione delle norme in materia di salu… | h | filled on the portal | 1 |
 | `dichiarazioni/obblighi_salute_sicurezza` | `(nothing)` | ricade nell'ambito di applicazione delle norme in materia di salute e… | l | filled on the portal | 15 |
 | `dichiarazioni/obblighi_salute_sicurezza/ricade` | `inf200ggUomo` | dichiara che l'entità presunta del cantiere è inferiore a 200 uomini-… | h | filled on the portal | 15 |
@@ -764,51 +670,9 @@ Portal boxes of the SCIA no schema alternative matched and no case ticks:
 
 Portal boxes of the SCIA alternativa no schema alternative matched and no case ticks:
 
-- a) Titolarità dell'intervento: comproprietario (mapped)
 - b) Presentazione della SCIA Alternativa…: PER PRESA VISIONE (not mapped)
-- d) Destinazione d'uso dell'immobile: industriale (mapped)
-- d) Destinazione d'uso dell'immobile: commerciale (mapped)
-- d) Destinazione d'uso dell'immobile: altro (mapped)
 - m) Diritti di terzi: dichiara di essere consapevole che la presente segnalazione non può comportare limitazion… (not mapped)
-- Asseverazione SCIA Alternativa - Dati p…: 2. Interventi di nuova costruzione o di ristrutturazione urbanistica qualora siano discip… (mapped)
-- Asseverazione SCIA Alternativa - Dati p…: 3. Interventi di nuova costruzione qualora siano in diretta esecuzione di strumenti urban… (mapped)
-- Asseverazione SCIA Alternativa - stato…: TOLLERANZA DI CUI ALL’ART. 34-BIS, COMMA 1 E 1-TER, SECONDO PERIODO: (mapped)
-- Asseverazione SCIA Alternativa - stato…: TOLLERANZA DI CUI ALL’ART. 34-TER, COMMA 4: (mapped)
-- Asseverazione SCIA Alternativa - stato…: attesta che sulla istanza di autorizzazione, si è formato il silenzio assenso per decorso… (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PUC (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PUA (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PIANO PARTICOLAREGGIATO (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: PIANO DI RECUPERO (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: interessa un edificio privato aperto al pubblico e che le opere previste sono conformi al… (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: accessibilità (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: pur essendo soggetto alle prescrizioni degli articoli 77 e seguenti del d.P.R. n. 380/200… (mapped)
-- Asseverazione SCIA Alternativa - Dati i…: presenta contestualmente alla SCIA condizionata, la documentazione per la richiesta di de… (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: per la distribuzione e l'utilizzazione di gas di qualsiasi tipo, comprese le opere di eva… (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: altre tipologie di impianti, anche definite dalla corrispondente normativa regionale (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: ricade nell'articolo 14, comma 6, del d.lgs. n. 102/2014 in merito al computo degli spess… (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: si certifica nella relazione tecnica una riduzione minima del 20 per cento dell'indice di… (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: ricade nell'articolo 14, comma 7, del d.lgs. n. 102/2014 in merito alle deroga alle dista… (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: si certifica nella relazione tecnica una riduzione minima del 10 per cento del limite di… (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: ricade nell'articolo 12, comma 1, del d.lgs. n. 28/2011 in merito al bonus volumetrico de… (mapped)
-- Asseverazione SCIA Alternativa - Sicure…: si certifica nella relazione tecnica una copertura dei consumi di calore, di elettricità… (mapped)
-- Asseverazione SCIA alternativa - Inquin…: dichiarazione sostitutiva dell'atto di notorietà, a firma del titolare, relativa al rispe… (mapped)
 - Asseverazione SCIA alternativa - Inquin…: la documentazione di previsione di impatto acusticocon l'indicazione delle misure previst… (not mapped)
-- Asseverazione SCIA alternativa - Inquin…: comportano la produzione di materiali da scavo che saranno riutilizzati nello stesso luog… (mapped)
-- Asseverazione SCIA Alternativa - Amiant…: alloggio monostanza per una persona con una superficie minima, inclusi i servizi, inferio… (mapped)
-- Asseverazione SCIA Alternativa - Amiant…: alloggio monostanza per due persone con una superficie minima, inclusi i servizi, inferio… (mapped)
-- Asseverazione SCIA Alternativa - Amiant…: è contestualmente presentato nell’ambito degli elaborati grafici allegati un progetto di… (mapped)
-- Asseverazione SCIA Alternativa - Altri…: fascia di rispetto dei depuratori (punto 1.2, allegato 4 della deliberazione 4 febbraio 1… (mapped)
-- Asseverazione SCIA Alternativa - Altri…: Altro (mapped)
-- Asseverazione SCIA Alternativa - Altri…: si allegano le autocertificazioni relative alla conformità dell'intervento per i relativi… (mapped)
-- Asseverazione SCIA Alternativa - TUTELA…: stradale (d.m. n. 1404/1968, d.P.R. n. 495/92) (mapped)
-- Asseverazione SCIA Alternativa - TUTELA…: ferroviario (d.P.R. n. 753/1980) (mapped)
-- Asseverazione SCIA Alternativa - TUTELA…: elettrodotto (d.P.C.M. 8 luglio 2003) (mapped)
-- Asseverazione SCIA Alternativa - TUTELA…: gasdotto (d.m. 24 novembre 1984) (mapped)
-- Asseverazione SCIA Alternativa - TUTELA…: militare (d.lgs. n. 66/2010) (mapped)
-- Asseverazione SCIA Alternativa - TUTELA…: aeroportuale (piano di rischio ai sensi dell'art. 707 del Codice della navigazione, speci… (mapped)
-- Asseverazione SCIA Alternativa - TUTELA…: Altro (mapped)
-- Asseverazione SCIA Alternativa - TUTELA…: si allegano le autocertificazioni relative alla conformità dell'intervento per i relativi… (mapped)
-- Asseverazione SCIA Alternativa - TUTELA…: si allega la documentazione necessaria ai fini del rilascio dei relativi atti di assenso (mapped)
 
 ### Agibilità (SCA)
 
@@ -853,13 +717,5 @@ Portal boxes of the SCIA alternativa no schema alternative matched and no case t
 
 Portal boxes of the Agibilità (SCA) no schema alternative matched and no case ticks:
 
-- destinazione d'uso dell'immobile: industriale (mapped)
-- destinazione d'uso dell'immobile: commerciale (mapped)
-- destinazione d'uso dell'immobile: altro (mapped)
-- Titolarità dell'intervento: proprietario (mapped)
-- Titolarità dell'intervento: comproprietario (mapped)
-- Titolarità dell'intervento: usufruttuario (mapped)
-- Titolarità dell'intervento: amministratore di condominio (mapped)
-- Titolarità dell'intervento: avere titolarità esclusiva all'esecuzione dell'intervento (mapped)
 - Titolarità dell'intervento: Maschio (not mapped)
 - Attestazione tecnica - Dati del Diretto…: Maschio (mapped)

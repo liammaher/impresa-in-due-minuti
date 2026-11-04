@@ -262,5 +262,29 @@
   "answers": "answers-scavo-vvf.json",
   "result": "filled",
   "seconds": 202.5
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-comproprietaria-negozio.json",
+  "result": "filled",
+  "seconds": 212.1
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-proprietario-deposito.json",
+  "result": "filled",
+  "seconds": 148.2
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-tolleranza-5.json",
+  "result": "filled",
+  "seconds": 169.8
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-usufruttuario-industriale.json",
+  "result": "filled",
+  "seconds": 166
  }
 ]

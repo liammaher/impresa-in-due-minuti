@@ -252,11 +252,13 @@ OPEN_BEYOND = [
     "document, signed, so its slot is proven only empty and required, never with a real signed file.",
     "Drift: the check compares the 27 single operations' sections as they show before any choice (last "
     "2026-11-02); the combinations and what a choice opens are checked only by the runner's label checks.",
-    "Portal defects (docs/portal-defects.md): none reported yet to InfoCamere or the Comune; two of them "
-    "refuse common cases (a permesso with no energy incentive, a CILA or CIL before the firm is chosen).",
+    "Portal defects (docs/portal-defects.md): none reported yet to InfoCamere or the Comune, the reports "
+    "ready to send in docs/defect-reports/; two of them refuse common cases (a permesso with no energy "
+    "incentive, a CILA or CIL before the firm is chosen).",
     "Firma e invio is the person's (unreachable on made-up data; FILING's yours says how). After filing, "
     "nothing in the repo maps the portal: integration requests, the codice pratica and receipt, the status "
-    "in Pratiche inviate.",
+    "in Pratiche inviate. InfoCamere's manual describes them (MyPage, \"Nuova Comunicazione\": portal/README.md), "
+    "but only a sent pratica shows them, and made-up data sends none.",
     "No real case has been checked by an architect who files these pratiche (level 5).",
 ]
 

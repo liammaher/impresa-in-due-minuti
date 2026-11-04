@@ -132,6 +132,7 @@ def files():
                                             "value": "{{ask.planimetria}}"})
     r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}), made_up=True)
     assert r["ready"] and r["files"][0]["exists"] and not r["pane_ok"], r
+    assert r["pick"] == ["planimetria.pdf"], r.get("pick")  # chosen by the person in the page
     r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(tmp / "nope.pdf")}), made_up=True)
     assert not r["ready"] and r["questions"][0]["error"].startswith("no file"), r
     # Over the portal's 9.77 MB, or a type the slot doesn't take: not ready, and why.
@@ -822,6 +823,7 @@ def linked_files():
         assert not run.preflight(steps, values(steps=steps), made_up=True)["pane_ok"]
         r = run.preflight(steps, values(steps=steps), {str(big): "https://example.org/planimetria.pdf"}, made_up=True)
         assert r["pane_ok"] and any(f.get("link") for f in r["files"]), r["files"]
+        assert "pick" not in r, r["pick"]
 
 
 def streets_and_lists():
