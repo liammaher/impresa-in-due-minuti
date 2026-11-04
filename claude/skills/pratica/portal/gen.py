@@ -316,20 +316,36 @@ def resolved(recipe, seen=()):
     main pratica's recipe plus the other's part, so a slot or a refusal mapped on one reaches the
     other (2026-10-31: the SCIA's combinations had missed eleven of the SCIA's slots). Later ones
     win key by key; `attachments` (per screen), `supports` and `sections` add up; `asks` and
-    `rules` merge by key; a null drops what an earlier one set. `answers` merge by key, nulls
-    kept (combo_answers)."""
+    `rules` merge by key, `rules.handles` adding up; a null drops what an earlier one set.
+    `answers` merge by key, nulls kept (combo_answers).
+
+    What a combination is follows from its main pratica and its parts, unless it says otherwise:
+    its `operation`s are the main pratica's then each part's (the wizard's order), and its
+    rules table's `main` is the main pratica's (its `procedure` is the combination's)."""
     parents = recipe.get("extends") or []
     if not parents:
         return recipe
-    out = {}
+    out, main, ops = {}, None, []
     for name in [parents] if isinstance(parents, str) else parents:
         if name in seen:
             raise GenError(f"{name}: extends goes round")
         path = HERE / f"{name}.yaml" if name.startswith("parts/") else REHEARSALS / name / "recipe.yaml"
         if not path.exists():
             raise GenError(f"extends {name}: no {path}")
-        merge_recipe(out, resolved(load_yaml(path), seen + (name,)))
-    merge_recipe(out, {k: v for k, v in recipe.items() if k != "extends"})
+        parent = resolved(load_yaml(path), seen + (name,))
+        if name.startswith("parts/"):
+            ops += [parent.pop("operation")] if parent.get("operation") else []
+        elif main is None:
+            main = parent
+            ops = list(parent["operation"]) if isinstance(parent.get("operation"), list) else [parent.get("operation")]
+        merge_recipe(out, parent)
+    own = {k: v for k, v in recipe.items() if k != "extends"}
+    if main is not None and "operation" not in own:
+        own["operation"] = ops
+    if main is not None and out.get("rules") and own.get("procedure", main.get("procedure")) != main.get("procedure") \
+            and "main" not in (own.get("rules") or {}):
+        out["rules"].setdefault("main", (main.get("rules") or {}).get("main", main.get("procedure")))
+    merge_recipe(out, own)
     return out
 
 
@@ -381,6 +397,8 @@ def merge_recipe(out, r):
             for kk, vv in v.items():
                 if vv is None:
                     merged.pop(kk, None)
+                elif k == "rules" and kk == "handles":
+                    merged[kk] = add(merged.get(kk), vv)  # a part's pratica, beside the main one's
                 else:
                     merged[kk] = vv
             out[k] = merged

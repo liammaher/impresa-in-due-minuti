@@ -454,7 +454,7 @@ def _():
     starts = lambda title, labels: any(gen.norm(title).startswith(gen.norm(l)) for l in labels)
     for d in sorted(REH.iterdir()):
         f = d / "portal-steps.generated.yaml"
-        if not f.is_file() or gen.load_yaml(d / "recipe.yaml").get("sportello") != "sue":
+        if not f.is_file() or gen.resolved(gen.load_yaml(d / "recipe.yaml")).get("sportello") != "sue":
             continue
         steps = gen.load_yaml(f)
         crawl = steps["generated"].split()[2]
@@ -1193,6 +1193,26 @@ def _():
         pass
 
 
+@case("a combination states only what is its own: its operations, comune, sportello and rules main follow from its main pratica and parts")
+def _():
+    n = 0
+    for f in sorted(REH.glob("*/recipe.yaml")):
+        own = gen.load_yaml(f)
+        if not own.get("extends"):
+            continue
+        n += 1
+        assert not {"operation", "comune", "sportello"} & set(own) and "main" not in (own.get("rules") or {}), f.parent.name
+        main, *parts = own["extends"]
+        m = gen.resolved(gen.load_yaml(REH / main / "recipe.yaml"))
+        r = gen.resolved(own)
+        mops = m["operation"] if isinstance(m["operation"], list) else [m["operation"]]
+        assert r["operation"] == mops + [gen.load_yaml(HERE.parent / f"{p}.yaml")["operation"] for p in parts], f.parent.name
+        assert (r["comune"], r["sportello"]) == (m["comune"], m["sportello"]), f.parent.name
+        assert r["rules"]["main"] == m["rules"].get("main", m["procedure"]), f.parent.name
+        assert set(m["rules"].get("handles", [])) < set(r["rules"]["handles"]), f.parent.name
+    assert n == 28, n
+
+
 @case("a combination carries its main pratica's slots and refusals, and its part's (2026-10-31: the SCIA's had drifted)")
 def _():
     for main, part, combos in [("scia-fittizia", None, ["scia-paesaggistica-semplificata-fittizia", "scia-paesaggistica-ordinaria-fittizia"]),
@@ -1375,7 +1395,7 @@ def _():
     pairs = {tuple(p["keys"]): p for p in w["pairs"]}
     assert set(pairs) == {(a["key"], b["key"]) for a, b in catalogue.sue_pairs()[1]}, "probe the missing pairs (catalogue.py pairs)"
     for d in sorted(ROOT.glob("rehearsals/*/recipe.yaml")):
-        r = gen.load_yaml(d)
+        r = gen.resolved(gen.load_yaml(d))
         if r.get("sportello") != "sue" or not isinstance(r.get("operation"), list):
             continue
         ks = sorted((key[o] for o in r["operation"]), key=order.index)
