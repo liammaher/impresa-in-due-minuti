@@ -17,11 +17,11 @@ attachments:
     # slot; plain PDFs are taken (read on a partial draft, 2026-11-03).
     - {kind: file, label: Copia di elaborato planimetrico del progetto con eventuali varianti, value: "{{ask.planimetria_parziale}}", when: "{{ask.fine_completa|not}}", on_page: true}
 asks:
-  diritti_euro: {default: "0", why: "Not in the Comune's 2026 table of SUE diritti (G.C. 239/2026): no diritti (non previsti dal tariffario)"}
+  diritti_euro: {default: "0", why: "Non presente nel tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): nessun diritto (non previsti dal tariffario)"}
   descrizione: {default: "fine lavori {{c:identity.last_name}}"}
-  oggetto: {question: "The pratica in one sentence (300 characters), e.g. the end of the works of the CILA"}
-  planimetria_parziale: {type: file, question: "The planimetria of the part finished (PDF), signed digitally by the direttore dei lavori", when: "{{ask.fine_completa|not}}"}
+  oggetto: {question: "La pratica in una frase (300 caratteri), es. la fine dei lavori della CILA"}
+  planimetria_parziale: {type: file, question: "La planimetria della parte ultimata (PDF), firmata digitalmente dal direttore dei lavori", when: "{{ask.fine_completa|not}}"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Sign and send (Firma e invio); keep the receipt"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "Firmi e invii (Firma e invio); conservi la ricevuta"

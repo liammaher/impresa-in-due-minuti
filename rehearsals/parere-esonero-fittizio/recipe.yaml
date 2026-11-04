@@ -16,12 +16,12 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
   descrizione: {default: "parere esonero {{c:identity.last_name}}"}
-  oggetto: {question: "The works in one sentence (300 characters)"}
+  oggetto: {question: "I lavori in una frase (300 caratteri)"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "Sign and send (Firma e invio); keep the receipt"
+  - "Firmi e invii (Firma e invio); conservi la ricevuta"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides; its
 # parere-esonero rule refuses the request in Napoli, with the reason.
 rules:
@@ -30,6 +30,6 @@ rules:
   facts: {permesso_per_scelta: "false", parere_esonero: "true"}
 supports:
   - when: "{{ask.esonero_altri_titoli|not}}"
-    else: "Only one previous building title is mapped: the legittimità section's rows for more titles aren't mapped yet."
+    else: "È gestito un solo titolo edilizio precedente: le righe della sezione legittimità per ulteriori titoli non sono ancora gestite."
   - when: "{{ask.allegato_a_uno}}"
-    else: "The form takes one item of Allegato A: works under several items aren't mapped."
+    else: "Il modulo accetta una sola voce dell'Allegato A: opere che rientrano in più voci non sono gestite."

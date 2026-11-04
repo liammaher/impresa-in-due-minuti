@@ -29,7 +29,7 @@ attachments:
     - {kind: file, label: "Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni", value: "{{ask.comunicazioni_doc}}", when: "{{ask.comunicazioni_contestuali}}"}
     - {kind: file, label: Documentazione necessaria per il rilascio di atti di assenso obbligatori, value: "{{ask.atti_doc}}", when: "{{ask.atti_da_acquisire}}"}
 asks:
-  diritti_euro: {default: "{{ask.cila_stato|diritti_cila}}", why: "Line SUE 13 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 151 € for a CILA; SUE 15: 166 € for one filed once the works started (mancata CILA)"}
+  diritti_euro: {default: "{{ask.cila_stato|diritti_cila}}", why: "Voce SUE 13 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 151 € per una CILA; SUE 15: 166 € per una CILA presentata a lavori iniziati (mancata CILA)"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}
@@ -38,12 +38,12 @@ asks:
   bene_culturale: {group: fatti, item: "L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?"}
   descrizione: {default: "CILA {{c:identity.last_name}}"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Pay the {{ask.diritti_euro}} € diritti before the second run (after the declarations; how Napoli takes them is below): its receipt, signed, goes with it. A late CILA's penalty is paid before the first run: its receipt is in quadro d)"
-  - "The CILA DSC may be the one fill.py fills (form quadro-riepilogativo-dsc: a box per document uploaded) instead of the portal's: signed, as PDF/A, it goes with the second run"
-  - "On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); its authorization is attached under Allegati liberi: keep it with the pratica"
-  - "Sign and send (Firma e invio); keep the receipt"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (dopo le dichiarazioni; come li riscuote Napoli è indicato sotto): la ricevuta, firmata, va allegata in quella. La sanzione della CILA tardiva si paga prima della prima compilazione: la sua ricevuta è nel quadro d)"
+  - "La DSC della CILA può essere quella compilata da Portali (modulo quadro-riepilogativo-dsc: un riquadro per ogni documento caricato) anziché quella del portale: firmata, in PDF/A, va allegata nella seconda compilazione (dopo le dichiarazioni)"
+  - "Su un bene culturale: i lavori iniziano solo dopo che la Soprintendenza li ha autorizzati (art. 21 c. 4 D.Lgs. 42/2004); la sua autorizzazione è allegata in Allegati liberi: la conservi con la pratica"
+  - "Firmi e invii (Firma e invio); conservi la ricevuta"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
 rules:
@@ -53,13 +53,13 @@ rules:
 supports:
   # A firm still to be chosen: the CILA's quadro h) has no line for it, and the portal requires the
   # firm's details whatever its site-safety quadro says (a CILA case stopped on them, 2026-11-01).
-  - {if: "{{ask.lavori_in_proprio|not}}", value: "{{ask.impresa_dopo}}", in: ["false"], defect: cila-impresa-dopo, else: "The CILA names its building firm: its quadro h) has no line for a firm still to be chosen, and the portal requires the firm's details (seen 2026-11-01). File the CILA once the firm is chosen."}
+  - {if: "{{ask.lavori_in_proprio|not}}", value: "{{ask.impresa_dopo}}", in: ["false"], defect: cila-impresa-dopo, else: "La CILA indica la sua impresa esecutrice: il suo quadro h) non prevede un'impresa ancora da scegliere, e il portale richiede i dati dell'impresa (verificato il 01/11/2026). Presenti la CILA una volta scelta l'impresa."}
   # A bene culturale: the Soprintendenza's authorization first, obtained apart (rules:
   # soprintendenza-cila-*), then attached under Allegati liberi. The relazione's assents list is
   # for assents the SUE is still to acquire (art. 23-bis), so one already obtained isn't listed.
-  - {if: "{{ask.intervento|in_manutenzione_straordinaria__restauro}} {{ask.cila_stato|is_da_iniziare}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "On a bene culturale the works need the Soprintendenza's authorization first (art. 21 c. 4 D.Lgs. 42/2004), and Napoli's SUE portal has no procedure to ask for it with this pratica: request it from the Soprintendenza ABAP per il Comune di Napoli (by PEC to sabap-na@pec.cultura.gov.it, on its form 'Istanza per opere su immobili vincolati', 16 euro bollo; up to 120 days, art. 22), then file this."}
+  - {if: "{{ask.intervento|in_manutenzione_straordinaria__restauro}} {{ask.cila_stato|is_da_iniziare}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "Su un bene culturale i lavori richiedono prima l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004), e il portale SUE di Napoli non ha una procedura per richiederla con questa pratica: la richieda alla Soprintendenza ABAP per il Comune di Napoli (via PEC a sabap-na@pec.cultura.gov.it, con il suo modulo 'Istanza per opere su immobili vincolati', bollo da 16 euro; fino a 120 giorni, art. 22), poi presenti questa pratica."}
   # Assents the SUE acquires (art. 23-bis c. 2-3 DPR 380/2001): the works start only once it says
   # they are in, so quadro d) gives no start date.
-  - {if: "{{ask.cila_stato|is_da_iniziare}} {{ask.atti_da_acquisire}}", value: "{{ask.inizio_dopo_assensi}}", in: ["true"], else: "With assents for the SUE to acquire, the works start only once the SUE says they are in (art. 23-bis c. 2 DPR 380/2001): answer that the works start after its communication, not on a date."}
+  - {if: "{{ask.cila_stato|is_da_iniziare}} {{ask.atti_da_acquisire}}", value: "{{ask.inizio_dopo_assensi}}", in: ["true"], else: "Con assensi che il SUE deve acquisire, i lavori iniziano solo quando il SUE comunica che sono stati acquisiti (art. 23-bis c. 2 DPR 380/2001): risponda che i lavori iniziano dopo la sua comunicazione, non a una data."}
   # Works under way or done can't wait for an assent: one still missing makes them unlawful.
-  - {if: "{{ask.cila_stato|is_da_iniziare|not}}", value: "{{ask.atti_da_acquisire}}", in: ["false"], else: "Works already under way or done can't have assents still to be acquired (art. 23-bis c. 2 DPR 380/2001: works start only once they are in): ask the SUE how to regularize them."}
+  - {if: "{{ask.cila_stato|is_da_iniziare|not}}", value: "{{ask.atti_da_acquisire}}", in: ["false"], else: "I lavori già in corso o eseguiti non possono avere assensi ancora da acquisire (art. 23-bis c. 2 DPR 380/2001: i lavori iniziano solo una volta acquisiti): chieda al SUE come regolarizzarli."}

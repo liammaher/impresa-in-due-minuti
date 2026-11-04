@@ -38,6 +38,12 @@ you're done. The name goes in the rehearsal's answers (`descrizione`), never in 
 dictionary's default: those are the names real users' drafts get. Pre-flight with `--made-up` refuses
 a draft name without it.
 
+**Italian for the tecnico.** What the person reads is written in Italian, addressing them as Lei,
+with no software words and no role codes: every `question`, checklist `item`, `how`, `why`, a
+`supports` entry's `else`, `yours`, and a defect's `title`, `what`, `law`, `checked` and `choices`
+(`bench/test_gen.py` checks the steps files). Comments, docs for contributors and the runner's
+reasons for a stop (`error`, which Claude reads) stay in English.
+
 **What never changes.** The runner never ticks a declaration, pays, signs or sends, and a case it can't
 fill all the way is refused before anything opens. A pratica is called `available` only after it has
 filled on the real portal, recorded in its rehearsal's README.

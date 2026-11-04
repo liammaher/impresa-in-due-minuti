@@ -273,12 +273,12 @@ def _bollo_yours(v):
     """The person's bollo step, from {{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}."""
     marche, esenzione = _facts(v, 2)
     if _bollo(esenzione) in BOLLO_ESENZIONE:
-        return "No imposta di bollo to pay: the client is exempt, and the form gives the reason"
+        return "Nessuna imposta di bollo da pagare: il committente è esente, e il modulo ne indica il motivo"
     if _bollo(esenzione) == "virtuale":
-        return "No marche or pagoPA for the imposta di bollo: the client pays it virtually (the form carries its dichiarazione)"
+        return "Nessuna marca né pagoPA per l'imposta di bollo: il committente la assolve in modo virtuale (il modulo ne riporta la dichiarazione)"
     if truthy(marche):
-        return "Cancel the marche da bollo whose serial numbers the form carries, and keep the originals"
-    return "Pay the imposta di bollo on pagoPA as the portal asks"
+        return "Annulli le marche da bollo i cui numeri di serie sono nel modulo, e ne conservi gli originali"
+    return "Paghi l'imposta di bollo con pagoPA, come chiede il portale"
 
 
 def _carica(v):
@@ -962,26 +962,26 @@ def ruled(steps, values):
         first = next(iter(rules.table(r["table"])["facts"]))
         return out, d["ask"][:1] if d["ask"][0] == first else d["ask"]
     if d["none"]:
-        return out + [f"This case needs no pratica: {d['none']['reason']}"], []
+        return out + [f"Per questo caso non serve alcuna pratica: {d['none']['reason']}"], []
     m = d["main"]
-    where = lambda o: " at " + " › ".join(o["portal"][k] for k in ("settore", "operazione") if k in o["portal"]) \
+    where = lambda o: " in " + " › ".join(o["portal"][k] for k in ("settore", "operazione") if k in o["portal"]) \
         if "portal" in o else ""
     if not m:
-        return out or [f"The rules table {r['table']} names no pratica for this case."], []
+        return out or [f"La tabella delle regole ({r['table']}) non indica alcuna pratica per questo caso."], []
     # A wizard screen's tree is one label, or a list of them (several operations: the SUE's
     # CILA with its landscape authorization), each a label or a {leaf: ...}.
     trees = [w["tree"] for w in steps.get("wizard", []) if "tree" in w]
     labels = {x if isinstance(x, str) else x.get("leaf") for t in trees for x in (t if isinstance(t, list) else [t])}
     seen = m.get("portal", {})
     if m["procedure"] != r.get("main", steps["procedure"]) or any(seen[k] not in labels for k in ("settore", "operazione") if k in seen):
-        out.append(f"This case is another pratica: {m['procedure']} ({m['regime']}){where(m)}.")
+        out.append(f"Questo caso è un'altra pratica: {m['procedure']} ({m['regime']}){where(m)}.")
     handles = r.get("handles", [])
     for a in d["also"]:
         if a["procedure"] not in handles:
-            out.append(f"This case also needs {a['procedure']} ({a['regime']}), which this pratica doesn't file.")
+            out.append(f"Questo caso richiede anche {a['procedure']} ({a['regime']}), che questa pratica non presenta.")
     for h in handles:
         if h not in [a["procedure"] for a in d["also"]]:
-            out.append(f"This pratica also files {h}, which this case doesn't need.")
+            out.append(f"Questa pratica presenta anche {h}, che a questo caso non serve.")
     return out, []
 
 
@@ -992,7 +992,7 @@ def apart(steps, values):
     d = _decision(steps, values)
     if d is None or d["ask"] or not d["main"]:
         return []
-    return [f"File apart, with its own office: {a['procedure']} ({a['regime']})" for a in d["apart"]]
+    return [f"Da presentare a parte, al suo ufficio: {a['procedure']} ({a['regime']})" for a in d["apart"]]
 
 
 def asked_yours(steps, values):
@@ -1374,9 +1374,9 @@ def preflight(steps, values, made_up=False, after=False):
         # Before signing and sending: the second run comes after the declarations, before Firma e invio.
         at = next((i for i, y in enumerate(report["yours"]) if "Firma e invio" in y), len(report["yours"]))
         report["yours"].insert(at,
-            f"Tick the declarations; then on Allega documenti download what the portal makes from the pratica only then "
-            f"(Scarica il documento): {'; '.join(later)}. Have the client sign the procura, sign each digitally (.p7m), "
-            "and give them to Claude, who attaches them to this draft in a second run (run.py --after-declarations)")
+            f"Spunti le dichiarazioni; poi, in Allega documenti, scarichi ciò che il portale genera solo a quel punto "
+            f"(Scarica il documento): {'; '.join(later)}. Faccia firmare la procura al committente, firmi digitalmente "
+            "ciascun file (.p7m) e lo dia a Claude, che lo allega a questa bozza con una seconda compilazione")
     if after:
         report["second_run"] = after_declarations(steps, values)
     report["ready"] = not (report["questions"] or report["proposals"] or report["missing"]
@@ -1464,27 +1464,28 @@ PLAIN_NAME = re.compile(r"[A-Za-z0-9_]+(\.[A-Za-z0-9]+)+")
 # pratica irricevibile. The run checks what it attaches; `yours` says it for the rest.
 FILING = {
     ("F839", "E"): {
-        "office": "Napoli's SUE (DD 501/2026)",
+        "office": "Il SUE di Napoli (DD 501/2026)",
         "pdfa": True,
         "signed": True,
         "names": True,
         "yours": [
-            "Napoli's SUE takes only PDF/A files, each under 20 MB (images within 200 DPI), named without "
-            "spaces, accents or other signs (Tavola01_inquadramento), and every one signed digitally: "
-            "otherwise the pratica is irricevibile (DD 501/2026). That holds for the files you attach too",
-            "Before sending, pay the diritti di istruttoria the Comune's table sets for this pratica (and any "
-            "sanzione), and attach the receipt: the diritti only to c/c postale 57060964 (Comune di Napoli "
-            "Servizio Tesoreria Edilizia Privata), sanzioni and contributo by bonifico to IBAN "
-            "IT95X0306903496100000046118, causale N1051_SUE – tipo pratica, identificativo, anno (before it "
-            "has one: the titolare's name and the property's address). Paid any other way, it is irricevibile",
+            "Il SUE di Napoli accetta solo file PDF/A, ciascuno sotto i 20 MB (immagini entro 200 DPI), con nomi "
+            "senza spazi, accenti o altri segni (Tavola01_inquadramento), e tutti firmati digitalmente: "
+            "altrimenti la pratica è irricevibile (DD 501/2026). Vale anche per i file che allega lei",
+            "Prima dell'invio, paghi i diritti di istruttoria che la tabella del Comune fissa per questa pratica "
+            "(ed eventuali sanzioni) e alleghi la ricevuta: i diritti solo sul c/c postale 57060964 (Comune di "
+            "Napoli Servizio Tesoreria Edilizia Privata), sanzioni e contributo con bonifico all'IBAN "
+            "IT95X0306903496100000046118, causale N1051_SUE – tipo pratica, identificativo, anno (finché non ha "
+            "un identificativo: il nome del titolare e l'indirizzo dell'immobile). Pagata in altro modo, è irricevibile",
             # The portal's Firma e invio (InfoCamere's Manuale funzioni di compilazione pratica, pp. 55-62):
             # it opens only once every required attachment is in, each signature valid, so never on
             # made-up data; the runner stops before it.
-            "On Firma e invio, with your own firma digitale (you file it as the procuratore, so the signer is "
-            "you): sign the pratica's PDF, then the distinta the portal makes next. Firma online needs the "
-            "device, InfoCamere's signing client and your PIN; firma offline: download each file, sign it "
-            "without opening and saving it or renaming it (the portal refuses a changed file), upload it. "
-            "Then Invio: the result page gives the codice pratica, and the receipt comes to the PEC in a few minutes",
+            "In Firma e invio, con la sua firma digitale (la presenta come procuratore, quindi firma lei): "
+            "firmi il PDF della pratica, poi la distinta che il portale genera subito dopo. La firma online "
+            "richiede il dispositivo, il client di firma di InfoCamere e il suo PIN; con la firma offline: "
+            "scarichi ogni file, lo firmi senza aprirlo, salvarlo o rinominarlo (il portale rifiuta un file "
+            "modificato) e lo ricarichi. Poi Invio: la pagina finale riporta il codice pratica, e la ricevuta "
+            "arriva in PEC in pochi minuti",
         ],
         # The building titles of DD 603/2025's forms (the CILA, the SCIA, the SCIA alternativa,
         # the permesso, their sanatorie and landscape combinations), whose attachment tables
@@ -1495,21 +1496,22 @@ FILING = {
                            "napoli/comune/scia-alternativa-pdc", "napoli/comune/permesso-di-costruire",
                            "napoli/comune/scia-in-sanatoria", "napoli/comune/permesso-in-sanatoria"],
             "yours": [
-                "Napoli's two declarations, always required with this pratica (DD 603/2025): the Allegato A "
-                "Nuovo Programma 100 (the titolare's sworn statement on what they owe the Comune) and the Modello "
-                "DP (your statement that the client paid your fees, L.R. Campania 59/2018). fill.py fills both "
-                "(napoli/comune/cila-lavori-edilizi, forms allegato-a-programma-100 and modello-dp, the same for "
-                "every title); the client signs the Allegato A, you both sign the DP, each digitally, and the "
-                "second run attaches them under Allegati liberi with the procura",
-                "For works on an existing building, the drawings include a Stato Comparativo sheet: the current "
-                "and the project plans overlaid, demolitions in yellow and new construction in red (green and "
-                "blue for works dropped in progress), black on white elsewhere (DD 501/2026 Linee Guida §9)",
-                "If the building is in the centro storico (zona A of the Variante generale): attach the "
-                "attestation, signed under art. 481 c.p., that the unit matches its tipo edilizio in the Norme "
+                "Le due dichiarazioni del Comune di Napoli, sempre obbligatorie con questa pratica (DD 603/2025): "
+                "l'Allegato A Nuovo Programma 100 (la dichiarazione del titolare su quanto deve al Comune) e il "
+                "Modello DP (la sua dichiarazione che il committente le ha pagato il compenso, L.R. Campania "
+                "59/2018). Portali le compila entrambe; il committente firma l'Allegato A, il DP lo firmate "
+                "entrambi, ciascuno digitalmente, e la seconda compilazione le allega in Allegati liberi insieme "
+                "alla procura",
+                "Per lavori su un edificio esistente, gli elaborati comprendono la tavola dello Stato Comparativo: "
+                "stato attuale e di progetto sovrapposti, demolizioni in giallo e nuove costruzioni in rosso "
+                "(verde e blu per le opere abbandonate in corso d'opera), nero su bianco il resto (DD 501/2026 "
+                "Linee Guida §9)",
+                "Se l'edificio è nel centro storico (zona A della Variante generale): alleghi l'attestazione, "
+                "firmata ai sensi dell'art. 481 c.p., che l'unità corrisponde al suo tipo edilizio nelle Norme "
                 "di attuazione (art. 63 c. 4)",
-                "If the works split the unit (frazionamento, art. 22 c. 2 of the Variante generale): the atto "
-                "d'obbligo not to split it further, transcribed at the Conservatoria, goes with this pratica "
-                "if the works are done, else with the fine lavori",
+                "Se i lavori dividono l'unità (frazionamento, art. 22 c. 2 della Variante generale): l'atto "
+                "d'obbligo a non frazionarla ulteriormente, trascritto in Conservatoria, va con questa pratica "
+                "se i lavori sono già eseguiti, altrimenti con la fine lavori",
             ],
         },
     },
@@ -1538,21 +1540,21 @@ def filing_problems(p, raw, rules):
     signed (p7m_signers reads it); its content must be PDF/A. Says what it couldn't check."""
     out = []
     if rules.get("names") and not PLAIN_NAME.fullmatch(p.name):
-        out.append(f"{rules['office']} refuses this name: only letters, digits and underscores "
-                   "(Tavola01_inquadramento.pdf), no spaces, accents or other signs")
+        out.append(f"{rules['office']} rifiuta questo nome: solo lettere, cifre e trattini bassi "
+                   "(Tavola01_inquadramento.pdf), senza spazi, accenti o altri segni")
     signed_p7m = p.name.lower().endswith(".p7m")
     doc = p7m_content(raw) if signed_p7m else raw
     if rules.get("pdfa"):
         if doc is None:
-            out.append("the document inside the .p7m can't be read to check it is PDF/A (no openssl?)")
+            out.append("non riesco a leggere il documento dentro il .p7m per controllare che sia PDF/A")
         elif not doc.startswith(b"%PDF"):
-            out.append(f"{rules['office']} takes only PDF/A files: this isn't a PDF")
+            out.append(f"{rules['office']} accetta solo file PDF/A: questo non è un PDF")
         elif not PDFA.search(doc):
-            out.append(f"{rules['office']} takes only PDF/A files: this PDF doesn't declare PDF/A "
-                       "(export it again as PDF/A)")
+            out.append(f"{rules['office']} accetta solo file PDF/A: questo PDF non è PDF/A "
+                       "(lo esporti di nuovo come PDF/A)")
     if rules.get("signed") and not signed_p7m and pades_signature(raw) is None:
-        out.append(f"{rules['office']} takes only files signed digitally: sign it (a .p7m, or the PDF's own "
-                   "signature) with your firma digitale")
+        out.append(f"{rules['office']} accetta solo file firmati digitalmente: lo firmi con la sua firma "
+                   "digitale (un .p7m, o la firma dentro il PDF)")
     return out
 
 

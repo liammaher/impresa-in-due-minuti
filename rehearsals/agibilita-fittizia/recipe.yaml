@@ -16,20 +16,20 @@ scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUN
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
-  diritti_euro: {default: "401", why: "Line SUE 10 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 401 € for a Segnalazione Certificata di Agibilità"}
+  diritti_euro: {default: "401", why: "Voce SUE 10 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 401 € per una Segnalazione Certificata di Agibilità"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   modello_dp: {default: "true"}
   descrizione: {default: "agibilità {{c:identity.last_name}}"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "As direttore dei lavori (or professionista abilitato), check every attestation on this page: they are yours, signed with the pratica"
-  - "Attestazione tecnica - Agibilità: the portal requires one of the art. 24 c. 5-bis/5-ter or 5-quater boxes; Claude ticks the one the case is, and none when it is neither (then ask the SUE)"
-  - "Sign and send (Firma e invio); keep the receipt"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di direttore dei lavori (o professionista abilitato), verifichi ogni attestazione di questa pagina: sono Sue, e le firma con la pratica"
+  - "Attestazione tecnica - Agibilità: il portale richiede una delle caselle dell'art. 24 c. 5-bis/5-ter o 5-quater; Claude spunta quella corrispondente al caso, e nessuna quando non ricorre nessuno dei due casi (in tal caso chieda al SUE)"
+  - "Firmi e invii (Firma e invio); conservi la ricevuta"
 supports:
   # Art. 24 c. 5-bis only with c. 5-ter's adattabilità met; the one-room flat also names its
   # c. 5-ter condition.
-  - {if: "{{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "Art. 24 c. 5-bis applies only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}
+  - {if: "{{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "L'art. 24 c. 5-bis si applica solo se è soddisfatto il requisito di adattabilità (art. 24 c. 5-ter): l'unità non ne ha i requisiti."}
 # Each "si allega" of the attestazione adds its own required slot (read on the portal 2026-10-30).
 attachments:
   Gestione degli allegati:

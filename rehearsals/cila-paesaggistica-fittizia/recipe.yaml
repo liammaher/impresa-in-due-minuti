@@ -11,10 +11,10 @@ crawl: sue-combo-cila-paesaggistica-semplificata
 asks:
   descrizione: {default: "CILA e paesaggistica {{c:identity.last_name}}"}
 yours:
-  - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
-  - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Pay the diritti before the second run (after the declarations): its receipt, signed, goes with it; the bollo before sending. A late CILA's penalty is paid before the first run: its receipt is in quadro d)"
-  - "Sign and send (Firma e invio); keep the receipt"
+  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "Paghi i diritti prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella; il bollo prima dell'invio. La sanzione della CILA tardiva si paga prima della prima compilazione: la sua ricevuta è nel quadro d)"
+  - "Firmi e invii (Firma e invio); conservi la ricevuta"
 attachments:
   Gestione degli allegati:
     # The semplificata's second relazione slot opens from the SCIA's and the permesso's asseverazione
