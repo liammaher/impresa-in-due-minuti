@@ -10,12 +10,7 @@
 extends: [scia-alternativa-fittizia, parts/paesaggistica-ordinaria]
 procedure: napoli/comune/scia-alternativa-pdc-con-paesaggistica-ordinaria
 title: "SCIA alternativa al permesso di costruire con autorizzazione paesaggistica ordinaria, SUE Napoli (tecnico con procura)"
-comune: F839
-sportello: sue
 crawl: sue-combo-scia-alt-paesaggistica-ordinaria
-operation:
-  - Segnalazione Certificata Inizio Attività alternativa al Permesso di Costruire (S.C.I.A. alternativa P.d.C.)
-  - Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)
 asks:
   descrizione: {default: "SCIA alt e paesaggistica {{c:identity.last_name}}"}
 yours:
@@ -25,8 +20,6 @@ yours:
   - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
   - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
   - "The 30 days before the works may start run from the landscape authorization's release, not from filing (art. 23 c. 3 DPR 380/2001); the contributo, if due, is paid as quadro g) says"
-rules:
-  main: napoli/comune/scia-alternativa-pdc
 # The case: the main pratica's P6 answers, the part's, then these (a null drops one);
 # `gen.py --answers` writes answers-p6.json.
 answers:

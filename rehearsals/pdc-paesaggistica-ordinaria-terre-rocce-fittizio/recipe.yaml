@@ -6,13 +6,7 @@
 extends: [pdc-paesaggistica-ordinaria-fittizio, parts/dichiarazione-utilizzo-terre]
 procedure: napoli/comune/permesso-di-costruire-con-paesaggistica-ordinaria-e-dichiarazione-utilizzo-terre
 title: "Permesso di costruire con autorizzazione paesaggistica ordinaria e dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
-comune: F839
-sportello: sue
 crawl: sue-combo-pdc-paesaggistica-ordinaria-dichiarazione-utilizzo
-operation:
-  - "Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001"
-  - "Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)"
-  - "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
 asks:
   descrizione: {default: "PdC ord. e terre e rocce {{c:identity.last_name}}"}
 # pdc-paesaggistica-ordinaria-fittizio's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
@@ -26,9 +20,6 @@ yours:
   - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
   - "The landscape authorization comes before the permesso (art. 146 c. 4 D.Lgs. 42/2004): the works start only once both are in"
   - "Once the permesso is issued: collect it (paying the contributo, if due, as quadro f) says), name the structural designer and the direttori dei lavori, and file the comunicazione di inizio lavori with the energy report and the structural filings"
-# `rules` merge key by key: both pratiche filed with the main one.
-rules:
-  handles: [napoli/comune/autorizzazione-paesaggistica-ordinaria, napoli/comune/utilizzo-materiale-scavo-fuori-sito]
 answers:
   descrizione: PROVA NON INVIARE - PdC ord. e terre e rocce P6
   # The asseverazione says what the dichiarazione files: by-products from a small site.

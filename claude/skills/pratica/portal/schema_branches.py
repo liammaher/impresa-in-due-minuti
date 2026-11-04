@@ -31,6 +31,7 @@ import yaml
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True
+import gen  # noqa: E402
 import run  # noqa: E402
 
 ROOT = HERE.parents[3]
@@ -43,13 +44,13 @@ FIXTURE = REHEARSALS / "cila-fittizia" / "fixture-p6.json"
 
 # Each national SUE form and the crawl of the pratica built from it.
 FORMS = {
-    "cila": "cila",
-    "scia": "scia",
+    "cila": "sue-comunicazione-inizio-lavoro-asseverata",
+    "scia": "sue-segnalazione-certificata-di-inizio-attivita-edilizia",
     "permesso_di_costruire": "sue-permesso-di-costruire-art-10-d-p-r-380-2001",
     "scia_alternativa": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost",
-    "segnalazione_certificata_agibilita": "agibilita",
-    "comunicazione_inizio_lavori": "inizio-lavori",
-    "comunicazione_fine_lavori": "fine-lavori",
+    "segnalazione_certificata_agibilita": "sue-segnalazione-certificata-per-l-agibilita",
+    "comunicazione_inizio_lavori": "sue-comunicazione-inizio-lavori",
+    "comunicazione_fine_lavori": "sue-comunicazione-di-fine-lavori",
 }
 # The wizard's operation each form is (sue-wizard.json): a form's choices apply only to cases that
 # file it. Two forms share section names ("h) Impresa esecutrice dei lavori" is the CILA's and the
@@ -230,9 +231,10 @@ def steps_fields(steps):
 
 
 def sue_steps():
+    gen.ensure()  # the steps files are built, never committed
     for d in sorted(REHEARSALS.iterdir()):
         f, recipe = d / "portal-steps.generated.yaml", d / "recipe.yaml"
-        if f.is_file() and recipe.is_file() and yaml.safe_load(recipe.read_text()).get("sportello") == "sue":
+        if f.is_file() and recipe.is_file() and gen.resolved(gen.load_yaml(recipe)).get("sportello") == "sue":
             yield d, yaml.safe_load(f.read_text())
 
 

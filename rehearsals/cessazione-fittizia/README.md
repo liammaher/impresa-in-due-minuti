@@ -8,9 +8,13 @@ into the dictionary by hand.
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-28 | pane | Stopped once in the wizard: this pratica has no "interventi eventuali" screen, which the batch crawl had recorded and the recipe didn't use (`gen.py` now drops a recipe's wizard step for a screen the crawl didn't see). Resumed on the draft: 51 values, every one read back on a fresh load. |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-28 | pane |  | Stopped once in the wizard: this pratica has no "interventi eventuali" screen, which the batch crawl had recorded and the recipe didn't use (`gen.py` now drops a recipe's wizard step for a screen the crawl didn't see). Resumed on the draft: 51 values, every one read back on a fresh load. |
+
+<!-- /runs -->
 
 ## The signing screen (a test of whether the portal shows the pratica's XML before signing)
 

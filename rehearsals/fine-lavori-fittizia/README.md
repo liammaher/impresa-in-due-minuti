@@ -10,7 +10,7 @@ Nobody walked this pratica's screens. Its steps file, `portal-steps.generated.ya
 from `claude/skills/pratica/portal/gen.py`:
 
 - `recipe.yaml`: the operation and scelta, the person's own steps, the cases it supports.
-- `catalogue/F839/sections/fine-lavori.json`: `crawl.js` on an empty draft (134 s: 13 sections,
+- `catalogue/F839/sections/sue-comunicazione-di-fine-lavori.json`: `crawl.js` on an empty draft (134 s: 13 sections,
   57 choices tried, the attachments screen's 7 slots).
 - `dictionary/fnsuap.yaml`: what goes in each field, by section and label, shared with the
   CILA.
@@ -34,10 +34,21 @@ it (2026-11-03).
 
 ## Runs
 
-| Date | Browser | Login → draft | Result |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
 |---|---|---|---|
-| 2026-10-28 | pane | 60.3 s to the end of the form (wizard 11.7, 9 sections ~40, fresh load 7.8), then 5.4 s for the attachments | First run, no stop: 70 values and 3 attachments kept, every value read back on a fresh load |
-| 2026-10-29 | pane | 53.1 s from a blank draft (`bench/rerun.py` batch, after the SCIA's dictionary change; fresh load 8.0 s) | **Filled**, every value read back on a fresh load |
+| 2026-10-28 | pane |  | First run, no stop: 70 values and 3 attachments kept, every value read back on a fresh load; Login → draft: 60.3 s to the end of the form (wizard 11.7, 9 sections ~40, fresh load 7.8), then 5.4 s for the attachments |
+| 2026-10-29 | pane | `answers-p6.json` | **Filled**, every value read back on a fresh load; Login → draft: 53.1 s from a blank draft (`bench/rerun.py` batch, after the SCIA's dictionary change; fresh load 8.0 s) |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 54 s |
+| 2026-11-03 | pane | `answers-parziale.json` | **stopped** in 57 s |
+| 2026-11-03 | pane | `answers-parziale.json` | **filled** in 62 s |
+| 2026-11-04 | pane | `answers-comproprietario.json` | **filled** in 70 s |
+| 2026-11-04 | pane | `answers-condominio.json` | **filled** in 66 s |
+| 2026-11-04 | pane | `answers-proprietario.json` | **filled** in 56 s |
+| 2026-11-04 | pane | `answers-usufruttuario.json` | **filled** in 61 s |
+
+<!-- /runs -->
 
 The attachments went in a second step: `gen.py` refuses an attachments screen nobody has seen,
 so the first run ended with the form; the slots were read on the screen (`crawl.js` slots()),

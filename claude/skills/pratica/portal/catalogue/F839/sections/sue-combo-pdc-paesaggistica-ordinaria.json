@@ -104,25 +104,25 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "cil#Scheda anagrafica",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "cil#Oggetto della pratica",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#Oggetto della pratica",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "cil#DOMICILIO DIGITALE",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#DOMICILIO DIGITALE",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "cil#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "seconds": 0.6
   },
   {
@@ -136,13 +136,13 @@
   {
    "section": "dichiarazione ubicazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "cil#Localizzazione dell'intervento",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#Localizzazione dell'intervento",
    "seconds": 0.6
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "cil#Dati catastali",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#Dati catastali",
    "seconds": 0.6
   },
   {
@@ -166,19 +166,19 @@
   {
    "section": "b) Titolarità dell'intervento",
    "fingerprint": "3e5d5f463d6964d8",
-   "same_as": "cil#a) Titolarità dell'intervento",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#a) Titolarità dell'intervento",
    "seconds": 0.6
   },
   {
    "section": "c) Destinazione d'uso dell'immobile",
    "fingerprint": "167628390a2f0298",
-   "same_as": "cil#d) Destinazione d'uso dell'immobile",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#d) Destinazione d'uso dell'immobile",
    "seconds": 0.6
   },
   {
    "section": "d) Opere su parti comuni o modifiche esterne",
    "fingerprint": "a9ea4400694734ae",
-   "same_as": "cil#b) Opere su parti comuni o modifiche esterne",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#b) Opere su parti comuni o modifiche esterne",
    "seconds": 0.6
   },
   {
@@ -202,7 +202,7 @@
   {
    "section": "g2) Altri tecnici incaricati",
    "fingerprint": "124292a24c7f627e",
-   "same_as": "cila#G2) Altri tecnici incaricati",
+   "same_as": "sue-comunicazione-inizio-lavoro-asseverata#G2) Altri tecnici incaricati",
    "seconds": 0.6
   },
   {
@@ -226,7 +226,7 @@
   {
    "section": "Note",
    "fingerprint": "e84721ea696ebe15",
-   "same_as": "scia#Note",
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Note",
    "seconds": 0.6
   },
   {
@@ -238,7 +238,7 @@
   {
    "section": "Asseverazione PdC -  stato legittimo, dichiarazione tolleranze, sanatoria",
    "fingerprint": "adf0f783fad89f7b",
-   "same_as": "scia#Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
    "seconds": 0.6
   },
   {
@@ -306,7 +306,7 @@
   {
    "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "cil#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#Dichiarazione relativa ai diritti di segreteria/istruttori",
    "seconds": 0.6
   },
   {
@@ -318,7 +318,7 @@
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "cil#Qualifica e dati del procuratore",
+   "same_as": "sue-comunicazione-di-inizio-lavori-per-opere-temporanee#Qualifica e dati del procuratore",
    "seconds": 0.8,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }

@@ -13,6 +13,10 @@ INVIARE - sospensione ristorante generato" and stops before the declarations, si
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-28 | pane | Filled with no stop: every value kept and read back on a fresh load (128 s, the portal slow). "Prosegui" then stayed on the form instead of opening the payment screen, unlike the shop's; not looked into (the runner's frame was closed for the batch), so the attachments screen isn't read and the steps stop at the form. |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-28 | pane |  | Filled with no stop: every value kept and read back on a fresh load (128 s, the portal slow). "Prosegui" then stayed on the form instead of opening the payment screen, unlike the shop's; not looked into (the runner's frame was closed for the batch), so the attachments screen isn't read and the steps stop at the form. |
+
+<!-- /runs -->

@@ -30,13 +30,25 @@ drawings and photos, the signed procura, the bollo and diritti, signing and send
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-28 | pane | Not run: impresainungiorno answered 503 (maintenance) at 23:50. Pre-flight ready with `answers-p6.json` and the P6 fixture's values. |
-| 2026-10-29 | pane | Stopped at Ambito: the art. 136 tick renumbered itself, which gen.py didn't yet send by label (fixed: `Section.moves_itself`). |
-| 2026-10-29 | pane | **Filled**, a new draft: 12 sections in 54 s (wizard 9 s), every value read back on a fresh load of the draft (8 s). Run with art. 136 and 142 together; 136 alone and 134 alone not run. |
-| 2026-10-29 | pane | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 53.3 s; second, with the runner waiting for a section to open, **filled** in 59 s, read back on a fresh load. |
-| 2026-10-30 | pane | the bollo with two marche (`answers-marche`), `bench/rerun.py` bundle | stopped on the bollo: no box labelled "numero seriale (2)". Read on the page: the authorization's marca line copies the first's, its serial box titled "numero seriale (1)" too |
-| 2026-10-30 | pane | the same, the second marca as the second "numero seriale (1)" and "data" | **filled** in 51 s, read back on a fresh load (9 s), nothing moved or loose |
-| 2026-10-31 | pane | the client's PEC as their INAD domicilio digitale (`answers-inad`), `bench/rerun.py` bundle | **filled** in 51 s, nothing moved or loose |
-| 2026-11-02 | pane | `answers-progettista`: the tecnico is another architect (`p:`): "non è colui che presenta la pratica", their name, codice fiscale, studio and albo, `bench/rerun.py` bundle | **filled** in 59 s. The PEC box then reads "Indirizzo Pec non valido" under the made-up address (kept on Salva; a real public PEC cleared it): `made_up` |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-28 | pane |  | Not run: impresainungiorno answered 503 (maintenance) at 23:50. Pre-flight ready with `answers-p6.json` and the P6 fixture's values. |
+| 2026-10-29 | pane |  | Stopped at Ambito: the art. 136 tick renumbered itself, which gen.py didn't yet send by label (fixed: `Section.moves_itself`). |
+| 2026-10-29 | pane |  | **Filled**, a new draft: 12 sections in 54 s (wizard 9 s), every value read back on a fresh load of the draft (8 s). Run with art. 136 and 142 together; 136 alone and 134 alone not run. |
+| 2026-10-29 | pane |  | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 53.3 s; second, with the runner waiting for a section to open, **filled** in 59 s, read back on a fresh load. |
+| 2026-10-30 | pane |  | the bollo with two marche (`answers-marche`), `bench/rerun.py` bundle: stopped on the bollo: no box labelled "numero seriale (2)". Read on the page: the authorization's marca line copies the first's, its serial box titled "numero seriale (1)" too |
+| 2026-10-30 | pane |  | the same, the second marca as the second "numero seriale (1)" and "data": **filled** in 51 s, read back on a fresh load (9 s), nothing moved or loose |
+| 2026-10-31 | pane |  | the client's PEC as their INAD domicilio digitale (`answers-inad`), `bench/rerun.py` bundle: **filled** in 51 s, nothing moved or loose |
+| 2026-10-31 | pane | `answers-inad.json` | **filled** in 51 s |
+| 2026-10-31 | pane | `answers-marche.json` | **filled** in 56 s |
+| 2026-10-31 | pane | `answers-p6.json` | **filled** in 52 s |
+| 2026-11-02 | pane |  | `answers-progettista`: the tecnico is another architect (`p:`): "non è colui che presenta la pratica", their name, codice fiscale, studio and albo, `bench/rerun.py` bundle: **filled** in 59 s. The PEC box then reads "Indirizzo Pec non valido" under the made-up address (kept on Salva; a real public PEC cleared it): `made_up` |
+| 2026-11-02 | pane | `answers-progettista.json` | **filled** in 59 s |
+| 2026-11-02 | pane | `answers-variante.json` | **filled** in 58 s |
+| 2026-11-02 | pane | `answers-esenzioni.json` | **filled** in 62 s |
+| 2026-11-02 | pane | `answers-bollo-virtuale.json` | **filled** in 64 s |
+| 2026-11-03 | pane | `answers-p6.json` | **filled** in 68 s |
+
+<!-- /runs -->

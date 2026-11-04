@@ -158,8 +158,8 @@ walk must settle and record here:
 
 ## What the first walk settled (2026-10-28)
 
-`portal-map.yaml` has every screen up to the attachments; `schema/schema-vs-portal.md` the
-official schema against it.
+The walk's screen notes (`portal-map.yaml`) went on 2026-11-04: the crawl in the catalogue has
+every screen; `schema/schema-vs-portal.md` the official schema against what the walk saw.
 
 - **Who may log in:** anyone with SPID. Liam (not an architect) walked it all. The procuratore's
   section opens with the logged-in name and CF but takes another person's (a made-up architect)
@@ -199,11 +199,67 @@ INVIARE" and deleted afterwards, logins are the person's own, FAC-SIMILE on ever
 
 ## Runs
 
-| Date | Persona | Browser | Wall time | Hands-on | Login → draft | Key diffs | Off-script | Result |
-|---|---|---|---|---|---|---|---|---|
-| 2026-10-28 | P6 | pane | not clocked | not clocked | 83.7 s (wizard 8.3, 18 sections 63, fresh load 12.3) | 1 (weakest key, seen before mapping) | not measured | Draft filled and verified; stop point not reached (see below) |
-| 2026-10-28 | P6 | pane | not clocked | not clocked | 101.9 s to Allega documenti (wizard 9, 18 sections ~71, fresh load 15.4, payment 2.2, 6 attachments 6.4) | 1 (as above) | not measured | Stop point reached except what is the person's (see below) |
-| 2026-10-28 | P6 | pane | not clocked | not clocked | ~129 s to Allega documenti in two legs (wizard 10, 5 sections ~26, stop, resume: 13 sections ~64, fresh load 15.9, payment 2.5, 6 attachments 8.8) | 1 (as above) | not measured | From the **generated** steps file: same fields, all kept (see below) |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-28 | pane | P6 | Draft filled and verified; stop point not reached (see below); Login → draft: 83.7 s (wizard 8.3, 18 sections 63, fresh load 12.3); Key diffs: 1 (weakest key, seen before mapping) |
+| 2026-10-28 | pane | P6 | Stop point reached except what is the person's (see below); Login → draft: 101.9 s to Allega documenti (wizard 9, 18 sections ~71, fresh load 15.4, payment 2.2, 6 attachments 6.4); Key diffs: 1 (as above) |
+| 2026-10-28 | pane | P6 | From the **generated** steps file: same fields, all kept (see below); Login → draft: ~129 s to Allega documenti in two legs (wizard 10, 5 sections ~26, stop, resume: 13 sections ~64, fresh load 15.9, payment 2.5, 6 attachments 8.8); Key diffs: 1 (as above) |
+| 2026-10-29 | pane | proprietario | Stopped there: the screen had no co-holders' ID slot, and two new ones (the contributo's prospetto and receipt). Mapped by answer (`on_page` slots), resumed on the draft: **filled**; Login → draft: 79.8 s to Allega documenti |
+| 2026-10-29 | pane | comodatario | Stopped after uploading the 1,000 € receipt: read back by label, its cell now shows the file's name. Named by the row above instead, resumed: **filled** (fresh load 13.7 s); Login → draft: 41.4 s to d) |
+| 2026-10-29 | pane | P6 | **Filled**, fresh load 13.6 s: the same 160 values as before; Login → draft: 91.3 s |
+| 2026-10-29 | pane | proprietario, clean | **Filled** from scratch, 20 sections, fresh load 22.2 s; Login → draft: 110.7 s |
+| 2026-10-29 | pane | comodatario, clean | **Filled** from scratch, 20 sections, fresh load 12.8 s; Login → draft: 85.6 s |
+| 2026-10-29 | pane | proprietario, 5 MB drawing by link | **Filled**: the elaborati grafici a 5,195,674-byte FAC-SIMILE PDF, fetched in the portal's page from a public test gist pinned to its commit (`run.py page --file-urls`), sha256 checked; run.js 6.9 KB. Still there, 4.95 MB, on a fresh reopen of the draft; Login → draft: 86.5 s (attachments 10.7 s) |
+| 2026-10-30 | pane | proprietario, structural tolerance: minor relevance (`answers-tolleranze-minore`), then relevant with the Genio Civile's authorization (`answers-tolleranze-autorizzazione`) | **Filled** both, the authorization in its "Autorizzazione sismica" slot; one loose box, the firm section's "lavori sono/saranno eseguiti dall" (`r2c1p2reg:radio:1_clone`), from the proprietario case, not the tolerances; Login → draft: 125 s, 91 s |
+| 2026-10-30 | pane | another technician as direttore dei lavori (`answers-direttore-atti`: G1's block "diverso dal progettista", `d:`), one assent and two filings already made (the relazione's lists), `bench/rerun.py` bundle | **filled** in 110 s, read back on a fresh load (14 s), nothing moved; one `loose` (h)'s "lavori sono/saranno eseguiti dall…", the base case's, seen before) |
+| 2026-10-30 | pane | another technician appointed (`answers-altri-tecnici`: G2's block, `a:`, registered, not a firm's employee) | **filled** in 105 s, read back on a fresh load (14 s), nothing moved; the same `loose` |
+| 2026-10-30 | pane | `answers-altri-tecnici.json` | **filled** |
+| 2026-10-30 | pane | `answers-direttore-atti.json` | **filled** |
+| 2026-10-30 | pane | `answers-tolleranze-autorizzazione.json` | **filled** |
+| 2026-10-30 | pane | `answers-tolleranze-minore.json` | **filled** |
+| 2026-10-31 | pane | three other technicians (`answers-altri-tecnici-tre`: G2's block repeated by "+", `a:`, `a2:` a firm's employee with `ad2:`, `a3:`) | first run stopped on G2: "alle dipendenze di" opens the firm's REA n., seat and legale rappresentante, 7 required boxes the crawl hadn't seen; mapped, then **filled** in 156 s, read back on a fresh load (18 s), nothing moved; the same `loose` |
+| 2026-10-31 | pane | `answers-altri-tecnici-tre.json` | **filled** |
+| 2026-10-31 | pane | `answers-altri-tecnici.json` | **filled** |
+| 2026-10-31 | pane | `answers-comodatario.json` | **filled** in 82 s |
+| 2026-10-31 | pane | `answers-p6.json` | **filled** in 102 s |
+| 2026-10-31 | pane | `answers-proprietario.json` | **filled** in 84 s |
+| 2026-11-01 | pane | `answers-altri-tecnici-otto` (eight other technicians, the limit raised from three), `bench/rerun.py` bundle | **filled** in 522 s (each "+" from the seventh takes a few seconds), read back on a fresh load |
+| 2026-11-01 | pane | `answers-bene-culturale` (a listed building, works to come, the Soprintendenza's authorization in the relazione's assents), `bench/rerun.py` bundle | **Filled** from a blank draft in 99.5 s, read back on a fresh load, nothing moved; the base case's one `loose` (h)'s "lavori sono/saranno eseguiti dall…") |
+| 2026-11-01 | pane |  | `answers-impresa-dopo` (the firm still to be chosen: the CILA has no line for it, so the firm's radio with no block and the safety quadro's "si riserva") stopped at h): the portal requires the firm's details (16 "obbligatorio", the DURC boxes). The recipe now refuses the case, the CIL's too |
+| 2026-11-01 | pane | `answers-altri-tecnici-otto.json` | **filled** in 522 s |
+| 2026-11-01 | pane | `answers-elenchi-lunghi.json` | **stopped** in 627 s |
+| 2026-11-01 | pane | `answers-direttore-atti.json` | **filled** in 108 s |
+| 2026-11-01 | pane | `answers-elenchi-lunghi.json` | **filled** in 742 s |
+| 2026-11-01 | pane | `answers-bene-culturale.json` | **filled** in 100 s |
+| 2026-11-01 | pane | `answers-impresa-dopo.json` | **stopped** in 88 s |
+| 2026-11-02 | pane | Clients other than a private person, `bench/rerun.py` bundle: a company in the Registro delle imprese (`answers-societa`: `c:` Immobiliare Fittizia, `cr:` Giulia Esempio, its legale rappresentante, INI-PEC), one not yet registered (`answers-societa-non-iscritta`), a condominium (`answers-condominio`: `cr:` its administrator, NON NECESSITA DI ISCRIZIONE, ALTRE FORME, AMMINISTRATORE), a client born in Albania with a permesso di soggiorno (`answers-non-ue`) | First pass: the non-EU client **filled** (86 s); the three companies stopped on the sede's Provincia ("2 fields with this label"): Forma giuridica re-renders the block and flags its empty boxes, and a flagged dropdown's own label read as its option list (inpage.js fixed). ISCRITTA's Camera di commercio also opens "Numero REA" and "Data", required. Second pass: not yet registered, condominium and non-EU **filled** (92, 94, 86 s), nothing moved or loose; the registered company stopped at Salva on the portal's own check, "Attenzione! Il CF inserito non è presente nel RI!": it looks the codice fiscale up in the Registro Imprese, so ISCRITTA is filled only for a real company, never a made-up one (no other error on the section) |
+| 2026-11-02 | pane | Another architectural designer (`p:` Valerio Disegno, `progettista_altro`), `bench/rerun.py` bundle: `answers-progettista` (the designer directs: G1's "non è colui che presenta la pratica", their block, "incaricato anche come direttore"; the relazione's progettista is theirs) and `answers-progettista-dl` (`d:` Elena Prova directs: her block is the second, below the designer's) | Both **filled** (125 s, 119 s), read back on a fresh load, nothing moved or loose; the draft's G1 read after: each person under their own heading. `answers-p6` rerun unchanged: **filled** |
+| 2026-11-02 | pane | `answers-societa.json` | **stopped** in 3 s |
+| 2026-11-02 | pane | `answers-societa-non-iscritta.json` | **stopped** in 3 s |
+| 2026-11-02 | pane | `answers-condominio.json` | **stopped** in 3 s |
+| 2026-11-02 | pane | `answers-non-ue.json` | **filled** in 86 s |
+| 2026-11-02 | pane | `answers-societa-non-iscritta.json` | **filled** in 92 s |
+| 2026-11-02 | pane | `answers-condominio.json` | **filled** in 94 s |
+| 2026-11-02 | pane | `answers-progettista.json` | **filled** in 125 s |
+| 2026-11-02 | pane | `answers-progettista-dl.json` | **filled** in 119 s |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 119 s |
+| 2026-11-02 | pane | `answers-procuratore-estero.json` | **filled** in 89 s |
+| 2026-11-03 | pane | A building with no title under the tolerances (`answers-tolleranze-privo`), `bench/rerun.py` bundle | **filled** in 150 s |
+| 2026-11-03 | pane | `answers-direttore-atti.json` | **filled** in 118 s |
+| 2026-11-03 | pane | `answers-elenchi-lunghi.json` | **filled** in 829 s |
+| 2026-11-03 | pane | `answers-bene-culturale.json` | **filled** in 115 s |
+| 2026-11-03 | pane | `answers-bene-culturale.json` | **stopped** in 100 s |
+| 2026-11-03 | pane | `answers-p6.json` | **filled** in 127 s |
+| 2026-11-03 | pane | `answers-tolleranze-privo.json` | **filled** in 150 s |
+| 2026-11-04 | pane | p6 with files of real size picked in the page (`run.py page`, no `--file-urls`): a 5 MB elaborati grafici and a 2 MB relazione tecnica (`bench/fake_pdf.py --size`), four small files | **Filled**: run.js 6 KB names the six files (`picked`); the runner's box took the folder `~/Downloads/pv-pick-prova` (the browser asked to upload it), kept the six by sha256, attached them, and the fresh load read every value back; the draft shows 5,00 MB and 2,00 MB. The runner itself came by one picked file (`pv-pick-runner.js`, 86 KB: the pane takes about 40 KB a call), which an installed runner doesn't need; Login → draft: 126.6 s (attachments 13.7 s) |
+| 2026-11-04 | pane | `answers-comproprietaria-negozio.json` | **filled** in 113 s |
+| 2026-11-04 | pane | `answers-deposito-4.json` | **filled** in 194 s |
+| 2026-11-04 | pane | `answers-usufruttuario-industriale.json` | **filled** in 98 s |
+| 2026-11-04 | pane | `answers-vico-6.json` | **filled** in 98 s |
+
+<!-- /runs -->
 
 ### 2026-10-28, P6, first run from the steps file
 
@@ -260,9 +316,10 @@ description) and Salva kept them all. Left, as the stop point says, to the perso
 
 `portal-steps.generated.yaml` is no longer written by hand: `claude/skills/pratica/portal/gen.py`
 wrote it from `recipe.yaml` (the operation, the scelta, the person's steps, `supports`), the
-crawl of an empty CILA draft (`catalogue/F839/sections/cila.json`, 282 s, every section, every
-choice tried) and the shared field dictionary (`dictionary/fnsuap.yaml`). `gen.py --check
-portal-steps.yaml` finds it the same as the hand walk, field for field: every id, including the
+crawl of an empty CILA draft (`catalogue/F839/sections/sue-comunicazione-inizio-lavoro-asseverata.json`, 282 s, every section, every
+choice tried) and the shared field dictionary (`dictionary/fnsuap.yaml`). `gen.py --check` against
+the hand walk's steps (since 2026-11-04 the golden case of gen.py's tests,
+`claude/skills/pratica/portal/bench/fixtures/cila-p6-hand-walk.yaml`) finds them the same, field for field: every id, including the
 21 of a) where two choices (title "altro", non-exclusive title) shift each other's rows, which
 the crawl tried apart and `gen.py` adds up by their offsets. It adds one case the walk didn't
 cover: diritti not due (0 €), from the amount.
@@ -351,26 +408,8 @@ start on a date, contributo paid, manutenzione + restauro, two tolerances, one f
 direttore) and `answers-comodatario.json` (comodatario with a co-owner's assent, works done,
 contributo to pay, in proprio, "altri interventi").
 
-| Date | Case | Browser | Login → draft | Result |
-|---|---|---|---|---|
-| 2026-10-29 | proprietario | pane | 79.8 s to Allega documenti | Stopped there: the screen had no co-holders' ID slot, and two new ones (the contributo's prospetto and receipt). Mapped by answer (`on_page` slots), resumed on the draft: **filled** |
-| 2026-10-29 | comodatario | pane | 41.4 s to d) | Stopped after uploading the 1,000 € receipt: read back by label, its cell now shows the file's name. Named by the row above instead, resumed: **filled** (fresh load 13.7 s) |
-| 2026-10-29 | P6 | pane | 91.3 s | **Filled**, fresh load 13.6 s: the same 160 values as before |
-| 2026-10-29 | proprietario, clean | pane | 110.7 s | **Filled** from scratch, 20 sections, fresh load 22.2 s |
-| 2026-10-29 | comodatario, clean | pane | 85.6 s | **Filled** from scratch, 20 sections, fresh load 12.8 s |
-| 2026-10-29 | proprietario, 5 MB drawing by link | pane | 86.5 s (attachments 10.7 s) | **Filled**: the elaborati grafici a 5,195,674-byte FAC-SIMILE PDF, fetched in the portal's page from a public test gist pinned to its commit (`run.py page --file-urls`), sha256 checked; run.js 6.9 KB. Still there, 4.95 MB, on a fresh reopen of the draft |
-| 2026-10-30 | proprietario, structural tolerance: minor relevance (`answers-tolleranze-minore`), then relevant with the Genio Civile's authorization (`answers-tolleranze-autorizzazione`) | pane | 125 s, 91 s | **Filled** both, the authorization in its "Autorizzazione sismica" slot; one loose box, the firm section's "lavori sono/saranno eseguiti dall" (`r2c1p2reg:radio:1_clone`), from the proprietario case, not the tolerances |
-| 2026-10-30 | pane | another technician as direttore dei lavori (`answers-direttore-atti`: G1's block "diverso dal progettista", `d:`), one assent and two filings already made (the relazione's lists), `bench/rerun.py` bundle | **filled** in 110 s, read back on a fresh load (14 s), nothing moved; one `loose` (h)'s "lavori sono/saranno eseguiti dall…", the base case's, seen before) |
-| 2026-10-30 | pane | another technician appointed (`answers-altri-tecnici`: G2's block, `a:`, registered, not a firm's employee) | **filled** in 105 s, read back on a fresh load (14 s), nothing moved; the same `loose` |
-| 2026-10-31 | pane | three other technicians (`answers-altri-tecnici-tre`: G2's block repeated by "+", `a:`, `a2:` a firm's employee with `ad2:`, `a3:`) | first run stopped on G2: "alle dipendenze di" opens the firm's REA n., seat and legale rappresentante, 7 required boxes the crawl hadn't seen; mapped, then **filled** in 156 s, read back on a fresh load (18 s), nothing moved; the same `loose` |
+Their runs are in the run table under Runs.
 
 Not run on the portal: a destinazione other than residenziale (the fixture's flat is
 residenziale; pre-flight and the generator cover it), a terzo titolare company other than P6's,
 two tolerances other than 1-bis and c. 2.
-| 2026-11-01 | pane | `answers-altri-tecnici-otto` (eight other technicians, the limit raised from three), `bench/rerun.py` bundle | **filled** in 522 s (each "+" from the seventh takes a few seconds), read back on a fresh load |
-| 2026-11-01 | pane | `answers-bene-culturale` (a listed building, works to come, the Soprintendenza's authorization in the relazione's assents), `bench/rerun.py` bundle | **Filled** from a blank draft in 99.5 s, read back on a fresh load, nothing moved; the base case's one `loose` (h)'s "lavori sono/saranno eseguiti dall…") |
-| 2026-11-01 | pane | `answers-impresa-dopo` (the firm still to be chosen: the CILA has no line for it, so the firm's radio with no block and the safety quadro's "si riserva") stopped at h): the portal requires the firm's details (16 "obbligatorio", the DURC boxes). The recipe now refuses the case, the CIL's too |
-| 2026-11-02 | pane | Clients other than a private person, `bench/rerun.py` bundle: a company in the Registro delle imprese (`answers-societa`: `c:` Immobiliare Fittizia, `cr:` Giulia Esempio, its legale rappresentante, INI-PEC), one not yet registered (`answers-societa-non-iscritta`), a condominium (`answers-condominio`: `cr:` its administrator, NON NECESSITA DI ISCRIZIONE, ALTRE FORME, AMMINISTRATORE), a client born in Albania with a permesso di soggiorno (`answers-non-ue`) | First pass: the non-EU client **filled** (86 s); the three companies stopped on the sede's Provincia ("2 fields with this label"): Forma giuridica re-renders the block and flags its empty boxes, and a flagged dropdown's own label read as its option list (inpage.js fixed). ISCRITTA's Camera di commercio also opens "Numero REA" and "Data", required. Second pass: not yet registered, condominium and non-EU **filled** (92, 94, 86 s), nothing moved or loose; the registered company stopped at Salva on the portal's own check, "Attenzione! Il CF inserito non è presente nel RI!": it looks the codice fiscale up in the Registro Imprese, so ISCRITTA is filled only for a real company, never a made-up one (no other error on the section) |
-| 2026-11-02 | pane | Another architectural designer (`p:` Valerio Disegno, `progettista_altro`), `bench/rerun.py` bundle: `answers-progettista` (the designer directs: G1's "non è colui che presenta la pratica", their block, "incaricato anche come direttore"; the relazione's progettista is theirs) and `answers-progettista-dl` (`d:` Elena Prova directs: her block is the second, below the designer's) | Both **filled** (125 s, 119 s), read back on a fresh load, nothing moved or loose; the draft's G1 read after: each person under their own heading. `answers-p6` rerun unchanged: **filled** |
-| 2026-11-03 | pane | A building with no title under the tolerances (`answers-tolleranze-privo`), `bench/rerun.py` bundle | **filled** in 150 s |
-| 2026-11-04 | p6 with files of real size picked in the page (`run.py page`, no `--file-urls`): a 5 MB elaborati grafici and a 2 MB relazione tecnica (`bench/fake_pdf.py --size`), four small files | pane | 126.6 s (attachments 13.7 s) | **Filled**: run.js 6 KB names the six files (`picked`); the runner's box took the folder `~/Downloads/pv-pick-prova` (the browser asked to upload it), kept the six by sha256, attached them, and the fresh load read every value back; the draft shows 5,00 MB and 2,00 MB. The runner itself came by one picked file (`pv-pick-runner.js`, 86 KB: the pane takes about 40 KB a call), which an installed runner doesn't need |
