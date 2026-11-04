@@ -7,7 +7,8 @@
       at all; a refusal behind a known portal defect also under `defects`, with the person's
       choices, defects.yaml), the answers it proposes for the person to confirm (an ask's
       `propose:`; one reading another answer of the same message comes with it, `assumes` or per
-      answer `cases` and `otherwise`, so one message is enough), the questions still to ask (its `asks:`, branch questions first), the
+      answer `cases` and `otherwise`, so one message is enough; what a proposal holds back, asked
+      only if it is changed, under `if_changed`), the questions still to ask (its `asks:`, branch questions first), the
       vault fields missing or expired, the files to attach (each within the portal's 9.77 MB,
       of a type its slot takes, and as its sportello takes them: Napoli's SUE refuses a file
       not in PDF/A, unsigned or oddly named, FILING) and whether they fit the pane, and the
@@ -1213,6 +1214,35 @@ def conditional_proposals(later, report, values, need):
     return out
 
 
+def assumed_proposals(steps, values, report):
+    """The message as the proposals make the case: a follow-up that hangs only on proposals and that
+    the case doesn't need once they hold (the details of other planning instruments, proposed
+    "no") leaves the message for `if_changed`, under the proposal that would open it, and is asked
+    only if the person changes that proposal. A follow-up that also hangs on an open question stays."""
+    held = {p["key"]: p["proposal"] for p in report["proposals"] if "proposal" in p}
+    if not held:
+        return
+    given = Values(values.answers | held, vault=values.vault, fields=values.fields, asks=values.asks)
+    given.cache, given._titolare_slug = values.cache, values._titolare_slug
+    need = needed(steps, given)
+    later = {}
+
+    def stays(x):
+        hangs = x.get("only_if") or []
+        if not hangs or not set(hangs) <= set(held) or x["key"] in need:
+            return True
+        for h in hangs:
+            later.setdefault(h, []).append(x["key"])
+        return False
+    for q in report["questions"]:
+        if "items" in q:
+            q["items"] = [i for i in q["items"] if stays(i)]
+    report["questions"] = [q for q in report["questions"] if ("items" in q and q["items"]) or ("items" not in q and stays(q))]
+    report["proposals"] = [p for p in report["proposals"] if stays(p)]
+    if later:
+        report["if_changed"] = later
+
+
 def preflight(steps, values, made_up=False, after=False):
     """Everything a run needs, settled before any browser opens: why this case isn't
     supported, the questions still to ask, the vault fields missing or expired, the files
@@ -1284,6 +1314,7 @@ def preflight(steps, values, made_up=False, after=False):
                                    | {x: a[x] for x in ("options", "labels", "how", "why") if x in a} | hangs
                                    | ({"error": why} if v is not None else {}))
     report["proposals"] += conditional_proposals(pending, report, values, need)
+    assumed_proposals(steps, values, report)
     if steps.get("rules"):
         # While the table's first fact (what the works are) is asked, it is asked alone, as the
         # rules table's own questions are: which others matter depends on it, even one no field

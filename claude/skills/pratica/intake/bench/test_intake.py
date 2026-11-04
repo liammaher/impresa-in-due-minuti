@@ -103,6 +103,16 @@ def notes():
     assert any(x.startswith("sanzione 333,00 €, to the account") for x in n), n
 
 
+def stato_legittimo_titles():
+    """The deed's titles as the whole checklist of the stato legittimo: the first licenza on its own
+    line, the second of the same kind on an "altro" row, each with its number and date."""
+    a = PROPOSED["answers"]
+    assert a["precedenti"] == ["prec_permesso", "prec_altro"], a.get("precedenti")
+    assert (a["prec_permesso_numero"], a["prec_permesso_data"]) == ("1234", "1960-03-12"), a
+    assert (a["prec_altro_quale"], a["prec_altro_numero"], a["prec_altro_data"]) == ("licenza edilizia", "567", "1961-06-05"), a
+    assert a["prec_altro_quanti"] == "1", a
+
+
 def wrong_account_and_signed_files():
     """A receipt paid elsewhere is flagged; a .p7m is read for the document it wraps."""
     d = TMP / "other"
@@ -206,7 +216,7 @@ def end_to_end():
     print(f"  pre-flight asks {count(without)} questions, proposes {len(without['proposals'])} and lacks "
           f"{len(without['missing'])} vault fields without the documents; {count(with_docs)}, "
           f"{len(with_docs['proposals'])} and {len(with_docs['missing'])} with them")
-    assert count(with_docs) == 0 and count(without) >= 20, (count(with_docs), count(without))
+    assert count(with_docs) == 0 and count(without) >= 15, (count(with_docs), count(without))
     # Left to confirm: only the steps file's own defaults, which no document answers (no filings
     # presented with it, no assents to acquire; no firm or technicians still to be named, since
     # 2026-11-01; the architect is the designer, since 2026-11-02).
@@ -275,7 +285,7 @@ def accept_never_replaces():
 
 
 def main():
-    tests = [kinds_and_unread, values_match_fixture, nothing_personal_for_claude, both_readers_agree, router_facts, notes,
+    tests = [kinds_and_unread, values_match_fixture, nothing_personal_for_claude, both_readers_agree, router_facts, notes, stato_legittimo_titles,
              wrong_account_and_signed_files, parsers, end_to_end, napoli_annexes, accept_never_replaces]
     try:
         for t in tests:

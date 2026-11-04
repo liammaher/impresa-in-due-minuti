@@ -489,7 +489,8 @@ product of every fact's values, 34.5 million, is the library's validator's), `be
 before and after a change, `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
 route.py on every case the SUE table decides (it prints the combinations not mapped yet), `bench/test_rounds.py`
 that every rehearsal's pre-flight is ready after one message (a proposal reading another answer of the same
-message comes with it: `assumes`, `cases`, `otherwise`), and
+message comes with it: `assumes`, `cases`, `otherwise`; what a proposal holds back is `if_changed`, asked only
+if it is changed), and
 `claude/skills/pratica/intake/bench/test_intake.py` the intake on a made-up dossier (`dossier.py`) against fixture-p6.json. On the real portal, `bench/rerun.py` reruns the rehearsals
 in the pane after a runner, dictionary or gen.py change (portal/README.md); `--record` files the results in each
 rehearsal's `runs.json`, the one run record: schema_branches.py and scoreboard.py count it, and each README's run
