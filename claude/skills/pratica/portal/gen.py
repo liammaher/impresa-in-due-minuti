@@ -868,7 +868,8 @@ def generate(recipe, base=HERE):
             defects = defects or load_yaml(HERE / "defects.yaml")
             if c["defect"] not in defects:
                 raise GenError(f"supports names the defect {c['defect']!r}, not in defects.yaml")
-            supports[i] = {**c, "defect": {"id": c["defect"], **defects[c["defect"]]}}
+            # Its `page` is docs/portal-defects.md's section (defects.py), not the person's.
+            supports[i] = {**c, "defect": {"id": c["defect"], **{k: v for k, v in defects[c["defect"]].items() if k != "page"}}}
     for t in ASKED.findall(json.dumps([recipe.get("yours"), supports, recipe.get("rules"), scelta_when])):
         asks_used.add(t)
     # The dictionary's questions, the recipe's wording over them; a question only this pratica
