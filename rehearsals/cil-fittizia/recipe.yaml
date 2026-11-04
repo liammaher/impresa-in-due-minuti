@@ -12,17 +12,7 @@ scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUN
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 firms: [f1]
 after: [Pagamento degli oneri, Gestione degli allegati]
-attachments:
-  Gestione degli allegati:
-    # The CIL has no slot of its own for these: each goes under Allegati liberi, in its own box
-    # (a slot named again takes its next, by its "+"), described.
-    - {kind: file, label: Allegati liberi, value: "{{ask.notifica_preliminare}}", describe: Notifica preliminare (art. 99 D.Lgs. 81/2008), when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}}"}
-    - {kind: file, label: Allegati liberi, value: "{{ask.comunicazioni_doc}}", describe: Documentazione delle comunicazioni del quadro e, when: "{{ask.comunicazioni_contestuali}}"}
-    - {kind: file, label: Allegati liberi, value: "{{ask.soprintendenza_autorizzazione}}", describe: Autorizzazione della Soprintendenza (art. 21 D.Lgs. 42/2004), when: "{{ask.bene_culturale}} {{ask.soprintendenza_autorizzata}}"}
 asks:
-  # In the facts checklist, as the rules table asks it: the supports read it too (the
-  # Soprintendenza's authorization first).
-  bene_culturale: {group: fatti, item: "L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?"}
   descrizione: {default: "PROVA NON INVIARE - CIL {{c:identity.last_name}}"}
   diritti_euro: {default: "100", why: "Line SUE 14 of the Comune's 2026 table of diritti: 100 € for a CIL."}
   data_inizio_lavori: {question: "When the works will start"}
@@ -30,8 +20,8 @@ asks:
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Pay the {{ask.diritti_euro}} € diritti before the second run (after the declarations): its receipt, signed, goes with it"
-  - "On a bene culturale: the works start only once the Soprintendenza has authorized them (art. 21 c. 4 D.Lgs. 42/2004); its authorization is attached under Allegati liberi: keep it with the pratica"
+  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
+  - "Pay the {{ask.diritti_euro}} € diritti before sending, and attach the receipt (copia attestazione versamento) on Allega documenti"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -40,12 +30,5 @@ rules:
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
-  # A firm still to be chosen: the CIL's quadro f) has no line for it, and the portal requires the
-  # firm's details whatever its site-safety quadro says (a CILA case stopped on them, 2026-11-01).
-  - {if: "{{ask.lavori_in_proprio|not}}", value: "{{ask.impresa_dopo}}", in: ["false"], defect: cila-impresa-dopo, else: "The CIL names its building firm: its quadro f) has no line for a firm still to be chosen, and the portal requires the firm's details (seen 2026-11-01). File the CIL once the firm is chosen."}
-  # A bene culturale: the Soprintendenza's authorization first, obtained apart (rules: soprintendenza-cil).
-  - {if: "{{ask.intervento|is_opere_temporanee}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "On a bene culturale the works need the Soprintendenza's authorization first (art. 21 c. 4 D.Lgs. 42/2004), and Napoli's SUE portal has no procedure to ask for it with this pratica: request it from the Soprintendenza ABAP per il Comune di Napoli (by PEC to sabap-na@pec.cultura.gov.it, on its form 'Istanza per opere su immobili vincolati', 16 euro bollo; up to 120 days, art. 22), then file this."}
-  # Filings presented with the CIL go in quadro e. Assents still to obtain have no line: the CIL's
-  # form (national and Napoli's) asks the SUE for none, unlike the CILA's relazione (art. 23-bis).
-  - when: "{{ask.atti_da_acquisire|not}}"
-    else: "The CIL's form has no request for assents for the SUE to acquire (only filings presented with it, quadro e): obtain them first (a nulla osta, an authorization), then file the CIL and attach them under Allegati liberi."
+  - when: "{{ask.altri_atti|not}}"
+    else: "Other filings or assents with the CIL (quadro e: Soprintendenza, ASL, fire brigade) aren't mapped yet."

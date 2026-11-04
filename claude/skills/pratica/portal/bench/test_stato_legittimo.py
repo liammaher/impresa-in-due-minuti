@@ -55,7 +55,7 @@ def boxes(a, recipe="scia-fittizia"):
     steps = STEPS[recipe]
     r = run.preflight(steps, values(steps, a), made_up=True)
     assert r["ready"], {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]}
-    return {p["id"]: p["value"] for p in run.plan(run.rehearsal(steps, values(steps, a)), values(steps, a)) if "precedenti edilizi" in p["section"].lower()}
+    return {p["id"]: p["value"] for p in run.plan(steps, values(steps, a)) if "precedenti edilizi" in p["section"].lower()}
 
 
 def rows(a, recipe="scia-fittizia"):
@@ -65,7 +65,7 @@ def rows(a, recipe="scia-fittizia"):
     steps = STEPS[recipe]
     r = run.preflight(steps, values(steps, a), made_up=True)
     assert r["ready"], {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]}
-    return [(p["label"] or "", p["value"]) for p in run.plan(run.rehearsal(steps, values(steps, a)), values(steps, a)) if "precedenti edilizi" in p["section"].lower()]
+    return [(p["label"] or "", p["value"]) for p in run.plan(steps, values(steps, a)) if "precedenti edilizi" in p["section"].lower()]
 
 
 def has(rs, start):
@@ -121,11 +121,11 @@ def _():
     assert ("specificare", "denuncia di inizio attività") in rs and ("specificare", "condono edilizio") in rs, rs
     assert {"2004/88", "2009/412", "95/1207", "PG/2017/5531", "20/11/2017"} <= {v for _, v in rs if v}, rs
     steps = STEPS["scia-fittizia"]
-    plan = [p for p in run.plan(run.rehearsal(steps, values(steps, a)), values(steps, a)) if "precedenti edilizi" in p["section"].lower()]
+    plan = [p for p in run.plan(steps, values(steps, a)) if "precedenti edilizi" in p["section"].lower()]
     adds = [p for p in plan if p["kind"] == "add"]
     assert len(adds) == 2, adds
-    # Three lines in all, as the count says: no fourth.
-    assert len([p for p in plan if p["label"] == "specificare"]) == 3, plan
+    # The fourth line isn't added: its question said no.
+    assert not [p for p in plan if p.get("value") == "{{ask.prec_altro_4_quale}}"]
 
 
 @case("sanctions: the receipt alone, or the payment's four details")
@@ -134,7 +134,7 @@ def _():
     assert has(rs, "che per l’immobile") and has(rs, "si allega la relativa ricevuta")
     assert not has(rs, "si forniscono gli estremi") and not has(rs, "di Euro")
     steps = STEPS["scia-fittizia"]
-    slot = [p for p in run.plan(run.rehearsal(steps, values(steps, answers("stato-sanzioni-ricevuta"))), values(steps, answers("stato-sanzioni-ricevuta"))) if p["kind"] == "file"
+    slot = [p for p in run.plan(steps, values(steps, answers("stato-sanzioni-ricevuta"))) if p["kind"] == "file"
             and (p["label"] or "").startswith("Ricevuta/e di versamento")]
     assert slot and slot[0]["value"].endswith("ricevuta-sanzione.pdf"), slot
     rs = rows(answers("stato-sanzioni-estremi"))
@@ -158,22 +158,19 @@ def _():
     assert has(rs, "conforme alla documentazione dello stato legittimo o di fatto") and not has(rs, "pienamente conforme")
 
 
-@case("the permesso's new construction on free land: its own radio, and fully conformant (the portal requires one of the two, 2026-11-02)")
+@case("the permesso's new construction on free land: its own radio, no conformity")
 def _():
     a = json.loads((ROOT / "rehearsals" / "pdc-fittizio" / "answers-p6.json").read_text())
     a.update({"stato_legittimo": "area libera"})
     b = boxes(a, "pdc-fittizio")
-    assert list(b)[0] == "r1c1p1reg:radio:0_clone" and len(b) == 2, b
-    assert has(rows(a, "pdc-fittizio"), "pienamente conforme")
+    assert list(b) == ["r1c1p1reg:radio:0_clone"], b
 
 
-@case("as many altro lines as the count says (the national form sets no limit); refused: titles with none named, no document, no declaration")
+@case("refused: more than five altro lines, titles with none named, no document, no declaration")
 def _():
-    more = {}
-    for i in range(4, 13):
-        more |= {f"prec_altro_{i}_quale": f"titolo {i}", f"prec_altro_{i}_numero": str(i), f"prec_altro_{i}_data": f"20{i + 10}-01-01"}
-    rs = rows(answers("stato-titoli-ripetuti", **more, prec_altro_quanti="12"))
-    assert [v for l, v in rs if l == "specificare"][-1] == "titolo 12" and len([l for l, _ in rs if l == "specificare"]) == 12, rs
+    refused(answers("stato-titoli-ripetuti", prec_altro_4="true", prec_altro_4_quale="x", prec_altro_4_numero="1",
+                    prec_altro_4_data="2018-01-01", prec_altro_5="true", prec_altro_5_quale="y",
+                    prec_altro_5_numero="2", prec_altro_5_data="2019-01-01", prec_altro_6="true"), "More than five")
     refused(answers("stato-epoca", prova_documenti=[]), "catasto primo impianto or other documents")
     refused(answers("stato-titoli", precedenti=[]), "at least one title")
     refused(answers("stato-tolleranze", tolleranze_precedenti=[]), "where they were made")
@@ -188,16 +185,14 @@ def _():
     asked = json.dumps(r["questions"])
     assert "sanzione_importo" in asked, asked
     assert "prec_permesso_numero" not in asked and "precedenti" not in asked, asked
-    # The titles case with "altro" ticked is asked how many altro lines, then the second line's
-    # details once the count says there is one (the count is proposed: one line).
-    r = run.preflight(steps, values(steps, answers("stato-titoli", prec_altro_quanti=None)), made_up=True)
-    assert [p["proposal"] for p in r["proposals"] if p["key"] == "prec_altro_quanti"] == ["1"], r["proposals"]
+    # The titles case is asked about a further altro line only once "altro" is ticked, and
+    # about a third only once the second is.
+    r = run.preflight(steps, values(steps, answers("stato-titoli", prec_altro_2=None)), made_up=True)
     keys = {q["key"]: q.get("only_if") for q in r["questions"]}
-    assert keys.get("prec_altro_2_quale") == ["prec_altro_quanti"], keys
-    r = run.preflight(steps, values(steps, answers("stato-titoli", prec_altro_quanti="3")), made_up=True)
-    assert {q["key"] for q in r["questions"]} >= {"prec_altro_2_quale", "prec_altro_3_data"} and "prec_altro_4_quale" not in json.dumps(r), r
+    assert "prec_altro_2" in keys and not keys["prec_altro_2"], keys
+    assert keys.get("prec_altro_3") == ["prec_altro_2"], keys
     # A refusal's `if` stops at its first false word, as a `when` does: a building with no title
-    # runs without the altro lines' answers.
+    # runs without the altro lines' answers, and a fourth line's "no" ends the questions there.
     for name in ("stato-epoca", "stato-titoli-ripetuti"):
         run.require_supported(steps, values(steps, answers(name)))
 

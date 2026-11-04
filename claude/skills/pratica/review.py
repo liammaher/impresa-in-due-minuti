@@ -198,9 +198,6 @@ def portal_review(report, out=None):
                        if ok else "Draft loaded again from the portal: a value didn't stay (see Stopped)", ok))
     if report.get("error"):
         checks.append((f"Stopped: {report['error']}", False))
-    # The portal's warnings beside boxes it kept (inpage.js alerts()): the person checks each.
-    for a in report.get("alerts", []):
-        checks.append((f"{a['section']}, {a.get('label') or 'a box'}: the portal warns \"{a['text']}\" (kept: check it)", False))
     # The report says only why a read-back failed; the person sees what it wanted and found.
     for d in report.get("details", []):
         checks.append((f"{d['section']}, {d['label']}: wanted {d['want']!r}, the portal had {d['got']!r}", False))

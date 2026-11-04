@@ -7,23 +7,16 @@ asks:
   paesaggio: {default: "semplificata"}
 rules:
   handles: [napoli/comune/autorizzazione-paesaggistica-semplificata]
-attachments:
-  Gestione degli allegati:
-    # The asseverazione's "Si allega la relazione paesaggistica semplificata" (the SCIA's, the
-    # permesso's, the SCIA alternativa's) adds a required slot that takes a plain PDF, besides the
-    # signed-only "Relazione Paesaggistica Semplificata" (read on their filled drafts 2026-11-01).
-    # A CILA or a CIL has no such box, so its recipe drops the slot (`drop: true`).
-    - {kind: file, label: Relazione paesaggistica semplificata e documentazione necessaria, value: "{{ask.relazione_semplificata_doc}}", on_page: true}
+supports:
+  - when: "{{ask.paes_variante|not}}"
+    else: "So far only for a new authorization: the variant of one already issued isn't run yet."
 # The case it adds to the main pratica's P6 answers (a null drops one): a property under art. 136
 # and 142, a new authorization. Each combination's recipe adds its works (`gen.py --answers`).
 answers:
   # Stated, not left to the ask's default: the CILA's and CIL's steps ask it from the rules table.
   paesaggio: semplificata
   bollo_marche: false
-  bollo_esenzione: "no"
-  progettista_altro: false
   paes_variante: false
-  relazione_semplificata_doc: rehearsals/scia-fittizia/files/relazione-paesaggistica-semplificata.pdf
   vincolo: art 136 and 142
   vincolo_136_lettera: c) e d)
   vincolo_136_provvedimento: D.M. fittizio PROVA NON INVIARE del 01/01/1960

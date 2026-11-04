@@ -229,57 +229,6 @@
        "r11c2p27reg:calendar_input",
        "r12c2p31reg:calendar_input"
       ]
-     ],
-     "then": [
-      {
-       "choice": "e autorizzazione paesaggistica",
-       "id": "r3c1p9reg:chk",
-       "kind": "checkbox",
-       "reveals": [
-        {
-         "id": "r4c2p12reg:txt",
-         "kind": "text",
-         "label": "prot.n.",
-         "context": "e autorizzazione paesaggistica",
-         "max": 50
-        },
-        {
-         "id": "r4c3p14reg:calendar_input",
-         "kind": "date",
-         "label": "del"
-        }
-       ],
-       "moved": [
-        [
-         "r3c1p9reg:chk",
-         "r4c1p10reg:chk"
-        ],
-        [
-         "r4c1p13reg:radio:1_clone",
-         "r5c1p17reg:radio:1_clone"
-        ],
-        [
-         "r6c1p20reg:radio:2_clone",
-         "r7c1p24reg:radio:2_clone"
-        ],
-        [
-         "r8c1p25reg:txt",
-         "r9c1p29reg:txt"
-        ],
-        [
-         "r10c1p27reg:txt",
-         "r11c1p31reg:txt"
-        ],
-        [
-         "r12c1p29reg:calendar_input",
-         "r13c1p33reg:calendar_input"
-        ],
-        [
-         "r12c2p31reg:calendar_input",
-         "r13c2p35reg:calendar_input"
-        ]
-       ]
-      }
      ]
     },
     {
@@ -330,53 +279,6 @@
        "r11c2p27reg:calendar_input",
        "r12c2p30reg:calendar_input"
       ]
-     ],
-     "then": [
-      {
-       "choice": "e autorizzazione paesaggistica",
-       "id": "r5c1p15reg:chk",
-       "kind": "checkbox",
-       "reveals": [
-        {
-         "id": "r6c2p18reg:txt",
-         "kind": "text",
-         "label": "prot.n.",
-         "context": "e autorizzazione paesaggistica",
-         "max": 50
-        },
-        {
-         "id": "r6c3p20reg:calendar_input",
-         "kind": "date",
-         "label": "del"
-        }
-       ],
-       "moved": [
-        [
-         "r5c1p15reg:chk",
-         "r6c1p16reg:chk"
-        ],
-        [
-         "r6c1p19reg:radio:2_clone",
-         "r7c1p23reg:radio:2_clone"
-        ],
-        [
-         "r8c1p24reg:txt",
-         "r9c1p28reg:txt"
-        ],
-        [
-         "r10c1p26reg:txt",
-         "r11c1p30reg:txt"
-        ],
-        [
-         "r12c1p28reg:calendar_input",
-         "r13c1p32reg:calendar_input"
-        ],
-        [
-         "r12c2p30reg:calendar_input",
-         "r13c2p34reg:calendar_input"
-        ]
-       ]
-      }
      ]
     },
     {
@@ -421,9 +323,7 @@
      ]
     }
    ],
-   "seconds": 4.8,
-   "depth": 8,
-   "recrawled": "2026-11-01"
+   "seconds": 2.9
   },
   {
    "section": "Altre dichiarazioni",

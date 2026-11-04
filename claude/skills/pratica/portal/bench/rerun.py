@@ -29,10 +29,7 @@ prints, or a fixture as it is (rehearsals/cila-fittizia/fixture-p6.json: its "fi
 person added to it is in the next batch).
 No rehearsal named: every one with a generated steps file and the answers file. A rehearsal
 named `NAME:ANSWERS.json` runs with that answers file instead (one pratica, several cases: each
-its own run, `NAME/ANSWERS` in the results). `NAME:ANSWERS.json:VALUES.json` runs that case on
-other values than --values' (an architect born abroad, from a copy of the fixture), so one bundle
-holds both: its result is `NAME/ANSWERS@VALUES`, which --record leaves out of runs.json (the
-repo's fixture wouldn't give that run again).
+its own run, `NAME/ANSWERS` in the results).
 """
 
 import argparse
@@ -57,16 +54,6 @@ def values_of(run_js, proc):
     head = f"__pv.start({json.dumps(proc)}, "
     assert line.startswith(head) and line.endswith(")"), "run.js changed shape"
     return line[len(head):-1]
-
-
-def fnv1a(text):
-    """The UTF-16 length and 32-bit FNV-1a hash of text, as a queue piece computes them in the page
-    (charCodeAt: UTF-16 code units)."""
-    units = text.encode("utf-16-le")
-    h = 0x811c9dc5
-    for k in range(0, len(units), 2):
-        h = ((h ^ int.from_bytes(units[k:k + 2], "little")) * 0x01000193) & 0xFFFFFFFF
-    return len(units) // 2, h
 
 
 def write_bundle(out, path):
@@ -127,9 +114,6 @@ def record(done, default, day):
     """Each run of a batch (record.js: "pdc-fittizio/answers-deroga", or a rehearsal alone for its
     default answers file) into rehearsals/<name>/runs.json, once per date, case and result."""
     for d in done:
-        if "@" in d["name"]:
-            print(f"{d['name']}: {d['result']}, on other values than the fixture's: not recorded")
-            continue
         name, _, stem = d["name"].partition("/")
         f = REHEARSALS / name / "runs.json"
         runs = json.loads(f.read_text()) if f.is_file() else []
@@ -164,37 +148,24 @@ def main():
     stored, sources, origin, queue, failed = {}, {}, None, [], []
     for item in names:
         name, _, answers = item.partition(":")
-        answers, _, own = answers.partition(":")
         answers = answers or a.answers
-        label = f"{name}/{Path(answers).stem}" if answers != a.answers or own else name
-        if own:
-            label += f"@{Path(own).stem}"
+        label = f"{name}/{Path(answers).stem}" if answers != a.answers else name
         d = REHEARSALS / name
         steps_file = d / "portal-steps.generated.yaml"
         if not steps_file.exists():
             steps_file = d / "portal-steps.yaml"
         steps = yaml.safe_load(steps_file.read_text())
-        values = run.Values(json.loads((d / answers).read_text()), fields=run.fields_of(Path(own).read_text()) if own else fields,
-                            asks=steps.get("asks"))
-        # A box the portal checks against a real register (a company in the Registro Imprese)
-        # refuses made-up data: such a run only stops there (2026-11-02, one did).
-        stops = run.preflight(steps, values, urls, made_up=True)["made_up_stops"]
-        if stops:
-            failed.append(f"{label}: made-up data can't pass {'; '.join(stops)}")
-            continue
+        values = run.Values(json.loads((d / answers).read_text()), fields=fields, asks=steps.get("asks"))
         try:
-            # Made-up files: no slot that takes only signed files (the portal refuses the signature).
-            files, parts = run.page_bundle(run.phase(run.expand(steps, values), made_up=True), values, urls=urls)
+            files, parts = run.page_bundle(steps, values, urls=urls)
         except run.StepError as e:
             failed.append(f"{label}: {e}")
             continue
-        # The pane's key: a case's "+" blocks give its steps their own (run.page_bundle).
-        proc = next(k for k in parts if k.startswith("pv-steps:"))[len("pv-steps:"):]
-        js = f"steps/{name}{'-' + proc.partition('#')[2] if '#' in proc else ''}.js"
+        proc = steps["procedure"]
         (a.out / "runner.js").write_text(files["runner.js"])
-        (a.out / js).write_text(files["steps.js"] + "'installed'\n")
+        (a.out / "steps" / f"{name}.js").write_text(files["steps.js"] + "'installed'\n")
         stored |= parts
-        sources |= {"pv-runner": "runner.js", f"pv-steps:{proc}": js}
+        sources |= {"pv-runner": "runner.js", f"pv-steps:{proc}": f"steps/{name}.js"}
         origin = origin or run.re.match(r"https?://[^/]+", steps["logged_in"])[0]
         queue.append([label, proc, json.loads(values_of(files["run.js"], proc))])
     if failed:
@@ -209,18 +180,9 @@ def main():
         cur.append(q)
     chunks.append(cur)
     for i, c in enumerate(chunks):
-        # Each piece checks itself before it joins the batch: 13 KB of values copied into the pane
-        # arrived with an element too many (2026-11-02), so a garbled piece now throws instead of
-        # running a case on values nobody chose.
-        raw = "[" + ",".join(c) + "]"
-        n, h = fnv1a(raw)
         (a.out / f"queue-{i}.js").write_text(
             ("window.pvBatch = [];\n" if i == 0 else "")
-            + "(() => {\n  const raw = " + json.dumps(raw, ensure_ascii=False) + ";\n"
-            + "  let h = 0x811c9dc5;\n"
-            + "  for (let k = 0; k < raw.length; k++) { h ^= raw.charCodeAt(k); h = Math.imul(h, 0x01000193) >>> 0; }\n"
-            + f"  if (raw.length !== {n} || h !== {h}) throw new Error(\"queue-{i}.js arrived changed: send it again, or use --bundle\");\n"
-            + "  window.pvBatch = window.pvBatch.concat(JSON.parse(raw));\n})();\nwindow.pvBatch.length\n")
+            + "window.pvBatch = window.pvBatch.concat([" + ",".join(c) + "]);\nwindow.pvBatch.length\n")
     (a.out / "loop.js").write_text("""if (!window.__pv) (0, eval)(localStorage.getItem('pv-runner'));
 // A run's values: whole ({base}), or what differs from its procedure's first run.
 if (window.pvBatch && window.pvBatch.some(([, , d]) => d.base || d.set)) {
@@ -250,10 +212,6 @@ if (!pvAlready) window.pvBatchRun = (async () => {
     __pv.start(proc, values);
     let r; do { r = await __pv.wait(30000); } while (r.result === "running");
     if (r.result !== "filled" && /^(the page didn't load|the portal stayed busy|signed out)/.test(r.error || "")) {
-      // Listed apart (`unreached`), so a batch that ends one short says which and why (2026-11-03:
-      // 26 of 27 "done", the last one's page hadn't loaded).
-      const un = JSON.parse(sessionStorage.getItem("pv-batch-unreached") || "[]").filter((u) => u.name !== name);
-      sessionStorage.setItem("pv-batch-unreached", JSON.stringify([...un, { name, error: r.error, section: r.at && r.at.section }]));
       if (++unreached >= 2) { window.pvBatchHalted = `${name}: ${r.error}`; break; }
       continue;
     }
@@ -261,14 +219,11 @@ if (!pvAlready) window.pvBatchRun = (async () => {
     // moved and loose: the ids that named another box, the labels worth a look (what a gen.py
     // change is checked by). gaps: a stopped run's empty boxes the portal wants (labels only,
     // from its snapshot, which holds no value), so the stop names them without opening the draft.
-    // Not a slot taking only signed files: the person's (2026-11-02, they hid the one missing slot).
-    const signed = (b) => b.kind === "file" && !!b.accepts && b.accepts.split(";").every((x) => x.endsWith(".p7m"));
     const gaps = ((r.snapshot && r.snapshot.boxes) || []).filter((b) => b.required && b.state !== "filled"
-      && b.state !== "checked" && !signed(b)).map((b) => `${b.kind} ${b.label || b.id}`);
+      && b.state !== "checked").map((b) => `${b.kind} ${b.label || b.id}`);
     done.push({ name, result: r.result, error: r.error || null, at: r.at, sections: r.sections.length,
       verify_seconds: r.verify_seconds ?? null, total_seconds: r.total_seconds, url: r.url,
-      moved: r.moved || [], loose: r.loose || [], retries: (r.retries || []).length, ...(gaps.length ? { gaps } : {}),
-      ...(r.alerts ? { alerts: r.alerts } : {}) });
+      moved: r.moved || [], loose: r.loose || [], retries: (r.retries || []).length, ...(gaps.length ? { gaps } : {}) });
     sessionStorage.setItem("pv-batch", JSON.stringify(done));
   }
   // Each filled run drew the person's review over the portal: nobody reads it in a batch, and it
@@ -278,25 +233,18 @@ if (!pvAlready) window.pvBatchRun = (async () => {
 })().finally(() => { window.pvBatchBusy = false; });
 pvAlready ? "a batch is already running in this tab: nothing started" : `started: ${(window.pvBatch || []).length} queued`
 """)
-    # Waits while the pane shows the page (the pane cuts a call at 45 s); a hidden pane slows its
-    # timers past that (2026-11-01), so then it answers at once and the caller waits outside.
-    (a.out / "results.js").write_text("""if (!document.hidden) await new Promise((r) => setTimeout(r, 35000));
+    (a.out / "results.js").write_text("""await new Promise((r) => setTimeout(r, 35000));  // the pane cuts a call at 45 s
 const done = JSON.parse(sessionStorage.getItem("pv-batch") || "[]");
 JSON.stringify({ done: done.length, of: (window.pvBatch || []).length, running: !!window.pvBatchBusy,
   halted: window.pvBatchHalted || null,
-  // Runs that never reached the portal and aren't in done: rerun them (a bundle of what's left).
-  unreached: JSON.parse(sessionStorage.getItem("pv-batch-unreached") || "[]").filter((u) => !done.some((d) => d.name === u.name)),
   filled: done.filter((d) => d.result === "filled").length,
   stopped: done.filter((d) => d.result !== "filled").map((d) => [d.name, d.error, d.at && d.at.section, d.gaps || []]),
   moved: done.filter((d) => (d.moved || []).length).map((d) => [d.name, d.moved]),
-  loose: done.filter((d) => (d.loose || []).length).map((d) => [d.name, d.loose]),
-  // The portal's warnings: by text, with how many runs had each (the made-up PEC and address are in all).
-  alerts: Object.entries(done.flatMap((d) => [...new Set((d.alerts || []).map((a) => `${a.section}: ${a.text}`))])
-    .reduce((n, a) => ({ ...n, [a]: (n[a] || 0) + 1 }), {})) })
+  loose: done.filter((d) => (d.loose || []).length).map((d) => [d.name, d.loose]) })
 """)
     (a.out / "record.js").write_text('JSON.stringify(JSON.parse(sessionStorage.getItem("pv-batch") || "[]")'
                                       '.map((d) => ({ name: d.name, result: d.result, total_seconds: d.total_seconds })))\n')
-    (a.out / "fresh.js").write_text('sessionStorage.removeItem("pv-batch"); sessionStorage.removeItem("pv-batch-unreached"); "cleared"\n')
+    (a.out / "fresh.js").write_text('sessionStorage.removeItem("pv-batch"); "cleared"\n')
     if a.bundle:
         write_bundle(a.out, a.bundle)
     print(f"{a.out}: {len(names)} rehearsals, {len(chunks)} queue file(s). In the pane, on {origin}: "

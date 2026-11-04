@@ -4,23 +4,5 @@
   "answers": "answers-p6.json",
   "result": "filled",
   "from": "README"
- },
- {
-  "date": "2026-11-01",
-  "answers": "answers-paesaggistica.json",
-  "result": "filled",
-  "seconds": 45.2
- },
- {
-  "date": "2026-11-02",
-  "answers": "answers-assenso.json",
-  "result": "filled",
-  "seconds": 48.2
- },
- {
-  "date": "2026-11-03",
-  "answers": "answers-p6.json",
-  "result": "filled",
-  "seconds": 58.9
  }
 ]

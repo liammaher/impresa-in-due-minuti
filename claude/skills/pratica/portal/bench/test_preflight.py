@@ -27,13 +27,6 @@ FIELDS = dict(json.loads((REHEARSAL / "fixture.json").read_text())["fields"])
 ANSWERS = json.loads((REHEARSAL / "answers.json").read_text())
 
 
-def rehearsal_plan(steps, values):
-    """run.plan as a rehearsal's run takes it: made-up files, so no slot that takes only signed
-    files, and nothing that waits for the declarations (run.phase)."""
-    import run
-    return run.plan(run.rehearsal(steps, values), values)
-
-
 def values(answers=ANSWERS, fields=FIELDS, steps=STEPS):
     return run.Values(dict(answers), fields=dict(fields), asks=steps.get("asks"))
 
@@ -141,14 +134,11 @@ def files():
     r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(huge)}), made_up=True)
     assert not r["ready"] and "over the portal's 9.77 MB" in r["files"][0]["problem"], r["files"]
     steps["sections"][-1]["fields"][-1]["accepts"] = "pdf.p7m;jpg.p7m"
-    # A slot that takes only signed files (a real case's: a rehearsal leaves it out, run.phase).
-    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}))
-    assert not r["ready"] and r["files"][0]["problem"] == "the slot takes only pdf.p7m, jpg.p7m", r["files"]
     r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}), made_up=True)
-    assert r["ready"] and not r["files"] and "1 slot(s) that take only signed files left empty" in r["warnings"][-1], r
+    assert not r["ready"] and r["files"][0]["problem"] == "the slot takes only pdf.p7m, jpg.p7m", r["files"]
     signed = tmp / "planimetria.pdf.p7m"
     signed.write_bytes(b"0")
-    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(signed)}))
+    r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(signed)}), made_up=True)
     assert not r["ready"] and "not a readable .p7m" in r["files"][0]["problem"], r["files"]
     for f in (big, huge, signed):
         f.unlink()
@@ -191,8 +181,7 @@ PDFA_CONTENT = (b"%PDF-1.7\n<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF><rdf:
 def napoli_filing():
     """Napoli's SUE (DD 501/2026): a file the run attaches must be PDF/A, signed digitally (a
     .p7m, or the PDF's own PAdES signature) and plainly named, else the pratica is irricevibile;
-    made-up files are only warned about; the person is told how Firma e invio goes. A SUAP pratica
-    isn't checked."""
+    made-up files are only warned about. A SUAP pratica isn't checked."""
     import shutil
     if not shutil.which("openssl"):
         return
@@ -214,8 +203,6 @@ def napoli_filing():
     assert not r["ready"] and all(w in f["problem"] for w in ("this name", "PDF/A", "signed digitally")), f
     assert any(y.startswith("Napoli's SUE takes only PDF/A") for y in r["yours"]), r["yours"]
     assert any("c/c postale 57060964" in y for y in r["yours"]), r["yours"]
-    # Firma e invio is the person's (the portal opens it only with every signature valid): how to sign.
-    assert any(y.startswith("On Firma e invio") and "distinta" in y for y in r["yours"]), r["yours"]
     # The same file with made-up data: ready, each refusal noted, and a warning never to send it.
     r, f = check(plain, made_up=True)
     assert r["ready"] and len(f["filing"]) == 3 and "problem" not in f, f
@@ -466,7 +453,7 @@ def agibilita_slots():
     def filed(rehearsal, answers):
         steps = yaml.safe_load((root / rehearsal / "portal-steps.generated.yaml").read_text())
         a = json.loads((root / rehearsal / answers).read_text())
-        return {f["label"] for f in rehearsal_plan(steps, values(a, fields, steps)) if f["kind"] == "file"} & slots
+        return {f["label"] for f in run.plan(steps, values(a, fields, steps)) if f["kind"] == "file"} & slots
 
     here = os.getcwd()
     os.chdir(HERE.parents[4])
@@ -480,9 +467,8 @@ def agibilita_slots():
 
 
 def sanatoria_cases():
-    """The SCIA in sanatoria: works in progress and double conformity fill, the payment by its estremi
-    or its receipt; the conformity of art. 36-bis c. 1 and pre-1977 variants (art. 34-ter) are refused,
-    each with its defect: the portal's asseverazione can't state either case."""
+    """The SCIA in sanatoria: works in progress and double conformity fill; the conformity of art.
+    36-bis c. 1 (the portal's asseverazione can't state it) and pre-1977 variants are refused."""
     d = HERE.parents[4] / "rehearsals" / "scia-sanatoria-fittizia"
     steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
     fields = dict(json.loads((HERE.parents[4] / "rehearsals" / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
@@ -491,325 +477,12 @@ def sanatoria_cases():
     os.chdir(HERE.parents[4])
     try:
         pre = lambda a: run.preflight(steps, values(a, fields, steps), made_up=True)
-        for a in ("in-corso", "ricevuta", "in-corso-ricevuta"):
-            assert pre(json.loads((d / f"answers-{a}.json").read_text()))["ready"], a
-        assert pre(p6)["ready"]
-        # The receipt has no slot of its own: the person attaches it signed, so pre-flight asks no file.
-        r = pre(p6 | {"sanatoria_prova": "ricevuta"})
-        assert r["ready"] and not r["questions"], r["questions"]
+        assert pre(p6)["ready"] and pre(json.loads((d / "answers-in-corso.json").read_text()))["ready"]
         r = pre(p6 | {"sanatoria_caso": "conformita urbanistica"})
-        assert any("a defect of the portal" in u for u in r["unsupported"]), r["unsupported"]
-        # The known defect comes with it, for the person to choose (defects.yaml through gen.py).
-        assert [d["id"] for d in r["defects"]] == ["scia-36bis-c1"] and len(r["defects"][0]["choices"]) == 3, r.get("defects")
-        r = pre(p6 | {"sanatoria_caso": "variante pre 1977"})
-        assert any("art. 34-ter" in u and "a defect of the portal" in u for u in r["unsupported"]), r["unsupported"]
-        assert [d["id"] for d in r["defects"]] == ["scia-34ter"], r.get("defects")
+        assert any("one radio choice" in u for u in r["unsupported"]), r["unsupported"]
+        assert pre(p6 | {"sanatoria_caso": "variante pre 1977"})["unsupported"]
     finally:
         os.chdir(here)
-
-
-def scelte_follow_the_case():
-    """A wizard choice a recipe takes only for some cases ({leaf, when}): ticked, with the section
-    it adds, only when the case's answer says so; asked when unanswered; more co-holders than the
-    portal's one-person section refused (the voltura, the cambio d'intestazione, a proroga)."""
-    root = HERE.parents[4] / "rehearsals"
-    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
-    here = os.getcwd()
-    os.chdir(HERE.parents[4])
-
-    def load(name):
-        steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
-        return steps, (lambda a: values(json.loads((root / name / f"answers-{a}.json").read_text()) if isinstance(a, str) else a, fields, steps))
-
-    def ticks(steps, v):
-        w = next(w for w in run.expand(steps, v)["wizard"] if w["screen"] == "Scelte eventuali")
-        return run.leaves(w)
-    try:
-        steps, v = load("voltura-pdc-fittizia")
-        coholder = "Informazioni su eventuali altri aventi titolo"
-        for a, has in (("p6", True), ("senza-cointestatari", False)):
-            assert run.preflight(steps, v(a), made_up=True)["ready"], a
-            assert ("ci sono cointestatari" in ticks(steps, v(a))) == has, a
-            assert any(s["section"] == coholder for s in run.expand(steps, v(a))["sections"]) == has, a
-        p6 = json.loads((root / "voltura-pdc-fittizia" / "answers-p6.json").read_text())
-        r = run.preflight(steps, v({k: x for k, x in p6.items() if k != "cointestatario"}), made_up=True)
-        # Proposed (none) for the person to confirm, never assumed.
-        assert [q["key"] for q in r["proposals"]] == ["cointestatario"] and not r["ready"], r["proposals"]
-        r = run.preflight(steps, v(p6 | {"altri_cointestatari": True}), made_up=True)
-        assert any("holds one person" in u for u in r["unsupported"]), r["unsupported"]
-        # The portal's limit, not a mapping gap: the person hears the defect and their choices.
-        assert [d["title"] for d in r.get("defects", [])] == ["Voltura and cambio d'intestazione: the co-holders' section holds one person"], r.get("defects")
-
-        steps, v = load("cambio-intestazione-fittizio")
-        assert len(ticks(steps, v("p6"))) == 1
-        assert len(ticks(steps, v("subentro"))) == 4 and run.preflight(steps, v("subentro"), made_up=True)["ready"]
-        sub = json.loads((root / "cambio-intestazione-fittizio" / "answers-subentro.json").read_text())
-        r = run.preflight(steps, v(sub | {"cambio_dl": False, "cambio_ditta": False}), made_up=True)
-        assert any("say which" in u for u in r["unsupported"]), r["unsupported"]
-
-        steps, v = load("proroga-paesaggistica-fittizia")
-        assert len(ticks(steps, v("p6"))) == 1 and len(ticks(steps, v("assenso"))) == 2
-    finally:
-        os.chdir(here)
-
-
-def assents_and_filings():
-    """The CILA relazione's lists as the national form words them (2026-11-03): filings presented
-    with it and assents the SUE acquires (art. 23-bis DPR 380/2001), each with its slot; assents
-    to acquire mean no start date, and works under way can't wait for one. The CIL lists filings
-    only. A partial fine lavori attaches its planimetria in the slot the answer adds."""
-    root = HERE.parents[4] / "rehearsals"
-    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
-    here = os.getcwd()
-    os.chdir(HERE.parents[4])
-
-    def case(name, answers):
-        steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
-        return steps, (lambda a: values(a, fields, steps)), json.loads((root / name / f"answers-{answers}.json").read_text())
-
-    def attached(r):  # what the case attaches, each "section: slot", and the file
-        return [(f["for"], Path(f["path"]).name) for f in r["files"]]
-    try:
-        steps, v, a = case("cila-fittizia", "direttore-atti")
-        r = run.preflight(steps, v(a), made_up=True)
-        got = attached(r)
-        assert r["ready"] and ("Gestione degli allegati: Documentazione necessaria per il rilascio di atti di assenso obbligatori", "documentazione-assensi.pdf") in got, got
-        assert ("Gestione degli allegati: Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni", "documentazione-comunicazioni.pdf") in got, got
-        r = run.preflight(steps, v(a | {"inizio_dopo_assensi": "false", "data_inizio_lavori": "2026-12-01"}), made_up=True)
-        assert any("start after its communication" in u for u in r["unsupported"]), r["unsupported"]
-        r = run.preflight(steps, v(a | {"cila_stato": "in corso", "ricevuta_sanzione": "rehearsals/cila-fittizia/files/ricevuta-sanzione.pdf"}), made_up=True)
-        assert any("can't have assents still to be acquired" in u for u in r["unsupported"]), r["unsupported"]
-        # An authorization already obtained isn't one to acquire: the bene culturale lists none.
-        steps, v, a = case("cila-fittizia", "bene-culturale")
-        assert a["atti_da_acquisire"] is False and run.preflight(steps, v(a), made_up=True)["ready"]
-
-        steps, v, a = case("cil-fittizia", "comunicazioni")
-        r = run.preflight(steps, v(a), made_up=True)
-        # Their documents under Allegati liberi, the runner's since 2026-11-03 (a slot named again
-        # takes its next box), no longer the person's.
-        assert r["ready"] and ("Gestione degli allegati: Allegati liberi", "documentazione-comunicazioni.pdf") in attached(r), attached(r)
-        assert not any("quadro e" in y for y in r["yours"]), r["yours"]
-        r = run.preflight(steps, v(a | {"atti_da_acquisire": True}), made_up=True)
-        assert any("no request for assents" in u for u in r["unsupported"]), r["unsupported"]
-
-        steps, v, a = case("fine-lavori-fittizia", "parziale")
-        r = run.preflight(steps, v(a), made_up=True)
-        assert r["ready"] and ("Gestione degli allegati: Copia di elaborato planimetrico del progetto con eventuali varianti", "planimetria-parte-ultimata.pdf") in attached(r), attached(r)
-        steps, v, a = case("fine-lavori-fittizia", "p6")
-        assert not [x for x in attached(run.preflight(steps, v(a), made_up=True)) if x[1] == "planimetria-parte-ultimata.pdf"]
-    finally:
-        os.chdir(here)
-
-
-def catasto_terreni():
-    """A unit with a categoria in the vault is in the Catasto Fabbricati, unasked; a plot (the
-    a made-up company's plot (lotto), no categoria) only in the Catasto Terreni: its radio, foglio and
-    particella, no subalterno or categoria (the permesso's new building on free land)."""
-    d = HERE.parents[4] / "rehearsals" / "pdc-fittizio"
-    steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
-    fields = dict(json.loads((HERE.parents[4] / "rehearsals" / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
-    here = os.getcwd()
-    os.chdir(HERE.parents[4])
-    try:
-        def ticked(a):
-            v = values(json.loads((d / f"answers-{a}.json").read_text()), fields, steps)
-            assert run.preflight(steps, v, made_up=True)["ready"], a
-            sec = next(s for s in run.expand(steps, v)["sections"] if s["section"] == "Dati catastali")
-            return [f["label"] for f in sec["fields"] if run.truthy(v.render(f.get("when", "true")) or "")]
-        assert ticked("p6")[0] == "Nuovo Catasto Edilizio Urbano" and "categoria" in ticked("p6")
-        assert ticked("terreno") == ["Nuovo Catasto Terreni", "foglio", "particella/mappale", "sezione Censuaria"], ticked("terreno")
-        # No categoria in the vault and no answer: asked, never assumed either way.
-        a = json.loads((d / "answers-p6.json").read_text())
-        no_cat = {k: x for k, x in fields.items() if k != "luca:immobile.catasto_categoria"}
-        r = run.preflight(steps, values(a, no_cat, steps), made_up=True)
-        assert "catasto_terreni" in [q["key"] for q in r["questions"]], r["questions"]
-    finally:
-        os.chdir(here)
-
-
-def group_two_choices():
-    """A variant to a landscape authorization ticks its box and gives that one's details; an
-    ordinaria's renewal with design changes ticks its box, a semplificata's is refused (no box);
-    an architect born abroad (birth province EE) is "all'Estero" with the Stato, not "in Italia"."""
-    root = HERE.parents[4] / "rehearsals"
-    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
-    here = os.getcwd()
-    os.chdir(HERE.parents[4])
-
-    def labels(name, a, flds=fields, section=None):
-        steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
-        v = values(json.loads((root / name / f"answers-{a}.json").read_text()) if isinstance(a, str) else a, flds, steps)
-        r = run.preflight(steps, v, made_up=True)
-        return r, [(p["label"], p["value"]) for p in rehearsal_plan(steps, v) if section is None or p["section"].startswith(section)] if r["ready"] else []
-    try:
-        _, b = labels("paesaggistica-semplificata-fittizia", "variante", section="Ambito")
-        assert ("In caso di intervento in VARIANTE", None) in b and ("Num.", "PG/2025/0444444") in b, b
-        _, b = labels("paesaggistica-semplificata-fittizia", "p6", section="Ambito")
-        assert not any(l == "In caso di intervento in VARIANTE" for l, _ in b), b
-        _, b = labels("rinnovo-paesaggistica-fittizia", "variazioni", section="Qualificazione")
-        assert any(l == "sono richieste variazioni progettuali" for l, _ in b), b
-        a = json.loads((root / "rinnovo-paesaggistica-fittizia" / "answers-p6.json").read_text())
-        r, _ = labels("rinnovo-paesaggistica-fittizia", a | {"paes_rinnovo_variazioni": True})
-        assert any("has no box for design changes" in u for u in r["unsupported"]), r["unsupported"]
-        # The studio's titolare (chiara) born in Buenos Aires.
-        abroad = fields | {"chiara:identity.birth_province": "EE", "chiara:identity.birth_country": "ARGENTINA",
-                           "chiara:identity.birth_comune": "Buenos Aires"}
-        _, b = labels("cila-fittizia", "p6", abroad, "Qualifica e dati del procuratore")
-        assert ("all'Estero", None) in b and ("Stato", "ARGENTINA") in b and not any(l == "in Italia" for l, _ in b), b
-        _, b = labels("cila-fittizia", "p6", fields, "Qualifica e dati del procuratore")
-        assert ("in Italia", None) in b and not any(l == "Stato" for l, _ in b), b
-    finally:
-        os.chdir(here)
-
-
-def exemptions_and_other_kinds():
-    """The bollo: proposed "no" for any client (a farmer can be exempt too), an exemption ticks its
-    reason whatever its spacing, a virtual payment its radio and upload, and the person's step
-    follows the case. The diritti's exemption and its reason (a text box, never a textarea the
-    page can't find); the permesso's "altro" and the SCIA alternativa's regional works; a studio's
-    other architect named as `t`, one with nothing in the vault reported, not guessed."""
-    root = HERE.parents[4] / "rehearsals"
-    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
-    here = os.getcwd()
-    os.chdir(HERE.parents[4])
-
-    def case(name, a):
-        steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
-        v = values(json.loads((root / name / f"answers-{a}.json").read_text()) if isinstance(a, str) else a, fields, steps)
-        r = run.preflight(steps, v, made_up=True)
-        return r, ([(p["label"] or "", p["value"]) for p in rehearsal_plan(steps, v)] if r["ready"] else [])
-    semplificata = "paesaggistica-semplificata-fittizia"
-    try:
-        for a in ("p6", "bollo-virtuale"):
-            base = json.loads((root / semplificata / f"answers-{a}.json").read_text())
-            base.pop("bollo_esenzione")
-            r, _ = case(semplificata, base)
-            assert ("bollo_esenzione", "no") in [(p["key"], p["proposal"]) for p in r["proposals"]], (a, r["proposals"])
-        # An exempt client isn't asked how it pays; one that pays is, once that's known.
-        unasked = json.loads((root / semplificata / "answers-esenzioni.json").read_text())
-        unasked.pop("bollo_marche")
-        r, _ = case(semplificata, unasked)
-        assert r["ready"] and not any(p["key"] == "bollo_marche" for p in r["proposals"]), r["proposals"]
-        paying = json.loads((root / semplificata / "answers-p6.json").read_text())
-        paying.pop("bollo_marche"); paying.pop("bollo_esenzione")
-        r, _ = case(semplificata, paying)
-        # (the ONLUS follow-up waits on the exemption: `only_if`)
-        assert [p["key"] for p in r["proposals"] if p["key"].startswith("bollo") and not p.get("only_if")] == ["bollo_esenzione"], r["proposals"]
-        r, b = case(semplificata, "esenzioni")
-        assert ("Il pagamento non è dovuto poiché esentati", None) in b and not any(l.startswith("Il pagamento è dovuto") for l, _ in b), b
-        assert ("per la seguente motivazione", run.BOLLO_ESENZIONE["cooperativa sociale"]) in b, b
-        assert ("poiché esentati", None) in b and any(l == "specificare la motivazione" and v for l, v in b), b
-        assert any(y.startswith("No imposta di bollo to pay") for y in r["yours"]) and not any("pagoPA" in y for y in r["yours"]), r["yours"]
-        spaced = json.loads((root / semplificata / "answers-esenzioni.json").read_text()) | {"bollo_esenzione": "cooperativa sociale "}
-        _, b2 = case(semplificata, spaced)
-        assert [x for x in b2 if x[0].startswith(("Il pagamento", "per la seguente"))] == [x for x in b if x[0].startswith(("Il pagamento", "per la seguente"))], b2
-        # An ONLUS only for a tax year begun before 2026, when the regime ended.
-        onlus = json.loads((root / semplificata / "answers-esenzioni.json").read_text()) | {"bollo_esenzione": "onlus"}
-        r, _ = case(semplificata, onlus | {"bollo_onlus_esercizio": False})
-        assert any("ONLUS exemption ended" in u for u in r["unsupported"]), r["unsupported"]
-        r, b = case(semplificata, onlus | {"bollo_onlus_esercizio": True})
-        assert ("per la seguente motivazione", run.BOLLO_ESENZIONE["onlus"]) in b, b
-        r, b = case(semplificata, "bollo-virtuale")
-        assert any(l.startswith("Per gli Enti autorizzati") for l, _ in b), b
-        assert ("dichiarazione relativa all'assolvimento dell'imposta di bollo", "rehearsals/scia-fittizia/files/dichiarazione-bollo-virtuale.pdf") in b, b
-        r, _ = case(semplificata, "p6")
-        assert "Pay the imposta di bollo on pagoPA as the portal asks" in r["yours"], r["yours"]
-        # The reason's box, wherever the crawl didn't see it (a SUAP draft), goes as the text box it reads as.
-        for name in ("dehors-fittizio", "cila-fittizia"):
-            steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
-            box = [f for s in steps["sections"] for f in s["fields"] if f.get("label") == "specificare la motivazione"]
-            assert box and all(f["kind"] == "text" for f in box), (name, box)
-        _, b = case("pdc-fittizio", "altro")
-        assert ("altro non indicato nei punti precedenti", None) in b and ("interventi di cui all'articolo 10", None) in b, b
-        _, b = case("scia-alternativa-fittizia", "regionale")
-        assert ("4. Altri interventi individuati dalla legislazione regionale", None) in b, b
-        assert not any(l.startswith("1. Interventi di ristrutturazione") for l, _ in b), b
-        _, b = case("cila-fittizia", "procuratore-estero")
-        assert ("Nome", "Sofia") in b and ("Stato", "Argentina") in b, b
-        a = json.loads((root / "cila-fittizia" / "answers-procuratore-estero.json").read_text())
-        r, _ = case("cila-fittizia", a | {"people": a["people"] | {"t": "nessuno"}})
-        assert not r["ready"] and "nessuno" in r["missing"][0]["why"], r["missing"]
-    finally:
-        os.chdir(here)
-
-
-def carica_not_crash():
-    """An architect named in `people` who isn't the titolare has no Carica on the portal: pre-flight
-    names the box (the run would have crashed on it), and the titolare's own still passes."""
-    steps = {"sections": [{"section": "Scheda anagrafica", "fields": [
-        {"id": "x", "kind": "select", "label": "Carica", "value": "{{t:ruolo.tipo|carica}}"}]}]}
-    flds = {"chiara:ruolo.tipo": "titolare", "sofia:ruolo.tipo": "collaboratore", "sofia:identity.first_name": "Sofia"}
-    r = run.preflight(steps, run.Values({"people": {"t": "sofia"}}, fields=flds, asks={}), made_up=True)
-    assert not r["ready"] and any("carica" in m["field"] and "Scheda anagrafica" in m["why"] for m in r["missing"]), r["missing"]
-    r = run.preflight(steps, run.Values({}, fields=flds, asks={}), made_up=True)
-    assert r["ready"], r
-
-
-def materiali_di_risulta_agree():
-    """The asseverazione's materiali di risulta say what the terre e rocce filings file (2026-11-03:
-    the SCIA with its dichiarazione declared "nessuno"): by-products with the dichiarazione or the
-    piano, and the small-site line with the dichiarazione, the large one with the piano."""
-    root = HERE.parents[4] / "rehearsals"
-    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
-    d = root / "scia-terre-rocce-fittizia"
-    steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
-    base = json.loads((d / "answers-p6.json").read_text())
-    pre = lambda a: run.preflight(steps, run.Values(a, fields=fields, asks=steps["asks"]), made_up=True)
-    # The steps name their files from the repo's root.
-    here = os.getcwd()
-    os.chdir(HERE.parents[4])
-    try:
-        assert pre(base)["ready"]
-        for change, words in (({"scavo": "nessuno"}, "must declare by-products"),
-                              ({"scavo_piano_utilizzo": "true"}, "not the asseverazione's large-site line"),
-                              ({"terre_rocce": "no"}, "files neither the dichiarazione")):
-            r = pre({**base, **change})
-            assert not r["ready"] and any(words in u for u in r["unsupported"]), (change, r["unsupported"])
-        # Proposed from the table's answer, for a case that hasn't said.
-        a = {k: v for k, v in base.items() if k not in ("scavo", "scavo_piano_utilizzo")}
-        props = {p["key"]: p["proposal"] for p in pre(a)["proposals"]}
-        assert props.get("scavo") == "sottoprodotti", props
-    finally:
-        os.chdir(here)
-
-
-def every_sue_case_ready():
-    """Every SUE rehearsal's every answers file pre-flights ready, but those refused on purpose: a
-    case that stops being ready drops out of the counts without a word (schema_branches.py skips
-    it): a new question proposed instead of answered from the vault would have stopped some 170 at
-    once (the land register, 2026-11-02). And only the registered company's case can't pass the
-    portal on made-up data (`made_up_stops`)."""
-    root = HERE.parents[4] / "rehearsals"
-    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
-    refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "This case is another pratica",
-               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Only art. 36 ",
-               ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia",
-               ("cila-fittizia", "answers-impresa-dopo.json"): "The CILA names its building firm",
-               # The permesso's landscape quadro has no line for the art. 167 accertamento (pdc-36-paesaggio).
-               ("pdc-sanatoria-accertamento-fittizio", "answers-p6.json"): "The permesso's asseverazione on the portal requires one of three",
-               # A whole building to another category: no change-of-use line states it (cambio-uso-regionale).
-               ("pdc-sanatoria-fittizio", "answers-cambio-intero.json"): "The national form's change-of-use line"}
-    here, seen, stops = os.getcwd(), 0, set()
-    os.chdir(HERE.parents[4])
-    try:
-        for d in sorted(root.iterdir()):
-            f = d / "portal-steps.generated.yaml"
-            if not f.is_file() or yaml.safe_load((d / "recipe.yaml").read_text()).get("sportello") != "sue":
-                continue
-            steps = yaml.safe_load(f.read_text())
-            for a in sorted(d.glob("answers*.json")):
-                seen += 1
-                r = run.preflight(steps, values(json.loads(a.read_text()), fields, steps), made_up=True)
-                if (d.name, a.name) in refused:
-                    assert r["unsupported"][0].startswith(refused[d.name, a.name]), (d.name, a.name, r["unsupported"])
-                    continue
-                assert r["ready"], (d.name, a.name, {k: r[k] for k in ("unsupported", "questions", "proposals", "missing") if r[k]})
-                if r["made_up_stops"]:
-                    stops.add((d.name, a.name))
-    finally:
-        os.chdir(here)
-    assert seen > 150, seen
-    assert stops == {("cila-fittizia", "answers-societa.json")}, stops
 
 
 def linked_files():
@@ -822,50 +495,6 @@ def linked_files():
         assert not run.preflight(steps, values(steps=steps), made_up=True)["pane_ok"]
         r = run.preflight(steps, values(steps=steps), {str(big): "https://example.org/planimetria.pdf"}, made_up=True)
         assert r["pane_ok"] and any(f.get("link") for f in r["files"]), r["files"]
-
-
-def streets_and_lists():
-    """A street that isn't a Via, Viale, Piazza, Corso or Largo (a third of Naples') is ALTRO with
-    its type in "Dettaglio DUG", the name after it; a type the portal lists nowhere (Naples' cupe) is
-    named by pre-flight. Citizenship takes a masculine adjective and a country's name; any of the
-    107 province sigle has its name (2026-11-04)."""
-    root = HERE.parents[4] / "rehearsals" / "cila-fittizia"
-    fields = dict(json.loads((root / "fixture-p6.json").read_text())["fields"])
-    a = json.loads((root / "answers-p6.json").read_text())
-    steps = yaml.safe_load((root / "portal-steps.generated.yaml").read_text())
-    client = a["people"]["c"]
-
-    def street(addr):
-        v = values(a, fields | {f"{client}:residenza.indirizzo": addr}, steps)
-        r = run.preflight(steps, v, made_up=True)
-        if not r["ready"]:
-            return r, None
-        boxes = ("Toponimo (DUG)", "da compilare obbligatoriamente", "Denominazione stradale")
-        return r, [(x["label"], x["value"]) for x in rehearsal_plan(steps, v)
-                   if x["section"] == "Scheda anagrafica" and x["label"] in boxes][:3]
-    here = os.getcwd()
-    os.chdir(HERE.parents[4])
-    try:
-        _, got = street("Via Toledo")
-        assert got == [("Toponimo (DUG)", "VIA"), ("Denominazione stradale", "TOLEDO")], got
-        _, got = street("Vico Lungo Gelso")
-        assert got == [("Toponimo (DUG)", "ALTRO"), ("da compilare obbligatoriamente", "VICO"),
-                       ("Denominazione stradale", "LUNGO GELSO")], got
-        _, got = street("Capo di Piazza Mercato")
-        assert got[1] == ("da compilare obbligatoriamente", "CAPO DI PIAZZA") and got[2][1] == "MERCATO", got
-        r, _ = street("Cupa Caiafa")
-        assert not r["ready"] and "no street type the portal lists" in r["missing"][0]["why"], r["missing"]
-        # `page` without pre-flight says the same and stops, not a traceback.
-        cupa = values(a, fields | {f"{client}:residenza.indirizzo": "Cupa Caiafa"}, steps)
-        raises(lambda: run.page_files(run.rehearsal(steps, cupa), cupa), "no street type the portal lists")
-        for cit, country in (("moldavo", "MOLDAVIA"), ("Moldavia", "MOLDAVIA"), ("britannica", "REGNO UNITO")):
-            assert run.FILTERS["cittadinanza"](cit) == country, cit
-        r = run.preflight(steps, values(a, fields | {f"{client}:identity.citizenship": "tagika"}, steps), made_up=True)
-        assert not r["ready"] and "no Cittadinanza for 'tagika'" in r["missing"][0]["why"], r["missing"]
-    finally:
-        os.chdir(here)
-    assert len(run.PROVINCE) == 107 and run.FILTERS["provincia_nome"]("ba") == "BARI"
-    assert run.FILTERS["straniera"]("Italia") == "false" and run.FILTERS["straniera"]("moldava") == "true"
 
 
 CASES = [
@@ -896,15 +525,6 @@ CASES = [
     ("the agibilità's systems: their dichiarazione is filled, other certificates asked system by system, asked only with systems", agibilita_systems),
     ("the agibilità's systems decide its slots: the dichiarazione's only with one, collaudo and atto notorio their own", agibilita_slots),
     ("the SCIA in sanatoria: in progress and double conformity ready, art. 36-bis c. 1 and pre-1977 variants refused", sanatoria_cases),
-    ("a landscape variant, a renewal with changes (refused for a semplificata), an architect born abroad", group_two_choices),
-    ("every SUE case is ready but those refused on purpose; only the registered company can't pass on made-up data", every_sue_case_ready),
-    ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
-    ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused (a portal defect)", scelte_follow_the_case),
-    ("the CILA's filings presented with it and assents for the SUE (art. 23-bis), the CIL's filings, a partial fine lavori's planimetria", assents_and_filings),
-    ("the bollo and diritti exemptions, the virtual bollo, the permesso's altro, the SCIA alternativa's regional works, a studio's other architect", exemptions_and_other_kinds),
-    ("the materiali di risulta agree with the terre e rocce filings, and are proposed from them", materiali_di_risulta_agree),
-    ("a value the vault has but the form can't take (a Carica for a named architect who isn't the titolare) is reported, not crashed on", carica_not_crash),
-    ("a street of any type (a Vico, a Capo di Piazza; a Cupa named), a citizenship by adjective or country, every province", streets_and_lists),
 ]
 
 

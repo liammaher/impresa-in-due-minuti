@@ -324,96 +324,11 @@
     report.done = true;
   }
 
-  // Which operations the wizard takes together: each pair selected on the operations screen,
-  // then forward with the defaults to the generated pratica. `together: false` is a pair the tree
-  // won't hold (ticking the second unticked the first: one radio group); a pair it holds is
-  // `accepted` (the pratica's adempimenti and sections) or `refused` (the screen it stayed on and
-  // the portal's words). Each result goes to localStorage `wizard:pair:<a>+<b>` as it's done, so a
-  // batch stopped by a logout resumes. Never past the generated pratica, as crawl().
-  async function pairs(opts) {
-    const t0 = performance.now();
-    frame = document.createElement("iframe");
-    frame.dataset.pv = "crawl";
-    frame.style.cssText = "position:fixed;inset:0;width:100vw;height:100vh;border:0;z-index:2147483647;background:#fff";
-    const loaded = new Promise((r) => frame.addEventListener("load", r, { once: true }));
-    frame.src = location.href;
-    document.body.append(frame);
-    await loaded;
-    await idle();
-    const toOps = async () => {
-      if (title().includes("scelta operazioni")) return;
-      await toScreen("scelta settore").catch(async () => { await reopen(true); await toScreen("scelta settore"); });
-      const sec = tree().find((n) => norm(n.label) === norm(opts.sector));
-      if (!sec) throw new Error(`no sector ${opts.sector}`);
-      if (!(await setSelected(sec.key, true))) throw new Error("sector didn't select");
-      await go(() => button("Conferma").click());
-      if (!title().includes("scelta operazioni")) throw new Error(`expected Scelta operazioni, found ${title()}`);
-    };
-    // A node by key, checked by its label (a tree that changed would move keys).
-    const find = (o) => {
-      const t = tree(), n = t.find((x) => x.key === o.key && norm(x.label) === norm(o.label));
-      return n || t.find((x) => norm(x.label) === norm(o.label));
-    };
-    const clear = async () => { for (const n of tree().filter((x) => x.selected && (x.type === "RAD" || x.type === "CHK"))) await setSelected(n.key, false); };
-    await reopen(true);
-    await toOps();
-    for (const [a, b] of opts.pairs) {
-      const k = `wizard:pair:${a.key}+${b.key}`;
-      const stored = JSON.parse(localStorage.getItem(k) || "null");
-      if (stored && !stored.error) { report.skipped++; continue; }
-      const r = { a: a.label, b: b.label, keys: [a.key, b.key] }, p0 = performance.now();
-      report.current = `${a.key}+${b.key}`;
-      try {
-        await toOps();
-        await clear();
-        const na = find(a), nb = find(b);
-        if (!na || !nb) throw new Error(`not in the tree: ${!na ? a.label : b.label}`);
-        await setSelected(na.key, true);
-        await setSelected(nb.key, true);
-        const sel = new Set(tree().filter((x) => x.selected).map((x) => x.key));
-        r.together = sel.has(na.key) && sel.has(nb.key);
-        if (r.together) {
-          const btn = button("Conferma");
-          // A refusal can come with no message: the screen just stays.
-          const stayed = await go(() => btn.click()).then(() => null, (e) => String(e.message || e));
-          if (title().includes("scelta operazioni")) {
-            r.refused = { screen: title(), messages: messages(), ...(stayed ? { error: stayed } : {}) };
-          } else {
-            try {
-              const p = await forward(null);
-              r.accepted = { adempimenti: p.adempimenti, sections: p.sections };
-            } catch (e) {
-              r.refused = { screen: title(), messages: messages(), error: String(e.message || e) };
-            }
-          }
-        }
-        await toScreen("scelta operazioni").catch(async () => { await reopen(true); await toOps(); });
-        await clear();
-      } catch (e) {
-        r.error = String(e.message || e);
-        if (!/impresainungiorno/.test(doc().location.host) || /login/i.test(doc().location.pathname)) { report.stopped = "logged out: log in, then pairs() again"; break; }
-        await reopen(true).then(toOps).catch(() => {});
-      }
-      r.seconds = +((performance.now() - p0) / 1000).toFixed(1);
-      localStorage.setItem(k, JSON.stringify(r));
-      report.done_ops++;
-      if (r.error) report.errors.push(`${r.keys.join("+")}: ${r.error}`);
-    }
-    report.seconds = +((performance.now() - t0) / 1000).toFixed(1);
-    report.done = true;
-  }
-
   window.__wizard = {
     // opts.draft: the scratch draft's description, to reopen it after an error page.
     start(opts = {}) {
       report = { started: new Date().toISOString(), draft: opts.draft, sectors: [], done_ops: 0, reopened: 0, done: false };
       crawl(opts).catch((e) => { report.error = String(e.message || e); report.done = true; });
-      return "started";
-    },
-    // opts: {draft, sector, pairs: [[{key, label}, {key, label}], ...]}
-    pairs(opts) {
-      report = { started: new Date().toISOString(), draft: opts.draft, pairs: opts.pairs.length, done_ops: 0, skipped: 0, reopened: 0, errors: [], done: false };
-      pairs(opts).catch((e) => { report.error = String(e.message || e); report.done = true; });
       return "started";
     },
     async wait(ms = 25000) {

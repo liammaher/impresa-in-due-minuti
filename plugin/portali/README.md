@@ -45,8 +45,3 @@ Read [responsible use](https://github.com/liammaher/portali/blob/main/docs/respo
 (Italian and English): you sign and answer for the pratica, one pratica at a time with your own
 SPID, and no personal data in a report. To ask for a pratica or report a portal that changed, open
 an [issue](https://github.com/liammaher/portali/issues/new/choose).
-
-## More than this
-
-To connect it to your other tools, run it across many jobs, or automate another workflow,
-write to liampmaher1996@gmail.com.

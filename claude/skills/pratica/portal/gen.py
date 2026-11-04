@@ -23,9 +23,7 @@ Sections are matched without their quadro letter (the CIL's f) is the CILA's h))
 first dictionary entry that fits the crawled section wins. A field under a `when` lives in
 its own branch of the section; a field outside it that such a choice moves goes by label,
 and so does a box whose own tick renumbers it (it opens rows above itself). An attachments
-slot that takes only signed files (.p7m) takes the person's signed file where an entry names it,
-and is left to the person where none does; a document the portal makes ("Scarica il documento":
-the procura) waits for the run after the declarations (`after_declarations`).
+slot that takes only signed files (.p7m) is left to the person.
 
 A dictionary entry's `supports` (the cases its boxes can't state) joins the recipe's in every
 pratica that shows the section.
@@ -33,10 +31,7 @@ pratica that shows the section.
 A recipe's `operation` may be a list (a CILA with its autorizzazione paesaggistica): the
 pratica is the union of each operation's sections with the recipe's `scelte`, in the order
 of the combination's own crawl, which must hold just those (a section both have under two
-names, the same fields, is one). Every scelta named is ticked, unless it is `{option, when}`:
-then it is ticked only when the case's answers make `when` true, and each section it adds
-carries that `when` (run.py drops the section otherwise), so one recipe files a pratica with
-co-holders and one without.
+names, the same fields, is one). Every scelta named is ticked.
 
 It stops, writing nothing, on a section the dictionary doesn't have, a dictionary field
 the crawl doesn't show, or a field the section shows that no dictionary entry fills or
@@ -51,7 +46,6 @@ in one checklist); run.py preflight then refuses a case the table gives to anoth
 """
 
 import argparse
-import collections
 import copy
 import json
 import re
@@ -64,10 +58,9 @@ import yaml
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import rules  # noqa: E402
-import run  # noqa: E402  (a "+" block's template, as run.py expands it)
 # The asks a template reads: after "{{", and each term of a sum ("+", "*") or of several fields
 # for one filter (",": {{ask.a,ask.b|any}}).
-ASKED = re.compile(r"(?:\{\{|[+*,])\s*ask\.([\w#]+)")
+ASKED = re.compile(r"(?:\{\{|[+*,])\s*ask\.(\w+)")
 DECLARATIONS = re.compile(
     r"consapevolezza|informativa sulla privacy|requisiti di o|altre dichiarazioni|"
     r"dichiarazioni ai sensi dell'art\. 6|rispetto sulle tasse|art\. ?75", re.I)
@@ -118,9 +111,6 @@ def rules_block(spec, asks, groups):
         elif a.get("type") != kind or (kind == "choice" and {rules.fact_value(fact, o) for o in a.get("options", [])} - set(fact["values"])):
             raise GenError(f"rules: the fact {name} is also asks.{name}, a {a.get('type')}: give its value in the "
                            "recipe's rules.facts")
-        elif a.get("group") == "fatti":
-            asks[name] = asks.pop(name)  # in the facts checklist at the table's place
-
         out[name] = "{{ask.%s}}" % name
     return {"table": spec["table"], **({"main": spec["main"]} if spec.get("main") else {}), "facts": out,
             **({"handles": spec["handles"]} if spec.get("handles") else {})}
@@ -284,27 +274,8 @@ class Section:
         self.avail = []
 
 
-class _Unique(yaml.SafeLoader):
-    """PyYAML keeps the last of two equal keys without a word: a question defined twice in the
-    dictionary took the later definition (2026-11-02, paes_variante). Here it's an error."""
-
-
-def _mapping(loader, node, deep=False):
-    seen = set()
-    for k, _ in node.value:
-        key = loader.construct_object(k, deep=deep)
-        if key in seen:
-            raise GenError(f"{node.start_mark.name}:{k.start_mark.line + 1}: the key {key!r} twice in one mapping")
-        seen.add(key)
-    return yaml.SafeLoader.construct_mapping(loader, node, deep)
-
-
-_Unique.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _mapping)
-
-
 def load_yaml(p):
-    with open(p, encoding="utf-8") as f:  # the file's name in an error's mark
-        return yaml.load(f, Loader=_Unique)
+    return yaml.safe_load(Path(p).read_text())
 
 
 REHEARSALS = HERE.parents[3] / "rehearsals"
@@ -404,13 +375,6 @@ def dictionary_entries(sections, name):
     return out
 
 
-def revealed(nodes):
-    """Every box a choice of the crawl opens, at any depth."""
-    for n in nodes or []:
-        yield from n.get("reveals", [])
-        yield from revealed(n.get("then"))
-
-
 def fill(entry, as_name, c, recipe, name):
     """One section from one dictionary entry: the steps, what doesn't fit, the asks it uses."""
     problems, asks_used = [], set()
@@ -420,45 +384,25 @@ def fill(entry, as_name, c, recipe, name):
         if k in entry:
             out[k] = entry[k]
     fields, filled = [], set()
-    # `each`: a block the national form repeats without limit (other technicians, "altro"
-    # titles, filings already made), as many as `count` says. The blocks up to `on_page` are on
-    # the page already (from `first`: those before are the entry's own fields); every later one
-    # is added with "+", written once as a template run.py expands for the case's count (an
-    # `add` with `each`, then the block's fields with `block: "#N"`). `#N` in a field is "" in
-    # the first block, then "2", "3" (role a, a2, a3), `#K` the block's number always; each block
-    # after the first waits for its count. `when` is every block's; a field keeps its own after it.
-    def each(e):
-        anchor = e.get("anchor", e["block"][0]["label"])
-        first, on_page = e.get("first", 1), e.get("on_page", 1)
-        joined = lambda *ws: {"when": " ".join(w for w in ws if w)} if any(ws) else {}
-        out = []
-        for n in range(first, on_page + 1):
-            gate = e["count"][:-2] + f"|atleast_{n}}}}}" if n > 1 else ""
-            for b in e["block"]:
-                g = run.nth_block(b, n)
-                out.append({**g, "anchor": anchor, "block": n, **joined(e.get("when", ""), gate, g.pop("when", ""))})
-        out.append({"kind": "add", "anchor": anchor, "block": "#N", "each": {"count": e["count"], "from": max(first, on_page + 1)},
-                    **joined(e.get("when", ""))})
-        out += [{**{k: v for k, v in b.items() if k != "when"}, "anchor": anchor, "block": "#N",
-                 **joined(e.get("when", ""), b.get("when", ""))} for b in e["block"]]
-        return out
-    dfields = [g for d in entry.get("fields", []) for g in (each(d) if d["kind"] == "each" else [d])]
+    dfields = list(entry.get("fields", []))
     # `branches`: conditions of a choice made first that renumbers every box below it (a
     # registered business or not): each box without a `when` once per branch, with its ids.
     if entry.get("branches"):
         dfields = [g for d in dfields for g in ([d] if "when" in d else
                    [{**d, "when": w} for w in entry["branches"]])]
-    # `shift` ({when, anchor}): a block that choice opens above every block of `anchor` (the
-    # architectural designer's, when another technician designs: read on the CILA, SCIA and
-    # permesso 2026-11-02), so under it each other field anchored there counts one block more.
-    if entry.get("shift"):
-        s = entry["shift"]
-        also = lambda d, w: {**d, "when": " ".join(x for x in (d.get("when", ""), w) if x)}
-        shifted = lambda d: d.get("anchor") == s["anchor"] and s["when"] not in d.get("when", "")
-        dfields = [g for d in dfields for g in ([also(d, s["when"][:-2] + "|not}}"),
-                                                 {**also(d, s["when"]), "block": d.get("block", 1) + 1}]
-                                                if shifted(d) else [d])]
     branch_terms = {re.match(r"\s*(\{\{[^}]*\}\})", w)[1] for w in entry.get("branches", [])}
+    # `repeat`: a block of people of the case, each after the first added with "+" under its
+    # `repeat_when`; `#N` in a field is "" in the first block, then "2", "3" (role a, a2, a3;
+    # ask altro_tecnico_..., altro_tecnico2_...). A field keeps its own `when` after the block's.
+    for i in range(entry.get("repeat", 0) if "block" in entry else 0):
+        cond = " ".join(x for x in (entry.get("firm_when", ""), entry["repeat_when"][i - 1] if i else "") if x)
+        anchor = entry["block"][0]["label"]
+        if i:
+            dfields.append({"kind": "add", "anchor": anchor, "block": i + 1, "when": cond})
+        for b in entry["block"]:
+            g = json.loads(json.dumps(b).replace("#N", str(i + 1) if i else ""))
+            when = " ".join(x for x in (cond, g.pop("when", "")) if x)
+            dfields.append({**g, "anchor": anchor, "block": i + 1, **({"when": when} if when else {})})
     for i, role in enumerate(recipe.get("firms", entry.get("firms", [])) if "block" in entry and "firms" in entry else []):
         # One block per firm, the second and later added with "+", and only when the job has
         # that firm; each also under the entry's `firm_when`.
@@ -469,9 +413,7 @@ def fill(entry, as_name, c, recipe, name):
             dfields.append({"kind": "add", "anchor": entry["block"][0]["label"], "block": i + 1, **cond})
         for b in entry["block"]:
             g = json.loads(json.dumps(b).replace("{{F:", "{{" + role + ":"))
-            # A field's own `when` (the Cassa edile's rows) after the block's.
-            own = " ".join(w for w in (when, g.pop("when", "")) if w)
-            dfields.append({**g, "anchor": entry["block"][0]["label"], "block": i + 1, **({"when": own} if own else {})})
+            dfields.append({**g, "anchor": entry["block"][0]["label"], "block": i + 1, **cond})
     last_select = None
     # A field under a `when` lives in its branch of the section (keyed by the condition's
     # first term): "already filed" and "this counts as filing" each open their own rows,
@@ -479,18 +421,7 @@ def fill(entry, as_name, c, recipe, name):
     # `within`: the same, for a choice under a longer condition inside its branch (a tolerance
     # ticked only for some answers): a later field of that branch goes by label unless its own
     # condition includes that choice's.
-    branches, main, changed, within, ticked = {}, sec, {}, {}, set()
-    # A "+" renumbers every box after the block it adds to: a box the section shows before any
-    # choice, from the block's first box on, goes by label. (One a choice opens keeps the id the
-    # crawl saw in that state: the CILA's tolerances, above its filings' "+".)
-    pluses = []
-    base = {x["id"]: x for x in sec.base}
-
-    def after_plus(f):
-        b = f.get("base_id", f["id"])
-        starts = [next((x["id"] for x in sorted(base.values(), key=lambda x: pos(x["id"]) or (0, 0))
-                        if matches(x, "text", a)), "") for a in pluses]
-        return b in base and any((pos(b) or (0, 0)) >= (pos(s) or (0, 0)) for s in starts)
+    branches, main, changed, within = {}, sec, {}, {}
     for d in dfields:
         term = re.match(r"\s*(\{\{[^}]*\}\})", d.get("when", ""))
         sec = main if not term else branches.setdefault(term[1], copy.deepcopy(main))
@@ -503,8 +434,6 @@ def fill(entry, as_name, c, recipe, name):
                 if len(hits) >= d.get("nth", 1):
                     filled.add((hits[d.get("nth", 1) - 1]["id"], hits[d.get("nth", 1) - 1]["label"]))
             sec.added = True
-            if d["kind"] == "add" and d["anchor"] not in pluses:
-                pluses.append(d["anchor"])
             fields.append(dict(d))
             continue
         look = sec
@@ -516,25 +445,16 @@ def fill(entry, as_name, c, recipe, name):
                 continue
             look.choose(last_select, d["via"])
         f, count = look.find(d["kind"], d["label"], d.get("nth", 1))
-        if f is None and d.get("on_page") and d["kind"] in ("radio", "checkbox") and \
-                look.find({"radio": "checkbox", "checkbox": "radio"}[d["kind"]], d["label"])[0]:
-            continue  # the crawl has the label as the other kind: another entry's box (the SCIA
-            # alternativa's "e allega ... la notifica" is a radio, the SCIA's a checkbox)
         if f is None and d.get("on_page"):
             # Shown only by a combination of choices the crawl didn't try: by label, found on
             # the page (and skipped there too if it isn't, `if_present`).
-            fields.append({k: v for k, v in d.items() if k not in ("note", "on_page")}
-                          | ({"kind": "text"} if d["kind"] == "textarea" else {}))
+            fields.append({k: v for k, v in d.items() if k not in ("note", "on_page")})
             continue
         if f is None and d.get("if_present"):
             continue  # a choice only some pratiche show
         if f is None:
-            # Shown only once a choice is made: that choice's state is its branch's, keyed by the
-            # first term of its `when` (2026-11-01: h1's si/no under the director's tick).
-            opened = any(matches(x, d["kind"], d["label"]) for x in revealed(c.get("branches")))
             problems.append(f"{name}: no {d['kind']} labelled {d['label']!r}" +
-                            (f" (only {count})" if count else "") + " in the crawl" +
-                            (": a choice opens it, so start its `when` with that choice's first term" if opened else ""))
+                            (f" (only {count})" if count else "") + " in the crawl")
             continue
         filled.add((f["id"], f["label"]))
         g = {k: v for k, v in d.items() if k not in ("label", "nth", "note", "via", "if_present", "by_label")}
@@ -558,7 +478,7 @@ def fill(entry, as_name, c, recipe, name):
             and (pos(f.get("base_id", f["id"])) or (0, 0)) >= at for k, at in changed.items()) or term and any(
             k.split()[0] == term[1] and not set(k.split()) <= set(d["when"].split())
             and (pos(f.get("base_id", f["id"])) or (0, 0)) >= at for k, at in within.items()) or (
-            d["kind"] in ("radio", "checkbox", "tick") and look.moves_itself(f)) or after_plus(f)
+            d["kind"] in ("radio", "checkbox", "tick") and look.moves_itself(f))
         filled.update((t["id"], t["label"]) for t in twins if t)
         # `by_label`: rows a choice the crawl tried alone moves in another branch (the SCIA's
         # sanatoria cases): never an id, found on the page as the answers left it.
@@ -570,14 +490,6 @@ def fill(entry, as_name, c, recipe, name):
             g = {"id": f["id"], **g, "label": d["label"], **({"nth": d["nth"]} if d.get("nth", 1) > 1 else {})}
         else:
             g = {**g, "label": d["label"], **({"nth": d["nth"]} if d.get("nth", 1) > 1 else {})}
-        # One box ticked by two labels under one condition (a form's own wording, and a shorter
-        # label found inside it): once. A second choice of it would move the rows after it again
-        # (the CILA's firm radio, 2026-11-01).
-        if d["kind"] in ("radio", "checkbox", "tick"):
-            key = (f.get("base_id", f["id"]), d.get("when", ""))
-            if key in ticked:
-                continue
-            ticked.add(key)
         fields.append(g)
         # A choice everyone makes happens in every branch too.
         for st in [sec] if term else [main, *branches.values()]:
@@ -604,9 +516,7 @@ def fill(entry, as_name, c, recipe, name):
     same = lambda g: (g["kind"], norm(g["label"]), norm(g.get("context")))
     filled_as = {same(g) for g in shown.values() if (g["id"], g["label"]) in filled}
     for f in shown.values():
-        # A box filled before a later choice moved it (the SUE's "In qualità di", under the non-EU box) too.
-        if (f["id"], f["label"]) in filled or (f.get("base_id"), f["label"]) in filled or same(f) in filled_as \
-                or f["kind"] in ("radio", "checkbox") and not entry.get("strict"):
+        if (f["id"], f["label"]) in filled or same(f) in filled_as or f["kind"] in ("radio", "checkbox") and not entry.get("strict"):
             continue
         if any(norm(f.get("label")).startswith(x) or norm(f.get("context")).startswith(x) for x in leave):
             continue
@@ -628,8 +538,7 @@ def split_by_yaml(dictionary, recipe):
     the tolerances' "..., comma 4, allegata" found the "presentata" box). Refuse it."""
     found = []
     entries = dictionary.get("sections", []) + dictionary.get("after", []) + recipe.get("sections", [])
-    fields = [(e.get("section"), f) for e in entries for f in e.get("fields", []) + e.get("block", [])
-              + [b for d in e.get("fields", []) if d.get("kind") == "each" for b in d["block"]]]
+    fields = [(e.get("section"), f) for e in entries for f in e.get("fields", []) + e.get("block", [])]
     fields += [(screen, f) for screen, fs in (recipe.get("attachments") or {}).items() for f in fs]
     for where, f in fields:
         empty = [k for k, v in f.items() if v is None]
@@ -645,21 +554,16 @@ def unslotted(steps):
     ricevuta") with no attachment slot under the same condition: each ticked box of the kind
     has added a required slot on the portal (the sanction's receipt, the sewer connection's
     documents), found only by a run. [(section, label, when)]; a case the recipe refuses
-    anyway is listed too (pre-flight decides which cases exist). A box whose dictionary entry says
-    what it adds (`slot`: the slot's title, or why it adds none, as read on the portal) is known."""
+    anyway is listed too (pre-flight decides which cases exist)."""
     terms = lambda w: set(re.findall(r"\{\{.+?\}\}", w or ""))
     files = [terms(f.get("when")) for s in steps["sections"] for f in s["fields"] if f["kind"] == "file"]
     return [(s["section"], f["label"], f["when"]) for s in steps["sections"] for f in s["fields"]
-            if f["kind"] in ("checkbox", "radio", "tick") and f.get("when") and not f.get("slot")
+            if f["kind"] in ("checkbox", "radio", "tick") and f.get("when")
             and re.match(r"(si )?alleg[ao]\b", norm(f.get("label")))
             and not any(terms(f["when"]) <= t for t in files)]
 
 def generate(recipe, base=HERE):
     recipe = resolved(recipe)
-    # A scelta is its option, or {option, when}: ticked only for the cases `when` holds (co-holders).
-    scelte = [s if isinstance(s, str) else s["option"] for s in recipe.get("scelte") or []]
-    scelta_when = {s["option"]: s["when"] for s in recipe.get("scelte") or [] if isinstance(s, dict)}
-    added_when = {}  # a section a conditional scelta adds: that scelta's `when`
     cat_dir = base / "catalogue" / recipe["comune"]
     catalogue = json.loads((cat_dir / f"{recipe['sportello']}-wizard.json").read_text())
     crawl = json.loads((cat_dir / "sections" / f"{recipe['crawl']}.json").read_text())
@@ -676,9 +580,9 @@ def generate(recipe, base=HERE):
         op = {"label": recipe["operation"], "scelte": []}
         # A batch crawl (crawl.js batch) says which sections the base pratica has and which a
         # scelta adds; the recipe's scelte pick those.
-        names = [s["section"] for s in crawl["sections"] if not s.get("scelta") or s["scelta"] in scelte]
+        names = [s["section"] for s in crawl["sections"] if not s.get("scelta") or s["scelta"] in recipe.get("scelte", [])]
         # A scelta the batch tried only once (its first pratica): its sections from there.
-        for sc in scelte:
+        for sc in recipe.get("scelte", []):
             if any(s.get("scelta") == sc for s in crawl["sections"]):
                 continue
             for other in sorted((cat_dir / "sections").glob("*.json")):
@@ -689,7 +593,6 @@ def generate(recipe, base=HERE):
                     break
             else:
                 raise GenError(f"no crawl has tried the scelta {sc!r}")
-        added_when = {norm(s["section"]): scelta_when[s["scelta"]] for s in crawl["sections"] if s.get("scelta") in scelta_when}
         if "wizard" not in recipe:
             raise GenError("the catalogue has no pratica for this operation: the recipe needs `wizard`")
     else:
@@ -703,13 +606,9 @@ def generate(recipe, base=HERE):
                 raise GenError(f"no operation {label!r} in the catalogue")
             # Each scelta drops and adds by index, so a second one keeps what the first added.
             own = list(o["sections"])
-            for s in scelte:
+            for s in recipe.get("scelte", []):
                 sc = next((x for x in o.get("scelte", []) if x["option"] == s), None) or \
                     (_ for _ in ()).throw(GenError(f"no scelta {s!r} for {label}"))
-                if s in scelta_when:
-                    if sc.get("drops"):
-                        raise GenError(f"the scelta {s!r} drops sections: it can't depend on the case (`when`)")
-                    added_when.update({norm(catalogue["sections"][i]): scelta_when[s] for i in sc.get("adds", []) if i not in own})
                 own = [i for i in own if i not in sc.get("drops", [])] + [i for i in sc.get("adds", []) if i not in own]
             # A Si/No question answered Si adds its sections too (the SCIA's sanatoria quadro).
             for q, a in (recipe.get("si_no") or {}).items():
@@ -785,11 +684,6 @@ def generate(recipe, base=HERE):
             problems.extend(min(tried, key=len))  # the entry that came closest
             continue
         asks_used |= used
-        if norm(name) in added_when:
-            # A section a scelta adds only for some cases: it and each of its fields wait on it.
-            w = added_when[norm(name)]
-            out = {"section": out["section"], "when": w, **{k: v for k, v in out.items() if k != "section"}}
-            out["fields"] = [{**f, "when": f"{w} {f['when']}" if f.get("when") else w} for f in out["fields"]]
         out_sections.append(out)
         # A section's own refusals (the cases its boxes can't state) go with it into every
         # pratica that shows it, after the recipe's.
@@ -818,38 +712,27 @@ def generate(recipe, base=HERE):
                     for t in ASKED.findall(json.dumps(d)):
                         asks_used.add(t)
                 continue  # this pratica has no such slot
-            # What the slot takes, so pre-flight can refuse a file it wouldn't (a plain copy where
-            # only a signed .p7m goes: the person signs, Claude attaches what they signed).
-            field = dict(d) | ({"accepts": slot["accepts"]} if slot.get("accepts") else {})
-            if slot.get("portal_document") or d.get("after_declarations"):
-                # The portal makes it from the pratica once the declarations are ticked ("Scarica il
-                # documento": the procura), or it comes last (the diritti receipt): a second run
-                # attaches it (run.py --after-declarations), and until then its empty slot is the
-                # person's, not the first run's error.
-                field["after_declarations"] = True
+            if slot.get("accepts") and all(t.endswith(".p7m") for t in slot["accepts"].split(";")):
+                # Signed files only: the person's to sign and attach, never a plain copy.
                 out["theirs"] = out.get("theirs", []) + [d["label"]]
-            fields.append(field)
+                continue
+            # What the slot takes, so pre-flight can refuse a file it wouldn't.
+            fields.append(dict(d) | ({"accepts": slot["accepts"]} if slot.get("accepts") else {}))
             for t in ASKED.findall(json.dumps(d)):
                 asks_used.add(t)
         if slots is not None:
-            # A slot that takes only signed files and no entry names is the person's.
+            # Every slot that takes only signed files is the person's, named or not.
             for s in slots:
-                if s.get("accepts") and all(t.endswith(".p7m") for t in s["accepts"].split(";")) \
-                        and not any(norm(s["title"]).startswith(norm(d["label"])) for d in fields):
+                if s.get("accepts") and all(t.endswith(".p7m") for t in s["accepts"].split(";")):
                     title = s["title"][:60]
                     if not any(norm(title).startswith(norm(t)) or norm(t).startswith(norm(title)) for t in out.get("theirs", [])):
                         out["theirs"] = out.get("theirs", []) + [title]
             for s in slots:
                 hit = any(norm(s["title"]).startswith(norm(d["label"])) for d in fields)
                 # The person's: the entry's own, and the signed-only slots handed to them above.
-                # An entry that is another slot's whole title names that slot alone (inpage.js `errors`).
-                titles = {norm(x["title"]) for x in slots}
-                theirs = any(norm(s["title"]).startswith(norm(t)) and (norm(s["title"]) == norm(t) or norm(t) not in titles)
-                             for t in entry.get("theirs", []) + out.get("theirs", []))
+                theirs = any(norm(s["title"]).startswith(norm(t)) for t in entry.get("theirs", []) + out.get("theirs", []))
                 if s.get("required") and not hit and not theirs:
                     problems.append(f"{name}: required slot {s['title'][:70]!r} is in no dictionary entry")
-        if out.get("theirs"):
-            out["theirs"] = list(dict.fromkeys(out["theirs"]))
         out["fields"] = fields
         if entry.get("note"):
             out["note"] = entry["note"]
@@ -860,35 +743,15 @@ def generate(recipe, base=HERE):
     for t in recipe.get("asks_used", []):
         asks_used.add(t)
     supports = recipe.get("supports", []) + [c for c in section_supports if c not in recipe.get("supports", [])]
-    # A refusal that names a known portal defect carries its record (defects.yaml), so the steps
-    # file alone tells pre-flight what to say: the plugin ships steps files, not this folder.
-    defects = None
-    for i, c in enumerate(supports):
-        if isinstance(c.get("defect"), str):
-            defects = defects or load_yaml(HERE / "defects.yaml")
-            if c["defect"] not in defects:
-                raise GenError(f"supports names the defect {c['defect']!r}, not in defects.yaml")
-            supports[i] = {**c, "defect": {"id": c["defect"], **defects[c["defect"]]}}
-    for t in ASKED.findall(json.dumps([recipe.get("yours"), supports, recipe.get("rules"), scelta_when])):
+    for t in ASKED.findall(json.dumps([recipe.get("yours"), supports, recipe.get("rules")])):
         asks_used.add(t)
     # The dictionary's questions, the recipe's wording over them; a question only this pratica
     # asks (one `supports` or `rules` reads) is the recipe's alone.
     asks = {}
     for k, v in list(dictionary["asks"].items()) + [(k, {}) for k in recipe.get("asks", {}) if k not in dictionary["asks"]]:
-        # A "+" block's question: one for each block written out (on the page), then the
-        # template run.py makes the others from.
-        for n, u in run.block_asks(k, asks_used - {k}):
-            asks.setdefault(u, {**run.nth_block(v, n), **recipe.get("asks", {}).get(u, {})})
         if k in asks_used:
             asks[k] = {**v, **recipe.get("asks", {}).get(k, {})}
     missing = (asks_used - set(asks)) | {k for k, a in asks.items() if "type" not in a}
-    if recipe.get("rules"):
-        # A fact of the rules table is asked from the table (rules_block), so a `supports` may
-        # gate on it: what the works are, before whether the building is listed.
-        try:
-            missing -= set(rules.table(recipe["rules"]["table"])["facts"]) - set(asks)
-        except ValueError as e:
-            raise GenError(str(e))
     if missing:
         raise GenError(f"asks with no definition in the dictionary: {sorted(missing)}")
     # Yes/no questions asked as one checklist (run.py preflight's `groups`).
@@ -919,8 +782,7 @@ def generate(recipe, base=HERE):
         {"screen": "Scelta del destinatario della pratica", "confirm": "CONFERMA"},
     ]
     if recipe.get("scelte") is not None and "wizard" not in recipe:
-        tree = [{"leaf": s, "when": scelta_when[s]} if s in scelta_when else s for s in scelte]
-        wizard.append({"screen": "Scelte eventuali", **({"tree": tree[0] if len(tree) == 1 else tree} if tree else {}),
+        wizard.append({"screen": "Scelte eventuali", **({"tree": recipe["scelte"][0] if len(recipe["scelte"]) == 1 else recipe["scelte"]} if recipe["scelte"] else {}),
                        **({"answers": recipe["si_no"]} if recipe.get("si_no") else {}),
                        "confirm": "CONFERMA"})
     return {
@@ -962,14 +824,7 @@ def check(gen, hand):
             diffs.append(f"{s['section']}: not in the hand-written file")
             continue
         hand_keys = [key(b) for b in h["fields"]]
-        # A box another branch fills again (a client company's rows, where the person's are) is
-        # that branch's case: each key counts as often as the hand file has it.
-        left = collections.Counter(hand_keys)
-        gen_fields = []
-        for a in s["fields"]:
-            if "when" not in a or left[key(a)] > 0:
-                gen_fields.append(a)
-                left[key(a)] -= 1
+        gen_fields = [a for a in s["fields"] if key(a) in hand_keys or "when" not in a]
         extra += [f"{s['section']}: {key(a)} when {a['when']}" for a in s["fields"] if a not in gen_fields]
         for i, (a, b) in enumerate(zip(gen_fields, h["fields"])):
             if key(a) != key(b) or a.get("value") != b.get("value"):

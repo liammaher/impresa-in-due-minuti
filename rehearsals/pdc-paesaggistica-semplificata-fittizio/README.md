@@ -23,4 +23,3 @@ the draft is "PROVA NON INVIARE" and stops before the declarations, payment, sig
 | Date | Browser | Result |
 |---|---|---|
 | 2026-10-31 | pane | P6 (ampliamento, B.1), from scratch: **filled** in 145 s, every value read back on a fresh load (24 s), nothing moved or loose, no retry |
-| 2026-11-01 | pane | P6, `bench/rerun.py` bundle, after the semplificata's "Si allega" box got its slot ("Relazione paesaggistica semplificata e documentazione necessaria": required, plain PDF; read on the earlier filled draft, whose run had left it empty: the runner took the portal's "required" under it for the person's signed-only "Relazione Paesaggistica Semplificata", whose title starts it; fixed in inpage.js): **filled** in 158.6 s, the slot holding its file. |

@@ -13,14 +13,11 @@
  "titolo_id_pratica": "FTTLCU91L02F839F-15032026-1012",
  "pdc_interventi": "ampliamento di un locale accessorio",
  "bollo_marche": false,
- "diritti_euro": "501",
+ "diritti_euro": "0",
  "proroga_data_prevista": "2030-03-15",
  "proroga_tipo_lavori": "finiture interne",
  "fine_termine": "2029-03-15",
  "proroga_giorni": "365",
  "proroga_motivo": "Ritardo nella consegna dei materiali da parte del fornitore, per cause non imputabili al titolare.",
- "titolo_tipo": "permesso di costruire",
- "diritti_esente": false,
- "bollo_esenzione": "no",
- "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
+ "titolo_tipo": "permesso di costruire"
 }

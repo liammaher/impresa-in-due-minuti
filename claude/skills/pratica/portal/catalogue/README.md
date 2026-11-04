@@ -20,11 +20,6 @@ catastale (`F839` is Napoli).
   "<pratica>#<section>"`), which `gen.py` follows. The first ones, by hand: `cila`, `cil`,
   `scia`, `inizio-lavori`, `fine-lavori`, `agibilita`, `acconciatore`.
 - `<comune>/drift.json`: what the last drift check found changed, per pratica (below).
-- `sue-wizard.json` `pairs`: which two operations the SUE's wizard takes in one pratica (wizard.js
-  `pairs`, `catalogue.py pairs DIR --bundle FILE`, then `pairs-import` of print.js's text). Every two
-  of different groups, both terre e rocce boxes, and one pair per radio group: `together` (the tree
-  holds both: false for two radios of one group), then `accepted` with the generated pratica's
-  adempimenti and sections, or `refused` with the screen it stayed on and the portal's words.
 
 ## How it's made
 
@@ -56,10 +51,6 @@ rehearsals on the portal before trusting them.
   crawled again. Each pratica goes to the pane's `localStorage` as it's done (`crawl:op:*`),
   so a batch stopped by a logout resumes where it stopped. 20 to 60 s a pratica once the
   common sections are known (the first restaurant pratica: 140 s).
-- `wizard.js` `pairs`: two operations at a time on the scratch draft, forward with the defaults to
-  the generated pratica and back, as `start` does one (about 20 s a pair; 190 pairs for the SUE).
-  Each result goes to localStorage `wizard:pair:<key>+<key>`, so a probe stopped by a logout
-  resumes; `--only KEY` probes the pairs with that operation, `--fresh` probes again.
 - `catalogue.py`: `ops sue|suap` lists a batch's operations, `known` the fingerprints the
   stored crawls have, `import` writes an exported batch here (refusing one that holds the
   login's name: `CATALOGUE_PRIVATE`, whole words: `\bname\b`, or a label's "ampliamento" matches a
@@ -116,14 +107,6 @@ Neither fills a value, saves a section, ticks a declaration, pays or sends.
   a restaurant's alcohol notice, and a restaurant's closure (SUAP); on the SUE all 22 pratiche
   with every section filled and the CILA with its semplificata (the clean reruns above).
 
-- **Terre e rocce** (2026-11-03): every pair of operations probed (`sue-wizard.json` `pairs`, 190,
-  none refused), then each title with the dichiarazione di utilizzo (`sue-combo-*-dichiarazione-utilizzo`)
-  and each title with a landscape procedure and the dichiarazione, three operations
-  (`sue-combo-*-paesaggistica-*-dichiarazione-utilizzo`): 15 crawls, every section one already crawled,
-  their attachments screens read on the empty draft and again on the filled one. All 15 filled on the
-  portal with made-up data. A crawl's `same_as` naming an op the repo hasn't (a pane-only recrawl,
-  `d4-scia-alt`) is renamed on import by fingerprint.
-
 ## Drift
 
 A section's fingerprint is a hash of what it shows before any choice: ids, kinds, labels,
@@ -131,14 +114,6 @@ lengths, short dropdown lists. `__crawl.batch({..., check: true})` reads only th
 a section) into `crawl:check:*`; `catalogue.py drift EXPORT.json` compares them with the
 stored crawls and writes `drift.json`. A pratica with a difference is refused by `gen.py` and
 by `run.py preflight` until it is crawled again (`import` clears it).
-
-A check of the SUE: `catalogue.py ops sue --all > ops.json`, then `catalogue.py pane DIR --bundle
-~/Downloads/pv-drift-sue.js --ops ops.json --check`, picked in the pane (about 10 minutes for the
-27 operations). The batch's `since` is today, so a check another day left in the pane's storage is
-done again (2026-11-02: six from 28 October were reused, unnoticed, until cleared by hand). Then
-`digest.js` prints one short digest a pratica, sha256 first, for `catalogue.py drift --digests -`:
-the same are recorded, and the others are named; set `window.pvCheckNames` to them, run
-`check-print.js`, and give its text to `catalogue.py drift -`. 2026-11-02: 27 of 27 the same.
 
 ## Limits
 

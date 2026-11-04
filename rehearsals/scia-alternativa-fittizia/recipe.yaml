@@ -37,14 +37,6 @@ attachments:
     # The asseverazione's sewer connection to request adds this required slot (read on the
     # permesso's attachments screen 2026-10-31): plain PDFs.
     - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura, value: "{{ask.allaccio_doc}}", when: "{{ask.scarichi|is_allaccio_da_richiedere}}", on_page: true}
-    # A discharge whose authorisation is asked with the pratica: its "si allega" adds its slot (read on the
-    # permesso's and the SCIA alternativa's screens, 2026-11-02).
-    - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in pubblica fognatura, value: "{{ask.scarico_doc}}", when: "{{ask.scarichi|is_fognatura_da_richiedere}}", on_page: true}
-    - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in acque, value: "{{ask.scarico_doc}}", when: "{{ask.scarichi|is_superficiali_da_richiedere}}", on_page: true}
-    # Opere a scomputo: the proposal's slot (read on the SCIA alternativa's screen, 2026-11-02).
-    - {kind: file, label: Proposta di progetto per la realizzazione delle opere di urbanizzazione, value: "{{ask.scomputo_doc}}", when: "{{ask.scia_onerosa}} {{ask.scomputo}}", on_page: true}
-    # The safety quadro's "allega la notifica" (the notifica attached now): its slot, as on the SCIA.
-    - {kind: file, label: Notifica preliminare, value: "{{ask.notifica_preliminare}}", when: "{{ask.dlgs81}} {{ask.impresa_dopo|not}} {{ask.notifica_dovuta}} {{ask.notifica_allegata}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
     # The energy filing's own slot (read on the P6 run's screen).
     - {kind: file, label: Relazione tecnica sui consumi energetici, value: "{{ask.relazione_energetica}}", when: "{{ask.prestazione_energetica}}"}
@@ -84,33 +76,15 @@ attachments:
     - {kind: file, label: "Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (militare)", value: "{{ask.fascia_militare_doc}}", when: "{{ask.fasce|is_assenso}} {{ask.fascia_militare}}", on_page: true}
     - {kind: file, label: "Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (aeroportuale)", value: "{{ask.fascia_aeroportuale_doc}}", when: "{{ask.fasce|is_assenso}} {{ask.fascia_aeroportuale}}", on_page: true}
     - {kind: file, label: "Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (altro)", value: "{{ask.fascia_altro_doc}}", when: "{{ask.fasce|is_assenso}} {{ask.fascia_altro}}", on_page: true}
-    # The SCIA's slots for the asseverazione's acoustics, fire brigade review, hygiene and cemetery
-    # deroghe, asbestos plan and barriers (labels as on the SCIA's screen, 2026-11-01: a run names this form's own).
-    - {kind: file, label: Documentazione di impatto acustico, value: "{{ask.acustica_impatto_doc}}", when: "{{ask.acustica}} {{ask.acustica_impatto}}", on_page: true}
-    - {kind: file, label: Dichiarazione sostitutiva, value: "{{ask.acustica_dichiarazione_doc}}", when: "{{ask.acustica}} {{ask.acustica_dichiarazione}}", on_page: true}
-    - {kind: file, label: Valutazione previsionale di clima acustico, value: "{{ask.acustica_clima_doc}}", when: "{{ask.acustica}} {{ask.acustica_clima}}", on_page: true}
-    - {kind: file, label: Documentazione di previsione di impatto acustico, value: "{{ask.acustica_misure_doc}}", when: "{{ask.acustica}} {{ask.acustica_misure}}", on_page: true}
-    - {kind: file, label: Documentazione necessaria al rilascio del parere progetto da parte dei Vigili del Fuoco, value: "{{ask.vvf_doc}}", when: "{{ask.vvf_valutazione}}", on_page: true}
-    - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: "{{ask.igienico_deroga_doc}}", when: "{{ask.igienico_conforme|not}}", on_page: true}
-    - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: "{{ask.cimiteriale_doc}}", when: "{{ask.fascia_cimiteriale|is_non_consentito}}", on_page: true}
-    # Soil analysed, no remediation: their results' required slot (read on the permesso's screen 2026-11-01).
-    - {kind: file, label: Risultati delle analisi ambientali sulla qualità dei terreni, value: "{{ask.indagini_analisi_doc}}", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}", on_page: true}
-    - {kind: file, label: "Piano di lavoro di demolizione o rimozione dell'amianto", value: "{{ask.amianto_piano}}", when: "{{ask.amianto}}", on_page: true}
-    - {kind: file, label: "Elaborati relativi al superamento delle barriere architettoniche (art. 82", value: "{{ask.barriere_elaborati}}", when: "{{ask.barriere_art82}}", on_page: true}
-    - {kind: file, label: "Elaborati relativi al superamento delle barriere architettoniche (art. 77", value: "{{ask.barriere_elaborati}}", when: "{{ask.barriere}} {{ask.barriere_deroga|not}}", on_page: true}
-    - {kind: file, label: Documentazione per la richiesta di deroga alla normativa per l'abbattimento delle barriere, value: "{{ask.barriere_deroga_doc}}", when: "{{ask.barriere}} {{ask.barriere_deroga}}", on_page: true}
 asks:
-  diritti_euro: {question: "The SUE's diritti in euro. Onerous, by the contributo di costruzione (oneri di urbanizzazione + costo di costruzione, as the prospetto works it out), lines SUE 7-9 of the 2026 table: 1003 up to 5,000 €, 1505 up to 30,000 €, 1998 above", propose: "{{ask.scia_onerosa|diritti_gratuito}}", why: "Line SUE 10 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 401 € when free of the contributo; onerous, SUE 7-9 by the contributo (urbanizzazione + costo di costruzione): 1,003 € up to 5,000 €, 1,505 € up to 30,000 €, 1,998 € above"}
-  # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
-  napoli_allegato_a: {default: "true"}
-  modello_dp: {default: "true"}
   descrizione: {default: "PROVA NON INVIARE - SCIA alt {{c:identity.last_name}}"}
   acustica: {question: "Does art. 8 of L. 447/1995 apply (an acoustic impact or clima acustico report: e.g. homes next to a main road, a railway or an airport)?"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
-  - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
+  - "Name the direttore dei lavori (and, for works on structures, the direttore dei lavori delle strutture) before the works start"
+  - "On Allega documenti: the portal's procura signed by the client and the Quadro riepilogativo (SCIA alternativa DSC), then everything signed digitally (.p7m)"
   - "Sign and send (Firma e invio); keep the receipt. The works may start 30 days after filing, once the assents the SCIA asks for (if any) are in; the contributo, if due, is paid as quadro g) says"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -119,8 +93,14 @@ rules:
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
-  # The SCIA's form has no line for a large site under VIA or AIA (its Piano di Utilizzo line is
-  # for sites up to 6000 m³, under the repealed DM 161/2012).
-  - {if: "{{ask.scavo|is_sottoprodotti}}", value: "{{ask.scavo_piano_utilizzo}}", in: ["false"], else: "The SCIA's form has no line for excavated earth over 6000 m³ under VIA or AIA, used as by-products under a Piano di Utilizzo (DPR 120/2017 art. 9): works of that size go by permesso di costruire; ask the SUE."}
+  - {value: "{{ask.fascia_cimiteriale}}", in: ["no", "consentito"], else: "Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet."}
+  - {value: "{{ask.acustica}}", in: ["false"], else: "An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet."}
+  - {value: "{{ask.vvf_valutazione}}", in: ["false"], else: "A project for the Vigili del Fuoco's assessment isn't mapped yet."}
+  - {value: "{{ask.amianto}}", in: ["false"], else: "Works on parts with asbestos aren't mapped yet."}
+  - {value: "{{ask.igienico_conforme}}", in: ["true"], else: "A hygiene derogation isn't mapped yet."}
+  - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_5bis_caso}}", in: ["altezza", "monostanza uno", "monostanza due"], else: "More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own conditions."}
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "The form allows art. 24 c. 5-bis only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}
+  - {value: "{{ask.barriere}}", in: ["false"], else: "The barriers rules (artt. 77-82) aren't mapped yet."}
+  - {value: "{{ask.indagini_ambientali}}", in: ["false"], else: "Soil needing environmental investigations (or already remediated) isn't mapped yet."}
+  - {value: "{{ask.urbanizzazione}}", in: ["true"], else: "An area without its primary urbanisation works isn't mapped yet."}
   - {if: "{{ask.scia_onerosa}}", value: "{{ask.contributo_pagamento}}", in: ["prima dei lavori", "rateizzazione", "in corso d'opera"], else: "A SCIA alternativa's contributo is paid within 30 days of filing, in instalments or during the works: its form has no box for a receipt already paid."}
