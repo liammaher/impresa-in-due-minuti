@@ -1577,15 +1577,15 @@ def bundle(out, path, files):
     (out / "pick.js").write_text(f"""document.querySelectorAll("#pv-pick").forEach((x) => x.remove());
 const box = document.createElement("div"); box.id = "pv-pick";
 box.style.cssText = "position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#fff;border:3px solid #1a4fd6;padding:16px 20px;font:16px sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3);border-radius:8px;max-width:520px";
-box.innerHTML = '<b>Choose <code>{path.name}</code> (once)</b><br><input type="file" accept=".js" style="margin-top:10px"><div style="margin-top:8px;color:#444"></div>';
+box.innerHTML = '<b>Scelga il file <code>{path.name}</code> (una volta sola)</b><br><input type="file" accept=".js" style="margin-top:10px"><div style="margin-top:8px;color:#444"></div>';
 document.body.appendChild(box);
 const [input, msg] = [box.querySelector("input"), box.querySelector("div")];
 input.addEventListener("change", async () => {{
   const text = await input.files[0].text();
   const got = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
-  if (got !== "{sha}") {{ msg.textContent = "Not that file (its sha256 differs): nothing loaded."; return; }}
+  if (got !== "{sha}") {{ msg.textContent = "Non è il file giusto: non ho caricato nulla."; return; }}
   input.disabled = true;
-  try {{ window.pvPicked = String((0, eval)(text)); msg.textContent = "Loaded: " + window.pvPicked; setTimeout(() => box.remove(), 3000); }}
+  try {{ window.pvPicked = String((0, eval)(text)); msg.textContent = "Caricato."; setTimeout(() => box.remove(), 3000); }}
   catch (e) {{ window.pvPicked = "error " + e.message; msg.textContent = window.pvPicked; }}
 }});
 "box shown: the person picks {path.name}, then poll __pv.wait()"
@@ -1676,18 +1676,19 @@ def show_code(code, give_up=None):
     anything Claude runs, so it is not printed, not in a file, and not in the child's arguments
     or environment (a program's arguments can be listed): the child reads it on stdin. The
     window stays until they close it, so run.py can return. give_up (tests): seconds."""
-    text = (f"Type this code into the portal page when it asks for it:\n\n{pretty_code(code)}\n\n"
-            "Keep this window open until the run is done. Don't tell it to anyone, Claude included.")
+    text = (f"Scriva questo codice nel riquadro che compare sulla pagina del portale:\n\n{pretty_code(code)}\n\n"
+            "Tenga aperta questa finestra fino alla fine della compilazione. Non lo dica a nessuno, "
+            "nemmeno a Claude.")
     if sys.platform == "darwin":
-        script = (f'display dialog {json.dumps(text)} with title "pvault" buttons {{"Done"}} default button "Done"'
+        script = (f'display dialog {json.dumps(text)} with title "Portali" buttons {{"Fatto"}} default button "Fatto"'
                   + (f" giving up after {give_up}" if give_up else ""))
         cmd, feed = ["osascript", "-"], script
     elif sys.platform == "win32":
         cmd = [sys.executable, "-I", "-c",
-               "import ctypes, sys; ctypes.windll.user32.MessageBoxW(0, sys.stdin.read(), 'pvault', 0x40 | 0x40000)"]
+               "import ctypes, sys; ctypes.windll.user32.MessageBoxW(0, sys.stdin.read(), 'Portali', 0x40 | 0x40000)"]
         feed = text
     elif shutil.which("zenity"):
-        cmd, feed = ["zenity", "--text-info", "--title=pvault", "--width=420", "--height=200"], text
+        cmd, feed = ["zenity", "--text-info", "--title=Portali", "--width=420", "--height=200"], text
     else:
         raise StepError("no way to show the code outside this conversation here: use `run` (its window "
                         "needs no code), or --plain if the values may pass through the conversation")

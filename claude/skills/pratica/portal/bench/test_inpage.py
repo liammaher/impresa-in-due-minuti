@@ -15,6 +15,7 @@ import hashlib
 import io
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -617,14 +618,16 @@ def main():
                 assert report["result"] == "filled", report.get("error")
                 inside = "document.querySelector('[data-pv=review]').shadowRoot"  # drawn in a shadow root
                 text = page.evaluate(f"{inside}.firstElementChild.nextElementSibling.innerText")
-                assert "Draft saved on the portal" in text and "nothing has been declared".lower() in text.lower(), text[:200]
+                assert "Bozza salvata sul portale" in text and "nulla è stato dichiarato" in text.lower(), text[:200]
+                english = re.findall(r"\b(the|your|you|and|was|draft|saved|every|value|declarations?|show|download)\b", text, re.I)
+                assert not english, f"English on the review over the portal: {sorted(set(english))}"
                 assert "dichiara quanto segue" in text and "Per presa visione" in text, "the declaration isn't on the review"
                 assert "che i locali possiedono i requisiti di sorvegliabilità" in text, "the radio's own label is missing"
                 everything = page.evaluate(f"{inside}.textContent")  # the values sit in closed <details>
                 assert answers["den"] in everything and answers["impresa"] in everything, "the values typed aren't on the review"
                 assert "dichiara quanto segue" not in json.dumps(report), "the report carries the declaration"
-                page.click("text=Show the draft")
-                assert page.query_selector('[data-pv="review"]') is None, "Show the draft left the review up"
+                page.click("text=Mostra la bozza")
+                assert page.query_selector('[data-pv="review"]') is None, "Mostra la bozza left the review up"
                 page.evaluate("__pv.review()")
                 assert page.query_selector('[data-pv="review"]'), "__pv.review() didn't draw it again"
             finally:
@@ -649,7 +652,7 @@ def main():
                 ok, why = run.capture_preview(page, folder)
                 assert not ok and "no preview" in why, (ok, why)
                 assert not (folder / "anteprima.pdf").exists()
-                assert "Not copied" in page.evaluate("document.querySelector('[data-pv=review]').shadowRoot.textContent"), \
+                assert "Non sono riuscito a copiarla" in page.evaluate("document.querySelector('[data-pv=review]').shadowRoot.textContent"), \
                     "the review doesn't say it has no preview"
             finally:
                 page.close()
@@ -856,7 +859,7 @@ def main():
                 assert first["result"] == "waiting" and first["waiting"], first
                 assert page.evaluate("document.querySelector('[data-pv=code] input').type") == "password"
                 type_code(page, run.pretty_code(run.new_code()))
-                page.wait_for_function("((document.querySelector('[data-pv=code]') || {}).textContent || '').includes(\"didn't open\")")
+                page.wait_for_function("((document.querySelector('[data-pv=code]') || {}).textContent || '').includes(\"non apre\")")
                 type_code(page, run.pretty_code(code).lower())
                 done = settle(page)
                 assert done["result"] == "filled", done.get("error")
@@ -952,7 +955,7 @@ def main():
             page = pick_page()
             try:
                 page.set_input_files(FILES, str(other / planimetria.name))
-                page.wait_for_function("(document.querySelector('[data-pv=files]') || {}).textContent.includes('Not the file pre-flight checked')")
+                page.wait_for_function("(document.querySelector('[data-pv=files]') || {}).textContent.includes('Non è il file controllato prima')")
                 assert page.evaluate("__pv.wait(200)")["result"] == "waiting"
                 page.set_input_files(FILES, [str(planimetria), str(ricevuta)])
                 done = settle(page)
@@ -1111,21 +1114,26 @@ def main():
         (folder / "private" / "declarations.json").write_text(json.dumps(decl))
         (folder / "private" / "anteprima.pdf").write_bytes(b"%PDF-1.4\nfinto\n")
         page = run.review.portal_review(filled | {"declarations_read": 1, "preview_pdf": True}, folder)
-        assert "Il sottoscritto dichiara il vero." in page and "The declarations you will tick" in page
-        assert "1 copied word for word from the portal; none ticked" in page, "no check that none is ticked"
-        assert "Download the PDF" in page and "The portal&#x27;s own PDF preview copied" in page
+        assert "Il sottoscritto dichiara il vero." in page and "Le dichiarazioni che spunterà" in page
+        assert "1 copiate parola per parola dal portale; nessuna spuntata" in page, "no check that none is ticked"
+        assert "Scarica il PDF" in page and "L&#x27;anteprima PDF del portale copiata" in page
         decl[0]["boxes"][0]["ticked"] = True
         (folder / "private" / "declarations.json").write_text(json.dumps(decl))
         page = run.review.portal_review(filled | {"declarations_read": 1}, folder)
-        assert "already ticked before you opened them" in page and "Dichiarazione di consapevolezza" in page
+        assert "già spuntate prima che lei le aprisse" in page and "Dichiarazione di consapevolezza" in page
         # Nothing copied (the pane, or an older run): the page says so, and never shows a stand-in.
         pane = run.review.portal_review(filled | {"declarations_read": 2}, tmp / "nowhere")
-        assert "Declarations: not copied in this run (read in the pane" in pane, "no note for the pane"
-        assert "was not copied in this run" in pane and "The declarations you will tick" not in pane
-        assert "couldn&#x27;t be copied (the portal said no)" in run.review.portal_review(
-            filled | {"preview_note": "the portal said no"}, tmp / "nowhere")
-        stopped = run.review.portal_review(filled | {"result": "stopped", "error": "x"}, tmp / "nowhere")
-        assert "Declarations" not in stopped and "preview" not in stopped.lower(), "a stopped run reports on what it never reached"
+        assert "Dichiarazioni: non copiate in questa compilazione" in pane, "no note for the pane"
+        assert "non è stata copiata" in pane and "Le dichiarazioni che spunterà" not in pane
+        stopped = run.review.portal_review(filled | {"result": "stopped", "error": "a reason for Claude"}, tmp / "nowhere")
+        assert "Dichiarazioni" not in stopped and "anteprima" not in stopped.lower(), "a stopped run reports on what it never reached"
+        assert "a reason for Claude" not in stopped and "si è fermata" in stopped.lower(), "the runner's reason on the person's page"
+        # The page the person reads is Italian: none of the words an English page would have.
+        english = re.compile(r"\b(the|your|you|and|of|was|draft|saved|every|value|left|declarations?)\b", re.I)
+        for doc in (page, pane, stopped):
+            text = re.sub(r"<[^>]+>", " ", doc.split("</style>", 1)[1])
+            hits = {w.lower() for w in english.findall(text)} - {"draft"}  # test/allegati, example.invalid/d
+            assert not hits, f"English on the review page: {sorted(hits)}"
     case("the review page shows the declarations' text and the portal's PDF, or says it has neither", reviewed)
 
     server.shutdown()

@@ -71,11 +71,13 @@ func pvCmd(_ args: String) -> String {
     return "'pvault \(args)'"
 }
 
-// vaultLabel names the vault in prompts: "your vault" for the default one,
-// "your studio vault" for ~/.pvault-studio (pvault --vault studio), so with
-// several vaults a fingerprint is never given for the wrong one.
+// vaultLabel names the vault in prompts: "suo archivio" for the default one,
+// "suo archivio «studio»" for ~/.pvault-studio (pvault --vault studio), so with
+// several vaults a fingerprint is never given for the wrong one. Prompts are in
+// Italian, worded as vault.PromptVaultLabel and GrantPrompt word them: each
+// completes macOS's own sentence, so it starts with a verb.
 func vaultLabel() -> String {
-    vaultName().map { "your \($0) vault" } ?? "your vault"
+    vaultName().map { "suo archivio «\($0)»" } ?? "suo archivio"
 }
 
 func fail(_ msg: String, code: Int32 = 1) -> Never {
@@ -399,51 +401,78 @@ func parseScope(_ scope: String) -> [String] {
     return parts
 }
 
+// categoryLabels names each schema category in prompts (vault.PromptCategories);
+// another (a numbered copy, cie2) shows as it is.
+let categoryLabels: [String: String] = [
+    "identity": "anagrafica", "cie": "carta d'identità", "spid": "SPID", "residenza": "residenza",
+    "domicilio": "domicilio", "abitazione": "abitazione", "locazione": "contratto d'affitto",
+    "utenze": "utenze", "tari": "TARI", "pratiche": "pratiche", "famiglia": "famiglia", "ruolo": "ruolo",
+    "procura": "procura", "business": "impresa", "locale": "locale", "immobile": "immobile",
+    "albo": "albo professionale", "cassa": "cassa previdenziale", "firma_digitale": "firma digitale",
+    "firma_autografa": "firma autografa", "permesso_soggiorno": "permesso di soggiorno",
+    "passaporto": "passaporto", "tessera_sanitaria": "tessera sanitaria", "patente": "patente",
+    "addresses": "altri indirizzi", "financial": "dati fiscali e finanziari", "payment": "carta di pagamento",
+    "preferences": "preferenze", "employment": "lavoro", "medical": "dati medici", "documents": "documenti",
+    "files": "file",
+]
+
+func category(_ c: Substring) -> String { categoryLabels[String(c)] ?? String(c) }
+
 func describe(_ pattern: String) -> String {
     if pattern == "*" {
-        let label = vaultLabel()
-        return label == "your vault"
-            ? "everything in your vault, your family's data included"
-            : "everything in \(label), everyone's data in it included"
+        return vaultLabel() == "suo archivio"
+            ? "tutto, compresi i dati dei suoi familiari"
+            : "tutto, compresi i dati di ogni persona che contiene"
     }
-    // Whose data: yours (no prefix), one person's, or everyone's.
-    var whose = "your", all = "all your"
+    // Whose data: the owner's (no prefix), one person's, or everyone's.
+    var mine = true, of = ""
     var rest = Substring(pattern)
     if let colon = pattern.firstIndex(of: ":") {
         let person = pattern[..<colon]
         rest = pattern[pattern.index(after: colon)...]
-        if rest == "*" { return "everything about \(person)" }
-        whose = person == "*" ? "everyone's" : "\(person)'s"
-        all = person == "*" ? "everyone's" : "all of \(person)'s"
+        if rest == "*" { return "tutto ciò che riguarda \(person)" }
+        mine = false
+        of = person == "*" ? " di tutte le persone" : " di \(person)"
     }
-    // A category pattern also covers <category>.documents (vault.ScopeAllows).
-    if rest.hasSuffix(".*") { return "\(all) \(rest.dropLast(2)) fields and documents" }
-    if rest.hasSuffix(".documents") { return "\(whose) \(rest.dropLast(10)) documents" }
-    return whose == "your" ? pattern : "\(whose) \(rest)"
+    if rest.hasSuffix(".*") {
+        let c = category(rest.dropLast(2))
+        return mine ? "i suoi dati di \(c)" : "i dati di \(c)\(of)"
+    }
+    if rest.hasSuffix(".documents") {
+        let c = category(rest.dropLast(10))
+        return mine ? "i suoi documenti di \(c)" : "i documenti di \(c)\(of)"
+    }
+    return "il campo \(rest)\(of)"
 }
 
 func duration(_ seconds: Int) -> String {
-    if seconds < 60 { return seconds == 1 ? "1 second" : "\(seconds) seconds" }
+    if seconds < 60 { return seconds == 1 ? "1 secondo" : "\(seconds) secondi" }
     let m = (seconds + 59) / 60  // round up: never understate how long a grant lasts
-    return m == 1 ? "1 minute" : "\(m) minutes"
+    return m == 1 ? "1 minuto" : "\(m) minuti"
 }
 
-// grantReason completes macOS's '"pvault-touchid" is trying to …' sentence.
+// grantReason completes macOS's '"pvault-touchid" sta tentando di …' sentence.
 func grantReason(scope: [String]?, access: String, seconds: Int) -> String {
     guard let scope else {
-        return "get full access to \(vaultLabel()), including settings and agent tokens, for \(duration(seconds))"
+        return "avere accesso completo al \(vaultLabel()), impostazioni e chiavi degli agenti comprese, per \(duration(seconds))"
     }
-    // "*" covers everything, so it is named alone rather than last in a list.
-    let what = (scope.contains("*") ? describe("*") : scope.map(describe).joined(separator: ", ")) + " "
     // Every scoped grant can read what it covers, append and write included.
     let verb: String
     switch access {
-    case "append": verb = "read and add new entries to"
-    case "write": verb = "read, change and delete"
-    default: verb = "read"
+    case "append": verb = "leggere e completare, senza cambiare ciò che c'è, nel \(vaultLabel())"
+    case "write": verb = "leggere, modificare ed eliminare nel \(vaultLabel())"
+    default: verb = "leggere dal \(vaultLabel())"
     }
-    let place = scope.contains("*") ? "" : (access == "read" ? "from \(vaultLabel()) " : "in \(vaultLabel()) ")
-    return "\(verb) \(what)\(place)for \(duration(seconds))"
+    // "*" covers everything, so it is named alone rather than last in a list.
+    var what: String
+    if scope.contains("*") {
+        what = describe("*")
+    } else {
+        what = scope.map(describe).joined(separator: ", ")
+        // A category pattern also covers <category>.documents (vault.ScopeAllows).
+        if scope.contains(where: { $0.hasSuffix(".*") && !$0.hasSuffix(":*") }) { what += " (documenti compresi)" }
+    }
+    return "\(verb), per \(duration(seconds)): \(what)"
 }
 
 // MARK: - Signing
@@ -467,12 +496,12 @@ func shownName(_ name: String) -> String {
     return out.isEmpty ? "?" : String(String.UnicodeScalarView(out))
 }
 
-// signReason completes macOS's '"pvault-touchid" is trying to …' sentence for
+// signReason completes macOS's '"pvault-touchid" sta tentando di …' sentence for
 // a signing review. The grant it unlocks reads the signed file and approves
 // it, so the wording says sign, not read.
 func signReason(name: String, pages: Int, hash8: String, requester: String, seconds: Int) -> String {
-    let count = pages == 1 ? "1 page" : "\(pages) pages"
-    return "review and sign \"\(shownName(name))\" (\(count), hash \(hash8)), filed by \(shownName(requester)), with your handwritten signature from \(vaultLabel()), for \(duration(seconds))"
+    let count = pages == 1 ? "1 pagina" : "\(pages) pagine"
+    return "rivedere e firmare «\(shownName(name))» (\(count), codice \(hash8)), inviato da \(shownName(requester)), con la sua firma autografa dal \(vaultLabel()), per \(duration(seconds))"
 }
 
 // MARK: - Commands
@@ -573,7 +602,7 @@ func cmdSign(_ args: [String]) {
 }
 
 func cmdUnlock() {
-    let (status, json) = sendCredentials(reason: "unlock \(vaultLabel())", path: "/vault/unlock")
+    let (status, json) = sendCredentials(reason: "aprire il \(vaultLabel())", path: "/vault/unlock")
     switch status {
     case 200: print("unlocked")  // the unlock token is discarded on purpose
     case 409: print("already unlocked")
@@ -605,7 +634,7 @@ func cmdEnroll(_ args: [String]) {
     guard let line = readLine(strippingNewline: true), !line.isEmpty else {
         fail("expected the profile password on stdin")
     }
-    approve("turn on Touch ID for \(vaultLabel())")
+    approve("attivare Touch ID per il \(vaultLabel())")
     storeEnrollment(Enrollment(password: line, server: server))
     print("enrolled")
 }
@@ -630,6 +659,10 @@ case "grant":
 case "sign":
     cmdSign(Array(args.dropFirst()))
 #if DEBUG
+case "describe-categories":
+    // The category names prompts use, as JSON, for the test that holds them to prompts.json.
+    let data = try! JSONSerialization.data(withJSONObject: categoryLabels, options: [.sortedKeys])
+    print(String(data: data, encoding: .utf8)!)
 case "describe-sign":
     // Prints the prompt a signing review would show, for tests.
     guard args.count == 5, let pages = Int(args[2]) else { fail("usage: describe-sign <name> <pages> <hash8> <requester>") }
