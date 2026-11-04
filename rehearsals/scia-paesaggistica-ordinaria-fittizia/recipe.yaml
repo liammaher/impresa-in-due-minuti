@@ -9,12 +9,7 @@
 extends: [scia-fittizia, parts/paesaggistica-ordinaria]
 procedure: napoli/comune/scia-con-paesaggistica-ordinaria
 title: "SCIA edilizia con autorizzazione paesaggistica ordinaria, SUE Napoli (tecnico con procura)"
-comune: F839
-sportello: sue
 crawl: sue-combo-scia-paesaggistica-ordinaria
-operation:
-  - Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)
-  - Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)
 asks:
   descrizione: {default: "PROVA NON INVIARE - SCIA e paesaggistica {{c:identity.last_name}}"}
   # No start date: the works start once the SUE says the authorization is in.
@@ -28,8 +23,6 @@ yours:
   - "Pay the diritti before the second run (after the declarations): its receipt, signed, goes with it"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "Sign and send (Firma e invio); keep the receipt"
-rules:
-  main: napoli/comune/scia-edilizia
 # The case: the main pratica's P6 answers, the part's, then these (a null drops one);
 # `gen.py --answers` writes answers-p6.json.
 answers:

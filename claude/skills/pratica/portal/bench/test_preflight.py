@@ -19,6 +19,7 @@ import yaml
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
+import gen  # noqa: E402
 import run  # noqa: E402
 
 REHEARSAL = HERE.parents[4] / "rehearsals" / "pizzeria-fittizia"
@@ -795,7 +796,7 @@ def every_sue_case_ready():
     try:
         for d in sorted(root.iterdir()):
             f = d / "portal-steps.generated.yaml"
-            if not f.is_file() or yaml.safe_load((d / "recipe.yaml").read_text()).get("sportello") != "sue":
+            if not f.is_file() or gen.resolved(gen.load_yaml(d / "recipe.yaml")).get("sportello") != "sue":
                 continue
             steps = yaml.safe_load(f.read_text())
             for a in sorted(d.glob("answers*.json")):
