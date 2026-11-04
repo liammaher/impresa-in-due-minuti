@@ -716,8 +716,13 @@ def exemptions_and_other_kinds():
         paying = json.loads((root / semplificata / "answers-p6.json").read_text())
         paying.pop("bollo_marche"); paying.pop("bollo_esenzione")
         r, _ = case(semplificata, paying)
-        # (the ONLUS follow-up waits on the exemption: `only_if`)
-        assert [p["key"] for p in r["proposals"] if p["key"].startswith("bollo") and not p.get("only_if")] == ["bollo_esenzione"], r["proposals"]
+        # (the ONLUS follow-up waits on the exemption: `only_if`; how it is paid is proposed in the
+        # same message, worded from the exemption proposed with it: `assumes`, or per answer: `cases`)
+        plain = [p["key"] for p in r["proposals"] if p["key"].startswith("bollo") and not p.get("only_if")
+                 and not p.get("assumes") and not p.get("cases")]
+        assert plain == ["bollo_esenzione"], r["proposals"]
+        marche = [p for p in r["proposals"] if p["key"] == "bollo_marche"]
+        assert marche and (marche[0].get("assumes") == ["bollo_esenzione"] or marche[0].get("cases")), marche
         r, b = case(semplificata, "esenzioni")
         assert ("Il pagamento non è dovuto poiché esentati", None) in b and not any(l.startswith("Il pagamento è dovuto") for l, _ in b), b
         assert ("per la seguente motivazione", run.BOLLO_ESENZIONE["cooperativa sociale"]) in b, b
