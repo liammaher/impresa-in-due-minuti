@@ -14,6 +14,7 @@ Run it with the pratica venv's Python (it imports gen.py, which needs PyYAML).
 """
 import argparse
 import datetime
+import collections
 import re
 import sys
 from pathlib import Path
@@ -262,10 +263,11 @@ OPEN_BEYOND = [
     "operations (inizio and fine lavori, agibilità, proroghe, voltura, a new direttore dei lavori or firm, "
     "the landscape renewal and proroga, the DAU) have library entries and steps files but no rules: the "
     "table's \"altro\" refuses proroghe and volture, so the person names the pratica.",
-    "Operations in one pratica: the wizard takes 188 pairs (sue-wizard.json `pairs`); the 28 combinations "
-    "mapped are a title with its landscape procedure and/or the dichiarazione di utilizzo. A lifecycle "
-    "operation with another (the inizio lavori with the dichiarazione di utilizzo, a proroga with the "
-    "landscape proroga) is neither researched nor crawled; each alone is mapped, so nothing is blocked.",
+    "Operations in one pratica: catalogue/F839/sue-pairs.yaml says, for each pair the wizard takes, whether a "
+    "case files them together and why (counted above). Its `reading` reasons (two filings due at one moment: "
+    "a title or its extension with what keeps the landscape authorization in force, the end of works with the "
+    "DAU) are for an architect to confirm; the rules table routes none of the follow-up combinations yet, so "
+    "the person names them.",
     "Several cadastral units are mapped, in both catasti (Dati catastali's two groups, 2026-11-04); "
     "a third group (back to the first catasto) is refused. The title's other holders take one row: more go in the "
     "assent's attachment, and the voltura's co-holders one person (portal defect coholders-one).",
@@ -273,6 +275,23 @@ OPEN_BEYOND = [
     "file, and no real signed file has been uploaded yet: the attachments of a real pratica rest on that. "
     "InfoCamere's \"Copia pratica\" (a new pratica from one sent before) is read in its manual, never used.",
 ]
+
+
+def pairs_line(reh):
+    """The wizard's pairs and triples (catalogue/F839/sue-pairs.yaml) a case files together: how
+    many have a steps file, how many of those ran on the portal; the rest, decided apart."""
+    p = yaml.safe_load((HERE / "catalogue/F839/sue-pairs.yaml").read_text())
+    entries = p["pairs"] + p["triples"]
+    verdict = lambda e: p["reasons"][e["reason"]]["verdict"]
+    together = [e for e in entries if verdict(e) == "together"]
+    mapped = [e for e in together if e["rehearsals"]]
+    ran = [e for e in mapped if any(reh.get(n, {}).get("run") for n in e["rehearsals"])]
+    other = collections.Counter(verdict(e) for e in entries if verdict(e) != "together")
+    return (f"- Operations in one pratica: of the {len(p['pairs'])} pairs the wizard takes and {len(p['triples'])} "
+            f"triples a case needs, **{len(together)} are filed together**: {len(mapped)} with a steps file, "
+            f"{len(ran)} of those run on the portal, **{len(together) - len(mapped)} still to map** "
+            f"(`bench/test_pairs.py` lists them). The others are decided: "
+            + ", ".join(f"{n} {k.replace('_', ' ')}" for k, n in sorted(other.items())) + ".")
 
 
 def sue_completeness(reh, status):
@@ -321,6 +340,7 @@ def sue_completeness(reh, status):
         f"- Level 3, in part: **{len(slots)} ticked \"si allega\" boxes with no attachment slot** under their"
         " condition (listed below): each may add a required slot. A box read on a filled draft says what it adds"
         " (the dictionary's `slot`).",
+        pairs_line(reh),
         "- Levels 4 and 5: not measured yet (see the open items).", "",
         "| Recipe | Refusals left |", "|---|---:|"]
     out += [f"| `{n}` | {k} |" for n, k in sorted(per.items(), key=lambda kv: (-kv[1], kv[0]))]

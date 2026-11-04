@@ -24,6 +24,12 @@ catastale (`F839` is Napoli).
   hairdresser's `acconciatore`, with the procura scelta, is
   `suap-011-aprire-l-attivita-di-acconciatore-procura`).
 - `<comune>/drift.json`: what the last drift check found changed, per pratica (below).
+- `sue-pairs.yaml`: for every pair `sue-wizard.json` says the wizard accepts (and the triples a case
+  needs: a title, a landscape procedure, the dichiarazione), whether a case files them together and why,
+  from the law: `together` (a steps file each, its rehearsals named), `apart`, `never`, `refused`, `rules`
+  (the rules table decides those cases otherwise), `each_alone`. Each reason cites the library's sources and
+  says whether it restates them (`verified`) or reads them (`reading`, for an architect to confirm).
+  `bench/test_pairs.py` holds it to the wizard and the rehearsals.
 - `sue-wizard.json` `pairs`: which two operations the SUE's wizard takes in one pratica (wizard.js
   `pairs`, `catalogue.py pairs DIR --bundle FILE`, then `pairs-import` of print.js's text). Every two
   of different groups, both terre e rocce boxes, and one pair per radio group: `together` (the tree
@@ -120,6 +126,15 @@ Neither fills a value, saves a section, ticks a declaration, pays or sends.
   a restaurant's alcohol notice, and a restaurant's closure (SUAP); on the SUE all 22 pratiche
   with every section filled and the CILA with its semplificata (the clean reruns above).
 
+- **The follow-up combinations** (2026-11-04): the 47 combinations `sue-pairs.yaml` calls `together` with no
+  steps file (a title or an extension of its terms with what keeps the landscape authorization in force; the
+  end of works or agibilità with the DAU; the start of works with the dichiarazione; a landscape procedure
+  alone with the dichiarazione) crawled in one batch, 40 at the first pass, the rest on retries: a crawl that
+  read a section before the portal had switched to it ("opened" the one before) failed on a different section
+  each time, so `__crawl.batch` run again on the same `crawl:batch` (it retries those with an error) is the
+  fix, not a recrawl. What they showed: the renewal is the semplificata's adempimento; a title with the
+  landscape proroga adds "richiesta della proroga di ultimazione dei lavori" and its wizard drops the
+  proroga's third-party assent (gen.py now holds a combination's scelte to its crawled `scelte eventuali`).
 - **Terre e rocce** (2026-11-03): every pair of operations probed (`sue-wizard.json` `pairs`, 190,
   none refused), then each title with the dichiarazione di utilizzo (`sue-combo-*-dichiarazione-utilizzo`)
   and each title with a landscape procedure and the dichiarazione, three operations

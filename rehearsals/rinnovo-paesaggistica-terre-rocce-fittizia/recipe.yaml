@@ -1,0 +1,44 @@
+# rinnovo paesaggistica e terre e rocce: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# dichiarazione-no-title). The case: rinnovo-paesaggistica-fittizia's, with what scavo-fuori-sito-fittizio adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+extends:
+- rinnovo-paesaggistica-fittizia
+- scavo-fuori-sito-fittizio
+procedure: napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata-con-utilizzo-materiale-scavo-fuori-sito
+title: Rinnovo paesaggistica e terre e rocce in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-rinnovo-paesaggistica-dichiarazione-utilizzo
+operation:
+- Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune)
+- Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017
+  (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PROVA NON INVIARE - rinnovo paesaggistica + terre e rocce {{c:identity.last_name}}
+  diritti_euro: null
+yours:
+- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
+  the acknowledgements in the client''s name'
+- '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
+  any acknowledgement in the client''s name'
+- Sign and send (Firma e invio); keep the receipt
+rules:
+  table: null
+  question: null
+  facts: null
+  main: napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata
+  handles:
+  - napoli/comune/utilizzo-materiale-scavo-fuori-sito
+answers:
+  descrizione: PROVA NON INVIARE - rinnovo paesaggistica + terre e rocce P6

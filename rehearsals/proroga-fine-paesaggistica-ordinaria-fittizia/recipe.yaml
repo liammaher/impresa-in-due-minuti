@@ -1,0 +1,45 @@
+# proroga fine e paesaggistica ordinaria: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: proroga-fine-fittizia's, with what paesaggistica-ordinaria-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+extends:
+- proroga-fine-fittizia
+- paesaggistica-ordinaria-fittizia
+procedure: napoli/comune/proroga-fine-lavori-con-autorizzazione-paesaggistica-ordinaria
+title: Proroga fine e paesaggistica ordinaria in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-proroga-fine-paesaggistica-ordinaria
+operation:
+- Proroga fine lavori
+- Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PROVA NON INVIARE - proroga fine + paes. ordinaria {{c:identity.last_name}}
+  diritti_euro:
+    propose: '{{ask.titolo_tipo|diritti_proroga_pdc}}'
+    why: 'Line SUE 11 of the Comune''s 2026 table of SUE diritti (G.C. 239/2026): 501 € for a proroga of a permesso
+      di costruire; another title''s isn''t in the table'
+yours:
+- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
+  any acknowledgement in the client''s name'
+- '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali'
+- Sign and send (Firma e invio); keep the receipt
+rules:
+  table: null
+  question: null
+  facts: null
+  main: napoli/comune/proroga-fine-lavori
+  handles:
+  - napoli/comune/autorizzazione-paesaggistica-ordinaria
+answers:
+  descrizione: PROVA NON INVIARE - proroga fine + paes. ordinaria P6

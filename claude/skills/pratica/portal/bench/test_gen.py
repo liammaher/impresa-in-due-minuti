@@ -7,6 +7,7 @@
 import copy
 import os
 import re
+import json
 import sys
 from pathlib import Path
 
@@ -340,9 +341,16 @@ def _():
             continue
         taken = {s if isinstance(s, str) else s["option"] for s in r.get("scelte") or []}
         answered = {gen.norm(k) for k in (r.get("si_no") or {})}
-        for label in r["operation"] if isinstance(r["operation"], list) else [r["operation"]]:
+        labels = r["operation"] if isinstance(r["operation"], list) else [r["operation"]]
+        # A combination's own wizard, where its crawl read it, can leave out a scelta one operation
+        # offers alone (the landscape proroga's assent, filed with a title: 2026-11-04).
+        crawl = json.loads((HERE.parent / "catalogue" / "F839" / "sections" / f"{r['crawl']}.json").read_text())
+        offered = {o["label"] for x in crawl.get("screens") or [] if gen.norm(x.get("screen")) == "scelte eventuali" for o in x["options"]}
+        for label in labels:
             op = next(o for o in wizard["operations"] if o["label"] == label)
             for sc in op.get("scelte", []):
+                if len(labels) > 1 and offered and sc["option"] not in offered:
+                    continue
                 if sc["option"] not in taken and not (sc.get("type") == "SIN" and any(gen.norm(sc["option"]).startswith(a) for a in answered)):
                     missing.append(f"{f.parent.name}: {sc['option'][:60]}")
     assert not missing, missing
@@ -1600,6 +1608,33 @@ def _():
             except KeyError:
                 unknown.setdefault(f, where)
     assert not unknown, unknown
+
+
+@case("two pratiche rehearsed alone, filed together: the main's answers, the other's fill what they don't say, the people of both (a proroga with the landscape proroga)")
+def _():
+    a = gen.combo_answers({"extends": ["proroga-inizio-fittizia", "proroga-paesaggistica-fittizia"],
+                           "answers": {"descrizione": "combinazione"}})
+    main = json.loads((gen.REHEARSALS / "proroga-inizio-fittizia" / "answers-p6.json").read_text())
+    other = json.loads((gen.REHEARSALS / "proroga-paesaggistica-fittizia" / "answers-p6.json").read_text())
+    assert a["descrizione"] == "combinazione"
+    assert a["pdc_data"] == main["pdc_data"], "a key both say is the main's"
+    assert a["paes_protocollo"] == other["paes_protocollo"], "the other's own section's answer"
+    assert a["people"] == {**other["people"], **main["people"]}, a["people"]
+    assert gen.combo_answers({"extends": ["cila-fittizia"]}) is None, "one rehearsal and no answers: nothing to write"
+
+
+@case("rules with no table (a combination no table routes yet): main and handles only, nothing asked")
+def _():
+    asks, groups = {}, {}
+    assert gen.rules_block({"main": "napoli/comune/fine-lavori", "handles": ["napoli/comune/dichiarazione-avvenuto-utilizzo-terre"]},
+                           asks, groups) == {"main": "napoli/comune/fine-lavori", "handles": ["napoli/comune/dichiarazione-avvenuto-utilizzo-terre"]}
+    assert not asks and not groups
+    for bad in ({"handles": ["x"]}, {"main": "x", "facts": {"sanatoria": "false"}}):
+        try:
+            gen.rules_block(bad, {}, {})
+        except gen.GenError:
+            continue
+        raise AssertionError(f"accepted {bad}")
 
 
 print(f"{sum(results)}/{len(results)} passed")

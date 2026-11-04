@@ -1,0 +1,412 @@
+{
+ "crawled": "2026-11-04T18:22:12.494Z",
+ "by": "crawl.js batch, depth 3",
+ "pratica": "SUE: 2 operations in one pratica: Segnalazione Certificata Inizio Attività alternativa al Permesso di Costruire (S.C.I.A. alternativa P.d.C.) + Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune), with the scelta IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+ "seconds": 81.6,
+ "note": "Every section is one of the operations' own, the same fingerprint: the combination is their union, in this order. A recipe names every operation and extends the main one's.",
+ "also": [
+  "EDILIZIA › Beni Paesaggistici › Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune)"
+ ],
+ "generated": {
+  "interventi": "Segnalazione Certificata Inizio Attività alternativa al Permesso di Costruire",
+  "adempimenti": [
+   {
+    "adempimento": "Segnalazione Certificata Inizio Attività alternativa al Permesso di Costruire (art. 23, d.P.R. 6 giugno 2001, n. 380 – art. 7, d.P.R. 7 settembre 2010, n. 160)",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   },
+   {
+    "adempimento": "Autorizzazione Paesaggistica Semplificata ex DPR 31/2017 (Ente Comune)",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   }
+  ],
+  "sections": [
+   "Scheda anagrafica",
+   "Oggetto della pratica",
+   "DOMICILIO DIGITALE",
+   "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "Localizzazione dell'intervento",
+   "Dati catastali",
+   "a) Titolarità dell'intervento",
+   "Qualificazione dell'intervento di rinnovo",
+   "b) Presentazione della SCIA Alternativa al Permesso di Costruire/SCIA Unica/SCIA Condizionata",
+   "c) Qualificazione dell'intervento",
+   "d) Destinazione d'uso dell'immobile",
+   "e) Opere su parti comuni o modifiche esterne",
+   "f) Regolarità urbanistica e precedenti edilizi",
+   "g) Calcolo del contributo di costruzione",
+   "h1) Tecnici incaricati",
+   "H2) Altri tecnici incaricati",
+   "i) Impresa esecutrice dei lavori",
+   "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+   "dati relativi al nome del tecnico",
+   "m) Diritti di terzi",
+   "Note",
+   "Asseverazione SCIA Alternativa - Dati progettista e descrizione opere",
+   "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+   "Asseverazione SCIA Alternativa -  Dati immobile, strumentazione urbanistica, barriere architettoniche",
+   "Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici",
+   "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+   "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+   "Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi",
+   "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+   "Asseverazione SCIA Alternativa - Tutela Ecologica",
+   "Asseverazione SCIA Alternativa - Altri Vincoli di Tutela Ecologica",
+   "Asseverazione SCIA Alternativa -  TUTELA FUNZIONALE",
+   "Asseverazione SCIA Alternativa -  NOTE",
+   "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "dichiarazione ai sensi dell' art. 75 del d.P.R. n° 445/2000",
+   "Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "Dichiarazione relativa all'assolvimento dell'imposta di bollo"
+  ]
+ },
+ "screens": [
+  {
+   "screen": "scelta del destinatario della pratica",
+   "options": [
+    {
+     "label": "",
+     "checked": false
+    },
+    {
+     "label": "",
+     "checked": true
+    }
+   ]
+  },
+  {
+   "screen": "scelte eventuali",
+   "options": [
+    {
+     "key": "0",
+     "type": "CHK",
+     "label": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+     "selected": true
+    }
+   ]
+  }
+ ],
+ "variants": [
+  {
+   "option": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+   "type": "CHK",
+   "adds": [
+    "Qualifica e dati del procuratore"
+   ],
+   "drops": []
+  }
+ ],
+ "sections": [
+  {
+   "section": "Scheda anagrafica",
+   "fingerprint": "4dd844db9cdb76ff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Scheda anagrafica",
+   "seconds": 0
+  },
+  {
+   "section": "Oggetto della pratica",
+   "fingerprint": "b9828eee09a1f50f",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Oggetto della pratica",
+   "seconds": 0.8
+  },
+  {
+   "section": "DOMICILIO DIGITALE",
+   "fingerprint": "5978ae29f079ce08",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO DIGITALE",
+   "seconds": 0.7
+  },
+  {
+   "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "fingerprint": "c282ef61bee9ea4d",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Localizzazione dell'intervento",
+   "fingerprint": "1ae79e0eb7308899",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione ubicazione dell'intervento",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dati catastali",
+   "fingerprint": "bd17e4e186aa5dc9",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati catastali",
+   "seconds": 0.8
+  },
+  {
+   "section": "a) Titolarità dell'intervento",
+   "fingerprint": "3e5d5f463d6964d8",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#a) Titolarità dell'intervento",
+   "seconds": 0.8
+  },
+  {
+   "section": "Qualificazione dell'intervento di rinnovo",
+   "fingerprint": "dba88e495dd96ac1",
+   "same_as": "sue-combo-cil-rinnovo-paesaggistica#Qualificazione dell'intervento di rinnovo",
+   "seconds": 0.7
+  },
+  {
+   "section": "b) Presentazione della SCIA Alternativa al Permesso di Costruire/SCIA Unica/SCIA Condizionata",
+   "fingerprint": "7ec3b7b3e91b457f",
+   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#b) Presentazione della SCIA Alternativa al Permesso di Costruire/SCIA Unica/SCIA Condizionata",
+   "seconds": 0.7
+  },
+  {
+   "section": "c) Qualificazione dell'intervento",
+   "fingerprint": "f7cf283e01fd41f9",
+   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#c) Qualificazione dell'intervento",
+   "seconds": 0.7
+  },
+  {
+   "section": "d) Destinazione d'uso dell'immobile",
+   "fingerprint": "167628390a2f0298",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#e) Destinazione d'uso",
+   "seconds": 0.8
+  },
+  {
+   "section": "e) Opere su parti comuni o modifiche esterne",
+   "fingerprint": "a9ea4400694734ae",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#b) Opere su parti comuni o modifiche esterne",
+   "seconds": 0.8
+  },
+  {
+   "section": "f) Regolarità urbanistica e precedenti edilizi",
+   "fingerprint": "0c7c0f62514725f2",
+   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#f) Regolarità urbanistica e precedenti edilizi",
+   "seconds": 0.8
+  },
+  {
+   "section": "g) Calcolo del contributo di costruzione",
+   "fingerprint": "c73f40920c970318",
+   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#g) Calcolo del contributo di costruzione",
+   "seconds": 0.8
+  },
+  {
+   "section": "h1) Tecnici incaricati",
+   "fingerprint": "cbe6e63b6534a4f7",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#h1) Tecnici incaricati",
+   "seconds": 0.8
+  },
+  {
+   "section": "H2) Altri tecnici incaricati",
+   "fingerprint": "124292a24c7f627e",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#G2) Altri tecnici incaricati",
+   "seconds": 0.8
+  },
+  {
+   "section": "i) Impresa esecutrice dei lavori",
+   "fingerprint": "334a1e7c12e87178",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#i) Impresa esecutrice dei lavori",
+   "seconds": 0.9
+  },
+  {
+   "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+   "fingerprint": "a40130c0522e1c94",
+   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
+   "seconds": 0.8
+  },
+  {
+   "section": "dati relativi al nome del tecnico",
+   "fingerprint": "ffddb90f4d2ab273",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati relativi al nome del tecnico",
+   "seconds": 0.9
+  },
+  {
+   "section": "m) Diritti di terzi",
+   "fingerprint": "6dcffcfdce6f75ea",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#m) Diritti di terzi",
+   "seconds": 0.9
+  },
+  {
+   "section": "Note",
+   "fingerprint": "e84721ea696ebe15",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#Note",
+   "seconds": 0.9
+  },
+  {
+   "section": "Asseverazione SCIA Alternativa - Dati progettista e descrizione opere",
+   "fingerprint": "1808956d199b020e",
+   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Asseverazione SCIA Alternativa - Dati progettista e descrizione opere",
+   "seconds": 0.8
+  },
+  {
+   "section": "Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+   "fingerprint": "53c4e7fc59406a03",
+   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Asseverazione SCIA Alternativa - stato legittimo, dichiarazione tolleranze",
+   "seconds": 0.9
+  },
+  {
+   "section": "Asseverazione SCIA Alternativa -  Dati immobile, strumentazione urbanistica, barriere architettoniche",
+   "fingerprint": "455d3194ba676ac0",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#Asseverazione SCIA - Dati immobile, strumentazione urbanistica, barriere architettoniche",
+   "seconds": 0.8
+  },
+  {
+   "section": "Asseverazione SCIA Alternativa -  Sicurezza impianti, Consumi energetici",
+   "fingerprint": "eabee6f40f7bc514",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#Asseverazione SCIA - Sicurezza impianti, consumi energetici",
+   "seconds": 1
+  },
+  {
+   "section": "Asseverazione SCIA alternativa - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+   "fingerprint": "afb4e293ac108424",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
+   "seconds": 0.9
+  },
+  {
+   "section": "Asseverazione SCIA Alternativa - Amianto, conformità igienico sanitaria, Sismica",
+   "fingerprint": "f5f2a3105610e9cc",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
+   "seconds": 0.9
+  },
+  {
+   "section": "Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi",
+   "fingerprint": "25ee2acf0bbc5144",
+   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Asseverazione SCIA Alternativa -  Qualità terreni, opere di urbanizzazione, Scarichi",
+   "seconds": 0.9
+  },
+  {
+   "section": "Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+   "fingerprint": "7dd42cc8f8a0ab0e",
+   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Asseverazione SCIA Alternativa - Tutela Storico Ambientale",
+   "seconds": 0.9
+  },
+  {
+   "section": "Asseverazione SCIA Alternativa - Tutela Ecologica",
+   "fingerprint": "6ccd3315fa68296d",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#Asseverazione SCIA - Tutela Ecologica",
+   "seconds": 0.9
+  },
+  {
+   "section": "Asseverazione SCIA Alternativa - Altri Vincoli di Tutela Ecologica",
+   "fingerprint": "257df9b959f07f7d",
+   "same_as": "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost#Asseverazione SCIA Alternativa - Altri Vincoli di Tutela Ecologica",
+   "seconds": 0.8
+  },
+  {
+   "section": "Asseverazione SCIA Alternativa -  TUTELA FUNZIONALE",
+   "fingerprint": "60daf62dbca96826",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#Asseverazione SCIA - Tutela Funzionale",
+   "seconds": 0.8
+  },
+  {
+   "section": "Asseverazione SCIA Alternativa -  NOTE",
+   "fingerprint": "b6ac34d6d6cc314e",
+   "same_as": "sue-combo-scia-sanatoria-paesaggistica-semplificata#Asseverazione SCIA - NOTE",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione ai sensi dell' art. 75 del d.P.R. n° 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "fingerprint": "52afb47e165ec4c7",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "fingerprint": "869752d2cea5aef3",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "seconds": 0.8
+  },
+  {
+   "section": "Qualifica e dati del procuratore",
+   "fingerprint": "2ebe54198e212bff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Qualifica e dati del procuratore",
+   "seconds": 0.8,
+   "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
+  }
+ ],
+ "slots": {
+  "Gestione degli allegati": [
+   {
+    "title": "Procura speciale",
+    "accepts": "jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Copia del documento di identità del/i titolare/i e/o del tecnico",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Quadro riepilogativo della documentazione - SCIA alternativa DSC",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Fotocopia di un documento di identita' del soggetto che conferisce la procura speciale",
+    "accepts": "pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Elaborati grafici dello stato di fatto, di progetto e comparativi",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Documentazione fotografica dello stato di fatto",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Allegati liberi",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Documentazione dimostrativa dello stato legittimo",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": true,
+    "portal_document": false
+   },
+   {
+    "title": "Dichiarazione di assenso dei terzi titolari di altri diritti reali o obbligatori",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": true,
+    "portal_document": false
+   },
+   {
+    "title": "Copia dei documenti d'identità del/i titolare/i, comproprietario/i",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": true,
+    "portal_document": false
+   },
+   {
+    "title": "Relazione tecnica sui consumi energetici",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": true,
+    "portal_document": false
+   }
+  ]
+ },
+ "slots_note": "read 2026-11-04 on the empty draft (crawl.js `slots`), plus the 4 its answers add from sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost's own screen"
+}

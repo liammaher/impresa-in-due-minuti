@@ -1,0 +1,341 @@
+{
+ "crawled": "2026-11-04T18:50:11.013Z",
+ "by": "crawl.js batch, depth 3",
+ "pratica": "SUE: 2 operations in one pratica: Proroga del termine di ultimazione lavori (art. 10 septies, Legge 51/2022) + Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune), with the scelta IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+ "seconds": 80.2,
+ "note": "Every section is one of the operations' own, the same fingerprint: the combination is their union, in this order. A recipe names every operation and extends the main one's.",
+ "also": [
+  "EDILIZIA › Beni Paesaggistici › Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)"
+ ],
+ "generated": {
+  "interventi": "Proroga del termine di ultimazione lavori (art. 10 septies, Legge 51/2022)",
+  "adempimenti": [
+   {
+    "adempimento": "Comunicazione di proroga del termine di ultimazione lavori",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   },
+   {
+    "adempimento": "Autorizzazione Paesaggistica Semplificata ex DPR 31/2017 (Ente Comune)",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   }
+  ],
+  "sections": [
+   "Scheda anagrafica",
+   "Oggetto della pratica",
+   "DOMICILIO DIGITALE",
+   "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "ubicazione dell'attività",
+   "dati catastali",
+   "dichiarazione delle motivazioni della richiesta di proroga",
+   "dati relativi al nome del tecnico",
+   "Qualificazione dell'intervento",
+   "dichiarazione periodo di proroga",
+   "richiesta della proroga di ultimazione dei lavori",
+   "riferimenti titolo edilizio e data prevista della fine lavori",
+   "Ambito dell'intervento",
+   "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "dichiarazione relativa ai diritti di segreteria/istruttori",
+   "Dichiarazione relativa all'assolvimento dell'imposta di bollo"
+  ]
+ },
+ "screens": [
+  {
+   "screen": "scelta del destinatario della pratica",
+   "options": [
+    {
+     "label": "",
+     "checked": false
+    },
+    {
+     "label": "",
+     "checked": true
+    }
+   ]
+  },
+  {
+   "screen": "scelte eventuali",
+   "options": [
+    {
+     "key": "0",
+     "type": "CHK",
+     "label": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+     "selected": true
+    }
+   ]
+  }
+ ],
+ "variants": [
+  {
+   "option": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+   "type": "CHK",
+   "adds": [
+    "Qualifica e dati del procuratore"
+   ],
+   "drops": []
+  }
+ ],
+ "sections": [
+  {
+   "section": "Scheda anagrafica",
+   "fingerprint": "4dd844db9cdb76ff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Scheda anagrafica",
+   "seconds": 0
+  },
+  {
+   "section": "Oggetto della pratica",
+   "fingerprint": "b9828eee09a1f50f",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Oggetto della pratica",
+   "seconds": 1.1
+  },
+  {
+   "section": "DOMICILIO DIGITALE",
+   "fingerprint": "5978ae29f079ce08",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO DIGITALE",
+   "seconds": 1
+  },
+  {
+   "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "fingerprint": "c282ef61bee9ea4d",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.9
+  },
+  {
+   "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "ubicazione dell'attività",
+   "fingerprint": "1ae79e0eb7308899",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione ubicazione dell'intervento",
+   "seconds": 0.9
+  },
+  {
+   "section": "dati catastali",
+   "fingerprint": "bd17e4e186aa5dc9",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati catastali",
+   "seconds": 0.9
+  },
+  {
+   "section": "dichiarazione delle motivazioni della richiesta di proroga",
+   "fingerprint": "0cd4b48a866a5e24",
+   "same_as": "sue-combo-proroga-inizio-paesaggistica-ordinaria#dichiarazione delle motivazioni della richiesta di proroga",
+   "seconds": 1
+  },
+  {
+   "section": "dati relativi al nome del tecnico",
+   "fingerprint": "ffddb90f4d2ab273",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati relativi al nome del tecnico",
+   "seconds": 1
+  },
+  {
+   "section": "Qualificazione dell'intervento",
+   "fingerprint": "24951c61da272643",
+   "same_as": "sue-combo-cil-paesaggistica-semplificata#Qualificazione dell'intervento",
+   "seconds": 0.9
+  },
+  {
+   "section": "dichiarazione periodo di proroga",
+   "fingerprint": "4a13a20b9ac3615b",
+   "same_as": "sue-combo-proroga-inizio-paesaggistica-ordinaria#dichiarazione periodo di proroga",
+   "seconds": 0.9
+  },
+  {
+   "section": "richiesta della proroga di ultimazione dei lavori",
+   "fingerprint": "10395948f398f904",
+   "same_as": "sue-proroga-fine-lavori#richiesta della proroga di ultimazione dei lavori",
+   "seconds": 0.9
+  },
+  {
+   "section": "riferimenti titolo edilizio e data prevista della fine lavori",
+   "fields": [
+    {
+     "id": "r2c1p2reg:radio:0_clone",
+     "kind": "radio",
+     "label": "di cui al Permesso di costruire",
+     "group": "r2c1p2reg:radio"
+    },
+    {
+     "id": "r2c2p4reg:txt",
+     "kind": "text",
+     "label": "P.G. numero",
+     "context": "di cui al Permesso di costruire",
+     "max": 30,
+     "disabled": true
+    },
+    {
+     "id": "r2c3p6reg:calendar_input",
+     "kind": "date",
+     "label": "del",
+     "disabled": true
+    },
+    {
+     "id": "r2c4p8reg:txt",
+     "kind": "text",
+     "label": "N.Put",
+     "max": 30,
+     "disabled": true
+    },
+    {
+     "id": "r4c1p10reg:radio:1_clone",
+     "kind": "radio",
+     "label": "di cui alla SCIA",
+     "group": "r4c1p10reg:radio"
+    },
+    {
+     "id": "r4c2p12reg:txt",
+     "kind": "text",
+     "label": "P.G. numero",
+     "context": "di cui alla SCIA",
+     "max": 30,
+     "disabled": true
+    },
+    {
+     "id": "r4c3p14reg:calendar_input",
+     "kind": "date",
+     "label": "del",
+     "disabled": true
+    },
+    {
+     "id": "r6c1p16reg:txt",
+     "kind": "text",
+     "label": "per (specificare l'oggetto dell'intervento)",
+     "max": 100
+    },
+    {
+     "id": "r8c1p18reg:txt",
+     "kind": "text",
+     "label": "intestato a",
+     "max": 50
+    },
+    {
+     "id": "r10c1p20reg:calendar_input",
+     "kind": "date",
+     "label": "la cui data di fine lavori dovrebbe essere entro il"
+    },
+    {
+     "id": "r10c2p22reg:calendar_input",
+     "kind": "date",
+     "label": "ed è invece prevista per"
+    }
+   ],
+   "fingerprint": "3548cc3621ac8bb6",
+   "text": "riferimenti titolo edilizio e data prevista della fine lavori P.G. numero del N.Put di cui al Permesso di costruire P.G. numero del di cui alla SCIA per (specificare l'oggetto dell'intervento) intestato a la cui data di fine lavori dovrebbe essere entro il ed è invece prevista per",
+   "branches": [
+    {
+     "choice": "di cui al Permesso di costruire",
+     "id": "r2c1p2reg:radio:0_clone",
+     "kind": "radio",
+     "moved": [
+      [
+       "r4c3p14reg:calendar_input",
+       "r2c3p6reg:calendar_input"
+      ]
+     ],
+     "enables": [
+      "r2c2p4reg:txt",
+      "r2c3p6reg:calendar_input",
+      "r2c4p8reg:txt"
+     ]
+    },
+    {
+     "choice": "di cui alla SCIA",
+     "id": "r4c1p10reg:radio:1_clone",
+     "kind": "radio",
+     "moved": [
+      [
+       "r4c3p14reg:calendar_input",
+       "r2c3p6reg:calendar_input"
+      ]
+     ],
+     "enables": [
+      "r4c2p12reg:txt",
+      "r4c3p14reg:calendar_input"
+     ]
+    }
+   ],
+   "seconds": 3.3
+  },
+  {
+   "section": "Ambito dell'intervento",
+   "fingerprint": "8cbcfdd54fdcde26",
+   "same_as": "sue-combo-cil-paesaggistica-semplificata#Ambito dell'intervento",
+   "seconds": 1
+  },
+  {
+   "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
+   "fingerprint": "52afb47e165ec4c7",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 1
+  },
+  {
+   "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "fingerprint": "869752d2cea5aef3",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "seconds": 1
+  },
+  {
+   "section": "Qualifica e dati del procuratore",
+   "fingerprint": "2ebe54198e212bff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Qualifica e dati del procuratore",
+   "seconds": 1.1,
+   "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
+  }
+ ],
+ "slots": {
+  "Gestione degli allegati": [
+   {
+    "title": "copia del documento d'identità in corso di validità ai sensi del DPR 445/2000 (solo per chi non firma digitalmente)",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Relazione Paesaggistica Semplificata",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Elaborati di progetto individuati nell'Allegata Relazione Paesaggistica Semplificata",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Procura speciale",
+    "accepts": "jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Fotocopia di un documento di identita' del soggetto che conferisce la procura speciale",
+    "accepts": "pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Allegati liberi",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg",
+    "required": false,
+    "portal_document": false
+   }
+  ]
+ },
+ "slots_note": "read 2026-11-04 on the empty draft (crawl.js `slots`)"
+}

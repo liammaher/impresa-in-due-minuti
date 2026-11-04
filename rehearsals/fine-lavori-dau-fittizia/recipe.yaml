@@ -1,0 +1,44 @@
+# fine lavori e DAU: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# dau-at-the-end). The case: fine-lavori-fittizia's, with what dau-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+extends:
+- fine-lavori-fittizia
+- dau-fittizia
+procedure: napoli/comune/fine-lavori-con-dichiarazione-avvenuto-utilizzo-terre
+title: Fine lavori e DAU in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-fine-lavori-dau
+operation:
+- Comunicazione di fine lavori
+- Dichiarazione di avvenuto utilizzo (D.A.U.) ai sensi dell'art. 7 del DPR n. 120/2017
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PROVA NON INVIARE - fine lavori + DAU {{c:identity.last_name}}
+  diritti_euro:
+    default: '0'
+    why: 'Not in the Comune''s 2026 table of SUE diritti (G.C. 239/2026): no diritti (non previsti dal tariffario)'
+yours:
+- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
+- 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza
+  (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
+  any acknowledgement in the client''s name'
+- Sign and send (Firma e invio); keep the receipt
+rules:
+  table: null
+  question: null
+  facts: null
+  main: napoli/comune/fine-lavori
+  handles:
+  - napoli/comune/dichiarazione-avvenuto-utilizzo-terre
+answers:
+  descrizione: PROVA NON INVIARE - fine lavori + DAU P6

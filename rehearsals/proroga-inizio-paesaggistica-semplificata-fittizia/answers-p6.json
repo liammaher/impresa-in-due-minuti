@@ -1,0 +1,35 @@
+{
+ "people": {
+  "c": "luca"
+ },
+ "descrizione": "PROVA NON INVIARE - proroga inizio + paes. semplificata P6",
+ "bollo_marche": false,
+ "titolo": "proprietario",
+ "oggetto": "Richiesta di proroga del termine di inizio lavori del permesso di costruire 999/2026.",
+ "pdc_data": "2026-09-15",
+ "pdc_protocollo": "PG/2026/0888888",
+ "pdc_interventi": "ampliamento di un locale accessorio",
+ "proroga_data_prevista": "2027-11-15",
+ "proroga_giorni": "365",
+ "proroga_motivo": "Ritardo nella consegna delle strutture prefabbricate da parte del fornitore, per cause non imputabili al titolare.",
+ "diritti_euro": "501",
+ "titolo_tipo": "permesso di costruire",
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "allegato_b": [
+  "paes_b3",
+  "paes_b7"
+ ],
+ "vincolo": "art 136 and 142",
+ "vincolo_136_lettera": "c) e d)",
+ "vincolo_136_provvedimento": "D.M. fittizio PROVA NON INVIARE del 01/01/1960",
+ "vincolo_142_lettera": "a)",
+ "paes_variante": false,
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "semplificata",
+ "fatti": [],
+ "progettista_altro": false,
+ "terre_rocce": "no"
+}

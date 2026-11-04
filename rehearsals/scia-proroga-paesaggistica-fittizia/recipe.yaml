@@ -1,0 +1,81 @@
+# SCIA e proroga paesaggistica: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: scia-paesaggistica-semplificata-fittizia's, with what proroga-paesaggistica-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+extends:
+- scia-paesaggistica-semplificata-fittizia
+- proroga-paesaggistica-fittizia
+procedure: napoli/comune/scia-edilizia-con-proroga-autorizzazione-paesaggistica
+title: SCIA e proroga paesaggistica in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-scia-proroga-paesaggistica
+operation:
+- Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)
+- Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022 - Comune)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PROVA NON INVIARE - SCIA + proroga paesaggistica {{c:identity.last_name}}
+  diritti_euro:
+    propose: '{{ask.scia_onerosa|diritti_gratuito}}'
+    why: 'Line SUE 10 of the Comune''s 2026 table of SUE diritti (G.C. 239/2026): 401 € for a SCIA free of the contributo;
+      an onerous SCIA isn''t in the table: ask the SUE'
+  strutture:
+    type: yes_no
+    question: I lavori toccano le parti strutturali dell'edificio?
+  sismica:
+    type: choice
+    question: Per le opere strutturali, che cosa chiede la normativa sismica?
+    options:
+    - deposito
+    - autorizzazione
+    - variante
+    labels:
+      deposito: Il deposito del progetto (interventi di minore rilevanza o privi di rilevanza, art. 94-bis c. 1
+        b e c)
+      autorizzazione: L'autorizzazione preventiva (interventi rilevanti, art. 94-bis c. 1 a)
+      variante: Una variante non sostanziale a un progetto strutturale già depositato o autorizzato
+  bene_culturale:
+    type: yes_no
+    question: L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?
+  terre_rocce:
+    type: choice
+    question: Le terre e rocce scavate escono dal cantiere per essere usate altrove come sottoprodotti (non come
+      rifiuti)?
+    options:
+    - 'no'
+    - dichiarazione
+    - piano
+    labels:
+      'no': 'No: non si scava, o le terre si riusano nello stesso sito, o si smaltiscono come rifiuti'
+      dichiarazione: Sì, da un cantiere che ne produce fino a 6.000 m³ (dalle sezioni di progetto), o di più ma
+        per opere non soggette a VIA né ad AIA
+      piano: Sì, da un cantiere che ne produce oltre 6.000 m³ per opere soggette a VIA o ad AIA
+yours:
+- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
+- 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi,
+  consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
+- 'As progettista, check every asseverazione on this page: they are yours, signed with the pratica'
+- Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural
+  one, the firm) with the SUE's comunicazione di nomina
+- 'No start date: the works start once the SUE says the landscape authorization (and any other assent) is in'
+- 'Pay the diritti before the second run (after the declarations): its receipt, signed, goes with it'
+- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
+  any acknowledgement in the client''s name'
+- Sign and send (Firma e invio); keep the receipt
+rules:
+  table: null
+  question: null
+  facts: null
+  main: napoli/comune/scia-edilizia
+  handles:
+  - napoli/comune/proroga-autorizzazione-paesaggistica
+answers:
+  descrizione: PROVA NON INVIARE - SCIA + proroga paesaggistica P6
