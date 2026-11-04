@@ -963,10 +963,11 @@ def _():
            if p["section"].startswith("Relazione Tecnica")]
     c, t = "Comunicazioni, segnalazioni", "Tipologia di atto"
     assert [l or "+" for k, l, _ in rel if k == "add" or l.startswith((c, t))] == [c, c, "+", c, t, t, "+", t], rel
-    # The count first: before it is answered, the second technician's questions wait on it.
+    # The count first: proposed as one, the second technician's questions wait on a change to it.
     steps, v, r = check("cila-fittizia", "answers-altri-tecnici.json", altri_tecnici_quanti=None)
     assert [p["proposal"] for p in r["proposals"] if p["key"] == "altri_tecnici_quanti"] == ["1"], r
-    assert {q["key"]: q.get("only_if") for q in r["questions"]}.get("altro_tecnico2_incarico") == ["altri_tecnici_quanti"], r["questions"]
+    assert "altro_tecnico2_incarico" not in {q["key"] for q in r["questions"]}, r["questions"]
+    assert "altro_tecnico2_incarico" in r["if_changed"]["altri_tecnici_quanti"], r.get("if_changed")
 
 
 @case("other technicians repeat by \"+\" (a, a2, a3), each an employee of a firm or not (ad: its seat is the studio)")

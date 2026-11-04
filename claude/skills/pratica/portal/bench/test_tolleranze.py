@@ -99,13 +99,14 @@ def _():
         assert not any("tolleranz" in x for x in ls), (recipe, ls)
 
 
-@case("unanswered, no tolerances is proposed, and the kinds hang on a yes")
+@case("unanswered, no tolerances is proposed, and the kinds wait on a yes")
 def _():
     for recipe in CASES:
         r = preflight(recipe, answers(recipe, "answers-p6.json", tolleranze=None))
         assert [p["proposal"] for p in r["proposals"] if p["key"] == "tolleranze"] == ["false"], (recipe, r["proposals"])
-        kinds = [q for q in r["questions"] if q["key"] == "tolleranze_tipi"]
-        assert kinds and all(i.get("only_if") == ["tolleranze"] for i in kinds[0]["items"]), (recipe, kinds)
+        # The kinds are asked only if the person changes the proposal to yes (`if_changed`).
+        assert not [q for q in r["questions"] if q["key"] == "tolleranze_tipi"], (recipe, r["questions"])
+        assert any(k.startswith("toll_") for k in r["if_changed"]["tolleranze"]), (recipe, r.get("if_changed"))
 
 
 @case("structurally relevant: its art. 94-bis class, then the authorization, the silenzio assenso or the term run out")

@@ -417,9 +417,13 @@ def nested_when():
     os.chdir(HERE.parents[4])  # the answers name files from the repo's root
     try:
         ask = lambda a: {q["key"]: q for q in run.preflight(steps, values(a, fields, steps), made_up=True)["questions"]}
-        q = ask(base)
-        assert q["contributo_pagato"]["only_if"] == ["cila_onerosa"], q.get("contributo_pagato")
-        assert q["toll_strutturale"]["only_if"] == ["tolleranze"], q.get("toll_strutturale")
+        # Unanswered, both are proposed (not onerosa, no tolerances): what a yes would open isn't
+        # in the message, but kept under the proposal (`if_changed`) for a person who changes it.
+        r = run.preflight(steps, values(base, fields, steps), made_up=True)
+        q = {x["key"]: x for x in r["questions"]}
+        assert "contributo_pagato" not in q and "toll_strutturale" not in q, list(q)
+        assert "contributo_pagato" in r["if_changed"]["cila_onerosa"], r.get("if_changed")
+        assert "toll_strutturale" in r["if_changed"]["tolleranze"], r.get("if_changed")
         q = ask(base | {"cila_onerosa": False, "tolleranze": False})
         assert not {"contributo_pagato", "ricevuta_contributo", "tolleranze_tipi", "toll_superficie", "toll_strutturale"} & set(q), q
         q = ask(base | {"cila_onerosa": True, "tolleranze": True})
@@ -443,8 +447,12 @@ def gated_support():
         pre = lambda a: run.preflight(steps, values(a, fields, steps), made_up=True)
         r = pre(base | {"scia_onerosa": "false", "contributo_normativa": "art. 17 (inventato)"})
         assert r["ready"] and not r["unsupported"], r
-        q = {x["key"]: x for x in pre(base)["questions"]}
-        assert q["contributo_pagamento"]["only_if"] == ["scia_onerosa"], q.get("contributo_pagamento")
+        # Unanswered, onerosa is proposed: how the contributo is paid is asked if it is onerosa,
+        # in the message when the proposal says so, else kept for a change to it (`if_changed`).
+        r = pre(base)
+        q = {x["key"]: x for x in r["questions"]}
+        held = (r.get("if_changed") or {}).get("scia_onerosa", [])
+        assert (q.get("contributo_pagamento") or {}).get("only_if") == ["scia_onerosa"] or "contributo_pagamento" in held, (q.get("contributo_pagamento"), held)
         r = pre(p6 | {"contributo_pagamento": "pagato"})
         assert any("mai prima della presentazione" in u for u in r["unsupported"]), r["unsupported"]
         assert pre(p6)["ready"]

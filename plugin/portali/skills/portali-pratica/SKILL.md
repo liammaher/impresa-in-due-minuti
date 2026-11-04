@@ -148,18 +148,25 @@ this pratica needs. Pre-flight prints JSON and exits 0 only when `ready`.
 - `unsupported`: say why in one line and stop. With `defects`, the law allows the case but the
   portal can't take it as the law asks: say what the portal does, what the law asks, and give
   its `choices` as a numbered list.
-- `questions`, `proposals`, `missing`: **one short message**, numbered, in Italian. A
-  `checklist` is one question with its items as bullets ("spunti quelli che valgono, o
-  nessuno"; usually none); an `only_if` question goes under its items ("se sì: …"). Proposals
-  in the same message as "Userò: …", one line each; "ok" confirms them all, and one nobody
-  confirmed is never used. A proposal that depends on another answer in the same message comes
+- `questions`, `proposals`, `missing`: **one short message**, in Italian, in two parts.
+  - *Le domande*, numbered: each question without `only_if`. A `checklist` is one question with
+    its items as bullets ("spunti quelli che valgono, o nessuno"; usually none). A question or
+    item with `only_if` is a follow-up: **don't write it out**; under its parent, say in a few
+    words what you'll need if the answer opens it ("se sì: quali impianti, e per ciascuno chi
+    rilascia la dichiarazione"; "per ogni titolo spuntato: numero e data"), so the tecnico can
+    give it in the same reply.
+  - *Userò*, one short line each, grouped by subject: the proposals; "ok" confirms them all, and
+    one nobody confirmed is never used.
+  - `if_changed` is not written: it lists what a proposal holds back (the details of other
+    planning instruments, under a "no"). Only if the tecnico changes that proposal does the next
+    pre-flight ask them. A proposal that depends on another answer in the same message comes
   with it, so there is no second message: `assumes` (worded from the proposals it names: it holds
   once those are confirmed), or `cases` ("Userò: X se …, Y se …", each `if` an answer given in this
   message) and `otherwise` (the answers with no proposal: ask its question under them). On "ok",
   write the case that matches what they answered. A `missing` field the tecnico gives you goes into the archive
   (`pvault set`), never into a file. Write the other replies under each `key` (dates
-  YYYY-MM-DD, files as paths) and run pre-flight again; an `error` says what didn't fit: ask
-  only that again.
+  YYYY-MM-DD, files as paths) and run pre-flight again; an `error` says what didn't fit, and
+  a follow-up whose details they didn't give comes back as a question: ask only those.
 - `files`: when `pick` is there, say they'll choose the pratica's files once, on the portal's
   page, at the start ("All'inizio le chiederò di scegliere la cartella dei documenti").
   A file's `problem` is what the sportello would refuse (at Napoli's SUE, DD 501/2026: not
