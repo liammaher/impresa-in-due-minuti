@@ -13,7 +13,7 @@ procedure: napoli/comune/permesso-in-sanatoria-con-accertamento-paesaggistico
 title: "Permesso di costruire in sanatoria con accertamento di compatibilità paesaggistica, SUE Napoli (tecnico con procura)"
 crawl: sue-combo-pdc-sanatoria-accertamento
 asks:
-  descrizione: {default: "PROVA NON INVIARE - PdC sanatoria e accertamento {{c:identity.last_name}}"}
+  descrizione: {default: "PdC sanatoria e accertamento {{c:identity.last_name}}"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali, art. 75 DPR 445/2000"

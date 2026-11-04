@@ -10,7 +10,7 @@ procedure: napoli/comune/cil-con-paesaggistica-semplificata
 title: "CIL opere temporanee con autorizzazione paesaggistica semplificata, SUE Napoli (tecnico con procura)"
 crawl: sue-combo-cil-paesaggistica-semplificata
 asks:
-  descrizione: {default: "PROVA NON INVIARE - CIL e paesaggistica {{c:identity.last_name}}"}
+  descrizione: {default: "CIL e paesaggistica {{c:identity.last_name}}"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"

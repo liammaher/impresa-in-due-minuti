@@ -1489,5 +1489,20 @@ def _():
         assert [p.parent.name for p in gen.ensure(root=root)] == ["fine-lavori-fittizia"]
 
 
+@case("a steps file's own defaults never name a draft PROVA NON INVIARE: real users run them; rehearsals answer it")
+def _():
+    # Built from each recipe, as regen.py builds them (the steps files aren't committed), and
+    # the hand-written ones as they are.
+    for d in sorted(p for p in REH.iterdir() if p.is_dir()):
+        if (d / "recipe.yaml").exists():
+            steps = generated(d.name)
+        elif (d / "portal-steps.yaml").exists():
+            steps = yaml.safe_load((d / "portal-steps.yaml").read_text())
+        else:
+            continue
+        default = str(steps.get("asks", {}).get("descrizione", {}).get("default", ""))
+        assert "PROVA" not in default, (d.name, default)
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

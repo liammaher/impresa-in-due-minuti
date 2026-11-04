@@ -57,8 +57,17 @@ def ready():
     assert any("€ 120" in y for y in r["yours"]), r["yours"]
 
 
+def rehearsal_draft_name():
+    """The steps file's own default names a real draft; a rehearsal must say PROVA NON INVIARE."""
+    r = run.preflight(STEPS, values(answers=ANSWERS | {"descrizione": "SCIA Rossi"}), made_up=True)
+    assert any("PROVA NON INVIARE" in u for u in r["unsupported"]), r["unsupported"]
+    unanswered = {k: v for k, v in ANSWERS.items() if k != "descrizione"}
+    assert run.preflight(STEPS, values(answers=unanswered), made_up=True)["unsupported"]
+    assert run.preflight(STEPS, values(answers=unanswered))["ready"]
+
+
 def all_questions():
-    r = run.preflight(STEPS, values(answers={}), made_up=True)
+    r = run.preflight(STEPS, values(answers={"descrizione": ANSWERS["descrizione"]}), made_up=True)
     keys = [q["key"] for q in r["questions"]]
     assert keys == ["extras", "insegna", "superficie_somministrazione_mq"], keys
     items = [i["key"] for i in r["questions"][0]["items"]]
@@ -875,6 +884,7 @@ def streets_and_lists():
 
 CASES = [
     ("the SCIA with its answers is ready", ready),
+    ("a rehearsal's draft must be named PROVA NON INVIARE; a real one takes the steps file's own name", rehearsal_draft_name),
     ("no answers: one checklist, branch items first, then two questions, no defaults", all_questions),
     ("alcohol stops at pre-flight with its reason, nothing else asked", alcohol),
     ("a company is refused: only ditte individuali are mapped", company),

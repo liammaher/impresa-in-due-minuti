@@ -31,7 +31,7 @@ asks:
   descrizione:
     type: text
     question: "A name for the draft in Pratiche in bozza"
-    default: "PROVA NON INVIARE - CILA {{c:identity.last_name}}"
+    default: "CILA {{c:identity.last_name}}"
   titolo:
     type: text
     question: "The client's title to the property (proprietario, comproprietario, usufruttuario, amministratore di condominio, locatario)"

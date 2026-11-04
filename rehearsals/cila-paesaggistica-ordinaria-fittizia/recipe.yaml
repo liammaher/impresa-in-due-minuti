@@ -10,7 +10,7 @@ procedure: napoli/comune/cila-con-paesaggistica-ordinaria
 title: "CILA con autorizzazione paesaggistica ordinaria, SUE Napoli (tecnico con procura)"
 crawl: sue-combo-cila-paesaggistica-ordinaria
 asks:
-  descrizione: {default: "PROVA NON INVIARE - CILA e paesaggistica {{c:identity.last_name}}"}
+  descrizione: {default: "CILA e paesaggistica {{c:identity.last_name}}"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"

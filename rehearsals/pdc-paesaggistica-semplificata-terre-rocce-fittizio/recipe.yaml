@@ -8,7 +8,7 @@ procedure: napoli/comune/permesso-di-costruire-con-paesaggistica-semplificata-e-
 title: "Permesso di costruire con autorizzazione paesaggistica semplificata e dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
 crawl: sue-combo-pdc-paesaggistica-semplificata-dichiarazione-utilizzo
 asks:
-  descrizione: {default: "PROVA NON INVIARE - PdC sempl. e terre e rocce {{c:identity.last_name}}"}
+  descrizione: {default: "PdC sempl. e terre e rocce {{c:identity.last_name}}"}
 # pdc-paesaggistica-semplificata-fittizio's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"

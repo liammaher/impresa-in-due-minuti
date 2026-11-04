@@ -11,7 +11,7 @@ procedure: napoli/comune/scia-con-paesaggistica-ordinaria
 title: "SCIA edilizia con autorizzazione paesaggistica ordinaria, SUE Napoli (tecnico con procura)"
 crawl: sue-combo-scia-paesaggistica-ordinaria
 asks:
-  descrizione: {default: "PROVA NON INVIARE - SCIA e paesaggistica {{c:identity.last_name}}"}
+  descrizione: {default: "SCIA e paesaggistica {{c:identity.last_name}}"}
   # No start date: the works start once the SUE says the authorization is in.
   data_inizio_lavori: null
 yours:

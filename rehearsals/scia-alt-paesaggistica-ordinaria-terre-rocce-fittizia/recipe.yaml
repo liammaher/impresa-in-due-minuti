@@ -8,7 +8,7 @@ procedure: napoli/comune/scia-alternativa-pdc-con-paesaggistica-ordinaria-e-dich
 title: "SCIA alternativa al permesso di costruire con autorizzazione paesaggistica ordinaria e dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
 crawl: sue-combo-scia-alt-paesaggistica-ordinaria-dichiarazione-utilizzo
 asks:
-  descrizione: {default: "PROVA NON INVIARE - SCIA alt ord. e terre e rocce {{c:identity.last_name}}"}
+  descrizione: {default: "SCIA alt ord. e terre e rocce {{c:identity.last_name}}"}
 # scia-alt-paesaggistica-ordinaria-fittizia's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"

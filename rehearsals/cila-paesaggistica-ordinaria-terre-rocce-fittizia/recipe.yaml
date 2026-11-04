@@ -8,7 +8,7 @@ procedure: napoli/comune/cila-con-paesaggistica-ordinaria-e-dichiarazione-utiliz
 title: "CILA con autorizzazione paesaggistica ordinaria e dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
 crawl: sue-combo-cila-paesaggistica-ordinaria-dichiarazione-utilizzo
 asks:
-  descrizione: {default: "PROVA NON INVIARE - CILA ord. e terre e rocce {{c:identity.last_name}}"}
+  descrizione: {default: "CILA ord. e terre e rocce {{c:identity.last_name}}"}
 # cila-paesaggistica-ordinaria-fittizia's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"

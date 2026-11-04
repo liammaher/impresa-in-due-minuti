@@ -8,7 +8,7 @@ procedure: napoli/comune/scia-con-paesaggistica-semplificata-e-dichiarazione-uti
 title: "SCIA edilizia con autorizzazione paesaggistica semplificata e dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
 crawl: sue-combo-scia-paesaggistica-semplificata-dichiarazione-utilizzo
 asks:
-  descrizione: {default: "PROVA NON INVIARE - SCIA sempl. e terre e rocce {{c:identity.last_name}}"}
+  descrizione: {default: "SCIA sempl. e terre e rocce {{c:identity.last_name}}"}
 # scia-paesaggistica-semplificata-fittizia's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"

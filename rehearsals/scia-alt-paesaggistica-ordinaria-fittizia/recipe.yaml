@@ -12,7 +12,7 @@ procedure: napoli/comune/scia-alternativa-pdc-con-paesaggistica-ordinaria
 title: "SCIA alternativa al permesso di costruire con autorizzazione paesaggistica ordinaria, SUE Napoli (tecnico con procura)"
 crawl: sue-combo-scia-alt-paesaggistica-ordinaria
 asks:
-  descrizione: {default: "PROVA NON INVIARE - SCIA alt e paesaggistica {{c:identity.last_name}}"}
+  descrizione: {default: "SCIA alt e paesaggistica {{c:identity.last_name}}"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"

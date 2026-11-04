@@ -8,7 +8,7 @@ procedure: napoli/comune/cila-con-paesaggistica-semplificata-e-dichiarazione-uti
 title: "CILA con autorizzazione paesaggistica semplificata e dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
 crawl: sue-combo-cila-paesaggistica-semplificata-dichiarazione-utilizzo
 asks:
-  descrizione: {default: "PROVA NON INVIARE - CILA sempl. e terre e rocce {{c:identity.last_name}}"}
+  descrizione: {default: "CILA sempl. e terre e rocce {{c:identity.last_name}}"}
 # cila-paesaggistica-fittizia's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
