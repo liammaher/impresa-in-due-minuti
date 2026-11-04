@@ -1,50 +1,64 @@
 [
  {
+  "date": "2026-10-28",
+  "browser": "pane",
+  "note": "First run, no stop: 70 values and 3 attachments kept, every value read back on a fresh load; Login → draft: 60.3 s to the end of the form (wizard 11.7, 9 sections ~40, fresh load 7.8), then 5.4 s for the attachments"
+ },
+ {
   "date": "2026-10-29",
   "answers": "answers-p6.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane",
+  "note": "**Filled**, every value read back on a fresh load; Login → draft: 53.1 s from a blank draft (`bench/rerun.py` batch, after the SCIA's dictionary change; fresh load 8.0 s)"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 53.7
+  "seconds": 53.7,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-parziale.json",
   "result": "stopped",
-  "seconds": 57.3
+  "seconds": 57.3,
+  "browser": "pane"
  },
  {
   "date": "2026-11-03",
   "answers": "answers-parziale.json",
   "result": "filled",
-  "seconds": 62.4
+  "seconds": 62.4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-comproprietario.json",
   "result": "filled",
-  "seconds": 70.1
+  "seconds": 70.1,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-condominio.json",
   "result": "filled",
-  "seconds": 65.6
+  "seconds": 65.6,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-proprietario.json",
   "result": "filled",
-  "seconds": 55.8
+  "seconds": 55.8,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-usufruttuario.json",
   "result": "filled",
-  "seconds": 60.8
+  "seconds": 60.8,
+  "browser": "pane"
  }
 ]

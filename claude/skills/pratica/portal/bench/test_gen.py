@@ -1089,14 +1089,30 @@ def _():
         before, rerun.REHEARSALS = rerun.REHEARSALS, Path(t)
         try:
             (Path(t) / "pdc-fittizio").mkdir()
+            (Path(t) / "pdc-fittizio" / "README.md").write_text("# PdC\n\n## Runs\n\nProse stays.\n")
             done = [{"name": "pdc-fittizio/answers-deroga", "result": "filled", "total_seconds": 142.4},
                     {"name": "pdc-fittizio", "result": "stopped"}]
             rerun.record(done, "answers-p6.json", "2026-10-31")
             rerun.record(done, "answers-p6.json", "2026-10-31")
             runs = json.loads((Path(t) / "pdc-fittizio" / "runs.json").read_text())
+            readme = (Path(t) / "pdc-fittizio" / "README.md").read_text()
         finally:
             rerun.REHEARSALS = before
     assert [(r["answers"], r["result"]) for r in runs] == [("answers-deroga.json", "filled"), ("answers-p6.json", "stopped")], runs
+    assert "| 2026-10-31 | pane | `answers-deroga.json` | **filled** in 142 s |\n" in readme, readme
+    assert readme.count("| 2026-10-31 |") == 2 and readme.endswith("<!-- /runs -->\n\nProse stays.\n"), readme
+
+
+@case("every README's run table is drawn from its runs.json, the one run record (runs.py --write)")
+def _():
+    import runs
+    assert not runs.stale(), f"run tables out of date (runs.py --write): {runs.stale()}"
+    for d in sorted(p for p in runs.REHEARSALS.iterdir() if p.is_dir()):
+        readme = d / "README.md"
+        text = readme.read_text() if readme.is_file() else ""
+        # no dated row left outside the drawn table
+        outside = text.split(runs.START)[0] + (text.split(runs.END, 1)[1] if runs.END in text else "")
+        assert not re.search(r"^\|\s*20\d\d-\d\d", outside, re.M), d.name
 
 
 

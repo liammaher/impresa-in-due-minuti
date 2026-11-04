@@ -98,10 +98,12 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    checks against a real register warns too (`made_up:` in the dictionary: a registered company's
    codice fiscale, looked up in the Registro Imprese): that case's run stops there by design.
 5. **Run in the pane** (the pratica skill, step 2) and record each run in the rehearsal's
-   README (`| Date | Browser | Result |`): what stopped it and what fixed it, then the
-   filled run. Both records count: coverage.md's "Run on the portal" reads the README's dated rows,
-   schema_branches.py the `runs.json` that `rerun.py --record` writes (2026-11-03: ten rehearsals
-   recorded only in runs.json read as never run). Where a case fills blocks that share labels (technicians, firms), read its draft's
+   `runs.json`, the one run record: `rerun.py --record` adds the date, answers file, result and
+   seconds; add a `note` (what stopped it and what fixed it) and a `case` where the words help.
+   coverage.md's "Run on the portal" and schema_branches.py both read it, and the README's run
+   table is drawn from it (`runs.py --write`, which `--record` runs; test_gen fails on a table
+   that differs). Until 2026-11-04 the READMEs' rows were a second record, and ten rehearsals
+   recorded only in runs.json read as never run. Where a case fills blocks that share labels (technicians, firms), read its draft's
    section after (`__crawl.sectionOf`): the read-back finds each box the way it was filled, so two
    blocks swapped read back as kept.
 6. **Tests:** `bench/test_gen.py` (add a case for what the pratica taught), `test_preflight.py`,
@@ -582,8 +584,8 @@ snapshot (no values), so a stop names them without opening the draft (2026-10-31
 file isn't one, nor one taking only signed files (the person's): until 2026-11-02 every slot was
 listed, filled or not, which hid the one missing. `--values`
 takes the fixture as it is. After a batch, run `record.js` in the pane and pipe what it prints (names
-and results, no values) into `rerun.py --record -`: each run goes in its rehearsal's `runs.json`: schema_branches.py
-counts a box as filled on the portal only from there. Stopped runs are recorded too. Record a batch
+and results, no values) into `rerun.py --record -`: each run goes in its rehearsal's `runs.json` and its README's run
+table: schema_branches.py counts a box as filled on the portal only from there. Stopped runs are recorded too. Record a batch
 before bundling the next (a bundle clears the tab's results), and leave `--date` out for a batch
 run today: it defaults to today (a guessed date filed a batch under the day before, 2026-11-02).
 The batch clears the runner's review from the page when it ends.

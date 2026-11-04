@@ -10,7 +10,14 @@ INVIARE" and stops before the declarations, the attachments, any bollo, signing 
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-29 | pane | **Filled**: every section in 44 s, every value read back on a fresh load of the draft. |
-| 2026-10-29 | pane | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 37.5 s; second, with the runner waiting for a section to open, **filled** in 39.5 s, read back on a fresh load. |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-29 | pane |  | **Filled**: every section in 44 s, every value read back on a fresh load of the draft. |
+| 2026-10-29 | pane |  | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 37.5 s; second, with the runner waiting for a section to open, **filled** in 39.5 s, read back on a fresh load. |
+| 2026-10-29 | pane | `answers-p6.json` | **filled** |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 42 s |
+| 2026-11-03 | pane | `answers-p6.json` | **filled** in 53 s |
+
+<!-- /runs -->
