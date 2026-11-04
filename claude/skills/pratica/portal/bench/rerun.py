@@ -44,6 +44,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True
+import gen  # noqa: E402
 import run  # noqa: E402
 import runs as runs_record  # noqa: E402
 import yaml  # noqa: E402
@@ -145,6 +146,7 @@ def record(done, default, day):
 
 
 def main():
+    gen.ensure()  # the rehearsals' steps files are built, never committed (steps.lock)
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("rehearsals", nargs="*")
     ap.add_argument("--values", type=Path)

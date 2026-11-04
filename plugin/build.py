@@ -34,7 +34,7 @@ PRATICA = REPO / "claude" / "skills" / "pratica"
 REHEARSALS = REPO / "rehearsals"
 sys.path.insert(0, str(PRATICA / "portal"))
 sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
-import gen  # noqa: E402  (a combination's recipe, resolved)
+import gen  # noqa: E402  (the steps files, built; a combination's recipe, resolved)
 # The library's parts a Cowork session reads: its tools, reports backend and layouts
 # (PDF filling, which needs PyMuPDF) stay out of this version.
 LIBRARY_PARTS = ["procedures", "rules", "offices", "situations", "contract/signing.json",
@@ -45,12 +45,25 @@ COVERAGE = yaml.safe_load((HERE / "coverage.yaml").read_text())
 TEST_CASE = "cila-fittizia"
 
 
+_built = {}
+
+
 def steps_file(d):
-    """A rehearsal's steps file, as bench/rerun.py picks it: the generated one first."""
-    for name in ("portal-steps.generated.yaml", "portal-steps.yaml"):
-        if (d / name).is_file():
-            return d / name
-    return None
+    """A rehearsal's steps file, as bench/rerun.py picks it: the generated one first. That one is
+    built here from its recipe (never committed), and must be the one rehearsals/steps.lock names:
+    a lock that isn't stops the build, as the plugin would ship steps no one has reviewed."""
+    if (d / "recipe.yaml").is_file():
+        if d not in _built:
+            text = gen.dump(gen.generate(gen.load_yaml(d / "recipe.yaml")))
+            if gen.sha256(text) != gen.read_lock().get(d.name):
+                sys.exit(f"{d.name}: its steps file isn't the one rehearsals/steps.lock names: "
+                         "run claude/skills/pratica/portal/bench/regen.py and commit the lock")
+            f = d / gen.STEPS
+            if not f.is_file() or f.read_text() != text:
+                f.write_text(text)  # the self-check pre-flights it with the repo's runner
+            _built[d] = f
+        return _built[d]
+    return d / "portal-steps.yaml" if (d / "portal-steps.yaml").is_file() else None
 
 
 def notes(text):

@@ -24,6 +24,7 @@ import route  # noqa: E402
 import rules  # noqa: E402
 import run  # noqa: E402
 
+gen.ensure()  # the rehearsals' steps files are built, never committed (steps.lock)
 REHEARSALS = HERE.parents[4] / "rehearsals"
 TABLE = rules.table("suap-napoli")
 

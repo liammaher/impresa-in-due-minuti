@@ -22,6 +22,8 @@ sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
 import gen  # noqa: E402
 import run  # noqa: E402
 
+gen.ensure()  # the rehearsals' steps files are built, never committed (steps.lock)
+
 REHEARSAL = HERE.parents[4] / "rehearsals" / "pizzeria-fittizia"
 STEPS = yaml.safe_load((REHEARSAL / "portal-steps.yaml").read_text())
 FIELDS = dict(json.loads((REHEARSAL / "fixture.json").read_text())["fields"])

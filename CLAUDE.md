@@ -20,6 +20,7 @@ make build                        # Build bin/pvault (+ bin/pvault-touchid on ma
 make touchid                      # Rebuild only the Touch ID helper
 make test                         # Go tests with race detector (not the MCP ones)
 make schema                       # Regenerate schema.json after a schema change (a test checks)
+make steps                        # Build the rehearsals' steps files and rehearsals/steps.lock (commit the lock)
 make clean                        # Remove build artifacts
 go test -race ./internal/vault/   # One layer: crypto, store, vault, api
 ```
@@ -109,7 +110,8 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      by fingerprint), `wizard.js` a comune's whole wizard (`catalogue/<comune>/`);
                      catalogue.py imports a batch, counts sections and records drift, which
                      gen.py and pre-flight refuse.
-                     gen.py writes a steps file from a crawl, `dictionary/fnsuap.yaml` (each
+                     gen.py writes a steps file (a build output: rehearsals/steps.lock holds their hashes,
+                     gen.ensure builds a missing one, `make steps` all) from a crawl, `dictionary/fnsuap.yaml` (each
                      section's fields by label, shared by every pratica) and a recipe
                      (rehearsals/*/recipe.yaml; `operation` may be a list, the union of their
                      sections, and such a recipe `extends` its main pratica's and the other's
