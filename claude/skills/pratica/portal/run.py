@@ -6,7 +6,8 @@
       file's `supports:`, and its `rules:` table, which says whether the case is this pratica
       at all; a refusal behind a known portal defect also under `defects`, with the person's
       choices, defects.yaml), the answers it proposes for the person to confirm (an ask's
-      `propose:`), the questions still to ask (its `asks:`, branch questions first), the
+      `propose:`; one reading another answer of the same message comes with it, `assumes` or per
+      answer `cases` and `otherwise`, so one message is enough), the questions still to ask (its `asks:`, branch questions first), the
       vault fields missing or expired, the files to attach (each within the portal's 9.77 MB,
       of a type its slot takes, and as its sportello takes them: Napoli's SUE refuses a file
       not in PDF/A, unsigned or oddly named, FILING) and whether they fit the pane, and the
@@ -1147,6 +1148,71 @@ def reopening(steps):
     return {"reopen": True, "from": {"section": at}, "kept": [], "fixes": []}
 
 
+# A proposal that reads a question asked in the same message is shown for each of its answers
+# when they are few (a yes/no, a short choice): at most this many cases.
+MAX_CASES = 6
+
+
+def conditional_proposals(later, report, values, need):
+    """The proposals that read another ask still open in this same message, so the person
+    confirms them all at once instead of in a second round. One that reads another proposal is
+    worded from it (`assumes`: it holds once that one is confirmed); one that reads an open
+    yes/no or choice is worded for each answer (`cases`: if this answer, this proposal), and for
+    an answer with no proposal the question itself is asked (`otherwise`: those answers). One that
+    reads an open text answer still waits for it. Chains resolve in order, a pass each."""
+    provisional = {p["key"]: p["proposal"] for p in report["proposals"] if "proposal" in p}
+    out = []
+    for _ in range(3):
+        waiting = []
+        for k, hangs in later:
+            a = values.asks[k]
+            reads = [r[4:] for r, _ in refs_in(a["propose"]) if r.startswith("ask.")]
+            open_ = [r for r in reads if r in need and values.field("ask." + r) is None]
+            assumed = [r for r in open_ if r in provisional]
+            choose = [r for r in open_ if r not in provisional]
+            options = {}
+            for r in choose:
+                q = values.asks.get(r, {})
+                options[r] = (["true", "false"] if q.get("type") == "yes_no" or "group" in q
+                              else list(q.get("options", [])) if q.get("type") == "choice" else None)
+            if any(not o for o in options.values()):
+                waiting.append((k, hangs))
+                continue
+            combos = [{}]
+            for r, opts in options.items():
+                combos = [c | {r: o} for c in combos for o in opts]
+            if len(combos) > MAX_CASES:
+                waiting.append((k, hangs))
+                continue
+            cases = []
+            for combo in combos:
+                given = Values(values.answers | {r: provisional[r] for r in assumed} | combo,
+                               vault=values.vault, fields=values.fields, asks=values.asks)
+                given.cache, given._titolare_slug = values.cache, values._titolare_slug
+                proposal = given.render(a["propose"])
+                if proposal is not None and not check_answer(a, proposal):
+                    cases.append((combo, proposal))
+            if not cases:
+                waiting.append((k, hangs))
+                continue
+            entry = {"key": k, "question": a["question"]} | ({"assumes": sorted(assumed)} if assumed else {})
+            covered = [c for c, _ in cases]
+            if choose and (len(cases) < len(combos) or len({str(p) for _, p in cases}) > 1):
+                # A proposal for each answer that has one; the question itself for the others.
+                entry["cases"] = [{"if": c, "proposal": p} for c, p in cases]
+                rest = [c for c in combos if c not in covered]
+                if rest:
+                    entry["otherwise"] = rest
+                    entry |= {x: a[x] for x in ("type", "options", "labels", "how") if x in a}
+            else:
+                entry["proposal"] = provisional[k] = cases[0][1]
+            out.append(entry | {x: a[x] for x in ("why",) if x in a} | hangs)
+        if len(waiting) == len(later):
+            break
+        later = waiting
+    return out
+
+
 def preflight(steps, values, made_up=False, after=False):
     """Everything a run needs, settled before any browser opens: why this case isn't
     supported, the questions still to ask, the vault fields missing or expired, the files
@@ -1181,7 +1247,7 @@ def preflight(steps, values, made_up=False, after=False):
                                      "`descrizione`), so no made-up draft looks like a real one.")
     if report["unsupported"]:
         return report
-    need, groups, lists = needed(steps, values), steps.get("groups", {}), {}
+    need, groups, lists, pending = needed(steps, values), steps.get("groups", {}), {}, []
     for k in order:
         if k not in need:
             continue
@@ -1193,8 +1259,10 @@ def preflight(steps, values, made_up=False, after=False):
         if v is None and "propose" in a:
             # What the rules or the vault say it should be: the person confirms it, or says
             # otherwise, instead of answering from scratch. Never used until confirmed. One
-            # that reads a question asked now waits for its answer: proposed next time.
+            # that reads a question asked now is proposed in the same message, after the others
+            # (conditional_proposals), so it doesn't take a second round.
             if any(r.startswith("ask.") and r[4:] in need and values.field(r) is None for r, _ in refs_in(a["propose"])):
+                pending.append((k, hangs))
                 continue
             proposal = values.render(a["propose"])
             if proposal is not None and not check_answer(a, proposal):
@@ -1215,6 +1283,7 @@ def preflight(steps, values, made_up=False, after=False):
         report["questions"].append({"key": k, "type": a["type"], "question": a["question"]}
                                    | {x: a[x] for x in ("options", "labels", "how", "why") if x in a} | hangs
                                    | ({"error": why} if v is not None else {}))
+    report["proposals"] += conditional_proposals(pending, report, values, need)
     if steps.get("rules"):
         # While the table's first fact (what the works are) is asked, it is asked alone, as the
         # rules table's own questions are: which others matter depends on it, even one no field

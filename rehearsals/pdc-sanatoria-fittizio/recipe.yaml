@@ -127,7 +127,7 @@ yours:
 # The permesso is the choice where the law lets SCIA works be asked as one (art. 22 c. 7).
 rules:
   table: sue-napoli
-  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
   main: napoli/comune/permesso-in-sanatoria
   facts: {permesso_per_scelta: "true", sanatoria: "true", parere_esonero: "false"}
 supports:

@@ -26,7 +26,7 @@ yours:
 # parere-esonero rule refuses the request in Napoli, with the reason.
 rules:
   table: sue-napoli
-  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "true"}
 supports:
   - when: "{{ask.esonero_altri_titoli|not}}"
