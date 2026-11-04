@@ -89,6 +89,7 @@ sections:
   - {id: r26c1p67reg, kind: select, value: '{{t:residenza.comune|upper}}', when: '{{business.rea|empty}}', label: Comune, nth: 2}
   - {id: r32c1p81reg, kind: select, value: '{{t:residenza.indirizzo|dug}}', when: '{{business.rea|empty|not}}', label: Toponimo (DUG)}
   - {id: r29c1p73reg, kind: select, value: '{{t:residenza.indirizzo|dug}}', when: '{{business.rea|empty}}', label: Toponimo (DUG)}
+  - {kind: select, value: '{{t:residenza.indirizzo|dug_dettaglio}}', when: '{{t:residenza.indirizzo|dug_altro}}', label: da compilare obbligatoriamente}
   - {id: 'r34c1p87reg:txt', kind: text, value: '{{t:residenza.indirizzo|street|upper}}', when: '{{business.rea|empty|not}}', max: 60, label: Denominazione stradale}
   - {id: 'r31c1p79reg:txt', kind: text, value: '{{t:residenza.indirizzo|street|upper}}', when: '{{business.rea|empty}}', max: 60, label: Denominazione stradale}
   - {id: 'r36c1p91reg:txt', kind: text, value: '{{t:residenza.civico}}', when: '{{business.rea|empty|not}}', max: 20, label: Numero civico}
@@ -115,6 +116,8 @@ sections:
   - {id: r46c1p117reg, kind: select, value: '{{business.sede_legale_comune|upper}}', when: '{{business.rea|empty}}', label: Comune, nth: 3}
   - {id: r52c1p131reg, kind: select, value: '{{business.sede_legale_indirizzo|dug}}', when: '{{business.rea|empty|not}}', label: Toponimo (DUG), nth: 2}
   - {id: r49c1p123reg, kind: select, value: '{{business.sede_legale_indirizzo|dug}}', when: '{{business.rea|empty}}', label: Toponimo (DUG), nth: 2}
+  - {kind: select, value: '{{business.sede_legale_indirizzo|dug_dettaglio}}', when: '{{business.sede_legale_indirizzo|dug_altro}} {{t:residenza.indirizzo|dug_altro|not}}', label: da compilare obbligatoriamente}
+  - {kind: select, label: da compilare obbligatoriamente, nth: 2, value: '{{business.sede_legale_indirizzo|dug_dettaglio}}', when: '{{business.sede_legale_indirizzo|dug_altro}} {{t:residenza.indirizzo|dug_altro}}'}
   - {id: 'r54c1p137reg:txt', kind: text, value: '{{business.sede_legale_indirizzo|street|upper}}', when: '{{business.rea|empty|not}}', max: 60, label: Denominazione stradale, nth: 2}
   - {id: 'r51c1p129reg:txt', kind: text, value: '{{business.sede_legale_indirizzo|street|upper}}', when: '{{business.rea|empty}}', max: 60, label: Denominazione stradale, nth: 2}
   - {id: 'r54c2p139reg:txt', kind: text, value: '{{business.sede_legale_civico}}', when: '{{business.rea|empty|not}}', max: 20, label: Numero civico, nth: 2}
