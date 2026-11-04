@@ -24,6 +24,8 @@ func main() {
 	switch os.Args[1] {
 	case "init":
 		cmdInit()
+	case "setup":
+		cmdSetup()
 	case "unlock":
 		cmdUnlock()
 	case "lock":
@@ -102,6 +104,7 @@ Usage: pvault [--vault <name>] <command> [args]
   ~/.pvault-<name>, with its own server, port and Touch ID. Without it: ~/.pvault.
 
 Commands:
+  setup [--impresa]                Create or open the vault and turn on Touch ID/Hello, in the browser
   onboard                          Create vault, unlock, and populate common fields
   init [--impresa]                 Create a new vault; --impresa makes a business vault, whose own data
                                    is the business's and whose people each have a ruolo
