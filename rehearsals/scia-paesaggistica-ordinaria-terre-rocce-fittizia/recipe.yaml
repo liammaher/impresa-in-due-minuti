@@ -14,7 +14,7 @@ operation:
   - "Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)"
   - "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
 asks:
-  descrizione: {default: "PROVA NON INVIARE - SCIA ord. e terre e rocce {{c:identity.last_name}}"}
+  descrizione: {default: "SCIA ord. e terre e rocce {{c:identity.last_name}}"}
 # scia-paesaggistica-ordinaria-fittizia's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"

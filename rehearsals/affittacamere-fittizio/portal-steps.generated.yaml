@@ -12,7 +12,7 @@ groups:
   extras:
     question: Does any of this apply to the lodging? Tick all that do, or none.
 asks:
-  descrizione: {type: text, question: A name for the draft in the portal's Pratiche in bozza, default: 'PROVA NON INVIARE - camere {{business.denominazione}}'}
+  descrizione: {type: text, question: A name for the draft in the portal's Pratiche in bozza, default: 'camere {{business.denominazione}}'}
   oggetto: {type: text, question: The pratica in one sentence (300 characters)}
   stagionale: {type: yes_no, question: 'Will it open only for part of the year (a season)?', propose: 'false'}
   stagione_dal: {type: text, question: The season's first day (gg/mm)}

@@ -17,7 +17,7 @@ operation:
   - Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001
   - Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)
 asks:
-  descrizione: {default: "PROVA NON INVIARE - PdC e paesaggistica {{c:identity.last_name}}"}
+  descrizione: {default: "PdC e paesaggistica {{c:identity.last_name}}"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"

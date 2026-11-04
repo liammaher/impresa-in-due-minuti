@@ -14,7 +14,7 @@ groups:
   extras:
     question: Does any of this apply to the dehors? Tick all that do, or none.
 asks:
-  descrizione: {type: text, question: A name for the draft in the portal's Pratiche in bozza, default: 'PROVA NON INVIARE - dehors {{business.denominazione}}'}
+  descrizione: {type: text, question: A name for the draft in the portal's Pratiche in bozza, default: 'dehors {{business.denominazione}}'}
   oggetto: {type: text, question: The pratica in one sentence (300 characters)}
   bollo_marche: {type: yes_no, question: 'Is the imposta di bollo paid with physical marche da bollo (rather than pagoPA)?', default: '{{ask.bollo_esenzione|bollo_non_dovuto}}', propose: '{{ask.bollo_esenzione|is_no|not}}'}
   bollo_esenzione: {type: choice, question: 'Is the client exempt from the imposta di bollo, or authorized to pay it virtually? no (it pays it); ets (an ente del Terzo settore in the RUNTS: art. 82 c. 5

@@ -14,7 +14,7 @@ groups:
   extras:
     question: Does any of this apply to the business? Tick all that do, or none.
 asks:
-  descrizione: {type: text, question: A name for the draft in the portal's Pratiche in bozza, default: 'PROVA NON INVIARE - variazione {{business.denominazione}}'}
+  descrizione: {type: text, question: A name for the draft in the portal's Pratiche in bozza, default: 'variazione {{business.denominazione}}'}
   oggetto: {type: text, question: The pratica in one sentence (300 characters)}
   titolo_attivita_protocollo: {type: text, question: The protocol number of the SCIA (or licence) it started under}
   titolo_attivita_data: {type: date, question: Its date}

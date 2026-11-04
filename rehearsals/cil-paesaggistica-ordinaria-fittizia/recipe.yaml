@@ -15,7 +15,7 @@ operation:
   - Comunicazione di Inizio Lavori per opere temporanee (C.I.L.)
   - Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)
 asks:
-  descrizione: {default: "PROVA NON INVIARE - CIL e paesaggistica {{c:identity.last_name}}"}
+  descrizione: {default: "CIL e paesaggistica {{c:identity.last_name}}"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"

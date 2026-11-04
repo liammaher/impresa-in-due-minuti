@@ -19,7 +19,7 @@ groups:
   impianti_atto_notorio:
     question: 'Which systems are certified by an atto di notorietà (art. 6 DPR 392/1994: older systems brought up to L. 46/1990)? Tick every one.'
 asks:
-  descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'PROVA NON INVIARE - agibilità {{c:identity.last_name}}'}
+  descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'agibilità {{c:identity.last_name}}'}
   titolo: {type: text, question: 'The client''s title to the property, in one word (proprietario, comproprietario, usufruttuario, amministratore di condominio, locatario, comodatario, ...)', propose: '{{c:immobile.titolo}}'}
   cliente_carica: {type: choice, question: 'What is the person declaring for the client company (`cr:`) to it? legale rappresentante; amministratore unico; amministratore delegato; presidente cda (presidente
       del consiglio di amministrazione); amministratore di condominio (a condominium''s administrator)', options: [legale rappresentante, amministratore unico, amministratore delegato, presidente cda, amministratore

@@ -159,6 +159,7 @@ DUG_DETTAGLIO = frozenset((
 ).split("|"))
 # run.js for the pane is one tool call's text: a receipt or a small scan, not a planimetria.
 # Larger files need another route into the page (docs/north-star.md, open question 7).
+REHEARSAL_DRAFT = "PROVA NON INVIARE"
 PAGE_FILES_LIMIT = 256 * 1024
 # What impresainungiorno takes in one slot: "Max: 9,77 MB" beside each, 10,000 KB.
 SLOT_MAX_BYTES = 10_000 * 1024
@@ -1158,6 +1159,11 @@ def preflight(steps, values, urls=None, made_up=False, after=False):
     if defects:
         report["defects"] = defects
     report["unsupported"] += portal_changed(steps)
+    # The steps files are the ones real users run, so their draft name carries no test marker;
+    # a rehearsal's answers put it back, and a made-up draft never looks like a real one.
+    if made_up and "descrizione" in asks and not str(values.raw("descrizione") or "").startswith(REHEARSAL_DRAFT):
+        report["unsupported"].append(f"A rehearsal names its draft \"{REHEARSAL_DRAFT} - ...\" (answers "
+                                     "`descrizione`), so no made-up draft looks like a real one.")
     if report["unsupported"]:
         return report
     need, groups, lists = needed(steps, values), steps.get("groups", {}), {}

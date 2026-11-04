@@ -31,7 +31,7 @@ groups:
   fatti:
     question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
 asks:
-  descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'PROVA NON INVIARE - SCIA {{c:identity.last_name}}'}
+  descrizione: {type: text, question: A name for the draft in Pratiche in bozza, default: 'SCIA {{c:identity.last_name}}'}
   titolo: {type: text, question: 'The client''s title to the property, in one word (proprietario, comproprietario, usufruttuario, amministratore di condominio, locatario, comodatario, ...)', propose: '{{c:immobile.titolo}}'}
   cliente_carica: {type: choice, question: 'What is the person declaring for the client company (`cr:`) to it? legale rappresentante; amministratore unico; amministratore delegato; presidente cda (presidente
       del consiglio di amministrazione); amministratore di condominio (a condominium''s administrator)', options: [legale rappresentante, amministratore unico, amministratore delegato, presidente cda, amministratore

@@ -13,7 +13,7 @@ groups:
   fatti:
     question: Quali di queste cose valgono per l'attività? Spunta quelle vere, anche nessuna.
 asks:
-  descrizione: {type: text, question: A name for the draft in the portal's Pratiche in bozza, default: 'PROVA NON INVIARE - cessazione {{business.denominazione}}'}
+  descrizione: {type: text, question: A name for the draft in the portal's Pratiche in bozza, default: 'cessazione {{business.denominazione}}'}
   oggetto: {type: text, question: The pratica in one sentence (300 characters)}
   attivita_cessata: {type: text, question: 'The activity that closes, in a few words (100 characters)'}
   titolo_attivita_protocollo: {type: text, question: The protocol number of the SCIA (or licence) it started under}

@@ -18,7 +18,7 @@ operation:
   - Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001
   - Accertamento di compatibilità paesaggistica (artt. 167-181 D.Lgs. 42/2004 - Comune)
 asks:
-  descrizione: {default: "PROVA NON INVIARE - PdC sanatoria e accertamento {{c:identity.last_name}}"}
+  descrizione: {default: "PdC sanatoria e accertamento {{c:identity.last_name}}"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali, art. 75 DPR 445/2000"

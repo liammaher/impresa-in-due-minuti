@@ -13,7 +13,7 @@ scelte:
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
-  descrizione: {default: "PROVA NON INVIARE - cambio impresa {{c:identity.last_name}}"}
+  descrizione: {default: "cambio impresa {{c:identity.last_name}}"}
   notifica_trasmessa: {type: yes_no, question: "Does the site fall under D.Lgs. 81/2008, with its notifica preliminare (art. 99) already sent?"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"

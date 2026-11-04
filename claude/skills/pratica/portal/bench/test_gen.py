@@ -1413,5 +1413,16 @@ def _():
     assert not changed, "regenerate (bench/regen.py): " + ", ".join(str(p.relative_to(regen.REHEARSALS)) for p in changed)
 
 
+@case("a steps file's own defaults never name a draft PROVA NON INVIARE: real users run them; rehearsals answer it")
+def _():
+    import regen
+    for d in sorted(regen.REHEARSALS.iterdir()):
+        for f in (d / "portal-steps.generated.yaml", d / "portal-steps.yaml"):
+            if f.exists():
+                asks = yaml.safe_load(f.read_text()).get("asks", {})
+                default = str(asks.get("descrizione", {}).get("default", ""))
+                assert "PROVA" not in default, (f.relative_to(regen.REHEARSALS), default)
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)
