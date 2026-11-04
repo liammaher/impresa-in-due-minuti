@@ -53,6 +53,7 @@ in one checklist); run.py preflight then refuses a case the table gives to anoth
 import argparse
 import collections
 import copy
+import hashlib
 import json
 import re
 import sys
@@ -302,12 +303,53 @@ def _mapping(loader, node, deep=False):
 _Unique.add_constructor(yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _mapping)
 
 
+# Every rehearsal's steps file is gen.py's output, built here, never committed (2026-11-04: 70,000
+# lines of them were): rehearsals/steps.lock holds one sha256 per steps file, as `shasum -a 256 -c`
+# reads it, so a change to the dictionary, a recipe or a crawl shows as the pratiche it changes.
+STEPS = "portal-steps.generated.yaml"
+
+
+def sha256(text):
+    return hashlib.sha256(text.encode()).hexdigest()
+
+
+def read_lock(path=None):
+    """{rehearsal: sha256 of its steps file}, from steps.lock."""
+    path = path or LOCK
+    out = {}
+    for line in path.read_text().splitlines() if path.is_file() else []:
+        digest, _, name = line.partition("  ")
+        out[name.split("/")[0]] = digest
+    return out
+
+
+def lock_text(digests):
+    return "".join(f"{d}  {name}/{STEPS}\n" for name, d in sorted(digests.items()))
+
+
+def ensure(names=None, root=None):
+    """Write every rehearsal's steps file that is missing or isn't the one steps.lock names (a
+    fresh clone, a pull), from its recipe; the paths written. One the lock names is left as it
+    is: after a change to the dictionary, a recipe or a crawl, bench/regen.py writes them all and
+    the lock (test_gen fails until it has)."""
+    root = Path(root or REHEARSALS)
+    lock, written = read_lock(root / LOCK.name), []
+    for d in sorted(p for p in root.iterdir() if (p / "recipe.yaml").is_file() and (not names or p.name in names)):
+        f = d / STEPS
+        if f.is_file() and sha256(f.read_text()) == lock.get(d.name):
+            continue
+        f.write_text(dump(generate(load_yaml(d / "recipe.yaml"))))
+        written.append(f)
+    return written
+
+
 def load_yaml(p):
     with open(p, encoding="utf-8") as f:  # the file's name in an error's mark
         return yaml.load(f, Loader=_Unique)
 
 
 REHEARSALS = HERE.parents[3] / "rehearsals"
+LOCK = REHEARSALS / "steps.lock"
 
 
 def resolved(recipe, seen=()):

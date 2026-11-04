@@ -81,10 +81,15 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    table's answers, for the person to confirm: `{{ask.intervento,ask.strutture|sue_scia_tipo}}`
    reads several facts at once, and a proposal waits while a fact it reads is still asked.
 3. **Generate:** `gen.py <recipe> --out <dir>/portal-steps.generated.yaml`. It writes nothing
-   if any field is unaccounted for. Regenerate every rehearsal after a dictionary, recipe or gen.py
-   change (`bench/regen.py`: every steps file and combination's answers; test_gen fails while one is
-   stale) and look at the diff: an unrelated steps file that changes is a regression until
-   shown otherwise. `bench/plan_diff.py` says what the change does to each case (its fill plan
+   if any field is unaccounted for. The steps files are build outputs, never committed (since
+   2026-11-04; they were 70,000 lines): `rehearsals/steps.lock` is, one sha256 per steps file
+   (`cd rehearsals && shasum -a 256 -c steps.lock` checks the ones on disk). `gen.ensure()` writes
+   any that is missing or isn't the lock's (a fresh clone, a pull): route.py, the bench tests and
+   tools call it, and `make steps` runs `bench/regen.py`. After a dictionary, recipe or gen.py
+   change run `bench/regen.py` (every steps file, the lock and each combination's answers; test_gen
+   fails while the lock is stale, and `plugin/build.py` refuses to build) and commit the lock: its
+   diff names the pratiche the change touches, and an unrelated one is a regression until shown
+   otherwise. `bench/plan_diff.py` says what the change does to each case (its fill plan
    before and after). A new question the existing cases reach makes their pre-flight propose
    or ask it: answer it in each as the case did before, and plan_diff shows them unchanged, so
    their recorded runs still stand. Add the keys as text: rewriting a file with `json.dump` reflows

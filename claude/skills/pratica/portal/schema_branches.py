@@ -231,6 +231,7 @@ def steps_fields(steps):
 
 
 def sue_steps():
+    gen.ensure()  # the steps files are built, never committed
     for d in sorted(REHEARSALS.iterdir()):
         f, recipe = d / "portal-steps.generated.yaml", d / "recipe.yaml"
         if f.is_file() and recipe.is_file() and gen.resolved(gen.load_yaml(recipe)).get("sportello") == "sue":

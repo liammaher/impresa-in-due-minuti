@@ -29,4 +29,6 @@ design: script calls in Cowork's browser, a 3 MB attachment, a run's cost; it wr
 `portali-test-results.md` to bring back).
 
 Rebuild after a change to the runner, a steps file, the dictionary or the library, and bump
-`version` in `portali/.claude-plugin/plugin.json`.
+`version` in `portali/.claude-plugin/plugin.json`. The generated steps files are built here from
+their recipes (they are never committed), and the build stops unless each is the one
+`rehearsals/steps.lock` names.
