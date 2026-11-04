@@ -132,7 +132,6 @@ sections:
       - {id: "r24c2p63reg", kind: select, label: Provincia, value: "{{t:residenza.provincia}}"}
       - {id: "r26c1p67reg", kind: select, label: Comune, value: "{{t:residenza.comune|upper}}"}
       - {id: "r29c1p73reg", kind: select, label: Toponimo (DUG), value: "{{t:residenza.indirizzo|dug}}"}
-      - {id: "r29c2p75reg", kind: select, label: "da compilare obbligatoriamente", value: "{{t:residenza.indirizzo|dug_dettaglio}}", when: "{{t:residenza.indirizzo|dug_altro}}"}
       - {id: "r31c1p79reg:txt", kind: text, label: Denominazione stradale, value: "{{t:residenza.indirizzo|street|upper}}"}
       - {id: "r33c1p83reg:txt", kind: text, label: Numero civico, value: "{{t:residenza.civico}}"}
       - {id: "r33c2p85reg:txt", kind: text, label: CAP, value: "{{t:residenza.cap}}"}
@@ -147,7 +146,6 @@ sections:
       - {id: "r44c2p113reg", kind: select, label: Provincia, value: "{{business.sede_legale_provincia}}"}
       - {id: "r46c1p117reg", kind: select, label: Comune, value: "{{business.sede_legale_comune|upper}}"}
       - {id: "r49c1p123reg", kind: select, label: Toponimo (DUG), value: "{{business.sede_legale_indirizzo|dug}}"}
-      - {id: "r49c2p125reg", kind: select, label: "da compilare obbligatoriamente", value: "{{business.sede_legale_indirizzo|dug_dettaglio}}", when: "{{business.sede_legale_indirizzo|dug_altro}}"}
       - {id: "r51c1p129reg:txt", kind: text, label: Denominazione stradale, value: "{{business.sede_legale_indirizzo|street|upper}}"}
       - {id: "r51c2p131reg:txt", kind: text, label: Numero civico, value: "{{business.sede_legale_civico}}"}
       - {id: "r51c3p133reg:txt", kind: text, label: CAP, value: "{{business.sede_legale_cap}}"}

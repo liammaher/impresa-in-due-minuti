@@ -54,20 +54,7 @@ user to keep that setting on the built-in browser.
 | **Cowork + plugin** | in the built-in browser, if tests 1 and 2 pass | folders and chat, no setup beyond the plugin | **the product** |
 | Code tab (today) | yes, `run.py page` in the pane | worktrees, permissions, a shell: a developer's tool | fallback, and where we test |
 | Chat, web or phone, with the plugin | no browser | what's supported, which pratica, what the law asks (the connector) | the questions, not the runs |
-| Our own app (Playwright window, `run.py run`) | yes, fastest, any file size | Python, pip and a downloaded Chromium, from a terminal | **ruled out** (below) |
-
-**No developer tools on a customer's computer, ever** (decided 2026-11-02). The users are
-non-technical people with a Claude subscription: they install the plugin and nothing else. So
-`run.py run` (Python, a venv, `pip install playwright`, `playwright install chromium`) is no
-customer path, not even if the Cowork tests fail, and nor is anything else that needs a
-terminal or an installer. A failed test is solved inside the built-in browser and the plugin
-(the fallbacks under each test), or the case is refused. `run` and Playwright stay as our own
-tooling: the offline bench and runs on our machines.
-
-This also settles where the client's data goes. With no vault in the first version, Claude
-reads the client's documents and writes `values.json`, so it sees the data by design, and the
-code window `run.py page` seals the values with can't open in Cowork's sandbox. What protects
-the client is the terms their data reaches Anthropic under (*Things to settle*).
+| Our own app (Playwright window, `run.py run`) | yes, fastest, any file size | software to install, outside Claude | only if the Cowork tests fail |
 
 ## The package: a listed plugin and its connector
 
@@ -193,12 +180,7 @@ the review page; the target is several pratiche in one 5-hour window.
 - **The client's data.** The architect is its controller; Anthropic advises against other
   people's personal data in the browser. The plugin says exactly what goes where (nothing to
   us: the connector takes only a case's facts) and tells the architect to turn off training
-  on their account. That shortens retention (30 days, not 5 years) but leaves the terms: Pro
-  and Max are consumer plans with no data processing agreement, while Team and Enterprise come
-  under the Commercial Terms with Anthropic's DPA as processor (GDPR art. 28;
-  [data usage](https://code.claude.com/docs/en/data-usage),
-  [DPA](https://www.anthropic.com/legal/data-processing-addendum)). Decide what the plugin
-  tells an architect on Pro before it handles a client's files.
+  on their account.
 - **The procura speciale.** The portal generates it for each pratica; local practice differs on
   whether it's signed by hand with an ID scan or digitally
   ([SUAP Molise](https://suap.regione.molise.it/faq/posso-allegare-alla-pratica-suap-una-procura-non-firmata/printable/pdf),

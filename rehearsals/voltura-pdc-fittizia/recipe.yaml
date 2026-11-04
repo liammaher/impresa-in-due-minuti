@@ -1,26 +1,20 @@
-# Voltura del permesso di costruire on Napoli's SUE, with or without a co-holder,, as gen.py writes its steps file from the batch crawl
+# Voltura del permesso di costruire, with a co-holder on Napoli's SUE, as gen.py writes its steps file from the batch crawl
 # (catalogue/F839/sections/sue-voltura-intestazione-permesso-di-costruire.json). The CILA rehearsal's architect (with procura) and
 # client (rehearsals/cila-fittizia).
 procedure: napoli/comune/voltura-permesso-di-costruire
-title: "Voltura del permesso di costruire, SUE Napoli (tecnico con procura)"
+title: "Voltura del permesso di costruire, with a co-holder, SUE Napoli (tecnico con procura)"
 comune: F839
 sportello: sue
 crawl: sue-voltura-intestazione-permesso-di-costruire
 operation: Voltura intestazione Permesso di costruire
-scelte:
-  - {option: ci sono cointestatari, when: "{{ask.cointestatario}}"}
-  - IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+scelte: [ci sono cointestatari, IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
-after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
-  diritti_euro: {default: "501", why: "Line SUE 11 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 501 € for a voltura of a permesso di costruire"}
   descrizione: {default: "PROVA NON INVIARE - voltura PdC {{c:identity.last_name}}"}
-supports:
-  # The co-holders' section holds one person and has no "+" (crawled 2026-10-28): a portal
-  # defect, not a mapping gap.
-  - {if: "{{ask.cointestatario}}", when: "{{ask.altri_cointestatari|not}}", defect: coholders-one, else: "The portal's co-holders section (the wizard's ci sono cointestatari) holds one person and has no \"+\": a voltura to more than one co-holder can't be filed complete on the portal (the permesso passes to every successor in title, art. 11 c. 2 DPR 380/2001)."}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
+  - "The co-holder's section has both sesso boxes ticked: the portal saves it no other way (two required groups); their codice fiscale says which"
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and the acknowledgements in the client's name"
-  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
+  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
+  - "Pay the imposta di bollo (two marche da 16 €) as the portal asks"
   - "Sign and send (Firma e invio); keep the receipt"

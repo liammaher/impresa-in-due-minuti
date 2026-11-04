@@ -81,7 +81,6 @@
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
  "sanatoria_caso": "doppia conformita",
- "sanatoria_prova": "estremi",
  "sanatoria_data": "2019-03-15",
  "sanatoria_oblazione": "516",
  "sanatoria_pagamento_data": "2026-10-27",
@@ -90,12 +89,5 @@
  "sanatoria_catasto_data": "2026-10-20",
  "strumenti_altri": "false",
  "paesaggio_eseguiti": "true",
- "paesaggio_volumi": "true",
- "altri_tecnici_dopo": "false",
- "direttore_lavori": "da nominare",
- "impresa_dopo": "false",
- "vvf_variante": "false",
- "progettista_altro": false,
- "diritti_esente": false,
- "terre_rocce": "no"
+ "paesaggio_volumi": "true"
 }

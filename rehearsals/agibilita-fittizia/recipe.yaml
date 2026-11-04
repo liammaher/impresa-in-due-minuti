@@ -1,7 +1,6 @@
 # The Segnalazione Certificata per l'Agibilità after the CILA rehearsal's works, as gen.py writes
 # its steps file. Never walked: crawl catalogue/F839/sections/agibilita.json, every field from
-# dictionary/fnsuap.yaml. The architect attests, as direttore dei lavori or, where none was named,
-# as professionista abilitato (art. 24 c. 5 DPR 380/2001); the client is
+# dictionary/fnsuap.yaml. The architect is the direttore dei lavori and attests; the client is
 # the tenant of the CILA (rehearsals/cila-fittizia). Works on structures (collaudo statico or
 # dichiarazione di regolare esecuzione), energy (AQE), house numbers, fire safety (the fire
 # SCIA, a SCIA Unica), lifts and every system with each of its certificates are mapped; partial
@@ -16,19 +15,18 @@ scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUN
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
-  diritti_euro: {default: "401", why: "Line SUE 10 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 401 € for a Segnalazione Certificata di Agibilità"}
-  # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
-  modello_dp: {default: "true"}
   descrizione: {default: "PROVA NON INVIARE - agibilità {{c:identity.last_name}}"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "As direttore dei lavori (or professionista abilitato), check every attestation on this page: they are yours, signed with the pratica"
+  - "As direttore dei lavori, check every attestation on this page: they are yours, signed with the pratica"
   - "Attestazione tecnica - Agibilità: the portal requires one of the art. 24 c. 5-bis/5-ter or 5-quater boxes; Claude ticks the one the case is, and none when it is neither (then ask the SUE)"
+  - "On Allega documenti: the portal's procura signed by the client, then everything signed digitally (.p7m)"
   - "Sign and send (Firma e invio); keep the receipt"
 supports:
-  # Art. 24 c. 5-bis only with c. 5-ter's adattabilità met; the one-room flat also names its
-  # c. 5-ter condition.
+  # Art. 24 c. 5-bis: one case per pratica (the form's boxes open their own sizes), and only
+  # with c. 5-ter's adattabilità met; the one-room flat also names its c. 5-ter condition.
+  - {if: "{{ask.igienico_24_5bis}}", value: "{{ask.igienico_5bis_caso}}", in: ["altezza", "monostanza uno", "monostanza due"], else: "More than one case of art. 24 c. 5-bis isn't mapped yet: each opens its own boxes."}
   - {if: "{{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "Art. 24 c. 5-bis applies only with the adattabilità requirement met (art. 24 c. 5-ter): the unit doesn't qualify."}
 # Each "si allega" of the attestazione adds its own required slot (read on the portal 2026-10-30).
 attachments:

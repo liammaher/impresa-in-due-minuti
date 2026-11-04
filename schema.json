@@ -1,5 +1,5 @@
 {
-  "version": "21",
+  "version": "19",
   "categories": [
     {
       "name": "identity",
@@ -809,11 +809,6 @@
           "sensitivity": "standard"
         },
         {
-          "id": "business.data_iscrizione_rea",
-          "description": "Date the business was entered in the REA, as on the visura camerale (YYYY-MM-DD); forms ask it with the REA number",
-          "sensitivity": "standard"
-        },
-        {
           "id": "business.data_apertura",
           "description": "Date the partita IVA was opened (YYYY-MM-DD)",
           "sensitivity": "standard"
@@ -828,7 +823,7 @@
         },
         {
           "id": "business.forma_giuridica",
-          "description": "Legal form: ditta_individuale, lavoratore_autonomo, srl, srls, snc, sas, spa, sapa, cooperativa, studio_associato, stp, condominio, altro (validated; SRL, S.r.l.s., ditta... accepted)",
+          "description": "Legal form: ditta_individuale, lavoratore_autonomo, srl, srls, snc, sas, spa, sapa, cooperativa, studio_associato, stp, altro (validated; SRL, S.r.l.s., ditta... accepted)",
           "sensitivity": "standard"
         },
         {
@@ -884,21 +879,6 @@
         {
           "id": "business.inail_codice_sede",
           "description": "INAIL codice sede, as on the F24 for the autoliquidazione",
-          "sensitivity": "standard"
-        },
-        {
-          "id": "business.cassa_edile_sede",
-          "description": "Cassa Edile the building firm is enrolled with: its seat (e.g. Napoli), as on the DURC",
-          "sensitivity": "standard"
-        },
-        {
-          "id": "business.cassa_edile_codice",
-          "description": "Cassa Edile's own code (codice cassa), as on the DURC",
-          "sensitivity": "standard"
-        },
-        {
-          "id": "business.cassa_edile_codice_impresa",
-          "description": "The firm's code at its Cassa Edile (codice impresa), as on the DURC",
           "sensitivity": "standard"
         },
         {
@@ -1244,7 +1224,7 @@
         },
         {
           "id": "immobile.catasto_sezione",
-          "description": "The visura's sezione, if any: urbana for the Catasto Fabbricati, censuaria (one letter) for a plot only in the Catasto Terreni",
+          "description": "Sezione urbana from the visura, if any",
           "sensitivity": "standard"
         },
         {

@@ -11,18 +11,16 @@ crawl: sue-accertamento-di-compatibilita-paesaggistica
 operation: Accertamento di compatibilità paesaggistica (artt. 167-181 D.Lgs. 42/2004 - Comune)
 scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
-after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
-  diritti_euro: {default: "441", why: "Line SUE 3 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 441 € for a landscape authorization in sanatoria asked on its own"}
-  # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
-  modello_dp: {default: "true"}
   descrizione: {default: "PROVA NON INVIARE - accertamento paesaggistico {{c:identity.last_name}}"}
   oggetto: {question: "The works in one sentence (300 characters)"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali"
+  - "On Allega documenti: the relazione paesaggistica (DPCM 12/12/2005), the drawings of the state as it is and the photos, signed digitally, and the scheda professionisti e imprese"
   - "If the Comune finds the works compatible: pay the sum it sets (art. 167 c. 5 D.Lgs. 42/2004, the greater of the damage and the profit)"
-  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
+  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
+  - "Pay the imposta di bollo (two marche da 16 €) as the portal asks"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.

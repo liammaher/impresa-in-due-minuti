@@ -13,26 +13,12 @@ letter. New in the dictionary: quadro c) (the dates and what the works are) and 
 checkbox where the CILA has a radio (`kind: tick`), and the D.Lgs. 81 and notifica choices are
 now questions.
 
-On a bene culturale (since 2026-11-01) the CIL goes once the Soprintendenza has authorized the
-works (art. 21 c. 4 D.Lgs. 42/2004), requested apart and first (the rules table's
-`soprintendenza-cil`): the CIL's quadro e lists only filings made with it, not assents, so the
-authorization isn't written in the CIL. `answers-bene-culturale.json`.
-
-Quadro e lists the other filings presented with the CIL (since 2026-11-03: `comunicazioni_contestuali`,
-two rows and more by "+"). Their documents, the notifica preliminare and, on a bene culturale, the
-Soprintendenza's authorization go under Allegati liberi, each in its own box (the slot's "+"),
-attached by the run since 2026-11-03: that slot takes plain PDFs, not only signed ones as the
-2026-11-01 run below read it. Assents still to obtain are refused: the CIL's form, national and Napoli's,
-asks the SUE for none. `answers-comunicazioni.json`: three filings, never run on the portal.
-
 ## Runs
 
 | Date | Browser | Login → draft | Result |
 |---|---|---|---|
 | 2026-10-28 | pane | 112.2 s to the end of the form (wizard 10.4, 15 sections, fresh load 14.9), then 14.5 s for 3 attachments | First run, no stop: 106 values and 3 attachments kept, every value read back on a fresh load |
 | 2026-10-29 | pane | 70.9 s, fresh load 11.1 s (`bench/rerun.py` with two SCIAs) | **Filled** with the Comune's 100 € diritti: the "sono dovuti oneri" branch, its total and "pagamento on line", walked for the first time; every value read back on a fresh load |
-| 2026-11-01 | pane | `answers-bene-culturale` (a listed building, the Soprintendenza's authorization obtained first), `bench/rerun.py` bundle | **Filled** from a blank draft in 75.6 s, read back on a fresh load, nothing moved; one `loose`, the impresa quadro's "lavori sono/saranno eseguiti dall…" (the CILA's base case has it too) |
-| 2026-11-01 | pane | `answers-notifica` (a notifica preliminare due: "allega alla presente comunicazione la notifica" ticked), `bench/rerun.py` bundle | **filled** in 76.7 s; its draft's Allega documenti read after: no slot for the notifica, only Allegati liberi (signed files only on the CIL), so it is the person's |
 
 Left to the person: the procura and the "Quadro riepilogativo della documentazione C.I.L."
 (portal documents, signed), the declarations, signing and sending. Diritti: 100 € (line SUE 14

@@ -7,25 +7,13 @@ comune: F839
 sportello: sue
 crawl: sue-cambio-intestazione-cia-scia-dia
 operation: Cambio intestazione CIA / SCIA / DIA
-scelte:
-  - {option: "è stato incaricato un nuovo Direttore dei Lavori", when: "{{ask.soggetti_cambiati}} {{ask.cambio_dl}}"}
-  - {option: "i lavori sono stati affidati ad una nuova ditta esecutrice", when: "{{ask.soggetti_cambiati}} {{ask.cambio_ditta}}"}
-  - {option: ci sono cointestatari, when: "{{ask.cointestatario}}"}
-  - IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
-after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
-  diritti_euro: {default: "0", why: "Not in the Comune's 2026 table of SUE diritti (G.C. 239/2026): no diritti (non previsti dal tariffario)"}
   descrizione: {default: "PROVA NON INVIARE - cambio intestazione {{c:identity.last_name}}"}
-  cambio_dl: {type: yes_no, question: "Is a new direttore dei lavori taking over?"}
-  cambio_ditta: {type: yes_no, question: "Is a new firm taking over the works?"}
-supports:
-  # The co-holders' section holds one person and has no "+" (crawled 2026-10-28): a portal
-  # defect, not a mapping gap.
-  - {if: "{{ask.cointestatario}}", when: "{{ask.altri_cointestatari|not}}", defect: coholders-one, else: "The portal's co-holders section (the wizard's ci sono cointestatari) holds one person and has no \"+\": a change of holder to more than one co-holder can't be filed complete on the portal, which must name each new holder."}
-  - {if: "{{ask.soggetti_cambiati}} {{ask.cambio_dl|not}}", when: "{{ask.cambio_ditta}}", else: "The direttore or the firm changes: say which (a new direttore dei lavori, a new firm, or both)."}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and the acknowledgements in the client's name"
-  - "No imposta di bollo to pay on this form: the portal's form for this pratica has no bollo section or slot"
+  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
+  - "Pay the imposta di bollo (two marche da 16 €) as the portal asks"
   - "Sign and send (Firma e invio); keep the receipt"

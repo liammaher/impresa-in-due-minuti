@@ -15,14 +15,9 @@
  "vincolo_142_lettera": "a)",
  "paes_variante": false,
  "bollo_marche": false,
- "diritti_euro": "401",
+ "diritti_euro": "0",
  "intervento": "edilizia_libera",
  "cambio_uso": "no",
  "paesaggio": "semplificata",
- "fatti": [],
- "progettista_altro": false,
- "diritti_esente": false,
- "bollo_esenzione": "no",
- "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
- "terre_rocce": "no"
+ "fatti": []
 }

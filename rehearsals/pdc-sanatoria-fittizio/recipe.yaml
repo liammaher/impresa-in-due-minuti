@@ -16,9 +16,6 @@ first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 attachments:
   Gestione degli allegati:
-    # The sanatoria's own drawings: a slot that takes only signed files, which its answer adds (the
-    # title as read on a filled draft; not in the crawl, made on an empty one).
-    - {kind: file, label: Elaborati richiesti per la sanatoria, value: "{{ask.elaborati_sanatoria}}", accepts: "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", on_page: true}
     # The asseverazione's "allega i relativi elaborati" adds a required slot per system's
     # project, as on the SCIA (read there 2026-10-29): plain PDFs.
     - {kind: file, label: "Progetto dell'impianto di produzione, trasformazione", value: "{{ask.progetto_elettrico_doc}}", when: "{{ask.progetto_impianti}} {{ask.impianti}} {{ask.impianto_elettrico}}", on_page: true}
@@ -39,25 +36,9 @@ attachments:
     # The asseverazione's sewer connection to request adds this required slot (read on the
     # permesso's attachments screen 2026-10-31): plain PDFs.
     - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura, value: "{{ask.allaccio_doc}}", when: "{{ask.scarichi|is_allaccio_da_richiedere}}", on_page: true}
-    # A discharge whose authorisation is asked with the pratica: its "si allega" adds its slot (read on the
-    # permesso's and the SCIA alternativa's screens, 2026-11-02).
-    - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in pubblica fognatura, value: "{{ask.scarico_doc}}", when: "{{ask.scarichi|is_fognatura_da_richiedere}}", on_page: true}
-    - {kind: file, label: Documentazione necessaria per la richiesta di autorizzazione allo scarico in acque, value: "{{ask.scarico_doc}}", when: "{{ask.scarichi|is_superficiali_da_richiedere}}", on_page: true}
     - {kind: file, label: Allegati liberi, value: "{{ask.relazione_tecnica}}", describe: Relazione tecnica}
-    # The permesso has no slot for the contributo's papers: they go under Allegati liberi, in its next box.
-    - {kind: file, label: Allegati liberi, value: "{{ask.prospetto_contributo}}", describe: Prospetto di calcolo preventivo del contributo di costruzione, when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}"}
-    - {kind: file, label: Allegati liberi, value: "{{ask.documentazione_calcolo_contributo}}", describe: Documentazione per la determinazione del contributo di costruzione, when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_sportello}}"}
     # Under the barriers rules, their drawings (a slot read on the P6 run's screen).
-    - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: "{{ask.elaborati_barriere}}", when: "{{ask.barriere}} {{ask.barriere_deroga|not}}"}
-    # The asseverazione's other "si allega" lines, by the SCIA's slot titles (each read on the
-    # permesso's screen once a case filled it, 2026-11-01).
-    - {kind: file, label: "Piano di lavoro di demolizione o rimozione dell'amianto", value: "{{ask.amianto_piano}}", when: "{{ask.amianto}} {{ask.amianto_piano_allegato}}", on_page: true}
-    - {kind: file, label: Denuncia dei lavori, value: "{{ask.denuncia_art65}}", when: "{{ask.strutture}} {{ask.cemento_armato}} {{ask.strutture_allegate}}", on_page: true}
-    - {kind: file, label: Denuncia dei lavori in zona sismica, value: "{{ask.sismica_doc}}", when: "{{ask.strutture}} {{ask.sismica|is_deposito}} {{ask.strutture_allegate}}", on_page: true}
-    - {kind: file, label: "Elaborati relativi al superamento delle barriere architettoniche (art. 82", value: "{{ask.barriere_elaborati}}", when: "{{ask.barriere_art82}}", on_page: true}
-    # The permesso has no slot for a barriers deroga's documents nor for a scomputo's proposal
-    # (read on its screen 2026-11-02): the deroga's reasons go in the relazione tecnica, and
-    # the works to scomputo are agreed with the Comune once the permesso is granted (art. 16 c. 2).
+    - {kind: file, label: Elaborati relativi al superamento delle barriere architettoniche, value: "{{ask.elaborati_barriere}}", when: "{{ask.barriere}}"}
     # Each "si allega" of the asseverazione adds its own slot, as on the SCIA.
     - {kind: file, label: Documentazione necessaria per il rilascio dell'autorizzazione sismica, value: "{{ask.sismica_doc}}", when: "{{ask.strutture}} {{ask.sismica|is_autorizzazione}}", on_page: true}
     # A protected building (bene culturale): its "Si allega" adds this required slot, as on the SCIA
@@ -88,22 +69,7 @@ attachments:
     - {kind: file, label: "Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (militare)", value: "{{ask.fascia_militare_doc}}", when: "{{ask.fasce|is_assenso}} {{ask.fascia_militare}}", on_page: true}
     - {kind: file, label: "Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (aeroportuale)", value: "{{ask.fascia_aeroportuale_doc}}", when: "{{ask.fasce|is_assenso}} {{ask.fascia_aeroportuale}}", on_page: true}
     - {kind: file, label: "Documentazione necessaria per il rilascio di atti di assenso relativi ai vincoli di tutela funzionale (altro)", value: "{{ask.fascia_altro_doc}}", when: "{{ask.fasce|is_assenso}} {{ask.fascia_altro}}", on_page: true}
-    # The SCIA's slots for the asseverazione's acoustics, fire brigade review, hygiene and cemetery
-    # deroghe (labels as on the SCIA's screen, 2026-11-01: a run names this form's own).
-    - {kind: file, label: Documentazione di impatto acustico, value: "{{ask.acustica_impatto_doc}}", when: "{{ask.acustica}} {{ask.acustica_impatto}}", on_page: true}
-    - {kind: file, label: Dichiarazione sostitutiva, value: "{{ask.acustica_dichiarazione_doc}}", when: "{{ask.acustica}} {{ask.acustica_dichiarazione}}", on_page: true}
-    - {kind: file, label: Valutazione previsionale di clima acustico, value: "{{ask.acustica_clima_doc}}", when: "{{ask.acustica}} {{ask.acustica_clima}}", on_page: true}
-    - {kind: file, label: Documentazione di previsione di impatto acustico, value: "{{ask.acustica_misure_doc}}", when: "{{ask.acustica}} {{ask.acustica_misure}}", on_page: true}
-    - {kind: file, label: Documentazione necessaria al rilascio del parere progetto da parte dei Vigili del Fuoco, value: "{{ask.vvf_doc}}", when: "{{ask.vvf_valutazione}}", on_page: true}
-    - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: "{{ask.igienico_deroga_doc}}", when: "{{ask.igienico_conforme|not}}", on_page: true}
-    - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: "{{ask.cimiteriale_doc}}", when: "{{ask.fascia_cimiteriale|is_non_consentito}}", on_page: true}
-    # Soil analysed, no remediation: their results' required slot (read on the permesso's screen 2026-11-01).
-    - {kind: file, label: Risultati delle analisi ambientali sulla qualità dei terreni, value: "{{ask.indagini_analisi_doc}}", when: "{{ask.indagini_ambientali}} {{ask.indagini_esito|is_analisi}}", on_page: true}
 asks:
-  diritti_euro: {default: "441", why: "Line SUE 16 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 441 € at filing for an accertamento di conformità (artt. 36, 36-bis), the rest by the contributo's bracket once determined; art. 36-bis c. 5 b, SUE 17-18"}
-  # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
-  napoli_allegato_a: {default: "true"}
-  modello_dp: {default: "true"}
   descrizione: {default: "PROVA NON INVIARE - PdC in sanatoria {{c:identity.last_name}}"}
   sanatoria_titolo: {default: permesso}
   # The permesso's quadro e) also takes a new construction on free land.
@@ -118,9 +84,9 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As progettista, check every asseverazione on this page: the portal makes them the Relazione tecnica di asseverazione you sign with the request"
-  - "The asseverazione's \"non interessa aree percorse dal fuoco\" (qualità terreni) is one choice with the soil statement on the portal: Claude ticks the soil statement and leaves it (a portal defect, docs/portal-defects.md); state it in the relazione tecnica if the SUE wants it"
+  - "On Allega documenti: the portal's procura signed by the client and the Quadro riepilogativo (PdC DSC), the broadband infrastructure drawing (art. 135-bis DPR 380/2001: signed files only), the contributo's prospetto or the documents for the SUE to work it out (the permesso has no slot for them: under Allegati liberi), then everything signed digitally (.p7m)"
   - "Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt"
-  - "For works on structures: the autorizzazione sismica in sanatoria from the Genio Civile di Napoli on S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983); its documents go in this pratica's slot"
+  - "On Allega documenti: the Elaborati richiesti per la sanatoria (stato legittimo, stato di fatto and the comparison, the difformità in red as the SUE's guidelines ask), signed digitally (.p7m only)"
   - "Once the SUE answers (within 60 days for art. 36, else it is refused): pay the oblazione it determines (twice the contributo di costruzione, art. 36 c. 2; art. 36-bis c. 5) and collect the permesso in sanatoria"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -131,14 +97,16 @@ rules:
   main: napoli/comune/permesso-in-sanatoria
   facts: {permesso_per_scelta: "true", sanatoria: "true", parere_esonero: "false"}
 supports:
+  - {value: "{{ask.fascia_cimiteriale}}", in: ["no", "consentito"], else: "Works not allowed in a cemetery's fascia di rispetto need a deroga, not mapped yet."}
+  - {value: "{{ask.acustica}}", in: ["false"], else: "An acoustic impact or clima acustico report (art. 8 L. 447/1995) isn't mapped yet."}
+  - {value: "{{ask.vvf_valutazione}}", in: ["false"], else: "A project for the Vigili del Fuoco's assessment isn't mapped yet."}
+  - {value: "{{ask.igienico_conforme}}", in: ["true"], else: "A hygiene derogation isn't mapped yet."}
+  - {value: "{{ask.indagini_ambientali}}", in: ["false"], else: "Soil needing environmental investigations (or already remediated) isn't mapped yet."}
+  - {value: "{{ask.urbanizzazione}}", in: ["true"], else: "An area without its primary urbanisation works isn't mapped yet."}
   # The portal requires one energy incentive claimed on every permesso, even with no energy
   # works or renewables (seen 2026-10-30): with none it can't be filed as is.
   - {value: "{{ask.incentivo_energetico}}", in: ["art 14 c6", "art 14 c7", "bonus volumetrico"], else: "The permesso's form on the portal wants one energy incentive claimed (art. 14 c. 6 or 7 D.Lgs. 102/2014, or the 5% bonus of D.Lgs. 28/2011) even with no energy works: a project with none can't be filed on it as is; ask the SUE."}
   # Under art. 36-bis the portal makes the documents, the dating (documents or attestation) and
   # the works proposal one radio group (seen 2026-10-30), as in the SCIA's case 4.4.
-  - {value: "{{ask.pdc_sanatoria_caso}}", in: ["assenza"], defect: pdc-36bis, else: "Only art. 36 (works without the permesso or in total difformity) is mapped. Under art. 36-bis the portal's asseverazione makes the documents attached, the date of the works and the works proposal one radio choice, so it can't state the case in full: a defect of the portal (docs/portal-defects.md); ask the SUE."}
+  - {value: "{{ask.pdc_sanatoria_caso}}", in: ["assenza"], else: "Only art. 36 (works without the permesso or in total difformity) is mapped. Under art. 36-bis the portal's asseverazione makes the documents attached, the date of the works and the works proposal one radio choice, so it can't state the case in full: ask the SUE."}
   - {if: "{{ask.scia_onerosa}}", value: "{{ask.contributo_pagamento}}", in: ["prima dei lavori"], else: "In sanatoria the release is subordinate to paying the oblazione (art. 36 c. 2, art. 36-bis c. 5): it's paid when the permesso is collected, not in instalments or during works already done."}
-  # Works on structures begun without the seismic filing always need the autorizzazione sismica
-  # in Campania (art. 4 c. 1 e L.R. 9/1983): the asseverazione's sismica row says so, and the
-  # authorization is filed apart with the Genio Civile (the rules table's sismica-sanatoria).
-  - {if: "{{ask.strutture}}", value: "{{ask.sismica}}", in: [autorizzazione], else: "Works on structures begun without the seismic filing always need the autorizzazione sismica in Campania, never the deposito or a variant filing (art. 4 c. 1 e L.R. 9/1983): the sismica answer is autorizzazione, filed with the Genio Civile."}
