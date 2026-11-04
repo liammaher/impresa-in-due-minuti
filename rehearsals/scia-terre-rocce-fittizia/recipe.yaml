@@ -9,7 +9,7 @@ procedure: napoli/comune/scia-con-dichiarazione-utilizzo-terre
 title: "SCIA edilizia con dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
 crawl: sue-combo-scia-dichiarazione-utilizzo
 asks:
-  descrizione: {default: "PROVA NON INVIARE - SCIA e terre e rocce {{c:identity.last_name}}"}
+  descrizione: {default: "SCIA e terre e rocce {{c:identity.last_name}}"}
 # Its main pratica's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"

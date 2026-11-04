@@ -174,7 +174,8 @@ def end_to_end():
     cli(intake_py, "accept", out, "--into", work / "facts.json", "--part", "facts")
     r = cli(route_py, "--table", "sue-napoli", "--answers", work / "facts.json")
     assert r["pratica"] == "cila-fittizia" and not r["questions"], r
-    answers = dict(r["answers"], people={"r": "giulia", "f1": "edil", "f2": "impianti"})  # the vault's, the architect's
+    answers = dict(r["answers"], people={"r": "giulia", "f1": "edil", "f2": "impianti"},  # the vault's, the architect's
+                   descrizione="PROVA NON INVIARE - intake")  # a rehearsal names its draft (--made-up)
     (work / "answers.json").write_text(json.dumps(answers))
     cli(intake_py, "scan", DOSSIER, "--out", out, "--steps", r["steps"])
     added = cli(intake_py, "accept", out, "--into", work / "answers.json")["added"]
@@ -195,7 +196,8 @@ def end_to_end():
     # Files under a question still open (the proposed "no other filings" too) are listed, not missing.
     assert all(f["exists"] for f in with_docs["files"]
                if "sismica" not in f["for"] and "altre comunicazioni" not in f["for"]), with_docs["files"]
-    baseline = dict(r["answers"], people={"c": "luca", "o": "immobiliare", "r": "giulia", "f1": "edil", "f2": "impianti"})
+    baseline = dict(r["answers"], people={"c": "luca", "o": "immobiliare", "r": "giulia", "f1": "edil", "f2": "impianti"},
+                    descrizione=answers["descrizione"])
     (work / "baseline.json").write_text(json.dumps(baseline))
     without = cli(run_py, "preflight", "--steps", r["steps"], "--answers", work / "baseline.json",
                   "--values", work / "vault.json", "--made-up")

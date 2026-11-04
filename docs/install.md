@@ -1,7 +1,8 @@
 # Installing
 
-**Status: not released yet.** The pieces below are built and tested offline; nothing is published until
-the first release tag (`v0.2.0`) is pushed, so `marketplace add` has nothing to point at today.
+**Status: released as [v0.2.0](https://github.com/liammaher/portali/releases/tag/v0.2.0)** (2026-10-29);
+the marketplace is pinned to it. Installed in an isolated Claude config; not yet on a clean Mac or
+Windows (*What is not done*). Work merged since is in the next release, not in 0.2.0.
 
 ## What you do
 

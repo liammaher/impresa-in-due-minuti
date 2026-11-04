@@ -106,7 +106,7 @@ asks:
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}
-  descrizione: {default: "PROVA NON INVIARE - PdC {{c:identity.last_name}}"}
+  descrizione: {default: "PdC {{c:identity.last_name}}"}
   # The permesso's quadro e) also takes a new construction on free land.
   stato_legittimo:
     question: "How does quadro e) show the building's stato legittimo? The form takes one: titoli (from its building titles or pratiche: you'll list them); epoca (built when no title was required: the catasto's primo impianto or other documents); prova (its title is lost or unknown, but there is documentary proof of it); sanzioni (pecuniary sanctions under artt. 33, 34, 37 or 38 DPR 380/2001 were imposed and fully paid); tolleranze (construction tolerance declarations, art. 34-bis or 34-ter c. 4); area libera (a new construction on free land: no building yet)"

@@ -90,7 +90,7 @@ asks:
   descrizione:
     type: text
     question: "A name for the draft in Pratiche in bozza"
-    default: "PROVA NON INVIARE - {{c:identity.last_name}}"
+    default: "{{c:identity.last_name}}"
   titolo:
     type: text
     question: "The client's title to the property, in one word (proprietario, comproprietario, usufruttuario, amministratore di condominio, locatario, comodatario, ...)"

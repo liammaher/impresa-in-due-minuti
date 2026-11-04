@@ -13,7 +13,7 @@ scelte:
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
-  descrizione: {default: "PROVA NON INVIARE - proroga paesaggistica {{c:identity.last_name}}"}
+  descrizione: {default: "proroga paesaggistica {{c:identity.last_name}}"}
   titolo_esclusivo: {question: "Does the client hold the title alone? If not, the extension states that the assent of the other holders of rights (dichiarazione di assenso dei terzi titolari) is in hand"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"

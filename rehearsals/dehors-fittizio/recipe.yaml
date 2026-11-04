@@ -30,7 +30,7 @@ asks:
   centro_storico: {group: extras, type: yes_no, item: "It's in the historic centre (UNESCO area or buffer zone)", why: "There only tipo A and B, with a central-pole umbrella, and the Soprintendenza may be involved: not mapped yet."}
   musica: {group: extras, type: yes_no, item: "Music or a sound system outside", why: "The dehors then declares it keeps to the acoustic limits; asked so the right box is ticked."}
   nuovo_852: {group: extras, type: yes_no, item: "The business's Reg. 852 notifica isn't filed yet", why: "Then it's filed with this pratica, a branch not mapped yet."}
-  descrizione: {type: text, question: "A name for the draft in the portal's Pratiche in bozza", default: "PROVA NON INVIARE - dehors {{business.denominazione}}"}
+  descrizione: {type: text, question: "A name for the draft in the portal's Pratiche in bozza", default: "dehors {{business.denominazione}}"}
   diritti_euro: {type: number, question: "The SUAP fees in euro", default: "250", why: "The 2026 table's line for suolo pubblico annesso a pubblici esercizi (DGC 239/2026)."}
   oggetto: {question: "The pratica in one sentence (300 characters)"}
 yours:
