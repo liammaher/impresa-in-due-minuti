@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Personal Vault</title>
+<title>Il suo archivio</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -326,23 +326,23 @@ body::before{
 
 <div class="progress-bar" id="progress" style="width:0%"></div>
 
-<div class="error-banner" id="errorBanner">Session expired. Reload this page to sign in again.</div>
+<div class="error-banner" id="errorBanner">Sessione scaduta: ricarichi la pagina per entrare di nuovo.</div>
 
 <nav class="chapters" id="chapters" aria-label="Sections"></nav>
 
 <div class="container locked">
   <div class="header">
-    <h1>Your Vault</h1>
-    <p>Everything stored here is encrypted end-to-end. Fill what you need, skip the rest.</p>
+    <h1>Il suo archivio</h1>
+    <p>Tutto ciò che salva qui resta cifrato su questo computer. Compili ciò che le serve e salti il resto.</p>
   </div>
 
   <form class="gate" id="gate" autocomplete="off">
-    <p>Enter your profile password to open your vault in this tab. Access lasts 15 minutes.</p>
+    <p>Scriva la password dell'archivio per aprirlo in questa scheda. L'accesso dura 15 minuti.</p>
     <div class="field">
-      <label for="gatePassword">Profile password</label>
+      <label for="gatePassword">Password dell'archivio</label>
       <input type="password" id="gatePassword" autocomplete="current-password" autofocus>
     </div>
-    <button type="submit" class="gate-btn">Open vault</button>
+    <button type="submit" class="gate-btn">Apri l'archivio</button>
     <p class="gate-error" id="gateError" role="alert"></p>
   </form>
 
@@ -354,8 +354,8 @@ body::before{
   <!-- Impresa: a business vault's own data -->
   <section data-owner-only class="section" data-section="impresa" data-chapter="Impresa" data-kind="impresa">
     <div class="section-number">--</div>
-    <h2>La tua impresa</h2>
-    <p class="subtitle">The business itself, as on the visura camerale. Its people (titolare, soci, employees, clients) are under Persone.</p>
+    <h2>La sua impresa</h2>
+    <p class="subtitle">L'impresa (o lo studio) come risulta dalla visura camerale. Le sue persone (titolare, soci, dipendenti, clienti) sono sotto Persone.</p>
 
     <div class="field">
       <label>Denominazione / ragione sociale</label>
@@ -502,7 +502,7 @@ body::before{
       </div>
     </div>
 
-    <h3 class="subhead">Locale (where the activity is carried on)</h3>
+    <h3 class="subhead">Locale (dove si svolge l'attività)</h3>
     <div class="field-row">
       <div class="field">
         <label>Indirizzo</label>
@@ -616,8 +616,8 @@ body::before{
   <!-- 01 Identità -->
   <section class="section" data-section="0" data-chapter="Identità">
     <div class="section-number">01</div>
-    <h2>Who are you?</h2>
-    <p class="subtitle">As on your documents — the codice fiscale is validated as you save</p>
+    <h2>Chi è</h2>
+    <p class="subtitle">Come sui documenti: il codice fiscale viene controllato quando salva</p>
 
     <div class="field-row">
       <div class="field">
@@ -661,7 +661,7 @@ body::before{
       <div class="field">
         <label>Provincia di nascita</label>
         <span class="status idle"></span>
-        <input type="text" data-field="identity.birth_province" placeholder="NA — EE if born abroad" maxlength="2" autocapitalize="characters">
+        <input type="text" data-field="identity.birth_province" placeholder="NA (EE se nato all'estero)" maxlength="2" autocapitalize="characters">
       </div>
     </div>
     <div class="field">
@@ -674,8 +674,8 @@ body::before{
   <!-- 02 Residenza -->
   <section class="section" data-section="1" data-chapter="Residenza">
     <div class="section-number">02</div>
-    <h2>Where do you live?</h2>
-    <p class="subtitle">Your residenza anagrafica as registered with the Comune (ANPR). Fill the domicilio only if you live somewhere else.</p>
+    <h2>Dove vive</h2>
+    <p class="subtitle">La residenza anagrafica registrata in Comune (ANPR). Compili il domicilio solo se vive altrove.</p>
 
     <div class="field-row">
       <div class="field">
@@ -720,7 +720,7 @@ body::before{
       <div class="field">
         <label>Domicilio — via / piazza</label>
         <span class="status idle"></span>
-        <input type="text" data-field="domicilio.indirizzo" placeholder="only if different">
+        <input type="text" data-field="domicilio.indirizzo" placeholder="solo se diverso">
       </div>
       <div class="field">
         <label>Civico</label>
@@ -755,8 +755,8 @@ body::before{
   <!-- 03 Casa -->
   <section data-owner-only class="section" data-section="2" data-chapter="Casa">
     <div class="section-number">03</div>
-    <h2>La tua casa</h2>
-    <p class="subtitle">The home at the address above. Catasto data is on the visura catastale; TARI, the rental registration and ISEE all ask for it.</p>
+    <h2>La sua casa</h2>
+    <p class="subtitle">La casa all'indirizzo qui sopra. I dati catastali sono sulla visura catastale; servono per la TARI, la registrazione dell'affitto e l'ISEE.</p>
 
     <div class="field-row">
       <div class="field">
@@ -782,7 +782,7 @@ body::before{
       <div class="field">
         <label>Sezione</label>
         <span class="status idle"></span>
-        <input type="text" data-field="abitazione.catasto_sezione" placeholder="if any" spellcheck="false">
+        <input type="text" data-field="abitazione.catasto_sezione" placeholder="se c'è" spellcheck="false">
       </div>
       <div class="field">
         <label>Foglio</label>
@@ -845,7 +845,7 @@ body::before{
       <div class="field">
         <label>TARI — codice contribuente</label>
         <span class="status idle"></span>
-        <input type="text" data-field="tari.codice_contribuente" placeholder="on the payment notice" spellcheck="false">
+        <input type="text" data-field="tari.codice_contribuente" placeholder="sull'avviso di pagamento" spellcheck="false">
       </div>
       <div class="field">
         <label>Dichiarazione TARI presentata il</label>
@@ -859,7 +859,7 @@ body::before{
   <section data-owner-only class="section" data-section="3" data-chapter="Affitto e utenze">
     <div class="section-number">04</div>
     <h2>Affitto e utenze</h2>
-    <p class="subtitle">Skip the contract if you own the home. Registration details are on the RLI receipt; the POD and PDR are on any electricity or gas bill.</p>
+    <p class="subtitle">Salti il contratto se la casa è sua. Gli estremi di registrazione sono sulla ricevuta RLI; il POD e il PDR sono su qualsiasi bolletta di luce o gas.</p>
 
     <div class="field-row">
       <div class="field">
@@ -982,8 +982,8 @@ body::before{
   <!-- 05 Contatti e banca -->
   <section class="section" data-section="4" data-chapter="Contatti">
     <div class="section-number">05</div>
-    <h2>How can you be reached?</h2>
-    <p class="subtitle">Contact details and the IBAN used for refunds (730, INPS) and payments</p>
+    <h2>Contatti</h2>
+    <p class="subtitle">Recapiti e l'IBAN per rimborsi (730, INPS) e pagamenti</p>
 
     <div class="field-row">
       <div class="field">
@@ -1012,8 +1012,8 @@ body::before{
   <!-- 06 Lavoro -->
   <section class="section" data-section="5" data-chapter="Lavoro" data-kind="persona">
     <div class="section-number">06</div>
-    <h2>What do you do?</h2>
-    <p class="subtitle">Employment, or your partita IVA if you are self-employed</p>
+    <h2>Lavoro</h2>
+    <p class="subtitle">Il lavoro, o la partita IVA se lavora in proprio</p>
 
     <div class="field-row">
       <div class="field">
@@ -1062,7 +1062,7 @@ body::before{
   <section class="section" data-section="6" data-chapter="Carta d'identità">
     <div class="section-number">07</div>
     <h2>Carta d'identità</h2>
-    <p class="subtitle">Electronic identity card. Never enter the PIN or PUK — the vault refuses them.</p>
+    <p class="subtitle">Carta d'identità elettronica. Non inserisca mai PIN o PUK: l'archivio li rifiuta.</p>
 
     <div class="field-row">
       <div class="field">
@@ -1093,8 +1093,8 @@ body::before{
   <!-- 08 SPID -->
   <section class="section" data-section="7" data-chapter="SPID e codici">
     <div class="section-number">08</div>
-    <h2>SPID e codici — solo per te</h2>
-    <p class="subtitle">Personal tier: stored encrypted and never readable, listable or changeable by any agent, whatever its token. Only you see these, here or with <code>pvault get</code>.</p>
+    <h2>SPID e codici, solo per lei</h2>
+    <p class="subtitle">Riservati: cifrati, e mai leggibili né modificabili da Claude o da altri programmi. Li vede solo lei, qui.</p>
 
     <div class="field-row">
       <div class="field">
@@ -1138,7 +1138,7 @@ body::before{
         <span class="status idle"></span>
         <div class="input-wrap">
           <input type="password" data-field="spid.password" placeholder="" autocomplete="off" >
-          <button type="button" class="toggle-vis" data-toggle>show</button>
+          <button type="button" class="toggle-vis" data-toggle>mostra</button>
         </div>
       </div>
     </div>
@@ -1153,7 +1153,7 @@ body::before{
         <span class="status idle"></span>
         <div class="input-wrap">
           <input type="password" data-field="cie.pin" placeholder="8 cifre" autocomplete="off" inputmode="numeric">
-          <button type="button" class="toggle-vis" data-toggle>show</button>
+          <button type="button" class="toggle-vis" data-toggle>mostra</button>
         </div>
       </div>
       <div class="field">
@@ -1161,7 +1161,7 @@ body::before{
         <span class="status idle"></span>
         <div class="input-wrap">
           <input type="password" data-field="cie.puk" placeholder="8 cifre" autocomplete="off" inputmode="numeric">
-          <button type="button" class="toggle-vis" data-toggle>show</button>
+          <button type="button" class="toggle-vis" data-toggle>mostra</button>
         </div>
       </div>
     </div>
@@ -1171,7 +1171,7 @@ body::before{
   <section class="section" data-section="8" data-chapter="Altri documenti">
     <div class="section-number">09</div>
     <h2>Altri documenti</h2>
-    <p class="subtitle">Numbers and expiry dates — run <code>pvault expiring</code> to see what needs renewing. Store scans with <code>pvault doc add</code>.</p>
+    <p class="subtitle">Numeri e date di scadenza dei documenti.</p>
 
     <!-- Shown only to non-Italian citizens (see updatePermesso) -->
     <div id="permessoFields">
@@ -1259,7 +1259,7 @@ body::before{
   <section class="section" data-section="professione" data-chapter="Professione" data-kind="impresa">
     <div class="section-number">--</div>
     <h2>Professione e firma</h2>
-    <p class="subtitle">For a professional who signs as tecnico (albo, cassa), and anyone with a digital signature. Never enter its PIN: a business vault refuses it.</p>
+    <p class="subtitle">Per chi firma come tecnico (albo, cassa) e per chi ha una firma digitale. Non inserisca mai il PIN: l'archivio lo rifiuta.</p>
     <div class="field-row">
       <div class="field">
         <label>Ordine / collegio</label>
@@ -1313,15 +1313,15 @@ body::before{
   <!-- 10 Pagamento -->
   <section data-owner-only class="section" data-section="9" data-chapter="Pagamento">
     <div class="section-number">10</div>
-    <h2>Payment card</h2>
-    <p class="subtitle">Optional — e.g. for pagoPA payments. Critical tier: agents can't read it unless you allow it.</p>
+    <h2>Carta di pagamento</h2>
+    <p class="subtitle">Facoltativa, per esempio per i pagamenti pagoPA. Claude non può leggerla, a meno che lei non lo consenta.</p>
 
       <div class="field">
         <label>Numero carta</label>
         <span class="status idle"></span>
         <div class="input-wrap">
           <input type="password" data-field="payment.card_number" placeholder="**** **** **** ****" autocomplete="off">
-          <button type="button" class="toggle-vis" data-toggle>show</button>
+          <button type="button" class="toggle-vis" data-toggle>mostra</button>
         </div>
       </div>
     <div class="field-row">
@@ -1353,8 +1353,8 @@ body::before{
   <!-- 11 Preferenze -->
   <section class="section" data-section="10" data-chapter="Preferenze">
     <div class="section-number">11</div>
-    <h2>Preferences</h2>
-    <p class="subtitle">How you like things set up</p>
+    <h2>Preferenze</h2>
+    <p class="subtitle">Come preferisce che si facciano le cose</p>
 
     <div class="field">
       <label>Fuso orario</label>
@@ -1396,10 +1396,10 @@ body::before{
   <!-- 12 Famiglia -->
   <section class="section" data-section="11" data-chapter="Famiglia" data-relation="famiglia">
     <div class="section-number">12</div>
-    <h2 data-owner-only>Your family</h2>
+    <h2 data-owner-only>La sua famiglia</h2>
     <h2 data-member-only>Family</h2>
-    <p class="subtitle" data-owner-only>Add the people you handle paperwork for. Each one gets their own fields: pick them under Persona at the top of the page to fill them in.</p>
-    <p class="subtitle" data-member-only>How this person relates to you, as the anagrafe and procedures like ISEE and the 730 need it</p>
+    <p class="subtitle" data-owner-only>Aggiunga le persone di cui segue le pratiche. Ognuna ha i suoi campi: la scelga in alto, sotto Persona, per compilarli.</p>
+    <p class="subtitle" data-member-only>Il legame di questa persona con lei, come lo chiedono l'anagrafe e pratiche come l'ISEE e il 730</p>
 
     <div data-owner-only>
       <ul class="members-list" id="membersList"></ul>
@@ -1428,7 +1428,7 @@ body::before{
 
     <div data-member-only>
       <div class="field">
-        <label>Relazione con te</label>
+        <label>Relazione con lei</label>
         <span class="status idle"></span>
         <select data-field="famiglia.relazione">
           <option value=""></option>
@@ -1448,17 +1448,17 @@ body::before{
           <option value="suocero">Suocero/a</option>
           <option value="cognato">Cognato/a</option>
           <option value="altro_affine">Altro affine</option>
-          <option value="altro">Altro (es. l'altro genitore dei tuoi figli)</option>
+          <option value="altro">Altro (es. l'altro genitore dei suoi figli)</option>
         </select>
       </div>
 
       <div class="field-row">
         <div class="field">
-          <label>Nel tuo stato di famiglia</label>
+          <label>Nel suo stato di famiglia</label>
           <span class="status idle"></span>
           <select data-field="famiglia.stato_famiglia">
             <option value=""></option>
-            <option value="si">Sì, vive con te</option>
+            <option value="si">Sì, vive con lei</option>
             <option value="no">No</option>
           </select>
         </div>
@@ -1500,9 +1500,9 @@ body::before{
     <div class="section-number">--</div>
     <h2 data-owner-only>Persone</h2>
     <h2 data-member-only>Ruolo</h2>
-    <p class="subtitle" data-owner-only>The business's titolare, soci, employees and clients. Each one gets their own fields: pick them under Persona at the top of the page to fill them in.</p>
-    <p class="subtitle" data-owner-only>Clients' data is the business's responsibility under the GDPR. If an AI agent reads it, its provider processes that data for you (art. 28): use a business plan with a data processing agreement (DPA) and no training on your data, not a consumer plan.</p>
-    <p class="subtitle" data-member-only>What this person is to the business</p>
+    <p class="subtitle" data-owner-only>Titolare, soci, dipendenti e clienti dell'impresa. Ognuno ha i suoi campi: lo scelga in alto, sotto Persona, per compilarli.</p>
+    <p class="subtitle" data-owner-only>Dei dati dei clienti risponde l'impresa (GDPR). Portali li porta al portale senza farli passare dalla conversazione con Claude.</p>
+    <p class="subtitle" data-member-only>Il ruolo di questa persona nell'impresa</p>
 
     <div data-owner-only>
       <ul class="members-list" id="ruoloList"></ul>
@@ -1598,7 +1598,7 @@ body::before{
   <section class="section" data-section="procura" data-chapter="Procura" data-member-only>
     <div class="section-number">--</div>
     <h2>Procura</h2>
-    <p class="subtitle">A delega or procura this person gave you, e.g. for a SUE or SUAP filing, the Agenzia delle Entrate or INPS. Store the signed copy with <code>pvault doc add &lt;slug&gt;:procura &lt;file&gt;</code>; a second one goes in <code>procura2</code>. The expiry shows in <code>pvault expiring</code>.</p>
+    <p class="subtitle">La delega o procura che questa persona le ha dato, per esempio per una pratica SUE o SUAP, l'Agenzia delle Entrate o l'INPS. La scadenza resta annotata nell'archivio.</p>
     <div class="field-row">
       <div class="field">
         <label>Ente</label>
@@ -1626,7 +1626,7 @@ body::before{
   </section>
 
   <div class="footer">
-    <span class="count" id="filledCount">0</span> of <span id="totalCount">0</span> fields filled
+    <span class="count" id="filledCount">0</span> di <span id="totalCount">0</span> campi compilati
   </div>
 </div>
 
@@ -1699,11 +1699,11 @@ body::before{
     (res[0].categories || []).forEach(function(c) { catInfo[c.name] = c; });
     holders = res[1];
     if (kind === 'impresa') {
-      document.querySelector('.header h1').textContent = 'Your business vault';
+      document.querySelector('.header h1').textContent = 'L\'archivio della sua impresa';
       personSelect.options[0].textContent = "L'impresa";
     }
   }).catch(function() {
-    showError("Couldn't load the vault's schema: reload this page.");
+    showError("Non sono riuscito a caricare l'archivio: ricarichi la pagina.");
   });
 
   // canHold reports whether the vault's own data (person false) or another
@@ -1733,7 +1733,7 @@ body::before{
     if (body) opts.body = JSON.stringify(body);
     return fetch(BASE + path, opts).then(function(r) {
       if (r.status === 401) {
-        showError('Session expired. Reload this page to sign in again.');
+        showError('Sessione scaduta: ricarichi la pagina per entrare di nuovo.');
         throw new Error('unauthorized');
       }
       return readJSON(r);
@@ -1749,7 +1749,7 @@ body::before{
     input.value = '';
     input.dataset.saved = '';
     input.dataset.secret = '1';
-    input.placeholder = 'saved \u2014 type to replace';
+    input.placeholder = 'salvato: scriva per sostituirlo';
     hideSecret(input);
   }
   function clearSecretMark(input) {
@@ -1819,7 +1819,7 @@ body::before{
         if (!value) {
           // A person has at least one ruolo; the vault refuses an empty list.
           cb.checked = true;
-          setStatus(hidden.closest('.field').querySelector('.status'), 'error', 'Keep at least one ruolo (remove the person with pvault person remove)');
+          setStatus(hidden.closest('.field').querySelector('.status'), 'error', 'Lasci almeno un ruolo');
           return;
         }
         hidden.value = value;
@@ -1958,12 +1958,12 @@ body::before{
     const errEl = document.getElementById('addError');
     errEl.textContent = '';
     const slug = slugFromName(name);
-    if (!slug) { errEl.textContent = 'Scrivi il nome (con delle lettere).'; return; }
+    if (!slug) { errEl.textContent = 'Scriva il nome (con delle lettere).'; return; }
     if (!rel) { errEl.textContent = 'Scegli la relazione.'; return; }
     // Never write over someone already in the vault.
     api('GET', '/vault/members').then(function(h) {
       if ((h.members || []).some(function(m) { return m.slug === slug; })) {
-        throw new Error(slug + ' è già nel vault: sceglilo in alto, o usa un altro nome.');
+        throw new Error(slug + ' è già nell\'archivio: lo scelga in alto, o usi un altro nome.');
       }
       return api('PUT', '/vault/fields/' + slug + ':famiglia.relazione', { value: rel });
     }).then(function() {
@@ -1989,11 +1989,11 @@ body::before{
     const errEl = document.getElementById('addRuoloError');
     errEl.textContent = '';
     const slug = slugFromName(name);
-    if (!slug) { errEl.textContent = 'Scrivi il nome (con delle lettere).'; return; }
+    if (!slug) { errEl.textContent = 'Scriva il nome (con delle lettere).'; return; }
     if (!ruoloSel.value) { errEl.textContent = 'Scegli il ruolo.'; return; }
     api('GET', '/vault/members').then(function(h) {
       if ((h.members || []).some(function(m) { return m.slug === slug; })) {
-        throw new Error(slug + ' è già nel vault: sceglilo in alto, o usa un altro nome.');
+        throw new Error(slug + ' è già nell\'archivio: lo scelga in alto, o usi un altro nome.');
       }
       return api('PUT', '/vault/fields/' + slug + ':ruolo.tipo', { value: ruoloSel.value });
     }).then(function() {

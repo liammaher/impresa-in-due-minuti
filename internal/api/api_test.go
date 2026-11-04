@@ -961,8 +961,8 @@ func TestUI_ServesHTML(t *testing.T) {
 	if ct != "text/html; charset=utf-8" {
 		t.Fatalf("expected text/html, got %q", ct)
 	}
-	if !strings.Contains(w.Body.String(), "Your Vault") {
-		t.Fatal("expected HTML page with 'Your Vault' heading")
+	if !strings.Contains(w.Body.String(), "Il suo archivio") {
+		t.Fatal("expected HTML page with 'Il suo archivio' heading")
 	}
 }
 

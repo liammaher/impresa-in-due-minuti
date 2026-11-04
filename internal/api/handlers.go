@@ -393,7 +393,7 @@ func (s *Server) approvedGrant(w http.ResponseWriter, r *http.Request, req sessi
 		return false
 	}
 	defer s.approveMu.Unlock()
-	approved, err := s.approver.Approve(r.Context(), req.Window, "pvault wants to "+reason+".")
+	approved, err := s.approver.Approve(r.Context(), req.Window, "Portali chiede di "+reason+".")
 	// Whoever asked has gone, or the server is stopping: no grant.
 	if r.Context().Err() != nil {
 		writeError(w, http.StatusServiceUnavailable, "approver_unavailable", "the request was cancelled")

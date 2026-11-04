@@ -167,7 +167,7 @@
       box.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:#fff;display:flex;flex-direction:column;" +
         "align-items:center;justify-content:center;gap:12px;font:16px system-ui,sans-serif";
       const msg = document.createElement("div");
-      msg.textContent = (note ? note + " " : "") + "Type the code shown in the pvault window on your screen.";
+      msg.textContent = (note ? note + " " : "") + "Scriva qui il codice che vede nella finestra «Portali» sullo schermo.";
       const input = document.createElement("input");
       input.type = "password";
       input.autocomplete = "off";
@@ -205,7 +205,7 @@
       box.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:#fff;display:flex;flex-direction:column;" +
         "align-items:center;justify-content:center;gap:12px;font:16px system-ui,sans-serif;padding:24px";
       const title = document.createElement("div");
-      title.textContent = "Choose these files from the job's folder: they go from your computer to the portal, nowhere else.";
+      title.textContent = "Scelga questi file dalla cartella della pratica: vanno dal suo computer al portale, e da nessun'altra parte.";
       const list = document.createElement("ul");
       list.style.cssText = "margin:0;max-height:40vh;overflow:auto";
       const pickFiles = document.createElement("input");
@@ -219,7 +219,7 @@
       note.style.color = "#a00";
       const stop = document.createElement("button");
       stop.type = "button";
-      stop.textContent = "Stop the run";
+      stop.textContent = "Interrompi";
       const other = new Set();
       const draw = () => {
         list.replaceChildren(...want.map((w) => {
@@ -227,7 +227,7 @@
           li.textContent = `${picked.has(w.sha256) ? "✓" : "…"} ${w.name} (${(w.size / 1024 / 1024).toFixed(1)} MB)`;
           return li;
         }));
-        note.textContent = other.size ? `Not the file pre-flight checked: ${[...other].join(", ")}. Choose the right one.` : "";
+        note.textContent = other.size ? `Non è il file controllato prima: ${[...other].join(", ")}. Scelga quello giusto.` : "";
       };
       const take = async (chosen) => {
         for (const f of chosen) {
@@ -242,7 +242,7 @@
       };
       for (const input of [pickFiles, pickFolder]) input.addEventListener("change", () => { take([...input.files]); input.value = ""; });
       stop.addEventListener("click", () => { box.remove(); reject(new StepError("the run's files weren't chosen")); });
-      box.append(title, list, labelled("Files:", pickFiles), labelled("or the folder:", pickFolder), note, stop);
+      box.append(title, list, labelled("I file:", pickFiles), labelled("oppure la cartella:", pickFolder), note, stop);
       document.body.append(box);
       draw();
     });
@@ -252,7 +252,7 @@
     for (let tries = 0; tries < 5; tries++) {
       const keys = await sealKeys(await askCode(note), sealed);
       try { return { keys, plain: JSON.parse(utf8d.decode(await openSealed(keys, sealed))) }; }
-      catch (e) { note = "That code didn't open it."; }
+      catch (e) { note = "Questo codice non apre i dati: lo riscriva."; }
     }
     throw new StepError("the code didn't open the values");
   }
@@ -1049,48 +1049,47 @@
     const page = el("div", "max-width:820px;margin:0 auto");
     const note = el("p", "color:GrayText;margin:0 0 8px");
     const say = (t) => { note.textContent = t; };
-    page.append(el("h1", "font-size:22px;margin:0 0 4px", "Draft saved on the portal"),
-      el("p", "margin:0 0 12px", "Nothing has been declared, signed, paid or sent. Read the declarations below as the portal words " +
-        "them before you tick any: you make them in your own name, and a false one is a crime (DPR 445/2000, art. 76)."),
-      btn("Show the draft", () => host.remove()),
+    page.append(el("h1", "font-size:22px;margin:0 0 4px", "Bozza salvata sul portale"),
+      el("p", "margin:0 0 12px", "Nulla è stato dichiarato, firmato, pagato o inviato. Prima di spuntare le dichiarazioni, le legga qui " +
+        "sotto come le scrive il portale: le rende a suo nome, e una dichiarazione falsa è un reato (DPR 445/2000, art. 76)."),
+      btn("Mostra la bozza", () => host.remove()),
       note);
     // The portal's warnings beside boxes it kept (alerts()): the person checks those values.
     if ((report.alerts || []).length) {
-      page.append(el("h2", "font-size:17px;margin:24px 0 8px", "What the portal flagged"),
-        el("p", "margin:0 0 8px", "The portal kept these values but warned about them. Check each one; " +
-          "\"Indirizzo sconosciuto\" shows for every address, the Comune's own too."),
-        el("ul", "margin:0 0 8px 20px", null, ...report.alerts.map((a) => el("li", "", `${a.section}, ${a.label || "a box"}: ${a.text}`))));
+      page.append(el("h2", "font-size:17px;margin:24px 0 8px", "Cosa ha segnalato il portale"),
+        el("p", "margin:0 0 8px", "Il portale ha salvato questi valori ma li ha segnalati: li controlli uno per uno. " +
+          "«Indirizzo sconosciuto» compare per ogni indirizzo, anche per quello del Comune."),
+        el("ul", "margin:0 0 8px 20px", null, ...report.alerts.map((a) => el("li", "", `${a.section}, ${a.label || "una casella"}: ${a.text}`))));
     }
-    page.append(el("h2", "font-size:17px;margin:24px 0 8px", "The declarations you will tick"));
+    page.append(el("h2", "font-size:17px;margin:24px 0 8px", "Le dichiarazioni che spunterà"));
     if (!declared.length) {
-      page.append(el("p", "color:GrayText", "Not copied" + (report.declarations_note ? ` (${report.declarations_note})` : "") +
-        ": open each declarations section in the portal and read it there."));
+      page.append(el("p", "color:GrayText", "Non sono riuscito a copiarle: apra ogni sezione delle dichiarazioni nel portale e la legga lì."));
     }
     for (const d of declared) {
       const lines = d.boxes.map((b) => el("li", b.ticked ? "color:#c62828;font-weight:600" : "",
-        `${b.ticked ? "☑ already ticked: " : "☐ "}${b.label}`));
+        `${b.ticked ? "☑ già spuntata: " : "☐ "}${b.label}`));
       page.append(el("details", "border:1px solid GrayText;border-radius:8px;margin:8px 0", null,
         el("summary", "cursor:pointer;padding:8px 12px;font-weight:600", d.section),
         el("div", "white-space:pre-wrap;padding:4px 12px 10px;overflow-wrap:anywhere", d.text),
         el("ul", "list-style:none;margin:0;padding:0 12px 10px", null, ...lines)));
       page.lastChild.open = true;
     }
-    page.append(el("h2", "font-size:17px;margin:24px 0 8px", "The portal's preview"));
+    page.append(el("h2", "font-size:17px;margin:24px 0 8px", "L'anteprima del portale"));
     if (previewBlob) {
       const href = URL.createObjectURL(previewBlob);
-      const dl = el("a", "display:inline-block;margin:0 0 8px", "Download the PDF");
+      const dl = el("a", "display:inline-block;margin:0 0 8px", "Scarica il PDF");
       dl.href = href;
       dl.download = "anteprima.pdf";
       const pdf = el("iframe", "width:100%;height:80vh;border:1px solid GrayText;border-radius:8px");
       pdf.src = href;
-      page.append(el("p", "color:GrayText;margin:0 0 4px", "The document the portal will file, as it renders it."), dl, pdf);
+      page.append(el("p", "color:GrayText;margin:0 0 4px", "Il documento che il portale depositerà, così come lo mostra."), dl, pdf);
     } else {
-      page.append(el("p", "color:GrayText", `Not copied${report.preview_note ? ` (${report.preview_note})` : ""}: press Visualizza anteprima in the portal and read it before you sign.`));
+      page.append(el("p", "color:GrayText", "Non sono riuscito a copiarla: prema Visualizza anteprima nel portale e la legga prima di firmare."));
     }
-    page.append(el("h2", "font-size:17px;margin:24px 0 8px", "Every value we typed"));
+    page.append(el("h2", "font-size:17px;margin:24px 0 8px", "Ogni valore inserito"));
     for (const { sec, done } of kept.filter((k) => !k.sec.go)) {
       const rows = done.map((f) => el("tr", "", null, el("td", "color:GrayText;padding:3px 12px 3px 0;width:42%", f.label || f.id || f.css || ""),
-        el("td", "padding:3px 0;overflow-wrap:anywhere", f.kind === "radio" || f.kind === "checkbox" ? "chosen" : String(f.typed ?? ""))));
+        el("td", "padding:3px 0;overflow-wrap:anywhere", f.kind === "radio" || f.kind === "checkbox" ? "scelto" : String(f.typed ?? ""))));
       page.append(el("details", "border:1px solid GrayText;border-radius:8px;margin:8px 0", null,
         el("summary", "cursor:pointer;padding:8px 12px;font-weight:600", sec.section),
         el("table", "width:100%;border-collapse:collapse;padding:0 12px", null, ...rows)));

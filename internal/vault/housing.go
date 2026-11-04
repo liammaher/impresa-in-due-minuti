@@ -82,23 +82,23 @@ func normalizeHousing(id, category, name, value string) (out string, handled boo
 		if t, ok := titoli[strings.ToLower(strings.TrimSpace(value))]; ok {
 			return t, true, nil
 		}
-		return fail("must be proprietario, locatario, comodatario, usufruttuario, ospite or altro")
+		return fail("può essere proprietario, locatario, comodatario, usufruttuario, ospite o altro")
 	case key == "abitazione.classe_energetica":
 		v := strings.TrimPrefix(normalizeCode(value), "CLASSE")
 		if !energyClasses[v] {
-			return fail("classe energetica must be A4, A3, A2, A1, B, C, D, E, F or G")
+			return fail("la classe energetica è A4, A3, A2, A1, B, C, D, E, F o G")
 		}
 		return v, true, nil
 	case key == "abitazione.vani", hasFieldSuffix(name, "mq"):
 		v, ok := normalizeDecimal(value)
 		if !ok {
-			return fail("must be a positive number (e.g. 72 or 72.5)")
+			return fail("dev'essere un numero positivo (per esempio 72 o 72,5)")
 		}
 		return v, true, nil
 	case euroFields[key]:
 		v, ok := normalizeEuro(value)
 		if !ok {
-			return fail("must be an amount in euro (e.g. 750, 750,00 or 1.250,50)")
+			return fail("dev'essere un importo in euro (per esempio 750, 750,00 o 1.250,50)")
 		}
 		return v, true, nil
 	case key == "locazione.preavviso_disdetta_mesi":
@@ -108,7 +108,7 @@ func normalizeHousing(id, category, name, value string) (out string, handled boo
 	case key == "locazione.cedolare_secca":
 		return yesNo(value, fail)
 	case key == "locazione.registrazione_codice_identificativo":
-		return matchCode(value, reRLICode, fail, "codice identificativo is 10-20 letters and digits, as on the RLI receipt")
+		return matchCode(value, reRLICode, fail, "il codice identificativo ha da 10 a 20 lettere e cifre, come sulla ricevuta RLI")
 	case key == "utenze.luce_pod":
 		return matchCode(value, rePOD, fail, "POD must look like IT001E12345678 (IT, 3 digits, E, then 8-9 characters)")
 	case key == "utenze.gas_pdr":
@@ -126,19 +126,19 @@ func normalizeCatasto(name, value string, fail func(string) (string, bool, error
 		v := normalizeCode(value)
 		m := reCatastoCategoria.FindStringSubmatch(v)
 		if m == nil {
-			return fail("categoria catastale must look like A/2 (a letter A-F and a number)")
+			return fail("la categoria catastale è come A/2 (una lettera dalla A alla F e un numero)")
 		}
 		n, _ := strconv.Atoi(m[2])
 		if n < 1 || n > catastoGroupMax[m[1][0]] {
-			return fail(fmt.Sprintf("group %s has categories %s/1 to %s/%d", m[1], m[1], m[1], catastoGroupMax[m[1][0]]))
+			return fail(fmt.Sprintf("il gruppo %s va da %s/1 a %s/%d", m[1], m[1], m[1], catastoGroupMax[m[1][0]]))
 		}
 		return fmt.Sprintf("%s/%d", m[1], n), true, nil
 	case "catasto_foglio":
-		return matchCode(value, reFoglio, fail, "foglio is a number of up to 4 digits")
+		return matchCode(value, reFoglio, fail, "il foglio è un numero fino a 4 cifre")
 	case "catasto_particella":
-		return matchCode(value, reParticella, fail, "particella is up to 7 letters or digits")
+		return matchCode(value, reParticella, fail, "la particella ha fino a 7 lettere o cifre")
 	case "catasto_subalterno":
-		return matchCode(value, reSubalterno, fail, "subalterno is a number of up to 4 digits")
+		return matchCode(value, reSubalterno, fail, "il subalterno è un numero fino a 4 cifre")
 	}
 	return value, false, nil
 }
@@ -155,7 +155,7 @@ func matchCode(value string, re *regexp.Regexp, fail func(string) (string, bool,
 func wholeNumber(value string, lo, hi int, fail func(string) (string, bool, error)) (string, bool, error) {
 	n, err := strconv.Atoi(strings.TrimSpace(value))
 	if err != nil || n < lo || n > hi {
-		return fail(fmt.Sprintf("must be a whole number from %d to %d", lo, hi))
+		return fail(fmt.Sprintf("dev'essere un numero intero da %d a %d", lo, hi))
 	}
 	return strconv.Itoa(n), true, nil
 }

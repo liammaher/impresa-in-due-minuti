@@ -43,17 +43,19 @@ func promptScope(scope string) ([]string, error) {
 	return parts, nil
 }
 
-// PromptVaultLabel names the vault in prompts: "your vault", or "your studio
-// vault" for a folder .pvault-studio (pvault --vault studio), so with several
-// vaults an approval is never given for the wrong one.
+// PromptVaultLabel names the vault in prompts: "suo archivio", or "suo archivio
+// «studio»" for a folder .pvault-studio (pvault --vault studio), so with several
+// vaults an approval is never given for the wrong one. Prompts are in Italian:
+// Portali's users are Italian, and a prompt completes the system's own sentence
+// ("… sta tentando di …" on a Mac set to Italian), so it starts with a verb.
 func PromptVaultLabel(dir string) string {
 	if name, ok := strings.CutPrefix(filepath.Base(dir), ".pvault-"); ok && ValidPersonSlug(name) {
-		return "your " + name + " vault"
+		return "suo archivio «" + name + "»"
 	}
-	return "your vault"
+	return "suo archivio"
 }
 
-// GrantPrompt completes "pvault wants to …" for a grant of scope with access
+// GrantPrompt completes "Portali chiede di …" for a grant of scope with access
 // (read if empty), lasting ttl; an empty scope (and access) is full access.
 // A scope or access it can't word is an error, never a vaguer prompt.
 func GrantPrompt(label, scope, access string, ttl time.Duration) (string, error) {
@@ -61,7 +63,7 @@ func GrantPrompt(label, scope, access string, ttl time.Duration) (string, error)
 		if access != "" {
 			return "", fmt.Errorf("access needs a scope")
 		}
-		return fmt.Sprintf("get full access to %s, including settings and agent tokens, for %s", label, promptDuration(ttl)), nil
+		return fmt.Sprintf("avere accesso completo al %s, impostazioni e chiavi degli agenti comprese, per %s", label, promptDuration(ttl)), nil
 	}
 	patterns, err := promptScope(scope)
 	if err != nil {
@@ -71,44 +73,45 @@ func GrantPrompt(label, scope, access string, ttl time.Duration) (string, error)
 	var verb string
 	switch access {
 	case "", AccessRead:
-		verb = "read"
+		verb = "leggere dal " + label
 	case AccessAppend:
-		verb = "read and add new entries to"
+		verb = "leggere e completare, senza cambiare ciò che c'è, nel " + label
 	case AccessWrite:
-		verb = "read, change and delete"
+		verb = "leggere, modificare ed eliminare nel " + label
 	default:
 		return "", fmt.Errorf("access must be read, append or write")
 	}
 	// "*" covers everything, so it is named alone rather than last in a list.
-	var what, place string
+	var what string
 	for _, p := range patterns {
 		if p == "*" {
 			what = describePattern(label, "*")
 		}
 	}
 	if what == "" {
-		names := make([]string, len(patterns))
+		names, documents := make([]string, len(patterns)), false
 		for i, p := range patterns {
 			names[i] = describePattern(label, p)
+			documents = documents || strings.HasSuffix(p, ".*") && !strings.HasSuffix(p, ":*")
 		}
 		what = strings.Join(names, ", ")
-		place = "in " + label + " "
-		if verb == "read" {
-			place = "from " + label + " "
+		// A category pattern also covers <category>.documents (ScopeAllows).
+		if documents {
+			what += " (documenti compresi)"
 		}
 	}
-	return fmt.Sprintf("%s %s %sfor %s", verb, what, place, promptDuration(ttl)), nil
+	return fmt.Sprintf("%s, per %s: %s", verb, promptDuration(ttl), what), nil
 }
 
-// SignPrompt completes "pvault wants to …" for reviewing a signing request,
+// SignPrompt completes "Portali chiede di …" for reviewing a signing request,
 // from the vault's own summary of it. The grant it unlocks reads the signed
 // file and approves it, so the wording says sign, not read.
 func SignPrompt(label, name string, pages int, hash8, requester string, ttl time.Duration) string {
-	count := fmt.Sprintf("%d pages", pages)
+	count := fmt.Sprintf("%d pagine", pages)
 	if pages == 1 {
-		count = "1 page"
+		count = "1 pagina"
 	}
-	return fmt.Sprintf(`review and sign "%s" (%s, hash %s), filed by %s, with your handwritten signature from %s, for %s`,
+	return fmt.Sprintf(`rivedere e firmare «%s» (%s, codice %s), inviato da %s, con la sua firma autografa dal %s, per %s`,
 		shownName(name), count, hash8, shownName(requester), label, promptDuration(ttl))
 }
 
@@ -141,49 +144,74 @@ func shownName(name string) string {
 	return string(out)
 }
 
+// PromptCategories names each schema category in prompts; another (a numbered
+// copy, cie2) shows as it is. The Touch ID helper has the same list, and both
+// are held to testdata/prompts.json.
+var PromptCategories = map[string]string{
+	"identity": "anagrafica", "cie": "carta d'identità", "spid": "SPID", "residenza": "residenza",
+	"domicilio": "domicilio", "abitazione": "abitazione", "locazione": "contratto d'affitto",
+	"utenze": "utenze", "tari": "TARI", "pratiche": "pratiche", "famiglia": "famiglia", "ruolo": "ruolo",
+	"procura": "procura", "business": "impresa", "locale": "locale", "immobile": "immobile",
+	"albo": "albo professionale", "cassa": "cassa previdenziale", "firma_digitale": "firma digitale",
+	"firma_autografa": "firma autografa", "permesso_soggiorno": "permesso di soggiorno",
+	"passaporto": "passaporto", "tessera_sanitaria": "tessera sanitaria", "patente": "patente",
+	"addresses": "altri indirizzi", "financial": "dati fiscali e finanziari", "payment": "carta di pagamento",
+	"preferences": "preferenze", "employment": "lavoro", "medical": "dati medici", "documents": "documenti",
+	"files": "file",
+}
+
+func promptCategory(c string) string {
+	if l, ok := PromptCategories[c]; ok {
+		return l
+	}
+	return c
+}
+
 func describePattern(label, pattern string) string {
 	if pattern == "*" {
-		if label == "your vault" {
-			return "everything in your vault, your family's data included"
+		if label == "suo archivio" {
+			return "tutto, compresi i dati dei suoi familiari"
 		}
-		return "everything in " + label + ", everyone's data in it included"
+		return "tutto, compresi i dati di ogni persona che contiene"
 	}
-	// Whose data: yours (no prefix), one person's, or everyone's.
-	whose, all, rest := "your", "all your", pattern
+	// Whose data: the owner's (no prefix), one person's, or everyone's.
+	mine, of, rest := true, "", pattern
 	if person, local, ok := strings.Cut(pattern, ":"); ok {
 		rest = local
 		if rest == "*" {
-			return "everything about " + person
+			return "tutto ciò che riguarda " + person
 		}
-		whose, all = person+"'s", "all of "+person+"'s"
+		mine, of = false, " di "+person
 		if person == "*" {
-			whose, all = "everyone's", "everyone's"
+			of = " di tutte le persone"
 		}
 	}
-	// A category pattern also covers <category>.documents (ScopeAllows).
 	if category, ok := strings.CutSuffix(rest, ".*"); ok {
-		return all + " " + category + " fields and documents"
+		if mine {
+			return "i suoi dati di " + promptCategory(category)
+		}
+		return "i dati di " + promptCategory(category) + of
 	}
 	if category, ok := strings.CutSuffix(rest, ".documents"); ok {
-		return whose + " " + category + " documents"
+		if mine {
+			return "i suoi documenti di " + promptCategory(category)
+		}
+		return "i documenti di " + promptCategory(category) + of
 	}
-	if whose == "your" {
-		return pattern
-	}
-	return whose + " " + rest
+	return "il campo " + rest + of
 }
 
 func promptDuration(d time.Duration) string {
 	s := int((d + time.Second - 1) / time.Second)
 	switch {
 	case s == 1:
-		return "1 second"
+		return "1 secondo"
 	case s < 60:
-		return fmt.Sprintf("%d seconds", s)
+		return fmt.Sprintf("%d secondi", s)
 	}
 	m := (s + 59) / 60 // round up: never understate how long a grant lasts
 	if m == 1 {
-		return "1 minute"
+		return "1 minuto"
 	}
-	return fmt.Sprintf("%d minutes", m)
+	return fmt.Sprintf("%d minuti", m)
 }
