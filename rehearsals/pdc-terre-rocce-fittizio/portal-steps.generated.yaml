@@ -527,6 +527,10 @@ asks:
       calcolano dalle sezioni di progetto, e la VIA o l''AIA sono quelle della Parte II del D.Lgs. 152/2006 (art. 2 c. 1 t, u, v D.P.R. 120/2017). Le terre riusate nello stesso sito seguono l''art. 24 e
       non chiedono una pratica.'}
 supports:
+- value: '{{ask.sanatoria_titolo}}'
+  in:
+  - nessuna
+  else: 'Works already done go by their own pratica: a permesso in sanatoria (the permesso with the wizard''s sanatoria choice), or, for works that needed a SCIA, a SCIA in sanatoria.'
 - value: '{{ask.incentivo_energetico}}'
   in:
   - art 14 c6

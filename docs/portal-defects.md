@@ -5,7 +5,8 @@ the law allows, so the recipe refuses it with the reason. Each is also a record 
 `claude/skills/pratica/portal/defects.yaml`, which the refusal names (`defect:`): pre-flight then
 returns it under `defects`, and the person is told what the portal does and chooses what to do. Fixing them is the portal's operator's
 (InfoCamere, which runs impresainungiorno) or the Comune's (the SUE configures its forms). Each
-entry says what to report and how it was checked, without personal data.
+entry says what to report and how it was checked, without personal data. The reports to send, in
+Italian and one per recipient, with the channels: [`docs/defect-reports/`](defect-reports/README.md).
 
 ## SCIA in sanatoria, art. 36-bis c. 1: dating, oblazione and works proposal saved as one field
 

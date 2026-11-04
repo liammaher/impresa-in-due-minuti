@@ -22,5 +22,29 @@
   "answers": "answers-parziale.json",
   "result": "filled",
   "seconds": 62.4
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-comproprietario.json",
+  "result": "filled",
+  "seconds": 70.1
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-condominio.json",
+  "result": "filled",
+  "seconds": 65.6
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-proprietario.json",
+  "result": "filled",
+  "seconds": 55.8
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-usufruttuario.json",
+  "result": "filled",
+  "seconds": 60.8
  }
 ]

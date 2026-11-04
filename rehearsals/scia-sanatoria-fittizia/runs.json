@@ -64,5 +64,11 @@
   "answers": "answers-variante-scia.json",
   "result": "filled",
   "seconds": 161.4
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-catasto-dopo.json",
+  "result": "filled",
+  "seconds": 179.7
  }
 ]

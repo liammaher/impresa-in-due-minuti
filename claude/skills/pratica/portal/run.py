@@ -75,9 +75,13 @@ lasts as long as the portal keeps it.
 A `kind: file` field attaches a file: its value is a path (usually an {{ask.x}}), and
 its bytes travel in run.js. With `page` they pass through the conversation, so all of a
 run's files together may be at most 256 KB (PAGE_FILES_LIMIT); `run` evaluates run.js
-itself and takes any size. `page --file-urls MAP.json` ({path: https URL}) sends a file
-by link instead: run.js carries its URL, size and sha256, and the runner fetches it in the
-portal's page and stops if the link serves other bytes; such files don't count to 256 KB.
+itself and takes any size. Over that, `page` carries each file's name, size and sha256
+instead (`picked`): before the run starts the runner shows a box on the portal's page where
+the person chooses them, and keeps only those whose bytes are the ones pre-flight read, so
+they go from the person's disk to the portal and nowhere else. `page --file-urls MAP.json`
+({path: https URL}) sends a file by link instead: run.js carries its URL, size and sha256,
+and the runner fetches it in the portal's page and stops if the link serves other bytes;
+such files don't count to 256 KB.
 
 No model is called during a run. A step that doesn't match what the steps file expects
 (a label, a lookup with no single answer, a value the portal didn't keep) stops the run:
@@ -1341,6 +1345,10 @@ def preflight(steps, values, urls=None, made_up=False, after=False):
         report["warnings"].append(f"made-up data: {len(unsigned)} slot(s) that take only signed files left empty "
                                   "(the portal refuses a made-up signature on upload); a real case attaches them")
     report["pane_ok"] = sum(x["bytes"] or 0 for x in report["files"] if "link" not in x) <= PAGE_FILES_LIMIT
+    # Over the pane's limit, `page` has the person choose the files in the portal's page at the
+    # start of the run (`picked`): the names they'll be asked for, once.
+    if not report["pane_ok"]:
+        report["pick"] = sorted({Path(x["path"]).name for x in report["files"] if x["exists"] and "link" not in x})
     report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + filing_yours(steps, sportello)
                        + asked_yours(steps, values) + apart(steps, values))
     if later:
@@ -1554,6 +1562,33 @@ def file_links(urls):
     return out
 
 
+def bundle(out, path, files):
+    """runner.js, steps.js and run.js as one file the person picks once in a box on the portal's page
+    (pick.js), for a pane that lacks the runner: it is 80 KB, and the pane takes about 40 KB a call
+    (2026-11-04), and a long script copied through the conversation can arrive garbled (2026-10-30). The
+    box checks the file by sha256 and evaluates it once; it returns what run.js does ("waiting for the
+    code", "waiting for the files", "started"). bench/rerun.py does the same for a batch."""
+    text = "\n;\n".join(files[k] for k in ("runner.js", "steps.js", "run.js"))
+    path.write_text(text)
+    sha = hashlib.sha256(text.encode()).hexdigest()
+    (out / "pick.js").write_text(f"""document.querySelectorAll("#pv-pick").forEach((x) => x.remove());
+const box = document.createElement("div"); box.id = "pv-pick";
+box.style.cssText = "position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#fff;border:3px solid #1a4fd6;padding:16px 20px;font:16px sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3);border-radius:8px;max-width:520px";
+box.innerHTML = '<b>Choose <code>{path.name}</code> (once)</b><br><input type="file" accept=".js" style="margin-top:10px"><div style="margin-top:8px;color:#444"></div>';
+document.body.appendChild(box);
+const [input, msg] = [box.querySelector("input"), box.querySelector("div")];
+input.addEventListener("change", async () => {{
+  const text = await input.files[0].text();
+  const got = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
+  if (got !== "{sha}") {{ msg.textContent = "Not that file (its sha256 differs): nothing loaded."; return; }}
+  input.disabled = true;
+  try {{ window.pvPicked = String((0, eval)(text)); msg.textContent = "Loaded: " + window.pvPicked; setTimeout(() => box.remove(), 3000); }}
+  catch (e) {{ window.pvPicked = "error " + e.message; msg.textContent = window.pvPicked; }}
+}});
+"box shown: the person picks {path.name}, then poll __pv.wait()"
+""")
+
+
 def resumption(report, fixes=None):
     """How run.js picks up a stopped run: the draft it stopped on, the section it stopped
     in (redone, with any fixes), and what the earlier sections typed, for the fresh load.
@@ -1568,16 +1603,16 @@ def resumption(report, fixes=None):
             "kept": report.get("kept", []), "fixes": fixes or []}
 
 
-def page_scripts(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=None, code=None):
+def page_scripts(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=None, code=None, pick=True):
     """install.js (inpage.js and the steps, no personal data) and run.js (the values)."""
-    files = page_files(steps, values, files_limit, resume, urls, code)
+    files = page_files(steps, values, files_limit, resume, urls, code, pick)
     return files["install.js"], files["run.js"]
 
 
-def page_files(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=None, code=None):
+def page_files(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=None, code=None, pick=True):
     """Every file `run.py page` writes, by name: install.js is runner.js and steps.js, and
     check.js says which of those two the pane's storage lacks."""
-    return page_bundle(steps, values, files_limit, resume, urls, code)[0]
+    return page_bundle(steps, values, files_limit, resume, urls, code, pick)[0]
 
 
 # --- sealing run.js ---------------------------------------------------------------
@@ -1666,10 +1701,12 @@ def show_code(code, give_up=None):
     return child
 
 
-def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=None, code=None):
+def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=None, code=None, pick=True):
     """page_files, and what runner.js and steps.js leave in the pane's localStorage. urls:
     {path: https URL}, files the page fetches itself instead of run.js carrying them.
-    code: seal the values under it (see above); None carries them in the clear."""
+    code: seal the values under it (see above); None carries them in the clear. pick: files
+    over files_limit are chosen by the person in the page (`picked`); False refuses them (a
+    batch has no one to pick for each run)."""
     expanded = expand(steps, values)
     blocks, steps = expanded is not steps, expanded
     links = file_links(urls)
@@ -1709,9 +1746,15 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, urls=N
     if files_limit is not None:
         files = [v for s in vals["sections"] for v in s if isinstance(v, dict) and "b64" in v]
         size = sum(len(f["b64"]) * 3 // 4 for f in files)
-        if size > files_limit:
+        if size > files_limit and not pick:
             raise StepError(f"the attachments come to {size // 1024} KB, more than the {files_limit // 1024} KB "
                             "run.js can carry in the pane: send the big ones by link (--file-urls) or use `run`")
+        if size > files_limit:
+            # Too big to carry: every file the run attaches is chosen in the page, so the person
+            # picks them all once, from the job's folder, and none is in the conversation.
+            for f in files:
+                data = base64.b64decode(f.pop("b64"))
+                f.update(size=len(data), sha256=hashlib.sha256(data).hexdigest(), picked=True)
     proc = steps["procedure"]
     if blocks:
         # Its "+" blocks as this case counts them: a case with other counts has other steps, so
@@ -1964,6 +2007,8 @@ def main():
     ap.add_argument("--resume", type=Path, help="page/run: a stopped run's report.json, to pick it up where it stopped")
     ap.add_argument("--file-urls", type=Path, help="preflight/page: JSON {path: https URL}, files the page fetches by link")
     ap.add_argument("--fix", type=Path, help="with --resume: JSON list of {section, field, set: {id|label|css}}")
+    ap.add_argument("--bundle", type=Path, help="page: also write runner.js, steps.js and run.js as this one file "
+                    "(in the person's Downloads), and pick.js, a box where the person picks it once")
     a = ap.parse_args()
     steps = yaml.safe_load(a.steps.read_text())
     try:
@@ -2027,6 +2072,10 @@ def main():
             drift(a.out, steps, resume)
             for name, text in files.items():
                 (a.out / name).write_text(text)
+            if a.bundle:
+                bundle(a.out, a.bundle, files)
+                print(f"{a.bundle}: if check.js names runner.js, run pick.js in the pane instead of the files it "
+                      "names: the person picks this file once in the box, then poll __pv.wait()")
             # The pane's report has no values or person's steps: review.py OUT adds these, from
             # private/ (Claude sends the review page and never opens that folder).
             private(a.out, review_shown(steps, values))
