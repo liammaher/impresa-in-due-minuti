@@ -1,152 +1,211 @@
 [
  {
+  "date": "2026-10-28",
+  "browser": "pane",
+  "note": "121 values and 4 attachments kept, every value read back on a fresh load (23.1 s); Login → draft: 218 s of runs in six legs on one draft; attachments 9.5 s"
+ },
+ {
+  "date": "2026-10-29",
+  "browser": "pane",
+  "note": "**Filled**, every value read back on a fresh load; Login → draft: 89.2 s from a blank draft (`bench/rerun.py` batch, after the SCIA's dictionary change; fresh load 14.3 s)"
+ },
+ {
   "date": "2026-10-30",
   "answers": "answers-collaudo.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane",
+  "note": "**Filled**: collaudo attached, AQE, house-number request, fire SCIA (SCIA Unica), all ten systems, the lift's communication; 8 files kept; Login → draft: `answers-collaudo.json`: 96.4 s from a blank draft (fresh load 16.1 s)"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-estremi.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane",
+  "note": "**Filled**: regolare esecuzione, house-number request and lift communication by their references, one unit's partial agibilità, art. 77; 5 files kept; Login → draft: `answers-estremi.json`: first try stopped on a required slot the partial agibilità adds (the elaborato planimetrico), mapped; rerun 87.7 s (fresh load 13.6 s)"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-p6.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane",
+  "note": "**Filled**: the collaudo certificate by its references, a building's partial agibilità, art. 82; Login → draft: `answers-parziale.json`: 89.9 s (fresh load 14.3 s)"
  },
  {
   "date": "2026-10-30",
   "answers": "answers-parziale.json",
   "result": "filled",
-  "from": "README"
+  "from": "README",
+  "browser": "pane",
+  "note": "**Filled**, unchanged; Login → draft: `answers-p6.json` on the final steps: 87.6 s (fresh load 13.4 s)"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "note": "`answers-monostanza-due` and `answers-5quater` **filled** (87 s, 86 s), nothing moved or loose. `answers-impianti-depositati` stopped at Allega documenti: with every system's certificate deposited the portal drops the dichiarazione di conformità's slot. `answers-impianti-collaudo` stopped there too: a system's collaudo and atto notorio each add a required slot (\"Certificato di collaudo ove previsto, degli impianti installati\", \"Atto notorio relativo alla conformità degli impianti\"). Both mapped after the run; Login → draft: `bench/rerun.py` bundle"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "note": "**filled** both (96 s, 98 s), read back on a fresh load (14 s each), nothing moved or loose; Login → draft: the two systems cases again, on the slots mapped from their stops"
+ },
+ {
+  "date": "2026-10-31",
+  "browser": "pane",
+  "note": "**filled** all four (88-105 s); Login → draft: the four cases ticking neither art. 24 box (`non-soggetto-collaudo`, `parziale-vale-fine`, `regolare-esecuzione`, `vale-fine-lavori`): stopped on the portal's \"deve essere selezionata almeno un'opzione\" once a592b60 had dropped the boxes' `theirs`; restored, rerun"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-impianti-depositati.json",
   "result": "stopped",
-  "seconds": 2
+  "seconds": 2,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-impianti-collaudo.json",
   "result": "stopped",
-  "seconds": 92.2
+  "seconds": 92.2,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-monostanza-due.json",
   "result": "filled",
-  "seconds": 86.9
+  "seconds": 86.9,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-5quater.json",
   "result": "filled",
-  "seconds": 86.2
+  "seconds": 86.2,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-impianti-depositati.json",
   "result": "filled",
-  "seconds": 96
+  "seconds": 96,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-impianti-collaudo.json",
   "result": "filled",
-  "seconds": 98.2
+  "seconds": 98.2,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-non-soggetto-collaudo.json",
   "result": "stopped",
-  "seconds": 52.3
+  "seconds": 52.3,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-parziale-vale-fine.json",
   "result": "stopped",
-  "seconds": 52.4
+  "seconds": 52.4,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-regolare-esecuzione.json",
   "result": "stopped",
-  "seconds": 72.7
+  "seconds": 72.7,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-vale-fine-lavori.json",
   "result": "stopped",
-  "seconds": 60
+  "seconds": 60,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-non-soggetto-collaudo.json",
   "result": "filled",
-  "seconds": 105.4
+  "seconds": 105.4,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-parziale-vale-fine.json",
   "result": "filled",
-  "seconds": 87.9
+  "seconds": 87.9,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-regolare-esecuzione.json",
   "result": "filled",
-  "seconds": 90.6
+  "seconds": 90.6,
+  "browser": "pane"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-vale-fine-lavori.json",
   "result": "filled",
-  "seconds": 90.3
+  "seconds": 90.3,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-01",
+  "browser": "pane",
+  "note": "`answers-professionista` (the attestazione signed as professionista abilitato) **filled** (230 s), `bench/rerun.py` bundle"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-bassa-monostanza.json",
   "result": "filled",
-  "seconds": 98.3
+  "seconds": 98.3,
+  "browser": "pane"
  },
  {
   "date": "2026-11-01",
   "answers": "answers-professionista.json",
   "result": "filled",
-  "seconds": 230.4
+  "seconds": 230.4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-02",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 143.4
+  "seconds": 143.4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-comproprietaria-negozio.json",
   "result": "filled",
-  "seconds": 115.3
+  "seconds": 115.3,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-condominio.json",
   "result": "filled",
-  "seconds": 113.6
+  "seconds": 113.6,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-proprietario-deposito.json",
   "result": "filled",
-  "seconds": 155
+  "seconds": 155,
+  "browser": "pane"
  },
  {
   "date": "2026-11-04",
   "answers": "answers-usufruttuario-industriale.json",
   "result": "filled",
-  "seconds": 165.3
+  "seconds": 165.3,
+  "browser": "pane"
  }
 ]

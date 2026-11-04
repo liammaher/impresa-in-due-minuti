@@ -7,27 +7,27 @@
   {
    "section": "SCHEDA ANAGRAFICA",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "scia#Scheda anagrafica"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Scheda anagrafica"
   },
   {
    "section": "Qualifica e dati del procuratore",
    "fingerprint": "2ebe54198e212bff",
-   "same_as": "scia#Qualifica e dati del procuratore"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Qualifica e dati del procuratore"
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "scia#Oggetto della pratica"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Oggetto della pratica"
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "scia#DOMICILIO DIGITALE"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#DOMICILIO DIGITALE"
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "scia#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)"
   },
   {
    "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
@@ -40,12 +40,12 @@
   {
    "section": "dichiarazione ubicazione dell'intervento",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "scia#Localizzazione dell'intervento"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Localizzazione dell'intervento"
   },
   {
    "section": "dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "scia#Dati catastali"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Dati catastali"
   },
   {
    "section": "dati relativi al nome del tecnico",
@@ -55,7 +55,7 @@
   {
    "section": "a) Titolarità dell'intervento",
    "fingerprint": "3e5d5f463d6964d8",
-   "same_as": "scia#a) Titolarità dell'intervento"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#a) Titolarità dell'intervento"
   },
   {
    "section": "dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento)",
@@ -65,117 +65,117 @@
   {
    "section": "b) Presentazione della SCIA/SCIA Unica/SCIA Condizionata",
    "fingerprint": "2d296ce3956dc559",
-   "same_as": "scia#b) Presentazione della SCIA/SCIA Unica/SCIA Condizionata"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#b) Presentazione della SCIA/SCIA Unica/SCIA Condizionata"
   },
   {
    "section": "c) Qualificazione dell'intervento",
    "fingerprint": "efad12f73389bb59",
-   "same_as": "scia#c) Qualificazione dell'intervento"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#c) Qualificazione dell'intervento"
   },
   {
    "section": "d) Destinazione d'uso dell'immobile",
    "fingerprint": "167628390a2f0298",
-   "same_as": "scia#d) Destinazione d'uso dell'immobile"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#d) Destinazione d'uso dell'immobile"
   },
   {
    "section": "e) Opere su parti comuni o modifiche esterne",
    "fingerprint": "a9ea4400694734ae",
-   "same_as": "scia#e) Opere su parti comuni o modifiche esterne"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#e) Opere su parti comuni o modifiche esterne"
   },
   {
    "section": "f) Regolarità urbanistica e precedenti edilizi",
    "fingerprint": "00d7988585f52837",
-   "same_as": "scia#f) Regolarità urbanistica e precedenti edilizi"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#f) Regolarità urbanistica e precedenti edilizi"
   },
   {
    "section": "g) Calcolo del contributo di costruzione",
    "fingerprint": "e307f3c15dac28df",
-   "same_as": "scia#g) Calcolo del contributo di costruzione"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#g) Calcolo del contributo di costruzione"
   },
   {
    "section": "h1) Tecnici incaricati",
    "fingerprint": "cbe6e63b6534a4f7",
-   "same_as": "scia#h1) Tecnici incaricati"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#h1) Tecnici incaricati"
   },
   {
    "section": "H2) Altri tecnici incaricati",
    "fingerprint": "124292a24c7f627e",
-   "same_as": "scia#H2) Altri tecnici incaricati"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#H2) Altri tecnici incaricati"
   },
   {
    "section": "i) Impresa esecutrice dei lavori",
    "fingerprint": "334a1e7c12e87178",
-   "same_as": "scia#i) Impresa esecutrice dei lavori"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#i) Impresa esecutrice dei lavori"
   },
   {
    "section": "l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro",
    "fingerprint": "543cd39f9d75191d",
-   "same_as": "scia#l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#l) Rispetto degli obblighi in materia di salute e sicurezza nei luoghi di lavoro"
   },
   {
    "section": "m) Diritti di terzi",
    "fingerprint": "6dcffcfdce6f75ea",
-   "same_as": "scia#m) Diritti di terzi"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#m) Diritti di terzi"
   },
   {
    "section": "Note",
    "fingerprint": "e84721ea696ebe15",
-   "same_as": "scia#Note"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Note"
   },
   {
    "section": "Asseverazione SCIA - Tipologia di intervento, descrizione opere",
    "fingerprint": "c51bc113fab1176d",
-   "same_as": "scia#Asseverazione SCIA - Tipologia di intervento, descrizione opere"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - Tipologia di intervento, descrizione opere"
   },
   {
    "section": "Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione",
    "fingerprint": "adf0f783fad89f7b",
-   "same_as": "scia#Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - Stato legittimo, Dichiarazione di tolleranze, Sanatoria e regolarizzazioni per interventi già realizzati e in corso di esecuzione"
   },
   {
    "section": "Asseverazione SCIA - Dati immobile, strumentazione urbanistica, barriere architettoniche",
    "fingerprint": "455d3194ba676ac0",
-   "same_as": "scia#Asseverazione SCIA - Dati immobile, strumentazione urbanistica, barriere architettoniche"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - Dati immobile, strumentazione urbanistica, barriere architettoniche"
   },
   {
    "section": "Asseverazione SCIA - Sicurezza impianti, consumi energetici",
    "fingerprint": "eabee6f40f7bc514",
-   "same_as": "scia#Asseverazione SCIA - Sicurezza impianti, consumi energetici"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - Sicurezza impianti, consumi energetici"
   },
   {
    "section": "Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi",
    "fingerprint": "afb4e293ac108424",
-   "same_as": "scia#Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - Inquinamento acustico, materiali di risulta, prevenzione incendi"
   },
   {
    "section": "Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica",
    "fingerprint": "f5f2a3105610e9cc",
-   "same_as": "scia#Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - Amianto, conformità igienico sanitaria, Sismica"
   },
   {
    "section": "Asseverazione SCIA - Tutela Storico Ambientale",
    "fingerprint": "33ad07aa693f5192",
-   "same_as": "scia#Asseverazione SCIA - Tutela Storico Ambientale"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - Tutela Storico Ambientale"
   },
   {
    "section": "Asseverazione SCIA - Tutela Ecologica",
    "fingerprint": "6ccd3315fa68296d",
-   "same_as": "scia#Asseverazione SCIA - Tutela Ecologica"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - Tutela Ecologica"
   },
   {
    "section": "Asseverazione SCIA - Altri Vincoli di Tutela Ecologica",
    "fingerprint": "968ac46e0d8571ad",
-   "same_as": "scia#Asseverazione SCIA - Altri Vincoli di Tutela Ecologica"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - Altri Vincoli di Tutela Ecologica"
   },
   {
    "section": "Asseverazione SCIA - Tutela Funzionale",
    "fingerprint": "60daf62dbca96826",
-   "same_as": "scia#Asseverazione SCIA - Tutela Funzionale"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - Tutela Funzionale"
   },
   {
    "section": "Asseverazione SCIA - NOTE",
    "fingerprint": "b6ac34d6d6cc314e",
-   "same_as": "scia#Asseverazione SCIA - NOTE"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Asseverazione SCIA - NOTE"
   },
   {
    "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
@@ -188,7 +188,7 @@
   {
    "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "scia#Dichiarazione relativa ai diritti di segreteria/istruttori"
+   "same_as": "sue-segnalazione-certificata-di-inizio-attivita-edilizia#Dichiarazione relativa ai diritti di segreteria/istruttori"
   },
   {
    "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",

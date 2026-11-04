@@ -1,0 +1,7 @@
+[
+ {
+  "date": "2026-10-28",
+  "browser": "pane",
+  "note": "Filled with no stop: every value kept and read back on a fresh load (128 s, the portal slow). \"Prosegui\" then stayed on the form instead of opening the payment screen, unlike the shop's; not looked into (the runner's frame was closed for the batch), so the attachments screen isn't read and the steps stop at the form."
+ }
+]

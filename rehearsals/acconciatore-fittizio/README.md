@@ -8,7 +8,7 @@ sending.
 
 How its steps file was made (`portal-steps.generated.yaml`, by `gen.py`):
 
-- **Crawl**: an empty draft, 91 s (`catalogue/F839/sections/acconciatore.json`). 9 sections
+- **Crawl**: an empty draft, 91 s (`catalogue/F839/sections/suap-011-aprire-l-attivita-di-acconciatore-procura.json`). 9 sections
   to fill; the rest are the person's declarations.
 - **Shared sections** (Scheda anagrafica, domicili, the premises, catasto, oggetto, diritti):
   the dictionary's, in their business version (`subject: impresa`), written from the
@@ -28,9 +28,13 @@ labels ("di essere Responsabile tecnico?"); wording them for a person is still t
 
 ## Runs
 
-| Date | Browser | Login → draft | Result |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
 |---|---|---|---|
-| 2026-10-28 | pane | 50.8 s (wizard 9.8, 10 sections, fresh load 7.3), then the attachments screen | First run, no stop: 53 values, every one read back on a fresh load |
+| 2026-10-28 | pane |  | First run, no stop: 53 values, every one read back on a fresh load; Login → draft: 50.8 s (wizard 9.8, 10 sections, fresh load 7.3), then the attachments screen |
+
+<!-- /runs -->
 
 Every attachments slot (planimetria quotata, relazione descrittiva, the fee receipt) takes
 only signed files (`.p7m`): the person's. `gen.py` now leaves every signed-only slot to the

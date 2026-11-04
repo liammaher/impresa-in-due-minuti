@@ -4,6 +4,8 @@
 # surface or volume (art. 167 c. 4). The building sanatoria holds only with the compatibility found
 # (art. 146 c. 4 D.Lgs. 42/2004; Cass. pen. Sez. III n. 15726/2026). The permesso's asseverazione
 # says the works alter the place and ticks none of its three procedures (`paesaggio_accertamento`).
+# Its operation in the SUE's wizard: a combination's operations are its main pratica's, then this.
+operation: "Accertamento di compatibilità paesaggistica (artt. 167-181 D.Lgs. 42/2004 - Comune)"
 asks:
   paesaggio_accertamento: {default: "true"}
 rules:

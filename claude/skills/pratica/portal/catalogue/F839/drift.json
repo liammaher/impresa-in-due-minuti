@@ -1,29 +1,5 @@
 {
  "pratiche": {
-  "agibilita": {
-   "checked": "2026-11-02",
-   "differences": []
-  },
-  "cil": {
-   "checked": "2026-11-02",
-   "differences": []
-  },
-  "cila": {
-   "checked": "2026-11-02",
-   "differences": []
-  },
-  "fine-lavori": {
-   "checked": "2026-11-02",
-   "differences": []
-  },
-  "inizio-lavori": {
-   "checked": "2026-11-02",
-   "differences": []
-  },
-  "scia": {
-   "checked": "2026-11-02",
-   "differences": []
-  },
   "sue-accertamento-di-compatibilita-paesaggistica": {
    "checked": "2026-11-02",
    "differences": []
@@ -49,6 +25,22 @@
    "differences": []
   },
   "sue-comunicazione-al-comune-di-nomina-impresa-esecutrice": {
+   "checked": "2026-11-02",
+   "differences": []
+  },
+  "sue-comunicazione-di-fine-lavori": {
+   "checked": "2026-11-02",
+   "differences": []
+  },
+  "sue-comunicazione-di-inizio-lavori-per-opere-temporanee": {
+   "checked": "2026-11-02",
+   "differences": []
+  },
+  "sue-comunicazione-inizio-lavori": {
+   "checked": "2026-11-02",
+   "differences": []
+  },
+  "sue-comunicazione-inizio-lavoro-asseverata": {
    "checked": "2026-11-02",
    "differences": []
   },
@@ -96,7 +88,15 @@
    "checked": "2026-11-02",
    "differences": []
   },
+  "sue-segnalazione-certificata-di-inizio-attivita-edilizia": {
+   "checked": "2026-11-02",
+   "differences": []
+  },
   "sue-segnalazione-certificata-inizio-attivita-alternativa-al-permesso-di-cost": {
+   "checked": "2026-11-02",
+   "differences": []
+  },
+  "sue-segnalazione-certificata-per-l-agibilita": {
    "checked": "2026-11-02",
    "differences": []
   },

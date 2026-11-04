@@ -18,9 +18,13 @@ alcolici ristorante generato" and stops before the statements, signing and sendi
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-28 | pane | Stopped in the wizard: the recipe named the operation "...per la vendita di alcolici", the tree says "...per la vendita o somministrazione di prodotti alcolici". Fixed and resumed on the draft: every value kept and read back on a fresh load (88 s). |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-28 | pane |  | Stopped in the wizard: the recipe named the operation "...per la vendita di alcolici", the tree says "...per la vendita o somministrazione di prodotti alcolici". Fixed and resumed on the draft: every value kept and read back on a fresh load (88 s). |
+
+<!-- /runs -->
 
 The attachments screen has only "Allegati liberi" (optional), and no fee receipt slot, unlike
 every other pratica run so far: the notice may carry no SUAP fee. The fees are still asked.

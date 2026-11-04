@@ -3,6 +3,8 @@
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 148.5
+  "seconds": 148.5,
+  "browser": "pane",
+  "note": "P6, from scratch, `bench/rerun.py` bundle: **filled** in 149 s"
  }
 ]
