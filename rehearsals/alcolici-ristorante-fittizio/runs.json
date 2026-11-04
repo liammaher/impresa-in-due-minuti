@@ -1,0 +1,7 @@
+[
+ {
+  "date": "2026-10-28",
+  "browser": "pane",
+  "note": "Stopped in the wizard: the recipe named the operation \"...per la vendita di alcolici\", the tree says \"...per la vendita o somministrazione di prodotti alcolici\". Fixed and resumed on the draft: every value kept and read back on a fresh load (88 s)."
+ }
+]

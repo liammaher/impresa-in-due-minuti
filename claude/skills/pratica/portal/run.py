@@ -1072,8 +1072,7 @@ def portal_changed(steps):
     m = re.match(r"gen\.py from (\S+) ", steps.get("generated", ""))
     if not m:
         return []
-    import catalogue  # noqa: E402 (portal/, on the path below)
-    diff = catalogue.drifted(m.group(1))
+    diff = rules.drifted(m.group(1))
     return [f"The portal changed this pratica since it was mapped ({'; '.join(diff)}): it needs a new crawl "
             "(crawl.js) and steps file (gen.py) first."] if diff else []
 

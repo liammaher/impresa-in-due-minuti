@@ -16,9 +16,13 @@ and sending.
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-28 | pane | Filled with no stop: every value kept and read back on a fresh load (79 s). |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-28 | pane |  | Filled with no stop: every value kept and read back on a fresh load (79 s). |
+
+<!-- /runs -->
 
 The attachments screen: the fee receipt takes only signed files, so it's the person's;
 "Allegati liberi" is optional.

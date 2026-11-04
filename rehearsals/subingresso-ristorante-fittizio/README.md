@@ -15,9 +15,13 @@ generato" and stops before the declarations, payment, signing and sending.
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-10-28 | pane | Filled with no stop: every value kept and read back on a fresh load (50 s). |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-28 | pane |  | Filled with no stop: every value kept and read back on a fresh load (50 s). |
+
+<!-- /runs -->
 
 The attachments screen: the fee receipt and the ASL tariff receipt take only signed files, so
 they're the person's; "Allegati liberi" is optional.

@@ -70,7 +70,9 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    A recipe's `supports` keeps only what the table doesn't decide (an unmapped branch).
    A new fact multiplies the table's cases by its values: with `terre_rocce` (three) the library's
    validator walks 34 million combinations (8 minutes; it built them as one array and ran out of memory
-   until 2026-11-03) and `bench/test_rules.py` about 45 minutes; the existing cases then answer it as
+   until 2026-11-03). `bench/test_rules.py` walks only the cases `route.cases()` reaches, each fact as
+   the table asks it (30,635, seconds; it took 45 minutes as the product until 2026-11-04), and checks
+   each leaf leaves no rule open, so the two hold the same cases; the existing cases then answer it as
    they did before (`bench/add_answer.py`), and test_route's hand-written cases too. In the library a
    rule's `regime` is a closed list (`contract/rules.schema.json`: a filing is `comunicazione`), its
    procedures one folder per ente name (the site test), and every entry must parse with PyYAML as well
@@ -104,10 +106,12 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    checks against a real register warns too (`made_up:` in the dictionary: a registered company's
    codice fiscale, looked up in the Registro Imprese): that case's run stops there by design.
 5. **Run in the pane** (the pratica skill, step 2) and record each run in the rehearsal's
-   README (`| Date | Browser | Result |`): what stopped it and what fixed it, then the
-   filled run. Both records count: coverage.md's "Run on the portal" reads the README's dated rows,
-   schema_branches.py the `runs.json` that `rerun.py --record` writes (2026-11-03: ten rehearsals
-   recorded only in runs.json read as never run). Where a case fills blocks that share labels (technicians, firms), read its draft's
+   `runs.json`, the one run record: `rerun.py --record` adds the date, answers file, result and
+   seconds; add a `note` (what stopped it and what fixed it) and a `case` where the words help.
+   coverage.md's "Run on the portal" and schema_branches.py both read it, and the README's run
+   table is drawn from it (`runs.py --write`, which `--record` runs; test_gen fails on a table
+   that differs). Until 2026-11-04 the READMEs' rows were a second record, and ten rehearsals
+   recorded only in runs.json read as never run. Where a case fills blocks that share labels (technicians, firms), read its draft's
    section after (`__crawl.sectionOf`): the read-back finds each box the way it was filled, so two
    blocks swapped read back as kept.
 6. **Tests:** `bench/test_gen.py` (add a case for what the pratica taught), `test_preflight.py`,
@@ -291,6 +295,8 @@ that also cites a Comune page may only confirm a national one there.
   the next row's tick hid it (until 2026-11-02 that stop read as a lookup's "fields with this label",
   which the runner retried twice as a slow portal, filing the draft wrong each time). Where the form's own choice can't say both, it's a portal
   defect (`defects.yaml`, `pdc-aree-fuoco`): left unticked and in `yours`, never filled around.
+  `defects.yaml` is the one defect record: each entry's `page` is its section of
+  `docs/portal-defects.md`, which `defects.py --write` draws (test_gen fails on a page that differs).
 - **A portal document's box reads "Scarica il documento"** (the procura, the DSC), once the
   declarations are ticked: before, the slot is an empty upload box like any other, "Tipologie
   ammesse: jpg.p7m;pdf.p7m Allega Max: 9,77 MB Il valore è obbligatorio" for the procura, the same
@@ -588,8 +594,8 @@ snapshot (no values), so a stop names them without opening the draft (2026-10-31
 file isn't one, nor one taking only signed files (the person's): until 2026-11-02 every slot was
 listed, filled or not, which hid the one missing. `--values`
 takes the fixture as it is. After a batch, run `record.js` in the pane and pipe what it prints (names
-and results, no values) into `rerun.py --record -`: each run goes in its rehearsal's `runs.json`: schema_branches.py
-counts a box as filled on the portal only from there. Stopped runs are recorded too. Record a batch
+and results, no values) into `rerun.py --record -`: each run goes in its rehearsal's `runs.json` and its README's run
+table: schema_branches.py counts a box as filled on the portal only from there. Stopped runs are recorded too. Record a batch
 before bundling the next (a bundle clears the tab's results), and leave `--date` out for a batch
 run today: it defaults to today (a guessed date filed a batch under the day before, 2026-11-02).
 The batch clears the runner's review from the page when it ends.
