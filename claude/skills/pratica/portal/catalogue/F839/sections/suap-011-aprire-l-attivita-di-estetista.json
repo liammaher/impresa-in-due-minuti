@@ -92,25 +92,25 @@
   {
    "section": "Scheda anagrafica",
    "fingerprint": "4dd844db9cdb76ff",
-   "same_as": "acconciatore#Scheda anagrafica",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Scheda anagrafica",
    "seconds": 0
   },
   {
    "section": "Oggetto della pratica",
    "fingerprint": "b9828eee09a1f50f",
-   "same_as": "acconciatore#Oggetto della pratica",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Oggetto della pratica",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO DIGITALE",
    "fingerprint": "5978ae29f079ce08",
-   "same_as": "acconciatore#DOMICILIO DIGITALE",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#DOMICILIO DIGITALE",
    "seconds": 0.6
   },
   {
    "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "fingerprint": "c282ef61bee9ea4d",
-   "same_as": "acconciatore#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
    "seconds": 0.7
   },
   {
@@ -124,31 +124,31 @@
   {
    "section": "ubicazione dell'attività",
    "fingerprint": "1ae79e0eb7308899",
-   "same_as": "acconciatore#ubicazione dell'attività",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#ubicazione dell'attività",
    "seconds": 0.7
   },
   {
    "section": "Dati catastali",
    "fingerprint": "bd17e4e186aa5dc9",
-   "same_as": "acconciatore#Dati catastali",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Dati catastali",
    "seconds": 0.6
   },
   {
    "section": "Dati sull'attività",
    "fingerprint": "70173953ea9eb70b",
-   "same_as": "acconciatore#Dati sull'attività",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Dati sull'attività",
    "seconds": 0.6
   },
   {
    "section": "Dichiarazione sul possesso dei requisiti antimafia",
    "fingerprint": "ab8abdefa773e8a4",
-   "same_as": "acconciatore#Dichiarazione sul possesso dei requisiti antimafia",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Dichiarazione sul possesso dei requisiti antimafia",
    "seconds": 0.7
   },
   {
    "section": "Dichiarazione sul possesso dei requisiti professionali (attività di estetista)",
    "fingerprint": "21e6af5c4236e8c8",
-   "same_as": "acconciatore#Dichiarazione sul possesso dei requisiti professionali (attività di acconciatore)",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Dichiarazione sul possesso dei requisiti professionali (attività di acconciatore)",
    "seconds": 0.7
   },
   {
@@ -166,7 +166,7 @@
   {
    "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
    "fingerprint": "52afb47e165ec4c7",
-   "same_as": "acconciatore#Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Dichiarazione relativa ai diritti di segreteria/istruttori",
    "seconds": 0.7
   }
  ]

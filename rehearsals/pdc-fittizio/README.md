@@ -74,6 +74,8 @@ The permesso's other kinds (2026-10-31):
 
 ## Runs
 
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
 | Date | Browser | Case | Result |
 |---|---|---|---|
 | 2026-10-29 | pane | P6 (plain), first legs on one draft | sections 0-14 filled first time (a), f), g1) included); then stopped six times, each fixed for every pratica and resumed on the same draft: the firm's opening radio worded "saranno eseguiti" (a fourth `if_present` variant), the safety notifica sent before the works (an `on_page` radio), the asseverazione's two opening radios kept as one by the portal, the energy rules requiring an incentive claimed, then two on the attachments screen (the slots the answers add, read and recorded in the crawl; the procura's box named "Scarica il documento") |
@@ -84,15 +86,81 @@ The permesso's other kinds (2026-10-31):
 | 2026-10-30 | pane | the same, rerun with a yes or a no read as a whole word | **filled** in 161 s, read back on a fresh load (27 s), nothing moved or loose |
 | 2026-10-30 | pane | structural tolerance of no relevance for public safety (`answers-tolleranze-privo`: the regional control term run out), then relevant with the Genio Civile's authorization and its "Autorizzazione sismica" slot (`answers-tolleranze-autorizzazione`) | **filled** both (195 s, 169 s), read back on a fresh load, nothing moved or loose |
 | 2026-10-30 | pane | systems needing a project (`answers-impianti`: six systems, each project in its own slot), `bench/rerun.py` bundle | **filled** in 147 s, read back on a fresh load (25 s), nothing moved or loose |
+| 2026-10-30 | pane | `answers-impianti.json` | **filled** |
+| 2026-10-30 | pane | `answers-tolleranze-autorizzazione.json` | **filled** |
+| 2026-10-30 | pane | `answers-tolleranze-privo.json` | **filled** |
+| 2026-10-30 | pane | `answers-tolleranze.json` | **filled** |
 | 2026-10-31 | pane | Campania's kinds and the other permessi (`bench/rerun.py` bundle of nine): `answers-sottotetti`, `-parcheggi`, `-convenzionato`, `-variante-sagoma`, `-variante-scia-alt`, `-variante-titolo-unico` | **filled** all six (151, 141, 144, 168, 150, 142 s), read back on a fresh load (23-27 s), nothing moved or loose |
 | 2026-10-31 | pane | `answers-deroga` | stopped on quadro a): the "(specificare)" box beside each limit has no text of its own and reads the limit from the cell before, so it started a block of its own; inpage.js now starts a block where the anchor is a box's best label |
 | 2026-10-31 | pane | `answers-mutamento-lr`, built on `answers-cambio-tra` | stopped on the attachments: a required slot empty, from that case's other answers (`answers-cambio-tra` had never run); rebuilt on P6 |
 | 2026-10-31 | pane | after the runner's fix: `answers-deroga`; `answers-mutamento-lr` rebuilt on P6; `answers-cambio-tra` alone (with the CILA's direttore and the SCIA's other technician, anchored blocks, as checks) | **filled** the deroga (142 s: each limit's line by its own box) and the change of use (142 s), read back on a fresh load, nothing moved; `answers-cambio-tra` stopped on the attachments: "Documentazione necessaria per la richiesta di autorizzazione all'allaccio in pubblica fognatura", required once the sewer connection is to be requested, was in no recipe: now mapped (plain PDFs) |
 | 2026-10-31 | pane | `answers-cambio-tra` with the sewer slot mapped | **filled** in 140 s, read back on a fresh load (22 s), nothing moved or loose |
 | 2026-10-31 | pane | two other technicians (`answers-altri-tecnici`: g2 by "+", the second a firm's employee; the permesso's g2 first run) | **filled** in 174 s, read back on a fresh load (24 s), nothing moved or loose |
-| 2026-10-31, 11-01 | pane | the never-run cases, `bench/rerun.py` bundles: `cambio-stessa`, `rir-fuori-area`, `variante-essenziale`, P6 **filled**; `intero-vincoli` and `rir-deroga-antincendio` stopped on the Soprintendenza and fire-deroga slots, mapped, then **filled**; `per-scelta` stopped twice on the opere a scomputo's NO, disabled for a free permesso, fixed, then **filled** (164 s) |
-| 2026-11-01 | pane | `answers-acustica-vvf-igiene` (acoustics, the Vigili del Fuoco's review, the hygiene deroga) **filled** (154 s); `answers-terreni-urbanizzazione` (soil analysed, no urbanisation works under a convenzione, the cemetery deroga) stopped on the results' slot, mapped, then **filled** (148 s) | |
-| 2026-11-01 | pane | `answers-direttori` (another architect directs, the notifica attached in its own slot, a Cassa edile firm) **filled** (197 s); `answers-impresa-dopo` (the architect directs, the firm named later, "si riserva") **filled** (170 s), `bench/rerun.py` bundle |
+| 2026-10-31 | pane | `answers-altri-tecnici.json` | **filled** |
+| 2026-10-31 | pane | `answers-cambio-tra.json` | **filled** |
+| 2026-10-31 | pane | `answers-convenzionato.json` | **filled** |
+| 2026-10-31 | pane | `answers-deroga.json` | **filled** |
+| 2026-10-31 | pane | `answers-mutamento-lr.json` | **filled** |
+| 2026-10-31 | pane | `answers-parcheggi.json` | **filled** |
+| 2026-10-31 | pane | `answers-sottotetti.json` | **filled** |
+| 2026-10-31 | pane | `answers-variante-sagoma.json` | **filled** |
+| 2026-10-31 | pane | `answers-variante-scia-alt.json` | **filled** |
+| 2026-10-31 | pane | `answers-variante-titolo-unico.json` | **filled** |
+| 2026-10-31 | pane | `answers-cambio-stessa.json` | **filled** in 146 s |
+| 2026-10-31 | pane | `answers-intero-vincoli.json` | **stopped** in 148 s |
+| 2026-10-31 | pane | `answers-p6.json` | **filled** in 159 s |
+| 2026-10-31 | pane | `answers-per-scelta.json` | **stopped** in 49 s |
+| 2026-10-31 | pane | `answers-rir-deroga-antincendio.json` | **stopped** in 150 s |
+| 2026-10-31 | pane | `answers-rir-fuori-area.json` | **filled** in 148 s |
+| 2026-10-31 | pane | `answers-variante-essenziale.json` | **filled** in 163 s |
+| 2026-10-31, 11-01 | pane |  | the never-run cases, `bench/rerun.py` bundles: `cambio-stessa`, `rir-fuori-area`, `variante-essenziale`, P6 **filled**; `intero-vincoli` and `rir-deroga-antincendio` stopped on the Soprintendenza and fire-deroga slots, mapped, then **filled**; `per-scelta` stopped twice on the opere a scomputo's NO, disabled for a free permesso, fixed, then **filled** (164 s) |
+| 2026-11-01 | pane | `answers-acustica-vvf-igiene` (acoustics, the Vigili del Fuoco's review, the hygiene deroga) **filled** (154 s); `answers-terreni-urbanizzazione` (soil analysed, no urbanisation works under a convenzione, the cemetery deroga) stopped on the results' slot, mapped, then **filled** (148 s) |  |
+| 2026-11-01 | pane |  | `answers-direttori` (another architect directs, the notifica attached in its own slot, a Cassa edile firm) **filled** (197 s); `answers-impresa-dopo` (the architect directs, the firm named later, "si riserva") **filled** (170 s), `bench/rerun.py` bundle |
+| 2026-11-01 | pane | `answers-intero-vincoli.json` | **filled** in 154 s |
+| 2026-11-01 | pane | `answers-per-scelta.json` | **stopped** in 53 s |
+| 2026-11-01 | pane | `answers-rir-deroga-antincendio.json` | **filled** in 148 s |
+| 2026-11-01 | pane | `answers-per-scelta.json` | **filled** in 164 s |
+| 2026-11-01 | pane | `answers-acustica-vvf-igiene.json` | **filled** in 154 s |
+| 2026-11-01 | pane | `answers-terreni-urbanizzazione.json` | **stopped** in 166 s |
+| 2026-11-01 | pane | `answers-terreni-urbanizzazione.json` | **filled** in 148 s |
+| 2026-11-01 | pane | `answers-altri-tecnici.json` | **filled** in 188 s |
+| 2026-11-01 | pane | `answers-direttori.json` | **filled** in 196 s |
+| 2026-11-01 | pane | `answers-impresa-dopo.json` | **filled** in 170 s |
 | 2026-11-02 | pane | `answers-progettista`: another architectural designer (`p:`) besides `answers-igiene-direttori`'s director and structural designer, `bench/rerun.py` bundle | **filled** in 222 s; g1 read on the draft after: the designer's block (under its radio, below the director and structural ticks) first, then the director's, then the structural designer's |
+| 2026-11-02 | pane | `answers-strumenti-barriere.json` | **stopped** in 4 s |
+| 2026-11-02 | pane | `answers-amianto-strutture.json` | **filled** in 166 s |
+| 2026-11-02 | pane | `answers-igiene-direttori.json` | **stopped** in 57 s |
+| 2026-11-02 | pane | `answers-scavo-vvf.json` | **filled** in 158 s |
+| 2026-11-02 | pane | `answers-piano-utilizzo-pozzi.json` | **stopped** in 148 s |
+| 2026-11-02 | pane | `answers-strumenti-barriere.json` | **filled** in 169 s |
+| 2026-11-02 | pane | `answers-igiene-direttori.json` | **filled** in 213 s |
+| 2026-11-02 | pane | `answers-piano-utilizzo-pozzi.json` | **filled** in 153 s |
+| 2026-11-02 | pane | `answers-progettista.json` | **filled** in 222 s |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 146 s |
+| 2026-11-02 | pane | `answers-terreno.json` | **stopped** in 32 s |
+| 2026-11-02 | pane | `answers-terreno.json` | **filled** in 143 s |
+| 2026-11-02 | pane | `answers-altro.json` | **filled** in 168 s |
 | 2026-11-03 | pane | Quadro f)'s stato legittimo branches no case had taken, one `bench/rerun.py` bundle: built before 1967 with a bonifica (`answers-stato-epoca-bonifica`), the primo impianto proved by a document (`answers-stato-prova`), sanctions by their details (`answers-stato-sanzioni-estremi`), tolerances declared (`answers-stato-tolleranze`); and `answers-scavo-vvf` with its excavation as waste (`scavo: rifiuti`, since by-products need the terre e rocce filing) | **filled**, all five (225 s, 239 s, 397 s, 463 s, 270 s). `answers-stato-sanzioni-ricevuta` stopped on Allega documenti: the permesso calls the receipt's slot "Ricevuta di pagamento della sanzione", not the SCIA's "Ricevuta/e di versamento a titolo di sanzione" (the stop's empty-slot list named it); recipe fixed |
+| 2026-11-03 | pane | `answers-p6.json` | **filled** in 155 s |
+| 2026-11-03 | pane | `answers-scavo-vvf.json` | **filled** in 270 s |
+| 2026-11-03 | pane | `answers-stato-epoca-bonifica.json` | **filled** in 225 s |
+| 2026-11-03 | pane | `answers-stato-prova.json` | **filled** in 239 s |
+| 2026-11-03 | pane | `answers-stato-sanzioni-ricevuta.json` | **stopped** in 10 s |
+| 2026-11-03 | pane | `answers-stato-sanzioni-estremi.json` | **filled** in 397 s |
+| 2026-11-03 | pane | `answers-stato-tolleranze.json` | **filled** in 464 s |
 | 2026-11-04 | pane | `answers-stato-sanzioni-ricevuta` with the slot's own title, `bench/rerun.py` bundle | **filled** in 212 s |
+| 2026-11-04 | pane | `answers-stato-sanzioni-ricevuta.json` | **filled** in 212 s |
+| 2026-11-04 | pane | `answers-deroga-destinazione-condominio.json` | **filled** in 173 s |
+| 2026-11-04 | pane | `answers-mutamento-agricola-deposito.json` | **filled** in 156 s |
+| 2026-11-04 | pane | `answers-mutamento-sagoma-usufruttuario.json` | **filled** in 202 s |
+| 2026-11-04 | pane | `answers-nuova-e2-fasce.json` | **filled** in 182 s |
+| 2026-11-04 | pane | `answers-nuova-e3-assensi.json` | **filled** in 242 s |
+| 2026-11-04 | pane | `answers-nuova-e4-bacino.json` | **filled** in 180 s |
+| 2026-11-04 | pane | `answers-nuova-e5-costa.json` | **filled** in 179 s |
+| 2026-11-04 | pane | `answers-nuova-e6-bonus.json` | **filled** in 248 s |
+| 2026-11-04 | pane | `answers-nuova-e7.json` | **filled** in 187 s |
+| 2026-11-04 | pane | `answers-precedenti-comproprietaria.json` | **filled** in 215 s |
+| 2026-11-04 | pane | `answers-sanatoria-scia.json` | **stopped** in 0 s |
+| 2026-11-04 | pane | `answers-tolleranze-silenzio.json` | **filled** in 230 s |
+
+<!-- /runs -->

@@ -1,4 +1,4 @@
-.PHONY: build touchid test schema install clean
+.PHONY: build touchid test schema steps install clean
 
 # On macOS pvault is signed with the hardened runtime too: pvault-touchid sends
 # the password only to a vault server running a hardened build, so no library
@@ -28,6 +28,11 @@ test:
 # pratiche-napoli's CI compares its copy with the one on main.
 schema:
 	go run ./cmd/pvault schema --json > schema.json
+
+# The rehearsals' steps files are gen.py's build outputs, never committed: write them all and
+# rehearsals/steps.lock (commit the lock). Needs the pratica venv (PyYAML).
+steps:
+	$(HOME)/.cache/pratica-portal/venv/bin/python claude/skills/pratica/portal/bench/regen.py
 
 # Remove before copying: overwriting a signed binary in place can get the
 # running copy killed by macOS.

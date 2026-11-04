@@ -3,12 +3,16 @@
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "stopped",
-  "seconds": 139.3
+  "seconds": 139.3,
+  "browser": "pane",
+  "note": "P6, from scratch: stopped on Gestione degli allegati, \"il valore è obbligatorio\": the slot the asseverazione's \"Si allega la relazione paesaggistica\" adds wasn't mapped (the SCIA's combination had it). Now in `parts/paesaggistica-ordinaria.yaml`, for both"
  },
  {
   "date": "2026-10-31",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 139.8
+  "seconds": 139.8,
+  "browser": "pane",
+  "note": "P6, from scratch, with that slot: **filled** in 140 s, every value read back on a fresh load (23 s), nothing moved or loose, no retry"
  }
 ]

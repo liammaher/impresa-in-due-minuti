@@ -51,6 +51,7 @@ def add(path, key, value):
 
 
 def main():
+    gen.ensure()  # the rehearsals' steps files are built, never committed (steps.lock)
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("key")
     ap.add_argument("value", type=json.loads)

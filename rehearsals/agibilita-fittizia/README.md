@@ -6,7 +6,7 @@ dichiarazione di conformità in `files/`); the draft is "PROVA NON INVIARE" and 
 the declarations, signing and sending.
 
 `portal-steps.generated.yaml` is `gen.py`'s, from `recipe.yaml`, the crawl of an empty draft
-(`catalogue/F839/sections/agibilita.json`: 255 s, 117 choices) and `dictionary/fnsuap.yaml`.
+(`catalogue/F839/sections/sue-segnalazione-certificata-per-l-agibilita.json`: 255 s, 117 choices) and `dictionary/fnsuap.yaml`.
 The attestations (impianti, statics, energy, barriers, catasto, house numbers, fire, lifts)
 are pre-flight's questions.
 
@@ -64,16 +64,43 @@ offline; **not yet run on the portal**:
 
 ## Runs
 
-| Date | Browser | Login → draft | Result |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
 |---|---|---|---|
-| 2026-10-28 | pane | 218 s of runs in six legs on one draft; attachments 9.5 s | 121 values and 4 attachments kept, every value read back on a fresh load (23.1 s) |
-| 2026-10-29 | pane | 89.2 s from a blank draft (`bench/rerun.py` batch, after the SCIA's dictionary change; fresh load 14.3 s) | **Filled**, every value read back on a fresh load |
-| 2026-10-30 | pane | `answers-collaudo.json`: 96.4 s from a blank draft (fresh load 16.1 s) | **Filled**: collaudo attached, AQE, house-number request, fire SCIA (SCIA Unica), all ten systems, the lift's communication; 8 files kept |
-| 2026-10-30 | pane | `answers-estremi.json`: first try stopped on a required slot the partial agibilità adds (the elaborato planimetrico), mapped; rerun 87.7 s (fresh load 13.6 s) | **Filled**: regolare esecuzione, house-number request and lift communication by their references, one unit's partial agibilità, art. 77; 5 files kept |
-| 2026-10-30 | pane | `answers-parziale.json`: 89.9 s (fresh load 14.3 s) | **Filled**: the collaudo certificate by its references, a building's partial agibilità, art. 82 |
-| 2026-10-30 | pane | `answers-p6.json` on the final steps: 87.6 s (fresh load 13.4 s) | **Filled**, unchanged |
-| 2026-10-31 | pane | `bench/rerun.py` bundle | `answers-monostanza-due` and `answers-5quater` **filled** (87 s, 86 s), nothing moved or loose. `answers-impianti-depositati` stopped at Allega documenti: with every system's certificate deposited the portal drops the dichiarazione di conformità's slot. `answers-impianti-collaudo` stopped there too: a system's collaudo and atto notorio each add a required slot ("Certificato di collaudo ove previsto, degli impianti installati", "Atto notorio relativo alla conformità degli impianti"). Both mapped after the run |
-| 2026-10-31 | pane | the two systems cases again, on the slots mapped from their stops | **filled** both (96 s, 98 s), read back on a fresh load (14 s each), nothing moved or loose |
+| 2026-10-28 | pane |  | 121 values and 4 attachments kept, every value read back on a fresh load (23.1 s); Login → draft: 218 s of runs in six legs on one draft; attachments 9.5 s |
+| 2026-10-29 | pane |  | **Filled**, every value read back on a fresh load; Login → draft: 89.2 s from a blank draft (`bench/rerun.py` batch, after the SCIA's dictionary change; fresh load 14.3 s) |
+| 2026-10-30 | pane | `answers-collaudo.json` | **Filled**: collaudo attached, AQE, house-number request, fire SCIA (SCIA Unica), all ten systems, the lift's communication; 8 files kept; Login → draft: `answers-collaudo.json`: 96.4 s from a blank draft (fresh load 16.1 s) |
+| 2026-10-30 | pane | `answers-estremi.json` | **Filled**: regolare esecuzione, house-number request and lift communication by their references, one unit's partial agibilità, art. 77; 5 files kept; Login → draft: `answers-estremi.json`: first try stopped on a required slot the partial agibilità adds (the elaborato planimetrico), mapped; rerun 87.7 s (fresh load 13.6 s) |
+| 2026-10-30 | pane | `answers-p6.json` | **Filled**: the collaudo certificate by its references, a building's partial agibilità, art. 82; Login → draft: `answers-parziale.json`: 89.9 s (fresh load 14.3 s) |
+| 2026-10-30 | pane | `answers-parziale.json` | **Filled**, unchanged; Login → draft: `answers-p6.json` on the final steps: 87.6 s (fresh load 13.4 s) |
+| 2026-10-31 | pane |  | `answers-monostanza-due` and `answers-5quater` **filled** (87 s, 86 s), nothing moved or loose. `answers-impianti-depositati` stopped at Allega documenti: with every system's certificate deposited the portal drops the dichiarazione di conformità's slot. `answers-impianti-collaudo` stopped there too: a system's collaudo and atto notorio each add a required slot ("Certificato di collaudo ove previsto, degli impianti installati", "Atto notorio relativo alla conformità degli impianti"). Both mapped after the run; Login → draft: `bench/rerun.py` bundle |
+| 2026-10-31 | pane |  | **filled** both (96 s, 98 s), read back on a fresh load (14 s each), nothing moved or loose; Login → draft: the two systems cases again, on the slots mapped from their stops |
+| 2026-10-31 | pane |  | **filled** all four (88-105 s); Login → draft: the four cases ticking neither art. 24 box (`non-soggetto-collaudo`, `parziale-vale-fine`, `regolare-esecuzione`, `vale-fine-lavori`): stopped on the portal's "deve essere selezionata almeno un'opzione" once a592b60 had dropped the boxes' `theirs`; restored, rerun |
+| 2026-10-31 | pane | `answers-impianti-depositati.json` | **stopped** in 2 s |
+| 2026-10-31 | pane | `answers-impianti-collaudo.json` | **stopped** in 92 s |
+| 2026-10-31 | pane | `answers-monostanza-due.json` | **filled** in 87 s |
+| 2026-10-31 | pane | `answers-5quater.json` | **filled** in 86 s |
+| 2026-10-31 | pane | `answers-impianti-depositati.json` | **filled** in 96 s |
+| 2026-10-31 | pane | `answers-impianti-collaudo.json` | **filled** in 98 s |
+| 2026-10-31 | pane | `answers-non-soggetto-collaudo.json` | **stopped** in 52 s |
+| 2026-10-31 | pane | `answers-parziale-vale-fine.json` | **stopped** in 52 s |
+| 2026-10-31 | pane | `answers-regolare-esecuzione.json` | **stopped** in 73 s |
+| 2026-10-31 | pane | `answers-vale-fine-lavori.json` | **stopped** in 60 s |
+| 2026-10-31 | pane | `answers-non-soggetto-collaudo.json` | **filled** in 105 s |
+| 2026-10-31 | pane | `answers-parziale-vale-fine.json` | **filled** in 88 s |
+| 2026-10-31 | pane | `answers-regolare-esecuzione.json` | **filled** in 91 s |
+| 2026-10-31 | pane | `answers-vale-fine-lavori.json` | **filled** in 90 s |
+| 2026-11-01 | pane |  | `answers-professionista` (the attestazione signed as professionista abilitato) **filled** (230 s), `bench/rerun.py` bundle |
+| 2026-11-01 | pane | `answers-bassa-monostanza.json` | **filled** in 98 s |
+| 2026-11-01 | pane | `answers-professionista.json` | **filled** in 230 s |
+| 2026-11-02 | pane | `answers-p6.json` | **filled** in 143 s |
+| 2026-11-04 | pane | `answers-comproprietaria-negozio.json` | **filled** in 115 s |
+| 2026-11-04 | pane | `answers-condominio.json` | **filled** in 114 s |
+| 2026-11-04 | pane | `answers-proprietario-deposito.json` | **filled** in 155 s |
+| 2026-11-04 | pane | `answers-usufruttuario-industriale.json` | **filled** in 165 s |
+
+<!-- /runs -->
 
 Each stop was general, fixed where it belongs, and the run resumed on the same draft:
 
@@ -96,5 +123,3 @@ signed), the art. 24 box above, the declarations, signing and sending.
 ## Clean reruns (2026-10-29)
 
 In the pane, from run.py's install.js and run.js, nothing touched between runs: first filled in 89.3 s; second, with the runner waiting for a section to open, **filled** in 101.3 s, read back on a fresh load.
-| 2026-10-31 | pane | the four cases ticking neither art. 24 box (`non-soggetto-collaudo`, `parziale-vale-fine`, `regolare-esecuzione`, `vale-fine-lavori`): stopped on the portal's "deve essere selezionata almeno un'opzione" once a592b60 had dropped the boxes' `theirs`; restored, rerun | **filled** all four (88-105 s) |
-| 2026-11-01 | pane | `answers-professionista` (the attestazione signed as professionista abilitato) **filled** (230 s), `bench/rerun.py` bundle |

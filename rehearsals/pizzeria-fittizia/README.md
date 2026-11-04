@@ -62,21 +62,12 @@ route and takes a handwritten signature scanned with an ID copy, so no firma dig
 - **No real third party's data.** The titolare is Gennaro Fittizio. If the portal ties the titolare
   to whoever is logged in, record it, and use Liam's own identity for that walk.
 
-## Doing it in one command
+## Running it
 
-```sh
-rehearsals/pizzeria-fittizia/do.py scia     # the SCIA on the SUAP portal, to a saved draft
-PRATICHE_NAPOLI_DIR=<library> rehearsals/pizzeria-fittizia/do.py tari   # the TARI Mod. 5, filled
-```
-
-Each serves the made-up vault, reads what the pratica needs and stops the vault. `scia`
-opens a Playwright window (log in there with SPID), runs `run.py run` and leaves the draft
-open at the person's steps. `tari` fills the Mod. 5 with `fill.py`, reads all 70 values back,
-opens it for review and prints the route: sign it, then send it with the ID copy and the
-planimetria from the business's PEC. Output: `~/.cache/pratica-rehearsal/pizzeria-fittizia/`.
-
-To try them as with a real business, from a fresh Claude session ("do the SCIA for Pizzeria
-Fittizia"), load the business into a real vault, `~/.pvault-fittizia`: `load.py` says how.
+The SCIA runs like every rehearsal, from its steps file in the browser pane (`run.py page`,
+`claude/skills/pratica/portal/README.md`); the TARI Mod. 5 is the fill pilot's `mod-5` case
+(`claude/skills/pratica/fill/pilot/regress.py`). The one-command scripts of 2026-10-28 (`do.py`,
+and `load.py` for a real business vault) were removed on 2026-11-04: the pane is the one way runs go.
 
 ## How a walk runs
 
@@ -104,14 +95,18 @@ Fittizia"), load the business into a real vault, `~/.pvault-fittizia`: `load.py`
 
 ## Runs
 
-| Date | Walked by | Reached | Broke on | Fixed |
-|---|---|---|---|---|
-| 2026-10-27 | Claude, Liam logged in | Allega documenti: 21 screens, every factual section saved | The attachments gate: two required files must be CAdES-signed (.p7m); the seven declarations are the person's | Map rewritten from what the portal showed |
-| 2026-10-27 | Claude from `portal-steps.yaml`, in the Claude browser (already logged in) | Every factual section saved and read back; stopped before the declarations and payment | Nothing in the map; two mechanics: a dropdown filter matches substrings, and a click on a fresh panel misses | The filter-and-arrow recipe, in the map and in `run.py` |
-| 2026-10-27 | Benchmark: 3 timed runs from the steps file, bigger batches | Every factual section saved and read back, each run | Run 1: a re-render after Forma giuridica wiped CF and P.IVA; run 3: it wiped Denominazione | Forma giuridica now comes before Denominazione in `portal-steps.yaml` |
-| 2026-10-27 | `inpage.js` in the Claude browser, one call to start it | Every factual section saved and read back, in 53 s | Four things the first tries found: the pane slows page timers, dropdowns build their list on first open, the last wizard screen loads twice, labels sit above or left of their box | All four in `inpage.js` and the shared label check |
-| 2026-10-28 | `do.py scia`: `run.py run` in a Playwright window, Liam logged in there | Every factual section saved and read back, 45 s after the login | Nothing | |
-| 2026-10-28 | `run.py run --vault-dir ~/.pvault-fittizia`: the real business vault, as the pratica skill does it | Every factual section saved and read back, 58 s | A window left open by the last run held the profile ("Opening in existing browser session") | Ran with `--profile` on a new folder |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-10-27 | Claude, Liam logged in |  | Reached: Allega documenti: 21 screens, every factual section saved; Broke on: The attachments gate: two required files must be CAdES-signed (.p7m); the seven declarations are the person's; Fixed: Map rewritten from what the portal showed |
+| 2026-10-27 | Claude from `portal-steps.yaml`, in the Claude browser (already logged in) |  | Reached: Every factual section saved and read back; stopped before the declarations and payment; Broke on: Nothing in the map; two mechanics: a dropdown filter matches substrings, and a click on a fresh panel misses; Fixed: The filter-and-arrow recipe, in the map and in `run.py` |
+| 2026-10-27 | Benchmark: 3 timed runs from the steps file, bigger batches |  | Reached: Every factual section saved and read back, each run; Broke on: Run 1: a re-render after Forma giuridica wiped CF and P.IVA; run 3: it wiped Denominazione; Fixed: Forma giuridica now comes before Denominazione in `portal-steps.yaml` |
+| 2026-10-27 | `inpage.js` in the Claude browser, one call to start it |  | Reached: Every factual section saved and read back, in 53 s; Broke on: Four things the first tries found: the pane slows page timers, dropdowns build their list on first open, the last wizard screen loads twice, labels sit above or left of their box; Fixed: All four in `inpage.js` and the shared label check |
+| 2026-10-28 | `do.py scia`: `run.py run` in a Playwright window, Liam logged in there |  | Reached: Every factual section saved and read back, 45 s after the login; Broke on: Nothing |
+| 2026-10-28 | `run.py run --vault-dir ~/.pvault-fittizia`: the real business vault, as the pratica skill does it |  | Reached: Every factual section saved and read back, 58 s; Broke on: A window left open by the last run held the profile ("Opening in existing browser session"); Fixed: Ran with `--profile` on a new folder |
+
+<!-- /runs -->
 
 Time: about an hour for the first walk, **14 min 51 s** for the second (7 wizard screens in
 about 4 minutes, the 9 sections in about 11), with the steps known and every value computed
