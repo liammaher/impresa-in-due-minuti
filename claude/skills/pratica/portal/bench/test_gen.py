@@ -1578,5 +1578,29 @@ def _():
         assert "PROVA" not in default, (d.name, default)
 
 
+@case("every filter a template names is run.py's, in the dictionary, recipes, parts, steps files and main's steps files")
+def _():
+    # An unknown filter is a KeyError, which render() takes for a missing value: a renamed one
+    # (one_catasto, 2026-11-04) made main's steps refuse every case quietly, so plan_diff showed
+    # 252 changed plans and patch.js none. Old names stay in run.py while a steps file names them.
+    import subprocess
+    import run
+    filters = lambda text: {f for t in re.findall(r"\{\{(.+?)\}\}", text) for f in [p.strip() for p in t.split("|")[1:]]}
+    texts = {str(p.relative_to(ROOT)): p.read_text() for p in [HERE.parent / "dictionary" / "fnsuap.yaml",
+             *(HERE.parent / "parts").glob("*.yaml"), *REH.glob("*/recipe.yaml"), *REH.glob("*/portal-steps*.yaml")]}
+    listed = subprocess.run(["git", "-C", str(ROOT), "ls-tree", "-r", "--name-only", "HEAD", "rehearsals"],
+                            capture_output=True, text=True).stdout.split()
+    for name in [n for n in listed if re.search(r"/portal-steps[^/]*\.yaml$", n)]:
+        texts["HEAD:" + name] = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"], capture_output=True, text=True).stdout
+    unknown = {}
+    for where, text in texts.items():
+        for f in filters(text):
+            try:
+                run.FILTERS[f]
+            except KeyError:
+                unknown.setdefault(f, where)
+    assert not unknown, unknown
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

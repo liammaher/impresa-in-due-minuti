@@ -748,6 +748,7 @@
     }
     const want = f.kind === "number" || f.kind === "date" ? "text" : f.kind;
     let hits = list.filter((e) => kindOf(e) === want && labelled(e, f.label));
+    const labelledAll = hits;
     // A box is counted by its own label (its title, else its cell), as the crawl counts it: a
     // "Si" whose nearby texts include the "No" before it is not a "No" (three Si/No pairs in a
     // row); the beds total under a shared header is not the rooms total.
@@ -760,7 +761,12 @@
       const best = Math.min(...hits.map((e) => labelRank(e, f.label)));
       hits = hits.filter((e) => labelRank(e, f.label) === best);
     }
-    const e = hits[(f.nth || 1) - 1] || fail(`${f.label}: ${hits.length} fields with this label${f.anchor ? ` in block ${f.block || 1}` : ""}`);
+    // `last`: the page's last box with the label at all, the newest of a list (a group "+" just
+    // added: Dati catastali's radios read "NCEU"/"NCT" in every group once the portal has checked
+    // the section, the long title only before, 2026-11-04). Not narrowed by own label or rank:
+    // a group with its title still on would lose to an older one, and the run untick that.
+    const e = (f.last ? labelledAll[labelledAll.length - 1] : hits[(f.nth || 1) - 1]) ||
+      fail(`${f.label}: ${hits.length} fields with this label${f.anchor ? ` in block ${f.block || 1}` : ""}`);
     return { ...f, id: e.id.split("dynaForm:")[1].replace(/:combo_input$/, "") };
   }
   // A slot's upload boxes and its "+", from the rows under its title (span.input-label) to the
@@ -814,9 +820,12 @@
     const plus = [...doc().querySelectorAll('[id*="dynaForm"] button')].filter((b) => shown(b) && b.textContent.trim() === "+");
     if (!plus.length) fail(`no + to add a block of ${f.anchor}`);
     // The first "+" after the anchor's last block is its own: a section can have one per list
-    // (the CILA relazione's filings, then its assents).
+    // (the CILA relazione's filings, then its assents). `nth`: a later one, the list's own list
+    // (Dati catastali: the unit's "+", then the group's, which adds a group with one unit).
     const last = inputs()[blockStarts(inputs(), f.anchor).pop()];
-    const own = last && plus.find((b) => last.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const after = last ? plus.filter((b) => last.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) : [];
+    const own = after[(f.nth || 1) - 1];
+    if (f.nth > 1 && !own) fail(`no + number ${f.nth} after ${f.anchor}'s last block`);
     press(own || plus[plus.length - 1], `+ ${f.anchor}`);
     await idle();
     if (count() !== before + 1) fail(`+ didn't add a block of ${f.anchor}`);

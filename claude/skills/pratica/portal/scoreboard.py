@@ -266,8 +266,8 @@ OPEN_BEYOND = [
     "mapped are a title with its landscape procedure and/or the dichiarazione di utilizzo. A lifecycle "
     "operation with another (the inizio lavori with the dichiarazione di utilizzo, a proroga with the "
     "landscape proroga) is neither researched nor crawled; each alone is mapped, so nothing is blocked.",
-    "Several cadastral units are mapped (one group of Dati catastali, 2026-11-04); units in both catasti "
-    "(the section's second group) are refused. The title's other holders take one row: more go in the "
+    "Several cadastral units are mapped, in both catasti (Dati catastali's two groups, 2026-11-04); "
+    "a third group (back to the first catasto) is refused. The title's other holders take one row: more go in the "
     "assent's attachment, and the voltura's co-holders one person (portal defect coholders-one).",
     "Napoli's SUE wants every file PDF/A and signed (DD 501/2026), so on a real case every slot takes a signed "
     "file, and no real signed file has been uploaded yet: the attachments of a real pratica rest on that. "
