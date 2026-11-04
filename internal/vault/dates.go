@@ -50,5 +50,5 @@ func NormalizeDate(s string) (string, error) {
 			return t.Format(dateLayout), nil
 		}
 	}
-	return "", errors.New("date must be YYYY-MM-DD or DD/MM/YYYY and a real calendar date")
+	return "", errors.New("la data va scritta come GG/MM/AAAA (o AAAA-MM-GG) e deve esistere")
 }
