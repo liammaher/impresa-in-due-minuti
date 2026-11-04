@@ -31,6 +31,7 @@ import yaml
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True
+import gen  # noqa: E402
 import run  # noqa: E402
 
 ROOT = HERE.parents[3]
@@ -232,7 +233,7 @@ def steps_fields(steps):
 def sue_steps():
     for d in sorted(REHEARSALS.iterdir()):
         f, recipe = d / "portal-steps.generated.yaml", d / "recipe.yaml"
-        if f.is_file() and recipe.is_file() and yaml.safe_load(recipe.read_text()).get("sportello") == "sue":
+        if f.is_file() and recipe.is_file() and gen.resolved(gen.load_yaml(recipe)).get("sportello") == "sue":
             yield d, yaml.safe_load(f.read_text())
 
 

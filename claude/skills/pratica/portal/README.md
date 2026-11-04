@@ -33,9 +33,12 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    Copy a sibling: `rehearsals/paesaggistica-ordinaria-fittizia`.
    **Two operations in one pratica** (a building pratica with its landscape authorization): the
    recipe `extends: [<main pratica's rehearsal>, parts/<the other's part>]` and states only what is
-   its own (procedure, title, crawl, operation list, `descrizione`, `yours`, `rules.main`). Later
-   ones win key by key; `attachments`, `supports` and `sections` add up; `asks` and `rules` merge,
-   each of their keys replaced whole (three operations state both `handles`); `yours` is replaced,
+   its own (procedure, title, crawl, `descrizione`, `yours`, its case's `answers`). The rest follows
+   from the two (gen.py `resolved`, since 2026-11-04): its operations are the main pratica's then
+   each part's `operation`, its rules table's `main` is the main pratica's, its comune and sportello
+   the main one's. Later ones win key by key; `attachments`, `supports` and `sections` add up;
+   `asks` and `rules` merge by key, each replaced whole but `rules.handles`, which adds up (a third
+   operation's part adds its pratica to the two before); `yours` is replaced,
    so a recipe restates its main pratica's (2026-11-03: without it the draft's name, whose ask only
    the main pratica's `yours` used, wasn't asked, and pre-flight stopped);
    a null drops what came before (`data_inizio_lavori: null`); a slot `{label, drop: true}` drops

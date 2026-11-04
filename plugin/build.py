@@ -32,6 +32,9 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
 PRATICA = REPO / "claude" / "skills" / "pratica"
 REHEARSALS = REPO / "rehearsals"
+sys.path.insert(0, str(PRATICA / "portal"))
+sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
+import gen  # noqa: E402  (a combination's recipe, resolved)
 # The library's parts a Cowork session reads: its tools, reports backend and layouts
 # (PDF filling, which needs PyMuPDF) stay out of this version.
 LIBRARY_PARTS = ["procedures", "rules", "offices", "situations", "contract/signing.json",
@@ -112,7 +115,8 @@ def copy_pratiche(skill, library):
         steps = yaml.safe_load(text)
         out = skill / "pratiche" / f"{d.name}.json"
         out.write_text(as_json(steps))
-        recipe = yaml.safe_load((d / "recipe.yaml").read_text()) if (d / "recipe.yaml").is_file() else {}
+        # Resolved: a combination takes its comune and sportello from its main pratica.
+        recipe = gen.resolved(gen.load_yaml(d / "recipe.yaml")) if (d / "recipe.yaml").is_file() else {}
         proc = steps["procedure"]
         catalog.append({
             "name": d.name,

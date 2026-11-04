@@ -7,12 +7,7 @@
 extends: [scia-fittizia, parts/dichiarazione-utilizzo-terre]
 procedure: napoli/comune/scia-con-dichiarazione-utilizzo-terre
 title: "SCIA edilizia con dichiarazione di utilizzo delle terre e rocce da scavo, SUE Napoli (tecnico con procura)"
-comune: F839
-sportello: sue
 crawl: sue-combo-scia-dichiarazione-utilizzo
-operation:
-  - Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)
-  - "Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017 (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)"
 asks:
   descrizione: {default: "PROVA NON INVIARE - SCIA e terre e rocce {{c:identity.last_name}}"}
 # Its main pratica's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
@@ -25,8 +20,6 @@ yours:
   - "The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal's document on Allega documenti once the declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at least 15 days after sending"
   - "When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017) on the SUE"
   - "Sign and send (Firma e invio); keep the receipt"
-rules:
-  main: napoli/comune/scia-edilizia
 answers:
   descrizione: PROVA NON INVIARE - SCIA e terre e rocce P6
   oggetto: "Manutenzione straordinaria non strutturale con modifica dei prospetti (persiane e ringhiere in facciata), nuovo bagno e nuovo allaccio fognario nel cortile, con scavo di 40 m³ di terre portate a un altro cantiere come sottoprodotto (dati inventati per la prova)."
