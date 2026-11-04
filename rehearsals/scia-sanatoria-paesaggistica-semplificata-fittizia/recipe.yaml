@@ -24,10 +24,10 @@ yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
-  - "Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina"
+  - "Name the direttore dei lavori (and, for works on structures, the direttore dei lavori delle strutture)"
+  - "On Allega documenti: the Elaborati richiesti per la sanatoria (stato legittimo, stato di fatto and the comparison), the portal's procura signed by the client, the relazione paesaggistica semplificata (DPR 31/2017, Allegato D) with its drawings and photos, then everything signed digitally (.p7m)"
   - "The works under way stop until the SUE says the landscape authorization is in; the facade works start only then"
-  - "Pay the €516 sanction (art. 37 c. 5) before the run, which attaches its receipt, and the diritti before the second run (after the declarations), which attaches theirs"
-  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
+  - "Pay the €516 sanction (art. 37 c. 5), the imposta di bollo and the diritti; upload the receipts"
   - "Sign and send (Firma e invio); keep the receipt"
 rules:
   main: napoli/comune/scia-in-sanatoria
@@ -44,7 +44,7 @@ answers:
   oggetto: "SCIA presentata spontaneamente a lavori in corso (art. 37 c. 5 DPR 380/2001) con autorizzazione paesaggistica semplificata: tramezzi interni, nuovo bagno, impianti; persiane e ringhiere in facciata di diverso disegno ancora da installare (dati inventati per la prova)."
   dettaglio_intervento: "All'interno, lavori iniziati senza SCIA: demolizione e ricostruzione di due tramezzi con nuova distribuzione di cucina e bagno; nuovo bagno; rifacimento degli impianti idrico ed elettrico. In facciata, da eseguire dopo l'autorizzazione paesaggistica: sostituzione di persiane e ringhiere con altre di diverso disegno. Opere non strutturali. Dati inventati per la prova."
   descrizione: PROVA NON INVIARE - SCIA sanatoria e semplificata
-  diritti_euro: '441'
+  diritti_euro: '151'
   sanatoria_caso: in corso
   sanatoria_data: '2026-10-05'
   sanatoria_estremi: IUV 0000000000000000 (inventato)

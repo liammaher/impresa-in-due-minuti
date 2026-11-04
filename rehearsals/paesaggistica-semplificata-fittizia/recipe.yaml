@@ -10,17 +10,15 @@ crawl: sue-autorizzazione-paesaggistica-semplificata
 operation: Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)
 scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
-after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
-  diritti_euro: {default: "401", why: "Line SUE 2 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 401 € for a landscape authorization asked on its own"}
-  # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
-  modello_dp: {default: "true"}
   descrizione: {default: "PROVA NON INVIARE - paesaggistica {{c:identity.last_name}}"}
   oggetto: {question: "The works in one sentence (300 characters)"}
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
-  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
+  - "On Allega documenti: the relazione paesaggistica semplificata (DPR 31/2017, Allegato D), the drawings and the photos, signed digitally"
+  - "On Allega documenti: download the portal's procura, have the client sign it, sign it digitally (.p7m) and attach it"
+  - "Pay the imposta di bollo (two marche da 16 €) as the portal asks"
   - "Sign and send (Firma e invio); keep the receipt"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -28,3 +26,6 @@ rules:
   table: sue-napoli
   question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}
+supports:
+  - when: "{{ask.paes_variante|not}}"
+    else: "So far only for a new authorization: the variant of one already issued isn't run yet."

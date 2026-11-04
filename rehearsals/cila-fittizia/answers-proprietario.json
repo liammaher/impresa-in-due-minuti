@@ -4,8 +4,8 @@
   "f1": "edil"
  },
  "descrizione": "PROVA NON INVIARE - CILA proprietario",
- "comunicazioni_contestuali": false,
- "atti_da_acquisire": false,
+ "comunicazioni_presentate": false,
+ "atti_acquisiti": false,
  "titolo": "proprietario",
  "titolo_esclusivo": true,
  "parti_comuni": "condominio",
@@ -17,6 +17,7 @@
  "ricevuta_contributo": "rehearsals/cila-fittizia/files/ricevuta-contributo.pdf",
  "direttore_lavori": "da nominare",
  "altri_tecnici": false,
+ "altri_atti": false,
  "lavori_in_proprio": false,
  "dlgs81": true,
  "sotto_200": true,
@@ -41,10 +42,5 @@
  "intervento": "manutenzione_straordinaria",
  "cambio_uso": "no",
  "paesaggio": "no",
- "fatti": [],
- "altri_tecnici_dopo": "false",
- "impresa_dopo": "false",
- "progettista_altro": false,
- "diritti_esente": false,
- "terre_rocce": "no"
+ "fatti": []
 }

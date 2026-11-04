@@ -46,7 +46,7 @@
  "amianto": "false",
  "igienico_conforme": "true",
  "strutture": "false",
- "diritti_euro": "401",
+ "diritti_euro": "151",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
  "assenso_proprietario": "rehearsals/cila-fittizia/files/assenso-immobiliare-fittizia.pdf",
  "notifica_preliminare": "rehearsals/cila-fittizia/files/notifica-preliminare.pdf",
@@ -88,17 +88,10 @@
  "scavo": "nessuno",
  "antincendio_deroga": "false",
  "igienico_24_5bis": "false",
- "altri_tecnici_quanti": "2",
+ "altri_tecnici_quanti": "due",
  "altro_tecnico_dipendente": true,
  "altro_tecnico_incarico": "coordinamento della sicurezza in fase di progettazione",
  "altro_tecnico2_incarico": "progettazione degli impianti",
  "altro_tecnico2_dipendente": false,
- "strumenti_altri": "false",
- "altri_tecnici_dopo": "false",
- "direttore_lavori": "da nominare",
- "impresa_dopo": "false",
- "vvf_variante": "false",
- "progettista_altro": false,
- "diritti_esente": false,
- "terre_rocce": "no"
+ "strumenti_altri": "false"
 }

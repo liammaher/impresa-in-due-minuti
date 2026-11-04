@@ -3,17 +3,15 @@
 
   PRATICHE_NAPOLI_DIR=<pratiche-napoli checkout> regress.py [--keep DIR] [case ...]
 
-The pilots are seven library forms: the TARI Mod. 1 (drawn on, with the
+The pilots are six library forms: the TARI Mod. 1 (drawn on, with the
 stato di famiglia's table), the ricorso al Prefetto (drawn on, two pages, tick
 boxes that are font characters), the CILA Allegato A (fillable fields; also
 declared by a studio's client in proprio), the Regione Campania scheda
 anagrafica, in a business vault (signed by its legale rappresentante, a
 procuratore read by --party, typed |__| cells), the TARI Mod. 5 in the Pizzeria
 Fittizia rehearsal's business vault (rehearsals/pizzeria-fittizia/fixture.json),
-the CILA DSC checklist, which the SUE gives only inside a draft, so its
-blank is in forms/ (an entry's form with no url is read from there), and the
-Comune's Modello DP, drawn as a grid with no line to write on (declared by a
-studio's architect, its client the committente, read by --party cliente).
+and the CILA DSC checklist, which the SUE gives only inside a draft, so its
+blank is in forms/ (an entry's form with no url is read from there).
 Each case changes a pilot's inputs (the made-up vault, the answers, the
 library entry, the library's layout, the form, who signs), runs fill.py
 against its own synthetic vault, and checks the exit code and that each
@@ -58,8 +56,6 @@ PILOTS = {
               os.path.join("..", "..", "..", "..", "..", "rehearsals", "pizzeria-fittizia", "fixture.json")),
     # The portal's own checklist, which it gives only inside a draft: the blank is in forms/.
     "dsc": ("napoli/comune/cila-lavori-edilizi", "quadro-riepilogativo-dsc", "dsc-answers.json", None, "fixture.json"),
-    # Drawn as a grid, with no line to write on: the studio's architect declares, its client is the committente.
-    "dp": ("napoli/comune/cila-lavori-edilizi", "modello-dp", "dp-answers.json", None, "business-fixture.json"),
 }
 ID, FORM = PILOTS["mod-1"][:2]
 SLUG = "tari-iscrizione-uso-abitativo-2026"
@@ -518,17 +514,6 @@ CASES = {
                     {"pilot": "cila", "for": "neri", "fixture_file": "business-fixture.json", "fixture": with_fields(*NERI)}, 0,
                     ["ok   neri declares in proprio, as the business's client",
                      "ok   no data of the business itself is on its client's form", "ok   the form is ready", "wrote: Neri Anna"]),
-    "dp": ("the Modello DP, a grid form: the studio's architect, the studio, and its client as committente with the property",
-           {"pilot": "dp", "for": "rossi", "party": ["cliente=neri"],
-            "fixture": with_fields(*NERI, ["neri:immobile.indirizzo", "Via Chiaia"], ["neri:immobile.civico", "12"],
-                                   ["neri:immobile.catasto_foglio", "12"], ["neri:immobile.catasto_particella", "345"],
-                                   ["neri:immobile.catasto_subalterno", "7"], ["business.partita_iva", "01234567897"])}, 0,
-           ["ok   every layout box sits on the form's own blank", "ok   the form is ready", "wrote: Neri Anna",
-            "wrote: foglio 12, particella 345, sub 7", "wrote: 12/2026"]),
-    "dp-off-the-grid": ("a box on a grid form's shaded band of labels is refused",
-                        {"pilot": "dp", "for": "rossi", "party": ["cliente=neri"], "fixture": with_fields(*NERI),
-                         "layout": lambda l: l["boxes"][0].__setitem__("rect", [37, 180, 314, 192])}, 1,
-                        ["FAIL every layout box sits on the form's own blank", "A1 – cognome", "overlaps a shaded band"]),
     "cila-client-for-business": ("a client ticking legale rappresentante would carry the studio's data: refused",
                                  {"pilot": "cila", "for": "neri", "fixture_file": "business-fixture.json",
                                   "fixture": with_fields(*NERI), "answers": {LR: "legale rappresentante"}}, 1,

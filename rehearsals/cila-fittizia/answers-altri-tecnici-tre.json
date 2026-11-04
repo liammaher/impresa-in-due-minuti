@@ -11,8 +11,8 @@
   "a3": "marco"
  },
  "descrizione": "PROVA NON INVIARE - CILA tre altri tecnici",
- "comunicazioni_contestuali": false,
- "atti_da_acquisire": false,
+ "comunicazioni_presentate": false,
+ "atti_acquisiti": false,
  "titolo": "locatario",
  "oggetto": "Manutenzione straordinaria non strutturale in appartamento: demolizione e ricostruzione di due tramezzi interni con nuova distribuzione di cucina e bagno, nuovo bagno, rifacimento degli impianti idrico ed elettrico.",
  "data_inizio_lavori": "2026-10-19",
@@ -32,6 +32,7 @@
  "cila_stato": "in corso",
  "direttore_lavori": "progettista",
  "altri_tecnici": true,
+ "altri_atti": false,
  "cila_onerosa": false,
  "tolleranze": false,
  "cila_interventi": [
@@ -41,16 +42,11 @@
  "cambio_uso": "no",
  "paesaggio": "no",
  "fatti": [],
- "altri_tecnici_quanti": "3",
+ "altri_tecnici_quanti": "tre",
  "altro_tecnico_dipendente": false,
  "altro_tecnico_incarico": "progettazione degli impianti",
  "altro_tecnico2_incarico": "coordinamento della sicurezza in fase di progettazione",
  "altro_tecnico2_dipendente": true,
  "altro_tecnico3_incarico": "certificazione energetica",
- "altro_tecnico3_dipendente": false,
- "altri_tecnici_dopo": "false",
- "impresa_dopo": "false",
- "progettista_altro": false,
- "diritti_esente": false,
- "terre_rocce": "no"
+ "altro_tecnico3_dipendente": false
 }

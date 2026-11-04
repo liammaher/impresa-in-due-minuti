@@ -51,18 +51,6 @@ FORMS = {
     "comunicazione_inizio_lavori": "inizio-lavori",
     "comunicazione_fine_lavori": "fine-lavori",
 }
-# The wizard's operation each form is (sue-wizard.json): a form's choices apply only to cases that
-# file it. Two forms share section names ("h) Impresa esecutrice dei lavori" is the CILA's and the
-# permesso's), so by section alone the permesso's choices were held against CILA cases.
-FORM_OPS = {
-    "cila": "Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)",
-    "scia": "Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)",
-    "permesso_di_costruire": "Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001",
-    "scia_alternativa": "Segnalazione Certificata Inizio Attività alternativa al Permesso di Costruire (S.C.I.A. alternativa P.d.C.)",
-    "segnalazione_certificata_agibilita": "Segnalazione Certificata per l'Agibilità",
-    "comunicazione_inizio_lavori": "Comunicazione inizio lavori",
-    "comunicazione_fine_lavori": "Comunicazione di fine lavori",
-}
 # Choices that are a person's or a place's details, not a branch of the case.
 NOT_BRANCHES = re.compile(r"scheda_anagrafica|allegat|residente|/sede\b|/nato|indirizzo|recapito|coordinate|"
                           r"localitaEstera|domicilio|cittadinanza|documento", re.I)
@@ -179,29 +167,6 @@ def boxes(name):
     return out
 
 
-def revealers(name):
-    """{box id: the label of the choice that shows it} for the boxes of a crawl a choice opens
-    (crawl.js `reveals` and `then`); a box always on screen isn't in it."""
-    out = {}
-
-    def walk(node, parent):
-        for f in node.get("reveals", []):
-            if isinstance(f, dict) and "id" in f:
-                out.setdefault(f["id"], parent)
-        for t in node.get("then", []):
-            if isinstance(t, dict) and "id" in t:
-                out.setdefault(t["id"], parent)
-                walk(t, t.get("label") or t.get("choice"))
-
-    for s in sections_of(name):
-        base = {f["id"] for f in s["fields"] if "id" in f}
-        for b in s["branches"]:
-            walk(b, b.get("label") or b.get("choice"))
-        for i in base:
-            out.pop(i, None)
-    return out
-
-
 def norm(s):
     """A label as the crawl and the dictionary both write it: no accents, quotes or punctuation."""
     s = "".join(c for c in unicodedata.normalize("NFKD", s or "") if not unicodedata.combining(c)).lower()
@@ -248,7 +213,7 @@ def ticked():
             try:
                 if not run.preflight(steps, values, made_up=True)["ready"]:
                     continue
-                planned = run.plan(run.rehearsal(steps, values), values)
+                planned = run.plan(steps, values)
             except Exception:  # a case pre-flight can't plan offline counts as not taken
                 continue
             for f in planned:
@@ -403,107 +368,6 @@ def table():
     return "\n".join(head + summary + nxt + ["", "## Every choice", ""] + detail).rstrip() + "\n"
 
 
-# Rows the flattening split out of one choice of the national form, at one path: ticking the
-# other row's box states this one. The permesso's stato legittimo is shown by its titles, its era,
-# a lost title or tolerances (009), or the works are a new building on free land (008), which has
-# none: the plot case ticks 008 (filled on the portal 2026-11-02). Its conformity (011), at the
-# same path, is required either way: the portal stopped on it.
-SPLIT = {("permesso_di_costruire", "009"): ["008"]}
-
-
-def required():
-    """[(form, choice id, at, rehearsal, answers file)]: a choice of the national form with no
-    "(nothing)" alternative (one of them must be stated), its boxes in a section the case files,
-    and the case ticks none. The free land's conformity (choice 011 of the permesso) was one: the
-    portal stopped on it (2026-11-02). Not judged, rather than guessed: a choice under a parent
-    alternative the case doesn't take (or one this can't name), one with an alternative no portal
-    box matches (it may be stated another way), and one with the person's boxes. A choice whose
-    boxes only another choice shows is required only where the case ticks that one: the
-    flattening sometimes puts such a choice at its parent's path (the agibilità's "completamente"
-    under "vale come fine lavori"). An option the flattening gave its own row (`at` + "/name")
-    counts as one of the choice's."""
-    forms = json.loads(CHOICES.read_text())
-    match = json.loads(MATCH.read_text())
-    leaves = left()
-    fields = dict(json.loads(FIXTURE.read_text())["fields"])
-    cases = []
-    os.chdir(ROOT)  # the answers name their files from the repo's root
-    import gen  # noqa: E402 (portal/, on the path)
-    for d, steps in sue_steps():
-        recipe = gen.resolved(gen.load_yaml(d / "recipe.yaml"))
-        ops = set(recipe["operation"] if isinstance(recipe["operation"], list) else [recipe["operation"]])
-        for a in sorted(d.glob("answers*.json")):
-            values = run.Values(json.loads(a.read_text()), fields=fields, asks=steps.get("asks"))
-            try:
-                if not run.preflight(steps, values, made_up=True)["ready"]:
-                    continue
-                planned = run.plan(run.rehearsal(steps, values), values)
-                sections = [norm(x["section"]) for x in run.expand(steps, values)["sections"]]
-            except Exception:
-                continue
-            ticks = [(norm(f["section"]), f["id"], "tick", norm(f["label"]), (d.name, a.name))
-                     for f in planned if f["kind"] in ("radio", "checkbox", "tick")]
-            ticks += [(norm(f["section"]), f["id"], "option", norm(f["value"]), (d.name, a.name))
-                      for f in planned if f["kind"] == "select" and f["value"]]
-            cases.append(((d.name, a.name), sections, ticks, ops))
-    out = []
-    for form, rows in forms.items():
-        bx = boxes(FORMS[form])
-        by_text = {(norm(b["section"]), norm(b["label"])): b for b in bx}
-        # The form's boxes some alternative names: a box only Napoli's form has (Campania's attics,
-        # car parks) that a case ticks in a choice's section may be that case's answer to it.
-        named = {(norm(x["section"]), norm(x["label"])) for e in match["forms"][form].values() for x in e.get("boxes", [])}
-        napoli = [b for b in bx if (norm(b["section"]), norm(b["label"])) not in named]
-        found = lambda c, alt: [by_text[k] for k in ((norm(x["section"]), norm(x["label"]))
-                                for x in match["forms"][form].get(f"{c['id']}/{alt}", {}).get("boxes", [])) if k in by_text]
-        shows = revealers(FORMS[form])
-        for c in rows:
-            if "(nothing)" in c["alternatives"]:
-                continue
-            # A choice nested under a name no row lists as an option (after its last [..._ctype]):
-            # its parent can't be told, so neither can whether it applies.
-            tail = c["at"].rsplit("]", 1)[1] if "]" in c["at"] else ""
-            if tail.strip("/") and not any(c["at"].startswith(p["at"] + "/") and tail.strip("/").split("/")[0] in p["alternatives"] for p in rows):
-                continue
-            alts = {alt: found(c, alt) for alt in c["alternatives"]}
-            if not all(alts.values()):
-                continue
-            mine = [b for bs in alts.values() for b in bs]
-            # An option with a row of its own (its sub-choice): any of that row's boxes takes it.
-            for sub in rows:
-                if sub["at"].startswith(c["at"] + "/") and "/" not in sub["at"][len(c["at"]) + 1:]:
-                    mine += [b for alt in sub["alternatives"] for b in found(sub, alt)]
-            if any(same_section(s, norm(b["section"])) and starts(norm(b["label"]), l) for b in mine for (s, l) in leaves):
-                continue
-            parent = max((p for p in rows if c["at"].startswith(p["at"] + "/")), key=lambda p: len(p["at"]), default=None)
-            under = None
-            if parent:
-                seg = re.sub(r"^\[|\]$", "", c["at"][len(parent["at"]) + 1:].split("/")[0])
-                if seg not in parent["alternatives"]:
-                    continue
-                under = found(parent, seg)
-                if not under:
-                    continue
-            for other in SPLIT.get((form, c["id"]), []):
-                row = next(r for r in rows if r["id"] == other)
-                mine += [b for alt in row["alternatives"] for b in found(row, alt)]
-            own = [b for b in napoli if any(same_section(norm(b["section"]), norm(m["section"])) for m in mine)]
-            # Shown only under other choices (every box of it): the labels that show it.
-            shown = {shows[i] for b in mine for i in b["ids"] if i in shows} if all(any(i in shows for i in b["ids"]) for b in mine) else None
-            for who, sections, ticks, ops in cases:
-                if FORM_OPS[form] not in ops or not any(same_section(s, norm(b["section"])) for b in mine for s in sections):
-                    continue
-                if any(hits(b, ticks, bx) for b in own):
-                    continue
-                if shown is not None and not any(starts(l, norm(x)[:50]) or starts(norm(x), l[:50]) for *_, l, _ in ticks for x in shown if x):
-                    continue
-                if under is not None and not any(hits(b, ticks, bx) for b in under):
-                    continue
-                if not any(hits(b, ticks, bx) for b in mine):
-                    out.append((READ[form], c["id"], c["at"], *who))
-    return out
-
-
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -517,12 +381,7 @@ def main():
     m.add_argument("--by", required=True)
     m.add_argument("--made", required=True)
     sub.add_parser("table")
-    sub.add_parser("required", help="cases that state none of a required choice's alternatives")
     a = ap.parse_args()
-    if a.cmd == "required":
-        rows = required()
-        print("\n".join(f"{f} {i} `{at}`: {r}/{ans}" for f, i, at, r, ans in rows) or "none")
-        return
     if a.cmd == "match":
         forms = json.loads(CHOICES.read_text())
         out = {"made": a.made, "by": a.by, "forms": {}}

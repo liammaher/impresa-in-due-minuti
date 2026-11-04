@@ -26,8 +26,6 @@ answers:
   # Stated, not left to the ask's default: the CILA's and CIL's steps ask it from the rules table.
   paesaggio: ordinaria
   bollo_marche: false
-  bollo_esenzione: "no"
-  progettista_altro: false
   vincolo: art 136 and 142
   vincolo_136_lettera: c) e d)
   vincolo_136_provvedimento: D.M. fittizio PROVA NON INVIARE del 01/01/1960

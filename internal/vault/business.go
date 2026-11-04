@@ -26,11 +26,10 @@ var qualitaDichiarante = map[string]string{
 
 // formeGiuridiche are the accepted legal forms, in the order the schema lists
 // them. lavoratore_autonomo is a libero professionista or other self-employed
-// person with a partita IVA but no impresa. condominio is a building's condominium (a client
-// with a codice fiscale, never in the Registro delle imprese).
+// person with a partita IVA but no impresa.
 var formeGiuridiche = []string{
 	"ditta_individuale", "lavoratore_autonomo", "srl", "srls", "snc", "sas", "spa", "sapa",
-	"cooperativa", "studio_associato", "stp", "condominio", "altro",
+	"cooperativa", "studio_associato", "stp", "altro",
 }
 
 // formaGiuridicaAliases maps ways of writing a legal form, compared with

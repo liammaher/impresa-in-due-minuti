@@ -13,6 +13,5 @@
  "superficie_alimentare_mq": "0",
  "superficie_monopolio_mq": "0",
  "in_ccn": "false",
- "in_factory_outlet": "false",
- "diritti_esente": false
+ "in_factory_outlet": "false"
 }

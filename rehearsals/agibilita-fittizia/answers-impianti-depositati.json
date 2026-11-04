@@ -26,7 +26,7 @@
  "docfa_data": "2026-10-27",
  "civici_variazione": "false",
  "antincendio_variazione": "false",
- "diritti_euro": "401",
+ "diritti_euro": "0",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
  "assenso_proprietario": "rehearsals/cila-fittizia/files/assenso-immobiliare-fittizia.pdf",
  "dichiarazione_conformita": "rehearsals/agibilita-fittizia/files/dichiarazione-conformita-impianti.pdf",
@@ -95,7 +95,5 @@
  "impianto_altro_collaudo": "false",
  "igienico_5bis_caso": "altezza",
  "igienico_adattabilita": "true",
- "ascensore_comunicazione": "sca",
- "agibilita_attestante": "direttore dei lavori",
- "diritti_esente": false
+ "ascensore_comunicazione": "sca"
 }

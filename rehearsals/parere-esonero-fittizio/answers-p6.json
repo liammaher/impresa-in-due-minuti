@@ -23,8 +23,5 @@
  "intervento": "edilizia_libera",
  "cambio_uso": "no",
  "paesaggio": "senza_autorizzazione",
- "fatti": [],
- "diritti_esente": false,
- "bollo_esenzione": "no",
- "terre_rocce": "no"
+ "fatti": []
 }

@@ -16,11 +16,5 @@
   "answers": "answers-impianti.json",
   "result": "filled",
   "seconds": 150.3
- },
- {
-  "date": "2026-11-03",
-  "answers": "answers-vincolo-142.json",
-  "result": "filled",
-  "seconds": 199.8
  }
 ]

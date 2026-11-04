@@ -97,4 +97,3 @@ signed), the art. 24 box above, the declarations, signing and sending.
 
 In the pane, from run.py's install.js and run.js, nothing touched between runs: first filled in 89.3 s; second, with the runner waiting for a section to open, **filled** in 101.3 s, read back on a fresh load.
 | 2026-10-31 | pane | the four cases ticking neither art. 24 box (`non-soggetto-collaudo`, `parziale-vale-fine`, `regolare-esecuzione`, `vale-fine-lavori`): stopped on the portal's "deve essere selezionata almeno un'opzione" once a592b60 had dropped the boxes' `theirs`; restored, rerun | **filled** all four (88-105 s) |
-| 2026-11-01 | pane | `answers-professionista` (the attestazione signed as professionista abilitato) **filled** (230 s), `bench/rerun.py` bundle |

@@ -16,35 +16,5 @@
   "answers": "answers-p6.json",
   "result": "filled",
   "seconds": 51.7
- },
- {
-  "date": "2026-11-02",
-  "answers": "answers-progettista.json",
-  "result": "filled",
-  "seconds": 58.7
- },
- {
-  "date": "2026-11-02",
-  "answers": "answers-variante.json",
-  "result": "filled",
-  "seconds": 57.7
- },
- {
-  "date": "2026-11-02",
-  "answers": "answers-esenzioni.json",
-  "result": "filled",
-  "seconds": 62.5
- },
- {
-  "date": "2026-11-02",
-  "answers": "answers-bollo-virtuale.json",
-  "result": "filled",
-  "seconds": 63.7
- },
- {
-  "date": "2026-11-03",
-  "answers": "answers-p6.json",
-  "result": "filled",
-  "seconds": 68.2
  }
 ]

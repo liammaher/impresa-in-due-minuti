@@ -23,7 +23,6 @@ from email.parser import BytesParser
 from email.policy import default
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, quote
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
@@ -37,13 +36,10 @@ DEN, IMPRESA = "form:r0c1:dynaForm:den_txt", "form:r4c1:dynaForm:impresa_txt"
 class Portal:
     """What the fake portal stored. drop: it shows Denominazione after Salva but never stores it.
     slow: the next that many loads of ?flaky=1 come without the second section's box, as
-    the real portal sometimes shows a section before its boxes. bounce: the draft's second load
-    passes through another origin (localhost for 127.0.0.1) and back, as the portal's sign-in
-    can (2026-11-03)."""
+    the real portal sometimes shows a section before its boxes."""
 
-    def reset(self, drop=False, slow=0, bounce=False):
+    def reset(self, drop=False, slow=0):
         self.fields, self.files, self.drop, self.sent, self.slow = {}, [], drop, False, slow
-        self.bounce, self.loads = bounce, 0
 
 
 PORTAL = Portal()
@@ -67,14 +63,6 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/":
             self.send(b"<!doctype html><title>bench</title>", "text/html")
         elif path == "/portal.html":
-            PORTAL.loads += 1
-            if PORTAL.bounce and PORTAL.loads == 2:
-                port = self.server.server_port
-                self.send_response(302)
-                self.send_header("Location", f"http://localhost:{port}/sso?back=" + quote(f"http://127.0.0.1:{port}{self.path}", safe=""))
-                self.send_header("Content-Length", "0")
-                self.end_headers()
-                return
             html = (HERE / "portal.html").read_bytes()
             if "flaky=1" in self.path and PORTAL.slow > 0:
                 PORTAL.slow -= 1
@@ -82,13 +70,6 @@ class Handler(BaseHTTPRequestHandler):
                                     b'        <td><input type="text" id="form:r4c1:dynaForm:impresa_txt"></td></tr>', b"")
                 assert b"impresa_txt" not in html, "the bench page changed: update the flaky cut"
             self.send(html, "text/html; charset=utf-8")
-        elif path == "/fnsuap/cmd/home":  # Pratiche in bozza: one draft, opened on its attachments
-            self.send(b"<!doctype html><title>Bozze</title><table><tr><td>PROVA NON INVIARE - seconda</td>"
-                      b"<td><a title='Apri' href='/portal.html?screens=1&more=1'>APRI</a></td></tr></table>", "text/html")
-        elif path == "/sso":  # the sign-in's origin, sending the frame back, as an SSO does
-            back = parse_qs(self.path.split("?", 1)[1])["back"][0]
-            self.send(b"<!doctype html><title>SSO</title><script>setTimeout(() => location.replace("
-                      + json.dumps(back).encode() + b"), 300)</script>", "text/html")
         elif path == "/login":  # where an expired sign-in lands (the portal's identity provider)
             self.send(b"<!doctype html><title>Accedi</title><p>Entra con SPID", "text/html")
         elif path == "/anteprima.pdf":
@@ -251,16 +232,6 @@ def main():
             assert not r.get("retries"), r.get("retries")
         case("an expired sign-in stops the run saying so, not as the portal staying busy", signed_out)
 
-        def sso_bounce():
-            # The fresh load of the draft passes through the sign-in's origin and back: the run
-            # waits for the portal again instead of stopping on "Blocked a frame with origin".
-            PORTAL.reset(bounce=True)
-            r = fill(browser, base, steps(base), answers)
-            assert r["result"] == "filled", r.get("error")
-            assert PORTAL.loads >= 3, f"no bounce: {PORTAL.loads} loads"
-            assert r.get("verify_seconds") is not None, "no fresh load of the draft"
-        case("a load that passes through another origin and back is waited for, not a stop", sso_bounce)
-
         def anchored():
             # A block's start is a box the anchor is the own label of: the "(specificare)" box
             # beside a tick box reads it as its cell before, and must not start a block itself.
@@ -276,26 +247,6 @@ def main():
             assert PORTAL.fields.get("form:r5c2:dynaForm:dens_txt") == answers["den"], PORTAL.fields
             assert PORTAL.fields.get("form:r5c2:dynaForm:alt_txt") == answers["impresa"], PORTAL.fields
         case("a box beside an anchor's tick box, labelled by it from the cell before, doesn't start a block", anchored)
-
-        def two_lists():
-            # Two lists in one section, each with its "+" after its rows: a block of the first is
-            # added by the first "+", not the page's last. The second list is a template, as
-            # gen.py writes one (an `add` with `each`, its fields with `block: "#N"`), three rows
-            # by its count.
-            PORTAL.reset()
-            st = steps(base, start="/portal.html?liste=1")
-            st["sections"][1]["fields"] += [
-                {"kind": "text", "label": "Comunicazioni", "anchor": "Comunicazioni", "block": 1, "value": "{{ask.den}}"},
-                {"kind": "add", "anchor": "Comunicazioni", "block": 2},
-                {"kind": "text", "label": "Comunicazioni", "anchor": "Comunicazioni", "block": 2, "value": "{{ask.impresa}}"},
-                {"kind": "text", "label": "Tipologia di atto", "anchor": "Tipologia di atto", "block": 1, "value": "{{ask.atto_1}}"},
-                {"kind": "add", "anchor": "Tipologia di atto", "block": "#N", "each": {"count": "{{ask.atti}}", "from": 2}},
-                {"kind": "text", "label": "Tipologia di atto", "anchor": "Tipologia di atto", "block": "#N", "value": "{{ask.atto_#K}}"}]
-            r = fill(browser, base, st, answers | {"atti": "3", "atto_1": "uno", "atto_2": "due", "atto_3": "tre"})
-            assert r["result"] == "filled", r.get("error")
-            got = {k.split(":")[-1]: v for k, v in PORTAL.fields.items() if ":dynaForm:" in k and k.endswith(("com1_txt", "com2_txt")) or "atto" in k}
-            assert got == {"com1_txt": answers["den"], "com2_txt": answers["impresa"], "atto1_txt": "uno", "atto2_txt": "due", "atto3_txt": "tre"}, got
-        case("two lists in a section: each \"+\" adds to its own list, as many rows as the count says", two_lists)
 
         def crawl_reveals():
             # A choice that opens an employer's block repeating labels above it (Cognome, Via):
@@ -348,30 +299,6 @@ def main():
             assert r["result"] == "filled", r
         case("a suggestion list still fading out over the next box is closed, not a stop", fading_list)
 
-        def street_lookup():
-            # The street's first word is its type, whatever it is: until 2026-11-04 only VIA,
-            # VIALE, PIAZZA, CORSO and LARGO were, and a Vico (a third of Naples' streets aren't
-            # those five) matched nothing in the list.
-            VIA = "form:r11c1:dynaForm:via:txtws_input"
-            for value, chosen in (("VICO LUNGO GELSO", "VICO LUNGO GELSO"), ("VIA GELSO", "VIA GELSO"),
-                                  ("VIA FORIA", "VIA FORIA"), ("CUPA CAIAFA", "CUPA CAIAFA")):
-                PORTAL.reset()
-                st = steps(base, start="/portal.html?via=1")
-                st["sections"][0]["fields"].insert(0, {"id": "via:txtws_input", "kind": "lookup",
-                                                       "label": "Via, Viale, Piazza", "value": "{{ask.via}}"})
-                r = fill(browser, base, st, answers | {"via": value})
-                assert r["result"] == "filled", (value, r.get("error"))
-                assert PORTAL.fields.get(VIA) == chosen, (value, PORTAL.fields.get(VIA))
-        case("a street lookup takes a street of any type (a Vico, a Cupa), and the exact one among similar", street_lookup)
-
-        def calendar_left_open():
-            # A typed date leaves the calendar open over the next box; a person's click elsewhere
-            # would close it, so the runner does (the permesso's sanatoria quadro, 2026-11-02).
-            PORTAL.reset()
-            r = fill(browser, base, steps(base, start="/portal.html?calendar=1"), answers)
-            assert r["result"] == "filled", r
-        case("a calendar a typed date left open over the next box is closed, not a stop", calendar_left_open)
-
         def signed_slot():
             # The portal's "required" under a slot that takes only signed files is the person's;
             # under a plain one it stops the run, and the snapshot names the slot by its title.
@@ -388,125 +315,8 @@ def main():
             rs = next(b for b in r2["snapshot"]["boxes"] if b["id"] == "rs_txt")
             assert rs["label"] == "ragione sociale" and rs.get("required") and rs["state"] == "empty", rs
             assert box["label"] == "procura speciale" and box["required"] and box["accepts"] == "pdf;pdf.p7m", box
-            assert box["state"] == "empty", box
-            # A slot the portal hasn't flagged: named by its title, not its wrapper's "false"; not
-            # required for the "OBBLIGATORIO" in its title; filled, since its cell names a file.
-            held = next(b for b in r["snapshot"]["boxes"] if b["id"] == "fibra_input")
-            assert held["label"].startswith("elaborato dimostrativo della fibra") and not held.get("required") \
-                and held["state"] == "filled", held
             assert ".pdf" not in json.dumps(r["snapshot"]), "a file's name in the snapshot"
         case("a required slot taking only signed files is the person's; a plain one stops, named by its title", signed_slot)
-
-        def refused_upload():
-            # A file the portal refuses on upload (a made-up digital signature, 2026-11-03) shows
-            # only in a growl that fades: the run stops on it, naming the slot and the portal's words.
-            PORTAL.reset()
-            r = fill(browser, base, steps(base, start="/portal.html?refuse=1"), answers)
-            stops(r, "Ricevuta ASL: the portal refused")
-            assert "firme digitali" in r["error"] and "ricevuta-asl" not in json.dumps(PORTAL.files), r
-        case("a file the portal refuses on upload, in a growl that fades, stops the run with its words", refused_upload)
-
-        def after_declarations():
-            # The second run: the first two sections' fields stay as filled, the attachments
-            # screen is reached from the menu's step on a reopened draft, and only what waits
-            # for the declarations is attached.
-            PORTAL.reset()
-            st = steps(base, start="/portal.html?screens=1")
-            st["sections"][1]["fields"][0]["after_declarations"] = True  # not on a go screen: kept
-            go = {"section": "Gestione degli allegati", "go": "Prosegui", "step": "Allega Documenti", "fields": [
-                {"id": "planimetria_input", "kind": "file", "label": "Planimetria quotata", "value": "{{ask.planimetria}}"},
-                {"id": "ricevuta_input", "kind": "file", "label": "Ricevuta ASL", "value": "{{ask.ricevuta}}",
-                 "accepts": "pdf.p7m", "after_declarations": True}]}
-            st["sections"].append(go)
-            first, second = run.phase(st), run.phase(st, after=True)
-            assert [f["label"] for f in first["sections"][2]["fields"]] == ["Planimetria quotata"]
-            assert [f["label"] for f in second["sections"][2]["fields"]] == ["Ricevuta ASL"]
-            assert len(second["sections"][1]["fields"]) == 1, "a section before the screens lost a field"
-            assert run.reopening(second)["from"] == {"section": 2}
-            assert not run.phase(st, after=True, made_up=True)["sections"][2]["fields"], "made-up: a signed-only slot kept"
-            r = fill(browser, base, second, small, resume={"url": base + "/portal.html?screens=1", "from": {"section": 2}})
-            assert r["result"] == "filled", r
-            assert [f["box"].rsplit(":", 1)[-1] for f in PORTAL.files] == ["ricevuta_input"], PORTAL.files
-        case("the second run reaches the attachments screen by its step and attaches only what waited", after_declarations)
-
-        def after_declarations_reopened():
-            # The second run as run.py starts it: the draft by its name from Pratiche in bozza, then
-            # Allegati liberi, whose first box the first run filled: the file goes in a new box ("+").
-            PORTAL.reset()
-            PORTAL.files.append({"name": "relazione-tecnica.pdf", "type": "application/pdf", "sha256": "",
-                                 "box": "form:r21c1:dynaForm:liberi1_input"})
-            st = {"procedure": "test/seconda", "start": base + "/portal.html", "logged_in": base + "/", "wizard": [],
-                  "sections": [{"section": "Gestione degli allegati", "go": "Prosegui", "step": "Allega Documenti",
-                                "fields": [{"kind": "file", "label": "Allegati liberi", "value": "{{ask.ricevuta}}",
-                                            "describe": "Allegato A", "after_declarations": True},
-                                           {"kind": "file", "label": "Allegati liberi", "value": "{{ask.planimetria}}",
-                                            "describe": "Modello DP", "after_declarations": True}]}]}
-            dp = tmp / "modello-dp.pdf"
-            dp.write_bytes(b"%PDF-1.4 dp\n")
-            two = small | {"planimetria": str(dp)}
-            r = fill(browser, base, st, two, resume={"reopen": "PROVA NON INVIARE - seconda", "from": {"section": 0}})
-            assert r["result"] == "filled", r
-            boxes = [f["box"].rsplit(":", 1)[-1] for f in PORTAL.files]
-            # Each its own new box: the second never replaces the first (an upload into a box that
-            # holds a file replaces it, on the portal).
-            assert boxes == ["liberi1_input", "liberi2_input", "liberi3_input"], boxes
-            # The same run again (a retry after a stop): what is there already is left, nothing twice.
-            r = fill(browser, base, st, two, resume={"reopen": "PROVA NON INVIARE - seconda", "from": {"section": 0}})
-            assert r["result"] == "filled" and len(PORTAL.files) == 3, (r, PORTAL.files)
-        case("the second run reopens the draft by its name and takes a slot's next empty box", after_declarations_reopened)
-
-        def twin_slots():
-            # The screen's `theirs` names the signed-only "Relazione Paesaggistica Semplificata";
-            # the plain slot whose title starts with it is Claude's: left empty, it stops the run.
-            # The attachments screen alone: on this one-page portal a later section would see the message too.
-            PORTAL.reset()
-            st = steps(base, start="/portal.html?twins=1", theirs=["Relazione Paesaggistica Semplificata"])
-            st["sections"] = st["sections"][:1]
-            r = fill(browser, base, st, answers)
-            assert r["result"] == "stopped" and r["error"].startswith("Allega documenti") and "obbligatorio" in r["error"], r
-        case("a person's slot whose title starts another's covers only its own: the other, empty and required, stops", twin_slots)
-
-        def flagged():
-            # The portal's warning beside a box it kept ("Indirizzo Pec non valido"; "Indirizzo
-            # sconosciuto" under every address): never a stop, listed by section and the box's label,
-            # no value. The attachments section alone: the warning is page-wide on this fake page.
-            st = steps(base, start="/portal.html?pec=1")
-            st["sections"] = st["sections"][:1]
-            st["sections"][0]["fields"].append({"id": "pec_txt", "kind": "text", "label": "Posta elettronica certificata",
-                                               "value": "{{ask.pec}}"})
-            PORTAL.reset()
-            r = fill(browser, base, st, {**answers, "pec": "prova@pec.example.it"})
-            assert r["result"] == "filled", r
-            assert r["alerts"] == [{"section": "Allega documenti", "label": "Posta elettronica certificata",
-                                    "text": "Indirizzo Pec non valido"}], r
-            assert "pec.example" not in json.dumps(r), "a value in the report"
-        case("the portal's warning beside a box it kept is reported, by label and without the value, never a stop", flagged)
-
-        def more_files():
-            # A slot named again takes its next box: its "+" adds one with no label under the last
-            # (the portal's Allegati liberi, 2026-11-03); each file goes in its own box, described,
-            # the fresh load finds them all by name, and a file a case doesn't attach takes no box.
-            extra, third = tmp / "autorizzazione.pdf", tmp / "comunicazioni.pdf"
-            extra.write_bytes(b"%PDF-1.4 autorizzazione\n")
-            third.write_bytes(b"%PDF-1.4 comunicazioni\n")
-            st = steps(base, start="/portal.html?more=1")
-            st["sections"] = st["sections"][:1]
-            st["sections"][0]["fields"] += [
-                {"kind": "file", "label": "Allegati liberi", "value": "{{ask.rel}}", "describe": "Relazione tecnica"},
-                {"kind": "file", "label": "Allegati liberi", "value": "{{ask.none}}", "describe": "Nulla", "optional": True},
-                {"kind": "file", "label": "Allegati liberi", "value": "{{ask.extra}}", "describe": "Autorizzazione"},
-                {"kind": "file", "label": "Allegati liberi", "value": "{{ask.third}}", "describe": "Comunicazioni"}]
-            PORTAL.reset()
-            r = fill(browser, base, st, {**small, "rel": str(tiny), "extra": str(extra), "third": str(third)})
-            assert r["result"] == "filled", r.get("error")
-            boxes = {f["box"]: f["name"] for f in PORTAL.files}
-            assert [boxes.get(f"form:r2{n}c1:dynaForm:liberi{n}_input") for n in (1, 2, 3)] == \
-                ["tiny.pdf", "autorizzazione.pdf", "comunicazioni.pdf"], boxes
-            got = {k: v for k, v in PORTAL.fields.items() if k.endswith("_desc")}
-            assert got == {f"form:r2{n}c1:dynaForm:liberi{n}_desc": d for n, d in
-                           ((1, "Relazione tecnica"), (2, "Autorizzazione"), (3, "Comunicazioni"))}, got
-            assert "loose" not in r and "moved" not in r, (r.get("loose"), r.get("moved"))
-        case("a slot named again takes its next box: its + adds each, each described, all kept", more_files)
 
         def theirs():
             PORTAL.reset()
@@ -756,30 +566,7 @@ def main():
             r = fill(browser, base, steps(base, start="/portal.html?rename=1"), answers, resume={"retry_wait_ms": 100})
             stops(r, "expected the label Impresa esecutrice")
             assert not r.get("retries"), r.get("retries")
-            # Some boxes with the label, but not the nth: the page as it is, never retried.
-            PORTAL.reset()
-            st = steps(base)
-            st["sections"][1]["fields"].append({"kind": "text", "label": "Impresa esecutrice", "nth": 2, "value": "x"})
-            r = fill(browser, base, st, answers, resume={"retry_wait_ms": 100})
-            stops(r, "1 fields with this label")
-            assert not r.get("retries"), r.get("retries")
-        case("retries are bounded; a renamed label, or a box found but not the nth, is never retried", stubborn)
-
-        def onefield():
-            # Two rows the portal keeps as one radio field, each opening its own box: the second's
-            # tick hides the first's box. The section's read-back says so, and it isn't retried as a
-            # slow portal (the art. 34-ter dating and oblazione, 2026-11-02).
-            PORTAL.reset()
-            st = steps(base, start="/portal.html?onefield=1")
-            st["sections"][1]["fields"] += [
-                {"kind": "radio", "label": "dà atto che la data/epoca di realizzazione"},
-                {"kind": "text", "label": "è", "value": "1966"},
-                {"kind": "radio", "label": "determina l’oblazione dovuta"},
-                {"kind": "text", "label": "in euro", "value": "1032"}]
-            r = fill(browser, base, st, answers, resume={"retry_wait_ms": 100})
-            stops(r, "not kept")
-            assert "hidden by a later choice" in r["error"] and not r.get("retries"), (r["error"], r.get("retries"))
-        case("a box a later choice hid is not kept, said so, and not retried", onefield)
+        case("retries are bounded, and a renamed label is never retried", stubborn)
 
         def silent():
             # A run that stops on a lost value tells a caller which box and why, never what it

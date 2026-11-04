@@ -96,13 +96,5 @@
  "idraulico_doc": "rehearsals/scia-fittizia/files/documentazione-idraulico.pdf",
  "vinca_doc": "rehearsals/scia-fittizia/files/documentazione-vinca.pdf",
  "rir_doc": "rehearsals/scia-fittizia/files/documentazione-rir.pdf",
- "strumenti_altri": "false",
- "altri_tecnici_dopo": "false",
- "direttore_lavori": "da nominare",
- "impresa_dopo": "false",
- "vvf_variante": "false",
- "scomputo": "false",
- "progettista_altro": false,
- "diritti_esente": false,
- "terre_rocce": "no"
+ "strumenti_altri": "false"
 }

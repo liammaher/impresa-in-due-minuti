@@ -17,7 +17,7 @@ title: "CILA: lavori interni non strutturali, SUE Napoli (tecnico con procura)"
 yours:
   - "Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page"
   - "Tick the dichiarante's declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Pay the 166 € diritti (to Napoli's postal account, below) and the 333 € penalty if not yet paid; upload the diritti receipt on Pagamento oneri"
+  - "Pay the 151 € diritti (to Napoli's postal account, below) and the 333 € penalty if not yet paid; upload the diritti receipt on Pagamento oneri"
   - "On Allega documenti: download the portal's procura and CILA DSC summary, have the client sign the procura, sign them digitally (.p7m) and attach them with the IDs and the drawings"
   - "Sign and send (Firma e invio); keep the receipt"
 
@@ -37,8 +37,7 @@ asks:
   dettaglio_intervento:
     type: text
     question: "The works for the relazione tecnica (500 characters)"
-  # A late CILA (works under way) is a "mancata CILA": 166 €, line SUE 15 of the 2026 table, not 151 € (2026-11-03).
-  diritti_euro: {type: number, question: "The SUE fees in euro", default: "166"}
+  diritti_euro: {type: number, question: "The SUE fees in euro", default: "151"}
   documento_identita_cliente: {type: file, question: "The client's identity document (PDF)"}
   assenso_proprietario: {type: file, question: "The owner's signed assent to the works (PDF)"}
   notifica_preliminare: {type: file, question: "The notifica preliminare already sent (PDF)"}
@@ -88,7 +87,6 @@ sections:
       - {id: "r24c2p63reg", kind: select, label: Provincia, value: "{{c:residenza.provincia}}"}
       - {id: "r26c1p67reg", kind: select, label: Comune, value: "{{c:residenza.comune|upper}}"}
       - {id: "r29c1p73reg", kind: select, label: Toponimo (DUG), value: "{{c:residenza.indirizzo|dug}}"}
-      - {id: "r29c2p75reg", kind: select, label: "da compilare obbligatoriamente", value: "{{c:residenza.indirizzo|dug_dettaglio}}", when: "{{c:residenza.indirizzo|dug_altro}}"}
       - {id: "r31c1p79reg:txt", kind: text, label: Denominazione stradale, value: "{{c:residenza.indirizzo|street|upper}}"}
       - {id: "r33c1p83reg:txt", kind: text, label: Numero civico, value: "{{c:residenza.civico}}"}
       - {id: "r33c2p85reg:txt", kind: text, label: CAP, value: "{{c:residenza.cap}}"}

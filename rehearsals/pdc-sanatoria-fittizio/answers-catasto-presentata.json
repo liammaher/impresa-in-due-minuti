@@ -82,17 +82,5 @@
  "nuova_costruzione_tipo": "e1",
  "relazione_energetica": "rehearsals/scia-fittizia/files/relazione-energetica.pdf",
  "sanatoria_catasto_protocollo": "NA0123456",
- "sanatoria_catasto_data": "2026-05-20",
- "altri_tecnici_dopo": "false",
- "direttore_lavori": "da nominare",
- "impresa_dopo": "false",
- "vvf_variante": "false",
- "scomputo": "false",
- "strumenti_altri": "false",
- "igienico_24_5bis": "false",
- "barriere_art82": "false",
- "progettista_altro": false,
- "diritti_esente": false,
- "bollo_esenzione": "no",
- "terre_rocce": "no"
+ "sanatoria_catasto_data": "2026-05-20"
 }
