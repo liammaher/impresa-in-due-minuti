@@ -113,8 +113,20 @@ Between 3 and 7 they hear nothing from you but the login, the code and the revie
 ## What this skill has
 
 `${CLAUDE_SKILL_DIR}` in a command is this skill's folder (should a command show a `$` variable
-there instead of a path, put this skill's base directory in its place). Scripts run with `python3`
-and need no packages.
+there instead of a path, put this skill's base directory in its place). Scripts run through
+`sh "${CLAUDE_SKILL_DIR}/py"`, never `python3` directly: it uses the computer's own Python 3.9+
+(no packages needed).
+<!-- download -->
+Where there is none (a new Mac, Windows), it downloads a self-contained one once (about 25 MB,
+checked by SHA-256) and keeps it. Its first run may take a minute and prints "scarico Python": tell
+the tecnico in one line that you are setting up, once. If it says it can't download, say so
+plainly and try again later; never install Python another way.
+<!-- /download -->
+<!-- no-download -->
+Where there is none, it stops with a message in Italian saying how to install it (on a Mac it
+opens Apple's own installer of the developer tools, which bring Python). Give that message as it
+is, in one line, wait for "fatto", and run the command again. Never install Python yourself.
+<!-- /no-download -->
 
 - `catalog.json`: each pratica with a steps file, one a line (`name`, `procedure`, `title`,
   `sportello`, `notes`: who the roles are, `steps_sha256`); `coverage.json`: every pratica's
@@ -172,7 +184,7 @@ once, in one message, and write them into `../studio.json`.
 Before each pre-flight and each compilation, check and merge the two files:
 
 ```sh
-python3 "${CLAUDE_SKILL_DIR}/check.py" ../studio.json values.json --out run/values.json
+sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/check.py" ../studio.json values.json --out run/values.json
 ```
 
 It prints each value that doesn't fit (a codice fiscale, a partita IVA, a date) and exits 1:
@@ -182,12 +194,12 @@ ask the tecnico for that one again.
 ## 1. Which pratica
 
 Read the documents first (step 2, without `--steps`) and take their facts:
-`python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" accept run/intake --into facts.json --part facts`
+`sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" accept run/intake --into facts.json --part facts`
 (`{}` without documents). Works needing a building title (CILA, SCIA, permesso, a sanatoria, a
 landscape authorization) are chosen by their facts, not their name:
 
 ```sh
-python3 "${CLAUDE_SKILL_DIR}/portal/route.py" --table sue-napoli --answers facts.json
+sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/route.py" --table sue-napoli --answers facts.json
 ```
 
 - `routed`: it names the pratica (`pratica`, its `steps`), the `answers` to start `answers.json`
@@ -231,14 +243,14 @@ here. Both of these can hold at once:
 Then, as for any folder, read them with the intake, never yourself:
 
 ```sh
-python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" scan docs --out run/intake --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json"
+sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" scan docs --out run/intake --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json"
 ```
 
 Before step 1 the same without `--steps`. A `notes` line saying the property isn't in the Comune
 di Napoli is the verdict: send it and stop. Read only `run/intake/intake.json`: each file's kind,
 the fields filled (ids, not values), `unread` files (scans and photos: their facts are asked
 instead), `notes` (in Italian), and `proposals` with the document and words each comes from. Take them now, so pre-flight doesn't ask
-them again: `python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" accept run/intake --into answers.json`
+them again: `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" accept run/intake --into answers.json`
 (it adds the client's and the owner's roles to `people`). They are shown in the one message, and
 the tecnico's "ok" confirms them with the rest; a correction goes into `answers.json`.
 
@@ -255,8 +267,8 @@ A client the archive doesn't hold yet is added by the values the intake read.
 The values come from one confirmation:
 
 ```sh
-pvault get $(python3 "${CLAUDE_SKILL_DIR}/portal/run.py" scope --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json") \
-  | python3 "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
+pvault get $(sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" scope --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json") \
+  | sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
       --answers answers.json --values - --values run/intake/private/values.json
 ```
 
@@ -268,7 +280,7 @@ this pratica needs. Pre-flight prints JSON and exits 0 only when `ready`.
 After `check.py` (step 0):
 
 ```sh
-python3 "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
+sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
   --answers answers.json --values run/values.json --values run/intake/private/values.json
 ```
 
@@ -323,14 +335,14 @@ and the review page.
 
 <!-- vault -->
 ```sh
-pvault get $(python3 "${CLAUDE_SKILL_DIR}/portal/run.py" scope --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json") \
-  | python3 "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
+pvault get $(sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" scope --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json") \
+  | sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
       --answers answers.json --values - --values run/intake/private/values.json --out run
 ```
 <!-- /vault -->
 <!-- no-vault -->
 ```sh
-python3 "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
+sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
   --values run/values.json --values run/intake/private/values.json --out run
 ```
 
@@ -352,7 +364,7 @@ through this conversation, so say so once first.
    that file once in the box it shows.
 4. `run.js` returns at once: call `await __pv.wait(40000)` until `result` is `filled` or
    `stopped`. `waiting` means the code or the files aren't in yet: say so once, gently.
-5. Save `JSON.stringify(__pv.last())` to `run/report.json`, then `python3 "${CLAUDE_SKILL_DIR}/review.py" run`
+5. Save `JSON.stringify(__pv.last())` to `run/report.json`, then `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run`
    writes `run/review.html`.
 
 Never read, screenshot or take the text of a page the compilation has filled, and take none
@@ -386,14 +398,14 @@ sign, the quadro riepilogativo) goes in a second compilation, when they say they
 
 <!-- vault -->
 ```sh
-pvault get $(python3 "${CLAUDE_SKILL_DIR}/portal/run.py" scope --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json") \
-  | python3 "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
+pvault get $(sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" scope --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json") \
+  | sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
       --values - --values run/intake/private/values.json --after-declarations --out run2
 ```
 <!-- /vault -->
 <!-- no-vault -->
 ```sh
-python3 "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
+sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
   --values run/values.json --values run/intake/private/values.json --after-declarations --out run2
 ```
 <!-- /no-vault -->
@@ -423,7 +435,7 @@ start it from `run/intake/private/values.json`). Check and merge, then the same 
 show the code window):
 
 ```sh
-python3 "${CLAUDE_SKILL_DIR}/check.py" ../studio.json values.json --out run/values.json
+sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/check.py" ../studio.json values.json --out run/values.json
 ```
 <!-- /vault -->
 
