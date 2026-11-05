@@ -10,9 +10,29 @@ permissions:
   pull-requests: write
 
 jobs:
+  # plugin/build.yaml's `vault`: false, the release builds no pvault (no Touch ID helper, no
+  # goreleaser archives) and the plugin it attaches ships none.
+  switch:
+    runs-on: ubuntu-latest
+    outputs:
+      vault: ${{ steps.read.outputs.vault }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: read
+        run: |
+          set -euo pipefail
+          vault=$(sed -n -E 's/^vault: *(true|false) *$/\1/p' plugin/build.yaml)
+          if [ "$vault" != true ] && [ "$vault" != false ]; then
+            echo "plugin/build.yaml: vault must be true or false" >&2
+            exit 1
+          fi
+          echo "vault=$vault" >> "$GITHUB_OUTPUT"
+
   # The Touch ID helper needs Swift and a Mac: one universal binary (Apple silicon and Intel),
   # ad-hoc signed as `make touchid` does; the installer signs it again on the person's Mac.
   touchid:
+    needs: switch
+    if: needs.switch.outputs.vault == 'true'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,14 +53,19 @@ jobs:
           path: touchid/pvault-touchid_*.tar.gz
 
   release:
-    needs: touchid
+    needs: [switch, touchid]
+    # touchid is skipped when the plugin ships no archive.
+    if: ${{ !cancelled() && needs.switch.result == 'success' && needs.touchid.result != 'failure' }}
     runs-on: ubuntu-latest
+    env:
+      VAULT: ${{ needs.switch.outputs.vault }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - uses: actions/download-artifact@v4
+        if: env.VAULT == 'true'
         with:
           name: touchid
           path: touchid
@@ -53,14 +78,23 @@ jobs:
         run: go test -race ./...
 
       - uses: goreleaser/goreleaser-action@v6
+        if: env.VAULT == 'true'
         with:
           version: "~> v2"
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Without the archive goreleaser doesn't run, so the release itself is made here.
+      - name: Create the release (no archive)
+        if: env.VAULT != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --generate-notes
+
       # The plugin people install in Claude (plugin/): built from this tag and the pratiche-napoli
-      # library, with this release's checksums so its setup skill can check the pvault download.
+      # library, with this release's checksums (when it ships the archive) so its setup skill can
+      # check the pvault download.
       # It is attached to the release as portali-<version>.zip.
       - uses: actions/checkout@v4
         with:
@@ -83,8 +117,11 @@ jobs:
             exit 1
           fi
           python3 -m pip install pyyaml
-          python3 plugin/build.py --library pratiche-napoli --out "$RUNNER_TEMP/plugin" \
-            --pvault-version "$version" --pvault-checksums dist/checksums.txt
+          pin=()
+          if [ "$VAULT" = true ]; then
+            pin=(--pvault-version "$version" --pvault-checksums dist/checksums.txt)
+          fi
+          python3 plugin/build.py --library pratiche-napoli --out "$RUNNER_TEMP/plugin" "${pin[@]}"
           cp "$RUNNER_TEMP/plugin/portali.plugin" "portali-$version.zip"
           sha256sum "portali-$version.zip" | cut -d' ' -f1 > "$RUNNER_TEMP/portali.sha256"
           gh release upload "$GITHUB_REF_NAME" "portali-$version.zip"

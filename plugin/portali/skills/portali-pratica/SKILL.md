@@ -19,11 +19,18 @@ the declarations, sign, pay and send.
 
   | Never | Say |
   |---|---|
+<!-- vault -->
   | vault, pvault | il suo archivio (Portali's private archive on this computer) |
+<!-- /vault -->
   | steps file, pre-flight, runner, run.js, check.js, script | (nothing: say what happens) |
   | draft | bozza |
   | run, fill | compilazione, compilo |
+<!-- vault -->
   | token, scope, grant, approval | conferma (con Touch ID / Windows Hello) |
+<!-- /vault -->
+<!-- no-vault -->
+  | studio.json, values.json | i dati dello studio, i dati del lavoro |
+<!-- /no-vault -->
   | slug, field id, JSON, hash, sha256, .js | (never) |
   | review.html | la pagina di riepilogo |
   | unsupported, refused | non posso prepararla, perché … |
@@ -44,11 +51,21 @@ the declarations, sign, pay and send.
   send. The runner refuses them; don't do them by hand.
 - **No credentials.** Never ask for, read or write a password, PIN or SPID/CIE login, theirs
   or a client's. They log in to the portal themselves.
+<!-- vault -->
 - **You never see their data.** Values go from the archive and the documents to the portal
   without passing through this conversation: never print `pvault get`'s output, never open the
   documents, `run/intake/private/`, `run/private/` or `run/review.html`. You read only what the
   tools print for you (which fields exist or are missing, never their values).
 - **No guesses.** Every value comes from the archive, a document or the tecnico.
+<!-- /vault -->
+<!-- no-vault -->
+- **You never see the documents' data.** Values go from the documents to the portal without
+  passing through this conversation: never open the documents, `run/intake/private/`,
+  `run/private/`, `run/values.json` or `run/review.html`. You read only what the tools print
+  for you (which fields exist or are missing, never their values). What the tecnico writes to
+  you is the one thing that does pass through it (step 0).
+- **No guesses.** Every value comes from a document or the tecnico.
+<!-- /no-vault -->
 - **The built-in browser** of the Claude desktop app, never Claude in Chrome.
 
 ## What this skill has
@@ -63,6 +80,7 @@ each command. Scripts run with `python3` and need no packages.
   (`rules/`), where to go (`offices/`). `reference/schema.json`: every field.
 - `portal/run.py`, `portal/route.py`, `intake/intake.py`, `review.py`, `check.py`.
 
+<!-- vault -->
 ## 0. The archive
 
 The tecnico's details, their studio's, and each client's live in their archive (pvault, a
@@ -84,6 +102,38 @@ that `portali-setup` printed):
 The first time, the studio's details may be missing (pre-flight lists them under `missing`):
 ask for them once, in one message, and save each with `pvault set <id> <value>` (one
 confirmation each) or have them type them in the archive's page (`pvault ui`).
+<!-- /vault -->
+<!-- no-vault -->
+## 0. The folder of jobs
+
+Portali installs nothing and keeps nothing of its own: the details live in files in the
+tecnico's folder of jobs (the folder open in this session, one subfolder per job; each command
+below runs in the job's subfolder).
+
+- `../studio.json`, at the folder's root: the studio (`business.*`) and the tecnico (the slug
+  `tecnico`: `"tecnico:identity.first_name"`), written once, kept for every job.
+- `values.json`, in the job's subfolder: what the tecnico tells you about the job's people that
+  the documents don't hold (`"bianchi:identity.first_name"`).
+- What the documents hold stays where the intake writes it (`run/intake/private/values.json`),
+  which you never open.
+
+When it doesn't exist, create `../studio.json` as `{"tecnico:ruolo.tipo": "titolare"}` (this
+makes `tecnico` the `t:` role; without it pre-flight lists none of their details) and
+`values.json` as `{}`. The first time, say once, in one line: a
+program on this computer reads the documents and the details reach the portal sealed, so you
+don't see them; only what they write in this conversation passes through it. The first
+pratica's pre-flight lists the studio's and the tecnico's details under `missing`: ask for them
+once, in one message, and write them into `../studio.json`.
+
+Before each pre-flight and each compilation, check and merge the two files:
+
+```sh
+python3 SKILL/check.py ../studio.json values.json --out run/values.json
+```
+
+It prints each value that doesn't fit (a codice fiscale, a partita IVA, a date) and exits 1:
+ask the tecnico for that one again.
+<!-- /no-vault -->
 
 ## 1. Which pratica
 
@@ -129,10 +179,14 @@ Without `--steps` and with `--part facts`, the same before step 1.
 
 The roles: `t:` is the tecnico; the others are people that `answers.json` names under
 `people` (the entry's `notes` say which: `{"people": {"c": "bianchi"}}` makes the client
-`bianchi`). A client the archive doesn't hold yet is added by the values the intake read.
+`bianchi`).
+<!-- vault -->
+A client the archive doesn't hold yet is added by the values the intake read.
+<!-- /vault -->
 
 ## 3. Pre-flight, before anything opens
 
+<!-- vault -->
 The values come from one confirmation:
 
 ```sh
@@ -144,6 +198,18 @@ pvault get $(python3 SKILL/portal/run.py scope --steps SKILL/pratiche/<name>.jso
 Leave out `--values run/intake/private/values.json` when the intake didn't run (here and
 below). Say first, in one line, that Touch ID (or Windows Hello) will ask to read the details
 this pratica needs. Pre-flight prints JSON and exits 0 only when `ready`.
+<!-- /vault -->
+<!-- no-vault -->
+After `check.py` (step 0):
+
+```sh
+python3 SKILL/portal/run.py preflight --steps SKILL/pratiche/<name>.json \
+  --answers answers.json --values run/values.json --values run/intake/private/values.json
+```
+
+Leave out `--values run/intake/private/values.json` when the intake didn't run (here and
+below). Pre-flight prints JSON and exits 0 only when `ready`.
+<!-- /no-vault -->
 
 - `unsupported`: say why in one line and stop. With `defects`, the law allows the case but the
   portal can't take it as the law asks: say what the portal does, what the law asks, and give
@@ -163,8 +229,18 @@ this pratica needs. Pre-flight prints JSON and exits 0 only when `ready`.
   with it, so there is no second message: `assumes` (worded from the proposals it names: it holds
   once those are confirmed), or `cases` ("Userò: X se …, Y se …", each `if` an answer given in this
   message) and `otherwise` (the answers with no proposal: ask its question under them). On "ok",
-  write the case that matches what they answered. A `missing` field the tecnico gives you goes into the archive
-  (`pvault set`), never into a file. Write the other replies under each `key` (dates
+  write the case that matches what they answered.
+<!-- vault -->
+  A `missing` field the tecnico gives you goes into the archive (`pvault set`), never into a file.
+<!-- /vault -->
+<!-- no-vault -->
+  A `missing` field the tecnico gives you goes into `../studio.json` when it is the studio's or
+  the tecnico's (no slug, or `tecnico:`), else into the job's `values.json` under the slug
+  `answers.json`'s `people` gives its role (`c:identity.last_name` with `"c": "bianchi"` is
+  `bianchi:identity.last_name`: under `c:` it would be ignored), or as printed when `people`
+  doesn't name the role; then `check.py` again.
+<!-- /no-vault -->
+  Write the other replies under each `key` (dates
   YYYY-MM-DD, files as paths) and run pre-flight again; an `error` says what didn't fit, and
   a follow-up whose details they didn't give comes back as a question: ask only those.
 - `files`: when `pick` is there, say they'll choose the pratica's files once, on the portal's
@@ -180,11 +256,22 @@ and the review page.
 
 ## 4. The compilation
 
+<!-- vault -->
 ```sh
 pvault get $(python3 SKILL/portal/run.py scope --steps SKILL/pratiche/<name>.json) \
   | python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json \
       --answers answers.json --values - --values run/intake/private/values.json --out run
 ```
+<!-- /vault -->
+<!-- no-vault -->
+```sh
+python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json --answers answers.json \
+  --values run/values.json --values run/intake/private/values.json --out run
+```
+
+Where no window can show the code (Cowork's sandbox), add `--plain`: the values then pass
+through this conversation, so say so once first.
+<!-- /no-vault -->
 
 1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser:
    "Acceda con SPID nella finestra del browser; quando vede la pagina del portale mi scriva
@@ -230,17 +317,26 @@ What the portal makes only once the declarations are ticked (the procura for the
 sign, the quadro riepilogativo) goes in a second compilation, when they say they have signed
 ("Ho firmato"):
 
+<!-- vault -->
 ```sh
 pvault get $(python3 SKILL/portal/run.py scope --steps SKILL/pratiche/<name>.json) \
   | python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json --answers answers.json \
       --values - --values run/intake/private/values.json --after-declarations --out run2
 ```
+<!-- /vault -->
+<!-- no-vault -->
+```sh
+python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json --answers answers.json \
+  --values run/values.json --values run/intake/private/values.json --after-declarations --out run2
+```
+<!-- /no-vault -->
 
 Write the signed files' paths into `answers.json` first (pre-flight with `--after-declarations`
 says which keys). It opens the draft by its name and attaches those files alone. It carries no
 other value, so there is **no code** this time: they choose the signed files once in the box on
 the page. Same calls as step 4, from `check.js`.
 
+<!-- vault -->
 ## The folder, without the archive
 
 Only where the archive can't be reached (Cowork's sandbox, until it can): the job's values go
@@ -254,6 +350,7 @@ show the code window):
 ```sh
 python3 SKILL/check.py ../studio.json values.json --out run/values.json
 ```
+<!-- /vault -->
 
 ## Beyond this plugin
 
