@@ -2,14 +2,16 @@
 """Build the Portali plugin for Cowork: plugin/portali plus the runner, the rehearsals'
 steps files and the pratiche-napoli library, as one installable file.
 
-  build.py [--library DIR] [--out DIR] [--connector URL]
+  build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off]
 
 Writes OUT/portali/ (default plugin/dist) and OUT/portali.plugin (the same, zipped), then
 pre-flights the test fixture with the built plugin under the system python3, as Cowork would run
 it. --library is a pratiche-napoli checkout (default $PRATICHE_NAPOLI_DIR). Needs PyYAML
 (the pratica venv's Python): the plugin itself needs no packages, because every YAML file
 the runner reads goes in as JSON (shim/yaml.py says how). --connector adds the Portali
-connector (connector/, serving this same build) as the plugin's .mcp.json.
+connector (connector/, serving this same build) as the plugin's .mcp.json. --vault overrides
+build.yaml's `vault` for this build: off, the plugin carries no setup skill and its texts keep
+only their no-vault parts.
 """
 
 import argparse
@@ -43,6 +45,50 @@ LIBRARY_PARTS = ["procedures", "rules", "offices", "situations", "contract/signi
 COVERAGE = yaml.safe_load((HERE / "coverage.yaml").read_text())
 # The fixture the test skill runs: the CILA rehearsal's P6 case, made-up people.
 TEST_CASE = "cila-fittizia"
+# The one switch: whether the plugin ships the archive (build.yaml says what each means).
+SETUP_SKILL = "portali-setup"
+MARKER = re.compile(r"^<!-- (/?)(vault|no-vault) -->$")
+
+
+def vault_default():
+    on = yaml.safe_load((HERE / "build.yaml").read_text()).get("vault")
+    if not isinstance(on, bool):
+        sys.exit("plugin/build.yaml: `vault` must be true or false")
+    return on
+
+
+def keep_parts(text, vault, name):
+    """text with only the parts for this build: a line `<!-- vault -->` opens a part kept when the
+    plugin ships the archive, `<!-- no-vault -->` one kept when it doesn't, and `<!-- /vault -->`
+    or `<!-- /no-vault -->` closes it. Parts don't nest; the marker lines themselves go."""
+    out, open_ = [], None
+    for n, line in enumerate(text.splitlines(keepends=True), 1):
+        m = MARKER.match(line.strip())
+        if not m:
+            if open_ is None or (open_ == "vault") == vault:
+                out.append(line)
+            continue
+        closing, part = m.groups()
+        if closing and open_ != part or not closing and open_ is not None:
+            sys.exit(f"{name}:{n}: {line.strip()} with {open_ and f'<!-- {open_} -->' or 'no part'} open")
+        open_ = None if closing else part
+    if open_:
+        sys.exit(f"{name}: <!-- {open_} --> never closed")
+    return "".join(out)
+
+
+def select_vault(plugin, vault):
+    """The hand-written plugin texts for this build. Without the archive: no setup skill (nor its
+    installers), and nothing left in a text that names it."""
+    if not vault:
+        shutil.rmtree(plugin / "skills" / SETUP_SKILL)
+    for f in sorted(plugin.rglob("*.md")):
+        text = keep_parts(f.read_text(), vault, f.relative_to(plugin))
+        if not vault:
+            said = re.search(r"pvault|" + SETUP_SKILL, text)
+            if said:
+                sys.exit(f"{f.relative_to(plugin)}: says {said.group(0)!r} outside a <!-- vault --> part")
+        f.write_text(text)
 
 
 _built = {}
@@ -254,6 +300,20 @@ def self_check(plugin):
                             "--values", values, "--made-up"], cwd=case, capture_output=True, text=True)
         if r.returncode:
             sys.exit(f"pre-flight of the test case isn't ready:\n{r.stdout}{r.stderr}")
+        # A first pratica in a new folder of jobs, as the skill starts it: studio.json holds only
+        # the tecnico's role, and pre-flight must then list the tecnico's details to ask for.
+        first = Path(tmp) / "first"
+        first.mkdir()
+        (first / "studio.json").write_text('{"tecnico:ruolo.tipo": "titolare"}')
+        (first / "values.json").write_text("{}")
+        subprocess.run([py, skill / "check.py", "studio.json", "values.json", "--out", "values-merged.json"],
+                       cwd=first, check=True, capture_output=True)
+        r = subprocess.run([py, skill / "portal" / "run.py", "preflight", "--steps",
+                            skill / "pratiche" / f"{TEST_CASE}.json", "--answers", case / "answers.json",
+                            "--values", "values-merged.json", "--made-up"], cwd=first, capture_output=True, text=True)
+        missing = [m["field"] for m in json.loads(r.stdout or "{}").get("missing", [])]
+        if not any(f.startswith("tecnico:identity.") for f in missing) or "*:ruolo.tipo" in missing:
+            sys.exit(f"a new folder's first pre-flight doesn't list the tecnico's details:\n{r.stdout}{r.stderr}")
         # Every pratica's JSON must read as its YAML did: pre-flight prints the same, from
         # the plugin under python3 and from the repo's runner with PyYAML.
         for steps in sorted((skill / "pratiche").glob("*.json")):
@@ -303,24 +363,29 @@ def main():
     ap.add_argument("--pvault-version", help="the pvault release the setup skill installs, e.g. 0.1.0 (with --pvault-checksums)")
     ap.add_argument("--pvault-checksums", type=Path, help="that release's checksums.txt")
     ap.add_argument("--connector", help="the Portali connector's https URL (connector/): the plugin brings it")
+    ap.add_argument("--vault", choices=("on", "off"), help="ship the archive or not, for this build (default: build.yaml's)")
     a = ap.parse_args()
+    vault = vault_default() if a.vault is None else a.vault == "on"
     if a.connector and not re.fullmatch(r"https://[^\s/]+(/\S*)?", a.connector):
         ap.error("--connector must be an https URL")
     if bool(a.pvault_version) != bool(a.pvault_checksums):
         ap.error("--pvault-version and --pvault-checksums go together")
+    if a.pvault_version and not vault:
+        ap.error("--pvault-version: this build ships no archive (vault off in plugin/build.yaml or --vault off)")
     if not a.library:
         ap.error("--library or $PRATICHE_NAPOLI_DIR: a pratiche-napoli checkout")
     plugin = a.out / "portali"
     if plugin.exists():
         shutil.rmtree(plugin)
     shutil.copytree(HERE / "portali", plugin, ignore=shutil.ignore_patterns(".DS_Store", "__pycache__"))
+    select_vault(plugin, vault)  # before anything else goes in: only the hand-written texts
     # The licence and notices travel with the plugin: it bundles the library's CC BY-SA texts.
     for name in ("LICENSE", "NOTICE.md"):
         shutil.copy2(REPO / name, plugin / name)
     if a.connector:  # without one the skill uses coverage.json, as of the build
         (plugin / ".mcp.json").write_text(as_json({"mcpServers": {"portali": {"type": "http", "url": a.connector}}}))
     if a.pvault_version:  # without one the setup skill says there is no release to install from
-        write_pvault_release(plugin / "skills" / "portali-setup", a.pvault_version, a.pvault_checksums)
+        write_pvault_release(plugin / "skills" / SETUP_SKILL, a.pvault_version, a.pvault_checksums)
     skill = plugin / "skills" / "portali-pratica"
     copy_runner(skill)
     catalog = copy_pratiche(skill, a.library)
@@ -337,7 +402,7 @@ def main():
             if f.is_file() and "__pycache__" not in f.parts and f.name != ".DS_Store":
                 z.write(f, f.relative_to(plugin))
     counts = {s: sum(e["status"] == s for e in coverage) for s in ("available", "paused", "mapped", "guide", "coming")}
-    print(f"{zipped}: {manifest['name']} {manifest['version']}, {len(catalog)} pratiche, "
+    print(f"{zipped}: {manifest['name']} {manifest['version']}, {'with' if vault else 'no'} archive, {len(catalog)} pratiche, "
           f"{zipped.stat().st_size // 1024} KB; coverage {counts}")
     return 0
 
