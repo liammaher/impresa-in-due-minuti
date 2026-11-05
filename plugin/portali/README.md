@@ -4,6 +4,20 @@ Prepara una pratica del Comune di Napoli su impresainungiorno (SUE e SUAP) dai d
 cliente. Si ferma dove comincia la sua parte: le dichiarazioni, la firma digitale, il pagamento e
 l'invio. Gratuito e open source.
 
+## Cosa copre, e cosa no
+
+- **Solo il Comune di Napoli (Campania)**, sugli sportelli SUE e SUAP di impresainungiorno. Un
+  immobile in un altro comune, un altro ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia
+  delle Entrate, Regione) o una pratica che Portali non conosce: Claude Le dice subito che non è
+  coperta dall'automazione, e non apre nulla.
+- Per ogni lavoro Claude Le dice prima se la pratica è **coperta dall'automazione** (la prepara per
+  intero), se ha **solo indicazioni** (non la compila) o se **non è coperta**, e perché. Poi Lei
+  conferma, e solo allora si comincia.
+- **Coperta** vuol dire: compilata sul portale vero con dati di prova, rileggendo ogni valore.
+  Nessuna pratica reale è ancora stata inviata con Portali.
+- Le regole vengono dalla biblioteca pratiche-napoli, ogni fatto con la sua fonte. Ciò che la
+  biblioteca non copre, Claude lo dice.
+
 ## Installazione
 
 Nell'app Claude per computer, un solo comando aggiunge e installa Portali:
@@ -28,13 +42,14 @@ altro da configurare. I dati dello studio li chiede Claude alla prima pratica, u
    Claude. Se lo fa, Claude non ne usa i dati: li copia nella cartella, o Le chiede di salvarli lì.
 2. Scriva una riga: «CILA per il signor Bianchi, i documenti sono nella cartella Bianchi».
 <!-- vault -->
-3. Claude risponde con un solo messaggio: cosa ha letto, quale pratica serve, le poche domande.
-   Risponda una volta, confermi con Touch ID (o Windows Hello).
+3. Claude risponde con un solo messaggio: se la pratica è coperta, cosa dicono i documenti,
+   quale pratica propone, le poche domande. Risponda una volta, confermi con Touch ID (o Windows
+   Hello).
 4. Acceda con SPID nel browser dell'app e scriva sul portale il codice che compare sullo schermo.
 <!-- /vault -->
 <!-- no-vault -->
-3. Claude risponde con un solo messaggio: cosa ha letto, quale pratica serve, le poche domande.
-   Risponda una volta.
+3. Claude risponde con un solo messaggio: se la pratica è coperta, cosa dicono i documenti,
+   quale pratica propone, le poche domande. Risponda una volta.
 4. Acceda con SPID nel browser dell'app e scriva sul portale il codice che compare sullo schermo.
 <!-- /no-vault -->
 5. Quando la bozza è pronta, legga la pagina di riepilogo: cosa resta da fare a Lei, ogni

@@ -48,6 +48,20 @@ the declarations, sign, pay and send.
 - A pratica's status: `available` = disponibile; `mapped` / `coming` = in arrivo (non ancora
   provata sul portale); `guide` = solo indicazioni; `paused` = sospesa (il portale è cambiato).
 
+## What Portali covers, said plainly
+
+- **Only the Comune di Napoli (Campania)**, on impresainungiorno's SUE and SUAP. Another comune,
+  another ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia delle Entrate, Regione) or a
+  pratica whose status isn't `available` is **not covered by the automation**: say so first, in one
+  line, and open nothing. A property outside Napoli is refused by the intake's `notes` and by
+  pre-flight; when the documents don't say where it is, ask.
+- **Coperta** means: filled on the real portal with made-up data, every value read back. No real
+  pratica has been sent through Portali yet: the verdict says so (step 3).
+- **Facts come from the library, each with its source** in brackets after it ("(DD 501/2026)").
+  What the library doesn't cover: "La biblioteca di Portali non lo copre." Anything you add from
+  your own knowledge is marked "(non verificato da Portali)", and is never a figure, a deadline or
+  a list of documents.
+
 ## Rules that never bend
 
 - **All or nothing.** Between the login and the tecnico's own steps the compilation does
@@ -56,7 +70,9 @@ the declarations, sign, pay and send.
 - **Their taps stay theirs.** Never tick a declaration, press pagoPA, Invia or Firma, sign or
   send. The runner refuses them; don't do them by hand.
 - **No credentials.** Never ask for, read or write a password, PIN or SPID/CIE login, theirs
-  or a client's. They log in to the portal themselves.
+  or a client's. They log in to the portal themselves. If they write one: don't use or repeat
+  it, say you will never need a password or PIN, that they should change it, and that they log
+  in themselves when the time comes.
 <!-- vault -->
 - **You never see their data.** Values go from the archive and the documents to the portal
   without passing through this conversation: never print `pvault get`'s output, never open the
@@ -80,10 +96,11 @@ the declarations, sign, pay and send.
 
 1. The studio's details, once (step 0).
 2. They say the job in one line and hand over the folder (documents attached here instead: step 2).
-3. You answer in **one message**: what you read (with the document each fact comes from), the
-   pratica the law gives (route.py), any refusal first, and the few open facts with proposed
+3. You answer in **one message**: first the verdict (covered by the automation, guidance only,
+   or not covered, and why), then what the documents say (with the document each fact comes
+   from), the pratica the rules give as your proposal, and the few open facts with proposed
    answers (pre-flight's `message`, Napoli's annexes and the file problems in it). Steps 1-3.
-4. They reply once ("ok", or what to change).
+4. They reply once ("ok", or what to change): nothing opens before it.
 5. The files are checked (pre-flight again). Nothing else to ask, unless they changed a proposal.
 6. They log in with SPID in the app's browser; you fill (step 4).
 7. The review page and a short list of their steps (step 5).
@@ -182,7 +199,10 @@ python3 "${CLAUDE_SKILL_DIR}/portal/route.py" --table sue-napoli --answers facts
 Other pratiche (a proroga, a fine lavori, a voltura): search `catalog.json`, or the Portali
 connector's `find_pratica` when it is there (describe a case to it by its facts only, never by a
 name, codice fiscale or address). A status other than `available` (its line in `coverage.json`,
-or the connector's `get_pratica`): say in one line what it means and stop.
+or the connector's `get_pratica`) is the verdict: "Non coperta dall'automazione: …" (in arrivo,
+sospesa) or "Solo indicazioni: questa pratica non la compilo." with what the library says, its
+sources, and stop. Nothing in `catalog.json` or `coverage.json`: "Non coperta: Portali non la
+conosce."
 
 ## 2. The documents
 
@@ -209,7 +229,8 @@ Then, as for any folder, read them with the intake, never yourself:
 python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" scan docs --out run/intake --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json"
 ```
 
-Before step 1 the same without `--steps`. Read only `run/intake/intake.json`: each file's kind,
+Before step 1 the same without `--steps`. A `notes` line saying the property isn't in the Comune
+di Napoli is the verdict: send it and stop. Read only `run/intake/intake.json`: each file's kind,
 the fields filled (ids, not values), `unread` files (scans and photos: their facts are asked
 instead), `notes` (in Italian), and `proposals` with the document and words each comes from. Take them now, so pre-flight doesn't ask
 them again: `python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" accept run/intake --into answers.json`
@@ -254,11 +275,17 @@ below). Pre-flight prints JSON and exits 0 only when `ready`.
   the portal's flaw, what you prepare instead, the choices. Send it as it is and stop.
 - `message`: the questions, the proposals, the details no document holds and the files to fix,
   already in Italian, ending with what is left to them. **The one message** is, in this order:
-  1. "Ho letto:" and a line per document, with its facts ("Dalla relazione tecnica:
-     manutenzione straordinaria, nessun intervento strutturale, inizio lavori 19/10/2026"), and
-     the intake's `notes`;
-  2. route.py's `message` (the pratica);
-  3. pre-flight's `message`, **as it is**.
+  1. The verdict, one line: "Coperta dall'automazione: la preparo per intero, fino alla Sua
+     parte (dichiarazioni, firma, pagamento, invio). È provata sul portale con dati di prova;
+     nessuna pratica reale è ancora stata inviata con Portali." (A refusal or a status other
+     than `available` is its own verdict: send that instead, and stop.)
+  2. "Dai documenti (li ha letti il programma sul Suo computer):" and a line per document, with
+     its facts ("Dalla relazione tecnica: manutenzione straordinaria, nessun intervento
+     strutturale, inizio lavori 19/10/2026"), the intake's `notes`, and "Non ho riconosciuto:"
+     for a file with no kind;
+  3. route.py's `message`, as your proposal: "Propongo: …". The choice is the tecnico's: they
+     sign the asseverazione;
+  4. pre-flight's `message`, **as it is**.
   You may only shorten it: a question's lettered follow-ups (3.a, 3.b) into a few words under it,
   keeping their letters ("3.a-3.c, se sì: quali impianti e chi rilascia la dichiarazione"), and a
   proposal line to its subject ("Tolleranze: no"). Never drop a question, a proposal or a
@@ -404,5 +431,7 @@ write or send the email, never put the client's details in it.
 ## Questions with no compilation
 
 "Cosa serve per una CILA in centro storico?", "È una CILA o una SCIA?": answer from
-`get_procedure` (else `library/procedures`) and `library/rules`, naming the source each fact
-cites. Say when the library doesn't cover it rather than filling the gap from memory.
+`get_procedure` (else `library/procedures`) and `library/rules`, each fact with its source in
+brackets after it, never one list of sources for the whole answer. Say when the library doesn't
+cover it rather than filling the gap from memory. Outside the Comune di Napoli: "Portali copre
+solo il Comune di Napoli", and nothing more about another comune's rules.
