@@ -18,7 +18,7 @@ asks:
 supports:
   # The co-holders' section holds one person and has no "+" (crawled 2026-10-28): a portal
   # defect, not a mapping gap.
-  - {if: "{{ask.cointestatario}}", when: "{{ask.altri_cointestatari|not}}", defect: coholders-one, else: "La sezione dei cointestatari del portale (ci sono cointestatari, nella procedura guidata) contiene una sola persona e non ha il \"+\": una voltura a favore di più cointestatari non può essere presentata completa sul portale (il permesso si trasferisce a tutti i successori o aventi causa, art. 11 c. 2 DPR 380/2001)."}
+  - {if: "{{ask.cointestatario}}", when: "{{ask.altri_cointestatari|not}}", defect: coholders-one, else: "Voltura a più cointestatari: la sezione dei cointestatari ha posto per una sola persona e nessun «+». È un difetto del portale; con un solo cointestatario la preparo."}
 yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
   - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"

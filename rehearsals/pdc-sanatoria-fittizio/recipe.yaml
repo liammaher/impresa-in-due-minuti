@@ -118,7 +118,7 @@ yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
   - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
   - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma con la richiesta"
-  - "Nell'asseverazione, la voce \"non interessa aree percorse dal fuoco\" (qualità terreni) è sul portale un'unica scelta insieme alla dichiarazione sui terreni: Claude spunta la dichiarazione sui terreni e lascia non spuntata quella voce (un difetto del portale, docs/portal-defects.md); lo dichiari nella relazione tecnica se il SUE lo richiede"
+  - "Nell'asseverazione, «non interessa aree percorse dal fuoco» e la dichiarazione sui terreni sono una sola scelta sul portale (un suo difetto): Claude spunta quella sui terreni. Le aree bruciate le dichiari nella relazione tecnica, se il SUE lo chiede"
   - "Paghi il bollo come chiede il portale, poi firmi e invii (Firma e invio); conservi la ricevuta"
   - "Per opere sulle strutture: l'autorizzazione sismica in sanatoria del Genio Civile di Napoli su S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983); i relativi documenti vanno nell'apposito spazio di caricamento di questa pratica"
   - "Quando il SUE risponde (entro 60 giorni per l'art. 36, altrimenti la richiesta si intende respinta): paghi l'oblazione che determina (il doppio del contributo di costruzione, art. 36 c. 2; art. 36-bis c. 5) e ritiri il permesso in sanatoria"
@@ -139,7 +139,7 @@ supports:
   - {value: "{{ask.incentivo_energetico}}", in: ["art 14 c6", "art 14 c7", "bonus volumetrico"], else: "Il modulo del permesso sul portale richiede di dichiarare un incentivo energetico (art. 14 c. 6 o 7 D.Lgs. 102/2014, o il bonus del 5% del D.Lgs. 28/2011) anche senza opere energetiche: un progetto che non ne prevede non può essere presentato così com'è; chieda al SUE."}
   # Under art. 36-bis the portal makes the documents, the dating (documents or attestation) and
   # the works proposal one radio group (seen 2026-10-30), as in the SCIA's case 4.4.
-  - {value: "{{ask.pdc_sanatoria_caso}}", in: ["assenza"], defect: pdc-36bis, else: "È gestito solo l'art. 36 (lavori senza permesso o in totale difformità). Per l'art. 36-bis l'asseverazione del portale riunisce in un'unica scelta alternativa i documenti allegati, la data dei lavori e la proposta di interventi, per cui non consente di descrivere il caso per intero: è un difetto del portale (docs/portal-defects.md); chieda al SUE."}
+  - {value: "{{ask.pdc_sanatoria_caso}}", in: ["assenza"], defect: pdc-36bis, else: "Permesso in sanatoria dell'art. 36-bis: il portale salva una sola voce tra documenti, data dei lavori e proposta di interventi. È un difetto del portale; l'art. 36 lo preparo."}
   - {if: "{{ask.scia_onerosa}}", value: "{{ask.contributo_pagamento}}", in: ["prima dei lavori"], else: "In sanatoria il rilascio è subordinato al pagamento dell'oblazione (art. 36 c. 2, art. 36-bis c. 5): si paga al ritiro del permesso, non a rate né in corso d'opera, trattandosi di opere già realizzate."}
   # Works on structures begun without the seismic filing always need the autorizzazione sismica
   # in Campania (art. 4 c. 1 e L.R. 9/1983): the asseverazione's sismica row says so, and the

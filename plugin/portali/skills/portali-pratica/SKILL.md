@@ -12,7 +12,11 @@ the declarations, sign, pay and send.
 ## How you speak
 
 - **Always Italian**, whatever language these instructions are in. Address the tecnico as
-  **Lei**. Short sentences, one idea each.
+  **Lei**. Short sentences, one idea each. No paragraphs: a line per point.
+- **Lead with what is done**, then their step. A question is answered with a word or a pick.
+- **A refusal names the exact case** ("la SCIA in sanatoria per l'art. 36-bis c. 1"), never the
+  whole pratica, says what you can prepare instead, and whether it is the portal's flaw (then
+  nothing is missing on their side). Then their choices, in one to three short lines.
 - Building-law words are theirs and stay: CILA, SCIA, asseverazione, titolo abilitativo,
   art. 6-bis DPR 380/2001, diritti di segreteria, procura, elaborati grafici.
 - **Software words never reach them.** Say instead:
@@ -31,14 +35,16 @@ the declarations, sign, pay and send.
 <!-- no-vault -->
   | studio.json, values.json | i dati dello studio, i dati del lavoro |
 <!-- /no-vault -->
-  | slug, field id, JSON, hash, sha256, .js | (never) |
+  | slug, field id, JSON, hash, sha256, .js, a path | (never) |
   | review.html | la pagina di riepilogo |
+  | browser pane, built-in browser | il browser dell'app |
   | unsupported, refused | non posso prepararla, perché … |
 
-- The tools' questions, refusals, defects and the tecnico's end steps (`yours`) are already in
-  Italian, addressed as Lei: **give them as written** (their options and the law they cite
-  too). Only the runner's own reasons for a stop (`error` in a report) are English: they are
-  for you to fix, never to quote. Never show a field id or a role code (`c:`, `cr:`).
+- The tools' messages (`message` of route.py and pre-flight), questions, refusals, defects and the
+  tecnico's end steps (`yours`) are already in Italian, addressed as Lei: **give them as
+  written** (their options and the law they cite too). Only the runner's own reasons for a stop
+  (`error` in a report) are English: they are for you to fix, never to quote. Never show a field
+  id, a role code (`c:`, `cr:`) or a library id (`napoli/comune/...`).
 - A pratica's status: `available` = disponibile; `mapped` / `coming` = in arrivo (non ancora
   provata sul portale); `guide` = solo indicazioni; `paused` = sospesa (il portale è cambiato).
 
@@ -68,6 +74,21 @@ the declarations, sign, pay and send.
 - **No guesses.** Every value comes from a document or the tecnico.
 <!-- /no-vault -->
 - **The built-in browser** of the Claude desktop app, never Claude in Chrome.
+
+## The flow, as the tecnico lives it
+
+1. The studio's details, once (step 0).
+2. They say the job in one line and hand over the folder.
+3. You answer in **one message**: what you read (with the document each fact comes from), the
+   pratica the law gives (route.py), any refusal first, and the few open facts with proposed
+   answers (pre-flight's `message`, Napoli's annexes and the file problems in it). Steps 1-3.
+4. They reply once ("ok", or what to change).
+5. The files are checked (pre-flight again). Nothing else to ask, unless they changed a proposal.
+6. They log in with SPID in the app's browser; you fill (step 4).
+7. The review page and a short list of their steps (step 5).
+8. After they send it: the next dates, and the next pratica (step 7).
+
+Between 3 and 7 they hear nothing from you but the login, the code and the review page.
 
 ## What this skill has
 
@@ -140,28 +161,27 @@ ask the tecnico for that one again.
 
 ## 1. Which pratica
 
-Works needing a building title (CILA, SCIA, permesso, a sanatoria, a landscape authorization)
-are chosen by their facts, not their name. With the job's documents, read them first (step 2,
-facts only), then:
+Read the documents first (step 2, without `--steps`) and take their facts:
+`python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" accept run/intake --into facts.json --part facts`
+(`{}` without documents). Works needing a building title (CILA, SCIA, permesso, a sanatoria, a
+landscape authorization) are chosen by their facts, not their name:
 
 ```sh
 python3 "${CLAUDE_SKILL_DIR}/portal/route.py" --table sue-napoli --answers facts.json
 ```
 
-Start `facts.json` as `{}` (or from the intake). It asks the rules table's facts as pre-flight
-asks, **in one message**: the works first, then every other fact; one with `only_for` applies
-only to those kinds of works, so put it after the others as "solo per <the labels of those
-works>", and leave it out of the answers when the works are another kind. Write the replies into
-`facts.json` and run it again; if the answer about the works changes, keep only that one. Once
-it decides it names the pratica (`pratica`, its `steps`) and the `answers` to start
-`answers.json` with; `unsupported` is the reason none fits. Other pratiche (a proroga, a fine
-lavori, a voltura): search `catalog.json`, or the Portali connector's `find_pratica` when it is there
-(describe a case to it by its facts only, never by a name, codice fiscale or address).
+- `routed`: it names the pratica (`pratica`, its `steps`), the `answers` to start `answers.json`
+  with, and a `message` of a line or two (the pratica, what goes apart): it goes in the one
+  message (step 3). Go on to step 2 with `--steps`.
+- `questions`: the documents don't settle it. Its `message` asks the facts, already in Italian:
+  send it as it is, with what you read, as the one message. Write the replies into `facts.json`
+  and run it again; if the answer about the works changes, keep only that one.
+- `unsupported`: its `message` says why. Send it and stop; don't open the portal.
 
-- Status other than `available` (its line in `coverage.json`, or the connector's `get_pratica`): say in one
-  line what it means and stop.
-- None fits: say which pratica it is and that Portali can't prepare it yet, give what the
-  library says it needs, and stop. Don't open the portal.
+Other pratiche (a proroga, a fine lavori, a voltura): search `catalog.json`, or the Portali
+connector's `find_pratica` when it is there (describe a case to it by its facts only, never by a
+name, codice fiscale or address). A status other than `available` (its line in `coverage.json`,
+or the connector's `get_pratica`): say in one line what it means and stop.
 
 ## 2. The documents
 
@@ -172,13 +192,12 @@ tecnica, elaborati, ricevute, documento d'identità). Read them with the intake,
 python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" scan docs --out run/intake --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json"
 ```
 
-Read only `run/intake/intake.json`: each file's kind, the fields filled (ids, not values),
-`unread` files (scans and photos: their facts are asked instead), `notes`, and `proposals` with
-the document and words each comes from. Show the proposals in one message, grouped by document,
-in Italian ("Dalla relazione tecnica: manutenzione straordinaria, nessun intervento
-strutturale, inizio lavori 19/10/2026"). On "ok": `python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" accept
-run/intake --into answers.json` (it adds the client's and the owner's roles to `people`).
-Without `--steps` and with `--part facts`, the same before step 1.
+Before step 1 the same without `--steps`. Read only `run/intake/intake.json`: each file's kind,
+the fields filled (ids, not values), `unread` files (scans and photos: their facts are asked
+instead), `notes` (in Italian), and `proposals` with the document and words each comes from. Take them now, so pre-flight doesn't ask
+them again: `python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" accept run/intake --into answers.json`
+(it adds the client's and the owner's roles to `people`). They are shown in the one message, and
+the tecnico's "ok" confirms them with the rest; a correction goes into `answers.json`.
 
 The roles: `t:` is the tecnico; the others are people that `answers.json` names under
 `people` (the entry's `notes` say which: `{"people": {"c": "bianchi"}}` makes the client
@@ -214,14 +233,19 @@ Leave out `--values run/intake/private/values.json` when the intake didn't run (
 below). Pre-flight prints JSON and exits 0 only when `ready`.
 <!-- /no-vault -->
 
-- `unsupported`: say why in one line and stop. With `defects`, the law allows the case but the
-  portal can't take it as the law asks: say what the portal does, what the law asks, and give
-  its `choices` as a numbered list.
-- `message`: the questions, the proposals and the details no document holds, already written
-  in Italian. Send it **as it is**, as one message. You may only shorten it: a question's lettered
-  follow-ups (3.a, 3.b) into a few words under it, keeping their letters ("3.a-3.c, se sì: quali
-  impianti e chi rilascia la dichiarazione"), and a "Userò" line to its subject ("Tolleranze: no").
-  Never drop a question, a proposal or a detail, never add a field id or a role code.
+- `unsupported`: its `message` is the refusal, already written: the exact case, whether it is
+  the portal's flaw, what you prepare instead, the choices. Send it as it is and stop.
+- `message`: the questions, the proposals, the details no document holds and the files to fix,
+  already in Italian, ending with what is left to them. **The one message** is, in this order:
+  1. "Ho letto:" and a line per document, with its facts ("Dalla relazione tecnica:
+     manutenzione straordinaria, nessun intervento strutturale, inizio lavori 19/10/2026"), and
+     the intake's `notes`;
+  2. route.py's `message` (the pratica);
+  3. pre-flight's `message`, **as it is**.
+  You may only shorten it: a question's lettered follow-ups (3.a, 3.b) into a few words under it,
+  keeping their letters ("3.a-3.c, se sì: quali impianti e chi rilascia la dichiarazione"), and a
+  proposal line to its subject ("Tolleranze: no"). Never drop a question, a proposal or a
+  detail, never add a field id or a role code.
 - The replies go under each `key` of `questions` (dates YYYY-MM-DD, files as paths). "ok" confirms
   every proposal as proposed; one given per answer (`cases`) takes the case whose `if` matches what
   they answered. A detail of `missing` goes under its `id`:
@@ -234,13 +258,13 @@ below). Pre-flight prints JSON and exits 0 only when `ready`.
 <!-- /no-vault -->
   Then pre-flight again: what is still open (an `error`, a follow-up they didn't give, what a
   changed proposal adds) is its new `message`.
-- `files`: when `pick` is there, say they'll choose the pratica's files once, on the portal's
-  page, at the start ("All'inizio le chiederò di scegliere la cartella dei documenti").
-  A file's `problem` is what the sportello would refuse (at Napoli's SUE, DD 501/2026: not
-  PDF/A, not signed digitally, or a name with spaces, accents or signs): say which and how to
-  fix it.
-- `yours` and `second_run`: tell them now what they will do at the end, so nothing surprises
-  them.
+- `files`: the message already says when they'll pick the files on the portal's page (`pick`)
+  and which files the sportello would refuse (`problem`: at Napoli's SUE, DD 501/2026, not
+  PDF/A, not signed digitally, or a name with spaces, accents or signs) and how to fix them.
+- `yours` and `second_run`: the message's last line says what is left to them. The full list
+  comes with the review page (step 5); don't list it now.
+- `ready` with no `message`: nothing to ask. Say in one line what you read and the pratica, and
+  go on.
 
 Only when it says `ready` go on. From here they hear nothing from you but the login, the code
 and the review page.
@@ -297,10 +321,12 @@ three minutes; then stop, leave the draft saved, and say plainly what's left.
 
 ## 5. Hand over
 
-Send `run/review.html` (show it, never open it): what's left for them, every check, every value
-as it went on the portal, the declarations' own words. A report's `alerts` (the portal's
-warnings beside boxes it kept) are each one line for them to check. Then list their steps
-(`yours`) once more, in order, in Italian, and stop: they review, declare, sign, pay and send.
+Lead with what is done: "La bozza è salvata sul portale e ogni valore è stato riletto." Send
+`run/review.html` (show it, never open it): what's left for them, every check, every value as it
+went on the portal, the declarations' own words. A report's `alerts` (the portal's warnings
+beside boxes it kept) are each one line for them to check. Then their steps (`yours`), numbered,
+in order: the first sentence of each only (the page has them whole). Stop: they review, declare,
+sign, pay and send.
 
 ## 6. The second compilation, after the declarations
 
@@ -326,6 +352,14 @@ Write the signed files' paths into `answers.json` first (pre-flight with `--afte
 says which keys). It opens the draft by its name and attaches those files alone. It carries no
 other value, so there is **no code** this time: they choose the signed files once in the box on
 the page. Same calls as step 4, from `check.js`.
+
+## 7. After they send it
+
+When they say it is sent ("inviata"), read the procedure's `deadline` and `after` in
+`library/procedures/<procedure>.yaml` and give the next dates in two or three lines (from the
+date they sent it: the controls, the start or end of the works, the catasto within 30 days).
+Then offer, in one line, the pratica that usually follows (the fine lavori, the agibilità; its
+line in `catalog.json`), and stop.
 
 <!-- vault -->
 ## The folder, without the archive

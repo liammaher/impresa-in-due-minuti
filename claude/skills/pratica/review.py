@@ -65,7 +65,7 @@ def page(title, subtitle, ok, status, yours, facts, checks, groups, extra="", to
            f"<h1>{esc(title)}</h1><p class='sub'>{esc(subtitle)}</p>",
            f"<span class='status {'ok' if ok else 'bad'}'>{esc(status)}</span>"]
     if yours:
-        out.append("<h2>Cosa resta da fare a lei</h2><div class='you'><ol>"
+        out.append("<h2>Cosa resta da fare a Lei</h2><div class='you'><ol>"
                    + "".join(f"<li>{esc(y)}</li>" for y in yours) + "</ol></div>")
     out.append(top)
     if facts:
@@ -136,7 +136,7 @@ def declarations(report, folder):
     if items:
         ticked = [i["section"] for i in items if any(b["ticked"] for b in i["boxes"])]
         checks.append((f"Dichiarazioni: {len(items)} copiate parola per parola dal portale; nessuna spuntata" if not ticked
-                       else "Dichiarazioni già spuntate prima che lei le aprisse (non da questa compilazione): "
+                       else "Dichiarazioni già spuntate prima che Lei le aprisse (non da questa compilazione): "
                        + "; ".join(ticked), not ticked))
     elif items is not None and not note:
         checks.append(("Dichiarazioni: nessuna nel menu del portale; le legga lì una per una prima di spuntarle", False))

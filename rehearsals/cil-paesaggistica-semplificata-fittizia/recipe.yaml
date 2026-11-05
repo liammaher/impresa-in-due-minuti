@@ -14,7 +14,7 @@ asks:
 yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
   - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella; il bollo prima dell'invio"
+  - "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione: la ricevuta firmata va allegata lì; il bollo prima dell'invio"
   - "I lavori iniziano solo quando il SUE comunica che l'autorizzazione paesaggistica è stata acquisita: la data di inizio è la prima possibile"
   - "Se è dovuta la notifica preliminare (art. 99 D.Lgs. 81/2008): la alleghi in Allegati liberi, firmata digitalmente (solo .p7m): la CIL non ha uno spazio di caricamento apposito"
   - "Firmi e invii (Firma e invio); conservi la ricevuta"

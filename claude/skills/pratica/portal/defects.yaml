@@ -5,17 +5,21 @@
 # no state the page itself can't make). What to report and how each was checked is the entry's
 # `page`: defects.py --write draws docs/portal-defects.md from it (gen.py leaves it out of the
 # steps files). This file is the one record: edit it, never the page.
+# The tecnico reads title, what, works and choices in pre-flight's message (run.py refusal_text),
+# in Italian and short (test_gen caps them): title names the exact sub-case, what is the portal's
+# flaw in one sentence, works what still fills, choices one to three lines. law and checked too.
 
 scia-36bis-c1:
-  title: "SCIA in sanatoria, art. 36-bis c. 1 (Salva Casa): il portale salva una sola delle tre dichiarazioni"
+  title: "SCIA in sanatoria, art. 36-bis c. 1 (Salva Casa)"
   portal: "Napoli's SUE on impresainungiorno: the SCIA's asseverazione, sanatoria quadro"
-  what: "Le quattro voci del caso (la data delle opere provata da documenti, la data attestata, l'oblazione, la proposta di lavori) sono un unico campo: il portale conserva solo l'ultima spuntata."
-  law: "L'art. 36-bis DPR 380/2001 e il modello nazionale chiedono tutte e tre insieme: quando sono state eseguite le opere, l'oblazione determinata dal tecnico (c. 5) e se si propongono lavori (c. 2)."
-  checked: "01/11/2026, su una bozza con dati fittizi; la casella sismica del caso (art. 36-bis c. 3-bis) funziona e non ne fa parte"
+  what: "Il portale salva una sola voce tra data delle opere, oblazione e proposta di lavori: la legge le chiede tutte."
+  works: "Le altre SCIA in sanatoria le preparo: lavori in corso (art. 37 c. 5), doppia conformità (art. 36-bis c. 5 b), strutture, area tutelata, cambio d'uso, variante a una SCIA."
+  law: "Art. 36-bis DPR 380/2001: la data delle opere, l'oblazione (c. 5) e se si propongono lavori (c. 2), insieme."
+  checked: "01/11/2026, su una bozza con dati fittizi."
   choices:
-    - "Chieda al SUE (Comune di Napoli, Sportello Unico Edilizia) come vuole che sia presentata questa sanatoria finché il portale non la accetta: via PEC, oppure sul portale con la data e l'oblazione indicate nella relazione tecnica asseverata allegata."
-    - "Segnali il difetto al gestore del portale (assistenza impresainungiorno di InfoCamere) o al SUE: docs/portal-defects.md indica di cosa si tratta e come è stato verificato."
-    - "La presenti Lei sul portale, a mano, come Le indica il SUE: Claude non compila questo caso."
+    - "Chieda al SUE come presentarla finché il portale non la accetta (PEC, o il portale con i dati nella relazione)."
+    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
   report: docs/portal-defects.md
   page:
     heading: "SCIA in sanatoria, art. 36-bis c. 1: dating, oblazione and works proposal saved as one field"
@@ -28,15 +32,16 @@ scia-36bis-c1:
       "Not part of it": "the case's seismic box below the four rows, \"Quanto alla rilevanza sismica [...] ai sensi dell'art. 36-bis, comma 3-bis\", works. Its choices are fields of their own: the zone (3 and 4, or 1 and 2), then for zones 1 and 2 whether the works have structural relevance, then the art. 94-bis class, and for a relevant one \"allega l'autorizzazione sismica\" or the silenzio assenso. Ticking them kept the dating row ticked (2026-11-01, same draft, not saved). So works on structures under c. 1 are blocked by this defect only. The box is offered only in this case, as in InfoCamere's SCIA form (`schema/sue-choices.json` 033/034): with double conformity and for works under way, structures go in the asseverazione's sismica quadro (the SCIA in sanatoria maps them there)."
 
 scia-34ter:
-  title: "SCIA in sanatoria, art. 34-ter (variante a un titolo anteriore al 1977): il portale salva la datazione oppure l'oblazione"
+  title: "SCIA in sanatoria, art. 34-ter (variante a un titolo anteriore al 1977)"
   portal: "Napoli's SUE on impresainungiorno: the SCIA's asseverazione, sanatoria quadro"
-  what: "Le tre voci del caso (la data della variante provata da documenti, la data attestata, l'oblazione) sono un unico campo: il portale conserva solo l'ultima spuntata."
-  law: "L'art. 34-ter c. 2 e 3 DPR 380/2001 chiede entrambe: la data della variante (dai documenti dell'art. 9-bis c. 1-bis, altrimenti dall'attestazione del tecnico) e l'oblazione dell'art. 36-bis c. 5 a cui è soggetta la SCIA."
-  checked: "02/11/2026, su una bozza con dati fittizi, voce spuntata e poi annullata senza salvare; le righe proprie del quadro della sanatoria (il titolo variato, il pagamento) sono due campi e funzionano"
+  what: "Il portale salva la data della variante oppure l'oblazione, non entrambe: la legge le chiede tutte e due."
+  works: "Le altre SCIA in sanatoria le preparo."
+  law: "Art. 34-ter c. 2 e 3 DPR 380/2001: la data della variante e l'oblazione dell'art. 36-bis c. 5."
+  checked: "02/11/2026, su una bozza con dati fittizi."
   choices:
-    - "Chieda al SUE (Comune di Napoli, Sportello Unico Edilizia) come vuole che sia presentata questa sanatoria finché il portale non la accetta: via PEC, oppure sul portale con la data o l'oblazione indicate nella relazione tecnica asseverata allegata."
-    - "Segnali il difetto al gestore del portale (assistenza impresainungiorno di InfoCamere) o al SUE: docs/portal-defects.md indica di cosa si tratta e come è stato verificato."
-    - "La presenti Lei sul portale, a mano, come Le indica il SUE: Claude non compila questo caso."
+    - "Chieda al SUE come presentarla finché il portale non la accetta (PEC, o il portale con i dati nella relazione)."
+    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
   report: docs/portal-defects.md
   page:
     heading: "SCIA in sanatoria, art. 34-ter: a pre-1977 variant's dating and oblazione saved as one field"
@@ -49,15 +54,16 @@ scia-34ter:
       "To report": "the dating and the oblazione should be separate choices, as the quadro's title and payment are."
 
 pdc-36bis:
-  title: "Permesso in sanatoria, art. 36-bis: il portale salva una sola delle dichiarazioni"
+  title: "Permesso in sanatoria, art. 36-bis"
   portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, sanatoria quadro"
-  what: "I documenti allegati, la data delle opere (documenti o attestazione) e la proposta di lavori sono un unico gruppo di opzioni: spuntarne una toglie la spunta alle altre."
-  law: "L'art. 36-bis DPR 380/2001 chiede insieme la data delle opere, l'oblazione e se si propongono lavori."
-  checked: "30/10/2026, a mano su una bozza con dati fittizi"
+  what: "Il portale salva una sola voce tra documenti, data delle opere e proposta di lavori: la legge le chiede insieme."
+  works: "Il permesso in sanatoria dell'art. 36 (lavori senza permesso o in totale difformità) lo preparo."
+  law: "Art. 36-bis DPR 380/2001: la data delle opere, l'oblazione e se si propongono lavori, insieme."
+  checked: "30/10/2026, su una bozza con dati fittizi."
   choices:
-    - "Chieda al SUE come vuole che sia presentato questo permesso in sanatoria finché il portale non lo accetta."
-    - "Segnali il difetto al gestore del portale o al SUE: docs/portal-defects.md indica di cosa si tratta."
-    - "La presenti Lei sul portale, a mano, come Le indica il SUE: Claude non compila questo caso."
+    - "Chieda al SUE come presentarlo finché il portale non lo accetta."
+    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Lo presenti Lei sul portale, come Le indica il SUE: io non lo compilo."
   report: docs/portal-defects.md
   page:
     heading: "Permesso in sanatoria, art. 36-bis: the same, on the permesso's asseverazione"
@@ -67,15 +73,16 @@ pdc-36bis:
       "Effect": "a permesso in sanatoria under art. 36-bis can't be filed complete on the portal. What only that case opens goes with it, mapped by no recipe: the landscape compatibility of art. 36-bis c. 4 in the asseverazione's tutela quadro (works done without the landscape authorization), and the sanatoria quadro's acknowledgment that the SUE may ask for structural works, which the portal also keeps in one radio group with the oblazione's."
 
 pdc-36-paesaggio:
-  title: "Permesso in sanatoria (art. 36) in area tutelata: il quadro paesaggistico non ha una voce per l'accertamento dell'art. 167"
+  title: "Permesso in sanatoria, art. 36, in area tutelata, con l'accertamento dell'art. 167"
   portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, quadro 16 (bene sottoposto ad autorizzazione paesaggistica), in the pratica that selects the permesso, its sanatoria and the accertamento di compatibilità paesaggistica together"
-  what: "Per opere che alterano lo stato dei luoghi il quadro richiede una di tre procedure (semplificata, ordinaria, l'accertamento dell'art. 36-bis), nessuna delle quali è l'accertamento dell'art. 167 necessario per le opere realizzate senza il permesso, sebbene il portale consenta di selezionare quell'accertamento insieme al permesso nella stessa pratica."
-  law: "Le opere eseguite senza permesso (art. 36 DPR 380/2001) in area vincolata si regolarizzano solo con la compatibilità paesaggistica accertata (art. 146 c. 4 D.Lgs. 42/2004), mediante l'accertamento dell'art. 167 c. 4-5; il parere vincolante dell'art. 36-bis c. 4 riguarda solo le difformità parziali e le variazioni essenziali."
-  checked: "02/11/2026, una compilazione con dati fittizi nel browser (rehearsals/pdc-sanatoria-accertamento-fittizio): con l'alterazione spuntata e nessun procedimento, \"Salva\" ha risposto \"il valore è obbligatorio\" su tutti e tre"
+  what: "Il quadro paesaggistico del permesso non ha la voce dell'accertamento dell'art. 167, e ne vuole un'altra."
+  works: "Il permesso in sanatoria dell'art. 36 lo preparo, anche in area tutelata se le opere non alterano lo stato dei luoghi."
+  law: "Le opere dell'art. 36 in area vincolata si regolarizzano con l'accertamento dell'art. 167 c. 4-5 D.Lgs. 42/2004."
+  checked: "02/11/2026, su una bozza con dati fittizi."
   choices:
-    - "Chieda al SUE (Comune di Napoli, Sportello Unico Edilizia) come vuole che sia compilato il quadro paesaggistico del permesso per una sanatoria ex art. 36 con l'accertamento presentato nella stessa pratica."
-    - "Segnali il difetto al gestore del portale (assistenza impresainungiorno di InfoCamere) o al SUE: docs/portal-defects.md indica di cosa si tratta e come è stato verificato."
-    - "La presenti Lei sul portale, a mano, come Le indica il SUE: Claude non compila questo caso."
+    - "Chieda al SUE come compilare il quadro paesaggistico in questo caso."
+    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Lo presenti Lei sul portale, come Le indica il SUE: io non lo compilo."
   report: docs/portal-defects.md
   page:
     heading: "Permesso in sanatoria, art. 36, in a protected area: no line for the accertamento of art. 167"
@@ -87,15 +94,16 @@ pdc-36-paesaggio:
       "Ask for": "a line \"è assoggettato al procedimento di accertamento della compatibilità paesaggistica di cui agli artt. 167 e 181 del D.Lgs. 42/2004\" beside the art. 36-bis one."
 
 cila-impresa-dopo:
-  title: "CILA e CIL: l'impresa non può essere indicata in un secondo momento, anche se il modulo lo consente"
+  title: "CILA o CIL con l'impresa da indicare dopo"
   portal: "Napoli's SUE on impresainungiorno: the CILA's quadro i) and the CIL's quadro g) (salute e sicurezza), and their firm's quadro (h, f)"
-  what: "Il quadro sicurezza offre \"ricade nell'ambito di applicazione del d.lgs. 81/2008 ma si riserva di presentare le dichiarazioni di cui al presente quadro prima dell'inizio lavori\", ma il quadro dell'impresa non ha alcuna voce per un'impresa ancora da scegliere e il portale richiede i dati dell'impresa (16 caselle obbligatorie, tra cui quelle del DURC) qualunque cosa dica il quadro sicurezza."
-  law: "Il committente trasmette i documenti dell'impresa (DURC, la notifica preliminare, la verifica dell'idoneità dell'impresa) prima dell'inizio dei lavori (art. 90 c. 9 c D.Lgs. 81/2008), non necessariamente con la presentazione; i moduli del permesso e della SCIA sullo stesso portale consentono di indicare l'impresa in seguito."
-  checked: "01/11/2026, una compilazione di una CILA fittizia nel browser (rehearsals/cila-fittizia, answers-impresa-dopo) si è fermata sulle caselle obbligatorie dell'impresa; il modello nazionale CILA di InfoCamere non prevede tale vincolo (schema/sue-choices.json 009-012)"
+  what: "Il modulo offre di indicare l'impresa prima dell'inizio lavori, ma il portale chiede subito i suoi dati."
+  works: "La CILA e la CIL con l'impresa già scelta le preparo."
+  law: "Art. 90 c. 9 c D.Lgs. 81/2008: i documenti dell'impresa vanno dati prima dell'inizio dei lavori."
+  checked: "01/11/2026, su una bozza con dati fittizi."
   choices:
-    - "Presenti la CILA o la CIL una volta scelta l'impresa: Claude la compilerà allora."
-    - "Chieda al SUE se una CILA può essere presentata prima della scelta dell'impresa, e come."
-    - "Segnali il difetto al gestore del portale (assistenza impresainungiorno di InfoCamere) o al SUE: docs/portal-defects.md indica di cosa si tratta e come è stato verificato."
+    - "Presenti la pratica quando l'impresa è scelta: allora la preparo."
+    - "Chieda al SUE se e come presentarla prima."
+    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
   report: docs/portal-defects.md
   page:
     heading: "CILA and CIL: a firm still to be chosen is offered, then refused"
@@ -108,14 +116,15 @@ cila-impresa-dopo:
       "To report": "either the reservation should let the firm's quadro wait, or the box should go."
 
 pdc-incentivo-energetico:
-  title: "Permesso: va dichiarato un incentivo energetico, anche per un progetto che non ne ha"
+  title: "Permesso senza incentivo energetico"
   portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, quadro sicurezza impianti e consumi energetici"
-  what: "Il quadro richiede di spuntare uno degli incentivi energetici (art. 14 c. 6 o c. 7 D.Lgs. 102/2014, oppure il bonus volumetrico del 5% del D.Lgs. 28/2011): non offre alcuna voce per un progetto che non ne richiede nessuno."
-  law: "Gli incentivi sono opzioni di cui il progettista può avvalersi (art. 14 D.Lgs. 102/2014: maggiori spessori di murature e coperture non computati, distanze e altezze in deroga; il bonus del 5% del D.Lgs. 28/2011 per le rinnovabili oltre il minimo), non un requisito di ogni permesso."
-  checked: "29/10/2026, le prime compilazioni del permesso nel browser (rehearsals/pdc-fittizio): il quadro si salvava solo con un incentivo spuntato"
+  what: "Il quadro impianti ed energia si salva solo con un incentivo energetico spuntato, anche se il progetto non ne ha."
+  works: "Il permesso con un incentivo energetico lo preparo."
+  law: "Gli incentivi (art. 14 D.Lgs. 102/2014, bonus del 5% D.Lgs. 28/2011) sono facoltativi."
+  checked: "29/10/2026, su bozze con dati fittizi."
   choices:
-    - "Chieda al SUE come presentare un permesso senza incentivo energetico, finché il portale ne richiede uno."
-    - "Segnali il difetto al gestore del portale (assistenza impresainungiorno di InfoCamere) o al SUE: docs/portal-defects.md indica di cosa si tratta e come è stato verificato."
+    - "Chieda al SUE come presentare il permesso senza incentivo."
+    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
   report: docs/portal-defects.md
   page:
     heading: "Permesso: an energy incentive must be claimed, even for a project with none"
@@ -128,14 +137,15 @@ pdc-incentivo-energetico:
       "To report": "the quadro should offer \"no incentive\"."
 
 coholder-sesso:
-  title: "Voltura e cambio d'intestazione: il sesso del cointestatario è chiesto in due caselle obbligatorie"
+  title: "Voltura e cambio d'intestazione: il sesso del cointestatario"
   portal: "Napoli's SUE on impresainungiorno: the co-holders' section (\"ci sono cointestatari\") of the voltura del permesso and of the cambio d'intestazione of a CILA, SCIA or DIA"
-  what: "\"sesso: M\" e \"sesso: F\" sono due gruppi di opzioni, entrambi obbligatori: la sezione si salva solo se sono spuntati entrambi, e quindi dichiara entrambi i sessi."
-  law: "Una persona ha un solo sesso nel codice fiscale; il modulo dovrebbe chiederne uno solo."
-  checked: "31/10/2026, le compilazioni della voltura nel browser (rehearsals/voltura-pdc-fittizia); il cointestatario del cambio d'intestazione il 02/11/2026, nella stessa sezione"
+  what: "Il portale chiede «M» e «F» in due caselle obbligatorie: si salva solo con entrambe spuntate."
+  works: "Preparo la pratica: spunto entrambe e lo scrivo tra i suoi passaggi."
+  law: "Una persona ha un solo sesso, quello del codice fiscale."
+  checked: "31/10/2026 e 02/11/2026, su bozze con dati fittizi."
   choices:
-    - "Claude li spunta entrambi, perché il portale non salva in altro modo, e lo segnala tra i passaggi lasciati a Lei; il codice fiscale indica quale vale."
-    - "Segnali il difetto al gestore del portale (assistenza impresainungiorno di InfoCamere) o al SUE: docs/portal-defects.md indica di cosa si tratta e come è stato verificato."
+    - "Spunto entrambe: il codice fiscale indica quale vale."
+    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
   report: docs/portal-defects.md
   page:
     heading: "Voltura and cambio d'intestazione: the co-holder's sex is two required boxes"
@@ -147,15 +157,16 @@ coholder-sesso:
       "To report": "one group, M or F."
 
 coholders-one:
-  title: "Voltura e cambio d'intestazione: la sezione dei cointestatari contiene una sola persona"
+  title: "Voltura o cambio d'intestazione a più di un cointestatario"
   portal: "Napoli's SUE on impresainungiorno: the co-holders' section (\"Informazioni su eventuali altri aventi titolo\", opened by the wizard's \"ci sono cointestatari\") of the voltura del permesso and of the cambio d'intestazione of a CILA, SCIA or DIA"
-  what: "La sezione ha le caselle di una sola persona e nessun \"+\" per aggiungerne un'altra, quindi un titolo che passa a tre o più titolari (il dichiarante e due o più cointestatari) può indicare un solo cointestatario."
-  law: "Il permesso si trasferisce agli aventi causa (art. 11 c. 2 DPR 380/2001), qualunque sia il loro numero: la voltura li indica uno per uno."
-  checked: "28/10/2026, la mappatura in blocco delle due pratiche (catalogue/F839/sections/sue-voltura-intestazione-permesso-di-costruire.json, sue-cambio-intestazione-cia-scia-dia.json): 14 caselle per una sola persona, nessun \"+\""
+  what: "La sezione dei cointestatari ha posto per una sola persona e nessun «+»."
+  works: "Con un solo cointestatario la preparo."
+  law: "Art. 11 c. 2 DPR 380/2001: il titolo passa a tutti gli aventi causa, ciascuno indicato."
+  checked: "28/10/2026, dalla mappa delle due pratiche: una sola persona, nessun «+»."
   choices:
-    - "Chieda al SUE come vuole che siano indicati gli altri cointestatari: ad esempio il primo nella sezione e tutti nella dichiarazione sostitutiva allegata sul titolo a intervenire, firmata da ciascuno."
-    - "Segnali il difetto al gestore del portale (assistenza impresainungiorno di InfoCamere) o al SUE: docs/portal-defects.md indica di cosa si tratta e come è stato verificato."
-    - "La presenti Lei sul portale, a mano, come Le indica il SUE: Claude non compila questo caso."
+    - "Chieda al SUE come indicare gli altri (ad es. in una dichiarazione allegata, firmata da ciascuno)."
+    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
   report: docs/portal-defects.md
   page:
     heading: "Voltura and cambio d'intestazione: the co-holders' section holds one person"
@@ -168,14 +179,15 @@ coholders-one:
       "To report": "a \"+\" on the section, as the CILA's and SCIA's lists of technicians and firms have."
 
 agibilita-art24:
-  title: "Agibilità: le eccezioni dell'art. 24 risultano obbligatorie"
+  title: "Agibilità: le eccezioni dell'art. 24"
   portal: "Napoli's SUE on impresainungiorno: the agibilità's Attestazione tecnica - Agibilità"
-  what: "Le caselle dell'art. 24 c. 5-bis e 5-ter (unità piccole o basse) e c. 5-quater (deroga consentita da un'altra legge) mostrano \"deve essere selezionata almeno un'opzione\" quando nessuna è spuntata, anche se la maggior parte delle unità non rientra in nessuno di questi casi."
-  law: "L'art. 24 c. 5-bis, 5-ter e 5-quater DPR 380/2001 prevede deroghe alle altezze e alle superfici minime, per le unità che indica; un'unità ordinaria rispetta i minimi e non dichiara nessuna delle due."
-  checked: "31/10/2026, le compilazioni dell'agibilità nel browser (rehearsals/agibilita-fittizia): i quattro casi che non spuntavano nessuna delle due voci mostravano il messaggio, e le bozze conservavano i valori"
+  what: "Le caselle dell'art. 24 c. 5-bis, 5-ter e 5-quater risultano obbligatorie anche per un'unità ordinaria."
+  works: "Preparo l'agibilità: spunto l'eccezione solo se vale, e il messaggio del portale resta."
+  law: "Le deroghe dell'art. 24 DPR 380/2001 valgono solo per le unità che indica."
+  checked: "31/10/2026, su bozze con dati fittizi: le bozze conservano i valori."
   choices:
-    - "Claude spunta l'eccezione corrispondente al caso, e nessuna per un'unità ordinaria; il messaggio è lasciato al direttore dei lavori, di cui è l'attestazione, e al SUE se l'invio viene rifiutato."
-    - "Segnali il difetto al gestore del portale (assistenza impresainungiorno di InfoCamere) o al SUE: docs/portal-defects.md indica di cosa si tratta e come è stato verificato."
+    - "Spunto solo l'eccezione che vale; il direttore dei lavori vede il messaggio."
+    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
   report: docs/portal-defects.md
   page:
     heading: "Agibilità: the art. 24 exceptions are marked required"
@@ -187,14 +199,15 @@ agibilita-art24:
       "To report": "the exceptions should be optional."
 
 pdc-aree-fuoco:
-  title: "Permesso: \"non interessa aree percorse dal fuoco\" toglie la spunta alla dichiarazione sul suolo"
+  title: "Permesso: «non interessa aree percorse dal fuoco»"
   portal: "Napoli's SUE on impresainungiorno: the permesso's asseverazione, quadro qualità terreni, opere di urbanizzazione, scarichi"
-  what: "La voce secondo cui l'area non è percorsa dal fuoco (art. 10 L. 353/2000) è un'unica scelta (pulsante di opzione) insieme alle voci sulle indagini sui terreni (non necessarie, analisi eseguite, bonificati): spuntarla toglie la spunta alla dichiarazione sui terreni, e viceversa."
-  law: "Sono due dichiarazioni distinte: la qualità ambientale del suolo (D.Lgs. 152/2006) e il divieto decennale di edificare su boschi e pascoli percorsi dal fuoco (art. 10 c. 1 L. 353/2000)."
-  checked: "01/11/2026, su una bozza con dati fittizi, voce spuntata e poi annullata senza salvare"
+  what: "Questa voce e la dichiarazione sui terreni sono una sola scelta: spuntarne una toglie l'altra."
+  works: "Preparo il permesso: spunto la dichiarazione sui terreni."
+  law: "Sono due dichiarazioni diverse: il suolo (D.Lgs. 152/2006) e le aree bruciate (art. 10 L. 353/2000)."
+  checked: "01/11/2026, su una bozza con dati fittizi."
   choices:
-    - "Claude spunta la dichiarazione sul suolo e lascia non spuntata la voce sulle aree percorse dal fuoco; la dichiari nella relazione tecnica se il SUE lo richiede, oppure chieda al SUE come vuole che siano dichiarate entrambe."
-    - "Segnali il difetto al gestore del portale (assistenza impresainungiorno di InfoCamere) o al SUE: docs/portal-defects.md indica di cosa si tratta e come è stato verificato."
+    - "Spunto la dichiarazione sui terreni; le aree bruciate le dichiari nella relazione, se il SUE lo chiede."
+    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
   report: docs/portal-defects.md
   page:
     heading: "Permesso: the burned-area line is one choice with the soil statement"
@@ -205,15 +218,16 @@ pdc-aree-fuoco:
       "To report": "the two lines should be separate choices (the soil under D.Lgs. 152/2006, the burned areas under art. 10 c. 1 L. 353/2000)."
 
 cambio-uso-regionale:
-  title: "SCIA alternativa e permesso: nessuna voce per un mutamento di destinazione d'uso per cui la legge della Campania prevede quel titolo"
+  title: "SCIA alternativa o permesso per un cambio d'uso della legge regionale"
   portal: "Napoli's SUE on impresainungiorno: the SCIA alternativa's quadro c) (Qualificazione dell'intervento) and the permesso's quadro a) and asseverazione (opere in progetto), from the national forms"
-  what: "La scelta obbligatoria sul cambio d'uso ha quattro voci, tutte dell'art. 23-ter DPR 380/2001: nessun cambio; una unità all'interno della stessa categoria; una unità in zona A, B o C tra le categorie da a) a c); un intero edificio all'interno della stessa categoria (c. 3). Per un intero edificio verso un'altra categoria, per un'unità fuori dalle zone A, B e C o per un cambio da o verso la categoria rurale non c'è alcuna voce, e qualunque voce spuntata dichiara una cosa diversa."
-  law: "In Campania questi mutamenti richiedono la SCIA alternativa al permesso (art. 2 c. 6 L.R. 13/2022; circolare regionale CI/2025/3, d), o il permesso, per i quali si presentano i moduli; l'art. 23-ter non ne indica il titolo, perciò i moduli nazionali, scritti per esso, non li nominano."
-  checked: "03/11/2026, dalle etichette dei moduli così come mappate (catalogue/F839/sections), dalle scelte dello schema nazionale (schema/sue-choices.json: scia_alternativa 002, permesso_di_costruire 000 e 019, nessuna facoltativa) e dal Mod. SCIA/PDC del Comune del 23/06/2025 (quadro c, le stesse quattro righe); non provato su una bozza"
+  what: "La voce sul cambio d'uso ha solo i casi dell'art. 23-ter: nessuna dichiara il suo."
+  works: "I cambi d'uso dell'art. 23-ter li preparo."
+  law: "In Campania questo cambio richiede la SCIA alternativa o il permesso (art. 2 c. 6 L.R. 13/2022)."
+  checked: "03/11/2026, dai moduli del portale e dello schema nazionale; non provato su una bozza."
   choices:
-    - "Chieda al SUE (Comune di Napoli, Sportello Unico Edilizia) quale voce vuole spuntata per questo mutamento, oppure se il mutamento va dichiarato nella relazione lasciando la voce come il portale consente."
-    - "Segnali il difetto al gestore del portale (assistenza impresainungiorno di InfoCamere) o al SUE: docs/portal-defects.md indica di cosa si tratta e come è stato verificato."
-    - "La presenti Lei sul portale, a mano, come Le indica il SUE: Claude non compila questo caso."
+    - "Chieda al SUE quale voce spuntare, o se dichiararlo nella relazione."
+    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
   report: docs/portal-defects.md
   page:
     heading: "SCIA alternativa and permesso: no line for Campania's own changes of use"

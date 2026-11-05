@@ -217,6 +217,20 @@ def questions(t, ask, errors, checklist=CHECKLIST, facts=None, works=None):
     return out
 
 
+def for_works(t, q):
+    """A question asked only for some kinds of works (`only_for`), saying so in the fewer words:
+    the kinds it is for, or those it isn't."""
+    if "only_for" not in q:
+        return q
+    first = next(iter(t["facts"]))
+    kinds = list(t["facts"][first]["values"])
+    for_ = q["only_for"][first]
+    name = lambda ks: "; ".join(run.said({"type": "choice", "labels": dict(t["facts"][first]["values"])}, k) for k in ks)
+    rest = [k for k in kinds if k not in for_]
+    note = f"solo per: {name(for_)}" if len(for_) <= len(rest) else f"non serve per: {name(rest)}"
+    return {**q, "question": q["question"] + f" ({note})"}
+
+
 def carry(t, steps, facts, answers):
     """The answers file for this steps file: each fact under the ask it reads it from, in
     that ask's own options; a fact read through another ask (with a filter) becomes that
@@ -270,6 +284,7 @@ def route(table, answers, root=None):
         raise run.StepError(f"rules table {table}: rules {', '.join(d['conflict'])} disagree (validate the library)")
     if d["refused"]:  # as pre-flight: a refusal ends the case, whatever is still unknown
         report["unsupported"] = [x["reason"] for x in d["refused"]]
+        report["message"] = run.refusal_text(report)
         return report
     # A wrong answer is asked again only if the case needs it: one it doesn't is dropped,
     # and a checklist answered wrong leaves its items unknown, so they are asked again whole.
@@ -285,29 +300,40 @@ def route(table, answers, root=None):
         group = next((s["groups"][GROUP]["question"] for _, _, s in idx.values() if GROUP in s.get("groups", {})),
                      CHECKLIST)
         report["questions"] = questions(t, [f for f in t["facts"] if f in ask], errors, group, facts, works)
+        # In pre-flight's format, for Claude to send as it is (with what it read in the documents).
+        report["message"] = run.message({"questions": [for_works(t, q) for q in report["questions"]],
+                                         "proposals": [], "missing": []}, {q["key"]: q for q in report["questions"]})
         return report
     if d["none"]:
         report["unsupported"] = [f"Per questo caso non serve alcuna pratica: {d['none']['reason']}"]
+        report["message"] = run.refusal_text(report)
         return report
     m = d["main"]
     if not m:
-        report["unsupported"] = [f"La tabella delle regole ({table}) non indica alcuna pratica per questo caso."]
+        report["unsupported"] = ["Le regole del SUE non indicano alcuna pratica per questo caso."]
+        report["message"] = run.refusal_text(report)
         return report
     also = [a["procedure"] for a in d["also"]]
     report["main"], report["also"] = m["procedure"], also
-    report["apart"] = [f"Da presentare a parte, al suo ufficio: {a['procedure']} ({a['regime']})" for a in d["apart"]]
+    report["apart"] = [f"Da presentare a parte, al suo ufficio: {run.procedure_name(a['procedure'])}" for a in d["apart"]]
     hit = idx.get(key(m["procedure"], also))
     if not hit:
-        report["unsupported"] = [f"Non ancora prevista: {m['procedure']} ({m['regime']})"
-                                 + (f" presentata con {', '.join(also)}" if also else "") + "."]
+        report["unsupported"] = [f"Non ancora prevista: {run.procedure_name(m['procedure'])}"
+                                 + (f", insieme a {', '.join(map(run.procedure_name, also))}" if also else "") + "."]
+        report["message"] = run.refusal_text(report)
         return report
     name, path, steps = hit
     carried, again = carry(t, steps, facts, answers)
     # The steps file's own reading of the case must agree: its fixed facts, its wizard.
     out, _ = run.ruled(steps, run.Values(carried, fields={}, asks=steps.get("asks", {})))
     if out:
-        report["unsupported"] = [f"{name}: {x}" for x in out]
+        report["unsupported"] = out
+        report["message"] = run.refusal_text(report)
         return report
+    # The route in a line or two, for the one message: the pratica and what goes apart.
+    report["message"] = "\n".join([f"La pratica: {run.procedure_name(m['procedure'])}"
+                                   + (f", insieme a {', '.join(map(run.procedure_name, also))}" if also else "") + "."]
+                                  + report["apart"])
     report.update(routed=True, pratica=name, steps=str(path), answers=carried, asked_again=again)
     return report
 

@@ -30,8 +30,8 @@ asks:
 yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
   - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella"
-  - "Su un bene culturale: i lavori iniziano solo dopo che la Soprintendenza li ha autorizzati (art. 21 c. 4 D.Lgs. 42/2004); la sua autorizzazione è allegata in Allegati liberi: la conservi con la pratica"
+  - "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione: la ricevuta firmata va allegata lì"
+  - "Se è un bene culturale: i lavori iniziano solo dopo l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004). È allegata in Allegati liberi: la conservi con la pratica"
   - "Firmi e invii (Firma e invio); conservi la ricevuta"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
@@ -44,7 +44,7 @@ supports:
   # firm's details whatever its site-safety quadro says (a CILA case stopped on them, 2026-11-01).
   - {if: "{{ask.lavori_in_proprio|not}}", value: "{{ask.impresa_dopo}}", in: ["false"], defect: cila-impresa-dopo, else: "La CIL indica la sua impresa esecutrice: il suo quadro f) non prevede un'impresa ancora da scegliere, e il portale richiede i dati dell'impresa (verificato il 01/11/2026). Presenti la CIL una volta scelta l'impresa."}
   # A bene culturale: the Soprintendenza's authorization first, obtained apart (rules: soprintendenza-cil).
-  - {if: "{{ask.intervento|is_opere_temporanee}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "Su un bene culturale i lavori richiedono prima l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004), e il portale SUE di Napoli non ha una procedura per richiederla con questa pratica: la richieda alla Soprintendenza ABAP per il Comune di Napoli (via PEC a sabap-na@pec.cultura.gov.it, con il suo modulo 'Istanza per opere su immobili vincolati', bollo da 16 euro; fino a 120 giorni, art. 22), poi presenti questa pratica."}
+  - {if: "{{ask.intervento|is_opere_temporanee}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "Su un bene culturale serve prima l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004), e il SUE non la chiede con questa pratica. La chieda alla Soprintendenza ABAP di Napoli (PEC sabap-na@pec.cultura.gov.it, bollo da 16 €, fino a 120 giorni), poi presenti questa pratica."}
   # Filings presented with the CIL go in quadro e. Assents still to obtain have no line: the CIL's
   # form (national and Napoli's) asks the SUE for none, unlike the CILA's relazione (art. 23-bis).
   - when: "{{ask.atti_da_acquisire|not}}"
