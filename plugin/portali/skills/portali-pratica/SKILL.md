@@ -114,11 +114,19 @@ Between 3 and 7 they hear nothing from you but the login, the code and the revie
 
 `${CLAUDE_SKILL_DIR}` in a command is this skill's folder (should a command show a `$` variable
 there instead of a path, put this skill's base directory in its place). Scripts run through
-`sh "${CLAUDE_SKILL_DIR}/py"`, never `python3` directly: it uses the computer's own Python 3.9+,
-or, where there is none (a new Mac, Windows), downloads a self-contained one once (about 25 MB,
+`sh "${CLAUDE_SKILL_DIR}/py"`, never `python3` directly: it uses the computer's own Python 3.9+
+(no packages needed).
+<!-- download -->
+Where there is none (a new Mac, Windows), it downloads a self-contained one once (about 25 MB,
 checked by SHA-256) and keeps it. Its first run may take a minute and prints "scarico Python": tell
-the tecnico in one line that you are setting up, once. It needs no packages. If it says it can't
-download, say so plainly and try again later; never install Python another way.
+the tecnico in one line that you are setting up, once. If it says it can't download, say so
+plainly and try again later; never install Python another way.
+<!-- /download -->
+<!-- no-download -->
+Where there is none, it stops with a message in Italian saying how to install it (on a Mac it
+opens Apple's own installer of the developer tools, which bring Python). Give that message as it
+is, in one line, wait for "fatto", and run the command again. Never install Python yourself.
+<!-- /no-download -->
 
 - `catalog.json`: each pratica with a steps file, one a line (`name`, `procedure`, `title`,
   `sportello`, `notes`: who the roles are, `steps_sha256`); `coverage.json`: every pratica's
