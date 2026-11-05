@@ -108,5 +108,6 @@
  "igienico_adattabilita": "true",
  "acustica_documenti": [],
  "acustica_dichiarazione": "true",
- "acustica_dichiarazione_doc": "rehearsals/pdc-fittizio/files/dichiarazione-limiti-acustici.pdf"
+ "acustica_dichiarazione_doc": "rehearsals/pdc-fittizio/files/dichiarazione-limiti-acustici.pdf",
+ "imprese_quante": 2
 }

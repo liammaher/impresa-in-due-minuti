@@ -110,5 +110,6 @@
  "diritti_esente": false,
  "bollo_esenzione": "no",
  "prospetto_contributo": "rehearsals/cila-fittizia/files/prospetto-contributo.pdf",
- "terre_rocce": "no"
+ "terre_rocce": "no",
+ "imprese_quante": 2
 }

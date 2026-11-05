@@ -434,5 +434,18 @@
   "browser": "pane",
   "case": "the same, on the fixed runner (`last` pinned for its read-back and found by its own cell)",
   "note": "**filled** in 121 s: NCEU, NCT, NCEU, the middle group's second plot by its unit's \"+\", nothing moved or loose"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-imprese-tre.json",
+  "result": "filled",
+  "seconds": 141.5,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-05",
+  "browser": "pane",
+  "case": "three firms (`answers-imprese-tre`: edil, impianti, muratori with its Cassa edile), the firms' \"+\" as an `each`",
+  "note": "**filled** in 142 s, `bench/rerun.py` bundle: the third firm's block by its \"+\", its Cassa edile rows, nothing moved or loose"
  }
 ]

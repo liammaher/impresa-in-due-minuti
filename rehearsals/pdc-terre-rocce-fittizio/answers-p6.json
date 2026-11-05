@@ -108,5 +108,6 @@
  "diritti_esente": false,
  "bollo_esenzione": "no",
  "terre_rocce": "dichiarazione",
+ "imprese_quante": 2,
  "scavo_piano_utilizzo": "false"
 }

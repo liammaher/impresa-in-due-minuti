@@ -11,12 +11,6 @@ Fixing them is the portal's operator's (InfoCamere, which runs impresainungiorno
 personal data. The reports to send, in Italian and one per recipient, with the channels:
 [`docs/defect-reports/`](defect-reports/README.md).
 
-Withdrawn: "the co-holders' section holds one person" (`coholders-one`, from a crawl of 2026-10-28).
-The voltura's and cambio d'intestazione's co-holders section has a "+" that adds a co-holder's
-whole block (read on a draft 2026-11-05; the 2026-10-31 crawl had recorded it), so it was never
-sent, and several co-holders are mapped. Read a section on a draft before calling a missing "+"
-a defect.
-
 ## SCIA in sanatoria, art. 36-bis c. 1: dating, oblazione and works proposal saved as one field
 
 - **Where**: SCIA edilizia with the sanatoria scelta, section "Asseverazione SCIA - Stato legittimo,
@@ -193,3 +187,17 @@ a defect.
   one category, and the case is refused since.
 - **To report**: the choice should have a line for a change of use the regional law gives this title
   for (art. 23 c. 01 lets the regions add cases), or let it be stated in the relazione.
+
+## Landscape authorization: another technician beside the architect presenting can't be named
+
+- **Where**: "dati relativi al nome del tecnico" of the autorizzazione paesaggistica, ordinaria and
+  semplificata (alone and with the titles filed with it).
+- **What happens**: the section's "+" adds another technician's block (name, codice fiscale, studio,
+  phone, PEC, albo). With "è colui che presenta la pratica" ticked, the block's rows but the albo's
+  stay hidden, and the albo's three boxes are required: a technician with no name.
+- **Effect**: a landscape project drawn by the architect presenting and another technician can't
+  name the second; Claude refuses the case (`paesaggio-altri-tecnici`). With "non è colui", each
+  technician's whole block is there and Claude fills them.
+- **Checked**: 2026-11-05, both choices on a made-up draft (paesaggistica ordinaria with terre e
+  rocce, P6), "+" pressed, cancelled with Annulla, nothing saved.
+- **To report**: show the added block's name rows under either choice.

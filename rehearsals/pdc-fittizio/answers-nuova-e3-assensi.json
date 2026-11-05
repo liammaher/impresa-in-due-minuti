@@ -114,5 +114,6 @@
  "fascia_stradale_quale": "strada provinciale, fascia di 30 m",
  "fascia_stradale_doc": "rehearsals/pdc-fittizio/files/assenso-fascia-stradale.pdf",
  "altri_vincoli_eco_tipo": "depuratori",
- "altri_vincoli_eco_doc": "rehearsals/pdc-fittizio/files/assenso-depuratore.pdf"
+ "altri_vincoli_eco_doc": "rehearsals/pdc-fittizio/files/assenso-depuratore.pdf",
+ "imprese_quante": 2
 }

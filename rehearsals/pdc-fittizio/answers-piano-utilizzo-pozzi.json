@@ -117,5 +117,6 @@
  "progettista_altro": false,
  "diritti_esente": false,
  "bollo_esenzione": "no",
- "terre_rocce": "piano"
+ "terre_rocce": "piano",
+ "imprese_quante": 2
 }

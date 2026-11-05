@@ -1,6 +1,6 @@
 # Segnalazione al Servizio Sportello Unico Edilizia del Comune di Napoli: moduli su impresainungiorno
 
-Cinque punti in cui i moduli del SUE di Napoli su impresainungiorno non permettono di dichiarare ciò
+Sei punti in cui i moduli del SUE di Napoli su impresainungiorno non permettono di dichiarare ciò
 che la legge chiede. Le caselle in questione non sono nei moduli nazionali (repository di InfoCamere
 `Sistema-Informatico-degli-Sportelli-Unici-Moduli-PA`, commit `fc13e08` del 12 marzo 2026), o i
 moduli nazionali non sono stati scritti per il caso regionale: per questo li segnaliamo al Comune.
@@ -84,3 +84,19 @@ chiediamo anche come il Sportello preferisce che il caso sia presentato finché 
   bozza (3 novembre 2026).
 - **Cosa chiediamo**: una riga per il cambio d'uso previsto dalla legge regionale, o l'indicazione
   di dichiararlo nella relazione tecnica.
+
+## 6. Autorizzazione paesaggistica: un secondo tecnico accanto a chi presenta non si può indicare
+
+- **Dove**: "dati relativi al nome del tecnico" dell'autorizzazione paesaggistica, ordinaria e
+  semplificata (anche presentata con CIL, CILA, SCIA, permesso o proroga).
+- **Cosa succede**: il pulsante "+" aggiunge il blocco di un altro tecnico (cognome, nome, codice
+  fiscale, studio, recapiti, albo). Con "è colui che presenta la pratica" spuntato, del nuovo blocco
+  resta visibile solo la riga dell'albo (ordine, provincia, numero, obbligatori): nome, codice
+  fiscale e studio restano nascosti.
+- **Effetto**: un progetto paesaggistico redatto da chi presenta la pratica insieme a un altro
+  tecnico non può indicare il secondo.
+- **Come riprodurlo**: su una bozza, spuntare "è colui che presenta la pratica" e premere "+";
+  poi spuntare "non è colui" e premere "+": solo nel secondo caso compare il blocco intero
+  (verificato il 5 novembre 2026, annullato senza salvare).
+- **Cosa chiediamo**: mostrare le righe del tecnico aggiunto con entrambe le scelte, o indicare come
+  presentare il caso.
