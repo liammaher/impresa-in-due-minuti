@@ -447,5 +447,18 @@
   "browser": "pane",
   "case": "three firms (`answers-imprese-tre`: edil, impianti, muratori with its Cassa edile), the firms' \"+\" as an `each`",
   "note": "**filled** in 142 s, `bench/rerun.py` bundle: the third firm's block by its \"+\", its Cassa edile rows, nothing moved or loose"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-quattro.json",
+  "result": "filled",
+  "seconds": 151.6,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-05",
+  "browser": "pane",
+  "case": "Five units in four catasto groups and four other holders (`answers-quattro`, fixture `ugo` with a third plot `immobile5`; `r:`-`r4:` marta, bruno, giulia with her company, dario)",
+  "note": "**filled** in 152 s, `bench/rerun.py` bundle: NCEU, NCT, NCEU, NCT by the group's \"+\", the fourth holder's row by its \"+\", nothing moved or loose"
  }
 ]

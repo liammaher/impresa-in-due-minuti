@@ -9,7 +9,10 @@ INVIARE" and stops before the acknowledgements in the new holder's name, signing
   who directs and builds the works).
 - Its prescrizioni acknowledgement reads "di essere pertanto a conoscenza…" (the voltura's "di aver
   preso visione"): both are the new holder's (`theirs`).
-- A co-holder needs the scelta "ci sono cointestatari", as in the voltura: not in this recipe.
+- A co-holder needs the scelta "ci sono cointestatari", as in the voltura (its `when`: `cointestatario`).
+- Several titles (a SCIA and its variante filed as a SCIA of its own): the title "+" adds a title's row above
+  "presentata da" (read on a draft 2026-11-05, cancelled unsaved), so the titles are one list (`titoli_quanti`)
+  and the previous holders another, after them.
 
 ## Runs
 

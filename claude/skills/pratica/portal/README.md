@@ -27,6 +27,10 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    after it, new and required ones marked; Annulla, nothing saved). A `new` box can be one the
    portal draws only on the next request: on a freshly opened landscape tecnico, "non è colui" leaves
    the first technician's studio Provincia and C.A.P. undrawn until the "+" (2026-11-05).
+   So is every box below a row the "+" adds, which it renumbers: the cambio's title "+" read 6 new,
+   3 of them the holders under "presentata da" (2026-11-05). The crawl's `plus` saw those 6 under
+   the holders' label, though the "+" it counts adds a title: where a section has two (`of` 2, or a
+   crawl without `of`), read each on a draft by `nth` before mapping either.
    To try a crawl.js change in the pane without another file pick: apply the same small edit to
    the pane's stored copy (`localStorage` `pv-crawl`), check its sha256 against `catalogue.py pane`'s
    `load.js`, store it and eval it. Each eval starts its own portal frame and leaves the earlier
@@ -107,7 +111,10 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    otherwise. `bench/plan_diff.py` says what the change does to each case (its fill plan
    before and after). A new question the existing cases reach makes their pre-flight propose
    or ask it: answer it in each as the case did before, and plan_diff shows them unchanged, so
-   their recorded runs still stand. Add the keys as text: rewriting a file with `json.dump` reflows
+   their recorded runs still stand. A new list's count with only a `propose` (`titoli_quanti`,
+   2026-11-05) makes every existing case ask the second block's own boxes, not just the count,
+   since a block waits for its count: give them the count (`bench/add_answer.py`).
+   Add the keys as text: rewriting a file with `json.dump` reflows
    its inline lists, and the diff of 84 files buries the answers (2026-11-01). `bench/add_answer.py KEY
    VALUE` does it for every rehearsal whose steps ask KEY, puts it in a part's `answers` where a
    combination's main pratica doesn't ask KEY (the CIL with its landscape authorization: regenerated

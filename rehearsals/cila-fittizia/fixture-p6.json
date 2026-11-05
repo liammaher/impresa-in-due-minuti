@@ -1007,6 +1007,15 @@
     ["ugo:immobile4.catasto_subalterno", "5"],
     ["ugo:immobile4.catasto_categoria", "C/6"],
     ["ugo:immobile4.destinazione_uso", "residenziale"],
-    ["ugo:immobile4.titolo", "proprietario"]
+    ["ugo:immobile4.titolo", "proprietario"],
+    ["ugo:immobile5.indirizzo", "Via Pigna"],
+    ["ugo:immobile5.civico", "40"],
+    ["ugo:immobile5.cap", "80128"],
+    ["ugo:immobile5.comune", "Napoli"],
+    ["ugo:immobile5.provincia", "NA"],
+    ["ugo:immobile5.catasto_foglio", "3"],
+    ["ugo:immobile5.catasto_particella", "103"],
+    ["ugo:immobile5.destinazione_uso", "residenziale"],
+    ["ugo:immobile5.titolo", "proprietario"]
   ]
 }
