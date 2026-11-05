@@ -1310,6 +1310,31 @@ def said(ask, v):
     return re.split(r" \(|: ", label)[0] if label else s.replace("_", " ")
 
 
+# Whose a missing detail is, by its role (answers.json "people"; dictionary/fnsuap.yaml's Roles):
+# no role, or a slug that isn't one, is the tecnico's or the studio's own, asked once and kept.
+WHOSE = [(r"(c|cr|o|r|f\d*|ad\d*|a\d*|s|d|p)(#\d+)?:(immobile|locale\d*)\.", "dell'immobile"),
+         (r"c(#\d+)?:", "del committente"), (r"cr(#\d+)?:", "di chi firma per il committente"),
+         (r"o(#\d+)?:", "della società proprietaria"), (r"r(#\d+)?:", "del legale rappresentante della proprietà"),
+         (r"f\d*(#\d+)?:", "delle imprese"), (r"ad\d*(#\d+)?:", "delle imprese degli altri tecnici"),
+         (r"a\d*(#\d+)?:", "degli altri tecnici"), (r"s(#\d+)?:", "del progettista delle strutture"),
+         (r"d(#\d+)?:", "del direttore dei lavori"), (r"p(#\d+)?:", "del progettista architettonico")]
+OWN = "Suoi e dello studio (una volta sola: valgono per le prossime pratiche)"
+WHOSE_ORDER = [OWN] + [w[:1].upper() + w[1:] for w in dict.fromkeys(w for _, w in WHOSE)]
+
+
+def missing_label(where):
+    """A missing detail as the message names it: the portal's label, without the section name
+    every person's or the property's shares."""
+    return re.sub(r"^(Scheda anagrafica|Localizzazione dell'intervento|Dati catastali): ", "", where)
+
+
+def whose_of(field):
+    for pattern, w in WHOSE:
+        if re.match(pattern, field):
+            return w[:1].upper() + w[1:]
+    return OWN
+
+
 def message(report, asks, held_need=None):
     """The one message pre-flight's questions, proposals and missing details make, in Italian,
     for Claude to send as it is: the questions numbered, each follow-up (`only_if`) under the
@@ -1407,17 +1432,42 @@ def message(report, asks, held_need=None):
             use.append(f"   (se la cambia, le farò {more})")
     if use:
         blocks.append(["Risposte che propongo (scriva «ok», o mi dica cosa cambiare):"] + use)
-    need = []
+    # The missing details on one line per person they belong to (WHOSE), the portal's labels
+    # without the anagrafica's section name, which every person's shares.
+    whose = {}
     for m in report["missing"]:
         if m["field"].startswith("*:"):
             continue  # nobody is the titolare yet: the skill seeds studio.json, never the tecnico
         expired = re.match(r"expired on (\S+)", m["why"])
-        need.append(f"– {m['for']}" + (" (lo spazio sul portale è più corto)" if "at most" in m["why"]
-                                      else f": il documento è scaduto il {expired[1]}, ne serve uno valido" if expired
-                                      else "" if m["why"] == "empty in the vault" else ": da correggere"))
-    if need:
-        blocks.append(["Mi mancano questi dati (non sono nei documenti):"] + need)
-    fix = [f"– {x['for']}: {x['problem']}" for x in report.get("files", []) if x.get("problem")]
+        label = missing_label(m["for"])
+        whose.setdefault(whose_of(m["field"]), []).append(
+            label + (" (lo spazio sul portale è più corto)" if "at most" in m["why"]
+                     else f": il documento è scaduto il {expired[1]}, ne serve uno valido" if expired
+                     else "" if m["why"] == "empty in the vault" else ": da correggere"))
+    if whose:
+        blocks.append(["Mi mancano questi dati (non sono nei documenti):"]
+                      + [f"– {w}: {', '.join(ls)}" for w, ls in sorted(whose.items(), key=lambda x: WHOSE_ORDER.index(x[0]))])
+    # Each file once (a file in two slots is one fix); those the sportello refuses grouped by what
+    # it refuses, its rules said once, with the fix; any other problem on its own line.
+    fix, by, office, seen = [], {}, None, set()
+    for x in report.get("files", []):
+        if not x.get("problem"):
+            continue
+        name = Path(x["path"]).name if x.get("path") else x["for"]
+        if x.get("refused"):
+            office = x["office"]
+            names = by.setdefault(tuple(c for c in REFUSED if c in x["refused"]), [])
+            if name not in names:
+                names.append(name)
+        elif (name, x["problem"]) not in seen:
+            seen.add((name, x["problem"]))
+            fix.append(f"– {name} ({x['for']}): {x['problem']}")
+    if by:
+        codes = [c for c in REFUSED if any(c in k for k in by)]
+        fix = [f"{office} rifiuta questi file:"] + \
+              [f"– {', '.join(names)}: {', '.join(REFUSED[c][0] for c in k)}" for k, names in by.items()] + \
+              ["Per ciascuno: " + "; ".join(REFUSED[c][1] for c in codes) + "."] + \
+              (["Poi:"] + fix if fix else [])
     if fix:
         blocks.append(["Questi file vanno sistemati prima:"] + fix)
     return "\n\n".join("\n".join(b) for b in blocks)
@@ -1625,9 +1675,10 @@ def preflight(steps, values, made_up=False, after=False):
                     if sportello and "problem" not in entry:
                         refused = filing_problems(p, raw, sportello)
                         if refused and made_up:
-                            entry["filing"] = refused
+                            entry["filing"] = [t for _, t in refused]
                         elif refused:
-                            entry["problem"] = "; ".join(refused)
+                            entry["problem"] = "; ".join(t for _, t in refused)
+                            entry["refused"], entry["office"] = [c for c, _ in refused], sportello["office"]
                 report["files"].append(entry)
     if made_up and any("filing" in x for x in report["files"]):
         # A rehearsal's made-up files: filled into a draft that is never sent.
@@ -1861,26 +1912,36 @@ def filing_yours(steps, sportello):
 
 
 def filing_problems(p, raw, rules):
-    """Why the sportello would refuse this file: its name, its format, its signature. A .p7m is
-    signed (p7m_signers reads it); its content must be PDF/A. Says what it couldn't check."""
+    """Why the sportello would refuse this file, as (code, text): its name, its format, its
+    signature. A .p7m is signed (p7m_signers reads it); its content must be PDF/A. Says what it
+    couldn't check. The codes (REFUSED) let the message say each rule once for all the files."""
     out = []
     if rules.get("names") and not PLAIN_NAME.fullmatch(p.name):
-        out.append(f"{rules['office']} rifiuta questo nome: solo lettere, cifre e trattini bassi "
-                   "(Tavola01_inquadramento.pdf), senza spazi, accenti o altri segni")
+        out.append(("name", f"{rules['office']} rifiuta questo nome: solo lettere, cifre e trattini bassi "
+                            "(Tavola01_inquadramento.pdf), senza spazi, accenti o altri segni"))
     signed_p7m = p.name.lower().endswith(".p7m")
     doc = p7m_content(raw) if signed_p7m else raw
     if rules.get("pdfa"):
         if doc is None:
-            out.append("non riesco a leggere il documento dentro il .p7m per controllare che sia PDF/A")
+            out.append(("p7m", "non riesco a leggere il documento dentro il .p7m per controllare che sia PDF/A"))
         elif not doc.startswith(b"%PDF"):
-            out.append(f"{rules['office']} accetta solo file PDF/A: questo non è un PDF")
+            out.append(("notpdf", f"{rules['office']} accetta solo file PDF/A: questo non è un PDF"))
         elif not PDFA.search(doc):
-            out.append(f"{rules['office']} accetta solo file PDF/A: questo PDF non è PDF/A "
-                       "(lo esporti di nuovo come PDF/A)")
+            out.append(("pdfa", f"{rules['office']} accetta solo file PDF/A: questo PDF non è PDF/A "
+                                "(lo esporti di nuovo come PDF/A)"))
     if rules.get("signed") and not signed_p7m and pades_signature(raw) is None:
-        out.append(f"{rules['office']} accetta solo file firmati digitalmente: lo firmi con la sua firma "
-                   "digitale (un .p7m, o la firma dentro il PDF)")
+        out.append(("signed", f"{rules['office']} accetta solo file firmati digitalmente: lo firmi con la sua "
+                              "firma digitale (un .p7m, o la firma dentro il PDF)"))
     return out
+
+
+# What each refusal code says in the message, once for all its files: (what's wrong, the fix).
+REFUSED = {"notpdf": ("non è un PDF", "lo converta in PDF/A"),
+           "pdfa": ("non è PDF/A", "lo esporti come PDF/A"),
+           "p7m": ("non riesco a leggere il PDF dentro il .p7m", "controlli che il .p7m contenga un PDF/A"),
+           "signed": ("non è firmato digitalmente", "lo firmi digitalmente (un .p7m, o la firma dentro il PDF)"),
+           "name": ("il nome ha spazi, accenti o segni",
+                    "lo rinomini con sole lettere, cifre e trattini bassi (Tavola01_inquadramento.pdf)")}
 
 
 def attachment(path):
