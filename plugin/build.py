@@ -2,16 +2,19 @@
 """Build the Portali plugin for Cowork: plugin/portali plus the runner, the rehearsals'
 steps files and the pratiche-napoli library, as one installable file.
 
-  build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off]
+  build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off] [--cowork-test] [--evals]
 
 Writes OUT/portali/ (default plugin/dist) and OUT/portali.plugin (the same, zipped), then
 pre-flights the test fixture with the built plugin under the system python3, as Cowork would run
 it. --library is a pratiche-napoli checkout (default $PRATICHE_NAPOLI_DIR). Needs PyYAML
 (the pratica venv's Python): the plugin itself needs no packages, because every YAML file
-the runner reads goes in as JSON (shim/yaml.py says how). --connector adds the Portali
+the runner reads goes in as JSON (rules.load reads it). --connector adds the Portali
 connector (connector/, serving this same build) as the plugin's .mcp.json. --vault overrides
 build.yaml's `vault` for this build: off, the plugin carries no setup skill and its texts keep
-only their no-vault parts.
+only their no-vault parts. --cowork-test keeps the Cowork test skill, for whoever runs those tests:
+a release leaves it out (its made-up case and 3 MB PDF are for the build's self-check and the test).
+--evals adds plugin/evals/ (how Claude follows the skill, for `claude plugin eval`), with that
+made-up case as their job (evals/_job/); a release leaves them out too.
 """
 
 import argparse
@@ -47,6 +50,7 @@ COVERAGE = yaml.safe_load((HERE / "coverage.yaml").read_text())
 TEST_CASE = "cila-fittizia"
 # The one switch: whether the plugin ships the archive (build.yaml says what each means).
 SETUP_SKILL = "portali-setup"
+TEST_SKILL = "portali-cowork-test"
 MARKER = re.compile(r"^<!-- (/?)(vault|no-vault) -->$")
 
 
@@ -127,6 +131,11 @@ def as_json(data):
     return json.dumps(data, ensure_ascii=False, indent=1, default=str)
 
 
+def lines_json(entries):
+    """A JSON list one entry a line, so Claude searches it (grep) instead of reading it whole."""
+    return "[\n" + ",\n".join(json.dumps(e, ensure_ascii=False, default=str) for e in entries) + "\n]"
+
+
 def copy_library(library, skill):
     for part in LIBRARY_PARTS:
         src, dst = library / part, skill / "library" / part
@@ -150,11 +159,10 @@ def copy_runner(skill):
         shutil.copy2(PRATICA / "portal" / name, portal / name)
     (portal / "catalogue" / "F839").mkdir(parents=True)
     shutil.copy2(PRATICA / "portal" / "catalogue" / "F839" / "drift.json", portal / "catalogue" / "F839" / "drift.json")
-    shutil.copy2(HERE / "shim" / "yaml.py", portal / "yaml.py")
     (portal / "rules").mkdir()
     for table in sorted((PRATICA / "portal" / "rules").glob("*.yaml")):
         # BaseLoader, as rules.py reads it: every scalar stays a string.
-        (portal / "rules" / table.name).write_text(as_json(yaml.load(table.read_text(), Loader=yaml.BaseLoader)))
+        (portal / "rules" / f"{table.stem}.json").write_text(as_json(yaml.load(table.read_text(), Loader=yaml.BaseLoader)))
     (skill / "fill").mkdir()
     shutil.copy2(PRATICA / "fill" / "fill.py", skill / "fill" / "fill.py")  # run.py imports it
     shutil.copy2(PRATICA / "review.py", skill / "review.py")
@@ -184,12 +192,13 @@ def copy_pratiche(skill, library):
             "comune": recipe.get("comune") or COVERAGE["default_comune"],
             "sportello": recipe.get("sportello") or COVERAGE["sportello"].get(d.name),
             "library": f"library/procedures/{proc}.yaml" if (library / "procedures" / f"{proc}.yaml").is_file() else None,
-            "refuses": [s["else"] for s in steps.get("supports", []) if "else" in s],
             "notes": notes(text),
             # The connector serves the same hash: a different one means this copy is stale.
             "steps_sha256": hashlib.sha256(out.read_bytes()).hexdigest(),
         })
-    (skill / "catalog.json").write_text(as_json(catalog))
+    # The cases each refuses stay in its steps file: pre-flight reports them, and the connector
+    # reads them there.
+    (skill / "catalog.json").write_text(lines_json(catalog))
     return catalog
 
 
@@ -231,9 +240,8 @@ def write_coverage(skill, catalog, library, version):
                         "comune": "F839" if proc.startswith("napoli/") else "IT", "sportello": None,
                         "status": "guide", "avatars": [], "library": True})
     entries += [c | {"name": None, "status": "coming"} for c in COVERAGE["coming"]]
-    (skill / "coverage.json").write_text(as_json({
-        "plugin_version": version, "built": dt.date.today().isoformat(),
-        "comuni": COVERAGE["comuni"] | {"IT": "nazionale"}, "pratiche": entries}))
+    head = {"plugin_version": version, "built": dt.date.today().isoformat(), "comuni": COVERAGE["comuni"] | {"IT": "nazionale"}}
+    (skill / "coverage.json").write_text(json.dumps(head, ensure_ascii=False)[:-1] + ', "pratiche": ' + lines_json(entries) + "}\n")
     return entries
 
 
@@ -287,7 +295,7 @@ def make_pdf(path, size):
 def self_check(plugin):
     """The test case through check.py and pre-flight under python3, as Cowork runs them."""
     skill = plugin / "skills" / "portali-pratica"
-    case = plugin / "skills" / "portali-cowork-test" / "cila"
+    case = plugin / "skills" / TEST_SKILL / "cila"
     py = shutil.which("python3") or sys.executable
     with tempfile.TemporaryDirectory() as tmp:
         values = Path(tmp) / "values.json"
@@ -364,6 +372,8 @@ def main():
     ap.add_argument("--pvault-checksums", type=Path, help="that release's checksums.txt")
     ap.add_argument("--connector", help="the Portali connector's https URL (connector/): the plugin brings it")
     ap.add_argument("--vault", choices=("on", "off"), help="ship the archive or not, for this build (default: build.yaml's)")
+    ap.add_argument("--cowork-test", action="store_true", help="keep the Cowork test skill (a release leaves it out)")
+    ap.add_argument("--evals", action="store_true", help="add plugin/evals/ for `claude plugin eval` (a release leaves them out)")
     a = ap.parse_args()
     vault = vault_default() if a.vault is None else a.vault == "on"
     if a.connector and not re.fullmatch(r"https://[^\s/]+(/\S*)?", a.connector):
@@ -392,8 +402,13 @@ def main():
     copy_library(a.library, skill)
     manifest = json.loads((plugin / ".claude-plugin" / "plugin.json").read_text())
     coverage = write_coverage(skill, catalog, a.library, manifest["version"])
-    make_test_case(plugin / "skills" / "portali-cowork-test")
+    make_test_case(plugin / "skills" / TEST_SKILL)
     self_check(plugin)
+    if a.evals:
+        shutil.copytree(HERE / "evals", plugin / "evals", ignore=shutil.ignore_patterns(".DS_Store", "results"))
+        shutil.copytree(plugin / "skills" / TEST_SKILL / "cila", plugin / "evals" / "_job")
+    if not a.cowork_test:  # the self-check's case, never the customer's
+        shutil.rmtree(plugin / "skills" / TEST_SKILL)
     if not re.fullmatch(r"[a-z0-9-]+", manifest["name"]):
         sys.exit(f"plugin name {manifest['name']!r} isn't kebab-case")
     zipped = a.out / f"{manifest['name']}.plugin"
@@ -402,7 +417,7 @@ def main():
             if f.is_file() and "__pycache__" not in f.parts and f.name != ".DS_Store":
                 z.write(f, f.relative_to(plugin))
     counts = {s: sum(e["status"] == s for e in coverage) for s in ("available", "paused", "mapped", "guide", "coming")}
-    print(f"{zipped}: {manifest['name']} {manifest['version']}, {'with' if vault else 'no'} archive, {len(catalog)} pratiche, "
+    print(f"{zipped}: {manifest['name']} {manifest['version']}, {'with' if vault else 'no'} archive{', Cowork test' if a.cowork_test else ''}{', evals' if a.evals else ''}, {len(catalog)} pratiche, "
           f"{zipped.stat().st_size // 1024} KB; coverage {counts}")
     return 0
 

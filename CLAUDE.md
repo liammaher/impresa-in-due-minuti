@@ -132,7 +132,9 @@ plugin/              the Portali plugin for Cowork (docs/design/packaging.md): b
                      runner, the rehearsals' steps files (as JSON: no packages in Cowork) and the
                      library into it; it stops unless each pratica's pre-flight matches the repo's.
                      build.yaml's `vault` ships the archive or not (off: no setup skill, no pvault
-                     in a release, the texts' `<!-- no-vault -->` parts; test_build.py)
+                     in a release, the texts' `<!-- no-vault -->` parts; test_build.py).
+                     `--cowork-test` keeps the Cowork test skill, `--evals` adds evals/ (how Claude
+                     follows the skill, `claude plugin eval`); a release has neither
 connector/           the Portali connector (remote MCP, read-only, no sign-in): coverage, search, a
                      pratica's status and freshness, library entries, from plugin/build.py's output.
                      It never takes personal data: its tools take a case's facts
@@ -273,7 +275,9 @@ the page never copies a rule.
   category or field name, wider words next to spid/cie/firma) are stored only as
   `personal`; SPID/CieID categories and their documents default to it.
 - **Formats**: Italian codes, dates (`YYYY-MM-DD`), euro amounts and areas are validated
-  and normalized (`italy.go`, `dates.go`, `housing.go`, `business.go`). Housing categories
+  and normalized (`italy.go`, `dates.go`, `housing.go`, `business.go`). The plugin's `check.py`
+  copies the ones the portal reads; `testdata/values.json` holds both to the same cases
+  (`italy_shared_test.go`, `plugin/test_check.py`): a rule changed here gets a case there. Housing categories
   (`abitazione`, `locazione`, `utenze`, `tari`) describe the home at residenza/domicilio;
   the schema exports them as `kinds: [persona]` (set from `IsHousingCategory`).
   A new field bumps the schema's `Version` (`make schema`); the library's copy
@@ -492,7 +496,8 @@ before and after a change, `bench/test_schema_branches.py` schema_branches.py an
 route.py on every case the SUE table decides (it prints the combinations not mapped yet), `bench/test_rounds.py`
 that every rehearsal's pre-flight is ready after one message (a proposal reading another answer of the same
 message comes with it: `assumes`, `cases`, `otherwise`; what a proposal holds back is `if_changed`, asked only
-if it is changed), and
+if it is changed), `bench/test_message.py` that one message (pre-flight's `message`, which the skill sends as
+it is) holds every question, proposal and missing detail and no field id, and
 `claude/skills/pratica/intake/bench/test_intake.py` the intake on a made-up dossier (`dossier.py`) against fixture-p6.json. On the real portal, `bench/rerun.py` reruns the rehearsals
 in the pane after a runner, dictionary or gen.py change (portal/README.md); `--record` files the results in each
 rehearsal's `runs.json`, the one run record: schema_branches.py and scoreboard.py count it, and each README's run

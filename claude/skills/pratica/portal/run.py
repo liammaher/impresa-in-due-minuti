@@ -12,7 +12,8 @@
       vault fields missing or expired, the files to attach (each within the portal's 9.77 MB,
       of a type its slot takes, and as its sportello takes them: Napoli's SUE refuses a file
       not in PDF/A, unsigned or oddly named, FILING) and whether they fit the pane, and the
-      person's own steps. Exits 0 when `ready`, 3 when not. --made-up (a rehearsal's made-up
+      person's own steps; `message` is the questions, proposals and missing details as the one
+      Italian message to send. Exits 0 when `ready`, 3 when not. --made-up (a rehearsal's made-up
       files, never sent) reports the sportello's refusals as warnings instead.
 
   run.py scope --steps STEPS.yaml
@@ -109,7 +110,6 @@ import time
 from datetime import date
 from pathlib import Path
 
-import yaml
 
 sys.path[:0] = [str(Path(__file__).resolve().parent.parent / "fill"), str(Path(__file__).resolve().parent.parent),
                 str(Path(__file__).resolve().parent)]
@@ -1218,10 +1218,11 @@ def assumed_proposals(steps, values, report):
     """The message as the proposals make the case: a follow-up that hangs only on proposals and that
     the case doesn't need once they hold (the details of other planning instruments, proposed
     "no") leaves the message for `if_changed`, under the proposal that would open it, and is asked
-    only if the person changes that proposal. A follow-up that also hangs on an open question stays."""
+    only if the person changes that proposal. A follow-up that also hangs on an open question stays.
+    Returns what the case needs once the proposals hold (None with none), for message()."""
     held = {p["key"]: p["proposal"] for p in report["proposals"] if "proposal" in p}
     if not held:
-        return
+        return None
     given = Values(values.answers | held, vault=values.vault, fields=values.fields, asks=values.asks)
     given.cache, given._titolare_slug = values.cache, values._titolare_slug
     need = needed(steps, given)
@@ -1241,6 +1242,126 @@ def assumed_proposals(steps, values, report):
     report["proposals"] = [p for p in report["proposals"] if stays(p)]
     if later:
         report["if_changed"] = later
+    return need
+
+
+# What the person reads again when an answer didn't fit (check_answer's reasons are for Claude).
+RETRY = {"yes_no": "risponda sì o no", "number": "serve un numero", "date": "serve una data",
+         "choice": "scelga una delle voci", "file": "il file indicato non c'è", "text": "la risposta è vuota"}
+
+
+def said(ask, v):
+    """An answer as the person reads it: sì or no, a choice's own words, a list's items."""
+    if isinstance(v, list):
+        return ", ".join(said(ask, x) for x in v) or "nessuna"
+    s = str(v).lower() if isinstance(v, bool) else str(v)
+    if s in ("true", "false") and ask.get("type") != "choice":
+        return "sì" if s == "true" else "no"
+    label = (ask.get("labels") or {}).get(s)
+    # A label's head, before its explanation: "Manutenzione straordinaria (art. 3 c. 1 b): ..."
+    return re.split(r" \(|: ", label)[0] if label else s.replace("_", " ")
+
+
+def message(report, asks, held_need=None):
+    """The one message pre-flight's questions, proposals and missing details make, in Italian,
+    for Claude to send as it is: the questions numbered, each follow-up (`only_if`) under the
+    question it hangs on (3.a, 3.a.1) so the tecnico can answer it in the same reply; the proposals
+    as "Userò" lines, a proposal per answer (`cases`) as "X se alla 3 risponde sì", with what
+    they'd add if one is changed; then the details no document holds, by the portal's own section
+    and box. Nothing from `if_changed`. A question the case needs with the proposals as they are
+    (held_need) is asked as one, never only "if a proposal changes"."""
+    questions, proposals = report["questions"], report["proposals"]
+    order = [x["key"] for x in questions + proposals]
+    items = {i["key"]: q["key"] for q in questions for i in q.get("items", [])}
+    depth = {x["key"]: len(x.get("only_if", [])) for x in questions + proposals}
+    asked = {q["key"] for q in questions}
+
+    def parent(q):
+        # The deepest question, checklist item or proposal this one hangs on that the message holds.
+        up = [k for k in q.get("only_if", []) if k in items or k in depth and (k in asked or q["key"] not in (held_need or {}))]
+        return max(up, key=lambda k: (depth.get(k, depth.get(items.get(k), 0) + 1), order.index(items.get(k, k))),
+                   default=None)
+    under = {}
+    for q in questions:
+        under.setdefault(parent(q), []).append(q)
+    number, lines = {}, []
+
+    def text(q):
+        a, out = asks.get(q["key"], {}), q["question"]
+        if q.get("type") == "yes_no":
+            out += " (sì/no)"
+        elif q.get("type") == "choice" and not all(str(o).lower() in out.lower() for o in q.get("options", [])):
+            out += " (" + " / ".join(said(a, o) for o in q.get("options", [])) + ")"
+        if q.get("how"):
+            out += f" ({q['how']})"
+        if q.get("error"):
+            m = re.search(r"at most (\d+) characters", q["error"])
+            out += f" (di nuovo: {'al massimo ' + m[1] + ' caratteri' if m else RETRY.get(q.get('type'), 'la risposta di prima non va')})"
+        return out
+
+    def tag(n, j, level):
+        return f"{n}.{chr(97 + j) if level % 2 else j + 1}"
+
+    def line(q, n, level):
+        indent = "   " * level
+        lines.append(f"{indent}{n}. {text(q)}")
+        number[q["key"]] = n
+        for i in q.get("items", []):
+            lines.append(f"{indent}   – {i['item']}" + (f" ({i['how']})" if i.get("how") else ""))
+            number[i["key"]] = n
+            for j, f in enumerate(under.get(i["key"], [])):
+                line(f, tag(n, j, level + 1), level + 2)
+        for j, f in enumerate(under.get(q["key"], [])):
+            line(f, tag(n, j, level + 1), level + 1)
+    for n, q in enumerate(under.get(None, []), 1):
+        line(q, str(n), 0)
+    blocks = [["Le domande (risponda con il numero; a quelle con la lettera solo se servono):"] + lines] if lines else []
+
+    def cond(combos):
+        # One question's answers together ("alla 1 risponde a, b o c"), else each combination.
+        ks = {k for c in combos for k in c}
+        if len(ks) == 1:
+            k = ks.pop()
+            vs = [said(asks.get(k, {}), c[k]) for c in combos]
+            return f"alla {number.get(k, '?')} risponde " + (", ".join(vs[:-1]) + " o " + vs[-1] if len(vs) > 1 else vs[0])
+        return " o ".join(" e ".join(f"alla {number.get(k, '?')} risponde {said(asks.get(k, {}), v)}"
+                                     for k, v in c.items()) for c in combos)
+
+    def later(key):
+        # What a changed proposal would add: the questions under it, and theirs, in a few words each.
+        out = []
+        for q in under.get(key, []):
+            out.append(q["question"].rstrip("?:. "))
+            out += later(q["key"])
+        return out
+    use = []
+    for p in proposals:
+        a = asks.get(p["key"], {})
+        if "cases" in p:
+            by = {}
+            for c in p["cases"]:
+                by.setdefault(json.dumps(c["proposal"]), []).append(c["if"])
+            what = "; ".join(f"{said(a, json.loads(v))} se {cond(cs)}" for v, cs in by.items())
+            if p.get("otherwise"):
+                what += f"; se {cond(p['otherwise'])}: me lo dica"
+        else:
+            what = said(a, p["proposal"])
+        use.append(f"– {p['question']} → {what}")
+        if later(p["key"]):
+            use.append("   se la cambia, mi dica anche: " + "; ".join(later(p["key"])))
+    if use:
+        blocks.append(["Userò queste risposte (scriva «ok» per confermarle tutte, o mi dica cosa cambiare):"] + use)
+    need = []
+    for m in report["missing"]:
+        if m["field"].startswith("*:"):
+            continue  # nobody is the titolare yet: the skill seeds studio.json, never the tecnico
+        expired = re.match(r"expired on (\S+)", m["why"])
+        need.append(f"– {m['for']}" + (" (lo spazio sul portale è più corto)" if "at most" in m["why"]
+                                      else f": il documento è scaduto il {expired[1]}, ne serve uno valido" if expired
+                                      else "" if m["why"] == "empty in the vault" else ": da correggere"))
+    if need:
+        blocks.append(["Mi servono anche questi dati, che i documenti non riportano:"] + need)
+    return "\n\n".join("\n".join(b) for b in blocks)
 
 
 def preflight(steps, values, made_up=False, after=False):
@@ -1314,7 +1435,7 @@ def preflight(steps, values, made_up=False, after=False):
                                    | {x: a[x] for x in ("options", "labels", "how", "why") if x in a} | hangs
                                    | ({"error": why} if v is not None else {}))
     report["proposals"] += conditional_proposals(pending, report, values, need)
-    assumed_proposals(steps, values, report)
+    held_need = assumed_proposals(steps, values, report)
     if steps.get("rules"):
         # While the table's first fact (what the works are) is asked, it is asked alone, as the
         # rules table's own questions are: which others matter depends on it, even one no field
@@ -1354,7 +1475,11 @@ def preflight(steps, values, made_up=False, after=False):
             full = values.titolare + ":" + ref[2:] if ref.startswith("t:") else ref
             read.add(full.rsplit(".", 1)[0])
             if values.field(ref) is None and "empty" not in filters:
-                missing.setdefault(full, {"field": full, "why": "empty in the vault", "for": where})
+                # `id`: where the tecnico's answer goes, the role named as its person (c: -> bianchi:).
+                role, _, rest = full.partition(":")
+                person = (values.answers.get("people") or {}).get(role)
+                missing.setdefault(full, {"field": full, "id": f"{person}:{rest}" if person else full,
+                                          "why": "empty in the vault", "for": where})
     today = date.today().isoformat()
     for cat in sorted(read):
         end = values.category(cat).get(cat + ".data_scadenza")
@@ -1481,6 +1606,9 @@ def preflight(steps, values, made_up=False, after=False):
         report["second_run"] = after_declarations(steps, values)
     report["ready"] = not (report["questions"] or report["proposals"] or report["missing"]
                            or any(not x["exists"] or x.get("problem") for x in report["files"] if x["path"]))
+    text = message(report, asks, held_need)
+    if text:
+        report["message"] = text
     return report
 
 
@@ -2119,7 +2247,7 @@ def main():
     ap.add_argument("--bundle", type=Path, help="page: also write runner.js, steps.js and run.js as this one file "
                     "(in the person's Downloads), and pick.js, a box where the person picks it once")
     a = ap.parse_args()
-    steps = yaml.safe_load(a.steps.read_text())
+    steps = rules.load(a.steps)
     if a.command == "scope":
         print(" ".join(shlex.quote(p) for p in scope(steps)))
         return 0
