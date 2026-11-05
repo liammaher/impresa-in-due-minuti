@@ -14,8 +14,14 @@ the declarations, sign, pay and send.
 - **Always Italian**, whatever language these instructions are in. Address the tecnico as
   **Lei**. Short sentences, one idea each. No paragraphs: a line per point.
 - **Lead with what is done**, then their step. A question is answered with a word or a pick.
+<!-- vault -->
 - **The program on their computer reads the documents, never you**: "Dai documenti", never
   "Ho letto i documenti". Say how their data travels once, the first time, never again.
+<!-- /vault -->
+<!-- no-vault -->
+- **You read the documents yourself**, and every fact says which one it comes from ("Dalla
+  visura: …"). Say how their data travels once, the first time (step 0), never again.
+<!-- /no-vault -->
 - **A refusal names the exact case** ("la SCIA in sanatoria per l'art. 36-bis c. 1"), never the
   whole pratica, says what you can prepare instead, and whether it is the portal's flaw (then
   nothing is missing on their side). Then their choices, in one to three short lines.
@@ -83,14 +89,12 @@ the declarations, sign, pay and send.
 - **No guesses.** Every value comes from the archive, a document or the tecnico.
 <!-- /vault -->
 <!-- no-vault -->
-- **You never see the documents' data.** Values go from the documents to the portal without
-  passing through this conversation: never open the documents, `run/intake/private/`,
-  `run/private/`, `run/values.json` or `run/review.html`. You read only what the tools print
-  for you (which fields exist or are missing, never their values). What the tecnico writes to
-  you passes through it (step 0), and so does a document attached to it (step 2), and so do the
-  values only where no window can show the code
-  (Cowork's sandbox, `--plain`): say so first (step 4).
-- **No guesses.** Every value comes from a document or the tecnico.
+- **You read the documents, and you check the work against them.** Read every file of the job
+  yourself (step 2), and what the intake read from them; after the compilation, read the portal's
+  own preview of the pratica and hold each value to its document (step 5). Their data passes
+  through this conversation: say so once, the first time (step 0).
+- **No guesses.** Every value comes from a document or the tecnico. A value you can't read for
+  sure (a blurred scan, two documents that disagree) is asked, with what each document says.
 <!-- /no-vault -->
 - **The built-in browser** of the Claude desktop app, never Claude in Chrome.
 
@@ -105,10 +109,21 @@ the declarations, sign, pay and send.
 4. They reply once ("ok", or what to change): nothing opens before it.
 5. The files are checked (pre-flight again). Nothing else to ask, unless they changed a proposal.
 6. They log in with SPID in the app's browser; you fill (step 4).
+<!-- vault -->
 7. The review page and a short list of their steps (step 5).
+<!-- /vault -->
+<!-- no-vault -->
+7. You check the draft against the documents; then the review page and a short list of their
+   steps (step 5).
+<!-- /no-vault -->
 8. After they send it: the next dates, and the next pratica (step 7).
 
+<!-- vault -->
 Between 3 and 7 they hear nothing from you but the login, the code and the review page.
+<!-- /vault -->
+<!-- no-vault -->
+Between 3 and 7 they hear nothing from you but the login and the review page.
+<!-- /no-vault -->
 
 ## What this skill has
 
@@ -134,7 +149,8 @@ is, in one line, wait for "fatto", and run the command again. Never install Pyth
   (`grep -i proroga "${CLAUDE_SKILL_DIR}/catalog.json"`), never read them whole: they are long.
 - `library/`: what the law asks for each procedure (`procedures/`), which pratica a case is
   (`rules/`), where to go (`offices/`). `reference/schema.json`: every field.
-- `portal/run.py`, `portal/route.py`, `intake/intake.py`, `review.py`, `check.py`.
+- `portal/run.py`, `portal/route.py`, `intake/intake.py`, `review.py`, `check.py`; for the page,
+  `portal/preview_text.js` and `portal/attachments.js` (step 5).
 
 <!-- vault -->
 ## 0. The archive
@@ -170,14 +186,15 @@ below runs in the job's subfolder).
   `tecnico`: `"tecnico:identity.first_name"`), written once, kept for every job.
 - `values.json`, in the job's subfolder: what the tecnico tells you about the job's people that
   the documents don't hold (`"bianchi:identity.first_name"`).
-- What the documents hold stays where the intake writes it (`run/intake/private/values.json`),
-  which you never open.
+- What the documents hold: the intake writes what it reads to `run/intake/private/values.json`;
+  what you read in them that it missed or got wrong goes into the job's `values.json`, which wins
+  over it.
 
 When it doesn't exist, create `../studio.json` as `{"tecnico:ruolo.tipo": "titolare"}` (this
 makes `tecnico` the `t:` role; without it pre-flight lists none of their details) and
-`values.json` as `{}`. The first time, say once, in one line: a
-program on this computer reads the documents and the details reach the portal sealed, so you
-don't see them; only what they write in this conversation passes through it. The first
+`values.json` as `{}`. The first time, say once, in one line, how their data travels:
+"Leggo io i documenti: i loro dati passano da questa conversazione e poi sul portale. Password e
+SPID mai." The first
 pratica's pre-flight lists the studio's and the tecnico's details under `missing`: ask for them
 once, in one message, and write them into `../studio.json`.
 
@@ -234,13 +251,13 @@ here. Both of these can hold at once:
   folder): copy it with `cp` into the job's `docs/` (`mkdir -p Bianchi/docs`, the subfolder
   named after the client), without opening, reading or converting it. Say where in one line of
   the one message: "Ho copiato i documenti nella cartella Bianchi, sottocartella docs."
-- An attachment whose content you were shown (a PDF or a photo in the conversation) has passed
-  through it. Take nothing from it: no value, no fact, no summary, no quote, not even to choose
-  the pratica. Say so once, plainly, and, unless you could copy it, ask for the file in the
-  folder: "Li ho visti qui, ma i dati li prende solo il programma sul Suo computer, che li copia
-  senza errori. Li salvi nella cartella Bianchi, sottocartella docs, e mi scriva «fatto»."
+- An attachment whose content you were shown (a PDF or a photo in the conversation): read it
+  like any document. The portal still needs the file itself to attach it, so unless you could
+  copy it, ask for it in the folder: "Per allegarli al portale mi servono i file: li salvi nella
+  cartella Bianchi, sottocartella docs, e mi scriva «fatto»."
 
-Then, as for any folder, read them with the intake, never yourself:
+Then run the intake on the folder; it reads the usual documents (visura, atto, contratto,
+relazione, ricevute) and says the words each value comes from:
 
 ```sh
 sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" scan docs --out run/intake --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json"
@@ -248,11 +265,20 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" scan docs --o
 
 Before step 1 the same without `--steps`. A `notes` line saying the property isn't in the Comune
 di Napoli is the verdict: send it and stop. Read only `run/intake/intake.json`: each file's kind,
-the fields filled (ids, not values), `unread` files (scans and photos: their facts are asked
-instead), `notes` (in Italian), and `proposals` with the document and words each comes from. Take them now, so pre-flight doesn't ask
+the fields filled (ids, not values), `unread` files (scans and photos: you read those yourself,
+below), `notes` (in Italian), and `proposals` with the document and words each comes from. Take them now, so pre-flight doesn't ask
 them again: `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" accept run/intake --into answers.json`
 (it adds the client's and the owner's roles to `people`). They are shown in the one message, and
 the tecnico's "ok" confirms them with the rest; a correction goes into `answers.json`.
+
+**Then read every document yourself** (Read: a PDF page by page, a scan or a photo as an image),
+the intake's `unread` ones first: it can't read scans. Hold each value the intake took
+(`run/intake/private/values.json`) to its document. Where it is wrong, or a document holds a field
+the intake left empty (pre-flight's `missing` names them, with their ids: step 3), write the value
+into the job's `values.json`, then `check.py` again. Keep, for each value you take, the document
+and page it comes from: the one message cites them, and so does the check after the compilation
+(step 5). Where two documents disagree (the visura and the deed give two subalterni), take
+neither: it goes under "Da controllare" with what each says.
 
 The roles: `t:` is the tecnico; the others are people that `answers.json` names under
 `people` (the entry's `notes` say which: `{"people": {"c": "bianchi"}}` makes the client
@@ -285,7 +311,9 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --step
 ```
 
 Leave out `--values run/intake/private/values.json` when the intake didn't run (here and
-below). Pre-flight prints JSON and exits 0 only when `ready`.
+below). Pre-flight prints JSON and exits 0 only when `ready`. Run it once before the one message:
+fill from the documents what its `missing` names (step 2), `check.py`, and run it again, so the
+one message asks only what no document holds.
 <!-- /no-vault -->
 
 - `unsupported`: its `message` is the refusal, already written: the exact case, whether it is
@@ -328,8 +356,14 @@ below). Pre-flight prints JSON and exits 0 only when `ready`.
 - `ready` with no `message`: nothing to ask. Say in one line what you read and the pratica, and
   go on.
 
+<!-- vault -->
 Only when it says `ready` go on. From here they hear nothing from you but the login, the code
 and the review page.
+<!-- /vault -->
+<!-- no-vault -->
+Only when it says `ready` go on. From here they hear nothing from you but the login and the
+review page.
+<!-- /no-vault -->
 
 ## 4. The compilation
 
@@ -343,20 +377,24 @@ pvault get $(sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" sco
 <!-- no-vault -->
 ```sh
 sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
-  --values run/values.json --values run/intake/private/values.json --out run
+  --values run/values.json --values run/intake/private/values.json --plain --out run
 ```
 
-Where no window can show the code (Cowork's sandbox), add `--plain`: the values then pass
-through this conversation, so say so once first.
+`--plain`: run.js carries the values itself, so there is no code to type.
 <!-- /no-vault -->
 
 1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser:
    "Acceda con SPID nella finestra del browser; quando vede la pagina del portale mi scriva
    «fatto»." Wait until the page is the portal's own, past the login.
+<!-- vault -->
 2. `page` opened a small window with a code on their screen. You never see it: never ask for
    it or look for it. Say: "Sullo schermo c'è una finestra con un codice. Tra poco sul portale
    compare un riquadro: lo scriva lì (non serve dirmelo) e lasci aperta la finestra fino alla
    fine."
+<!-- /vault -->
+<!-- no-vault -->
+2. Say: "Compilo ora la bozza: non tocchi la pagina finché non Le scrivo."
+<!-- /no-vault -->
 3. Run each script as **one** JavaScript call on the portal's page, its text exactly as the
    file has it: `run/check.js` first. It returns what to run next: `runner.js` and `steps.js`
    only when it names them, then `run.js`. When it names `runner.js` and the call is too big,
@@ -367,9 +405,14 @@ through this conversation, so say so once first.
 5. Save `JSON.stringify(__pv.last())` to `run/report.json`, then `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run`
    writes `run/review.html`.
 
+<!-- vault -->
 Never read, screenshot or take the text of a page the compilation has filled, and take none
-while the code box is up. One compilation per login at a time: the portal keeps one pratica
-open per login.
+while the code box is up.
+<!-- /vault -->
+<!-- no-vault -->
+While it runs, don't click, type or take screenshots on the page: the compilation is using it.
+<!-- /no-vault -->
+One compilation per login at a time: the portal keeps one pratica open per login.
 
 **If it stops, recover it without the tecnico.** `__pv.last()` has `error`, `at` (the
 wizard screen, or the section and field) and `snapshot` (the page with no value in it);
@@ -381,6 +424,7 @@ inatteso", a 503): `url = await __pv.reopen("<draft name>")`, then `__pv.resume(
 the tecnico only for a fact nothing holds, in one plain question. Budget: two fixes or about
 three minutes; then stop, leave the draft saved, and say plainly what's left.
 
+<!-- vault -->
 ## 5. Hand over
 
 Lead with what is done: "La bozza è salvata sul portale e ogni valore è stato riletto." Send
@@ -389,6 +433,45 @@ went on the portal, the declarations' own words. A report's `alerts` (the portal
 beside boxes it kept) are each one line for them to check. Then their steps (`yours`), numbered,
 in order: the first sentence of each only (the page has them whole). Stop: they review, declare,
 sign, pay and send.
+<!-- /vault -->
+<!-- no-vault -->
+## 5. Check against the documents, then hand over
+
+The runner read back every value it typed. Now check that each is the right one, from what the
+Comune will receive, before you tell the tecnico anything:
+
+1. Run `${CLAUDE_SKILL_DIR}/portal/preview_text.js` as one JavaScript call on the draft, its text
+   exactly as the file has it. It returns the portal's own preview of the pratica as text
+   (`text`: a line per row, labels above their values, `[ X ]` for a ticked box), or `error`
+   (then the review page says the preview wasn't compared: tell them to read it in the portal,
+   "Visualizza anteprima").
+2. Hold every value in it that comes from the job (people, codici fiscali, dates, addresses, the
+   catasto, the works, amounts, the tecnico and the studio; not the portal's own wording) to its
+   source: the document and page you noted (step 2), or what the tecnico wrote. Same meaning is
+   equal ("Maschile" and M, 08/04/1971 and 1971-04-08, capitals); a long value may run onto the
+   next line. A ticked box is held to the answer it comes from. Each is a row of
+   `run/check.json`: `{"rows": [{"section", "label", "portal", "document", "source", "ok",
+   "note"}], "not_in_preview": [...]}`. Sections the preview leaves out (on the SUE, the
+   Relazione Tecnica di Asseverazione) go under `not_in_preview`: hold their values in
+   `run/report.json` to the documents the same way.
+3. Run `${CLAUDE_SKILL_DIR}/portal/attachments.js` the same way. `{"opening": true}` means it
+   opened Allega documenti: wait for the page, then run it again. Save what it returns as
+   `run/portal-files.json`.
+4. `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run` writes `run/review.html`: it
+   matches each file on the portal to the job's own by its bytes.
+
+A value that doesn't match is never fixed by hand on the portal. Say it first, with what the
+portal and the document each say; once they say which is right, correct `values.json` or
+`answers.json` and compile again (a new bozza: the old one they delete from Pratiche in bozza).
+
+Then lead with what is done and what the check found: "La bozza è salvata sul portale. Ho
+confrontato l'anteprima del portale con i documenti: 61 valori, tutti coincidono; gli 8 allegati
+sono identici ai Suoi file." (a mismatch first, if any). Send `run/review.html`: what's left for
+them, every check, every value and its document, the files, the declarations' own words. A
+report's `alerts` (the portal's warnings beside boxes it kept) are each one line for them to
+check. Then their steps (`yours`), numbered, in order: the first sentence of each only (the page
+has them whole). Stop: they review, declare, sign, pay and send.
+<!-- /no-vault -->
 
 ## 6. The second compilation, after the declarations
 

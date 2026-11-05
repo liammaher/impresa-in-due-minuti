@@ -485,7 +485,8 @@ pilot's form from disk; the `sign` case needs a library whose layout has `signat
 CI runs `regress.py` against the library's main (`fill.yml`); the library runs it on its own changes.
 The portal runner has offline tests on a fake portal: `claude/skills/pratica/portal/bench/test_inpage.py`,
 run with the pratica venv's Python (`~/.cache/pratica-portal/venv`, Playwright's Chromium, headless; no
-network, vault or model); `bench/test_preflight.py` tests pre-flight on the SCIA rehearsal's files, `bench/test_gen.py`
+network, vault or model); `bench/test_preview_text.py` the preview PDF's reader (`preview_text.js`),
+`bench/test_review_check.py` review.py's check against the documents; `bench/test_preflight.py` tests pre-flight on the SCIA rehearsal's files, `bench/test_gen.py`
 gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the SUE choice count
 (`branches.py --write` writes `docs/sue-branches.md`), `bench/test_portability.py` the national/Campania/Napoli
 split (`portability.py --write`, `docs/portability.md`), `bench/test_tolleranze.py` the asseverazioni's
