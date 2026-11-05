@@ -30,7 +30,6 @@ import json
 import sys
 from pathlib import Path
 
-import yaml
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
@@ -116,7 +115,7 @@ def index(table, root):
 def _index(table, root):
     out = {}
     for name, path in steps_files(root):
-        steps = yaml.safe_load(path.read_text())
+        steps = rules.load(path)
         r = (steps or {}).get("rules") or {}
         if r.get("table") != table:
             continue

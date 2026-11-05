@@ -2,17 +2,19 @@
 """Build the Portali plugin for Cowork: plugin/portali plus the runner, the rehearsals'
 steps files and the pratiche-napoli library, as one installable file.
 
-  build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off] [--cowork-test]
+  build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off] [--cowork-test] [--evals]
 
 Writes OUT/portali/ (default plugin/dist) and OUT/portali.plugin (the same, zipped), then
 pre-flights the test fixture with the built plugin under the system python3, as Cowork would run
 it. --library is a pratiche-napoli checkout (default $PRATICHE_NAPOLI_DIR). Needs PyYAML
 (the pratica venv's Python): the plugin itself needs no packages, because every YAML file
-the runner reads goes in as JSON (shim/yaml.py says how). --connector adds the Portali
+the runner reads goes in as JSON (rules.load reads it). --connector adds the Portali
 connector (connector/, serving this same build) as the plugin's .mcp.json. --vault overrides
 build.yaml's `vault` for this build: off, the plugin carries no setup skill and its texts keep
 only their no-vault parts. --cowork-test keeps the Cowork test skill, for whoever runs those tests:
 a release leaves it out (its made-up case and 3 MB PDF are for the build's self-check and the test).
+--evals adds plugin/evals/ (how Claude follows the skill, for `claude plugin eval`), with that
+made-up case as their job (evals/_job/); a release leaves them out too.
 """
 
 import argparse
@@ -157,11 +159,10 @@ def copy_runner(skill):
         shutil.copy2(PRATICA / "portal" / name, portal / name)
     (portal / "catalogue" / "F839").mkdir(parents=True)
     shutil.copy2(PRATICA / "portal" / "catalogue" / "F839" / "drift.json", portal / "catalogue" / "F839" / "drift.json")
-    shutil.copy2(HERE / "shim" / "yaml.py", portal / "yaml.py")
     (portal / "rules").mkdir()
     for table in sorted((PRATICA / "portal" / "rules").glob("*.yaml")):
         # BaseLoader, as rules.py reads it: every scalar stays a string.
-        (portal / "rules" / table.name).write_text(as_json(yaml.load(table.read_text(), Loader=yaml.BaseLoader)))
+        (portal / "rules" / f"{table.stem}.json").write_text(as_json(yaml.load(table.read_text(), Loader=yaml.BaseLoader)))
     (skill / "fill").mkdir()
     shutil.copy2(PRATICA / "fill" / "fill.py", skill / "fill" / "fill.py")  # run.py imports it
     shutil.copy2(PRATICA / "review.py", skill / "review.py")
@@ -372,6 +373,7 @@ def main():
     ap.add_argument("--connector", help="the Portali connector's https URL (connector/): the plugin brings it")
     ap.add_argument("--vault", choices=("on", "off"), help="ship the archive or not, for this build (default: build.yaml's)")
     ap.add_argument("--cowork-test", action="store_true", help="keep the Cowork test skill (a release leaves it out)")
+    ap.add_argument("--evals", action="store_true", help="add plugin/evals/ for `claude plugin eval` (a release leaves them out)")
     a = ap.parse_args()
     vault = vault_default() if a.vault is None else a.vault == "on"
     if a.connector and not re.fullmatch(r"https://[^\s/]+(/\S*)?", a.connector):
@@ -402,6 +404,9 @@ def main():
     coverage = write_coverage(skill, catalog, a.library, manifest["version"])
     make_test_case(plugin / "skills" / TEST_SKILL)
     self_check(plugin)
+    if a.evals:
+        shutil.copytree(HERE / "evals", plugin / "evals", ignore=shutil.ignore_patterns(".DS_Store", "results"))
+        shutil.copytree(plugin / "skills" / TEST_SKILL / "cila", plugin / "evals" / "_job")
     if not a.cowork_test:  # the self-check's case, never the customer's
         shutil.rmtree(plugin / "skills" / TEST_SKILL)
     if not re.fullmatch(r"[a-z0-9-]+", manifest["name"]):
@@ -412,7 +417,7 @@ def main():
             if f.is_file() and "__pycache__" not in f.parts and f.name != ".DS_Store":
                 z.write(f, f.relative_to(plugin))
     counts = {s: sum(e["status"] == s for e in coverage) for s in ("available", "paused", "mapped", "guide", "coming")}
-    print(f"{zipped}: {manifest['name']} {manifest['version']}, {'with' if vault else 'no'} archive{', Cowork test' if a.cowork_test else ''}, {len(catalog)} pratiche, "
+    print(f"{zipped}: {manifest['name']} {manifest['version']}, {'with' if vault else 'no'} archive{', Cowork test' if a.cowork_test else ''}{', evals' if a.evals else ''}, {len(catalog)} pratiche, "
           f"{zipped.stat().st_size // 1024} KB; coverage {counts}")
     return 0
 

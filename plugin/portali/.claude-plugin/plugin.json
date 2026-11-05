@@ -5,6 +5,8 @@
   "author": {
     "name": "Liam Maher"
   },
+  "homepage": "https://github.com/liammaher/portali",
+  "repository": "https://github.com/liammaher/portali",
   "license": "MIT",
   "keywords": ["portali", "italia", "napoli", "sue", "suap", "cila", "scia", "architetti", "pratiche"]
 }

@@ -1,0 +1,200 @@
+{
+ "_comment": "Value cases shared by internal/vault/italy_shared_test.go (the vault's NormalizeAndValidate) and plugin/test_check.py (the plugin's check.py, which has no vault and copies these rules), so the two can't drift apart. want: the normalized value, or null for a refusal. Only rules both make: check.py's own extras (sex, a field's fixed values) are tested in test_check.py.",
+ "cases": [
+  {
+   "id": "identity.codice_fiscale",
+   "value": "RSSMRA85T10A562S",
+   "want": "RSSMRA85T10A562S"
+  },
+  {
+   "id": "identity.codice_fiscale",
+   "value": "rss mra 85t10 a562s",
+   "want": "RSSMRA85T10A562S"
+  },
+  {
+   "id": "identity.codice_fiscale",
+   "value": "RSS-MRA.85T10A562S",
+   "want": "RSSMRA85T10A562S"
+  },
+  {
+   "id": "identity.codice_fiscale",
+   "value": "RSSMRA85T10A56NH",
+   "want": "RSSMRA85T10A56NH"
+  },
+  {
+   "id": "identity.codice_fiscale",
+   "value": "RSSMRA85T50A562W",
+   "want": "RSSMRA85T50A562W"
+  },
+  {
+   "id": "identity.codice_fiscale",
+   "value": "RSSMRA85T10A562T",
+   "want": null
+  },
+  {
+   "id": "identity.codice_fiscale",
+   "value": "RSSMRA85T32A562S",
+   "want": null
+  },
+  {
+   "id": "identity.codice_fiscale",
+   "value": "RSSMRA85T10A562",
+   "want": null
+  },
+  {
+   "id": "identity.codice_fiscale",
+   "value": "12345670017",
+   "want": "12345670017"
+  },
+  {
+   "id": "identity.codice_fiscale",
+   "value": "12345670018",
+   "want": null
+  },
+  {
+   "id": "business.codice_fiscale",
+   "value": "01234567897",
+   "want": "01234567897"
+  },
+  {
+   "id": "leo:identity.codice_fiscale",
+   "value": "rssmra85t10a562s",
+   "want": "RSSMRA85T10A562S"
+  },
+  {
+   "id": "locazione.locatore_codice_fiscale",
+   "value": "RSSMRA85T10A562S",
+   "want": "RSSMRA85T10A562S"
+  },
+  {
+   "id": "business.partita_iva",
+   "value": "12345670017",
+   "want": "12345670017"
+  },
+  {
+   "id": "business.partita_iva",
+   "value": "IT 123 456 700 17",
+   "want": "12345670017"
+  },
+  {
+   "id": "business.partita_iva",
+   "value": "12345670018",
+   "want": null
+  },
+  {
+   "id": "business.partita_iva",
+   "value": "1234567001",
+   "want": null
+  },
+  {
+   "id": "business.partita_iva",
+   "value": "12345670000",
+   "want": null
+  },
+  {
+   "id": "residenza.cap",
+   "value": "80134",
+   "want": "80134"
+  },
+  {
+   "id": "residenza.cap",
+   "value": " 80134 ",
+   "want": "80134"
+  },
+  {
+   "id": "residenza.cap",
+   "value": "8013",
+   "want": null
+  },
+  {
+   "id": "residenza.cap",
+   "value": "80l34",
+   "want": null
+  },
+  {
+   "id": "residenza.provincia",
+   "value": "na",
+   "want": "NA"
+  },
+  {
+   "id": "residenza.provincia",
+   "value": "Napoli",
+   "want": null
+  },
+  {
+   "id": "business.sede_legale_provincia",
+   "value": "mi",
+   "want": "MI"
+  },
+  {
+   "id": "identity.birth_province",
+   "value": "Na",
+   "want": "NA"
+  },
+  {
+   "id": "identity.date_of_birth",
+   "value": "1985-12-10",
+   "want": "1985-12-10"
+  },
+  {
+   "id": "identity.date_of_birth",
+   "value": "10/12/1985",
+   "want": "1985-12-10"
+  },
+  {
+   "id": "identity.date_of_birth",
+   "value": "10-12-1985",
+   "want": "1985-12-10"
+  },
+  {
+   "id": "identity.date_of_birth",
+   "value": "10.12.1985",
+   "want": "1985-12-10"
+  },
+  {
+   "id": "identity.date_of_birth",
+   "value": "5/3/1985",
+   "want": "1985-03-05"
+  },
+  {
+   "id": "identity.date_of_birth",
+   "value": " 10/12/1985 ",
+   "want": "1985-12-10"
+  },
+  {
+   "id": "cie.data_scadenza",
+   "value": "2031-02-29",
+   "want": null
+  },
+  {
+   "id": "cie.data_scadenza",
+   "value": "2032-02-29",
+   "want": "2032-02-29"
+  },
+  {
+   "id": "cie.data_scadenza",
+   "value": "31/04/2030",
+   "want": null
+  },
+  {
+   "id": "cie.data_scadenza",
+   "value": "19851210",
+   "want": null
+  },
+  {
+   "id": "cie.data_scadenza",
+   "value": "5.3.1985",
+   "want": null
+  },
+  {
+   "id": "cie.data_scadenza",
+   "value": "1985-3-5",
+   "want": null
+  },
+  {
+   "id": "cie.data_scadenza",
+   "value": "domani",
+   "want": null
+  }
+ ]
+}

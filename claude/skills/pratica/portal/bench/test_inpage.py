@@ -30,6 +30,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
 import run  # noqa: E402
+import yaml  # noqa: E402
 
 
 DEN, IMPRESA = "form:r0c1:dynaForm:den_txt", "form:r4c1:dynaForm:impresa_txt"
@@ -1050,7 +1051,7 @@ def main():
     def cli_page():
         # `page` seals by default and shows the code only to the window; --plain leaves the values
         # in the clear and shows nothing; with no window to show it in, nothing is left to run.
-        (tmp / "s.yaml").write_text(run.yaml.safe_dump(steps(base), allow_unicode=True))
+        (tmp / "s.yaml").write_text(yaml.safe_dump(steps(base), allow_unicode=True))
         (tmp / "a.json").write_text(json.dumps(small))
         (tmp / "v.json").write_text(json.dumps({"x:ruolo.tipo": "titolare"}))
         shown, real = [], run.show_code
