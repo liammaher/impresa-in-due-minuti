@@ -69,7 +69,8 @@ the declarations, sign, pay and send.
   passing through this conversation: never open the documents, `run/intake/private/`,
   `run/private/`, `run/values.json` or `run/review.html`. You read only what the tools print
   for you (which fields exist or are missing, never their values). What the tecnico writes to
-  you passes through it (step 0), and so do the values only where no window can show the code
+  you passes through it (step 0), and so does a document attached to it (step 2), and so do the
+  values only where no window can show the code
   (Cowork's sandbox, `--plain`): say so first (step 4).
 - **No guesses.** Every value comes from a document or the tecnico.
 <!-- /no-vault -->
@@ -78,7 +79,7 @@ the declarations, sign, pay and send.
 ## The flow, as the tecnico lives it
 
 1. The studio's details, once (step 0).
-2. They say the job in one line and hand over the folder.
+2. They say the job in one line and hand over the folder (documents attached here instead: step 2).
 3. You answer in **one message**: what you read (with the document each fact comes from), the
    pratica the law gives (route.py), any refusal first, and the few open facts with proposed
    answers (pre-flight's `message`, Napoli's annexes and the file problems in it). Steps 1-3.
@@ -186,7 +187,23 @@ or the connector's `get_pratica`): say in one line what it means and stop.
 ## 2. The documents
 
 The job's folder holds the client's documents (`docs/`: visura, atto or contratto, relazione
-tecnica, elaborati, ricevute, documento d'identità). Read them with the intake, never yourself:
+tecnica, elaborati, ricevute, documento d'identità).
+
+**Documents attached to the conversation** (uploaded, dragged in) belong in that folder, not
+here. Both of these can hold at once:
+
+- An attachment that is a file on this computer (its path is in the message, or in the uploads
+  folder): copy it with `cp` into the job's `docs/` (`mkdir -p Bianchi/docs`, the subfolder
+  named after the client), without opening, reading or converting it. Say where in one line of
+  the one message: "Ho copiato i documenti nella cartella Bianchi, sottocartella docs."
+- An attachment whose content you were shown (a PDF or a photo in the conversation) has passed
+  through it. Take nothing from it: no value, no fact, no summary, no quote, not even to choose
+  the pratica. Say so once, plainly, and, unless you could copy it, ask for the file in the
+  folder: "I documenti allegati qui passano dalla conversazione, quindi li ho visti; non ne uso
+  nessun dato. Li salvi nella cartella Bianchi, sottocartella docs, e mi scriva «fatto»: li legge
+  il programma sul suo computer."
+
+Then, as for any folder, read them with the intake, never yourself:
 
 ```sh
 python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" scan docs --out run/intake --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json"
