@@ -250,7 +250,8 @@ here. Both of these can hold at once:
 - An attachment that is a file on this computer (its path is in the message, or in the uploads
   folder): copy it with `cp` into the job's `docs/` (`mkdir -p Bianchi/docs`, the subfolder
   named after the client), unchanged (never converted or renamed). Say where in one line of
-  the one message: "Ho copiato i documenti nella cartella Bianchi, sottocartella docs."
+  the one message: "Ho copiato i documenti nella cartella Bianchi, sottocartella docs." Never name
+  the folder they were uploaded to, nor any path ("caricati/", "uploads/").
 - An attachment whose content you were shown (a PDF or a photo in the conversation): read it
   like any document. The portal still needs the file itself to attach it, so unless you could
   copy it, ask for it in the folder: "Per allegarli al portale mi servono i file: li salvi nella
@@ -272,8 +273,10 @@ them again: `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" 
 (it adds the client's and the owner's roles to `people`). They are shown in the one message, and
 the tecnico's "ok" confirms them with the rest; a correction goes into `answers.json`.
 
-**Then read every document yourself, before the one message** (Read: a PDF page by page, a scan
-or a photo as an image), the intake's `unread` ones first: it can't read scans. Hold each value the intake took
+**Then read every document yourself, before the one message**, each with the Read tool (it shows
+a PDF's pages as they look, a scan or a photo as an image), the intake's `unread` ones first: it
+can't read scans. Never pull text out of a file in the shell (`strings`, `grep`, `pdftotext`, a
+script): a real PDF's text is compressed and a scan has none, so you would miss what is there. Hold each value the intake took
 (`run/intake/private/values.json`) to its document. Where it is wrong, or a document holds a field
 the intake left empty (pre-flight's `missing` names them, with their ids: step 3), write the value
 into the job's `values.json`, then `check.py` again. Keep, for each value you take, the document
@@ -323,7 +326,9 @@ one message asks only what no document holds.
 - `unsupported`: its `message` is the refusal, already written: the exact case, whether it is
   the portal's flaw, what you prepare instead, the choices. Send it as it is and stop.
 - `message`: the questions, the proposals, the details no document holds and the files to fix,
-  already in Italian, ending with what is left to them. **The one message** is, in this order:
+  already in Italian, ending with what is left to them. **The one message** is, in this order,
+  written to the tecnico (never about them), with nothing before the verdict, not even the
+  pratica's name:
   1. The verdict, one line: "Coperta dall'automazione: la preparo per intero, fino alla Sua
      parte (dichiarazioni, firma, pagamento, invio). Provata sul portale con dati di prova;
      nessuna pratica reale è ancora stata inviata con Portali." (A refusal or a status other
@@ -335,9 +340,13 @@ one message asks only what no document holds.
      matters ("Dalla relazione tecnica: manutenzione straordinaria, inizio lavori 19/10/2026"),
      the intake's `notes`, and "Non ho riconosciuto:" with the files of no kind;
   3. route.py's `message`, as your proposal: "Propongo: …". The choice is the tecnico's: they
-     sign the asseverazione;
+     sign the asseverazione. This line names the pratica only: never which questions are still
+     open or already settled;
   4. "Da controllare:" only where the documents and a proposal disagree (a sanzione's receipt,
-     but works proposed as not started), at most three lines;
+     but works proposed as not started), at most three lines. Each says what the document shows
+     and which question or proposal it bears on ("La ricevuta della sanzione (333 €) è per una
+     CILA tardiva: ne tenga conto alla domanda 1."), never the answer it suggests, and asks
+     nothing outside the numbered questions;
   5. pre-flight's `message`, **as it is**.
   You may only shorten it: a question's lettered follow-ups (3.a, 3.b) into a few words under it,
   keeping their letters ("3.a-3.c, se sì: quali impianti e chi rilascia la dichiarazione"), and a
