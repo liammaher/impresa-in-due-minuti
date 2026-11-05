@@ -128,8 +128,12 @@ def wrong_account_and_signed_files():
                        check=True, capture_output=True)
         key.unlink()
         crt.unlink()
+    (d / "Ricevuta_sanzione.pdf").write_bytes(dossier.one_page(["RICEVUTA", "Sanzione CILA tardiva", "Importo: Euro 333,00"]))
     report, _, proposed = intake.scan(d)
-    assert any("NON sul conto" in x["note"] for x in report["notes"]), report["notes"]
+    notes = {x["from"]: x["note"] for x in report["notes"]}
+    assert "NON sul conto" in notes["Ricevuta_diritti.pdf"], notes
+    # No account named: asked to check, never called irricevibile.
+    assert "non indica il conto" in notes["Ricevuta_sanzione.pdf"], notes
     if shutil.which("openssl"):
         assert {Path(x["file"]).name: x["kind"] for x in report["documents"]}["Relazione_tecnica.pdf.p7m"] == "relazione"
         assert proposed["facts"]["intervento"] == "manutenzione_straordinaria"
