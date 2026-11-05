@@ -770,7 +770,17 @@ def chosen(steps, values):
         wizard.append({k: (tree[0] if len(tree) == 1 else tree) if k == "tree" else v for k, v in w.items() if k != "tree" or tree})
     sections = [{k: v for k, v in s.items() if k != "when"} for s in steps["sections"] if "when" not in s or taken(s)]
     whens = [x["when"] for w in steps.get("wizard", []) for x in leaves(w) if isinstance(x, dict) and "when" in x]
-    return {**steps, "wizard": wizard, "sections": sections, "chosen": list(dict.fromkeys(whens))}
+    out = {**steps, "wizard": wizard, "sections": sections, "chosen": list(dict.fromkeys(whens))}
+    # An ask only a dropped section reads goes with it (the co-holders' count, no co-holders).
+    gone = [s for s in steps["sections"] if "when" in s and not taken(s)]
+    if gone and "asks" in steps:
+        # Every template of the dropped sections, a block's count too (templates() reads it only
+        # once expand has made it each block's `when`).
+        gone_reads = {r[4:] for r, _ in refs_in(json.dumps(gone, ensure_ascii=False)) if r.startswith("ask.")}
+        only = gone_reads - {r[4:] for _, t, _ in templates(out) for r, _ in refs_in(t) if r.startswith("ask.")}
+        only -= {r[4:] for s in sections for r, _ in refs_in(json.dumps(s, ensure_ascii=False)) if r.startswith("ask.")}
+        out["asks"] = {k: a for k, a in steps["asks"].items() if k not in only}
+    return out
 
 
 def expand(steps, values):
@@ -2209,7 +2219,12 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=N
     over files_limit are chosen by the person in the page (`picked`); False refuses them (a
     batch has no one to pick for each run)."""
     expanded = expand(steps, values)
-    blocks, steps = expanded is not steps, expanded
+    # Steps expanded already (rerun.py passes them so) still have their blocks: an `add` per
+    # block. Missed until 2026-11-05: two CILA cases with other counts shared one pane key, and
+    # the second ran on the first's steps ("no + to add a block of Cognome").
+    blocks = expanded is not steps or any(f.get("kind") == "add" and isinstance(f.get("block"), int)
+                                          for s in expanded["sections"] for f in s["fields"])
+    steps = expanded
     require_supported(steps, values)
     plan(steps, values)  # stops on a missing required value
     skeleton = {

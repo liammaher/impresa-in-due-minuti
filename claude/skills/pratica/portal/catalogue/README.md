@@ -181,4 +181,7 @@ the same are recorded, and the others are named; set `window.pvCheckNames` to th
   the section crawl settles.
 - A section's "+" is tried once, the last one: a list of lists (Dati catastali's unit "+" before its
   group's "+") or two lists show only the last one's `plus` (`of` counts them since 2026-11-04). What
-  the others add is read on a draft, pressed and cancelled with Annulla, which saves nothing.
+  the others add is read on a draft, pressed and cancelled with Annulla, which saves nothing. A
+  crawl's `plus` is read: `bench/test_gen.py` holds every one to a list in the dictionary (`each`,
+  `firms`) or a `plus:` saying why not (2026-11-05: the co-holders' "+", crawled 2026-10-31, had been
+  called a portal defect).

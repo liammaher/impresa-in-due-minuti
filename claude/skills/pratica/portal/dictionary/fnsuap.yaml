@@ -9,7 +9,9 @@
 # `branches` repeats its boxes once per condition of a first choice that renumbers them. A radio or a
 # checkbox listed is ticked, and what it opens is found in the crawl. `via: <option>` is a field
 # a templated dropdown opens only on that option (its `when` says when). `leave:` names what the
-# section shows that stays empty; `omit:` a section that is the person's alone. `kind: tick`
+# section shows that stays empty; `omit:` a section that is the person's alone; `plus:` why a "+"
+# its crawl saw is no list here (`kind: each` or `firms` map one; test_gen holds every crawled "+"
+# to one of the three: the co-holders' "+" was crawled and unread for a week). `kind: tick`
 # is a radio in one pratica and a checkbox in another; `if_present` a field only some pratiche
 # show; `on_page` one the crawl can't see (shown by two choices together), found by label on
 # the page; `by_label` one the crawl sees but whose id another answer moves, found the same way;
@@ -113,6 +115,13 @@ asks:
     type: yes_no
     question: "Il committente ha il titolo da solo, senza altri (comproprietari, il proprietario locatore) il cui assenso sia necessario per i lavori? In caso contrario, l'altro titolare va indicato tra i soggetti della pratica come legale rappresentante della proprietà, e la sua società come società proprietaria se l'immobile appartiene a una società"
     propose: "{{ask.titolo|titolo_solo}}"
+  # The other holders (a.2's rows, one each by "+"): `r:`, `r2:`, `r3:` ... in the job's people
+  # (with `o:`, `o2:` ... where one is a company). One unasked while the job names no `r2:`.
+  altri_titolari:
+    type: number
+    question: "How many other holders give their assent (co-owners, the landlord)? The first is `r:` in the job's people, the second `r2:`, and so on (a company's legale rappresentante, with the company as `o:`, `o2:` ...)"
+    default: "{{r2:identity.last_name|empty|single_unit}}"
+    propose: "{{r:identity.last_name,r2:identity.last_name,r3:identity.last_name,r4:identity.last_name,r5:identity.last_name,r6:identity.last_name,r7:identity.last_name,r8:identity.last_name,r9:identity.last_name|filled_count}}"
   # A unit with a categoria in the vault is in the Catasto Fabbricati: asked only without one.
   # One per unit (catasto_terreni, catasto_terreni2 ...): each unit's own catasto.
   catasto_terreni#N:
@@ -128,16 +137,18 @@ asks:
     default: "{{c:immobile2.catasto_foglio|empty|single_unit}}"
     propose: "{{c:immobile.catasto_foglio,c:immobile2.catasto_foglio,c:immobile3.catasto_foglio,c:immobile4.catasto_foglio,c:immobile5.catasto_foglio,c:immobile6.catasto_foglio,c:immobile7.catasto_foglio,c:immobile8.catasto_foglio,c:immobile9.catasto_foglio|filled_count}}"
   # A voltura's or cambio d'intestazione's co-holders: the wizard's "ci sono cointestatari"
-  # adds a section for one (`a:`); it has no "+" for more.
+  # adds a section for one (`a:`), and its "+" one more each (`a2:`, `a3:` ...).
   cointestatario:
     type: yes_no
     question: "Il nuovo titolare condivide il titolo con un'altra persona (un cointestatario)? In tal caso, il cointestatario va indicato tra i soggetti della pratica"
     propose: "false"
     yours: "Nella sezione del cointestatario sono spuntate entrambe le caselle del sesso: il portale non la salva in altro modo (due gruppi obbligatori); il suo codice fiscale indica quale vale"
-  altri_cointestatari:
-    type: yes_no
-    question: "Ci sono altri cointestatari oltre al primo già indicato?"
-    propose: "false"
+  # One unasked while the job names no `a2:`.
+  cointestatari_quanti:
+    type: number
+    question: "Quanti cointestatari hanno il titolo insieme al nuovo titolare?"
+    default: "{{a2:identity.last_name|empty|single_unit}}"
+    propose: "{{a:identity.last_name,a2:identity.last_name,a3:identity.last_name,a4:identity.last_name,a5:identity.last_name,a6:identity.last_name,a7:identity.last_name,a8:identity.last_name,a9:identity.last_name|filled_count}}"
   parti_comuni:
     type: choice
     question: "I lavori interessano parti comuni dell'edificio? nessuna; condominio (parti comuni di un condominio); comproprieta (un edificio di più proprietari che non è un condominio, con la loro approvazione); art 1102 (parti comuni usate a spese del committente senza alterarne la destinazione, art. 1102 c.c.: non serve alcun assenso)"
@@ -1544,12 +1555,10 @@ sections:
   # draft 2026-11-04, NCEU and NCT alike, cancelled unsaved). Units go in vault order, one group
   # per catasto: where a unit's catasto isn't the one before's, the group's "+", then its radio
   # (the page's last of that label). The units are counted across groups, so unit n is the
-  # n-th "foglio". Three groups (a catasto, the other, the first again) are refused.
+  # n-th "foglio". A group's "+" after any group's last unit adds one more, so the catasto may
+  # change as often as the units do (a third group back to the first read on a draft 2026-11-05).
   - section: Dati catastali
     leave: [sezione Amministrativa, classe]
-    supports:
-      - when: "{{ask.unita_catastali,c:immobile.catasto_categoria,c:immobile2.catasto_categoria,c:immobile3.catasto_categoria,c:immobile4.catasto_categoria,c:immobile5.catasto_categoria,c:immobile6.catasto_categoria,c:immobile7.catasto_categoria,c:immobile8.catasto_categoria,c:immobile9.catasto_categoria|two_groups}}"
-        else: "The units go from one catasto to the other more than once (by their categoria: Fabbricati with one, Terreni without): store those of one catasto one after the other (immobile, immobile2 ... all Fabbricati, then the Terreni), so they fill two groups."
     fields:
       - {kind: radio, label: Nuovo Catasto Edilizio Urbano, when: "{{ask.catasto_terreni|not}}"}
       - {kind: radio, label: Nuovo Catasto Terreni, when: "{{ask.catasto_terreni}}"}
@@ -1577,8 +1586,9 @@ sections:
 
   # The client's title. The dropdown's "altro" (a tenant, a comodatario: + specificare) adds a
   # row and renumbers the radios below it. Then the title held alone (a.1), or the assent of
-  # the other holder (a.2), whose row opens: a person (`r:`), or a company (`o:`) with `r:` its
-  # legale rappresentante. The portal's row takes one holder; more go in the assent's attachment.
+  # the other holders (a.2), whose row opens: a person (`r:`), or a company (`o:`) with `r:` its
+  # legale rappresentante. The "+" after the row adds another holder's whole row, the company tick
+  # too (read on a SCIA draft 2026-11-05, three rows, cancelled unsaved): one per holder.
   - section: a) Titolarità dell'intervento
     aliases: ["Titolarità dell'intervento"]
     fields:
@@ -1587,27 +1597,34 @@ sections:
       - {kind: select, label: "Il richiedente dichiara di avere titolo", value: "{{ask.titolo|titolo_pratica}}", when: "{{ask.titolo|titolo_is_altro|not}}"}
       - {kind: radio, label: avere titolarità esclusiva, when: "{{ask.titolo_esclusivo}}"}
       - {kind: radio, label: non avere titolarità esclusiva, when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: Cognome, value: "{{r:identity.last_name}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: Nome, value: "{{r:identity.first_name}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: C.F., value: "{{r:identity.codice_fiscale}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: date, label: Data di nascita, value: "{{r:identity.date_of_birth|date_it}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: select, label: Sesso, value: "{{r:identity.sex|sesso}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: select, label: Provincia, value: "{{r:identity.birth_province}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: Comune italiano, value: "{{r:identity.birth_comune|upper}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: select, label: Provincia, nth: 2, value: "{{r:residenza.provincia}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: Comune italiano, nth: 2, value: "{{r:residenza.comune|upper}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: "Via, Piazza", value: "{{r:residenza.indirizzo|upper}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: "N.", value: "{{r:residenza.civico}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: C.A.P., value: "{{r:residenza.cap}}", when: "{{ask.titolo_esclusivo|not}}"}
-      # A company's contacts, else the person's own.
-      - {kind: text, label: PEC / posta elettronica, value: "{{o:business.pec}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
-      - {kind: text, label: Telefono, value: "{{o:business.telefono|phone_it}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
-      - {kind: text, label: PEC / posta elettronica, value: "{{r:identity.email}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty}}"}
-      - {kind: text, label: Telefono, value: "{{r:identity.phone|phone_it}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty}}"}
-      - {kind: checkbox, label: Da compilare solo nel caso in cui il titolare sia, when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
-      - {kind: text, label: in qualità di, value: legale rappresentante, when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
-      - {kind: text, label: della ditta / società, value: "{{o:business.denominazione}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
-      - {kind: text, label: con codice fiscale / p. IVA, value: "{{o:business.partita_iva}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
+      # One block per other holder, each after the first by its "+": a person (`r:`, `r2:` ...),
+      # or a company (`o:`, `o2:` ...) with its legale rappresentante as `r#N:`.
+      - kind: each
+        count: "{{ask.altri_titolari}}"
+        when: "{{ask.titolo_esclusivo|not}}"
+        anchor: Cognome
+        block:
+          - {kind: text, label: Cognome, value: "{{r#N:identity.last_name}}"}
+          - {kind: text, label: Nome, value: "{{r#N:identity.first_name}}"}
+          - {kind: text, label: C.F., value: "{{r#N:identity.codice_fiscale}}"}
+          - {kind: date, label: Data di nascita, value: "{{r#N:identity.date_of_birth|date_it}}"}
+          - {kind: select, label: Sesso, value: "{{r#N:identity.sex|sesso}}"}
+          - {kind: select, label: Provincia, value: "{{r#N:identity.birth_province}}"}
+          - {kind: text, label: Comune italiano, value: "{{r#N:identity.birth_comune|upper}}"}
+          - {kind: select, label: Provincia, nth: 2, value: "{{r#N:residenza.provincia}}"}
+          - {kind: text, label: Comune italiano, nth: 2, value: "{{r#N:residenza.comune|upper}}"}
+          - {kind: text, label: "Via, Piazza", value: "{{r#N:residenza.indirizzo|upper}}"}
+          - {kind: text, label: "N.", value: "{{r#N:residenza.civico}}"}
+          - {kind: text, label: C.A.P., value: "{{r#N:residenza.cap}}"}
+          # A company's contacts, else the person's own.
+          - {kind: text, label: PEC / posta elettronica, value: "{{o#N:business.pec}}", when: "{{o#N:business.denominazione|empty|not}}"}
+          - {kind: text, label: Telefono, value: "{{o#N:business.telefono|phone_it}}", when: "{{o#N:business.denominazione|empty|not}}"}
+          - {kind: text, label: PEC / posta elettronica, value: "{{r#N:identity.email}}", when: "{{o#N:business.denominazione|empty}}"}
+          - {kind: text, label: Telefono, value: "{{r#N:identity.phone|phone_it}}", when: "{{o#N:business.denominazione|empty}}"}
+          - {kind: checkbox, label: Da compilare solo nel caso in cui il titolare sia, when: "{{o#N:business.denominazione|empty|not}}"}
+          - {kind: text, label: in qualità di, value: legale rappresentante, when: "{{o#N:business.denominazione|empty|not}}"}
+          - {kind: text, label: della ditta / società, value: "{{o#N:business.denominazione}}", when: "{{o#N:business.denominazione|empty|not}}"}
+          - {kind: text, label: con codice fiscale / p. IVA, value: "{{o#N:business.partita_iva}}", when: "{{o#N:business.denominazione|empty|not}}"}
 
   - section: b) Opere su parti comuni
     fields:
@@ -1810,6 +1827,10 @@ sections:
   - section: h) Impresa esecutrice dei lavori
     leave: [Telefono, fax]
     firms: [f1, f2]
+    # The "+" adds a firm's block; two are mapped, so a third is refused, never left out.
+    supports:
+      - when: "{{f3:business.denominazione|empty}}"
+        else: "Two building firms are mapped (`f1:`, `f2:`): a third firm on site (`f3:`) isn't yet."
     firm_when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}"
     fields:
       # Each form words a choice its own way: one label per wording, each starting its box's text
@@ -2129,6 +2150,7 @@ sections:
   # 2026-11-02) the other choice opens above the albo's rows. More tecnici ("+") aren't mapped.
   - section: dati relativi al nome del tecnico
     leave: [Fax]
+    plus: "more tecnici than the designer aren't mapped: the run names the designer only"
     fields:
       - {kind: radio, label: è colui che presenta la pratica, when: "{{ask.progettista_altro|not}}"}
       - {kind: text, label: ordine/collegio/albo, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}
@@ -2186,6 +2208,7 @@ sections:
       - {kind: text, label: (specificare), value: "{{ask.titolo}}", when: "{{ask.titolo|is_proprietario|not}}"}
 
   - section: dichiarazione della legittimita' dell'intervento
+    plus: "one previous title; the parere is refused in Napoli by law (the rules table), so more aren't mapped"
     fields:
       - {kind: radio, label: il lotto è libero, when: "{{ask.esonero_lotto|is_libero}}"}
       - {kind: radio, label: esiste un precedente edilizio, when: "{{ask.esonero_lotto|is_precedente}}"}
@@ -2357,6 +2380,7 @@ sections:
   - section: Contenuti dell'intervento (titolo del richiedente
     aliases: ["dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente"]
     leave: [coordinate geografiche, latitudine, longitudine]
+    plus: "the coordinates' rows, left empty (optional)"
     fields:
       - {kind: radio, label: proprietà, when: "{{ask.titolo|is_proprietario}}"}
       - {kind: radio, label: comproprietà, when: "{{ask.titolo|is_comproprietario}}"}
@@ -2442,6 +2466,7 @@ sections:
 
   # Cambio d'intestazione of a CILA, SCIA or DIA: as the voltura, the title by its kind.
   - section: dichiarazione relativa agli estremi della CILA / SCIA / DIA e proprietario
+    plus: "one previous holder (precedente_*): a title held until now by several isn't mapped"
     fields:
       - {kind: select, label: seleziona un titolo, value: "{{ask.titolo_tipo|sigla}}"}
       - {kind: text, label: prot. n°, value: "{{ask.pdc_protocollo}}"}
@@ -2465,27 +2490,34 @@ sections:
   - section: dichiarazione relativa alla presa visione della CILA / SCIA / DIA
     theirs: [di aver preso visione]
     fields: []
-  # Another holder of title with the new one, the `a:` person: shown by the scelta "ci sono
-  # cointestatari" (the voltura and the cambio intestazione), one person.
+  # The other holders of title with the new one, `a:`, `a2:` ...: shown by the scelta "ci sono
+  # cointestatari" (the voltura and the cambio intestazione), one block each, each after the
+  # first by its "+" (14 boxes, its own two sesso groups; read on a voltura draft 2026-11-05,
+  # cancelled unsaved: the coholders-one defect was wrong).
   - section: Informazioni su eventuali altri aventi titolo
     aliases: [dichiarazione relativa ad eventuali altri aventi titolo]
     fields:
-      - {kind: text, label: cognome, value: "{{a:identity.last_name|upper}}"}
-      - {kind: text, label: nome, value: "{{a:identity.first_name|upper}}"}
-      - {kind: date, label: nato/a il, value: "{{a:identity.date_of_birth|date_it}}"}
-      - {kind: text, label: a, value: "{{a:identity.birth_comune|upper}}"}
-      - {kind: text, label: prov, value: "{{a:identity.birth_province}}"}
-      - {kind: text, label: residente a, value: "{{a:residenza.comune|upper}}"}
-      - {kind: text, label: in via, value: "{{a:residenza.indirizzo|upper}}"}
-      - {kind: text, label: numero civico, value: "{{a:residenza.civico}}"}
-      - {kind: text, label: CAP, value: "{{a:residenza.cap}}"}
-      - {kind: text, label: prov, nth: 2, value: "{{a:residenza.provincia}}"}
-      - {kind: text, label: cittadinanza, value: "{{a:identity.citizenship|upper}}"}
-      # Two radio groups, each required: the section saves only with both ticked (seen
-      # 2026-10-29, as anyone filing by hand must). The codice fiscale says which.
-      - {kind: radio, label: "sesso: M"}
-      - {kind: radio, label: "sesso: F"}
-      - {kind: text, label: codice fiscale, value: "{{a:identity.codice_fiscale}}"}
+      - kind: each
+        count: "{{ask.cointestatari_quanti}}"
+        anchor: cognome
+        block:
+          - {kind: text, label: cognome, value: "{{a#N:identity.last_name|upper}}"}
+          - {kind: text, label: nome, value: "{{a#N:identity.first_name|upper}}"}
+          - {kind: date, label: nato/a il, value: "{{a#N:identity.date_of_birth|date_it}}"}
+          - {kind: text, label: a, value: "{{a#N:identity.birth_comune|upper}}"}
+          - {kind: text, label: prov, value: "{{a#N:identity.birth_province}}"}
+          - {kind: text, label: residente a, value: "{{a#N:residenza.comune|upper}}"}
+          - {kind: text, label: in via, value: "{{a#N:residenza.indirizzo|upper}}"}
+          - {kind: text, label: numero civico, value: "{{a#N:residenza.civico}}"}
+          - {kind: text, label: CAP, value: "{{a#N:residenza.cap}}"}
+          - {kind: text, label: prov, nth: 2, value: "{{a#N:residenza.provincia}}"}
+          - {kind: text, label: cittadinanza, value: "{{a#N:identity.citizenship|upper}}"}
+          # Two radio groups, each required: the section saves only with both ticked (seen
+          # 2026-10-29, as anyone filing by hand must; a new block's are two groups again,
+          # 2026-11-05). The codice fiscale says which.
+          - {kind: radio, label: "sesso: M"}
+          - {kind: radio, label: "sesso: F"}
+          - {kind: text, label: codice fiscale, value: "{{a#N:identity.codice_fiscale}}"}
 
   # A new direttore dei lavori: the studio's architect (`t:`), her studio's address and her albo.
   - section: nomina nuovo direttore dei lavori
@@ -3691,6 +3723,7 @@ sections:
   # opens its own "con prot." and "in data", in that order, after the bonifica's "in data".
   - section: Asseverazione PdC - qualità terreni
     aliases: ["Asseverazione SCIA Alternativa - Qualità terreni"]
+    plus: "an upload box's own \"+\" (a document in several files): one file is attached"
     # The permesso's "non interessa aree percorse dal fuoco" is one choice with the soil
     # investigations' radios on the portal (ticking it unticks them, read 2026-11-01): left, a
     # defect (defects.yaml pdc-aree-fuoco).

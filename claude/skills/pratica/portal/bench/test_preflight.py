@@ -563,8 +563,8 @@ def sanatoria_cases():
 
 def scelte_follow_the_case():
     """A wizard choice a recipe takes only for some cases ({leaf, when}): ticked, with the section
-    it adds, only when the case's answer says so; asked when unanswered; more co-holders than the
-    portal's one-person section refused (the voltura, the cambio d'intestazione, a proroga)."""
+    it adds, only when the case's answer says so; asked when unanswered; several co-holders, each
+    a block of the section by its "+" (the voltura, the cambio d'intestazione, a proroga)."""
     root = HERE.parents[4] / "rehearsals"
     fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
     here = os.getcwd()
@@ -588,10 +588,17 @@ def scelte_follow_the_case():
         r = run.preflight(steps, v({k: x for k, x in p6.items() if k != "cointestatario"}), made_up=True)
         # Proposed (none) for the person to confirm, never assumed.
         assert [q["key"] for q in r["proposals"]] == ["cointestatario"] and not r["ready"], r["proposals"]
-        r = run.preflight(steps, v(p6 | {"altri_cointestatari": True}), made_up=True)
-        assert any("ha posto per una sola persona" in u for u in r["unsupported"]), r["unsupported"]
-        # The portal's limit, not a mapping gap: the person hears the defect and their choices.
-        assert [d["title"] for d in r.get("defects", [])] == ["Voltura o cambio d'intestazione a più di un cointestatario"], r.get("defects")
+        # More co-holders, one block each by the section's "+" (2026-11-05: the coholders-one
+        # defect was wrong); one unasked while the job names no `a2:`.
+        assert "cointestatari_quanti" not in str(run.preflight(steps, v("p6"), made_up=True)["proposals"])
+        three = json.loads((root / "voltura-pdc-fittizia" / "answers-tre-cointestatari.json").read_text())
+        r = run.preflight(steps, v({k: x for k, x in three.items() if k != "cointestatari_quanti"}), made_up=True)
+        assert {"key": "cointestatari_quanti", "proposal": "3"}.items() <= next(
+            p for p in r["proposals"] if p["key"] == "cointestatari_quanti").items(), r["proposals"]
+        assert run.preflight(steps, v(three), made_up=True)["ready"]
+        sec = next(s for s in run.expand(steps, v(three))["sections"] if s["section"] == coholder)
+        live = [f for f in sec["fields"] if run.truthy(v(three).render(f.get("when", "true")) or "")]
+        assert [f["kind"] for f in live].count("add") == 2 and [f.get("label") for f in live].count("sesso: M") == 3, live
 
         steps, v = load("cambio-intestazione-fittizio")
         assert len(ticks(steps, v("p6"))) == 1
@@ -684,7 +691,7 @@ def cadastral_units():
     """Several units (the client's immobile, immobile2 ...): one unit unasked, as before; a second
     in the vault proposes the count, never assumes it; each unit after the first takes its own
     block by the unit's "+", the radios once; a unit in the other catasto by the group's "+" and
-    that group's own radio; a third group refused."""
+    that group's own radio; a third group (back to the first catasto) the same way."""
     d = HERE.parents[4] / "rehearsals" / "cila-fittizia"
     steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
     fields = dict(json.loads((d / "fixture-p6.json").read_text())["fields"])
@@ -723,10 +730,46 @@ def cadastral_units():
         # Asked, not assumed: a unit with no categoria in the vault may be a flat missing it.
         r = run.preflight(steps, values({k: x for k, x in mixed.items() if k != "catasto_terreni2"}, fields, steps), made_up=True)
         assert "catasto_terreni2" in [q["key"] for q in r["questions"]], r["questions"]
-        # A flat, a plot, a flat again: three groups, refused.
-        three = {**fields, **{k.replace("immobile.", "immobile3."): x for k, x in fields.items() if k.startswith("piero:immobile.")}}
-        r = run.preflight(steps, values(mixed | {"unita_catastali": 3}, three, steps), made_up=True)
-        assert any("one catasto to the other more than once" in u for u in r["unsupported"]), r["unsupported"]
+        # A flat, two plots, a garage: three groups (back to the first catasto). Each change of
+        # catasto is the group's "+" and that group's radio, the middle group's second plot its
+        # unit's "+"; units count across groups, so the garage is block 4.
+        three = json.loads((d / "answers-catasti-tre-gruppi.json").read_text())
+        r = run.preflight(steps, values(three, fields, steps), made_up=True)
+        assert r["ready"] and not r["unsupported"], r["unsupported"]
+        rows = catastali(three)
+        assert [x for x in rows if x[0] == "add"] == [("add", None, 2, 2), ("add", None, None, 3), ("add", None, 2, 4)], rows
+        assert ("radio", "NCT", None, 2) in rows and ("radio", "NCEU", None, 4) in rows, rows
+        assert not any(x[0] == "radio" and x[3] == 3 for x in rows), rows
+        assert ("text", "se non presente indicare il numero 0", "5", 4) in rows, rows
+        # Two cases of one pratica with other counts get their own steps in the pane, from steps
+        # expanded already too, as rerun.py passes them (2026-11-05: they shared one key, and the
+        # catasto case ran on the three holders' steps).
+        holders = json.loads((d / "answers-comproprietari-tre.json").read_text())
+        keys = set()
+        for a in (three, holders):
+            v = values(a, fields, steps)
+            for st in (run.phase(steps, made_up=True), run.rehearsal(steps, v)):
+                _, parts = run.page_bundle(st, v, files_limit=None, pick=False)
+                keys.add(next(k for k in parts if k.startswith("pv-steps:")))
+        assert len(keys) == 2 and all("#" in k for k in keys), keys
+    finally:
+        os.chdir(here)
+
+
+def third_firm():
+    """Two building firms are mapped by the firm's "+" (`f1:`, `f2:`); a third is refused, never
+    left out of the pratica (2026-11-05: the "+" lists the crawls saw, each held to a mapping)."""
+    d = HERE.parents[4] / "rehearsals" / "cila-fittizia"
+    steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
+    fields = dict(json.loads((d / "fixture-p6.json").read_text())["fields"])
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+    try:
+        p6 = json.loads((d / "answers-p6.json").read_text())
+        assert run.preflight(steps, values(p6, fields, steps), made_up=True)["ready"]
+        three = p6 | {"people": p6["people"] | {"f3": "muratori"}}
+        r = run.preflight(steps, values(three, fields, steps), made_up=True)
+        assert any("a third firm" in u for u in r["unsupported"]), r["unsupported"]
     finally:
         os.chdir(here)
 
@@ -1101,8 +1144,9 @@ CASES = [
     ("a landscape variant, a renewal with changes (refused for a semplificata), an architect born abroad", group_two_choices),
     ("every SUE case is ready but those refused on purpose; only the registered company can't pass on made-up data", every_sue_case_ready),
     ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
-    ("cadastral units: one unasked, a second proposed, each after the first by its \"+\", both catasti refused", cadastral_units),
-    ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused (a portal defect)", scelte_follow_the_case),
+    ("cadastral units: one unasked, a second proposed, each after the first by its \"+\", in up to three groups", cadastral_units),
+    ("a third building firm is refused: two are mapped", third_firm),
+    ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and three co-holders by the section's \"+\"", scelte_follow_the_case),
     ("the CILA's filings presented with it and assents for the SUE (art. 23-bis), the CIL's filings, a partial fine lavori's planimetria", assents_and_filings),
     ("the bollo and diritti exemptions, the virtual bollo, the permesso's altro, the SCIA alternativa's regional works, a studio's other architect", exemptions_and_other_kinds),
     ("the materiali di risulta agree with the terre e rocce filings, and are proposed from them", materiali_di_risulta_agree),
