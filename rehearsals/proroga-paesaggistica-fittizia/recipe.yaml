@@ -13,6 +13,7 @@ scelte:
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
+  diritti_euro: {why: "La tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) non ha una voce per la proroga dell'art. 10-septies di un'autorizzazione paesaggistica; se la copra SUE 2 (401 €, autorizzazioni paesaggistiche chieste da sole) lo dice il SUE"}
   descrizione: {default: "proroga paesaggistica {{c:identity.last_name}}"}
   titolo_esclusivo: {question: "Il committente ha il titolo da solo? In caso contrario, la proroga dichiara di disporre dell'assenso degli altri titolari di diritti (dichiarazione di assenso dei terzi titolari)"}
 yours:

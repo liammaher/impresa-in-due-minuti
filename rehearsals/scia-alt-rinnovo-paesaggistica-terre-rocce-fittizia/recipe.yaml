@@ -26,13 +26,9 @@ asks:
   descrizione:
     default: PROVA NON INVIARE - SCIA alt. + rinnovo paes. + terre {{c:identity.last_name}}
   diritti_euro:
-    question: 'The SUE''s diritti in euro. Onerous, by the contributo di costruzione (oneri di urbanizzazione +
-      costo di costruzione, as the prospetto works it out), lines SUE 7-9 of the 2026 table: 1003 up to 5,000 €,
-      1505 up to 30,000 €, 1998 above'
-    propose: '{{ask.scia_onerosa|diritti_gratuito}}'
-    why: 'Line SUE 10 of the Comune''s 2026 table of SUE diritti (G.C. 239/2026): 401 € when free of the contributo;
-      onerous, SUE 7-9 by the contributo (urbanizzazione + costo di costruzione): 1,003 € up to 5,000 €, 1,505 €
-      up to 30,000 €, 1,998 € above'
+    question: "The SUE's diritti in euro: the 2026 table can't tell this case's line (the SUE works the contributo out, or it is exactly 5,000 €). Onerous, SUE 7-9 by the contributo: 1003 up to 5,000 €, 1505 from 5,000 to 30,000 €, 1998 above"
+    propose: "{{ask.scia_onerosa,ask.contributo_euro|diritti_scia_alt}}"
+    why: "Lines of the Comune's 2026 table of SUE diritti (G.C. 239/2026): SUE 10, 401 € when free of the contributo; onerous, SUE 7-9 by the contributo (oneri urbanizzazione + costo costruzione): 1,003 € up to 5,000 €, 1,505 € from 5,000 to 30,000 €, 1,998 € above"
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi,

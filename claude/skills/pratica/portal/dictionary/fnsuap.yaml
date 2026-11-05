@@ -810,6 +810,18 @@ asks:
     question: "Chi calcola il contributo: prospetto (il prospetto di calcolo preventivo del progettista, allegato); sportello (il SUE, sulla base dei documenti tecnici allegati)"
     options: [prospetto, sportello]
   documentazione_calcolo_contributo: {type: file, question: "I documenti tecnici di cui il SUE ha bisogno per calcolare il contributo (PDF)"}
+  # Asked only for the diritti's bracket (an ask's `propose` reads it; run.py needed): no box on
+  # the forms takes either.
+  contributo_euro:
+    type: number
+    question: "Il contributo di costruzione in euro, oneri di urbanizzazione + costo di costruzione, come risulta dal prospetto di calcolo (solo cifre, ad es. 12500 o 12500,50)"
+    when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}"
+    why: "Le voci SUE 7-9 della tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) dipendono dal contributo (oneri di urbanizzazione + costo di costruzione): fino a 5.000 €, da 5.000 a 30.000 €, oltre 30.000 €"
+  parcheggio_mq:
+    type: number
+    question: "La superficie del parcheggio in m², come indicata nella relazione tecnica (solo cifre)"
+    when: "{{ask.pdc_tipo|is_parcheggi}}"
+    why: "Le voci SUE 4-6 della tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) dipendono dalla superficie del parcheggio: fino a 300 m², da 301 a 1.000 m², oltre 1.001 m² (la tabella non dice se lorda o netta)"
   # The SCIA's f), the SCIA alternativa's f) and the permesso's e): how the stato legittimo is
   # shown. The national form (ent_regolarita_urbanistica_scia/pdc) takes one of the five, then
   # "pienamente conforme" or "conforme ... unitamente alla sanatoria" (quadro c's sanatoria and

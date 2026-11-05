@@ -229,10 +229,15 @@ OPEN_BEYOND = [
     "stay: the rules table refuses the parere in Napoli by law, so there is nothing to file them on.",
     "Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots "
     "may be missing (the catalogue notes this for the pratiche read on an empty draft). The \"Elaborati richiesti "
-    "per la sanatoria\" slot is mapped by the title a filled draft showed, never crawled. The diritti come from the Comune's 2026 "
-    "table (G.C. 239/2026), by the case's facts; it can't say an onerous SCIA's, an onerous permesso's or SCIA "
-    "alternativa's bracket (no ask holds the contributo's amount), a car park's (its floor area), works under "
-    "way in sanatoria (art. 37 c. 5), the art. 10-septies proroghe or a landscape renewal: those are asked.",
+    "per la sanatoria\" slot is mapped by the title a filled draft showed, never crawled.",
+    "The diritti come from the Comune's 2026 table (G.C. 239/2026), by the case's facts: an onerous permesso's or "
+    "SCIA alternativa's bracket from the contributo's amount (SUE 7-9), a car park's from its floor area (SUE 4-6), "
+    "and a combination pays its main pratica's line alone (a landscape authorization has its own only \"quando "
+    "oggetto di autonoma istanza\"; terre e rocce and the DAU have none). Asked, because the table can't tell (each "
+    "a pitfall in the library, to confirm with the SUE): a contributo the SUE works out, one of exactly 5,000 € "
+    "(in SUE 7 and SUE 8), a car park over 300 and under 301 m² or over 1,000 and up to 1,001 m² (in no row), an "
+    "onerous SCIA (SUE 7-9 name only the permesso and the SCIA alternativa), works under way in sanatoria "
+    "(art. 37 c. 5), the art. 10-septies proroghe, a landscape renewal or extension.",
     "Signed files: the portal checks every digital signature on upload and refuses a made-up one (2026-11-03), "
     "so the slots that take only signed files can't be filled with made-up data: on the portal only the "
     "refusal is proven; a real signed file, never yet. The second run after the declarations ran on the portal "

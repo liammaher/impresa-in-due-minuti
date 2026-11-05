@@ -153,7 +153,12 @@ built on a combination's recipe states `first` and `after` itself: copied as nul
 them they drop the payment and attachments screens (twenty did, 2026-11-04; `test_gen.py` checks every
 SUE steps file opens with the Scheda anagrafica and has its payment and attachments screens). Its `yours`
 takes the main pratica's payment lines (diritti, bollo): another's "no bollo on this form" contradicts a main
-pratica that has a bollo section. Every combination has a rules table since 2026-11-04; `rules:` with `main`
+pratica that has a bollo section. Its `diritti_euro` is the main pratica's too, copied where the other part's
+would win the merge (a null where the main has none): the Comune's table (G.C. 239/2026) charges a landscape
+authorization only "quando oggetto di autonoma istanza" and has no line for the terre e rocce or the DAU
+(`test_preflight.py` checks every combination). The diritti's facts no box holds (the contributo's amount
+for SUE 7-9, a car park's area for SUE 4-6) are asks with their own `when`, read only by the diritti's
+`propose`: pre-flight asks them where that `when` holds and the diritti aren't answered. Every combination has a rules table since 2026-11-04; `rules:` with `main`
 and `handles` and no `table` is still accepted, for a combination mapped before its table (pre-flight then
 decides nothing and the person names the pratica).
 

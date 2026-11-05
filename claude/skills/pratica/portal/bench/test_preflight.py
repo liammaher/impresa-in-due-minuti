@@ -985,6 +985,88 @@ def wizard_description_too_long():
     assert q and "at most 60" in q[0]["error"] and not r["ready"], r["questions"]
 
 
+def diritti_brackets():
+    """The SUE's 2026 table (G.C. 239/2026) at its edges: SUE 7-9 by the contributo ("fino a
+    € 5.000,00", "da € 5.000,00 ad € 30.000", "oltre € 30.000,00": exactly 5,000 € is in two rows),
+    SUE 4-6 by the car park's floor area ("fino a 300 mq", "da 301 mq a 1000 mq", "oltre 1001 mq":
+    what falls between is in none). Where the table can't tell, nothing is proposed."""
+    c = run.FILTERS["diritti_scia_alt"]
+    for contributo, want in (("1", "1003"), ("4999,99", "1003"), ("5000", ""), ("5000.00", ""), ("5000,01", "1505"),
+                             ("12500", "1505"), ("12500,50", "1505"), ("30000", "1505"), ("30000.01", "1998"),
+                             ("250000", "1998"), ("0", ""), ("", ""), ("abc", ""),
+                             ("12.500", ""), ("1.250.000", "")):  # a thousands separator, never read as 12.5
+        assert c(f"true/{contributo}") == want, (contributo, c(f"true/{contributo}"), want)
+    assert c("false/") == c("false/12500") == "401" and c("/12500") == "", "SUE 10 when free; unknown: nothing"
+    p = run.FILTERS["diritti_pdc"]
+    for mq, want in (("1", "677"), ("300", "677"), ("300,5", ""), ("301", "1129"), ("1000", "1129"),
+                     ("1000.5", ""), ("1001", ""), ("1001,5", "1998"), ("5000", "1998"), ("", ""), ("0", "")):
+        assert p(f"parcheggi/true//{mq}") == p(f"parcheggi/false//{mq}") == want, (mq, p(f"parcheggi/true//{mq}"), want)
+    assert p("nuova costruzione/false//") == "401" and p("nuova costruzione/true/30001/") == "1998"
+    assert p("variante essenziale/true//") == p("variante sagoma/false//") == "501"  # SUE 11
+    assert p("nuova costruzione/true//") == p("nuova costruzione///") == "", "onerous with no contributo, or not yet known"
+    g = run.FILTERS["diritti_gratuito"]
+    assert g("false") == "401" and g("true") == "", "an onerous SCIA (art. 22) is in no row"
+
+
+def diritti_from_the_case():
+    """The permesso and the SCIA alternativa: the contributo's amount is asked only when onerous with
+    the progettista's prospetto (the SUE working it out leaves the diritti asked), the car park's area
+    only for car parks; the diritti wait for it, then are proposed. The SCIA's onerous case stays
+    asked, with no contributo asked for it; a combination asks what its main pratica asks."""
+    root = HERE.parents[4] / "rehearsals"
+    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+
+    def case(name, base="p6", **change):
+        steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
+        a = json.loads((root / name / f"answers-{base}.json").read_text())
+        a.pop("diritti_euro", None)
+        r = run.preflight(steps, values({**a, **change}, fields, steps), made_up=True)
+        return [q["key"] for q in r["questions"]], {p["key"]: p["proposal"] for p in r["proposals"]}
+    onerous = {"scia_onerosa": "true", "contributo_pagamento": "rateizzazione"}
+    for name in ("pdc-fittizio", "scia-alternativa-fittizia", "pdc-proroga-paesaggistica-fittizio", "scia-alt-rinnovo-paesaggistica-fittizia"):
+        q, p = case(name, **onerous, contributo_calcolo="sportello")
+        assert "diritti_euro" in q and "contributo_euro" not in q and "diritti_euro" not in p, (name, q, p)
+        q, p = case(name, **onerous, contributo_calcolo="prospetto")
+        assert "contributo_euro" in q and "diritti_euro" not in q + list(p), (name, q, p)  # waits for the amount
+        for amount, want in (("4800", "1003"), ("12500", "1505"), ("45000", "1998")):
+            q, p = case(name, **onerous, contributo_calcolo="prospetto", contributo_euro=amount)
+            assert p.get("diritti_euro") == want and "contributo_euro" not in q, (name, amount, q, p)
+        q, p = case(name, **onerous, contributo_calcolo="prospetto", contributo_euro="5000")
+        assert "diritti_euro" in q and "diritti_euro" not in p, (name, q, p)
+        q, p = case(name, scia_onerosa="false", contributo_normativa="art. 17 c. 3 DPR 380/2001")
+        assert p.get("diritti_euro") == "401" and "contributo_euro" not in q, (name, q, p)
+    q, p = case("pdc-fittizio", "parcheggi")
+    assert "parcheggio_mq" in q and "diritti_euro" not in q + list(p), (q, p)
+    for mq, want in (("280", "677"), ("450", "1129"), ("1200", "1998")):
+        q, p = case("pdc-fittizio", "parcheggi", parcheggio_mq=mq)
+        assert p.get("diritti_euro") == want and "contributo_euro" not in q, (mq, q, p)
+    q, p = case("pdc-fittizio", "parcheggi", parcheggio_mq="300,5")
+    assert "diritti_euro" in q, q
+    q, p = case("pdc-fittizio")
+    assert "parcheggio_mq" not in q, q
+    q, p = case("scia-fittizia", **onerous, contributo_calcolo="prospetto")
+    assert "diritti_euro" in q and "contributo_euro" not in q, (q, p)
+
+
+def diritti_main_row():
+    """Two adempimenti in one pratica pay the main pratica's line alone: SUE 2 and 3 apply only to a
+    landscape authorization "quando oggetto di autonoma istanza", and the table has no line for the
+    terre e rocce or the DAU. Every combination's diritti ask is its main pratica's."""
+    root = HERE.parents[4] / "rehearsals"
+    load = lambda d: yaml.safe_load((d / "recipe.yaml").read_text())
+    checked = 0
+    for d in sorted(root.iterdir()):
+        if not (d / "portal-steps.generated.yaml").exists() or not isinstance(load(d).get("operation"), list):
+            continue
+        main = d
+        while isinstance(load(main).get("operation"), list):  # a combination's main may be one itself
+            main = root / (load(main)["extends"][0])
+        ask = lambda x: yaml.safe_load((x / "portal-steps.generated.yaml").read_text())["asks"].get("diritti_euro")
+        assert ask(d) == ask(main), (d.name, main.name, ask(d), ask(main))
+        checked += 1
+    assert checked >= 60, checked
+
+
 CASES = [
     ("the SCIA with its answers is ready", ready),
     ("run.py scope: the pvault get patterns cover every field the steps read, and only those", vault_scope),
@@ -1026,6 +1108,9 @@ CASES = [
     ("the materiali di risulta agree with the terre e rocce filings, and are proposed from them", materiali_di_risulta_agree),
     ("a value the vault has but the form can't take (a Carica for a named architect who isn't the titolare) is reported, not crashed on", carica_not_crash),
     ("a street of any type (a Vico, a Capo di Piazza; a Cupa named), a citizenship by adjective or country, every province", streets_and_lists),
+    ("the SUE's diritti at the 2026 table's edges: the contributo's brackets (5,000 € in two rows), a car park's area (300-301 and 1,000-1,001 m² in none)", diritti_brackets),
+    ("the diritti from the case: the contributo asked only with the prospetto, a car park's area only for one, then proposed; the onerous SCIA asked", diritti_from_the_case),
+    ("two adempimenti in one pratica pay the main pratica's line alone (SUE 2-3 only on their own; no line for terre e rocce or the DAU)", diritti_main_row),
 ]
 
 

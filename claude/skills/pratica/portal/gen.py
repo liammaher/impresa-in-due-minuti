@@ -984,6 +984,16 @@ def generate(recipe, base=HERE):
     # asks (one `supports` or `rules` reads) is the recipe's alone. A block's #P (the block
     # before) is the same template question as its #N.
     asks_used = {u.replace("#P", "#N") for u in asks_used}
+    # An ask a used one's proposal reads with its own `when` (the contributo's amount, for the
+    # diritti's bracket) is used too, with what that `when` reads (run.py needed asks it).
+    while True:
+        defs = {k: {**dictionary["asks"].get(k, {}), **(recipe.get("asks", {}).get(k) or {})} for k in asks_used}
+        more = {r for a in defs.values() for r in ASKED.findall(str(a.get("propose", "")))
+                if (dictionary["asks"].get(r, {}) | (recipe.get("asks", {}).get(r) or {})).get("when")}
+        more |= {r for k in more for r in ASKED.findall(str((dictionary["asks"].get(k, {}) | (recipe.get("asks", {}).get(k) or {}))["when"]))}
+        if more <= asks_used:
+            break
+        asks_used |= more
     asks = {}
     for k, v in list(dictionary["asks"].items()) + [(k, {}) for k in recipe.get("asks", {}) if k not in dictionary["asks"]]:
         # A "+" block's question: one for each block written out (on the page), then the
