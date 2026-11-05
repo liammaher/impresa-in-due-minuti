@@ -666,7 +666,7 @@ def main():
         if a.cmd == "scan":
             if not a.dossier.is_dir():
                 raise run.StepError(f"no folder {a.dossier}")
-            steps = yaml_load(a.steps) if a.steps else None
+            steps = rules.load(a.steps) if a.steps else None
             report, values, proposals = scan(a.dossier, steps, a.client)
             a.out.mkdir(parents=True, exist_ok=True)
             vfile = private_dir(a.out) / "values.json"
@@ -698,11 +698,6 @@ def main():
     except (run.StepError, OSError, ValueError) as e:
         print(f"stopped: {e}", file=sys.stderr)
         return 1
-
-
-def yaml_load(path):
-    import yaml
-    return yaml.safe_load(path.read_text())
 
 
 if __name__ == "__main__":

@@ -47,7 +47,8 @@ server.
 Nella cartella dei suoi lavori, su questo computer, e sul portale. Da nessun'altra parte:
 Portali non ha un server. I documenti li legge un programma sul suo computer, e i dati arrivano
 al portale sigillati sotto il codice che solo lei vede: Claude non li vede. Passa da Claude solo
-ciò che lei scrive nella conversazione.
+ciò che lei scrive nella conversazione, e in Cowork, dove la finestra del codice non si apre,
+anche i dati: Claude glielo dice prima.
 <!-- /no-vault -->
 Lei è titolare del trattamento dei dati dei suoi clienti: in Claude disattivi «Aiuta a
 migliorare Claude» (Impostazioni → Privacy) e usi il browser dell'app, non Claude in Chrome.

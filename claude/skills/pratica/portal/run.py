@@ -110,7 +110,6 @@ import time
 from datetime import date
 from pathlib import Path
 
-import yaml
 
 sys.path[:0] = [str(Path(__file__).resolve().parent.parent / "fill"), str(Path(__file__).resolve().parent.parent),
                 str(Path(__file__).resolve().parent)]
@@ -2248,7 +2247,7 @@ def main():
     ap.add_argument("--bundle", type=Path, help="page: also write runner.js, steps.js and run.js as this one file "
                     "(in the person's Downloads), and pick.js, a box where the person picks it once")
     a = ap.parse_args()
-    steps = yaml.safe_load(a.steps.read_text())
+    steps = rules.load(a.steps)
     if a.command == "scope":
         print(" ".join(shlex.quote(p) for p in scope(steps)))
         return 0

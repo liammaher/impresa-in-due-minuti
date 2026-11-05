@@ -95,10 +95,15 @@ def normalize(category, name, v):
         return v, None if v in ("M", "F") else "sex is M or F, as on Italian documents"
     if is_date_field(name):
         v = v.strip()
-        m = re.fullmatch(r"(\d{1,2})[/.-](\d{1,2})[/.-](\d{4})", v)
-        if m:  # 05/03/1980, as Italian documents write it
-            v = f"{m[3]}-{int(m[2]):02d}-{int(m[1]):02d}"
+        # The vault's layouts (dates.go NormalizeDate): 05/03/1980, 05-03-1980, 05.03.1980 or
+        # 5/3/1980 as Italian documents write it, else YYYY-MM-DD exactly (not 19800305).
+        m = re.fullmatch(r"(\d{2})([/.-])(\d{2})\2(\d{4})|(\d{1,2})/(\d{1,2})/(\d{4})", v)
+        if m:
+            d, mo, y = (m[1], m[3], m[4]) if m[1] else (m[5], m[6], m[7])
+            v = f"{y}-{int(mo):02d}-{int(d):02d}"
         try:
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", v):
+                raise ValueError
             dt.date.fromisoformat(v)
             return v, None
         except ValueError:
