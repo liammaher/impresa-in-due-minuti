@@ -37,7 +37,7 @@ body:
     attributes:
       label: Versioni / Versions
       description: Portali (`/plugin`) e `pvault version`, se lo usi. / Portali (`/plugin`) and `pvault version`, if you use it.
-      placeholder: portali 0.2.0, pvault 0.2.0
+      placeholder: portali 0.3.0
     validations:
       required: true
   - type: input
