@@ -11,7 +11,9 @@
 # a templated dropdown opens only on that option (its `when` says when). `leave:` names what the
 # section shows that stays empty; `omit:` a section that is the person's alone; `plus:` why a "+"
 # its crawl saw is no list here (`kind: each` maps one; test_gen holds every crawled "+"
-# to one of the two: the co-holders' "+" was crawled and unread for a week). `kind: tick`
+# to one of the two: the co-holders' "+" was crawled and unread for a week; a block's asks are
+# templates, `#N` "" in the first, so `pdc#N_protocollo` keeps an older single-title ask,
+# `pdc_protocollo`, as its first block and the existing cases' answers stand). `kind: tick`
 # is a radio in one pratica and a checkbox in another; `if_present` a field only some pratiche
 # show; `on_page` one the crawl can't see (shown by two choices together), found by label on
 # the page; `by_label` one the crawl sees but whose id another answer moves, found the same way;
@@ -329,6 +331,19 @@ asks:
     question: "Il titolo dei lavori: cosa è stato presentato o rilasciato"
     options: [permesso di costruire, SCIA, DIA, CILA, variante, autorizzazione paesaggistica]
     propose: permesso di costruire
+  # The cambio d'intestazione's further titles (a SCIA and its variante filed as a SCIA of its
+  # own pass together): one row each by the title "+". The first is titolo_tipo, pdc_protocollo
+  # and pdc_data above; these template asks make the second and later ones.
+  titoli_quanti:
+    type: number
+    question: "Quanti titoli trasferisce il cambio d'intestazione? Di solito uno; con una variante presentata come pratica a sé (una SCIA in variante), il titolo e ciascuna variante"
+    propose: "1"
+  titolo#N_tipo:
+    type: choice
+    question: "Titolo #K trasferito con il cambio: che cosa è stato presentato"
+    options: [SCIA, DIA, CILA]
+  pdc#N_protocollo: {type: text, question: "Titolo #K: il numero di protocollo generale"}
+  pdc#N_data: {type: date, question: "Titolo #K: la sua data"}
   titolo_id_pratica: {type: text, question: "Il numero di pratica del titolo sul SUAP/SUE (ID pratica)"}
   data_nomina: {type: date, question: "Da quando subentra il nuovo direttore dei lavori"}
   nomina_aggiunta: {type: yes_no, question: "L'impresa viene nominata in aggiunta a una nominata in precedenza (anziché come prima impresa nominata)?", propose: "false"}
@@ -2493,14 +2508,19 @@ sections:
       - {kind: text, label: tel, value: "{{c:business.telefono|phone_it}}", when: "{{c:business.denominazione|empty|not}}", optional: true}
 
   # Cambio d'intestazione of a CILA, SCIA or DIA: as the voltura, the title by its kind.
-  # Two "+" (read on a draft 2026-11-05, cancelled unsaved): the one after the title's row adds
-  # another title (one is mapped: a cambio names the title it transfers), the one after the
-  # holder's row ("presentata da") another holder's three boxes under their own labels.
+  # Two "+" (read on a draft 2026-11-05, cancelled unsaved): the one after the titles' last row
+  # adds another title's three boxes, all required, above "presentata da" (whose boxes it
+  # renumbers); the one after the holders' last row another holder's three boxes. Two lists,
+  # titles first, each block found by its own labels.
   - section: dichiarazione relativa agli estremi della CILA / SCIA / DIA e proprietario
     fields:
-      - {kind: select, label: seleziona un titolo, value: "{{ask.titolo_tipo|sigla}}"}
-      - {kind: text, label: prot. n°, value: "{{ask.pdc_protocollo}}"}
-      - {kind: date, label: del, value: "{{ask.pdc_data|date_it}}"}
+      - kind: each
+        count: "{{ask.titoli_quanti}}"
+        anchor: seleziona un titolo
+        block:
+          - {kind: select, label: seleziona un titolo, value: "{{ask.titolo#N_tipo|sigla}}"}
+          - {kind: text, label: prot. n°, value: "{{ask.pdc#N_protocollo}}"}
+          - {kind: date, label: del, value: "{{ask.pdc#N_data|date_it}}"}
       # One block per holder until now, each after the first by its "+" (the first after the
       # holders' last row: the title's is above them).
       - kind: each

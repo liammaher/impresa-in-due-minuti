@@ -277,8 +277,10 @@ OPEN_BEYOND = [
     "Repeated rows (2026-11-05): Dati catastali takes any number of units in as many groups as the catasto "
     "changes (a third group back to the first catasto read on a draft and filled); the title's other holders "
     "and the voltura's and cambio d'intestazione's co-holders one block each by the section's \"+\" (the "
-    "coholders-one defect was withdrawn: the section has a \"+\"). Not tried: more than three groups or "
-    "holders, the co-holders' \"+\" on the cambio d'intestazione beyond two.",
+    "coholders-one defect was withdrawn: the section has a \"+\"); the cambio d'intestazione's titles one "
+    "row each by the title's \"+\". Filled on the portal: four catasto groups, four other holders, two "
+    "titles, three previous holders and three co-holders on the cambio (2026-11-05). Not tried: more than "
+    "that; every list is one `each`, so a fifth is the fourth's steps again.",
     "Napoli's SUE wants every file PDF/A and signed (DD 501/2026), so on a real case every slot takes a signed "
     "file, and no real signed file has been uploaded yet: the attachments of a real pratica rest on that. "
     "InfoCamere's \"Copia pratica\" (a new pratica from one sent before) is read in its manual, never used.",
