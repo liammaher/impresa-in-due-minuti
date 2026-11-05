@@ -454,8 +454,8 @@ Lead with what is done: "La bozza è salvata sul portale e ogni valore è stato 
 `run/review.html` (show it, never open it): what's left for them, every check, every value as it
 went on the portal, the declarations' own words. A report's `alerts` (the portal's warnings
 beside boxes it kept) are each one line for them to check. Then their steps (`yours`), numbered,
-in order: the first sentence of each only (the page has them whole). Stop: they review, declare,
-sign, pay and send.
+in order: the first sentence of each only (the page has them whole). Then, as the last line, always: "Prima di dichiarare, firmare e inviare, controlli con attenzione ogni valore e ogni allegato nella pagina di riepilogo e sul portale: la pratica la presenta Lei." Stop:
+they review, declare, sign, pay and send.
 <!-- /vault -->
 <!-- no-vault -->
 ## 5. Check against the documents, then hand over
@@ -494,7 +494,8 @@ sono identici ai Suoi file." (a mismatch first, if any). Send `run/review.html`:
 them, every check, every value and its document, the files, the declarations' own words. A
 report's `alerts` (the portal's warnings beside boxes it kept) are each one line for them to
 check. Then their steps (`yours`), numbered, in order: the first sentence of each only (the page
-has them whole). Stop: they review, declare, sign, pay and send.
+has them whole). Then, as the last line, always: "Prima di dichiarare, firmare e inviare, controlli con attenzione ogni valore e ogni allegato nella pagina di riepilogo e sul portale: la pratica la presenta Lei." Stop: they review, declare, sign, pay and
+send.
 <!-- /no-vault -->
 
 ## 6. The second compilation, after the declarations
