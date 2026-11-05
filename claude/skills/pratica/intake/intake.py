@@ -417,8 +417,11 @@ def read_receipt(text):
     """The account a payment went to, and its amount: whether Napoli takes it that way."""
     t = norm(text)
     amount = re.search(r"(?:importo|euro|eur)\s*:?\s*(?:euro |eur )?(\d{1,3}(?:\.\d{3})*,\d{2})", t)
+    # An account it names at all: an IBAN (spaces dropped, so no word boundary), or a c/c number.
+    names = bool(re.search(r"it\d{2}[a-z]\d{10}[0-9a-z]{12}", t.replace(" ", ""))
+                 or re.search(r"\b(?:c/c|c\.c\.|conto(?: corrente)?(?: postale)?)\s*(?:n\.?|nr\.?|numero)?\s*:?\s*\d{6,}", t))
     return {"postale_57060964": "57060964" in t, "iban_sue": "it95x0306903496100000046118" in t.replace(" ", ""),
-            "importo": amount.group(1) if amount else None}
+            "names_account": names, "importo": amount.group(1) if amount else None}
 
 
 # --- the scan ----------------------------------------------------------------------------
@@ -591,9 +594,11 @@ def scan(dossier, steps=None, client=None):
                 continue
             r = read_receipt(text)
             ok = r["postale_57060964"] if kind == "ricevuta_diritti" else r["iban_sue"]
-            report["notes"].append({"from": p.name, "note": f"{kind.split('_')[1]} {r['importo'] or '?'} €: "
-                                    + ("sul conto che il SUE di Napoli accetta" if ok else
-                                       "NON sul conto che il SUE di Napoli accetta: irricevibile")})
+            # A receipt that names no account says nothing either way: never call it irricevibile.
+            where = ("sul conto che il SUE di Napoli accetta" if ok else
+                     "NON sul conto che il SUE di Napoli accetta: irricevibile" if r["names_account"] else
+                     "la ricevuta non indica il conto: verifichi che sia quello che il SUE di Napoli accetta")
+            report["notes"].append({"from": p.name, "note": f"{kind.split('_')[1]} {r['importo'] or '?'} €: {where}"})
 
     # The files, each in the steps file's slot for its kind.
     asks = (steps or {}).get("asks", {})
