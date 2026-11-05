@@ -36,7 +36,7 @@ body:
     attributes:
       label: Versione di Portali / Portali version
       description: "`plugin_version` in `coverage.json`, o `/plugin` in Claude Code."
-      placeholder: 0.2.0
+      placeholder: 0.3.0
     validations:
       required: true
   - type: input
