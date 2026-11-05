@@ -26,7 +26,7 @@ export interface CatalogEntry {
   name: string;
   procedure: string;
   title: string | null;
-  refuses: string[];
+  refuses: string[]; // from the steps file (loadRegistry)
   notes: string;
   steps_sha256: string;
 }
@@ -81,7 +81,12 @@ export async function loadRegistry(dir: string): Promise<Registry> {
     join(dir, "coverage.json"));
   const catalog = new Map((await json<CatalogEntry[]>(join(dir, "catalog.json"))).map((c) => [c.name, c]));
   const steps = new Map<string, string>();
-  for (const name of catalog.keys()) steps.set(name, await readFile(join(dir, "pratiche", `${name}.json`), "utf8"));
+  for (const [name, c] of catalog) {
+    const text = await readFile(join(dir, "pratiche", `${name}.json`), "utf8");
+    steps.set(name, text);
+    // Not in catalog.json, which Claude searches: the cases a pratica refuses are its steps file's.
+    c.refuses = ((JSON.parse(text) as { supports?: { else?: string }[] }).supports ?? []).flatMap((s) => s.else ? [s.else] : []);
+  }
   const procedures = new Map<string, Procedure>();
   const root = join(dir, "library", "procedures");
   for (const f of await yamlFiles(root)) {
