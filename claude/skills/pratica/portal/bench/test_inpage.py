@@ -350,7 +350,27 @@ def main():
             assert got == {"catg1_nceu": "on", "cat1g1_fog": "12", "cat1g1_par": "678", "cat1g1_sub": "3", "catg2_nct": "on",
                            "cat2g2_fog": "12", "cat2g2_par": "679", "cat2g2_sub": "", "cat3g2_fog": "12", "cat3g2_par": "680",
                            "cat3g2_sub": ""}, got
-        case("cadastral units: each unit by its own \"+\", a new catasto by the group's, the subalterno by its title", cadastral_units)
+
+            # A flat, a plot, a garage: a third group back to the first catasto. The second group's
+            # NCT is the page's last NCT when it's ticked, not once the third group is there: its
+            # read-back goes to where it was (2026-11-05: "not kept NCT" on the portal, the third
+            # group's NCT read in its place).
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?catasto=1")
+            st["sections"][1]["fields"] += [
+                {"id": "catg1_nceu", "kind": "radio", "label": "Nuovo Catasto Edilizio Urbano"},
+                box("foglio", 1, "12"), box("particella/mappale", 1, "678"), box("se non presente indicare il numero 0", 1, "3"),
+                {"kind": "add", "anchor": "foglio", "block": 2, "nth": 2},
+                {"kind": "radio", "label": "NCT", "last": True},
+                box("foglio", 2, "12"), box("particella/mappale", 2, "679"),
+                {"kind": "add", "anchor": "foglio", "block": 3, "nth": 2},
+                {"kind": "radio", "label": "NCEU", "last": True},
+                box("foglio", 3, "12"), box("particella/mappale", 3, "678"), box("se non presente indicare il numero 0", 3, "5")]
+            r = fill(browser, base, st, answers)
+            assert r["result"] == "filled", r.get("error")
+            got = {k.split(":")[-1]: v for k, v in PORTAL.fields.items() if ":dynaForm:catg" in k}
+            assert got == {"catg1_nceu": "on", "catg2_nct": "on", "catg3_nceu": "on"}, got
+        case("cadastral units: each unit by its own \"+\", a new catasto by the group's, the subalterno by its title; three groups", cadastral_units)
 
         def crawl_reveals():
             # A choice that opens an employer's block repeating labels above it (Cognome, Via):

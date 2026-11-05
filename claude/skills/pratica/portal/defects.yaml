@@ -156,27 +156,6 @@ coholder-sesso:
       "Checked": "2026-10-31 (the voltura's runs), 2026-11-02 (the cambio d'intestazione's co-holder)."
       "To report": "one group, M or F."
 
-coholders-one:
-  title: "Voltura o cambio d'intestazione a più di un cointestatario"
-  portal: "Napoli's SUE on impresainungiorno: the co-holders' section (\"Informazioni su eventuali altri aventi titolo\", opened by the wizard's \"ci sono cointestatari\") of the voltura del permesso and of the cambio d'intestazione of a CILA, SCIA or DIA"
-  what: "La sezione dei cointestatari ha posto per una sola persona e nessun «+»."
-  works: "Con un solo cointestatario la preparo."
-  law: "Art. 11 c. 2 DPR 380/2001: il titolo passa a tutti gli aventi causa, ciascuno indicato."
-  checked: "28/10/2026, dalla mappa delle due pratiche: una sola persona, nessun «+»."
-  choices:
-    - "Chieda al SUE come indicare gli altri (ad es. in una dichiarazione allegata, firmata da ciascuno)."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
-    - "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
-  report: docs/portal-defects.md
-  page:
-    heading: "Voltura and cambio d'intestazione: the co-holders' section holds one person"
-    points:
-      "Where": "the co-holders' section (\"Informazioni su eventuali altri aventi titolo\", opened by the wizard's \"ci sono cointestatari\") of both pratiche."
-      "What happens": "the section has one person's boxes (name, birth, residence, citizenship, sex, codice fiscale) and no \"+\" to add another."
-      "What the law asks": "the permesso passes to the successors in title (art. 11 c. 2 DPR 380/2001), however many; the voltura names each of them."
-      "Effect": "a title passing to three or more holders can name only one co-holder on the portal."
-      "Checked": "2026-10-28, the batch crawl of both pratiche (one person's 14 boxes, no \"+\")."
-      "To report": "a \"+\" on the section, as the CILA's and SCIA's lists of technicians and firms have."
 
 agibilita-art24:
   title: "Agibilità: le eccezioni dell'art. 24"

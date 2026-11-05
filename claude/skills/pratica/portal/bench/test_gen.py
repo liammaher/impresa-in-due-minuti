@@ -131,13 +131,13 @@ NEW_SLOT = "Copia del documento di identità del/i titolare/i e/o del tecnico"
 
 def as_p6_ran(steps):
     """A generated CILA as the P6 run took it: its first run with made-up files (run.phase),
-    without the slot the hand walk left empty, and one cadastral unit (no "+" template: P6's
-    count of other technicians is none too)."""
+    without the slot the hand walk left empty, one cadastral unit and one other holder (no "+"
+    template: P6's count of other technicians is none too)."""
     import run
     steps = run.phase(steps, made_up=True)
-    unit_plus = lambda f: f.get("anchor") == "foglio" and f.get("block") == "#N"
-    return steps | {"sections": [s | {"fields": [f for f in s["fields"] if f.get("label") != NEW_SLOT
-                                                 and not (s["section"] == "Dati catastali" and unit_plus(f))]}
+    plus = {"Dati catastali": "foglio", "Titolarità dell'intervento": "Cognome"}
+    one = lambda s, f: f.get("block") == "#N" and f.get("anchor") == plus.get(gen.QUADRO.sub("", s["section"]).strip())
+    return steps | {"sections": [s | {"fields": [f for f in s["fields"] if f.get("label") != NEW_SLOT and not one(s, f)]}
                                  for s in steps["sections"]]}
 
 
@@ -302,10 +302,13 @@ def _():
         check = (t / "out" / "check.js").read_text()
         # Each steps file by name; one that differs from main's in some sections by its patch first,
         # the whole file named as what the patch asks for when it can't apply.
-        assert all(f'"steps/{n}.js"' in check or f'"steps/{n}.patch.js (it says if steps/{n}.js is needed instead)"' in check
+        # A case's "+" blocks give its steps a key of their own (steps/<name>-<hash>.js), from steps
+        # rerun.py expanded too (2026-11-05: two CILA cases shared one and the second ran the first's).
+        js = {n: next(p.stem for p in (t / "out" / "steps").glob(f"{n}*.js") if not p.stem.endswith(".patch")) for n in names}
+        assert all(js[n] != n for n in names), js
+        assert all(f'"steps/{js[n]}.js"' in check or f'"steps/{js[n]}.patch.js (it says if steps/{js[n]}.js is needed instead)"' in check
                    for n in names) and '"runner.js"' in check
-        assert all((t / "out" / "steps" / f"{n}.js").exists() for n in names)
-        assert all((t / "out" / "steps" / f"{n}.patch.js").exists() == (f"{n}.patch.js" in check) for n in names)
+        assert all((t / "out" / "steps" / f"{js[n]}.patch.js").exists() == (f"{js[n]}.patch.js" in check) for n in names)
         # The piece's values as a string it checks before adding them (a garbled copy throws): its
         # length and FNV-1a hash as the page computes them.
         line = next(x for x in queue.splitlines() if x.strip().startswith("const raw = "))
@@ -317,8 +320,9 @@ def _():
         n, h = rerun.fnv1a(raw)
         assert f"raw.length !== {n} || h !== {h}" in queue
         # Each procedure's first run whole ({"base": ...}); a later one is what differs from it.
-        assert '["dau-fittizia","napoli/comune/dichiarazione-avvenuto-utilizzo-terre",{"base":{"wizard":["PROVA NON INVIARE - DAU P6 generato"' in raw
-        assert (t / "out" / "steps" / "dau-fittizia.js").read_text().startswith('localStorage.setItem("pv-steps:napoli/comune/dichiarazione-avvenuto-utilizzo-terre"')
+        import re
+        assert re.search(r'\["dau-fittizia","napoli/comune/dichiarazione-avvenuto-utilizzo-terre#[0-9a-f]{8}",\{"base":\{"wizard":\["PROVA NON INVIARE - DAU P6 generato"', raw), raw[:200]
+        assert (t / "out" / "steps" / f"{js['dau-fittizia']}.js").read_text().startswith('localStorage.setItem("pv-steps:napoli/comune/dichiarazione-avvenuto-utilizzo-terre#')
         # A case on other values (a copy of the fixture) goes in the same batch, labelled with them,
         # and isn't recorded: the repo's fixture wouldn't give that run again.
         other = dict(fixture["fields"]) | {"chiara:identity.birth_province": "EE", "chiara:identity.birth_country": "ARGENTINA"}
@@ -1652,6 +1656,33 @@ def _():
         if not names or names[0] != "Scheda anagrafica" or not {"Pagamento degli oneri", "Gestione degli allegati"} <= set(names):
             bad.append(f"{f.parent.name}: {names[:1]}")
     assert not bad, bad
+
+
+@case("every \"+\" a SUE crawl saw is a list the dictionary maps (`each`, `firms`) or says why not (`plus:`)")
+def _():
+    # The co-holders' "+" was in the 2026-10-31 crawl (`plus`) and nobody read it: a portal defect
+    # was written for it, until a draft showed the "+" (2026-11-05).
+    import json
+    d = gen.load_yaml(HERE.parent / "dictionary" / "fnsuap.yaml")
+
+    def plus(node):
+        if isinstance(node, dict):
+            return "plus" in node or any(plus(v) for v in node.values())
+        return isinstance(node, list) and any(plus(v) for v in node)
+
+    def lists(e):
+        return "firms" in e or "plus" in e or '"kind": "each"' in json.dumps(e.get("fields", []))
+    bad = set()
+    for f in sorted((HERE.parent / "catalogue" / "F839" / "sections").glob("*.json")):
+        if f.stem.startswith("suap") or f.stem == "acconciatore":
+            continue
+        for s in json.loads(f.read_text())["sections"]:
+            if s.get("same_as") or not plus(s):
+                continue
+            entries = gen.dictionary_entries(d["sections"], s["section"])
+            if entries and not any(lists(e) for e, _ in entries):
+                bad.add(f"{s['section']} ({f.stem})")
+    assert not bad, sorted(bad)
 
 
 print(f"{sum(results)}/{len(results)} passed")

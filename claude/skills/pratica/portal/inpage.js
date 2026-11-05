@@ -807,9 +807,21 @@
     // added: Dati catastali's radios read "NCEU"/"NCT" in every group once the portal has checked
     // the section, the long title only before, 2026-11-04). Not narrowed by own label or rank:
     // a group with its title still on would lose to an older one, and the run untick that.
-    const e = (f.last ? labelledAll[labelledAll.length - 1] : hits[(f.nth || 1) - 1]) ||
+    // `at`: a `last` box as it was when filled (pinned), so a read-back after later groups were
+    // added reads it, not the newest (2026-11-05: the third group's NCT read as the second's).
+    // A `last` radio by its own cell where one has it: a group's NCT reads the NCEU of the cell to
+    // its left too, so the newest "NCEU" was the third group's NCT (2026-11-05, the fake portal).
+    const cell = (e) => (e.closest("td") || {}).innerText || "";
+    const inCell = labelledAll.filter((e) => startsLabel(cell(e), f.label));
+    const at = f.at !== undefined ? f.at : f.last ? labelledAll.indexOf((inCell.length ? inCell : labelledAll).slice(-1)[0]) : undefined;
+    const e = (at !== undefined ? labelledAll[at] : hits[(f.nth || 1) - 1]) ||
       fail(`${f.label}: ${hits.length} fields with this label${f.anchor ? ` in block ${f.block || 1}` : ""}`);
-    return { ...f, id: e.id.split("dynaForm:")[1].replace(/:combo_input$/, "") };
+    return { ...f, ...(at !== undefined ? { at } : {}), id: e.id.split("dynaForm:")[1].replace(/:combo_input$/, "") };
+  }
+  // A field found by its label, with how to find it again: a `last` one pinned where it was.
+  function bySpec(f) {
+    const r = resolve(f);
+    return { ...r, spec: r.at !== undefined ? { ...f, last: false, at: r.at } : f };
   }
   // A slot's upload boxes and its "+", from the rows under its title (span.input-label) to the
   // next title. "+" adds a box under the slot's last one, with no label of its own, and moves
@@ -936,9 +948,9 @@
       if (f.id && f.label && !f.slotted) f = located(f);
       if (!f.id && !f.css && f.if_present) {
         // A box only some pratiche show: skipped where this one doesn't.
-        try { f = { ...resolve(f), spec: f }; } catch (e) { if (e instanceof StepError) continue; throw e; }
+        try { f = bySpec(f); } catch (e) { if (e instanceof StepError) continue; throw e; }
       }
-      f = f.id || f.css ? f : { ...resolve(f), spec: f };
+      f = f.id || f.css ? f : bySpec(f);
       await closeLists();
       if (f.kind === "radio" || f.kind === "checkbox") typed = await tick(f);
       else if (v === null || v === "") continue;
@@ -975,7 +987,7 @@
   function keep(si, done) {
     kept = kept.filter((k) => k.sec !== steps.sections[si]).concat([{ sec: steps.sections[si], done }]);
     report.kept = (report.kept || []).filter((k) => k.section !== si)
-      .concat([{ section: si, fields: done.map((d) => [d.field, d.typed]) }]);
+      .concat([{ section: si, fields: done.map((d) => d.spec && d.spec.at !== undefined ? [d.field, d.typed, d.spec.at] : [d.field, d.typed]) }]);
   }
 
   // Each read-back above saw its section right after its own Salva. A later section can
@@ -1170,9 +1182,9 @@
       if (/\/cmd\/error/.test(doc().location.href)) fail("the draft's address has expired: open it again from Pratiche in bozza");
       const from = resume.from || {};
       for (const k of resume.kept || []) {
-        keep(k.section, k.fields.map(([field, typed]) => {
+        keep(k.section, k.fields.map(([field, typed, at]) => {
           const def = steps.sections[k.section].fields[field];
-          return { ...def, typed, field, ...(def.id || def.css ? {} : { spec: def }) };
+          return { ...def, typed, field, ...(def.id || def.css ? {} : { spec: at !== undefined ? { ...def, last: false, at } : def }) };
         }));
       }
       if (from.section === undefined) {

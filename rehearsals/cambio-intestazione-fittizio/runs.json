@@ -41,5 +41,17 @@
   "result": "filled",
   "seconds": 70.8,
   "browser": "pane"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-due-cointestatari.json",
+  "result": "filled",
+  "seconds": 138,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-05",
+  "browser": "pane",
+  "note": "Two co-holders (`answers-due-cointestatari`: paolo, marta), the co-holders' \"+\", `bench/rerun.py` bundle: **filled** in 138 s, nothing moved or loose"
  }
 ]

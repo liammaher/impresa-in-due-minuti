@@ -240,7 +240,9 @@ that also cites a Comune page may only confirm a national one there.
   conoscenza d…"): open and check by the whole name. The Scheda anagrafica's link reloads the
   whole page: the runner waits until the section is the open one before reading it.
 - **Scelte.** Some sections exist only with a scelta ("ci sono cointestatari"): list every
-  scelta the case needs; gen.py ticks them all.
+  scelta the case needs; gen.py ticks them all. A section a scelta drops for a case takes its asks
+  with it (run.py `chosen`): the co-holders' count, with no co-holders (2026-11-05: pre-flight
+  stopped on "no field reads asks.cointestatari_quanti").
 - **Values the portal checks.** Codici fiscali and partite IVA by their check digit (the P6
   fixture's pass), the draft's name at most 60 characters, a P.G. box may take 10. The landscape
   pratiche's other technician's PEC is looked up at Salva: kept, but "Indirizzo Pec non valido" under
@@ -316,8 +318,15 @@ that also cites a Comune page may only confirm a national one there.
   the new group's is the page's last "NCT" (by its long name, none found: the first run stopped
   there, 2026-11-04). The first group's keeps its crawl id, which the run trusts when its label
   has gone (`loose` in the report). Filled on the portal 2026-11-04: a flat and its garden plot. `#P` in a block is the
-  block before's `#N`. A third group (back to the first catasto) is refused: store the units of
-  one catasto one after the other. A vault read must name each copy (`*:immobile2.*`: a scope
+  block before's `#N`. After the second group's last unit come the same three buttons (unit "+",
+  group "+", "-"), so a third group back to the first catasto is the group's "+" again (read on a
+  draft 2026-11-05): units in any order of catasti. The first run with three groups stopped after
+  Salva on "not kept NCT: empty" though the draft saved NCEU, NCT, NCEU and all four units: the
+  read-back found the `last` NCT again as the page's newest, by then the third group's. A `last` box
+  is now pinned where it was filled (inpage.js `at`; a resumed run's `kept` carries it). On the fake
+  portal the same case also ticked the third group's NCT for its NCEU, a radio's texts including the
+  cell to its left: `last` now prefers boxes whose own cell starts with the label (the portal's own
+  radios weren't misread that way). A vault read must name each copy (`*:immobile2.*`: a scope
   matches a category whole).
   The crawl's own "plus" pressed the last "+", the group's, which is why its `adds` looked odd
   (crawl.js now notes how many "+" it saw, `of`). By label "subalterno" the first run typed the
@@ -330,6 +339,18 @@ that also cites a Comune page may only confirm a national one there.
   Salva means one label found its neighbour; open the draft and read the boxes' values. The fake
   portal's `?catasto=1` (test_inpage) keeps both: by title it fills, by label it doesn't; and a
   flat then two plots: the group's "+", its own radio, then the second group's own unit "+".
+- **Holders and co-holders repeat too** (read on drafts 2026-11-05, pressed and cancelled with Annulla):
+  the titles' "Titolarità dell'intervento" (one section for the CIL, CILA, SCIA, SCIA alternativa,
+  permesso and agibilità) adds another holder's whole row by the "+" after the last one (27 boxes,
+  the company tick and its three boxes too), and the voltura's and cambio d'intestazione's "Informazioni
+  su eventuali altri aventi titolo" another co-holder's 14 boxes, with its own two required sesso
+  groups. Each is an `each` (`altri_titolari`, `cointestatari_quanti`: unasked while the job names no
+  `r2:` or `a2:`), the people `r:`, `r2:` ... (`o#N:` a company holder) and `a:`, `a2:` .... The
+  coholders-one defect (no "+", from the 2026-10-28 crawl) was wrong and is withdrawn: the 2026-10-31
+  crawl had recorded the "+" (`plus`), unread. A missing "+" is read on a draft before it's a defect.
+  Two cases of one pratica with other counts take other steps: page_bundle keys each by its blocks
+  (`procedure#hash`) also for steps rerun.py has expanded already; until 2026-11-05 those shared one key
+  and the second case of a batch ran on the first's steps.
 - **A choice's revealed boxes may repeat labels above them** (an employer's "Via, Piazza", "N.",
   "Cognome"): crawl.js counts reveals per label since 2026-10-31; crawls before then left those
   out, so a run can still find required boxes there (recrawl a section to see them).
@@ -692,7 +713,9 @@ shows and otherwise answer at once, so while it's hidden, wait between polls out
 (the pane's `wait` actions in one batch, then `results.js`).
 The pane's profile, and so the SPID session, is the same for every session of the app: before a
 batch, check that no other chat is running the portal (2026-11-03: one was, with its own batches).
-Check the sign-in too: an old page keeps showing Pratiche in bozza after the session has ended, and a
+Check the sign-in too, and that the pane shows: a hidden pane on InfoCamere's sign-in page is one the person
+can't see to sign in on (2026-11-05: the pane's `tabs_context` says hidden; ask them to show it). An old page
+keeps showing Pratiche in bozza after the session has ended, and a
 fresh load of `/fnsuap/cmd/home` lands on InfoCamere's "Apache Syncope Login" (`iasu.infocamere.it`)
 when it has (2026-11-03, after about three hours; a `fetch` of it from the page fails outright). The
 person signs in again; nothing else is needed. When InfoCamere's sign-in itself is down, every route

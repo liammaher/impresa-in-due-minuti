@@ -1,6 +1,6 @@
 # Segnalazione al Servizio Sportello Unico Edilizia del Comune di Napoli: moduli su impresainungiorno
 
-Sei punti in cui i moduli del SUE di Napoli su impresainungiorno non permettono di dichiarare ciò
+Cinque punti in cui i moduli del SUE di Napoli su impresainungiorno non permettono di dichiarare ciò
 che la legge chiede. Le caselle in questione non sono nei moduli nazionali (repository di InfoCamere
 `Sistema-Informatico-degli-Sportelli-Unici-Moduli-PA`, commit `fc13e08` del 12 marzo 2026), o i
 moduli nazionali non sono stati scritti per il caso regionale: per questo li segnaliamo al Comune.
@@ -66,22 +66,7 @@ chiediamo anche come il Sportello preferisce che il caso sia presentato finché 
   (verificato il 31 ottobre e il 2 novembre 2026).
 - **Cosa chiediamo**: un solo gruppo, M o F.
 
-## 5. Voltura del permesso e cambio d'intestazione: la sezione dei cointestatari contiene una sola persona
-
-- **Dove**: "Informazioni su eventuali altri aventi titolo", aperta dalla scelta "ci sono
-  cointestatari" di entrambe le pratiche.
-- **Cosa succede**: la sezione ha le caselle di una sola persona (nome, nascita, residenza,
-  cittadinanza, sesso, codice fiscale) e nessun "+" per aggiungerne altre.
-- **Cosa chiede la legge**: il permesso si trasferisce agli aventi causa (art. 11 c. 2 DPR
-  380/2001), quanti che siano; la voltura li nomina tutti.
-- **Effetto**: un titolo che passa a tre o più intestatari può nominarne sul portale solo uno oltre
-  al dichiarante.
-- **Come riprodurlo**: aprire la sezione: 14 caselle di una persona, nessun "+" (verificato il 28
-  ottobre 2026).
-- **Cosa chiediamo**: un "+" sulla sezione, come gli elenchi dei tecnici e delle imprese di CILA e
-  SCIA.
-
-## 6. SCIA alternativa e permesso: nessuna riga per i cambi d'uso della legge regionale
+## 5. SCIA alternativa e permesso: nessuna riga per i cambi d'uso della legge regionale
 
 - **Dove**: SCIA alternativa al permesso, quadro c) "Qualificazione dell'intervento"; Permesso di
   Costruire, quadro a) e asseverazione ("opere in progetto").

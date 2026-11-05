@@ -11,6 +11,12 @@ Fixing them is the portal's operator's (InfoCamere, which runs impresainungiorno
 personal data. The reports to send, in Italian and one per recipient, with the channels:
 [`docs/defect-reports/`](defect-reports/README.md).
 
+Withdrawn: "the co-holders' section holds one person" (`coholders-one`, from a crawl of 2026-10-28).
+The voltura's and cambio d'intestazione's co-holders section has a "+" that adds a co-holder's
+whole block (read on a draft 2026-11-05; the 2026-10-31 crawl had recorded it), so it was never
+sent, and several co-holders are mapped. Read a section on a draft before calling a missing "+"
+a defect.
+
 ## SCIA in sanatoria, art. 36-bis c. 1: dating, oblazione and works proposal saved as one field
 
 - **Where**: SCIA edilizia with the sanatoria scelta, section "Asseverazione SCIA - Stato legittimo,
@@ -138,18 +144,6 @@ personal data. The reports to send, in Italian and one per recipient, with the c
 - **Effect**: the pratica states both sexes; Claude ticks both and says so in the person's steps.
 - **Checked**: 2026-10-31 (the voltura's runs), 2026-11-02 (the cambio d'intestazione's co-holder).
 - **To report**: one group, M or F.
-
-## Voltura and cambio d'intestazione: the co-holders' section holds one person
-
-- **Where**: the co-holders' section ("Informazioni su eventuali altri aventi titolo", opened by the
-  wizard's "ci sono cointestatari") of both pratiche.
-- **What happens**: the section has one person's boxes (name, birth, residence, citizenship, sex,
-  codice fiscale) and no "+" to add another.
-- **What the law asks**: the permesso passes to the successors in title (art. 11 c. 2 DPR 380/2001),
-  however many; the voltura names each of them.
-- **Effect**: a title passing to three or more holders can name only one co-holder on the portal.
-- **Checked**: 2026-10-28, the batch crawl of both pratiche (one person's 14 boxes, no "+").
-- **To report**: a "+" on the section, as the CILA's and SCIA's lists of technicians and firms have.
 
 ## Agibilità: the art. 24 exceptions are marked required
 
