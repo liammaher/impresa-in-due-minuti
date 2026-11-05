@@ -103,6 +103,7 @@ import os
 import re
 import secrets
 import shlex
+import unicodedata
 import shutil
 import subprocess
 import sys
@@ -1448,7 +1449,7 @@ def preflight(steps, values, made_up=False, after=False):
     report["unsupported"], _, defects = refusals(steps, values)
     if defects:
         report["defects"] = defects
-    report["unsupported"] += portal_changed(steps)
+    report["unsupported"] += outside_comune(steps, values) + portal_changed(steps)
     # The steps files are the ones real users run, so their draft name carries no test marker;
     # a rehearsal's answers put it back, and a made-up draft never looks like a real one.
     if made_up and "descrizione" in asks and not str(values.raw("descrizione") or "").startswith(REHEARSAL_DRAFT):
@@ -1812,6 +1813,34 @@ def yours_in_order(own, notes, later, apart):
                    f"{'; '.join(dict.fromkeys(later))}. Faccia firmare la procura al committente e firmi "
                    "digitalmente ogni file (.p7m). Poi li dia a Claude: li allega con una seconda compilazione")
     return out + sends + apart
+
+
+# The comune each sportello serves, by the Belfiore code in a steps file's start.
+SPORTELLO_COMUNE = {"F839": "Napoli"}
+
+
+def outside_comune(steps, values):
+    """A property the job names (the client's immobile, the business's locale) outside the comune
+    whose sportello the steps file files at: refused, since every steps file files at one comune.
+    The comune isn't named: the message reaches Claude."""
+    from urllib.parse import parse_qs, urlparse
+    code = parse_qs(urlparse(steps.get("start", "")).query).get("comune", [""])[0]
+    comune = SPORTELLO_COMUNE.get(code)
+    if not comune:
+        return []
+    def plain(s):
+        s = unicodedata.normalize("NFKD", str(s))
+        return " ".join("".join(c for c in s if not unicodedata.combining(c)).lower().split())
+    for ref in ("c:immobile.comune", "locale.comune", "locale2.comune"):
+        try:
+            v = values.field(ref)
+        except StepError:
+            v = None
+        if v and plain(v) != plain(comune):
+            return [f"L'immobile è fuori dal Comune di {comune}. Portali prepara solo le pratiche del Comune "
+                    f"di {comune} (Campania), sui suoi sportelli: per un altro comune non c'è nulla di "
+                    "automatico, e non preparo niente."]
+    return []
 
 
 def filing_rules(steps):
