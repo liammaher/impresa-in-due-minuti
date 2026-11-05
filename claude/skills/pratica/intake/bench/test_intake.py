@@ -128,8 +128,14 @@ def wrong_account_and_signed_files():
                        check=True, capture_output=True)
         key.unlink()
         crt.unlink()
+    (d / "Prospetto.pdf").write_bytes(dossier.one_page(["Prospetto di calcolo preventivo del contributo di costruzione"]))
+    (d / "Ricevuta_sanzione.pdf").write_bytes(dossier.one_page(["RICEVUTA", "Sanzione CILA tardiva", "Importo: Euro 333,00"]))
     report, _, proposed = intake.scan(d)
-    assert any("NON sul conto" in x["note"] for x in report["notes"]), report["notes"]
+    notes = {x["from"]: x["note"] for x in report["notes"]}
+    assert "NON sul conto" in notes["Ricevuta_diritti.pdf"], notes
+    # No account named: asked to check, never called irricevibile.
+    assert "non indica il conto" in notes["Ricevuta_sanzione.pdf"], notes
+    assert {Path(x["file"]).name: x["kind"] for x in report["documents"]}["Prospetto.pdf"] == "prospetto_contributo"
     if shutil.which("openssl"):
         assert {Path(x["file"]).name: x["kind"] for x in report["documents"]}["Relazione_tecnica.pdf.p7m"] == "relazione"
         assert proposed["facts"]["intervento"] == "manutenzione_straordinaria"
@@ -153,6 +159,15 @@ def parsers():
     assert values["rossi:identity.last_name"] == "Rossi" and values["rossi:ruolo.tipo"] == "cliente", values
     co = sole.replace("totale intestati: 1", "totale intestati: 2").replace("per 1/1", "per 1/2") + \
         "BIANCHI ANNA\n(CF BNCNNA82A41F839X)\nDiritto di: Proprieta' per 1/2\n"
+    # A property outside Napoli is said first, without the comune's name (Claude reads the notes).
+    far = TMP / "pozzuoli"
+    far.mkdir()
+    (far / "Visura.pdf").write_bytes(dossier.one_page(["Visura attuale per immobile", "Dati identificativi",
+                                                       "Dati di classamento"]
+                                                      + sole.replace("NAPOLI (F839)", "POZZUOLI (G964)").splitlines()))
+    notes = [n["note"] for n in intake.scan(far)[0]["notes"]]
+    assert any("non è nel Comune di Napoli" in n for n in notes) and not any("Pozzuoli" in n for n in notes), notes
+    assert not any("non è nel Comune di Napoli" in n["note"] for n in intake.scan(d)[0]["notes"])
     _, owners, _ = intake.read_visura(co)
     assert [o["name"] for o in owners] == ["ROSSI MARIO"], "a block after 'Visura telematica' is not an owner"
     _, owners, _ = intake.read_visura(co.replace("Visura telematica\n", "") + "Visura telematica\n")
