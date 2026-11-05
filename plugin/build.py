@@ -293,17 +293,18 @@ def make_pdf(path, size):
 
 
 def self_check(plugin):
-    """The test case through check.py and pre-flight under python3, as Cowork runs them."""
+    """The test case through check.py and pre-flight, run as the skill runs them: through its
+    py launcher (sh py), which picks this computer's python3."""
     skill = plugin / "skills" / "portali-pratica"
     case = plugin / "skills" / TEST_SKILL / "cila"
-    py = shutil.which("python3") or sys.executable
+    py = ["sh", str(skill / "py")]
     with tempfile.TemporaryDirectory() as tmp:
         values = Path(tmp) / "values.json"
-        r = subprocess.run([py, skill / "check.py", "studio.json", "values.json", "--out", values],
+        r = subprocess.run([*py, skill / "check.py", "studio.json", "values.json", "--out", values],
                            cwd=case, capture_output=True, text=True)
         if r.returncode:
             sys.exit(f"check.py refused the test case:\n{r.stdout}{r.stderr}")
-        r = subprocess.run([py, skill / "portal" / "run.py", "preflight", "--steps",
+        r = subprocess.run([*py, skill / "portal" / "run.py", "preflight", "--steps",
                             skill / "pratiche" / f"{TEST_CASE}.json", "--answers", "answers.json",
                             "--values", values, "--made-up"], cwd=case, capture_output=True, text=True)
         if r.returncode:
@@ -314,9 +315,9 @@ def self_check(plugin):
         first.mkdir()
         (first / "studio.json").write_text('{"tecnico:ruolo.tipo": "titolare"}')
         (first / "values.json").write_text("{}")
-        subprocess.run([py, skill / "check.py", "studio.json", "values.json", "--out", "values-merged.json"],
+        subprocess.run([*py, skill / "check.py", "studio.json", "values.json", "--out", "values-merged.json"],
                        cwd=first, check=True, capture_output=True)
-        r = subprocess.run([py, skill / "portal" / "run.py", "preflight", "--steps",
+        r = subprocess.run([*py, skill / "portal" / "run.py", "preflight", "--steps",
                             skill / "pratiche" / f"{TEST_CASE}.json", "--answers", case / "answers.json",
                             "--values", "values-merged.json", "--made-up"], cwd=first, capture_output=True, text=True)
         missing = [m["field"] for m in json.loads(r.stdout or "{}").get("missing", [])]
@@ -328,7 +329,7 @@ def self_check(plugin):
             d = REHEARSALS / steps.stem
             answers = next(iter(sorted(d.glob("answers*.json"))), None)
             tail = (["--answers", answers] if answers else []) + ["--values", values]
-            ours = subprocess.run([py, skill / "portal" / "run.py", "preflight", "--steps", steps] + tail,
+            ours = subprocess.run([*py, skill / "portal" / "run.py", "preflight", "--steps", steps] + tail,
                                   cwd=REPO, capture_output=True, text=True)
             theirs = subprocess.run([sys.executable, PRATICA / "portal" / "run.py", "preflight", "--steps",
                                      steps_file(d)] + tail, cwd=REPO, capture_output=True, text=True)

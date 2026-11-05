@@ -33,8 +33,9 @@ computer. Lì restano i dati Suoi, dello studio e dei clienti; Claude non li ved
 <!-- /vault -->
 <!-- no-vault -->
 Poi apra nell'app la cartella dei Suoi lavori, con una sottocartella per ogni lavoro. I dati dello
-studio li chiede Claude alla prima pratica, una volta sola. Serve Python 3 sul computer: su un Mac
-che non lo ha, macOS propone di installarlo la prima volta; accetti.
+studio li chiede Claude alla prima pratica, una volta sola. Non serve installare altro: se sul
+computer non c'è Python, alla prima pratica Portali ne scarica uno (circa 25 MB, verificato), una
+volta sola.
 <!-- /no-vault -->
 
 ## Come si usa
