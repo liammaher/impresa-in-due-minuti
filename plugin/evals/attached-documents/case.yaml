@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: attached-documents
+tags: [skill, rules]
+context:
+  scaffold_script: fixture.sh

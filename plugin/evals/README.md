@@ -2,8 +2,9 @@
 
 How Claude follows the skill, on made-up data, with no browser and no portal: whether it sends
 pre-flight's message as written, refuses a case it can't prepare before opening anything, never
-uses a credential, and answers from the library. `claude plugin eval` runs them against a built
-plugin; a release ships none of this.
+uses a credential, answers from the library, and puts documents attached to the conversation in
+the job's folder unopened. `claude plugin eval` runs them against a built plugin; a release ships
+none of this.
 
 ```sh
 PRATICHE_NAPOLI_DIR=../pratiche-napoli ~/.cache/pratica-portal/venv/bin/python plugin/build.py --evals
