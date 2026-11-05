@@ -56,8 +56,11 @@ install-pvault.sh | .ps1  downloads  pvault_<version>_<os>_<arch>  and refuses i
   a Mac with Touch ID a closed vault opens by fingerprint (`pvault unlock`); on Windows it is the page
   again. Creating, opening and the refusals are tested end to end on a Mac (`TestSetup_*`); the Touch ID
   and Windows Hello buttons are untried, since they need a person's fingerprint or face.
-- **Running a pratica still needs Python** on your own computer (stage three), except in Cowork, whose
-  sandbox has it.
+- **Python comes with it.** The skill runs its scripts through `sh py`
+  (`plugin/portali/skills/portali-pratica/py`): the computer's own Python 3.9+ if there is one, else
+  python-build-standalone 3.12 (release 20261013), downloaded once into `~/.cache/portali` and run only
+  if its SHA-256 is the one pinned there (`plugin/test_py.py` tests the choice offline). Untried: the
+  download itself on a clean Mac, and anything on Windows (Git Bash's `sh`, `curl` and `tar`).
 - **A listing in Anthropic's directory** (stage four) would make step 1 a single "Add".
 
 ## Releasing (maintainers)
