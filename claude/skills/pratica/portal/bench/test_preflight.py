@@ -965,6 +965,26 @@ def streets_and_lists():
     assert run.FILTERS["straniera"]("Italia") == "false" and run.FILTERS["straniera"]("moldava") == "true"
 
 
+def wizard_description_too_long():
+    """The pratica's description (the wizard's first box) takes 60 characters: a longer one is asked
+    again at pre-flight, not met when the batch is built (2026-11-04: 88 characters passed)."""
+    reh = HERE.parents[4] / "rehearsals" / "cil-fittizia"
+    steps = yaml.safe_load((reh / "portal-steps.generated.yaml").read_text())
+    fixture = dict(json.loads((HERE.parents[4] / "rehearsals" / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+    answers = json.loads((reh / "answers-p6.json").read_text())
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])  # the answers name their files from the repo's root
+    try:
+        ok = run.preflight(steps, values(answers=answers, fields=fixture, steps=steps), made_up=True)
+        r = run.preflight(steps, values(answers={**answers, "descrizione": "PROVA NON INVIARE - " + "x" * 41},
+                                        fields=fixture, steps=steps), made_up=True)
+    finally:
+        os.chdir(here)
+    assert ok["ready"], ok["questions"]
+    q = [q for q in r["questions"] if q["key"] == "descrizione"]
+    assert q and "at most 60" in q[0]["error"] and not r["ready"], r["questions"]
+
+
 CASES = [
     ("the SCIA with its answers is ready", ready),
     ("run.py scope: the pvault get patterns cover every field the steps read, and only those", vault_scope),
@@ -986,6 +1006,7 @@ CASES = [
     ("a proposal is offered to confirm, used once confirmed, and asked when the vault can't fill it", proposals),
     ("a sum of answers renders, needs every term, and each term is asked", sums),
     ("a value longer than its box is asked again, or named in the vault, before the run", too_long),
+    ("the wizard's description longer than its 60 characters is asked again at pre-flight", wizard_description_too_long),
     ("a .p7m is read: signed by the dichiarante, by someone else (a warning without any codice fiscale), or not a signature (not ready)", p7m_signer),
     ("Napoli's SUE: PDF/A, signed (.p7m or PAdES), plain names, else not ready; made-up files only warned; the SUAP unchecked", napoli_filing),
     ("the imposta di bollo route is listed as a choice made in the person's name", bollo_chosen),

@@ -137,17 +137,6 @@ def _():
             assert c["source"] in ids, f"{name}: {c['procedure']} has no source {c['source']}"
 
 
-@case("each combination's steps file opens with the Scheda anagrafica and ends on the attachments screen (2026-11-04: twenty lost both)")
-def _():
-    for kind, e in ENTRIES:
-        for name in e.get("rehearsals") or []:
-            f = ROOT / "rehearsals" / name / "portal-steps.generated.yaml"
-            assert f.is_file(), f"{name}: no steps file"
-            names = [s["section"] for s in yaml.safe_load(f.read_text())["sections"]]
-            assert names and names[0] == "Scheda anagrafica", f"{name} starts with {names[:1]}"
-            assert "Gestione degli allegati" in names, f"{name}: no attachments screen"
-
-
 todo = [(kind, e["ops"]) for kind, e in ENTRIES if e.get("rehearsals") == []]
 print(f"\nTo map ({len(todo)}): combinations a case files together with no steps file yet")
 for kind, ops in todo:

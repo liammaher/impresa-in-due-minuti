@@ -198,8 +198,20 @@ def read_export(source, what="imported"):
     return data
 
 
+def private_pattern():
+    """CATALOGUE_PRIVATE: a pattern for the login's name and CF, kept out of the repo, that every
+    import checks a crawl against. Unset, nothing was checked and nothing said so (2026-11-04: a
+    batch of 47 went in with it set by hand only because someone noticed): now an import refuses."""
+    private = os.environ.get("CATALOGUE_PRIVATE")
+    if not private:
+        sys.exit("set CATALOGUE_PRIVATE to a pattern for the portal login's name and codice fiscale "
+                 "(whole words, e.g. '\\b(nome|cognome|CODICEFISCALE)\\b'): every import checks a crawl against it")
+    return private
+
+
 def cmd_import(args):
     """Each pratica of an export (localStorage `crawl:op:*`) to sections/<name>.json."""
+    private_pattern()  # before anything is read
     data = read_export(args.export)
     out, known = [], None
     for key, r in sorted(data.items()):
@@ -211,8 +223,8 @@ def cmd_import(args):
             continue
         # The login's name and CF must never be in a crawl (crawl.js stores only that a box was
         # prefilled): CATALOGUE_PRIVATE is a pattern for them, kept out of the repo.
-        private = os.environ.get("CATALOGUE_PRIVATE")
-        if private and re.search(private, json.dumps(r, ensure_ascii=False), re.I):
+        private = private_pattern()
+        if re.search(private, json.dumps(r, ensure_ascii=False), re.I):
             sys.exit(f"{r['name']}: holds the login's name or CF, not imported")
         depth = r.get("depth") or args.depth or 2
         doc = {"crawled": r["crawled"], "by": f"crawl.js batch, depth {depth}",
@@ -289,8 +301,8 @@ def cmd_graft(args):
         r = r if isinstance(r, dict) else json.loads(r)
         if not key.startswith("crawl:op:") or r.get("error"):
             continue
-        private = os.environ.get("CATALOGUE_PRIVATE")  # the login's name and CF: as import
-        if private and re.search(private, json.dumps(r, ensure_ascii=False), re.I):
+        private = private_pattern()  # the login's name and CF: as import
+        if re.search(private, json.dumps(r, ensure_ascii=False), re.I):
             sys.exit(f"{r['name']}: holds the login's name or CF, not grafted")
         for s in r["sections"]:
             if not s.get("branches") or not any(slug(s["section"], 200).startswith(slug(n, 200)) for n in args.section):
@@ -697,8 +709,8 @@ def cmd_pairs_import(args):
     tree holds both, and if so whether the portal accepted them (the pratica's adempimenti and
     sections, as indices into `sections`, a new section added there) or refused them."""
     data = read_export(args.export)
-    private = os.environ.get("CATALOGUE_PRIVATE")
-    if private and re.search(private, json.dumps(data, ensure_ascii=False), re.I):
+    private = private_pattern()
+    if re.search(private, json.dumps(data, ensure_ascii=False), re.I):
         sys.exit("the results hold the login's name or CF: not imported")
     path = CAT / "sue-wizard.json"
     w = json.loads(path.read_text())

@@ -149,10 +149,12 @@ gen.py's `combo_answers` fills from the other's answers what the main's don't sa
 people of both kept. Its `scelte` are only those the combination's crawled wizard offers (gen.py refuses
 another: filed with a title, the landscape proroga's third-party assent isn't there, 2026-11-04). A recipe
 built on a combination's recipe states `first` and `after` itself: copied as null from a recipe that inherits
-them they drop the payment and attachments screens (twenty did, 2026-11-04; `test_pairs.py` checks every
-combination opens with the Scheda anagrafica and reaches the attachments screen). Every combination has a
-rules table since 2026-11-04; `rules:` with `main` and `handles` and no `table` is still accepted, for a
-combination mapped before its table (pre-flight then decides nothing and the person names the pratica).
+them they drop the payment and attachments screens (twenty did, 2026-11-04; `test_gen.py` checks every
+SUE steps file opens with the Scheda anagrafica and has its payment and attachments screens). Its `yours`
+takes the main pratica's payment lines (diritti, bollo): another's "no bollo on this form" contradicts a main
+pratica that has a bollo section. Every combination has a rules table since 2026-11-04; `rules:` with `main`
+and `handles` and no `table` is still accepted, for a combination mapped before its table (pre-flight then
+decides nothing and the person names the pratica).
 
 ## Every choice: `branches.py`
 
@@ -687,7 +689,13 @@ batch, check that no other chat is running the portal (2026-11-03: one was, with
 Check the sign-in too: an old page keeps showing Pratiche in bozza after the session has ended, and a
 fresh load of `/fnsuap/cmd/home` lands on InfoCamere's "Apache Syncope Login" (`iasu.infocamere.it`)
 when it has (2026-11-03, after about three hours; a `fetch` of it from the page fails outright). The
-person signs in again; nothing else is needed. A closed pane reopens on that sign-in page, but the
+person signs in again; nothing else is needed. When InfoCamere's sign-in itself is down, every route
+answers "Application Not Authorized to Use CAS" (the SUE's client `ic.suap.old` and impresainungiorno's `ic.impg`
+alike), then "503 Service Unavailable" (2026-11-04 evening, back the next morning): wait, nothing on this side
+fixes it. Never open `iasu.infocamere.it/syncope-wa/login` directly: without the `service` a portal sends, its script
+fails and the providers never show (a blank SPID tab); start from `/fnsuap/cmd/home`. A new session of the app closes
+the pane and may clear the scratch folder: the bundle in Downloads stays, `rerun.py --bundle` with the same names
+writes its `pick.js` again, and the `runs.json` already recorded stay. A closed pane reopens on that sign-in page, but the
 runner and steps stay in the portal's storage: read it only once the page is back on
 `suap.impresainungiorno.gov.it` (2026-11-04: read on the sign-in's origin, it looked empty). Times to plan by (2026-11-03): a CIL or CILA 1½-2 min, a
 SCIA 3-4, a SCIA alternativa or permesso 3-8 (one tolerance case 10); 27 runs took 2 h 10 min.
@@ -720,7 +728,13 @@ and results, no values) into `rerun.py --record -`: each run goes in its rehears
 table: schema_branches.py counts a box as filled on the portal only from there. Stopped runs are recorded too. Record a batch
 before bundling the next (a bundle clears the tab's results), and leave `--date` out for a batch
 run today: it defaults to today (a guessed date filed a batch under the day before, 2026-11-02).
-The batch clears the runner's review from the page when it ends.
+The batch clears the runner's review from the page when it ends. A run "unreached" is retried by nobody: bundle the
+batch's unreached names (results.js lists them) once it ends. "The page didn't load" on the big SCIA and SCIA
+alternativa combinations was the portal composing the pratica past act()'s 60 s ("Composizione della pratica",
+2026-11-05). The runner and the crawler now wait on what the portal shows, not on a clock from the click
+(inpage.js and crawl.js `until`): they keep waiting while a request is in flight, a page loads or the portal's own
+"Attendere prego" / "Composizione della pratica" box shows, and give up only after 20 s (the crawler 15 s) with
+none of those and the section still not open, or after a ceiling of minutes (the wizard five, `WIZARD_MS`).
 
 ## Crawling: `catalogue.py pane --bundle`
 
