@@ -757,19 +757,37 @@ def cadastral_units():
 
 
 def third_firm():
-    """Two building firms are mapped by the firm's "+" (`f1:`, `f2:`); a third is refused, never
-    left out of the pratica (2026-11-05: the "+" lists the crawls saw, each held to a mapping)."""
-    d = HERE.parents[4] / "rehearsals" / "cila-fittizia"
+    """The firms repeat by "+" (`f1:`, `f2:`, `f3:` ...: 2026-11-05, the "+" lists the crawls saw,
+    each held to a mapping): a third firm's block is filled, its Cassa edile rows too, and the
+    count is never silent once the job names more than one. The landscape form's second
+    technician beside the architect presenting is refused with the portal's defect."""
+    root = HERE.parents[4] / "rehearsals"
+    d = root / "cila-fittizia"
     steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
     fields = dict(json.loads((d / "fixture-p6.json").read_text())["fields"])
     here = os.getcwd()
     os.chdir(HERE.parents[4])
     try:
         p6 = json.loads((d / "answers-p6.json").read_text())
-        assert run.preflight(steps, values(p6, fields, steps), made_up=True)["ready"]
         three = p6 | {"people": p6["people"] | {"f3": "muratori"}}
-        r = run.preflight(steps, values(three, fields, steps), made_up=True)
-        assert any("a third firm" in u for u in r["unsupported"]), r["unsupported"]
+        three.pop("imprese_quante")
+        assert not run.preflight(steps, values(three, fields, steps), made_up=True)["ready"]  # the count is asked
+        case = json.loads((d / "answers-imprese-tre.json").read_text())
+        v = values(case, fields, steps)
+        assert run.preflight(steps, v, made_up=True)["ready"]
+        firms = [p["value"] for p in run.plan(run.rehearsal(steps, v), v)
+                 if p["section"].startswith("h) Impresa") and p.get("label") == "Ragione sociale"]
+        assert firms == ["Edil Fittizia di Marco Esempio", "Impianti Fittizi S.n.c.", "Muratori Fittizi S.r.l."], firms
+        o = root / "paesaggistica-ordinaria-fittizia"
+        ost = yaml.safe_load((o / "portal-steps.generated.yaml").read_text())
+        op6 = json.loads((o / "answers-p6.json").read_text())
+        r = run.preflight(ost, values(op6 | {"people": op6["people"] | {"p2": "elena"}}, fields, ost), made_up=True)
+        assert not r["ready"] and "paesaggio-altri-tecnici" in json.dumps(r), r.get("unsupported")
+        tre = json.loads((o / "answers-tecnici-tre.json").read_text())
+        v = values(tre, fields, ost)
+        assert run.preflight(ost, v, made_up=True)["ready"]
+        names = [p["value"] for p in run.plan(run.rehearsal(ost, v), v) if p.get("label") == "cognome"]
+        assert names == ["DISEGNO", "PROVA", "ESEMPIO"], names
     finally:
         os.chdir(here)
 
@@ -1145,7 +1163,7 @@ CASES = [
     ("every SUE case is ready but those refused on purpose; only the registered company can't pass on made-up data", every_sue_case_ready),
     ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
     ("cadastral units: one unasked, a second proposed, each after the first by its \"+\", in up to three groups", cadastral_units),
-    ("a third building firm is refused: two are mapped", third_firm),
+    ("firms repeat by \"+\"; a landscape technician beside the presenter is the portal's defect", third_firm),
     ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and three co-holders by the section's \"+\"", scelte_follow_the_case),
     ("the CILA's filings presented with it and assents for the SUE (art. 23-bis), the CIL's filings, a partial fine lavori's planimetria", assents_and_filings),
     ("the bollo and diritti exemptions, the virtual bollo, the permesso's altro, the SCIA alternativa's regional works, a studio's other architect", exemptions_and_other_kinds),

@@ -22,7 +22,15 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    Where a choice puts its boxes (which block comes first) is the page's layout, not a value: any
    saved draft of the pratica shows it, ticked there and left without Salva (the designer's block
    above the director's, read on three rehearsals' drafts 2026-11-02). A section of a draft reads
-   with `__crawl.sectionOf(draft, section)`.
+   with `__crawl.sectionOf(draft, section)`; what its "+" adds with `__crawl.plusOf(draft, section,
+   {choice, nth})` (the choice ticked first, the nth "+" pressed, default the last; each row's boxes
+   after it, new and required ones marked; Annulla, nothing saved). A `new` box can be one the
+   portal draws only on the next request: on a freshly opened landscape tecnico, "non è colui" leaves
+   the first technician's studio Provincia and C.A.P. undrawn until the "+" (2026-11-05).
+   To try a crawl.js change in the pane without another file pick: apply the same small edit to
+   the pane's stored copy (`localStorage` `pv-crawl`), check its sha256 against `catalogue.py pane`'s
+   `load.js`, store it and eval it. Each eval starts its own portal frame and leaves the earlier
+   ones over the page: remove every `iframe` first, or a script reads an older frame's state.
 2. **The recipe** (`rehearsals/<name>/recipe.yaml`): procedure, title, comune, sportello,
    crawl, operation (or a list of them), scelte, `first`, `asks`, `yours` (what's left to the
    person: declarations, attachments, payment, signing), `supports` (the cases refused, with
@@ -351,6 +359,18 @@ that also cites a Comune page may only confirm a national one there.
   Two cases of one pratica with other counts take other steps: page_bundle keys each by its blocks
   (`procedure#hash`) also for steps rerun.py has expanded already; until 2026-11-05 those shared one key
   and the second case of a batch ran on the first's steps.
+- **So do firms, previous holders and landscape technicians** (read on drafts 2026-11-05, cancelled
+  with Annulla). Every "+" a crawl saw is an `each` or a `plus:` reason (test_gen). The building firms
+  (Impresa esecutrice, the CIL's f, the CILA's and permesso's h, the SCIA's i) are `f1:`, `f2:`,
+  `f3:` ... (`f#K`, `imprese_quante`): the fixed two-firm `firms:` mechanism is gone from gen.py. The
+  cambio d'intestazione's "estremi della CILA / SCIA / DIA" has two "+": the title's (one title is
+  mapped) and, below "presentata da", the previous holders', each three boxes under their own labels
+  (`precedente#N_cognome`, `_nome`, `_cf`; `precedenti_quanti`, proposed 1). The landscape form's "dati
+  relativi al nome del tecnico" adds a whole technician (name, codice fiscale, studio, phone, PEC, albo)
+  under "non è colui che presenta la pratica" (`p:`, `p2:` ...; `progettisti_quanti`); under "è colui"
+  the same "+" shows only an unnamed albo row, so a second technician there is refused
+  (defects.yaml `paesaggio-altri-tecnici`). An existing case that names `f2:` answers
+  `imprese_quante: 2`, so its plan and recorded runs stand.
 - **A choice's revealed boxes may repeat labels above them** (an employer's "Via, Piazza", "N.",
   "Cognome"): crawl.js counts reveals per label since 2026-10-31; crawls before then left those
   out, so a run can still find required boxes there (recrawl a section to see them).

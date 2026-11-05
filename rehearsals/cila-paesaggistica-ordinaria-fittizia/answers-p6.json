@@ -41,6 +41,7 @@
  "progettista_altro": false,
  "diritti_esente": false,
  "terre_rocce": "no",
+ "imprese_quante": 2,
  "bollo_marche": false,
  "bollo_esenzione": "no",
  "vincolo": "art 136 and 142",

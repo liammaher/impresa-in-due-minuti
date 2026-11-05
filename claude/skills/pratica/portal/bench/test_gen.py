@@ -88,36 +88,38 @@ P6_ONLY = gen.yaml.safe_load("""
     - {kind: select, label: "L'intervento interessa l'immobile", value: "{{c:immobile.destinazione_uso}}"}
 - section: h) Impresa esecutrice dei lavori
   leave: [Telefono, fax]
-  firms: [f1, f2]
-  firm_when: "{{ask.lavori_in_proprio|not}}"
   fields:
     - {kind: radio, label: lavori sono/saranno eseguiti dall, if_present: true, when: "{{ask.lavori_in_proprio|not}}"}
-  block:
-    - {kind: text, label: Ragione sociale, value: "{{F:business.denominazione}}"}
-    - {kind: text, label: codice fiscale / p. IVA, value: "{{F:business.partita_iva}}"}
-    - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: "{{F:business.cciaa}}"}
-    - {kind: text, label: n., nth: 1, value: "{{F:business.rea|rea_num}}"}
-    - {kind: text, label: con sede in, value: "{{F:business.sede_legale_comune|upper}}"}
-    - {kind: select, label: provincia, nth: 1, value: "{{F:business.sede_legale_provincia}}"}
-    - {kind: text, label: "Via, Piazza", value: "{{F:business.sede_legale_indirizzo|upper}}"}
-    - {kind: text, label: N., nth: 2, value: "{{F:business.sede_legale_civico}}"}
-    - {kind: text, label: C.A.P., value: "{{F:business.sede_legale_cap}}"}
-    - {kind: text, label: Cognome, value: "{{F:identity.last_name}}"}
-    - {kind: text, label: Nome, value: "{{F:identity.first_name}}"}
-    - {kind: text, label: codice fiscale, nth: 2, value: "{{F:identity.codice_fiscale}}"}
-    - {kind: text, label: nato a, value: "{{F:identity.birth_comune|upper}}"}
-    - {kind: select, label: provincia, nth: 2, value: "{{F:identity.birth_province}}"}
-    - {kind: date, label: nato il, value: "{{F:identity.date_of_birth|date_it}}"}
-    - {kind: text, label: cell., value: "{{F:identity.phone|phone_it}}"}
-    - {kind: text, label: posta elettronica, value: "{{F:business.pec}}"}
-    # DURC: each box opens its own rows (and renumbers what follows).
-    - {kind: checkbox, label: INPS}
-    - {kind: text, label: sede di, nth: 1, value: "{{F:business.sede_legale_comune|upper}}"}
-    - {kind: text, label: Matr./Pos. Contr., value: "{{F:business.inps_matricola}}"}
-    - {kind: checkbox, label: INAIL}
-    - {kind: text, label: sede di, nth: 2, value: "{{F:business.inail_codice_sede}}"}
-    - {kind: text, label: codice impresa, value: "{{F:business.inail_codice_ditta}}"}
-    - {kind: text, label: pos. assicurativa, value: "{{F:business.inail_pat}}"}
+    - kind: each
+      count: "{{ask.imprese_quante}}"
+      when: "{{ask.lavori_in_proprio|not}}"
+      anchor: Ragione sociale
+      block:
+        - {kind: text, label: Ragione sociale, value: "{{f#K:business.denominazione}}"}
+        - {kind: text, label: codice fiscale / p. IVA, value: "{{f#K:business.partita_iva}}"}
+        - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: "{{f#K:business.cciaa}}"}
+        - {kind: text, label: n., nth: 1, value: "{{f#K:business.rea|rea_num}}"}
+        - {kind: text, label: con sede in, value: "{{f#K:business.sede_legale_comune|upper}}"}
+        - {kind: select, label: provincia, nth: 1, value: "{{f#K:business.sede_legale_provincia}}"}
+        - {kind: text, label: "Via, Piazza", value: "{{f#K:business.sede_legale_indirizzo|upper}}"}
+        - {kind: text, label: N., nth: 2, value: "{{f#K:business.sede_legale_civico}}"}
+        - {kind: text, label: C.A.P., value: "{{f#K:business.sede_legale_cap}}"}
+        - {kind: text, label: Cognome, value: "{{f#K:identity.last_name}}"}
+        - {kind: text, label: Nome, value: "{{f#K:identity.first_name}}"}
+        - {kind: text, label: codice fiscale, nth: 2, value: "{{f#K:identity.codice_fiscale}}"}
+        - {kind: text, label: nato a, value: "{{f#K:identity.birth_comune|upper}}"}
+        - {kind: select, label: provincia, nth: 2, value: "{{f#K:identity.birth_province}}"}
+        - {kind: date, label: nato il, value: "{{f#K:identity.date_of_birth|date_it}}"}
+        - {kind: text, label: cell., value: "{{f#K:identity.phone|phone_it}}"}
+        - {kind: text, label: posta elettronica, value: "{{f#K:business.pec}}"}
+        # DURC: each box opens its own rows (and renumbers what follows).
+        - {kind: checkbox, label: INPS}
+        - {kind: text, label: sede di, nth: 1, value: "{{f#K:business.sede_legale_comune|upper}}"}
+        - {kind: text, label: Matr./Pos. Contr., value: "{{f#K:business.inps_matricola}}"}
+        - {kind: checkbox, label: INAIL}
+        - {kind: text, label: sede di, nth: 2, value: "{{f#K:business.inail_codice_sede}}"}
+        - {kind: text, label: codice impresa, value: "{{f#K:business.inail_codice_ditta}}"}
+        - {kind: text, label: pos. assicurativa, value: "{{f#K:business.inail_pat}}"}
 """)
 
 
@@ -137,7 +139,10 @@ def as_p6_ran(steps):
     steps = run.phase(steps, made_up=True)
     plus = {"Dati catastali": "foglio", "Titolarità dell'intervento": "Cognome"}
     one = lambda s, f: f.get("block") == "#N" and f.get("anchor") == plus.get(gen.QUADRO.sub("", s["section"]).strip())
-    return steps | {"sections": [s | {"fields": [f for f in s["fields"] if f.get("label") != NEW_SLOT and not one(s, f)]}
+    # P6's two firms: the firms' template written out as its second block, as the hand walk has it.
+    firm = lambda f: {k: v for k, v in run.nth_block(f, 2).items() if k != "each"} | {"block": 2} \
+        if (f.get("block") == "#N" or f.get("each")) and f.get("anchor") == "Ragione sociale" else f
+    return steps | {"sections": [s | {"fields": [firm(f) for f in s["fields"] if f.get("label") != NEW_SLOT and not one(s, f)]}
                                  for s in steps["sections"]]}
 
 
@@ -172,7 +177,7 @@ def filled(steps, values):
     try:
         out, v = {}, values(steps)
         rehearsal_plan(steps, v)  # stops on a missing value
-        for sec in steps["sections"]:
+        for sec in run.expand(steps, v)["sections"]:  # a "+" list's blocks, as many as the case has
             for f in sec["fields"]:
                 # A box only some pratiche show is skipped where it isn't, so it isn't compared.
                 if f.get("on_page") or f.get("if_present") or "when" in f and not run.truthy(v.render(f["when"]) or ""):
@@ -1317,12 +1322,18 @@ def _():
 
 @case("a firm block's field keeps its own `when` after the block's: the Cassa edile's rows only for a firm enrolled")
 def _():
+    import run
     steps = gen.generate(gen.load_yaml(ROOT / "rehearsals" / "scia-fittizia" / "recipe.yaml"))
     sec = section(steps, "i) Impresa esecutrice")
     cassa = next(f for f in sec["fields"] if f.get("label") == "Cassa edile" and f["block"] == 1)
     assert cassa["when"] == "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}} {{f1:business.cassa_edile_codice_impresa|empty|not}}", cassa
-    second = next(f for f in sec["fields"] if f.get("label") == "Cassa edile" and f["block"] == 2)
-    assert "{{f2:business.denominazione|empty|not}} {{f2:business.cassa_edile_codice_impresa|empty|not}}" in second["when"], second
+    # A later firm's, after its count (the CILA case's third firm is enrolled with one).
+    cila = gen.generate(gen.load_yaml(CILA / "recipe.yaml"))
+    v = p6_values("cila-fittizia", "answers-imprese-tre.json")(cila)
+    third = next(f for f in section(run.expand(cila, v), "h) Impresa esecutrice")["fields"]
+                 if f.get("label") == "Cassa edile" and f["block"] == 3)
+    assert third["when"].endswith("{{ask.imprese_quante|atleast_3}} {{f3:business.cassa_edile_codice_impresa|empty|not}}"), third
+    assert run.truthy(v.render(third["when"])), third
 
 
 @case("the SCIA's h1: under another technician's direction the structural designer is the second Cognome block")

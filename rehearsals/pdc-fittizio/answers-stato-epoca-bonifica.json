@@ -120,5 +120,6 @@
  "toll_decorso": "true",
  "indagini_esito": "bonifica",
  "bonifica_ente": "Città Metropolitana di Napoli (inventato)",
- "bonifica_data": "2024-05-10"
+ "bonifica_data": "2024-05-10",
+ "imprese_quante": 2
 }

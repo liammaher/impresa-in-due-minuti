@@ -539,19 +539,6 @@ def fill(entry, as_name, c, recipe, name):
                                                  {**also(d, s["when"]), "block": d.get("block", 1) + 1}]
                                                 if shifted(d) else [d])]
     branch_terms = {re.match(r"\s*(\{\{[^}]*\}\})", w)[1] for w in entry.get("branches", [])}
-    for i, role in enumerate(recipe.get("firms", entry.get("firms", [])) if "block" in entry and "firms" in entry else []):
-        # One block per firm, the second and later added with "+", and only when the job has
-        # that firm; each also under the entry's `firm_when`.
-        when = " ".join(([entry["firm_when"]] if entry.get("firm_when") else [])
-                        + (["{{%s:business.denominazione|empty|not}}" % role] if i else []))
-        cond = {"when": when} if when else {}
-        if i:
-            dfields.append({"kind": "add", "anchor": entry["block"][0]["label"], "block": i + 1, **cond})
-        for b in entry["block"]:
-            g = json.loads(json.dumps(b).replace("{{F:", "{{" + role + ":"))
-            # A field's own `when` (the Cassa edile's rows) after the block's.
-            own = " ".join(w for w in (when, g.pop("when", "")) if w)
-            dfields.append({**g, "anchor": entry["block"][0]["label"], "block": i + 1, **({"when": own} if own else {})})
     last_select = None
     # A field under a `when` lives in its branch of the section (keyed by the condition's
     # first term): "already filed" and "this counts as filing" each open their own rows,

@@ -27,5 +27,6 @@
  "soggetti_cambiati": "false",
  "cointestatario": false,
  "diritti_esente": false,
- "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "precedenti_quanti": 1
 }

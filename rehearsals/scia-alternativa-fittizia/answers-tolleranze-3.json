@@ -106,5 +106,6 @@
  "toll_strutturale": false,
  "toll_superficie": "300-500",
  "indagini_esito": "analisi",
- "indagini_analisi_doc": "rehearsals/scia-fittizia/files/analisi-terreni.pdf"
+ "indagini_analisi_doc": "rehearsals/scia-fittizia/files/analisi-terreni.pdf",
+ "imprese_quante": 2
 }
