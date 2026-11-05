@@ -4,7 +4,7 @@ How Claude follows the skill, on made-up data, with no browser and no portal: wh
 pre-flight's message as written, refuses a case it can't prepare before opening anything, says a
 property outside the Comune di Napoli isn't covered, never
 uses a credential, answers from the library, and puts documents attached to the conversation in
-the job's folder unopened. `claude plugin eval` runs them against a built plugin; a release ships
+the job's folder and reads them, naming the document each fact comes from. `claude plugin eval` runs them against a built plugin; a release ships
 none of this.
 
 ```sh
