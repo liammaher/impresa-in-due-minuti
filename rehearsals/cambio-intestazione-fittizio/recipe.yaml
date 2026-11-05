@@ -22,7 +22,7 @@ asks:
 supports:
   # The co-holders' section holds one person and has no "+" (crawled 2026-10-28): a portal
   # defect, not a mapping gap.
-  - {if: "{{ask.cointestatario}}", when: "{{ask.altri_cointestatari|not}}", defect: coholders-one, else: "La sezione dei cointestatari del portale (ci sono cointestatari, nella procedura guidata) contiene una sola persona e non ha il \"+\": un cambio di intestatario a favore di più cointestatari non può essere presentato completo sul portale, che deve indicare ogni nuovo intestatario."}
+  - {if: "{{ask.cointestatario}}", when: "{{ask.altri_cointestatari|not}}", defect: coholders-one, else: "Cambio d'intestazione a più cointestatari: la sezione dei cointestatari ha posto per una sola persona e nessun «+». È un difetto del portale; con un solo cointestatario lo preparo."}
   - {if: "{{ask.soggetti_cambiati}} {{ask.cambio_dl|not}}", when: "{{ask.cambio_ditta}}", else: "Cambia il direttore o l'impresa: indichi quale (un nuovo direttore dei lavori, una nuova impresa, o entrambi)."}
 yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"

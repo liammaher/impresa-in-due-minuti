@@ -26,11 +26,11 @@ groups:
   extras:
     question: "Qualcuna di queste voci vale per la struttura ricettiva? Spunti tutte quelle che valgono, o nessuna."
 asks:
-  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), non ancora mappata."}
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "camere {{business.denominazione}}"}
-  grande: {group: extras, type: yes_no, item: "Più di 25 posti letto, o soggetta ai controlli di prevenzione incendi", why: "Ciò comporta la SCIA di prevenzione incendi, un caso non ancora gestito."}
-  alcolici: {group: extras, type: yes_no, item: "Venderà bevande alcoliche", why: "La vendita di alcolici comporta la comunicazione alle Dogane, un caso non ancora gestito."}
-  insegna_esterna: {group: extras, type: yes_no, item: "Avrà un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna, un ramo non ancora mappato."}
+  grande: {group: extras, type: yes_no, item: "Più di 25 posti letto, o soggetta ai controlli di prevenzione incendi", why: "Ciò comporta la SCIA di prevenzione incendi: un caso che non preparo ancora."}
+  alcolici: {group: extras, type: yes_no, item: "Venderà bevande alcoliche", why: "La vendita di alcolici comporta la comunicazione alle Dogane: un caso che non preparo ancora."}
+  insegna_esterna: {group: extras, type: yes_no, item: "Avrà un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
   servizi: {group: extras, type: yes_no, item: "Una piscina, un centro estetico, una palestra o un negozio per gli ospiti o per il pubblico", why: "Those services aren't mapped yet."}
   diritti_euro: {type: number, question: "I diritti SUAP in euro", default: "200", why: "La voce S94 del tariffario 2026 per una struttura ricettiva extralberghiera senza notifica sanitaria."}
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
@@ -43,9 +43,9 @@ supports:
   - value: "{{business.forma_giuridica}}"
     in: [ditta_individuale, srl, srls, snc, sas, spa]
     else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
-  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non ancora gestito."}
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
   - {when: "{{ask.grande|not}}", else: "Le strutture con più di 25 posti letto o soggette ai controlli di prevenzione incendi non sono ancora gestite."}
-  - {when: "{{ask.alcolici|not}}", else: "La vendita di alcolici non è ancora gestita: aggiunge alla pratica la comunicazione alle Dogane."}
-  - {when: "{{ask.insegna_esterna|not}}", else: "Un'insegna esterna non è ancora gestita: include in questa la SCIA dell'insegna."}
+  - {when: "{{ask.alcolici|not}}", else: "La vendita di alcolici per ora non la preparo: aggiunge alla pratica la comunicazione alle Dogane."}
+  - {when: "{{ask.insegna_esterna|not}}", else: "Un'insegna esterna per ora non la preparo: include in questa la SCIA dell'insegna."}
   - {when: "{{ask.servizi|not}}", else: "Piscina, centro estetico, palestra o negozio non sono ancora gestiti."}
   - {when: "{{ask.colazione|is_nessuna}}", else: "Gli alimenti per gli ospiti non sono ancora gestiti: aggiungono la somministrazione agli ospiti (e, se preparati, la notifica Reg. 852)."}

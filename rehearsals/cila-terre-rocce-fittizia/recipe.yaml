@@ -14,9 +14,9 @@ asks:
 yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
   - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (dopo le dichiarazioni; come li riscuote Napoli è indicato sotto): la ricevuta, firmata, va allegata in quella. La sanzione della CILA tardiva si paga prima della prima compilazione: la sua ricevuta è nel quadro d)"
-  - "La DSC della CILA può essere quella compilata da Portali (modulo quadro-riepilogativo-dsc: un riquadro per ogni documento caricato) anziché quella del portale: firmata, in PDF/A, va allegata nella seconda compilazione (dopo le dichiarazioni)"
-  - "Su un bene culturale: i lavori iniziano solo dopo che la Soprintendenza li ha autorizzati (art. 21 c. 4 D.Lgs. 42/2004); la sua autorizzazione è allegata in Allegati liberi: la conservi con la pratica"
+  - "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (come, è indicato sotto): la ricevuta firmata va allegata lì. La sanzione della CILA tardiva si paga prima: la sua ricevuta è nel quadro d)"
+  - "Per la DSC della CILA può usare quella che compila Claude (un riquadro per ogni documento caricato) invece di quella del portale: firmata e in PDF/A, va nella seconda compilazione"
+  - "Se è un bene culturale: i lavori iniziano solo dopo l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004). È allegata in Allegati liberi: la conservi con la pratica"
   - "La dichiarazione di utilizzo (Allegato 6 DPR 120/2017) è il documento del portale in Allega documenti dopo aver spuntato le dichiarazioni: la firma il produttore, Claude la allega nella seconda compilazione (dopo le dichiarazioni); lo scavo inizia almeno 15 giorni dopo l'invio"
   - "Quando tutte le terre e rocce da scavo saranno state utilizzate, entro la validità della dichiarazione, presenti sul SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)"
   - "Firmi e invii (Firma e invio); conservi la ricevuta"

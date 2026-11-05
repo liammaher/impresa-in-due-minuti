@@ -966,25 +966,41 @@ def ruled(steps, values):
     if d["none"]:
         return out + [f"Per questo caso non serve alcuna pratica: {d['none']['reason']}"], []
     m = d["main"]
-    where = lambda o: " in " + " › ".join(o["portal"][k] for k in ("settore", "operazione") if k in o["portal"]) \
-        if "portal" in o else ""
+    where = lambda o: " (sul portale: " + " › ".join(o["portal"][k] for k in ("settore", "operazione") if k in o["portal"]) \
+        + ")" if "portal" in o else ""
     if not m:
-        return out or [f"La tabella delle regole ({r['table']}) non indica alcuna pratica per questo caso."], []
+        return out or ["Le regole del SUE non indicano alcuna pratica per questo caso."], []
     # A wizard screen's tree is one label, or a list of them (several operations: the SUE's
     # CILA with its landscape authorization), each a label or a {leaf: ...}.
     trees = [w["tree"] for w in steps.get("wizard", []) if "tree" in w]
     labels = {x if isinstance(x, str) else x.get("leaf") for t in trees for x in (t if isinstance(t, list) else [t])}
     seen = m.get("portal", {})
     if m["procedure"] != r.get("main", steps["procedure"]) or any(seen[k] not in labels for k in ("settore", "operazione") if k in seen):
-        out.append(f"Questo caso è un'altra pratica: {m['procedure']} ({m['regime']}){where(m)}.")
+        out.append(f"Questo caso è un'altra pratica: {procedure_name(m['procedure'])}{where(m)}.")
     handles = r.get("handles", [])
     for a in d["also"]:
         if a["procedure"] not in handles:
-            out.append(f"Questo caso richiede anche {a['procedure']} ({a['regime']}), che questa pratica non presenta.")
+            out.append(f"Questo caso chiede anche {procedure_name(a['procedure'])}, che questa pratica non presenta.")
     for h in handles:
         if h not in [a["procedure"] for a in d["also"]]:
-            out.append(f"Questa pratica presenta anche {h}, che a questo caso non serve.")
+            out.append(f"Questa pratica presenta anche {procedure_name(h)}, che a questo caso non serve.")
     return out, []
+
+
+def procedure_name(pid):
+    """A library procedure as the tecnico reads it: its title up to " – " (no "Comune di Napoli,
+    sul SUE"), from the plugin's library/ or $PRATICHE_NAPOLI_DIR (plugin/build.py sets it, so
+    both runners name it alike), else its id's last part in words. Never the id itself."""
+    roots = [Path(__file__).resolve().parent.parent / "library"]
+    if os.environ.get("PRATICHE_NAPOLI_DIR"):
+        roots.append(Path(os.environ["PRATICHE_NAPOLI_DIR"]))
+    for root in roots:
+        p = root / "procedures" / f"{pid}.yaml"
+        if p.is_file():
+            m = re.search(r"^title: *[\"']?(.+?)[\"']? *$", p.read_text(), re.M)
+            if m:
+                return m[1].split(" – ")[0]
+    return pid.rsplit("/", 1)[-1].replace("-", " ")
 
 
 def apart(steps, values):
@@ -994,7 +1010,7 @@ def apart(steps, values):
     d = _decision(steps, values)
     if d is None or d["ask"] or not d["main"]:
         return []
-    return [f"Da presentare a parte, al suo ufficio: {a['procedure']} ({a['regime']})" for a in d["apart"]]
+    return [f"Da presentare a parte, al suo ufficio: {procedure_name(a['procedure'])}" for a in d["apart"]]
 
 
 def asked_yours(steps, values):
@@ -1048,8 +1064,8 @@ def refusals(steps, values):
         ok = v is not None and (truthy(v) if "when" in c else v in [str(x) for x in c["in"]])
         if not ok:
             out.append(values.render(c["else"]) or c["else"])
-            if isinstance(c.get("defect"), dict) and c["defect"] not in defects:
-                defects.append(c["defect"])
+            if isinstance(c.get("defect"), dict) and c["defect"]["id"] not in [d["id"] for d in defects]:
+                defects.append({**c["defect"], "else": out[-1]})
     return out, need, defects
 
 
@@ -1093,8 +1109,12 @@ def portal_changed(steps):
     if not m:
         return []
     diff = rules.drifted(m.group(1))
-    return [f"The portal changed this pratica since it was mapped ({'; '.join(diff)}): it needs a new crawl "
-            "(crawl.js) and steps file (gen.py) first."] if diff else []
+    # The person reads it: the portal's own section names (catalogue.py's "gone: ", "new: ",
+    # "changed: " in Italian), and that it waits for a new check.
+    said = {"gone": "tolta", "new": "nuova", "changed": "cambiata"}
+    where = "; ".join(f"{n} ({said.get(k, k)})" for k, _, n in (d.partition(": ") for d in diff))
+    return [f"Il portale ha cambiato questa pratica da quando l'ho provata: {where}. Per ora non la "
+            "preparo, finché non è verificata di nuovo."] if diff else []
 
 
 def signed_only(f):
@@ -1245,6 +1265,33 @@ def assumed_proposals(steps, values, report):
     return need
 
 
+def head(question):
+    """A proposal's question as the message shows it: up to its "?", without the asides that cite
+    no law (a parenthesis with no number): the answer is already proposed, so they only explain it.
+    The whole question stays in the report, for a tecnico who asks."""
+    i = question.find("?")
+    q = question[:i + 1] if 0 < i < len(question) - 1 else question
+    return re.sub(r" \([^()\d]*\)", "", q)
+
+
+def refusal_text(report):
+    """Pre-flight's message when it refuses, for Claude to send as it is: each known portal defect
+    first (the exact sub-case, that it is the portal's flaw and not missing work, what still
+    fills, the choices), then any other reason in the steps file's own words."""
+    blocks = []
+    for d in report.get("defects", []):
+        blocks.append([f"Non posso preparare: {d['title']}.",
+                       f"È un difetto del portale, non manca nulla da parte sua. {d['what']}"]
+                      + ([d["works"]] if d.get("works") else [])
+                      + ["Può:"] + [f"{i}. {c}" for i, c in enumerate(d.get("choices", []), 1)])
+    told = {d.get("else") for d in report.get("defects", [])}
+    rest = [u for u in report["unsupported"] if u not in told]
+    if rest:
+        blocks.append(["Non posso preparare questa pratica:" if len(rest) > 1 else "Non posso preparare questa pratica."]
+                      + [f"– {u}" if len(rest) > 1 else u for u in rest])
+    return "\n\n".join("\n".join(b) for b in blocks)
+
+
 # What the person reads again when an answer didn't fit (check_answer's reasons are for Claude).
 RETRY = {"yes_no": "risponda sì o no", "number": "serve un numero", "date": "serve una data",
          "choice": "scelga una delle voci", "file": "il file indicato non c'è", "text": "la risposta è vuota"}
@@ -1266,10 +1313,12 @@ def message(report, asks, held_need=None):
     """The one message pre-flight's questions, proposals and missing details make, in Italian,
     for Claude to send as it is: the questions numbered, each follow-up (`only_if`) under the
     question it hangs on (3.a, 3.a.1) so the tecnico can answer it in the same reply; the proposals
-    as "Userò" lines, a proposal per answer (`cases`) as "X se alla 3 risponde sì", with what
-    they'd add if one is changed; then the details no document holds, by the portal's own section
-    and box. Nothing from `if_changed`. A question the case needs with the proposals as they are
-    (held_need) is asked as one, never only "if a proposal changes"."""
+    as "Risposte che propongo" lines (each question as head() shortens it), a proposal per answer
+    (`cases`) as "X se alla 3 risponde sì", with how many questions a change would add; a long
+    choice's options one a line; then the details no document holds, by the portal's own section
+    and box, and the files the sportello would refuse. Nothing from `if_changed`. A question the
+    case needs with the proposals as they are (held_need) is asked as one, never only "if a
+    proposal changes"."""
     questions, proposals = report["questions"], report["proposals"]
     order = [x["key"] for x in questions + proposals]
     items = {i["key"]: q["key"] for q in questions for i in q.get("items", [])}
@@ -1286,13 +1335,19 @@ def message(report, asks, held_need=None):
         under.setdefault(parent(q), []).append(q)
     number, lines = {}, []
 
+    listed = {}
+
     def text(q):
         a, out = asks.get(q["key"], {}), q["question"]
         if q.get("type") == "yes_no":
             out += " (sì/no)"
         elif q.get("type") == "choice" and not all(str(o).lower() in out.lower() for o in q.get("options", [])):
-            out += " (" + " / ".join(said(a, o) for o in q.get("options", [])) + ")"
-        if q.get("how"):
+            heads = [said(a, o) for o in q.get("options", [])]
+            if len(heads) <= 4 and len(" / ".join(heads)) <= 100:
+                out += " (" + " / ".join(heads) + ")"
+            else:  # one a line, under the question: a long list inline reads as a paragraph
+                listed[q["key"]] = heads
+        if q.get("how") and not q["how"].startswith("Lo stabilisce"):  # who decides: the tecnico reading it
             out += f" ({q['how']})"
         if q.get("error"):
             m = re.search(r"at most (\d+) characters", q["error"])
@@ -1305,6 +1360,7 @@ def message(report, asks, held_need=None):
     def line(q, n, level):
         indent = "   " * level
         lines.append(f"{indent}{n}. {text(q)}")
+        lines.extend(f"{indent}   – {h}" for h in listed.get(q["key"], []))
         number[q["key"]] = n
         for i in q.get("items", []):
             lines.append(f"{indent}   – {i['item']}" + (f" ({i['how']})" if i.get("how") else ""))
@@ -1315,7 +1371,7 @@ def message(report, asks, held_need=None):
             line(f, tag(n, j, level + 1), level + 1)
     for n, q in enumerate(under.get(None, []), 1):
         line(q, str(n), 0)
-    blocks = [["Le domande (risponda con il numero; a quelle con la lettera solo se servono):"] + lines] if lines else []
+    blocks = [["Domande (risponda con il numero; alle lettere solo se servono):"] + lines] if lines else []
 
     def cond(combos):
         # One question's answers together ("alla 1 risponde a, b o c"), else each combination.
@@ -1328,12 +1384,9 @@ def message(report, asks, held_need=None):
                                      for k, v in c.items()) for c in combos)
 
     def later(key):
-        # What a changed proposal would add: the questions under it, and theirs, in a few words each.
-        out = []
-        for q in under.get(key, []):
-            out.append(q["question"].rstrip("?:. "))
-            out += later(q["key"])
-        return out
+        # What a changed proposal would add: the questions under it, and theirs, counted (asked
+        # once it is changed, so the message stays short).
+        return sum(1 + later(q["key"]) for q in under.get(key, []))
     use = []
     for p in proposals:
         a = asks.get(p["key"], {})
@@ -1346,11 +1399,13 @@ def message(report, asks, held_need=None):
                 what += f"; se {cond(p['otherwise'])}: me lo dica"
         else:
             what = said(a, p["proposal"])
-        use.append(f"– {p['question']} → {what}")
-        if later(p["key"]):
-            use.append("   se la cambia, mi dica anche: " + "; ".join(later(p["key"])))
+        use.append(f"– {head(p['question'])} → {what}")
+        n = later(p["key"])
+        if n:
+            more = "un'altra domanda" if n == 1 else f"altre {n} domande"
+            use.append(f"   (se la cambia, le farò {more})")
     if use:
-        blocks.append(["Userò queste risposte (scriva «ok» per confermarle tutte, o mi dica cosa cambiare):"] + use)
+        blocks.append(["Risposte che propongo (scriva «ok», o mi dica cosa cambiare):"] + use)
     need = []
     for m in report["missing"]:
         if m["field"].startswith("*:"):
@@ -1360,7 +1415,10 @@ def message(report, asks, held_need=None):
                                       else f": il documento è scaduto il {expired[1]}, ne serve uno valido" if expired
                                       else "" if m["why"] == "empty in the vault" else ": da correggere"))
     if need:
-        blocks.append(["Mi servono anche questi dati, che i documenti non riportano:"] + need)
+        blocks.append(["Mi mancano questi dati (non sono nei documenti):"] + need)
+    fix = [f"– {x['for']}: {x['problem']}" for x in report.get("files", []) if x.get("problem")]
+    if fix:
+        blocks.append(["Questi file vanno sistemati prima:"] + fix)
     return "\n\n".join("\n".join(b) for b in blocks)
 
 
@@ -1397,6 +1455,7 @@ def preflight(steps, values, made_up=False, after=False):
         report["unsupported"].append(f"A rehearsal names its draft \"{REHEARSAL_DRAFT} - ...\" (answers "
                                      "`descrizione`), so no made-up draft looks like a real one.")
     if report["unsupported"]:
+        report["message"] = refusal_text(report)
         return report
     need, groups, lists, pending = needed(steps, values), steps.get("groups", {}), {}, []
     for k in order:
@@ -1531,10 +1590,10 @@ def preflight(steps, values, made_up=False, after=False):
                 if entry["exists"]:
                     takes = [t for t in f.get("accepts", "").lower().split(";") if t]
                     if entry["bytes"] > SLOT_MAX_BYTES:
-                        entry["problem"] = (f"{entry['bytes'] / 1024 / 1024:.1f} MB, over the portal's 9.77 MB a file: "
-                                            "compress it or split it across the slot's +")
+                        entry["problem"] = (f"{entry['bytes'] / 1024 / 1024:.1f} MB: il portale accetta al massimo 9,77 MB "
+                                            "per file. Lo comprima, o lo divida su più file (il «+» della casella)")
                     elif takes and not any(p.name.lower().endswith("." + t) for t in takes):
-                        entry["problem"] = f"the slot takes only {', '.join(takes)}"
+                        entry["problem"] = f"la casella accetta solo file {', '.join(takes)}"
                     raw = p.read_bytes()
                     signers = why = None
                     if "problem" not in entry:
@@ -1542,8 +1601,8 @@ def preflight(steps, values, made_up=False, after=False):
                         if pades is None and p.name.lower().endswith(".p7m"):
                             signers, why = p7m_signers(p)
                         elif pades is not None:  # a PDF signed in itself (PAdES)
-                            signers, why = signers_in([("DER", pades)], "the PDF's own signature can't be read: "
-                                                      "sign it again with your firma digitale")
+                            signers, why = signers_in([("DER", pades)], "la firma dentro il PDF non si legge: "
+                                                      "lo firmi di nuovo con la sua firma digitale")
                     if why:
                         entry["problem"] = why
                     elif signers is not None:
@@ -1554,14 +1613,14 @@ def preflight(steps, values, made_up=False, after=False):
                                 cf = None
                             entry["signers"] = len(signers)
                             if not signers:
-                                report["warnings"].append(f"{entry['for']}: the signature carries no certificate "
-                                                          "with a codice fiscale, so who signed it can't be told")
+                                report["warnings"].append(f"{entry['for']}: la firma non riporta un codice fiscale, "
+                                                          "quindi non so dire chi ha firmato")
                             elif cf:
                                 entry["signed_by_dichiarante"] = cf.upper() in signers
                                 if not entry["signed_by_dichiarante"]:
                                     report["warnings"].append(
-                                        f"{entry['for']}: signed by {len(signers)} other person(s), not by the "
-                                        "dichiarante: right if someone else must sign it, otherwise sign it again")
+                                        f"{entry['for']}: firmato da altri ({len(signers)}), non dal dichiarante. "
+                                        "Va bene se deve firmarlo un altro; altrimenti lo firmi di nuovo")
                     if sportello and "problem" not in entry:
                         refused = filing_problems(p, raw, sportello)
                         if refused and made_up:
@@ -1593,22 +1652,22 @@ def preflight(steps, values, made_up=False, after=False):
     # start of the run (`picked`): the names they'll be asked for, once.
     if not report["pane_ok"]:
         report["pick"] = sorted({Path(x["path"]).name for x in report["files"] if x["exists"]})
-    report["yours"] = ([values.render(y) or y for y in steps.get("yours", [])] + filing_yours(steps, sportello)
-                       + asked_yours(steps, values) + apart(steps, values))
-    if later:
-        # Before signing and sending: the second run comes after the declarations, before Firma e invio.
-        at = next((i for i, y in enumerate(report["yours"]) if "Firma e invio" in y), len(report["yours"]))
-        report["yours"].insert(at,
-            f"Spunti le dichiarazioni; poi, in Allega documenti, scarichi ciò che il portale genera solo a quel punto "
-            f"(Scarica il documento): {'; '.join(later)}. Faccia firmare la procura al committente, firmi digitalmente "
-            "ciascun file (.p7m) e lo dia a Claude, che lo allega a questa bozza con una seconda compilazione")
+    report["yours"] = yours_in_order([values.render(y) or y for y in steps.get("yours", [])],
+                                     filing_yours(steps, sportello) + asked_yours(steps, values), later,
+                                     apart(steps, values))
     if after:
         report["second_run"] = after_declarations(steps, values)
     report["ready"] = not (report["questions"] or report["proposals"] or report["missing"]
                            or any(not x["exists"] or x.get("problem") for x in report["files"] if x["path"]))
     text = message(report, asks, held_need)
     if text:
-        report["message"] = text
+        # What comes after, in a line, so nothing at the end surprises them (`yours` has it all).
+        end = ["All'inizio della compilazione le chiederò di scegliere i file del lavoro, una volta sola."] \
+            if report.get("pick") else []
+        end.append("Alla fine restano a Lei: le dichiarazioni, la firma, il pagamento e l'invio."
+                   + (" Dopo le dichiarazioni mi darà i file firmati (la procura e gli altri): li allego con una "
+                      "seconda compilazione." if later else ""))
+        report["message"] = text + "\n\n" + "\n".join(end)
     return report
 
 
@@ -1619,7 +1678,7 @@ def p7m_signers(path):
     that, and so does the person's own signing software. This catches the wrong file, an
     unsigned copy renamed, and a signature by someone other than the dichiarante, before upload."""
     return signers_in(p7m_forms(Path(path).read_bytes()),
-                      "not a readable .p7m (CAdES) file: sign the document again with your firma digitale")
+                      "il file .p7m non si legge: firmi di nuovo il documento con la sua firma digitale")
 
 
 def p7m_forms(raw):
@@ -1697,23 +1756,20 @@ FILING = {
         "signed": True,
         "names": True,
         "yours": [
-            "Il SUE di Napoli accetta solo file PDF/A, ciascuno sotto i 20 MB (immagini entro 200 DPI), con nomi "
-            "senza spazi, accenti o altri segni (Tavola01_inquadramento), e tutti firmati digitalmente: "
-            "altrimenti la pratica è irricevibile (DD 501/2026). Vale anche per i file che allega lei",
-            "Prima dell'invio, paghi i diritti di istruttoria che la tabella del Comune fissa per questa pratica "
-            "(ed eventuali sanzioni) e alleghi la ricevuta: i diritti solo sul c/c postale 57060964 (Comune di "
-            "Napoli Servizio Tesoreria Edilizia Privata), sanzioni e contributo con bonifico all'IBAN "
-            "IT95X0306903496100000046118, causale N1051_SUE – tipo pratica, identificativo, anno (finché non ha "
-            "un identificativo: il nome del titolare e l'indirizzo dell'immobile). Pagata in altro modo, è irricevibile",
+            "Il SUE di Napoli accetta solo file PDF/A, firmati digitalmente, sotto i 20 MB (immagini entro "
+            "200 DPI), con nomi senza spazi, accenti o segni (Tavola01_inquadramento). Altrimenti la pratica è "
+            "irricevibile (DD 501/2026). Vale anche per i file che allega Lei",
+            "Prima dell'invio paghi e alleghi la ricevuta. Diritti: solo c/c postale 57060964 (Comune di "
+            "Napoli Servizio Tesoreria Edilizia Privata). Sanzioni e contributo: bonifico all'IBAN "
+            "IT95X0306903496100000046118. Causale: N1051_SUE – tipo pratica, identificativo, anno (o titolare "
+            "e indirizzo). Pagata in altro modo, è irricevibile",
             # The portal's Firma e invio (InfoCamere's Manuale funzioni di compilazione pratica, pp. 55-62):
             # it opens only once every required attachment is in, each signature valid, so never on
             # made-up data; the runner stops before it.
-            "In Firma e invio, con la sua firma digitale (la presenta come procuratore, quindi firma lei): "
-            "firmi il PDF della pratica, poi la distinta che il portale genera subito dopo. La firma online "
-            "richiede il dispositivo, il client di firma di InfoCamere e il suo PIN; con la firma offline: "
-            "scarichi ogni file, lo firmi senza aprirlo, salvarlo o rinominarlo (il portale rifiuta un file "
-            "modificato) e lo ricarichi. Poi Invio: la pagina finale riporta il codice pratica, e la ricevuta "
-            "arriva in PEC in pochi minuti",
+            "In Firma e invio firma Lei, come procuratore: prima il PDF della pratica, poi la distinta. Online "
+            "servono il dispositivo, il client di firma InfoCamere e il PIN. Offline: scarichi ogni file, lo "
+            "firmi senza aprirlo né rinominarlo e lo ricarichi. Poi Invio: la ricevuta arriva in PEC in pochi "
+            "minuti",
         ],
         # The building titles of DD 603/2025's forms (the CILA, the SCIA, the SCIA alternativa,
         # the permesso, their sanatorie and landscape combinations), whose attachment tables
@@ -1724,26 +1780,38 @@ FILING = {
                            "napoli/comune/scia-alternativa-pdc", "napoli/comune/permesso-di-costruire",
                            "napoli/comune/scia-in-sanatoria", "napoli/comune/permesso-in-sanatoria"],
             "yours": [
-                "Le due dichiarazioni del Comune di Napoli, sempre obbligatorie con questa pratica (DD 603/2025): "
-                "l'Allegato A Nuovo Programma 100 (la dichiarazione del titolare su quanto deve al Comune) e il "
-                "Modello DP (la sua dichiarazione che il committente le ha pagato il compenso, L.R. Campania "
-                "59/2018). Portali le compila entrambe; il committente firma l'Allegato A, il DP lo firmate "
-                "entrambi, ciascuno digitalmente, e la seconda compilazione le allega in Allegati liberi insieme "
-                "alla procura",
-                "Per lavori su un edificio esistente, gli elaborati comprendono la tavola dello Stato Comparativo: "
-                "stato attuale e di progetto sovrapposti, demolizioni in giallo e nuove costruzioni in rosso "
-                "(verde e blu per le opere abbandonate in corso d'opera), nero su bianco il resto (DD 501/2026 "
-                "Linee Guida §9)",
+                "Napoli chiede sempre due dichiarazioni (DD 603/2025): l'Allegato A Nuovo Programma 100 (il "
+                "titolare su quanto deve al Comune) e il Modello DP (il compenso pagatoLe, L.R. Campania 59/2018). "
+                "Claude le compila. L'Allegato A lo firma il committente, il DP entrambi, digitalmente. Vanno con "
+                "la procura nella seconda compilazione",
+                "Su un edificio esistente gli elaborati comprendono lo Stato Comparativo: attuale e progetto "
+                "sovrapposti, demolizioni in giallo, nuove opere in rosso (verde e blu le opere abbandonate in "
+                "corso d'opera), il resto nero su bianco (DD 501/2026 Linee Guida §9)",
                 "Se l'edificio è nel centro storico (zona A della Variante generale): alleghi l'attestazione, "
                 "firmata ai sensi dell'art. 481 c.p., che l'unità corrisponde al suo tipo edilizio nelle Norme "
                 "di attuazione (art. 63 c. 4)",
-                "Se i lavori dividono l'unità (frazionamento, art. 22 c. 2 della Variante generale): l'atto "
-                "d'obbligo a non frazionarla ulteriormente, trascritto in Conservatoria, va con questa pratica "
-                "se i lavori sono già eseguiti, altrimenti con la fine lavori",
+                "Se i lavori dividono l'unità (frazionamento, art. 22 c. 2 della Variante generale): serve l'atto "
+                "d'obbligo a non frazionarla ancora, trascritto in Conservatoria. Va con questa pratica se i "
+                "lavori sono già eseguiti, altrimenti con la fine lavori",
             ],
         },
     },
 }
+
+
+def yours_in_order(own, notes, later, apart):
+    """The person's steps in the order they take them: the steps file's own, the sportello's and the
+    answers' notes, the second run (after the declarations), signing and sending last, then what is
+    filed apart. The sportello's own Firma e invio step stands for the steps file's shorter one."""
+    sends = [y for y in own + notes if "Firma e invio" in y]
+    if any(y in notes for y in sends):
+        sends = [y for y in sends if y in notes]
+    out = [y for y in own + notes if "Firma e invio" not in y]
+    if later:
+        out.append(f"Dopo le dichiarazioni, in Allega documenti, scarichi i file che il portale crea solo allora: "
+                   f"{'; '.join(dict.fromkeys(later))}. Faccia firmare la procura al committente e firmi "
+                   "digitalmente ogni file (.p7m). Poi li dia a Claude: li allega con una seconda compilazione")
+    return out + sends + apart
 
 
 def filing_rules(steps):

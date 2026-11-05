@@ -333,8 +333,9 @@ def refusals_say_why():
         shutil.copytree(REHEARSALS / "cila-fittizia", Path(tmp) / "cila-fittizia")
         r = route.route(TABLE, {"intervento": "manutenzione_straordinaria", "terre_rocce": "no", "cambio_uso": "no", "paesaggio": "ordinaria",
                                 "fatti": []}, Path(tmp))
-    assert r["unsupported"] == ["Non ancora prevista: napoli/comune/cila-lavori-edilizi (comunicazione) presentata con "
-                                "napoli/comune/autorizzazione-paesaggistica-ordinaria."], r
+    assert r["unsupported"] == [f"Non ancora prevista: {run.procedure_name('napoli/comune/cila-lavori-edilizi')}, insieme a "
+                                f"{run.procedure_name('napoli/comune/autorizzazione-paesaggistica-ordinaria')}."], r
+    assert "napoli/" not in r["message"], r["message"]
 
 
 def apart_is_the_persons():

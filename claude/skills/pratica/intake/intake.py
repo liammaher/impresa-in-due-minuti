@@ -510,16 +510,16 @@ def scan(dossier, steps=None, client=None):
             propose("answers", "titolo", values[f"{c}:immobile.{k}"], "visura" if not tenant else "contratto di locazione")
     if c and (tenant or owners and (len(owners) > 1 or owners[0].get("quota") not in ("1/1", None))):
         propose("answers", "titolo_esclusivo", False, "contratto di locazione" if tenant else "visura",
-                "the landlord's assent is needed" if tenant else "other owners on the visura")
+                "serve l'assenso del proprietario" if tenant else "altri proprietari nella visura")
     elif c and owners:
-        propose("answers", "titolo_esclusivo", True, "visura", "sole owner, 1/1")
+        propose("answers", "titolo_esclusivo", True, "visura", "unico proprietario, 1/1")
     if people:
         proposals["people"] = people
     if planimetria:
-        report["notes"].append({"from": "visura", "note": f"planimetria filed on {planimetria}"
-                                + (" (catasto di primo impianto: a principio di prova for the stato legittimo, "
+        report["notes"].append({"from": "visura", "note": f"planimetria depositata il {planimetria}"
+                                + (" (catasto di primo impianto: un principio di prova dello stato legittimo, "
                                    "art. 9-bis c. 1-bis)" if planimetria < "1943-01-01" else
-                                   ": not a primo impianto, so not a proof of the stato legittimo")})
+                                   ": non è di primo impianto, quindi non prova lo stato legittimo")})
 
     # The stato legittimo's starting point: the titles the deed names.
     for p, text in docs.get("atto", []):
@@ -551,7 +551,7 @@ def scan(dossier, steps=None, client=None):
                 propose("answers", "prec_altro_quanti", str(len(extra)), src)
             propose("answers", "precedenti", items, src)
         if ante67:
-            report["notes"].append({"from": "atto", "note": "built before 1 September 1967"})
+            report["notes"].append({"from": "atto", "note": "costruito prima del 1° settembre 1967"})
 
     # The works: the architect's own relazione.
     for p, text in docs.get("relazione", []):
@@ -591,9 +591,9 @@ def scan(dossier, steps=None, client=None):
                 continue
             r = read_receipt(text)
             ok = r["postale_57060964"] if kind == "ricevuta_diritti" else r["iban_sue"]
-            report["notes"].append({"from": p.name, "note": f"{kind.split('_')[1]} {r['importo'] or '?'} €, "
-                                    + ("to the account Napoli's SUE takes" if ok else
-                                       "NOT to the account Napoli's SUE takes it on: irricevibile")})
+            report["notes"].append({"from": p.name, "note": f"{kind.split('_')[1]} {r['importo'] or '?'} €: "
+                                    + ("sul conto che il SUE di Napoli accetta" if ok else
+                                       "NON sul conto che il SUE di Napoli accetta: irricevibile")})
 
     # The files, each in the steps file's slot for its kind.
     asks = (steps or {}).get("asks", {})
@@ -606,20 +606,20 @@ def scan(dossier, steps=None, client=None):
     # those always required, when the dossier lacks them.
     relazione = next((read_relazione(t) for _, t in docs.get("relazione", []) if t), {})
     if relazione.get("zona_prg", ("",))[0] == "A" and "tipo_edilizio" not in docs:
-        report["notes"].append({"from": "relazione tecnica", "note": "zona A (centro storico): attach the attestation, "
-                                "signed under art. 481 c.p., that the unit matches its tipo edilizio (art. 63 c. 4 "
-                                "of the Variante generale); none is in the dossier"})
+        report["notes"].append({"from": "relazione tecnica", "note": "zona A (centro storico): manca l'attestazione, "
+                                "firmata ai sensi dell'art. 481 c.p., che l'unità corrisponde al suo tipo edilizio "
+                                "(art. 63 c. 4 della Variante generale)"})
     if relazione.get("frazionamento", (False,))[0] and "atto_obbligo" not in docs:
-        report["notes"].append({"from": "relazione tecnica", "note": "frazionamento: the atto d'obbligo not to split "
-                                "the unit further (art. 22 c. 2 of the Variante generale), transcribed, goes with this "
-                                "pratica if the works are done, else with the fine lavori; none is in the dossier"})
+        report["notes"].append({"from": "relazione tecnica", "note": "frazionamento: manca l'atto d'obbligo a non frazionare "
+                                "ancora l'unità (art. 22 c. 2 della Variante generale), trascritto: va con questa "
+                                "pratica se i lavori sono eseguiti, altrimenti con la fine lavori"})
     sportello = run.filing_rules(steps) if steps else None
     if sportello and len(run.filing_yours(steps, sportello)) > len(sportello["yours"]):
-        lacking = [name for kind, name in (("programma100", "the Allegato A Nuovo Programma 100"),
-                                           ("modello_dp", "the Modello DP")) if kind not in docs]
+        lacking = [name for kind, name in (("programma100", "l'Allegato A Nuovo Programma 100"),
+                                           ("modello_dp", "il Modello DP")) if kind not in docs]
         if lacking:
-            report["notes"].append({"from": "dossier", "note": f"not in the dossier: {' and '.join(lacking)}, always "
-                                    "required with this pratica in Napoli (DD 603/2025)"})
+            report["notes"].append({"from": "dossier", "note": f"manca {' e '.join(lacking)}, sempre "
+                                    "obbligatorio con questa pratica a Napoli (DD 603/2025)"})
     # Only what the router or the steps file asks, and fits there.
     facts = rules.table("sue-napoli")["facts"]
     for key in list(proposals["facts"]):

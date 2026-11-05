@@ -16,6 +16,7 @@ os.chdir(ROOT)  # the answers name files from the repo's root, wherever this run
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True
 import gen  # noqa: E402
+import run  # noqa: E402  (FILING, refusal_text: what the tecnico reads)
 import yaml  # noqa: E402
 
 gen.ensure()  # the rehearsals' steps files are built, never committed (steps.lock)
@@ -1492,11 +1493,13 @@ def _():
 
 @case("what the tecnico reads is Italian: every question, checklist item, refusal and end step, no role codes")
 def _():
-    english = re.compile(r"\b(the|which|what|does|will|have|with|your|their|tick|every|must|before|after|only)\b", re.I)
+    english = re.compile(r"\b(the|which|what|does|will|have|with|your|their|tick|every|must|before|after|only|of|and|"
+                         r"new|other|another|number|time|systems|how|many|something|lifts|protection|beer)\b", re.I)
     bad = []
     for d in sorted(p for p in REH.iterdir() if (p / "recipe.yaml").exists()):
         steps = generated(d.name)
         texts = [a.get(k) for a in steps.get("asks", {}).values() for k in ("question", "item", "how", "why")]
+        texts += [v for a in steps.get("asks", {}).values() for v in (a.get("labels") or {}).values()]
         texts += [g.get("question") for g in steps.get("groups", {}).values()]
         texts += [c.get("else") for c in steps.get("supports", [])] + list(steps.get("yours", []))
         for t in filter(None, texts):
@@ -1504,6 +1507,52 @@ def _():
             if english.search(plain) or "`" in plain:
                 bad.append((d.name, str(t)[:90]))
     assert not bad, f"{len(bad)} English or coded texts, e.g. {bad[:3]}"
+
+
+# What the tecnico reads, short and with no software word: a path, a file type, a library id
+# (napoli/comune/...), or the words of how Portali is built.
+SOFTWARE = re.compile(r"docs/|rehearsals/|catalogue/|schema/|\b(napoli|italia)/[a-z]|\.(md|json|ya?ml|js)\b|"
+                      r"\b(slug|recipe|steps file|json|pre-?flight|sha256|runner|script|crawl|mappat[oa]|gestit[oa])\b",
+                      re.I)
+# Caps in characters, one idea a sentence: the refusal a recipe gives, an end step, a defect's lines.
+CAPS = {"else": 300, "yours": 350, "title": 120, "what": 200, "works": 200, "law": 200, "checked": 200, "choice": 140}
+
+
+@case("what the tecnico reads is short and plain: refusals, end steps and defects within their caps, no software words; "
+      "a refusal behind a defect names the case, the portal's flaw and 1-3 choices")
+def _():
+    bad = []
+
+    def check(where, kind, t, cap=None):
+        t = re.sub(r"\{\{.*?\}\}", "", str(t))
+        if SOFTWARE.search(t):
+            bad.append(f"{where}: {kind} says {SOFTWARE.search(t).group(0)!r}: {t[:80]}")
+        if cap and len(t) > cap:
+            bad.append(f"{where}: {kind} is {len(t)} characters (at most {cap}): {t[:80]}")
+    for d in sorted(p for p in REH.iterdir() if (p / "recipe.yaml").exists()):
+        steps = generated(d.name)
+        for a in steps.get("asks", {}).values():
+            for k in ("question", "item", "how", "why", "yours"):
+                if a.get(k):
+                    check(d.name, k, a[k])
+        for c in steps.get("supports", []):
+            if c.get("else"):
+                check(d.name, "else", c["else"], CAPS["else"])
+        for y in steps.get("yours", []):
+            check(d.name, "yours", y, CAPS["yours"])
+    for y in run.FILING[("F839", "E")]["yours"] + run.FILING[("F839", "E")]["titles"]["yours"]:
+        check("run.FILING", "yours", y, CAPS["yours"])
+    for id_, d in yaml.safe_load((HERE.parent / "defects.yaml").read_text()).items():
+        for k in ("title", "what", "works", "law", "checked"):
+            check(id_, k, d.get(k) or "", CAPS[k])
+        if not 1 <= len(d.get("choices", [])) <= 3:
+            bad.append(f"{id_}: {len(d.get('choices', []))} choices (one to three)")
+        for c in d.get("choices", []):
+            check(id_, "choice", c, CAPS["choice"])
+        m = run.refusal_text({"unsupported": ["x"], "defects": [{**d, "id": id_, "else": "x"}]})
+        if not (m.startswith(f"Non posso preparare: {d['title']}.") and "difetto del portale" in m and d["works"] in m):
+            bad.append(f"{id_}: its refusal doesn't name the case, the portal's flaw and what still fills:\n{m}")
+    assert not bad, f"{len(bad)} problems:\n" + "\n".join(bad[:12])
 
 
 @case("a steps file's own defaults never name a draft PROVA NON INVIARE: real users run them; rehearsals answer it")

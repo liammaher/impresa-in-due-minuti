@@ -30,6 +30,6 @@ rules:
   facts: {permesso_per_scelta: "false", parere_esonero: "true"}
 supports:
   - when: "{{ask.esonero_altri_titoli|not}}"
-    else: "È gestito un solo titolo edilizio precedente: le righe della sezione legittimità per ulteriori titoli non sono ancora gestite."
+    else: "Per ora indico un solo titolo edilizio precedente: le righe per altri titoli, nella sezione legittimità, non le compilo ancora."
   - when: "{{ask.allegato_a_uno}}"
     else: "Il modulo accetta una sola voce dell'Allegato A: opere che rientrano in più voci non sono gestite."

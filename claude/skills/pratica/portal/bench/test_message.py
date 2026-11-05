@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Pre-flight's `message`, the one the skill sends as it is: for every rehearsal, it holds every
-question, proposal and missing detail, refers only to questions it numbers, and shows no field id
+question (one under a proposal only counted), proposal and missing detail, refers only to questions it numbers, and shows no field id
 or role code. Also the small cases by hand: a follow-up under its question, one under a proposal,
 a proposal per answer.
 
@@ -27,14 +27,20 @@ LEAK = re.compile(r"\b[a-z][a-z0-9-]*:[a-z_]+\.[a-z_]+\b|(?<![\w/])(?:t|c|cr|o|r
 def holds(m, report):
     """What the message lacks or shows that it mustn't."""
     bad = []
+    # A question that hangs on a proposal is counted under it ("se la cambia, le farò altre 2
+    # domande"), not printed: asked only if the tecnico changes that proposal. So are its own.
+    counted = {p["key"] for p in report["proposals"]}
     for q in report["questions"]:
         if q["question"].rstrip("?:. ") not in m:
+            if set(q.get("only_if", [])) & counted:
+                counted.add(q["key"])
+                continue
             bad.append(f"question {q['key']} missing")
         for i in q.get("items", []):
             if i["item"] not in m:
                 bad.append(f"item {i['key']} missing")
     for p in report["proposals"]:
-        if p["question"] not in m:
+        if run.head(p["question"]) not in m:
             bad.append(f"proposal {p['key']} missing")
     for x in report["missing"]:
         if not x["field"].startswith("*:") and x["for"] not in m:
@@ -68,7 +74,7 @@ def by_hand():
                            "for": "Scheda anagrafica: Cod.Fiscale"}]}
     m = run.message(report, asks, held_need={"impianti": [], "stato": []})
     want = ["1. Ci sono impianti? (sì/no)", "   1.a. Quali impianti?", "2. I lavori sono iniziati? (in corso / realizzato)",
-            "– Ci sono tolleranze? → no", "   se la cambia, mi dica anche: La classe",
+            "– Ci sono tolleranze? → no", "   (se la cambia, le farò un'altra domanda)",
             "– I diritti → 166 se alla 2 risponde in corso o realizzato", "– Scheda anagrafica: Cod.Fiscale"]
     return [f"by hand: no line {w!r} in:\n{m}" for w in want if w not in m.splitlines()]
 
