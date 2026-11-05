@@ -17,7 +17,7 @@ let dir: string;
 let http: Server;
 let url: string;
 let client: Client;
-const steps = JSON.stringify({ procedure: "napoli/comune/cila-lavori-edilizi", asks: { titolo: { question: "The client's title" } }, yours: ["Sign and send"] });
+const steps = JSON.stringify({ procedure: "napoli/comune/cila-lavori-edilizi", supports: [{ if: "x", else: "So far only a tenant" }], asks: { titolo: { question: "The client's title" } }, yours: ["Sign and send"] });
 const sha = createHash("sha256").update(steps).digest("hex");
 
 before(async () => {
@@ -26,7 +26,7 @@ before(async () => {
   await mkdir(join(dir, "library", "procedures", "napoli", "comune"), { recursive: true });
   await writeFile(join(dir, "pratiche", "cila-fittizia.json"), steps);
   await writeFile(join(dir, "catalog.json"), JSON.stringify([
-    { name: "cila-fittizia", procedure: "napoli/comune/cila-lavori-edilizi", title: "CILA: lavori interni non strutturali", refuses: ["So far only a tenant"], notes: "c the client", steps_sha256: sha },
+    { name: "cila-fittizia", procedure: "napoli/comune/cila-lavori-edilizi", title: "CILA: lavori interni non strutturali", notes: "c the client", steps_sha256: sha },
   ]));
   await writeFile(join(dir, "coverage.json"), JSON.stringify({
     plugin_version: "0.1.0", built: "2026-10-29", comuni: { F839: "Napoli", IT: "nazionale" },

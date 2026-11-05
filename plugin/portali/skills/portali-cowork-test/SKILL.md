@@ -8,9 +8,9 @@ description: Run the Portali plugin's three Cowork tests with made-up data - whe
 Three questions decide how the Portali plugin works in Cowork. Answer them with the CILA
 rehearsal's made-up client (architetto Chiara Fittizia, client Luca Fittizio: no real
 person, codici fiscali chosen at random) on the real portal, as a draft named "PROVA NON
-INVIARE", never sent. Every path is relative to this skill's base directory (`TEST` below)
-or the portali-pratica skill's (`SKILL`, its sibling folder `../portali-pratica`): write them
-out in full. Keep notes as you go and write them all to `portali-test-results.md` in the
+INVIARE", never sent. `${CLAUDE_SKILL_DIR}` in a command is this skill's
+folder, and the portali-pratica skill's is its sibling, `${CLAUDE_SKILL_DIR}/../portali-pratica` (should
+a command show a `$` variable instead of a path, put this skill's base directory in its place). Keep notes as you go and write them all to `portali-test-results.md` in the
 user's folder at the end, even when a test fails.
 
 ## 0. Before anything
@@ -21,12 +21,12 @@ user's folder at the end, even when a test fails.
    especially: a tool that runs JavaScript on a page, and a tool that puts a local file into
    a page's file input. Note which browser the browser setting uses (it must be the
    built-in one).
-3. Copy `TEST/cila` into the user's folder as `portali-test/` and work from there.
+3. Copy `${CLAUDE_SKILL_DIR}/cila` into the user's folder as `portali-test/` and work from there.
 4. Check and pre-flight it:
    ```sh
    cd portali-test
-   python3 SKILL/check.py studio.json values.json --out run/values.json
-   python3 SKILL/portal/run.py preflight --steps SKILL/pratiche/cila-fittizia.json \
+   python3 "${CLAUDE_SKILL_DIR}/../portali-pratica/check.py" studio.json values.json --out run/values.json
+   python3 "${CLAUDE_SKILL_DIR}/../portali-pratica/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/../portali-pratica/pratiche/cila-fittizia.json" \
      --answers answers.json --values run/values.json --made-up
    ```
    (`--made-up`: the test case's files are made up, so Napoli's file rules only warn.)
@@ -34,7 +34,7 @@ user's folder at the end, even when a test fails.
 
 ## 1. Does the built-in browser run the runner?
 
-1. `python3 SKILL/portal/run.py page --steps SKILL/pratiche/cila-fittizia.json --answers
+1. `python3 "${CLAUDE_SKILL_DIR}/../portali-pratica/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/../portali-pratica/pratiche/cila-fittizia.json" --answers
    answers.json --values run/values.json --out run --plain`; record the sizes it prints.
    (Without `--plain` it tries to show a code in a window on the host: record whether
    that works from Cowork's sandbox, and what it says.)
@@ -54,7 +54,7 @@ user's folder at the end, even when a test fails.
 4. Call `await __pv.wait(40000)` until `result` is `filled` or `stopped`; record how many
    calls that took.
 5. Save `JSON.stringify(__pv.last())` as `run/report.json` and run
-   `python3 SKILL/review.py run`. Record `result`, `error`, `at`, `wizard_seconds`,
+   `python3 "${CLAUDE_SKILL_DIR}/../portali-pratica/review.py" run`. Record `result`, `error`, `at`, `wizard_seconds`,
    `total_seconds`. The Code tab's browser pane filled this same draft in 84 to 102 s on
    2026-10-28.
 6. If it stopped: follow the portali-pratica skill's recovery once (at most two fixes) and
@@ -62,7 +62,7 @@ user's folder at the end, even when a test fails.
 
 ## 2. Does a planimetria-sized file get in?
 
-`TEST/planimetria-3mb.pdf` is a valid 3 MB PDF, the size of a real set of drawings (the
+`${CLAUDE_SKILL_DIR}/planimetria-3mb.pdf` is a valid 3 MB PDF, the size of a real set of drawings (the
 portal takes up to 9.77 MB a file). A run carries files through the conversation, at most
 256 KB, so this has to go another way.
 

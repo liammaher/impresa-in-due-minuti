@@ -10,8 +10,6 @@ import json
 import re
 from pathlib import Path
 
-import yaml
-
 HERE = Path(__file__).resolve().parent
 TABLES = HERE / "rules"
 # What the last drift check (catalogue.py drift) found changed on the portal, per pratica.
@@ -28,12 +26,22 @@ def drifted(name):
     return json.loads(DRIFT.read_text())["pratiche"].get(name, {}).get("differences", [])
 
 
+def load(path, strings=False):
+    """A steps file or a rules table: JSON as the plugin ships them (it runs with no packages),
+    else the repo's YAML. strings: every scalar a string, as a rules table is read."""
+    path = Path(path)
+    if path.suffix == ".json":
+        return json.loads(path.read_text())
+    import yaml  # the repo's files only
+    return yaml.load(path.read_text(), Loader=yaml.BaseLoader) if strings else yaml.safe_load(path.read_text())
+
+
 def table(name):
     if name not in _tables:
-        path = TABLES / f"{name}.yaml"
-        if not path.is_file():
+        path = next((p for p in (TABLES / f"{name}.json", TABLES / f"{name}.yaml") if p.is_file()), None)
+        if not path:
             raise ValueError(f"no rules table {name} in {TABLES}")
-        _tables[name] = yaml.load(path.read_text(), Loader=yaml.BaseLoader)  # strings: "true" stays a word
+        _tables[name] = load(path, strings=True)  # strings: "true" stays a word
         for r in _tables[name]["rules"]:
             r["when"] = {k: _condition(v) for k, v in r["when"].items()}
     return _tables[name]

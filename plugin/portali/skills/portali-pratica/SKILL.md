@@ -63,19 +63,22 @@ the declarations, sign, pay and send.
   passing through this conversation: never open the documents, `run/intake/private/`,
   `run/private/`, `run/values.json` or `run/review.html`. You read only what the tools print
   for you (which fields exist or are missing, never their values). What the tecnico writes to
-  you is the one thing that does pass through it (step 0).
+  you passes through it (step 0), and so do the values only where no window can show the code
+  (Cowork's sandbox, `--plain`): say so first (step 4).
 - **No guesses.** Every value comes from a document or the tecnico.
 <!-- /no-vault -->
 - **The built-in browser** of the Claude desktop app, never Claude in Chrome.
 
 ## What this skill has
 
-Every path is relative to this skill's base directory (`SKILL` below): write it out in full in
-each command. Scripts run with `python3` and need no packages.
+`${CLAUDE_SKILL_DIR}` in a command is this skill's folder (should a command show a `$` variable
+there instead of a path, put this skill's base directory in its place). Scripts run with `python3`
+and need no packages.
 
-- `catalog.json`: each pratica with a steps file (`name`, `procedure`, `title`, `sportello`,
-  `refuses`, `notes`: who the roles are, `steps_sha256`); `coverage.json`: every pratica's
-  `status`; `pratiche/<name>.json`: its steps file.
+- `catalog.json`: each pratica with a steps file, one a line (`name`, `procedure`, `title`,
+  `sportello`, `notes`: who the roles are, `steps_sha256`); `coverage.json`: every pratica's
+  `status`, one a line; `pratiche/<name>.json`: its steps file. Search the two
+  (`grep -i proroga "${CLAUDE_SKILL_DIR}/catalog.json"`), never read them whole: they are long.
 - `library/`: what the law asks for each procedure (`procedures/`), which pratica a case is
   (`rules/`), where to go (`offices/`). `reference/schema.json`: every field.
 - `portal/run.py`, `portal/route.py`, `intake/intake.py`, `review.py`, `check.py`.
@@ -128,7 +131,7 @@ once, in one message, and write them into `../studio.json`.
 Before each pre-flight and each compilation, check and merge the two files:
 
 ```sh
-python3 SKILL/check.py ../studio.json values.json --out run/values.json
+python3 "${CLAUDE_SKILL_DIR}/check.py" ../studio.json values.json --out run/values.json
 ```
 
 It prints each value that doesn't fit (a codice fiscale, a partita IVA, a date) and exits 1:
@@ -142,7 +145,7 @@ are chosen by their facts, not their name. With the job's documents, read them f
 facts only), then:
 
 ```sh
-python3 SKILL/portal/route.py --table sue-napoli --answers facts.json
+python3 "${CLAUDE_SKILL_DIR}/portal/route.py" --table sue-napoli --answers facts.json
 ```
 
 Start `facts.json` as `{}` (or from the intake). It asks the rules table's facts as pre-flight
@@ -152,10 +155,10 @@ works>", and leave it out of the answers when the works are another kind. Write 
 `facts.json` and run it again; if the answer about the works changes, keep only that one. Once
 it decides it names the pratica (`pratica`, its `steps`) and the `answers` to start
 `answers.json` with; `unsupported` is the reason none fits. Other pratiche (a proroga, a fine
-lavori, a voltura): `catalog.json`, or the Portali connector's `find_pratica` when it is there
+lavori, a voltura): search `catalog.json`, or the Portali connector's `find_pratica` when it is there
 (describe a case to it by its facts only, never by a name, codice fiscale or address).
 
-- Status other than `available` (`coverage.json`, or the connector's `get_pratica`): say in one
+- Status other than `available` (its line in `coverage.json`, or the connector's `get_pratica`): say in one
   line what it means and stop.
 - None fits: say which pratica it is and that Portali can't prepare it yet, give what the
   library says it needs, and stop. Don't open the portal.
@@ -166,14 +169,14 @@ The job's folder holds the client's documents (`docs/`: visura, atto or contratt
 tecnica, elaborati, ricevute, documento d'identità). Read them with the intake, never yourself:
 
 ```sh
-python3 SKILL/intake/intake.py scan docs --out run/intake --steps SKILL/pratiche/<name>.json
+python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" scan docs --out run/intake --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json"
 ```
 
 Read only `run/intake/intake.json`: each file's kind, the fields filled (ids, not values),
 `unread` files (scans and photos: their facts are asked instead), `notes`, and `proposals` with
 the document and words each comes from. Show the proposals in one message, grouped by document,
 in Italian ("Dalla relazione tecnica: manutenzione straordinaria, nessun intervento
-strutturale, inizio lavori 19/10/2026"). On "ok": `python3 SKILL/intake/intake.py accept
+strutturale, inizio lavori 19/10/2026"). On "ok": `python3 "${CLAUDE_SKILL_DIR}/intake/intake.py" accept
 run/intake --into answers.json` (it adds the client's and the owner's roles to `people`).
 Without `--steps` and with `--part facts`, the same before step 1.
 
@@ -190,8 +193,8 @@ A client the archive doesn't hold yet is added by the values the intake read.
 The values come from one confirmation:
 
 ```sh
-pvault get $(python3 SKILL/portal/run.py scope --steps SKILL/pratiche/<name>.json) \
-  | python3 SKILL/portal/run.py preflight --steps SKILL/pratiche/<name>.json \
+pvault get $(python3 "${CLAUDE_SKILL_DIR}/portal/run.py" scope --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json") \
+  | python3 "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
       --answers answers.json --values - --values run/intake/private/values.json
 ```
 
@@ -203,7 +206,7 @@ this pratica needs. Pre-flight prints JSON and exits 0 only when `ready`.
 After `check.py` (step 0):
 
 ```sh
-python3 SKILL/portal/run.py preflight --steps SKILL/pratiche/<name>.json \
+python3 "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
   --answers answers.json --values run/values.json --values run/intake/private/values.json
 ```
 
@@ -214,35 +217,23 @@ below). Pre-flight prints JSON and exits 0 only when `ready`.
 - `unsupported`: say why in one line and stop. With `defects`, the law allows the case but the
   portal can't take it as the law asks: say what the portal does, what the law asks, and give
   its `choices` as a numbered list.
-- `questions`, `proposals`, `missing`: **one short message**, in Italian, in two parts.
-  - *Le domande*, numbered: each question without `only_if`. A `checklist` is one question with
-    its items as bullets ("spunti quelli che valgono, o nessuno"; usually none). A question or
-    item with `only_if` is a follow-up: **don't write it out**; under its parent, say in a few
-    words what you'll need if the answer opens it ("se sì: quali impianti, e per ciascuno chi
-    rilascia la dichiarazione"; "per ogni titolo spuntato: numero e data"), so the tecnico can
-    give it in the same reply.
-  - *Userò*, one short line each, grouped by subject: the proposals; "ok" confirms them all, and
-    one nobody confirmed is never used.
-  - `if_changed` is not written: it lists what a proposal holds back (the details of other
-    planning instruments, under a "no"). Only if the tecnico changes that proposal does the next
-    pre-flight ask them. A proposal that depends on another answer in the same message comes
-  with it, so there is no second message: `assumes` (worded from the proposals it names: it holds
-  once those are confirmed), or `cases` ("Userò: X se …, Y se …", each `if` an answer given in this
-  message) and `otherwise` (the answers with no proposal: ask its question under them). On "ok",
-  write the case that matches what they answered.
+- `message`: the questions, the proposals and the details no document holds, already written
+  in Italian. Send it **as it is**, as one message. You may only shorten it: a question's lettered
+  follow-ups (3.a, 3.b) into a few words under it, keeping their letters ("3.a-3.c, se sì: quali
+  impianti e chi rilascia la dichiarazione"), and a "Userò" line to its subject ("Tolleranze: no").
+  Never drop a question, a proposal or a detail, never add a field id or a role code.
+- The replies go under each `key` of `questions` (dates YYYY-MM-DD, files as paths). "ok" confirms
+  every proposal as proposed; one given per answer (`cases`) takes the case whose `if` matches what
+  they answered. A detail of `missing` goes under its `id`:
 <!-- vault -->
-  A `missing` field the tecnico gives you goes into the archive (`pvault set`), never into a file.
+  into the archive (`pvault set <id> <value>`), never into a file.
 <!-- /vault -->
 <!-- no-vault -->
-  A `missing` field the tecnico gives you goes into `../studio.json` when it is the studio's or
-  the tecnico's (no slug, or `tecnico:`), else into the job's `values.json` under the slug
-  `answers.json`'s `people` gives its role (`c:identity.last_name` with `"c": "bianchi"` is
-  `bianchi:identity.last_name`: under `c:` it would be ignored), or as printed when `people`
-  doesn't name the role; then `check.py` again.
+  into `../studio.json` when it is the studio's or the tecnico's (no slug, or `tecnico:`), else
+  into the job's `values.json`; then `check.py` again.
 <!-- /no-vault -->
-  Write the other replies under each `key` (dates
-  YYYY-MM-DD, files as paths) and run pre-flight again; an `error` says what didn't fit, and
-  a follow-up whose details they didn't give comes back as a question: ask only those.
+  Then pre-flight again: what is still open (an `error`, a follow-up they didn't give, what a
+  changed proposal adds) is its new `message`.
 - `files`: when `pick` is there, say they'll choose the pratica's files once, on the portal's
   page, at the start ("All'inizio le chiederò di scegliere la cartella dei documenti").
   A file's `problem` is what the sportello would refuse (at Napoli's SUE, DD 501/2026: not
@@ -258,14 +249,14 @@ and the review page.
 
 <!-- vault -->
 ```sh
-pvault get $(python3 SKILL/portal/run.py scope --steps SKILL/pratiche/<name>.json) \
-  | python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json \
+pvault get $(python3 "${CLAUDE_SKILL_DIR}/portal/run.py" scope --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json") \
+  | python3 "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
       --answers answers.json --values - --values run/intake/private/values.json --out run
 ```
 <!-- /vault -->
 <!-- no-vault -->
 ```sh
-python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json --answers answers.json \
+python3 "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
   --values run/values.json --values run/intake/private/values.json --out run
 ```
 
@@ -287,7 +278,7 @@ through this conversation, so say so once first.
    that file once in the box it shows.
 4. `run.js` returns at once: call `await __pv.wait(40000)` until `result` is `filled` or
    `stopped`. `waiting` means the code or the files aren't in yet: say so once, gently.
-5. Save `JSON.stringify(__pv.last())` to `run/report.json`, then `python3 SKILL/review.py run`
+5. Save `JSON.stringify(__pv.last())` to `run/report.json`, then `python3 "${CLAUDE_SKILL_DIR}/review.py" run`
    writes `run/review.html`.
 
 Never read, screenshot or take the text of a page the compilation has filled, and take none
@@ -319,14 +310,14 @@ sign, the quadro riepilogativo) goes in a second compilation, when they say they
 
 <!-- vault -->
 ```sh
-pvault get $(python3 SKILL/portal/run.py scope --steps SKILL/pratiche/<name>.json) \
-  | python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json --answers answers.json \
+pvault get $(python3 "${CLAUDE_SKILL_DIR}/portal/run.py" scope --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json") \
+  | python3 "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
       --values - --values run/intake/private/values.json --after-declarations --out run2
 ```
 <!-- /vault -->
 <!-- no-vault -->
 ```sh
-python3 SKILL/portal/run.py page --steps SKILL/pratiche/<name>.json --answers answers.json \
+python3 "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
   --values run/values.json --values run/intake/private/values.json --after-declarations --out run2
 ```
 <!-- /no-vault -->
@@ -348,7 +339,7 @@ start it from `run/intake/private/values.json`). Check and merge, then the same 
 show the code window):
 
 ```sh
-python3 SKILL/check.py ../studio.json values.json --out run/values.json
+python3 "${CLAUDE_SKILL_DIR}/check.py" ../studio.json values.json --out run/values.json
 ```
 <!-- /vault -->
 

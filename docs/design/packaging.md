@@ -9,7 +9,8 @@ ship it.
 
 Status (2026-10-29): a draft plugin (`plugin/`) and its connector (`connector/`) are built
 and tested offline; the connector isn't deployed and nothing has run in Cowork yet. Two tests
-decide the run (below); the plugin's test skill runs them.
+decide the run (below); the plugin's test skill runs them (in a build made with
+`plugin/build.py --cowork-test`: a release leaves it out).
 
 ## What we bring that Claude doesn't have
 
