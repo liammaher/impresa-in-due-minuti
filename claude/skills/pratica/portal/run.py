@@ -408,6 +408,54 @@ def _facts(v, n):
     return (str(v).split("/") + [""] * n)[:n]
 
 
+def _amount(v):
+    """A number answer (12500, 12500,50, 12500.5), or None: also for "12.500", which may be an
+    Italian thousands separator, so a bracket is never worked out from a figure read wrong."""
+    s = str(v).strip().replace(" ", "")
+    if not s or re.fullmatch(r"\d{1,3}(\.\d{3})+", s):
+        return None
+    try:
+        return float(s.replace(",", "."))
+    except ValueError:
+        return None
+
+
+# Napoli SUE's diritti (tabella G.C. 239/2026, read line by line 2026-11-05): "" where the table's
+# own words put the figure in no row or in two, so the question stays.
+def _diritti_contributo(v):
+    """SUE 7-9, an onerous permesso's or SCIA alternativa's, by the contributo (oneri di
+    urbanizzazione + costo di costruzione): "fino a € 5.000,00" 1,003 €, "da € 5.000,00 ad
+    € 30.000" 1,505 €, "oltre € 30.000,00" 1,998 €. Exactly 5,000 € is in both SUE 7 and SUE 8."""
+    x = _amount(v)
+    if x is None or x <= 0 or x == 5000:
+        return ""
+    return "1003" if x < 5000 else "1505" if x <= 30000 else "1998"
+
+
+def _diritti_parcheggio(v):
+    """SUE 4-6, a permesso for parcheggi pertinenziali, by floor area: "fino a 300 mq" 677 €,
+    "da 301 mq a 1000 mq" 1,129 €, "oltre 1001 mq" 1,998 €. Over 300 and under 301 m², or over
+    1,000 and up to 1,001 m², is in no row."""
+    x = _amount(v)
+    if x is None or x <= 0:
+        return ""
+    return "677" if x <= 300 else "1129" if 301 <= x <= 1000 else "1998" if x > 1001 else ""
+
+
+def _diritti_pdc(v):
+    """A permesso's line: a variant to one issued SUE 11; car parks on free land (L.R. Campania
+    19/2001 art. 6 c. 2, "parcheggi pertinenziali", a permesso non oneroso) SUE 4-6; onerous
+    SUE 7-9; free SUE 10."""
+    tipo, onerosa, contributo, mq = _facts(v, 4)
+    if tipo in ("variante essenziale", "variante sagoma"):
+        return "501"
+    if tipo == "parcheggi":
+        return _diritti_parcheggio(mq)
+    if not onerosa.strip():
+        return ""
+    return _diritti_contributo(contributo) if truthy(onerosa) else "401"
+
+
 SUE_CAMBIO = {"stessa_categoria": "stessa categoria", "tra_categorie": "tra categorie"}
 
 
@@ -533,12 +581,16 @@ FILTERS = Filters({
     "sue_scia_cambio_uso": lambda v: {"no": "no", "intero_immobile": "intero immobile", "piano_terra": "tra categorie",
                                       "intero_tra_categorie": "altro", "altro": "altro", **SUE_CAMBIO}.get(str(v), ""),
     # Napoli SUE's diritti (tabella G.C. 239/2026) where its line depends on the case: the amount to
-    # propose, or "" where the table needs what no ask holds (an onerous title's contributo bracket,
-    # a car park's floor area), so the question stays.
+    # propose, or "" where the table can't tell (the SUE works the contributo out, a figure on a
+    # bracket's edge, a title no row names), so the question stays.
     "diritti_cila": lambda v: {"da iniziare": "151", "in corso": "166", "realizzato": "166"}.get(str(v).strip(), ""),
+    # SUE 10, a SCIA free of the contributo; an onerous one (art. 22) is in no row: SUE 7-9 name
+    # only the permesso a titolo oneroso and the SCIA alternativa.
     "diritti_gratuito": lambda v: "401" if v is not None and not truthy(v) else "",
-    "diritti_pdc": lambda v: ("501" if _facts(v, 2)[0] in ("variante essenziale", "variante sagoma") else ""
-                              if _facts(v, 2)[0] == "parcheggi" or truthy(_facts(v, 2)[1]) else "401"),
+    # The SCIA alternativa: free SUE 10, onerous SUE 7-9 ({{ask.scia_onerosa,ask.contributo_euro|..}}).
+    "diritti_scia_alt": lambda v: ("" if not _facts(v, 2)[0].strip() else
+                                   _diritti_contributo(_facts(v, 2)[1]) if truthy(_facts(v, 2)[0]) else "401"),
+    "diritti_pdc": _diritti_pdc,
     # A SCIA in sanatoria: line SUE 16 names the accertamenti (art. 36-bis) and the regularizations
     # (art. 34-ter), not the works still under way (art. 37 c. 5).
     "diritti_sanatoria_scia": lambda v: "" if str(v).strip() in ("", "in corso") else "441",
@@ -882,6 +934,11 @@ def check_asks(steps):
     reads = lambda wheres: {r[4:] for where, t, _ in templates(steps) if wheres(where)
                             for r, _ in refs_in(t) if r.startswith("ask.")}
     used = reads(lambda w: w != "yours")
+    # An ask with its own `when` that a used one's proposal reads (the contributo's amount, for
+    # the diritti's bracket: needed asks it).
+    more = {r[4:] for k in used for r, _ in refs_in(asks.get(k, {}).get("propose", ""))
+            if r.startswith("ask.") and asks.get(r[4:], {}).get("when")}
+    used |= more | {r[4:] for k in more for r, _ in refs_in(asks[k]["when"]) if r.startswith("ask.")}
     lacking = sorted((used | reads(lambda w: w == "yours")) - set(asks))
     if lacking:
         raise StepError(f"steps file: no question in asks: for {', '.join(lacking)}")
@@ -962,6 +1019,18 @@ def needed(steps, values):
                 if w is None:
                     deps = [k for k in asked(f["when"]) if values.field("ask." + k) is None]
             add(asked(f.get("value", "")), deps)
+    # An ask only a proposal reads (the contributo's amount, which the diritti's bracket needs) is
+    # asked where its own `when` holds, while the proposal's ask is unanswered; the proposal waits.
+    asks = steps.get("asks", {})
+    for k in list(need):
+        if values.raw(k) is not None:
+            continue
+        for r in asked(asks.get(k, {}).get("propose", "")):
+            w = asks.get(r, {}).get("when")
+            if r in need or not w or not gate(w):
+                continue
+            deps = [x for x in asked(w) if values.field("ask." + x) is None] if values.render(w) is None else []
+            add([r], sorted(need[k]) + deps)
     return need
 
 

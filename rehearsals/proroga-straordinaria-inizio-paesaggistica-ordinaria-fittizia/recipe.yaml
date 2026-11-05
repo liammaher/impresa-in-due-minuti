@@ -26,7 +26,8 @@ after:
 asks:
   descrizione:
     default: PROVA NON INVIARE - pror. straord. inizio + paes. ord. {{c:identity.last_name}}
-  diritti_euro: null
+  diritti_euro:
+    why: "The Comune's 2026 table of SUE diritti (G.C. 239/2026) has no row for an art. 10-septies communication: SUE 11 (501 €) names the proroghe of permessi di costruire rilasciati, and whether it covers a communication that asks for no decision (or one on another title) is for the SUE to say (library pitfall)"
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and

@@ -11,6 +11,7 @@ scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUN
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
+  diritti_euro: {why: "La tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) non ha una voce per il rinnovo di un'autorizzazione paesaggistica; se la copra SUE 2 (401 €, autorizzazioni paesaggistiche chieste da sole) lo dice il SUE"}
   descrizione: {default: "rinnovo paesaggistica {{c:identity.last_name}}"}
 yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"

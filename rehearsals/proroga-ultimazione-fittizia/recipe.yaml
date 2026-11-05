@@ -11,6 +11,7 @@ scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUN
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
+  diritti_euro: {why: "La tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) non ha una voce per la comunicazione dell'art. 10-septies: SUE 11 (501 €) indica le proroghe dei permessi di costruire rilasciati, e se copra una comunicazione che non chiede alcuna decisione (o una su un altro titolo) lo dice il SUE"}
   descrizione: {default: "proroga ultimazione {{c:identity.last_name}}"}
 yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
