@@ -18,7 +18,8 @@ from a file). The build:
 - writes each rehearsal's steps file (the generated one first, as `bench/rerun.py` picks it)
   and the rules tables as JSON, which `shim/yaml.py` reads in PyYAML's place: Cowork runs
   the plugin with no packages;
-- lists them in `catalog.json` with their library procedure, `supports` refusals and notes;
+- lists them in `catalog.json`, one pratica a line (Claude searches it), with their library
+  procedure and notes (the cases each refuses stay in its steps file, where pre-flight reads them);
 - copies the library's procedures, rules, offices, situations and `signing.json`;
 - makes the test skill's case from the CILA rehearsal's P6 fixture (studio and job split as
   an architect's folder holds them) and a 3 MB test PDF;
@@ -32,9 +33,9 @@ folder of jobs, still sealed under the on-screen code on their way to the portal
 builds no pvault at all (`release.yml`). On, everything comes back as it was: flip it and
 rebuild. `--vault on|off` overrides it for one build; `test_build.py` checks both.
 
-Two skills: `portali-pratica` (the job) and `portali-cowork-test` (the tests that decide the
-design: script calls in Cowork's browser, a 3 MB attachment, a run's cost; it writes
-`portali-test-results.md` to bring back).
+One skill, `portali-pratica` (the job). `--cowork-test` keeps a second, `portali-cowork-test` (the
+tests that decide the design: script calls in Cowork's browser, a 3 MB attachment, a run's cost;
+it writes `portali-test-results.md` to bring back), for whoever runs them: a release leaves it out.
 
 Rebuild after a change to the runner, a steps file, the dictionary or the library, and bump
 `version` in `portali/.claude-plugin/plugin.json`. The generated steps files are built here from
