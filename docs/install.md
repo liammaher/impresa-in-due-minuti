@@ -1,8 +1,10 @@
 # Installing
 
-**Status: released as [v0.2.0](https://github.com/liammaher/portali/releases/tag/v0.2.0)** (2026-10-29);
-the marketplace is pinned to it. Installed in an isolated Claude config; not yet on a clean Mac or
-Windows (*What is not done*). Work merged since is in the next release, not in 0.2.0.
+**Status: released as [v0.3.0](https://github.com/liammaher/portali/releases/tag/v0.3.0)** (2026-11-05),
+without the archive (`plugin/build.yaml` `vault: false`: the release builds no pvault); the
+marketplace is pinned to it once the release's pull request is merged. 0.2.0 (2026-10-29) shipped
+the archive. Installed in an isolated Claude config; not yet on a clean Mac or Windows (*What is not
+done*). Work merged since is in the next release, not in 0.3.0.
 
 ## What you do
 
