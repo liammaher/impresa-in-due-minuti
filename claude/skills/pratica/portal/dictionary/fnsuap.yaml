@@ -1033,8 +1033,8 @@ asks:
   # progettista knows them from the PRG's and the Comune's maps; each is theirs to say.
   paesaggio:
     type: choice
-    question: "L'immobile è sottoposto a tutela paesaggistica (D.Lgs. 42/2004 parte III: art. 136, art. 142 o piano paesaggistico), e cosa richiedono i lavori? no (non tutelato); senza autorizzazione (tutelato, ma i lavori non alterano lo stato dei luoghi né l'aspetto esteriore degli edifici, o non richiedono autorizzazione: art. 149, DPR 31/2017 Allegato A); semplificata (DPR 31/2017 Allegato B); ordinaria (art. 146)"
-    options: ["no", senza autorizzazione, semplificata, ordinaria]
+    question: "L'immobile è sottoposto a tutela paesaggistica (D.Lgs. 42/2004 parte III: art. 136, art. 142 o piano paesaggistico), e cosa richiedono i lavori? no (non tutelato); senza autorizzazione (tutelato, ma i lavori non alterano lo stato dei luoghi né l'aspetto esteriore degli edifici, o non richiedono autorizzazione: art. 149, DPR 31/2017 Allegato A); semplificata (DPR 31/2017 Allegato B); ordinaria (art. 146); proroga (i lavori hanno già un'autorizzazione in vigore che scade prima che finiscano, e non contrastano con un piano o una misura di tutela adottati nel frattempo: la sua proroga, art. 10-septies, presentata con il titolo); rinnovo (l'autorizzazione è scaduta da non più di un anno, i lavori non sono stati fatti o lo sono in parte, il progetto è invariato o con varianti minime: il suo rinnovo, art. 7 DPR 31/2017, presentato con il titolo; varianti non minime richiedono l'ordinaria, art. 7 c. 2)"
+    options: ["no", senza autorizzazione, semplificata, ordinaria, proroga, rinnovo]
   relazione_paesaggistica: {type: file, question: "La relazione paesaggistica (DPCM 12/12/2005), per l'autorizzazione paesaggistica ordinaria (PDF)"}
   relazione_semplificata_doc: {type: file, question: "La relazione paesaggistica semplificata con la relativa documentazione (DPR 31/2017, Allegato D), per la voce di allegato che aggiunge il \"Si allega\" dell'asseverazione (PDF)"}
   # In a SCIA in sanatoria (the recipe sets it) works that needed a landscape authorization are
@@ -2786,7 +2786,7 @@ sections:
     theirs: [PER PRESA VISIONE]
     leave: ["Per SCIA/SCIA Unica, il titolare dichiara"]
     fields:
-      - {kind: date, label: "Per SCIA/SCIA Unica, il titolare dichiara che i lavori avranno inizio", value: "{{ask.data_inizio_lavori|date_it}}", when: "{{ask.bene_culturale|not}} {{ask.area_protetta|is_nulla_osta|not}} {{ask.idrogeologico|is_autorizzazione|not}} {{ask.idraulico|not}} {{ask.vinca|not}} {{ask.rir|is_in_area|not}} {{ask.rir|is_non_individuata|not}} {{ask.altri_vincoli_eco|is_assenso|not}} {{ask.fasce|is_assenso|not}} {{ask.paesaggio|is_semplificata|not}} {{ask.paesaggio|is_ordinaria|not}} {{ask.barriere_deroga|not}} {{ask.antincendio_deroga|not}} {{ask.vvf_valutazione|not}} {{ask.igienico_conforme}} {{ask.fascia_cimiteriale|is_non_consentito|not}} {{ask.sanatoria_titolo|is_nessuna}}"}
+      - {kind: date, label: "Per SCIA/SCIA Unica, il titolare dichiara che i lavori avranno inizio", value: "{{ask.data_inizio_lavori|date_it}}", when: "{{ask.bene_culturale|not}} {{ask.area_protetta|is_nulla_osta|not}} {{ask.idrogeologico|is_autorizzazione|not}} {{ask.idraulico|not}} {{ask.vinca|not}} {{ask.rir|is_in_area|not}} {{ask.rir|is_non_individuata|not}} {{ask.altri_vincoli_eco|is_assenso|not}} {{ask.fasce|is_assenso|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo|not}} {{ask.paesaggio|is_ordinaria|not}} {{ask.barriere_deroga|not}} {{ask.antincendio_deroga|not}} {{ask.vvf_valutazione|not}} {{ask.igienico_conforme}} {{ask.fascia_cimiteriale|is_non_consentito|not}} {{ask.sanatoria_titolo|is_nessuna}}"}
 
   # One choice: the works (each with whether it changes the use), a variant, or a change of
   # use alone. The labels keep the portal's apostrophes (’ and ' both appear).
@@ -3384,6 +3384,9 @@ sections:
   # as a bene culturale (parte II: the Soprintendenza), a protected natural area (L. 394/1991).
   # A landscape authorization is its own operation on Napoli's SUE, selected with the SCIA in
   # the wizard (rehearsals/scia-paesaggistica-*): here the asseverazione names its procedure.
+  # An authorization the works already have, extended or renewed with the title (paesaggio
+  # proroga or rinnovo), is stated as the semplificata, as the combinations were filled on the
+  # portal (2026-11-04); the renewal is the semplificata's own procedure (art. 7 D.P.R. 31/2017).
   # The two "Si allega ... parere/nulla
   # osta" boxes are the Soprintendenza's (first) and the park's (second).
   - section: Asseverazione SCIA - Tutela Storico Ambientale
@@ -3391,12 +3394,12 @@ sections:
     fields:
       - {kind: radio, label: NON ricade in zona sottoposta a tutela, when: "{{ask.paesaggio|is_no}}"}
       - {kind: radio, label: "ricade in zona tutelata, ma le opere non comportano alterazione", when: "{{ask.paesaggio|is_senza_autorizzazione}}"}
-      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
-      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}"}
+      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}"}
       # What each box adds on Allega documenti, read on the combinations' filled drafts 2026-11-01:
       # the semplificata's a required slot taking a plain PDF (parts/paesaggistica-semplificata.yaml), the
       # ordinaria's the second relazione slot, the parere vincolante's a signed-only slot (the person's).
-      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
       - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
       - {kind: radio, label: è assoggettato al procedimento ordinario, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
       - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}", slot: "Relazione paesaggistica e documentazione per il rilascio"}
@@ -4195,10 +4198,10 @@ sections:
       - {kind: radio, label: NON ricade in zona sottoposta a tutela, when: "{{ask.paesaggio|is_no}}"}
       - {kind: radio, label: "ricade in zona tutelata, ma le opere non comportano alterazione", when: "{{ask.paesaggio|is_senza_autorizzazione}}"}
       - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.paesaggio_accertamento}} {{ask.paesaggio|in_semplificata__ordinaria}}"}
-      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_semplificata}}"}
-      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}"}
+      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}"}
       # What each box adds on Allega documenti: as the SCIA's (read on the permesso's filled drafts 2026-11-01).
-      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_semplificata}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
       - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_ordinaria}}"}
       - {kind: radio, label: è assoggettato al procedimento ordinario, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_ordinaria}}"}
       - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_ordinaria}}", slot: "Relazione paesaggistica e documentazione per il rilascio"}

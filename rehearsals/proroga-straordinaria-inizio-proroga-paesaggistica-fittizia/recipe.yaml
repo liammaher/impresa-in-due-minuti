@@ -1,6 +1,6 @@
 # proroga straordinaria inizio e proroga paesaggistica: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
 # authorization-keeps-pace). The case: proroga-straordinaria-inizio-fittizia's, with what proroga-paesaggistica-fittizia adds; the other's answers fill
-# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli-adempimenti routes it.
 extends:
 - proroga-straordinaria-inizio-fittizia
 - proroga-paesaggistica-fittizia
@@ -34,9 +34,12 @@ yours:
 - 'No imposta di bollo to pay on this form: the portal''s form for this pratica has no bollo section or slot'
 - Sign and send (Firma e invio); keep the receipt
 rules:
-  table: null
-  question: null
-  facts: null
+  table: sue-napoli-adempimenti
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  facts:
+    adempimento: proroga_inizio
+    proroga: integrativa
+    paesaggistica: proroga
   main: napoli/comune/proroga-straordinaria-inizio-lavori
   handles:
   - napoli/comune/proroga-autorizzazione-paesaggistica

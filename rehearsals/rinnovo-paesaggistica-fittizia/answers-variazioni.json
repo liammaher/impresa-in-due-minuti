@@ -15,5 +15,10 @@
  "paes_rinnovo_variazioni": true,
  "diritti_esente": false,
  "bollo_esenzione": "no",
- "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "rinnovo",
+ "fatti": [],
+ "terre_rocce": "no"
 }

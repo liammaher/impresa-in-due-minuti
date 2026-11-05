@@ -3,11 +3,12 @@
 
   ~/.cache/pratica-portal/venv/bin/python -I claude/skills/pratica/portal/bench/test_route.py
 
-No browser, vault or network. Walks every case the SUE rules table decides (each fact
-asked as the table asks it), and checks each is routed to a steps file that agrees or
-refused with a reason, that every rules-gated SUE rehearsal is reached, and that each
-rehearsal's own cases come back to it. Prints the combinations the table decides that no
-steps file files yet: what is left to map.
+No browser, vault or network. Walks every case the SUE rules tables decide (each fact
+asked as the table asks it): sue-napoli, the title for new works, and sue-napoli-adempimenti,
+what is filed on a title held. Checks each is routed to a steps file that agrees or refused
+with a reason, that every rules-gated SUE rehearsal is reached, and that each rehearsal's own
+cases come back to it. Prints the combinations a table decides that no steps file files yet:
+what is left to map.
 """
 
 import json
@@ -28,19 +29,21 @@ import run  # noqa: E402
 
 REHEARSALS = HERE.parents[4] / "rehearsals"
 TABLE = "sue-napoli"
+FOLLOW = "sue-napoli-adempimenti"  # filings on a title held (2026-11-04)
 T = rules.table(TABLE)
 
 
 LEAVES = route.cases(TABLE)
+CASES = {TABLE: LEAVES, FOLLOW: route.cases(FOLLOW)}
 
 
-def every_case_routed_or_refused():
+def every_case_routed_or_refused(table=TABLE):
     """Each decided case reaches the one steps file for its pratiche, which reads the case
     the same way (its fixed facts, its wizard), or is refused with the reason; the
     combinations no steps file files are the mapping still to do."""
-    idx, unmapped, routed = route.index(TABLE, REHEARSALS), defaultdict(int), 0
-    for facts, d in LEAVES:
-        r = route.route(TABLE, facts, REHEARSALS)
+    idx, unmapped, routed = route.index(table, REHEARSALS), defaultdict(int), 0
+    for facts, d in CASES[table]:
+        r = route.route(table, facts, REHEARSALS)
         assert not r["questions"], (facts, r["questions"])
         if d["refused"] or d["none"]:
             assert not r["routed"] and r["unsupported"], (facts, r)
@@ -53,9 +56,9 @@ def every_case_routed_or_refused():
         assert r["routed"], (facts, r["unsupported"])
         assert r["pratica"] == idx[k][0]
         routed += 1
-    c = route.coverage(TABLE, REHEARSALS)  # what scoreboard.py prints: the same count
+    c = route.coverage(table, REHEARSALS)  # what scoreboard.py prints: the same count
     assert (c["routed"], dict(c["unmapped"])) == (routed, dict(unmapped)), c
-    print(f"  {len(LEAVES)} cases: {routed} routed, {sum(unmapped.values())} not mapped yet")
+    print(f"  {table}: {len(CASES[table])} cases, {routed} routed, {sum(unmapped.values())} not mapped yet")
     for (main, also), n in sorted(unmapped.items(), key=lambda x: -x[1]):
         print(f"    to map: {main}" + (f" + {', '.join(also)}" if also else "") + f" ({n} cases)")
 
@@ -71,14 +74,14 @@ def every_recipe_reached():
     assert len(idx) >= 14 and {n for n, _, _ in idx.values()} - names == {"parere-esonero-fittizio"}, sorted(idx)
 
 
-def answers_carry_into_preflight():
+def answers_carry_into_preflight(table=TABLE):
     """The answers route.py hands on fit the steps file's own asks, and leave its rules
     waiting on nothing but what it says it asks again."""
-    by_name = {n: s for n, _, s in route.index(TABLE, REHEARSALS).values()}
-    for facts, d in LEAVES:
+    by_name = {n: s for n, _, s in route.index(table, REHEARSALS).values()}
+    for facts, d in CASES[table]:
         if not d["main"] or d["refused"]:
             continue
-        r = route.route(TABLE, facts, REHEARSALS)
+        r = route.route(table, facts, REHEARSALS)
         if not r["routed"]:
             continue
         steps = by_name[r["pratica"]]
@@ -102,7 +105,7 @@ def as_a_conversation():
     """Each decided case asked as a person would answer it: the works, then one reply to
     everything the second message shows (the checklist as the items ticked). It ends where
     the case does, and nothing is handed on that the person wasn't shown."""
-    first = next(iter(T["facts"]))
+    first = next(iter(T["facts"]))  # T, LEAVES and TABLE: the table under test (follow_ups_routed swaps them)
     for facts, d in LEAVES:
         if first not in facts or d["refused"] or not d["main"]:
             continue
@@ -276,11 +279,11 @@ def cambio_uso_fuori_23ter():
     assert not r["routed"] and "Giunta" in r["unsupported"][0], r
 
 
-def rehearsal_cases_come_home():
+def rehearsal_cases_come_home(table=TABLE, least=30):
     """Each rehearsal's answers files, read as its steps file reads the facts, route back to it
     (a case its own rules refuse is left out: it tests the refusal)."""
     n = 0
-    for name, path, steps in route.index(TABLE, REHEARSALS).values():
+    for name, path, steps in route.index(table, REHEARSALS).values():
         for f in sorted(path.parent.glob("answers*.json")):
             a = json.loads(f.read_text())
             v = run.Values(a, fields={}, asks=steps["asks"])
@@ -288,11 +291,11 @@ def rehearsal_cases_come_home():
             if out or waiting:
                 continue
             facts = {k: x for k, t in steps["rules"]["facts"].items() if (x := v.render(t)) is not None}
-            r = route.route(TABLE, facts, REHEARSALS)
+            r = route.route(table, facts, REHEARSALS)
             assert r["pratica"] == name, (name, f.name, r["unsupported"] or r["questions"])
             n += 1
-    assert n >= 30, n
-    print(f"  {n} rehearsal cases routed back")
+    assert n >= least, n
+    print(f"  {table}: {n} rehearsal cases routed back")
 
 
 def asks_as_the_table_asks():
@@ -323,11 +326,11 @@ def asks_as_the_table_asks():
 
 
 def refusals_say_why():
-    r = route.route(TABLE, {"intervento": "edilizia_libera", "cambio_uso": "no", "paesaggio": "no", "fatti": []},
-                    REHEARSALS)
+    r = route.route(TABLE, {"intervento": "edilizia_libera", "cambio_uso": "no", "paesaggio": "no", "terre_rocce": "no",
+                            "fatti": []}, REHEARSALS)
     assert not r["routed"] and r["unsupported"][0].startswith("Per questo caso non serve alcuna pratica"), r
     r = route.route(TABLE, {"intervento": "altro"}, REHEARSALS)
-    assert not r["routed"] and "proroghe" in r["unsupported"][0], r
+    assert not r["routed"] and "proroghe" in r["unsupported"][0] and FOLLOW in r["unsupported"][0], r
     # Every combination has a steps file since 2026-10-31: one left out shows the message.
     with tempfile.TemporaryDirectory() as tmp:
         shutil.copytree(REHEARSALS / "cila-fittizia", Path(tmp) / "cila-fittizia")
@@ -371,12 +374,113 @@ def plugin_layout():
         assert [n for n, _, _ in route.index(TABLE, Path(tmp)).values()] == ["scia-fittizia"]
 
 
+def landscape_kept_in_force():
+    """A title whose works already have a landscape authorization (2026-11-04): extended (art.
+    10-septies) or renewed (art. 7 D.P.R. 31/2017) in the title's pratica; works with no title
+    take it alone. Done without the permesso they needed, the table refuses it (the accertamento
+    is the way), and a SCIA in sanatoria with it is still to map."""
+    base = {"terre_rocce": "no", "cambio_uso": "no", "fatti": []}
+    cila = {**base, "intervento": "manutenzione_straordinaria"}
+    assert route.route(TABLE, {**cila, "paesaggio": "proroga"}, REHEARSALS)["pratica"] == "cila-proroga-paesaggistica-fittizia"
+    assert route.route(TABLE, {**cila, "paesaggio": "rinnovo", "terre_rocce": "dichiarazione"},
+                       REHEARSALS)["pratica"] == "cila-rinnovo-paesaggistica-terre-rocce-fittizia"
+    pdc = {**base, "intervento": "nuova_costruzione", "fatti": [], "paesaggio": "rinnovo"}
+    r = route.route(TABLE, pdc, REHEARSALS)
+    assert r["pratica"] == "pdc-rinnovo-paesaggistica-fittizio", r
+    libera = {**base, "intervento": "edilizia_libera"}
+    assert route.route(TABLE, {**libera, "paesaggio": "proroga"}, REHEARSALS)["pratica"] == "proroga-paesaggistica-fittizia"
+    assert route.route(TABLE, {**libera, "paesaggio": "rinnovo"}, REHEARSALS)["pratica"] == "rinnovo-paesaggistica-fittizia"
+    r = route.route(TABLE, {**pdc, "fatti": ["sanatoria"]}, REHEARSALS)
+    assert not r["routed"] and "permesso in sanatoria" in r["unsupported"][0], r
+    r = route.route(TABLE, {**base, "intervento": "ristrutturazione", "paesaggio": "proroga", "fatti": ["sanatoria"]}, REHEARSALS)
+    assert r["unsupported"][0].startswith("Not mapped yet: napoli/comune/scia-in-sanatoria"), r
+
+
+def edilizia_libera_that_digs():
+    """Works with no title whose soil leaves the site (2026-11-04): the dichiarazione di utilizzo
+    is their pratica, or goes with their landscape procedure; the piano goes to the VIA authority
+    and the SUE has nothing; after landscape works already done, never (the dichiarazione comes first)."""
+    libera = {"intervento": "edilizia_libera", "cambio_uso": "no", "fatti": [], "terre_rocce": "dichiarazione"}
+    assert route.route(TABLE, {**libera, "paesaggio": "no"}, REHEARSALS)["pratica"] == "scavo-fuori-sito-fittizio"
+    for paesaggio, name in (("semplificata", "paesaggistica-semplificata-terre-rocce-fittizia"),
+                            ("ordinaria", "paesaggistica-ordinaria-terre-rocce-fittizia"),
+                            ("proroga", "proroga-paesaggistica-terre-rocce-fittizia"),
+                            ("rinnovo", "rinnovo-paesaggistica-terre-rocce-fittizia")):
+        r = route.route(TABLE, {**libera, "paesaggio": paesaggio}, REHEARSALS)
+        assert r["pratica"] == name and any("avvenuto" in a for a in r["apart"]), r
+    r = route.route(TABLE, {**libera, "paesaggio": "no", "terre_rocce": "piano"}, REHEARSALS)
+    assert not r["routed"] and "piano di utilizzo" in r["unsupported"][0], r
+    r = route.route(TABLE, {**libera, "paesaggio": "semplificata", "fatti": ["paesaggio_eseguiti"]}, REHEARSALS)
+    assert r["pratica"] == "accertamento-paesaggistico-fittizio", r
+    # Already dug (2026-11-05 review): neither the dichiarazione nor the piano is filed any more.
+    for terre in ("dichiarazione", "piano"):
+        r = route.route(TABLE, {**libera, "paesaggio": "no", "terre_rocce": terre, "fatti": ["sanatoria"]}, REHEARSALS)
+        assert not r["routed"] and "già fatti" in r["unsupported"][0], r
+    # A change of use free without works keeps saying so, never "the permesso in sanatoria".
+    r = route.route(TABLE, {"intervento": "nessuna_opera", "cambio_uso": "intero_tra_categorie", "paesaggio": "proroga",
+                            "fatti": ["sanatoria", "uso_ammesso_prg"]}, REHEARSALS)
+    assert r["unsupported"][0].startswith("This case needs no pratica"), r
+
+
+def follow_ups_routed():
+    """What is filed on a title held (2026-11-04): every case of sue-napoli-adempimenti reaches
+    its steps file or is refused with why, every one of those steps files is reached, and each
+    rehearsal's own cases come back to it."""
+    every_case_routed_or_refused(FOLLOW)
+    assert not route.coverage(FOLLOW, REHEARSALS)["unmapped"]
+    reached = {route.route(FOLLOW, f, REHEARSALS)["pratica"] for f, d in CASES[FOLLOW] if d["main"]}
+    names = {n for n, _, _ in route.index(FOLLOW, REHEARSALS).values()}
+    assert names == reached - {None} and len(names) >= 37, sorted(names ^ reached)
+    answers_carry_into_preflight(FOLLOW)
+    rehearsal_cases_come_home(FOLLOW, least=20)
+    r = route.route(FOLLOW, {}, REHEARSALS)
+    assert [q["key"] for q in r["questions"]] == ["adempimento"], r
+    # The checklist is about the works, as the new works' is, never gen.py's default for a shop
+    # ("valgono per l'attività": the recipes named no question, 2026-11-05).
+    r = route.route(FOLLOW, {"adempimento": "fine_lavori"}, REHEARSALS)
+    assert {q["key"]: q for q in r["questions"]}["fatti"]["question"] == route.CHECKLIST, r
+    for name, _, steps in route.index(FOLLOW, REHEARSALS).values():
+        assert steps.get("groups", {}).get("fatti", {}).get("question", route.CHECKLIST) == route.CHECKLIST, name
+    # Asked as a person answers: the filing alone, then one reply with the checklist ticked.
+    global TABLE, T, LEAVES
+    saved = TABLE, T, LEAVES
+    TABLE, T, LEAVES = FOLLOW, rules.table(FOLLOW), CASES[FOLLOW]
+    try:
+        as_a_conversation()
+    finally:
+        TABLE, T, LEAVES = saved
+
+
+def follow_ups_as_the_law_reads_them():
+    """The title decides the filing: a voltura for a permesso, a cambio d'intestazione for a
+    CILA or a SCIA; the ordinary extension is the permesso's, the 10-septies one the permesso's
+    and the SCIA's; the first 10-septies communication of the start has no operation of its own."""
+    go = lambda **a: route.route(FOLLOW, a, REHEARSALS)
+    assert go(adempimento="intestatario", titolo_tipo="permesso di costruire")["pratica"] == "voltura-pdc-fittizia"
+    assert go(adempimento="intestatario", titolo_tipo="SCIA")["pratica"] == "cambio-intestazione-fittizio"
+    assert go(adempimento="proroga_fine", proroga="straordinaria", titolo_tipo="SCIA",
+              paesaggistica="no")["pratica"] == "proroga-ultimazione-fittizia"
+    r = go(adempimento="proroga_fine", proroga="ordinaria", titolo_tipo="SCIA")
+    assert not r["routed"] and "art. 15 c. 2" in r["unsupported"][0], r
+    r = go(adempimento="proroga_inizio", proroga="straordinaria")
+    assert not r["routed"] and "va chiesto al SUE" in r["unsupported"][0], r
+    r = go(adempimento="proroga_inizio", proroga="ordinaria", titolo_tipo="permesso di costruire", paesaggistica="rinnovo")
+    assert r["pratica"] == "proroga-inizio-rinnovo-paesaggistica-fittizia", r
+    r = go(adempimento="fine_lavori", fatti=["dau"])
+    assert r["pratica"] == "fine-lavori-dau-fittizia", r
+    r = go(adempimento="inizio_lavori", titolo_tipo="permesso di costruire", fatti=["dichiarazione_utilizzo"])
+    assert r["pratica"] == "inizio-lavori-terre-rocce-fittizia" and r["apart"], r
+    r = go(adempimento="inizio_lavori", titolo_tipo="CILA")
+    assert not r["routed"] and "art. 15" in r["unsupported"][0], r
+
+
 def main():
     tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, as_a_conversation,
              wrong_answers, gated_items_stay_unknown, own_words_kept_only_if_they_agree, missing_answers_file,
              cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso, sanatoria_zona_a, sanatoria_titoli, cambio_uso_fuori_23ter,
              rehearsal_cases_come_home, asks_as_the_table_asks, refusals_say_why, apart_is_the_persons,
-             one_steps_file_per_combination, plugin_layout]
+             one_steps_file_per_combination, plugin_layout, landscape_kept_in_force, edilizia_libera_that_digs,
+             follow_ups_routed, follow_ups_as_the_law_reads_them]
     for t in tests:
         t()
         print(f"ok  {t.__name__}")

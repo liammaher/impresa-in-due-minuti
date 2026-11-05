@@ -4,7 +4,7 @@
 
 - **The crawl**: `catalogue/F839/sections/sue-combo-cila-rinnovo-paesaggistica-dichiarazione-utilizzo.json`.
 - **The recipe** `extends` `cila-paesaggistica-semplificata-terre-rocce-fittizia`, `rinnovo-paesaggistica-fittizia`: the first is the main pratica, the others' answers fill what its don't say.
-- No rules table routes this combination yet: the person names it.
+- The rules table sue-napoli routes this combination (2026-11-04).
 
 Made-up data; the draft is "PROVA NON INVIARE" and stops before the declarations, payment, signing and sending.
 

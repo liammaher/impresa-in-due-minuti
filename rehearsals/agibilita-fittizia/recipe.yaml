@@ -42,3 +42,8 @@ attachments:
     # Opened by a system's collaudo or atto notorio, and required then (read on the portal 2026-10-31).
     - {kind: file, label: "Certificato di collaudo ove previsto, degli impianti installati", value: "{{ask.impianti_collaudo_doc}}", when: "{{ask.impianti}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_elettrico_collaudo,ask.impianto_radiotv_collaudo,ask.impianto_termico_collaudo,ask.impianto_idrico_collaudo,ask.impianto_gas_collaudo,ask.impianto_ascensore_collaudo,ask.impianto_antincendio_collaudo,ask.impianto_scariche_collaudo,ask.impianto_linee_vita_collaudo,ask.impianto_altro_collaudo|any}}", on_page: true}
     - {kind: file, label: "Atto notorio relativo alla conformità degli impianti", value: "{{ask.impianti_atto_notorio_doc}}", when: "{{ask.impianti}} {{ask.impianti_certificazione|is_altro}} {{ask.impianto_elettrico_atto_notorio,ask.impianto_radiotv_atto_notorio,ask.impianto_termico_atto_notorio,ask.impianto_idrico_atto_notorio,ask.impianto_gas_atto_notorio,ask.impianto_ascensore_atto_notorio,ask.impianto_antincendio_atto_notorio,ask.impianto_scariche_atto_notorio|any}}", on_page: true}
+# Routed by the rules table sue-napoli-adempimenti: what is filed on the title held.
+rules:
+  table: sue-napoli-adempimenti
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+  facts: {adempimento: "agibilita"}

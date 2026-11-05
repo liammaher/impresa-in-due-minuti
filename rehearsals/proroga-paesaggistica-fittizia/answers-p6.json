@@ -21,5 +21,10 @@
  "proroga_tipo_lavori": "sostituzione infissi",
  "titolo_esclusivo": true,
  "diritti_esente": false,
- "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "proroga",
+ "fatti": [],
+ "terre_rocce": "no"
 }

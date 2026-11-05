@@ -220,6 +220,11 @@ landscape authorization) are chosen by their facts, not their name:
 sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/route.py" --table sue-napoli --answers facts.json
 ```
 
+A filing on a title already held (start or end of works, agibilità, a proroga, a voltura or change
+of holder, a new direttore dei lavori or firm, the DAU) the same way, with
+`--table sue-napoli-adempimenti`. Ask which only when the request doesn't say: new works, or a title
+already held.
+
 - `routed`: it names the pratica (`pratica`, its `steps`), the `answers` to start `answers.json`
   with, and a `message` of a line or two (the pratica, what goes apart): it goes in the one
   message (step 3). Go on to step 2 with `--steps`.
@@ -232,7 +237,7 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/route.py" --table sue-na
   and run it again; if the answer about the works changes, keep only that one.
 - `unsupported`: its `message` says why. Send it and stop; don't open the portal.
 
-Other pratiche (a proroga, a fine lavori, a voltura): search `catalog.json`, or the Portale SUE
+Any other pratica: search `catalog.json`, or the Portale SUE
 connector's `find_pratica` when it is there (describe a case to it by its facts only, never by a
 name, codice fiscale or address). A status other than `available` (its line in `coverage.json`,
 or the connector's `get_pratica`) is the verdict: "Non coperta dall'automazione: …" (in arrivo,

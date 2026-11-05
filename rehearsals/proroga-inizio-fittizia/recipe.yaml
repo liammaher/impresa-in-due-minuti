@@ -24,3 +24,8 @@ yours:
 supports:
   - when: "{{ask.titolo_tipo|is_permesso_di_costruire}}"
     else: "Per ora solo per un permesso di costruire: il caso della DIA non è ancora stato provato."
+# Routed by the rules table sue-napoli-adempimenti: what is filed on the title held.
+rules:
+  table: sue-napoli-adempimenti
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+  facts: {adempimento: "proroga_inizio", proroga: "ordinaria"}

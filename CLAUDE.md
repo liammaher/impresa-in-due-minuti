@@ -98,7 +98,8 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      copied in `rules/`: whether the law makes the case this pratica, the others it
                      adds with it, and those filed apart, which go in `yours`)
                      and `asks:` (questions, asked in one message, or proposed to confirm). Before it, for
-                     the SUE's building titles, `route.py` asks the table's facts and names the one steps
+                     the SUE's pratiche (`sue-napoli`: new works; `sue-napoli-adempimenti`: filings on a
+                     title held), `route.py` asks the table's facts and names the one steps
                      file whose `rules:` main and `handles` are the case's pratiche, with the answers to
                      carry (the index is read from the steps files). Pre-flight also holds each file to its
                      sportello's `FILING` rules (Napoli's SUE, DD 501/2026: PDF/A, signed .p7m or PAdES,

@@ -18,9 +18,15 @@
  "titolo_tipo": "permesso di costruire",
  "titolo_esclusivo": true,
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "paesaggistica": "no",
  "paes_protocollo": "PG/2023/0555555",
  "paes_data": "2023-05-10",
  "paes_scadenza": "2028-05-10",
  "proroga_tipo_lavori": "sostituzione infissi",
- "diritti_esente": false
+ "diritti_esente": false,
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "proroga",
+ "fatti": [],
+ "terre_rocce": "no"
 }

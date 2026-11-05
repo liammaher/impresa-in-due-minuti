@@ -1,6 +1,6 @@
 # inizio lavori e terre e rocce: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
 # dichiarazione-with-start). The case: inizio-lavori-fittizia's, with what scavo-fuori-sito-fittizio adds; the other's answers fill
-# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli-adempimenti routes it.
 extends:
 - inizio-lavori-fittizia
 - scavo-fuori-sito-fittizio
@@ -35,9 +35,12 @@ yours:
   any acknowledgement in the client''s name'
 - Sign and send (Firma e invio); keep the receipt
 rules:
-  table: null
-  question: null
-  facts: null
+  table: sue-napoli-adempimenti
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  facts:
+    adempimento: inizio_lavori
+    titolo_tipo: permesso_di_costruire
+    dichiarazione_utilizzo: 'true'
   main: napoli/comune/inizio-lavori-pdc
   handles:
   - napoli/comune/utilizzo-materiale-scavo-fuori-sito
