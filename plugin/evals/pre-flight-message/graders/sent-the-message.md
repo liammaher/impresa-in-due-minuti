@@ -1,4 +1,4 @@
 ---
 type: regex
-pattern: 'Le domande|Userò'
+pattern: 'Domande|Risposte che propongo'
 ---

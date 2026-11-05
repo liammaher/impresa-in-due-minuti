@@ -1121,7 +1121,7 @@ def main():
         decl[0]["boxes"][0]["ticked"] = True
         (folder / "private" / "declarations.json").write_text(json.dumps(decl))
         page = run.review.portal_review(filled | {"declarations_read": 1}, folder)
-        assert "già spuntate prima che lei le aprisse" in page and "Dichiarazione di consapevolezza" in page
+        assert "già spuntate prima che Lei le aprisse" in page and "Dichiarazione di consapevolezza" in page
         # Nothing copied (the pane, or an older run): the page says so, and never shows a stand-in.
         pane = run.review.portal_review(filled | {"declarations_read": 2}, tmp / "nowhere")
         assert "Dichiarazioni: non copiate in questa compilazione" in pane, "no note for the pane"

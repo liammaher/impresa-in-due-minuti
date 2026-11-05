@@ -257,14 +257,14 @@ asks:
   # Allega documenti. Two rows each on the page, more by "+" (the national form's
   # altre_comunicazioni and atti_di_assenso are unbounded). The CIL's quadro e is the first list.
   comunicazioni_contestuali: {type: yes_no, question: "Insieme a questa pratica si presentano altri adempimenti (una segnalazione, comunicazione o notifica a un altro ufficio, necessaria per i lavori)?", propose: "false"}
-  comunicazioni_quante: {type: number, question: "How many?"}
+  comunicazioni_quante: {type: number, question: "Quanti?"}
   comunicazione_1: {type: text, question: "Il primo: cosa si presenta insieme (es. SCIA antincendio)?"}
   comunicazione_1_autorita: {type: text, question: "L'ente competente (es. Comando provinciale dei Vigili del Fuoco di Napoli)"}
   comunicazione_#K: {type: text, question: "Adempimento #K: che cosa si presenta con esso?"}
   comunicazione_#K_autorita: {type: text, question: "Adempimento #K: l'autorità competente"}
   comunicazioni_doc: {type: file, question: "I documenti necessari per quelle presentazioni, in un unico PDF (la voce 'Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni')"}
   atti_da_acquisire: {type: yes_no, question: "I lavori richiedono atti di assenso non ancora ottenuti (un nulla osta, un'autorizzazione, una deroga) che il SUE deve acquisire sulla base dei documenti che Lei allega (art. 23-bis DPR 380/2001)? In tal caso i lavori iniziano solo quando il SUE comunica di averli acquisiti. Un atto di assenso già ottenuto non rientra qui: va allegato", propose: "false"}
-  atti_quanti: {type: number, question: "How many?"}
+  atti_quanti: {type: number, question: "Quanti?"}
   atto_1: {type: text, question: "Il primo: quale atto (es. parere igienico-sanitario, deroga)?"}
   atto_1_autorita: {type: text, question: "Quale ente lo rilascia (ad es. ASL Napoli 1 Centro)?"}
   atto_#K: {type: text, question: "Atto di assenso #K: quale atto?"}
@@ -323,8 +323,8 @@ asks:
   paes_b8: {type: yes_no, group: allegato_b, item: "B.8 Pannelli solari (termici o fotovoltaici) a servizio di un singolo edificio"}
   paes_b9: {type: yes_no, group: allegato_b, item: "B.9 Microgeneratori eolici di altezza fino a 1,50 m e diametro fino a 1,00 m"}
   paes_b10: {type: yes_no, group: allegato_b, item: "B.10 Cabine o colonnine modulari per servizi a rete, o loro sostituzione con altre diverse"}
-  paes_b11: {type: yes_no, group: allegato_b, item: "B.11 Local road changes: roundabouts, junctions, lay-bys, pavements"}
-  paes_b12: {type: yes_no, group: allegato_b, item: "B.12 Systematic street furniture, public lighting included"}
+  paes_b11: {type: yes_no, group: allegato_b, item: "B.11 Modifiche alla viabilità locale: rotatorie, incroci, piazzole, marciapiedi"}
+  paes_b12: {type: yes_no, group: allegato_b, item: "B.12 Arredo urbano sistematico, illuminazione pubblica compresa"}
   paes_b13: {type: yes_no, group: allegato_b, item: "B.13 Opere di urbanizzazione primaria in piani attuativi già sottoposti a valutazione paesaggistica"}
   paes_b14: {type: yes_no, group: allegato_b, item: "B.14 Interventi della voce A.12 (Allegato A) nelle aree di pertinenza di un edificio vincolato"}
   paes_b15: {type: yes_no, group: allegato_b, item: "B.15 Demolizione senza ricostruzione di edifici privi di valore architettonico, storico o testimoniale"}
@@ -354,7 +354,7 @@ asks:
   paes_b39: {type: yes_no, group: allegato_b, item: "B.39 Modifiche alle opere di difesa idraulica sulle sponde di fiumi e laghi"}
   paes_b40: {type: yes_no, group: allegato_b, item: "B.40 Interventi sistematici di ingegneria naturalistica per la difesa idraulica, del suolo o dalle frane"}
   paes_b41: {type: yes_no, group: allegato_b, item: "B.41 Demolizione e ricostruzione con la stessa volumetria, sagoma e area di sedime"}
-  paes_b42: {type: yes_no, group: allegato_b, item: "B.42 Beach nourishment, artificial dunes, restoring coastal works"}
+  paes_b42: {type: yes_no, group: allegato_b, item: "B.42 Ripascimenti, dune artificiali, ripristino di opere costiere"}
   precedente_cognome: {type: text, question: "L'intestatario del permesso finora: cognome, o denominazione della società"}
   precedente_nome: {type: text, question: "Il nome (nessuno per una società)", default: ""}
   precedente_cf: {type: text, question: "Il codice fiscale o la partita IVA"}
@@ -362,11 +362,11 @@ asks:
   atto_data: {type: date, question: "La sua data"}
   atto_notaio: {type: text, question: "Il nome del notaio"}
   atto_notaio_sede: {type: text, question: "Il comune sede del notaio"}
-  atto_repertorio: {type: text, question: "Repertorio number"}
-  atto_raccolta: {type: text, question: "Raccolta (rogito) number"}
+  atto_repertorio: {type: text, question: "Numero di repertorio"}
+  atto_raccolta: {type: text, question: "Numero di raccolta (rogito)"}
   atto_registrato_a: {type: text, question: "Dove è stato registrato (ufficio dell'Agenzia delle Entrate)"}
-  atto_registrazione_data: {type: date, question: "Registration date"}
-  atto_registrazione_numero: {type: text, question: "Registration number"}
+  atto_registrazione_data: {type: date, question: "Data di registrazione"}
+  atto_registrazione_numero: {type: text, question: "Numero di registrazione"}
   zona_prg: {type: text, question: "La zona dell'immobile nel PRG (es. zona B)"}
   prg_nta: {type: text, question: "L'articolo delle NTA del PRG per quella zona (es. art. 33)"}
   proprietario_nome: {type: text, question: "Il nome o la denominazione del proprietario (il committente è titolare di un altro diritto reale)"}
@@ -434,14 +434,14 @@ asks:
   superficie_somministrazione_mq: {type: number, question: "Quanti m² misura l'area in cui i clienti mangiano e bevono? (non l'intero locale)"}
   avvio_data: {type: date, question: "Il giorno di avvio dell'attività alimentare, se diverso dal giorno della notifica", default: ""}
   termine_data: {type: date, question: "Il giorno di termine, se ha carattere temporaneo", default: ""}
-  ristorazione: {type: yes_no, group: attivita_852, item: "Food service: a bar, a restaurant, a canteen, catering"}
+  ristorazione: {type: yes_no, group: attivita_852, item: "Somministrazione: bar, ristorante, mensa, catering"}
   ristorante: {type: yes_no, group: attivita_852, item: "Un ristorante, pizzeria o trattoria (ristorazione pubblica)"}
   bar: {type: yes_no, group: attivita_852, item: "Un bar senza cucina o laboratorio propri"}
   bar_laboratorio: {type: yes_no, group: attivita_852, item: "Un bar con cucina o laboratorio propri"}
   pasti_collettiva: {type: yes_no, group: attivita_852, item: "Pasti preparati per mense o catering (produzione pasti pronti)"}
-  mensa: {type: yes_no, group: attivita_852, item: "A canteen serving meals (ristorazione collettiva)"}
+  mensa: {type: yes_no, group: attivita_852, item: "Una mensa (ristorazione collettiva)"}
   manifestazioni: {type: yes_no, group: attivita_852, item: "Somministrazione di alimenti in fiere ed eventi"}
-  home_restaurant: {type: yes_no, group: attivita_852, item: "A home restaurant"}
+  home_restaurant: {type: yes_no, group: attivita_852, item: "Un home restaurant"}
   attivita_cessata: {type: text, question: "L'attività che cessa, in poche parole (100 caratteri)"}
   titolo_attivita_protocollo: {type: text, question: "Il numero di protocollo della SCIA (o della licenza) con cui ha avviato l'attività"}
   titolo_attivita_data: {type: date, question: "La sua data"}
@@ -523,10 +523,10 @@ asks:
   impianto_termico_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "Riscaldamento o climatizzazione"}
   impianto_idrico_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "Impianti idrici e sanitari"}
   impianto_gas_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "Gas"}
-  impianto_ascensore_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "Lifts, goods lifts, escalators"}
-  impianto_antincendio_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "Fire protection"}
-  impianto_scariche_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "Lightning protection"}
-  impianto_linee_vita_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "Safety lines (linee vita)"}
+  impianto_ascensore_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "Ascensori, montacarichi, scale mobili"}
+  impianto_antincendio_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "Impianti antincendio"}
+  impianto_scariche_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "Protezione dalle scariche atmosferiche"}
+  impianto_linee_vita_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "Linee vita"}
   impianto_altro_dichiarazione: {type: yes_no, group: impianti_dichiarazione, item: "L'altro impianto"}
   impianto_elettrico_depositato: {type: yes_no, group: impianti_depositato, item: "L'impianto elettrico"}
   impianto_elettrico_pg: {type: text, question: "Il numero di protocollo (P.G.) del certificato presentato per l'impianto elettrico"}
@@ -538,13 +538,13 @@ asks:
   impianto_idrico_pg: {type: text, question: "Il numero di protocollo (P.G.) del certificato depositato per gli impianti idrici e sanitari"}
   impianto_gas_depositato: {type: yes_no, group: impianti_depositato, item: "Gas"}
   impianto_gas_pg: {type: text, question: "Il numero di protocollo (P.G.) del certificato presentato per l'impianto gas"}
-  impianto_ascensore_depositato: {type: yes_no, group: impianti_depositato, item: "Lifts, goods lifts, escalators"}
+  impianto_ascensore_depositato: {type: yes_no, group: impianti_depositato, item: "Ascensori, montacarichi, scale mobili"}
   impianto_ascensore_pg: {type: text, question: "Il numero di protocollo (P.G.) del certificato presentato per gli ascensori"}
-  impianto_antincendio_depositato: {type: yes_no, group: impianti_depositato, item: "Fire protection"}
+  impianto_antincendio_depositato: {type: yes_no, group: impianti_depositato, item: "Impianti antincendio"}
   impianto_antincendio_pg: {type: text, question: "Il numero di protocollo (P.G.) del certificato presentato per la protezione antincendio"}
-  impianto_scariche_depositato: {type: yes_no, group: impianti_depositato, item: "Lightning protection"}
+  impianto_scariche_depositato: {type: yes_no, group: impianti_depositato, item: "Protezione dalle scariche atmosferiche"}
   impianto_scariche_pg: {type: text, question: "Il numero di protocollo (P.G.) del certificato presentato per la protezione dalle scariche atmosferiche"}
-  impianto_linee_vita_depositato: {type: yes_no, group: impianti_depositato, item: "Safety lines (linee vita)"}
+  impianto_linee_vita_depositato: {type: yes_no, group: impianti_depositato, item: "Linee vita"}
   impianto_linee_vita_pg: {type: text, question: "Il numero di protocollo (P.G.) del certificato depositato per le linee vita"}
   impianto_altro_depositato: {type: yes_no, group: impianti_depositato, item: "L'altro impianto"}
   impianto_altro_pg: {type: text, question: "Il numero di protocollo (P.G.) del certificato presentato per l'altro impianto"}
@@ -553,19 +553,19 @@ asks:
   impianto_termico_collaudo: {type: yes_no, group: impianti_collaudo, item: "Riscaldamento o climatizzazione"}
   impianto_idrico_collaudo: {type: yes_no, group: impianti_collaudo, item: "Impianti idrici e sanitari"}
   impianto_gas_collaudo: {type: yes_no, group: impianti_collaudo, item: "Gas"}
-  impianto_ascensore_collaudo: {type: yes_no, group: impianti_collaudo, item: "Lifts, goods lifts, escalators"}
-  impianto_antincendio_collaudo: {type: yes_no, group: impianti_collaudo, item: "Fire protection"}
-  impianto_scariche_collaudo: {type: yes_no, group: impianti_collaudo, item: "Lightning protection"}
-  impianto_linee_vita_collaudo: {type: yes_no, group: impianti_collaudo, item: "Safety lines (linee vita)"}
+  impianto_ascensore_collaudo: {type: yes_no, group: impianti_collaudo, item: "Ascensori, montacarichi, scale mobili"}
+  impianto_antincendio_collaudo: {type: yes_no, group: impianti_collaudo, item: "Impianti antincendio"}
+  impianto_scariche_collaudo: {type: yes_no, group: impianti_collaudo, item: "Protezione dalle scariche atmosferiche"}
+  impianto_linee_vita_collaudo: {type: yes_no, group: impianti_collaudo, item: "Linee vita"}
   impianto_altro_collaudo: {type: yes_no, group: impianti_collaudo, item: "L'altro impianto"}
   impianto_elettrico_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: "L'impianto elettrico"}
   impianto_radiotv_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: "Impianti radiotelevisivi, antenne, impianti elettronici"}
   impianto_termico_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: "Riscaldamento o climatizzazione"}
   impianto_idrico_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: "Impianti idrici e sanitari"}
   impianto_gas_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: "Gas"}
-  impianto_ascensore_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: "Lifts, goods lifts, escalators"}
-  impianto_antincendio_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: "Fire protection"}
-  impianto_scariche_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: "Lightning protection"}
+  impianto_ascensore_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: "Ascensori, montacarichi, scale mobili"}
+  impianto_antincendio_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: "Impianti antincendio"}
+  impianto_scariche_atto_notorio: {type: yes_no, group: impianti_atto_notorio, item: "Protezione dalle scariche atmosferiche"}
   ascensore_comunicazione:
     type: choice
     question: "La comunicazione di messa in esercizio dell'ascensore al Comune (art. 12 DPR 162/1999): sca (questa agibilità vale come tale, come consente il modulo); presentata (presentata prima dell'agibilità: ne indica il protocollo); nessuna (nessun ascensore messo in esercizio con questi lavori)"
@@ -897,8 +897,8 @@ asks:
   # salvaguardia over the area (each its own rows: which plan, zone, article).
   strumenti_altri: {type: yes_no, question: "Oltre al PRG, l'immobile ricade in un'area disciplinata da un altro strumento urbanistico vigente o in salvaguardia (un PUC adottato, un PUA, un piano particolareggiato, di lottizzazione o di recupero, un P.I.P., un P.E.E.P., un piano di settore, il piano stralcio dell'Autorità di Bacino, il PTCP, un piano paesistico o il piano di un parco, altro)?", propose: "false"}
   strumento_puc: {type: yes_no, group: strumenti, item: "Un PUC (Piano Urbanistico Comunale) adottato o approvato"}
-  strumento_pua: {type: yes_no, group: strumenti, item: "A PUA (piano urbanistico attuativo, L.R. Campania 16/2004 art. 26)"}
-  strumento_particolareggiato: {type: yes_no, group: strumenti, item: "A piano particolareggiato"}
+  strumento_pua: {type: yes_no, group: strumenti, item: "Un PUA (piano urbanistico attuativo, L.R. Campania 16/2004 art. 26)"}
+  strumento_particolareggiato: {type: yes_no, group: strumenti, item: "Un piano particolareggiato"}
   strumento_recupero: {type: yes_no, group: strumenti, item: "A piano di recupero (L. 457/1978)"}
   strumento_pip: {type: yes_no, group: strumenti, item: "A P.I.P. (piano per gli insediamenti produttivi)"}
   strumento_peep: {type: yes_no, group: strumenti, item: "A P.E.E.P. (piano per l'edilizia economica e popolare, L. 167/1962)"}
@@ -907,9 +907,9 @@ asks:
   strumento_settore: {type: yes_no, group: strumenti, item: "A piano di settore"}
   strumento_psai: {type: yes_no, group: strumenti, item: "Il piano stralcio dell'Autorità di Bacino (PSAI)"}
   strumento_ptcp: {type: yes_no, group: strumenti, item: "Il P.T.C.P. (piano territoriale di coordinamento provinciale)"}
-  strumento_paesistico: {type: yes_no, group: strumenti, item: "A piano territoriale paesistico"}
-  strumento_parco: {type: yes_no, group: strumenti, item: "A park authority's plan (piano dell'ente parco)"}
-  strumento_altro: {type: yes_no, group: strumenti, item: "Another planning instrument"}
+  strumento_paesistico: {type: yes_no, group: strumenti, item: "Un piano territoriale paesistico"}
+  strumento_parco: {type: yes_no, group: strumenti, item: "Il piano dell'ente parco"}
+  strumento_altro: {type: yes_no, group: strumenti, item: "Un altro strumento urbanistico"}
   strumento_puc_zona: {type: text, question: "La zona dell'immobile nel PUC"}
   strumento_puc_articolo: {type: text, question: "L'articolo delle norme del PUC per quella zona"}
   strumento_pua_zona: {type: text, question: "La zona dell'immobile nel PUA"}
@@ -963,8 +963,8 @@ asks:
   progetto_antincendio_doc: {type: file, question: "Il progetto dell'impianto di protezione antincendio (PDF)"}
   progetto_altro_doc: {type: file, question: "Il progetto dell'altro impianto (PDF)"}
   impianto_radiotv: {type: yes_no, question: "Impianti radiotelevisivi, antenne, impianti elettronici?", when: "{{ask.impianti}}"}
-  impianto_ascensore: {type: yes_no, question: "Lifts, goods lifts, escalators?", when: "{{ask.impianti}}"}
-  impianto_antincendio: {type: yes_no, question: "Fire-protection systems?", when: "{{ask.impianti}}"}
+  impianto_ascensore: {type: yes_no, question: "Ascensori, montacarichi, scale mobili?", when: "{{ask.impianti}}"}
+  impianto_antincendio: {type: yes_no, question: "Impianti antincendio?", when: "{{ask.impianti}}"}
   impianto_altro: {type: yes_no, question: "Un altro tipo di impianto (come definito dalle norme regionali)?", when: "{{ask.impianti}}"}
   impianto_altro_quale: {type: text, question: "Quale altro impianto, in poche parole (100 caratteri)"}
   demolizioni: {type: yes_no, question: "I lavori comportano demolizioni (tramezzi, finiture) e producono rifiuti?"}
@@ -1085,14 +1085,14 @@ asks:
     question: "L'immobile ricade in una fascia di rispetto stradale, ferroviaria, di elettrodotto, di gasdotto, di un sito militare o di un aeroporto (tutela funzionale)? no; autocertificazione (il progettista autocertifica la conformità dei lavori: allegata); assenso (servono assensi: allegati i documenti delle relative richieste)"
     options: ["no", autocertificazione, assenso]
     propose: "no"
-  fascia_stradale: {type: yes_no, group: fasce_funzionali, item: "Road (D.M. 1404/1968, D.P.R. 495/1992)"}
+  fascia_stradale: {type: yes_no, group: fasce_funzionali, item: "Stradale (D.M. 1404/1968, D.P.R. 495/1992)"}
   fascia_stradale_quale: {type: text, question: "Quale fascia di rispetto stradale (la riga 'specificare')"}
-  fascia_ferroviaria: {type: yes_no, group: fasce_funzionali, item: "Railway (D.P.R. 753/1980)"}
-  fascia_elettrodotto: {type: yes_no, group: fasce_funzionali, item: "Power line (D.P.C.M. 8 July 2003)"}
-  fascia_gasdotto: {type: yes_no, group: fasce_funzionali, item: "Gas pipeline (D.M. 24 November 1984)"}
-  fascia_militare: {type: yes_no, group: fasce_funzionali, item: "Military (D.Lgs. 66/2010)"}
+  fascia_ferroviaria: {type: yes_no, group: fasce_funzionali, item: "Ferroviaria (D.P.R. 753/1980)"}
+  fascia_elettrodotto: {type: yes_no, group: fasce_funzionali, item: "Elettrodotto (D.P.C.M. 8 luglio 2003)"}
+  fascia_gasdotto: {type: yes_no, group: fasce_funzionali, item: "Gasdotto (D.M. 24 novembre 1984)"}
+  fascia_militare: {type: yes_no, group: fasce_funzionali, item: "Militare (D.Lgs. 66/2010)"}
   fascia_aeroportuale: {type: yes_no, group: fasce_funzionali, item: "Airport (ENAC's piano di rischio, art. 707 Codice della navigazione)"}
-  fascia_altro: {type: yes_no, group: fasce_funzionali, item: "Another (named below)"}
+  fascia_altro: {type: yes_no, group: fasce_funzionali, item: "Un'altra (indicata sotto)"}
   fascia_altro_quale: {type: text, question: "Quale altra fascia di rispetto"}
   # Each fascia ticked has its own slot on the attachments screen: the self-certification, or
   # the request for its assent.
@@ -1118,11 +1118,11 @@ asks:
   relazione_tecnica: {type: file, question: "La relazione tecnica (PDF)"}
   documentazione_fotografica: {type: file, question: "Foto dello stato dei locali (PDF)"}
   napoli_allegato_a: {type: yes_no, default: "false", question: "Questa pratica richiede l'Allegato A Programma 100 di Napoli (ogni titolo edilizio, DD 603/2025)?"}
-  napoli_allegato_a_firmato: {type: file, question: "L'Allegato A Programma 100 del committente (lo compila Portali: napoli/comune/cila-lavori-edilizi, modulo allegato-a-programma-100), firmato digitalmente (.p7m)"}
+  napoli_allegato_a_firmato: {type: file, question: "L'Allegato A Programma 100 del committente (lo compila Claude), firmato digitalmente (.p7m)"}
   modello_dp: {type: yes_no, default: "false", question: "Questa pratica richiede il Modello DP di Napoli (titoli, agibilità, autorizzazioni paesaggistiche: L.R. Campania 59/2018)?"}
-  modello_dp_firmato: {type: file, question: "Il Modello DP (compilato da Portali: napoli/comune/cila-lavori-edilizi, modulo modello-dp), firmato digitalmente da Lei e dal committente (.p7m), con la lettera d'incarico o il contratto"}
+  modello_dp_firmato: {type: file, question: "Il Modello DP (lo compila Claude), firmato digitalmente da Lei e dal committente (.p7m), con la lettera d'incarico o il contratto"}
   procura_firmata: {type: file, question: "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da Lei (.p7m)"}
-  dsc_firmato: {type: file, question: "Il Quadro riepilogativo della documentazione della pratica (DSC: quello del portale, Scarica il documento dopo aver spuntato le dichiarazioni, o quello che Portali compila per una CILA), completato e firmato digitalmente (.p7m)"}
+  dsc_firmato: {type: file, question: "Il Quadro riepilogativo della documentazione della pratica (DSC: quello del portale, Scarica il documento dopo aver spuntato le dichiarazioni, o quello che Claude compila per una CILA), completato e firmato digitalmente (.p7m)"}
   ricevuta_diritti: {type: file, question: "La ricevuta dei diritti pagati (prima dell'invio, come li riscuote lo sportello), firmata digitalmente (.p7m)"}
   relazione_semplificata_firmata: {type: file, question: "La Relazione Paesaggistica Semplificata del portale (Allegato D DPR 31/2017, Scarica il documento dopo aver spuntato le dichiarazioni), firmata digitalmente (.p7m)"}
   elaborati_paesaggistici: {type: file, question: "Gli elaborati paesaggistici: stato attuale, progetto e opere, con il contesto (firmati digitalmente, .p7m)"}
@@ -1166,9 +1166,9 @@ asks:
 
   forno: {type: yes_no, group: attivita_852, item: "Pane, pizza, pasticceria, gelati o piatti pronti prodotti nei locali"}
   pane: {type: yes_no, group: attivita_852, item: "Pane, pizza e altri prodotti da forno"}
-  pasticceria: {type: yes_no, group: attivita_852, item: "Pastry"}
-  gelateria: {type: yes_no, group: attivita_852, item: "Ice cream"}
-  gastronomia: {type: yes_no, group: attivita_852, item: "Ready meals (gastronomia, rosticceria, friggitoria)"}
+  pasticceria: {type: yes_no, group: attivita_852, item: "Pasticceria"}
+  gelateria: {type: yes_no, group: attivita_852, item: "Gelateria"}
+  gastronomia: {type: yes_no, group: attivita_852, item: "Piatti pronti (gastronomia, rosticceria, friggitoria)"}
   pasta: {type: yes_no, group: attivita_852, item: "Pasta fresca o secca"}
   dettaglio_alimenti: {type: yes_no, group: attivita_852, item: "Food sold in a shop (esercizio di vicinato)"}
   consumo_sul_posto: {type: yes_no, question: "I clienti possono consumare i prodotti sul posto (senza servizio al tavolo)?", propose: "false"}
@@ -1216,14 +1216,14 @@ asks:
   superficie_non_alimentare_prima_mq: {type: number, question: "Di cui, m² per il settore non alimentare prima della modifica"}
 
   alcol_vino: {type: yes_no, group: alcolici, item: "Vino (fermo o spumante)"}
-  alcol_birra: {type: yes_no, group: alcolici, item: "Beer"}
+  alcol_birra: {type: yes_no, group: alcolici, item: "Birra"}
   alcol_liquori: {type: yes_no, group: alcolici, item: "Superalcolici e liquori"}
   alcol_intermedi: {type: yes_no, group: alcolici, item: "Vermouth, vini liquorosi e aromatizzati"}
-  alcol_altre_bevande: {type: yes_no, group: alcolici, item: "Other alcoholic drinks"}
-  alcol_puro: {type: yes_no, group: alcolici, item: "Pure ethyl alcohol"}
-  alcol_aromi: {type: yes_no, group: alcolici, item: "Alcoholic flavourings"}
-  alcol_profumeria: {type: yes_no, group: alcolici, item: "Alcohol-based perfumery"}
-  alcol_altri: {type: yes_no, group: alcolici, item: "Other alcoholic products"}
+  alcol_altre_bevande: {type: yes_no, group: alcolici, item: "Altre bevande alcoliche"}
+  alcol_puro: {type: yes_no, group: alcolici, item: "Alcol etilico puro"}
+  alcol_aromi: {type: yes_no, group: alcolici, item: "Aromi alcolici"}
+  alcol_profumeria: {type: yes_no, group: alcolici, item: "Profumeria a base alcolica"}
+  alcol_altri: {type: yes_no, group: alcolici, item: "Altri prodotti alcolici"}
   alcol_con_scia: {type: yes_no, question: "La pratica è presentata insieme alla SCIA dell'attività stessa (una nuova attività), anziché per un'attività già avviata?", propose: "false"}
   alcol_avvio: {type: date, question: "Da quando vende alcolici"}
   ateco_descrizione: {type: text, question: "Il codice ATECO dell'impresa e l'attività in poche parole (70 caratteri, es. 56.10.11 Ristorazione con somministrazione)"}
@@ -1264,7 +1264,7 @@ asks:
   titolo_attivita_comune: {type: text, question: "Il comune presso cui è stato presentato il titolo", propose: "Napoli"}
 
   orario_dalle: {type: text, question: "Orario di apertura, uguale per tutti i giorni di apertura (hh:mm)"}
-  orario_alle: {type: text, question: "Closing time (hh:mm)"}
+  orario_alle: {type: text, question: "Orario di chiusura (hh:mm)"}
   giorno_chiusura: {type: text, question: "Il giorno di chiusura settimanale ('nessuno' se non c'è)", propose: "nessuno"}
   area_privata_uso_pubblico: {type: yes_no, question: "Il suolo è privato ma aperto al pubblico (anziché pubblico)?", propose: "false"}
   dehors_dal: {type: date, question: "Il primo giorno della stagione per il dehors"}
@@ -3451,7 +3451,7 @@ sections:
   - section: Qualificazione dell'intervento
     # Its change-of-use line, required, has no row for Campania's own SCIA alternativa changes.
     supports:
-      - {value: "{{ask.scia_cambio_uso}}", in: ["no", stessa categoria, tra categorie, intero immobile], defect: cambio-uso-regionale, else: "La voce sul cambio di destinazione d'uso del modulo nazionale (obbligatoria) indica solo i casi dell'art. 23-ter: una unità nell'ambito della sua categoria, una unità in zona A, B o C tra le categorie dalla a) alla c), un intero edificio nell'ambito della sua categoria. Un cambio per cui la legge della Campania prevede questo titolo (un intero edificio verso un'altra categoria, un'unità fuori dalle zone A, B e C, verso o dalla categoria rurale) non ha una voce che lo dichiari in modo veritiero: un difetto del modulo (docs/portal-defects.md); chieda al SUE."}
+      - {value: "{{ask.scia_cambio_uso}}", in: ["no", stessa categoria, tra categorie, intero immobile], defect: cambio-uso-regionale, else: "Il modulo non ha una voce per questo cambio d'uso della legge campana (un intero edificio verso un'altra categoria, un'unità fuori dalle zone A, B e C, da o verso il rurale): è un difetto del modulo; chieda al SUE."}
     fields:
       - {kind: checkbox, label: interventi per i quali è possibile presentare la SCIA alternativa}
       - {kind: radio, label: non comporta mutamento di destinazione d’uso, when: "{{ask.scia_cambio_uso|is_no}}"}
@@ -3599,7 +3599,7 @@ sections:
     # leaving the site as a by-product is filed (the dichiarazione with the title, the piano apart),
     # and a filing is for by-products.
     supports:
-      - {if: "{{ask.scavo|is_sottoprodotti}}", value: "{{ask.terre_rocce}}", in: [dichiarazione, piano], else: "L'asseverazione dichiara sottoprodotti, ma la pratica non presenta né la dichiarazione di utilizzo né il piano (alla domanda sulle terre e rocce la risposta è no): le terre che escono dal cantiere sono sottoprodotto solo se ne è stata presentata la dichiarazione o il piano (DPR 120/2017 artt. 9, 21)."}
+      - {if: "{{ask.scavo|is_sottoprodotti}}", value: "{{ask.terre_rocce}}", in: [dichiarazione, piano], else: "L'asseverazione dichiara sottoprodotti, ma la pratica non ha né la dichiarazione di utilizzo né il piano (alle terre e rocce ha risposto no). Le terre sono sottoprodotto solo con l'una o l'altro (DPR 120/2017 artt. 9, 21)."}
       - {if: "{{ask.terre_rocce|in_dichiarazione__piano}}", value: "{{ask.scavo}}", in: [sottoprodotti], else: "La pratica presenta la dichiarazione o il piano delle terre e rocce, quindi i materiali di risulta dell'asseverazione devono essere dichiarati come sottoprodotti."}
       - {if: "{{ask.scavo|is_sottoprodotti}} {{ask.terre_rocce|is_piano}}", value: "{{ask.scavo_piano_utilizzo}}", in: ["true"], else: "Il piano di utilizzo riguarda un cantiere di oltre 6000 m³ soggetto a VIA o AIA: la voce dell'asseverazione per i cantieri di grandi dimensioni."}
       - {if: "{{ask.scavo|is_sottoprodotti}} {{ask.terre_rocce|is_dichiarazione}}", value: "{{ask.scavo_piano_utilizzo}}", in: ["false"], else: "La dichiarazione di utilizzo riguarda un cantiere fino a 6000 m³ o uno non soggetto a VIA/AIA: non la voce dell'asseverazione per i grandi cantieri."}
@@ -3711,14 +3711,14 @@ sections:
     # pending then are decided, under the old rules (L.R. 13/2022 art. 4 c. 17).
     law: ["piano casa, ai sensi della l.r. n. 19/2009", interventi di ampliamento (articolo 4), interventi di demolizione e ricostruzione (articolo 5), interventi edilizi in zona agricola, riqualificazione di aree urbane degradate (articolo 7)]
     supports:
-      - {value: "{{ask.pdc_tipo}}", in: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, facolta scia, variante essenziale, variante sagoma, sottotetti, parcheggi, mutamento uso, altro], else: "Il piano casa (L.R. Campania 19/2009) non accetta nuove richieste dal 30 settembre 2022 (L.R. 31/2021 art. 28 c. 6; la L.R. 13/2022 art. 4 c. 17 disciplina solo quelle pendenti a quella data). Una variante a un permesso rilasciato in base al piano casa non è gestita."}
+      - {value: "{{ask.pdc_tipo}}", in: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, facolta scia, variante essenziale, variante sagoma, sottotetti, parcheggi, mutamento uso, altro], else: "Il piano casa (L.R. Campania 19/2009) non accetta nuove richieste dal 30 settembre 2022 (L.R. 31/2021 art. 28 c. 6; la L.R. 13/2022 art. 4 c. 17 disciplina solo quelle pendenti a quella data). Una variante a un permesso rilasciato in base al piano casa per ora non la preparo."}
       - {if: "{{ask.pdc_tipo|is_mutamento_uso}}", value: "{{ask.scia_cambio_uso}}", in: [stessa categoria, tra categorie, intero immobile, altro], else: "Un mutamento di destinazione d'uso ai sensi dell'art. 2 L.R. 19/2001 cambia la destinazione d'uso: indichi quale (stessa categoria, tra categorie, intero immobile o altro)."}
       - {if: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}}", value: "{{ask.deroga_densita,ask.deroga_altezza,ask.deroga_distanza,ask.deroga_destinazione|any}}", in: ["true"], else: "Un permesso in deroga (art. 14 DPR 380/2001) deroga ad almeno un limite: densità, altezza, distanza o destinazione d'uso."}
       - {if: "{{ask.pdc_tipo|is_altro}}", value: "{{ask.pdc_procedura}}", in: [ordinaria], else: "I lavori che nessun'altra voce indica si chiedono ai sensi dell'art. 10 in quanto tali: non come convenzionato né in deroga."}
       # A change of use that needed a SCIA alternativa or a permesso, done without it, is legalized by
       # the permesso in sanatoria too (art. 36 c. 1 names the SCIA of art. 23 c. 01): the asseverazione
       # states it as an L.R. 19/2001 change of use, or as "altro" (a whole building, L.R. 13/2022).
-      - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_tipo}}", in: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, mutamento uso, altro], else: "Il permesso in sanatoria (art. 36 DPR 380/2001) è mappato per gli interventi dell'art. 10 e i mutamenti di destinazione d'uso: non per interventi da SCIA richiesti come permesso (si presentano con la SCIA in sanatoria), per una tipologia regionale campana o per una variante."}
+      - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_tipo}}", in: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, mutamento uso, altro], else: "Il permesso in sanatoria (art. 36 DPR 380/2001) lo preparo per gli interventi dell'art. 10 e i mutamenti di destinazione d'uso: non per interventi da SCIA richiesti come permesso (si presentano con la SCIA in sanatoria), per una tipologia regionale campana o per una variante."}
       - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_procedura}}", in: [ordinaria], else: "Un permesso in sanatoria (art. 36 DPR 380/2001) si richiede come tale: non come convenzionato né in deroga."}
     fields:
       - {kind: radio, label: interventi di cui all'articolo 10, when: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia__altro}} {{ask.pdc_procedura|is_ordinaria}} {{ask.sanatoria_titolo|is_permesso|not}}"}
@@ -3930,7 +3930,7 @@ sections:
     leave: [che i lavori riguardano l'immobile individuato]
     # Its change-of-use line, required, as the SCIA alternativa's (cambio-uso-regionale).
     supports:
-      - {value: "{{ask.scia_cambio_uso}}", in: ["no", stessa categoria, tra categorie, intero immobile], defect: cambio-uso-regionale, else: "La voce sul cambio di destinazione d'uso del modulo nazionale (obbligatoria) indica solo i casi dell'art. 23-ter: una unità nell'ambito della sua categoria, una unità in zona A, B o C tra le categorie dalla a) alla c), un intero edificio nell'ambito della sua categoria. Un cambio per cui la legge della Campania prevede questo titolo (un intero edificio verso un'altra categoria, un'unità fuori dalle zone A, B e C, verso o dalla categoria rurale) non ha una voce che lo dichiari in modo veritiero: un difetto del modulo (docs/portal-defects.md); chieda al SUE."}
+      - {value: "{{ask.scia_cambio_uso}}", in: ["no", stessa categoria, tra categorie, intero immobile], defect: cambio-uso-regionale, else: "Il modulo non ha una voce per questo cambio d'uso della legge campana (un intero edificio verso un'altra categoria, un'unità fuori dalle zone A, B e C, da o verso il rurale): è un difetto del modulo; chieda al SUE."}
 
     # The piano casa: closed to new requests (quadro a's note).
     law: ["Opere edilizie straordinarie di cui alla l.r. n. 19/2009", interventi straordinari di ampliamento, ampliamento fino al venti per cento, modifica della destinazione d'uso da volumetria esistente non residenziale, realizzazione di opere interne finalizzate all'utilizzo dei volumi esistenti, interventi straordinari di demolizione e ricostruzione, aumento entro il limite del trentacinque per cento, ricostruzione a parità di volume, interventi edilizi in zona agricola (articolo 6-bis), mutamento di destinazione d'uso di immobili o loro parti per uso residenziale, realizzazione di nuove costruzioni ad uso produttivo, riqualificazione di aree urbane degradate (articolo 7), mutamento di destinazione d'uso ai fini abitativi, ricostruzione in sito di edifici diruti]

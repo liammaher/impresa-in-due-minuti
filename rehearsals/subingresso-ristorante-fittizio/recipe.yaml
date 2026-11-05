@@ -25,7 +25,7 @@ groups:
   extras:
     question: "Qualcuna di queste voci vale per l'attività? Spunti tutte quelle che valgono, o nessuna."
 asks:
-  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), non ancora mappata."}
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "subingresso {{business.denominazione}}"}
   diritti_euro: {type: number, question: "I diritti SUAP in euro", default: "96", why: "La colonna VCA del tariffario 2026 per un bar o ristorante fuori dalle zone tutelate con notifica sanitaria (S72)."}
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
@@ -43,5 +43,5 @@ supports:
   - value: "{{business.forma_giuridica}}"
     in: [ditta_individuale, srl, srls, snc, sas, spa]
     else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
-  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non ancora gestito."}
-  - {when: "{{ask.atto_registrato}}", else: "Un atto ancora in corso di registrazione non è ancora gestito: in quel caso il portale accetta la sua copia firmata, che spetta a Lei caricare. Presenti la pratica dopo la registrazione."}
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
+  - {when: "{{ask.atto_registrato}}", else: "Un atto ancora in corso di registrazione per ora non lo preparo: in quel caso il portale accetta la sua copia firmata, che spetta a Lei caricare. Presenti la pratica dopo la registrazione."}
