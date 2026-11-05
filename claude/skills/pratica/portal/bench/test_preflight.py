@@ -54,7 +54,7 @@ def ready():
     r = run.preflight(STEPS, values(), made_up=True)
     assert r["ready"], r
     assert not (r["questions"] or r["missing"] or r["unsupported"]), r
-    assert any("€ 120" in y for y in r["yours"]), r["yours"]
+    assert any("120 €" in y for y in r["yours"]), r["yours"]
 
 
 def rehearsal_draft_name():
@@ -89,8 +89,10 @@ def all_questions():
 
 def alcohol():
     r = run.preflight(STEPS, values(answers=ANSWERS | {"extras": ["alcolici"]}), made_up=True)
-    assert not r["ready"] and r["unsupported"] == ["Selling alcohol isn't supported yet: it adds the Dogane "
-                                                   "notice to the pratica."], r
+    assert not r["ready"] and r["unsupported"] == ["La vendita di alcolici aggiunge la comunicazione alle "
+                                                   "Dogane: non la preparo ancora."], r
+    # The one message Claude sends as it is: the refusal, in Italian.
+    assert r["message"] == "Non posso preparare questa pratica.\n" + r["unsupported"][0], r["message"]
     assert not r["questions"], "asked questions for an unsupported case"
 
 
@@ -162,17 +164,17 @@ def files():
     with huge.open("wb") as f:
         f.truncate(run.SLOT_MAX_BYTES + 1)
     r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(huge)}), made_up=True)
-    assert not r["ready"] and "over the portal's 9.77 MB" in r["files"][0]["problem"], r["files"]
+    assert not r["ready"] and "al massimo 9,77 MB" in r["files"][0]["problem"], r["files"]
     steps["sections"][-1]["fields"][-1]["accepts"] = "pdf.p7m;jpg.p7m"
     # A slot that takes only signed files (a real case's: a rehearsal leaves it out, run.phase).
     r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}))
-    assert not r["ready"] and r["files"][0]["problem"] == "the slot takes only pdf.p7m, jpg.p7m", r["files"]
+    assert not r["ready"] and r["files"][0]["problem"] == "la casella accetta solo file pdf.p7m, jpg.p7m", r["files"]
     r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(big)}), made_up=True)
     assert r["ready"] and not r["files"] and "1 slot(s) that take only signed files left empty" in r["warnings"][-1], r
     signed = tmp / "planimetria.pdf.p7m"
     signed.write_bytes(b"0")
     r = run.preflight(steps, values(steps=steps, answers=ANSWERS | {"planimetria": str(signed)}))
-    assert not r["ready"] and "not a readable .p7m" in r["files"][0]["problem"], r["files"]
+    assert not r["ready"] and "il file .p7m non si legge" in r["files"][0]["problem"], r["files"]
     for f in (big, huge, signed):
         f.unlink()
     tmp.rmdir()
@@ -260,7 +262,7 @@ def napoli_filing():
     broken = tmp / "Relazione_rotta.pdf"
     broken.write_bytes(PDFA_CONTENT + b"/ByteRange [0 1 2 3] /Contents <30" + b"AB" * 300 + b">")
     r, f = check(broken)
-    assert not r["ready"] and "own signature can't be read" in f["problem"], f
+    assert not r["ready"] and "la firma dentro il PDF non si legge" in f["problem"], f
     # Not Napoli's SUE (the pizzeria's SUAP): none of this is checked.
     r, f = check(plain, steps=suap)
     assert r["ready"] and "problem" not in f and not any("PDF/A" in y for y in r["yours"]), (f, r["yours"])
@@ -291,13 +293,13 @@ def p7m_signer():
     # and never the codici fiscali themselves: Claude reads this report.
     r = check(signed_file(tmp, "altro.pdf.p7m", other))
     assert r["ready"] and r["files"][0]["signed_by_dichiarante"] is False, r["files"]
-    assert len(r["warnings"]) == 1 and "not by the dichiarante" in r["warnings"][0], r["warnings"]
+    assert len(r["warnings"]) == 1 and "non dal dichiarante" in r["warnings"][0], r["warnings"]
     assert other not in json.dumps(r) and own not in json.dumps(r["files"]) + json.dumps(r["warnings"]), "a codice fiscale in the report"
     # Not a signature at all (an unsigned file renamed, a truncated download): not ready, and why.
     junk = tmp / "finto.pdf.p7m"
     junk.write_bytes(b"%PDF-1.4 non firmato\n")
     r = check(junk)
-    assert not r["ready"] and "not a readable .p7m" in r["files"][0]["problem"], r["files"]
+    assert not r["ready"] and "il file .p7m non si legge" in r["files"][0]["problem"], r["files"]
     shutil_rmtree(tmp)
 
 
@@ -567,9 +569,9 @@ def scelte_follow_the_case():
         # Proposed (none) for the person to confirm, never assumed.
         assert [q["key"] for q in r["proposals"]] == ["cointestatario"] and not r["ready"], r["proposals"]
         r = run.preflight(steps, v(p6 | {"altri_cointestatari": True}), made_up=True)
-        assert any("contiene una sola persona" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("ha posto per una sola persona" in u for u in r["unsupported"]), r["unsupported"]
         # The portal's limit, not a mapping gap: the person hears the defect and their choices.
-        assert [d["title"] for d in r.get("defects", [])] == ["Voltura e cambio d'intestazione: la sezione dei cointestatari contiene una sola persona"], r.get("defects")
+        assert [d["title"] for d in r.get("defects", [])] == ["Voltura o cambio d'intestazione a più di un cointestatario"], r.get("defects")
 
         steps, v = load("cambio-intestazione-fittizio")
         assert len(ticks(steps, v("p6"))) == 1
@@ -798,7 +800,7 @@ def materiali_di_risulta_agree():
         assert pre(base)["ready"]
         for change, words in (({"scavo": "nessuno"}, "devono essere dichiarati come sottoprodotti"),
                               ({"scavo_piano_utilizzo": "true"}, "non la voce dell'asseverazione per i grandi cantieri"),
-                              ({"terre_rocce": "no"}, "non presenta né la dichiarazione")):
+                              ({"terre_rocce": "no"}, "non ha né la dichiarazione")):
             r = pre({**base, **change})
             assert not r["ready"] and any(words in u for u in r["unsupported"]), (change, r["unsupported"])
         # Proposed from the table's answer, for a case that hasn't said.
@@ -818,13 +820,13 @@ def every_sue_case_ready():
     root = HERE.parents[4] / "rehearsals"
     fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
     refused = {("scia-fittizia", "answers-cambio-immobile-6bis.json"): "Questo caso è un'altra pratica",
-               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "È gestito solo l'art. 36 (la",
+               ("pdc-sanatoria-fittizio", "answers-parziale.json"): "Permesso in sanatoria dell'art. 36-bis",
                ("parere-esonero-fittizio", "answers-p6.json"): "A Napoli il Comune non rilascia",
                ("cila-fittizia", "answers-impresa-dopo.json"): "La CILA indica la sua impresa esecutrice",
                # The permesso's landscape quadro has no line for the art. 167 accertamento (pdc-36-paesaggio).
-               ("pdc-sanatoria-accertamento-fittizio", "answers-p6.json"): "L'asseverazione del permesso sul portale richiede una delle tre",
+               ("pdc-sanatoria-accertamento-fittizio", "answers-p6.json"): "Sanatoria dell'art. 36 in area tutelata",
                # A whole building to another category: no change-of-use line states it (cambio-uso-regionale).
-               ("pdc-sanatoria-fittizio", "answers-cambio-intero.json"): "La voce sul cambio di destinazione d'uso"}
+               ("pdc-sanatoria-fittizio", "answers-cambio-intero.json"): "Il modulo non ha una voce per questo cambio d'uso"}
     here, seen, stops = os.getcwd(), 0, set()
     os.chdir(HERE.parents[4])
     try:

@@ -24,12 +24,12 @@ groups:
   extras:
     question: "Qualcuna di queste voci vale per l'attività? Spunti tutte quelle che valgono, o nessuna."
 asks:
-  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), non ancora mappata."}
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "variazione {{business.denominazione}}"}
   var_altro:
     group: variazioni
     type: yes_no
-    item: "Something else: shares sold, a new legal representative, new partners, a new professional manager (preposto)"
+    item: "Altro: quote cedute, un nuovo legale rappresentante, nuovi soci, un nuovo preposto"
     why: "Si tratta di modifiche della società, o richiedono una dichiarazione del nuovo gestore: caso non ancora previsto."
   diritti_euro: {type: number, question: "I diritti SUAP in euro (colonna VPF del tariffario 2026: verifichi la voce; 0 se non dovuti)"}
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
@@ -42,7 +42,7 @@ supports:
   - value: "{{business.forma_giuridica}}"
     in: [ditta_individuale, srl, srls, snc, sas, spa]
     else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
-  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non ancora gestito."}
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
   - {when: "{{ask.var_altro|not}}", else: "Per ora sono gestiti solo il cambio di denominazione o il trasferimento della sede legale."}
   - value: "{{ask.var_denominazione}}-{{ask.var_sede_legale}}"
     in: [true-false, false-true]

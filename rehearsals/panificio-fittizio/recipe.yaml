@@ -26,12 +26,12 @@ groups:
   extras:
     question: "Qualcuna di queste voci vale per il panificio? Spunti tutte quelle che valgono, o nessuna."
 asks:
-  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), non ancora mappata."}
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "panificio {{business.denominazione}}"}
-  caldaia: {group: extras, type: yes_no, item: "Forni o riscaldamento oltre 116 kW, o alimentati a combustibile solido o liquido", why: "Ciò comporta la documentazione di prevenzione incendi, un caso non ancora gestito."}
-  farina: {group: extras, type: yes_no, item: "Più di 300 kg di farina al giorno", why: "Ciò comporta la documentazione di prevenzione incendi, un caso non ancora gestito."}
-  sotterraneo: {group: extras, type: yes_no, item: "Locali interrati (sotterranei o semisotterranei)", why: "Ciò comporta l'autorizzazione ASL per il lavoro in locali sotterranei, un caso non ancora gestito."}
-  insegna_esterna: {group: extras, type: yes_no, item: "Avrà un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna, un ramo non ancora mappato."}
+  caldaia: {group: extras, type: yes_no, item: "Forni o riscaldamento oltre 116 kW, o alimentati a combustibile solido o liquido", why: "Ciò comporta la documentazione di prevenzione incendi: un caso che non preparo ancora."}
+  farina: {group: extras, type: yes_no, item: "Più di 300 kg di farina al giorno", why: "Ciò comporta la documentazione di prevenzione incendi: un caso che non preparo ancora."}
+  sotterraneo: {group: extras, type: yes_no, item: "Locali interrati (sotterranei o semisotterranei)", why: "Ciò comporta l'autorizzazione ASL per il lavoro in locali sotterranei: un caso che non preparo ancora."}
+  insegna_esterna: {group: extras, type: yes_no, item: "Avrà un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
   diritti_euro: {type: number, question: "I diritti SUAP in euro (voce del tariffario 2026 per un panificio con notifica sanitaria)"}
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
 yours:
@@ -43,10 +43,10 @@ supports:
   - value: "{{business.forma_giuridica}}"
     in: [ditta_individuale, srl, srls, snc, sas, spa]
     else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
-  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non ancora gestito."}
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
   - {when: "{{ask.caldaia|not}}", else: "Forni o riscaldamento oltre 116 kW, o a combustibile solido o liquido, non sono ancora gestiti: comportano la prevenzione incendi."}
-  - {when: "{{ask.farina|not}}", else: "Una lavorazione di più di 300 kg di farina al giorno non è ancora gestita: comporta la prevenzione incendi."}
+  - {when: "{{ask.farina|not}}", else: "Una lavorazione di più di 300 kg di farina al giorno per ora non la preparo: comporta la prevenzione incendi."}
   - {when: "{{ask.sotterraneo|not}}", else: "I locali interrati non sono ancora previsti: richiedono anche l'autorizzazione dell'ASL."}
-  - {when: "{{ask.insegna_esterna|not}}", else: "Un'insegna esterna non è ancora gestita: include in questa la SCIA dell'insegna."}
+  - {when: "{{ask.insegna_esterna|not}}", else: "Un'insegna esterna per ora non la preparo: include in questa la SCIA dell'insegna."}
   - {when: "{{ask.forno}}", else: "Questa è la pratica di un panificio: devono valere le voci della notifica relative al panificio."}
   - {when: "{{ask.ristorazione|not}}", else: "La somministrazione non rientra nel panificio: è la pratica del bar o ristorante."}

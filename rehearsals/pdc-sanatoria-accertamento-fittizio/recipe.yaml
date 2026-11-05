@@ -17,8 +17,8 @@ asks:
 yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
   - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali, art. 75 DPR 445/2000"
-  - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma con la richiesta. Il suo quadro paesaggistico dichiara che i lavori alterano lo stato dei luoghi e non spunta nessuna delle tre procedure: la compatibilità è oggetto dell'accertamento presentato insieme (lo dichiari nella relazione tecnica)"
-  - "Nell'asseverazione, la voce \"non interessa aree percorse dal fuoco\" (qualità terreni) è sul portale un'unica scelta insieme alla dichiarazione sui terreni: Claude spunta la dichiarazione sui terreni e lascia non spuntata quella voce (un difetto del portale, docs/portal-defects.md); lo dichiari nella relazione tecnica se il SUE lo richiede"
+  - "Come progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma. Il quadro paesaggistico dichiara che i lavori alterano i luoghi e non spunta alcuna procedura: la compatibilità è nell'accertamento presentato insieme (lo scriva nella relazione tecnica)"
+  - "Nell'asseverazione, «non interessa aree percorse dal fuoco» e la dichiarazione sui terreni sono una sola scelta sul portale (un suo difetto): Claude spunta quella sui terreni. Le aree bruciate le dichiari nella relazione tecnica, se il SUE lo chiede"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "Firmi e invii (Firma e invio); conservi la ricevuta"
   - "Il Comune decide prima sulla compatibilità, con il parere vincolante della Soprintendenza: se è accertata, paghi la somma che stabilisce (art. 167 c. 5 D.Lgs. 42/2004, la maggiore tra il danno arrecato e il profitto conseguito); in caso contrario, le opere devono essere rimosse e il permesso in sanatoria non può essere rilasciato"
@@ -29,7 +29,7 @@ yours:
 supports:
   - when: "{{ask.paesaggio_accertamento|not}}"
     defect: pdc-36-paesaggio
-    else: "L'asseverazione del permesso sul portale richiede una delle tre procedure paesaggistiche (semplificata, ordinaria, l'accertamento dell'art. 36-bis) per opere che alterano lo stato dei luoghi, e nessuna è l'accertamento dell'art. 167 richiesto da una sanatoria ex art. 36: un difetto del portale (docs/portal-defects.md); chieda al SUE."
+    else: "Sanatoria dell'art. 36 in area tutelata: il quadro paesaggistico del permesso non ha la voce dell'accertamento dell'art. 167. È un difetto del portale; chieda al SUE."
 # The case: the main pratica's P6 answers, the part's, then these (a null drops one);
 # `gen.py --answers` writes answers-p6.json.
 answers:

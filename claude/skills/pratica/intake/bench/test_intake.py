@@ -98,9 +98,9 @@ def router_facts():
 def notes():
     n = [x["note"] for x in REPORT["notes"]]
     assert "licenza edilizia n. 1234 del 1960-03-12" in n and "licenza edilizia n. 567 del 1961-06-05" in n, n
-    assert any(x.startswith("planimetria filed on 1962-05-18: not a primo impianto") for x in n), n
-    assert any(x.startswith("diritti 151,00 €, to the account") for x in n), n
-    assert any(x.startswith("sanzione 333,00 €, to the account") for x in n), n
+    assert any(x.startswith("planimetria depositata il 1962-05-18: non è di primo impianto") for x in n), n
+    assert any(x.startswith("diritti 151,00 €: sul conto") for x in n), n
+    assert any(x.startswith("sanzione 333,00 €: sul conto") for x in n), n
 
 
 def stato_legittimo_titles():
@@ -129,7 +129,7 @@ def wrong_account_and_signed_files():
         key.unlink()
         crt.unlink()
     report, _, proposed = intake.scan(d)
-    assert any("NOT to the account" in x["note"] for x in report["notes"]), report["notes"]
+    assert any("NON sul conto" in x["note"] for x in report["notes"]), report["notes"]
     if shutil.which("openssl"):
         assert {Path(x["file"]).name: x["kind"] for x in report["documents"]}["Relazione_tecnica.pdf.p7m"] == "relazione"
         assert proposed["facts"]["intervento"] == "manutenzione_straordinaria"
@@ -264,7 +264,7 @@ def napoli_annexes():
            for line in dossier.relazione_lines()] + ["Le opere comprendono il frazionamento dell'unita' immobiliare."]
     (d / "Relazione_tecnica.pdf").write_bytes(dossier.one_page(rel))
     notes = [n["note"] for n in intake.scan(d, cila)[0]["notes"]]
-    assert any(n.startswith("not in the dossier: the Allegato A Nuovo Programma 100 and the Modello DP") for n in notes), notes
+    assert any(n.startswith("manca l'Allegato A Nuovo Programma 100 e il Modello DP") for n in notes), notes
     assert any(n.startswith("zona A (centro storico)") for n in notes) and any(n.startswith("frazionamento") for n in notes), notes
     assert not [n for n in intake.scan(d, proroga)[0]["notes"] if n["from"] == "dossier"], "a proroga needs neither"
     # An atto d'obbligo is a notarial act, and not the deed.

@@ -25,7 +25,7 @@ groups:
   extras:
     question: "Qualcuna di queste voci vale per il dehors? Spunti tutte quelle che valgono, o nessuna."
 asks:
-  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), non ancora mappata."}
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   coperto: {group: extras, type: yes_no, item: "Una struttura coperta: tende fisse, pedane o paraventi (tipo C), oppure chiusa su non più di tre lati (tipo D)", why: "I tipi C e D richiedono ulteriori documenti (e nel centro storico non sono ammessi): caso non ancora previsto."}
   centro_storico: {group: extras, type: yes_no, item: "Si trova nel centro storico (area UNESCO o buffer zone)", why: "Lì sono ammessi solo i tipi A e B, con ombrellone a palo centrale, e può essere coinvolta la Soprintendenza: caso non ancora previsto."}
   musica: {group: extras, type: yes_no, item: "Musica o impianto audio all'esterno", why: "Per il dehors si dichiara poi il rispetto dei limiti acustici; la domanda serve a spuntare la casella corretta."}
@@ -44,7 +44,7 @@ supports:
   - value: "{{business.forma_giuridica}}"
     in: [ditta_individuale, srl, srls, snc, sas, spa]
     else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
-  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non ancora gestito."}
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
   - {when: "{{ask.coperto|not}}", else: "I dehors coperti (tipo C o D) non sono ancora gestiti."}
-  - {when: "{{ask.centro_storico|not}}", else: "Un dehors nel centro storico non è ancora gestito."}
-  - {when: "{{ask.nuovo_852|not}}", else: "Presentare la notifica Reg. 852 insieme al dehors non è ancora gestito: presenti prima l'apertura dell'attività."}
+  - {when: "{{ask.centro_storico|not}}", else: "Un dehors nel centro storico per ora non lo preparo."}
+  - {when: "{{ask.nuovo_852|not}}", else: "Presentare la notifica Reg. 852 insieme al dehors per ora non lo preparo: presenti prima l'apertura dell'attività."}

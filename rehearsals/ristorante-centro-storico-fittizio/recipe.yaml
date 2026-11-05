@@ -30,13 +30,13 @@ groups:
   piano:
     question: "I requisiti del Piano 2026 per il centro storico: spunti ciascuno di quelli che i locali soddisfano (un tecnico li assevera in CS 1 e CG 1)."
 asks:
-  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), non ancora mappata."}
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "centro storico {{business.denominazione}}"}
   accessibile: {group: piano, type: yes_no, item: "I locali sono accessibili alle persone con disabilità"}
   sicurezza: {group: piano, type: yes_no, item: "C'è un sistema di sicurezza (videosorveglianza, allarme o sistemi passivi)"}
   punteggio: {group: piano, type: yes_no, item: "Il CG 1 del tecnico raggiunge il punteggio minimo di gestione previsto per la zona e l'area dei locali (secondo lo stradario del Comune)"}
   alcolici: {group: extras, type: yes_no, item: "Venderà bevande alcoliche", why: "Alcolici e nulla osta insieme non sono ancora stati rilevati sul portale."}
-  insegna_esterna: {group: extras, type: yes_no, item: "Avrà un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna, un ramo non ancora mappato."}
+  insegna_esterna: {group: extras, type: yes_no, item: "Avrà un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
   diritti_euro: {type: number, question: "I diritti SUAP in euro (voci S74-S76 del tariffario 2026 per le zone tutelate: con la notifica 420, più il nulla osta acustico: verifichi)"}
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
 yours:
@@ -56,8 +56,8 @@ supports:
   - value: "{{business.forma_giuridica}}"
     in: [ditta_individuale, srl, srls, snc, sas, spa]
     else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
-  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non ancora gestito."}
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
   - {when: "{{ask.superficie_somministrazione_mq|atleast_20}}", else: "Il Piano richiede nel centro storico almeno 20 m² destinati alla consumazione da parte dei clienti (art. 7): l'autorizzazione sarebbe negata."}
   - {when: "{{ask.accessibile}} {{ask.sicurezza}} {{ask.punteggio}}", else: "I requisiti del Piano (accessibilità, un sistema di sicurezza, il punteggio minimo della zona) devono essere soddisfatti tutti (artt. 7, 9, 12): l'autorizzazione sarebbe negata."}
   - {when: "{{ask.ristorazione}}", else: "Per ora solo bar o ristorante: le altre voci di attività della notifica non sono gestite."}
-  - {when: "{{ask.forno|not}} {{ask.dettaglio_alimenti|not}}", else: "Un bar o ristorante che produce anche prodotti da forno o gestisce un negozio alimentare non è ancora gestito."}
+  - {when: "{{ask.forno|not}} {{ask.dettaglio_alimenti|not}}", else: "Un bar o ristorante che produce anche prodotti da forno o gestisce un negozio alimentare per ora non lo preparo."}

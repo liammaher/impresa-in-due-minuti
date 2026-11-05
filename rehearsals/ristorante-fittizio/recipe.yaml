@@ -26,11 +26,11 @@ groups:
   extras:
     question: "Qualcuna di queste voci vale per l'attività? Spunti tutte quelle che valgono, o nessuna."
 asks:
-  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), non ancora mappata."}
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "ristorante {{business.denominazione}}"}
-  alcolici: {group: extras, type: yes_no, item: "Venderà bevande alcoliche, birra e vino compresi", why: "La vendita di alcolici aggiunge a questa pratica la comunicazione alle Dogane, un caso non ancora gestito."}
-  musica: {group: extras, type: yes_no, item: "Avrà musica o un impianto audio", why: "La musica comporta la documentazione di impatto acustico, un caso non ancora gestito."}
-  insegna_esterna: {group: extras, type: yes_no, item: "Avrà un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna, un ramo non ancora mappato."}
+  alcolici: {group: extras, type: yes_no, item: "Venderà bevande alcoliche, birra e vino compresi", why: "La vendita di alcolici aggiunge a questa pratica la comunicazione alle Dogane: un caso che non preparo ancora."}
+  musica: {group: extras, type: yes_no, item: "Avrà musica o un impianto audio", why: "La musica comporta la documentazione di impatto acustico: un caso che non preparo ancora."}
+  insegna_esterna: {group: extras, type: yes_no, item: "Avrà un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
   diritti_euro: {type: number, question: "I diritti SUAP in euro", default: "120", why: "La voce del tariffario 2026 per un bar o ristorante con notifica sanitaria fuori dalle zone tutelate."}
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
 yours:
@@ -49,6 +49,6 @@ supports:
   - value: "{{business.forma_giuridica}}"
     in: [ditta_individuale, srl, srls, snc, sas, spa]
     else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
-  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non ancora gestito."}
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
   - {when: "{{ask.ristorazione}}", else: "Per ora solo bar o ristorante: le altre voci di attività della notifica non sono gestite."}
-  - {when: "{{ask.forno|not}} {{ask.dettaglio_alimenti|not}}", else: "Un bar o ristorante che produce anche prodotti da forno o gestisce un negozio alimentare non è ancora gestito: queste voci insieme non sono ancora state mappate."}
+  - {when: "{{ask.forno|not}} {{ask.dettaglio_alimenti|not}}", else: "Un bar o ristorante che produce anche prodotti da forno o gestisce un negozio alimentare per ora non lo preparo: queste voci insieme non sono ancora state mappate."}

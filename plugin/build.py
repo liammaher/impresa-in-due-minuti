@@ -384,6 +384,9 @@ def main():
         ap.error("--pvault-version: this build ships no archive (vault off in plugin/build.yaml or --vault off)")
     if not a.library:
         ap.error("--library or $PRATICHE_NAPOLI_DIR: a pratiche-napoli checkout")
+    # The repo's runner names a procedure by its library title from here, as the plugin's does
+    # from its own library/ (run.procedure_name): the self-check compares their pre-flights.
+    os.environ["PRATICHE_NAPOLI_DIR"] = str(Path(a.library).resolve())
     plugin = a.out / "portali"
     if plugin.exists():
         shutil.rmtree(plugin)
