@@ -9,3 +9,16 @@
 # The skills' and README's parts for each are marked <!-- vault --> ... <!-- /vault --> and
 # <!-- no-vault --> ... <!-- /no-vault -->; build.py keeps one set and drops the markers.
 vault: false
+
+# Whether the skill's launcher (skills/portali-pratica/py) may fetch a Python where the computer
+# has none.
+#
+# false: it uses the computer's own Python 3.9+ only; where there is none it says how to install
+#        one (on a Mac it opens Apple's installer of the developer tools, which bring Python) and
+#        stops. Nothing in the plugin downloads anything.
+# true:  where there is none it downloads python-build-standalone 3.12 once (about 25 MB, checked
+#        by its pinned SHA-256) into ~/.cache/portali.
+#
+# Its parts are <!-- download --> / <!-- no-download --> in the texts, `# <download>` /
+# `# <no-download>` in the launcher.
+python_download: false

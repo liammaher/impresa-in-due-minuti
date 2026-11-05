@@ -1,17 +1,14 @@
 #!/bin/sh
-# Runs the skill's Python scripts on any computer: `sh py script.py args...`.
+# Runs the skill's Python scripts: `sh py script.py args...`. They need Python 3.9+ and no
+# packages. A real one already on the computer is used as it is; never the macOS stub
+# /usr/bin/python3 without the Command Line Tools (it opens an install dialog) nor the Windows
+# Store alias (it opens the Store). PORTALI_PYTHON=<path> picks one. Messages for the person are
+# in Italian, on stderr.
 #
-# A real Python 3.9+ already there is used as it is. Otherwise a self-contained Python
-# (python-build-standalone 3.12, the build uv uses) is downloaded once, checked against the
-# SHA-256 pinned below, and kept in ~/.cache/portali. The scripts need no packages. Never the macOS stub /usr/bin/python3 without the Command Line Tools
-# (it opens an install dialog) or the Windows Store alias (it opens the Store).
-#
-# PORTALI_PYTHON=<path> picks a Python; PORTALI_PYTHON=download skips the one installed
-# (tests). Messages for the person are in Italian, on stderr.
+# plugin/build.yaml's python_download picks which of the two parts marked below a build keeps
+# (their marker lines go). This file as it is in the repo behaves as the build that keeps none:
+# with no Python it says how to install one (that none() comes last).
 set -eu
-
-TAG=20261013
-VER=3.12.15
 
 ok() { # a usable Python: runs, is 3.9 or newer
   "$1" -c 'import sys; sys.exit(sys.version_info < (3, 9))' >/dev/null 2>&1
@@ -29,9 +26,15 @@ installed() {
   return 1
 }
 
+# <download>
+# Where there is none: python-build-standalone 3.12 (the build uv uses), downloaded once,
+# checked against the SHA-256 pinned here, kept in ~/.cache/portali. PORTALI_PYTHON=download
+# skips the installed one (tests).
+TAG=20261013
+VER=3.12.15
+
 triple() {
-  m=$(uname -m)
-  case "$m" in arm64 | aarch64) a=aarch64 ;; x86_64 | amd64) a=x86_64 ;; *) return 1 ;; esac
+  case "$(uname -m)" in arm64 | aarch64) a=aarch64 ;; x86_64 | amd64) a=x86_64 ;; *) return 1 ;; esac
   case "$(uname -s)" in
     Darwin) echo "$a-apple-darwin" ;;
     Linux) echo "$a-unknown-linux-gnu" ;;
@@ -81,7 +84,7 @@ bundled() {
     echo "Portali: il file scaricato non è quello atteso (SHA-256 $got): non lo uso." >&2; return 1
   fi
   mkdir "$tmp/x"
-  tar -xzf "$tmp/$name" -C "$tmp/x"
+  tar -xzf "$tmp/$name" -C "$tmp/x" || { echo "Portali: il Python scaricato non si apre." >&2; return 1; }
   ok "$tmp/x/$exe" || { echo "Portali: il Python scaricato non parte su questo computer." >&2; return 1; }
   rm -rf "$dir"
   mv "$tmp/x" "$dir"
@@ -89,9 +92,29 @@ bundled() {
   echo "$dir/$exe"
 }
 
+none() { bundled; }
+# </download>
+# <no-download>
+none() { # no Python 3.9+ on this computer: say how to get one, and stop
+  case "$(uname -s)" in
+    Darwin)
+      # The same window the stub opens: Apple's developer tools, which bring Python 3.
+      xcode-select --install >/dev/null 2>&1 || true
+      echo "Portali: su questo Mac manca Python. macOS apre una finestra per installare gli «strumenti per sviluppatori» di Apple: li installi (gratis, qualche minuto), poi riprovi." >&2 ;;
+    MINGW* | MSYS* | CYGWIN*)
+      echo "Portali: su questo computer manca Python 3. Lo installi da python.org (spunti «Add python.exe to PATH»), riapra l'app e riprovi." >&2 ;;
+    *)
+      echo "Portali: su questo computer manca Python 3 (3.9 o più recente): lo installi, poi riprovi." >&2 ;;
+  esac
+  return 1
+}
+# </no-download>
+
 case "${PORTALI_PYTHON:-}" in
-  "") py=$(installed) || py=$(bundled) ;;
+  "") py=$(installed) || py=$(none) ;;
+# <download>
   download) py=$(bundled) ;;
+# </download>
   *) py=$PORTALI_PYTHON ;;
 esac
 exec "$py" "$@"

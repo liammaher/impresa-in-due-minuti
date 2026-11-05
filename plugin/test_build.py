@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""build.py's vault switch, offline: the marked parts each build keeps, the markers it refuses,
-and the hand-written plugin both ways (no setup skill and no word of the archive without it).
+"""build.py's two switches, offline: the marked parts each build keeps, the markers it refuses,
+and the hand-written plugin both ways (vault: no setup skill and no word of the archive without
+it; python_download: off by default, and then no download in the launcher or the texts).
 
   python3 plugin/test_build.py      (needs PyYAML, as build.py does)
 """
@@ -60,7 +61,35 @@ def main():
             pass
         else:
             raise AssertionError("a no-vault build kept a text that names pvault")
-    print("ok: build.py's vault switch")
+    # python_download: off unless build.yaml says otherwise; its parts nest inside the vault's.
+    assert build.switch("python_download") is False, "plugin/build.yaml: python_download ships off"
+    both = "a\n<!-- no-vault -->\n<!-- download -->\nb\n<!-- /download -->\n<!-- no-download -->\nc\n<!-- /no-download -->\n<!-- /no-vault -->\n"
+    assert build.keep(build.keep_parts(both, False, "t.md"), False, "download", build.DOWNLOAD, "t.md") == "a\nc\n"
+    assert build.keep(build.keep_parts(both, False, "t.md"), True, "download", build.DOWNLOAD, "t.md") == "a\nb\n"
+    assert build.keep("x\n# <download>\ny\n# </download>\n", False, "download", build.DOWNLOAD_SH, "py") == "x\n"
+    with tempfile.TemporaryDirectory() as tmp:
+        for download in (True, False):
+            plugin = Path(tmp) / str(download)
+            shutil.copytree(HERE / "portali", plugin)
+            build.select_vault(plugin, False)
+            build.select_download(plugin, download)
+            py = (plugin / build.LAUNCHER).read_text()
+            assert ("python-build-standalone" in py) == download and "# <" not in py
+            skill = (plugin / "skills" / "portali-pratica" / "SKILL.md").read_text()
+            assert ("scarico Python" in skill) == download and ("Never install Python yourself" in skill) != download
+            for f in plugin.rglob("*.md"):
+                assert not any(build.DOWNLOAD.match(line.strip()) for line in f.read_text().splitlines()), f
+        # A text that says the plugin downloads Python, outside a download part, stops an off build.
+        plugin = Path(tmp) / "leak-dl"
+        shutil.copytree(HERE / "portali", plugin)
+        (plugin / "skills" / "portali-pratica" / "EXTRA.md").write_text("it fetches python-build-standalone\n")
+        try:
+            build.select_download(plugin, False)
+        except SystemExit:
+            pass
+        else:
+            raise AssertionError("an off build kept a text about downloading Python")
+    print("ok: build.py's vault and python_download switches")
     return 0
 
 
