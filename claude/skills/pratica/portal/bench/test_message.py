@@ -43,7 +43,8 @@ def holds(m, report):
         if run.head(p["question"]) not in m:
             bad.append(f"proposal {p['key']} missing")
     for x in report["missing"]:
-        if not x["field"].startswith("*:") and x["for"] not in m:
+        line = next((ln for ln in m.splitlines() if ln.startswith(f"– {run.whose_of(x['field'])}:")), "")
+        if not x["field"].startswith("*:") and run.missing_label(x["for"]) not in line:
             bad.append(f"missing {x['field']} not asked")
     if "alla ?" in m:
         bad.append("refers to a question it doesn't number")
@@ -75,7 +76,8 @@ def by_hand():
     m = run.message(report, asks, held_need={"impianti": [], "stato": []})
     want = ["1. Ci sono impianti? (sì/no)", "   1.a. Quali impianti?", "2. I lavori sono iniziati? (in corso / realizzato)",
             "– Ci sono tolleranze? → no", "   (se la cambia, le farò un'altra domanda)",
-            "– I diritti → 166 se alla 2 risponde in corso o realizzato", "– Scheda anagrafica: Cod.Fiscale"]
+            "– I diritti → 166 se alla 2 risponde in corso o realizzato",
+            "– Suoi e dello studio (una volta sola: valgono per le prossime pratiche): Cod.Fiscale"]
     return [f"by hand: no line {w!r} in:\n{m}" for w in want if w not in m.splitlines()]
 
 

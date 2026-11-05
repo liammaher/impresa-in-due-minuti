@@ -14,6 +14,8 @@ the declarations, sign, pay and send.
 - **Always Italian**, whatever language these instructions are in. Address the tecnico as
   **Lei**. Short sentences, one idea each. No paragraphs: a line per point.
 - **Lead with what is done**, then their step. A question is answered with a word or a pick.
+- **The program on their computer reads the documents, never you**: "Dai documenti", never
+  "Ho letto i documenti". Say how their data travels once, the first time, never again.
 - **A refusal names the exact case** ("la SCIA in sanatoria per l'art. 36-bis c. 1"), never the
   whole pratica, says what you can prepare instead, and whether it is the portal's flaw (then
   nothing is missing on their side). Then their choices, in one to three short lines.
@@ -191,8 +193,12 @@ python3 "${CLAUDE_SKILL_DIR}/portal/route.py" --table sue-napoli --answers facts
 - `routed`: it names the pratica (`pratica`, its `steps`), the `answers` to start `answers.json`
   with, and a `message` of a line or two (the pratica, what goes apart): it goes in the one
   message (step 3). Go on to step 2 with `--steps`.
-- `questions`: the documents don't settle it. Its `message` asks the facts, already in Italian:
-  send it as it is, with what you read, as the one message. Write the replies into `facts.json`
+- `questions`: the documents don't settle it. What the tecnico wrote in their request is a
+  source too: a question their own words answer plainly ("lavori interni, niente strutture" →
+  manutenzione straordinaria, no structures) goes into `facts.json` with that answer, and the
+  one message shows it as "Dalla Sua richiesta: …" to confirm with the rest; never infer one
+  they didn't say. Run it again, then send its `message` as it is, with what you read, as the
+  one message. Write the replies into `facts.json`
   and run it again; if the answer about the works changes, keep only that one.
 - `unsupported`: its `message` says why. Send it and stop; don't open the portal.
 
@@ -219,9 +225,8 @@ here. Both of these can hold at once:
 - An attachment whose content you were shown (a PDF or a photo in the conversation) has passed
   through it. Take nothing from it: no value, no fact, no summary, no quote, not even to choose
   the pratica. Say so once, plainly, and, unless you could copy it, ask for the file in the
-  folder: "I documenti allegati qui passano dalla conversazione, quindi li ho visti; non ne uso
-  nessun dato. Li salvi nella cartella Bianchi, sottocartella docs, e mi scriva «fatto»: li legge
-  il programma sul suo computer."
+  folder: "Li ho visti qui, ma i dati li prende solo il programma sul Suo computer, che li copia
+  senza errori. Li salvi nella cartella Bianchi, sottocartella docs, e mi scriva «fatto»."
 
 Then, as for any folder, read them with the intake, never yourself:
 
@@ -276,16 +281,17 @@ below). Pre-flight prints JSON and exits 0 only when `ready`.
 - `message`: the questions, the proposals, the details no document holds and the files to fix,
   already in Italian, ending with what is left to them. **The one message** is, in this order:
   1. The verdict, one line: "Coperta dall'automazione: la preparo per intero, fino alla Sua
-     parte (dichiarazioni, firma, pagamento, invio). È provata sul portale con dati di prova;
+     parte (dichiarazioni, firma, pagamento, invio). Provata sul portale con dati di prova;
      nessuna pratica reale è ancora stata inviata con Portali." (A refusal or a status other
      than `available` is its own verdict: send that instead, and stop.)
-  2. "Dai documenti (li ha letti il programma sul Suo computer):" and a line per document, with
-     its facts ("Dalla relazione tecnica: manutenzione straordinaria, nessun intervento
-     strutturale, inizio lavori 19/10/2026"), the intake's `notes`, and "Non ho riconosciuto:"
-     for a file with no kind;
+  2. "Dai documenti:" one line naming the documents recognised, then a line per fact that
+     matters ("Dalla relazione tecnica: manutenzione straordinaria, inizio lavori 19/10/2026"),
+     the intake's `notes`, and "Non ho riconosciuto:" with the files of no kind;
   3. route.py's `message`, as your proposal: "Propongo: …". The choice is the tecnico's: they
      sign the asseverazione;
-  4. pre-flight's `message`, **as it is**.
+  4. "Da controllare:" only where the documents and a proposal disagree (a sanzione's receipt,
+     but works proposed as not started), at most three lines;
+  5. pre-flight's `message`, **as it is**.
   You may only shorten it: a question's lettered follow-ups (3.a, 3.b) into a few words under it,
   keeping their letters ("3.a-3.c, se sì: quali impianti e chi rilascia la dichiarazione"), and a
   proposal line to its subject ("Tolleranze: no"). Never drop a question, a proposal or a
