@@ -1,6 +1,6 @@
 # proroga paesaggistica e terre e rocce: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
 # dichiarazione-no-title). The case: proroga-paesaggistica-fittizia's, with what scavo-fuori-sito-fittizio adds; the other's answers fill
-# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli routes it.
 extends:
 - proroga-paesaggistica-fittizia
 - scavo-fuori-sito-fittizio
@@ -35,11 +35,14 @@ yours:
 - 'No imposta di bollo to pay on this form: the portal''s form for this pratica has no bollo section or slot'
 - Sign and send (Firma e invio); keep the receipt
 rules:
-  table: null
-  question: null
-  facts: null
+  table: sue-napoli
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  facts:
+    permesso_per_scelta: 'false'
+    parere_esonero: 'false'
   main: napoli/comune/proroga-autorizzazione-paesaggistica
   handles:
   - napoli/comune/utilizzo-materiale-scavo-fuori-sito
 answers:
   descrizione: PROVA NON INVIARE - proroga paesaggistica + terre e rocce P6
+  terre_rocce: dichiarazione

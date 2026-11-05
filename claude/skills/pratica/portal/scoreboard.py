@@ -214,7 +214,7 @@ OPEN_BEYOND = [
     "a radio pair; art. 36 is filled). A SCIA in sanatoria in a protected area is mapped two ways: works done "
     "through the art. 36-bis c. 4 compatibility, works under way (art. 37 c. 5) with the authorization for the "
     "landscape works still to come; partly done landscape works under way are refused (art. 146 c. 4). "
-    "The combinations of pratiche still to map are counted above, from the rules table.",
+    "The combinations of pratiche still to map are counted above, from the rules tables.",
     "SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal saves its dating, "
     "oblazione and works proposal as one field with four values (checked 2026-11-01): a portal defect "
     "(docs/portal-defects.md), as is the permesso's under art. 36-bis. So is a variant to a pre-1977 title "
@@ -259,15 +259,16 @@ OPEN_BEYOND = [
     "but only a sent pratica shows them, and made-up data sends none.",
     "No real case has been checked by an architect who files these pratiche (level 5).",
     # The audit of 2026-11-04 (what it found that no count above shows).
-    "Which pratica a case needs: the rules table routes the building titles only. The 15 lifecycle "
-    "operations (inizio and fine lavori, agibilità, proroghe, voltura, a new direttore dei lavori or firm, "
-    "the landscape renewal and proroga, the DAU) have library entries and steps files but no rules: the "
-    "table's \"altro\" refuses proroghe and volture, so the person names the pratica.",
+    "Which pratica a case needs: two rules tables route it (2026-11-04). sue-napoli takes new works (the title, "
+    "the landscape authorization filed with it or extended or renewed with it, the terre e rocce); "
+    "sue-napoli-adempimenti what is filed on a title held (inizio and fine lavori, agibilità, proroghe, "
+    "voltura, a new direttore dei lavori or firm, the DAU). The person says which of the two: new works, or "
+    "a title already held.",
     "Operations in one pratica: catalogue/F839/sue-pairs.yaml says, for each pair the wizard takes, whether a "
     "case files them together and why (counted above). Its `reading` reasons (two filings due at one moment: "
     "a title or its extension with what keeps the landscape authorization in force, the end of works with the "
-    "DAU) are for an architect to confirm; the rules table routes none of the follow-up combinations yet, so "
-    "the person names them.",
+    "DAU) are for an architect to confirm: the rules tables route these combinations on them, each such rule "
+    "marked `Lettura` in the library's table.",
     "Several cadastral units are mapped, in both catasti (Dati catastali's two groups, 2026-11-04); "
     "a third group (back to the first catasto) is refused. The title's other holders take one row: more go in the "
     "assent's attachment, and the voltura's co-holders one person (portal defect coholders-one).",
@@ -324,7 +325,10 @@ def sue_completeness(reh, status):
     # The rules table's cases, walked as bench/test_route.py walks them: a pratica counted alone
     # can be done while the same works with another pratica filed with it aren't (2026-10-31: the
     # permesso was, with its landscape authorization it wasn't, and this page didn't say).
-    c = route.coverage("sue-napoli", REHEARSALS)
+    tables = [route.coverage(t, REHEARSALS) for t in ("sue-napoli", "sue-napoli-adempimenti")]
+    c = {k: sum(x[k] for x in tables) for k in ("cases", "routed", "refused")}
+    c["unmapped"] = sorted((kv for x in tables for kv in x["unmapped"]), key=lambda kv: (-kv[1], kv[0]))
+    c["combinations"] = sorted({k for x in tables for k in x["combinations"]})
     combos = sum(1 for k in sue if k.startswith("sue-combo-"))
     bare = lambda p: p.removeprefix("napoli/comune/")
     combo = lambda k: " + ".join(bare(x) for x in [k[0], *k[1]])
@@ -333,7 +337,7 @@ def sue_completeness(reh, status):
         "", "Measured today:", "",
         f"- Level 1: {len(fill)} of {len(sue)} pratiche fully in the dictionary" + (f" ({short} not)." if short else ".")
         + f" {combos} of them are two operations in one pratica (`sue-combo-*`).",
-        f"- Which pratiche a case needs: of the {c['cases']} cases the rules table decides, **{c['routed']} reach a "
+        f"- Which pratiche a case needs: of the {c['cases']} cases the rules tables decide, **{c['routed']} reach a "
         f"steps file**, {c['refused']} are refused with a reason or need no pratica, and **{to_map} have no steps "
         f"file yet**: {len(c['unmapped'])} combinations of pratiche, listed below (`bench/test_route.py`).",
         f"- Level 2: **{sum(per.values())} refusals across {len(per)} recipes**, {len(refusals)} distinct messages.",

@@ -1,6 +1,6 @@
 # proroga fine e proroga paesaggistica: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
 # authorization-keeps-pace). The case: proroga-fine-fittizia's, with what proroga-paesaggistica-fittizia adds; the other's answers fill
-# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli-adempimenti routes it.
 extends:
 - proroga-fine-fittizia
 - proroga-paesaggistica-fittizia
@@ -37,9 +37,12 @@ yours:
 - '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
 - Sign and send (Firma e invio); keep the receipt
 rules:
-  table: null
-  question: null
-  facts: null
+  table: sue-napoli-adempimenti
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  facts:
+    adempimento: proroga_fine
+    proroga: ordinaria
+    paesaggistica: proroga
   main: napoli/comune/proroga-fine-lavori
   handles:
   - napoli/comune/proroga-autorizzazione-paesaggistica

@@ -23,8 +23,14 @@
  "diritti_esente": false,
  "bollo_esenzione": "no",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "paesaggistica": "no",
  "paes_protocollo": "PG/2023/0555555",
  "paes_data": "2023-05-10",
  "paes_scadenza": "2028-05-10",
- "titolo_esclusivo": true
+ "titolo_esclusivo": true,
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "proroga",
+ "fatti": [],
+ "terre_rocce": "no"
 }

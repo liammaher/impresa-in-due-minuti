@@ -4,7 +4,7 @@
 
 - **The crawl**: `catalogue/F839/sections/sue-combo-scia-proroga-paesaggistica.json`.
 - **The recipe** `extends` `scia-paesaggistica-semplificata-fittizia`, `proroga-paesaggistica-fittizia`: the first is the main pratica, the others' answers fill what its don't say.
-- No rules table routes this combination yet: the person names it.
+- The rules table sue-napoli routes this combination (2026-11-04).
 
 Made-up data; the draft is "PROVA NON INVIARE" and stops before the declarations, payment, signing and sending.
 

@@ -18,6 +18,7 @@
  "diritti_esente": false,
  "bollo_esenzione": "no",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "paesaggistica": "no",
  "pdc_numero": "999/2026",
  "pdc_anno": "2026",
  "titolo_id_pratica": "FTTLCU91L02F839F-15032026-1012",
@@ -25,5 +26,10 @@
  "paes_data": "2023-05-10",
  "paes_scadenza": "2028-05-10",
  "proroga_tipo_lavori": "sostituzione infissi",
- "titolo_esclusivo": true
+ "titolo_esclusivo": true,
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "proroga",
+ "fatti": [],
+ "terre_rocce": "no"
 }

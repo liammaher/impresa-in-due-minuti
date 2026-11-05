@@ -1,6 +1,6 @@
 # rinnovo paesaggistica e terre e rocce: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
 # dichiarazione-no-title). The case: rinnovo-paesaggistica-fittizia's, with what scavo-fuori-sito-fittizio adds; the other's answers fill
-# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli routes it.
 extends:
 - rinnovo-paesaggistica-fittizia
 - scavo-fuori-sito-fittizio
@@ -34,11 +34,14 @@ yours:
   any acknowledgement in the client''s name'
 - Sign and send (Firma e invio); keep the receipt
 rules:
-  table: null
-  question: null
-  facts: null
+  table: sue-napoli
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  facts:
+    permesso_per_scelta: 'false'
+    parere_esonero: 'false'
   main: napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata
   handles:
   - napoli/comune/utilizzo-materiale-scavo-fuori-sito
 answers:
   descrizione: PROVA NON INVIARE - rinnovo paesaggistica + terre e rocce P6
+  terre_rocce: dichiarazione

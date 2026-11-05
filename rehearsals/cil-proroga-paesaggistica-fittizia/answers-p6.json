@@ -24,7 +24,7 @@
  "atti_da_acquisire": false,
  "comunicazioni_contestuali": false,
  "intervento": "opere_temporanee",
- "paesaggio": "semplificata",
+ "paesaggio": "proroga",
  "fatti": [],
  "impresa_dopo": "false",
  "diritti_esente": false,
@@ -51,5 +51,6 @@
  "paes_data": "2023-05-10",
  "paes_scadenza": "2028-05-10",
  "proroga_data_prevista": "2029-05-10",
- "proroga_tipo_lavori": "sostituzione infissi"
+ "proroga_tipo_lavori": "sostituzione infissi",
+ "cambio_uso": "no"
 }

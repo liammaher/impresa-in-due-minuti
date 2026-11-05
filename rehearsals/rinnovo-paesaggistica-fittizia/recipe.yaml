@@ -17,3 +17,8 @@ yours:
   - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "Firmi e invii (Firma e invio); conservi la ricevuta"
+# Routed by the rules table sue-napoli: works with no building title in a protected area.
+rules:
+  table: sue-napoli
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+  facts: {permesso_per_scelta: "false", parere_esonero: "false"}

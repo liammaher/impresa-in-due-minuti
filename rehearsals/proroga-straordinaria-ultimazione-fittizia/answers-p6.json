@@ -20,5 +20,6 @@
  "titolo_tipo": "permesso di costruire",
  "titolo_con_paesaggistica": false,
  "titolo_esclusivo": true,
- "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "paesaggistica": "no"
 }

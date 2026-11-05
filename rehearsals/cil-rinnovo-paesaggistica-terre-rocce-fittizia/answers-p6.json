@@ -24,7 +24,7 @@
  "atti_da_acquisire": false,
  "comunicazioni_contestuali": false,
  "intervento": "opere_temporanee",
- "paesaggio": "semplificata",
+ "paesaggio": "rinnovo",
  "fatti": [],
  "impresa_dopo": "false",
  "diritti_esente": false,
@@ -45,5 +45,6 @@
  "paes_data": "2021-09-01",
  "paes_scadenza": "2026-09-01",
  "paes_rinnovo_di": "semplificata",
- "paes_rinnovo_variazioni": false
+ "paes_rinnovo_variazioni": false,
+ "cambio_uso": "no"
 }

@@ -20,3 +20,8 @@ yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
   - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
   - "Firmi e invii (Firma e invio); conservi la ricevuta"
+# Routed by the rules table sue-napoli-adempimenti: what is filed on the title held.
+rules:
+  table: sue-napoli-adempimenti
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+  facts: {adempimento: "inizio_lavori", titolo_tipo: "permesso_di_costruire"}

@@ -1,6 +1,6 @@
 # SCIA e rinnovo paesaggistica e terre e rocce: 3 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
 # authorization-keeps-pace). The case: scia-paesaggistica-semplificata-terre-rocce-fittizia's, with what rinnovo-paesaggistica-fittizia adds; the other's answers fill
-# what the main's don't say (gen.py combo_answers). No rules table routes it yet: the person names it.
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli routes it.
 extends:
 - scia-paesaggistica-semplificata-terre-rocce-fittizia
 - rinnovo-paesaggistica-fittizia
@@ -29,37 +29,6 @@ asks:
     propose: '{{ask.scia_onerosa|diritti_gratuito}}'
     why: 'Line SUE 10 of the Comune''s 2026 table of SUE diritti (G.C. 239/2026): 401 € for a SCIA free of the contributo;
       an onerous SCIA isn''t in the table: ask the SUE'
-  strutture:
-    type: yes_no
-    question: I lavori toccano le parti strutturali dell'edificio?
-  sismica:
-    type: choice
-    question: Per le opere strutturali, che cosa chiede la normativa sismica?
-    options:
-    - deposito
-    - autorizzazione
-    - variante
-    labels:
-      deposito: Il deposito del progetto (interventi di minore rilevanza o privi di rilevanza, art. 94-bis c. 1
-        b e c)
-      autorizzazione: L'autorizzazione preventiva (interventi rilevanti, art. 94-bis c. 1 a)
-      variante: Una variante non sostanziale a un progetto strutturale già depositato o autorizzato
-  bene_culturale:
-    type: yes_no
-    question: L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?
-  terre_rocce:
-    type: choice
-    question: Le terre e rocce scavate escono dal cantiere per essere usate altrove come sottoprodotti (non come
-      rifiuti)?
-    options:
-    - 'no'
-    - dichiarazione
-    - piano
-    labels:
-      'no': 'No: non si scava, o le terre si riusano nello stesso sito, o si smaltiscono come rifiuti'
-      dichiarazione: Sì, da un cantiere che ne produce fino a 6.000 m³ (dalle sezioni di progetto), o di più ma
-        per opere non soggette a VIA né ad AIA
-      piano: Sì, da un cantiere che ne produce oltre 6.000 m³ per opere soggette a VIA o ad AIA
 yours:
 - Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
 - 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi,
@@ -79,12 +48,16 @@ yours:
   the acknowledgements in the client''s name'
 - Sign and send (Firma e invio); keep the receipt
 rules:
-  table: null
-  question: null
-  facts: null
+  table: sue-napoli
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  facts:
+    permesso_per_scelta: 'false'
+    parere_esonero: 'false'
   main: napoli/comune/scia-edilizia
   handles:
   - napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata
   - napoli/comune/utilizzo-materiale-scavo-fuori-sito
 answers:
   descrizione: PROVA NON INVIARE - SCIA + rinnovo paes. + terre e rocce P6
+  paesaggio: rinnovo
+  terre_rocce: dichiarazione

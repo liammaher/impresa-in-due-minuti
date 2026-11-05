@@ -15,6 +15,11 @@
  "diritti_euro": "0",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
  "diritti_esente": false,
+ "fatti": [],
  "titolo_id_pratica": "FTTLCU91L02F839F-15032026-1012",
- "bollo_marche": false
+ "bollo_marche": false,
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "no",
+ "terre_rocce": "dichiarazione"
 }

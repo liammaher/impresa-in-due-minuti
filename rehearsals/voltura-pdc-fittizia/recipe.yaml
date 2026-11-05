@@ -24,3 +24,8 @@ yours:
   - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "Firmi e invii (Firma e invio); conservi la ricevuta"
+# Routed by the rules table sue-napoli-adempimenti: what is filed on the title held.
+rules:
+  table: sue-napoli-adempimenti
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+  facts: {adempimento: "intestatario", titolo_tipo: "permesso_di_costruire"}

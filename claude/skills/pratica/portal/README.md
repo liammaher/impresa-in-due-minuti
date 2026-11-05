@@ -131,6 +131,15 @@ recipe is routed once its steps file is generated; two steps files for one combi
 combination, read the same way there, or be refused with the reason. It prints the combinations
 no steps file files yet ("to map"), most cases first: the SUE's mapping still to do.
 
+The SUE has two tables (2026-11-04): `sue-napoli` for new works (the title, and what goes with it:
+the landscape authorization asked, extended or renewed, the terre e rocce) and `sue-napoli-adempimenti`
+for what is filed on a title held (start and end of works, agibilità, proroghe, voltura, direttore dei
+lavori, impresa, DAU). A steps file reads one table, so the landscape proroga and rinnovo filed alone are
+`sue-napoli`'s (works with no title); filed with a title's extension they are the adempimenti's. A
+combination's `rules.facts` replace its parents' whole (`rules` merges by key), so a combination of two
+rehearsed pratiche restates its main pratica's facts. A title's landscape quadro states `proroga` and
+`rinnovo` as the semplificata (the dictionary), as the combinations were filled on the portal.
+
 ## Operations filed together: `catalogue/F839/sue-pairs.yaml`
 
 Which of the wizard's pairs a case files in one pratica, and why, is `sue-pairs.yaml` (catalogue/README.md);
@@ -141,9 +150,9 @@ people of both kept. Its `scelte` are only those the combination's crawled wizar
 another: filed with a title, the landscape proroga's third-party assent isn't there, 2026-11-04). A recipe
 built on a combination's recipe states `first` and `after` itself: copied as null from a recipe that inherits
 them they drop the payment and attachments screens (twenty did, 2026-11-04; `test_pairs.py` checks every
-combination opens with the Scheda anagrafica and reaches the attachments screen). No rules table routes the
-follow-up combinations yet: their `rules:` name `main` and `handles` only (no `table`), so pre-flight decides
-nothing and the person names the pratica; the table's facts a title's checks read are asked as plain questions.
+combination opens with the Scheda anagrafica and reaches the attachments screen). Every combination has a
+rules table since 2026-11-04; `rules:` with `main` and `handles` and no `table` is still accepted, for a
+combination mapped before its table (pre-flight then decides nothing and the person names the pratica).
 
 ## Every choice: `branches.py`
 
