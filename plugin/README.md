@@ -25,6 +25,13 @@ from a file). The build:
 - stops unless the test case passes `check.py` and pre-flight under the system `python3`,
   and every pratica's pre-flight prints the same from the plugin as from the repo's runner.
 
+**The archive switch.** `build.yaml`'s `vault` says whether the plugin ships Portali's archive
+(pvault). Off (as now), the plugin has no `portali-setup` skill and no installer, the skill and
+README keep only their `<!-- no-vault -->` parts (a job's details live in files in the tecnico's
+folder of jobs, still sealed under the on-screen code on their way to the portal), and a release
+builds no pvault at all (`release.yml`). On, everything comes back as it was: flip it and
+rebuild. `--vault on|off` overrides it for one build; `test_build.py` checks both.
+
 Two skills: `portali-pratica` (the job) and `portali-cowork-test` (the tests that decide the
 design: script calls in Cowork's browser, a 3 MB attachment, a run's cost; it writes
 `portali-test-results.md` to bring back).

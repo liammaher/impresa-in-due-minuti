@@ -21,7 +21,14 @@ REPO = "liammaher/portali"
 HERE = Path(__file__).resolve().parent
 
 
-def marketplace(version, sha256, repo=REPO):
+def vault():
+    """build.yaml's `vault`: whether the release's plugin ships the archive (the listing says so)."""
+    sys.path.insert(0, str(HERE))
+    import build
+    return build.vault_default()
+
+
+def marketplace(version, sha256, repo=REPO, vault=True):
     return {
         "name": "portali",
         "description": "Portali: Claude prepares your pratiche on Italian government portals up to the steps only "
@@ -30,8 +37,8 @@ def marketplace(version, sha256, repo=REPO):
         "plugins": [{
             "name": "portali",
             "description": "Prepares pratiche on the portals, today the Comune di Napoli's (SUE and SUAP on "
-                           "impresainungiorno), from your documents or your private vault, with the pratiche-napoli "
-                           "library of rules.",
+                           f"impresainungiorno), from your documents{' or your private vault' if vault else ''}, "
+                           "with the pratiche-napoli library of rules.",
             "source": {
                 "source": "archive",
                 "url": f"https://github.com/{repo}/releases/download/v{version}/portali-{version}.zip",
@@ -52,7 +59,7 @@ def main():
     if not re.fullmatch(r"[0-9a-fA-F]{64}", a.sha256):
         ap.error("--sha256 must be 64 hex characters")
     a.out.parent.mkdir(parents=True, exist_ok=True)
-    a.out.write_text(json.dumps(marketplace(a.version, a.sha256.lower()), indent=2, ensure_ascii=False) + "\n")
+    a.out.write_text(json.dumps(marketplace(a.version, a.sha256.lower(), vault=vault()), indent=2, ensure_ascii=False) + "\n")
     print(a.out)
     return 0
 

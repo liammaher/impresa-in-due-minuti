@@ -1,0 +1,11 @@
+# Whether the plugin ships Portali's archive (pvault). Flip it and rebuild; nothing else changes.
+#
+# false: the plugin carries no setup skill and no installer, its texts say nothing of an archive,
+#        and a release builds no pvault (release.yml). A job's details live in files in the
+#        tecnico's folder of jobs, and still reach the portal sealed under the on-screen code.
+# true:  the setup skill installs pvault (checked against the release's checksums), and each
+#        pratica reads its details from the archive with one Touch ID or Windows Hello approval.
+#
+# The skills' and README's parts for each are marked <!-- vault --> ... <!-- /vault --> and
+# <!-- no-vault --> ... <!-- /no-vault -->; build.py keeps one set and drops the markers.
+vault: false
