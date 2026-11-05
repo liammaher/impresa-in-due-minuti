@@ -2,16 +2,20 @@
 """Build the Portali plugin for Cowork: plugin/portali plus the runner, the rehearsals'
 steps files and the pratiche-napoli library, as one installable file.
 
-  build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off] [--cowork-test] [--evals]
+  build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off] [--python-download on|off]
+           [--cowork-test] [--evals]
 
 Writes OUT/portali/ (default plugin/dist) and OUT/portali.plugin (the same, zipped), then
-pre-flights the test fixture with the built plugin under the system python3, as Cowork would run
-it. --library is a pratiche-napoli checkout (default $PRATICHE_NAPOLI_DIR). Needs PyYAML
-(the pratica venv's Python): the plugin itself needs no packages, because every YAML file
+pre-flights the test fixture with the built plugin through its launcher (sh py, which picks this
+computer's python3), as the skill runs it. --library is a pratiche-napoli checkout (default
+$PRATICHE_NAPOLI_DIR). Needs PyYAML (the pratica venv's Python): the plugin itself needs no
+packages, because every YAML file
 the runner reads goes in as JSON (rules.load reads it). --connector adds the Portali
 connector (connector/, serving this same build) as the plugin's .mcp.json. --vault overrides
 build.yaml's `vault` for this build: off, the plugin carries no setup skill and its texts keep
-only their no-vault parts. --cowork-test keeps the Cowork test skill, for whoever runs those tests:
+only their no-vault parts. --python-download overrides build.yaml's `python_download`: off, the
+skill's launcher (py) and its texts keep only their no-download parts, so nothing in the plugin
+fetches a Python. --cowork-test keeps the Cowork test skill, for whoever runs those tests:
 a release leaves it out (its made-up case and 3 MB PDF are for the build's self-check and the test).
 --evals adds plugin/evals/ (how Claude follows the skill, for `claude plugin eval`), with that
 made-up case as their job (evals/_job/); a release leaves them out too.
@@ -48,37 +52,53 @@ LIBRARY_PARTS = ["procedures", "rules", "offices", "situations", "contract/signi
 COVERAGE = yaml.safe_load((HERE / "coverage.yaml").read_text())
 # The fixture the test skill runs: the CILA rehearsal's P6 case, made-up people.
 TEST_CASE = "cila-fittizia"
-# The one switch: whether the plugin ships the archive (build.yaml says what each means).
+# The archive switch: whether the plugin ships pvault (build.yaml says what each means).
 SETUP_SKILL = "portali-setup"
 TEST_SKILL = "portali-cowork-test"
 MARKER = re.compile(r"^<!-- (/?)(vault|no-vault) -->$")
+# The second switch, python_download: its parts in the texts, and in the launcher (a shell
+# script, so its marker lines are comments: `# <download>` ... `# </download>`).
+DOWNLOAD = re.compile(r"^<!-- (/?)(download|no-download) -->$")
+DOWNLOAD_SH = re.compile(r"^# <(/?)(download|no-download)>$")
+LAUNCHER = "skills/portali-pratica/py"
 
 
-def vault_default():
-    on = yaml.safe_load((HERE / "build.yaml").read_text()).get("vault")
+def switch(key):
+    on = yaml.safe_load((HERE / "build.yaml").read_text()).get(key)
     if not isinstance(on, bool):
-        sys.exit("plugin/build.yaml: `vault` must be true or false")
+        sys.exit(f"plugin/build.yaml: `{key}` must be true or false")
     return on
 
 
-def keep_parts(text, vault, name):
-    """text with only the parts for this build: a line `<!-- vault -->` opens a part kept when the
-    plugin ships the archive, `<!-- no-vault -->` one kept when it doesn't, and `<!-- /vault -->`
-    or `<!-- /no-vault -->` closes it. Parts don't nest; the marker lines themselves go."""
+def vault_default():
+    return switch("vault")
+
+
+def keep(text, on, part, marker, name):
+    """text with only the parts for this build: a marker line opening `part` starts a part kept
+    when `on`, one opening `no-<part>` a part kept when not, and its closing line ends it. Parts of
+    one switch don't nest (another switch's markers are plain lines here, so its parts may sit
+    inside); the marker lines themselves go."""
     out, open_ = [], None
     for n, line in enumerate(text.splitlines(keepends=True), 1):
-        m = MARKER.match(line.strip())
+        m = marker.match(line.strip())
         if not m:
-            if open_ is None or (open_ == "vault") == vault:
+            if open_ is None or (open_ == part) == on:
                 out.append(line)
             continue
-        closing, part = m.groups()
-        if closing and open_ != part or not closing and open_ is not None:
-            sys.exit(f"{name}:{n}: {line.strip()} with {open_ and f'<!-- {open_} -->' or 'no part'} open")
-        open_ = None if closing else part
+        closing, got = m.groups()
+        if closing and open_ != got or not closing and open_ is not None:
+            sys.exit(f"{name}:{n}: {line.strip()} with {open_ or 'no part'} open")
+        open_ = None if closing else got
     if open_:
-        sys.exit(f"{name}: <!-- {open_} --> never closed")
+        sys.exit(f"{name}: {open_} never closed")
     return "".join(out)
+
+
+def keep_parts(text, vault, name):
+    """text with only the archive switch's parts for this build: `<!-- vault -->` ...
+    `<!-- /vault -->` kept when the plugin ships the archive, `<!-- no-vault -->` ... when not."""
+    return keep(text, vault, "vault", MARKER, name)
 
 
 def select_vault(plugin, vault):
@@ -92,6 +112,20 @@ def select_vault(plugin, vault):
             said = re.search(r"pvault|" + SETUP_SKILL, text)
             if said:
                 sys.exit(f"{f.relative_to(plugin)}: says {said.group(0)!r} outside a <!-- vault --> part")
+        f.write_text(text)
+
+
+def select_download(plugin, download):
+    """The launcher and the texts for the python_download switch. Off: nothing left that fetches a
+    Python, or says the plugin does."""
+    py = plugin / LAUNCHER
+    files = sorted(plugin.rglob("*.md")) + [py]
+    for f in files:
+        text = keep(f.read_text(), download, "download", DOWNLOAD_SH if f == py else DOWNLOAD, f.relative_to(plugin))
+        if not download:
+            said = re.search(r"python-build-standalone|curl\b|scarico Python|25 MB", text)
+            if said:
+                sys.exit(f"{f.relative_to(plugin)}: says {said.group(0)!r} outside a download part")
         f.write_text(text)
 
 
@@ -293,17 +327,18 @@ def make_pdf(path, size):
 
 
 def self_check(plugin):
-    """The test case through check.py and pre-flight under python3, as Cowork runs them."""
+    """The test case through check.py and pre-flight, run as the skill runs them: through its
+    py launcher (sh py), which picks this computer's python3."""
     skill = plugin / "skills" / "portali-pratica"
     case = plugin / "skills" / TEST_SKILL / "cila"
-    py = shutil.which("python3") or sys.executable
+    py = ["sh", str(skill / "py")]
     with tempfile.TemporaryDirectory() as tmp:
         values = Path(tmp) / "values.json"
-        r = subprocess.run([py, skill / "check.py", "studio.json", "values.json", "--out", values],
+        r = subprocess.run([*py, skill / "check.py", "studio.json", "values.json", "--out", values],
                            cwd=case, capture_output=True, text=True)
         if r.returncode:
             sys.exit(f"check.py refused the test case:\n{r.stdout}{r.stderr}")
-        r = subprocess.run([py, skill / "portal" / "run.py", "preflight", "--steps",
+        r = subprocess.run([*py, skill / "portal" / "run.py", "preflight", "--steps",
                             skill / "pratiche" / f"{TEST_CASE}.json", "--answers", "answers.json",
                             "--values", values, "--made-up"], cwd=case, capture_output=True, text=True)
         if r.returncode:
@@ -314,9 +349,9 @@ def self_check(plugin):
         first.mkdir()
         (first / "studio.json").write_text('{"tecnico:ruolo.tipo": "titolare"}')
         (first / "values.json").write_text("{}")
-        subprocess.run([py, skill / "check.py", "studio.json", "values.json", "--out", "values-merged.json"],
+        subprocess.run([*py, skill / "check.py", "studio.json", "values.json", "--out", "values-merged.json"],
                        cwd=first, check=True, capture_output=True)
-        r = subprocess.run([py, skill / "portal" / "run.py", "preflight", "--steps",
+        r = subprocess.run([*py, skill / "portal" / "run.py", "preflight", "--steps",
                             skill / "pratiche" / f"{TEST_CASE}.json", "--answers", case / "answers.json",
                             "--values", "values-merged.json", "--made-up"], cwd=first, capture_output=True, text=True)
         missing = [m["field"] for m in json.loads(r.stdout or "{}").get("missing", [])]
@@ -328,7 +363,7 @@ def self_check(plugin):
             d = REHEARSALS / steps.stem
             answers = next(iter(sorted(d.glob("answers*.json"))), None)
             tail = (["--answers", answers] if answers else []) + ["--values", values]
-            ours = subprocess.run([py, skill / "portal" / "run.py", "preflight", "--steps", steps] + tail,
+            ours = subprocess.run([*py, skill / "portal" / "run.py", "preflight", "--steps", steps] + tail,
                                   cwd=REPO, capture_output=True, text=True)
             theirs = subprocess.run([sys.executable, PRATICA / "portal" / "run.py", "preflight", "--steps",
                                      steps_file(d)] + tail, cwd=REPO, capture_output=True, text=True)
@@ -400,10 +435,13 @@ def main():
     ap.add_argument("--pvault-checksums", type=Path, help="that release's checksums.txt")
     ap.add_argument("--connector", help="the Portali connector's https URL (connector/): the plugin brings it")
     ap.add_argument("--vault", choices=("on", "off"), help="ship the archive or not, for this build (default: build.yaml's)")
+    ap.add_argument("--python-download", choices=("on", "off"),
+                    help="let the skill's launcher fetch a Python where there is none, for this build (default: build.yaml's)")
     ap.add_argument("--cowork-test", action="store_true", help="keep the Cowork test skill (a release leaves it out)")
     ap.add_argument("--evals", action="store_true", help="add plugin/evals/ for `claude plugin eval` (a release leaves them out)")
     a = ap.parse_args()
     vault = vault_default() if a.vault is None else a.vault == "on"
+    download = switch("python_download") if a.python_download is None else a.python_download == "on"
     if a.connector and not re.fullmatch(r"https://[^\s/]+(/\S*)?", a.connector):
         ap.error("--connector must be an https URL")
     if bool(a.pvault_version) != bool(a.pvault_checksums):
@@ -420,6 +458,7 @@ def main():
         shutil.rmtree(plugin)
     shutil.copytree(HERE / "portali", plugin, ignore=shutil.ignore_patterns(".DS_Store", "__pycache__"))
     select_vault(plugin, vault)  # before anything else goes in: only the hand-written texts
+    select_download(plugin, download)
     # The licence and notices travel with the plugin: it bundles the library's CC BY-SA texts.
     for name in ("LICENSE", "NOTICE.md"):
         shutil.copy2(REPO / name, plugin / name)
@@ -449,7 +488,7 @@ def main():
             if f.is_file() and "__pycache__" not in f.parts and f.name != ".DS_Store":
                 z.write(f, f.relative_to(plugin))
     counts = {s: sum(e["status"] == s for e in coverage) for s in ("available", "paused", "mapped", "guide", "coming")}
-    print(f"{zipped}: {manifest['name']} {manifest['version']}, {'with' if vault else 'no'} archive{', Cowork test' if a.cowork_test else ''}{', evals' if a.evals else ''}, {len(catalog)} pratiche, "
+    print(f"{zipped}: {manifest['name']} {manifest['version']}, {'with' if vault else 'no'} archive, {'with' if download else 'no'} Python download{', Cowork test' if a.cowork_test else ''}{', evals' if a.evals else ''}, {len(catalog)} pratiche, "
           f"{zipped.stat().st_size // 1024} KB; coverage {counts}")
     return 0
 

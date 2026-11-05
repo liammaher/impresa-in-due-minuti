@@ -1,0 +1,120 @@
+#!/bin/sh
+# Runs the skill's Python scripts: `sh py script.py args...`. They need Python 3.9+ and no
+# packages. A real one already on the computer is used as it is; never the macOS stub
+# /usr/bin/python3 without the Command Line Tools (it opens an install dialog) nor the Windows
+# Store alias (it opens the Store). PORTALI_PYTHON=<path> picks one. Messages for the person are
+# in Italian, on stderr.
+#
+# plugin/build.yaml's python_download picks which of the two parts marked below a build keeps
+# (their marker lines go). This file as it is in the repo behaves as the build that keeps none:
+# with no Python it says how to install one (that none() comes last).
+set -eu
+
+ok() { # a usable Python: runs, is 3.9 or newer
+  "$1" -c 'import sys; sys.exit(sys.version_info < (3, 9))' >/dev/null 2>&1
+}
+
+installed() {
+  for c in python3 python; do
+    p=$(command -v "$c" 2>/dev/null) || continue
+    case "$p" in *WindowsApps*) continue ;; esac  # the Store alias
+    if [ "$p" = /usr/bin/python3 ] && [ "$(uname -s)" = Darwin ]; then
+      xcode-select -p >/dev/null 2>&1 || continue  # the stub, until the Command Line Tools are in
+    fi
+    if ok "$p"; then echo "$p"; return 0; fi
+  done
+  return 1
+}
+
+# <download>
+# Where there is none: python-build-standalone 3.12 (the build uv uses), downloaded once,
+# checked against the SHA-256 pinned here, kept in ~/.cache/portali. PORTALI_PYTHON=download
+# skips the installed one (tests).
+TAG=20261013
+VER=3.12.15
+
+triple() {
+  case "$(uname -m)" in arm64 | aarch64) a=aarch64 ;; x86_64 | amd64) a=x86_64 ;; *) return 1 ;; esac
+  case "$(uname -s)" in
+    Darwin) echo "$a-apple-darwin" ;;
+    Linux) echo "$a-unknown-linux-gnu" ;;
+    MINGW* | MSYS* | CYGWIN*) echo "$a-pc-windows-msvc" ;;
+    *) return 1 ;;
+  esac
+}
+
+sha_of() { # the pinned SHA-256 of this release's install_only_stripped archive
+  case "$1" in
+    aarch64-apple-darwin) echo 9866e11cf2ae9caa1e671383786f248859a52dd8bfb702fb4c0dc2c65f1d36de ;;
+    x86_64-apple-darwin) echo d09998f85752b646873a8a6bc7eea442a0d251b1c8d2413aa8ea06ef131c3335 ;;
+    aarch64-unknown-linux-gnu) echo 9467a99bacc7d90b64b02de7fa9ecfc99b72905e64e74f7ff6b460ad95cfed5a ;;
+    x86_64-unknown-linux-gnu) echo 178d3d83b6e8e99285a65d3fce9c16b87952cc5efdb4d1a0e3ff3be18ff0fc9c ;;
+    aarch64-pc-windows-msvc) echo 864342350eec45119bf295d7af7d60a36842e1c6d181cce760fcc6f60e5a072a ;;
+    x86_64-pc-windows-msvc) echo 7a2aef48e5ee569e310b29b32681debbc5d888e92790d85331a47736c6b06aad ;;
+    *) return 1 ;;
+  esac
+}
+
+sha256() {
+  if command -v sha256sum >/dev/null 2>&1; then sha256sum "$1" | cut -d' ' -f1
+  else shasum -a 256 "$1" | cut -d' ' -f1; fi
+}
+
+bundled() {
+  t=$(triple) || { echo "Portali: questo computer ($(uname -s) $(uname -m)) non è tra quelli previsti." >&2; return 1; }
+  want=$(sha_of "$t")
+  # $HOME in Git Bash too (/c/Users/...): its tar reads "C:\..." as a remote host.
+  root=${XDG_CACHE_HOME:-$HOME/.cache}/portali
+  case "$t" in *windows*) exe=python/python.exe ;; *) exe=python/bin/python3 ;; esac
+  dir=$root/python-$VER-$TAG
+  # Ready: unpacked from an archive with the pinned hash (written last, so a half-done one isn't).
+  if [ -f "$dir/.sha256" ] && [ "$(cat "$dir/.sha256")" = "$want" ] && ok "$dir/$exe"; then
+    echo "$dir/$exe"; return 0
+  fi
+  echo "Portali: scarico Python (circa 25 MB), una volta sola..." >&2
+  mkdir -p "$root"
+  tmp=$(mktemp -d "$root/.dl.XXXXXX")
+  trap 'rm -rf "$tmp"' EXIT
+  name=cpython-$VER+$TAG-$t-install_only_stripped.tar.gz
+  if ! curl -fsSL --retry 3 -o "$tmp/$name" "https://github.com/astral-sh/python-build-standalone/releases/download/$TAG/$name"; then
+    echo "Portali: non riesco a scaricare Python (connessione?). Riprovi tra poco." >&2; return 1
+  fi
+  got=$(sha256 "$tmp/$name")
+  if [ "$got" != "$want" ]; then
+    echo "Portali: il file scaricato non è quello atteso (SHA-256 $got): non lo uso." >&2; return 1
+  fi
+  mkdir "$tmp/x"
+  tar -xzf "$tmp/$name" -C "$tmp/x" || { echo "Portali: il Python scaricato non si apre." >&2; return 1; }
+  ok "$tmp/x/$exe" || { echo "Portali: il Python scaricato non parte su questo computer." >&2; return 1; }
+  rm -rf "$dir"
+  mv "$tmp/x" "$dir"
+  echo "$want" > "$dir/.sha256"
+  echo "$dir/$exe"
+}
+
+none() { bundled; }
+# </download>
+# <no-download>
+none() { # no Python 3.9+ on this computer: say how to get one, and stop
+  case "$(uname -s)" in
+    Darwin)
+      # The same window the stub opens: Apple's developer tools, which bring Python 3.
+      xcode-select --install >/dev/null 2>&1 || true
+      echo "Portali: su questo Mac manca Python. macOS apre una finestra per installare gli «strumenti per sviluppatori» di Apple: li installi (gratis, qualche minuto), poi riprovi." >&2 ;;
+    MINGW* | MSYS* | CYGWIN*)
+      echo "Portali: su questo computer manca Python 3. Lo installi da python.org (spunti «Add python.exe to PATH»), riapra l'app e riprovi." >&2 ;;
+    *)
+      echo "Portali: su questo computer manca Python 3 (3.9 o più recente): lo installi, poi riprovi." >&2 ;;
+  esac
+  return 1
+}
+# </no-download>
+
+case "${PORTALI_PYTHON:-}" in
+  "") py=$(installed) || py=$(none) ;;
+# <download>
+  download) py=$(bundled) ;;
+# </download>
+  *) py=$PORTALI_PYTHON ;;
+esac
+exec "$py" "$@"
