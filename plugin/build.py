@@ -364,6 +364,34 @@ def write_pvault_release(setup, version, checksums):
     (setup / "pvault-checksums.txt").write_text("".join(f"{lines[n]}  {n}\n" for n in sorted(lines)))
 
 
+def private_terms():
+    """The maintainer's own details the plugin must never carry (codice fiscale, address, CIE, ...),
+    one per line, # for comments. The list is the maintainer's, outside the repo: it is the data."""
+    path = Path(os.environ.get("PORTALI_PRIVATE_TERMS") or Path.home() / ".config" / "portali" / "private-terms.txt")
+    if not path.is_file():
+        return []
+    lines = (l.strip() for l in path.read_text().splitlines())
+    return [l for l in lines if l and not l.startswith("#")]
+
+
+def check_private(plugin, terms):
+    """Stop the build if a private term is in any file, as a whole word (a number inside a hash
+    doesn't count), or, for a long one, spaced out as a form prints a codice fiscale."""
+    found = {}
+    pats = [re.compile(r"(?<![0-9A-Za-z])" + re.escape(t) + r"(?![0-9A-Za-z])", re.I) for t in terms]
+    for f in sorted(plugin.rglob("*")):
+        if not f.is_file():
+            continue
+        text = f.read_bytes().decode("utf-8", "ignore")
+        flat = re.sub(r"\s+", "", text)
+        for i, p in enumerate(pats):
+            if p.search(text) or (len(terms[i]) >= 9 and p.search(flat)):
+                found.setdefault(str(f.relative_to(plugin)), []).append(i + 1)
+    if found:  # line numbers of the list, never the terms: this output may end up in a log
+        sys.exit("private terms in the plugin (line numbers in the private list):\n"
+                 + "\n".join(f"  {f}: {n}" for f, n in found.items()))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--library", type=Path, default=os.environ.get("PRATICHE_NAPOLI_DIR"))
@@ -414,6 +442,7 @@ def main():
         shutil.rmtree(plugin / "skills" / TEST_SKILL)
     if not re.fullmatch(r"[a-z0-9-]+", manifest["name"]):
         sys.exit(f"plugin name {manifest['name']!r} isn't kebab-case")
+    check_private(plugin, private_terms())
     zipped = a.out / f"{manifest['name']}.plugin"
     with zipfile.ZipFile(zipped, "w", zipfile.ZIP_DEFLATED) as z:
         for f in sorted(plugin.rglob("*")):
