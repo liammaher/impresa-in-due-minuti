@@ -24,7 +24,11 @@ from a file). The build:
 - makes the test skill's case from the CILA rehearsal's P6 fixture (studio and job split as
   an architect's folder holds them) and a 3 MB test PDF;
 - stops unless the test case passes `check.py` and pre-flight under the system `python3`,
-  and every pratica's pre-flight prints the same from the plugin as from the repo's runner.
+  and every pratica's pre-flight prints the same from the plugin as from the repo's runner;
+- stops if any file holds a term from the maintainer's private list (`PORTALI_PRIVATE_TERMS`,
+  default `~/.config/portali/private-terms.txt`, one per line; outside the repo, since it is the
+  data): their codice fiscale, address, CIE and the like. It names the file and the list's
+  line, never the term.
 
 **The archive switch.** `build.yaml`'s `vault` says whether the plugin ships Portali's archive
 (pvault). Off (as now), the plugin has no `portali-setup` skill and no installer, the skill and
