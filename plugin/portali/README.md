@@ -24,7 +24,8 @@ altro da configurare. I dati dello studio li chiede Claude alla prima pratica, u
 ## Come si usa
 
 1. Metta i documenti di ogni lavoro in una cartella: visura, atto o contratto, documento
-   d'identità, relazione tecnica, elaborati.
+   d'identità, relazione tecnica, elaborati. Non li alleghi alla conversazione: passerebbero da
+   Claude. Se lo fa, Claude non ne usa i dati: li copia nella cartella, o Le chiede di salvarli lì.
 2. Scriva una riga: «CILA per il signor Bianchi, i documenti sono nella cartella Bianchi».
 <!-- vault -->
 3. Claude risponde con un solo messaggio: cosa ha letto, quale pratica serve, le poche domande.
