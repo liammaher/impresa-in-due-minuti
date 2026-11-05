@@ -200,8 +200,10 @@ def check(out):
     c = json.loads(f.read_text())
     rows = c.get("rows", [])
     bad = [r for r in rows if not r.get("ok")]
-    checks = [(f"Anteprima del portale confrontata con i documenti: {len(rows)} valori, tutti coincidono" if not bad
-               else f"Anteprima del portale confrontata con i documenti: {len(bad)} valori su {len(rows)} da guardare",
+    n = lambda k: f"{k} valore" if k == 1 else f"{k} valori"  # noqa: E731
+    checks = [(f"Anteprima del portale confrontata con i documenti: {n(len(rows))}, "
+               + ("coincide" if len(rows) == 1 else "tutti coincidono") if not bad
+               else f"Anteprima del portale confrontata con i documenti: {n(len(bad))} su {len(rows)} da guardare",
                not bad and bool(rows))]
     if not rows:
         checks[0] = ("Anteprima del portale: nessun valore confrontato", False)
@@ -238,8 +240,14 @@ def attachments(out, job):
     files = json.loads(f.read_text()).get("files", [])
     local = {}
     for p in sorted(job.rglob("*")) if job else []:
-        if p.is_file() and out not in p.parents and p.stat().st_size <= 50 * 2**20:
-            local.setdefault(hashlib.sha256(p.read_bytes()).hexdigest(), p.relative_to(job).as_posix())
+        # Not the run's own folder, not hidden files; a file that can't be read is skipped.
+        if out in p.parents or any(part.startswith(".") for part in p.relative_to(job).parts):
+            continue
+        try:
+            if p.is_file() and p.stat().st_size <= 50 * 2**20:
+                local.setdefault(hashlib.sha256(p.read_bytes()).hexdigest(), p.relative_to(job).as_posix())
+        except OSError:
+            continue
     rows, bad = [], 0
     for x in files:
         same = local.get(x.get("sha256"))
@@ -247,8 +255,10 @@ def attachments(out, job):
         rows.append(f"<tr><td>{'✓' if same else '✗'} {esc(x.get('slot'))}</td><td>{esc(x.get('name'))}<br>"
                     f"<span class='blank'>{'uguale byte per byte a ' + esc(same) if same else 'nessun file del lavoro ha questi byte'}"
                     "</span></td></tr>")
-    checks = [(f"Allegati: {len(files)} file sul portale, ognuno uguale byte per byte a un file del lavoro" if files and not bad
+    checks = [("Allegati: 1 file sul portale, uguale byte per byte a un file del lavoro" if len(files) == 1 and not bad
+               else f"Allegati: {len(files)} file sul portale, ognuno uguale byte per byte a un file del lavoro" if files and not bad
                else "Allegati: nessun file sul portale" if not files
+               else "Allegati: 1 file sul portale diverso da ogni file del lavoro" if bad == 1
                else f"Allegati: {bad} file sul portale diversi da ogni file del lavoro", bool(files) and not bad)]
     return ("<h2>Gli allegati sul portale</h2><p class='sub'>Riscaricati dal portale e confrontati con i file del "
             "lavoro.</p><details open><summary>Allegati</summary><table>" + "".join(rows) + "</table></details>"), checks
@@ -280,8 +290,11 @@ def portal_review(report, out=None, job=None):
     # A stopped run hasn't reached either, so it says nothing about them.
     decl_html, decl_checks = declarations(report, folder) if ok else ("", [])
     prev_html, prev_checks = preview(report, folder) if ok else ("", [])
-    check_html, check_checks = check(out) if ok else ("", [])
-    files_html, files_checks = attachments(out, job) if ok else ("", [])
+    # The check against the documents is the skill's (review.py OUT, with the job's folder);
+    # run.py run's own review, which calls this with no job, has no such step.
+    checked = ok and job is not None
+    check_html, check_checks = check(out) if checked else ("", [])
+    files_html, files_checks = attachments(out, job) if checked else ("", [])
     if out and (out / "check.json").exists():
         prev_checks = []  # the preview was read and checked: that line says more than "not copied"
     checks += check_checks + files_checks + decl_checks + prev_checks
