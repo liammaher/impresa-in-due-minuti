@@ -2,7 +2,8 @@
 
 How a pratica on impresainungiorno (the SUAP and SUE front office) goes from crawled to
 filled, as the 23 SUE recipes did. The crawl itself is in `catalogue/README.md`; the
-person-facing flow (pre-flight questions, the review page) is in the pratica skill.
+person-facing flow (pre-flight questions, the review page) is in the pratica skill. How far the
+SUE's five most common cases fill, and why each part that doesn't is refused: `docs/sue-common-cases.md`.
 
 ## Adding a pratica
 
