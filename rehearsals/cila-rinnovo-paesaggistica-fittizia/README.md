@@ -13,3 +13,4 @@ Made-up data; the draft is "PROVA NON INVIARE" and stops before the declarations
 | Date | Browser | Result |
 |---|---|---|
 | 2026-11-04 | pane | P6, from scratch, `bench/rerun.py` bundle: **filled** in 177 s, every value read back on a fresh load; the portal's usual warnings on made-up data; but under a steps file that had lost its payment and attachments screens and its first sections (the recipe's `first` and `after`, fixed the same day): those screens are unproven until the next run |
+| 2026-11-05 | pane | P6, from scratch, `bench/rerun.py` bundle: **filled** in 76 s, every value read back on a fresh load; the portal's usual warnings on made-up data |

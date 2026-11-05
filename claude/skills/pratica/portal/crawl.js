@@ -53,7 +53,29 @@
     return !d || d.readyState !== "complete" || (w.jQuery && w.jQuery.active > 0) ||
       !!(w.PrimeFaces && w.PrimeFaces.ajax && !w.PrimeFaces.ajax.Queue.isEmpty());
   };
-  async function idle(ms = 30000) {
+  // The portal's own "please wait" box, and anything in flight: working, so not a failure.
+  const working = () => {
+    if (busy()) return true;
+    try {
+      return [...doc().querySelectorAll(".ui-dialog, .ui-blockui, .ui-overlay-visible, .ui-outputpanel-loading")]
+        .some((e) => e.offsetParent !== null && /attendere|caricamento|composizione della pratica/i.test(e.innerText || ""));
+    } catch (e) { return false; }
+  };
+  // Waits until done(), giving up only after `quiet` ms with no sign of work, or `cap` in all
+  // (a deadline from the click failed a slow portal that was still working, 2026-11-04).
+  async function until(done, quiet = 15000, cap = 180000) {
+    const start = performance.now();
+    let last = start;
+    while (!done()) {
+      const now = performance.now();
+      if (working()) last = now;
+      if (now - last > quiet || now - start > cap) return false;
+      await sleep(100);
+    }
+    return true;
+  }
+  // Busy is working: the limit is only for a portal stuck busy (it was 30 s until 2026-11-05).
+  async function idle(ms = 180000) {
     const end = performance.now() + ms;
     for (let q = 0; q < 3;) { if (performance.now() > end) throw new Error("portal busy"); q = busy() ? 0 : q + 1; await sleep(40); }
   }
@@ -190,16 +212,22 @@
     await act(() => b.click());
   }
   async function open(name) {
-    const a = [...doc().querySelectorAll("a.linkmenu")].find((x) => norm(x.textContent).startsWith(norm(name)));
-    if (!a) return false; // already open, or not in this pratica
-    const before = current();
-    await act(() => a.click());
-    // Scheda anagrafica reloads the whole page, which act() can't see starting. The title must
-    // change too: two sections can share their first 20 characters ("dichiarazione relativa
-    // alla conoscenza d...": the voltura's prescrizioni and soggetti).
-    for (let end = performance.now() + 10000; performance.now() < end &&
-      (current() === before || !norm(current()).startsWith(norm(name).slice(0, 20)));) await sleep(200);
-    await idle();
+    const wanted = () => norm(current()).startsWith(norm(name).slice(0, 20));
+    // On a slow portal a click can leave the previous section open past a fixed wait: 17 sections
+    // of 7 combinations "opened" the one before them, each a different one when crawled again
+    // (2026-11-04). It waits while the portal works, and clicks a second time if nothing happened.
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const a = [...doc().querySelectorAll("a.linkmenu")].find((x) => norm(x.textContent).startsWith(norm(name)));
+      if (!a) return attempt > 0; // already open, or not in this pratica
+      const before = current();
+      await act(() => a.click());
+      // Scheda anagrafica reloads the whole page, which act() can't see starting. The title must
+      // change too: two sections can share their first 20 characters ("dichiarazione relativa
+      // alla conoscenza d...": the voltura's prescrizioni and soggetti).
+      await until(() => current() !== before && wanted());
+      await idle();
+      if (wanted()) return true;
+    }
     return true;
   }
   // The open section's title: li#corrente also holds the section's form.

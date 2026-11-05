@@ -312,7 +312,7 @@ def sue_completeness(reh, status):
             msgs += [c["else"] for c in steps["supports"] if "else" in c and c["else"] not in msgs]
             for sec, label, _ in gen.unslotted(steps):
                 slots.setdefault((sec, label), set()).add(name)
-        except gen.GenError:
+        except (gen.GenError, FileNotFoundError):  # a recipe whose crawl isn't imported yet (2026-11-04)
             pass  # not fillable yet: the recipe's own refusals only
         for msg in msgs:
             msg = msg.strip()

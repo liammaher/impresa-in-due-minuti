@@ -277,7 +277,36 @@
   // to read) or to a login page: it looked like "the portal stayed busy" for 20 s (2026-10-30).
   const signedOut = () => { try { const d = frame.contentDocument; return !d || /login|spid|idp/i.test(d.location.pathname); } catch (e) { return true; } };
 
-  async function idle(ms = 20000) {
+  // The portal's own "please wait": a visible box saying "Attendere prego" or "Composizione della
+  // pratica" (after the wizard), shown while no request may be in flight from this side.
+  const pleaseWait = () => {
+    try {
+      return [...doc().querySelectorAll(".ui-dialog, .ui-blockui, .ui-overlay-visible, .ui-outputpanel-loading")]
+        .some((e) => e.offsetParent !== null && /attendere|caricamento|composizione della pratica/i.test(e.innerText || ""));
+    } catch (e) { return false; }
+  };
+  const working = () => busy() || pleaseWait();
+
+  // Waits until done(). A deadline from the click failed a slow portal that was still working
+  // (2026-11-04/05: crawled sections, two big wizard runs), so it gives up only after QUIET ms
+  // with no sign of work and done() still false, or after `cap` ms in all: a slow portal gets its
+  // time, a dead one is caught within QUIET.
+  const QUIET = 20000;
+  async function until(done, why, cap = 300000) {
+    const start = performance.now();
+    let last = start;
+    while (!done()) {
+      const now = performance.now();
+      if (working()) last = now;
+      if (signedOut() && now - start > 2000) fail("signed out: the portal sent the page to its sign-in (no document to read); sign in again, then rerun");
+      if (now - last > QUIET) fail(`${why} (nothing happening for ${QUIET / 1000} s)`);
+      if (now - start > cap) fail(`${why} (still working after ${Math.round(cap / 60000)} minutes)`);
+      await sleep(100);
+    }
+  }
+
+  // Busy is working: the limit is only for a portal stuck busy (it was 20 s, 2026-10-30 to 11-05).
+  async function idle(ms = 180000) {
     const start = performance.now(), end = start + ms;
     for (let quiet = 0; quiet < 3;) {
       if (signedOut() && performance.now() - start > 2000) fail("signed out: the portal sent the page to its sign-in (no document to read); sign in again, then rerun");
@@ -289,7 +318,8 @@
 
   // Runs a click and waits for what it starts, until 300 ms pass with no ajax in flight
   // and no page loading: a load can start another (the last wizard screen redirects).
-  async function act(click, ms = 60000) {
+  // ms: a ceiling for a request or a page that never ends (it was 60 s until 2026-11-05).
+  async function act(click, ms = 180000) {
     const end = performance.now() + ms;
     let loads = 0, leaving = null;
     const onload = () => { loads++; };
@@ -452,6 +482,15 @@
     }
   }
 
+  const WIZARD_MS = 300000;
+  // "Composizione della pratica. Attendere prego...": the portal's own wait after the last wizard
+  // screen, before the draft's first section opens. Waited out, not read as a busy portal.
+  async function composed() {
+    const composing = () => { try { return /Composizione della pratica/i.test(doc().body.innerText); } catch (e) { return false; } };
+    await until(() => !composing() && !busy(), "the page didn't load: the portal was composing the pratica", WIZARD_MS);
+    await idle();
+  }
+
   async function wizard(step, value, wi) {
     report.at = { phase: "wizard", index: wi, screen: step.screen };
     if (!norm(doc().body.innerText).includes(norm(step.screen))) fail(`expected the screen ${step.screen}`);
@@ -477,7 +516,10 @@
     // same title after CONFERMA means the portal refused it.
     const title = () => norm((doc().querySelector(".content-title") || {}).innerText);
     const before = title();
-    await act(() => press(button(step.confirm), step.confirm));
+    // A wizard screen's CONFERMA can start the portal composing the pratica, which for a big one (a
+    // SCIA alternativa with the landscape proroga) outlasted act()'s 60 s: two runs failed as "the
+    // page didn't load" and filled when rerun (2026-11-05). So the wizard waits up to five minutes.
+    await act(() => press(button(step.confirm), step.confirm), WIZARD_MS);
     if (before && title() === before) {
       const why = [...doc().querySelectorAll("span, div")].filter((e) => !e.children.length && e.offsetParent && /obbligatori|errore/i.test(e.textContent));
       fail(`still on ${step.screen} after ${step.confirm}: ${why.map((e) => norm(e.textContent)).join("; ") || "no message"}`);
@@ -842,13 +884,10 @@
   // can come back before the new page shows it (a fresh load read the old one): wait until
   // the section is the open one, its link gone from the menu and nothing loading (a page
   // that marks no open section, li#corrente, only the loading).
-  async function openSection(a, name, ms = 20000) {
+  async function openSection(a, name) {
     await act(() => press(a, name));
-    const end = performance.now() + ms;
-    while (busy() || (doc().querySelector("li#corrente") && linkTo(name) && !isOpen(name))) {
-      if (performance.now() > end) fail(`${name}: the section didn't open`);
-      await sleep(100);
-    }
+    await until(() => !busy() && !(doc().querySelector("li#corrente") && linkTo(name) && !isOpen(name)),
+      `${name}: the section didn't open`);
     await idle();
   }
 
@@ -1138,6 +1177,7 @@
       }
       if (from.section === undefined) {
         for (const [i, w] of steps.wizard.entries()) if (i >= (from.wizard || 0)) await wizard(w, values.wizard[i], i);
+        await composed();
       }
       report.wizard_seconds = secs();
       for (const [i, s] of steps.sections.entries()) {

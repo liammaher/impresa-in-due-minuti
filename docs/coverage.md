@@ -20,7 +20,7 @@ branch no rehearsal took.
 
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
-| SUE (building works) | 102 | 102 | 59 | 27 checked, 0 changed |
+| SUE (building works) | 102 | 102 | 100 | 27 checked, 0 changed |
 | SUAP (businesses) | 278 | 112 | 13 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
@@ -30,53 +30,12 @@ By section use (how much of what pratiche show the dictionary fills):
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
 
-- `cil-proroga-paesaggistica-fittizia`
-- `cil-proroga-paesaggistica-terre-rocce-fittizia`
-- `cila-proroga-paesaggistica-fittizia`
-- `cila-proroga-paesaggistica-terre-rocce-fittizia`
 - `dehors-fittizio`
-- `inizio-lavori-terre-rocce-fittizia`
 - `negozio-insegna-fittizio`
-- `paesaggistica-ordinaria-terre-rocce-fittizia`
-- `paesaggistica-semplificata-terre-rocce-fittizia`
 - `parere-esonero-fittizio`
-- `pdc-proroga-paesaggistica-fittizio`
-- `pdc-proroga-paesaggistica-terre-rocce-fittizio`
-- `pdc-rinnovo-paesaggistica-fittizio`
-- `pdc-rinnovo-paesaggistica-terre-rocce-fittizio`
 - `pdc-sanatoria-accertamento-fittizio`
-- `proroga-fine-paesaggistica-ordinaria-fittizia`
-- `proroga-fine-paesaggistica-semplificata-fittizia`
-- `proroga-fine-proroga-paesaggistica-fittizia`
-- `proroga-fine-rinnovo-paesaggistica-fittizia`
-- `proroga-inizio-paesaggistica-ordinaria-fittizia`
-- `proroga-inizio-paesaggistica-semplificata-fittizia`
-- `proroga-inizio-proroga-paesaggistica-fittizia`
-- `proroga-inizio-rinnovo-paesaggistica-fittizia`
-- `proroga-paesaggistica-terre-rocce-fittizia`
-- `proroga-straordinaria-inizio-paesaggistica-ordinaria-fittizia`
-- `proroga-straordinaria-inizio-paesaggistica-semplificata-fittizia`
-- `proroga-straordinaria-inizio-proroga-paesaggistica-fittizia`
-- `proroga-straordinaria-inizio-rinnovo-paesaggistica-fittizia`
-- `proroga-straordinaria-ultimazione-paesaggistica-ordinaria-fittizia`
-- `proroga-straordinaria-ultimazione-paesaggistica-semplificata-fittizia`
-- `proroga-straordinaria-ultimazione-proroga-paesaggistica-fittizia`
-- `proroga-straordinaria-ultimazione-rinnovo-paesaggistica-fittizia`
-- `proroga-ultimazione-paesaggistica-ordinaria-fittizia`
-- `proroga-ultimazione-paesaggistica-semplificata-fittizia`
-- `proroga-ultimazione-proroga-paesaggistica-fittizia`
-- `proroga-ultimazione-rinnovo-paesaggistica-fittizia`
-- `rinnovo-paesaggistica-terre-rocce-fittizia`
 - `ristorante-alcolici-fittizio`
 - `ristorante-centro-storico-fittizio`
-- `scia-alt-proroga-paesaggistica-fittizia`
-- `scia-alt-proroga-paesaggistica-terre-rocce-fittizia`
-- `scia-alt-rinnovo-paesaggistica-fittizia`
-- `scia-alt-rinnovo-paesaggistica-terre-rocce-fittizia`
-- `scia-proroga-paesaggistica-fittizia`
-- `scia-proroga-paesaggistica-terre-rocce-fittizia`
-- `scia-rinnovo-paesaggistica-fittizia`
-- `scia-rinnovo-paesaggistica-terre-rocce-fittizia`
 - `sospensione-srl-fittizia`
 - `variazione-negozio-fittizio`
 
@@ -104,7 +63,7 @@ Measured today:
 - Which pratiche a case needs: of the 39792 cases the rules tables decide, **9823 reach a steps file**, 29913 are refused with a reason or need no pratica, and **56 have no steps file yet**: 2 combinations of pratiche, listed below (`bench/test_route.py`).
 - Level 2: **14 refusals across 13 recipes**, 3 distinct messages.
 - Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot. A box read on a filled draft says what it adds (the dictionary's `slot`).
-- Operations in one pratica: of the 188 pairs the wizard takes and 20 triples a case needs, **73 are filed together**: 73 with a steps file, 31 of those run on the portal, **0 still to map** (`bench/test_pairs.py` lists them). The others are decided: 44 apart, 57 each alone, 4 never, 26 refused, 4 rules.
+- Operations in one pratica: of the 188 pairs the wizard takes and 20 triples a case needs, **73 are filed together**: 73 with a steps file, 72 of those run on the portal, **0 still to map** (`bench/test_pairs.py` lists them). The others are decided: 44 apart, 57 each alone, 4 never, 26 refused, 4 rules.
 - Levels 4 and 5: not measured yet (see the open items).
 
 | Recipe | Refusals left |
@@ -240,7 +199,7 @@ What a Napoli architect or pratiche agency files again and again, so what has to
 
 **SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, extensions, voltura, DL and contractor changes, the landscape authorizations), all of them.
 
-- 102 of 102 fillable, 59 run on the portal.
+- 102 of 102 fillable, 100 run on the portal.
 
 **SUAP: nine sectors × seven operations.** Each cell is one pratica on the portal:
 

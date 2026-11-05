@@ -14,6 +14,9 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[4]
 os.chdir(ROOT)  # the answers name files from the repo's root, wherever this runs from
+# catalogue.py's imports refuse to run without the login's pattern (2026-11-05); these crawls are the
+# repo's own, so one that matches no name stands in for it.
+os.environ.setdefault("CATALOGUE_PRIVATE", r"\bnessun-nome-fittizio\b")
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True
 import gen  # noqa: E402
@@ -1635,6 +1638,20 @@ def _():
         except gen.GenError:
             continue
         raise AssertionError(f"accepted {bad}")
+
+
+@case("every SUE steps file opens with the Scheda anagrafica and has its payment and attachments screens (2026-11-04: twenty combinations lost both)")
+def _():
+    # A recipe built on another that inherits `first` and `after` copied them as null, which drops
+    # the screens: their runs "filled" without ever reaching Allega documenti.
+    bad = []
+    for f in sorted(REH.glob("*/portal-steps.generated.yaml")):
+        if yaml.safe_load((f.parent / "recipe.yaml").read_text()).get("sportello") != "sue":
+            continue
+        names = [s["section"] for s in yaml.safe_load(f.read_text())["sections"]]
+        if not names or names[0] != "Scheda anagrafica" or not {"Pagamento degli oneri", "Gestione degli allegati"} <= set(names):
+            bad.append(f"{f.parent.name}: {names[:1]}")
+    assert not bad, bad
 
 
 print(f"{sum(results)}/{len(results)} passed")

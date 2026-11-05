@@ -71,8 +71,8 @@ rehearsals on the portal before trusting them.
   Each result goes to localStorage `wizard:pair:<key>+<key>`, so a probe stopped by a logout
   resumes; `--only KEY` probes the pairs with that operation, `--fresh` probes again.
 - `catalogue.py`: `ops sue|suap` lists a batch's operations, `known` the fingerprints the
-  stored crawls have, `import` writes an exported batch here (refusing one that holds the
-  login's name: `CATALOGUE_PRIVATE`, whole words: `\bname\b`, or a label's "ampliamento" matches a
+  stored crawls have, `import` writes an exported batch here (refusing to run without the pattern, and refusing one
+  that holds the login's name: `CATALOGUE_PRIVATE`, whole words: `\bname\b`, or a label's "ampliamento" matches a
   "liam"), `count` the distinct sections, how many pratiche use each
   and whether the dictionary fills it under each title the portal gives it (gen.py's own test;
   `names_missing` lists a title with no entry).
@@ -131,8 +131,8 @@ Neither fills a value, saves a section, ticks a declaration, pays or sends.
   end of works or agibilità with the DAU; the start of works with the dichiarazione; a landscape procedure
   alone with the dichiarazione) crawled in one batch, 40 at the first pass, the rest on retries: a crawl that
   read a section before the portal had switched to it ("opened" the one before) failed on a different section
-  each time, so `__crawl.batch` run again on the same `crawl:batch` (it retries those with an error) is the
-  fix, not a recrawl. What they showed: the renewal is the semplificata's adempimento; a title with the
+  each time, so `__crawl.batch` run again on the same `crawl:batch` (it retries those with an error) is the fix, not a recrawl; `open` now waits while the portal shows it is working (`until`) and clicks a second time if nothing
+  happened for 15 s. What they showed: the renewal is the semplificata's adempimento; a title with the
   landscape proroga adds "richiesta della proroga di ultimazione dei lavori" and its wizard drops the
   proroga's third-party assent (gen.py now holds a combination's scelte to its crawled `scelte eventuali`).
 - **Terre e rocce** (2026-11-03): every pair of operations probed (`sue-wizard.json` `pairs`, 190,

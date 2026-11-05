@@ -13,3 +13,4 @@ Made-up data; the draft is "PROVA NON INVIARE" and stops before the declarations
 | Date | Browser | Result |
 |---|---|---|
 | 2026-11-04 | pane | P6, `bench/rerun.py` bundle: **stopped** in 10 s on the wizard: the landscape proroga's third-party assent isn't offered when it is filed with a title (the crawl's scelte eventuali show only the procura). The recipe no longer ticks it, and gen.py now refuses a scelta a combination's crawled wizard doesn't offer |
+| 2026-11-05 | pane | P6, from scratch, `bench/rerun.py` bundle: **filled** in 118 s (a recheck of the morning's 20 s run), every value read back on a fresh load; the portal's usual warnings on made-up data |

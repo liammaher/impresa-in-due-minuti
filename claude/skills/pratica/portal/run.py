@@ -1638,23 +1638,26 @@ def preflight(steps, values, made_up=False, after=False):
     # A value longer than its box (a protocol "PG/2026/0666666" where the shop's form takes 10)
     # is asked again, or named as the vault field to shorten, before the run instead of by it.
     asked = {q["key"] for q in report["questions"]}
-    for sec in steps["sections"]:
-        for f in sec["fields"]:
-            if not f.get("max") or "value" not in f or ("when" in f and not truthy(values.render(f["when"]) or "")):
-                continue
-            v = values.render(f["value"])
-            if v is None or len(v) <= f["max"]:
-                continue
-            why = f"{sec['section']}: {f.get('label') or f.get('id')} takes at most {f['max']} characters"
-            refs = refs_in(f["value"])
-            if len(refs) == 1 and refs[0][0].startswith("ask.") and refs[0][0][4:] in asks:
-                k = refs[0][0][4:]
-                if k not in asked:
-                    asked.add(k)
-                    report["questions"].append({"key": k, "type": asks[k]["type"], "question": asks[k]["question"],
-                                                "error": why})
-            else:
-                missing.setdefault(f["value"], {"field": f["value"], "why": why, "for": sec["section"]})
+    # The wizard's boxes too: the pratica's description takes 60 characters, and an 88-character
+    # one passed pre-flight to fail only when the batch was built (2026-11-04).
+    boxes = [({"section": w["screen"]}, {**w["fill"], "label": "its box"}) for w in steps.get("wizard", []) if "fill" in w]
+    boxes += [(sec, f) for sec in steps["sections"] for f in sec["fields"]]
+    for sec, f in boxes:
+        if not f.get("max") or "value" not in f or ("when" in f and not truthy(values.render(f["when"]) or "")):
+            continue
+        v = values.render(f["value"])
+        if v is None or len(v) <= f["max"]:
+            continue
+        why = f"{sec['section']}: {f.get('label') or f.get('id')} takes at most {f['max']} characters"
+        refs = refs_in(f["value"])
+        if len(refs) == 1 and refs[0][0].startswith("ask.") and refs[0][0][4:] in asks:
+            k = refs[0][0][4:]
+            if k not in asked:
+                asked.add(k)
+                report["questions"].append({"key": k, "type": asks[k]["type"], "question": asks[k]["question"],
+                                            "error": why})
+        else:
+            missing.setdefault(f["value"], {"field": f["value"], "why": why, "for": sec["section"]})
     # A vault value the form can't take (a ruolo with no Carica on the portal, for an architect
     # named in `people` who isn't the titolare) is named here, not met by the run as a crash.
     for sec in steps["sections"]:
