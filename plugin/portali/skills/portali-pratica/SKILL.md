@@ -192,9 +192,9 @@ below runs in the job's subfolder).
 
 When it doesn't exist, create `../studio.json` as `{"tecnico:ruolo.tipo": "titolare"}` (this
 makes `tecnico` the `t:` role; without it pre-flight lists none of their details) and
-`values.json` as `{}`. The first time, say once, in one line, how their data travels:
-"Leggo io i documenti: i loro dati passano da questa conversazione e poi sul portale. Password e
-SPID mai." The first
+`values.json` as `{}`. The first time, say once, in one line, how their data travels: "Leggo io i
+documenti: i loro dati passano da questa conversazione e poi sul portale. Password e SPID mai." It
+goes in the one message (step 3), right after the verdict, never before it. The first
 pratica's pre-flight lists the studio's and the tecnico's details under `missing`: ask for them
 once, in one message, and write them into `../studio.json`.
 
@@ -249,7 +249,7 @@ here. Both of these can hold at once:
 
 - An attachment that is a file on this computer (its path is in the message, or in the uploads
   folder): copy it with `cp` into the job's `docs/` (`mkdir -p Bianchi/docs`, the subfolder
-  named after the client), without opening, reading or converting it. Say where in one line of
+  named after the client), unchanged (never converted or renamed). Say where in one line of
   the one message: "Ho copiato i documenti nella cartella Bianchi, sottocartella docs."
 - An attachment whose content you were shown (a PDF or a photo in the conversation): read it
   like any document. The portal still needs the file itself to attach it, so unless you could
@@ -264,21 +264,25 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" scan docs --o
 ```
 
 Before step 1 the same without `--steps`. A `notes` line saying the property isn't in the Comune
-di Napoli is the verdict: send it and stop. Read only `run/intake/intake.json`: each file's kind,
+di Napoli is the verdict: send it and stop. Of what the intake wrote, read `run/intake/intake.json`
+first: each file's kind,
 the fields filled (ids, not values), `unread` files (scans and photos: you read those yourself,
 below), `notes` (in Italian), and `proposals` with the document and words each comes from. Take them now, so pre-flight doesn't ask
 them again: `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" accept run/intake --into answers.json`
 (it adds the client's and the owner's roles to `people`). They are shown in the one message, and
 the tecnico's "ok" confirms them with the rest; a correction goes into `answers.json`.
 
-**Then read every document yourself** (Read: a PDF page by page, a scan or a photo as an image),
-the intake's `unread` ones first: it can't read scans. Hold each value the intake took
+**Then read every document yourself, before the one message** (Read: a PDF page by page, a scan
+or a photo as an image), the intake's `unread` ones first: it can't read scans. Hold each value the intake took
 (`run/intake/private/values.json`) to its document. Where it is wrong, or a document holds a field
 the intake left empty (pre-flight's `missing` names them, with their ids: step 3), write the value
 into the job's `values.json`, then `check.py` again. Keep, for each value you take, the document
 and page it comes from: the one message cites them, and so does the check after the compilation
 (step 5). Where two documents disagree (the visura and the deed give two subalterni), take
-neither: it goes under "Da controllare" with what each says.
+neither: it goes under "Da controllare" with what each says. A document never answers one of
+pre-flight's questions for them: what it says is a fact under "Dai documenti" ("Dalla notifica
+preliminare: due imprese"), and the question stays in the one message for the tecnico. Write
+nothing into `answers.json` but the intake's proposals and their replies.
 
 The roles: `t:` is the tecnico; the others are people that `answers.json` names under
 `people` (the entry's `notes` say which: `{"people": {"c": "bianchi"}}` makes the client
@@ -324,6 +328,9 @@ one message asks only what no document holds.
      parte (dichiarazioni, firma, pagamento, invio). Provata sul portale con dati di prova;
      nessuna pratica reale è ancora stata inviata con Portali." (A refusal or a status other
      than `available` is its own verdict: send that instead, and stop.)
+<!-- no-vault -->
+     The first time, right after it: the line on how their data travels (step 0).
+<!-- /no-vault -->
   2. "Dai documenti:" one line naming the documents recognised, then a line per fact that
      matters ("Dalla relazione tecnica: manutenzione straordinaria, inizio lavori 19/10/2026"),
      the intake's `notes`, and "Non ho riconosciuto:" with the files of no kind;
@@ -401,9 +408,16 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${
    build with `--bundle ~/Downloads/portali-<name>.js` and run `pick.js` instead: they choose
    that file once in the box it shows.
 4. `run.js` returns at once: call `await __pv.wait(40000)` until `result` is `filled` or
-   `stopped`. `waiting` means the code or the files aren't in yet: say so once, gently.
+   `stopped`. `waiting` means the page waits for the tecnico (the files to pick in its box, or a
+   code to type): say so once, gently.
+<!-- vault -->
 5. Save `JSON.stringify(__pv.last())` to `run/report.json`, then `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run`
    writes `run/review.html`.
+<!-- /vault -->
+<!-- no-vault -->
+5. Save `JSON.stringify(__pv.last())` to `run/report.json`. The review page comes after the
+   check (step 5).
+<!-- /no-vault -->
 
 <!-- vault -->
 Never read, screenshot or take the text of a page the compilation has filled, and take none
@@ -452,8 +466,9 @@ Comune will receive, before you tell the tecnico anything:
    next line. A ticked box is held to the answer it comes from. Each is a row of
    `run/check.json`: `{"rows": [{"section", "label", "portal", "document", "source", "ok",
    "note"}], "not_in_preview": [...]}`. Sections the preview leaves out (on the SUE, the
-   Relazione Tecnica di Asseverazione) go under `not_in_preview`: hold their values in
-   `run/report.json` to the documents the same way.
+   Relazione Tecnica di Asseverazione) go under `not_in_preview`: hold their values the same way,
+   from `run/private/shown.json` (`values`: each section's label and value as typed; the
+   compilation read each back on the portal).
 3. Run `${CLAUDE_SKILL_DIR}/portal/attachments.js` the same way. `{"opening": true}` means it
    opened Allega documenti: wait for the page, then run it again. Save what it returns as
    `run/portal-files.json`.
