@@ -60,7 +60,21 @@ def main():
             pass
         else:
             raise AssertionError("a no-vault build kept a text that names pvault")
-    print("ok: build.py's vault switch")
+
+        # A private term stops the build, as a whole word (not inside a hash), and the message
+        # gives its line number in the list, never the term.
+        plugin = Path(tmp) / "private"
+        (plugin / "s").mkdir(parents=True)
+        (plugin / "s" / "schema.json").write_text('{"d": "e.g. 908", "sha": "a908b", "cf": "ABCDEF 12G34 H567I"}')
+        build.check_private(plugin, ["90", "a9"])  # only inside other words: passes
+        for terms, line in ((["x", "908"], 2), (["ABCDEF12G34H567I"], 1)):  # a long one also spaced out
+            try:
+                build.check_private(plugin, terms)
+            except SystemExit as e:
+                assert f"s/schema.json: [{line}]" in str(e) and terms[line - 1] not in str(e), e
+            else:
+                raise AssertionError(f"{terms} not found")
+    print("ok: build.py's vault switch and private terms")
     return 0
 
 
