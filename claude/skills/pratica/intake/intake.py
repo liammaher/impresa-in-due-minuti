@@ -183,8 +183,9 @@ KINDS = [
     ("foto", r"documentazione fotografica", r"foto"),
     ("ricevuta_diritti", r"57060964|diritti di (segreteria|istruttoria)", r"diritti"),
     ("ricevuta_sanzione", r"sanzione|oblazione", r"sanzion"),
-    ("ricevuta_contributo", r"contributo di costruzione|oneri di urbanizzazione", r"ricevuta.*contributo"),
+    # The prospetto first: it names the contributo di costruzione too.
     ("prospetto_contributo", r"prospetto di calcolo", r"prospetto"),
+    ("ricevuta_contributo", r"contributo di costruzione|oneri di urbanizzazione", r"ricevuta.*contributo"),
     ("identita", r"carta d'?identita|repubblica italiana.*identity card", r"identit|\bcie\b|carta|passaporto|patente"),
     ("procura", r"procura speciale", r"procura"),
 ]
