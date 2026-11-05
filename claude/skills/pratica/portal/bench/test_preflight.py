@@ -57,6 +57,26 @@ def ready():
     assert any("120 €" in y for y in r["yours"]), r["yours"]
 
 
+def outside_napoli():
+    """Every steps file files at the Comune di Napoli's sportello: a premises or a client's property
+    in another comune is refused before anything opens, without naming the comune; Napoli in any
+    case or accent passes."""
+    for v in ("Pozzuoli", "Casoria"):
+        r = run.preflight(STEPS, values(fields=FIELDS | {"locale.comune": v}), made_up=True)
+        assert not r["ready"] and any("fuori dal Comune di Napoli" in u for u in r["unsupported"]), r
+        assert v not in r["message"], r["message"]
+    assert run.preflight(STEPS, values(fields=FIELDS | {"locale.comune": " NAPOLI "}), made_up=True)["ready"]
+    # The SUE's client: their immobile, by the role c.
+    people = {"people": {**ANSWERS.get("people", {}), "c": "luca"}}
+    r = run.preflight(STEPS, values(answers=ANSWERS | people, fields=FIELDS | {"luca:immobile.comune": "Pozzuoli"}),
+                      made_up=True)
+    assert any("fuori dal Comune di Napoli" in u for u in r["unsupported"]), r
+    # A sportello of another comune isn't Portali's to judge.
+    other = copy.deepcopy(STEPS)
+    other["start"] = "https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=G964"
+    assert run.outside_comune(other, values(fields=FIELDS | {"locale.comune": "Pozzuoli"})) == []
+
+
 def rehearsal_draft_name():
     """The steps file's own default names a real draft; a rehearsal must say PROVA NON INVIARE."""
     r = run.preflight(STEPS, values(answers=ANSWERS | {"descrizione": "SCIA Rossi"}), made_up=True)
@@ -920,6 +940,7 @@ CASES = [
     ("the imposta di bollo route is listed as a choice made in the person's name", bollo_chosen),
     ("a condition's words gate each other: a later question waits on the earlier answer (CILA contributo)", nested_when),
     ("a supports check with `if` applies, and is asked, only once its gate holds (permesso contributo)", gated_support),
+    ("a premises or a client's property outside the Comune di Napoli is refused before anything opens", outside_napoli),
     ("the agibilità's systems: their dichiarazione is filled, other certificates asked system by system, asked only with systems", agibilita_systems),
     ("the agibilità's systems decide its slots: the dichiarazione's only with one, collaudo and atto notorio their own", agibilita_slots),
     ("the SCIA in sanatoria: in progress and double conformity ready, art. 36-bis c. 1 and pre-1977 variants refused", sanatoria_cases),
