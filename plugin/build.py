@@ -15,10 +15,11 @@ connector (connector/, serving this same build) as the plugin's .mcp.json. --vau
 build.yaml's `vault` for this build: off, the plugin carries no setup skill and its texts keep
 only their no-vault parts. --python-download overrides build.yaml's `python_download`: off, the
 skill's launcher (py) and its texts keep only their no-download parts, so nothing in the plugin
-fetches a Python. --cowork-test keeps the Cowork test skill, for whoever runs those tests:
-a release leaves it out (its made-up case and 3 MB PDF are for the build's self-check and the test).
---evals adds plugin/evals/ (how Claude follows the skill, for `claude plugin eval`), with that
-made-up case as their job (evals/_job/); a release leaves them out too.
+fetches a Python. Every build carries the made-up CILA (portale-sue-pratica/prova/): the skill's
+Prova, a draft on the real portal with nothing of the tecnico's, and the build's self-check.
+--cowork-test keeps the Cowork test skill, for whoever runs those tests (it adds a 3 MB PDF): a
+release leaves it out. --evals adds plugin/evals/ (how Claude follows the skill, for
+`claude plugin eval`), with the made-up case as their job (evals/_job/); a release leaves them out too.
 """
 
 import argparse
@@ -52,8 +53,11 @@ LIBRARY_PARTS = ["offices", "contract/signing.json", "README.md", "LICENSE", "LI
 PROCEDURE_ID = re.compile(r"\b(?:napoli|italia)/[a-z0-9-]+/[a-z0-9-]+\b")
 # What coverage.json can't derive: comuni, who files each sportello's pratiche, what's coming.
 COVERAGE = yaml.safe_load((HERE / "coverage.yaml").read_text())
-# The fixture the test skill runs: the CILA rehearsal's P6 case, made-up people.
+# The Prova the skill runs (and the self-check, the evals and the Cowork test): the CILA
+# rehearsal's P6 case, made-up people, filled on the portal (rehearsals/cila-fittizia/runs.json).
 TEST_CASE = "cila-fittizia"
+PROVA = "prova"
+PROVA_DRAFT = "PROVA NON INVIARE - CILA di prova"
 # The archive switch: whether the plugin ships pvault (build.yaml says what each means).
 SETUP_SKILL = "portale-sue-setup"
 TEST_SKILL = "portale-sue-cowork-test"
@@ -317,9 +321,10 @@ def write_coverage(skill, catalog, library, version):
     return entries
 
 
-def make_test_case(test):
+def make_test_case(skill):
     """The CILA rehearsal's P6 fixture, split as an architect's folder holds it: the studio
-    and the architect in studio.json, the job's people in values.json."""
+    and the architect in studio.json, the job's people in values.json. Written as the pratica
+    skill's Prova (skill/prova/): every answer given, so pre-flight asks nothing."""
     d = REHEARSALS / TEST_CASE
     fixture = json.loads((d / "fixture-p6.json").read_text())
     fields = dict(fixture["fields"])
@@ -327,7 +332,7 @@ def make_test_case(test):
     studio_people = {s for s, v in ruolo.items() if "titolare" in v.split(",")}
     studio = {k: v for k, v in fields.items() if ":" not in k or k.split(":")[0] in studio_people}
     job = {k: v for k, v in fields.items() if k not in studio}
-    case = test / "cila"
+    case = skill / PROVA
     (case / "files").mkdir(parents=True)
     for f in (d / "files").glob("*.pdf"):
         shutil.copy2(f, case / "files" / f.name)
@@ -335,10 +340,9 @@ def make_test_case(test):
     for k, v in answers.items():
         if isinstance(v, str) and v.startswith(f"rehearsals/{TEST_CASE}/files/"):
             answers[k] = "files/" + Path(v).name
-    answers["descrizione"] = "PROVA NON INVIARE - CILA Cowork test"
+    answers["descrizione"] = PROVA_DRAFT
     for name, data in (("studio.json", studio), ("values.json", job), ("answers.json", answers)):
         (case / name).write_text(json.dumps(data, indent=1, ensure_ascii=False))
-    make_pdf(test / "planimetria-3mb.pdf", 3 * 1024 * 1024)
 
 
 def make_pdf(path, size):
@@ -368,9 +372,13 @@ def self_check(plugin):
     """The test case through check.py and pre-flight, run as the skill runs them: through its
     py launcher (sh py), which picks this computer's python3."""
     skill = plugin / "skills" / "portale-sue-pratica"
-    case = plugin / "skills" / TEST_SKILL / "cila"
     py = ["sh", str(skill / "py")]
     with tempfile.TemporaryDirectory() as tmp:
+        # The Prova as prova.md starts it: prova.py copies it out of the plugin's folder.
+        r = subprocess.run([*py, skill / "prova.py"], cwd=tmp, capture_output=True, text=True)
+        case = Path(r.stdout.strip())
+        if r.returncode or case != (Path(tmp) / "portale-sue-prova").resolve() or not (case / "answers.json").is_file():
+            sys.exit(f"prova.py didn't copy the Prova:\n{r.stdout}{r.stderr}")
         values = Path(tmp) / "values.json"
         r = subprocess.run([*py, skill / "check.py", "studio.json", "values.json", "--out", values],
                            cwd=case, capture_output=True, text=True)
@@ -514,12 +522,14 @@ def main():
     manifest = json.loads((plugin / ".claude-plugin" / "plugin.json").read_text())
     # The guides: the procedures the plugin's library copy holds, the carried sportelli's only.
     coverage = write_coverage(skill, catalog, skill / "library", manifest["version"])
-    make_test_case(plugin / "skills" / TEST_SKILL)
+    make_test_case(skill)
     self_check(plugin)
     if a.evals:
         shutil.copytree(HERE / "evals", plugin / "evals", ignore=shutil.ignore_patterns(".DS_Store", "results"))
-        shutil.copytree(plugin / "skills" / TEST_SKILL / "cila", plugin / "evals" / "_job")
-    if not a.cowork_test:  # the self-check's case, never the customer's
+        shutil.copytree(skill / PROVA, plugin / "evals" / "_job")
+    if a.cowork_test:
+        make_pdf(plugin / "skills" / TEST_SKILL / "planimetria-3mb.pdf", 3 * 1024 * 1024)
+    else:  # the tests that decided the design, never the customer's
         shutil.rmtree(plugin / "skills" / TEST_SKILL)
     if not re.fullmatch(r"[a-z0-9-]+", manifest["name"]):
         sys.exit(f"plugin name {manifest['name']!r} isn't kebab-case")

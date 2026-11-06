@@ -84,6 +84,19 @@ def main():
     import review  # noqa: PLC0415
     h = review.portal_review(dict(REPORT))
     check("run.py run's review: no check lines", "confrontata" not in h and "riscaricati" not in h, h)
+    # The Prova: made-up data, so no check against documents, and the portal's warning on a
+    # made-up PEC is expected, never a red line for the person to chase.
+    alert = {"section": "Domicilio elettronico", "label": "PEC", "text": "Indirizzo Pec non valido"}
+    with tempfile.TemporaryDirectory() as t:
+        job = Path(t) / "portale-sue-prova"
+        out = job / "run"
+        out.mkdir(parents=True)
+        (out / "report.json").write_text(json.dumps(dict(REPORT, alerts=[alert])))
+        r = subprocess.run([sys.executable, "-I", str(REVIEW), str(out), "--prova"], capture_output=True, text=True)
+        h = (out / "review.html").read_text() if not r.returncode else r.stderr
+        check("the Prova: no check lines, a made-up value's warning expected, said to be a test",
+              "confrontata" not in h and "riscaricati" not in h and "normale con dati inventati" in h
+              and "Bozza di prova" in h and "lo controlli" not in h, h)
 
     print(f"{failed} failed" if failed else "all passed")
     return 1 if failed else 0

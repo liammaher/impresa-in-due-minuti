@@ -21,10 +21,11 @@ user's folder at the end, even when a test fails.
    especially: a tool that runs JavaScript on a page, and a tool that puts a local file into
    a page's file input. Note which browser the browser setting uses (it must be the
    built-in one).
-3. Copy `${CLAUDE_SKILL_DIR}/cila` into the user's folder as `portale-sue-test/` and work from there.
+3. Copy the made-up case into the user's folder and work from there:
+   `cd "$(python3 "${CLAUDE_SKILL_DIR}/../portale-sue-pratica/prova.py" portale-sue-test)"` (a `cp`
+   from the plugin's folder can be refused).
 4. Check and pre-flight it:
    ```sh
-   cd portale-sue-test
    python3 "${CLAUDE_SKILL_DIR}/../portale-sue-pratica/check.py" studio.json values.json --out run/values.json
    python3 "${CLAUDE_SKILL_DIR}/../portale-sue-pratica/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/../portale-sue-pratica/pratiche/cila-fittizia.json" \
      --answers answers.json --values run/values.json --made-up
@@ -117,5 +118,5 @@ check.py, pre-flight and run.py page as printed; the report's result, error and 
 ```
 
 Then attach `portale-sue-test-results.md` and `portale-sue-test/run/report.json`, and tell the user to
-send both back. The draft "PROVA NON INVIARE - CILA Cowork test" stays in their Pratiche in
+send both back. The draft "PROVA NON INVIARE - CILA di prova" stays in their Pratiche in
 bozza: tell them it's there, for them to delete when they like.

@@ -1,6 +1,6 @@
 ---
 name: portale-sue-pratica
-description: Prepara una pratica edilizia del SUE del Comune di Napoli su impresainungiorno a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti. Use when an architect, geometra or ingegnere asks (in Italian or English) to prepare, fill, draft or file a pratica for a client in Napoli ("prepara una CILA", "compila la SCIA"), or asks what a case needs.
+description: Prepara una pratica edilizia del SUE del Comune di Napoli su impresainungiorno a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti, e fa vedere una prova su una CILA con dati inventati. Use when an architect, geometra or ingegnere asks (in Italian or English) to prepare, fill, draft or file a pratica for a client in Napoli ("prepara una CILA", "compila la SCIA"), asks what a case needs, or wants to try it or see a demo ("fammi vedere una prova").
 ---
 
 # Pratiche a Napoli
@@ -102,11 +102,10 @@ the declarations, sign, pay and send.
 
 1. The studio's details, once (step 0).
 2. They say the job in one line and hand over the folder (documents attached here instead: step 2).
-3. You answer in **one message**: first the verdict (covered by the automation, guidance only,
-   or not covered, and why), then what the documents say (with the document each fact comes
-   from), the pratica the rules give as your proposal, and the few open facts with proposed
-   answers (pre-flight's `message`, Napoli's annexes and the file problems in it). Steps 1-3.
-4. They reply once ("ok", or what to change): nothing opens before it.
+3. You answer in **one short message**: the verdict, what you understood, the pratica you
+   propose, then the open questions as clickable choices (step 3, **Asking**). Steps 1-3.
+4. They answer: nothing opens before it. Then, in one more short message, the details and files
+   still missing.
 5. The files are checked (pre-flight again). Nothing else to ask, unless they changed a proposal.
 6. They log in with SPID in the app's browser; you fill (step 4).
 <!-- vault -->
@@ -124,6 +123,24 @@ Between 3 and 7 they hear nothing from you but the login, the code and the revie
 <!-- no-vault -->
 Between 3 and 7 they hear nothing from you but the login and the review page.
 <!-- /no-vault -->
+
+## La prova
+
+**When the tecnico wants to try Portale SUE**, see what it does, or has no job at hand ("prova",
+"fammi vedere", "una demo", "test", "con dati inventati", "non ho i documenti"), or says a job of
+theirs is only a test ("è una prova, inventa i dati"): read `${CLAUDE_SKILL_DIR}/prova.md` and
+follow it. A made-up CILA, filled on the real portal in a few minutes, with no questions and none
+of a real filing's rules.
+
+**When they come without a job** ("come funziona?", "ciao", "cosa fa?"), the Prova is the answer:
+seeing it beats any description. Your whole reply is these two lines, nothing before or after,
+no list of features or steps:
+  "Preparo le pratiche edilizie del SUE di Napoli sul portale, fino alla Sua firma.
+  Le mostro come funziona su una CILA di prova? Due minuti, dati inventati, resta una bozza da cancellare."
+With the clickable-options tool, the second line is its question, "Sì, me lo faccia vedere" first
+and "Ho già un caso vero"; without it, add "Scriva «sì», o mi dica il Suo caso." On yes,
+`prova.md`. Never force it: when they come with a real job, start the job, and offer the Prova
+only if they hesitate or lack the documents.
 
 ## What this skill has
 
@@ -288,8 +305,8 @@ the intake left empty (pre-flight's `missing` names them, with their ids: step 3
 into the job's `values.json`, then `check.py` again. Keep, for each value you take, the document
 and page it comes from: the one message cites them, and so does the check after the compilation
 (step 5). Where two documents disagree (the visura and the deed give two subalterni), take
-neither: it goes under "Da controllare" with what each says. A document never answers one of
-pre-flight's questions for them: what it says is a fact under "Dai documenti" ("Dalla notifica
+neither: the one message says what each says (its point 4). A document never answers one of
+pre-flight's questions for them: what it says is a fact in what you understood ("dalla notifica
 preliminare: due imprese"), and the question stays in the one message for the tecnico. Write
 nothing into `answers.json` but the intake's proposals and their replies.
 
@@ -332,33 +349,88 @@ one message asks only what no document holds.
 - `unsupported`: its `message` is the refusal, already written: the exact case, whether it is
   the portal's flaw, what you prepare instead, the choices. Send it as it is and stop.
 - `message`: the questions, the proposals, the details no document holds and the files to fix,
-  already in Italian, ending with what is left to them. **The one message** is, in this order,
-  written to the tecnico (never about them), with nothing before the verdict, not even the
-  pratica's name:
-  1. The verdict, one line: "Coperta dall'automazione: la preparo per intero, fino alla Sua
-     parte (dichiarazioni, firma, pagamento, invio). Provata sul portale con dati di prova;
-     nessuna pratica reale è ancora stata inviata con Portale SUE." (A refusal or a status other
-     than `available` is its own verdict: send that instead, and stop.)
+  already in Italian. **The one message** is short: the tecnico should read it in ten seconds and
+  answer with clicks. Written to them (never about them), nothing before the verdict, not even
+  the pratica's name:
+  1. The verdict, one line: "Coperta dall'automazione: la preparo fino alla Sua parte
+     (dichiarazioni, firma, pagamento, invio); provata sul portale con dati di prova." (A refusal
+     or a status other than `available` is its own verdict: send that instead, and stop.)
 <!-- no-vault -->
      The first time, right after it: the line on how their data travels (step 0).
 <!-- /no-vault -->
-  2. "Dai documenti:" one line naming the documents recognised, then a line per fact that
-     matters ("Dalla relazione tecnica: manutenzione straordinaria, inizio lavori 19/10/2026"),
-     the intake's `notes`, and "Non ho riconosciuto:" with the files of no kind;
-  3. route.py's `message`, as your proposal: "Propongo: …". The choice is the tecnico's: they
-     sign the asseverazione. This line names the pratica only: never which questions are still
-     open or already settled;
-  4. "Da controllare:" only where the documents and a proposal disagree (a sanzione's receipt,
-     but works proposed as not started), at most three lines. Each says what the document shows
-     and which question or proposal it bears on ("La ricevuta della sanzione (333 €) è per una
-     CILA tardiva: ne tenga conto alla domanda 1."), never the answer it suggests, and asks
-     nothing outside the numbered questions;
-  5. pre-flight's `message`, **as it is**.
-  You may only shorten it: a question's lettered follow-ups (3.a, 3.b) into a few words under it,
-  keeping their letters ("3.a-3.c, se sì: quali impianti e chi rilascia la dichiarazione"), and a
-  proposal line to its subject ("Tolleranze: no"). Never drop a question, a proposal or a
-  detail, never add a field id or a role code.
-- The replies go under each `key` of `questions` (dates YYYY-MM-DD, files as paths). "ok" confirms
+  2. What you understood, in at most two sentences of prose (never a list): only the facts that
+     decide the pratica, each with the document it comes from.
+  3. route.py's `message`, as your proposal: "Propongo una CILA (art. 6-bis DPR 380/2001)." The
+     choice is the tecnico's: they sign the asseverazione. It names the pratica only.
+  4. Only where the documents and a proposal disagree (a sanzione's receipt, but works proposed
+     as not started): one sentence each, at most two, with what the document shows and which
+     question it bears on, never the answer it suggests.
+  5. The open questions and the proposals: **Asking**, below.
+  Everything else waits for **After they answer**: the details no document holds, the files and
+  what is wrong with them (PDF/A, signatures, names), Napoli's annexes, the intake's `notes`, the
+  documents you didn't recognise. Never a field id or a role code. The whole of it, before the
+  questions, looks like this and is no longer:
+
+  > Coperta dall'automazione: la preparo fino alla Sua parte (dichiarazioni, firma, pagamento,
+  > invio); provata sul portale con dati di prova.
+  > Dalla notifica preliminare e dall'assenso: lavori in via Domenico Fontana 40 per il locatario
+  > Luca Fittizio, con due imprese; la proprietaria Immobiliare Fittizia ha dato l'assenso.
+  > Propongo una CILA (art. 6-bis DPR 380/2001).
+  > La ricevuta della sanzione (333 €) è per una CILA tardiva: ne tenga conto alla domanda 1.
+
+**Asking.** If you have a tool that asks multiple-choice questions with clickable options
+(AskUserQuestion, or the app's clickable options), ask pre-flight's `questions` with it, after
+the short message. Each question's `options` and `labels` (Italian, as written), `items` (a
+checklist: several can be true), `how` and `only_if` (a follow-up, under the question it hangs on)
+are in the JSON:
+- **One question at a time where they depend**: a follow-up (`only_if`) only once its parent's
+  answer calls for it, never before; independent ones together, up to four in one call.
+- A choice: each option's label as the option's title in at most five words, its full text (the
+  law it cites included) as its description. A yes/no: "Sì" and "No". A checklist: a
+  multi-select of its items (none ticked is an answer: no "Nessuna" option).
+- At most four options a question. More: the three likeliest for this case and "Un altro caso"
+  (a checklist: "Altre voci"); if picked, a second question with the next ones, the same way.
+  Never drop an option.
+- A short header for each (at most 12 characters: "Paesaggio", "Terre/rocce").
+- The proposals: one question, "Per il resto imposto il caso più comune (<n> risposte, tutte
+  nella pagina di riepilogo). Va bene?", options "Sì, va bene" and "Voglio rivederle"; on the
+  second, list them, a line each, as pre-flight's `message` has them.
+- Free text and dates are not choices: ask them in the text after the call. Files: **After they
+  answer**.
+- A radio list (one answer) gets a preselected first option only when a document supports it
+  (say which in its description); with nothing behind it, no option goes first as "consigliata".
+Without such a tool, after the short message send pre-flight's `short` **as it is**: its numbered
+questions (but the files they ask for) and the proposals in one line to confirm with «ok». A
+question's lettered follow-ups may shrink to a few words under it, keeping their letters. Nothing
+else from `message` yet: the files and the details wait for **After they answer**. On
+«rivediamole», the "Risposte che propongo" block of `message`, as it is.
+
+Never answer a question for them, in either form: what a document says about one is a fact in
+point 2, and the question stays theirs (a test is the one exception: `prova.md`).
+
+**After they answer**, the answers in `answers.json`, then pre-flight again. Built from the
+answers, its `files`, its questions that ask for a file and its `missing` are what this pratica
+needs now: show them as one checklist,
+grouped, a line each, what you have ticked:
+
+  Documenti
+  ✓ Visura catastale
+  ✓ Documento d'identità del committente
+  ○ Relazione tecnica
+  ○ Elaborati grafici: stato di fatto, progetto, comparativo
+  Dati
+  ✓ Immobile (dalla visura)
+  ○ Suoi e dello studio: una volta sola, valgono per le prossime pratiche
+
+A file with a `problem` is "○ … da sistemare" and the fix is said once under the list (for the
+sportello's refusals: PDF/A, the digital signature, plain names). A detail you could propose from
+a document is "✓ … (dalla visura)": they correct it in one reply if it's wrong. Then one line on
+how to give the rest (the files in the job's `docs/`, the details in a message), and, last: "Se è
+solo una prova, scriva «prova»: invento io il resto." (then `prova.md`). A follow-up the answers
+opened, or an `error`, is asked as before, with the tool.
+- The replies go under each `key` of `questions` (dates YYYY-MM-DD, files as paths; a clicked
+  option as its value in `options`, never its label; a checklist as the list of its ticked items'
+  `key`s under its own `key`, `[]` for none). "ok" confirms
   every proposal as proposed; one given per answer (`cases`) takes the case whose `if` matches what
   they answered. A detail of `missing` goes under its `id`:
 <!-- vault -->
@@ -370,11 +442,12 @@ one message asks only what no document holds.
 <!-- /no-vault -->
   Then pre-flight again: what is still open (an `error`, a follow-up they didn't give, what a
   changed proposal adds) is its new `message`.
-- `files`: the message already says when they'll pick the files on the portal's page (`pick`)
-  and which files the sportello would refuse (`problem`: at Napoli's SUE, DD 501/2026, not
-  PDF/A, not signed digitally, or a name with spaces, accents or signs) and how to fix them.
-- `yours` and `second_run`: the message's last line says what is left to them. The full list
-  comes with the review page (step 5); don't list it now.
+- `files`: each slot's `for` (its name), whether the file `exists`, and its `problem` (at
+  Napoli's SUE, DD 501/2026: not PDF/A, not signed digitally, or a name with spaces, accents or
+  signs; the fix is in the "Questi file vanno sistemati" block of `message`): the checklist's
+  documents. `pick`: they choose the files once in a box on the portal's page; say so in one line.
+- `yours` and `second_run`: what is left to them comes with the review page (step 5); now, at
+  most one line.
 - `ready` with no `message`: nothing to ask. Say in one line what you read and the pratica, and
   go on.
 
