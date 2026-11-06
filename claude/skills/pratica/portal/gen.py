@@ -364,7 +364,8 @@ def resolved(recipe, seen=()):
     main pratica's recipe plus the other's part, so a slot or a refusal mapped on one reaches the
     other (2026-10-31: the SCIA's combinations had missed eleven of the SCIA's slots). Later ones
     win key by key; `attachments` (per screen), `supports` and `sections` add up; `asks` and
-    `rules` merge by key, `rules.handles` adding up; a null drops what an earlier one set.
+    `rules` merge by key, `rules.handles` adding up (a recipe that names its own is that list); a null
+    drops what an earlier one set.
     `answers` merge by key, nulls kept (combo_answers).
 
     What a combination is follows from its main pratica and its parts, unless it says otherwise:
@@ -393,6 +394,11 @@ def resolved(recipe, seen=()):
     if main is not None and out.get("rules") and own.get("procedure", main.get("procedure")) != main.get("procedure") \
             and "main" not in (own.get("rules") or {}):
         out["rules"].setdefault("main", (main.get("rules") or {}).get("main", main.get("procedure")))
+    if (own.get("rules") or {}).get("handles") and out.get("rules"):
+        # A recipe's own list is the whole of what it files with its main: a landscape proroga
+        # extends the semplificata's combination for its sections, not for its authorization
+        # (2026-11-06: 22 proroga and rinnovo combinations were never routed to).
+        out["rules"].pop("handles", None)
     merge_recipe(out, own)
     return out
 

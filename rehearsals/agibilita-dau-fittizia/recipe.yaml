@@ -22,28 +22,23 @@ after:
 - Gestione degli allegati
 asks:
   descrizione:
-    default: PROVA NON INVIARE - agibilità + DAU {{c:identity.last_name}}
+    default: agibilità + DAU {{c:identity.last_name}}
   diritti_euro:
     default: '401'
-    why: 'Line SUE 10 of the Comune''s 2026 table of SUE diritti (G.C. 239/2026): 401 € for a Segnalazione Certificata
-      di Agibilità'
+    why: "Voce SUE 10 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 401 € per una Segnalazione Certificata di Agibilità"
   strutture:
     type: yes_no
     question: I lavori toccano le parti strutturali dell'edificio?
 yours:
-- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
-- 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza
-  (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
-- 'As direttore dei lavori (or professionista abilitato), check every attestation on this page: they are yours,
-  signed with the pratica'
-- 'Attestazione tecnica - Agibilità: the portal requires one of the art. 24 c. 5-bis/5-ter or 5-quater boxes; Claude
-  ticks the one the case is, and none when it is neither (then ask the SUE)'
-- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
-  any acknowledgement in the client''s name'
-- Sign and send (Firma e invio); keep the receipt
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "In qualità di direttore dei lavori (o professionista abilitato), verifichi ogni attestazione di questa pagina: sono Sue, e le firma con la pratica"
+- "Attestazione tecnica - Agibilità: il portale richiede una delle caselle dell'art. 24 c. 5-bis/5-ter o 5-quater; Claude spunta quella corrispondente al caso, e nessuna quando non ricorre nessuno dei due casi (in tal caso chieda al SUE)"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
 rules:
   table: sue-napoli-adempimenti
-  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
   facts:
     adempimento: agibilita
     dau: 'true'

@@ -1278,6 +1278,12 @@ def _():
         own = gen.load_yaml(f)
         if not own.get("extends"):
             continue
+        # A combination of two rehearsed pratiche (a proroga with the landscape proroga, the
+        # agibilità with the DAU, a title with the landscape proroga in place of the authorization
+        # its main combination files) states its operations and rules main: they are not the
+        # main's plus a part's (combo_answers takes its case from both).
+        if any(not p.startswith("parts/") for p in own["extends"][1:]):
+            continue
         n += 1
         assert not {"operation", "comune", "sportello"} & set(own) and "main" not in (own.get("rules") or {}), f.parent.name
         main, *parts = own["extends"]

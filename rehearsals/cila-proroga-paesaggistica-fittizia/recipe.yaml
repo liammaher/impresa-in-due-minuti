@@ -22,23 +22,19 @@ after:
 - Gestione degli allegati
 asks:
   descrizione:
-    default: PROVA NON INVIARE - CILA + proroga paesaggistica {{c:identity.last_name}}
+    default: CILA + proroga paesaggistica {{c:identity.last_name}}
   diritti_euro:
     default: '{{ask.cila_stato|diritti_cila}}'
-    why: 'Line SUE 13 of the Comune''s 2026 table of SUE diritti (G.C. 239/2026): 151 € for a CILA; SUE 15: 166
-      € for one filed once the works started (mancata CILA)'
+    why: "Voce SUE 13 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 151 € per una CILA; SUE 15: 166 € per una CILA presentata a lavori iniziati (mancata CILA)"
 yours:
-- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
-- 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), c) PER PRESA VISIONE,
-  consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
-- 'Pay the diritti before the second run (after the declarations): its receipt, signed, goes with it; the bollo
-  before sending. A late CILA''s penalty is paid before the first run: its receipt is in quadro d)'
-- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
-  any acknowledgement in the client''s name'
-- Sign and send (Firma e invio); keep the receipt
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "Paghi i diritti prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va con essa; il bollo prima dell'invio. La sanzione per una CILA tardiva si paga prima della prima compilazione: la ricevuta è nel quadro d)"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
 rules:
   table: sue-napoli
-  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
   facts:
     sanatoria: '{{ask.cila_stato|in_in_corso__realizzato}}'
     permesso_per_scelta: 'false'
@@ -51,4 +47,4 @@ answers:
   paesaggio: proroga
 groups:
   fatti:
-    question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+    question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.

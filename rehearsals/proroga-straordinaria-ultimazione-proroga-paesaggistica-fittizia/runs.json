@@ -3,6 +3,7 @@
   "date": "2026-11-05",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 103.7
+  "seconds": 103.7,
+  "browser": "pane"
  }
 ]

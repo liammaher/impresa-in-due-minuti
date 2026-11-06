@@ -148,7 +148,7 @@ def record(done, default, day):
         print(f"{name}: {entry['answers']} {entry['result']}")
 
 
-def main_patch(steps_file, values, urls, key, new_json, fallback):
+def main_patch(steps_file, values, key, new_json, fallback):
     """The patch from main's version of these steps to these (run.patch_script), or None: no
     such file on main, the same steps, another key (a "+" count), or not patchable by section."""
     root = REHEARSALS.parent
@@ -157,7 +157,7 @@ def main_patch(steps_file, values, urls, key, new_json, fallback):
                              capture_output=True, text=True, check=True).stdout
         old_steps = yaml.safe_load(old)
         v = run.Values(values.answers, fields=values.fields, asks=old_steps.get("asks"))
-        _, parts = run.page_bundle(run.phase(run.expand(old_steps, v), made_up=True), v, urls=urls, pick=False)
+        _, parts = run.page_bundle(run.phase(run.expand(old_steps, v), made_up=True), v, pick=False)
     except (subprocess.CalledProcessError, run.StepError, KeyError, ValueError):
         return None
     return parts.get(key) and run.patch_script(key, parts[key], new_json, fallback)
@@ -218,7 +218,7 @@ def main():
         sources |= {"pv-runner": "runner.js", f"pv-steps:{proc}": js}
         # The same steps as main has them: if the pane holds those, a patch of the sections
         # that changed is enough (run.patch_script), a few KB in place of 40-90.
-        patch = main_patch(steps_file, values, urls, f"pv-steps:{proc}", parts[f"pv-steps:{proc}"], js)
+        patch = main_patch(steps_file, values, f"pv-steps:{proc}", parts[f"pv-steps:{proc}"], js)
         if patch:
             pjs = js[:-3] + ".patch.js"
             (a.out / pjs).write_text(patch)

@@ -10,7 +10,12 @@ Made-up data; the draft is "PROVA NON INVIARE" and stops before the declarations
 
 ## Runs
 
-| Date | Browser | Result |
-|---|---|---|
-| 2026-11-04 | pane | P6, from scratch, `bench/rerun.py` bundle: **filled** in 90 s, every value read back on a fresh load; the portal's usual warnings on made-up data; but under a steps file that had lost its payment and attachments screens and its first sections (the recipe's `first` and `after`, fixed the same day): those screens are unproven until the next run |
-| 2026-11-05 | pane | P6, from scratch, `bench/rerun.py` bundle: **filled** in 111 s, every value read back on a fresh load; the portal's usual warnings on made-up data |
+<!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
+
+| Date | Browser | Case | Result |
+|---|---|---|---|
+| 2026-11-04 | pane | `answers-p6.json` | **filled** in 90 s |
+| 2026-11-05 | pane | `answers-p6.json` | **filled** in 111 s |
+
+<!-- /runs -->
+

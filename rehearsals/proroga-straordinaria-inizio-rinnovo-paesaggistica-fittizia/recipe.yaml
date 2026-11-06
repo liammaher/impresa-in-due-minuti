@@ -25,20 +25,18 @@ after:
 - Gestione degli allegati
 asks:
   descrizione:
-    default: PROVA NON INVIARE - pror. straord. inizio + rinnovo paes. {{c:identity.last_name}}
+    default: pror. straord. inizio + rinnovo paes. {{c:identity.last_name}}
   diritti_euro:
-    why: "The Comune's 2026 table of SUE diritti (G.C. 239/2026) has no row for an art. 10-septies communication: SUE 11 (501 €) names the proroghe of permessi di costruire rilasciati, and whether it covers a communication that asks for no decision (or one on another title) is for the SUE to say (library pitfall)"
+    why: "La tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) non ha una voce per la comunicazione dell'art. 10-septies: SUE 11 (501 €) indica le proroghe dei permessi di costruire rilasciati, e se copra una comunicazione che non chiede alcuna decisione (o una su un altro titolo) lo dice il SUE"
 yours:
-- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
-- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
-  any acknowledgement in the client''s name'
-- 'No imposta di bollo to pay on this form: the portal''s form for this pratica has no bollo section or slot'
-- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
-  the acknowledgements in the client''s name'
-- Sign and send (Firma e invio); keep the receipt
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Nessuna imposta di bollo da pagare con questo modulo: il modulo del portale per questa pratica non ha una sezione né uno spazio per il bollo"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
 rules:
   table: sue-napoli-adempimenti
-  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
   facts:
     adempimento: proroga_inizio
     proroga: integrativa

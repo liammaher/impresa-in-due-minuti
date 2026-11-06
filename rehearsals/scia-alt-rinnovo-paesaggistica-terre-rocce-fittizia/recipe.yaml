@@ -24,32 +24,25 @@ after:
 - Gestione degli allegati
 asks:
   descrizione:
-    default: PROVA NON INVIARE - SCIA alt. + rinnovo paes. + terre {{c:identity.last_name}}
+    default: SCIA alt. + rinnovo paes. + terre {{c:identity.last_name}}
   diritti_euro:
-    question: "The SUE's diritti in euro: the 2026 table can't tell this case's line (the SUE works the contributo out, or it is exactly 5,000 €). Onerous, SUE 7-9 by the contributo: 1003 up to 5,000 €, 1505 from 5,000 to 30,000 €, 1998 above"
+    question: "I diritti del SUE in euro: la tabella 2026 non indica la voce per questo caso (il contributo lo calcola il SUE, o è esattamente 5.000 €). Pratica onerosa, SUE 7-9 in base al contributo: 1003 fino a 5.000 €, 1505 da 5.000 a 30.000 €, 1998 oltre"
     propose: "{{ask.scia_onerosa,ask.contributo_euro|diritti_scia_alt}}"
-    why: "Lines of the Comune's 2026 table of SUE diritti (G.C. 239/2026): SUE 10, 401 € when free of the contributo; onerous, SUE 7-9 by the contributo (oneri urbanizzazione + costo costruzione): 1,003 € up to 5,000 €, 1,505 € from 5,000 to 30,000 €, 1,998 € above"
+    why: "Voci del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): SUE 10, 401 € se non soggetta al contributo; se onerosa, SUE 7-9 in base al contributo (oneri di urbanizzazione + costo di costruzione): 1.003 € fino a 5.000 €, 1.505 € da 5.000 a 30.000 €, 1.998 € oltre"
 yours:
-- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
-- 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi,
-  consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
-- 'As progettista, check every asseverazione on this page: they are yours, signed with the pratica'
-- Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural
-  one, the firm) with the SUE's comunicazione di nomina
-- 'The dichiarazione di utilizzo (Allegato 6 DPR 120/2017) is the portal''s document on Allega documenti once the
-  declarations are ticked: the producer signs it, Claude attaches it in the second run; the excavation starts at
-  least 15 days after sending'
-- When the soil has all been used, within the dichiarazione's validity, file the dichiarazione di avvenuto utilizzo
-  (art. 7 DPR 120/2017) on the SUE
-- Pay the bollo as the portal asks, then sign and send (Firma e invio); keep the receipt
-- The 30 days before the works may start run from the landscape authorization's release, not from filing (art. 23
-  c. 3 DPR 380/2001); the contributo, if due, is paid as quadro g) says
-- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
-  the acknowledgements in the client''s name'
-- Sign and send (Firma e invio); keep the receipt
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- 'In qualità di progettista, verifichi ogni asseverazione di questa pagina: sono Sue, e le firma con la pratica'
+- "Prima dell'inizio dei lavori, nomini chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
+- "La dichiarazione di utilizzo (Allegato 6 DPR 120/2017) è il documento che il portale genera in Allega documenti una volta spuntate le dichiarazioni: la firma il produttore, Claude la allega nella seconda compilazione; lo scavo inizia almeno 15 giorni dopo l'invio"
+- "Quando le terre sono state tutte utilizzate, entro la validità della dichiarazione, presenti al SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)"
+- "Paghi il bollo come chiede il portale, poi firmi e invii (Firma e invio); conservi la ricevuta"
+- "I 30 giorni prima dell'inizio dei lavori decorrono dal rilascio dell'autorizzazione paesaggistica, non dalla presentazione (art. 23 c. 3 DPR 380/2001); il contributo, se dovuto, si paga come indica il quadro g)"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
 rules:
   table: sue-napoli
-  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
   facts:
     permesso_per_scelta: 'false'
     parere_esonero: 'false'

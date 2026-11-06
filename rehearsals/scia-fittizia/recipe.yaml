@@ -83,7 +83,7 @@ attachments:
     - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: "{{ask.igienico_deroga_doc}}", when: "{{ask.igienico_conforme|not}}", on_page: true}
     - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: "{{ask.cimiteriale_doc}}", when: "{{ask.fascia_cimiteriale|is_non_consentito}}", on_page: true}
 asks:
-  diritti_euro: {propose: "{{ask.scia_onerosa|diritti_gratuito}}", why: "Voce SUE 10 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 401 € per una SCIA non soggetta al contributo; una SCIA onerosa non è nel tariffario: chieda al SUE"}
+  diritti_euro: {question: "I diritti del SUE in euro: una SCIA onerosa non è in alcuna voce della tabella 2026 del Comune; chieda al SUE", propose: "{{ask.scia_onerosa|diritti_gratuito}}", why: "Voce SUE 10 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 401 € per una SCIA non soggetta al contributo. Una SCIA onerosa (art. 22) non è in alcuna voce: le fasce SUE 7-9 nominano solo il permesso a titolo oneroso e la SCIA alternativa, quindi l'importo si chiede (da confermare con il SUE)"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}

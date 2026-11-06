@@ -28,5 +28,5 @@ yours:
 # Routed by the rules table sue-napoli-adempimenti: what is filed on the title held.
 rules:
   table: sue-napoli-adempimenti
-  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
   facts: {adempimento: "fine_lavori"}
