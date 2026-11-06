@@ -22,27 +22,24 @@ after:
 - Gestione degli allegati
 asks:
   descrizione:
-    default: PROVA NON INVIARE - SCIA + rinnovo paesaggistica {{c:identity.last_name}}
+    default: SCIA + rinnovo paesaggistica {{c:identity.last_name}}
   diritti_euro:
-    question: "The SUE's diritti in euro: an onerous SCIA is in no row of the Comune's 2026 table; ask the SUE"
+    question: "I diritti del SUE in euro: una SCIA onerosa non è in alcuna voce della tabella 2026 del Comune; chieda al SUE"
     propose: "{{ask.scia_onerosa|diritti_gratuito}}"
-    why: "Line SUE 10 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 401 € for a SCIA free of the contributo. An onerous SCIA (art. 22) is in no row: SUE 7-9's brackets name only the permesso a titolo oneroso and the SCIA alternativa, so it's asked (library pitfall, to confirm with the SUE)"
+    why: "Voce SUE 10 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 401 € per una SCIA non soggetta al contributo. Una SCIA onerosa (art. 22) non è in alcuna voce: le fasce SUE 7-9 nominano solo il permesso a titolo oneroso e la SCIA alternativa, quindi l'importo si chiede (da confermare con il SUE)"
 yours:
-- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
-- 'Tick the dichiarante''s declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi,
-  consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000'
-- 'As progettista, check every asseverazione on this page: they are yours, signed with the pratica'
-- Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural
-  one, the firm) with the SUE's comunicazione di nomina
-- 'No start date: the works start once the SUE says the landscape authorization (and any other assent) is in'
-- 'Pay the diritti before the second run (after the declarations): its receipt, signed, goes with it'
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- 'In qualità di progettista, verifichi ogni asseverazione di questa pagina: sono Sue, e le firma con la pratica'
+- "Prima dell'inizio dei lavori, nomini chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
+- 'Nessuna data di inizio: i lavori iniziano quando il SUE comunica che l''autorizzazione paesaggistica (e ogni altro assenso) è stata acquisita'
+- 'Paghi i diritti prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella'
 - '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
-- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
-  the acknowledgements in the client''s name'
-- Sign and send (Firma e invio); keep the receipt
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
 rules:
   table: sue-napoli
-  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
   facts:
     permesso_per_scelta: 'false'
     parere_esonero: 'false'

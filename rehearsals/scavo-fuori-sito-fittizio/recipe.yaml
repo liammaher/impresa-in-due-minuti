@@ -20,5 +20,5 @@ yours:
 # Routed by the rules table sue-napoli: works with no building title in a protected area.
 rules:
   table: sue-napoli
-  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}

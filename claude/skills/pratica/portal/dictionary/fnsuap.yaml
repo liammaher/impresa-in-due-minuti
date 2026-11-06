@@ -121,21 +121,21 @@ asks:
   # (with `o:`, `o2:` ... where one is a company). One unasked while the job names no `r2:`.
   altri_titolari:
     type: number
-    question: "How many other holders give their assent (co-owners, the landlord)? The first is `r:` in the job's people, the second `r2:`, and so on (a company's legale rappresentante, with the company as `o:`, `o2:` ...)"
+    question: "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conti il suo legale rappresentante"
     default: "{{r2:identity.last_name|empty|single_unit}}"
     propose: "{{r:identity.last_name,r2:identity.last_name,r3:identity.last_name,r4:identity.last_name,r5:identity.last_name,r6:identity.last_name,r7:identity.last_name,r8:identity.last_name,r9:identity.last_name|filled_count}}"
   # The building firms on site (Impresa esecutrice's blocks, one each by "+"): `f1:`, `f2:`,
   # `f3:` ... in the job's people. One unasked while the job names no `f2:`.
   imprese_quante:
     type: number
-    question: "How many building firms work on site? The first is `f1:` in the job's people, the second `f2:`, and so on"
+    question: "Quante imprese esecutrici lavorano in cantiere?"
     default: "{{f2:business.denominazione|empty|single_unit}}"
     propose: "{{f1:business.denominazione,f2:business.denominazione,f3:business.denominazione,f4:business.denominazione,f5:business.denominazione,f6:business.denominazione,f7:business.denominazione,f8:business.denominazione,f9:business.denominazione|filled_count}}"
   # The landscape form's technicians when the architect presenting isn't the designer: `p:`,
   # then `p2:`, `p3:` ... (one block each by "+"). One unasked while the job names no `p2:`.
   progettisti_quanti:
     type: number
-    question: "How many technicians does the landscape form name as its tecnici? The first is `p:` in the job's people, the second `p2:`, and so on"
+    question: "Quanti tecnici indica il modulo paesaggistico?"
     default: "{{p2:identity.last_name|empty|single_unit}}"
     propose: "{{p:identity.last_name,p2:identity.last_name,p3:identity.last_name,p4:identity.last_name,p5:identity.last_name,p6:identity.last_name,p7:identity.last_name,p8:identity.last_name,p9:identity.last_name|filled_count}}"
   # A unit with a categoria in the vault is in the Catasto Fabbricati: asked only without one.
@@ -149,7 +149,7 @@ asks:
   # each in Dati catastali. One unasked while the vault holds no second; with one, asked.
   unita_catastali:
     type: number
-    question: "How many cadastral units does the pratica name? (the client's `immobile` is the first, `immobile2` the second, and so on: those in one catasto one after the other)"
+    question: "Quante unità catastali indica la pratica? (quelle dello stesso catasto una dopo l'altra)"
     default: "{{c:immobile2.catasto_foglio|empty|single_unit}}"
     propose: "{{c:immobile.catasto_foglio,c:immobile2.catasto_foglio,c:immobile3.catasto_foglio,c:immobile4.catasto_foglio,c:immobile5.catasto_foglio,c:immobile6.catasto_foglio,c:immobile7.catasto_foglio,c:immobile8.catasto_foglio,c:immobile9.catasto_foglio|filled_count}}"
   # A voltura's or cambio d'intestazione's co-holders: the wizard's "ci sono cointestatari"
@@ -2187,7 +2187,7 @@ sections:
   - section: dati relativi al nome del tecnico
     leave: [Fax]
     supports:
-      - {if: "{{ask.progettista_altro|not}}", value: "{{p2:identity.last_name|empty}}", in: ["true"], defect: paesaggio-altri-tecnici, else: "The landscape form's technicians: with the architect presenting the pratica as its tecnico, the portal shows another technician's block (\"+\") without its name rows, so a second technician (`p2:`) can't be named there: a defect of the portal (docs/portal-defects.md); ask the SUE."}
+      - {if: "{{ask.progettista_altro|not}}", value: "{{p2:identity.last_name|empty}}", in: ["true"], defect: paesaggio-altri-tecnici, else: "I tecnici del modulo paesaggistico: se l'architetto che presenta la pratica è il suo tecnico, il portale mostra il blocco di un altro tecnico («+») senza nome né codice fiscale, quindi un secondo tecnico non si può indicare. È un difetto del portale: chieda al SUE."}
     fields:
       - {kind: radio, label: è colui che presenta la pratica, when: "{{ask.progettista_altro|not}}"}
       - {kind: text, label: ordine/collegio/albo, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}

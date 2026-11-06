@@ -22,21 +22,19 @@ after:
 - Gestione degli allegati
 asks:
   descrizione:
-    default: PROVA NON INVIARE - proroga inizio + paes. ordinaria {{c:identity.last_name}}
+    default: proroga inizio + paes. ordinaria {{c:identity.last_name}}
   diritti_euro:
     propose: '{{ask.titolo_tipo|diritti_proroga_pdc}}'
-    why: 'Line SUE 11 of the Comune''s 2026 table of SUE diritti (G.C. 239/2026): 501 € for a proroga of a permesso
-      di costruire'
+    why: "Voce SUE 11 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 501 € per la proroga di un permesso di costruire"
 yours:
-- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
-- 'Tick the dichiarante''s declarations: the awareness box under the PEC (domicilio elettronico), consapevolezza
-  (artt. 46-47), informativa privacy, tasse comunali'
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
 - '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
-- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali'
-- Sign and send (Firma e invio); keep the receipt
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
 rules:
   table: sue-napoli-adempimenti
-  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
   facts:
     adempimento: proroga_inizio
     proroga: ordinaria

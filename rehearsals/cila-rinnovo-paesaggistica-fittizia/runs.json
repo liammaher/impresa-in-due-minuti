@@ -3,12 +3,14 @@
   "date": "2026-11-04",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 177.4
+  "seconds": 177.4,
+  "browser": "pane"
  },
  {
   "date": "2026-11-05",
   "answers": "answers-p6.json",
   "result": "filled",
-  "seconds": 75.9
+  "seconds": 75.9,
+  "browser": "pane"
  }
 ]

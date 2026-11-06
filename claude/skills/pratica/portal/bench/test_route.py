@@ -421,7 +421,7 @@ def edilizia_libera_that_digs():
     # A change of use free without works keeps saying so, never "the permesso in sanatoria".
     r = route.route(TABLE, {"intervento": "nessuna_opera", "cambio_uso": "intero_tra_categorie", "paesaggio": "proroga",
                             "fatti": ["sanatoria", "uso_ammesso_prg"]}, REHEARSALS)
-    assert r["unsupported"][0].startswith("This case needs no pratica"), r
+    assert r["unsupported"][0].startswith("Per questo caso non serve alcuna pratica"), r
 
 
 def follow_ups_routed():
@@ -436,7 +436,8 @@ def follow_ups_routed():
     answers_carry_into_preflight(FOLLOW)
     rehearsal_cases_come_home(FOLLOW, least=20)
     r = route.route(FOLLOW, {}, REHEARSALS)
-    assert [q["key"] for q in r["questions"]] == ["adempimento"], r
+    # One message, as the new works' table: what is filed first, then what each filing needs.
+    assert r["questions"][0]["key"] == "adempimento" and not r["routed"], [q["key"] for q in r["questions"]]
     # The checklist is about the works, as the new works' is, never gen.py's default for a shop
     # ("valgono per l'attività": the recipes named no question, 2026-11-05).
     r = route.route(FOLLOW, {"adempimento": "fine_lavori"}, REHEARSALS)

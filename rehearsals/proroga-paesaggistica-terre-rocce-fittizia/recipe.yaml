@@ -26,18 +26,17 @@ after:
 - Gestione degli allegati
 asks:
   descrizione:
-    default: PROVA NON INVIARE - proroga paesaggistica + terre e rocce {{c:identity.last_name}}
+    default: proroga paesaggistica + terre e rocce {{c:identity.last_name}}
   diritti_euro:
-    why: "The Comune's 2026 table of SUE diritti (G.C. 239/2026) has no row for an art. 10-septies extension of a landscape authorization; whether SUE 2 (401 €, landscape authorizations asked on their own) covers it is for the SUE to say (library pitfall)"
+    why: "La tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) non ha una voce per la proroga dell'art. 10-septies di un'autorizzazione paesaggistica; se la copra SUE 2 (401 €, autorizzazioni paesaggistiche chieste da sole) lo dice il SUE"
 yours:
-- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
-- 'Tick the dichiarante''s declarations: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, and
-  any acknowledgement in the client''s name'
-- 'No imposta di bollo to pay on this form: the portal''s form for this pratica has no bollo section or slot'
-- Sign and send (Firma e invio); keep the receipt
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Nessuna imposta di bollo da pagare con questo modulo: il modulo del portale per questa pratica non ha una sezione né uno spazio per il bollo"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
 rules:
   table: sue-napoli
-  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
   facts:
     permesso_per_scelta: 'false'
     parere_esonero: 'false'
