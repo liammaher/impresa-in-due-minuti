@@ -179,9 +179,9 @@ pairs:
   - {ops: [scia, dau], reason: dau-after}
   - {ops: [scia, paesaggistica-ordinaria], reason: authorization-with-title, rehearsals: [scia-paesaggistica-ordinaria-fittizia, scia-sanatoria-paesaggistica-ordinaria-fittizia]}
   - {ops: [scia, paesaggistica-semplificata], reason: authorization-with-title, rehearsals: [scia-paesaggistica-semplificata-fittizia, scia-sanatoria-paesaggistica-semplificata-fittizia]}
-  - {ops: [scia, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [scia-rinnovo-paesaggistica-fittizia]}
+  - {ops: [scia, rinnovo-paesaggistica], reason: authorization-keeps-pace, rehearsals: [scia-rinnovo-paesaggistica-fittizia, scia-sanatoria-rinnovo-paesaggistica-fittizia]}
   - {ops: [scia, accertamento-paesaggistico], reason: accertamento-rules}
-  - {ops: [scia, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [scia-proroga-paesaggistica-fittizia]}
+  - {ops: [scia, proroga-paesaggistica], reason: authorization-keeps-pace, rehearsals: [scia-proroga-paesaggistica-fittizia, scia-sanatoria-proroga-paesaggistica-fittizia]}
   - {ops: [scia, parere-esonero], reason: parere-refused}
   - {ops: [scia-alternativa, piano-utilizzo], reason: piano-apart}
   - {ops: [scia-alternativa, dichiarazione-utilizzo], reason: dichiarazione-with-title, rehearsals: [scia-alt-terre-rocce-fittizia]}

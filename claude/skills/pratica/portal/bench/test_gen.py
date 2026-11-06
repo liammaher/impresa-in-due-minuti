@@ -1180,6 +1180,15 @@ def _():
         export = (t / "out" / "export.js").read_text()
         assert "__crawlUnsaved" in export and "crawl-batch-prova.json" in export
         assert "crawl:batch" in (t / "out" / "status.js").read_text()
+        # start.js: the same batch with no pick, from the pane's stored crawler once its sha256 is
+        # the repo's; small enough for one call, so it never carries the crawler itself (2026-11-05).
+        start = (t / "out" / "start.js").read_text()
+        for f in ("wizard.js", "crawl.js"):
+            assert hashlib.sha256((HERE.parent / f).read_text().encode()).hexdigest() in start, f
+        body = text[text.index("  const opts = "):text.rindex("})()")]
+        assert body in start and len(start) < 30000 and "__wizard" not in start, len(start)
+        assert start.index("stale") < start.index("window.__crawl.batch(opts)")
+        assert "pvPrintNames" in (t / "out" / "print.js").read_text()
 
 
 @case("catalogue.py: a combination is one op (the procura only, its slots read), and a printed batch that changed is refused")
@@ -1205,6 +1214,12 @@ def _():
     ok = subprocess.run(cat + ["import", "-"], input=hashlib.sha256(body.encode()).hexdigest() + "\n" + body + "\n",
                         capture_output=True, text=True)
     assert ok.returncode == 0, ok.stderr
+    # As the pane's JavaScript tool returns it: one JSON string, quotes and escapes in (2026-11-05).
+    quoted = json.dumps(hashlib.sha256(body.encode()).hexdigest() + "\n" + body)
+    ok = subprocess.run(cat + ["import", "-"], input=quoted + "\n", capture_output=True, text=True)
+    assert ok.returncode == 0, ok.stderr
+    bad = subprocess.run(cat + ["import", "-"], input=json.dumps("0" * 64 + "\n" + body), capture_output=True, text=True)
+    assert bad.returncode and "sha256 differs" in bad.stderr, bad.stderr
 
 
 @case("catalogue.py graft: a deeper crawl of a section goes into every stored copy of it; a changed one is refused")

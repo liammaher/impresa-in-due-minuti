@@ -20,12 +20,12 @@ branch no rehearsal took.
 
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
-| SUE (building works) | 102 | 102 | 100 | 27 checked, 0 changed |
+| SUE (building works) | 104 | 104 | 102 | 27 checked, 0 changed |
 | SUAP (businesses) | 278 | 112 | 13 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
-- SUE: 102 pratiche, 128 distinct sections, 125 in the dictionary; 2159 of 2159 uses (100%)
+- SUE: 104 pratiche, 128 distinct sections, 125 in the dictionary; 2231 of 2231 uses (100%)
 - SUAP: 278 pratiche, 477 distinct sections, 77 in the dictionary; 2432 of 3365 uses (72%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
@@ -59,8 +59,8 @@ SUE pratiche not yet fillable:
 
 Measured today:
 
-- Level 1: 102 of 102 pratiche fully in the dictionary. 75 of them are two operations in one pratica (`sue-combo-*`).
-- Which pratiche a case needs: of the 39792 cases the rules tables decide, **9823 reach a steps file**, 29913 are refused with a reason or need no pratica, and **56 have no steps file yet**: 2 combinations of pratiche, listed below (`bench/test_route.py`).
+- Level 1: 104 of 104 pratiche fully in the dictionary. 77 of them are two operations in one pratica (`sue-combo-*`).
+- Which pratiche a case needs: of the 39792 cases the rules tables decide, **9879 reach a steps file**, 29913 are refused with a reason or need no pratica, and **0 have no steps file yet**: 0 combinations of pratiche, listed below (`bench/test_route.py`).
 - Level 2: **14 refusals across 13 recipes**, 3 distinct messages.
 - Level 3, in part: **0 ticked "si allega" boxes with no attachment slot** under their condition (listed below): each may add a required slot. A box read on a filled draft says what it adds (the dictionary's `slot`).
 - Operations in one pratica: of the 188 pairs the wizard takes and 20 triples a case needs, **73 are filed together**: 73 with a steps file, 72 of those run on the portal, **0 still to map** (`bench/test_pairs.py` lists them). The others are decided: 44 apart, 57 each alone, 4 never, 26 refused, 4 rules.
@@ -159,11 +159,12 @@ Pratiche filed together, mapped (a steps file each):
 - scia-edilizia + utilizzo-materiale-scavo-fuori-sito
 - scia-in-sanatoria + autorizzazione-paesaggistica-ordinaria
 - scia-in-sanatoria + autorizzazione-paesaggistica-semplificata
+- scia-in-sanatoria + proroga-autorizzazione-paesaggistica
+- scia-in-sanatoria + rinnovo-autorizzazione-paesaggistica-semplificata
 
 Pratiche filed together, not mapped yet (the cases that need them, most first):
 
-- scia-in-sanatoria + proroga-autorizzazione-paesaggistica: 28 cases
-- scia-in-sanatoria + rinnovo-autorizzazione-paesaggistica-semplificata: 28 cases
+- none
 
 Refusals, by how many recipes carry them (the most shared are the cheapest to close once):
 
@@ -200,7 +201,7 @@ What a Napoli architect or pratiche agency files again and again, so what has to
 
 **SUE: every pratica of the building chain** (CILA, SCIA, permesso, start and end of works, agibilità, extensions, voltura, DL and contractor changes, the landscape authorizations), all of them.
 
-- 102 of 102 fillable, 100 run on the portal.
+- 104 of 104 fillable, 102 run on the portal.
 
 **SUAP: nine sectors × seven operations.** Each cell is one pratica on the portal:
 

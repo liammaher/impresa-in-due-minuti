@@ -378,7 +378,7 @@ def landscape_kept_in_force():
     """A title whose works already have a landscape authorization (2026-11-04): extended (art.
     10-septies) or renewed (art. 7 D.P.R. 31/2017) in the title's pratica; works with no title
     take it alone. Done without the permesso they needed, the table refuses it (the accertamento
-    is the way), and a SCIA in sanatoria with it is still to map."""
+    is the way); a SCIA in sanatoria of works under way files it with the SCIA."""
     base = {"terre_rocce": "no", "cambio_uso": "no", "fatti": []}
     cila = {**base, "intervento": "manutenzione_straordinaria"}
     assert route.route(TABLE, {**cila, "paesaggio": "proroga"}, REHEARSALS)["pratica"] == "cila-proroga-paesaggistica-fittizia"
@@ -392,8 +392,10 @@ def landscape_kept_in_force():
     assert route.route(TABLE, {**libera, "paesaggio": "rinnovo"}, REHEARSALS)["pratica"] == "rinnovo-paesaggistica-fittizia"
     r = route.route(TABLE, {**pdc, "fatti": ["sanatoria"]}, REHEARSALS)
     assert not r["routed"] and "permesso in sanatoria" in r["unsupported"][0], r
-    r = route.route(TABLE, {**base, "intervento": "ristrutturazione", "paesaggio": "proroga", "fatti": ["sanatoria"]}, REHEARSALS)
-    assert r["unsupported"][0].startswith("Not mapped yet: napoli/comune/scia-in-sanatoria"), r
+    # Works under way in sanatoria (art. 37 c. 5) carry the extension or the renewal (2026-11-05).
+    for kind in ("proroga", "rinnovo"):
+        r = route.route(TABLE, {**base, "intervento": "ristrutturazione", "paesaggio": kind, "fatti": ["sanatoria"]}, REHEARSALS)
+        assert r["pratica"] == f"scia-sanatoria-{kind}-paesaggistica-fittizia", r
 
 
 def edilizia_libera_that_digs():
