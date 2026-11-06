@@ -1,6 +1,6 @@
-<h1 align="center">Portali</h1>
+<h1 align="center">Portale SUE</h1>
 
-**Portali** is a free, open-source plugin that lets Claude prepare your pratiche on Italian government portals, up to the steps only you can take: your SPID login, the declarations, signature, payment and sending. It starts with the Comune di Napoli's SUE and SUAP on impresainungiorno, and is meant to grow to every city and portal. Your details stay in an encrypted vault on your own computer, so Claude can fill a form without the details passing through the conversation. Unofficial: see [NOTICE.md](NOTICE.md). Before you use it, read [responsible use](docs/responsible-use.md); to ask for a pratica or report a changed portal, see [CONTRIBUTING.md](CONTRIBUTING.md).
+**Portale SUE** is a free, open-source plugin that lets Claude prepare your building pratiche on the SUE (Sportello Unico per l'Edilizia), up to the steps only you can take: your SPID login, the declarations, signature, payment and sending. It covers the Comune di Napoli's SUE on impresainungiorno. Your details stay in an encrypted vault on your own computer, so Claude can fill a form without the details passing through the conversation. Unofficial: see [NOTICE.md](NOTICE.md). Before you use it, read [responsible use](docs/responsible-use.md); to ask for a pratica or report a changed portal, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 The rest of this page is about that vault, `pvault`.
 
@@ -24,13 +24,13 @@ You enter your details and scan your documents once. Agents that prepare forms (
 
 ## Quick start
 
-**As a Claude plugin** (once the first release is out; see [docs/install.md](docs/install.md)): in Claude Code, `/plugin install portali --marketplace liammaher/portali`, then say "set me up". No compiler.
+**As a Claude plugin** (once the first release is out; see [docs/install.md](docs/install.md)): in Claude Code, `/plugin install portale-sue --marketplace liammaher/portale-sue`, then say "set me up". No compiler.
 
 **From source.** Requires Go 1.26+.
 
 ```sh
-git clone https://github.com/liammaher/portali.git
-cd portali
+git clone https://github.com/liammaher/portale-sue.git
+cd portale-sue
 make build                      # → bin/pvault
 ln -s "$PWD/bin/pvault" /opt/homebrew/bin/pvault   # or: sudo make install
 
@@ -48,8 +48,8 @@ For secrets (SPID password, CIE PIN/PUK), run `pvault set <id>` **without** a va
 pvault runs on Windows 10 and 11; Windows Hello needs Windows 11. Download `pvault_<version>_windows_amd64.zip` (or `_arm64`) from the releases, or build it with Go 1.26+:
 
 ```powershell
-git clone https://github.com/liammaher/portali.git
-cd portali
+git clone https://github.com/liammaher/portale-sue.git
+cd portale-sue
 go build -o bin\pvault.exe .\cmd\pvault
 ```
 
@@ -206,7 +206,7 @@ cd mcp && npm ci && npm run build
   "mcpServers": {
     "vault": {
       "command": "node",
-      "args": ["/path/to/portali/mcp/dist/index.js"],
+      "args": ["/path/to/portale-sue/mcp/dist/index.js"],
       "env": { "VAULT_KEYCHAIN_SERVICE": "pvault-mcp" }
     }
   }

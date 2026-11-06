@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The skill's Python launcher (plugin/portali/skills/portali-pratica/py), offline, in both builds of
+"""The skill's Python launcher (plugin/portale-sue/skills/portale-sue-pratica/py), offline, in both builds of
 plugin/build.yaml's python_download: which Python it picks; off, that nothing fetches anything and
 it says how to install one; on, that it never runs a download whose SHA-256 isn't the pinned one.
 
@@ -21,7 +21,7 @@ sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True
 import build  # noqa: E402
 
-PY = HERE / "portali" / "skills" / "portali-pratica" / "py"
+PY = HERE / "portale-sue" / "skills" / "portale-sue-pratica" / "py"
 TOOLS = ["sh", "uname", "mkdir", "mktemp", "rm", "mv", "cat", "cut", "tar", "shasum", "sha256sum"]
 SHA_ARM_MAC = "9866e11cf2ae9caa1e671383786f248859a52dd8bfb702fb4c0dc2c65f1d36de"
 
@@ -97,8 +97,8 @@ def main():
             check(f"{tag}: a python3 older than 3.9 is passed over", r.stdout.strip() == "python ran", r)
             b, h = fresh()
             fake(b, "mine", 'echo "mine: $*"')
-            r = run(f, b, h, "x.py", env={"PORTALI_PYTHON": str(b / "mine")})
-            check(f"{tag}: PORTALI_PYTHON is used as named", r.stdout.strip() == "mine: x.py", r)
+            r = run(f, b, h, "x.py", env={"PORTALE_SUE_PYTHON": str(b / "mine")})
+            check(f"{tag}: PORTALE_SUE_PYTHON is used as named", r.stdout.strip() == "mine: x.py", r)
 
         # Off (and the repo's file, which behaves as off): no Python means a message, never a fetch.
         for tag, f in [("off", builds[False]), ("repo", PY)]:
@@ -128,7 +128,7 @@ def main():
         b, h = fresh()
         fake(b, "curl", 'while [ $# -gt 0 ]; do [ "$1" = -o ] && { echo evil > "$2"; }; shift; done; exit 0')
         r = run(on, b, h, "x.py")
-        cache = h / ".cache" / "portali"
+        cache = h / ".cache" / "portale-sue"
         check("on: a download with another SHA-256 is refused", r.returncode != 0 and "non è quello atteso" in r.stderr
               and "scarico Python" in r.stderr and not list(cache.glob("python-*")) and not list(cache.glob(".dl.*")), r)
         b, h = fresh()
@@ -145,14 +145,14 @@ def main():
         b, h = fresh()
         fake(b, "curl", "exit 6")
         fake(b, "uname", 'case "$1" in -m) echo arm64 ;; *) echo Darwin ;; esac')
-        d = h / ".cache" / "portali" / "python-3.12.15-20261013"
+        d = h / ".cache" / "portale-sue" / "python-3.12.15-20261013"
         (d / "python" / "bin").mkdir(parents=True)
         fake(d / "python" / "bin", "python3", 'case "$1" in -c) exit 0 ;; esac; echo "cached ran"')
         (d / ".sha256").write_text("0" * 64 + "\n")
-        r = run(on, b, h, "x.py", env={"PORTALI_PYTHON": "download"})
+        r = run(on, b, h, "x.py", env={"PORTALE_SUE_PYTHON": "download"})
         check("on: a cache with the wrong hash isn't run", "cached ran" not in r.stdout and r.returncode != 0, r)
         (d / ".sha256").write_text(SHA_ARM_MAC + "\n")
-        r = run(on, b, h, "x.py", env={"PORTALI_PYTHON": "download"})
+        r = run(on, b, h, "x.py", env={"PORTALE_SUE_PYTHON": "download"})
         check("on: a cache with the pinned hash runs without a download",
               r.stdout.strip() == "cached ran" and "scarico" not in r.stderr, r)
 

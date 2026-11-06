@@ -1,16 +1,16 @@
 ---
-name: portali-setup
-description: Configura Portali su questo computer - installa l'archivio cifrato (pvault, verificato con il checksum che il plugin porta con sé), lo crea o lo apre in una pagina del browser e attiva Touch ID o Windows Hello, senza terminale. Use when the user says "configura Portali", "set me up", asks to set up, install, open or update the archive (vault, pvault), or when a pratica needs the archive and it isn't installed, created, open or confirmable.
+name: portale-sue-setup
+description: Configura Portale SUE su questo computer - installa l'archivio cifrato (pvault, verificato con il checksum che il plugin porta con sé), lo crea o lo apre in una pagina del browser e attiva Touch ID o Windows Hello, senza terminale. Use when the user says "configura Portale SUE", "set me up", asks to set up, install, open or update the archive (vault, pvault), or when a pratica needs the archive and it isn't installed, created, open or confirmable.
 ---
 
-# Configurare Portali
+# Configurare Portale SUE
 
 The archive (pvault) keeps the tecnico's, the studio's and the clients' details on their own
 computer, encrypted, so a portal is filled from it without the details passing through this
 conversation. This skill installs it, has the tecnico create it (or open it) in a page of their
 browser, and turns on Touch ID (Mac) or Windows Hello (Windows). It needs a shell on their own
 computer (the Claude desktop app's Code tab); in a sandbox with no access to it (Cowork's) say so
-in one line and stop: `portali-pratica` then works from a folder.
+in one line and stop: `portale-sue-pratica` then works from a folder.
 
 Speak Italian to the tecnico, as Lei, with no software words: "l'archivio", "la pagina", "la
 password", "la chiave di recupero", "Touch ID". Never "vault", "pvault", "server", "checksum",

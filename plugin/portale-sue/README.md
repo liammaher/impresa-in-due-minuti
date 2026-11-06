@@ -1,41 +1,41 @@
-# Portali
+# Portale SUE
 
-Prepara una pratica del Comune di Napoli su impresainungiorno (SUE e SUAP) dai documenti del Suo
+Prepara una pratica edilizia del SUE del Comune di Napoli, su impresainungiorno, dai documenti del Suo
 cliente. Si ferma dove comincia la Sua parte: le dichiarazioni, la firma digitale, il pagamento e
 l'invio: Claude non spunta mai una dichiarazione, non firma, non paga e non invia. Gratuito e
 open source.
 
 ## Cosa copre, e cosa no
 
-- **Solo il Comune di Napoli (Campania)**, sugli sportelli SUE e SUAP di impresainungiorno. Un
-  immobile in un altro comune, un altro ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia
-  delle Entrate, Regione) o una pratica che Portali non conosce: Claude Le dice subito che non è
+- **Solo il SUE del Comune di Napoli (Campania)**, su impresainungiorno. Una pratica del SUAP (un
+  negozio, un ristorante), un immobile in un altro comune, un altro ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia
+  delle Entrate, Regione) o una pratica che Portale SUE non conosce: Claude Le dice subito che non è
   coperta dall'automazione, e non apre nulla.
 - Per ogni lavoro Claude Le dice prima se la pratica è **coperta dall'automazione** (la prepara per
   intero), se ha **solo indicazioni** (non la compila) o se **non è coperta**, e perché. Poi Lei
   conferma, e solo allora si comincia.
 - **Coperta** vuol dire: compilata sul portale vero con dati di prova, rileggendo ogni valore.
-  Nessuna pratica reale è ancora stata inviata con Portali.
+  Nessuna pratica reale è ancora stata inviata con Portale SUE.
 - Le regole vengono dalla biblioteca pratiche-napoli, ogni fatto con la sua fonte. Ciò che la
   biblioteca non copre, Claude lo dice.
 
 ## Installazione
 
-Nell'app Claude per computer, un solo comando aggiunge e installa Portali:
+Nell'app Claude per computer, un solo comando aggiunge e installa Portale SUE:
 
 ```
-/plugin install portali --marketplace liammaher/portali
+/plugin install portale-sue --marketplace liammaher/portale-sue
 ```
 
 <!-- vault -->
-Poi scriva «Configura Portali»: Claude prepara il Suo archivio privato, cifrato, su questo
+Poi scriva «Configura Portale SUE»: Claude prepara il Suo archivio privato, cifrato, su questo
 computer. Lì restano i dati Suoi, dello studio e dei clienti; Claude non li vede mai.
 <!-- /vault -->
 <!-- no-vault -->
 Poi apra nell'app la cartella dei Suoi lavori, con una sottocartella per ogni lavoro. I dati dello
 studio li chiede Claude alla prima pratica, una volta sola.
 <!-- download -->
-Non serve installare altro: se sul computer non c'è Python, alla prima pratica Portali ne scarica
+Non serve installare altro: se sul computer non c'è Python, alla prima pratica Portale SUE ne scarica
 uno (circa 25 MB, verificato), una volta sola.
 <!-- /download -->
 <!-- no-download -->
@@ -69,12 +69,12 @@ installi da python.org.
 ## Dove vanno i dati dei Suoi clienti
 
 <!-- vault -->
-Nel Suo archivio su questo computer e sul portale. Da nessun'altra parte: Portali non ha un
+Nel Suo archivio su questo computer e sul portale. Da nessun'altra parte: Portale SUE non ha un
 server.
 <!-- /vault -->
 <!-- no-vault -->
 Nella cartella dei Suoi lavori, su questo computer, e sul portale. Da nessun'altra parte:
-Portali non ha un server. I documenti li legge un programma sul Suo computer. I dati arrivano al
+Portale SUE non ha un server. I documenti li legge un programma sul Suo computer. I dati arrivano al
 portale sigillati sotto un codice che vede solo Lei: Claude non li vede. Passa da Claude solo ciò
 che Lei scrive nella conversazione. In Cowork la finestra del codice non si apre, e passano da
 Claude anche i dati: Claude glielo dice prima.
@@ -84,11 +84,11 @@ migliorare Claude» (Impostazioni → Privacy) e usi il browser dell'app, non Cl
 
 ## Prima di usarlo
 
-Legga l'[uso responsabile](https://github.com/liammaher/portali/blob/main/docs/responsible-use.md).
+Legga l'[uso responsabile](https://github.com/liammaher/portale-sue/blob/main/docs/responsible-use.md).
 In breve: Lei firma e risponde della pratica; una pratica alla volta, con il Suo SPID; nessun dato
 personale in una segnalazione. Per chiedere una pratica o segnalare un portale cambiato apra una
-[segnalazione](https://github.com/liammaher/portali/issues/new/choose).
-Se qualcosa di Portali non funziona, lo dica a Claude: Le prepara la segnalazione già
+[segnalazione](https://github.com/liammaher/portale-sue/issues/new/choose).
+Se qualcosa di Portale SUE non funziona, lo dica a Claude: Le prepara la segnalazione già
 compilata, senza i dati dei clienti, e Lei la rilegge prima di inviarla.
 
 ## Per qualcosa in più

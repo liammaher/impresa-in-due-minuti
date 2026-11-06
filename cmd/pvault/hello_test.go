@@ -88,7 +88,7 @@ func TestHello_GetAsksForExactlyWhatItReads(t *testing.T) {
 	if !strings.Contains(out, "Mario Rossi") {
 		t.Fatalf("get printed %q", out)
 	}
-	want := "Portali chiede di leggere dal suo archivio, per 2 minuti: il campo identity.full_name."
+	want := "Portale SUE chiede di leggere dal suo archivio, per 2 minuti: il campo identity.full_name."
 	if msgs := f.asked(); len(msgs) != 1 || msgs[0] != want {
 		t.Fatalf("prompt %q, want %q", msgs, want)
 	}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""build.py's two switches, offline: the marked parts each build keeps, the markers it refuses,
+"""build.py's switches, offline: the marked parts each build keeps, the markers it refuses,
 and the hand-written plugin both ways (vault: no setup skill and no word of the archive without
 it; python_download: off by default, and then no download in the launcher or the texts).
 
@@ -42,7 +42,7 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         for vault in (True, False):
             plugin = Path(tmp) / str(vault)
-            shutil.copytree(HERE / "portali", plugin)
+            shutil.copytree(HERE / "portale-sue", plugin)
             build.select_vault(plugin, vault)
             assert (plugin / "skills" / build.SETUP_SKILL).is_dir() == vault
             for f in plugin.rglob("*.md"):
@@ -53,8 +53,8 @@ def main():
                         assert word not in text, f"{f.relative_to(plugin)} says {word!r} without the archive"
         # A text naming the archive outside a vault part stops a no-vault build.
         plugin = Path(tmp) / "leak"
-        shutil.copytree(HERE / "portali", plugin)
-        (plugin / "skills" / "portali-pratica" / "EXTRA.md").write_text("run pvault status\n")
+        shutil.copytree(HERE / "portale-sue", plugin)
+        (plugin / "skills" / "portale-sue-pratica" / "EXTRA.md").write_text("run pvault status\n")
         try:
             build.select_vault(plugin, False)
         except SystemExit:
@@ -85,26 +85,31 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         for download in (True, False):
             plugin = Path(tmp) / str(download)
-            shutil.copytree(HERE / "portali", plugin)
+            shutil.copytree(HERE / "portale-sue", plugin)
             build.select_vault(plugin, False)
             build.select_download(plugin, download)
             py = (plugin / build.LAUNCHER).read_text()
             assert ("python-build-standalone" in py) == download and "# <" not in py
-            skill = (plugin / "skills" / "portali-pratica" / "SKILL.md").read_text()
+            skill = (plugin / "skills" / "portale-sue-pratica" / "SKILL.md").read_text()
             assert ("scarico Python" in skill) == download and ("Never install Python yourself" in skill) != download
             for f in plugin.rglob("*.md"):
                 assert not any(build.DOWNLOAD.match(line.strip()) for line in f.read_text().splitlines()), f
         # A text that says the plugin downloads Python, outside a download part, stops an off build.
         plugin = Path(tmp) / "leak-dl"
-        shutil.copytree(HERE / "portali", plugin)
-        (plugin / "skills" / "portali-pratica" / "EXTRA.md").write_text("it fetches python-build-standalone\n")
+        shutil.copytree(HERE / "portale-sue", plugin)
+        (plugin / "skills" / "portale-sue-pratica" / "EXTRA.md").write_text("it fetches python-build-standalone\n")
         try:
             build.select_download(plugin, False)
         except SystemExit:
             pass
         else:
             raise AssertionError("an off build kept a text about downloading Python")
-    print("ok: build.py's vault and python_download switches, and private terms")
+    # Portale SUE carries the SUE's pratiche only: the switch says so, and a table's name says its
+    # sportello (the SUAP's table stays out).
+    assert build.sportelli() == {"sue"}, build.sportelli()
+    assert build.table_sportello(Path("sue-napoli-adempimenti.yaml")) == "sue"
+    assert build.table_sportello(Path("suap-napoli.yaml")) == "suap"
+    print("ok: build.py's vault, python_download and sportelli switches, and private terms")
     return 0
 
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Writes .claude-plugin/marketplace.json for one release: the marketplace people add
-(`claude plugin marketplace add liammaher/portali`) and the one entry in it, the
-Portali plugin, as a zip attached to that release and pinned by its SHA-256, so Claude Code
+(`claude plugin marketplace add liammaher/portale-sue`) and the one entry in it, the
+Portale SUE plugin, as a zip attached to that release and pinned by its SHA-256, so Claude Code
 refuses a download that isn't the file this release published.
 
-  pin_marketplace.py --version 0.2.0 --sha256 <64 hex of portali-0.2.0.zip> [--out FILE]
+  pin_marketplace.py --version 0.2.0 --sha256 <64 hex of portale-sue-0.2.0.zip> [--out FILE]
 
 The release workflow (.github/workflows/release.yml) runs it after attaching the zip and opens a
 pull request with the result; until the first release the repository has no marketplace file,
@@ -17,7 +17,7 @@ import re
 import sys
 from pathlib import Path
 
-REPO = "liammaher/portali"
+REPO = "liammaher/portale-sue"
 HERE = Path(__file__).resolve().parent
 
 
@@ -30,18 +30,18 @@ def vault():
 
 def marketplace(version, sha256, repo=REPO, vault=True):
     return {
-        "name": "portali",
-        "description": "Portali: Claude prepares your pratiche on Italian government portals up to the steps only "
+        "name": "portale-sue",
+        "description": "Portale SUE: Claude prepares your pratiche on Italian government portals up to the steps only "
                        "you can take (SPID login, declarations, signature, payment, sending).",
         "owner": {"name": "Liam Maher"},
         "plugins": [{
-            "name": "portali",
-            "description": "Prepares pratiche on the portals, today the Comune di Napoli's (SUE and SUAP on "
+            "name": "portale-sue",
+            "description": "Prepares pratiche on the portals, today the Comune di Napoli's SUE (on "
                            f"impresainungiorno), from your documents{' or your private vault' if vault else ''}, "
                            "with the pratiche-napoli library of rules.",
             "source": {
                 "source": "archive",
-                "url": f"https://github.com/{repo}/releases/download/v{version}/portali-{version}.zip",
+                "url": f"https://github.com/{repo}/releases/download/v{version}/portale-sue-{version}.zip",
                 "sha256": sha256,
             },
         }],
