@@ -1070,9 +1070,10 @@ def diritti_brackets():
 
 
 def diritti_from_the_case():
-    """The permesso and the SCIA alternativa: the contributo's amount is asked only when onerous with
-    the progettista's prospetto (the SUE working it out leaves the diritti asked), the car park's area
-    only for car parks; the diritti wait for it, then are proposed. The SCIA's onerous case stays
+    """The permesso and the SCIA alternativa: the contributo's bracket is asked only when onerous
+    with the progettista's prospetto (the SUE working it out leaves the diritti asked), the car
+    park's area only for car parks; the diritti come in the same message, one proposal per
+    bracket (`cases`), and once the bracket is given, proposed. The SCIA's onerous case stays
     asked, with no contributo asked for it; a combination asks what its main pratica asks."""
     root = HERE.parents[4] / "rehearsals"
     fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
@@ -1082,31 +1083,37 @@ def diritti_from_the_case():
         a = json.loads((root / name / f"answers-{base}.json").read_text())
         a.pop("diritti_euro", None)
         r = run.preflight(steps, values({**a, **change}, fields, steps), made_up=True)
-        return [q["key"] for q in r["questions"]], {p["key"]: p["proposal"] for p in r["proposals"]}
+        return [q["key"] for q in r["questions"]], {p["key"]: p.get("proposal", p.get("cases")) for p in r["proposals"]}
+
+    def per_bracket(p, key):
+        return {c["if"][key]: c["proposal"] for c in p.get("diritti_euro") or [] if isinstance(c, dict)}
     onerous = {"scia_onerosa": "true", "contributo_pagamento": "rateizzazione"}
     for name in ("pdc-fittizio", "scia-alternativa-fittizia", "pdc-proroga-paesaggistica-fittizio", "scia-alt-rinnovo-paesaggistica-fittizia"):
         q, p = case(name, **onerous, contributo_calcolo="sportello")
-        assert "diritti_euro" in q and "contributo_euro" not in q and "diritti_euro" not in p, (name, q, p)
+        assert "diritti_euro" in q and "contributo_fascia" not in q and "diritti_euro" not in p, (name, q, p)
         q, p = case(name, **onerous, contributo_calcolo="prospetto")
-        assert "contributo_euro" in q and "diritti_euro" not in q + list(p), (name, q, p)  # waits for the amount
-        for amount, want in (("4800", "1003"), ("12500", "1505"), ("45000", "1998")):
-            q, p = case(name, **onerous, contributo_calcolo="prospetto", contributo_euro=amount)
-            assert p.get("diritti_euro") == want and "contributo_euro" not in q, (name, amount, q, p)
-        q, p = case(name, **onerous, contributo_calcolo="prospetto", contributo_euro="5000")
+        # one message: the bracket asked, the diritti proposed for each bracket that has one line
+        assert "contributo_fascia" in q and "diritti_euro" not in q, (name, q, p)
+        assert per_bracket(p, "contributo_fascia") == {"fino_5000": "1003", "da_5000_a_30000": "1505", "oltre_30000": "1998"}, (name, p)
+        for fascia, want in (("fino_5000", "1003"), ("da_5000_a_30000", "1505"), ("oltre_30000", "1998")):
+            q, p = case(name, **onerous, contributo_calcolo="prospetto", contributo_fascia=fascia)
+            assert p.get("diritti_euro") == want and "contributo_fascia" not in q, (name, fascia, q, p)
+        q, p = case(name, **onerous, contributo_calcolo="prospetto", contributo_fascia="5000")
         assert "diritti_euro" in q and "diritti_euro" not in p, (name, q, p)
         q, p = case(name, scia_onerosa="false", contributo_normativa="art. 17 c. 3 DPR 380/2001")
-        assert p.get("diritti_euro") == "401" and "contributo_euro" not in q, (name, q, p)
+        assert p.get("diritti_euro") == "401" and "contributo_fascia" not in q, (name, q, p)
     q, p = case("pdc-fittizio", "parcheggi")
-    assert "parcheggio_mq" in q and "diritti_euro" not in q + list(p), (q, p)
-    for mq, want in (("280", "677"), ("450", "1129"), ("1200", "1998")):
-        q, p = case("pdc-fittizio", "parcheggi", parcheggio_mq=mq)
-        assert p.get("diritti_euro") == want and "contributo_euro" not in q, (mq, q, p)
-    q, p = case("pdc-fittizio", "parcheggi", parcheggio_mq="300,5")
+    assert "parcheggio_fascia" in q and "diritti_euro" not in q, (q, p)
+    assert per_bracket(p, "parcheggio_fascia") == {"fino_300": "677", "da_301_a_1000": "1129", "oltre_1001": "1998"}, p
+    for fascia, want in (("fino_300", "677"), ("da_301_a_1000", "1129"), ("oltre_1001", "1998")):
+        q, p = case("pdc-fittizio", "parcheggi", parcheggio_fascia=fascia)
+        assert p.get("diritti_euro") == want and "contributo_fascia" not in q, (fascia, q, p)
+    q, p = case("pdc-fittizio", "parcheggi", parcheggio_fascia="altro")
     assert "diritti_euro" in q, q
     q, p = case("pdc-fittizio")
-    assert "parcheggio_mq" not in q, q
+    assert "parcheggio_fascia" not in q, q
     q, p = case("scia-fittizia", **onerous, contributo_calcolo="prospetto")
-    assert "diritti_euro" in q and "contributo_euro" not in q, (q, p)
+    assert "diritti_euro" in q and "contributo_fascia" not in q, (q, p)
 
 
 def diritti_main_row():
@@ -1114,13 +1121,15 @@ def diritti_main_row():
     landscape authorization "quando oggetto di autonoma istanza", and the table has no line for the
     terre e rocce or the DAU. Every combination's diritti ask is its main pratica's."""
     root = HERE.parents[4] / "rehearsals"
-    load = lambda d: yaml.safe_load((d / "recipe.yaml").read_text())
+    load = lambda d: gen.load_yaml(d / "recipe.yaml")
+    # Resolved: a combination's operations follow from what it extends (gen.resolved).
+    several = lambda d: isinstance(gen.resolved(load(d)).get("operation"), list) and len(gen.resolved(load(d))["operation"]) > 1
     checked = 0
     for d in sorted(root.iterdir()):
-        if not (d / "portal-steps.generated.yaml").exists() or not isinstance(load(d).get("operation"), list):
+        if not (d / "portal-steps.generated.yaml").exists() or not several(d):
             continue
         main = d
-        while isinstance(load(main).get("operation"), list):  # a combination's main may be one itself
+        while several(main):  # a combination's main may be one itself
             main = root / (load(main)["extends"][0])
         ask = lambda x: yaml.safe_load((x / "portal-steps.generated.yaml").read_text())["asks"].get("diritti_euro")
         assert ask(d) == ask(main), (d.name, main.name, ask(d), ask(main))

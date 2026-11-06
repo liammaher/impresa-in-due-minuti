@@ -17,6 +17,9 @@ import yaml
 
 HERE = Path(__file__).resolve().parent
 PORTAL = HERE.parent
+sys.path.insert(0, str(PORTAL))
+sys.dont_write_bytecode = True
+import gen  # noqa: E402  (a combination's operations, resolved)
 ROOT = PORTAL.parents[3]
 WIZARD = json.loads((PORTAL / "catalogue/F839/sue-wizard.json").read_text())
 PAIRS = yaml.safe_load((PORTAL / "catalogue/F839/sue-pairs.yaml").read_text())
@@ -49,7 +52,7 @@ def recipe_ops():
     """Each rehearsal's operations, as slugs (a frozenset)."""
     out = {}
     for f in sorted((ROOT / "rehearsals").glob("*/recipe.yaml")):
-        op = yaml.safe_load(f.read_text()).get("operation")
+        op = gen.resolved(gen.load_yaml(f)).get("operation")  # a combination's follow from its extends
         if op is None:
             continue
         ops = [op] if isinstance(op, str) else op

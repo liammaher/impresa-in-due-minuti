@@ -4,13 +4,15 @@
   "answers": "answers-p6.json",
   "result": "stopped",
   "seconds": 7,
-  "browser": "pane"
+  "browser": "pane",
+  "note": "P6, `bench/rerun.py` bundle: **stopped** in 7 s on the wizard: the landscape proroga's third-party assent isn't offered when it is filed with a title (the crawl's scelte eventuali show only the procura). The recipe no longer ticks it, and gen.py now refuses a scelta a combination's crawled wizard doesn't offer"
  },
  {
   "date": "2026-11-05",
   "answers": "answers-p6.json",
   "result": "filled",
   "seconds": 122.7,
-  "browser": "pane"
+  "browser": "pane",
+  "note": "P6, from scratch, `bench/rerun.py` bundle: **filled** in 123 s, every value read back on a fresh load; the portal's usual warnings on made-up data"
  }
 ]

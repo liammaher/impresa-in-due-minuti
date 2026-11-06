@@ -385,40 +385,19 @@
   "browser": "pane"
  },
  {
-  "date": "2026-11-04",
-  "browser": "pane",
-  "case": "p6 with files of real size picked in the page (`run.py page`, no `--file-urls`): a 5 MB elaborati grafici and a 2 MB relazione tecnica (`bench/fake_pdf.py --size`), four small files",
-  "note": "126.6 s (attachments 13.7 s); **Filled**: run.js 6 KB names the six files (`picked`); the runner's box took the folder `~/Downloads/pv-pick-prova` (the browser asked to upload it), kept the six by sha256, attached them, and the fresh load read every value back; the draft shows 5,00 MB and 2,00 MB. The runner itself came by one picked file (`pv-pick-runner.js`, 86 KB: the pane takes about 40 KB a call), which an installed runner doesn't need"
- },
- {
-  "date": "2026-11-05",
-  "answers": "answers-catasti-tre-gruppi.json",
-  "result": "stopped",
-  "seconds": 36.4,
-  "browser": "pane"
- },
- {
   "date": "2026-11-05",
   "answers": "answers-comproprietari-tre.json",
   "result": "filled",
   "seconds": 133.7,
-  "browser": "pane"
- },
- {
-  "date": "2026-11-05",
-  "answers": "answers-catasti-tre-gruppi.json",
-  "result": "filled",
-  "seconds": 120.9,
-  "browser": "pane"
- },
- {
-  "date": "2026-11-05",
   "browser": "pane",
   "case": "Three other holders of the title (`answers-comproprietari-tre`: marta, bruno, and Immobiliare Fittizia with giulia as its legale rappresentante), the titolarità's \"+\" pressed twice, `bench/rerun.py` bundle",
   "note": "**filled** in 134 s, nothing moved or loose"
  },
  {
   "date": "2026-11-05",
+  "answers": "answers-catasti-tre-gruppi.json",
+  "result": "stopped",
+  "seconds": 36.4,
   "browser": "pane",
   "case": "Four units in three catasto groups (`answers-catasti-tre-gruppi`, fixture `ugo`: flat, two plots, garage), same bundle",
   "note": "stopped in 36 s on a) Titolarità, \"no + to add a block of Cognome\": rerun.py gave run.py steps expanded already, so both CILA cases shared one pane key and this one ran the three holders' steps (fixed: page_bundle keys expanded steps by their blocks too)"
@@ -431,6 +410,9 @@
  },
  {
   "date": "2026-11-05",
+  "answers": "answers-catasti-tre-gruppi.json",
+  "result": "filled",
+  "seconds": 120.9,
   "browser": "pane",
   "case": "the same, on the fixed runner (`last` pinned for its read-back and found by its own cell)",
   "note": "**filled** in 121 s: NCEU, NCT, NCEU, the middle group's second plot by its unit's \"+\", nothing moved or loose"
@@ -440,10 +422,6 @@
   "answers": "answers-imprese-tre.json",
   "result": "filled",
   "seconds": 141.5,
-  "browser": "pane"
- },
- {
-  "date": "2026-11-05",
   "browser": "pane",
   "case": "three firms (`answers-imprese-tre`: edil, impianti, muratori with its Cassa edile), the firms' \"+\" as an `each`",
   "note": "**filled** in 142 s, `bench/rerun.py` bundle: the third firm's block by its \"+\", its Cassa edile rows, nothing moved or loose"
@@ -453,10 +431,6 @@
   "answers": "answers-quattro.json",
   "result": "filled",
   "seconds": 151.6,
-  "browser": "pane"
- },
- {
-  "date": "2026-11-05",
   "browser": "pane",
   "case": "Five units in four catasto groups and four other holders (`answers-quattro`, fixture `ugo` with a third plot `immobile5`; `r:`-`r4:` marta, bruno, giulia with her company, dario)",
   "note": "**filled** in 152 s, `bench/rerun.py` bundle: NCEU, NCT, NCEU, NCT by the group's \"+\", the fourth holder's row by its \"+\", nothing moved or loose"

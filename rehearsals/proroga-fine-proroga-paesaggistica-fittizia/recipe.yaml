@@ -28,7 +28,7 @@ asks:
     default: proroga fine + proroga paesaggistica {{c:identity.last_name}}
   diritti_euro:
     propose: '{{ask.titolo_tipo|diritti_proroga_pdc}}'
-    why: "Voce SUE 11 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 501 € per la proroga di un permesso di costruire; quella di un altro titolo non è nel tariffario"
+    why: "Voce SUE 11 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 501 € per la proroga di un permesso di costruire; la proroga di un altro titolo non è nel tariffario"
 yours:
 - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
 - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"

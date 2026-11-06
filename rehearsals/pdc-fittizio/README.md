@@ -163,7 +163,6 @@ The permesso's other kinds (2026-10-31):
 | 2026-11-04 | pane | `answers-sanatoria-scia.json` | **stopped** in 0 s |
 | 2026-11-04 | pane | `answers-tolleranze-silenzio.json` | **filled** in 230 s |
 | 2026-11-04 | pane | `answers-terreno.json` | **filled** in 270 s |
-| 2026-11-05 | pane | `answers-due-titolari.json` | **filled** in 261 s |
 | 2026-11-05 | pane | Two other holders (`answers-due-titolari`: the landlord company, then marta), "b) Titolarità"'s "+", `bench/rerun.py` bundle | **filled** in 261 s, nothing moved or loose |
 
 <!-- /runs -->

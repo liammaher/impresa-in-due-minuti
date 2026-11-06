@@ -50,5 +50,5 @@ supports:
   - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
   - {when: "{{ask.speciali|not}}", else: "Armi, metalli preziosi, prodotti fitosanitari, medicinali o mangimi non sono ancora previsti."}
   - {when: "{{ask.in_centro_commerciale|not}}", else: "Un negozio all'interno di un centro commerciale per ora non lo preparo: Napoli chiede la tipologia del centro."}
-  - {when: "{{ask.in_factory_outlet|not}}", else: "A shop in a factory outlet centre isn't supported yet."}
+  - {when: "{{ask.in_factory_outlet|not}}", else: "Un negozio in un factory outlet non lo preparo ancora."}
   - {when: "{{ask.superficie_alimentare_mq|positive|not}}", else: "Questa è la pratica del negozio non alimentare: un negozio che vende alimenti presenta quella del settore alimentare (con la notifica ai sensi del Reg. 852)."}

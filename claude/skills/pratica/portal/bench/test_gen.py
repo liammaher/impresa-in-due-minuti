@@ -1546,6 +1546,15 @@ def _():
         assert [p.parent.name for p in gen.ensure(root=root)] == ["fine-lavori-fittizia"]
 
 
+def _all(x, key):
+    """Every value of `key` anywhere in x."""
+    if isinstance(x, dict):
+        return [v for k, v in x.items() if k == key] + [w for v in x.values() for w in _all(v, key)]
+    if isinstance(x, list):
+        return [w for v in x for w in _all(v, key)]
+    return []
+
+
 @case("what the tecnico reads is Italian: every question, checklist item, refusal and end step, no role codes")
 def _():
     english = re.compile(r"\b(the|which|what|does|will|have|with|your|their|tick|every|must|before|after|only|of|and|"
@@ -1557,6 +1566,8 @@ def _():
         texts += [v for a in steps.get("asks", {}).values() for v in (a.get("labels") or {}).values()]
         texts += [g.get("question") for g in steps.get("groups", {}).values()]
         texts += [c.get("else") for c in steps.get("supports", [])] + list(steps.get("yours", []))
+        # every refusal, a field's own included (2026-11-06: the tolerances' one was in English)
+        texts += [x for x in _all(steps, "else") if isinstance(x, str)]
         for t in filter(None, texts):
             plain = re.sub(r"\{\{.*?\}\}|\"[^\"]*\"", "", str(t))  # templates and the portal's own quoted words
             if english.search(plain) or "`" in plain:

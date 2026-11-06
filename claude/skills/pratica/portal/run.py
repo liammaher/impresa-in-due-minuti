@@ -422,10 +422,18 @@ def _amount(v):
 
 # Napoli SUE's diritti (tabella G.C. 239/2026, read line by line 2026-11-05): "" where the table's
 # own words put the figure in no row or in two, so the question stays.
+# The brackets as asked (dictionary contributo_fascia, parcheggio_fascia); an amount still works.
+FASCIA_CONTRIBUTO = {"fino_5000": "1003", "5000": "", "da_5000_a_30000": "1505", "oltre_30000": "1998"}
+FASCIA_PARCHEGGIO = {"fino_300": "677", "da_301_a_1000": "1129", "oltre_1001": "1998", "altro": ""}
+
+
 def _diritti_contributo(v):
     """SUE 7-9, an onerous permesso's or SCIA alternativa's, by the contributo (oneri di
     urbanizzazione + costo di costruzione): "fino a € 5.000,00" 1,003 €, "da € 5.000,00 ad
     € 30.000" 1,505 €, "oltre € 30.000,00" 1,998 €. Exactly 5,000 € is in both SUE 7 and SUE 8."""
+    s = str(v).strip()
+    if s in FASCIA_CONTRIBUTO:  # asks.contributo_fascia
+        return FASCIA_CONTRIBUTO[s]
     x = _amount(v)
     if x is None or x <= 0 or x == 5000:
         return ""
@@ -436,6 +444,9 @@ def _diritti_parcheggio(v):
     """SUE 4-6, a permesso for parcheggi pertinenziali, by floor area: "fino a 300 mq" 677 €,
     "da 301 mq a 1000 mq" 1,129 €, "oltre 1001 mq" 1,998 €. Over 300 and under 301 m², or over
     1,000 and up to 1,001 m², is in no row."""
+    s = str(v).strip()
+    if s in FASCIA_PARCHEGGIO:  # asks.parcheggio_fascia
+        return FASCIA_PARCHEGGIO[s]
     x = _amount(v)
     if x is None or x <= 0:
         return ""
@@ -587,7 +598,7 @@ FILTERS = Filters({
     # SUE 10, a SCIA free of the contributo; an onerous one (art. 22) is in no row: SUE 7-9 name
     # only the permesso a titolo oneroso and the SCIA alternativa.
     "diritti_gratuito": lambda v: "401" if v is not None and not truthy(v) else "",
-    # The SCIA alternativa: free SUE 10, onerous SUE 7-9 ({{ask.scia_onerosa,ask.contributo_euro|..}}).
+    # The SCIA alternativa: free SUE 10, onerous SUE 7-9 ({{ask.scia_onerosa,ask.contributo_fascia|..}}).
     "diritti_scia_alt": lambda v: ("" if not _facts(v, 2)[0].strip() else
                                    _diritti_contributo(_facts(v, 2)[1]) if truthy(_facts(v, 2)[0]) else "401"),
     "diritti_pdc": _diritti_pdc,
