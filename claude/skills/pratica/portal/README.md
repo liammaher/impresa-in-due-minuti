@@ -673,6 +673,11 @@ arrive garbled (2026-10-30). `run.py page --bundle FILE` writes runner.js, steps
 file (in the person's Downloads) and `pick.js`, a box on the portal's page where the person picks
 it once; it is checked by sha256 and evaluated, which starts the run (then, with big files, the
 files box). The batches' `bench/rerun.py --bundle` does the same for many runs.
+The skill always passes `--bundle ~/Downloads/portale-sue-<name>.js` and asks the app for the
+Downloads folder when it can't write there (`could not write`, e.g. Cowork's sandbox): a tecnico
+never downloads or saves a file by hand (2026-11-06, a test where Claude sent files to download).
+The box names the file without its extension, and the skill deletes it after the run (it holds
+the values).
 
 ## Writing new cases: `bench/new_case.py`, `bench/fake_pdf.py`
 

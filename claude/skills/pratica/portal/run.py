@@ -2103,18 +2103,24 @@ def bundle(out, path, files):
     box checks the file by sha256 and evaluates it once; it returns what run.js does ("waiting for the
     code", "waiting for the files", "started"). bench/rerun.py does the same for a batch."""
     text = "\n;\n".join(files[k] for k in ("runner.js", "steps.js", "run.js"))
-    path.write_text(text)
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text)
+    except OSError as e:
+        # A sandbox (Cowork) can't reach the person's Downloads until they allow that folder.
+        raise StepError(f"could not write {path} ({e.strerror}): ask the person to allow the Downloads "
+                        "folder (the app's own folder-access request), then run page again; never send them the file")
     sha = hashlib.sha256(text.encode()).hexdigest()
     (out / "pick.js").write_text(f"""document.querySelectorAll("#pv-pick").forEach((x) => x.remove());
 const box = document.createElement("div"); box.id = "pv-pick";
 box.style.cssText = "position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#fff;border:3px solid #1a4fd6;padding:16px 20px;font:16px sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3);border-radius:8px;max-width:520px";
-box.innerHTML = '<b>Scelga il file <code>{path.name}</code> (una volta sola)</b><br><input type="file" accept=".js" style="margin-top:10px"><div style="margin-top:8px;color:#444"></div>';
+box.innerHTML = '<b>Per avviare la compilazione scelga il file «{path.stem}» nella cartella Download</b><br>Una volta sola: l&#39;ho salvato io.<br><input type="file" accept=".js" style="margin-top:10px"><div style="margin-top:8px;color:#444"></div>';
 document.body.appendChild(box);
 const [input, msg] = [box.querySelector("input"), box.querySelector("div")];
 input.addEventListener("change", async () => {{
   const text = await input.files[0].text();
   const got = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
-  if (got !== "{sha}") {{ msg.textContent = "Non è il file giusto: non ho caricato nulla."; return; }}
+  if (got !== "{sha}") {{ msg.textContent = "Non è il file giusto: scelga «{path.stem}» nella cartella Download."; return; }}
   input.disabled = true;
   try {{ window.pvPicked = String((0, eval)(text)); msg.textContent = "Caricato."; setTimeout(() => box.remove(), 3000); }}
   catch (e) {{ window.pvPicked = "error " + e.message; msg.textContent = window.pvPicked; }}
