@@ -3,16 +3,41 @@
 A test run, for a tecnico who wants to see Portale SUE work before a real job, or who calls a job
 of theirs a test. `${CLAUDE_SKILL_DIR}` is this skill's folder, as in SKILL.md.
 
-**When the tecnico wants to try Portale SUE**, see what it does, or has no job at hand ("prova",
-"fammi vedere", "una demo", "test", "con dati inventati", "non ho i documenti"), run the Prova: a
-CILA for a made-up client, every answer and file ready, on the real portal, as a bozza named
-"PROVA NON INVIARE - CILA di prova". No questions, no file rules, nothing to pay, sign or send:
-the point is that they see a whole pratica filled, fast.
+**Which test.** Decide from their words alone, and ask nothing:
+- **The Prova**, every time the pratica they name is a CILA, or they name none ("una prova",
+  "fammi vedere", "a client's renovation", "una pratica"). What they say about the client or the
+  works ("for a client's renovation project") doesn't change it: the Prova is that, a CILA for
+  works inside a home. A made-up client, studio and documents, every answer ready, on the real
+  portal, as a bozza named "PROVA NON INVIARE - CILA di prova".
+- **Their own case, as a test** (below), only when they name another pratica (a SCIA, a permesso,
+  a CIL, a sanatoria, an agibilità...) or hand over a job's folder or documents and call it a test.
 
-1. Say only this, then start:
+**Mid-job.** When a job has started (you asked for a folder, documents or a question, or showed
+questions) and they then say it is a test ("voglio fare una prova", "fai tu", "come esempio",
+"inventa tu"): drop the job and every open question, and start the test now. Never ask again what
+you asked before.
+
+**Never, in a test:** ask for a folder, a document, the studio's or the tecnico's details, an
+answer about the case, or a confirmation to start; offer test documents or ask them to write
+test data; say that you don't invent data (in a test you do). The tecnico and procuratore are
+invented too, though they log in with their own SPID: the portal takes a made-up procuratore
+(the live Prova of 2026-11-06 filled it). Never make, send or show a file (the Prova's own PDFs
+are attached by the compilation; they never see or pick them), and never list the data you
+invented: the review page has it. No file rules, nothing to pay, sign
+or send: the point is that they see a whole pratica filled, fast.
+
+## The Prova
+
+1. Say only this, and in the same turn open the portal (SKILL.md, step 4.1, without sending its
+   line), so they log in while you prepare:
    "Le mostro Portale SUE su una CILA di prova: committente, studio e documenti inventati, nessuna domanda.
    Apro il portale nel browser dell'app: acceda con SPID e mi scriva «fatto».
    Compilo la bozza «PROVA NON INVIARE - CILA di prova» in un paio di minuti; poi la cancelli da «Pratiche in bozza»."
+   With no browser in this session (no tool opens a page), say instead, in three lines, once the scripts below have run, that the Prova is ready,
+   that it fills on the portal from the Claude app, where its browser is ("Mi scriva «fammi
+   vedere una prova» dall'app Claude per computer, con il suo browser"), and that the draft
+   «PROVA NON INVIARE - CILA di prova», with invented data, is then to be deleted from «Pratiche
+   in bozza». Then stop.
 2. From the folder open in this session (no folder open: your working folder), `prova.py` copies
    the Prova into a new `portale-sue-prova/` (`-2`, `-3` when one is there) and prints it: run
    everything in that folder. Never `cd` into `${CLAUDE_SKILL_DIR}` and never `cp` from it: the
@@ -24,19 +49,16 @@ the point is that they see a whole pratica filled, fast.
    sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
      --answers answers.json --values run/values.json --made-up
    sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
-     --answers answers.json --values run/values.json --made-up --plain --out run
+     --answers answers.json --values run/values.json --made-up --plain --out run \
+     --bundle ~/Downloads/portale-sue-prova.js
    ```
+   Before `page`, the one line on the file it saves in Downloads (SKILL.md, step 4); `<name>` is
+   `prova` in the lines of step 4.3.
    Pre-flight says `ready` (the build checks it); its warnings are the Prova's own, never for
    the tecnico. If it isn't ready, that is Portale SUE's fault: SKILL.md,
    **When Portale SUE itself goes wrong**.
-   No browser in this session (no tool opens a page): say in three lines that the Prova is ready,
-   that it fills on the portal from the Claude app, where its browser is ("Mi scriva «fammi
-   vedere una prova» dall'app Claude per computer, con il suo browser"), and that the draft
-   «PROVA NON INVIARE - CILA di prova», with invented data, is then to be deleted from «Pratiche
-   in bozza». Then stop.
-3. Open the portal and wait for their «fatto» as in SKILL.md, step 4.1 (they have the line
-   already: don't send it again). There is no code to type (`--plain`): skip step 4.2. Then steps
-   4.3 and 4.4 (the scripts, `__pv.wait`), save `JSON.stringify(__pv.last())` to `run/report.json`,
+3. Wait for their «fatto» (the portal is open since step 1). There is no code to type (`--plain`): skip step 4.2. Then steps
+   4.3 and 4.4 (the scripts, `__pv.wait`) and 4.6 (delete the file), save `JSON.stringify(__pv.last())` to `run/report.json`,
    and run `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova`. No check
    against the documents: they are made up (`--prova` leaves those lines out, and calls the
    portal's warnings on made-up values, such as the PEC, expected).
@@ -48,9 +70,21 @@ the point is that they see a whole pratica filled, fast.
    (<T>: the report's `total_seconds`.) Nothing else: no verdict, no list of their steps, no
    diritti, no procura, no second compilation.
 
-**Their own case, as a test.** When, in a job, they say it is only a test ("è una prova",
-"inventa i dati", "non ho i documenti, prova lo stesso"), it becomes a test of that case, and
-everything only a real filing needs drops away, as in the Prova. In this order:
+## Their own case, as a test
+
+Another pratica, or their own job called a test: everything only a real filing needs drops away,
+as in the Prova, and you answer every question yourself. With no job folder, make one in the
+folder open in this session (no folder open: your working folder), named `prova-<pratica>`, with
+`answers.json` and `values.json` as `{}`; never ask for one. First say only this, so they log in
+while you prepare:
+   "Preparo una <pratica> di prova: committente, studio e documenti inventati, nessuna domanda.
+   Apro il portale nel browser dell'app: acceda con SPID e mi scriva «fatto»."
+and open the portal (SKILL.md, step 4.1, without sending its line again). Then, in this order:
+0. Which pratica: route.py as in SKILL.md, step 1, with `facts.json` written by you. Each of its
+   questions you answer yourself, from their words where they say it, else with the simplest
+   answer that leads to the pratica they named (no landscape protection, no structures, no change
+   of use, no terre e rocce, works not started), and run it again until `routed`. Never show its
+   questions or its `message`. Then its `answers` start `answers.json`.
 1. `descrizione` in the job's `answers.json` first: "PROVA NON INVIARE - " and the pratica
    (pre-flight with `--made-up` refuses a draft named otherwise, before it says anything else).
 2. The studio and the tecnico: the Prova's `studio.json`, read with the Read tool
@@ -58,8 +92,8 @@ everything only a real filing needs drops away, as in the Prova. In this order:
    `studio.json`, used in place of `../studio.json` (`check.py studio.json values.json`). Never
    write the tecnico's own `../studio.json` with made-up data.
 3. Pre-flight with `--made-up`. Answer every open question yourself: the proposals as proposed,
-   the rest with the simplest case that keeps the pratica. Say what you chose in one line; never
-   ask.
+   the rest with the simplest case that keeps the pratica. Never ask; the review page shows what
+   you chose.
 4. Invent every value it lists under `missing`, plainly fictitious ("Prova" in the names), into
    the job's `values.json`. `check.py` checks a codice fiscale's control character and date and a
    partita IVA's check digit: when it refuses one, make a valid one and run it again.

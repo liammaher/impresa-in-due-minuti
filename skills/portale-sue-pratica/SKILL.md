@@ -1,6 +1,6 @@
 ---
 name: portale-sue-pratica
-description: Prepara una pratica edilizia del SUE del Comune di Napoli su impresainungiorno a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti, e fa vedere una prova su una CILA con dati inventati. Use when an architect, geometra or ingegnere asks (in Italian or English) to prepare, fill, draft or file a pratica for a client in Napoli ("prepara una CILA", "compila la SCIA"), asks what a case needs, or wants to try it or see a demo ("fammi vedere una prova").
+description: Prepara una pratica edilizia del SUE del Comune di Napoli su impresainungiorno a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti, e fa vedere una prova su una CILA con dati inventati. Use when an architect, geometra or ingegnere asks (in Italian or English) to prepare, fill, draft or file a pratica for a client in Napoli ("prepara una CILA", "compila la SCIA"), asks what a case needs, or wants to try it, see a demo or do a test with made-up data ("fammi vedere una prova", "do a test", "fai tu come esempio").
 ---
 
 # Pratiche a Napoli
@@ -8,6 +8,9 @@ description: Prepara una pratica edilizia del SUE del Comune di Napoli su impres
 The user is a **tecnico** (architetto, geometra, ingegnere) filing for clients in Napoli with a
 procura. You prepare the draft on impresainungiorno; they log in with their own SPID, then make
 the declarations, sign, pay and send.
+
+**A test** ("do a test", "prova", "esempio", "fai tu", "inventa", even inside a job or after
+your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
 
 ## How you speak
 
@@ -93,11 +96,9 @@ Between 3 and 7 they hear nothing from you but the login and the review page.
 
 ## La prova
 
-**When the tecnico wants to try Portale SUE**, see what it does, or has no job at hand ("prova",
-"fammi vedere", "una demo", "test", "con dati inventati", "non ho i documenti"), or says a job of
-theirs is only a test ("è una prova, inventa i dati"): read `${CLAUDE_SKILL_DIR}/prova.md` and
-follow it. A made-up CILA, filled on the real portal in a few minutes, with no questions and none
-of a real filing's rules.
+**Any test**: `${CLAUDE_SKILL_DIR}/prova.md`. A made-up CILA, filled on
+the real portal in a few minutes, with no questions and none of a real filing's rules; a test of
+another pratica the same way.
 
 **When they come without a job** ("come funziona?", "ciao", "cosa fa?"), the Prova is the answer:
 seeing it beats any description. Your whole reply is these two lines, nothing before or after,
@@ -106,8 +107,8 @@ no list of features or steps:
   Le mostro come funziona su una CILA di prova? Due minuti, dati inventati, resta una bozza da cancellare."
 With the clickable-options tool, the second line is its question, "Sì, me lo faccia vedere" first
 and "Ho già un caso vero"; without it, add "Scriva «sì», o mi dica il Suo caso." On yes,
-`prova.md`. Never force it: when they come with a real job, start the job, and offer the Prova
-only if they hesitate or lack the documents.
+`prova.md`. Never force it: when they come with a real job and don't call it a test, start the
+job, and offer the Prova only if they hesitate or lack the documents.
 
 ## What this skill has
 
@@ -367,25 +368,36 @@ review page.
 
 ```sh
 sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
-  --values run/values.json --values run/intake/private/values.json --plain --out run
+  --values run/values.json --values run/intake/private/values.json --plain --out run \
+  --bundle ~/Downloads/portale-sue-<name>.js
 ```
 
 `--plain`: run.js carries the values itself, so there is no code to type.
+
+`--bundle` saves in their Downloads folder the one file the portal's page needs to start (the
+runner is too big to send otherwise). Say first, in one line: "Salvo nella cartella Download il
+file che avvia la compilazione: se l'app Le chiede il permesso, lo consenta." When it can't write
+there (`could not write`: the app refused, or this session can't reach that folder), ask for the
+Downloads folder with the app's own tool that asks the person to allow a folder, and run `page`
+again. Never send them the file, never ask them to download or save one, never say "JS".
 
 1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser:
    "Acceda con SPID nella finestra del browser; quando vede la pagina del portale mi scriva
    «fatto»." Wait until the page is the portal's own, past the login.
 2. Say: "Compilo ora la bozza: non tocchi la pagina finché non Le scrivo."
 3. Run each script as **one** JavaScript call on the portal's page, its text exactly as the
-   file has it: `run/check.js` first. It returns what to run next: `runner.js` and `steps.js`
-   only when it names them, then `run.js`. When it names `runner.js` and the call is too big,
-   build with `--bundle ~/Downloads/portale-sue-<name>.js` and run `pick.js` instead: they choose
-   that file once in the box it shows.
+   file has it: `run/check.js` first. It returns what to run next. When it names only `run.js`,
+   run that. When it names `runner.js` or `steps.js`, run `run/pick.js` instead (it carries all
+   three): a box on the portal asks them to choose the file you saved. Say: "Sul portale compare
+   un riquadro: scelga lì il file «portale-sue-<name>» dalla cartella Download. Una volta sola."
+   Then `__pv.wait` as below (`window.pvPicked` says once the file is in).
 4. `run.js` returns at once: call `await __pv.wait(40000)` until `result` is `filled` or
    `stopped`. `waiting` means the page waits for the tecnico (the files to pick in its box, or a
    code to type): say so once, gently.
 5. Save `JSON.stringify(__pv.last())` to `run/report.json`. The review page comes after the
    check (step 5).
+6. Delete the file from Downloads (`rm ~/Downloads/portale-sue-<name>.js`): it holds the job's
+   values. The next compilation saves it again.
 
 While it runs, don't click, type or take screenshots on the page: the compilation is using it.
 One compilation per login at a time: the portal keeps one pratica open per login.
