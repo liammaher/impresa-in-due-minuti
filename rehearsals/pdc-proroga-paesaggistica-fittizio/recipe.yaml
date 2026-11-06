@@ -25,7 +25,7 @@ asks:
     default: PdC + proroga paesaggistica {{c:identity.last_name}}
   diritti_euro:
     question: "I diritti del SUE in euro: la tabella 2026 non indica la voce per questo caso (il contributo lo calcola il SUE, è esattamente 5.000 €, o la superficie del parcheggio cade tra due righe). Pratica onerosa, SUE 7-9 in base al contributo: 1003 fino a 5.000 €, 1505 da 5.000 a 30.000 €, 1998 oltre; parcheggi, SUE 4-6: 677 fino a 300 m², 1129 da 301 a 1.000 m², 1998 oltre 1.001 m²"
-    propose: "{{ask.pdc_tipo,ask.scia_onerosa,ask.contributo_euro,ask.parcheggio_mq|diritti_pdc}}"
+    propose: "{{ask.pdc_tipo,ask.scia_onerosa,ask.contributo_fascia,ask.parcheggio_fascia|diritti_pdc}}"
     why: "Voci del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): SUE 10, 401 € per un permesso non soggetto al contributo; SUE 11, 501 € per una variante a un permesso rilasciato; se oneroso, SUE 7-9 in base al contributo (oneri di urbanizzazione + costo di costruzione): 1.003 € fino a 5.000 €, 1.505 € da 5.000 a 30.000 €, 1.998 € oltre; parcheggi su suolo libero (L.R. Campania 19/2001 art. 6 c. 2, parcheggi pertinenziali), SUE 4-6 in base alla superficie: 677 € fino a 300 m², 1.129 € da 301 a 1.000 m², 1.998 € oltre 1.001 m²"
 yours:
 - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"

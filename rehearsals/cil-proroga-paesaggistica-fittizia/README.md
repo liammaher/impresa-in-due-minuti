@@ -14,8 +14,8 @@ Made-up data; the draft is "PROVA NON INVIARE" and stops before the declarations
 
 | Date | Browser | Case | Result |
 |---|---|---|---|
-| 2026-11-04 | pane | `answers-p6.json` | **stopped** in 6 s |
-| 2026-11-05 | pane | `answers-p6.json` | **filled** in 118 s |
+| 2026-11-04 | pane | `answers-p6.json` | P6, `bench/rerun.py` bundle: **stopped** in 6 s on the wizard: the landscape proroga's third-party assent isn't offered when it is filed with a title (the crawl's scelte eventuali show only the procura). The recipe no longer ticks it, and gen.py now refuses a scelta a combination's crawled wizard doesn't offer |
+| 2026-11-05 | pane | `answers-p6.json` | P6, from scratch, `bench/rerun.py` bundle: **filled** in 118 s, every value read back on a fresh load; the portal's usual warnings on made-up data |
 
 <!-- /runs -->
 

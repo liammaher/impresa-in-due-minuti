@@ -855,18 +855,23 @@ asks:
     question: "Chi calcola il contributo: prospetto (il prospetto di calcolo preventivo del progettista, allegato); sportello (il SUE, sulla base dei documenti tecnici allegati)"
     options: [prospetto, sportello]
   documentazione_calcolo_contributo: {type: file, question: "I documenti tecnici di cui il SUE ha bisogno per calcolare il contributo (PDF)"}
-  # Asked only for the diritti's bracket (an ask's `propose` reads it; run.py needed): no box on
-  # the forms takes either.
-  contributo_euro:
-    type: number
-    question: "Il contributo di costruzione in euro, oneri di urbanizzazione + costo di costruzione, come risulta dal prospetto di calcolo (solo cifre, ad es. 12500 o 12500,50)"
+  # Asked only for the diritti's line (an ask's `propose` reads it; run.py needed): no box on the
+  # forms takes either. A choice, not an amount, so the diritti come in the same message, one
+  # proposal per answer (run.py conditional_proposals waits a round for a number).
+  contributo_fascia:
+    type: choice
+    question: "Il contributo di costruzione (oneri di urbanizzazione + costo di costruzione), come risulta dal prospetto di calcolo"
+    options: [fino_5000, "5000", da_5000_a_30000, oltre_30000]
+    labels: {fino_5000: "Fino a 5.000 €", "5000": "Esattamente 5.000 €", da_5000_a_30000: "Da 5.000 a 30.000 €", oltre_30000: "Oltre 30.000 €"}
     when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}"
-    why: "Le voci SUE 7-9 della tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) dipendono dal contributo (oneri di urbanizzazione + costo di costruzione): fino a 5.000 €, da 5.000 a 30.000 €, oltre 30.000 €"
-  parcheggio_mq:
-    type: number
-    question: "La superficie del parcheggio in m², come indicata nella relazione tecnica (solo cifre)"
+    why: "Le voci SUE 7-9 della tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) dipendono dal contributo: fino a 5.000 € (1.003 €), da 5.000 a 30.000 € (1.505 €), oltre 30.000 € (1.998 €); esattamente 5.000 € è in due voci, quindi i diritti si chiedono"
+  parcheggio_fascia:
+    type: choice
+    question: "La superficie del parcheggio, come indicata nella relazione tecnica"
+    options: [fino_300, da_301_a_1000, oltre_1001, altro]
+    labels: {fino_300: "Fino a 300 m²", da_301_a_1000: "Da 301 a 1.000 m²", oltre_1001: "Oltre 1.001 m²", altro: "Altro (tra 300 e 301 m², o tra 1.000 e 1.001 m²)"}
     when: "{{ask.pdc_tipo|is_parcheggi}}"
-    why: "Le voci SUE 4-6 della tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) dipendono dalla superficie del parcheggio: fino a 300 m², da 301 a 1.000 m², oltre 1.001 m² (la tabella non dice se lorda o netta)"
+    why: "Le voci SUE 4-6 della tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) dipendono dalla superficie del parcheggio: fino a 300 m² (677 €), da 301 a 1.000 m² (1.129 €), oltre 1.001 m² (1.998 €); la tabella non dice se lorda o netta, e tra le voci restano scoperti i decimali"
   # The SCIA's f), the SCIA alternativa's f) and the permesso's e): how the stato legittimo is
   # shown. The national form (ent_regolarita_urbanistica_scia/pdc) takes one of the five, then
   # "pienamente conforme" or "conforme ... unitamente alla sanatoria" (quadro c's sanatoria and
@@ -2941,7 +2946,7 @@ sections:
     supports:
       - {if: "{{ask.stato_legittimo|is_titoli}}", value: "{{ask.prec_titolo_unico,ask.prec_permesso,ask.prec_autorizzazione,ask.prec_comunicazione,ask.prec_dia,ask.prec_dia_alternativa,ask.prec_scia,ask.prec_cel,ask.prec_condono,ask.prec_pdc_sanatoria,ask.prec_scia_sanatoria,ask.prec_scia_sanatoria_variante,ask.prec_altro|any}}", in: ["true"], else: "Uno stato legittimo desunto dai titoli dell'edificio richiede almeno un titolo."}
       - {if: "{{ask.stato_legittimo|in_epoca__prova}}", value: "{{ask.prova_catasto,ask.prova_altri|any}}", in: ["true"], else: "Per un edificio senza titolo agli atti servono il catasto di primo impianto o altri documenti."}
-      - {if: "{{ask.stato_legittimo|is_tolleranze}}", value: "{{ask.toll_prec_pratica,ask.toll_prec_atto|any}}", in: ["true"], else: "A stato legittimo from tolerance declarations needs where they were made."}
+      - {if: "{{ask.stato_legittimo|is_tolleranze}}", value: "{{ask.toll_prec_pratica,ask.toll_prec_atto|any}}", in: ["true"], else: "Uno stato legittimo dalle dichiarazioni di tolleranze richiede dove sono state rese: la pratica o l'atto."}
     fields:
       # Only the permesso's e): a new construction on free land (its recipes offer it).
       - {kind: radio, label: che le opere riguardano un intervento di nuova costruzione su area libera, if_present: true, when: "{{ask.stato_legittimo|is_area_libera}}"}

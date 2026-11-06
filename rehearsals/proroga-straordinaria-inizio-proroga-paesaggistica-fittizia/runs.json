@@ -4,6 +4,7 @@
   "answers": "answers-p6.json",
   "result": "filled",
   "seconds": 69.2,
-  "browser": "pane"
+  "browser": "pane",
+  "note": "P6, from scratch, `bench/rerun.py` bundle: **filled** in 69 s, every value read back on a fresh load; the portal's usual warnings on made-up data"
  }
 ]

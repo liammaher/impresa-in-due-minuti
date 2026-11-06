@@ -25,14 +25,11 @@ holders' names, the bollo, signing and sending.
 | 2026-10-29 | pane |  | Clean reruns of all 23 SUE recipes from run.py's install.js and run.js, nothing touched between runs: first filled in 76.5 s; second, with the runner waiting for a section to open, **filled** in 65.8 s, read back on a fresh load. |
 | 2026-10-30 | pane |  | the bollo with two marche (`answers-marche`), `bench/rerun.py` bundle: stopped on the bollo as the semplificata's ("numero seriale (2)" isn't a label on the page) |
 | 2026-10-30 | pane |  | the same, the second marca by label and nth: **filled** in 82 s, read back on a fresh load (12 s), nothing moved or loose |
-| 2026-10-30 | pane | the bollo with two marche (`answers-marche`), `bench/rerun.py` bundle | stopped on the bollo as the semplificata's ("numero seriale (2)" isn't a label on the page) |
-| 2026-10-30 | pane | the same, the second marca by label and nth | **filled** in 82 s, read back on a fresh load (12 s), nothing moved or loose |
 | 2026-10-31 | pane | `answers-marche.json` | **filled** in 67 s |
 | 2026-10-31 | pane | `answers-p6.json` | **filled** in 66 s |
 | 2026-11-02 | pane | `answers-senza-cointestatari.json` | **filled** in 56 s |
 | 2026-11-02 | pane | `answers-p6.json` | **filled** in 59 s |
 | 2026-11-03 | pane | `answers-p6.json` | **filled** in 87 s |
-| 2026-11-05 | pane | `answers-tre-cointestatari.json` | **filled** in 94 s |
-| 2026-11-05 | pane |  | Three co-holders (`answers-tre-cointestatari`: paolo, marta, bruno), the co-holders' "+" twice, `bench/rerun.py` bundle: **filled** in 94 s, nothing moved or loose: the section has a "+" (the coholders-one defect withdrawn) |
+| 2026-11-05 | pane | `answers-tre-cointestatari.json` | Three co-holders (`answers-tre-cointestatari`: paolo, marta, bruno), the co-holders' "+" twice, `bench/rerun.py` bundle: **filled** in 94 s, nothing moved or loose: the section has a "+" (the coholders-one defect withdrawn) |
 
 <!-- /runs -->

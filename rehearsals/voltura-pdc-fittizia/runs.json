@@ -25,18 +25,6 @@
   "note": "the same, the second marca by label and nth: **filled** in 82 s, read back on a fresh load (12 s), nothing moved or loose"
  },
  {
-  "date": "2026-10-30",
-  "browser": "pane",
-  "case": "the bollo with two marche (`answers-marche`), `bench/rerun.py` bundle",
-  "note": "stopped on the bollo as the semplificata's (\"numero seriale (2)\" isn't a label on the page)"
- },
- {
-  "date": "2026-10-30",
-  "browser": "pane",
-  "case": "the same, the second marca by label and nth",
-  "note": "**filled** in 82 s, read back on a fresh load (12 s), nothing moved or loose"
- },
- {
   "date": "2026-10-31",
   "answers": "answers-marche.json",
   "result": "filled",
@@ -76,10 +64,6 @@
   "answers": "answers-tre-cointestatari.json",
   "result": "filled",
   "seconds": 94.1,
-  "browser": "pane"
- },
- {
-  "date": "2026-11-05",
   "browser": "pane",
   "note": "Three co-holders (`answers-tre-cointestatari`: paolo, marta, bruno), the co-holders' \"+\" twice, `bench/rerun.py` bundle: **filled** in 94 s, nothing moved or loose: the section has a \"+\" (the coholders-one defect withdrawn)"
  }

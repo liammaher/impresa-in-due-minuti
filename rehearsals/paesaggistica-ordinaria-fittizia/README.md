@@ -28,7 +28,6 @@ attachments (the relazione paesaggistica, DPCM 12/12/2005), the bollo, signing a
 | 2026-11-02 | pane | `answers-p6.json` | **filled** in 49 s |
 | 2026-11-03 | pane | `answers-p6.json` | **stopped** in 61 s |
 | 2026-11-03 | pane | `answers-p6.json` | **filled** in 65 s |
-| 2026-11-05 | pane | `answers-tecnici-tre.json` | **filled** in 89 s |
-| 2026-11-05 | pane |  | Three technicians, none the architect presenting (`answers-tecnici-tre`: valerio, elena, davide), the tecnico section's "+" twice, `bench/rerun.py` bundle: **filled** in 89 s, nothing moved or loose. A second technician beside the presenter is refused (defects.yaml `paesaggio-altri-tecnici`: under "è colui" the "+" shows only an albo row, read on a draft the same day) |
+| 2026-11-05 | pane | `answers-tecnici-tre.json` | Three technicians, none the architect presenting (`answers-tecnici-tre`: valerio, elena, davide), the tecnico section's "+" twice, `bench/rerun.py` bundle: **filled** in 89 s, nothing moved or loose. A second technician beside the presenter is refused (defects.yaml `paesaggio-altri-tecnici`: under "è colui" the "+" shows only an albo row, read on a draft the same day) |
 
 <!-- /runs -->

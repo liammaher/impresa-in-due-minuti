@@ -27,7 +27,7 @@ asks:
     default: SCIA alt. + pror. paes. + terre {{c:identity.last_name}}
   diritti_euro:
     question: "I diritti del SUE in euro: la tabella 2026 non indica la voce per questo caso (il contributo lo calcola il SUE, o è esattamente 5.000 €). Pratica onerosa, SUE 7-9 in base al contributo: 1003 fino a 5.000 €, 1505 da 5.000 a 30.000 €, 1998 oltre"
-    propose: "{{ask.scia_onerosa,ask.contributo_euro|diritti_scia_alt}}"
+    propose: "{{ask.scia_onerosa,ask.contributo_fascia|diritti_scia_alt}}"
     why: "Voci del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): SUE 10, 401 € se non soggetta al contributo; se onerosa, SUE 7-9 in base al contributo (oneri di urbanizzazione + costo di costruzione): 1.003 € fino a 5.000 €, 1.505 € da 5.000 a 30.000 €, 1.998 € oltre"
 yours:
 - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
