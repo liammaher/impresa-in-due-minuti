@@ -1,17 +1,17 @@
 {
-  "name": "portali",
-  "description": "Portali: Claude prepares your pratiche on Italian government portals up to the steps only you can take (SPID login, declarations, signature, payment, sending).",
+  "name": "portale-sue",
+  "description": "Portale SUE: Claude prepares your pratiche on Italian government portals up to the steps only you can take (SPID login, declarations, signature, payment, sending).",
   "owner": {
     "name": "Liam Maher"
   },
   "plugins": [
     {
-      "name": "portali",
-      "description": "Prepares pratiche on the portals, today the Comune di Napoli's (SUE and SUAP on impresainungiorno), from your documents, with the pratiche-napoli library of rules.",
+      "name": "portale-sue",
+      "description": "Prepares pratiche on the portals, today the Comune di Napoli's SUE (on impresainungiorno), from your documents, with the pratiche-napoli library of rules.",
       "source": {
         "source": "archive",
-        "url": "https://github.com/liammaher/portali/releases/download/v0.3.0/portali-0.3.0.zip",
-        "sha256": "2a267183360863d878461b31ee8b0219ccca44355af8079fc96855c42da08815"
+        "url": "https://github.com/liammaher/portale-sue/releases/download/v0.4.0/portale-sue-0.4.0.zip",
+        "sha256": "41363980a2c55c2afaf44bea182710a89efc27dceaa956cf3b98a059f737a790"
       }
     }
   ]
