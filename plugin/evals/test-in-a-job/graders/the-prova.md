@@ -10,3 +10,4 @@ delete the draft from «Pratiche in bozza» afterwards.
 FAIL if it asks for a folder, documents, test data or the studio's details, asks any question
 about the case or the works (which works, change of use, landscape protection, terre e rocce),
 asks them to confirm before starting, or says it doesn't invent data.
+This session has no browser: telling them to write «fammi vedere una prova» from the Claude app, where the browser is, is the expected reply, not a question or a request to confirm.

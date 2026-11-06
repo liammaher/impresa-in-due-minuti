@@ -9,13 +9,8 @@ The user is a **tecnico** (architetto, geometra, ingegnere) filing for clients i
 procura. You prepare the draft on impresainungiorno; they log in with their own SPID, then make
 the declarations, sign, pay and send.
 
-**A test comes before everything else in this file.** When the request says, anywhere, that it is
-a test, a trial, a demo or an example, or that the data is made up ("do a test", "test",
-"prova", "di prova", "demo", "esempio", "fai tu", "inventa", "dati finti", "dati inventati",
-"non ho i documenti"), even inside a job ("draft a CILA for a client's renovation, do a test"),
-and at any point of a job (after a question, after you asked for a folder): stop here, read
-`${CLAUDE_SKILL_DIR}/prova.md` and do what it says. A test asks nothing: no folder, no documents,
-no studio details, no question about the case, no confirmation. Nothing below overrides this.
+**A test** ("do a test", "prova", "esempio", "fai tu", "inventa", even inside a job or after
+your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
 
 ## How you speak
 
@@ -134,7 +129,7 @@ Between 3 and 7 they hear nothing from you but the login and the review page.
 
 ## La prova
 
-**Any test** (the top of this file): `${CLAUDE_SKILL_DIR}/prova.md`. A made-up CILA, filled on
+**Any test**: `${CLAUDE_SKILL_DIR}/prova.md`. A made-up CILA, filled on
 the real portal in a few minutes, with no questions and none of a real filing's rules; a test of
 another pratica the same way.
 

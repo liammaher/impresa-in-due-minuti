@@ -7,3 +7,4 @@ with SPID in the app's browser (or says it can't open the browser here), and tel
 the draft from «Pratiche in bozza» afterwards.
 FAIL if it asks them any question about the case, asks for documents or for their studio's
 details, asks them to sign, pay or convert a file, or mentions PDF/A or the diritti.
+This session has no browser: telling them to write «fammi vedere una prova» from the Claude app, where the browser is, is the expected reply, not a question or a request to confirm.
