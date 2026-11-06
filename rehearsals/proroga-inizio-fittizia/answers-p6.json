@@ -16,5 +16,6 @@
  "titolo_tipo": "permesso di costruire",
  "diritti_esente": false,
  "bollo_esenzione": "no",
- "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "paesaggistica": "no"
 }

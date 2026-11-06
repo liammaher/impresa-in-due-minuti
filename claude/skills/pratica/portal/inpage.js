@@ -277,7 +277,36 @@
   // to read) or to a login page: it looked like "the portal stayed busy" for 20 s (2026-10-30).
   const signedOut = () => { try { const d = frame.contentDocument; return !d || /login|spid|idp/i.test(d.location.pathname); } catch (e) { return true; } };
 
-  async function idle(ms = 20000) {
+  // The portal's own "please wait": a visible box saying "Attendere prego" or "Composizione della
+  // pratica" (after the wizard), shown while no request may be in flight from this side.
+  const pleaseWait = () => {
+    try {
+      return [...doc().querySelectorAll(".ui-dialog, .ui-blockui, .ui-overlay-visible, .ui-outputpanel-loading")]
+        .some((e) => e.offsetParent !== null && /attendere|caricamento|composizione della pratica/i.test(e.innerText || ""));
+    } catch (e) { return false; }
+  };
+  const working = () => busy() || pleaseWait();
+
+  // Waits until done(). A deadline from the click failed a slow portal that was still working
+  // (2026-11-04/05: crawled sections, two big wizard runs), so it gives up only after QUIET ms
+  // with no sign of work and done() still false, or after `cap` ms in all: a slow portal gets its
+  // time, a dead one is caught within QUIET.
+  const QUIET = 20000;
+  async function until(done, why, cap = 300000) {
+    const start = performance.now();
+    let last = start;
+    while (!done()) {
+      const now = performance.now();
+      if (working()) last = now;
+      if (signedOut() && now - start > 2000) fail("signed out: the portal sent the page to its sign-in (no document to read); sign in again, then rerun");
+      if (now - last > QUIET) fail(`${why} (nothing happening for ${QUIET / 1000} s)`);
+      if (now - start > cap) fail(`${why} (still working after ${Math.round(cap / 60000)} minutes)`);
+      await sleep(100);
+    }
+  }
+
+  // Busy is working: the limit is only for a portal stuck busy (it was 20 s, 2026-10-30 to 11-05).
+  async function idle(ms = 180000) {
     const start = performance.now(), end = start + ms;
     for (let quiet = 0; quiet < 3;) {
       if (signedOut() && performance.now() - start > 2000) fail("signed out: the portal sent the page to its sign-in (no document to read); sign in again, then rerun");
@@ -289,7 +318,8 @@
 
   // Runs a click and waits for what it starts, until 300 ms pass with no ajax in flight
   // and no page loading: a load can start another (the last wizard screen redirects).
-  async function act(click, ms = 60000) {
+  // ms: a ceiling for a request or a page that never ends (it was 60 s until 2026-11-05).
+  async function act(click, ms = 180000) {
     const end = performance.now() + ms;
     let loads = 0, leaving = null;
     const onload = () => { loads++; };
@@ -452,6 +482,15 @@
     }
   }
 
+  const WIZARD_MS = 300000;
+  // "Composizione della pratica. Attendere prego...": the portal's own wait after the last wizard
+  // screen, before the draft's first section opens. Waited out, not read as a busy portal.
+  async function composed() {
+    const composing = () => { try { return /Composizione della pratica/i.test(doc().body.innerText); } catch (e) { return false; } };
+    await until(() => !composing() && !busy(), "the page didn't load: the portal was composing the pratica", WIZARD_MS);
+    await idle();
+  }
+
   async function wizard(step, value, wi) {
     report.at = { phase: "wizard", index: wi, screen: step.screen };
     if (!norm(doc().body.innerText).includes(norm(step.screen))) fail(`expected the screen ${step.screen}`);
@@ -477,7 +516,10 @@
     // same title after CONFERMA means the portal refused it.
     const title = () => norm((doc().querySelector(".content-title") || {}).innerText);
     const before = title();
-    await act(() => press(button(step.confirm), step.confirm));
+    // A wizard screen's CONFERMA can start the portal composing the pratica, which for a big one (a
+    // SCIA alternativa with the landscape proroga) outlasted act()'s 60 s: two runs failed as "the
+    // page didn't load" and filled when rerun (2026-11-05). So the wizard waits up to five minutes.
+    await act(() => press(button(step.confirm), step.confirm), WIZARD_MS);
     if (before && title() === before) {
       const why = [...doc().querySelectorAll("span, div")].filter((e) => !e.children.length && e.offsetParent && /obbligatori|errore/i.test(e.textContent));
       fail(`still on ${step.screen} after ${step.confirm}: ${why.map((e) => norm(e.textContent)).join("; ") || "no message"}`);
@@ -748,6 +790,7 @@
     }
     const want = f.kind === "number" || f.kind === "date" ? "text" : f.kind;
     let hits = list.filter((e) => kindOf(e) === want && labelled(e, f.label));
+    const labelledAll = hits;
     // A box is counted by its own label (its title, else its cell), as the crawl counts it: a
     // "Si" whose nearby texts include the "No" before it is not a "No" (three Si/No pairs in a
     // row); the beds total under a shared header is not the rooms total.
@@ -760,8 +803,25 @@
       const best = Math.min(...hits.map((e) => labelRank(e, f.label)));
       hits = hits.filter((e) => labelRank(e, f.label) === best);
     }
-    const e = hits[(f.nth || 1) - 1] || fail(`${f.label}: ${hits.length} fields with this label${f.anchor ? ` in block ${f.block || 1}` : ""}`);
-    return { ...f, id: e.id.split("dynaForm:")[1].replace(/:combo_input$/, "") };
+    // `last`: the page's last box with the label at all, the newest of a list (a group "+" just
+    // added: Dati catastali's radios read "NCEU"/"NCT" in every group once the portal has checked
+    // the section, the long title only before, 2026-11-04). Not narrowed by own label or rank:
+    // a group with its title still on would lose to an older one, and the run untick that.
+    // `at`: a `last` box as it was when filled (pinned), so a read-back after later groups were
+    // added reads it, not the newest (2026-11-05: the third group's NCT read as the second's).
+    // A `last` radio by its own cell where one has it: a group's NCT reads the NCEU of the cell to
+    // its left too, so the newest "NCEU" was the third group's NCT (2026-11-05, the fake portal).
+    const cell = (e) => (e.closest("td") || {}).innerText || "";
+    const inCell = labelledAll.filter((e) => startsLabel(cell(e), f.label));
+    const at = f.at !== undefined ? f.at : f.last ? labelledAll.indexOf((inCell.length ? inCell : labelledAll).slice(-1)[0]) : undefined;
+    const e = (at !== undefined ? labelledAll[at] : hits[(f.nth || 1) - 1]) ||
+      fail(`${f.label}: ${hits.length} fields with this label${f.anchor ? ` in block ${f.block || 1}` : ""}`);
+    return { ...f, ...(at !== undefined ? { at } : {}), id: e.id.split("dynaForm:")[1].replace(/:combo_input$/, "") };
+  }
+  // A field found by its label, with how to find it again: a `last` one pinned where it was.
+  function bySpec(f) {
+    const r = resolve(f);
+    return { ...r, spec: r.at !== undefined ? { ...f, last: false, at: r.at } : f };
   }
   // A slot's upload boxes and its "+", from the rows under its title (span.input-label) to the
   // next title. "+" adds a box under the slot's last one, with no label of its own, and moves
@@ -814,9 +874,12 @@
     const plus = [...doc().querySelectorAll('[id*="dynaForm"] button')].filter((b) => shown(b) && b.textContent.trim() === "+");
     if (!plus.length) fail(`no + to add a block of ${f.anchor}`);
     // The first "+" after the anchor's last block is its own: a section can have one per list
-    // (the CILA relazione's filings, then its assents).
+    // (the CILA relazione's filings, then its assents). `nth`: a later one, the list's own list
+    // (Dati catastali: the unit's "+", then the group's, which adds a group with one unit).
     const last = inputs()[blockStarts(inputs(), f.anchor).pop()];
-    const own = last && plus.find((b) => last.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+    const after = last ? plus.filter((b) => last.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) : [];
+    const own = after[(f.nth || 1) - 1];
+    if (f.nth > 1 && !own) fail(`no + number ${f.nth} after ${f.anchor}'s last block`);
     press(own || plus[plus.length - 1], `+ ${f.anchor}`);
     await idle();
     if (count() !== before + 1) fail(`+ didn't add a block of ${f.anchor}`);
@@ -833,13 +896,10 @@
   // can come back before the new page shows it (a fresh load read the old one): wait until
   // the section is the open one, its link gone from the menu and nothing loading (a page
   // that marks no open section, li#corrente, only the loading).
-  async function openSection(a, name, ms = 20000) {
+  async function openSection(a, name) {
     await act(() => press(a, name));
-    const end = performance.now() + ms;
-    while (busy() || (doc().querySelector("li#corrente") && linkTo(name) && !isOpen(name))) {
-      if (performance.now() > end) fail(`${name}: the section didn't open`);
-      await sleep(100);
-    }
+    await until(() => !busy() && !(doc().querySelector("li#corrente") && linkTo(name) && !isOpen(name)),
+      `${name}: the section didn't open`);
     await idle();
   }
 
@@ -888,9 +948,9 @@
       if (f.id && f.label && !f.slotted) f = located(f);
       if (!f.id && !f.css && f.if_present) {
         // A box only some pratiche show: skipped where this one doesn't.
-        try { f = { ...resolve(f), spec: f }; } catch (e) { if (e instanceof StepError) continue; throw e; }
+        try { f = bySpec(f); } catch (e) { if (e instanceof StepError) continue; throw e; }
       }
-      f = f.id || f.css ? f : { ...resolve(f), spec: f };
+      f = f.id || f.css ? f : bySpec(f);
       await closeLists();
       if (f.kind === "radio" || f.kind === "checkbox") typed = await tick(f);
       else if (v === null || v === "") continue;
@@ -927,7 +987,7 @@
   function keep(si, done) {
     kept = kept.filter((k) => k.sec !== steps.sections[si]).concat([{ sec: steps.sections[si], done }]);
     report.kept = (report.kept || []).filter((k) => k.section !== si)
-      .concat([{ section: si, fields: done.map((d) => [d.field, d.typed]) }]);
+      .concat([{ section: si, fields: done.map((d) => d.spec && d.spec.at !== undefined ? [d.field, d.typed, d.spec.at] : [d.field, d.typed]) }]);
   }
 
   // Each read-back above saw its section right after its own Salva. A later section can
@@ -1122,13 +1182,14 @@
       if (/\/cmd\/error/.test(doc().location.href)) fail("the draft's address has expired: open it again from Pratiche in bozza");
       const from = resume.from || {};
       for (const k of resume.kept || []) {
-        keep(k.section, k.fields.map(([field, typed]) => {
+        keep(k.section, k.fields.map(([field, typed, at]) => {
           const def = steps.sections[k.section].fields[field];
-          return { ...def, typed, field, ...(def.id || def.css ? {} : { spec: def }) };
+          return { ...def, typed, field, ...(def.id || def.css ? {} : { spec: at !== undefined ? { ...def, last: false, at } : def }) };
         }));
       }
       if (from.section === undefined) {
         for (const [i, w] of steps.wizard.entries()) if (i >= (from.wizard || 0)) await wizard(w, values.wizard[i], i);
+        await composed();
       }
       report.wizard_seconds = secs();
       for (const [i, s] of steps.sections.entries()) {

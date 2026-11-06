@@ -1,0 +1,25 @@
+{
+ "people": {
+  "c": "luca",
+  "f1": "edil"
+ },
+ "descrizione": "PROVA NON INVIARE - inizio lavori + terre e rocce P6",
+ "titolo": "proprietario",
+ "oggetto": "Comunicazione di inizio lavori del permesso di costruire per ampliamento di un locale accessorio.",
+ "pdc_numero": "999/2026",
+ "pdc_data": "2026-09-15",
+ "pdc_protocollo": "PG/2026/0888888",
+ "pdc_anno": "2026",
+ "pdc_interventi": "ampliamento di un locale accessorio",
+ "data_inizio_lavori": "2026-11-16",
+ "diritti_euro": "0",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "diritti_esente": false,
+ "fatti": [],
+ "titolo_id_pratica": "FTTLCU91L02F839F-15032026-1012",
+ "bollo_marche": false,
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "no",
+ "terre_rocce": "dichiarazione"
+}

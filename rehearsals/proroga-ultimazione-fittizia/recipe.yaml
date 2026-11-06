@@ -11,9 +11,15 @@ scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUN
 first: [Scheda anagrafica, Qualifica e dati del procuratore]
 after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
+  diritti_euro: {why: "La tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) non ha una voce per la comunicazione dell'art. 10-septies: SUE 11 (501 €) indica le proroghe dei permessi di costruire rilasciati, e se copra una comunicazione che non chiede alcuna decisione (o una su un altro titolo) lo dice il SUE"}
   descrizione: {default: "proroga ultimazione {{c:identity.last_name}}"}
 yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
   - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
   - "Nessuna imposta di bollo da pagare con questo modulo: il modulo del portale per questa pratica non ha una sezione né uno spazio per il bollo"
   - "Firmi e invii (Firma e invio); conservi la ricevuta"
+# Routed by the rules table sue-napoli-adempimenti: what is filed on the title held.
+rules:
+  table: sue-napoli-adempimenti
+  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+  facts: {adempimento: "proroga_fine", proroga: "straordinaria"}

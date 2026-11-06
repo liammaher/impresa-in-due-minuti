@@ -41,5 +41,29 @@
   "result": "filled",
   "seconds": 70.8,
   "browser": "pane"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-due-cointestatari.json",
+  "result": "filled",
+  "seconds": 138,
+  "browser": "pane",
+  "note": "Two co-holders (`answers-due-cointestatari`: paolo, marta), the co-holders' \"+\", `bench/rerun.py` bundle: **filled** in 138 s, nothing moved or loose"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-precedenti-due.json",
+  "result": "filled",
+  "seconds": 84.7,
+  "browser": "pane",
+  "note": "Two previous holders (`answers-precedenti-due`: the company and Giulia Esempio), the \"presentata da\" \"+\", `bench/rerun.py` bundle: **filled** in 85 s, nothing moved or loose"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-tre-di-ogni.json",
+  "result": "filled",
+  "seconds": 80.6,
+  "browser": "pane",
+  "note": "Two titles, three previous holders, three co-holders (`answers-tre-di-ogni`: paolo, marta, bruno), the title \"+\" as an `each`, `bench/rerun.py` bundle: **filled** in 81 s, the second title's row, the holders' rows below it by their own \"+\", nothing moved or loose"
  }
 ]

@@ -1,0 +1,31 @@
+{
+ "people": {
+  "c": "luca",
+  "f1": "edil"
+ },
+ "descrizione": "PROVA NON INVIARE - rinnovo paesaggistica + terre e rocce P6",
+ "titolo": "proprietario",
+ "bollo_marche": false,
+ "diritti_euro": "0",
+ "oggetto": "Rinnovo dell'autorizzazione paesaggistica semplificata per la sostituzione degli infissi esterni, senza variazioni.",
+ "paes_protocollo": "PG/2021/0777777",
+ "paes_data": "2021-09-01",
+ "paes_scadenza": "2026-09-01",
+ "paes_rinnovo_di": "semplificata",
+ "progettista_altro": false,
+ "paes_rinnovo_variazioni": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "rinnovo",
+ "fatti": [],
+ "terre_rocce": "dichiarazione",
+ "pdc_numero": "999/2026",
+ "pdc_anno": "2026",
+ "pdc_data": "2026-03-15",
+ "pdc_protocollo": "PG/2026/0888888",
+ "titolo_id_pratica": "FTTLCU91L02F839F-15032026-1012",
+ "pdc_interventi": "ampliamento di un locale accessorio"
+}

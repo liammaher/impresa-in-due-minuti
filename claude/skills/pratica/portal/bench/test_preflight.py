@@ -563,8 +563,8 @@ def sanatoria_cases():
 
 def scelte_follow_the_case():
     """A wizard choice a recipe takes only for some cases ({leaf, when}): ticked, with the section
-    it adds, only when the case's answer says so; asked when unanswered; more co-holders than the
-    portal's one-person section refused (the voltura, the cambio d'intestazione, a proroga)."""
+    it adds, only when the case's answer says so; asked when unanswered; several co-holders, each
+    a block of the section by its "+" (the voltura, the cambio d'intestazione, a proroga)."""
     root = HERE.parents[4] / "rehearsals"
     fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
     here = os.getcwd()
@@ -588,10 +588,17 @@ def scelte_follow_the_case():
         r = run.preflight(steps, v({k: x for k, x in p6.items() if k != "cointestatario"}), made_up=True)
         # Proposed (none) for the person to confirm, never assumed.
         assert [q["key"] for q in r["proposals"]] == ["cointestatario"] and not r["ready"], r["proposals"]
-        r = run.preflight(steps, v(p6 | {"altri_cointestatari": True}), made_up=True)
-        assert any("ha posto per una sola persona" in u for u in r["unsupported"]), r["unsupported"]
-        # The portal's limit, not a mapping gap: the person hears the defect and their choices.
-        assert [d["title"] for d in r.get("defects", [])] == ["Voltura o cambio d'intestazione a più di un cointestatario"], r.get("defects")
+        # More co-holders, one block each by the section's "+" (2026-11-05: the coholders-one
+        # defect was wrong); one unasked while the job names no `a2:`.
+        assert "cointestatari_quanti" not in str(run.preflight(steps, v("p6"), made_up=True)["proposals"])
+        three = json.loads((root / "voltura-pdc-fittizia" / "answers-tre-cointestatari.json").read_text())
+        r = run.preflight(steps, v({k: x for k, x in three.items() if k != "cointestatari_quanti"}), made_up=True)
+        assert {"key": "cointestatari_quanti", "proposal": "3"}.items() <= next(
+            p for p in r["proposals"] if p["key"] == "cointestatari_quanti").items(), r["proposals"]
+        assert run.preflight(steps, v(three), made_up=True)["ready"]
+        sec = next(s for s in run.expand(steps, v(three))["sections"] if s["section"] == coholder)
+        live = [f for f in sec["fields"] if run.truthy(v(three).render(f.get("when", "true")) or "")]
+        assert [f["kind"] for f in live].count("add") == 2 and [f.get("label") for f in live].count("sesso: M") == 3, live
 
         steps, v = load("cambio-intestazione-fittizio")
         assert len(ticks(steps, v("p6"))) == 1
@@ -676,6 +683,111 @@ def catasto_terreni():
         no_cat = {k: x for k, x in fields.items() if k != "luca:immobile.catasto_categoria"}
         r = run.preflight(steps, values(a, no_cat, steps), made_up=True)
         assert "catasto_terreni" in [q["key"] for q in r["questions"]], r["questions"]
+    finally:
+        os.chdir(here)
+
+
+def cadastral_units():
+    """Several units (the client's immobile, immobile2 ...): one unit unasked, as before; a second
+    in the vault proposes the count, never assumes it; each unit after the first takes its own
+    block by the unit's "+", the radios once; a unit in the other catasto by the group's "+" and
+    that group's own radio; a third group (back to the first catasto) the same way."""
+    d = HERE.parents[4] / "rehearsals" / "cila-fittizia"
+    steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
+    fields = dict(json.loads((d / "fixture-p6.json").read_text())["fields"])
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+    try:
+        def catastali(a, flds=fields):
+            v = values(a, flds, steps)
+            sec = next(s for s in run.expand(steps, v)["sections"] if s["section"] == "Dati catastali")
+            return [(f["kind"], f.get("label"), v.render(f["value"]) if "value" in f else f.get("nth"), f.get("block"))
+                    for f in sec["fields"] if run.truthy(v.render(f.get("when", "true")) or "")]
+        one = json.loads((d / "answers-proprietario.json").read_text())
+        r = run.preflight(steps, values(one, fields, steps), made_up=True)
+        assert r["ready"] and "unita_catastali" not in str(r["proposals"]), r["proposals"]
+        assert [x for x in catastali(one) if x[0] == "add"] == [], catastali(one)
+        two = json.loads((d / "answers-accorpamento.json").read_text())
+        unasked = {k: x for k, x in two.items() if k != "unita_catastali"}
+        r = run.preflight(steps, values(unasked, fields, steps), made_up=True)
+        assert {"key": "unita_catastali", "proposal": "2"}.items() <= next(
+            p for p in r["proposals"] if p["key"] == "unita_catastali").items(), r["proposals"]
+        assert run.preflight(steps, values(two, fields, steps), made_up=True)["ready"]
+        rows = catastali(two)
+        assert [x[1] for x in rows].count("Nuovo Catasto Edilizio Urbano") == 1, rows
+        assert ("add", None, None, 2) in rows and ("add", None, 2, 2) not in rows, rows
+        assert ("text", "se non presente indicare il numero 0", "8", 2) in rows, rows
+        assert ("text", "se non presente indicare il numero 0", "7", 1) in rows, rows
+        # A flat, then its garden plot: the group's "+" (the second), its Catasto Terreni radio
+        # (the page's last NCT), the plot's foglio and particella, no subalterno or categoria.
+        mixed = json.loads((d / "answers-catasti-misti.json").read_text())
+        assert run.preflight(steps, values(mixed, fields, steps), made_up=True)["ready"]
+        rows = catastali(mixed)
+        assert ("add", None, 2, 2) in rows and ("add", None, None, 2) not in rows, rows
+        assert ("radio", "NCT", None, 2) in rows, rows
+        assert [x for x in rows if x[3] == 2 and x[0] == "text"] == [
+            ("text", "foglio", "12", 2), ("text", "particella/mappale", "679", 2), ("text", "sezione Censuaria", None, 2)], rows
+        # Asked, not assumed: a unit with no categoria in the vault may be a flat missing it.
+        r = run.preflight(steps, values({k: x for k, x in mixed.items() if k != "catasto_terreni2"}, fields, steps), made_up=True)
+        assert "catasto_terreni2" in [q["key"] for q in r["questions"]], r["questions"]
+        # A flat, two plots, a garage: three groups (back to the first catasto). Each change of
+        # catasto is the group's "+" and that group's radio, the middle group's second plot its
+        # unit's "+"; units count across groups, so the garage is block 4.
+        three = json.loads((d / "answers-catasti-tre-gruppi.json").read_text())
+        r = run.preflight(steps, values(three, fields, steps), made_up=True)
+        assert r["ready"] and not r["unsupported"], r["unsupported"]
+        rows = catastali(three)
+        assert [x for x in rows if x[0] == "add"] == [("add", None, 2, 2), ("add", None, None, 3), ("add", None, 2, 4)], rows
+        assert ("radio", "NCT", None, 2) in rows and ("radio", "NCEU", None, 4) in rows, rows
+        assert not any(x[0] == "radio" and x[3] == 3 for x in rows), rows
+        assert ("text", "se non presente indicare il numero 0", "5", 4) in rows, rows
+        # Two cases of one pratica with other counts get their own steps in the pane, from steps
+        # expanded already too, as rerun.py passes them (2026-11-05: they shared one key, and the
+        # catasto case ran on the three holders' steps).
+        holders = json.loads((d / "answers-comproprietari-tre.json").read_text())
+        keys = set()
+        for a in (three, holders):
+            v = values(a, fields, steps)
+            for st in (run.phase(steps, made_up=True), run.rehearsal(steps, v)):
+                _, parts = run.page_bundle(st, v, files_limit=None, pick=False)
+                keys.add(next(k for k in parts if k.startswith("pv-steps:")))
+        assert len(keys) == 2 and all("#" in k for k in keys), keys
+    finally:
+        os.chdir(here)
+
+
+def third_firm():
+    """The firms repeat by "+" (`f1:`, `f2:`, `f3:` ...: 2026-11-05, the "+" lists the crawls saw,
+    each held to a mapping): a third firm's block is filled, its Cassa edile rows too, and the
+    count is never silent once the job names more than one. The landscape form's second
+    technician beside the architect presenting is refused with the portal's defect."""
+    root = HERE.parents[4] / "rehearsals"
+    d = root / "cila-fittizia"
+    steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
+    fields = dict(json.loads((d / "fixture-p6.json").read_text())["fields"])
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+    try:
+        p6 = json.loads((d / "answers-p6.json").read_text())
+        three = p6 | {"people": p6["people"] | {"f3": "muratori"}}
+        three.pop("imprese_quante")
+        assert not run.preflight(steps, values(three, fields, steps), made_up=True)["ready"]  # the count is asked
+        case = json.loads((d / "answers-imprese-tre.json").read_text())
+        v = values(case, fields, steps)
+        assert run.preflight(steps, v, made_up=True)["ready"]
+        firms = [p["value"] for p in run.plan(run.rehearsal(steps, v), v)
+                 if p["section"].startswith("h) Impresa") and p.get("label") == "Ragione sociale"]
+        assert firms == ["Edil Fittizia di Marco Esempio", "Impianti Fittizi S.n.c.", "Muratori Fittizi S.r.l."], firms
+        o = root / "paesaggistica-ordinaria-fittizia"
+        ost = yaml.safe_load((o / "portal-steps.generated.yaml").read_text())
+        op6 = json.loads((o / "answers-p6.json").read_text())
+        r = run.preflight(ost, values(op6 | {"people": op6["people"] | {"p2": "elena"}}, fields, ost), made_up=True)
+        assert not r["ready"] and "paesaggio-altri-tecnici" in json.dumps(r), r.get("unsupported")
+        tre = json.loads((o / "answers-tecnici-tre.json").read_text())
+        v = values(tre, fields, ost)
+        assert run.preflight(ost, v, made_up=True)["ready"]
+        names = [p["value"] for p in run.plan(run.rehearsal(ost, v), v) if p.get("label") == "cognome"]
+        assert names == ["DISEGNO", "PROVA", "ESEMPIO"], names
     finally:
         os.chdir(here)
 
@@ -914,6 +1026,117 @@ def streets_and_lists():
     assert run.FILTERS["straniera"]("Italia") == "false" and run.FILTERS["straniera"]("moldava") == "true"
 
 
+def wizard_description_too_long():
+    """The pratica's description (the wizard's first box) takes 60 characters: a longer one is asked
+    again at pre-flight, not met when the batch is built (2026-11-04: 88 characters passed)."""
+    reh = HERE.parents[4] / "rehearsals" / "cil-fittizia"
+    steps = yaml.safe_load((reh / "portal-steps.generated.yaml").read_text())
+    fixture = dict(json.loads((HERE.parents[4] / "rehearsals" / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+    answers = json.loads((reh / "answers-p6.json").read_text())
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])  # the answers name their files from the repo's root
+    try:
+        ok = run.preflight(steps, values(answers=answers, fields=fixture, steps=steps), made_up=True)
+        r = run.preflight(steps, values(answers={**answers, "descrizione": "PROVA NON INVIARE - " + "x" * 41},
+                                        fields=fixture, steps=steps), made_up=True)
+    finally:
+        os.chdir(here)
+    assert ok["ready"], ok["questions"]
+    q = [q for q in r["questions"] if q["key"] == "descrizione"]
+    assert q and "at most 60" in q[0]["error"] and not r["ready"], r["questions"]
+
+
+def diritti_brackets():
+    """The SUE's 2026 table (G.C. 239/2026) at its edges: SUE 7-9 by the contributo ("fino a
+    € 5.000,00", "da € 5.000,00 ad € 30.000", "oltre € 30.000,00": exactly 5,000 € is in two rows),
+    SUE 4-6 by the car park's floor area ("fino a 300 mq", "da 301 mq a 1000 mq", "oltre 1001 mq":
+    what falls between is in none). Where the table can't tell, nothing is proposed."""
+    c = run.FILTERS["diritti_scia_alt"]
+    for contributo, want in (("1", "1003"), ("4999,99", "1003"), ("5000", ""), ("5000.00", ""), ("5000,01", "1505"),
+                             ("12500", "1505"), ("12500,50", "1505"), ("30000", "1505"), ("30000.01", "1998"),
+                             ("250000", "1998"), ("0", ""), ("", ""), ("abc", ""),
+                             ("12.500", ""), ("1.250.000", "")):  # a thousands separator, never read as 12.5
+        assert c(f"true/{contributo}") == want, (contributo, c(f"true/{contributo}"), want)
+    assert c("false/") == c("false/12500") == "401" and c("/12500") == "", "SUE 10 when free; unknown: nothing"
+    p = run.FILTERS["diritti_pdc"]
+    for mq, want in (("1", "677"), ("300", "677"), ("300,5", ""), ("301", "1129"), ("1000", "1129"),
+                     ("1000.5", ""), ("1001", ""), ("1001,5", "1998"), ("5000", "1998"), ("", ""), ("0", "")):
+        assert p(f"parcheggi/true//{mq}") == p(f"parcheggi/false//{mq}") == want, (mq, p(f"parcheggi/true//{mq}"), want)
+    assert p("nuova costruzione/false//") == "401" and p("nuova costruzione/true/30001/") == "1998"
+    assert p("variante essenziale/true//") == p("variante sagoma/false//") == "501"  # SUE 11
+    assert p("nuova costruzione/true//") == p("nuova costruzione///") == "", "onerous with no contributo, or not yet known"
+    g = run.FILTERS["diritti_gratuito"]
+    assert g("false") == "401" and g("true") == "", "an onerous SCIA (art. 22) is in no row"
+
+
+def diritti_from_the_case():
+    """The permesso and the SCIA alternativa: the contributo's bracket is asked only when onerous
+    with the progettista's prospetto (the SUE working it out leaves the diritti asked), the car
+    park's area only for car parks; the diritti come in the same message, one proposal per
+    bracket (`cases`), and once the bracket is given, proposed. The SCIA's onerous case stays
+    asked, with no contributo asked for it; a combination asks what its main pratica asks."""
+    root = HERE.parents[4] / "rehearsals"
+    fields = dict(json.loads((root / "cila-fittizia" / "fixture-p6.json").read_text())["fields"])
+
+    def case(name, base="p6", **change):
+        steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
+        a = json.loads((root / name / f"answers-{base}.json").read_text())
+        a.pop("diritti_euro", None)
+        r = run.preflight(steps, values({**a, **change}, fields, steps), made_up=True)
+        return [q["key"] for q in r["questions"]], {p["key"]: p.get("proposal", p.get("cases")) for p in r["proposals"]}
+
+    def per_bracket(p, key):
+        return {c["if"][key]: c["proposal"] for c in p.get("diritti_euro") or [] if isinstance(c, dict)}
+    onerous = {"scia_onerosa": "true", "contributo_pagamento": "rateizzazione"}
+    for name in ("pdc-fittizio", "scia-alternativa-fittizia", "pdc-proroga-paesaggistica-fittizio", "scia-alt-rinnovo-paesaggistica-fittizia"):
+        q, p = case(name, **onerous, contributo_calcolo="sportello")
+        assert "diritti_euro" in q and "contributo_fascia" not in q and "diritti_euro" not in p, (name, q, p)
+        q, p = case(name, **onerous, contributo_calcolo="prospetto")
+        # one message: the bracket asked, the diritti proposed for each bracket that has one line
+        assert "contributo_fascia" in q and "diritti_euro" not in q, (name, q, p)
+        assert per_bracket(p, "contributo_fascia") == {"fino_5000": "1003", "da_5000_a_30000": "1505", "oltre_30000": "1998"}, (name, p)
+        for fascia, want in (("fino_5000", "1003"), ("da_5000_a_30000", "1505"), ("oltre_30000", "1998")):
+            q, p = case(name, **onerous, contributo_calcolo="prospetto", contributo_fascia=fascia)
+            assert p.get("diritti_euro") == want and "contributo_fascia" not in q, (name, fascia, q, p)
+        q, p = case(name, **onerous, contributo_calcolo="prospetto", contributo_fascia="5000")
+        assert "diritti_euro" in q and "diritti_euro" not in p, (name, q, p)
+        q, p = case(name, scia_onerosa="false", contributo_normativa="art. 17 c. 3 DPR 380/2001")
+        assert p.get("diritti_euro") == "401" and "contributo_fascia" not in q, (name, q, p)
+    q, p = case("pdc-fittizio", "parcheggi")
+    assert "parcheggio_fascia" in q and "diritti_euro" not in q, (q, p)
+    assert per_bracket(p, "parcheggio_fascia") == {"fino_300": "677", "da_301_a_1000": "1129", "oltre_1001": "1998"}, p
+    for fascia, want in (("fino_300", "677"), ("da_301_a_1000", "1129"), ("oltre_1001", "1998")):
+        q, p = case("pdc-fittizio", "parcheggi", parcheggio_fascia=fascia)
+        assert p.get("diritti_euro") == want and "contributo_fascia" not in q, (fascia, q, p)
+    q, p = case("pdc-fittizio", "parcheggi", parcheggio_fascia="altro")
+    assert "diritti_euro" in q, q
+    q, p = case("pdc-fittizio")
+    assert "parcheggio_fascia" not in q, q
+    q, p = case("scia-fittizia", **onerous, contributo_calcolo="prospetto")
+    assert "diritti_euro" in q and "contributo_fascia" not in q, (q, p)
+
+
+def diritti_main_row():
+    """Two adempimenti in one pratica pay the main pratica's line alone: SUE 2 and 3 apply only to a
+    landscape authorization "quando oggetto di autonoma istanza", and the table has no line for the
+    terre e rocce or the DAU. Every combination's diritti ask is its main pratica's."""
+    root = HERE.parents[4] / "rehearsals"
+    load = lambda d: gen.load_yaml(d / "recipe.yaml")
+    # Resolved: a combination's operations follow from what it extends (gen.resolved).
+    several = lambda d: isinstance(gen.resolved(load(d)).get("operation"), list) and len(gen.resolved(load(d))["operation"]) > 1
+    checked = 0
+    for d in sorted(root.iterdir()):
+        if not (d / "portal-steps.generated.yaml").exists() or not several(d):
+            continue
+        main = d
+        while several(main):  # a combination's main may be one itself
+            main = root / (load(main)["extends"][0])
+        ask = lambda x: yaml.safe_load((x / "portal-steps.generated.yaml").read_text())["asks"].get("diritti_euro")
+        assert ask(d) == ask(main), (d.name, main.name, ask(d), ask(main))
+        checked += 1
+    assert checked >= 60, checked
+
+
 CASES = [
     ("the SCIA with its answers is ready", ready),
     ("run.py scope: the pvault get patterns cover every field the steps read, and only those", vault_scope),
@@ -935,6 +1158,7 @@ CASES = [
     ("a proposal is offered to confirm, used once confirmed, and asked when the vault can't fill it", proposals),
     ("a sum of answers renders, needs every term, and each term is asked", sums),
     ("a value longer than its box is asked again, or named in the vault, before the run", too_long),
+    ("the wizard's description longer than its 60 characters is asked again at pre-flight", wizard_description_too_long),
     ("a .p7m is read: signed by the dichiarante, by someone else (a warning without any codice fiscale), or not a signature (not ready)", p7m_signer),
     ("Napoli's SUE: PDF/A, signed (.p7m or PAdES), plain names, else not ready; made-up files only warned; the SUAP unchecked", napoli_filing),
     ("the imposta di bollo route is listed as a choice made in the person's name", bollo_chosen),
@@ -947,12 +1171,17 @@ CASES = [
     ("a landscape variant, a renewal with changes (refused for a semplificata), an architect born abroad", group_two_choices),
     ("every SUE case is ready but those refused on purpose; only the registered company can't pass on made-up data", every_sue_case_ready),
     ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
-    ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and two co-holders refused (a portal defect)", scelte_follow_the_case),
+    ("cadastral units: one unasked, a second proposed, each after the first by its \"+\", in up to three groups", cadastral_units),
+    ("firms repeat by \"+\"; a landscape technician beside the presenter is the portal's defect", third_firm),
+    ("a wizard choice follows the case: co-holders, a new direttore or firm, the others' assent; asked, and three co-holders by the section's \"+\"", scelte_follow_the_case),
     ("the CILA's filings presented with it and assents for the SUE (art. 23-bis), the CIL's filings, a partial fine lavori's planimetria", assents_and_filings),
     ("the bollo and diritti exemptions, the virtual bollo, the permesso's altro, the SCIA alternativa's regional works, a studio's other architect", exemptions_and_other_kinds),
     ("the materiali di risulta agree with the terre e rocce filings, and are proposed from them", materiali_di_risulta_agree),
     ("a value the vault has but the form can't take (a Carica for a named architect who isn't the titolare) is reported, not crashed on", carica_not_crash),
     ("a street of any type (a Vico, a Capo di Piazza; a Cupa named), a citizenship by adjective or country, every province", streets_and_lists),
+    ("the SUE's diritti at the 2026 table's edges: the contributo's brackets (5,000 € in two rows), a car park's area (300-301 and 1,000-1,001 m² in none)", diritti_brackets),
+    ("the diritti from the case: the contributo asked only with the prospetto, a car park's area only for one, then proposed; the onerous SCIA asked", diritti_from_the_case),
+    ("two adempimenti in one pratica pay the main pratica's line alone (SUE 2-3 only on their own; no line for terre e rocce or the DAU)", diritti_main_row),
 ]
 
 

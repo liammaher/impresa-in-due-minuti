@@ -98,7 +98,8 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      copied in `rules/`: whether the law makes the case this pratica, the others it
                      adds with it, and those filed apart, which go in `yours`)
                      and `asks:` (questions, asked in one message, or proposed to confirm). Before it, for
-                     the SUE's building titles, `route.py` asks the table's facts and names the one steps
+                     the SUE's pratiche (`sue-napoli`: new works; `sue-napoli-adempimenti`: filings on a
+                     title held), `route.py` asks the table's facts and names the one steps
                      file whose `rules:` main and `handles` are the case's pratiche, with the answers to
                      carry (the index is read from the steps files). Pre-flight also holds each file to its
                      sportello's `FILING` rules (Napoli's SUE, DD 501/2026: PDF/A, signed .p7m or PAdES,
@@ -501,7 +502,9 @@ route.py on every case the SUE table decides (it prints the combinations not map
 that every rehearsal's pre-flight is ready after one message (a proposal reading another answer of the same
 message comes with it: `assumes`, `cases`, `otherwise`; what a proposal holds back is `if_changed`, asked only
 if it is changed), `bench/test_message.py` that one message (pre-flight's `message`, which the skill sends as
-it is) holds every question, proposal and missing detail and no field id, and
+it is) holds every question, proposal and missing detail and no field id,
+`bench/test_pairs.py` the wizard's pairs against `catalogue/F839/sue-pairs.yaml` (filed together or
+not, and why), and
 `claude/skills/pratica/intake/bench/test_intake.py` the intake on a made-up dossier (`dossier.py`) against fixture-p6.json. On the real portal, `bench/rerun.py` reruns the rehearsals
 in the pane after a runner, dictionary or gen.py change (portal/README.md); `--record` files the results in each
 rehearsal's `runs.json`, the one run record: schema_branches.py and scoreboard.py count it, and each README's run

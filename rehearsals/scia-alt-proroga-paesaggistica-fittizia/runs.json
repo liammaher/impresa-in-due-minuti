@@ -1,0 +1,10 @@
+[
+ {
+  "date": "2026-11-05",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 185.3,
+  "browser": "pane",
+  "note": "P6, from scratch, `bench/rerun.py` bundle: **filled** in 185 s, every value read back on a fresh load; the portal's usual warnings on made-up data"
+ }
+]

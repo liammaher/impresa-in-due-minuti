@@ -1,0 +1,32 @@
+{
+ "people": {
+  "c": "luca"
+ },
+ "descrizione": "PROVA NON INVIARE - proroga inizio + rinnovo paes. P6",
+ "bollo_marche": false,
+ "titolo": "proprietario",
+ "oggetto": "Richiesta di proroga del termine di inizio lavori del permesso di costruire 999/2026.",
+ "pdc_data": "2026-09-15",
+ "pdc_protocollo": "PG/2026/0888888",
+ "pdc_interventi": "ampliamento di un locale accessorio",
+ "proroga_data_prevista": "2027-11-15",
+ "proroga_giorni": "365",
+ "proroga_motivo": "Ritardo nella consegna delle strutture prefabbricate da parte del fornitore, per cause non imputabili al titolare.",
+ "diritti_euro": "501",
+ "titolo_tipo": "permesso di costruire",
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "paesaggistica": "no",
+ "paes_protocollo": "PG/2021/0777777",
+ "paes_data": "2021-09-01",
+ "paes_scadenza": "2026-09-01",
+ "paes_rinnovo_di": "semplificata",
+ "progettista_altro": false,
+ "paes_rinnovo_variazioni": false,
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "rinnovo",
+ "fatti": [],
+ "terre_rocce": "no"
+}

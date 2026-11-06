@@ -1,0 +1,44 @@
+# fine lavori e DAU: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# dau-at-the-end). The case: fine-lavori-fittizia's, with what dau-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli-adempimenti routes it.
+extends:
+- fine-lavori-fittizia
+- dau-fittizia
+procedure: napoli/comune/fine-lavori-con-dichiarazione-avvenuto-utilizzo-terre
+title: Fine lavori e DAU in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-fine-lavori-dau
+operation:
+- Comunicazione di fine lavori
+- Dichiarazione di avvenuto utilizzo (D.A.U.) ai sensi dell'art. 7 del DPR n. 120/2017
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: fine lavori + DAU {{c:identity.last_name}}
+  diritti_euro:
+    default: '0'
+    why: "Non presente nel tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): nessun diritto (non previsti dal tariffario)"
+yours:
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
+rules:
+  table: sue-napoli-adempimenti
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  facts:
+    adempimento: fine_lavori
+    dau: 'true'
+  main: napoli/comune/fine-lavori
+  handles:
+  - napoli/comune/dichiarazione-avvenuto-utilizzo-terre
+answers:
+  descrizione: PROVA NON INVIARE - fine lavori + DAU P6

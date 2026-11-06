@@ -1,0 +1,48 @@
+# proroga paesaggistica e terre e rocce: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# dichiarazione-no-title). The case: proroga-paesaggistica-fittizia's, with what scavo-fuori-sito-fittizio adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli routes it.
+extends:
+- proroga-paesaggistica-fittizia
+- scavo-fuori-sito-fittizio
+procedure: napoli/comune/proroga-autorizzazione-paesaggistica-con-utilizzo-materiale-scavo-fuori-sito
+title: Proroga paesaggistica e terre e rocce in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-proroga-paesaggistica-dichiarazione-utilizzo
+operation:
+- Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022 - Comune)
+- Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017
+  (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)
+scelte:
+- option: in assenza di titolarità esclusiva all'esecuzione dell'intervento edilizio, si dispone della dichiarazione
+    di assenso dei terzi titolari di altri diritti reali o obbligatori
+  when: '{{ask.titolo_esclusivo|not}}'
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: proroga paesaggistica + terre e rocce {{c:identity.last_name}}
+  diritti_euro:
+    why: "La tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) non ha una voce per la proroga dell'art. 10-septies di un'autorizzazione paesaggistica; se la copra SUE 2 (401 €, autorizzazioni paesaggistiche chieste da sole) lo dice il SUE"
+yours:
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Nessuna imposta di bollo da pagare con questo modulo: il modulo del portale per questa pratica non ha una sezione né uno spazio per il bollo"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
+rules:
+  table: sue-napoli
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  facts:
+    permesso_per_scelta: 'false'
+    parere_esonero: 'false'
+  main: napoli/comune/proroga-autorizzazione-paesaggistica
+  handles:
+  - napoli/comune/utilizzo-materiale-scavo-fuori-sito
+answers:
+  descrizione: PROVA NON INVIARE - proroga paesaggistica + terre e rocce P6
+  terre_rocce: dichiarazione

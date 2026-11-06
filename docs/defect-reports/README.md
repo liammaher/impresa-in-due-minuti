@@ -8,7 +8,7 @@ belongs to the other.
 | Report | Recipient | Defects |
 |---|---|---|
 | [`infocamere.md`](infocamere.md) | InfoCamere, impresainungiorno's operator | `scia-36bis-c1`, `scia-34ter`, `pdc-36bis`, `pdc-36-paesaggio`, `pdc-incentivo-energetico` |
-| [`comune-napoli-sue.md`](comune-napoli-sue.md) | Comune di Napoli, Servizio Sportello Unico Edilizia | `cila-impresa-dopo`, `agibilita-art24`, `pdc-aree-fuoco`, `coholder-sesso`, `coholders-one`, `cambio-uso-regionale` |
+| [`comune-napoli-sue.md`](comune-napoli-sue.md) | Comune di Napoli, Servizio Sportello Unico Edilizia | `cila-impresa-dopo`, `agibilita-art24`, `pdc-aree-fuoco`, `coholder-sesso`, `cambio-uso-regionale`, `paesaggio-altri-tecnici` |
 
 Why each goes where: a defect goes to InfoCamere where InfoCamere's national form
 (`schema/sue-choices.json`) has the right structure and the portal renders it otherwise, or where

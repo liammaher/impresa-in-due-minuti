@@ -1,0 +1,57 @@
+# PdC e proroga paesaggistica e terre e rocce: 3 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: pdc-paesaggistica-semplificata-terre-rocce-fittizio's, with what proroga-paesaggistica-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli routes it.
+extends:
+- pdc-paesaggistica-semplificata-terre-rocce-fittizio
+- proroga-paesaggistica-fittizia
+procedure: napoli/comune/permesso-di-costruire-con-proroga-autorizzazione-paesaggistica-e-utilizzo-materiale-scavo-fuori-sito
+title: PdC e proroga paesaggistica e terre e rocce in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-pdc-proroga-paesaggistica-dichiarazione-utilizzo
+operation:
+- Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001
+- Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022 - Comune)
+- Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017
+  (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PdC + proroga paes. + terre e rocce {{c:identity.last_name}}
+  diritti_euro:
+    question: "I diritti del SUE in euro: la tabella 2026 non indica la voce per questo caso (il contributo lo calcola il SUE, è esattamente 5.000 €, o la superficie del parcheggio cade tra due righe). Pratica onerosa, SUE 7-9 in base al contributo: 1003 fino a 5.000 €, 1505 da 5.000 a 30.000 €, 1998 oltre; parcheggi, SUE 4-6: 677 fino a 300 m², 1129 da 301 a 1.000 m², 1998 oltre 1.001 m²"
+    propose: "{{ask.pdc_tipo,ask.scia_onerosa,ask.contributo_fascia,ask.parcheggio_fascia|diritti_pdc}}"
+    why: "Voci del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): SUE 10, 401 € per un permesso non soggetto al contributo; SUE 11, 501 € per una variante a un permesso rilasciato; se oneroso, SUE 7-9 in base al contributo (oneri di urbanizzazione + costo di costruzione): 1.003 € fino a 5.000 €, 1.505 € da 5.000 a 30.000 €, 1.998 € oltre; parcheggi su suolo libero (L.R. Campania 19/2001 art. 6 c. 2, parcheggi pertinenziali), SUE 4-6 in base alla superficie: 677 € fino a 300 m², 1.129 € da 301 a 1.000 m², 1.998 € oltre 1.001 m²"
+yours:
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "Come progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma con la richiesta"
+- "Nell'asseverazione, «non interessa aree percorse dal fuoco» e la dichiarazione sui terreni sono una sola scelta sul portale (un suo difetto): Claude spunta quella sui terreni. Le aree bruciate le dichiari nella relazione tecnica, se il SUE lo chiede"
+- "La dichiarazione di utilizzo (Allegato 6 DPR 120/2017) è il documento che il portale genera in Allega documenti una volta spuntate le dichiarazioni: la firma il produttore, Claude la allega nella seconda compilazione; lo scavo inizia almeno 15 giorni dopo l'invio"
+- "Quando le terre sono state tutte utilizzate, entro la validità della dichiarazione, presenti al SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)"
+- "Paghi il bollo come chiede il portale, poi firmi e invii (Firma e invio); conservi la ricevuta"
+- "L'autorizzazione paesaggistica precede il permesso (art. 146 c. 4 D.Lgs. 42/2004): i lavori iniziano solo quando ci sono entrambi"
+- "Una volta rilasciato il permesso: lo ritiri (pagando il contributo, se dovuto, come indica il quadro f)), nomini il progettista strutturale e i direttori dei lavori, e presenti la comunicazione di inizio lavori con la relazione energetica e i depositi strutturali"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
+rules:
+  table: sue-napoli
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  facts:
+    permesso_per_scelta: 'true'
+    parere_esonero: 'false'
+  main: napoli/comune/permesso-di-costruire
+  handles:
+  - napoli/comune/proroga-autorizzazione-paesaggistica
+  - napoli/comune/utilizzo-materiale-scavo-fuori-sito
+answers:
+  descrizione: PROVA NON INVIARE - PdC + proroga paes. + terre e rocce P6
+  paesaggio: proroga
+  terre_rocce: dichiarazione

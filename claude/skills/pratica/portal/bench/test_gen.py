@@ -7,12 +7,16 @@
 import copy
 import os
 import re
+import json
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[4]
 os.chdir(ROOT)  # the answers name files from the repo's root, wherever this runs from
+# catalogue.py's imports refuse to run without the login's pattern (2026-11-05); these crawls are the
+# repo's own, so one that matches no name stands in for it.
+os.environ.setdefault("CATALOGUE_PRIVATE", r"\bnessun-nome-fittizio\b")
 sys.path.insert(0, str(HERE.parent))
 sys.dont_write_bytecode = True
 import gen  # noqa: E402
@@ -84,36 +88,38 @@ P6_ONLY = gen.yaml.safe_load("""
     - {kind: select, label: "L'intervento interessa l'immobile", value: "{{c:immobile.destinazione_uso}}"}
 - section: h) Impresa esecutrice dei lavori
   leave: [Telefono, fax]
-  firms: [f1, f2]
-  firm_when: "{{ask.lavori_in_proprio|not}}"
   fields:
     - {kind: radio, label: lavori sono/saranno eseguiti dall, if_present: true, when: "{{ask.lavori_in_proprio|not}}"}
-  block:
-    - {kind: text, label: Ragione sociale, value: "{{F:business.denominazione}}"}
-    - {kind: text, label: codice fiscale / p. IVA, value: "{{F:business.partita_iva}}"}
-    - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: "{{F:business.cciaa}}"}
-    - {kind: text, label: n., nth: 1, value: "{{F:business.rea|rea_num}}"}
-    - {kind: text, label: con sede in, value: "{{F:business.sede_legale_comune|upper}}"}
-    - {kind: select, label: provincia, nth: 1, value: "{{F:business.sede_legale_provincia}}"}
-    - {kind: text, label: "Via, Piazza", value: "{{F:business.sede_legale_indirizzo|upper}}"}
-    - {kind: text, label: N., nth: 2, value: "{{F:business.sede_legale_civico}}"}
-    - {kind: text, label: C.A.P., value: "{{F:business.sede_legale_cap}}"}
-    - {kind: text, label: Cognome, value: "{{F:identity.last_name}}"}
-    - {kind: text, label: Nome, value: "{{F:identity.first_name}}"}
-    - {kind: text, label: codice fiscale, nth: 2, value: "{{F:identity.codice_fiscale}}"}
-    - {kind: text, label: nato a, value: "{{F:identity.birth_comune|upper}}"}
-    - {kind: select, label: provincia, nth: 2, value: "{{F:identity.birth_province}}"}
-    - {kind: date, label: nato il, value: "{{F:identity.date_of_birth|date_it}}"}
-    - {kind: text, label: cell., value: "{{F:identity.phone|phone_it}}"}
-    - {kind: text, label: posta elettronica, value: "{{F:business.pec}}"}
-    # DURC: each box opens its own rows (and renumbers what follows).
-    - {kind: checkbox, label: INPS}
-    - {kind: text, label: sede di, nth: 1, value: "{{F:business.sede_legale_comune|upper}}"}
-    - {kind: text, label: Matr./Pos. Contr., value: "{{F:business.inps_matricola}}"}
-    - {kind: checkbox, label: INAIL}
-    - {kind: text, label: sede di, nth: 2, value: "{{F:business.inail_codice_sede}}"}
-    - {kind: text, label: codice impresa, value: "{{F:business.inail_codice_ditta}}"}
-    - {kind: text, label: pos. assicurativa, value: "{{F:business.inail_pat}}"}
+    - kind: each
+      count: "{{ask.imprese_quante}}"
+      when: "{{ask.lavori_in_proprio|not}}"
+      anchor: Ragione sociale
+      block:
+        - {kind: text, label: Ragione sociale, value: "{{f#K:business.denominazione}}"}
+        - {kind: text, label: codice fiscale / p. IVA, value: "{{f#K:business.partita_iva}}"}
+        - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: "{{f#K:business.cciaa}}"}
+        - {kind: text, label: n., nth: 1, value: "{{f#K:business.rea|rea_num}}"}
+        - {kind: text, label: con sede in, value: "{{f#K:business.sede_legale_comune|upper}}"}
+        - {kind: select, label: provincia, nth: 1, value: "{{f#K:business.sede_legale_provincia}}"}
+        - {kind: text, label: "Via, Piazza", value: "{{f#K:business.sede_legale_indirizzo|upper}}"}
+        - {kind: text, label: N., nth: 2, value: "{{f#K:business.sede_legale_civico}}"}
+        - {kind: text, label: C.A.P., value: "{{f#K:business.sede_legale_cap}}"}
+        - {kind: text, label: Cognome, value: "{{f#K:identity.last_name}}"}
+        - {kind: text, label: Nome, value: "{{f#K:identity.first_name}}"}
+        - {kind: text, label: codice fiscale, nth: 2, value: "{{f#K:identity.codice_fiscale}}"}
+        - {kind: text, label: nato a, value: "{{f#K:identity.birth_comune|upper}}"}
+        - {kind: select, label: provincia, nth: 2, value: "{{f#K:identity.birth_province}}"}
+        - {kind: date, label: nato il, value: "{{f#K:identity.date_of_birth|date_it}}"}
+        - {kind: text, label: cell., value: "{{f#K:identity.phone|phone_it}}"}
+        - {kind: text, label: posta elettronica, value: "{{f#K:business.pec}}"}
+        # DURC: each box opens its own rows (and renumbers what follows).
+        - {kind: checkbox, label: INPS}
+        - {kind: text, label: sede di, nth: 1, value: "{{f#K:business.sede_legale_comune|upper}}"}
+        - {kind: text, label: Matr./Pos. Contr., value: "{{f#K:business.inps_matricola}}"}
+        - {kind: checkbox, label: INAIL}
+        - {kind: text, label: sede di, nth: 2, value: "{{f#K:business.inail_codice_sede}}"}
+        - {kind: text, label: codice impresa, value: "{{f#K:business.inail_codice_ditta}}"}
+        - {kind: text, label: pos. assicurativa, value: "{{f#K:business.inail_pat}}"}
 """)
 
 
@@ -127,10 +133,16 @@ NEW_SLOT = "Copia del documento di identità del/i titolare/i e/o del tecnico"
 
 def as_p6_ran(steps):
     """A generated CILA as the P6 run took it: its first run with made-up files (run.phase),
-    without the slot the hand walk left empty."""
+    without the slot the hand walk left empty, one cadastral unit and one other holder (no "+"
+    template: P6's count of other technicians is none too)."""
     import run
     steps = run.phase(steps, made_up=True)
-    return steps | {"sections": [s | {"fields": [f for f in s["fields"] if f.get("label") != NEW_SLOT]}
+    plus = {"Dati catastali": "foglio", "Titolarità dell'intervento": "Cognome"}
+    one = lambda s, f: f.get("block") == "#N" and f.get("anchor") == plus.get(gen.QUADRO.sub("", s["section"]).strip())
+    # P6's two firms: the firms' template written out as its second block, as the hand walk has it.
+    firm = lambda f: {k: v for k, v in run.nth_block(f, 2).items() if k != "each"} | {"block": 2} \
+        if (f.get("block") == "#N" or f.get("each")) and f.get("anchor") == "Ragione sociale" else f
+    return steps | {"sections": [s | {"fields": [firm(f) for f in s["fields"] if f.get("label") != NEW_SLOT and not one(s, f)]}
                                  for s in steps["sections"]]}
 
 
@@ -165,7 +177,7 @@ def filled(steps, values):
     try:
         out, v = {}, values(steps)
         rehearsal_plan(steps, v)  # stops on a missing value
-        for sec in steps["sections"]:
+        for sec in run.expand(steps, v)["sections"]:  # a "+" list's blocks, as many as the case has
             for f in sec["fields"]:
                 # A box only some pratiche show is skipped where it isn't, so it isn't compared.
                 if f.get("on_page") or f.get("if_present") or "when" in f and not run.truthy(v.render(f["when"]) or ""):
@@ -293,7 +305,15 @@ def _():
         assert 'querySelectorAll(\'[data-pv="review"]' in loop, "the batch leaves the review over the portal"
         queue = (t / "out" / "queue-0.js").read_text()
         check = (t / "out" / "check.js").read_text()
-        assert all(f'"steps/{n}.js"' in check for n in names) and '"runner.js"' in check
+        # Each steps file by name; one that differs from main's in some sections by its patch first,
+        # the whole file named as what the patch asks for when it can't apply.
+        # A case's "+" blocks give its steps a key of their own (steps/<name>-<hash>.js), from steps
+        # rerun.py expanded too (2026-11-05: two CILA cases shared one and the second ran the first's).
+        js = {n: next(p.stem for p in (t / "out" / "steps").glob(f"{n}*.js") if not p.stem.endswith(".patch")) for n in names}
+        assert all(js[n] != n for n in names), js
+        assert all(f'"steps/{js[n]}.js"' in check or f'"steps/{js[n]}.patch.js (it says if steps/{js[n]}.js is needed instead)"' in check
+                   for n in names) and '"runner.js"' in check
+        assert all((t / "out" / "steps" / f"{js[n]}.patch.js").exists() == (f"{js[n]}.patch.js" in check) for n in names)
         # The piece's values as a string it checks before adding them (a garbled copy throws): its
         # length and FNV-1a hash as the page computes them.
         line = next(x for x in queue.splitlines() if x.strip().startswith("const raw = "))
@@ -305,8 +325,9 @@ def _():
         n, h = rerun.fnv1a(raw)
         assert f"raw.length !== {n} || h !== {h}" in queue
         # Each procedure's first run whole ({"base": ...}); a later one is what differs from it.
-        assert '["dau-fittizia","napoli/comune/dichiarazione-avvenuto-utilizzo-terre",{"base":{"wizard":["PROVA NON INVIARE - DAU P6 generato"' in raw
-        assert (t / "out" / "steps" / "dau-fittizia.js").read_text().startswith('localStorage.setItem("pv-steps:napoli/comune/dichiarazione-avvenuto-utilizzo-terre"')
+        import re
+        assert re.search(r'\["dau-fittizia","napoli/comune/dichiarazione-avvenuto-utilizzo-terre#[0-9a-f]{8}",\{"base":\{"wizard":\["PROVA NON INVIARE - DAU P6 generato"', raw), raw[:200]
+        assert (t / "out" / "steps" / f"{js['dau-fittizia']}.js").read_text().startswith('localStorage.setItem("pv-steps:napoli/comune/dichiarazione-avvenuto-utilizzo-terre#')
         # A case on other values (a copy of the fixture) goes in the same batch, labelled with them,
         # and isn't recorded: the repo's fixture wouldn't give that run again.
         other = dict(fixture["fields"]) | {"chiara:identity.birth_province": "EE", "chiara:identity.birth_country": "ARGENTINA"}
@@ -332,9 +353,16 @@ def _():
             continue
         taken = {s if isinstance(s, str) else s["option"] for s in r.get("scelte") or []}
         answered = {gen.norm(k) for k in (r.get("si_no") or {})}
-        for label in r["operation"] if isinstance(r["operation"], list) else [r["operation"]]:
+        labels = r["operation"] if isinstance(r["operation"], list) else [r["operation"]]
+        # A combination's own wizard, where its crawl read it, can leave out a scelta one operation
+        # offers alone (the landscape proroga's assent, filed with a title: 2026-11-04).
+        crawl = json.loads((HERE.parent / "catalogue" / "F839" / "sections" / f"{r['crawl']}.json").read_text())
+        offered = {o["label"] for x in crawl.get("screens") or [] if gen.norm(x.get("screen")) == "scelte eventuali" for o in x["options"]}
+        for label in labels:
             op = next(o for o in wizard["operations"] if o["label"] == label)
             for sc in op.get("scelte", []):
+                if len(labels) > 1 and offered and sc["option"] not in offered:
+                    continue
                 if sc["option"] not in taken and not (sc.get("type") == "SIN" and any(gen.norm(sc["option"]).startswith(a) for a in answered)):
                     missing.append(f"{f.parent.name}: {sc['option'][:60]}")
     assert not missing, missing
@@ -1152,6 +1180,15 @@ def _():
         export = (t / "out" / "export.js").read_text()
         assert "__crawlUnsaved" in export and "crawl-batch-prova.json" in export
         assert "crawl:batch" in (t / "out" / "status.js").read_text()
+        # start.js: the same batch with no pick, from the pane's stored crawler once its sha256 is
+        # the repo's; small enough for one call, so it never carries the crawler itself (2026-11-05).
+        start = (t / "out" / "start.js").read_text()
+        for f in ("wizard.js", "crawl.js"):
+            assert hashlib.sha256((HERE.parent / f).read_text().encode()).hexdigest() in start, f
+        body = text[text.index("  const opts = "):text.rindex("})()")]
+        assert body in start and len(start) < 30000 and "__wizard" not in start, len(start)
+        assert start.index("stale") < start.index("window.__crawl.batch(opts)")
+        assert "pvPrintNames" in (t / "out" / "print.js").read_text()
 
 
 @case("catalogue.py: a combination is one op (the procura only, its slots read), and a printed batch that changed is refused")
@@ -1177,6 +1214,12 @@ def _():
     ok = subprocess.run(cat + ["import", "-"], input=hashlib.sha256(body.encode()).hexdigest() + "\n" + body + "\n",
                         capture_output=True, text=True)
     assert ok.returncode == 0, ok.stderr
+    # As the pane's JavaScript tool returns it: one JSON string, quotes and escapes in (2026-11-05).
+    quoted = json.dumps(hashlib.sha256(body.encode()).hexdigest() + "\n" + body)
+    ok = subprocess.run(cat + ["import", "-"], input=quoted + "\n", capture_output=True, text=True)
+    assert ok.returncode == 0, ok.stderr
+    bad = subprocess.run(cat + ["import", "-"], input=json.dumps("0" * 64 + "\n" + body), capture_output=True, text=True)
+    assert bad.returncode and "sha256 differs" in bad.stderr, bad.stderr
 
 
 @case("catalogue.py graft: a deeper crawl of a section goes into every stored copy of it; a changed one is refused")
@@ -1234,6 +1277,12 @@ def _():
     for f in sorted(REH.glob("*/recipe.yaml")):
         own = gen.load_yaml(f)
         if not own.get("extends"):
+            continue
+        # A combination of two rehearsed pratiche (a proroga with the landscape proroga, the
+        # agibilità with the DAU, a title with the landscape proroga in place of the authorization
+        # its main combination files) states its operations and rules main: they are not the
+        # main's plus a part's (combo_answers takes its case from both).
+        if any(not p.startswith("parts/") for p in own["extends"][1:]):
             continue
         n += 1
         assert not {"operation", "comune", "sportello"} & set(own) and "main" not in (own.get("rules") or {}), f.parent.name
@@ -1294,12 +1343,18 @@ def _():
 
 @case("a firm block's field keeps its own `when` after the block's: the Cassa edile's rows only for a firm enrolled")
 def _():
+    import run
     steps = gen.generate(gen.load_yaml(ROOT / "rehearsals" / "scia-fittizia" / "recipe.yaml"))
     sec = section(steps, "i) Impresa esecutrice")
     cassa = next(f for f in sec["fields"] if f.get("label") == "Cassa edile" and f["block"] == 1)
     assert cassa["when"] == "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}} {{f1:business.cassa_edile_codice_impresa|empty|not}}", cassa
-    second = next(f for f in sec["fields"] if f.get("label") == "Cassa edile" and f["block"] == 2)
-    assert "{{f2:business.denominazione|empty|not}} {{f2:business.cassa_edile_codice_impresa|empty|not}}" in second["when"], second
+    # A later firm's, after its count (the CILA case's third firm is enrolled with one).
+    cila = gen.generate(gen.load_yaml(CILA / "recipe.yaml"))
+    v = p6_values("cila-fittizia", "answers-imprese-tre.json")(cila)
+    third = next(f for f in section(run.expand(cila, v), "h) Impresa esecutrice")["fields"]
+                 if f.get("label") == "Cassa edile" and f["block"] == 3)
+    assert third["when"].endswith("{{ask.imprese_quante|atleast_3}} {{f3:business.cassa_edile_codice_impresa|empty|not}}"), third
+    assert run.truthy(v.render(third["when"])), third
 
 
 @case("the SCIA's h1: under another technician's direction the structural designer is the second Cognome block")
@@ -1491,6 +1546,15 @@ def _():
         assert [p.parent.name for p in gen.ensure(root=root)] == ["fine-lavori-fittizia"]
 
 
+def _all(x, key):
+    """Every value of `key` anywhere in x."""
+    if isinstance(x, dict):
+        return [v for k, v in x.items() if k == key] + [w for v in x.values() for w in _all(v, key)]
+    if isinstance(x, list):
+        return [w for v in x for w in _all(v, key)]
+    return []
+
+
 @case("what the tecnico reads is Italian: every question, checklist item, refusal and end step, no role codes")
 def _():
     english = re.compile(r"\b(the|which|what|does|will|have|with|your|their|tick|every|must|before|after|only|of|and|"
@@ -1502,6 +1566,8 @@ def _():
         texts += [v for a in steps.get("asks", {}).values() for v in (a.get("labels") or {}).values()]
         texts += [g.get("question") for g in steps.get("groups", {}).values()]
         texts += [c.get("else") for c in steps.get("supports", [])] + list(steps.get("yours", []))
+        # every refusal, a field's own included (2026-11-06: the tolerances' one was in English)
+        texts += [x for x in _all(steps, "else") if isinstance(x, str)]
         for t in filter(None, texts):
             plain = re.sub(r"\{\{.*?\}\}|\"[^\"]*\"", "", str(t))  # templates and the portal's own quoted words
             if english.search(plain) or "`" in plain:
@@ -1568,6 +1634,98 @@ def _():
             continue
         default = str(steps.get("asks", {}).get("descrizione", {}).get("default", ""))
         assert "PROVA" not in default, (d.name, default)
+
+
+@case("every filter a template names is run.py's, in the dictionary, recipes, parts, steps files and main's steps files")
+def _():
+    # An unknown filter is a KeyError, which render() takes for a missing value: a renamed one
+    # (one_catasto, 2026-11-04) made main's steps refuse every case quietly, so plan_diff showed
+    # 252 changed plans and patch.js none. Old names stay in run.py while a steps file names them.
+    import subprocess
+    import run
+    filters = lambda text: {f for t in re.findall(r"\{\{(.+?)\}\}", text) for f in [p.strip() for p in t.split("|")[1:]]}
+    texts = {str(p.relative_to(ROOT)): p.read_text() for p in [HERE.parent / "dictionary" / "fnsuap.yaml",
+             *(HERE.parent / "parts").glob("*.yaml"), *REH.glob("*/recipe.yaml"), *REH.glob("*/portal-steps*.yaml")]}
+    listed = subprocess.run(["git", "-C", str(ROOT), "ls-tree", "-r", "--name-only", "HEAD", "rehearsals"],
+                            capture_output=True, text=True).stdout.split()
+    for name in [n for n in listed if re.search(r"/portal-steps[^/]*\.yaml$", n)]:
+        texts["HEAD:" + name] = subprocess.run(["git", "-C", str(ROOT), "show", f"HEAD:{name}"], capture_output=True, text=True).stdout
+    unknown = {}
+    for where, text in texts.items():
+        for f in filters(text):
+            try:
+                run.FILTERS[f]
+            except KeyError:
+                unknown.setdefault(f, where)
+    assert not unknown, unknown
+
+
+@case("two pratiche rehearsed alone, filed together: the main's answers, the other's fill what they don't say, the people of both (a proroga with the landscape proroga)")
+def _():
+    a = gen.combo_answers({"extends": ["proroga-inizio-fittizia", "proroga-paesaggistica-fittizia"],
+                           "answers": {"descrizione": "combinazione"}})
+    main = json.loads((gen.REHEARSALS / "proroga-inizio-fittizia" / "answers-p6.json").read_text())
+    other = json.loads((gen.REHEARSALS / "proroga-paesaggistica-fittizia" / "answers-p6.json").read_text())
+    assert a["descrizione"] == "combinazione"
+    assert a["pdc_data"] == main["pdc_data"], "a key both say is the main's"
+    assert a["paes_protocollo"] == other["paes_protocollo"], "the other's own section's answer"
+    assert a["people"] == {**other["people"], **main["people"]}, a["people"]
+    assert gen.combo_answers({"extends": ["cila-fittizia"]}) is None, "one rehearsal and no answers: nothing to write"
+
+
+@case("rules with no table (a combination no table routes yet): main and handles only, nothing asked")
+def _():
+    asks, groups = {}, {}
+    assert gen.rules_block({"main": "napoli/comune/fine-lavori", "handles": ["napoli/comune/dichiarazione-avvenuto-utilizzo-terre"]},
+                           asks, groups) == {"main": "napoli/comune/fine-lavori", "handles": ["napoli/comune/dichiarazione-avvenuto-utilizzo-terre"]}
+    assert not asks and not groups
+    for bad in ({"handles": ["x"]}, {"main": "x", "facts": {"sanatoria": "false"}}):
+        try:
+            gen.rules_block(bad, {}, {})
+        except gen.GenError:
+            continue
+        raise AssertionError(f"accepted {bad}")
+
+
+@case("every SUE steps file opens with the Scheda anagrafica and has its payment and attachments screens (2026-11-04: twenty combinations lost both)")
+def _():
+    # A recipe built on another that inherits `first` and `after` copied them as null, which drops
+    # the screens: their runs "filled" without ever reaching Allega documenti.
+    bad = []
+    for f in sorted(REH.glob("*/portal-steps.generated.yaml")):
+        if yaml.safe_load((f.parent / "recipe.yaml").read_text()).get("sportello") != "sue":
+            continue
+        names = [s["section"] for s in yaml.safe_load(f.read_text())["sections"]]
+        if not names or names[0] != "Scheda anagrafica" or not {"Pagamento degli oneri", "Gestione degli allegati"} <= set(names):
+            bad.append(f"{f.parent.name}: {names[:1]}")
+    assert not bad, bad
+
+
+@case("every \"+\" a SUE crawl saw is a list the dictionary maps (`each`, `firms`) or says why not (`plus:`)")
+def _():
+    # The co-holders' "+" was in the 2026-10-31 crawl (`plus`) and nobody read it: a portal defect
+    # was written for it, until a draft showed the "+" (2026-11-05).
+    import json
+    d = gen.load_yaml(HERE.parent / "dictionary" / "fnsuap.yaml")
+
+    def plus(node):
+        if isinstance(node, dict):
+            return "plus" in node or any(plus(v) for v in node.values())
+        return isinstance(node, list) and any(plus(v) for v in node)
+
+    def lists(e):
+        return "firms" in e or "plus" in e or '"kind": "each"' in json.dumps(e.get("fields", []))
+    bad = set()
+    for f in sorted((HERE.parent / "catalogue" / "F839" / "sections").glob("*.json")):
+        if f.stem.startswith("suap") or f.stem == "acconciatore":
+            continue
+        for s in json.loads(f.read_text())["sections"]:
+            if s.get("same_as") or not plus(s):
+                continue
+            entries = gen.dictionary_entries(d["sections"], s["section"])
+            if entries and not any(lists(e) for e, _ in entries):
+                bad.add(f"{s['section']} ({f.stem})")
+    assert not bad, sorted(bad)
 
 
 print(f"{sum(results)}/{len(results)} passed")

@@ -97,5 +97,6 @@
  "diritti_esente": false,
  "bollo_esenzione": "no",
  "intervento_tipo": "Demolizione e ricostruzione in zona A con la stessa sagoma, sedime, prospetti e volume (DGC 454/2014: in zona A la SCIA è esclusa)",
- "terre_rocce": "no"
+ "terre_rocce": "no",
+ "imprese_quante": 2
 }

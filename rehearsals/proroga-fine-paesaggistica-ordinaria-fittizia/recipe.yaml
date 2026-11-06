@@ -1,0 +1,46 @@
+# proroga fine e paesaggistica ordinaria: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: proroga-fine-fittizia's, with what paesaggistica-ordinaria-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli-adempimenti routes it.
+extends:
+- proroga-fine-fittizia
+- paesaggistica-ordinaria-fittizia
+procedure: napoli/comune/proroga-fine-lavori-con-autorizzazione-paesaggistica-ordinaria
+title: Proroga fine e paesaggistica ordinaria in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-proroga-fine-paesaggistica-ordinaria
+operation:
+- Proroga fine lavori
+- Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: proroga fine + paes. ordinaria {{c:identity.last_name}}
+  diritti_euro:
+    propose: '{{ask.titolo_tipo|diritti_proroga_pdc}}'
+    why: "Voce SUE 11 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 501 € per la proroga di un permesso di costruire; la proroga di un altro titolo non è nel tariffario"
+yours:
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
+rules:
+  table: sue-napoli-adempimenti
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  facts:
+    adempimento: proroga_fine
+    proroga: ordinaria
+    paesaggistica: ordinaria
+  main: napoli/comune/proroga-fine-lavori
+  handles:
+  - napoli/comune/autorizzazione-paesaggistica-ordinaria
+answers:
+  descrizione: PROVA NON INVIARE - proroga fine + paes. ordinaria P6

@@ -174,9 +174,9 @@ def _():
         more |= {f"prec_altro_{i}_quale": f"titolo {i}", f"prec_altro_{i}_numero": str(i), f"prec_altro_{i}_data": f"20{i + 10}-01-01"}
     rs = rows(answers("stato-titoli-ripetuti", **more, prec_altro_quanti="12"))
     assert [v for l, v in rs if l == "specificare"][-1] == "titolo 12" and len([l for l, _ in rs if l == "specificare"]) == 12, rs
-    refused(answers("stato-epoca", prova_documenti=[]), "catasto primo impianto or other documents")
-    refused(answers("stato-titoli", precedenti=[]), "at least one title")
-    refused(answers("stato-tolleranze", tolleranze_precedenti=[]), "where they were made")
+    refused(answers("stato-epoca", prova_documenti=[]), "catasto di primo impianto o altri documenti")
+    refused(answers("stato-titoli", precedenti=[]), "almeno un titolo")
+    refused(answers("stato-tolleranze", tolleranze_precedenti=[]), "dove sono state rese")
 
 
 @case("a question is asked only on its way: the sanctions case is never asked about titles")
@@ -192,8 +192,8 @@ def _():
     # details once the count says there is one (the count is proposed: one line).
     r = run.preflight(steps, values(steps, answers("stato-titoli", prec_altro_quanti=None)), made_up=True)
     assert [p["proposal"] for p in r["proposals"] if p["key"] == "prec_altro_quanti"] == ["1"], r["proposals"]
-    keys = {q["key"]: q.get("only_if") for q in r["questions"]}
-    assert keys.get("prec_altro_2_quale") == ["prec_altro_quanti"], keys
+    # One message: with one line proposed, the second line's details wait (asked if the count changes).
+    assert "prec_altro_2_quale" not in json.dumps(r["questions"]), r["questions"]
     r = run.preflight(steps, values(steps, answers("stato-titoli", prec_altro_quanti="3")), made_up=True)
     assert {q["key"] for q in r["questions"]} >= {"prec_altro_2_quale", "prec_altro_3_data"} and "prec_altro_4_quale" not in json.dumps(r), r
     # A refusal's `if` stops at its first false word, as a `when` does: a building with no title

@@ -1,0 +1,51 @@
+# CIL e proroga paesaggistica: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: cil-paesaggistica-semplificata-fittizia's, with what proroga-paesaggistica-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli routes it.
+extends:
+- cil-paesaggistica-semplificata-fittizia
+- proroga-paesaggistica-fittizia
+procedure: napoli/comune/cil-opere-temporanee-con-proroga-autorizzazione-paesaggistica
+title: CIL e proroga paesaggistica in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-cil-proroga-paesaggistica
+operation:
+- Comunicazione di Inizio Lavori per opere temporanee (C.I.L.)
+- Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022 - Comune)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: CIL + proroga paesaggistica {{c:identity.last_name}}
+  diritti_euro:
+    default: '100'
+    why: "Voce SUE 14 del tariffario 2026 dei diritti del Comune: 100 € per una CIL."
+yours:
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella; il bollo prima dell'invio"
+- 'I lavori iniziano solo quando il SUE comunica che l''autorizzazione paesaggistica è stata acquisita: la data di inizio è la prima possibile'
+- "Se è dovuta la notifica preliminare (art. 99 D.Lgs. 81/2008): la alleghi negli Allegati liberi, firmata digitalmente (solo .p7m): la CIL non ha uno spazio apposito"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
+rules:
+  table: sue-napoli
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  facts:
+    permesso_per_scelta: 'false'
+    parere_esonero: 'false'
+  main: napoli/comune/cil-opere-temporanee
+  handles:
+  - napoli/comune/proroga-autorizzazione-paesaggistica
+answers:
+  descrizione: PROVA NON INVIARE - CIL + proroga paesaggistica P6
+  paesaggio: proroga
+groups:
+  fatti:
+    question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.

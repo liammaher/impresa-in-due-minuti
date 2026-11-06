@@ -1,0 +1,230 @@
+{
+ "crawled": "2026-11-04T18:35:04.933Z",
+ "by": "crawl.js batch, depth 3",
+ "pratica": "SUE: 2 operations in one pratica: Proroga inizio lavori + Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune), with the scelta IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+ "seconds": 61.8,
+ "note": "Every section is one of the operations' own, the same fingerprint: the combination is their union, in this order. A recipe names every operation and extends the main one's.",
+ "also": [
+  "EDILIZIA › Beni Paesaggistici › Autorizzazione paesaggistica semplificata (DPR 31/2017 - Comune)"
+ ],
+ "generated": {
+  "interventi": "Autorizzazione paesaggistica semplificata per interventi di lieve entità in aree soggette a vincolo paesaggistico (DPR 31/2017)",
+  "adempimenti": [
+   {
+    "adempimento": "Autorizzazione Paesaggistica Semplificata ex DPR 31/2017 (Ente Comune)",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   },
+   {
+    "adempimento": "Provvedimento di proroga del termine di inizio lavori",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   }
+  ],
+  "sections": [
+   "Scheda anagrafica",
+   "Oggetto della pratica",
+   "DOMICILIO DIGITALE",
+   "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "dichiarazione ubicazione dell'intervento",
+   "dati catastali",
+   "dati relativi al nome del tecnico",
+   "Qualificazione dell'intervento",
+   "Ambito dell'intervento",
+   "dichiarazione delle motivazioni della richiesta di proroga",
+   "dichiarazione periodo di proroga",
+   "dichiarazione dell'immobile oggetto della domanda, riferimenti titolo edilizio e data prevista dell'inizio lavori",
+   "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "dichiarazione relativa ai diritti di segreteria/istruttori",
+   "Dichiarazione relativa all'assolvimento dell'imposta di bollo"
+  ]
+ },
+ "screens": [
+  {
+   "screen": "scelta del destinatario della pratica",
+   "options": [
+    {
+     "label": "",
+     "checked": false
+    },
+    {
+     "label": "",
+     "checked": true
+    }
+   ]
+  },
+  {
+   "screen": "scelte eventuali",
+   "options": [
+    {
+     "key": "0",
+     "type": "CHK",
+     "label": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+     "selected": true
+    }
+   ]
+  }
+ ],
+ "variants": [
+  {
+   "option": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+   "type": "CHK",
+   "adds": [
+    "Qualifica e dati del procuratore"
+   ],
+   "drops": []
+  }
+ ],
+ "sections": [
+  {
+   "section": "Scheda anagrafica",
+   "fingerprint": "4dd844db9cdb76ff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Scheda anagrafica",
+   "seconds": 0
+  },
+  {
+   "section": "Oggetto della pratica",
+   "fingerprint": "b9828eee09a1f50f",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Oggetto della pratica",
+   "seconds": 0.8
+  },
+  {
+   "section": "DOMICILIO DIGITALE",
+   "fingerprint": "5978ae29f079ce08",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO DIGITALE",
+   "seconds": 0.7
+  },
+  {
+   "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "fingerprint": "c282ef61bee9ea4d",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione ubicazione dell'intervento",
+   "fingerprint": "1ae79e0eb7308899",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione ubicazione dell'intervento",
+   "seconds": 0.7
+  },
+  {
+   "section": "dati catastali",
+   "fingerprint": "bd17e4e186aa5dc9",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati catastali",
+   "seconds": 0.8
+  },
+  {
+   "section": "dati relativi al nome del tecnico",
+   "fingerprint": "ffddb90f4d2ab273",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati relativi al nome del tecnico",
+   "seconds": 0.8
+  },
+  {
+   "section": "Qualificazione dell'intervento",
+   "fingerprint": "24951c61da272643",
+   "same_as": "sue-combo-cil-paesaggistica-semplificata#Qualificazione dell'intervento",
+   "seconds": 1
+  },
+  {
+   "section": "Ambito dell'intervento",
+   "fingerprint": "8cbcfdd54fdcde26",
+   "same_as": "sue-combo-cil-paesaggistica-semplificata#Ambito dell'intervento",
+   "seconds": 0.9
+  },
+  {
+   "section": "dichiarazione delle motivazioni della richiesta di proroga",
+   "fingerprint": "0cd4b48a866a5e24",
+   "same_as": "sue-combo-proroga-inizio-paesaggistica-ordinaria#dichiarazione delle motivazioni della richiesta di proroga",
+   "seconds": 0.9
+  },
+  {
+   "section": "dichiarazione periodo di proroga",
+   "fingerprint": "4a13a20b9ac3615b",
+   "same_as": "sue-combo-proroga-inizio-paesaggistica-ordinaria#dichiarazione periodo di proroga",
+   "seconds": 1.1
+  },
+  {
+   "section": "dichiarazione dell'immobile oggetto della domanda, riferimenti titolo edilizio e data prevista dell'inizio lavori",
+   "fingerprint": "fbf86c22e2c6ef37",
+   "same_as": "sue-combo-proroga-inizio-paesaggistica-ordinaria#dichiarazione dell'immobile oggetto della domanda, riferimenti titolo edilizio e data prevista dell'inizio lavori",
+   "seconds": 0.9
+  },
+  {
+   "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
+   "fingerprint": "52afb47e165ec4c7",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "fingerprint": "869752d2cea5aef3",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "seconds": 0.9
+  },
+  {
+   "section": "Qualifica e dati del procuratore",
+   "fingerprint": "2ebe54198e212bff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Qualifica e dati del procuratore",
+   "seconds": 0.8,
+   "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
+  }
+ ],
+ "slots": {
+  "Gestione degli allegati": [
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Relazione Paesaggistica Semplificata",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Elaborati di progetto individuati nell'Allegata Relazione Paesaggistica Semplificata",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Procura speciale",
+    "accepts": "jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Fotocopia di un documento di identita' del soggetto che conferisce la procura speciale",
+    "accepts": "pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia del documento d'identità in corso di validità ai sensi del DPR 445/2000 (solo per chi non firma digitalmente)",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Allegati liberi",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg",
+    "required": false,
+    "portal_document": false
+   }
+  ]
+ },
+ "slots_note": "read 2026-11-04 on the empty draft (crawl.js `slots`)"
+}

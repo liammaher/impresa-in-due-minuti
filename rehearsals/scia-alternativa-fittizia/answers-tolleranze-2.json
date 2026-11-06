@@ -106,5 +106,6 @@
  "toll_strutturale": true,
  "toll_superficie": "oltre 500",
  "toll_classe": "privo di rilevanza",
- "toll_decorso": "true"
+ "toll_decorso": "true",
+ "imprese_quante": 2
 }

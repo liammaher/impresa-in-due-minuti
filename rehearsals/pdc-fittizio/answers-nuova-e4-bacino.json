@@ -116,5 +116,6 @@
  "acustica_dichiarazione": "true",
  "acustica_dichiarazione_doc": "rehearsals/pdc-fittizio/files/dichiarazione-limiti-acustici.pdf",
  "acustica_misure": "true",
- "acustica_misure_doc": "rehearsals/pdc-fittizio/files/previsione-impatto-acustico.pdf"
+ "acustica_misure_doc": "rehearsals/pdc-fittizio/files/previsione-impatto-acustico.pdf",
+ "imprese_quante": 2
 }

@@ -9,7 +9,11 @@
 # `branches` repeats its boxes once per condition of a first choice that renumbers them. A radio or a
 # checkbox listed is ticked, and what it opens is found in the crawl. `via: <option>` is a field
 # a templated dropdown opens only on that option (its `when` says when). `leave:` names what the
-# section shows that stays empty; `omit:` a section that is the person's alone. `kind: tick`
+# section shows that stays empty; `omit:` a section that is the person's alone; `plus:` why a "+"
+# its crawl saw is no list here (`kind: each` maps one; test_gen holds every crawled "+"
+# to one of the two: the co-holders' "+" was crawled and unread for a week; a block's asks are
+# templates, `#N` "" in the first, so `pdc#N_protocollo` keeps an older single-title ask,
+# `pdc_protocollo`, as its first block and the existing cases' answers stand). `kind: tick`
 # is a radio in one pratica and a checkbox in another; `if_present` a field only some pratiche
 # show; `on_page` one the crawl can't see (shown by two choices together), found by label on
 # the page; `by_label` one the crawl sees but whose id another answer moves, found the same way;
@@ -39,7 +43,7 @@
 # titolare, the architect), `c:` the client (a person, or a company or condominium with
 # business.*: its property and procura are its own), `cr:` the person declaring for a client
 # company or condominium (its legale rappresentante or administrator), `o:` the owner company, `r:` its legale
-# rappresentante, `f1:`/`f2:` the firms, `s:` the structural designer, `d:` a direttore dei
+# rappresentante, `f1:`, `f2:`, `f3:` ... the firms, `s:` the structural designer, `d:` a direttore dei
 # lavori who isn't the architect, `p:` the architectural designer when it isn't the architect
 # presenting the pratica, `a:`/`a2:`/`a3:` other technicians appointed for the works
 # and `ad:`/`ad2:`/`ad3:` the firm each is employed by.
@@ -113,22 +117,54 @@ asks:
     type: yes_no
     question: "Il committente ha il titolo da solo, senza altri (comproprietari, il proprietario locatore) il cui assenso sia necessario per i lavori? In caso contrario, l'altro titolare va indicato tra i soggetti della pratica come legale rappresentante della proprietà, e la sua società come società proprietaria se l'immobile appartiene a una società"
     propose: "{{ask.titolo|titolo_solo}}"
+  # The other holders (a.2's rows, one each by "+"): `r:`, `r2:`, `r3:` ... in the job's people
+  # (with `o:`, `o2:` ... where one is a company). One unasked while the job names no `r2:`.
+  altri_titolari:
+    type: number
+    question: "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conti il suo legale rappresentante"
+    default: "{{r2:identity.last_name|empty|single_unit}}"
+    propose: "{{r:identity.last_name,r2:identity.last_name,r3:identity.last_name,r4:identity.last_name,r5:identity.last_name,r6:identity.last_name,r7:identity.last_name,r8:identity.last_name,r9:identity.last_name|filled_count}}"
+  # The building firms on site (Impresa esecutrice's blocks, one each by "+"): `f1:`, `f2:`,
+  # `f3:` ... in the job's people. One unasked while the job names no `f2:`.
+  imprese_quante:
+    type: number
+    question: "Quante imprese esecutrici lavorano in cantiere?"
+    default: "{{f2:business.denominazione|empty|single_unit}}"
+    propose: "{{f1:business.denominazione,f2:business.denominazione,f3:business.denominazione,f4:business.denominazione,f5:business.denominazione,f6:business.denominazione,f7:business.denominazione,f8:business.denominazione,f9:business.denominazione|filled_count}}"
+  # The landscape form's technicians when the architect presenting isn't the designer: `p:`,
+  # then `p2:`, `p3:` ... (one block each by "+"). One unasked while the job names no `p2:`.
+  progettisti_quanti:
+    type: number
+    question: "Quanti tecnici indica il modulo paesaggistico?"
+    default: "{{p2:identity.last_name|empty|single_unit}}"
+    propose: "{{p:identity.last_name,p2:identity.last_name,p3:identity.last_name,p4:identity.last_name,p5:identity.last_name,p6:identity.last_name,p7:identity.last_name,p8:identity.last_name,p9:identity.last_name|filled_count}}"
   # A unit with a categoria in the vault is in the Catasto Fabbricati: asked only without one.
-  catasto_terreni:
+  # One per unit (catasto_terreni, catasto_terreni2 ...): each unit's own catasto.
+  catasto_terreni#N:
     type: yes_no
-    question: "L'immobile è censito solo al Catasto Terreni (un lotto da edificare, senza subalterno né categoria), anziché al Catasto Fabbricati?"
-    default: "{{c:immobile.catasto_categoria|filled|not}}"
+    question: "L'unità catastale #K è censita solo al Catasto Terreni (un lotto da edificare, senza subalterno né categoria), anziché al Catasto Fabbricati?"
+    default: "{{c:immobile#N.catasto_categoria|filled|not}}"
+  # The cadastral units the works touch (merging or splitting flats, a whole building, a plot of
+  # several particelle): the client's immobile, immobile2, immobile3 ... in the vault, one block
+  # each in Dati catastali. One unasked while the vault holds no second; with one, asked.
+  unita_catastali:
+    type: number
+    question: "Quante unità catastali indica la pratica? (quelle dello stesso catasto una dopo l'altra)"
+    default: "{{c:immobile2.catasto_foglio|empty|single_unit}}"
+    propose: "{{c:immobile.catasto_foglio,c:immobile2.catasto_foglio,c:immobile3.catasto_foglio,c:immobile4.catasto_foglio,c:immobile5.catasto_foglio,c:immobile6.catasto_foglio,c:immobile7.catasto_foglio,c:immobile8.catasto_foglio,c:immobile9.catasto_foglio|filled_count}}"
   # A voltura's or cambio d'intestazione's co-holders: the wizard's "ci sono cointestatari"
-  # adds a section for one (`a:`); it has no "+" for more.
+  # adds a section for one (`a:`), and its "+" one more each (`a2:`, `a3:` ...).
   cointestatario:
     type: yes_no
     question: "Il nuovo titolare condivide il titolo con un'altra persona (un cointestatario)? In tal caso, il cointestatario va indicato tra i soggetti della pratica"
     propose: "false"
     yours: "Nella sezione del cointestatario sono spuntate entrambe le caselle del sesso: il portale non la salva in altro modo (due gruppi obbligatori); il suo codice fiscale indica quale vale"
-  altri_cointestatari:
-    type: yes_no
-    question: "Ci sono altri cointestatari oltre al primo già indicato?"
-    propose: "false"
+  # One unasked while the job names no `a2:`.
+  cointestatari_quanti:
+    type: number
+    question: "Quanti cointestatari hanno il titolo insieme al nuovo titolare?"
+    default: "{{a2:identity.last_name|empty|single_unit}}"
+    propose: "{{a:identity.last_name,a2:identity.last_name,a3:identity.last_name,a4:identity.last_name,a5:identity.last_name,a6:identity.last_name,a7:identity.last_name,a8:identity.last_name,a9:identity.last_name|filled_count}}"
   parti_comuni:
     type: choice
     question: "I lavori interessano parti comuni dell'edificio? nessuna; condominio (parti comuni di un condominio); comproprieta (un edificio di più proprietari che non è un condominio, con la loro approvazione); art 1102 (parti comuni usate a spese del committente senza alterarne la destinazione, art. 1102 c.c.: non serve alcun assenso)"
@@ -295,6 +331,19 @@ asks:
     question: "Il titolo dei lavori: cosa è stato presentato o rilasciato"
     options: [permesso di costruire, SCIA, DIA, CILA, variante, autorizzazione paesaggistica]
     propose: permesso di costruire
+  # The cambio d'intestazione's further titles (a SCIA and its variante filed as a SCIA of its
+  # own pass together): one row each by the title "+". The first is titolo_tipo, pdc_protocollo
+  # and pdc_data above; these template asks make the second and later ones.
+  titoli_quanti:
+    type: number
+    question: "Quanti titoli trasferisce il cambio d'intestazione? Di solito uno; con una variante presentata come pratica a sé (una SCIA in variante), il titolo e ciascuna variante"
+    propose: "1"
+  titolo#N_tipo:
+    type: choice
+    question: "Titolo #K trasferito con il cambio: che cosa è stato presentato"
+    options: [SCIA, DIA, CILA]
+  pdc#N_protocollo: {type: text, question: "Titolo #K: il numero di protocollo generale"}
+  pdc#N_data: {type: date, question: "Titolo #K: la sua data"}
   titolo_id_pratica: {type: text, question: "Il numero di pratica del titolo sul SUAP/SUE (ID pratica)"}
   data_nomina: {type: date, question: "Da quando subentra il nuovo direttore dei lavori"}
   nomina_aggiunta: {type: yes_no, question: "L'impresa viene nominata in aggiunta a una nominata in precedenza (anziché come prima impresa nominata)?", propose: "false"}
@@ -355,9 +404,14 @@ asks:
   paes_b40: {type: yes_no, group: allegato_b, item: "B.40 Interventi sistematici di ingegneria naturalistica per la difesa idraulica, del suolo o dalle frane"}
   paes_b41: {type: yes_no, group: allegato_b, item: "B.41 Demolizione e ricostruzione con la stessa volumetria, sagoma e area di sedime"}
   paes_b42: {type: yes_no, group: allegato_b, item: "B.42 Ripascimenti, dune artificiali, ripristino di opere costiere"}
-  precedente_cognome: {type: text, question: "L'intestatario del permesso finora: cognome, o denominazione della società"}
-  precedente_nome: {type: text, question: "Il nome (nessuno per una società)", default: ""}
-  precedente_cf: {type: text, question: "Il codice fiscale o la partita IVA"}
+  # The title's holders until now (the cambio d'intestazione takes several, one row each by "+").
+  precedenti_quanti:
+    type: number
+    question: "Quanti erano finora i titolari (i precedenti titolari a cui subentra il nuovo)?"
+    propose: "1"
+  precedente#N_cognome: {type: text, question: "Il titolare #K finora: cognome, o denominazione della società"}
+  precedente#N_nome: {type: text, question: "Il suo nome (nessuno per una società)", default: ""}
+  precedente#N_cf: {type: text, question: "Il suo codice fiscale o la partita IVA"}
   atto_tipo: {type: text, question: "L'atto con cui è stato trasferito l'immobile (es. atto di compravendita)"}
   atto_data: {type: date, question: "La sua data"}
   atto_notaio: {type: text, question: "Il nome del notaio"}
@@ -801,6 +855,23 @@ asks:
     question: "Chi calcola il contributo: prospetto (il prospetto di calcolo preventivo del progettista, allegato); sportello (il SUE, sulla base dei documenti tecnici allegati)"
     options: [prospetto, sportello]
   documentazione_calcolo_contributo: {type: file, question: "I documenti tecnici di cui il SUE ha bisogno per calcolare il contributo (PDF)"}
+  # Asked only for the diritti's line (an ask's `propose` reads it; run.py needed): no box on the
+  # forms takes either. A choice, not an amount, so the diritti come in the same message, one
+  # proposal per answer (run.py conditional_proposals waits a round for a number).
+  contributo_fascia:
+    type: choice
+    question: "Il contributo di costruzione (oneri di urbanizzazione + costo di costruzione), come risulta dal prospetto di calcolo"
+    options: [fino_5000, "5000", da_5000_a_30000, oltre_30000]
+    labels: {fino_5000: "Fino a 5.000 €", "5000": "Esattamente 5.000 €", da_5000_a_30000: "Da 5.000 a 30.000 €", oltre_30000: "Oltre 30.000 €"}
+    when: "{{ask.scia_onerosa}} {{ask.contributo_calcolo|is_prospetto}}"
+    why: "Le voci SUE 7-9 della tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) dipendono dal contributo: fino a 5.000 € (1.003 €), da 5.000 a 30.000 € (1.505 €), oltre 30.000 € (1.998 €); esattamente 5.000 € è in due voci, quindi i diritti si chiedono"
+  parcheggio_fascia:
+    type: choice
+    question: "La superficie del parcheggio, come indicata nella relazione tecnica"
+    options: [fino_300, da_301_a_1000, oltre_1001, altro]
+    labels: {fino_300: "Fino a 300 m²", da_301_a_1000: "Da 301 a 1.000 m²", oltre_1001: "Oltre 1.001 m²", altro: "Altro (tra 300 e 301 m², o tra 1.000 e 1.001 m²)"}
+    when: "{{ask.pdc_tipo|is_parcheggi}}"
+    why: "Le voci SUE 4-6 della tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) dipendono dalla superficie del parcheggio: fino a 300 m² (677 €), da 301 a 1.000 m² (1.129 €), oltre 1.001 m² (1.998 €); la tabella non dice se lorda o netta, e tra le voci restano scoperti i decimali"
   # The SCIA's f), the SCIA alternativa's f) and the permesso's e): how the stato legittimo is
   # shown. The national form (ent_regolarita_urbanistica_scia/pdc) takes one of the five, then
   # "pienamente conforme" or "conforme ... unitamente alla sanatoria" (quadro c's sanatoria and
@@ -1024,8 +1095,8 @@ asks:
   # progettista knows them from the PRG's and the Comune's maps; each is theirs to say.
   paesaggio:
     type: choice
-    question: "L'immobile è sottoposto a tutela paesaggistica (D.Lgs. 42/2004 parte III: art. 136, art. 142 o piano paesaggistico), e cosa richiedono i lavori? no (non tutelato); senza autorizzazione (tutelato, ma i lavori non alterano lo stato dei luoghi né l'aspetto esteriore degli edifici, o non richiedono autorizzazione: art. 149, DPR 31/2017 Allegato A); semplificata (DPR 31/2017 Allegato B); ordinaria (art. 146)"
-    options: ["no", senza autorizzazione, semplificata, ordinaria]
+    question: "L'immobile è sottoposto a tutela paesaggistica (D.Lgs. 42/2004 parte III: art. 136, art. 142 o piano paesaggistico), e cosa richiedono i lavori? no (non tutelato); senza autorizzazione (tutelato, ma i lavori non alterano lo stato dei luoghi né l'aspetto esteriore degli edifici, o non richiedono autorizzazione: art. 149, DPR 31/2017 Allegato A); semplificata (DPR 31/2017 Allegato B); ordinaria (art. 146); proroga (i lavori hanno già un'autorizzazione in vigore che scade prima che finiscano, e non contrastano con un piano o una misura di tutela adottati nel frattempo: la sua proroga, art. 10-septies, presentata con il titolo); rinnovo (l'autorizzazione è scaduta da non più di un anno, i lavori non sono stati fatti o lo sono in parte, il progetto è invariato o con varianti minime: il suo rinnovo, art. 7 DPR 31/2017, presentato con il titolo; varianti non minime richiedono l'ordinaria, art. 7 c. 2)"
+    options: ["no", senza autorizzazione, semplificata, ordinaria, proroga, rinnovo]
   relazione_paesaggistica: {type: file, question: "La relazione paesaggistica (DPCM 12/12/2005), per l'autorizzazione paesaggistica ordinaria (PDF)"}
   relazione_semplificata_doc: {type: file, question: "La relazione paesaggistica semplificata con la relativa documentazione (DPR 31/2017, Allegato D), per la voce di allegato che aggiunge il \"Si allega\" dell'asseverazione (PDF)"}
   # In a SCIA in sanatoria (the recipe sets it) works that needed a landscape authorization are
@@ -1517,22 +1588,46 @@ sections:
   # The property in the Catasto Fabbricati (NCEU: a unit with its subalterno and categoria), or a
   # plot only in the Catasto Terreni (NCT: a new building's land), whose one box of its own is the
   # sezione censuaria: the visura's sezione, which the vault keeps as catasto_sezione either way.
+  # The section is a list of groups, each a catasto (the radios) with a list of units: a unit's
+  # "+" (the first after its boxes) adds one with the same labels under the same catasto; the
+  # group's "+" (the second) adds another group, its own radios and one unit (read on a CILA
+  # draft 2026-11-04, NCEU and NCT alike, cancelled unsaved). Units go in vault order, one group
+  # per catasto: where a unit's catasto isn't the one before's, the group's "+", then its radio
+  # (the page's last of that label). The units are counted across groups, so unit n is the
+  # n-th "foglio". A group's "+" after any group's last unit adds one more, so the catasto may
+  # change as often as the units do (a third group back to the first read on a draft 2026-11-05).
   - section: Dati catastali
     leave: [sezione Amministrativa, classe]
     fields:
       - {kind: radio, label: Nuovo Catasto Edilizio Urbano, when: "{{ask.catasto_terreni|not}}"}
       - {kind: radio, label: Nuovo Catasto Terreni, when: "{{ask.catasto_terreni}}"}
-      - {kind: text, label: foglio, value: "{{c:immobile.catasto_foglio}}"}
-      - {kind: text, label: particella/mappale, value: "{{c:immobile.catasto_particella}}"}
-      - {kind: text, label: subalterno, value: "{{c:immobile.catasto_subalterno}}", when: "{{ask.catasto_terreni|not}}"}
-      - {kind: text, label: sezione Urbana, value: "{{c:immobile.catasto_sezione}}", optional: true, when: "{{ask.catasto_terreni|not}}"}
-      - {kind: select, label: categoria, value: "{{c:immobile.catasto_categoria|categoria}}", when: "{{ask.catasto_terreni|not}}"}
-      - {kind: text, label: sezione Censuaria, value: "{{c:immobile.catasto_sezione}}", optional: true, when: "{{ask.catasto_terreni}}"}
+      - kind: each
+        count: "{{ask.unita_catastali}}"
+        anchor: foglio
+        add_when: "{{ask.catasto_terreni#N,ask.catasto_terreni#P|differ|not}}"
+        block:
+          - {kind: add, nth: 2, when: "{{ask.catasto_terreni#N,ask.catasto_terreni#P|differ}}"}
+          # The new group's radios by their cell's text, the page's last: once the portal has
+          # checked the section (any "+" does), every group's radio is titled "Il valore è
+          # obbligatorio" and reads only NCEU or NCT (2026-11-04: by its long name, none found).
+          - {kind: radio, label: NCEU, last: true, free: true, when: "{{ask.catasto_terreni#N,ask.catasto_terreni#P|differ}} {{ask.catasto_terreni#N|not}}"}
+          - {kind: radio, label: NCT, last: true, free: true, when: "{{ask.catasto_terreni#N,ask.catasto_terreni#P|differ}} {{ask.catasto_terreni#N}}"}
+          - {kind: text, label: foglio, value: "{{c:immobile#N.catasto_foglio}}"}
+          - {kind: text, label: particella/mappale, value: "{{c:immobile#N.catasto_particella}}"}
+          # Found by its own title: the particella's texts (its title said twice) read
+          # "subalterno" from the next column as near as the subalterno's own, and by label the
+          # first box wins (a run typed the subalterno into the particella, 2026-11-04). The title
+          # is the portal's rule too: a unit with no subalterno takes 0, stored so in the vault.
+          - {kind: text, label: subalterno, title: se non presente indicare il numero 0, value: "{{c:immobile#N.catasto_subalterno}}", when: "{{ask.catasto_terreni#N|not}}"}
+          - {kind: text, label: sezione Urbana, value: "{{c:immobile#N.catasto_sezione}}", optional: true, when: "{{ask.catasto_terreni#N|not}}"}
+          - {kind: select, label: categoria, value: "{{c:immobile#N.catasto_categoria|categoria}}", when: "{{ask.catasto_terreni#N|not}}"}
+          - {kind: text, label: sezione Censuaria, value: "{{c:immobile#N.catasto_sezione}}", optional: true, when: "{{ask.catasto_terreni#N}}"}
 
   # The client's title. The dropdown's "altro" (a tenant, a comodatario: + specificare) adds a
   # row and renumbers the radios below it. Then the title held alone (a.1), or the assent of
-  # the other holder (a.2), whose row opens: a person (`r:`), or a company (`o:`) with `r:` its
-  # legale rappresentante. The portal's row takes one holder; more go in the assent's attachment.
+  # the other holders (a.2), whose row opens: a person (`r:`), or a company (`o:`) with `r:` its
+  # legale rappresentante. The "+" after the row adds another holder's whole row, the company tick
+  # too (read on a SCIA draft 2026-11-05, three rows, cancelled unsaved): one per holder.
   - section: a) Titolarità dell'intervento
     aliases: ["Titolarità dell'intervento"]
     fields:
@@ -1541,27 +1636,34 @@ sections:
       - {kind: select, label: "Il richiedente dichiara di avere titolo", value: "{{ask.titolo|titolo_pratica}}", when: "{{ask.titolo|titolo_is_altro|not}}"}
       - {kind: radio, label: avere titolarità esclusiva, when: "{{ask.titolo_esclusivo}}"}
       - {kind: radio, label: non avere titolarità esclusiva, when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: Cognome, value: "{{r:identity.last_name}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: Nome, value: "{{r:identity.first_name}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: C.F., value: "{{r:identity.codice_fiscale}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: date, label: Data di nascita, value: "{{r:identity.date_of_birth|date_it}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: select, label: Sesso, value: "{{r:identity.sex|sesso}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: select, label: Provincia, value: "{{r:identity.birth_province}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: Comune italiano, value: "{{r:identity.birth_comune|upper}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: select, label: Provincia, nth: 2, value: "{{r:residenza.provincia}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: Comune italiano, nth: 2, value: "{{r:residenza.comune|upper}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: "Via, Piazza", value: "{{r:residenza.indirizzo|upper}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: "N.", value: "{{r:residenza.civico}}", when: "{{ask.titolo_esclusivo|not}}"}
-      - {kind: text, label: C.A.P., value: "{{r:residenza.cap}}", when: "{{ask.titolo_esclusivo|not}}"}
-      # A company's contacts, else the person's own.
-      - {kind: text, label: PEC / posta elettronica, value: "{{o:business.pec}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
-      - {kind: text, label: Telefono, value: "{{o:business.telefono|phone_it}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
-      - {kind: text, label: PEC / posta elettronica, value: "{{r:identity.email}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty}}"}
-      - {kind: text, label: Telefono, value: "{{r:identity.phone|phone_it}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty}}"}
-      - {kind: checkbox, label: Da compilare solo nel caso in cui il titolare sia, when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
-      - {kind: text, label: in qualità di, value: legale rappresentante, when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
-      - {kind: text, label: della ditta / società, value: "{{o:business.denominazione}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
-      - {kind: text, label: con codice fiscale / p. IVA, value: "{{o:business.partita_iva}}", when: "{{ask.titolo_esclusivo|not}} {{o:business.denominazione|empty|not}}"}
+      # One block per other holder, each after the first by its "+": a person (`r:`, `r2:` ...),
+      # or a company (`o:`, `o2:` ...) with its legale rappresentante as `r#N:`.
+      - kind: each
+        count: "{{ask.altri_titolari}}"
+        when: "{{ask.titolo_esclusivo|not}}"
+        anchor: Cognome
+        block:
+          - {kind: text, label: Cognome, value: "{{r#N:identity.last_name}}"}
+          - {kind: text, label: Nome, value: "{{r#N:identity.first_name}}"}
+          - {kind: text, label: C.F., value: "{{r#N:identity.codice_fiscale}}"}
+          - {kind: date, label: Data di nascita, value: "{{r#N:identity.date_of_birth|date_it}}"}
+          - {kind: select, label: Sesso, value: "{{r#N:identity.sex|sesso}}"}
+          - {kind: select, label: Provincia, value: "{{r#N:identity.birth_province}}"}
+          - {kind: text, label: Comune italiano, value: "{{r#N:identity.birth_comune|upper}}"}
+          - {kind: select, label: Provincia, nth: 2, value: "{{r#N:residenza.provincia}}"}
+          - {kind: text, label: Comune italiano, nth: 2, value: "{{r#N:residenza.comune|upper}}"}
+          - {kind: text, label: "Via, Piazza", value: "{{r#N:residenza.indirizzo|upper}}"}
+          - {kind: text, label: "N.", value: "{{r#N:residenza.civico}}"}
+          - {kind: text, label: C.A.P., value: "{{r#N:residenza.cap}}"}
+          # A company's contacts, else the person's own.
+          - {kind: text, label: PEC / posta elettronica, value: "{{o#N:business.pec}}", when: "{{o#N:business.denominazione|empty|not}}"}
+          - {kind: text, label: Telefono, value: "{{o#N:business.telefono|phone_it}}", when: "{{o#N:business.denominazione|empty|not}}"}
+          - {kind: text, label: PEC / posta elettronica, value: "{{r#N:identity.email}}", when: "{{o#N:business.denominazione|empty}}"}
+          - {kind: text, label: Telefono, value: "{{r#N:identity.phone|phone_it}}", when: "{{o#N:business.denominazione|empty}}"}
+          - {kind: checkbox, label: Da compilare solo nel caso in cui il titolare sia, when: "{{o#N:business.denominazione|empty|not}}"}
+          - {kind: text, label: in qualità di, value: legale rappresentante, when: "{{o#N:business.denominazione|empty|not}}"}
+          - {kind: text, label: della ditta / società, value: "{{o#N:business.denominazione}}", when: "{{o#N:business.denominazione|empty|not}}"}
+          - {kind: text, label: con codice fiscale / p. IVA, value: "{{o#N:business.partita_iva}}", when: "{{o#N:business.denominazione|empty|not}}"}
 
   - section: b) Opere su parti comuni
     fields:
@@ -1755,16 +1857,13 @@ sections:
           - {kind: text, label: Cognome, nth: 2, value: "{{ad#N:identity.last_name|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
           - {kind: text, label: Nome, nth: 2, value: "{{ad#N:identity.first_name|upper}}", when: "{{ask.altro_tecnico#N_dipendente}}"}
 
-  # The firms on site (`f1:`, and `f2:` when the job has one: its block comes from "+"), or
-  # minor works the client does without one. Fields by label inside the block-th repeat that
-  # starts at "Ragione sociale"; `firm_when` is each block's condition (a later one also
-  # needs its firm).
+  # The firms on site (`f1:`, `f2:`, `f3:` ...: each block after the first by the "+" after the
+  # last one, 48 boxes), or minor works the client does without one. Fields by label inside the
+  # block that starts at "Ragione sociale".
   # A firm still to be chosen: the SCIA and the permesso say so ("sarà individuata"); the CILA
   # and the CIL have no such line, and their recipes refuse it.
   - section: h) Impresa esecutrice dei lavori
     leave: [Telefono, fax]
-    firms: [f1, f2]
-    firm_when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}"
     fields:
       # Each form words a choice its own way: one label per wording, each starting its box's text
       # (a label found only inside it reads "loose" at run time).
@@ -1776,41 +1875,46 @@ sections:
       - {kind: radio, label: i lavori sono/saranno eseguiti dall, if_present: true, when: "{{ask.lavori_in_proprio|not}}"}
       - {kind: radio, label: i lavori sono eseguiti/sono stati eseguiti, if_present: true, when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}"}
       - {kind: radio, label: i lavori saranno eseguiti/sono eseguiti, if_present: true, when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}"}
-    block:
-      - {kind: text, label: Ragione sociale, value: "{{F:business.denominazione}}"}
-      - {kind: text, label: codice fiscale / p. IVA, value: "{{F:business.partita_iva}}"}
-      - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: "{{F:business.cciaa}}"}
-      - {kind: text, label: n., nth: 1, value: "{{F:business.rea|rea_num}}"}
-      - {kind: text, label: con sede in, value: "{{F:business.sede_legale_comune|upper}}"}
-      - {kind: select, label: provincia, nth: 1, value: "{{F:business.sede_legale_provincia}}"}
-      - {kind: text, label: "Via, Piazza", value: "{{F:business.sede_legale_indirizzo|upper}}"}
-      - {kind: text, label: N., nth: 2, value: "{{F:business.sede_legale_civico}}"}
-      - {kind: text, label: C.A.P., value: "{{F:business.sede_legale_cap}}"}
-      - {kind: text, label: Cognome, value: "{{F:identity.last_name}}"}
-      - {kind: text, label: Nome, value: "{{F:identity.first_name}}"}
-      - {kind: text, label: codice fiscale, nth: 2, value: "{{F:identity.codice_fiscale}}"}
-      - {kind: text, label: nato a, value: "{{F:identity.birth_comune|upper}}"}
-      - {kind: select, label: provincia, nth: 2, value: "{{F:identity.birth_province}}"}
-      - {kind: date, label: nato il, value: "{{F:identity.date_of_birth|date_it}}"}
-      - {kind: text, label: cell., value: "{{F:identity.phone|phone_it}}"}
-      - {kind: text, label: posta elettronica, value: "{{F:business.pec}}"}
-      # DURC: each box opens its own rows (and renumbers what follows). A firm enrolled with a
-      # Cassa edile ticks it too; its rows come first, so the INPS's and INAIL's "sede di" and
-      # "codice impresa" count after its own.
-      - {kind: checkbox, label: Cassa edile, when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
-      - {kind: text, label: sede di, nth: 1, value: "{{F:business.cassa_edile_sede|upper}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
-      - {kind: text, label: codice impresa, nth: 1, value: "{{F:business.cassa_edile_codice_impresa}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
-      - {kind: text, label: codice cassa, value: "{{F:business.cassa_edile_codice}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
-      - {kind: checkbox, label: INPS}
-      - {kind: text, label: sede di, nth: 1, value: "{{F:business.sede_legale_comune|upper}}", when: "{{F:business.cassa_edile_codice_impresa|empty}}"}
-      - {kind: text, label: sede di, nth: 2, value: "{{F:business.sede_legale_comune|upper}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
-      - {kind: text, label: Matr./Pos. Contr., value: "{{F:business.inps_matricola}}"}
-      - {kind: checkbox, label: INAIL}
-      - {kind: text, label: sede di, nth: 2, value: "{{F:business.inail_codice_sede}}", when: "{{F:business.cassa_edile_codice_impresa|empty}}"}
-      - {kind: text, label: sede di, nth: 3, value: "{{F:business.inail_codice_sede}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
-      - {kind: text, label: codice impresa, nth: 1, value: "{{F:business.inail_codice_ditta}}", when: "{{F:business.cassa_edile_codice_impresa|empty}}"}
-      - {kind: text, label: codice impresa, nth: 2, value: "{{F:business.inail_codice_ditta}}", when: "{{F:business.cassa_edile_codice_impresa|empty|not}}"}
-      - {kind: text, label: pos. assicurativa, value: "{{F:business.inail_pat}}"}
+      # One block per firm, each after the first by its "+" (`f#K`: f1, f2, f3 ...).
+      - kind: each
+        count: "{{ask.imprese_quante}}"
+        when: "{{ask.lavori_in_proprio|not}} {{ask.impresa_dopo|not}}"
+        anchor: Ragione sociale
+        block:
+          - {kind: text, label: Ragione sociale, value: "{{f#K:business.denominazione}}"}
+          - {kind: text, label: codice fiscale / p. IVA, value: "{{f#K:business.partita_iva}}"}
+          - {kind: select, label: Iscritta alla C.C.I.A.A. di, value: "{{f#K:business.cciaa}}"}
+          - {kind: text, label: n., nth: 1, value: "{{f#K:business.rea|rea_num}}"}
+          - {kind: text, label: con sede in, value: "{{f#K:business.sede_legale_comune|upper}}"}
+          - {kind: select, label: provincia, nth: 1, value: "{{f#K:business.sede_legale_provincia}}"}
+          - {kind: text, label: "Via, Piazza", value: "{{f#K:business.sede_legale_indirizzo|upper}}"}
+          - {kind: text, label: N., nth: 2, value: "{{f#K:business.sede_legale_civico}}"}
+          - {kind: text, label: C.A.P., value: "{{f#K:business.sede_legale_cap}}"}
+          - {kind: text, label: Cognome, value: "{{f#K:identity.last_name}}"}
+          - {kind: text, label: Nome, value: "{{f#K:identity.first_name}}"}
+          - {kind: text, label: codice fiscale, nth: 2, value: "{{f#K:identity.codice_fiscale}}"}
+          - {kind: text, label: nato a, value: "{{f#K:identity.birth_comune|upper}}"}
+          - {kind: select, label: provincia, nth: 2, value: "{{f#K:identity.birth_province}}"}
+          - {kind: date, label: nato il, value: "{{f#K:identity.date_of_birth|date_it}}"}
+          - {kind: text, label: cell., value: "{{f#K:identity.phone|phone_it}}"}
+          - {kind: text, label: posta elettronica, value: "{{f#K:business.pec}}"}
+          # DURC: each box opens its own rows (and renumbers what follows). A firm enrolled with a
+          # Cassa edile ticks it too; its rows come first, so the INPS's and INAIL's "sede di" and
+          # "codice impresa" count after its own.
+          - {kind: checkbox, label: Cassa edile, when: "{{f#K:business.cassa_edile_codice_impresa|empty|not}}"}
+          - {kind: text, label: sede di, nth: 1, value: "{{f#K:business.cassa_edile_sede|upper}}", when: "{{f#K:business.cassa_edile_codice_impresa|empty|not}}"}
+          - {kind: text, label: codice impresa, nth: 1, value: "{{f#K:business.cassa_edile_codice_impresa}}", when: "{{f#K:business.cassa_edile_codice_impresa|empty|not}}"}
+          - {kind: text, label: codice cassa, value: "{{f#K:business.cassa_edile_codice}}", when: "{{f#K:business.cassa_edile_codice_impresa|empty|not}}"}
+          - {kind: checkbox, label: INPS}
+          - {kind: text, label: sede di, nth: 1, value: "{{f#K:business.sede_legale_comune|upper}}", when: "{{f#K:business.cassa_edile_codice_impresa|empty}}"}
+          - {kind: text, label: sede di, nth: 2, value: "{{f#K:business.sede_legale_comune|upper}}", when: "{{f#K:business.cassa_edile_codice_impresa|empty|not}}"}
+          - {kind: text, label: Matr./Pos. Contr., value: "{{f#K:business.inps_matricola}}"}
+          - {kind: checkbox, label: INAIL}
+          - {kind: text, label: sede di, nth: 2, value: "{{f#K:business.inail_codice_sede}}", when: "{{f#K:business.cassa_edile_codice_impresa|empty}}"}
+          - {kind: text, label: sede di, nth: 3, value: "{{f#K:business.inail_codice_sede}}", when: "{{f#K:business.cassa_edile_codice_impresa|empty|not}}"}
+          - {kind: text, label: codice impresa, nth: 1, value: "{{f#K:business.inail_codice_ditta}}", when: "{{f#K:business.cassa_edile_codice_impresa|empty}}"}
+          - {kind: text, label: codice impresa, nth: 2, value: "{{f#K:business.inail_codice_ditta}}", when: "{{f#K:business.cassa_edile_codice_impresa|empty|not}}"}
+          - {kind: text, label: pos. assicurativa, value: "{{f#K:business.inail_pat}}"}
 
   # Site safety. A choice is a radio in one pratica and a checkbox in another (`tick`); the
   # check of the firms' documents shows only in some (`if_present`).
@@ -2080,30 +2184,42 @@ sections:
 
   # Landscape pratiche: the tecnico is the designer, the architect who files with the procura or
   # another technician (`p:`), whose name, codice fiscale and studio ("Studio in:", read
-  # 2026-11-02) the other choice opens above the albo's rows. More tecnici ("+") aren't mapped.
+  # 2026-11-02) the other choice opens above the albo's rows. The "+" after the albo's rows adds
+  # another technician's whole block (`p2:`, `p3:` ...: name, codice fiscale, studio, phone, PEC,
+  # albo, read on a draft 2026-11-05, cancelled unsaved). Under "è colui che presenta la pratica"
+  # the same "+" shows only the new block's albo row, its name rows hidden by that choice: another
+  # technician beside the architect presenting can't be named (defects.yaml paesaggio-altri-tecnici).
   - section: dati relativi al nome del tecnico
     leave: [Fax]
+    supports:
+      - {if: "{{ask.progettista_altro|not}}", value: "{{p2:identity.last_name|empty}}", in: ["true"], defect: paesaggio-altri-tecnici, else: "I tecnici del modulo paesaggistico: se l'architetto che presenta la pratica è il suo tecnico, il portale mostra il blocco di un altro tecnico («+») senza nome né codice fiscale, quindi un secondo tecnico non si può indicare. È un difetto del portale: chieda al SUE."}
     fields:
       - {kind: radio, label: è colui che presenta la pratica, when: "{{ask.progettista_altro|not}}"}
       - {kind: text, label: ordine/collegio/albo, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}
       - {kind: text, label: provincia (sigla), value: "{{t:albo.provincia}}", when: "{{ask.progettista_altro|not}}"}
       - {kind: text, label: numero iscrizione, value: "{{t:albo.numero}}", when: "{{ask.progettista_altro|not}}"}
       - {kind: radio, label: non è colui che presenta la pratica, when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: cognome, value: "{{p:identity.last_name|upper}}", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: nome, value: "{{p:identity.first_name|upper}}", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: codice fiscale, value: "{{p:identity.codice_fiscale}}", when: "{{ask.progettista_altro}}"}
-      - {kind: select, label: Stato, value: ITALIA, when: "{{ask.progettista_altro}}"}
-      - {kind: select, label: Provincia, value: "{{p:business.sede_legale_provincia}}", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: Comune italiano, value: "{{p:business.sede_legale_comune|upper}}", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: "Via, viale", value: "{{p:business.sede_legale_indirizzo|upper}}", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: Numero civico, value: "{{p:business.sede_legale_civico}}", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: C.A.P., value: "{{p:business.sede_legale_cap}}", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: Telefono, value: "{{p:identity.phone|phone_it}}", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: Cell., value: "{{p:identity.phone|phone_it}}", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: Posta elettronica, value: "{{p:identity.pec}}", made_up: "the portal looks the PEC up at Salva and keeps it, flagged \"Indirizzo Pec non valido\" unless it is a real one (read 2026-11-02): a made-up address stays flagged", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: ordine/collegio/albo, value: "{{p:albo.ordine}}", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: provincia (sigla), value: "{{p:albo.provincia}}", when: "{{ask.progettista_altro}}"}
-      - {kind: text, label: numero iscrizione, value: "{{p:albo.numero}}", when: "{{ask.progettista_altro}}"}
+      # One block per technician, each after the first by its "+": `p:`, `p2:`, `p3:` ...
+      - kind: each
+        count: "{{ask.progettisti_quanti}}"
+        when: "{{ask.progettista_altro}}"
+        anchor: cognome
+        block:
+          - {kind: text, label: cognome, value: "{{p#N:identity.last_name|upper}}"}
+          - {kind: text, label: nome, value: "{{p#N:identity.first_name|upper}}"}
+          - {kind: text, label: codice fiscale, value: "{{p#N:identity.codice_fiscale}}"}
+          - {kind: select, label: Stato, value: ITALIA}
+          - {kind: select, label: Provincia, value: "{{p#N:business.sede_legale_provincia}}"}
+          - {kind: text, label: Comune italiano, value: "{{p#N:business.sede_legale_comune|upper}}"}
+          - {kind: text, label: "Via, viale", value: "{{p#N:business.sede_legale_indirizzo|upper}}"}
+          - {kind: text, label: Numero civico, value: "{{p#N:business.sede_legale_civico}}"}
+          - {kind: text, label: C.A.P., value: "{{p#N:business.sede_legale_cap}}"}
+          - {kind: text, label: Telefono, value: "{{p#N:identity.phone|phone_it}}"}
+          - {kind: text, label: Cell., value: "{{p#N:identity.phone|phone_it}}"}
+          - {kind: text, label: Posta elettronica, value: "{{p#N:identity.pec}}", made_up: "the portal looks the PEC up at Salva and keeps it, flagged \"Indirizzo Pec non valido\" unless it is a real one (read 2026-11-02): a made-up address stays flagged"}
+          - {kind: text, label: ordine/collegio/albo, value: "{{p#N:albo.ordine}}"}
+          - {kind: text, label: provincia (sigla), value: "{{p#N:albo.provincia}}"}
+          - {kind: text, label: numero iscrizione, value: "{{p#N:albo.numero}}"}
 
   # The accertamento di compatibilità paesaggistica: the works and what they changed, the
   # technician (the architect; more are "+" blocks, not mapped), art. 181 (the dichiarante's
@@ -2140,6 +2256,7 @@ sections:
       - {kind: text, label: (specificare), value: "{{ask.titolo}}", when: "{{ask.titolo|is_proprietario|not}}"}
 
   - section: dichiarazione della legittimita' dell'intervento
+    plus: "one previous title; the parere is refused in Napoli by law (the rules table), so more aren't mapped"
     fields:
       - {kind: radio, label: il lotto è libero, when: "{{ask.esonero_lotto|is_libero}}"}
       - {kind: radio, label: esiste un precedente edilizio, when: "{{ask.esonero_lotto|is_precedente}}"}
@@ -2311,6 +2428,7 @@ sections:
   - section: Contenuti dell'intervento (titolo del richiedente
     aliases: ["dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente"]
     leave: [coordinate geografiche, latitudine, longitudine]
+    plus: "the coordinates' rows, left empty (optional)"
     fields:
       - {kind: radio, label: proprietà, when: "{{ask.titolo|is_proprietario}}"}
       - {kind: radio, label: comproprietà, when: "{{ask.titolo|is_comproprietario}}"}
@@ -2395,14 +2513,28 @@ sections:
       - {kind: text, label: tel, value: "{{c:business.telefono|phone_it}}", when: "{{c:business.denominazione|empty|not}}", optional: true}
 
   # Cambio d'intestazione of a CILA, SCIA or DIA: as the voltura, the title by its kind.
+  # Two "+" (read on a draft 2026-11-05, cancelled unsaved): the one after the titles' last row
+  # adds another title's three boxes, all required, above "presentata da" (whose boxes it
+  # renumbers); the one after the holders' last row another holder's three boxes. Two lists,
+  # titles first, each block found by its own labels.
   - section: dichiarazione relativa agli estremi della CILA / SCIA / DIA e proprietario
     fields:
-      - {kind: select, label: seleziona un titolo, value: "{{ask.titolo_tipo|sigla}}"}
-      - {kind: text, label: prot. n°, value: "{{ask.pdc_protocollo}}"}
-      - {kind: date, label: del, value: "{{ask.pdc_data|date_it}}"}
-      - {kind: text, label: cognome / ragione sociale, value: "{{ask.precedente_cognome}}"}
-      - {kind: text, label: nome, value: "{{ask.precedente_nome}}", optional: true}
-      - {kind: text, label: codice fiscale / P. IVA, value: "{{ask.precedente_cf}}"}
+      - kind: each
+        count: "{{ask.titoli_quanti}}"
+        anchor: seleziona un titolo
+        block:
+          - {kind: select, label: seleziona un titolo, value: "{{ask.titolo#N_tipo|sigla}}"}
+          - {kind: text, label: prot. n°, value: "{{ask.pdc#N_protocollo}}"}
+          - {kind: date, label: del, value: "{{ask.pdc#N_data|date_it}}"}
+      # One block per holder until now, each after the first by its "+" (the first after the
+      # holders' last row: the title's is above them).
+      - kind: each
+        count: "{{ask.precedenti_quanti}}"
+        anchor: cognome / ragione sociale
+        block:
+          - {kind: text, label: cognome / ragione sociale, value: "{{ask.precedente#N_cognome}}"}
+          - {kind: text, label: nome, value: "{{ask.precedente#N_nome}}", optional: true}
+          - {kind: text, label: codice fiscale / P. IVA, value: "{{ask.precedente#N_cf}}"}
   - section: dichiarazione della tipologia di attività svolta
     fields:
       - {kind: text, label: è la seguente, value: "{{ask.attivita_svolta}}"}
@@ -2419,27 +2551,34 @@ sections:
   - section: dichiarazione relativa alla presa visione della CILA / SCIA / DIA
     theirs: [di aver preso visione]
     fields: []
-  # Another holder of title with the new one, the `a:` person: shown by the scelta "ci sono
-  # cointestatari" (the voltura and the cambio intestazione), one person.
+  # The other holders of title with the new one, `a:`, `a2:` ...: shown by the scelta "ci sono
+  # cointestatari" (the voltura and the cambio intestazione), one block each, each after the
+  # first by its "+" (14 boxes, its own two sesso groups; read on a voltura draft 2026-11-05,
+  # cancelled unsaved: the coholders-one defect was wrong).
   - section: Informazioni su eventuali altri aventi titolo
     aliases: [dichiarazione relativa ad eventuali altri aventi titolo]
     fields:
-      - {kind: text, label: cognome, value: "{{a:identity.last_name|upper}}"}
-      - {kind: text, label: nome, value: "{{a:identity.first_name|upper}}"}
-      - {kind: date, label: nato/a il, value: "{{a:identity.date_of_birth|date_it}}"}
-      - {kind: text, label: a, value: "{{a:identity.birth_comune|upper}}"}
-      - {kind: text, label: prov, value: "{{a:identity.birth_province}}"}
-      - {kind: text, label: residente a, value: "{{a:residenza.comune|upper}}"}
-      - {kind: text, label: in via, value: "{{a:residenza.indirizzo|upper}}"}
-      - {kind: text, label: numero civico, value: "{{a:residenza.civico}}"}
-      - {kind: text, label: CAP, value: "{{a:residenza.cap}}"}
-      - {kind: text, label: prov, nth: 2, value: "{{a:residenza.provincia}}"}
-      - {kind: text, label: cittadinanza, value: "{{a:identity.citizenship|upper}}"}
-      # Two radio groups, each required: the section saves only with both ticked (seen
-      # 2026-10-29, as anyone filing by hand must). The codice fiscale says which.
-      - {kind: radio, label: "sesso: M"}
-      - {kind: radio, label: "sesso: F"}
-      - {kind: text, label: codice fiscale, value: "{{a:identity.codice_fiscale}}"}
+      - kind: each
+        count: "{{ask.cointestatari_quanti}}"
+        anchor: cognome
+        block:
+          - {kind: text, label: cognome, value: "{{a#N:identity.last_name|upper}}"}
+          - {kind: text, label: nome, value: "{{a#N:identity.first_name|upper}}"}
+          - {kind: date, label: nato/a il, value: "{{a#N:identity.date_of_birth|date_it}}"}
+          - {kind: text, label: a, value: "{{a#N:identity.birth_comune|upper}}"}
+          - {kind: text, label: prov, value: "{{a#N:identity.birth_province}}"}
+          - {kind: text, label: residente a, value: "{{a#N:residenza.comune|upper}}"}
+          - {kind: text, label: in via, value: "{{a#N:residenza.indirizzo|upper}}"}
+          - {kind: text, label: numero civico, value: "{{a#N:residenza.civico}}"}
+          - {kind: text, label: CAP, value: "{{a#N:residenza.cap}}"}
+          - {kind: text, label: prov, nth: 2, value: "{{a#N:residenza.provincia}}"}
+          - {kind: text, label: cittadinanza, value: "{{a#N:identity.citizenship|upper}}"}
+          # Two radio groups, each required: the section saves only with both ticked (seen
+          # 2026-10-29, as anyone filing by hand must; a new block's are two groups again,
+          # 2026-11-05). The codice fiscale says which.
+          - {kind: radio, label: "sesso: M"}
+          - {kind: radio, label: "sesso: F"}
+          - {kind: text, label: codice fiscale, value: "{{a#N:identity.codice_fiscale}}"}
 
   # A new direttore dei lavori: the studio's architect (`t:`), her studio's address and her albo.
   - section: nomina nuovo direttore dei lavori
@@ -2752,7 +2891,7 @@ sections:
     theirs: [PER PRESA VISIONE]
     leave: ["Per SCIA/SCIA Unica, il titolare dichiara"]
     fields:
-      - {kind: date, label: "Per SCIA/SCIA Unica, il titolare dichiara che i lavori avranno inizio", value: "{{ask.data_inizio_lavori|date_it}}", when: "{{ask.bene_culturale|not}} {{ask.area_protetta|is_nulla_osta|not}} {{ask.idrogeologico|is_autorizzazione|not}} {{ask.idraulico|not}} {{ask.vinca|not}} {{ask.rir|is_in_area|not}} {{ask.rir|is_non_individuata|not}} {{ask.altri_vincoli_eco|is_assenso|not}} {{ask.fasce|is_assenso|not}} {{ask.paesaggio|is_semplificata|not}} {{ask.paesaggio|is_ordinaria|not}} {{ask.barriere_deroga|not}} {{ask.antincendio_deroga|not}} {{ask.vvf_valutazione|not}} {{ask.igienico_conforme}} {{ask.fascia_cimiteriale|is_non_consentito|not}} {{ask.sanatoria_titolo|is_nessuna}}"}
+      - {kind: date, label: "Per SCIA/SCIA Unica, il titolare dichiara che i lavori avranno inizio", value: "{{ask.data_inizio_lavori|date_it}}", when: "{{ask.bene_culturale|not}} {{ask.area_protetta|is_nulla_osta|not}} {{ask.idrogeologico|is_autorizzazione|not}} {{ask.idraulico|not}} {{ask.vinca|not}} {{ask.rir|is_in_area|not}} {{ask.rir|is_non_individuata|not}} {{ask.altri_vincoli_eco|is_assenso|not}} {{ask.fasce|is_assenso|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo|not}} {{ask.paesaggio|is_ordinaria|not}} {{ask.barriere_deroga|not}} {{ask.antincendio_deroga|not}} {{ask.vvf_valutazione|not}} {{ask.igienico_conforme}} {{ask.fascia_cimiteriale|is_non_consentito|not}} {{ask.sanatoria_titolo|is_nessuna}}"}
 
   # One choice: the works (each with whether it changes the use), a variant, or a change of
   # use alone. The labels keep the portal's apostrophes (’ and ' both appear).
@@ -2807,7 +2946,7 @@ sections:
     supports:
       - {if: "{{ask.stato_legittimo|is_titoli}}", value: "{{ask.prec_titolo_unico,ask.prec_permesso,ask.prec_autorizzazione,ask.prec_comunicazione,ask.prec_dia,ask.prec_dia_alternativa,ask.prec_scia,ask.prec_cel,ask.prec_condono,ask.prec_pdc_sanatoria,ask.prec_scia_sanatoria,ask.prec_scia_sanatoria_variante,ask.prec_altro|any}}", in: ["true"], else: "Uno stato legittimo desunto dai titoli dell'edificio richiede almeno un titolo."}
       - {if: "{{ask.stato_legittimo|in_epoca__prova}}", value: "{{ask.prova_catasto,ask.prova_altri|any}}", in: ["true"], else: "Per un edificio senza titolo agli atti servono il catasto di primo impianto o altri documenti."}
-      - {if: "{{ask.stato_legittimo|is_tolleranze}}", value: "{{ask.toll_prec_pratica,ask.toll_prec_atto|any}}", in: ["true"], else: "A stato legittimo from tolerance declarations needs where they were made."}
+      - {if: "{{ask.stato_legittimo|is_tolleranze}}", value: "{{ask.toll_prec_pratica,ask.toll_prec_atto|any}}", in: ["true"], else: "Uno stato legittimo dalle dichiarazioni di tolleranze richiede dove sono state rese: la pratica o l'atto."}
     fields:
       # Only the permesso's e): a new construction on free land (its recipes offer it).
       - {kind: radio, label: che le opere riguardano un intervento di nuova costruzione su area libera, if_present: true, when: "{{ask.stato_legittimo|is_area_libera}}"}
@@ -3350,6 +3489,9 @@ sections:
   # as a bene culturale (parte II: the Soprintendenza), a protected natural area (L. 394/1991).
   # A landscape authorization is its own operation on Napoli's SUE, selected with the SCIA in
   # the wizard (rehearsals/scia-paesaggistica-*): here the asseverazione names its procedure.
+  # An authorization the works already have, extended or renewed with the title (paesaggio
+  # proroga or rinnovo), is stated as the semplificata, as the combinations were filled on the
+  # portal (2026-11-04); the renewal is the semplificata's own procedure (art. 7 D.P.R. 31/2017).
   # The two "Si allega ... parere/nulla
   # osta" boxes are the Soprintendenza's (first) and the park's (second).
   - section: Asseverazione SCIA - Tutela Storico Ambientale
@@ -3357,12 +3499,12 @@ sections:
     fields:
       - {kind: radio, label: NON ricade in zona sottoposta a tutela, when: "{{ask.paesaggio|is_no}}"}
       - {kind: radio, label: "ricade in zona tutelata, ma le opere non comportano alterazione", when: "{{ask.paesaggio|is_senza_autorizzazione}}"}
-      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
-      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}"}
+      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}"}
       # What each box adds on Allega documenti, read on the combinations' filled drafts 2026-11-01:
       # the semplificata's a required slot taking a plain PDF (parts/paesaggistica-semplificata.yaml), the
       # ordinaria's the second relazione slot, the parere vincolante's a signed-only slot (the person's).
-      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_semplificata}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
       - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
       - {kind: radio, label: è assoggettato al procedimento ordinario, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}"}
       - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio|is_ordinaria}}", slot: "Relazione paesaggistica e documentazione per il rilascio"}
@@ -3642,6 +3784,7 @@ sections:
   # opens its own "con prot." and "in data", in that order, after the bonifica's "in data".
   - section: Asseverazione PdC - qualità terreni
     aliases: ["Asseverazione SCIA Alternativa - Qualità terreni"]
+    plus: "an upload box's own \"+\" (a document in several files): one file is attached"
     # The permesso's "non interessa aree percorse dal fuoco" is one choice with the soil
     # investigations' radios on the portal (ticking it unticks them, read 2026-11-01): left, a
     # defect (defects.yaml pdc-aree-fuoco).
@@ -4161,10 +4304,10 @@ sections:
       - {kind: radio, label: NON ricade in zona sottoposta a tutela, when: "{{ask.paesaggio|is_no}}"}
       - {kind: radio, label: "ricade in zona tutelata, ma le opere non comportano alterazione", when: "{{ask.paesaggio|is_senza_autorizzazione}}"}
       - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.paesaggio_accertamento}} {{ask.paesaggio|in_semplificata__ordinaria}}"}
-      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_semplificata}}"}
-      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_semplificata}}"}
+      - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}"}
+      - {kind: radio, label: è assoggettato al procedimento semplificato, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}"}
       # What each box adds on Allega documenti: as the SCIA's (read on the permesso's filled drafts 2026-11-01).
-      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_semplificata}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
+      - {kind: checkbox, label: Si allega la relazione paesaggistica semplificata, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|in_semplificata__proroga__rinnovo}}", slot: "Relazione paesaggistica semplificata e documentazione necessaria"}
       - {kind: radio, label: ricade in zona tutelata e le opere comportano alterazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_ordinaria}}"}
       - {kind: radio, label: è assoggettato al procedimento ordinario, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_ordinaria}}"}
       - {kind: checkbox, label: Si allega la relazione paesaggistica e la documentazione, when: "{{ask.sanatoria_paesaggio|not}} {{ask.paesaggio_accertamento|not}} {{ask.paesaggio|is_ordinaria}}", slot: "Relazione paesaggistica e documentazione per il rilascio"}

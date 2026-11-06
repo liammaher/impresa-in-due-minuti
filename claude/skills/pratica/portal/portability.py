@@ -15,7 +15,7 @@ Two layers, each counted from what the repository already holds:
                          forms' yes/no leaves (their xsd:choice list doesn't hold them) and the
                          portal's own boxes. "o della corrispondente normativa regionale" is the
                          national forms' own wording, not a Campania box.
-  the rules table        each rule of rules/sue-napoli.yaml by the sources it cites, each source
+  the rules tables       each rule of the SUE tables (rules/sue-napoli*.yaml) by the sources it cites, each source
                          placed by the host of its URL in the library (PRATICHE_NAPOLI_DIR):
                          Normattiva is national, the Regione Campania's sites Campania's, the
                          Comune's and the Soprintendenza for Napoli Napoli's, impresainungiorno
@@ -52,7 +52,12 @@ import gen  # noqa: E402
 
 OUT = HERE.parents[3] / "docs" / "portability.md"
 MATCH = HERE / "schema" / "sue-choice-match.json"
-RULES = HERE / "rules" / "sue-napoli.yaml"
+# New works, and the filings on a title held (2026-11-04).
+RULES = [HERE / "rules" / "sue-napoli.yaml", HERE / "rules" / "sue-napoli-adempimenti.yaml"]
+
+
+def table_rules():
+    return [r for path in RULES for r in yaml.safe_load(path.read_text())["rules"]]
 
 # A Campania law by its number (l.r. n. 15/2000, L.R.19/09, legge regionale n. 13), the regional
 # seismic regulation, or the region or city by name.
@@ -107,9 +112,8 @@ def host_level(url):
 
 def sources(lib):
     """{(procedure, source id): level} for every source the table cites, from the library."""
-    table = yaml.safe_load(RULES.read_text())
     out = {}
-    for r in table["rules"]:
+    for r in table_rules():
         for c in r.get("cites") or []:
             key = (c["procedure"], c["source"])
             if key in out:
@@ -125,7 +129,7 @@ def sources(lib):
 def rules(lib):
     levels = sources(lib)
     out = []
-    for r in yaml.safe_load(RULES.read_text())["rules"]:
+    for r in table_rules():
         # A source is its procedure's: one id under two procedures may be two documents.
         cites = sorted({(c["procedure"], c["source"]) for c in r.get("cites") or []})
         cited = {levels[k] for k in cites}
@@ -175,14 +179,14 @@ def render(cs, rs, levels):
         seen.add(key)
         lines.append(f"- {c['section'].strip()}: {c['choice'].strip()}")
     lines.append("")
-    lines += ["## The rules table", ""]
+    lines += ["## The rules tables", ""]
     if rs is None:
         lines += ["Not counted: PRATICHE_NAPOLI_DIR is unset (the sources' URLs are in the library).", ""]
         return "\n".join(lines)
     rc = collections.Counter(r["level"] for r in rs)
     portal = sum(r["portal"] for r in rs if r["level"] == "national")
     lines += [
-        f"**{len(rs)} rules** in `rules/sue-napoli.yaml`, each by the sources it cites, placed by where "
+        f"**{len(rs)} rules** in `rules/sue-napoli.yaml` and `rules/sue-napoli-adempimenti.yaml`, each by the sources it cites, placed by where "
         "the library has them published.", "",
         "| Level | Rules | Share | What it rests on |", "|---|---:|---:|---|",
         f"| national | {rc['national']} | {pct(rc['national'], len(rs))} | national law only ({portal} also cite the portal, for which operation to pick) |",

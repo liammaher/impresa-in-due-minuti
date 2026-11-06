@@ -2,7 +2,8 @@
 
 How a pratica on impresainungiorno (the SUAP and SUE front office) goes from crawled to
 filled, as the 23 SUE recipes did. The crawl itself is in `catalogue/README.md`; the
-person-facing flow (pre-flight questions, the review page) is in the pratica skill.
+person-facing flow (pre-flight questions, the review page) is in the pratica skill. How far the
+SUE's five most common cases fill, and why each part that doesn't is refused: `docs/sue-common-cases.md`.
 
 ## Adding a pratica
 
@@ -21,7 +22,19 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    Where a choice puts its boxes (which block comes first) is the page's layout, not a value: any
    saved draft of the pratica shows it, ticked there and left without Salva (the designer's block
    above the director's, read on three rehearsals' drafts 2026-11-02). A section of a draft reads
-   with `__crawl.sectionOf(draft, section)`.
+   with `__crawl.sectionOf(draft, section)`; what its "+" adds with `__crawl.plusOf(draft, section,
+   {choice, nth})` (the choice ticked first, the nth "+" pressed, default the last; each row's boxes
+   after it, new and required ones marked; Annulla, nothing saved). A `new` box can be one the
+   portal draws only on the next request: on a freshly opened landscape tecnico, "non è colui" leaves
+   the first technician's studio Provincia and C.A.P. undrawn until the "+" (2026-11-05).
+   So is every box below a row the "+" adds, which it renumbers: the cambio's title "+" read 6 new,
+   3 of them the holders under "presentata da" (2026-11-05). The crawl's `plus` saw those 6 under
+   the holders' label, though the "+" it counts adds a title: where a section has two (`of` 2, or a
+   crawl without `of`), read each on a draft by `nth` before mapping either.
+   To try a crawl.js change in the pane without another file pick: apply the same small edit to
+   the pane's stored copy (`localStorage` `pv-crawl`), check its sha256 against `catalogue.py pane`'s
+   `load.js`, store it and eval it. Each eval starts its own portal frame and leaves the earlier
+   ones over the page: remove every `iframe` first, or a script reads an older frame's state.
 2. **The recipe** (`rehearsals/<name>/recipe.yaml`): procedure, title, comune, sportello,
    crawl, operation (or a list of them), scelte, `first`, `asks`, `yours` (what's left to the
    person: declarations, attachments, payment, signing), `supports` (the cases refused, with
@@ -98,7 +111,10 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    otherwise. `bench/plan_diff.py` says what the change does to each case (its fill plan
    before and after). A new question the existing cases reach makes their pre-flight propose
    or ask it: answer it in each as the case did before, and plan_diff shows them unchanged, so
-   their recorded runs still stand. Add the keys as text: rewriting a file with `json.dump` reflows
+   their recorded runs still stand. A new list's count with only a `propose` (`titoli_quanti`,
+   2026-11-05) makes every existing case ask the second block's own boxes, not just the count,
+   since a block waits for its count: give them the count (`bench/add_answer.py`).
+   Add the keys as text: rewriting a file with `json.dump` reflows
    its inline lists, and the diff of 84 files buries the answers (2026-11-01). `bench/add_answer.py KEY
    VALUE` does it for every rehearsal whose steps ask KEY, puts it in a part's `answers` where a
    combination's main pratica doesn't ask KEY (the CIL with its landscape authorization: regenerated
@@ -130,6 +146,36 @@ recipe is routed once its steps file is generated; two steps files for one combi
 `bench/test_route.py` walks every case the table decides: each must reach the steps file for its
 combination, read the same way there, or be refused with the reason. It prints the combinations
 no steps file files yet ("to map"), most cases first: the SUE's mapping still to do.
+
+The SUE has two tables (2026-11-04): `sue-napoli` for new works (the title, and what goes with it:
+the landscape authorization asked, extended or renewed, the terre e rocce) and `sue-napoli-adempimenti`
+for what is filed on a title held (start and end of works, agibilità, proroghe, voltura, direttore dei
+lavori, impresa, DAU). A steps file reads one table, so the landscape proroga and rinnovo filed alone are
+`sue-napoli`'s (works with no title); filed with a title's extension they are the adempimenti's. A
+combination's `rules.facts` replace its parents' whole (`rules` merges by key), so a combination of two
+rehearsed pratiche restates its main pratica's facts. A title's landscape quadro states `proroga` and
+`rinnovo` as the semplificata (the dictionary), as the combinations were filled on the portal.
+
+## Operations filed together: `catalogue/F839/sue-pairs.yaml`
+
+Which of the wizard's pairs a case files in one pratica, and why, is `sue-pairs.yaml` (catalogue/README.md);
+`bench/test_pairs.py` lists any filed together with no steps file. A combination of two pratiche each
+rehearsed alone (a proroga with the landscape proroga) `extends` both: the first is the main pratica, and
+gen.py's `combo_answers` fills from the other's answers what the main's don't say (its own section's), the
+people of both kept. Its `scelte` are only those the combination's crawled wizard offers (gen.py refuses
+another: filed with a title, the landscape proroga's third-party assent isn't there, 2026-11-04). A recipe
+built on a combination's recipe states `first` and `after` itself: copied as null from a recipe that inherits
+them they drop the payment and attachments screens (twenty did, 2026-11-04; `test_gen.py` checks every
+SUE steps file opens with the Scheda anagrafica and has its payment and attachments screens). Its `yours`
+takes the main pratica's payment lines (diritti, bollo): another's "no bollo on this form" contradicts a main
+pratica that has a bollo section. Its `diritti_euro` is the main pratica's too, copied where the other part's
+would win the merge (a null where the main has none): the Comune's table (G.C. 239/2026) charges a landscape
+authorization only "quando oggetto di autonoma istanza" and has no line for the terre e rocce or the DAU
+(`test_preflight.py` checks every combination). The diritti's facts no box holds (the contributo's amount
+for SUE 7-9, a car park's area for SUE 4-6) are asks with their own `when`, read only by the diritti's
+`propose`: pre-flight asks them where that `when` holds and the diritti aren't answered. Every combination has a rules table since 2026-11-04; `rules:` with `main`
+and `handles` and no `table` is still accepted, for a combination mapped before its table (pre-flight then
+decides nothing and the person names the pratica).
 
 ## Every choice: `branches.py`
 
@@ -209,7 +255,9 @@ that also cites a Comune page may only confirm a national one there.
   conoscenza d…"): open and check by the whole name. The Scheda anagrafica's link reloads the
   whole page: the runner waits until the section is the open one before reading it.
 - **Scelte.** Some sections exist only with a scelta ("ci sono cointestatari"): list every
-  scelta the case needs; gen.py ticks them all.
+  scelta the case needs; gen.py ticks them all. A section a scelta drops for a case takes its asks
+  with it (run.py `chosen`): the co-holders' count, with no co-holders (2026-11-05: pre-flight
+  stopped on "no field reads asks.cointestatari_quanti").
 - **Values the portal checks.** Codici fiscali and partite IVA by their check digit (the P6
   fixture's pass), the draft's name at most 60 characters, a P.G. box may take 10. The landscape
   pratiche's other technician's PEC is looked up at Salva: kept, but "Indirizzo Pec non valido" under
@@ -260,8 +308,76 @@ that also cites a Comune page may only confirm a national one there.
   (`comunicazione_3`). gen.py writes the blocks on the page and one template (`block: "#N"` after an
   `add` with `each`); run.py's `expand` makes as many as the count says, and the pane keeps each
   count's steps apart (`procedure#hash`). Each "+" is the first after its list's last row (two in
-  one section, 2026-11-01), and the boxes after it go by label. "Alle dipendenze di" opens more
+  one section, 2026-11-01), and the boxes after it go by label; an `add` with `nth` presses a
+  later one (a list of lists: Dati catastali's group "+", below). The `each` may take `anchor`,
+  `add_when` (the "+" only where it holds, per block) and `free` block fields (found in the whole
+  section, not in the block); `#P` is the block before's `#N`. A field key inpage.js reads must
+  also be in the keys run.py sends the page (`page_bundle`'s list): `last` wasn't at first, and
+  the run ticked the first group's radio. A filter a steps file names stays in run.py once
+  renamed (`one_catasto`): plan_diff and a patch run main's steps through this run.py, and an
+  unknown filter reads as a missing value, never an error (test_gen checks every name, main's too). "Alle dipendenze di" opens more
   than the crawl saw: the firm's REA, seat and legale rappresentante (read 2026-10-31).
+- **Dati catastali is a list of lists** (read on a CILA draft 2026-11-04, cancelled unsaved): the
+  NCEU/NCT radios once, then the units, each foglio, particella/mappale, subalterno and the rest
+  under the same labels; the first "+" after a unit's boxes adds one more (with a "-" beside it),
+  and the "+" below that adds another group with its own radios. The units are the client's
+  `immobile`, `immobile2` ... (`unita_catastali`: unasked while the vault holds no `immobile2`,
+  else proposed from how many it holds), each with its own catasto (`catasto_terreni#N`, from its
+  categoria, asked when it has none). Units count across groups (unit n is the n-th "foglio"), so
+  one list of blocks fills both groups: within a catasto the unit's "+" (`add_when` on the
+  `each`), and where the catasto changes the group's "+" (a block field `kind: add`, `nth: 2`:
+  the second "+" after the last unit) and that group's radio (`free`, found in the whole section,
+  `last`: it sits above the group's first unit). The radios' long names ("Nuovo Catasto
+  Terreni") are only their titles: once the portal has checked the section (any "+" does) every
+  radio, the first group's too, is titled "Il valore è obbligatorio" and reads NCEU or NCT, so
+  the new group's is the page's last "NCT" (by its long name, none found: the first run stopped
+  there, 2026-11-04). The first group's keeps its crawl id, which the run trusts when its label
+  has gone (`loose` in the report). Filled on the portal 2026-11-04: a flat and its garden plot. `#P` in a block is the
+  block before's `#N`. After the second group's last unit come the same three buttons (unit "+",
+  group "+", "-"), so a third group back to the first catasto is the group's "+" again (read on a
+  draft 2026-11-05): units in any order of catasti. The first run with three groups stopped after
+  Salva on "not kept NCT: empty" though the draft saved NCEU, NCT, NCEU and all four units: the
+  read-back found the `last` NCT again as the page's newest, by then the third group's. A `last` box
+  is now pinned where it was filled (inpage.js `at`; a resumed run's `kept` carries it). On the fake
+  portal the same case also ticked the third group's NCT for its NCEU, a radio's texts including the
+  cell to its left: `last` now prefers boxes whose own cell starts with the label (the portal's own
+  radios weren't misread that way). A vault read must name each copy (`*:immobile2.*`: a scope
+  matches a category whole).
+  The crawl's own "plus" pressed the last "+", the group's, which is why its `adds` looked odd
+  (crawl.js now notes how many "+" it saw, `of`). By label "subalterno" the first run typed the
+  subalterno into the particella box and left its own empty: the runner reads a box's first three
+  distinct texts, and the particella's title said twice (its own, the header above) lets the next
+  column's "subalterno" in, as near as the subalterno's own (whose title is "se non presente
+  indicare il numero 0"). The dictionary field's `title` is the text the run finds a block's box by,
+  its `label` still the crawl's (gen.py accounts for the box by it). The stop read "not kept:
+  particella/mappale different, subalterno different": two neighbouring boxes "different" after
+  Salva means one label found its neighbour; open the draft and read the boxes' values. The fake
+  portal's `?catasto=1` (test_inpage) keeps both: by title it fills, by label it doesn't; and a
+  flat then two plots: the group's "+", its own radio, then the second group's own unit "+".
+- **Holders and co-holders repeat too** (read on drafts 2026-11-05, pressed and cancelled with Annulla):
+  the titles' "Titolarità dell'intervento" (one section for the CIL, CILA, SCIA, SCIA alternativa,
+  permesso and agibilità) adds another holder's whole row by the "+" after the last one (27 boxes,
+  the company tick and its three boxes too), and the voltura's and cambio d'intestazione's "Informazioni
+  su eventuali altri aventi titolo" another co-holder's 14 boxes, with its own two required sesso
+  groups. Each is an `each` (`altri_titolari`, `cointestatari_quanti`: unasked while the job names no
+  `r2:` or `a2:`), the people `r:`, `r2:` ... (`o#N:` a company holder) and `a:`, `a2:` .... The
+  coholders-one defect (no "+", from the 2026-10-28 crawl) was wrong and is withdrawn: the 2026-10-31
+  crawl had recorded the "+" (`plus`), unread. A missing "+" is read on a draft before it's a defect.
+  Two cases of one pratica with other counts take other steps: page_bundle keys each by its blocks
+  (`procedure#hash`) also for steps rerun.py has expanded already; until 2026-11-05 those shared one key
+  and the second case of a batch ran on the first's steps.
+- **So do firms, previous holders and landscape technicians** (read on drafts 2026-11-05, cancelled
+  with Annulla). Every "+" a crawl saw is an `each` or a `plus:` reason (test_gen). The building firms
+  (Impresa esecutrice, the CIL's f, the CILA's and permesso's h, the SCIA's i) are `f1:`, `f2:`,
+  `f3:` ... (`f#K`, `imprese_quante`): the fixed two-firm `firms:` mechanism is gone from gen.py. The
+  cambio d'intestazione's "estremi della CILA / SCIA / DIA" has two "+": the title's (one title is
+  mapped) and, below "presentata da", the previous holders', each three boxes under their own labels
+  (`precedente#N_cognome`, `_nome`, `_cf`; `precedenti_quanti`, proposed 1). The landscape form's "dati
+  relativi al nome del tecnico" adds a whole technician (name, codice fiscale, studio, phone, PEC, albo)
+  under "non è colui che presenta la pratica" (`p:`, `p2:` ...; `progettisti_quanti`); under "è colui"
+  the same "+" shows only an unnamed albo row, so a second technician there is refused
+  (defects.yaml `paesaggio-altri-tecnici`). An existing case that names `f2:` answers
+  `imprese_quante: 2`, so its plan and recorded runs stand.
 - **A choice's revealed boxes may repeat labels above them** (an employer's "Via, Piazza", "N.",
   "Cognome"): crawl.js counts reveals per label since 2026-10-31; crawls before then left those
   out, so a run can still find required boxes there (recrawl a section to see them).
@@ -575,6 +691,12 @@ are the SCIA's sanatoria rows the permesso's stato legittimo inherits by `same_a
 show (catalogue/README.md, Limits: a crawl of that section on a permesso draft would drop them),
 three the SCIA's whole-building change of use (it goes to the SCIA alternativa), one the agibilità
 director's sex (the made-up architect's own).
+A fixture person with a second property (`immobile2`) makes every case naming them ask how many
+cadastral units the pratica has: give such a property to a new person (2026-11-04: `gemma`, two
+flats being merged), never to one the existing cases use. The fixture is plain text, a blank line
+between people: append to it as text, never by loading and dumping the JSON (that rewrote 4,000
+lines once). A list of several units' values joined by "/" breaks on a categoria (A/2): run.py's
+`_categorie` reads them whole.
 
 ## Checking them all: `bench/rerun.py`
 
@@ -590,7 +712,14 @@ Hide the pane (Cmd+Shift+B) rather than close it: closing it ends the SPID sessi
 loaded bundle, so the person signs in and picks the file again (2026-11-01, twice).
 In the pane, on the portal's origin and logged in: `check.js` (it names which of `runner.js`
 and `steps/<name>.js` the pane lacks: send only those), the `queue-N.js` files, `loop.js`,
-then `results.js` until `done` equals `of`. A stopped one: rerun it alone, unchanged, before
+then `results.js` until `done` equals `of`. Where a steps file differs from main's in a few
+sections, check.js names `steps/<name>.patch.js` (run.py `patch_script`): only those sections, a
+few KB in place of 40-90, the rest taken from the pane's copy when it is main's; it stores the
+result only if its sha256 is the new file's, else it says to send the full `steps/<name>.js`
+(2026-11-04: the CILA's and the permesso's Dati catastali went this way, by hand, the first time).
+The patch is main's steps run through this run.py, so none is written when they no longer plan
+here (a filter they name was renamed, a case they refused): then the whole file, or the bundle.
+A stopped one: rerun it alone, unchanged, before
 calling it a bug (the portal is sometimes slow); twice the same is a bug. 2026-10-29: 20 of
 23 on the first pass, 23 of 23 once the runner waited for each section to open.
 
@@ -611,10 +740,18 @@ shows and otherwise answer at once, so while it's hidden, wait between polls out
 (the pane's `wait` actions in one batch, then `results.js`).
 The pane's profile, and so the SPID session, is the same for every session of the app: before a
 batch, check that no other chat is running the portal (2026-11-03: one was, with its own batches).
-Check the sign-in too: an old page keeps showing Pratiche in bozza after the session has ended, and a
+Check the sign-in too, and that the pane shows: a hidden pane on InfoCamere's sign-in page is one the person
+can't see to sign in on (2026-11-05: the pane's `tabs_context` says hidden; ask them to show it). An old page
+keeps showing Pratiche in bozza after the session has ended, and a
 fresh load of `/fnsuap/cmd/home` lands on InfoCamere's "Apache Syncope Login" (`iasu.infocamere.it`)
 when it has (2026-11-03, after about three hours; a `fetch` of it from the page fails outright). The
-person signs in again; nothing else is needed. A closed pane reopens on that sign-in page, but the
+person signs in again; nothing else is needed. When InfoCamere's sign-in itself is down, every route
+answers "Application Not Authorized to Use CAS" (the SUE's client `ic.suap.old` and impresainungiorno's `ic.impg`
+alike), then "503 Service Unavailable" (2026-11-04 evening, back the next morning): wait, nothing on this side
+fixes it. Never open `iasu.infocamere.it/syncope-wa/login` directly: without the `service` a portal sends, its script
+fails and the providers never show (a blank SPID tab); start from `/fnsuap/cmd/home`. A new session of the app closes
+the pane and may clear the scratch folder: the bundle in Downloads stays, `rerun.py --bundle` with the same names
+writes its `pick.js` again, and the `runs.json` already recorded stay. A closed pane reopens on that sign-in page, but the
 runner and steps stay in the portal's storage: read it only once the page is back on
 `suap.impresainungiorno.gov.it` (2026-11-04: read on the sign-in's origin, it looked empty). Times to plan by (2026-11-03): a CIL or CILA 1½-2 min, a
 SCIA 3-4, a SCIA alternativa or permesso 3-8 (one tolerance case 10); 27 runs took 2 h 10 min.
@@ -647,7 +784,13 @@ and results, no values) into `rerun.py --record -`: each run goes in its rehears
 table: schema_branches.py counts a box as filled on the portal only from there. Stopped runs are recorded too. Record a batch
 before bundling the next (a bundle clears the tab's results), and leave `--date` out for a batch
 run today: it defaults to today (a guessed date filed a batch under the day before, 2026-11-02).
-The batch clears the runner's review from the page when it ends.
+The batch clears the runner's review from the page when it ends. A run "unreached" is retried by nobody: bundle the
+batch's unreached names (results.js lists them) once it ends. "The page didn't load" on the big SCIA and SCIA
+alternativa combinations was the portal composing the pratica past act()'s 60 s ("Composizione della pratica",
+2026-11-05). The runner and the crawler now wait on what the portal shows, not on a clock from the click
+(inpage.js and crawl.js `until`): they keep waiting while a request is in flight, a page loads or the portal's own
+"Attendere prego" / "Composizione della pratica" box shows, and give up only after 20 s (the crawler 15 s) with
+none of those and the section still not open, or after a ceiling of minutes (the wizard five, `WIZARD_MS`).
 
 ## Crawling: `catalogue.py pane --bundle`
 
@@ -688,14 +831,23 @@ adds (`sue-combo-scia-sanatoria-paesaggistica-*`, 2026-10-31). The slots it read
 checkboxes, so a Si/No's own slots come from the main pratica's recipe.
 Once a batch is done and the tab still has wizard.js and crawl.js, a small second one starts from
 the page without a bundle: `crawl:batch` set to its ops, then `__crawl.batch(opts)`, the known
-fingerprints kept (2026-10-31: the two SCIA in sanatoria combinations). Save the first batch's
+fingerprints kept (2026-10-31: the two SCIA in sanatoria combinations). In a new tab or session,
+`start.js` (written with every bundle, a few KB) does the same: it checks the pane's stored
+`pv-wizard` and `pv-crawl` against the repo's by sha256, removes older frames, and starts the batch
+from them, so no file is picked; it says "stale" when a crawler change hasn't reached the pane, and
+then pick.js's box is the way (2026-11-05: the SCIA in sanatoria with the landscape proroga and rinnovo,
+crawled with no pick in 100 and 130 s, their sections all known). Save the first batch's
 results before, or name all of them in export.js: it reads the ops of `crawl:batch`.
 A batch whose sections were all seen before is small: `print.js` prints it with its sha256, and
 `catalogue.py import -` refuses a copy that arrived changed (no download to ask for), trailing
 newlines aside. Over 40 KB print.js packs it (`strings-v1`: each string once, used by index), which
 import unpacks; past what that saves (ten three-operation crawls, 64 KB packed, 2026-11-03) it's
 export.js and the person's yes to a download. Copy a print one combination at a time
-(`{"crawl:op:<name>": ...}` with its own sha256) rather than by hand-split halves. The declarations
+(`window.pvPrintNames = ["<name>"]` before print.js, its own sha256) rather than by hand-split halves.
+The pane's JavaScript tool returns the print as one JSON string, quotes and `\"` escapes in: save it as it
+came and `import -` decodes it (2026-11-05: unescaped by hand once, a risk the sha256 only catches after).
+`import` needs `CATALOGUE_PRIVATE`, a pattern for the portal login's name and codice fiscale, set in the
+shell for that command only (never written to the repo): it refuses a crawl that holds them. The declarations
 come back `skipped` (the person's, never crawled), not as new sections: a first look at a batch that
 counts them as new misreads it. A section's `same_as` can name an op that only ever lived in the pane
 (a deeper recrawl, `d4-scia-alt`): import names the repo crawl that holds its fingerprint instead.

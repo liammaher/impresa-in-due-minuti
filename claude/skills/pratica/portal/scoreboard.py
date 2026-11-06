@@ -14,6 +14,7 @@ Run it with the pratica venv's Python (it imports gen.py, which needs PyYAML).
 """
 import argparse
 import datetime
+import collections
 import re
 import sys
 from pathlib import Path
@@ -213,7 +214,7 @@ OPEN_BEYOND = [
     "a radio pair; art. 36 is filled). A SCIA in sanatoria in a protected area is mapped two ways: works done "
     "through the art. 36-bis c. 4 compatibility, works under way (art. 37 c. 5) with the authorization for the "
     "landscape works still to come; partly done landscape works under way are refused (art. 146 c. 4). "
-    "The combinations of pratiche still to map are counted above, from the rules table.",
+    "The combinations of pratiche still to map are counted above, from the rules tables.",
     "SCIA in sanatoria, case 3 (art. 36-bis c. 1, Salva Casa): refused, because the portal saves its dating, "
     "oblazione and works proposal as one field with four values (checked 2026-11-01): a portal defect "
     "(docs/portal-defects.md), as is the permesso's under art. 36-bis. So is a variant to a pre-1977 title "
@@ -228,10 +229,15 @@ OPEN_BEYOND = [
     "stay: the rules table refuses the parere in Napoli by law, so there is nothing to file them on.",
     "Attachments: where a slot depends on an answer, only the cases a rehearsal took are read, so other slots "
     "may be missing (the catalogue notes this for the pratiche read on an empty draft). The \"Elaborati richiesti "
-    "per la sanatoria\" slot is mapped by the title a filled draft showed, never crawled. The diritti come from the Comune's 2026 "
-    "table (G.C. 239/2026), by the case's facts; it can't say an onerous SCIA's, an onerous permesso's or SCIA "
-    "alternativa's bracket (no ask holds the contributo's amount), a car park's (its floor area), works under "
-    "way in sanatoria (art. 37 c. 5), the art. 10-septies proroghe or a landscape renewal: those are asked.",
+    "per la sanatoria\" slot is mapped by the title a filled draft showed, never crawled.",
+    "The diritti come from the Comune's 2026 table (G.C. 239/2026), by the case's facts: an onerous permesso's or "
+    "SCIA alternativa's bracket from the contributo's amount (SUE 7-9), a car park's from its floor area (SUE 4-6), "
+    "and a combination pays its main pratica's line alone (a landscape authorization has its own only \"quando "
+    "oggetto di autonoma istanza\"; terre e rocce and the DAU have none). Asked, because the table can't tell (each "
+    "a pitfall in the library, to confirm with the SUE): a contributo the SUE works out, one of exactly 5,000 € "
+    "(in SUE 7 and SUE 8), a car park over 300 and under 301 m² or over 1,000 and up to 1,001 m² (in no row), an "
+    "onerous SCIA (SUE 7-9 name only the permesso and the SCIA alternativa), works under way in sanatoria "
+    "(art. 37 c. 5), the art. 10-septies proroghe, a landscape renewal or extension.",
     "Signed files: the portal checks every digital signature on upload and refuses a made-up one (2026-11-03), "
     "so the slots that take only signed files can't be filled with made-up data: on the portal only the "
     "refusal is proven; a real signed file, never yet. The second run after the declarations ran on the portal "
@@ -257,7 +263,45 @@ OPEN_BEYOND = [
     "in Pratiche inviate. InfoCamere's manual describes them (MyPage, \"Nuova Comunicazione\": portal/README.md), "
     "but only a sent pratica shows them, and made-up data sends none.",
     "No real case has been checked by an architect who files these pratiche (level 5).",
+    # The audit of 2026-11-04 (what it found that no count above shows).
+    "Which pratica a case needs: two rules tables route it (2026-11-04). sue-napoli takes new works (the title, "
+    "the landscape authorization filed with it or extended or renewed with it, the terre e rocce); "
+    "sue-napoli-adempimenti what is filed on a title held (inizio and fine lavori, agibilità, proroghe, "
+    "voltura, a new direttore dei lavori or firm, the DAU). The person says which of the two: new works, or "
+    "a title already held.",
+    "Operations in one pratica: catalogue/F839/sue-pairs.yaml says, for each pair the wizard takes, whether a "
+    "case files them together and why (counted above). Its `reading` reasons (two filings due at one moment: "
+    "a title or its extension with what keeps the landscape authorization in force, the end of works with the "
+    "DAU) are for an architect to confirm: the rules tables route these combinations on them, each such rule "
+    "marked `Lettura` in the library's table.",
+    "Repeated rows (2026-11-05): Dati catastali takes any number of units in as many groups as the catasto "
+    "changes (a third group back to the first catasto read on a draft and filled); the title's other holders "
+    "and the voltura's and cambio d'intestazione's co-holders one block each by the section's \"+\" (the "
+    "coholders-one defect was withdrawn: the section has a \"+\"); the cambio d'intestazione's titles one "
+    "row each by the title's \"+\". Filled on the portal: four catasto groups, four other holders, two "
+    "titles, three previous holders and three co-holders on the cambio (2026-11-05). Not tried: more than "
+    "that; every list is one `each`, so a fifth is the fourth's steps again.",
+    "Napoli's SUE wants every file PDF/A and signed (DD 501/2026), so on a real case every slot takes a signed "
+    "file, and no real signed file has been uploaded yet: the attachments of a real pratica rest on that. "
+    "InfoCamere's \"Copia pratica\" (a new pratica from one sent before) is read in its manual, never used.",
 ]
+
+
+def pairs_line(reh):
+    """The wizard's pairs and triples (catalogue/F839/sue-pairs.yaml) a case files together: how
+    many have a steps file, how many of those ran on the portal; the rest, decided apart."""
+    p = yaml.safe_load((HERE / "catalogue/F839/sue-pairs.yaml").read_text())
+    entries = p["pairs"] + p["triples"]
+    verdict = lambda e: p["reasons"][e["reason"]]["verdict"]
+    together = [e for e in entries if verdict(e) == "together"]
+    mapped = [e for e in together if e["rehearsals"]]
+    ran = [e for e in mapped if any(reh.get(n, {}).get("run") for n in e["rehearsals"])]
+    other = collections.Counter(verdict(e) for e in entries if verdict(e) != "together")
+    return (f"- Operations in one pratica: of the {len(p['pairs'])} pairs the wizard takes and {len(p['triples'])} "
+            f"triples a case needs, **{len(together)} are filed together**: {len(mapped)} with a steps file, "
+            f"{len(ran)} of those run on the portal, **{len(together) - len(mapped)} still to map** "
+            f"(`bench/test_pairs.py` lists them). The others are decided: "
+            + ", ".join(f"{n} {k.replace('_', ' ')}" for k, n in sorted(other.items())) + ".")
 
 
 def sue_completeness(reh, status):
@@ -277,7 +321,7 @@ def sue_completeness(reh, status):
             msgs += [c["else"] for c in steps["supports"] if "else" in c and c["else"] not in msgs]
             for sec, label, _ in gen.unslotted(steps):
                 slots.setdefault((sec, label), set()).add(name)
-        except gen.GenError:
+        except (gen.GenError, FileNotFoundError):  # a recipe whose crawl isn't imported yet (2026-11-04)
             pass  # not fillable yet: the recipe's own refusals only
         for msg in msgs:
             msg = msg.strip()
@@ -290,7 +334,10 @@ def sue_completeness(reh, status):
     # The rules table's cases, walked as bench/test_route.py walks them: a pratica counted alone
     # can be done while the same works with another pratica filed with it aren't (2026-10-31: the
     # permesso was, with its landscape authorization it wasn't, and this page didn't say).
-    c = route.coverage("sue-napoli", REHEARSALS)
+    tables = [route.coverage(t, REHEARSALS) for t in ("sue-napoli", "sue-napoli-adempimenti")]
+    c = {k: sum(x[k] for x in tables) for k in ("cases", "routed", "refused")}
+    c["unmapped"] = sorted((kv for x in tables for kv in x["unmapped"]), key=lambda kv: (-kv[1], kv[0]))
+    c["combinations"] = sorted({k for x in tables for k in x["combinations"]})
     combos = sum(1 for k in sue if k.startswith("sue-combo-"))
     bare = lambda p: p.removeprefix("napoli/comune/")
     combo = lambda k: " + ".join(bare(x) for x in [k[0], *k[1]])
@@ -299,13 +346,14 @@ def sue_completeness(reh, status):
         "", "Measured today:", "",
         f"- Level 1: {len(fill)} of {len(sue)} pratiche fully in the dictionary" + (f" ({short} not)." if short else ".")
         + f" {combos} of them are two operations in one pratica (`sue-combo-*`).",
-        f"- Which pratiche a case needs: of the {c['cases']} cases the rules table decides, **{c['routed']} reach a "
+        f"- Which pratiche a case needs: of the {c['cases']} cases the rules tables decide, **{c['routed']} reach a "
         f"steps file**, {c['refused']} are refused with a reason or need no pratica, and **{to_map} have no steps "
         f"file yet**: {len(c['unmapped'])} combinations of pratiche, listed below (`bench/test_route.py`).",
         f"- Level 2: **{sum(per.values())} refusals across {len(per)} recipes**, {len(refusals)} distinct messages.",
         f"- Level 3, in part: **{len(slots)} ticked \"si allega\" boxes with no attachment slot** under their"
         " condition (listed below): each may add a required slot. A box read on a filled draft says what it adds"
         " (the dictionary's `slot`).",
+        pairs_line(reh),
         "- Levels 4 and 5: not measured yet (see the open items).", "",
         "| Recipe | Refusals left |", "|---|---:|"]
     out += [f"| `{n}` | {k} |" for n, k in sorted(per.items(), key=lambda kv: (-kv[1], kv[0]))]

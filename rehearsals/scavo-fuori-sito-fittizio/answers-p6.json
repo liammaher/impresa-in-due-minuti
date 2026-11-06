@@ -14,5 +14,10 @@
  "pdc_interventi": "ampliamento di un locale accessorio",
  "bollo_marche": false,
  "diritti_euro": "0",
- "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "no",
+ "fatti": [],
+ "terre_rocce": "dichiarazione"
 }

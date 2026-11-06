@@ -66,22 +66,7 @@ chiediamo anche come il Sportello preferisce che il caso sia presentato finché 
   (verificato il 31 ottobre e il 2 novembre 2026).
 - **Cosa chiediamo**: un solo gruppo, M o F.
 
-## 5. Voltura del permesso e cambio d'intestazione: la sezione dei cointestatari contiene una sola persona
-
-- **Dove**: "Informazioni su eventuali altri aventi titolo", aperta dalla scelta "ci sono
-  cointestatari" di entrambe le pratiche.
-- **Cosa succede**: la sezione ha le caselle di una sola persona (nome, nascita, residenza,
-  cittadinanza, sesso, codice fiscale) e nessun "+" per aggiungerne altre.
-- **Cosa chiede la legge**: il permesso si trasferisce agli aventi causa (art. 11 c. 2 DPR
-  380/2001), quanti che siano; la voltura li nomina tutti.
-- **Effetto**: un titolo che passa a tre o più intestatari può nominarne sul portale solo uno oltre
-  al dichiarante.
-- **Come riprodurlo**: aprire la sezione: 14 caselle di una persona, nessun "+" (verificato il 28
-  ottobre 2026).
-- **Cosa chiediamo**: un "+" sulla sezione, come gli elenchi dei tecnici e delle imprese di CILA e
-  SCIA.
-
-## 6. SCIA alternativa e permesso: nessuna riga per i cambi d'uso della legge regionale
+## 5. SCIA alternativa e permesso: nessuna riga per i cambi d'uso della legge regionale
 
 - **Dove**: SCIA alternativa al permesso, quadro c) "Qualificazione dell'intervento"; Permesso di
   Costruire, quadro a) e asseverazione ("opere in progetto").
@@ -99,3 +84,19 @@ chiediamo anche come il Sportello preferisce che il caso sia presentato finché 
   bozza (3 novembre 2026).
 - **Cosa chiediamo**: una riga per il cambio d'uso previsto dalla legge regionale, o l'indicazione
   di dichiararlo nella relazione tecnica.
+
+## 6. Autorizzazione paesaggistica: un secondo tecnico accanto a chi presenta non si può indicare
+
+- **Dove**: "dati relativi al nome del tecnico" dell'autorizzazione paesaggistica, ordinaria e
+  semplificata (anche presentata con CIL, CILA, SCIA, permesso o proroga).
+- **Cosa succede**: il pulsante "+" aggiunge il blocco di un altro tecnico (cognome, nome, codice
+  fiscale, studio, recapiti, albo). Con "è colui che presenta la pratica" spuntato, del nuovo blocco
+  resta visibile solo la riga dell'albo (ordine, provincia, numero, obbligatori): nome, codice
+  fiscale e studio restano nascosti.
+- **Effetto**: un progetto paesaggistico redatto da chi presenta la pratica insieme a un altro
+  tecnico non può indicare il secondo.
+- **Come riprodurlo**: su una bozza, spuntare "è colui che presenta la pratica" e premere "+";
+  poi spuntare "non è colui" e premere "+": solo nel secondo caso compare il blocco intero
+  (verificato il 5 novembre 2026, annullato senza salvare).
+- **Cosa chiediamo**: mostrare le righe del tecnico aggiunto con entrambe le scelte, o indicare come
+  presentare il caso.

@@ -564,5 +564,21 @@
   "result": "filled",
   "seconds": 229.7,
   "browser": "pane"
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-terreno.json",
+  "result": "filled",
+  "seconds": 270.3,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-due-titolari.json",
+  "result": "filled",
+  "seconds": 260.7,
+  "browser": "pane",
+  "case": "Two other holders (`answers-due-titolari`: the landlord company, then marta), \"b) Titolarità\"'s \"+\", `bench/rerun.py` bundle",
+  "note": "**filled** in 261 s, nothing moved or loose"
  }
 ]

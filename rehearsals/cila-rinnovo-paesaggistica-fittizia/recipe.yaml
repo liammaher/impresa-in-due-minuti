@@ -1,0 +1,50 @@
+# CILA e rinnovo paesaggistica: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: cila-paesaggistica-fittizia's, with what rinnovo-paesaggistica-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli routes it.
+extends:
+- cila-paesaggistica-fittizia
+- rinnovo-paesaggistica-fittizia
+procedure: napoli/comune/cila-lavori-edilizi-con-rinnovo-autorizzazione-paesaggistica-semplificata
+title: CILA e rinnovo paesaggistica in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-cila-rinnovo-paesaggistica
+operation:
+- Comunicazione Inizio Lavoro Asseverata (C.I.L.A.)
+- Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: CILA + rinnovo paesaggistica {{c:identity.last_name}}
+  diritti_euro:
+    default: '{{ask.cila_stato|diritti_cila}}'
+    why: "Voce SUE 13 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 151 € per una CILA; SUE 15: 166 € per una CILA presentata a lavori iniziati (mancata CILA)"
+yours:
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "Paghi i diritti prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella; il bollo prima dell'invio. La sanzione della CILA tardiva si paga prima della prima compilazione: la sua ricevuta è nel quadro d)"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
+rules:
+  table: sue-napoli
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  facts:
+    sanatoria: '{{ask.cila_stato|in_in_corso__realizzato}}'
+    permesso_per_scelta: 'false'
+    parere_esonero: 'false'
+  main: napoli/comune/cila-lavori-edilizi
+  handles:
+  - napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata
+answers:
+  descrizione: PROVA NON INVIARE - CILA + rinnovo paesaggistica P6
+  paesaggio: rinnovo
+groups:
+  fatti:
+    question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.

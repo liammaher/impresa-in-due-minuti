@@ -110,5 +110,6 @@
   "toll_34bis_2"
  ],
  "toll_strutturale": false,
- "toll_superficie": "100-300"
+ "toll_superficie": "100-300",
+ "imprese_quante": 2
 }

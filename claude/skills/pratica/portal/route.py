@@ -2,6 +2,7 @@
 """From a case's facts to the one steps file that files it, before any pre-flight.
 
   route.py --table sue-napoli [--answers A.json] [--pratiche DIR]
+  route.py --table sue-napoli-adempimenti ...   (a filing on a title held: proroga, fine lavori, ...)
 
 Asks the rules table's own facts (rules/<table>.yaml) in one message, as pre-flight would: the
 first fact (what the works are), then every other one some kind of works needs, each one not

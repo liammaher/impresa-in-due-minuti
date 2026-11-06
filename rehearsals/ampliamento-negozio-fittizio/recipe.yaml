@@ -46,5 +46,5 @@ supports:
     else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
   - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
   - {when: "{{ask.settori|not}}", else: "Per ora preparo solo un ampliamento della superficie negli stessi settori."}
-  - {when: "{{ask.insegna_esterna|not}}", else: "An outside sign isn't supported yet."}
+  - {when: "{{ask.insegna_esterna|not}}", else: "Un'insegna esterna non la preparo ancora."}
   - {when: "{{ask.superficie_alimentare_mq|positive|not}}", else: "Questa è la pratica del negozio non alimentare."}

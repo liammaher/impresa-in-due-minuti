@@ -291,6 +291,19 @@ def _carica(v):
     raise ValueError(f"no portal carica for ruolo {v!r}")
 
 
+def _categorie(s):
+    """Several units' categorie joined by "/" (a/b/c, "" for a unit with none), where a categoria
+    itself may hold one (A/2): each read whole, in order."""
+    out = []
+    while s:
+        m = re.match(r"([A-Fa-f]\s*/?\s*\d{1,2}|[^/]*)(/|$)", s)
+        out.append(m[1])
+        s = s[m.end():]
+        if m[2] == "/" and not s:
+            out.append("")
+    return out
+
+
 def _split_street(v):
     """A street as the Scheda anagrafica takes it: its DUG, its "Dettaglio DUG" (the street type when
     the DUG is ALTRO, "" when it isn't, None for a type neither list has) and the name after it."""
@@ -395,6 +408,65 @@ def _facts(v, n):
     return (str(v).split("/") + [""] * n)[:n]
 
 
+def _amount(v):
+    """A number answer (12500, 12500,50, 12500.5), or None: also for "12.500", which may be an
+    Italian thousands separator, so a bracket is never worked out from a figure read wrong."""
+    s = str(v).strip().replace(" ", "")
+    if not s or re.fullmatch(r"\d{1,3}(\.\d{3})+", s):
+        return None
+    try:
+        return float(s.replace(",", "."))
+    except ValueError:
+        return None
+
+
+# Napoli SUE's diritti (tabella G.C. 239/2026, read line by line 2026-11-05): "" where the table's
+# own words put the figure in no row or in two, so the question stays.
+# The brackets as asked (dictionary contributo_fascia, parcheggio_fascia); an amount still works.
+FASCIA_CONTRIBUTO = {"fino_5000": "1003", "5000": "", "da_5000_a_30000": "1505", "oltre_30000": "1998"}
+FASCIA_PARCHEGGIO = {"fino_300": "677", "da_301_a_1000": "1129", "oltre_1001": "1998", "altro": ""}
+
+
+def _diritti_contributo(v):
+    """SUE 7-9, an onerous permesso's or SCIA alternativa's, by the contributo (oneri di
+    urbanizzazione + costo di costruzione): "fino a € 5.000,00" 1,003 €, "da € 5.000,00 ad
+    € 30.000" 1,505 €, "oltre € 30.000,00" 1,998 €. Exactly 5,000 € is in both SUE 7 and SUE 8."""
+    s = str(v).strip()
+    if s in FASCIA_CONTRIBUTO:  # asks.contributo_fascia
+        return FASCIA_CONTRIBUTO[s]
+    x = _amount(v)
+    if x is None or x <= 0 or x == 5000:
+        return ""
+    return "1003" if x < 5000 else "1505" if x <= 30000 else "1998"
+
+
+def _diritti_parcheggio(v):
+    """SUE 4-6, a permesso for parcheggi pertinenziali, by floor area: "fino a 300 mq" 677 €,
+    "da 301 mq a 1000 mq" 1,129 €, "oltre 1001 mq" 1,998 €. Over 300 and under 301 m², or over
+    1,000 and up to 1,001 m², is in no row."""
+    s = str(v).strip()
+    if s in FASCIA_PARCHEGGIO:  # asks.parcheggio_fascia
+        return FASCIA_PARCHEGGIO[s]
+    x = _amount(v)
+    if x is None or x <= 0:
+        return ""
+    return "677" if x <= 300 else "1129" if 301 <= x <= 1000 else "1998" if x > 1001 else ""
+
+
+def _diritti_pdc(v):
+    """A permesso's line: a variant to one issued SUE 11; car parks on free land (L.R. Campania
+    19/2001 art. 6 c. 2, "parcheggi pertinenziali", a permesso non oneroso) SUE 4-6; onerous
+    SUE 7-9; free SUE 10."""
+    tipo, onerosa, contributo, mq = _facts(v, 4)
+    if tipo in ("variante essenziale", "variante sagoma"):
+        return "501"
+    if tipo == "parcheggi":
+        return _diritti_parcheggio(mq)
+    if not onerosa.strip():
+        return ""
+    return _diritti_contributo(contributo) if truthy(onerosa) else "401"
+
+
 SUE_CAMBIO = {"stessa_categoria": "stessa categoria", "tra_categorie": "tra categorie"}
 
 
@@ -494,6 +566,21 @@ FILTERS = Filters({
     "empty": lambda v: "true" if not v else "false",
     # Several yes/no answers at once ({{ask.a,ask.b|any}}): true when one is (a `when` has no "or").
     "any": lambda v: "true" if any(truthy(x) for x in str(v).split("/")) else "false",
+    # The cadastral units of a job: the client's immobile, immobile2 ... One unit when the vault
+    # holds no second ({{c:immobile2.x|empty|single_unit}}); with one, no value (None): the count
+    # is asked, proposed from how many are filled (`filled_count`). `two_groups` takes the count, then
+    # each unit's categoria (filled: Fabbricati, empty: Terreni), and is true when the
+    # first n change catasto at most once (Dati catastali's two groups, one per catasto).
+    # `differ`: two yes/no answers apart ({{ask.a#N,ask.a#P|differ}}: this unit starts a group).
+    "single_unit": lambda v: "1" if truthy(v) else None,
+    "filled_count": lambda v: str(sum(1 for x in str(v).split("/") if x.strip())),
+    "two_groups": lambda v: (lambda n, cats: "true" if sum(
+        bool(a.strip()) != bool(b.strip()) for a, b in zip(cats[:n], cats[1:n])) <= 1 else "false")(
+        int(float(v.split("/")[0] or 1)), _categorie(v.split("/", 1)[1] if "/" in v else "")),
+    "differ": lambda v: "true" if len({truthy(x) for x in str(v).split("/")}) > 1 else "false",
+    # Steps written before the second group (2026-11-04) still name it: all one catasto.
+    "one_catasto": lambda v: (lambda n, cats: "true" if len({bool(c.strip()) for c in cats[:n]}) <= 1 else "false")(
+        int(float(v.split("/")[0] or 1)), _categorie(v.split("/", 1)[1] if "/" in v else "")),
     "not": lambda v: "false" if truthy(v) else "true",
     "positive": lambda v: "true" if float(str(v or 0).replace(",", ".")) > 0 else "false",
     # The SUE rules table's facts as the forms' own boxes (an ask's `propose`).
@@ -505,12 +592,16 @@ FILTERS = Filters({
     "sue_scia_cambio_uso": lambda v: {"no": "no", "intero_immobile": "intero immobile", "piano_terra": "tra categorie",
                                       "intero_tra_categorie": "altro", "altro": "altro", **SUE_CAMBIO}.get(str(v), ""),
     # Napoli SUE's diritti (tabella G.C. 239/2026) where its line depends on the case: the amount to
-    # propose, or "" where the table needs what no ask holds (an onerous title's contributo bracket,
-    # a car park's floor area), so the question stays.
+    # propose, or "" where the table can't tell (the SUE works the contributo out, a figure on a
+    # bracket's edge, a title no row names), so the question stays.
     "diritti_cila": lambda v: {"da iniziare": "151", "in corso": "166", "realizzato": "166"}.get(str(v).strip(), ""),
+    # SUE 10, a SCIA free of the contributo; an onerous one (art. 22) is in no row: SUE 7-9 name
+    # only the permesso a titolo oneroso and the SCIA alternativa.
     "diritti_gratuito": lambda v: "401" if v is not None and not truthy(v) else "",
-    "diritti_pdc": lambda v: ("501" if _facts(v, 2)[0] in ("variante essenziale", "variante sagoma") else ""
-                              if _facts(v, 2)[0] == "parcheggi" or truthy(_facts(v, 2)[1]) else "401"),
+    # The SCIA alternativa: free SUE 10, onerous SUE 7-9 ({{ask.scia_onerosa,ask.contributo_fascia|..}}).
+    "diritti_scia_alt": lambda v: ("" if not _facts(v, 2)[0].strip() else
+                                   _diritti_contributo(_facts(v, 2)[1]) if truthy(_facts(v, 2)[0]) else "401"),
+    "diritti_pdc": _diritti_pdc,
     # A SCIA in sanatoria: line SUE 16 names the accertamenti (art. 36-bis) and the regularizations
     # (art. 34-ter), not the works still under way (art. 37 c. 5).
     "diritti_sanatoria_scia": lambda v: "" if str(v).strip() in ("", "in corso") else "441",
@@ -640,6 +731,8 @@ class Values:
                     raise KeyError(ref)
             for f in filters:
                 v = FILTERS[f](v)
+                if v is None:  # a filter that can't tell (single_unit): no value, as a missing field
+                    raise KeyError(ref)
             return v
         try:
             return re.sub(r"\{\{(.+?)\}\}", one, str(template))
@@ -651,8 +744,11 @@ class Values:
 
 def nth_block(obj, n):
     """A template block's field or ask for its n-th repeat: #N is "" in the first and n after
-    (role a, a2; ask altro_tecnico_..., altro_tecnico2_...), #K is n always (comunicazione_3)."""
-    return json.loads(json.dumps(obj, ensure_ascii=False).replace("#N", str(n) if n > 1 else "").replace("#K", str(n)))
+    (role a, a2; ask altro_tecnico_..., altro_tecnico2_...), #K is n always (comunicazione_3), #P the
+    block before's #N (immobile#P: the unit before, to tell where a new catasto group starts)."""
+    prev = str(n - 1) if n > 2 else ""
+    return json.loads(json.dumps(obj, ensure_ascii=False).replace("#N", str(n) if n > 1 else "")
+                      .replace("#K", str(n)).replace("#P", prev))
 
 
 def leaves(w):
@@ -685,7 +781,17 @@ def chosen(steps, values):
         wizard.append({k: (tree[0] if len(tree) == 1 else tree) if k == "tree" else v for k, v in w.items() if k != "tree" or tree})
     sections = [{k: v for k, v in s.items() if k != "when"} for s in steps["sections"] if "when" not in s or taken(s)]
     whens = [x["when"] for w in steps.get("wizard", []) for x in leaves(w) if isinstance(x, dict) and "when" in x]
-    return {**steps, "wizard": wizard, "sections": sections, "chosen": list(dict.fromkeys(whens))}
+    out = {**steps, "wizard": wizard, "sections": sections, "chosen": list(dict.fromkeys(whens))}
+    # An ask only a dropped section reads goes with it (the co-holders' count, no co-holders).
+    gone = [s for s in steps["sections"] if "when" in s and not taken(s)]
+    if gone and "asks" in steps:
+        # Every template of the dropped sections, a block's count too (templates() reads it only
+        # once expand has made it each block's `when`).
+        gone_reads = {r[4:] for r, _ in refs_in(json.dumps(gone, ensure_ascii=False)) if r.startswith("ask.")}
+        only = gone_reads - {r[4:] for _, t, _ in templates(out) for r, _ in refs_in(t) if r.startswith("ask.")}
+        only -= {r[4:] for s in sections for r, _ in refs_in(json.dumps(s, ensure_ascii=False)) if r.startswith("ask.")}
+        out["asks"] = {k: a for k, a in steps["asks"].items() if k not in only}
+    return out
 
 
 def expand(steps, values):
@@ -728,7 +834,11 @@ def expand(steps, values):
             # The first block it adds is there even when the count says none: it holds the
             # count's question (asked first), and its own `when` keeps it off the page.
             for n in range(each["from"], max(each["from"], count or 0) + 1):
-                fields.append({**{k: x for k, x in f.items() if k != "each"}, "block": n, "when": when(f, n)})
+                # The "+" itself may have a condition per block (`each.when`: the unit's "+" only
+                # within a group; the group's "+", a block field, where a new catasto starts).
+                own = nth_block(each["when"], n) if each.get("when") else ""
+                fields.append({**{k: x for k, x in f.items() if k != "each"}, "block": n,
+                               "when": " ".join(x for x in (when(f, n), own) if x)})
                 fields += [{**g, "block": n, "when": when(g, n)} for g in map(lambda b: nth_block(b, n), body)]
         out["sections"].append({**sec, "fields": fields})
     used = {r[4:] for _, t, _ in templates(out) for r, _ in refs_in(t) if r.startswith("ask.")}
@@ -845,6 +955,11 @@ def check_asks(steps):
     reads = lambda wheres: {r[4:] for where, t, _ in templates(steps) if wheres(where)
                             for r, _ in refs_in(t) if r.startswith("ask.")}
     used = reads(lambda w: w != "yours")
+    # An ask with its own `when` that a used one's proposal reads (the contributo's amount, for
+    # the diritti's bracket: needed asks it).
+    more = {r[4:] for k in used for r, _ in refs_in(asks.get(k, {}).get("propose", ""))
+            if r.startswith("ask.") and asks.get(r[4:], {}).get("when")}
+    used |= more | {r[4:] for k in more for r, _ in refs_in(asks[k]["when"]) if r.startswith("ask.")}
     lacking = sorted((used | reads(lambda w: w == "yours")) - set(asks))
     if lacking:
         raise StepError(f"steps file: no question in asks: for {', '.join(lacking)}")
@@ -925,6 +1040,18 @@ def needed(steps, values):
                 if w is None:
                     deps = [k for k in asked(f["when"]) if values.field("ask." + k) is None]
             add(asked(f.get("value", "")), deps)
+    # An ask only a proposal reads (the contributo's amount, which the diritti's bracket needs) is
+    # asked where its own `when` holds, while the proposal's ask is unanswered; the proposal waits.
+    asks = steps.get("asks", {})
+    for k in list(need):
+        if values.raw(k) is not None:
+            continue
+        for r in asked(asks.get(k, {}).get("propose", "")):
+            w = asks.get(r, {}).get("when")
+            if r in need or not w or not gate(w):
+                continue
+            deps = [x for x in asked(w) if values.field("ask." + x) is None] if values.render(w) is None else []
+            add([r], sorted(need[k]) + deps)
     return need
 
 
@@ -932,7 +1059,9 @@ def _decision(steps, values):
     """The rules table's decision of this case (steps `rules:`), or None without one. Each
     fact is the recipe's value or an ask's answer."""
     r = steps.get("rules")
-    if not r:
+    if not r or not r.get("table"):
+        # A combination no table routes yet (a proroga with the landscape one): `main` and
+        # `handles` only, filed when the person names it.
         return None
     t = rules.table(r["table"])
     facts = {}
@@ -1546,7 +1675,7 @@ def preflight(steps, values, made_up=False, after=False):
                                    | ({"error": why} if v is not None else {}))
     report["proposals"] += conditional_proposals(pending, report, values, need)
     held_need = assumed_proposals(steps, values, report)
-    if steps.get("rules"):
+    if (steps.get("rules") or {}).get("table"):
         # While the table's first fact (what the works are) is asked, it is asked alone, as the
         # rules table's own questions are: which others matter depends on it, even one no field
         # hangs on it formally (a CILA's listed building, read by its Soprintendenza attachment
@@ -1599,23 +1728,26 @@ def preflight(steps, values, made_up=False, after=False):
     # A value longer than its box (a protocol "PG/2026/0666666" where the shop's form takes 10)
     # is asked again, or named as the vault field to shorten, before the run instead of by it.
     asked = {q["key"] for q in report["questions"]}
-    for sec in steps["sections"]:
-        for f in sec["fields"]:
-            if not f.get("max") or "value" not in f or ("when" in f and not truthy(values.render(f["when"]) or "")):
-                continue
-            v = values.render(f["value"])
-            if v is None or len(v) <= f["max"]:
-                continue
-            why = f"{sec['section']}: {f.get('label') or f.get('id')} takes at most {f['max']} characters"
-            refs = refs_in(f["value"])
-            if len(refs) == 1 and refs[0][0].startswith("ask.") and refs[0][0][4:] in asks:
-                k = refs[0][0][4:]
-                if k not in asked:
-                    asked.add(k)
-                    report["questions"].append({"key": k, "type": asks[k]["type"], "question": asks[k]["question"],
-                                                "error": why})
-            else:
-                missing.setdefault(f["value"], {"field": f["value"], "why": why, "for": sec["section"]})
+    # The wizard's boxes too: the pratica's description takes 60 characters, and an 88-character
+    # one passed pre-flight to fail only when the batch was built (2026-11-04).
+    boxes = [({"section": w["screen"]}, {**w["fill"], "label": "its box"}) for w in steps.get("wizard", []) if "fill" in w]
+    boxes += [(sec, f) for sec in steps["sections"] for f in sec["fields"]]
+    for sec, f in boxes:
+        if not f.get("max") or "value" not in f or ("when" in f and not truthy(values.render(f["when"]) or "")):
+            continue
+        v = values.render(f["value"])
+        if v is None or len(v) <= f["max"]:
+            continue
+        why = f"{sec['section']}: {f.get('label') or f.get('id')} takes at most {f['max']} characters"
+        refs = refs_in(f["value"])
+        if len(refs) == 1 and refs[0][0].startswith("ask.") and refs[0][0][4:] in asks:
+            k = refs[0][0][4:]
+            if k not in asked:
+                asked.add(k)
+                report["questions"].append({"key": k, "type": asks[k]["type"], "question": asks[k]["question"],
+                                            "error": why})
+        else:
+            missing.setdefault(f["value"], {"field": f["value"], "why": why, "for": sec["section"]})
     # A vault value the form can't take (a ruolo with no Carica on the portal, for an architect
     # named in `people` who isn't the titolare) is named here, not met by the run as a crash.
     for sec in steps["sections"]:
@@ -2098,7 +2230,12 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=N
     over files_limit are chosen by the person in the page (`picked`); False refuses them (a
     batch has no one to pick for each run)."""
     expanded = expand(steps, values)
-    blocks, steps = expanded is not steps, expanded
+    # Steps expanded already (rerun.py passes them so) still have their blocks: an `add` per
+    # block. Missed until 2026-11-05: two CILA cases with other counts shared one pane key, and
+    # the second ran on the first's steps ("no + to add a block of Cognome").
+    blocks = expanded is not steps or any(f.get("kind") == "add" and isinstance(f.get("block"), int)
+                                          for s in expanded["sections"] for f in s["fields"])
+    steps = expanded
     require_supported(steps, values)
     plan(steps, values)  # stops on a missing required value
     skeleton = {
@@ -2110,7 +2247,9 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=N
                      | ({"theirs": s["theirs"]} if "theirs" in s else {})
                      | ({"go": s["go"]} if "go" in s else {})
                      | ({"step": s["step"]} if "step" in s else {})
-                     | {"fields": [{k: f[k] for k in ("id", "css", "kind", "label", "anchor", "block", "nth", "describe", "if_present") if k in f}
+                     # Only these keys reach the page: a new one inpage.js reads goes here too
+                     # (`last` didn't, 2026-11-04, and the run ticked the first group's radio).
+                     | {"fields": [{k: f[k] for k in ("id", "css", "kind", "label", "anchor", "block", "nth", "last", "describe", "if_present") if k in f}
                                    for f in s["fields"]]}
                      for s in steps["sections"]],
         "forbidden": FORBIDDEN.pattern, "declarations": DECLARATIONS.pattern,
@@ -2181,6 +2320,34 @@ def pane_parts(proc, skeleton):
     # JSON.stringify of that literal gives back these same bytes; the runner is stored as its source.
     stored = {"pv-runner": "(function () {\n" + runner + "})()", "pv-steps:" + proc: steps_json}
     return runner_js, steps_js, stored
+
+
+def patch_script(key, old_json, new_json, fallback):
+    """A steps script that sends only what changed: the new steps with each section the old ones
+    have the same left out, taken from what the pane holds (the old steps, if it holds them), and
+    stored only if the whole comes out byte for byte (sha256). Else it says to send `fallback`.
+    2026-11-04: a 43 KB and a 90 KB steps file, one section changed in each, went this way, where
+    pasting a long script can garble it. None when the two can't be patched section by section."""
+    old, new = json.loads(old_json), json.loads(new_json)
+    if old_json == new_json or len(old.get("sections", [])) != len(new.get("sections", [])):
+        return None
+    same = lambda i: json.dumps(old["sections"][i], ensure_ascii=False, separators=(",", ":")) == \
+        json.dumps(new["sections"][i], ensure_ascii=False, separators=(",", ":"))
+    lite = {**new, "sections": [None if same(i) else s for i, s in enumerate(new["sections"])]}
+    want = hashlib.sha256(new_json.encode()).hexdigest()
+    return ("(async () => {\n"
+            "  const sha = async (s) => Array.from(new Uint8Array(await crypto.subtle.digest(\"SHA-256\", new TextEncoder().encode(s)))).map((b) => b.toString(16).padStart(2, \"0\")).join(\"\");\n"
+            f"  const k = {json.dumps(key)}, cur = localStorage.getItem(k);\n"
+            f"  if (cur !== null && await sha(cur) === {json.dumps(want)}) return 'stored already';\n"
+            "  let s = null; try { s = JSON.parse(cur); } catch (e) {}\n"
+            f"  const n = {json.dumps(lite, ensure_ascii=False, separators=(',', ':'))};\n"
+            f"  if (!s || !Array.isArray(s.sections) || s.sections.length !== n.sections.length) return {json.dumps('send ' + fallback)};\n"
+            "  n.sections = n.sections.map((x, i) => x === null ? s.sections[i] : x);\n"
+            "  const txt = JSON.stringify(n);\n"
+            f"  if (await sha(txt) !== {json.dumps(want)}) return {json.dumps('the pane holds other steps: send ' + fallback)};\n"
+            "  localStorage.setItem(k, txt);\n"
+            "  return 'installed';\n"
+            "})()\n")
 
 
 def check_script(stored, origin, files=None, then="run.js"):

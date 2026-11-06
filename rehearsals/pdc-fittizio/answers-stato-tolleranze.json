@@ -110,5 +110,6 @@
  "tolleranze_precedenti": [
   "toll_prec_pratica",
   "toll_prec_atto"
- ]
+ ],
+ "imprese_quante": 2
 }

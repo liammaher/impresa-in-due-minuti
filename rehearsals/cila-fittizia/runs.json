@@ -362,5 +362,77 @@
   "result": "filled",
   "seconds": 98,
   "browser": "pane"
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-accorpamento.json",
+  "result": "filled",
+  "seconds": 122.1,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-proprietario.json",
+  "result": "filled",
+  "seconds": 95.6,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-04",
+  "answers": "answers-catasti-misti.json",
+  "result": "filled",
+  "seconds": 26.2,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-comproprietari-tre.json",
+  "result": "filled",
+  "seconds": 133.7,
+  "browser": "pane",
+  "case": "Three other holders of the title (`answers-comproprietari-tre`: marta, bruno, and Immobiliare Fittizia with giulia as its legale rappresentante), the titolarità's \"+\" pressed twice, `bench/rerun.py` bundle",
+  "note": "**filled** in 134 s, nothing moved or loose"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-catasti-tre-gruppi.json",
+  "result": "stopped",
+  "seconds": 36.4,
+  "browser": "pane",
+  "case": "Four units in three catasto groups (`answers-catasti-tre-gruppi`, fixture `ugo`: flat, two plots, garage), same bundle",
+  "note": "stopped in 36 s on a) Titolarità, \"no + to add a block of Cognome\": rerun.py gave run.py steps expanded already, so both CILA cases shared one pane key and this one ran the three holders' steps (fixed: page_bundle keys expanded steps by their blocks too)"
+ },
+ {
+  "date": "2026-11-05",
+  "browser": "pane",
+  "case": "the same, alone in a bundle",
+  "note": "stopped in 5 s (resumed once) on Dati catastali after Salva: \"not kept NCT: empty\". The draft saved NCEU, NCT, NCEU and all four units (read on it after); the read-back found the second group's NCT again as the page's last NCT, by then the third group's (fixed: a `last` box is pinned where it was filled, inpage.js `at`)"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-catasti-tre-gruppi.json",
+  "result": "filled",
+  "seconds": 120.9,
+  "browser": "pane",
+  "case": "the same, on the fixed runner (`last` pinned for its read-back and found by its own cell)",
+  "note": "**filled** in 121 s: NCEU, NCT, NCEU, the middle group's second plot by its unit's \"+\", nothing moved or loose"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-imprese-tre.json",
+  "result": "filled",
+  "seconds": 141.5,
+  "browser": "pane",
+  "case": "three firms (`answers-imprese-tre`: edil, impianti, muratori with its Cassa edile), the firms' \"+\" as an `each`",
+  "note": "**filled** in 142 s, `bench/rerun.py` bundle: the third firm's block by its \"+\", its Cassa edile rows, nothing moved or loose"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-quattro.json",
+  "result": "filled",
+  "seconds": 151.6,
+  "browser": "pane",
+  "case": "Five units in four catasto groups and four other holders (`answers-quattro`, fixture `ugo` with a third plot `immobile5`; `r:`-`r4:` marta, bruno, giulia with her company, dario)",
+  "note": "**filled** in 152 s, `bench/rerun.py` bundle: NCEU, NCT, NCEU, NCT by the group's \"+\", the fourth holder's row by its \"+\", nothing moved or loose"
  }
 ]

@@ -1,0 +1,57 @@
+# SCIA e rinnovo paesaggistica e terre e rocce: 3 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: scia-paesaggistica-semplificata-terre-rocce-fittizia's, with what rinnovo-paesaggistica-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli routes it.
+extends:
+- scia-paesaggistica-semplificata-terre-rocce-fittizia
+- rinnovo-paesaggistica-fittizia
+procedure: napoli/comune/scia-edilizia-con-rinnovo-autorizzazione-paesaggistica-semplificata-e-utilizzo-materiale-scavo-fuori-sito
+title: SCIA e rinnovo paesaggistica e terre e rocce in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-scia-rinnovo-paesaggistica-dichiarazione-utilizzo
+operation:
+- Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)
+- Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune)
+- Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017
+  (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: SCIA + rinnovo paes. + terre e rocce {{c:identity.last_name}}
+  diritti_euro:
+    question: "I diritti del SUE in euro: una SCIA onerosa non è in alcuna voce della tabella 2026 del Comune; chieda al SUE"
+    propose: "{{ask.scia_onerosa|diritti_gratuito}}"
+    why: "Voce SUE 10 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 401 € per una SCIA non soggetta al contributo. Una SCIA onerosa (art. 22) non è in alcuna voce: le fasce SUE 7-9 nominano solo il permesso a titolo oneroso e la SCIA alternativa, quindi l'importo si chiede (da confermare con il SUE)"
+yours:
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- 'In qualità di progettista, verifichi ogni asseverazione di questa pagina: sono Sue, e le firma con la pratica'
+- "Prima dell'inizio dei lavori, nomini chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
+- 'Nessuna data di inizio: i lavori iniziano quando il SUE comunica che l''autorizzazione paesaggistica (e ogni altro assenso) è stata acquisita'
+- 'Paghi i diritti prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella'
+- '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
+- "La dichiarazione di utilizzo (Allegato 6 DPR 120/2017) è il documento che il portale genera in Allega documenti una volta spuntate le dichiarazioni: la firma il produttore, Claude la allega nella seconda compilazione; lo scavo inizia almeno 15 giorni dopo l'invio"
+- "Quando le terre sono state tutte utilizzate, entro la validità della dichiarazione, presenti al SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
+rules:
+  table: sue-napoli
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  facts:
+    permesso_per_scelta: 'false'
+    parere_esonero: 'false'
+  main: napoli/comune/scia-edilizia
+  handles:
+  - napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata
+  - napoli/comune/utilizzo-materiale-scavo-fuori-sito
+answers:
+  descrizione: PROVA NON INVIARE - SCIA + rinnovo paes. + terre e rocce P6
+  paesaggio: rinnovo
+  terre_rocce: dichiarazione
