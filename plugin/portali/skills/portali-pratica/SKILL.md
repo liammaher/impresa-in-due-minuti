@@ -149,7 +149,8 @@ is, in one line, wait for "fatto", and run the command again. Never install Pyth
   (`grep -i proroga "${CLAUDE_SKILL_DIR}/catalog.json"`), never read them whole: they are long.
 - `library/`: what the law asks for each procedure (`procedures/`), which pratica a case is
   (`rules/`), where to go (`offices/`). `reference/schema.json`: every field.
-- `portal/run.py`, `portal/route.py`, `intake/intake.py`, `review.py`, `check.py`; for the page,
+- `portal/run.py`, `portal/route.py`, `intake/intake.py`, `review.py`, `check.py`, `report.py`
+  (a problem report, below); for the page,
   `portal/preview_text.js` and `portal/attachments.js` (step 5).
 
 <!-- vault -->
@@ -546,6 +547,46 @@ show the code window):
 sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/check.py" ../studio.json values.json --out run/values.json
 ```
 <!-- /vault -->
+
+## When Portali itself goes wrong
+
+Only for Portali's own faults, never their pratica's: a compilation that stopped and wasn't
+recovered within the budget (step 4), a value the compilation put wrong that no document
+explains (step 5), a script that fails, or the tecnico saying something of Portali doesn't work.
+Then offer once, in one line, after saying what happened: "Se vuole, preparo una segnalazione per
+chi sviluppa Portali: la legge prima di inviarla." Nothing more unless they say yes.
+
+On a yes, write `run/segnalazione.json` (in the job's folder; with no job, in the folder you are
+in), in Italian:
+
+- `title`: the pratica and what went wrong, in a few words ("CILA: la compilazione si ferma in
+  Dati catastali").
+- `cosa`: what they asked, the pratica (its title in `catalog.json`), the step, and what happened; a
+  section's and a box's label as the portal shows it. `atteso`: what should have happened.
+- `output`: the runner's `error` and `at`, or a script's last lines. Never `snapshot`.
+- `dove`: `Claude desktop, Code`, `Cowork` or `Claude Code nel terminale / in a terminal`.
+
+**Never anything of the job**: no name (of the client, the tecnico, the studio, a firm), codice
+fiscale, address, catasto, date, amount, file name or path. Write "il cognome del committente",
+never the surname. Then:
+
+<!-- vault -->
+```sh
+sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/report.py" run/segnalazione.json --values run/intake/private/values.json
+```
+<!-- /vault -->
+<!-- no-vault -->
+```sh
+sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/report.py" run/segnalazione.json --values run/values.json --values run/intake/private/values.json
+```
+<!-- /no-vault -->
+
+It adds the plugin's version and the computer's system, and prints a link to Portali's bug form
+on GitHub with every box filled in, or what in the report is the job's (then rewrite that part
+and run it again). Give the tecnico the report's text first, as it will appear, then the link:
+"Apra il link: trova il modulo già compilato. Lo rilegga, spunti la casella sui dati personali e
+prema il pulsante verde in fondo. Serve un account GitHub (gratuito)." Never open the link yourself, never send it.
+Without an account, they can send the same text to the address below themselves.
 
 ## Beyond this plugin
 

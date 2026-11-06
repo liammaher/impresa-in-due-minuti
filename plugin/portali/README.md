@@ -88,6 +88,8 @@ Legga l'[uso responsabile](https://github.com/liammaher/portali/blob/main/docs/r
 In breve: Lei firma e risponde della pratica; una pratica alla volta, con il Suo SPID; nessun dato
 personale in una segnalazione. Per chiedere una pratica o segnalare un portale cambiato apra una
 [segnalazione](https://github.com/liammaher/portali/issues/new/choose).
+Se qualcosa di Portali non funziona, lo dica a Claude: Le prepara la segnalazione già
+compilata, senza i dati dei clienti, e Lei la rilegge prima di inviarla.
 
 ## Per qualcosa in più
 

@@ -134,7 +134,9 @@ plugin/              the Portali plugin for Cowork (docs/design/packaging.md): b
                      build.yaml's `vault` ships the archive or not (off: no setup skill, no pvault
                      in a release, the texts' `<!-- no-vault -->` parts; test_build.py).
                      `--cowork-test` keeps the Cowork test skill, `--evals` adds evals/ (how Claude
-                     follows the skill, `claude plugin eval`); a release has neither
+                     follows the skill, `claude plugin eval`); a release has neither.
+                     The skill's report.py: a Portali fault as a link to the bug form, filled in,
+                     refused if it holds a job's value (test_report.py); the tecnico submits it
 connector/           the Portali connector (remote MCP, read-only, no sign-in): coverage, search, a
                      pratica's status and freshness, library entries, from plugin/build.py's output.
                      It never takes personal data: its tools take a case's facts
