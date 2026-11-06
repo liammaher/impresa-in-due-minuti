@@ -1,14 +1,18 @@
 # Installing
 
-**Status: released as [v0.3.0](https://github.com/liammaher/portale-sue/releases/tag/v0.3.0)** (2026-11-05),
-without the archive (`plugin/build.yaml` `vault: false`: the release builds no pvault); the
-marketplace is pinned to it once the release's pull request is merged. 0.2.0 (2026-10-29) shipped
-the archive. Installed in an isolated Claude config; not yet on a clean Mac or Windows (*What is not
-done*). Work merged since is in the next release, not in 0.3.0.
+**Status:** the marketplace installs the release its file pins (the latest is on the
+[releases page](https://github.com/liammaher/portale-sue/releases)). Since 0.3.0 the plugin ships
+without the archive (`plugin/build.yaml` `vault: false`: the release builds no pvault); 0.2.0
+(2026-10-29) shipped it. From 0.4.0 it is Portale SUE, the SUE's pratiche only; whoever has Portali
+0.3.0 installs `portale-sue` once and removes `portali`. Installed in an isolated Claude config; not
+yet on a clean Mac or Windows (*What is not done*).
+
+Without the archive, Claude reads the job's documents and checks the draft against them, so the
+client's details pass through the conversation (the plugin's README says so to the tecnico).
 
 ## What you do
 
-1. **Add the plugin**, on a paid plan (Anthropic lists plugins for Pro, Max, Ultra, Team and
+1. **Add the plugin**, on a paid plan (Anthropic lists plugins for Pro, Max, Team and
    Enterprise). In the Claude app, with no terminal: **Customize → Plugins → Add → Add marketplace**,
    type `liammaher/portale-sue`, then **Install** on Portale SUE. Turn on **Sync automatically** on the
    marketplace: a plugin installed this way updates from its marketplace, which is how a remapped
@@ -19,13 +23,12 @@ done*). Work merged since is in the next release, not in 0.3.0.
 
    One way only: there is no separate skill to upload. An uploaded skill has no update channel, so it
    would go stale the first time the portal changed.
-2. **Say "set me up"** if you want the private vault. Claude asks before it downloads anything.
-3. **Choose a password and keep the recovery key** on the page `pvault setup` opens in your browser,
-   then turn on Touch ID there. This is the one step that is yours alone: neither is ever typed or
-   shown in the conversation.
+2. **Open the folder of jobs** in the app, one subfolder per job. That is all today's plugin needs.
 
-Pratiche that don't use the vault need no step 2 or 3: the folder-and-`values.json` way works as soon as
-the plugin is installed.
+Only a build with the archive (`vault: true`, not today's releases) adds two steps: say "set me up"
+(Claude asks before it downloads anything), then choose a password and keep the recovery key on the
+page `pvault setup` opens in the browser, and turn on Touch ID there; neither is ever typed or shown
+in the conversation. The rest of this page up to *Python* is about that archive.
 
 ## What happens, and what is checked
 
@@ -77,7 +80,10 @@ install-pvault.sh | .ps1  downloads  pvault_<version>_<os>_<arch>  and refuses i
    same. The workflow runs the tests, builds the six `pvault` archives and
    `checksums.txt` (goreleaser), builds the plugin with them and attaches it as `portale-sue-X.Y.Z.zip`, then
    opens a pull request that pins `.claude-plugin/marketplace.json` to it.
-3. Merge that pull request. Until then `marketplace add` finds no marketplace.
-4. On a clean Mac and a clean Windows machine: add the marketplace, say "set me up", and check
-   `pvault version`. (The installer's tests run against a fake release in CI:
-   `plugin/test_install.py`.)
+3. Merge that pull request (a bot's pull request gets no CI run, so it takes an admin merge). Until
+   then the marketplace still installs the previous release.
+4. On a clean Mac and a clean Windows machine: add the marketplace, install, and run one pratica's
+   pre-flight; with the archive, also say "set me up" and check `pvault version`. (The installer's
+   tests run against a fake release in CI: `plugin/test_install.py`.)
+5. The private-terms check (`plugin/build.py`) runs only where the maintainer's list is, never in
+   CI: build the released zip's tag locally, or unzip the release and run `check_private` on it.

@@ -21,7 +21,7 @@ open source.
 
 ## Installazione
 
-Serve un piano Claude a pagamento (Pro, Max, Ultra, Team o Enterprise). Nell'app Claude per
+Serve un piano Claude a pagamento (Pro, Max, Team o Enterprise). Nell'app Claude per
 computer, senza terminale:
 
 1. Apra **Customize** e la scheda **Plugins**.
@@ -66,7 +66,8 @@ installi da python.org.
 <!-- no-vault -->
 3. Claude risponde con un solo messaggio: se la pratica è coperta, cosa dicono i documenti,
    quale pratica propone, le poche domande. Risponda una volta.
-4. Acceda con SPID nel browser dell'app e scriva sul portale il codice che compare sullo schermo.
+4. Acceda con SPID nel browser dell'app e scriva a Claude «fatto». Claude compila la bozza: non
+   tocchi la pagina finché non Le scrive. Poi confronta l'anteprima del portale con i documenti.
 <!-- /no-vault -->
 5. Quando la bozza è pronta, legga la pagina di riepilogo: cosa resta da fare a Lei, ogni
    controllo fatto, ogni valore inserito.
@@ -79,11 +80,13 @@ Nel Suo archivio su questo computer e sul portale. Da nessun'altra parte: Portal
 server.
 <!-- /vault -->
 <!-- no-vault -->
-Nella cartella dei Suoi lavori, su questo computer, e sul portale. Da nessun'altra parte:
-Portale SUE non ha un server. I documenti li legge un programma sul Suo computer. I dati arrivano al
-portale sigillati sotto un codice che vede solo Lei: Claude non li vede. Passa da Claude solo ciò
-che Lei scrive nella conversazione. In Cowork la finestra del codice non si apre, e passano da
-Claude anche i dati: Claude glielo dice prima.
+Nella cartella dei Suoi lavori su questo computer, nella conversazione con Claude e sul portale.
+Portale SUE non ha un server suo.
+**Claude legge i documenti del lavoro**, compila la bozza e la confronta con essi: i dati dei
+clienti (nomi, codici fiscali, indirizzi, dati catastali) passano quindi dalla conversazione con
+Claude, come ogni documento che Lei vi apre. Claude glielo dice alla prima pratica. Se un cliente
+non vuole che i suoi documenti passino da Claude, non usi Portale SUE per quel lavoro.
+Password, PIN e accesso SPID mai: l'accesso al portale lo fa Lei.
 <!-- /no-vault -->
 Lei è titolare del trattamento dei dati dei Suoi clienti. In Claude disattivi «Aiuta a
 migliorare Claude» (Impostazioni → Privacy) e usi il browser dell'app, non Claude in Chrome.
