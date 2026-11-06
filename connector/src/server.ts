@@ -3,13 +3,13 @@ import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import type { Entry, Registry, Status } from "./registry.js";
 
-export const INSTRUCTIONS = `Napoli: which Italian government pratiche can be prepared automatically, starting with the Comune di Napoli's SUE and SUAP on impresainungiorno, and what the law asks for each.
+export const INSTRUCTIONS = `Napoli: which Italian government pratiche can be prepared automatically, starting with the Comune di Napoli's SUE (building works) on impresainungiorno, and what the law asks for each.
 
 Statuses: available = run on the real portal and unchanged since; paused = the portal changed, refused until it's mapped again; mapped = steps exist but haven't been run on the portal yet, so it's coming soon: don't run it for a client; guide = the library says what it needs and where, but it can't be filled automatically; coming = being worked on.
 
 Rules:
 - Send this server no personal data: no names, codici fiscali, addresses or documents of anyone. Describe a case by its facts only (the works, the activity, the zone, the size).
-- Filling a pratica needs the Portali plugin in Cowork, with the client's data in the user's own folder. This server only says what exists and how.
+- Filling a pratica needs the Portale SUE plugin in Cowork, with the client's data in the user's own folder. This server only says what exists and how.
 - Never tick a declaration, sign, pay or send for the user: those steps are theirs.
 - Answer about the law only from get_procedure, naming the sources it cites; say so when the library doesn't cover something.`;
 
@@ -95,7 +95,7 @@ export function unknownWords(reg: Registry, query: string): string[] {
 }
 
 export function createServer(reg: Registry): McpServer {
-  const server = new McpServer({ name: "portali", version: reg.pluginVersion }, { instructions: INSTRUCTIONS });
+  const server = new McpServer({ name: "portale-sue", version: reg.pluginVersion }, { instructions: INSTRUCTIONS });
   const readOnly = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 
   server.registerTool(

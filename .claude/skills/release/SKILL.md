@@ -40,6 +40,6 @@ Create a release for personal-vault. Version argument (if provided): $ARGUMENTS
    - Run `git push origin <version>`
 
 7. **Confirm**
-   - Print the GitHub Actions URL: `https://github.com/liammaher/portali/actions`
-   - Print the releases URL: `https://github.com/liammaher/portali/releases`
+   - Print the GitHub Actions URL: `https://github.com/liammaher/portale-sue/actions`
+   - Print the releases URL: `https://github.com/liammaher/portale-sue/releases`
    - Tell the user to check CI for the goreleaser build

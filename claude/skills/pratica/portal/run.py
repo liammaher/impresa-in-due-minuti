@@ -1888,7 +1888,7 @@ def outside_comune(steps, values):
         except StepError:
             v = None
         if v and plain(v) != plain(comune):
-            return [f"L'immobile è fuori dal Comune di {comune}. Portali prepara solo le pratiche del Comune "
+            return [f"L'immobile è fuori dal Comune di {comune}. Portale SUE prepara solo le pratiche del Comune "
                     f"di {comune} (Campania), sui suoi sportelli: per un altro comune non c'è nulla di "
                     "automatico, e non preparo niente."]
     return []
@@ -2068,15 +2068,15 @@ def show_code(code, give_up=None):
             "Tenga aperta questa finestra fino alla fine della compilazione. Non lo dica a nessuno, "
             "nemmeno a Claude.")
     if sys.platform == "darwin":
-        script = (f'display dialog {json.dumps(text)} with title "Portali" buttons {{"Fatto"}} default button "Fatto"'
+        script = (f'display dialog {json.dumps(text)} with title "Portale SUE" buttons {{"Fatto"}} default button "Fatto"'
                   + (f" giving up after {give_up}" if give_up else ""))
         cmd, feed = ["osascript", "-"], script
     elif sys.platform == "win32":
         cmd = [sys.executable, "-I", "-c",
-               "import ctypes, sys; ctypes.windll.user32.MessageBoxW(0, sys.stdin.read(), 'Portali', 0x40 | 0x40000)"]
+               "import ctypes, sys; ctypes.windll.user32.MessageBoxW(0, sys.stdin.read(), 'Portale SUE', 0x40 | 0x40000)"]
         feed = text
     elif shutil.which("zenity"):
-        cmd, feed = ["zenity", "--text-info", "--title=Portali", "--width=420", "--height=200"], text
+        cmd, feed = ["zenity", "--text-info", "--title=Portale SUE", "--width=420", "--height=200"], text
     else:
         raise StepError("no way to show the code outside this conversation here: use `run` (its window "
                         "needs no code), or --plain if the values may pass through the conversation")
