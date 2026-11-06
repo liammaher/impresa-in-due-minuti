@@ -1,0 +1,46 @@
+# rinnovo paesaggistica e terre e rocce: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# dichiarazione-no-title). The case: rinnovo-paesaggistica-fittizia's, with what scavo-fuori-sito-fittizio adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli routes it.
+extends:
+- rinnovo-paesaggistica-fittizia
+- scavo-fuori-sito-fittizio
+procedure: napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata-con-utilizzo-materiale-scavo-fuori-sito
+title: Rinnovo paesaggistica e terre e rocce in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-rinnovo-paesaggistica-dichiarazione-utilizzo
+operation:
+- Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune)
+- Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017
+  (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: rinnovo paesaggistica + terre e rocce {{c:identity.last_name}}
+  diritti_euro:
+    why: "La tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) non ha una voce per il rinnovo di un'autorizzazione paesaggistica; se la copra SUE 2 (401 €, autorizzazioni paesaggistiche chieste da sole) lo dice il SUE"
+yours:
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
+- '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
+rules:
+  table: sue-napoli
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  facts:
+    permesso_per_scelta: 'false'
+    parere_esonero: 'false'
+  main: napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata
+  handles:
+  - napoli/comune/utilizzo-materiale-scavo-fuori-sito
+answers:
+  descrizione: PROVA NON INVIARE - rinnovo paesaggistica + terre e rocce P6
+  terre_rocce: dichiarazione

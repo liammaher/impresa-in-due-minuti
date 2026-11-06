@@ -13,5 +13,6 @@
  "data_inizio_lavori": "2026-11-16",
  "diritti_euro": "0",
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
- "diritti_esente": false
+ "diritti_esente": false,
+ "fatti": []
 }

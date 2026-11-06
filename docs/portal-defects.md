@@ -139,18 +139,6 @@ personal data. The reports to send, in Italian and one per recipient, with the c
 - **Checked**: 2026-10-31 (the voltura's runs), 2026-11-02 (the cambio d'intestazione's co-holder).
 - **To report**: one group, M or F.
 
-## Voltura and cambio d'intestazione: the co-holders' section holds one person
-
-- **Where**: the co-holders' section ("Informazioni su eventuali altri aventi titolo", opened by the
-  wizard's "ci sono cointestatari") of both pratiche.
-- **What happens**: the section has one person's boxes (name, birth, residence, citizenship, sex,
-  codice fiscale) and no "+" to add another.
-- **What the law asks**: the permesso passes to the successors in title (art. 11 c. 2 DPR 380/2001),
-  however many; the voltura names each of them.
-- **Effect**: a title passing to three or more holders can name only one co-holder on the portal.
-- **Checked**: 2026-10-28, the batch crawl of both pratiche (one person's 14 boxes, no "+").
-- **To report**: a "+" on the section, as the CILA's and SCIA's lists of technicians and firms have.
-
 ## Agibilità: the art. 24 exceptions are marked required
 
 - **Where**: the agibilità's "Attestazione tecnica - Agibilità".
@@ -199,3 +187,17 @@ personal data. The reports to send, in Italian and one per recipient, with the c
   one category, and the case is refused since.
 - **To report**: the choice should have a line for a change of use the regional law gives this title
   for (art. 23 c. 01 lets the regions add cases), or let it be stated in the relazione.
+
+## Landscape authorization: another technician beside the architect presenting can't be named
+
+- **Where**: "dati relativi al nome del tecnico" of the autorizzazione paesaggistica, ordinaria and
+  semplificata (alone and with the titles filed with it).
+- **What happens**: the section's "+" adds another technician's block (name, codice fiscale, studio,
+  phone, PEC, albo). With "è colui che presenta la pratica" ticked, the block's rows but the albo's
+  stay hidden, and the albo's three boxes are required: a technician with no name.
+- **Effect**: a landscape project drawn by the architect presenting and another technician can't
+  name the second; Claude refuses the case (`paesaggio-altri-tecnici`). With "non è colui", each
+  technician's whole block is there and Claude fills them.
+- **Checked**: 2026-11-05, both choices on a made-up draft (paesaggistica ordinaria with terre e
+  rocce, P6), "+" pressed, cancelled with Annulla, nothing saved.
+- **To report**: show the added block's name rows under either choice.

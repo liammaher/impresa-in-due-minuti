@@ -1,0 +1,330 @@
+{
+ "crawled": "2026-11-04T18:53:38.560Z",
+ "by": "crawl.js batch, depth 3",
+ "pratica": "SUE: 2 operations in one pratica: Comunicazione integrativa proroga straordinaria trenta mesi inizio lavori (art. 10 septies, Legge 51/2022) + Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune), with the scelta IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+ "seconds": 94.7,
+ "note": "Every section is one of the operations' own, the same fingerprint: the combination is their union, in this order. A recipe names every operation and extends the main one's.",
+ "also": [
+  "EDILIZIA › Beni Paesaggistici › Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)"
+ ],
+ "generated": {
+  "interventi": "Autorizzazione paesaggistica ordinaria per interventi ricadenti in aree soggette a vincolo paesaggistico (art.146 D.Lgs. 42/2004)",
+  "adempimenti": [
+   {
+    "adempimento": "Autorizzazione Paesaggistica ordinaria ex art. 146 D.Lgs. 42/2004 (Ente Comune)",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   },
+   {
+    "adempimento": "Comunicazione integrativa di proroga del termine di inizio lavori",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI - SUE"
+   }
+  ],
+  "sections": [
+   "Scheda anagrafica",
+   "Oggetto della pratica",
+   "DOMICILIO DIGITALE",
+   "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "dichiarazione ubicazione dell'intervento",
+   "dati catastali",
+   "dati relativi al nome del tecnico",
+   "dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento)",
+   "Riferimenti titolo edilizio e data prevista dell'inizio lavori",
+   "Altre dichiarazioni",
+   "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "dichiarazione relativa ai diritti di segreteria/istruttori",
+   "Dichiarazione relativa all'assolvimento dell'imposta di bollo"
+  ]
+ },
+ "screens": [
+  {
+   "screen": "scelta del destinatario della pratica",
+   "options": [
+    {
+     "label": "",
+     "checked": false
+    },
+    {
+     "label": "",
+     "checked": true
+    }
+   ]
+  },
+  {
+   "screen": "scelte eventuali",
+   "options": [
+    {
+     "key": "0",
+     "type": "CHK",
+     "label": "in assenza di titolarità esclusiva all'esecuzione dell'intervento edilizio, si dispone della dichiarazione di assenso dei terzi titolari di altri diritti reali o obbligatori"
+    },
+    {
+     "key": "1",
+     "type": "CHK",
+     "label": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+     "selected": true
+    }
+   ]
+  }
+ ],
+ "variants": [
+  {
+   "option": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE",
+   "type": "CHK",
+   "adds": [
+    "Qualifica e dati del procuratore"
+   ],
+   "drops": []
+  }
+ ],
+ "sections": [
+  {
+   "section": "Scheda anagrafica",
+   "fingerprint": "4dd844db9cdb76ff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Scheda anagrafica",
+   "seconds": 0
+  },
+  {
+   "section": "Oggetto della pratica",
+   "fingerprint": "b9828eee09a1f50f",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Oggetto della pratica",
+   "seconds": 1.1
+  },
+  {
+   "section": "DOMICILIO DIGITALE",
+   "fingerprint": "5978ae29f079ce08",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO DIGITALE",
+   "seconds": 0.8
+  },
+  {
+   "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "fingerprint": "c282ef61bee9ea4d",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.9
+  },
+  {
+   "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione ubicazione dell'intervento",
+   "fingerprint": "1ae79e0eb7308899",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione ubicazione dell'intervento",
+   "seconds": 0.9
+  },
+  {
+   "section": "dati catastali",
+   "fingerprint": "bd17e4e186aa5dc9",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati catastali",
+   "seconds": 0.9
+  },
+  {
+   "section": "dati relativi al nome del tecnico",
+   "fingerprint": "ffddb90f4d2ab273",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati relativi al nome del tecnico",
+   "seconds": 1
+  },
+  {
+   "section": "dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento)",
+   "fingerprint": "0dda28ca5077533f",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione relativa ai contenuti dell'intervento (titolo del richiedente, descrizione e riferimenti dell'immobile o dell'area oggetto dell'intervento)",
+   "seconds": 0.9
+  },
+  {
+   "section": "Riferimenti titolo edilizio e data prevista dell'inizio lavori",
+   "fields": [
+    {
+     "id": "r2c1p2reg:radio:0_clone",
+     "kind": "radio",
+     "label": "di cui al Permesso di costruire",
+     "group": "r2c1p2reg:radio"
+    },
+    {
+     "id": "r2c2p4reg:txt",
+     "kind": "text",
+     "label": "P.G. numero",
+     "context": "di cui al Permesso di costruire",
+     "max": 30,
+     "disabled": true
+    },
+    {
+     "id": "r2c3p6reg:calendar_input",
+     "kind": "date",
+     "label": "del",
+     "disabled": true
+    },
+    {
+     "id": "r2c4p8reg:txt",
+     "kind": "text",
+     "label": "N.Put",
+     "max": 30,
+     "disabled": true
+    },
+    {
+     "id": "r4c1p10reg:radio:1_clone",
+     "kind": "radio",
+     "label": "di cui alla SCIA",
+     "group": "r4c1p10reg:radio"
+    },
+    {
+     "id": "r4c2p12reg:txt",
+     "kind": "text",
+     "label": "P.G. numero",
+     "context": "di cui alla SCIA",
+     "max": 30,
+     "disabled": true
+    },
+    {
+     "id": "r4c3p14reg:calendar_input",
+     "kind": "date",
+     "label": "del",
+     "disabled": true
+    },
+    {
+     "id": "r6c1p16reg:txt",
+     "kind": "text",
+     "label": "per (specificare l'oggetto dell'intervento)",
+     "max": 100
+    },
+    {
+     "id": "r8c1p18reg:txt",
+     "kind": "text",
+     "label": "intestato a",
+     "max": 50
+    },
+    {
+     "id": "r10c1p20reg:calendar_input",
+     "kind": "date",
+     "label": "la cui data di inizio lavori è prevista per"
+    }
+   ],
+   "fingerprint": "43f32c7d14ecc9ce",
+   "text": "Riferimenti titolo edilizio e data prevista dell'inizio lavori P.G. numero del N.Put di cui al Permesso di costruire P.G. numero del di cui alla SCIA per (specificare l'oggetto dell'intervento) intestato a la cui data di inizio lavori è prevista per",
+   "branches": [
+    {
+     "choice": "di cui al Permesso di costruire",
+     "id": "r2c1p2reg:radio:0_clone",
+     "kind": "radio",
+     "moved": [
+      [
+       "r4c3p14reg:calendar_input",
+       "r2c3p6reg:calendar_input"
+      ]
+     ],
+     "enables": [
+      "r2c2p4reg:txt",
+      "r2c3p6reg:calendar_input",
+      "r2c4p8reg:txt"
+     ]
+    },
+    {
+     "choice": "di cui alla SCIA",
+     "id": "r4c1p10reg:radio:1_clone",
+     "kind": "radio",
+     "moved": [
+      [
+       "r4c3p14reg:calendar_input",
+       "r2c3p6reg:calendar_input"
+      ]
+     ],
+     "enables": [
+      "r4c2p12reg:txt",
+      "r4c3p14reg:calendar_input"
+     ]
+    }
+   ],
+   "seconds": 2.4
+  },
+  {
+   "section": "Altre dichiarazioni",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione relativa ai diritti di segreteria/istruttori",
+   "fingerprint": "52afb47e165ec4c7",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 1
+  },
+  {
+   "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "fingerprint": "869752d2cea5aef3",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "seconds": 0.9
+  },
+  {
+   "section": "Qualifica e dati del procuratore",
+   "fingerprint": "2ebe54198e212bff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Qualifica e dati del procuratore",
+   "seconds": 1.1,
+   "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
+  }
+ ],
+ "slots": {
+  "Gestione degli allegati": [
+   {
+    "title": "Procura speciale",
+    "accepts": "jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Fotocopia di un documento di identita' del soggetto che conferisce la procura speciale",
+    "accepts": "pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia della precedente autorizzazione paesaggistica (per le varianti)",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "elaborati grafici comprensivi di stato attuale progetto ed interventi, con indicazione dei materiali adottati",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "documentazione fotografica a colori del contesto edilizio e paesaggistico, anche a lunga e media distanza, con evidenziati, su apposita planimetria, i coni visu",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia del documento d'identità in corso di validità ai sensi del DPR 445/2000 (solo per chi non firma digitalmente)",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Relazione paesaggistica (redatta ai sensi del D.P.C.M: 12 dicembre 2005)",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Allegati liberi",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg",
+    "required": false,
+    "portal_document": false
+   }
+  ]
+ },
+ "slots_note": "read 2026-11-04 on the empty draft (crawl.js `slots`)"
+}

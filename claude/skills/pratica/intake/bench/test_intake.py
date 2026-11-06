@@ -236,7 +236,8 @@ def end_to_end():
     # presented with it, no assents to acquire; no firm or technicians still to be named, since
     # 2026-11-01; the architect is the designer, since 2026-11-02).
     assert {p["key"] for p in with_docs["proposals"]} <= {"comunicazioni_contestuali", "atti_da_acquisire",
-                                                        "impresa_dopo", "altri_tecnici_dopo", "progettista_altro"}, with_docs["proposals"]
+                                                        "impresa_dopo", "altri_tecnici_dopo", "progettista_altro",
+                                                        "imprese_quante"}, with_docs["proposals"]  # the job's firms, counted
     # The lease carries no citizenship: the Scheda anagrafica's Cittadinanza is asked of the vault
     # (since 2026-11-02; before, every client went as the portal's preset ITALIA).
     assert len(with_docs["missing"]) <= 6 < len(without["missing"]), with_docs["missing"]

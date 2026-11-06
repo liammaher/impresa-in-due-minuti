@@ -58,5 +58,13 @@
   "result": "filled",
   "seconds": 86.7,
   "browser": "pane"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-tre-cointestatari.json",
+  "result": "filled",
+  "seconds": 94.1,
+  "browser": "pane",
+  "note": "Three co-holders (`answers-tre-cointestatari`: paolo, marta, bruno), the co-holders' \"+\" twice, `bench/rerun.py` bundle: **filled** in 94 s, nothing moved or loose: the section has a \"+\" (the coholders-one defect withdrawn)"
  }
 ]

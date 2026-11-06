@@ -20,12 +20,14 @@ asks:
   cambio_dl: {type: yes_no, question: "Subentra un nuovo direttore dei lavori?"}
   cambio_ditta: {type: yes_no, question: "Subentra una nuova impresa nell'esecuzione dei lavori?"}
 supports:
-  # The co-holders' section holds one person and has no "+" (crawled 2026-10-28): a portal
-  # defect, not a mapping gap.
-  - {if: "{{ask.cointestatario}}", when: "{{ask.altri_cointestatari|not}}", defect: coholders-one, else: "Cambio d'intestazione a più cointestatari: la sezione dei cointestatari ha posto per una sola persona e nessun «+». È un difetto del portale; con un solo cointestatario lo preparo."}
   - {if: "{{ask.soggetti_cambiati}} {{ask.cambio_dl|not}}", when: "{{ask.cambio_ditta}}", else: "Cambia il direttore o l'impresa: indichi quale (un nuovo direttore dei lavori, una nuova impresa, o entrambi)."}
 yours:
   - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
   - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
   - "Nessuna imposta di bollo da pagare con questo modulo: il modulo del portale per questa pratica non ha una sezione né uno spazio per il bollo"
   - "Firmi e invii (Firma e invio); conservi la ricevuta"
+# Routed by the rules table sue-napoli-adempimenti: what is filed on the title held.
+rules:
+  table: sue-napoli-adempimenti
+  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+  facts: {adempimento: "intestatario"}

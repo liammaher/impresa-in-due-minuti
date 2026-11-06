@@ -1,0 +1,48 @@
+# proroga straordinaria ultimazione e paesaggistica ordinaria: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: proroga-straordinaria-ultimazione-fittizia's, with what paesaggistica-ordinaria-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli-adempimenti routes it.
+extends:
+- proroga-straordinaria-ultimazione-fittizia
+- paesaggistica-ordinaria-fittizia
+procedure: napoli/comune/proroga-straordinaria-ultimazione-lavori-con-autorizzazione-paesaggistica-ordinaria
+title: Proroga straordinaria ultimazione e paesaggistica ordinaria in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-proroga-straordinaria-ultimazione-paesaggistica-ordinaria
+operation:
+- Comunicazione integrativa proroga straordinaria trenta mesi ultimazione lavori (art. 10 septies, Legge 51/2022)
+- Autorizzazione paesaggistica ordinaria (art.146 del D.Lgs 42/2004 - Comune)
+scelte:
+- option: in assenza di titolarità esclusiva all'esecuzione dell'intervento edilizio, si dispone della dichiarazione
+    di assenso dei terzi titolari di altri diritti reali o obbligatori
+  when: '{{ask.titolo_esclusivo|not}}'
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: pror. straord. ult. + paes. ordinaria {{c:identity.last_name}}
+  diritti_euro:
+    why: "La tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) non ha una voce per la comunicazione dell'art. 10-septies: SUE 11 (501 €) indica le proroghe dei permessi di costruire rilasciati, e se copra una comunicazione che non chiede alcuna decisione (o una su un altro titolo) lo dice il SUE"
+yours:
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Nessuna imposta di bollo da pagare con questo modulo: il modulo del portale per questa pratica non ha una sezione né uno spazio per il bollo"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
+rules:
+  table: sue-napoli-adempimenti
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  facts:
+    adempimento: proroga_fine
+    proroga: integrativa
+    paesaggistica: ordinaria
+  main: napoli/comune/proroga-straordinaria-ultimazione-lavori
+  handles:
+  - napoli/comune/autorizzazione-paesaggistica-ordinaria
+answers:
+  descrizione: PROVA NON INVIARE - pror. straord. ult. + paes. ordinaria P6

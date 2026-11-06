@@ -16,5 +16,6 @@
  "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
  "assenso_proprietario": "rehearsals/cila-fittizia/files/assenso-immobiliare-fittizia.pdf",
  "titolo_esclusivo": true,
- "diritti_esente": false
+ "diritti_esente": false,
+ "fatti": []
 }

@@ -258,6 +258,15 @@ INVIARE" and deleted afterwards, logins are the person's own, FAC-SIMILE on ever
 | 2026-11-04 | pane | `answers-deposito-4.json` | **filled** in 194 s |
 | 2026-11-04 | pane | `answers-usufruttuario-industriale.json` | **filled** in 98 s |
 | 2026-11-04 | pane | `answers-vico-6.json` | **filled** in 98 s |
+| 2026-11-04 | pane | `answers-accorpamento.json` | **filled** in 122 s |
+| 2026-11-04 | pane | `answers-proprietario.json` | **filled** in 96 s |
+| 2026-11-04 | pane | `answers-catasti-misti.json` | **filled** in 26 s |
+| 2026-11-05 | pane | Three other holders of the title (`answers-comproprietari-tre`: marta, bruno, and Immobiliare Fittizia with giulia as its legale rappresentante), the titolarità's "+" pressed twice, `bench/rerun.py` bundle | **filled** in 134 s, nothing moved or loose |
+| 2026-11-05 | pane | Four units in three catasto groups (`answers-catasti-tre-gruppi`, fixture `ugo`: flat, two plots, garage), same bundle | stopped in 36 s on a) Titolarità, "no + to add a block of Cognome": rerun.py gave run.py steps expanded already, so both CILA cases shared one pane key and this one ran the three holders' steps (fixed: page_bundle keys expanded steps by their blocks too) |
+| 2026-11-05 | pane | the same, alone in a bundle | stopped in 5 s (resumed once) on Dati catastali after Salva: "not kept NCT: empty". The draft saved NCEU, NCT, NCEU and all four units (read on it after); the read-back found the second group's NCT again as the page's last NCT, by then the third group's (fixed: a `last` box is pinned where it was filled, inpage.js `at`) |
+| 2026-11-05 | pane | the same, on the fixed runner (`last` pinned for its read-back and found by its own cell) | **filled** in 121 s: NCEU, NCT, NCEU, the middle group's second plot by its unit's "+", nothing moved or loose |
+| 2026-11-05 | pane | three firms (`answers-imprese-tre`: edil, impianti, muratori with its Cassa edile), the firms' "+" as an `each` | **filled** in 142 s, `bench/rerun.py` bundle: the third firm's block by its "+", its Cassa edile rows, nothing moved or loose |
+| 2026-11-05 | pane | Five units in four catasto groups and four other holders (`answers-quattro`, fixture `ugo` with a third plot `immobile5`; `r:`-`r4:` marta, bruno, giulia with her company, dario) | **filled** in 152 s, `bench/rerun.py` bundle: NCEU, NCT, NCEU, NCT by the group's "+", the fourth holder's row by its "+", nothing moved or loose |
 
 <!-- /runs -->
 

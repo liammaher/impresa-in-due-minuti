@@ -1,0 +1,51 @@
+# PdC e rinnovo paesaggistica: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# authorization-keeps-pace). The case: pdc-paesaggistica-semplificata-fittizio's, with what rinnovo-paesaggistica-fittizia adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli routes it.
+extends:
+- pdc-paesaggistica-semplificata-fittizio
+- rinnovo-paesaggistica-fittizia
+procedure: napoli/comune/permesso-di-costruire-con-rinnovo-autorizzazione-paesaggistica-semplificata
+title: PdC e rinnovo paesaggistica in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-pdc-rinnovo-paesaggistica
+operation:
+- Permesso di Costruire (P.d.C) - Art.10 D.P.R. 380/2001
+- Rinnovo Autorizzazione Paesaggistica Semplificata  (DPR 31/2017 - Comune)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PdC + rinnovo paesaggistica {{c:identity.last_name}}
+  diritti_euro:
+    question: "I diritti del SUE in euro: la tabella 2026 non indica la voce per questo caso (il contributo lo calcola il SUE, è esattamente 5.000 €, o la superficie del parcheggio cade tra due righe). Pratica onerosa, SUE 7-9 in base al contributo: 1003 fino a 5.000 €, 1505 da 5.000 a 30.000 €, 1998 oltre; parcheggi, SUE 4-6: 677 fino a 300 m², 1129 da 301 a 1.000 m², 1998 oltre 1.001 m²"
+    propose: "{{ask.pdc_tipo,ask.scia_onerosa,ask.contributo_fascia,ask.parcheggio_fascia|diritti_pdc}}"
+    why: "Voci del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): SUE 10, 401 € per un permesso non soggetto al contributo; SUE 11, 501 € per una variante a un permesso rilasciato; se oneroso, SUE 7-9 in base al contributo (oneri di urbanizzazione + costo di costruzione): 1.003 € fino a 5.000 €, 1.505 € da 5.000 a 30.000 €, 1.998 € oltre; parcheggi su suolo libero (L.R. Campania 19/2001 art. 6 c. 2, parcheggi pertinenziali), SUE 4-6 in base alla superficie: 677 € fino a 300 m², 1.129 € da 301 a 1.000 m², 1.998 € oltre 1.001 m²"
+yours:
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "Come progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma con la richiesta"
+- "Nell'asseverazione, «non interessa aree percorse dal fuoco» e la dichiarazione sui terreni sono una sola scelta sul portale (un suo difetto): Claude spunta quella sui terreni. Le aree bruciate le dichiari nella relazione tecnica, se il SUE lo chiede"
+- "Paghi il bollo come chiede il portale, poi firmi e invii (Firma e invio); conservi la ricevuta"
+- "L'autorizzazione paesaggistica precede il permesso (art. 146 c. 4 D.Lgs. 42/2004): i lavori iniziano solo quando ci sono entrambi"
+- "Una volta rilasciato il permesso: lo ritiri (pagando il contributo, se dovuto, come indica il quadro f)), nomini il progettista strutturale e i direttori dei lavori, e presenti la comunicazione di inizio lavori con la relazione energetica e i depositi strutturali"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
+rules:
+  table: sue-napoli
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  facts:
+    permesso_per_scelta: 'true'
+    parere_esonero: 'false'
+  main: napoli/comune/permesso-di-costruire
+  handles:
+  - napoli/comune/rinnovo-autorizzazione-paesaggistica-semplificata
+answers:
+  descrizione: PROVA NON INVIARE - PdC + rinnovo paesaggistica P6
+  paesaggio: rinnovo

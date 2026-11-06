@@ -1,0 +1,42 @@
+{
+ "people": {
+  "c": "luca",
+  "f1": "edil"
+ },
+ "descrizione": "PROVA NON INVIARE - pror. ult. + paes. semplificata P6",
+ "oggetto": "Proroga del termine di ultimazione lavori ai sensi dell'art. 10 septies della L. 51/2022.",
+ "titolo": "proprietario",
+ "pdc_numero": "999/2026",
+ "pdc_anno": "2026",
+ "pdc_data": "2026-03-15",
+ "pdc_protocollo": "PG/2026/0888888",
+ "titolo_id_pratica": "FTTLCU91L02F839F-15032026-1012",
+ "pdc_interventi": "ampliamento di un locale accessorio",
+ "bollo_marche": false,
+ "diritti_euro": "0",
+ "proroga_data_prevista": "2030-03-15",
+ "proroga_tipo_lavori": "finiture interne",
+ "fine_termine": "2029-03-15",
+ "proroga_giorni": "365",
+ "proroga_motivo": "Ritardo nella consegna dei materiali da parte del fornitore, per cause non imputabili al titolare.",
+ "titolo_tipo": "permesso di costruire",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "paesaggistica": "no",
+ "allegato_b": [
+  "paes_b3",
+  "paes_b7"
+ ],
+ "vincolo": "art 136 and 142",
+ "vincolo_136_lettera": "c) e d)",
+ "vincolo_136_provvedimento": "D.M. fittizio PROVA NON INVIARE del 01/01/1960",
+ "vincolo_142_lettera": "a)",
+ "paes_variante": false,
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "semplificata",
+ "fatti": [],
+ "progettista_altro": false,
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "terre_rocce": "no"
+}

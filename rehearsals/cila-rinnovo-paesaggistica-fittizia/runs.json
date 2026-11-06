@@ -1,0 +1,18 @@
+[
+ {
+  "date": "2026-11-04",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 177.4,
+  "browser": "pane",
+  "note": "P6, from scratch, `bench/rerun.py` bundle: **filled** in 177 s, every value read back on a fresh load; the portal's usual warnings on made-up data; but under a steps file that had lost its payment and attachments screens and its first sections (the recipe's `first` and `after`, fixed the same day): those screens are unproven until the next run"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 75.9,
+  "browser": "pane",
+  "note": "P6, from scratch, `bench/rerun.py` bundle: **filled** in 76 s, every value read back on a fresh load; the portal's usual warnings on made-up data"
+ }
+]

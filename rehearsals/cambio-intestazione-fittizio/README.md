@@ -9,7 +9,10 @@ INVIARE" and stops before the acknowledgements in the new holder's name, signing
   who directs and builds the works).
 - Its prescrizioni acknowledgement reads "di essere pertanto a conoscenza…" (the voltura's "di aver
   preso visione"): both are the new holder's (`theirs`).
-- A co-holder needs the scelta "ci sono cointestatari", as in the voltura: not in this recipe.
+- A co-holder needs the scelta "ci sono cointestatari", as in the voltura (its `when`: `cointestatario`).
+- Several titles (a SCIA and its variante filed as a SCIA of its own): the title "+" adds a title's row above
+  "presentata da" (read on a draft 2026-11-05, cancelled unsaved), so the titles are one list (`titoli_quanti`)
+  and the previous holders another, after them.
 
 ## Runs
 
@@ -24,5 +27,8 @@ INVIARE" and stops before the acknowledgements in the new holder's name, signing
 | 2026-11-02 | pane | `answers-subentro.json` | **filled** in 65 s |
 | 2026-11-02 | pane | `answers-p6.json` | **filled** in 60 s |
 | 2026-11-03 | pane | `answers-p6.json` | **filled** in 71 s |
+| 2026-11-05 | pane | `answers-due-cointestatari.json` | Two co-holders (`answers-due-cointestatari`: paolo, marta), the co-holders' "+", `bench/rerun.py` bundle: **filled** in 138 s, nothing moved or loose |
+| 2026-11-05 | pane | `answers-precedenti-due.json` | Two previous holders (`answers-precedenti-due`: the company and Giulia Esempio), the "presentata da" "+", `bench/rerun.py` bundle: **filled** in 85 s, nothing moved or loose |
+| 2026-11-05 | pane | `answers-tre-di-ogni.json` | Two titles, three previous holders, three co-holders (`answers-tre-di-ogni`: paolo, marta, bruno), the title "+" as an `each`, `bench/rerun.py` bundle: **filled** in 81 s, the second title's row, the holders' rows below it by their own "+", nothing moved or loose |
 
 <!-- /runs -->

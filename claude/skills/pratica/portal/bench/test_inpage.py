@@ -302,6 +302,76 @@ def main():
             assert got == {"com1_txt": answers["den"], "com2_txt": answers["impresa"], "atto1_txt": "uno", "atto2_txt": "due", "atto3_txt": "tre"}, got
         case("two lists in a section: each \"+\" adds to its own list, as many rows as the count says", two_lists)
 
+        def cadastral_units():
+            # Dati catastali (2026-11-04): two units by the unit's "+", never the group's after it;
+            # the subalterno found by its title, since by label "subalterno" another box ties with it.
+            def unit(n, sub_label):
+                block = n if n == 1 else "#N"
+                return [{"kind": "text", "label": "foglio", "anchor": "foglio", "block": block, "value": "{{ask.fog_#K}}"},
+                        {"kind": "text", "label": "particella/mappale", "anchor": "foglio", "block": block, "value": "{{ask.par_#K}}"},
+                        {"kind": "text", "label": sub_label, "anchor": "foglio", "block": block, "value": "{{ask.sub_#K}}"}]
+            vals = {"unita": "2", "fog_1": "12", "par_1": "345", "sub_1": "7", "fog_2": "12", "par_2": "345", "sub_2": "8"}
+
+            def run_with(sub_label):
+                PORTAL.reset()
+                st = steps(base, start="/portal.html?catasto=1")
+                st["sections"][1]["fields"] += [*run.nth_block(unit(1, sub_label), 1),
+                                                 {"kind": "add", "anchor": "foglio", "block": "#N", "each": {"count": "{{ask.unita}}", "from": 2}},
+                                                 *unit(2, sub_label)]
+                return fill(browser, base, st, answers | vals)
+            r = run_with("se non presente indicare il numero 0")
+            assert r["result"] == "filled", r.get("error")
+            got = {k.split(":")[-1]: v for k, v in PORTAL.fields.items() if ":dynaForm:cat" in k and "_" in k and v != "on"}
+            assert got == {"cat1g1_fog": "12", "cat1g1_par": "345", "cat1g1_sub": "7", "cat2g1_fog": "12", "cat2g1_par": "345", "cat2g1_sub": "8"}, got
+            assert not any("catg2" in k for k in PORTAL.fields), "pressed the group's +"
+            # By the label the crawl gives it, the subalterno lands in another box: never filled.
+            r = run_with("subalterno")
+            assert r["result"] != "filled", "the subalterno by label filled: the tie is gone, the title may not be needed"
+
+            # A flat, then two plots: the group's "+" (the second after the last unit) where the
+            # catasto changes, the new group's own NCT (the page's last: every radio reads NCEU or
+            # NCT once a "+" has checked the section), and the
+            # third unit by the first "+" after the second, which is now the second group's own.
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?catasto=1")
+            box = lambda label, n, v: {"kind": "text", "label": label, "anchor": "foglio", "block": n, "value": v}
+            st["sections"][1]["fields"] += [
+                # By id, as the steps file has it: after a "+" its long name is gone from the page.
+                {"id": "catg1_nceu", "kind": "radio", "label": "Nuovo Catasto Edilizio Urbano"},
+                box("foglio", 1, "12"), box("particella/mappale", 1, "678"), box("se non presente indicare il numero 0", 1, "3"),
+                {"kind": "add", "anchor": "foglio", "block": 2, "nth": 2},
+                {"kind": "radio", "label": "NCT", "last": True},
+                box("foglio", 2, "12"), box("particella/mappale", 2, "679"),
+                {"kind": "add", "anchor": "foglio", "block": 3},
+                box("foglio", 3, "12"), box("particella/mappale", 3, "680")]
+            r = fill(browser, base, st, answers)
+            assert r["result"] == "filled", r.get("error")
+            got = {k.split(":")[-1]: v for k, v in PORTAL.fields.items() if ":dynaForm:cat" in k}
+            assert got == {"catg1_nceu": "on", "cat1g1_fog": "12", "cat1g1_par": "678", "cat1g1_sub": "3", "catg2_nct": "on",
+                           "cat2g2_fog": "12", "cat2g2_par": "679", "cat2g2_sub": "", "cat3g2_fog": "12", "cat3g2_par": "680",
+                           "cat3g2_sub": ""}, got
+
+            # A flat, a plot, a garage: a third group back to the first catasto. The second group's
+            # NCT is the page's last NCT when it's ticked, not once the third group is there: its
+            # read-back goes to where it was (2026-11-05: "not kept NCT" on the portal, the third
+            # group's NCT read in its place).
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?catasto=1")
+            st["sections"][1]["fields"] += [
+                {"id": "catg1_nceu", "kind": "radio", "label": "Nuovo Catasto Edilizio Urbano"},
+                box("foglio", 1, "12"), box("particella/mappale", 1, "678"), box("se non presente indicare il numero 0", 1, "3"),
+                {"kind": "add", "anchor": "foglio", "block": 2, "nth": 2},
+                {"kind": "radio", "label": "NCT", "last": True},
+                box("foglio", 2, "12"), box("particella/mappale", 2, "679"),
+                {"kind": "add", "anchor": "foglio", "block": 3, "nth": 2},
+                {"kind": "radio", "label": "NCEU", "last": True},
+                box("foglio", 3, "12"), box("particella/mappale", 3, "678"), box("se non presente indicare il numero 0", 3, "5")]
+            r = fill(browser, base, st, answers)
+            assert r["result"] == "filled", r.get("error")
+            got = {k.split(":")[-1]: v for k, v in PORTAL.fields.items() if ":dynaForm:catg" in k}
+            assert got == {"catg1_nceu": "on", "catg2_nct": "on", "catg3_nceu": "on"}, got
+        case("cadastral units: each unit by its own \"+\", a new catasto by the group's, the subalterno by its title; three groups", cadastral_units)
+
         def crawl_reveals():
             # A choice that opens an employer's block repeating labels above it (Cognome, Via):
             # its boxes are revealed, counted per label, never read as the ones above moving.
@@ -703,6 +773,32 @@ def main():
             done = fill(browser, base, st, answers, resume=run.resumption(first, fix))
             stops(done, "fresh load of the draft: not kept")
         case("after a resume, a value lost from an earlier section is still caught", lost_before)
+
+        def patched():
+            # A steps file changed in one section: the patch sends that one and takes the others
+            # from what the pane holds, storing the result only when it comes out byte for byte.
+            key = "pv-steps:test/patch"
+            dumps = lambda o: json.dumps(o, ensure_ascii=False, separators=(",", ":"))
+            old = {"start": "x", "sections": [{"section": "A", "fields": [1]}, {"section": "Dati catastali", "fields": [2]}]}
+            new = {"start": "x", "sections": [{"section": "A", "fields": [1]}, {"section": "Dati catastali", "fields": [2, 3]}]}
+            js = run.patch_script(key, dumps(old), dumps(new), "steps/x.js")
+            assert '"section":"A"' not in js, "sent a section the pane holds"
+            assert run.patch_script(key, dumps(new), dumps(new), "steps/x.js") is None
+            page = browser.new_page()
+            try:
+                page.goto(base + "/portal.html")
+                put = lambda v: page.evaluate("([k, v]) => v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v)", [key, v])
+                put(dumps(old))
+                assert page.evaluate(js) == "installed"
+                assert page.evaluate("(k) => localStorage.getItem(k)", key) == dumps(new)
+                assert page.evaluate(js) == "stored already"
+                put(dumps({**old, "sections": [{"section": "A", "fields": [9]}, old["sections"][1]]}))
+                assert page.evaluate(js) == "the pane holds other steps: send steps/x.js"
+                put(None)
+                assert page.evaluate(js) == "send steps/x.js"
+            finally:
+                page.close()
+        case("a patch sends only the changed sections, and stores nothing unless the whole matches", patched)
 
         def checked():
             # check.js names what the pane's storage lacks, byte for byte, and nothing once

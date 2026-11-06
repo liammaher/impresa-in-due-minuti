@@ -1,0 +1,33 @@
+{
+ "people": {
+  "c": "luca",
+  "p": "valerio",
+  "p2": "elena",
+  "p3": "davide"
+ },
+ "descrizione": "PROVA NON INVIARE - paes. ordinaria tre tecnici",
+ "titolo": "proprietario",
+ "oggetto": "Realizzazione di una pergola in legno sul terrazzo di copertura e sostituzione della pavimentazione esterna.",
+ "titolo_atto": "rogito",
+ "atto_notaio": "Mario Fittizio",
+ "atto_notaio_sede": "Napoli",
+ "atto_repertorio": "12345",
+ "paes_interessa": "immobile",
+ "prg_nta": "art. 33",
+ "zona_prg": "zona B",
+ "atti_gravanti": false,
+ "vincolo": "art 136 and 142",
+ "bollo_marche": false,
+ "diritti_euro": "401",
+ "intervento": "edilizia_libera",
+ "cambio_uso": "no",
+ "paesaggio": "ordinaria",
+ "fatti": [],
+ "progettista_altro": true,
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf",
+ "relazione_paesaggistica": "rehearsals/scia-fittizia/files/relazione-paesaggistica.pdf",
+ "terre_rocce": "no",
+ "progettisti_quanti": 3
+}

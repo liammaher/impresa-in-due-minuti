@@ -22,6 +22,9 @@
 //   await __crawl.sectionOf(draft, section)              a draft's section as the page shows it, each
 //       box's value in [brackets], a tick box [x] or [ ]: for a rehearsal's draft (made-up values),
 //       to see which block holds whom where blocks share labels (the read-back can't tell)
+//   await __crawl.plusOf(draft, section, {choice, nth})  what a "+" adds on a draft: `choice` ticked
+//       first, the nth "+" (default the last) pressed, each row's boxes after it (new ones marked,
+//       required ones too), then Annulla: nothing saved
 //
 // A choice's node says what it reveals, hides and moves (old id → new id); gen.py reads them.
 // It also says which shown boxes it switches on and off (`enables`, `disables`): a block
@@ -53,7 +56,29 @@
     return !d || d.readyState !== "complete" || (w.jQuery && w.jQuery.active > 0) ||
       !!(w.PrimeFaces && w.PrimeFaces.ajax && !w.PrimeFaces.ajax.Queue.isEmpty());
   };
-  async function idle(ms = 30000) {
+  // The portal's own "please wait" box, and anything in flight: working, so not a failure.
+  const working = () => {
+    if (busy()) return true;
+    try {
+      return [...doc().querySelectorAll(".ui-dialog, .ui-blockui, .ui-overlay-visible, .ui-outputpanel-loading")]
+        .some((e) => e.offsetParent !== null && /attendere|caricamento|composizione della pratica/i.test(e.innerText || ""));
+    } catch (e) { return false; }
+  };
+  // Waits until done(), giving up only after `quiet` ms with no sign of work, or `cap` in all
+  // (a deadline from the click failed a slow portal that was still working, 2026-11-04).
+  async function until(done, quiet = 15000, cap = 180000) {
+    const start = performance.now();
+    let last = start;
+    while (!done()) {
+      const now = performance.now();
+      if (working()) last = now;
+      if (now - last > quiet || now - start > cap) return false;
+      await sleep(100);
+    }
+    return true;
+  }
+  // Busy is working: the limit is only for a portal stuck busy (it was 30 s until 2026-11-05).
+  async function idle(ms = 180000) {
     const end = performance.now() + ms;
     for (let q = 0; q < 3;) { if (performance.now() > end) throw new Error("portal busy"); q = busy() ? 0 : q + 1; await sleep(40); }
   }
@@ -190,16 +215,22 @@
     await act(() => b.click());
   }
   async function open(name) {
-    const a = [...doc().querySelectorAll("a.linkmenu")].find((x) => norm(x.textContent).startsWith(norm(name)));
-    if (!a) return false; // already open, or not in this pratica
-    const before = current();
-    await act(() => a.click());
-    // Scheda anagrafica reloads the whole page, which act() can't see starting. The title must
-    // change too: two sections can share their first 20 characters ("dichiarazione relativa
-    // alla conoscenza d...": the voltura's prescrizioni and soggetti).
-    for (let end = performance.now() + 10000; performance.now() < end &&
-      (current() === before || !norm(current()).startsWith(norm(name).slice(0, 20)));) await sleep(200);
-    await idle();
+    const wanted = () => norm(current()).startsWith(norm(name).slice(0, 20));
+    // On a slow portal a click can leave the previous section open past a fixed wait: 17 sections
+    // of 7 combinations "opened" the one before them, each a different one when crawled again
+    // (2026-11-04). It waits while the portal works, and clicks a second time if nothing happened.
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const a = [...doc().querySelectorAll("a.linkmenu")].find((x) => norm(x.textContent).startsWith(norm(name)));
+      if (!a) return attempt > 0; // already open, or not in this pratica
+      const before = current();
+      await act(() => a.click());
+      // Scheda anagrafica reloads the whole page, which act() can't see starting. The title must
+      // change too: two sections can share their first 20 characters ("dichiarazione relativa
+      // alla conoscenza d...": the voltura's prescrizioni and soggetti).
+      await until(() => current() !== before && wanted());
+      await idle();
+      if (wanted()) return true;
+    }
     return true;
   }
   // The open section's title: li#corrente also holds the section's form.
@@ -233,7 +264,10 @@
     const disabled = now.filter((f) => was.has(key(f)) && !was.get(key(f)).disabled && f.disabled);
     if (enabled.length) node.enables = enabled.map((f) => f.id);
     if (disabled.length) node.disables = disabled.map((f) => f.id);
-    // A "+" open in this state repeats a block: press it once, note what it adds.
+    // A "+" open in this state repeats a block: press it once, note what it adds. Only the last
+    // one is pressed: where there are more (two lists, or a list of lists: Dati catastali's
+    // unit "+" before its group's "+", 2026-11-04), `of` says so and what the others add is read
+    // on a draft. The last there was the group's: its `adds` looked like no unit at all.
     if (depth > 1) {
       const plus = [...doc().querySelectorAll('[id*="dynaForm"] button')].filter((b) => b.offsetParent && b.textContent.trim() === "+");
       if (plus.length) {
@@ -241,7 +275,7 @@
         const after = snap();
         const had = new Set(now.map(key));
         const adds = after.filter((f) => !had.has(key(f)) || after.filter((g) => key(g) === key(f)).length > now.filter((g) => key(g) === key(f)).length);
-        node.plus = { anchor: (adds.find((f) => f.kind !== "message") || {}).label, adds: adds.length };
+        node.plus = { anchor: (adds.find((f) => f.kind !== "message") || {}).label, adds: adds.length, of: plus.length };
       }
     }
     out.push(node);
@@ -560,7 +594,7 @@
   // shows the sections' menu, then the section's link opens it. Nothing is ticked or saved: what
   // the page shows, its texts and each box's value in reading order (2026-11-02: the designer's,
   // the director's and the structural designer's blocks, each under its own heading).
-  async function sectionOf(draft, section) {
+  async function openSection(draft, section) {
     await openDraft(draft);
     const link = () => [...doc().querySelectorAll("a.linkmenu")].find((a) => norm(a.textContent).startsWith(norm(section)));
     const open = () => norm((doc().querySelector("li#corrente") || {}).innerText).startsWith(norm(section));
@@ -579,6 +613,9 @@
       }
       await idle();
     }
+  }
+  async function sectionOf(draft, section) {
+    await openSection(draft, section);
     const out = [];
     const walk = (n) => {
       if (n.nodeType === 3) { const s = n.textContent.replace(/\s+/g, " ").trim(); if (s) out.push(s); return; }
@@ -599,12 +636,56 @@
     return { draft, section, text: out.join(" ").replace(/\s*Selezionare un valore\s*/g, " ") };
   }
 
+  // What a list's "+" adds, read on a draft as the dictionary needs it (2026-11-05, by hand
+  // twice before this): the section opened as sectionOf does, `choice` ticked first where the
+  // "+" shows another block under each choice (the landscape tecnico's: a whole technician under
+  // "non è colui che presenta la pratica", only an albo row under "è colui"), the `nth` "+" pressed
+  // (default the last: a section can have two, the cambio's title row and its holders), then each
+  // row as the page shows it, its boxes' ids and whether the portal now calls them required
+  // ("Il valore è obbligatorio"), the new ones marked `new`. Annulla at the end: nothing saved.
+  // `new` is what the page didn't show before the press, so a box the portal draws only on the next
+  // request reads as new too: on a freshly opened landscape tecnico, "non è colui" draws the first
+  // technician's studio without its Provincia and C.A.P. until the "+" (or the run's choice of
+  // Stato) asks the portal again (read 2026-11-05): judge `new` by the rows it sits in.
+  async function plusOf(draft, section, { choice, nth } = {}) {
+    await openSection(draft, section);
+    const root = () => doc().querySelector("li#corrente");
+    const boxes = () => [...root().querySelectorAll("input, select, textarea")].filter((x) => x.type !== "hidden" && !/combo_focus$|combo_filter$|_clone$/.test(x.id));
+    if (choice) {
+      // The shown box (a radio's _clone, in its wrapper), as `choose` clicks it, not the hidden input.
+      const r = [...root().querySelectorAll("input[type=radio], input[type=checkbox]")].find((x) => x.closest(".ui-radiobutton, .ui-chkbox")
+        && (x.closest(".ui-radiobutton, .ui-chkbox").offsetParent) && norm(x.closest("td") && x.closest("td").innerText).startsWith(norm(choice)));
+      if (!r) throw new Error(`${section}: no choice ${choice}`);
+      const wrap = r.closest(".ui-radiobutton, .ui-chkbox");
+      await act(() => (wrap && wrap.querySelector(".ui-radiobutton-box, .ui-chkbox-box") || r).click());
+      await idle();
+    }
+    const before = new Set(boxes().map((x) => x.id));
+    const pluses = [...root().querySelectorAll("button")].filter((b) => b.offsetParent && b.textContent.trim() === "+");
+    const plus = pluses[(nth || pluses.length) - 1];
+    if (!plus) throw new Error(`${section}: no "+"${nth ? ` number ${nth}` : ""} (${pluses.length} shown)`);
+    await act(() => plus.click());
+    await idle();
+    const short = (id) => id.split("dynaForm:")[1] || id;
+    const rows = [...root().querySelectorAll("tr")].filter((tr) => !tr.querySelector("tr") && tr.offsetParent).map((tr) =>
+      [...tr.children].map((td) => {
+        const own = [...td.querySelectorAll("input, select, textarea")].filter((x) => x.type !== "hidden" && !/combo_focus$|combo_filter$|_clone$/.test(x.id));
+        const text = td.innerText.replace(/\s+/g, " ").replace(/Selezionare un valore.*/, "").trim().slice(0, 60);
+        return own.length ? { text, boxes: own.map((x) => ({ id: short(x.id), kind: x.tagName === "SELECT" ? "select" : x.type,
+          required: /obbligatori/i.test(td.innerText), ...(before.has(x.id) ? {} : { new: true }) })) } : text;
+      }).filter((c) => c && (typeof c !== "string" || c))).filter((r) => r.length);
+    const added = boxes().filter((x) => !before.has(x.id)).length;
+    await undo();
+    return { draft, section, choice: choice || null, pluses: pluses.length, pressed: (nth || pluses.length), added, rows };
+  }
+
   window.__crawl = {
     revealed, save, // for bench/test_inpage.py
     // The frame of the page's own run (or of a run that ended): never one already removed.
     slots: () => { if (!frame || !frame.isConnected) frame = document.querySelector("iframe"); return slots(); },
     slotsOf,
     sectionOf,
+    plusOf,
     report: () => report,
     // Ends a batch after the pratica under way (await __crawl.wait() for it): before another
     // script drives the portal, so two never drive one draft through wizard.js's shared frame.

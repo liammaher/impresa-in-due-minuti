@@ -41,5 +41,13 @@
   "result": "filled",
   "seconds": 65.1,
   "browser": "pane"
+ },
+ {
+  "date": "2026-11-05",
+  "answers": "answers-tecnici-tre.json",
+  "result": "filled",
+  "seconds": 88.8,
+  "browser": "pane",
+  "note": "Three technicians, none the architect presenting (`answers-tecnici-tre`: valerio, elena, davide), the tecnico section's \"+\" twice, `bench/rerun.py` bundle: **filled** in 89 s, nothing moved or loose. A second technician beside the presenter is refused (defects.yaml `paesaggio-altri-tecnici`: under \"è colui\" the \"+\" shows only an albo row, read on a draft the same day)"
  }
 ]

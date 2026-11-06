@@ -30,5 +30,6 @@ holders' names, the bollo, signing and sending.
 | 2026-11-02 | pane | `answers-senza-cointestatari.json` | **filled** in 56 s |
 | 2026-11-02 | pane | `answers-p6.json` | **filled** in 59 s |
 | 2026-11-03 | pane | `answers-p6.json` | **filled** in 87 s |
+| 2026-11-05 | pane | `answers-tre-cointestatari.json` | Three co-holders (`answers-tre-cointestatari`: paolo, marta, bruno), the co-holders' "+" twice, `bench/rerun.py` bundle: **filled** in 94 s, nothing moved or loose: the section has a "+" (the coholders-one defect withdrawn) |
 
 <!-- /runs -->

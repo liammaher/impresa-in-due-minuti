@@ -1,0 +1,46 @@
+# inizio lavori e terre e rocce: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml, reason
+# dichiarazione-with-start). The case: inizio-lavori-fittizia's, with what scavo-fuori-sito-fittizio adds; the other's answers fill
+# what the main's don't say (gen.py combo_answers). The rules table sue-napoli-adempimenti routes it.
+extends:
+- inizio-lavori-fittizia
+- scavo-fuori-sito-fittizio
+procedure: napoli/comune/inizio-lavori-pdc-con-utilizzo-materiale-scavo-fuori-sito
+title: Inizio lavori e terre e rocce in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-inizio-lavori-dichiarazione-utilizzo
+operation:
+- Comunicazione inizio lavori
+- Dichiarazione di utilizzo del materiale di scavo fuori del sito di produzione ai sensi dell'art. 21 del DPR n.120/2017
+  (da trasmettere almeno 15 giorni prima dell'inizio dei lavori di scavo)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: inizio lavori + terre e rocce {{c:identity.last_name}}
+  diritti_euro:
+    default: '0'
+    why: "Non presente nel tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): nessun diritto (non previsti dal tariffario)"
+yours:
+- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
+- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
+- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Firmi e invii (Firma e invio); conservi la ricevuta"
+rules:
+  table: sue-napoli-adempimenti
+  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  facts:
+    adempimento: inizio_lavori
+    titolo_tipo: permesso_di_costruire
+    dichiarazione_utilizzo: 'true'
+  main: napoli/comune/inizio-lavori-pdc
+  handles:
+  - napoli/comune/utilizzo-materiale-scavo-fuori-sito
+answers:
+  descrizione: PROVA NON INVIARE - inizio lavori + terre e rocce P6
