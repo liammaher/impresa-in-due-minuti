@@ -21,11 +21,17 @@ open source.
 
 ## Installazione
 
-Nell'app Claude per computer, un solo comando aggiunge e installa Portale SUE:
+Serve un piano Claude a pagamento (Pro, Max, Ultra, Team o Enterprise). Nell'app Claude per
+computer, senza terminale:
 
-```
-/plugin install portale-sue --marketplace liammaher/portale-sue
-```
+1. Apra **Customize** e la scheda **Plugins**.
+2. Clicchi **Add**, poi **Add marketplace**, e scriva `liammaher/portale-sue`.
+3. Trovi Portale SUE nell'elenco e clicchi **Install**.
+4. Sul marketplace attivi **Sync automatically**: così riceve da solo ogni aggiornamento, anche
+   quando il portale cambia e una pratica va rimappata.
+
+I nomi dei menu sono quelli dell'app in inglese. In uno studio con piano Team o Enterprise basta che
+lo aggiunga l'amministratore: arriva a tutti.
 
 <!-- vault -->
 Poi scriva «Configura Portale SUE»: Claude prepara il Suo archivio privato, cifrato, su questo

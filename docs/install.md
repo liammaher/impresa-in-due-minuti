@@ -8,14 +8,17 @@ done*). Work merged since is in the next release, not in 0.3.0.
 
 ## What you do
 
-1. **Add the plugin.** In Claude Code:
+1. **Add the plugin**, on a paid plan (Anthropic lists plugins for Pro, Max, Ultra, Team and
+   Enterprise). In the Claude app, with no terminal: **Customize → Plugins → Add → Add marketplace**,
+   type `liammaher/portale-sue`, then **Install** on Portale SUE. Turn on **Sync automatically** on the
+   marketplace: a plugin installed this way updates from its marketplace, which is how a remapped
+   pratica or a portal-drift refusal reaches the tecnico. It is saved to the account, so it is in chat,
+   Cowork and Claude Code too. On a Team or Enterprise plan an owner can install it for everyone (or
+   require it) instead. In Claude Code the same is
+   `/plugin install portale-sue --marketplace liammaher/portale-sue`.
 
-   ```
-   /plugin install portale-sue --marketplace liammaher/portale-sue
-   ```
-
-   (or `claude plugin marketplace add liammaher/portale-sue`, then
-   `claude plugin install portale-sue@portale-sue`).
+   One way only: there is no separate skill to upload. An uploaded skill has no update channel, so it
+   would go stale the first time the portal changed.
 2. **Say "set me up"** if you want the private vault. Claude asks before it downloads anything.
 3. **Choose a password and keep the recovery key** on the page `pvault setup` opens in your browser,
    then turn on Touch ID there. This is the one step that is yours alone: neither is ever typed or
@@ -67,9 +70,11 @@ install-pvault.sh | .ps1  downloads  pvault_<version>_<os>_<arch>  and refuses i
 
 ## Releasing (maintainers)
 
-1. Bump `version` in `plugin/portale-sue/.claude-plugin/plugin.json`; the release workflow refuses a tag that
-   differs from it.
-2. Tag `vX.Y.Z` and push the tag. The workflow runs the tests, builds the six `pvault` archives and
+1. Bump `version` in `plugin/portale-sue/.claude-plugin/plugin.json` (in a pull request, merged); the
+   release workflow refuses a tag that differs from it.
+2. On GitHub, **Actions → Release → Run workflow** on `main`: it tags `v<that version>` itself and runs
+   the release (it refuses a version released already). Pushing a tag `vX.Y.Z` by hand does the
+   same. The workflow runs the tests, builds the six `pvault` archives and
    `checksums.txt` (goreleaser), builds the plugin with them and attaches it as `portale-sue-X.Y.Z.zip`, then
    opens a pull request that pins `.claude-plugin/marketplace.json` to it.
 3. Merge that pull request. Until then `marketplace add` finds no marketplace.
