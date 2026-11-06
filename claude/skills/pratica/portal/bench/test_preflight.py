@@ -982,6 +982,32 @@ def every_sue_case_ready():
     assert stops == {("cila-fittizia", "answers-societa.json")}, stops
 
 
+def short_message():
+    """The first message in text (`short`): the questions, but the files they ask for, and the
+    proposals as one line to confirm them all; the missing details and the files to fix wait for
+    the answers (they are only in `message`). The CILA with only its facts answered."""
+    root = HERE.parents[4] / "rehearsals"
+    d = root / "cila-fittizia"
+    steps = yaml.safe_load((d / "portal-steps.generated.yaml").read_text())
+    fields = dict(json.loads((d / "fixture-p6.json").read_text())["fields"])
+    full = json.loads((d / "answers-p6.json").read_text())
+    keep = ("people", "descrizione", "fatti", "intervento", "cambio_uso", "paesaggio")
+    here = os.getcwd()
+    os.chdir(HERE.parents[4])
+    try:
+        r = run.preflight(steps, values({k: v for k, v in full.items() if k in keep}, fields, steps))
+    finally:
+        os.chdir(here)
+    short, message = r["short"], r["message"]
+    assert r["proposals"] and any(q.get("type") == "file" for q in r["questions"]), r["questions"]
+    assert short.startswith("Domande") and len(short) < len(message) / 2, short
+    for words in ("Risposte che propongo", "Mi mancano", "vanno sistemati", "(PDF)", "Alla fine restano"):
+        assert words not in short, (words, short)
+    assert f"({len(r['proposals'])} risposte, tutte nella pagina di riepilogo)" in short, short
+    assert short.rstrip().endswith("per vederle una per una."), short
+    assert "Risposte che propongo" in message, message
+
+
 def streets_and_lists():
     """A street that isn't a Via, Viale, Piazza, Corso or Largo (a third of Naples') is ALTRO with
     its type in "Dettaglio DUG", the name after it; a type the portal lists nowhere (Naples' cupe) is
@@ -1170,6 +1196,7 @@ CASES = [
     ("the SCIA in sanatoria: in progress and double conformity ready, art. 36-bis c. 1 and pre-1977 variants refused", sanatoria_cases),
     ("a landscape variant, a renewal with changes (refused for a semplificata), an architect born abroad", group_two_choices),
     ("every SUE case is ready but those refused on purpose; only the registered company can't pass on made-up data", every_sue_case_ready),
+    ("the first message in text: the questions without their files, the proposals in one line, nothing else yet", short_message),
     ("the Catasto Terreni: a plot's radio and boxes, a unit's from its categoria unasked, asked when the vault can't tell", catasto_terreni),
     ("cadastral units: one unasked, a second proposed, each after the first by its \"+\", in up to three groups", cadastral_units),
     ("firms repeat by \"+\"; a landscape technician beside the presenter is the portal's defect", third_firm),

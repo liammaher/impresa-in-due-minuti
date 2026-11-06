@@ -264,7 +264,9 @@ def attachments(out, job):
             "lavoro.</p><details open><summary>Allegati</summary><table>" + "".join(rows) + "</table></details>"), checks
 
 
-def portal_review(report, out=None, job=None):
+def portal_review(report, out=None, job=None, prova=False):
+    """prova: the skill's Prova (made-up data): no check against documents, and the portal's
+    warnings on made-up values are expected, not for the person to chase."""
     ok = report.get("result") == "filled"
     # The runner's own reasons are for Claude, who recovers a stop; the person reads where.
     checks = [(f"{s['section']}: salvata, ogni campo riletto ({s['seconds']} s)"
@@ -279,7 +281,8 @@ def portal_review(report, out=None, job=None):
         checks.append(("La compilazione si è fermata prima della fine: Claude sa dove e perché", False))
     # The portal's warnings beside boxes it kept (inpage.js alerts()): the person checks each.
     for a in report.get("alerts", []):
-        checks.append((f"{a['section']}, {a.get('label') or 'una casella'}: il portale segnala «{a['text']}» (valore salvato: lo controlli)", False))
+        checks.append((f"{a['section']}, {a.get('label') or 'una casella'}: il portale segnala «{a['text']}» "
+                       + ("(normale con dati inventati)" if prova else "(valore salvato: lo controlli)"), prova))
     # The report says only why a read-back failed; the person sees what it wanted and found.
     for d in report.get("details", []):
         checks.append((f"{d['section']}, {d['label']}: doveva essere «{d['want']}», il portale ha «{d['got']}»", False))
@@ -292,14 +295,15 @@ def portal_review(report, out=None, job=None):
     prev_html, prev_checks = preview(report, folder) if ok else ("", [])
     # The check against the documents is the skill's (review.py OUT, with the job's folder);
     # run.py run's own review, which calls this with no job, has no such step.
-    checked = ok and job is not None
+    checked = ok and job is not None and not prova
     check_html, check_checks = check(out) if checked else ("", [])
     files_html, files_checks = attachments(out, job) if checked else ("", [])
     if out and (out / "check.json").exists():
         prev_checks = []  # the preview was read and checked: that line says more than "not copied"
     checks += check_checks + files_checks + decl_checks + prev_checks
     return page(report.get("title") or report["procedure"], "Bozza sul portale", ok,
-                f"Bozza salvata in {report.get('total_seconds')} s: pronta da rivedere" if ok
+                (f"Bozza di prova compilata in {report.get('total_seconds')} s, con dati inventati: non va inviata"
+                 if prova else f"Bozza salvata in {report.get('total_seconds')} s: pronta da rivedere") if ok
                 else "Si è fermata prima della fine", report.get("yours", []), [("Bozza", report.get("url"))],
                 checks, list(groups.items()), prev_html, check_html + files_html + decisions(report) + decl_html)
 
@@ -308,6 +312,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("out", type=Path)
     ap.add_argument("--route", type=Path)
+    ap.add_argument("--prova", action="store_true", help="the skill's Prova: made-up data, no check against documents")
     ap.add_argument("--job", type=Path, help="the job's folder, whose files the portal's are matched to "
                     "(default: OUT's parent)")
     a = ap.parse_args()
@@ -317,7 +322,7 @@ def main():
         report |= json.loads(shown.read_text())
     route = json.loads(a.route.read_text()) if a.route else None
     job = (a.job or a.out.resolve().parent).resolve()
-    doc = form_review(a.out, report, route) if "rows" in report else portal_review(report, a.out.resolve(), job)
+    doc = form_review(a.out, report, route) if "rows" in report else portal_review(report, a.out.resolve(), job, a.prova)
     (a.out / "review.html").write_text(doc, encoding="utf-8")
     print(a.out / "review.html")
     return 0
