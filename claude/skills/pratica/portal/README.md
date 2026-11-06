@@ -824,14 +824,23 @@ adds (`sue-combo-scia-sanatoria-paesaggistica-*`, 2026-10-31). The slots it read
 checkboxes, so a Si/No's own slots come from the main pratica's recipe.
 Once a batch is done and the tab still has wizard.js and crawl.js, a small second one starts from
 the page without a bundle: `crawl:batch` set to its ops, then `__crawl.batch(opts)`, the known
-fingerprints kept (2026-10-31: the two SCIA in sanatoria combinations). Save the first batch's
+fingerprints kept (2026-10-31: the two SCIA in sanatoria combinations). In a new tab or session,
+`start.js` (written with every bundle, a few KB) does the same: it checks the pane's stored
+`pv-wizard` and `pv-crawl` against the repo's by sha256, removes older frames, and starts the batch
+from them, so no file is picked; it says "stale" when a crawler change hasn't reached the pane, and
+then pick.js's box is the way (2026-11-05: the SCIA in sanatoria with the landscape proroga and rinnovo,
+crawled with no pick in 100 and 130 s, their sections all known). Save the first batch's
 results before, or name all of them in export.js: it reads the ops of `crawl:batch`.
 A batch whose sections were all seen before is small: `print.js` prints it with its sha256, and
 `catalogue.py import -` refuses a copy that arrived changed (no download to ask for), trailing
 newlines aside. Over 40 KB print.js packs it (`strings-v1`: each string once, used by index), which
 import unpacks; past what that saves (ten three-operation crawls, 64 KB packed, 2026-11-03) it's
 export.js and the person's yes to a download. Copy a print one combination at a time
-(`{"crawl:op:<name>": ...}` with its own sha256) rather than by hand-split halves. The declarations
+(`window.pvPrintNames = ["<name>"]` before print.js, its own sha256) rather than by hand-split halves.
+The pane's JavaScript tool returns the print as one JSON string, quotes and `\"` escapes in: save it as it
+came and `import -` decodes it (2026-11-05: unescaped by hand once, a risk the sha256 only catches after).
+`import` needs `CATALOGUE_PRIVATE`, a pattern for the portal login's name and codice fiscale, set in the
+shell for that command only (never written to the repo): it refuses a crawl that holds them. The declarations
 come back `skipped` (the person's, never crawled), not as new sections: a first look at a batch that
 counts them as new misreads it. A section's `same_as` can name an op that only ever lived in the pane
 (a deeper recrawl, `d4-scia-alt`): import names the repo crawl that holds its fingerprint instead.

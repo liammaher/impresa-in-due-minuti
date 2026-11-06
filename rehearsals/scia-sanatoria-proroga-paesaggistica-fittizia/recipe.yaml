@@ -1,0 +1,61 @@
+# SCIA in sanatoria e proroga paesaggistica: 2 operations in one pratica on Napoli's SUE (catalogue/F839/sue-pairs.yaml,
+# reason authorization-keeps-pace). A SCIA filed of one's own accord for works still under way (art. 37 c. 5 DPR 380/2001)
+# on a property whose landscape authorization, already held for the works not yet done, is about to expire: the SCIA
+# carries its art. 10-septies extension, as a new title would (rules/sue-napoli.yaml, paesaggistica-proroga). The case:
+# scia-sanatoria-paesaggistica-semplificata-fittizia's, with what proroga-paesaggistica-fittizia adds; the other's answers
+# fill what the main's don't say (gen.py combo_answers). gen.py takes the order from the combination's crawl with the
+# sanatoria answered Sì (catalogue/F839/sections/sue-combo-scia-sanatoria-proroga-paesaggistica.json).
+extends:
+- scia-sanatoria-paesaggistica-semplificata-fittizia
+- proroga-paesaggistica-fittizia
+procedure: napoli/comune/scia-in-sanatoria-con-proroga-autorizzazione-paesaggistica
+title: SCIA in sanatoria e proroga paesaggistica in una pratica, SUE Napoli (tecnico con procura)
+comune: F839
+sportello: sue
+crawl: sue-combo-scia-sanatoria-proroga-paesaggistica
+operation:
+- Segnalazione Certificata di Inizio Attività Edilizia (S.C.I.A.)
+- Proroga autorizzazione paesaggistica (art. 10 septies, Legge 51/2022 - Comune)
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+after:
+- Pagamento degli oneri
+- Gestione degli allegati
+asks:
+  descrizione:
+    default: PROVA NON INVIARE - SCIA sanatoria + proroga {{c:identity.last_name}}
+  # The main pratica's: the proroga's own would win the merge, and the Comune's table charges a landscape
+  # authorization only "quando oggetto di autonoma istanza".
+  diritti_euro:
+    propose: "{{ask.sanatoria_caso|diritti_sanatoria_scia}}"
+    why: "Line SUE 16 of the Comune's 2026 table of SUE diritti (G.C. 239/2026): 441 € at filing for an accertamento di conformità (art. 36-bis) or a regularization (art. 34-ter), the rest once determined; art. 36-bis c. 5 b, SUE 17-18. A SCIA filed while the works are under way (art. 37 c. 5, the 516 € sanzione) is in no row: SUE 16 names only the accertamenti and the regularizations, so it's asked (library pitfall, to confirm with the SUE)"
+yours:
+- Open the draft in Pratiche in bozza ({{ask.descrizione}}) and check it against this page
+- "Tick the dichiarante's declarations: the awareness box under the PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "As progettista, check every asseverazione on this page: they are yours, signed with the pratica"
+- Before the works start, name whoever the pratica leaves to be named (the direttore dei lavori, the structural one, the firm) with the SUE's comunicazione di nomina
+- "File before the landscape authorization expires: the art. 10-septies extension is communicated while it is still in force"
+- "Pay the €516 sanction (art. 37 c. 5) before the run, which attaches its receipt, and the diritti before the second run (after the declarations), which attaches theirs"
+- Sign and send (Firma e invio); keep the receipt
+rules:
+  table: sue-napoli
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
+  # A combination's facts replace its parents' whole: the main pratica's, restated.
+  facts:
+    permesso_per_scelta: 'false'
+    sanatoria: 'true'
+    parere_esonero: 'false'
+  main: napoli/comune/scia-in-sanatoria
+  handles:
+  - napoli/comune/proroga-autorizzazione-paesaggistica
+# The case: the main pratica's P6 answers, the other's, then these (a null drops one); `gen.py --answers` writes
+# answers-p6.json. Interior works begun without the SCIA; the facade works, authorized in 2021, still to do.
+answers:
+  descrizione: PROVA NON INVIARE - SCIA sanatoria + proroga paes. P6
+  paesaggio: proroga
+  oggetto: "SCIA a lavori in corso (art. 37 c. 5 DPR 380/2001) con proroga dell'autorizzazione paesaggistica (art. 10-septies L. 51/2022): tramezzi interni, nuovo bagno, impianti; persiane e ringhiere in facciata, già autorizzate, da installare (dati inventati)."
+  dettaglio_intervento: "All'interno, lavori iniziati senza SCIA: demolizione e ricostruzione di due tramezzi con nuova distribuzione di cucina e bagno; nuovo bagno; rifacimento degli impianti idrico ed elettrico. In facciata, da eseguire entro la proroga dell'autorizzazione paesaggistica in vigore: sostituzione di persiane e ringhiere con altre di diverso disegno. Opere non strutturali. Dati inventati per la prova."
+  allegato_b: null

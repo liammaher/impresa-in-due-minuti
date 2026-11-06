@@ -23,7 +23,9 @@
     catalogue.py pane DIR --bundle FILE --ops OPS.json     a batch as one file the person picks (pick.js),
         [--draft NAME] [--depth 3] [--fresh|--forget-known] [--check]   (--check: a drift check, today's)
                                                            status.js to poll, export.js to save the results
-                                                           (print.js prints a small batch's, sha256 first)
+                                                           (print.js prints a small batch's, sha256 first);
+                                                           start.js starts it with no pick from the pane's
+                                                           stored crawler, when that is this one
 
 A section's fingerprint is what it shows before any choice (ids, kinds, labels, lengths,
 short lists), hashed as crawl.js does: the same fingerprint is the same section, whatever
@@ -179,6 +181,10 @@ def read_export(source, what="imported"):
     digest.js), so a copy that arrived changed is refused. Its JSON never ends in a newline,
     but a heredoc or a paste adds one (2026-10-31: a good copy refused)."""
     text = sys.stdin.read() if source == "-" else Path(source).read_text()
+    if text.lstrip().startswith('"'):
+        # The pane's JavaScript tool returns a script's text as a JSON string, quotes and escapes
+        # included: kept as it came and decoded here, never unescaped by hand (2026-11-05).
+        text = json.loads(text)
     head, _, rest = text.partition("\n")
     rest = rest.rstrip("\r\n")
     if re.fullmatch(r"[0-9a-f]{64}", head.strip()):
@@ -524,11 +530,8 @@ def bundle(out, path, srcs, ops, args):
     stamp = "backup-" + datetime.date.today().strftime("%Y%m%d")
     # Busy only while a batch runs: one that ended doesn't hold the tab (2026-10-31: a second
     # bundle in the tab was refused).
-    text = (f"(() => {{\n  if (window.__crawlBusy && !(window.__crawl && (window.__crawl.report() || {{}}).done)) return \"a batch already runs in this tab\";\n"
-            f"  const src = {json.dumps(srcs)};\n"
-            "  for (const [k, v] of Object.entries(src)) localStorage.setItem(k, v);\n"
-            "  (0, eval)(src[\"pv-wizard\"]); (0, eval)(src[\"pv-crawl\"]);\n"
-            f"  const opts = {json.dumps(opts, ensure_ascii=False)};\n"
+    guard = "  if (window.__crawlBusy && !(window.__crawl && (window.__crawl.report() || {}).done)) return \"a batch already runs in this tab\";\n"
+    body = (f"  const opts = {json.dumps(opts, ensure_ascii=False)};\n"
             "  localStorage.setItem(\"crawl:batch\", JSON.stringify(opts));\n"
             # --fresh redoes the ops; the sections it has seen come back as same_as (2026-10-31: a
             # combination crawled again only for its attachments read every section, 8 minutes for 2).
@@ -537,9 +540,27 @@ def bundle(out, path, srcs, ops, args):
                "  localStorage.setItem(\"crawl:known\", \"{}\"); localStorage.removeItem(\"crawl:scelte\");\n" if args.forget_known else "")
             + ("  for (const o of opts.ops) localStorage.removeItem(\"crawl:op:\" + o.name);\n" if args.fresh or args.forget_known else "")
             + "  window.__crawlBusy = true;\n  window.__crawl.batch(opts);\n"
-            f"  return `started: ${{opts.ops.length}} pratiche, depth ${{opts.depth}}{' (fresh)' if args.fresh or args.forget_known else ''}`;\n}})()\n")
+            f"  return `started: ${{opts.ops.length}} pratiche, depth ${{opts.depth}}{' (fresh)' if args.fresh or args.forget_known else ''}`;\n")
+    text = (f"(() => {{\n{guard}  const src = {json.dumps(srcs)};\n"
+            "  for (const [k, v] of Object.entries(src)) localStorage.setItem(k, v);\n"
+            "  (0, eval)(src[\"pv-wizard\"]); (0, eval)(src[\"pv-crawl\"]);\n" + body + "})()\n")
     path.write_text(text)
     sha = hashlib.sha256(text.encode()).hexdigest()
+    # The same batch with no file pick, when the pane's stored wizard.js and crawl.js are this repo's
+    # (by sha256): the crawler is 50 KB and a call takes about 40, but the batch's own opts are small
+    # (2026-11-05: two combinations crawled this way, the pick kept for the runs). Older frames go first.
+    want = {k: hashlib.sha256(v.encode()).hexdigest() for k, v in srcs.items()}
+    start = ("document.querySelectorAll(\"iframe\").forEach((x) => x.remove());\n"
+             "const sha = async (s) => Array.from(new Uint8Array(await crypto.subtle.digest(\"SHA-256\", "
+             "new TextEncoder().encode(s)))).map((b) => b.toString(16).padStart(2, \"0\")).join(\"\");\n"
+             f"const want = {json.dumps(want)};\n"
+             "const stale = []; for (const k of Object.keys(want)) if (await sha(localStorage.getItem(k) || \"\") !== want[k]) stale.push(k);\n"
+             f"stale.length ? `stale: ${{stale.join(\", \")}}: show pick.js's box and pick {path.name} instead` : (() => {{\n{guard}"
+             "  (0, eval)(localStorage.getItem(\"pv-wizard\")); (0, eval)(localStorage.getItem(\"pv-crawl\"));\n" + body + "})()\n")
+    if len(start) < 30000:
+        (out / "start.js").write_text(start)
+    else:
+        (out / "start.js").unlink(missing_ok=True)
     (out / "pick.js").write_text(f"""document.querySelectorAll("iframe, #pv-pick").forEach((x) => x.remove());
 const box = document.createElement("div"); box.id = "pv-pick";
 box.style.cssText = "position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:2147483647;background:#fff;border:3px solid #1a4fd6;padding:16px 20px;font:16px sans-serif;box-shadow:0 4px 18px rgba(0,0,0,.3);border-radius:8px;max-width:520px";
@@ -576,9 +597,10 @@ document.body.appendChild(a); a.click(); a.remove();
     (out / "print.js").write_text("""// A small batch's results as text (a combination, its sections all known): sha256 first, for
 // `catalogue.py import -`, which refuses a copy that arrived changed. Over 40 KB, each string over 12
 // characters goes once in `strings` and is {"$": index} where used. Too big still: export.js.
+// window.pvPrintNames, if set, prints only those ops: one combination a copy.
 const opts = JSON.parse(localStorage.getItem("crawl:batch")), unsaved = window.__crawlUnsaved || {};
 const out = {};
-for (const o of opts.ops) { const k = "crawl:op:" + o.name, v = unsaved[k] || localStorage.getItem(k); if (v) out[k] = JSON.parse(v); }
+for (const o of opts.ops.filter((o) => !window.pvPrintNames || window.pvPrintNames.includes(o.name))) { const k = "crawl:op:" + o.name, v = unsaved[k] || localStorage.getItem(k); if (v) out[k] = JSON.parse(v); }
 let text = JSON.stringify(out);
 if (text.length > 40000) {
   const strings = [], at = new Map();
@@ -621,7 +643,8 @@ text.length > 40000 ? `${text.length} characters: name fewer pratiche` : sha + "
     return [f"{path} ({path.stat().st_size // 1024} KB, {len(names)} pratiche) and, in {out}: pick.js (the box "
             f"where the person picks it), status.js (poll), "
             + ("digest.js (each pratica's digest, for `drift --digests -`), check-print.js (those that differ, for `drift -`)"
-               if args.check else f"export.js (saves {name}, once they agree), print.js (a small batch's results as text)")]
+               if args.check else f"export.js (saves {name}, once they agree), print.js (a small batch's results as text)")
+            + (f"; start.js starts the batch with no pick while the pane's stored crawler is this one" if (out / "start.js").exists() else "")]
 
 
 def wizard_group(key):
