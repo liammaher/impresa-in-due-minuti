@@ -36,7 +36,7 @@ def main():
     assert isinstance(build.vault_default(), bool)
     import pin_marketplace  # the listing people read before installing says what the plugin has
     for vault in (True, False):
-        said = pin_marketplace.marketplace("0.1.0", "0" * 64, vault=vault)["plugins"][0]["description"]
+        said = pin_marketplace.marketplace("0.1.0", "0" * 40, vault=vault)["plugins"][0]["description"]
         assert ("vault" in said) == vault, said
 
     with tempfile.TemporaryDirectory() as tmp:

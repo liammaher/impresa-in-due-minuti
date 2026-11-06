@@ -33,14 +33,18 @@ in the conversation. The rest of this page up to *Python* is about that archive.
 ## What happens, and what is checked
 
 ```
-.claude-plugin/marketplace.json  --pinned by SHA-256-->  portale-sue-<version>.zip  (a release asset)
-portale-sue-<version>.zip  contains  pvault-checksums.txt  (SHA-256 of each pvault archive of that release)
+.claude-plugin/marketplace.json  --pinned by commit-->  plugin-v<version>  (the plugin branch)
+the plugin  contains  pvault-checksums.txt  (SHA-256 of each pvault archive of that release)
 install-pvault.sh | .ps1  downloads  pvault_<version>_<os>_<arch>  and refuses it unless it matches
 ```
 
-- The marketplace file is pinned to one release's zip, so Claude Code refuses a zip that isn't the one
-  the release published. A pull request moves the pin at each release (`plugin/pin_marketplace.py`).
-- The zip carries the checksums of the `pvault` downloads, so a swapped binary is refused even if the
+- The marketplace file is pinned to one release's commit of the `plugin` branch (the built plugin,
+  tagged `plugin-v<version>`), so a moved tag installs nothing else. A pull request moves the pin at
+  each release (`plugin/pin_marketplace.py`). A git source because the Claude app takes only
+  `github`, `url`, `git-subdir` and `./` sources: with the release zip (`archive`, which only
+  Claude Code reads) "Add marketplace" failed in the app. The zip is still on each release, for
+  **Upload plugin**.
+- The plugin carries the checksums of the `pvault` downloads, so a swapped binary is refused even if the
   release page were tampered with. The checksum is not fetched with the download.
 - The installer needs no admin rights, edits no PATH or shell profile (Windows: only with
   `-AddToPath`), unpacks one named file from the archive, and runs nothing but that `pvault`, to print
@@ -78,12 +82,15 @@ install-pvault.sh | .ps1  downloads  pvault_<version>_<os>_<arch>  and refuses i
 2. On GitHub, **Actions → Release → Run workflow** on `main`: it tags `v<that version>` itself and runs
    the release (it refuses a version released already). Pushing a tag `vX.Y.Z` by hand does the
    same. The workflow runs the tests, builds the six `pvault` archives and
-   `checksums.txt` (goreleaser), builds the plugin with them and attaches it as `portale-sue-X.Y.Z.zip`, then
-   opens a pull request that pins `.claude-plugin/marketplace.json` to it.
+   `checksums.txt` (goreleaser), builds the plugin with them and attaches it as `portale-sue-X.Y.Z.zip`, commits the same build
+   to the `plugin` branch as `plugin-vX.Y.Z` (`plugin/publish_plugin.py`), then opens a pull request
+   that pins `.claude-plugin/marketplace.json` to that commit.
 3. Merge that pull request (a bot's pull request gets no CI run, so it takes an admin merge). Until
    then the marketplace still installs the previous release.
 4. On a clean Mac and a clean Windows machine: add the marketplace, install, and run one pratica's
    pre-flight; with the archive, also say "set me up" and check `pvault version`. (The installer's
    tests run against a fake release in CI: `plugin/test_install.py`.)
 5. The private-terms check (`plugin/build.py`) runs only where the maintainer's list is, never in
-   CI: build the released zip's tag locally, or unzip the release and run `check_private` on it.
+   CI: build the released zip's tag locally, or unzip the release and run `check_private` on it. The
+   `plugin` branch holds the same files, so a term found there means deleting the release and the
+   `plugin-vX.Y.Z` tag and force-pushing `plugin` back to the commit before it.
