@@ -4,20 +4,60 @@ on:
   push:
     tags:
       - "v*"
+  # The one button: Actions > Release > Run workflow on main releases the version plugin.json says.
+  # It makes that tag itself (a tag pushed by the workflow's own token starts no second run).
+  workflow_dispatch:
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
+  # The tag this release is: the one pushed, or, from the button, v<plugin.json's version>, made here.
+  tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_EVENT_NAME" != workflow_dispatch ]; then
+            echo "tag=$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$GITHUB_REF_NAME" != main ]; then
+            echo "Run it on main: a release is cut from main only" >&2
+            exit 1
+          fi
+          version=$(python3 -c 'import json; print(json.load(open("plugin/portale-sue/.claude-plugin/plugin.json"))["version"])')
+          tag="v$version"
+          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null || gh release view "$tag" >/dev/null 2>&1; then
+            echo "$tag is released already: bump version in plugin/portale-sue/.claude-plugin/plugin.json first" >&2
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$tag" -m "Release $tag"
+          git push origin "$tag"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
   # plugin/build.yaml's `vault`: false, the release builds no pvault (no Touch ID helper, no
   # goreleaser archives) and the plugin it attaches ships none.
   switch:
+    needs: tag
     runs-on: ubuntu-latest
     outputs:
       vault: ${{ steps.read.outputs.vault }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.tag.outputs.tag }}
       - id: read
         run: |
           set -euo pipefail
@@ -31,15 +71,19 @@ jobs:
   # The Touch ID helper needs Swift and a Mac: one universal binary (Apple silicon and Intel),
   # ad-hoc signed as `make touchid` does; the installer signs it again on the person's Mac.
   touchid:
-    needs: switch
+    needs: [tag, switch]
     if: needs.switch.outputs.vault == 'true'
     runs-on: macos-latest
+    env:
+      TAG: ${{ needs.tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.tag.outputs.tag }}
       - name: Build pvault-touchid
         run: |
           set -euo pipefail
-          version="${GITHUB_REF_NAME#v}"
+          version="${TAG#v}"
           mkdir -p touchid
           for arch in arm64 x86_64; do
             swiftc -O -swift-version 5 -target "$arch-apple-macos13" cmd/pvault-touchid/main.swift -o "touchid/h-$arch"
@@ -53,15 +97,17 @@ jobs:
           path: touchid/pvault-touchid_*.tar.gz
 
   release:
-    needs: [switch, touchid]
+    needs: [tag, switch, touchid]
     # touchid is skipped when the plugin ships no archive.
     if: ${{ !cancelled() && needs.switch.result == 'success' && needs.touchid.result != 'failure' }}
     runs-on: ubuntu-latest
     env:
       VAULT: ${{ needs.switch.outputs.vault }}
+      TAG: ${{ needs.tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ needs.tag.outputs.tag }}
           fetch-depth: 0
 
       - uses: actions/download-artifact@v4
@@ -90,7 +136,7 @@ jobs:
         if: env.VAULT != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --generate-notes
+        run: gh release create "$TAG" --verify-tag --title "$TAG" --generate-notes
 
       # The plugin people install in Claude (plugin/): built from this tag and the pratiche-napoli
       # library, with this release's checksums (when it ships the archive) so its setup skill can
@@ -110,7 +156,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          version="${GITHUB_REF_NAME#v}"
+          version="${TAG#v}"
           manifest=$(python3 -c 'import json; print(json.load(open("plugin/portale-sue/.claude-plugin/plugin.json"))["version"])')
           if [ "$manifest" != "$version" ]; then
             echo "plugin/portale-sue/.claude-plugin/plugin.json says $manifest, the tag says $version: bump the plugin first" >&2
@@ -124,7 +170,7 @@ jobs:
           python3 plugin/build.py --library pratiche-napoli --out "$RUNNER_TEMP/plugin" "${pin[@]}"
           cp "$RUNNER_TEMP/plugin/portale-sue.plugin" "portale-sue-$version.zip"
           sha256sum "portale-sue-$version.zip" | cut -d' ' -f1 > "$RUNNER_TEMP/portale-sue.sha256"
-          gh release upload "$GITHUB_REF_NAME" "portale-sue-$version.zip"
+          gh release upload "$TAG" "portale-sue-$version.zip"
           echo "PLUGIN_VERSION=$version" >> "$GITHUB_ENV"
           echo "PLUGIN_SHA256=$(cat "$RUNNER_TEMP/portale-sue.sha256")" >> "$GITHUB_ENV"
 
