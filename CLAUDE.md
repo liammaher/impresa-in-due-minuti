@@ -128,16 +128,17 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      the person to confirm (`accept`); Claude reads only intake.json, never the
                      documents' values (intake/README.md)
   pratica/review.py  the page the person reviews: what's left for them, the checks, every value
-plugin/              the Portali plugin for Cowork (docs/design/packaging.md): build.py copies the
+plugin/              the Portale SUE plugin for Cowork (docs/design/packaging.md): build.py copies the
                      runner, the rehearsals' steps files (as JSON: no packages in Cowork) and the
                      library into it; it stops unless each pratica's pre-flight matches the repo's.
                      build.yaml's `vault` ships the archive or not (off: no setup skill, no pvault
-                     in a release, the texts' `<!-- no-vault -->` parts; test_build.py).
+                     in a release, the texts' `<!-- no-vault -->` parts; test_build.py); its
+                     `sportelli` (`[sue]`) which pratiche, rules tables and library procedures go in.
                      `--cowork-test` keeps the Cowork test skill, `--evals` adds evals/ (how Claude
                      follows the skill, `claude plugin eval`); a release has neither.
-                     The skill's report.py: a Portali fault as a link to the bug form, filled in,
+                     The skill's report.py: a Portale SUE fault as a link to the bug form, filled in,
                      refused if it holds a job's value (test_report.py); the tecnico submits it
-connector/           the Portali connector (remote MCP, read-only, no sign-in): coverage, search, a
+connector/           the Portale SUE connector (remote MCP, read-only, no sign-in): coverage, search, a
                      pratica's status and freshness, library entries, from plugin/build.py's output.
                      It never takes personal data: its tools take a case's facts
 ```
@@ -203,7 +204,7 @@ Profile Password + Secret Key (128-bit)
   enrolled pvault (audit token → valid hardened code with the enrolled cdhash), and returns
   only a token. Rebuilding the helper or moving pvault means `pvault touchid enable` again.
 - The prompt is worded from the exact scope it requests and never understates it. It is
-  Italian (Portali's users are), each category named as `PromptCategories` names it.
+  Italian (Portale SUE's users are), each category named as `PromptCategories` names it.
   Patterns are anchored with `\A`/`\z`. Its parser is held to `internal/vault/testdata/scopes.json`,
   its wording to `prompts.json`, as is the vault's own (`approval_prompt.go`, for Windows Hello).
 - `touchid enable`/`disable` refuse without a terminal, so a script can't switch them; an
@@ -216,7 +217,7 @@ Profile Password + Secret Key (128-bit)
 - The vault server asks itself: `POST /vault/session` with `approve: "hello"` (private channel
   only, never with a password, only once the session turned it on with `POST /vault/hello`,
   itself private-channel only; meta `hello`, which backups clear, so a restore starts with it
-  off) shows a prompt `Portali chiede di <reason>.`, the reason from `GrantPrompt` for
+  off) shows a prompt `Portale SUE chiede di <reason>.`, the reason from `GrantPrompt` for
   the validated request or `SignPrompt` from the vault's own summary, and issues exactly that
   grant (`CreateApprovedGrant`, `CreateApprovedSignGrant`; audited `via: hello`). Nothing
   secret is stored for it, and `unlock` keeps the password.

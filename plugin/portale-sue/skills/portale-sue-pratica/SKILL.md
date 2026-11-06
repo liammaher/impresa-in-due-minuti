@@ -1,6 +1,6 @@
 ---
-name: portali-pratica
-description: Prepara una pratica del Comune di Napoli su impresainungiorno (SUE e SUAP) a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti. Use when an architect, geometra or ingegnere asks (in Italian or English) to prepare, fill, draft or file a pratica for a client in Napoli ("prepara una CILA", "compila la SCIA"), or asks what a case needs.
+name: portale-sue-pratica
+description: Prepara una pratica edilizia del SUE del Comune di Napoli su impresainungiorno a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti. Use when an architect, geometra or ingegnere asks (in Italian or English) to prepare, fill, draft or file a pratica for a client in Napoli ("prepara una CILA", "compila la SCIA"), or asks what a case needs.
 ---
 
 # Pratiche a Napoli
@@ -32,7 +32,7 @@ the declarations, sign, pay and send.
   | Never | Say |
   |---|---|
 <!-- vault -->
-  | vault, pvault | il suo archivio (Portali's private archive on this computer) |
+  | vault, pvault | il suo archivio (Portale SUE's private archive on this computer) |
 <!-- /vault -->
   | steps file, pre-flight, runner, run.js, check.js, script | (nothing: say what happens) |
   | draft | bozza |
@@ -56,18 +56,18 @@ the declarations, sign, pay and send.
 - A pratica's status: `available` = disponibile; `mapped` / `coming` = in arrivo (non ancora
   provata sul portale); `guide` = solo indicazioni; `paused` = sospesa (il portale è cambiato).
 
-## What Portali covers, said plainly
+## What Portale SUE covers, said plainly
 
-- **Only the Comune di Napoli (Campania)**, on impresainungiorno's SUE and SUAP. Another comune,
-  another ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia delle Entrate, Regione) or a
+- **Only the Comune di Napoli's SUE (Campania)**, on impresainungiorno. A SUAP pratica (a shop, a
+  restaurant, an activity), another comune, another ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia delle Entrate, Regione) or a
   pratica whose status isn't `available` is **not covered by the automation**: say so first, in one
   line, and open nothing. A property outside Napoli is refused by the intake's `notes` and by
   pre-flight; when the documents don't say where it is, ask.
 - **Coperta** means: filled on the real portal with made-up data, every value read back. No real
-  pratica has been sent through Portali yet: the verdict says so (step 3).
+  pratica has been sent through Portale SUE yet: the verdict says so (step 3).
 - **Facts come from the library, each with its source** in brackets after it ("(DD 501/2026)").
-  What the library doesn't cover: "La biblioteca di Portali non lo copre." Anything you add from
-  your own knowledge is marked "(non verificato da Portali)", and is never a figure, a deadline or
+  What the library doesn't cover: "La biblioteca di Portale SUE non lo copre." Anything you add from
+  your own knowledge is marked "(non verificato da Portale SUE)", and is never a figure, a deadline or
   a list of documents.
 
 ## Rules that never bend
@@ -159,15 +159,15 @@ is, in one line, wait for "fatto", and run the command again. Never install Pyth
 The tecnico's details, their studio's, and each client's live in their archive (pvault, a
 business vault: the studio is the business, the tecnico a person with `ruolo.tipo` `titolare`,
 each client a person with `ruolo.tipo` `cliente`). Run `pvault status` (or the `PVAULT_PATH`
-that `portali-setup` printed):
+that `portale-sue-setup` printed):
 
-- not found, or "not initialized": the `portali-setup` skill sets it up. Say in one line that
+- not found, or "not initialized": the `portale-sue-setup` skill sets it up. Say in one line that
   the archive keeps their and their clients' details on this computer, encrypted, and that you
   never see them.
 - "locked" (it closes itself after 30 minutes unused): on a Mac with Touch ID, `pvault unlock`
   opens it with their fingerprint (say so first: "Le chiedo l'impronta per aprire l'archivio").
   Otherwise `pvault setup` opens a page in their browser where they type the password
-  (`portali-setup`, step 3).
+  (`portale-sue-setup`, step 3).
 - confirmations off (`pvault touchid status`; Windows: `pvault hello status`): `pvault setup`
   turns them on, on the same page. Without them you can't read the archive at all.
 - no shell on their computer (Cowork's sandbox): **The folder, without the archive** at the end.
@@ -179,7 +179,7 @@ confirmation each) or have them type them in the archive's page (`pvault ui`).
 <!-- no-vault -->
 ## 0. The folder of jobs
 
-Portali installs nothing and keeps nothing of its own: the details live in files in the
+Portale SUE installs nothing and keeps nothing of its own: the details live in files in the
 tecnico's folder of jobs (the folder open in this session, one subfolder per job; each command
 below runs in the job's subfolder).
 
@@ -232,12 +232,12 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/route.py" --table sue-na
   and run it again; if the answer about the works changes, keep only that one.
 - `unsupported`: its `message` says why. Send it and stop; don't open the portal.
 
-Other pratiche (a proroga, a fine lavori, a voltura): search `catalog.json`, or the Portali
+Other pratiche (a proroga, a fine lavori, a voltura): search `catalog.json`, or the Portale SUE
 connector's `find_pratica` when it is there (describe a case to it by its facts only, never by a
 name, codice fiscale or address). A status other than `available` (its line in `coverage.json`,
 or the connector's `get_pratica`) is the verdict: "Non coperta dall'automazione: …" (in arrivo,
 sospesa) or "Solo indicazioni: questa pratica non la compilo." with what the library says, its
-sources, and stop. Nothing in `catalog.json` or `coverage.json`: "Non coperta: Portali non la
+sources, and stop. Nothing in `catalog.json` or `coverage.json`: "Non coperta: Portale SUE non la
 conosce."
 
 ## 2. The documents
@@ -332,7 +332,7 @@ one message asks only what no document holds.
   pratica's name:
   1. The verdict, one line: "Coperta dall'automazione: la preparo per intero, fino alla Sua
      parte (dichiarazioni, firma, pagamento, invio). Provata sul portale con dati di prova;
-     nessuna pratica reale è ancora stata inviata con Portali." (A refusal or a status other
+     nessuna pratica reale è ancora stata inviata con Portale SUE." (A refusal or a status other
      than `available` is its own verdict: send that instead, and stop.)
 <!-- no-vault -->
      The first time, right after it: the line on how their data travels (step 0).
@@ -415,7 +415,7 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${
 3. Run each script as **one** JavaScript call on the portal's page, its text exactly as the
    file has it: `run/check.js` first. It returns what to run next: `runner.js` and `steps.js`
    only when it names them, then `run.js`. When it names `runner.js` and the call is too big,
-   build with `--bundle ~/Downloads/portali-<name>.js` and run `pick.js` instead: they choose
+   build with `--bundle ~/Downloads/portale-sue-<name>.js` and run `pick.js` instead: they choose
    that file once in the box it shows.
 4. `run.js` returns at once: call `await __pv.wait(40000)` until `result` is `filled` or
    `stopped`. `waiting` means the page waits for the tecnico (the files to pick in its box, or a
@@ -548,13 +548,13 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/check.py" ../studio.json values
 ```
 <!-- /vault -->
 
-## When Portali itself goes wrong
+## When Portale SUE itself goes wrong
 
-Only for Portali's own faults, never their pratica's: a compilation that stopped and wasn't
+Only for Portale SUE's own faults, never their pratica's: a compilation that stopped and wasn't
 recovered within the budget (step 4), a value the compilation put wrong that no document
-explains (step 5), a script that fails, or the tecnico saying something of Portali doesn't work.
+explains (step 5), a script that fails, or the tecnico saying something of Portale SUE doesn't work.
 Then offer once, in one line, after saying what happened: "Se vuole, preparo una segnalazione per
-chi sviluppa Portali: la legge prima di inviarla." Nothing more unless they say yes.
+chi sviluppa Portale SUE: la legge prima di inviarla." Nothing more unless they say yes.
 
 On a yes, write `run/segnalazione.json` (in the job's folder; with no job, in the folder you are
 in), in Italian:
@@ -581,7 +581,7 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/report.py" run/segnalazione.jso
 ```
 <!-- /no-vault -->
 
-It adds the plugin's version and the computer's system, and prints a link to Portali's bug form
+It adds the plugin's version and the computer's system, and prints a link to Portale SUE's bug form
 on GitHub with every box filled in, or what in the report is the job's (then rewrite that part
 and run it again). Give the tecnico the report's text first, as it will appear, then the link:
 "Apra il link: trova il modulo già compilato. Lo rilegga, spunti la casella sui dati personali e
@@ -600,5 +600,5 @@ write or send the email, never put the client's details in it.
 "Cosa serve per una CILA in centro storico?", "È una CILA o una SCIA?": answer from
 `get_procedure` (else `library/procedures`) and `library/rules`, each fact with its source in
 brackets after it, never one list of sources for the whole answer. Say when the library doesn't
-cover it rather than filling the gap from memory. Outside the Comune di Napoli: "Portali copre
+cover it rather than filling the gap from memory. Outside the Comune di Napoli: "Portale SUE copre
 solo il Comune di Napoli", and nothing more about another comune's rules.
