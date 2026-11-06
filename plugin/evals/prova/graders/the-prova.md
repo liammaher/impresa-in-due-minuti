@@ -1,7 +1,7 @@
 ---
 type: llm
 ---
-PASS if the reply is in Italian, addresses the tecnico as Lei, says the CILA's client, studio and
+PASS if the reply is in Italian, addresses the tecnico as Lei (formal forms such as «mi scriva», «la cancelli» are enough), says the CILA's client, studio and
 documents are invented, names the draft «PROVA NON INVIARE - CILA di prova», asks them to log in
 with SPID in the app's browser (or says it can't open the browser here), and tells them to delete
 the draft from «Pratiche in bozza» afterwards.

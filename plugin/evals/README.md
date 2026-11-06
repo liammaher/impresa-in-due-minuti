@@ -15,6 +15,9 @@ claude plugin eval plugin/dist/portale-sue --scaffold --allow-tools Bash Write
 
 `--evals` copies this folder into the build as `evals/`, with the made-up CILA job
 (`_job/`: the CILA rehearsal's P6 fixture, split as a tecnico's folder holds it) that
-`pre-flight-message`, `no-credentials`, `bug-report` and `test-own-case` start from; `prova` and
-`first-contact` start from an empty folder, as a tecnico who has just installed the plugin. Each case runs 3 times; graders that only say
+`pre-flight-message`, `no-credentials`, `bug-report` and `test-own-case` start from; `prova`,
+`first-contact` and the three tests asked as a tecnico asked them on 2026-11-06 (`test-in-a-job`: a CILA
+called a test in its first line; `test-mid-job`: a test after the folder and the questions were asked;
+`test-other-pratica`: a SCIA as a test) start from an empty folder, as a tecnico who has just installed the plugin.
+A test asks nothing: every `prova`-tagged case fails on a question. Each case runs 3 times; graders that only say
 whether the skill fired (`tool_used: Skill`) don't count toward the score.

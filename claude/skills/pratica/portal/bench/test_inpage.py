@@ -1092,6 +1092,9 @@ def main():
             out = tmp / "bundle-out"
             out.mkdir(exist_ok=True)
             run.bundle(out, out / "pv-run.js", files)
+            # The person reads the box: the file by name, where it is, and no "JS".
+            box = (out / "pick.js").read_text()
+            assert "«pv-run» nella cartella Download" in box and "JS" not in box.split("innerHTML")[1].split(";")[0], box
             page = browser.new_page()
             try:
                 page.goto(base + "/")
@@ -1105,6 +1108,22 @@ def main():
             finally:
                 page.close()
         case("run.py page --bundle: runner, steps and run.js picked as one file start the run", picked_bundle)
+
+        def bundle_unwritable():
+            # Cowork's sandbox can't reach the person's Downloads until they allow it: a clear stop
+            # that says to ask for the folder, never a traceback.
+            files = run.page_files(steps(base), run.Values(small, fields={"x:ruolo.tipo": "titolare"}))
+            locked = tmp / "locked"
+            locked.mkdir(exist_ok=True)
+            locked.chmod(0o500)
+            try:
+                run.bundle(tmp, locked / "Downloads" / "pv-run.js", files)
+                raise AssertionError("an unwritable Downloads was not refused")
+            except run.StepError as e:
+                assert "allow the Downloads folder" in str(e), e
+            finally:
+                locked.chmod(0o700)
+        case("run.py page --bundle: a Downloads it can't write says to ask for the folder", bundle_unwritable)
 
         def pick_stopped():
             PORTAL.reset()
