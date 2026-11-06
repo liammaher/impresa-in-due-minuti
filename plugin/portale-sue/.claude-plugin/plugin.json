@@ -1,6 +1,6 @@
 {
   "name": "portale-sue",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Portale SUE: prepares Italian government pratiche on their portals, up to the steps only you can take (SPID login, declarations, signature, payment, sending). Today: the Comune di Napoli's SUE (building works) on impresainungiorno, with the pratiche-napoli library of rules and procedures.",
   "author": {
     "name": "Liam Maher"

@@ -1,8 +1,8 @@
 <h1 align="center">Portale SUE</h1>
 
-**Portale SUE** is a free, open-source plugin that lets Claude prepare your building pratiche on the SUE (Sportello Unico per l'Edilizia), up to the steps only you can take: your SPID login, the declarations, signature, payment and sending. It covers the Comune di Napoli's SUE on impresainungiorno. Your details stay in an encrypted vault on your own computer, so Claude can fill a form without the details passing through the conversation. Unofficial: see [NOTICE.md](NOTICE.md). Before you use it, read [responsible use](docs/responsible-use.md); to ask for a pratica or report a changed portal, see [CONTRIBUTING.md](CONTRIBUTING.md).
+**Portale SUE** is a free, open-source plugin that lets Claude prepare your building pratiche on the SUE (Sportello Unico per l'Edilizia), up to the steps only you can take: your SPID login, the declarations, signature, payment and sending. It covers the Comune di Napoli's SUE on impresainungiorno. Claude reads the job's documents, fills the draft from them and checks it against them, so the client's details pass through the conversation with Claude; the plugin has no server of its own, and Claude never asks for a password, PIN or SPID login. Unofficial: see [NOTICE.md](NOTICE.md). Before you use it, read [responsible use](docs/responsible-use.md); to ask for a pratica or report a changed portal, see [CONTRIBUTING.md](CONTRIBUTING.md). To install it, see [Quick start](#quick-start).
 
-The rest of this page is about that vault, `pvault`.
+The rest of this page is about `pvault`, an encrypted local vault that keeps the details out of the conversation. Today's plugin doesn't ship it (`plugin/build.yaml` `vault: false`).
 
 ---
 
