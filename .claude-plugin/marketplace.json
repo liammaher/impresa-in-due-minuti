@@ -9,9 +9,10 @@
       "name": "portale-sue",
       "description": "Prepares pratiche on the portals, today the Comune di Napoli's SUE (on impresainungiorno), from your documents, with the pratiche-napoli library of rules.",
       "source": {
-        "source": "archive",
-        "url": "https://github.com/liammaher/portale-sue/releases/download/v0.4.1/portale-sue-0.4.1.zip",
-        "sha256": "5f8efee1e083c9d48f279adca897fbde1abe22bd359fb031caf233680b493428"
+        "source": "github",
+        "repo": "liammaher/portale-sue",
+        "ref": "plugin-v0.4.1",
+        "sha": "f9ab4911236d56af462c906793a0bde645e3f080"
       }
     }
   ]

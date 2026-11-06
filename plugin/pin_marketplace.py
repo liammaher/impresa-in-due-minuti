@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """Writes .claude-plugin/marketplace.json for one release: the marketplace people add
-(`claude plugin marketplace add liammaher/portale-sue`) and the one entry in it, the
-Portale SUE plugin, as a zip attached to that release and pinned by its SHA-256, so Claude Code
-refuses a download that isn't the file this release published.
+(in the Claude app, or `claude plugin marketplace add liammaher/portale-sue`) and the one entry in
+it, the Portale SUE plugin, as the release's commit on the `plugin` branch (publish_plugin.py),
+tagged plugin-v<version> and pinned by its commit SHA, so a moved tag installs nothing else.
 
-  pin_marketplace.py --version 0.2.0 --sha256 <64 hex of portale-sue-0.2.0.zip> [--out FILE]
+  pin_marketplace.py --version 0.4.1 --commit <40 hex of plugin-v0.4.1's commit> [--out FILE]
 
-The release workflow (.github/workflows/release.yml) runs it after attaching the zip and opens a
-pull request with the result; until the first release the repository has no marketplace file,
-because there is nothing for it to point at.
+A git source, not the release's zip (`archive`, Claude Code only): the Claude app (chat, Cowork)
+syncs only `github`, `url`, `git-subdir` and `./` sources (claude.com/docs/plugins/org-sync); with
+the `archive` source, "Add marketplace" failed in the app (2026-11-06). The release workflow
+(.github/workflows/release.yml) runs it after publishing the plugin and opens a pull request.
 """
 
 import argparse
@@ -28,7 +29,7 @@ def vault():
     return build.vault_default()
 
 
-def marketplace(version, sha256, repo=REPO, vault=True):
+def marketplace(version, commit, repo=REPO, vault=True):
     return {
         "name": "portale-sue",
         "description": "Portale SUE: Claude prepares your pratiche on Italian government portals up to the steps only "
@@ -40,9 +41,10 @@ def marketplace(version, sha256, repo=REPO, vault=True):
                            f"impresainungiorno), from your documents{' or your private vault' if vault else ''}, "
                            "with the pratiche-napoli library of rules.",
             "source": {
-                "source": "archive",
-                "url": f"https://github.com/{repo}/releases/download/v{version}/portale-sue-{version}.zip",
-                "sha256": sha256,
+                "source": "github",
+                "repo": repo,
+                "ref": f"plugin-v{version}",
+                "sha": commit,
             },
         }],
     }
@@ -51,15 +53,15 @@ def marketplace(version, sha256, repo=REPO, vault=True):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--version", required=True)
-    ap.add_argument("--sha256", required=True)
+    ap.add_argument("--commit", required=True, help="the plugin branch's commit for this version")
     ap.add_argument("--out", type=Path, default=HERE.parent / ".claude-plugin" / "marketplace.json")
     a = ap.parse_args()
     if not re.fullmatch(r"\d+\.\d+\.\d+([-+][0-9A-Za-z.-]+)?", a.version):
         ap.error(f"--version {a.version!r} isn't a version like 0.1.0")
-    if not re.fullmatch(r"[0-9a-fA-F]{64}", a.sha256):
-        ap.error("--sha256 must be 64 hex characters")
+    if not re.fullmatch(r"[0-9a-f]{40}", a.commit):
+        ap.error("--commit must be a full commit SHA, 40 lower-case hex characters")
     a.out.parent.mkdir(parents=True, exist_ok=True)
-    a.out.write_text(json.dumps(marketplace(a.version, a.sha256.lower(), vault=vault()), indent=2, ensure_ascii=False) + "\n")
+    a.out.write_text(json.dumps(marketplace(a.version, a.commit, vault=vault()), indent=2, ensure_ascii=False) + "\n")
     print(a.out)
     return 0
 

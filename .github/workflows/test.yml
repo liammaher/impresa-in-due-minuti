@@ -28,7 +28,7 @@ jobs:
       # build.py's vault switch (plugin/test_build.py), and check.py against the vault's
       # value cases (plugin/test_check.py, the same file the Go test reads), and the skill's
       # Python launcher with fake commands (plugin/test_py.py: no download), and the bug-report
-      # link (plugin/test_report.py).
+      # link (plugin/test_report.py), and publishing to the plugin branch (plugin/test_publish.py).
       - name: Installer
         run: |
           python3 -m pip install pyyaml
@@ -36,6 +36,7 @@ jobs:
           python3 plugin/test_build.py
           python3 plugin/test_check.py
           python3 plugin/test_py.py
+          python3 plugin/test_publish.py
           python3 plugin/test_report.py
           python3 claude/skills/pratica/portal/bench/test_review_check.py
 

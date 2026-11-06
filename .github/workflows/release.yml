@@ -169,12 +169,20 @@ jobs:
           fi
           python3 plugin/build.py --library pratiche-napoli --out "$RUNNER_TEMP/plugin" "${pin[@]}"
           cp "$RUNNER_TEMP/plugin/portale-sue.plugin" "portale-sue-$version.zip"
-          sha256sum "portale-sue-$version.zip" | cut -d' ' -f1 > "$RUNNER_TEMP/portale-sue.sha256"
           gh release upload "$TAG" "portale-sue-$version.zip"
           echo "PLUGIN_VERSION=$version" >> "$GITHUB_ENV"
-          echo "PLUGIN_SHA256=$(cat "$RUNNER_TEMP/portale-sue.sha256")" >> "$GITHUB_ENV"
 
-      # The marketplace file in the repository points at one release's zip, pinned by SHA-256.
+      # The zip stays on the release for Upload plugin; the marketplace installs the same build from
+      # the `plugin` branch (tag plugin-v<version>), since the Claude app takes only git sources.
+      - name: Publish the plugin to the plugin branch
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          commit=$(python3 plugin/publish_plugin.py --version "$PLUGIN_VERSION" --dir "$RUNNER_TEMP/plugin/portale-sue" --push)
+          echo "PLUGIN_COMMIT=$commit" >> "$GITHUB_ENV"
+
+      # The marketplace file in the repository points at one release's commit of the plugin branch.
       # A pull request moves it to this one. If the repository doesn't let Actions open pull
       # requests, the release still stands: run plugin/pin_marketplace.py by hand.
       - name: Open a pull request pinning the marketplace to this release
@@ -183,9 +191,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          python3 plugin/pin_marketplace.py --version "$PLUGIN_VERSION" --sha256 "$PLUGIN_SHA256"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          python3 plugin/pin_marketplace.py --version "$PLUGIN_VERSION" --commit "$PLUGIN_COMMIT"
           branch="release/marketplace-$PLUGIN_VERSION"
           git checkout -b "$branch"
           git add .claude-plugin/marketplace.json
@@ -193,4 +199,4 @@ jobs:
           git push origin "$branch"
           gh pr create --base main --head "$branch" \
             --title "Marketplace: point at the $PLUGIN_VERSION plugin" \
-            --body "Pins .claude-plugin/marketplace.json to portale-sue-$PLUGIN_VERSION.zip (SHA-256 $PLUGIN_SHA256). Merge it and \`claude plugin marketplace add liammaher/portale-sue\` gives this release."
+            --body "Pins .claude-plugin/marketplace.json to plugin-v$PLUGIN_VERSION (commit $PLUGIN_COMMIT on the plugin branch). Merge it and adding the marketplace liammaher/portale-sue gives this release."
