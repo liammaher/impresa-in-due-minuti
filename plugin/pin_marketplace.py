@@ -19,6 +19,7 @@ import sys
 from pathlib import Path
 
 REPO = "liammaher/portale-sue"
+DISPLAY_NAME = "Portale SUE"  # shown in place of the id; the entry's wins over plugin.json's
 HERE = Path(__file__).resolve().parent
 
 
@@ -32,14 +33,15 @@ def vault():
 def marketplace(version, commit, repo=REPO, vault=True):
     return {
         "name": "portale-sue",
-        "description": "Portale SUE: Claude prepares your pratiche on Italian government portals up to the steps only "
-                       "you can take (SPID login, declarations, signature, payment, sending).",
+        "description": "Portale SUE: Claude prepara le Sue pratiche sui portali della pubblica amministrazione, fino ai "
+                       "passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio).",
         "owner": {"name": "Liam Maher"},
         "plugins": [{
             "name": "portale-sue",
-            "description": "Prepares pratiche on the portals, today the Comune di Napoli's SUE (on "
-                           f"impresainungiorno), from your documents{' or your private vault' if vault else ''}, "
-                           "with the pratiche-napoli library of rules.",
+            "displayName": DISPLAY_NAME,
+            "description": "Prepara le pratiche edilizie del SUE del Comune di Napoli, su impresainungiorno, dai "
+                           f"documenti del cliente{' o dal Suo archivio cifrato (vault)' if vault else ''}, con la "
+                           "biblioteca pratiche-napoli di regole e procedure.",
             "source": {
                 "source": "github",
                 "repo": repo,
