@@ -6,6 +6,7 @@ it; python_download: off by default, and then no download in the launcher or the
   python3 plugin/test_build.py      (needs PyYAML, as build.py does)
 """
 
+import json
 import shutil
 import sys
 import tempfile
@@ -38,6 +39,12 @@ def main():
     for vault in (True, False):
         said = pin_marketplace.marketplace("0.1.0", "0" * 40, vault=vault)["plugins"][0]["description"]
         assert ("vault" in said) == vault, said
+    # What the app lists, in Italian and under the plugin's name, entry and manifest alike.
+    entry = pin_marketplace.marketplace("0.1.0", "0" * 40, vault=False)["plugins"][0]
+    manifest = json.loads((HERE / "portale-sue" / ".claude-plugin" / "plugin.json").read_text())
+    for said in (entry, manifest):
+        assert said["displayName"] == "Portale SUE", said
+        assert "pratiche edilizie" in said["description"] and "prepares" not in said["description"].lower(), said
 
     with tempfile.TemporaryDirectory() as tmp:
         for vault in (True, False):

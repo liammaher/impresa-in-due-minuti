@@ -1,13 +1,14 @@
 {
   "name": "portale-sue",
-  "description": "Portale SUE: Claude prepares your pratiche on Italian government portals up to the steps only you can take (SPID login, declarations, signature, payment, sending).",
+  "description": "Portale SUE: Claude prepara le Sue pratiche sui portali della pubblica amministrazione, fino ai passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio).",
   "owner": {
     "name": "Liam Maher"
   },
   "plugins": [
     {
       "name": "portale-sue",
-      "description": "Prepares pratiche on the portals, today the Comune di Napoli's SUE (on impresainungiorno), from your documents, with the pratiche-napoli library of rules.",
+      "displayName": "Portale SUE",
+      "description": "Prepara le pratiche edilizie del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, con la biblioteca pratiche-napoli di regole e procedure.",
       "source": {
         "source": "github",
         "repo": "liammaher/portale-sue",
