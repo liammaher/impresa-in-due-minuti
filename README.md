@@ -5,6 +5,14 @@ cliente. Si ferma dove comincia la Sua parte: le dichiarazioni, la firma digital
 l'invio: Claude non spunta mai una dichiarazione, non firma, non paga e non invia. Gratuito e
 open source.
 
+## Lo provi in pochi minuti
+
+Dopo l'installazione scriva **«Fammi vedere una prova»**. Claude compila sul portale vero una CILA
+di prova, con committente, studio e documenti inventati, senza farLe domande: Lei accede con SPID,
+e in un paio di minuti vede la bozza «PROVA NON INVIARE - CILA di prova» compilata e la pagina di
+riepilogo. Poi la cancelli da «Pratiche in bozza». Anche su un Suo caso, se non ha ancora i
+documenti, basta dire «è una prova, inventa i dati».
+
 ## Cosa copre, e cosa no
 
 - **Solo il SUE del Comune di Napoli (Campania)**, su impresainungiorno. Una pratica del SUAP (un

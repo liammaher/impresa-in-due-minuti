@@ -1464,7 +1464,7 @@ def whose_of(field):
     return OWN
 
 
-def message(report, asks, held_need=None):
+def message(report, asks, held_need=None, short=False):
     """The one message pre-flight's questions, proposals and missing details make, in Italian,
     for Claude to send as it is: the questions numbered, each follow-up (`only_if`) under the
     question it hangs on (3.a, 3.a.1) so the tecnico can answer it in the same reply; the proposals
@@ -1473,8 +1473,12 @@ def message(report, asks, held_need=None):
     choice's options one a line; then the details no document holds, by the portal's own section
     and box, and the files the sportello would refuse. Nothing from `if_changed`. A question the
     case needs with the proposals as they are (held_need) is asked as one, never only "if a
-    proposal changes"."""
+    proposal changes". short: the first message only (`short`): the questions but the files they
+    ask for (those come with the checklist, once answered), and the proposals as one line to
+    confirm them all; no missing details, no files to fix."""
     questions, proposals = report["questions"], report["proposals"]
+    if short:
+        questions = [q for q in questions if q.get("type") != "file"]
     order = [x["key"] for x in questions + proposals]
     items = {i["key"]: q["key"] for q in questions for i in q.get("items", [])}
     depth = {x["key"]: len(x.get("only_if", [])) for x in questions + proposals}
@@ -1559,6 +1563,12 @@ def message(report, asks, held_need=None):
         if n:
             more = "un'altra domanda" if n == 1 else f"altre {n} domande"
             use.append(f"   (se la cambia, le farò {more})")
+    if short:
+        if proposals:
+            n = len(proposals)
+            blocks.append([f"Per il resto imposto il caso più comune ({'una risposta' if n == 1 else f'{n} risposte'}, "
+                           "tutte nella pagina di riepilogo): scriva «ok», o «rivediamole» per vederle una per una."])
+        return "\n\n".join("\n".join(b) for b in blocks)
     if use:
         blocks.append(["Risposte che propongo (scriva «ok», o mi dica cosa cambiare):"] + use)
     # The missing details on one line per person they belong to (WHOSE), the portal's labels
@@ -1845,6 +1855,7 @@ def preflight(steps, values, made_up=False, after=False):
                            or any(not x["exists"] or x.get("problem") for x in report["files"] if x["path"]))
     text = message(report, asks, held_need)
     if text:
+        report["short"] = message(report, asks, held_need, short=True)
         # What comes after, in a line, so nothing at the end surprises them (`yours` has it all).
         end = ["All'inizio della compilazione le chiederò di scegliere i file del lavoro, una volta sola."] \
             if report.get("pick") else []
