@@ -1,0 +1,2241 @@
+#!/usr/bin/env python3
+"""Fill a pratiche-napoli form from the vault, and check the result.
+
+  fill.py needs (--library DIR [--procedure ID] | --entry E.json) [--entry E.json] [--layout L.json]
+                --form ID [--for SLUG] [--party ROLE=SLUG[,SLUG]]... [--draft] [--vault-dir DIR]
+      The service tokens a run needs, as the pratica skill asks for them:
+      prepare (append, the form's categories and pratiche.*, and, when the
+      layout has a signature box on a form that is signed, firma_autografa.signing
+      for --sign) and track (write, pratiche.* and the categories the entry's
+      records go to; only the synthetic vault's --reply uses it); with --draft,
+      one read token for the form's categories. prepare or draft comes with the
+      pvault command that saves it where run --vault-dir looks, and the ask
+      rows come with how their answers are written.
+
+  fill.py run (--library DIR [--procedure ID] | --entry E.json --layout L.json) [--entry ...]
+              --form ID [--for SLUG] [--party ROLE=SLUG[,SLUG]]... --out DIR [--pdf FORM.pdf]
+              (--server S.json | --vault-dir DIR [--keychain SERVICE])
+              [--draft] [--answers A.json] [--reply R.json] [--playbook NAME]
+              [--channel TYPE] [--sign]
+      Reads the vault over its HTTP API with the prepare token, resolves each
+      of the entry's form rows, fills the PDF at the layout's positions, reads
+      the PDF back to check every value landed in its box, and, only if every
+      check passed and this isn't a --draft, opens the pratica record and
+      checks its deadline in /vault/expiring. With --reply it then plays the
+      ente's answer with the track token: sent, records saved, closed. Writes
+      DIR/filled.pdf, DIR/page-<n>.png for page 1 and each page written on,
+      and DIR/report.json; exits 1 if a check failed. A --draft writes
+      nothing to the vault.
+      --channel picks the entry's channel by type (default: its preferred one).
+      With --sign, once every check passed, it files a signing request for
+      DIR/filled.pdf at the layout's signature boxes (the channel must take a
+      handwritten signature: the form's `signing` for it, else the library's
+      contract/signing.json) and prints the id: the user runs `pvault sign review <id>`, sees the
+      signed PDF, and approves it in person. The vault holds the signed file
+      until then; this tool can neither approve nor read it. Run again with
+      --sign when the request expired (30 minutes, or midnight) or failed: an
+      open pratica is not opened twice, only the request is filed again. Only
+      the vault's owner signs this way so far (--sign refuses --for).
+
+  fill.py route (--library DIR --procedure ID | --entry E.json) [--channel TYPE]
+                [--server S.json | --vault-dir DIR [--keychain SERVICE]] [--json]
+      What to do on one route (default: the entry's preferred one), start to
+      finish: the shared steps and the route's own (steps[].channel) in order,
+      where to send or take it, how it is signed there, what to attach or
+      bring, the proof it gives back and the deadline. A desk that depends on
+      where the person lives (office: { list, from: residenza.municipalita })
+      is picked from the library's offices/<list>.json with that field, read
+      from the vault when one is given (the prepare or draft token); without
+      one, it says so.
+
+  fill.py offices --library DIR [--address ADDR] [--municipalita N] [--distretto-asl D]
+                  [--server S.json | --vault-dir DIR [--keychain SERVICE]] [--json]
+      Every office list in the library (offices/: the Municipalità's sede, its
+      Anagrafe, the ASL's Anagrafe Sanitaria, its Prevenzione Collettiva) with the
+      person's office in each and what it serves: the area from the flags,
+      else read from the vault for ADDR (residenza by default; leo:residenza,
+      domicilio, locale, sede_legale).
+
+Who signs: the vault's owner, unless --for names another person (a slug of
+the household; ask the user by display name). Their own data (the library's
+dichiarante: the schema's persona categories each person has, identity,
+residenza, cie..., and ruolo) is then read from that person's fields; the
+rest (the home, the pratiche, business.*, locale.*) stays the vault's own,
+and the pratica record names the person. In a business
+vault a person always signs: --for names one whose ruolo is one of the
+entry's dichiarante roles, and "in qualità di" is the role they sign as; or
+a cliente, who declares in proprio (a studio's client), so none of the
+business's own business.* and locale.* may reach their form.
+
+Other people (a procuratore, the soci): --party ROLE=SLUG names who has a
+ruolo the form reads, so the token reaches only them. A party row reads
+that person's fields; without one it is asked by its label ("no" when the
+role isn't part of this pratica). A repeat by ruolo is a row of a table per
+person (columns), or else an allegato: its pages copied at the end of the
+form once per person after the first. Everyone's ruolo.tipo is read, so a
+role --party didn't name, or a person without it, fails the run.
+
+The vault: --server S.json, {"url": ..., "tokens": {"prepare": ..., "track":
+...}}, is the synthetic vault over TCP. --vault-dir is a real one (~/.pvault,
+or ~/.pvault-<name>): requests, the token included, go only to its
+run/pvault.sock, after checking that folder is yours and private, as the MCP
+server does; the token is the one `pvault create-service-token ...
+--keychain SERVICE` stored. Without --keychain it is $VAULT_TOKEN, else the
+service `needs` names: pvault-pratica-fill (pvault-<name>-pratica-fill for
+~/.pvault-<name>).
+
+--library is a pratiche-napoli checkout (npm ci done): the entry is
+procedures/<ID>.yaml, read with the library's own YAML parser (node), and
+the layout layouts/<ID>/<form>.json; its contract/ gives the vault schema
+and the signing rules, offices/ the desks of each service by area. Without --pdf the form is
+downloaded from the entry's url into DIR. --entry is a procedure already as
+JSON, in place of the library's file (the library still gives the rest).
+
+The entry says what goes in each box (map, template, columns, optional,
+choices) and the deadline (compute); the layout only where each box is: a
+rect on a page (page 1 unless it says), or a fillable field by name
+(widget, choice_widgets). A date the vault keeps (YYYY-MM-DD) is written
+as Italian forms want it, DD/MM/YYYY; an address doesn't repeat the word
+the form prints before its box (Via Toledo after a printed Via).
+Answers are the ask rows' answers by label; one whose answers go into a
+table (into_table) takes a list of rows, each by column label. Its
+"values" give, by field ID, what the user says for a field the vault lacks
+and can't hold (N/E for someone with no codice fiscale): used for this run
+only, refused for a field the vault has or the form doesn't read. Needs
+PyMuPDF (fitz).
+"""
+
+import argparse
+import base64
+import datetime as dt
+import getpass
+import hashlib
+import http.client
+import io
+import json
+import os
+import re
+import shlex
+import socket
+import stat
+import subprocess
+import sys
+import time
+import urllib.parse
+import urllib.request
+
+MAP_KINDS = {"direct", "concat", "fallback", "repeat", "ask", "blank_with_reason"}
+MAP_KEYS = MAP_KINDS | {"fields", "template", "columns", "party"}
+ROW_KEYS = {"label", "map", "notes", "optional", "choices", "when"}
+INK = (0, 0, 0.55)
+# The role one signs as is the signer's, though business.* is the vault's.
+SIGNERS_OWN = {"business.qualita_dichiarante"}
+SLUG = re.compile(r"[a-z][a-z0-9-]{0,31}")
+ISO_DATE = re.compile(r"(\d{4})-(\d{2})-(\d{2})")
+# Words a form prints before an address box that an address also starts with.
+TOPONYMS = {"via", "viale", "piazza", "piazzetta", "corso", "largo", "vico", "vicolo", "strada", "salita",
+            "calata", "discesa", "rampa", "rampe", "traversa", "contrada", "località", "borgo", "lungomare"}
+# Text is ours when it is in our font (read_back relies on that), so we write in
+# a base-14 font the form doesn't use, which embeds nothing. Those only have
+# Latin-1: for Łukasz or Nguyễn a Unicode font is embedded and subset. Embedded on
+# a page and left unused, it isn't subset, and a whole Arial Unicode makes the
+# PDF 15 MB, over what the portals take (9.77 MB on impresainungiorno).
+BASE14 = [("helv", "Helvetica"), ("tiro", "Times-Roman"), ("cour", "Courier")]
+UNICODE_FONTS = [
+    "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    "/usr/share/fonts/dejavu/DejaVuSans.ttf",
+]
+# Answers confirming that nobody else lives in the home, or that an ask has
+# nothing to write (no garage).
+NOBODY = {"nessuno", "nessuna", "none", "nobody"}
+NOTHING = NOBODY | {"no"}
+# Typographic marks typed on phones, as the plain ones Latin-1 has.
+PLAIN = str.maketrans({"’": "'", "‘": "'", "“": '"', "”": '"', "–": "-"})
+
+
+def italian_date(value):
+    """YYYY-MM-DD as DD/MM/YYYY; anything else as it is."""
+    m = ISO_DATE.fullmatch(value)
+    return f"{m[3]}/{m[2]}/{m[1]}" if m else value
+
+
+def said(answer):
+    """An answer as compared with a layout's list: "No." is no, "Sì" is sì,
+    legale_rappresentante is legale rappresentante."""
+    return str(answer).translate(PLAIN).replace("_", " ").strip().rstrip(".!").strip().lower()
+
+
+def role_list(ruolo):
+    """A library ruolo: one, or a list."""
+    return ruolo if isinstance(ruolo, list) else [ruolo]
+
+
+def human_role(code):
+    """A ruolo as a form writes it: legale rappresentante."""
+    return code.replace("_", " ")
+
+
+def parse_parties(given):
+    """--party ROLE=SLUG[,SLUG...], repeatable: who each role is, by slug."""
+    out = {}
+    for item in given or []:
+        role, _, slugs = item.partition("=")
+        people = slugs.split(",") if slugs else []
+        if not re.fullmatch(r"[a-z_]+", role) or not people or not all(SLUG.fullmatch(p) for p in people):
+            sys.exit(f"--party {item!r}: want ROLE=SLUG[,SLUG...], e.g. --party procuratore=bianchi")
+        out.setdefault(role, [])
+        out[role] += [p for p in people if p not in out[role]]
+    return out
+
+
+def party_people(row, parties):
+    """Everyone --party named for a party row's ruoli, in order; the row
+    reads the first (the user picks when there are more)."""
+    return list(dict.fromkeys(p for r in role_list(row["map"]["party"]["ruolo"]) for p in parties.get(r, [])))
+
+
+def repeat_people(spec, parties, signer):
+    """The people a repeat by ruolo has a row (or an allegato) for, as --party
+    named them, in order; except: dichiarante leaves out whoever signs."""
+    out = []
+    for r in role_list(spec["ruolo"]):
+        out += [p for p in parties.get(r, []) if p not in out]
+    return [p for p in out if not (spec.get("except") == "dichiarante" and p == signer)]
+
+
+def is_allegato(row):
+    """A repeat by ruolo without columns: one allegato (copy of its pages)
+    per person, rather than a row of a table."""
+    m = row["map"]
+    return isinstance(m.get("repeat"), dict) and not m.get("columns")
+
+
+def ticks(row, value):
+    """The boxes of a row's choices that a value or answer ticks."""
+    return [c for c in row.get("choices", []) if said(value) in {said(v) for v in c["values"]}]
+
+
+# --- The entry and its rows -------------------------------------------------
+
+def load(path):
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def form_of(entry, form_id):
+    for form in entry.get("forms", []):
+        if form["id"] == form_id:
+            return form
+    sys.exit(f"{entry['id']} has no form {form_id}")
+
+
+# YAML 1.2 by the library's own parser, as its validator reads it.
+READ_YAML = """
+import { parse } from "yaml";
+import { readFileSync } from "node:fs";
+process.stdout.write(JSON.stringify(parse(readFileSync(process.argv[1], "utf8"), { version: "1.2" })));
+"""
+
+
+def library_file(a, folder, ext):
+    """<library>/<folder>/<procedure>[/<form>].<ext>, for an ID that can only
+    name a file in there."""
+    if not re.fullmatch(r"(napoli|italia)/[a-z0-9-]+/[a-z0-9-]+", a.procedure):
+        sys.exit(f"{a.procedure!r} isn't a library procedure ID (napoli/comune/tari-iscrizione-uso-abitativo)")
+    if folder == "layouts" and not re.fullmatch(r"[a-z0-9-]+", a.form):
+        sys.exit(f"{a.form!r} isn't a form ID")
+    parts = [a.library, folder, a.procedure] + ([a.form] if folder == "layouts" else [])
+    path = os.path.join(*parts) + ext
+    if not os.path.isfile(path):
+        sys.exit(f"no {path}: is {a.library} a pratiche-napoli checkout on main?")
+    return path
+
+
+def entry_of(a):
+    if a.entry:
+        return load(a.entry)
+    path = library_file(a, "procedures", ".yaml")
+    got = subprocess.run(["node", "--input-type=module", "-e", READ_YAML, path], cwd=a.library,
+                         capture_output=True, text=True, timeout=60)
+    if got.returncode != 0:
+        sys.exit(f"reading {path} failed (npm ci in {a.library}?): {got.stderr.strip()}")
+    return json.loads(got.stdout)
+
+
+def form_pdf(a, form):
+    """The form: --pdf, else the entry's url downloaded into the output
+    folder (kept there, and fetched again only if it isn't that version).
+    The run checks its sha256 either way."""
+    if a.pdf:
+        return a.pdf
+    path = os.path.join(a.out, "form.pdf")
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            if hashlib.sha256(f.read()).hexdigest() == form.get("sha256"):
+                return path
+    if not form.get("url", "").startswith("https://"):
+        sys.exit(f"form {form['id']} has no https url to download: pass --pdf")
+    try:
+        with urllib.request.urlopen(form["url"], timeout=60) as resp, open(path, "wb") as f:
+            f.write(resp.read())
+    except OSError as e:
+        sys.exit(f"downloading {form['url']} failed: {e}")
+    return path
+
+
+def default_keychain(vault_dir):
+    """The Keychain service for this vault's fill token: one per vault, since
+    a new token saved under a service revokes the one it replaces."""
+    base = os.path.basename(os.path.normpath(os.path.expanduser(vault_dir)))
+    if base == ".pvault":
+        return "pvault-pratica-fill"
+    name = re.sub(r"[^A-Za-z0-9._-]", "-", base.removeprefix(".pvault-").lstrip("."))[:32]
+    return f"pvault-{name}-pratica-fill"
+
+
+def pvault_command(vault_dir):
+    """How the user types pvault for this vault folder, as words."""
+    full = os.path.normpath(os.path.expanduser(vault_dir or "~/.pvault"))
+    base = os.path.basename(full)
+    if base == ".pvault" and os.path.dirname(full) == os.path.expanduser("~"):
+        return ["pvault"]
+    if base.startswith(".pvault-") and os.path.dirname(full) == os.path.expanduser("~"):
+        return ["pvault", "--vault", base.removeprefix(".pvault-")]
+    return [f"VAULT_DIR={shlex.quote(full)}", "pvault"]
+
+
+def get_command(vault_dir, scope):
+    """The pvault get that reads a draft's fields with one Touch ID approval, for
+    run --values -; None past get's 10 patterns. get takes a person's field by
+    ID, but everyone's (*:) only as a whole category."""
+    args = []
+    for pattern in scope.split(","):
+        if pattern.startswith("*:") and not pattern.endswith(".*"):
+            pattern = pattern.rsplit(".", 1)[0] + ".*"
+        if pattern not in args:
+            args.append(pattern)
+    if len(args) > 10:
+        return None
+    return " ".join(pvault_command(vault_dir) + ["get"] + [shlex.quote(x) for x in args])
+
+
+def token_command(vault_dir, token):
+    """The pvault command that saves this token where run --vault-dir reads it."""
+    full = os.path.normpath(os.path.expanduser(vault_dir))
+    pvault = pvault_command(full)
+    args = ["create-service-token", "pratica-fill", "--scope", token["scope"], "--access", token["access"],
+            "--ttl", "1h", "--keychain", default_keychain(full)]
+    return " ".join(pvault + [shlex.quote(x) for x in args])
+
+
+def asks(form, layout, parties=None):
+    """The ask rows, as the user is asked them: a row whose answers go into a
+    table takes rows by column; one with boxes to tick, the values that tick
+    each box."""
+    tables = {b["label"]: b["into_table"] for b in (layout or {}).get("boxes", []) if "into_table" in b}
+    columns = {r["label"]: [c["label"] for c in r["map"]["columns"]] for r in form["fields"] if r["map"].get("columns")}
+    # Party rows that only apply after another answer (when) are one question,
+    # asked with that answer: who has the role, if it applies.
+    unnamed = [r for r in form["fields"] if "party" in r["map"] and not party_people(r, parties or {})]
+    gated = {}
+    for row in unnamed:
+        if row.get("when"):
+            role = role_list(row["map"]["party"]["ruolo"])[0]
+            gated.setdefault(row["when"]["field"], {})[role] = row["when"]["ticks"]
+    out = []
+    for row in form["fields"]:
+        if row in unnamed and row.get("when"):
+            continue
+        if row in unnamed:
+            roles = " o ".join(human_role(r) for r in role_list(row["map"]["party"]["ruolo"]))
+            out.append({"label": row["label"], "question": f"{row['label']}: dati del {roles}. Se è nel vault, "
+                        f"--party {role_list(row['map']['party']['ruolo'])[0]}=<slug>; se non c'è per questa pratica, \"no\""})
+            continue
+        if "ask" not in row["map"]:
+            continue
+        q = {"label": row["label"], "question": row["map"]["ask"]}
+        for role, boxes in gated.get(row["label"], {}).items():
+            q["question"] += f" (se {' o '.join(boxes)}: chi è il {human_role(role)}? --party {role}=<slug>)"
+        if row.get("when"):
+            q["when"] = row["when"]
+        if row.get("choices"):
+            q["ticks"] = {c["box"]: c["values"] for c in row["choices"]}
+        if row["label"] in tables:
+            q["rows_by_column"] = columns[tables[row["label"]]]
+        out.append(q)
+    return out
+
+
+def check_supported(entry, form, signer="io"):
+    # Anything this tool doesn't know is refused, never read as blank: the
+    # library adds keys without raising schema_version.
+    if entry.get("schema_version") != 0:
+        sys.exit(f"schema_version {entry.get('schema_version')}: this tool reads version 0")
+    if signer != "io" and any(r["map"].get("repeat") == "famiglia" for r in form["fields"]):
+        # The table's relazioni are the owner's; another dichiarante's would have to be asked.
+        sys.exit("a form with the stato di famiglia's table is signed by the intestatario: --for isn't supported for it yet")
+    for row in form["fields"]:
+        m = row["map"]
+        kinds = set(m) & MAP_KINDS
+        if len(kinds) != 1 or set(m) - MAP_KEYS or set(row) - ROW_KEYS:
+            sys.exit(f"row {row['label']!r}: unknown map or row keys {sorted(set(m) | set(row))}")
+        if row.get("choices") and not ((("direct" in m or "fallback" in m) and "template" not in m and "party" not in m)
+                                       or "ask" in m):
+            sys.exit(f"row {row['label']!r}: choices need a row of one field (direct or fallback, no template) or an ask")
+        when = row.get("when")
+        if when and not any(r["label"] == when["field"] and "ask" in r["map"] and r.get("choices") for r in form["fields"]):
+            sys.exit(f"row {row['label']!r}: when names {when['field']!r}, which isn't an ask with boxes to tick")
+        if m.get("repeat") == "famiglia" and not m.get("columns"):
+            sys.exit(f"row {row['label']!r}: a table needs the procedure's columns")
+        for t in [m.get("template", "")] + [c["template"] for c in m.get("columns", [])]:
+            bad = [f for f in template_filters(t) if f not in ("", "date", "digits") and not re.fullmatch(r"or:\S.*", f)]
+            if bad:
+                sys.exit(f"row {row['label']!r}: unknown template filter {bad[0]!r}")
+
+
+# The vault's scope for filing signing requests (vault.SigningScopeID).
+SIGNING_SCOPE = "firma_autografa.signing"
+
+
+def signable(form, layout):
+    """A signed form whose layout says where the signature goes."""
+    return bool(form.get("signature_required") and (layout or {}).get("signatures"))
+
+
+def refs(m):
+    return [m["direct"]] if "direct" in m else m.get("concat", []) + m.get("fallback", [])
+
+
+def local_id(ref):
+    """A field ID without its person prefix (leo:cie.numero is cie.numero)."""
+    return ref.split(":", 1)[1] if ":" in ref.split(".", 1)[0] else ref
+
+
+def category(ref):
+    return local_id(ref).split(".", 1)[0]
+
+
+def schema_category(ref):
+    """The schema category a ref's category is, or is a numbered copy of
+    (cie2, abitazione-2), as the vault reads it."""
+    return re.sub(r"-?\d+$", "", category(ref))
+
+
+def person_categories(schema):
+    """The categories a signer other than the owner brings their own of: the
+    library's dichiarante (isPersonData in its validator), persona categories
+    each person has, ruolo, and immobile: the property a pratica is about is a
+    client's own (luca:immobile, the Modello DP's committente's), never the
+    studio's. business stays the vault's: the studio, on the DP's A1.2."""
+    return {c["name"] for c in schema["categories"]
+            if c.get("scope") == "person" and (c.get("subject") == "persona" or c["name"] in ("ruolo", "immobile"))}
+
+
+def signer_id(ref, signer, people):
+    """The field a row's ref reads when signer signs: their own for an
+    unprefixed person category, the vault's for the rest."""
+    if signer == "io" or ref.startswith("*:") or ":" in ref.split(".", 1)[0]:
+        return ref
+    if schema_category(ref) not in people and ref not in SIGNERS_OWN:
+        return ref
+    return f"{signer}:{ref}"
+
+
+def as_signer(values, signer, people):
+    """The vault's values as the rows read them when signer signs: their
+    person fields unprefixed, in place of the owner's."""
+    if signer == "io":
+        return dict(values)
+    out = {k: v for k, v in values.items() if signer_id(k, signer, people) == k}
+    prefix = signer + ":"
+    for k, v in values.items():
+        if k.startswith(prefix) and (schema_category(k) in people or k[len(prefix):] in SIGNERS_OWN):
+            out[k[len(prefix):]] = v
+    return out
+
+
+def needs_schema(a):
+    """The vault's schema for needs, which reads no data: the library's copy,
+    else the schema.json of the repository this file is in (through a
+    symlinked skills folder too), else the vault's own (/vault/schema needs
+    no token)."""
+    if a.library:
+        return load(os.path.join(a.library, "contract", "vault-schema.json"))
+    repo = os.path.join(os.path.dirname(os.path.realpath(__file__)), "..", "..", "..", "..", "schema.json")
+    if os.path.isfile(repo):
+        return load(repo)
+    vault_dir = os.path.expanduser(a.vault_dir)
+    status, schema = Vault("", socket_path=vault_socket(vault_dir)).call("GET", "/vault/schema")
+    if status != 200:
+        sys.exit(f"no vault schema: pass --library, or unlock the vault in {vault_dir}")
+    return schema
+
+
+def template_vars(template):
+    """Every {name|filter} in a template as (name, filter, outside): outside
+    any [...], so the text can't do without it."""
+    def walk(nodes, outside):
+        for n in nodes:
+            if n[0] == "var":
+                yield n[1], n[2], outside
+            elif n[0] == "group":
+                yield from walk(n[1], False)
+    return list(walk(parse_template(template), True))
+
+
+def template_names(template):
+    return [name for name, _, _ in template_vars(template)]
+
+
+def template_filters(template):
+    return [f for _, f, _ in template_vars(template)]
+
+
+def placed_names(template):
+    """Every {name} in a template, and whether the text needs it: outside
+    any [...] and without an |or: to stand in for it."""
+    return list(dict.fromkeys((name, outside and not f.startswith("or:")) for name, f, outside in template_vars(template)))
+
+
+def form_fields(form):
+    """Every field ID the form's rows read, a person's written without the
+    prefix (identity.codice_fiscale)."""
+    out = set()
+    for row in form["fields"]:
+        m = row["map"]
+        names = refs(m) + m.get("fields", []) + template_names(m.get("template", ""))
+        names += [n for c in m.get("columns", []) for n in template_names(c["template"])]
+        out |= {n.removeprefix("*:") for n in names if "." in n and not n.startswith(".")}
+    return out
+
+
+def needs(entry, form, draft=False, signer="io", people=(), parties=None, layout=None):
+    check_supported(entry, form, signer)
+    parties = parties or {}
+    patterns = set()
+    for row in form["fields"]:
+        m = row["map"]
+        read = refs(m) + [n for n in template_names(m.get("template", "")) if "." in n and not n.startswith(".")]
+        read += [c["field"] for o in row.get("optional", []) for c in o.get("required_if", [])]
+        if "party" in m or isinstance(m.get("repeat"), dict):
+            # Only the people --party names, and who holds which ruolo, so
+            # the run can tell a role nobody was named for.
+            patterns.add("*:ruolo.tipo")
+            if "party" in m:
+                who = party_people(row, parties)[:1]
+            else:
+                who = repeat_people(m["repeat"], parties, None)
+                # Its columns' fields, besides its conditions (*:, each person's).
+                read += [n for n in m["fields"] + [n for c in m.get("columns", []) for n in template_names(c["template"])]
+                         if "." in n]
+            patterns |= {f"{p}:{category(ref)}.*" for p in who for ref in read}
+            continue
+        if m.get("repeat") == "famiglia":
+            # Who is in the stato di famiglia, and their names for relazione_label.
+            read += ["*:famiglia.*", "*:identity.*"] + m["fields"]
+        for ref in read:
+            if ref.startswith("*:"):
+                patterns.add(f"*:{category(ref)}.*")
+            else:
+                patterns.add(signer_id(f"{category(ref)}.*", signer, people))
+                if ref in SIGNERS_OWN and signer != "io":
+                    patterns.add(f"{signer}:{ref}")
+    patterns |= {signer_id(f"{category(r['compute']['from'])}.*", signer, people)
+                 for r in entry.get("deadline", {}).get("rules", []) if "compute" in r}
+    # The desk picked by area, which route reads with the same token: that
+    # field alone, never the street beside it, unless the form reads both.
+    for c in entry.get("channels", []):
+        if c.get("purpose") == "procedure" and "office" in c:
+            field = signer_id(c["office"]["from"], signer, people)
+            if f"{field.rsplit('.', 1)[0]}.*" not in patterns:
+                patterns.add(field)
+    if "dichiarante" in entry:
+        # In a business vault, whether the signer holds a signing ruolo.
+        patterns.add("*:ruolo.tipo")
+    # *:x.* reaches the owner too, so x.* beside it adds nothing.
+    patterns = {p for p in patterns if f"*:{p}" not in patterns}
+    if draft:
+        return {"for": signer, "parties": parties, "tokens": {"draft": {"scope": ",".join(sorted(patterns)), "access": "read"}}}
+    records = {signer_id(f"{category(r['field'])}.*", signer, people) for r in entry.get("records", [])}
+    prepare = sorted(patterns) + ["pratiche.*"]
+    if signer == "io" and signable(form, layout):
+        prepare.append(SIGNING_SCOPE)
+    return {
+        "for": signer,
+        "parties": parties,
+        "tokens": {
+            "prepare": {"scope": ",".join(prepare), "access": "append"},
+            "track": {"scope": ",".join(["pratiche.*"] + sorted(records)), "access": "write"},
+        }
+    }
+
+
+# --- The vault, over HTTP ----------------------------------------------------
+
+class UnixHTTPConnection(http.client.HTTPConnection):
+    def __init__(self, socket_path, timeout):
+        super().__init__("localhost", timeout=timeout)
+        self.socket_path = socket_path
+
+    def connect(self):
+        if self.socket_path.startswith(PIPE_PREFIX):
+            self.sock = PipeSocket(self.socket_path, self.timeout)
+            return
+        self.sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        self.sock.settimeout(self.timeout)
+        self.sock.connect(self.socket_path)
+
+
+class PipeSocket:
+    """A Windows named pipe opened as a file, with what http.client asks of a
+    socket: Python has no AF_UNIX there."""
+
+    def __init__(self, path, timeout):
+        self.timeout = timeout
+        # Between two connections the server may have no instance waiting
+        # (ERROR_PIPE_BUSY, 231) for a moment.
+        for _ in range(50):
+            try:
+                self.file = open(path, "r+b", buffering=0)
+                return
+            except OSError as e:
+                if getattr(e, "winerror", None) != 231:
+                    raise
+                time.sleep(0.05)
+        self.file = open(path, "r+b", buffering=0)
+
+    def sendall(self, data):
+        view = memoryview(data)
+        while view:
+            view = view[self.file.write(view):]
+
+    def makefile(self, mode):
+        # As socket.makefile: the pipe stays open while a reader still reads
+        # it, since http.client closes the connection before the body is
+        # read when the server says it will close.
+        self.readers = getattr(self, "readers", 0) + 1
+        return io.BufferedReader(PipeReader(self.file, self.timeout, owner=self))
+
+    def close(self):
+        self.closed = True
+        if not getattr(self, "readers", 0):
+            self.file.close()
+
+    def reader_closed(self):
+        self.readers -= 1
+        if getattr(self, "closed", False) and not self.readers:
+            self.file.close()
+
+
+class PipeReader(io.RawIOBase):
+    """Reads a pipe opened as a file, which has no timeout of its own: it
+    reads only what PeekNamedPipe says has arrived, and gives up when nothing
+    has for timeout seconds."""
+
+    def __init__(self, file, timeout, peek=None, owner=None):
+        self.file, self.timeout, self.owner = file, timeout, owner
+        self.peek = peek or peek_named_pipe
+
+    def readable(self):
+        return True
+
+    def close(self):
+        if not self.closed and self.owner:
+            self.owner.reader_closed()
+        super().close()
+
+    def readinto(self, b):
+        deadline = time.monotonic() + (self.timeout or 15)
+        while True:
+            available = self.peek(self.file)
+            if available is None:  # the server closed its end
+                return 0
+            if available:
+                return self.file.readinto(memoryview(b)[:min(len(b), available)])
+            if time.monotonic() > deadline:
+                raise TimeoutError("the vault didn't answer in time")
+            time.sleep(0.01)
+
+
+def peek_named_pipe(file):
+    """How many bytes wait in the pipe, or None once the server closed it."""
+    import ctypes
+    import msvcrt
+    from ctypes import wintypes
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    available = wintypes.DWORD()
+    handle = wintypes.HANDLE(msvcrt.get_osfhandle(file.fileno()))
+    if not kernel32.PeekNamedPipe(handle, None, 0, None, ctypes.byref(available), None):
+        if ctypes.get_last_error() == 109:  # ERROR_BROKEN_PIPE
+            return None
+        raise ctypes.WinError(ctypes.get_last_error())
+    return available.value
+
+
+PIPE_PREFIX = "\\\\.\\pipe\\"
+
+
+def vault_pipe(vault_dir):
+    """The named pipe of this vault's Windows server, from the file it writes
+    in <vault dir>\\run, a folder only this user can enter. Pipe names are
+    machine-wide and any account can create one, so a name counts only while
+    the server still holds that file open: Windows won't delete a file another
+    process holds open (ERROR_SHARING_VIOLATION, 32), so if the delete works
+    the server is gone and the name may be someone else's by now."""
+    path = os.path.join(vault_dir, "run", "pipe")
+    not_running = f"no vault server for {vault_dir}: run pvault unlock"
+    try:
+        with open(path, encoding="ascii", errors="replace") as f:
+            name = f.read().strip()
+    except FileNotFoundError:
+        sys.exit(not_running)
+    try:
+        os.remove(path)
+    except FileNotFoundError:
+        sys.exit(not_running)
+    except PermissionError as e:
+        if getattr(e, "winerror", None) != 32:
+            sys.exit(f"refusing to send the token: can't tell whether {path} is the server's ({e})")
+        if not re.fullmatch(r"\\\\\.\\pipe\\pvault-[0-9a-f]{32}", name):
+            sys.exit(f"refusing to send the token: {path} doesn't name a vault server's pipe")
+        return name
+    sys.exit(not_running)
+
+
+def vault_socket(vault_dir):
+    """<vault dir>/run/pvault.sock, once it is this user's vault server's:
+    the run folder ours and private (0700), the socket ours. Anything can
+    listen on 127.0.0.1:7200 while the vault is locked; only this user can
+    put a socket there. The MCP server makes the same check. On Windows the
+    server listens on a named pipe only this user can open instead."""
+    if os.name == "nt":
+        return vault_pipe(vault_dir)
+    run = os.path.join(vault_dir, "run")
+    sock = os.path.join(run, "pvault.sock")
+    try:
+        folder, entry = os.lstat(run), os.lstat(sock)
+    except FileNotFoundError:
+        sys.exit(f"no vault server for {vault_dir}: run pvault unlock")
+    if not stat.S_ISDIR(folder.st_mode) or folder.st_uid != os.getuid() or folder.st_mode & 0o077:
+        sys.exit(f"refusing to send the token: {run} must be a private folder of yours (mode 0700)")
+    if not stat.S_ISSOCK(entry.st_mode) or entry.st_uid != os.getuid():
+        sys.exit(f"refusing to send the token: {sock} is not your vault server's socket")
+    return sock
+
+
+def keychain_token(service):
+    """What `pvault create-service-token --keychain SERVICE` stored for this user."""
+    if not re.fullmatch(r"[A-Za-z0-9._][A-Za-z0-9._-]{0,63}", service):
+        sys.exit(f"{service!r} isn't a Keychain service name")
+    if os.name == "nt":
+        return credential_token(service)
+    # By absolute path, so nothing earlier in PATH can stand in for it.
+    got = subprocess.run(["/usr/bin/security", "find-generic-password", "-a", getpass.getuser(), "-s", service, "-w"],
+                         capture_output=True, text=True, timeout=10)
+    if got.returncode == 44:
+        sys.exit(f"nothing in Keychain service {service!r}: create the token with pvault create-service-token ... --keychain {service}"
+                 " (or, if it was just saved, this process can't reach the Keychain, as in a sandbox)")
+    if got.returncode != 0:
+        sys.exit(f"reading Keychain service {service!r} failed: {got.stderr.strip()}")
+    return got.stdout.strip()
+
+
+def credential_token(service):
+    """On Windows, what --keychain SERVICE stored in Credential Manager: a
+    generic credential of this user, the token as UTF-16 (wincred)."""
+    import ctypes
+    from ctypes import wintypes
+
+    class CREDENTIAL(ctypes.Structure):
+        _fields_ = [("Flags", wintypes.DWORD), ("Type", wintypes.DWORD), ("TargetName", wintypes.LPWSTR),
+                    ("Comment", wintypes.LPWSTR), ("LastWritten", wintypes.FILETIME),
+                    ("CredentialBlobSize", wintypes.DWORD), ("CredentialBlob", ctypes.POINTER(ctypes.c_ubyte)),
+                    ("Persist", wintypes.DWORD), ("AttributeCount", wintypes.DWORD), ("Attributes", ctypes.c_void_p),
+                    ("TargetAlias", wintypes.LPWSTR), ("UserName", wintypes.LPWSTR)]
+
+    advapi32 = ctypes.WinDLL("advapi32", use_last_error=True)
+    advapi32.CredReadW.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD,
+                                   ctypes.POINTER(ctypes.POINTER(CREDENTIAL))]
+    advapi32.CredReadW.restype = wintypes.BOOL
+    advapi32.CredFree.argtypes = [ctypes.c_void_p]
+    cred = ctypes.POINTER(CREDENTIAL)()
+    missing = f"nothing in Credential Manager under {service!r}: create the token with pvault create-service-token ... --keychain {service}"
+    if not advapi32.CredReadW(service, 1, 0, ctypes.byref(cred)):  # CRED_TYPE_GENERIC
+        if ctypes.get_last_error() == 1168:  # ERROR_NOT_FOUND
+            sys.exit(missing)
+        sys.exit(f"reading Credential Manager {service!r} failed: {ctypes.WinError(ctypes.get_last_error())}")
+    try:
+        raw = ctypes.string_at(cred.contents.CredentialBlob, cred.contents.CredentialBlobSize)
+        user = cred.contents.UserName or ""
+    finally:
+        advapi32.CredFree(cred)
+    # Saved for another user counts as none, as a Keychain item of another
+    # account would. USERNAME is the Windows account name Go and Node use;
+    # getpass reads LOGNAME and USER first, which Git Bash or ssh may set.
+    if user.lower() != (os.environ.get("USERNAME") or getpass.getuser()).lower():
+        sys.exit(missing)
+    try:
+        return raw.decode("utf-16-le").strip()
+    except UnicodeDecodeError:
+        sys.exit(f"{service!r} in Credential Manager isn't a token pvault saved")
+
+
+class Given:
+    """A draft's values as `pvault get` printed them (one Touch ID approval, no
+    token): the fields it read, and the vault's own status and schema, which
+    need no token. The household is the people those fields name."""
+
+    def __init__(self, fields, socket_path):
+        self.fields = {k: v for k, v in fields.items() if v is not None}
+        self.vault = Vault("", socket_path=socket_path)
+
+    def call(self, method, path, body=None):
+        if method == "GET" and path in ("/vault/status", "/vault/schema"):
+            return self.vault.call(method, path)
+        if method == "GET" and path == "/vault/members":
+            slugs = sorted({k.split(":")[0] for k in self.fields if ":" in k})
+            return 200, {"members": [{"slug": s, "display_name": self.fields.get(f"{s}:identity.display_name", ""),
+                                      "ruolo": {k.split(".", 1)[1]: v for k, v in self.fields.items()
+                                                if k.startswith(f"{s}:ruolo.")}} for s in slugs]}
+        if method == "GET" and path.startswith("/vault/fields/"):
+            field = urllib.parse.unquote(path[len("/vault/fields/"):])
+            return (200, {"id": field, "value": self.fields[field]}) if field in self.fields else (404, {})
+        sys.exit(f"--values: a draft reads only what pvault get printed, not {method} {path}")
+
+    def values(self):
+        return dict(self.fields)
+
+    def why_missing(self, field_id):
+        return "is not among the fields pvault get printed (add its category to the get, or it isn't in the vault)"
+
+
+def connect(a):
+    """The vault, and its tokens by name (prepare, track; a real vault has one
+    token for both)."""
+    if not a.vault_dir:
+        server = load(a.server)
+        return {name: Vault(token, url=server["url"]) for name, token in server["tokens"].items()}
+    sock = vault_socket(os.path.expanduser(a.vault_dir))
+    if getattr(a, "values", None):
+        given = sys.stdin.read() if a.values == "-" else open(a.values, encoding="utf-8").read()
+        return {"draft": Given(json.loads(given), sock)}
+    token = os.environ.get("VAULT_TOKEN", "").strip() if not a.keychain else ""
+    if not token:
+        token = keychain_token(a.keychain or default_keychain(a.vault_dir))
+    if not re.fullmatch(r"[\x21-\x7e]+", token):
+        sys.exit("no service token: run the command fill.py needs prints, or set VAULT_TOKEN")
+    vault = Vault(token, socket_path=sock)
+    status, info = vault.call("GET", "/vault/status")
+    if status != 200 or info.get("locked", True):
+        sys.exit(f"the vault in {a.vault_dir} is locked: run pvault unlock")
+    # As the MCP server: a set VAULT_ADDR must be this vault's own server.
+    addr = os.environ.get("VAULT_ADDR", "").strip()
+    if addr and urllib.parse.urlsplit(addr).netloc != info.get("addr"):
+        sys.exit(f"VAULT_ADDR {addr} isn't the server of {a.vault_dir}, which listens on {info.get('addr')}")
+    return {"prepare": vault, "track": vault, "draft": vault}
+
+
+class Vault:
+    """The vault's HTTP API: over TCP to the synthetic vault, or over a real
+    vault's socket (vault_socket checked it)."""
+
+    def __init__(self, token, url=None, socket_path=None):
+        self.token, self.url, self.socket_path = token, url, socket_path
+
+    def call(self, method, path, body=None):
+        data = json.dumps(body).encode() if body is not None else None
+        headers = {"Content-Type": "application/json"}
+        if self.token:  # /vault/schema and /vault/status need none
+            headers["Authorization"] = "Bearer " + self.token
+        if self.socket_path:
+            conn = UnixHTTPConnection(self.socket_path, timeout=15)
+            headers["Host"] = "localhost"  # the server wants a loopback Host
+        else:
+            u = urllib.parse.urlsplit(self.url)
+            conn = http.client.HTTPConnection(u.hostname, u.port, timeout=15)
+        try:
+            conn.request(method, path, body=data, headers=headers)
+            resp = conn.getresponse()
+            status, raw = resp.status, resp.read()
+        except (OSError, http.client.HTTPException) as e:
+            sys.exit(f"the vault didn't answer {method} {path}: {e}")
+        finally:
+            conn.close()
+        try:
+            return status, json.loads(raw or b"null")
+        except ValueError:
+            return status, raw.decode(errors="replace").strip()
+
+    def field_path(self, field_id):
+        return "/vault/fields/" + urllib.parse.quote(field_id, safe=":")
+
+    def values(self):
+        """Every field the token may read, in one request (the server leaves
+        out what the token can't see)."""
+        status, bundle = self.call("GET", "/vault/context")
+        if status == 401:
+            sys.exit("the vault refused the token (expired after its hour, or revoked): run the command fill.py needs prints again")
+        if status != 200:
+            sys.exit(f"reading the vault: {status} {bundle}")
+        return {f["id"]: f["value"] for fields in bundle["categories"].values() for f in fields}
+
+    def why_missing(self, field_id):
+        """A field the run needs and didn't get: absent, or hidden from this token."""
+        status, got = self.call("GET", self.field_path(field_id))
+        if status == 404:
+            return "not in the vault"
+        if status == 200:
+            return "in the vault, but not read"
+        return f"in the vault but this token can't read it ({status}: {got.get('error') if isinstance(got, dict) else got})"
+
+    def set(self, field_id, value):
+        return self.call("PUT", self.field_path(field_id), {"value": value})
+
+
+# --- Resolving rows ----------------------------------------------------------
+
+def parse_template(template):
+    """The library's template language ($defs/template): {name}, {name|date},
+    [optional part], and \\[ \\] \\{ \\} for the characters themselves;
+    groups nest."""
+    stack, i = [[]], 0
+    while i < len(template):
+        c = template[i]
+        if c == "\\" and i + 1 < len(template):
+            stack[-1].append(("text", template[i + 1]))
+            i += 2
+            continue
+        if c == "{":
+            end = template.index("}", i)
+            name, _, flt = template[i + 1:end].partition("|")
+            stack[-1].append(("var", name, flt))
+            i = end + 1
+            continue
+        if c == "[":
+            stack.append([])
+        elif c == "]":
+            if len(stack) == 1:
+                raise ValueError(f"unbalanced ] in {template!r}")
+            group = stack.pop()
+            stack[-1].append(("group", group))
+        else:
+            stack[-1].append(("text", c))
+        i += 1
+    if len(stack) != 1:
+        raise ValueError(f"unbalanced [ in {template!r}")
+    return stack[0]
+
+
+def render(template, lookup):
+    """The text, and the names left empty outside any [...] (each value is
+    put in once, never read as a template itself)."""
+    def ev(nodes):
+        out, missing = [], []
+        for node in nodes:
+            if node[0] == "text":
+                out.append(node[1])
+            elif node[0] == "var":
+                # A vault date is YYYY-MM-DD; forms want DD/MM/YYYY, |date or not.
+                # |or:TEXT is what an empty field means (Italia).
+                v = italian_date(lookup(node[1]) or "")
+                if node[2] == "digits":  # NA-123456 → 123456
+                    v = re.sub(r"\D", "", v)
+                if not v and node[2].startswith("or:"):
+                    v = node[2][3:]
+                if not v:
+                    missing.append(node[1])
+                out.append(v)
+            else:
+                text, empty = ev(node[1])
+                if not empty:
+                    out.append(text)
+        return "".join(out), missing
+    return ev(parse_template(template))
+
+
+def required_by(rule, lookup):
+    """Why an optional field is needed after all: the first of its
+    required_if conditions the data meets, or None."""
+    for c in rule.get("required_if", []):
+        v = lookup(c["field"]) or ""
+        if "equals" in c and v == c["equals"]:
+            return f"{c['field']} is {c['equals']}"
+        if "matches" in c and re.search(c["matches"], v):
+            return f"{c['field']} matches {c['matches']}"
+    return None
+
+
+def gaps(names, lookup, optional, conditions, name_of):
+    """The empty names a row can't do without: outside [...] and not optional,
+    or optional but required now. Each as {field, needed}."""
+    out = []
+    for name, outside in names:
+        if lookup(name):
+            continue
+        rule = optional.get(name)
+        needed = required_by(rule, conditions) if rule else None
+        if (outside and rule is None) or needed:
+            out.append({"field": name_of(name), "needed": needed})
+    return out
+
+
+def resolve(form, values, household, answers, who):
+    """Each row as value, missing (the vault lacks something it needs: ask
+    the user), answered, ask (not answered yet) or blank, the ways the skill
+    reads a row. A table's value lists its people, each a cell per column;
+    an allegato's, each person's text. who: the raw values, the signer, the
+    person categories, --party and each person's ruolo (Who)."""
+    rows = []
+    by_label = {r["label"]: r for r in form["fields"]}
+    for row in form["fields"]:
+        m, out = row["map"], {"label": row["label"]}
+        when = row.get("when")
+        if when:
+            # Only when another row's answer ticks one of these boxes; until
+            # it is answered there is nothing to read for this one.
+            answer = answers.get(when["field"])
+            if answer in (None, ""):
+                rows.append({**out, "status": "blank", "reason": f"until {when['field']!r} is answered"})
+                continue
+            if not {c["box"] for c in ticks(by_label[when["field"]], answer)} & set(when["ticks"]):
+                rows.append({**out, "status": "blank", "reason": f"only when {when['field']!r} is {' or '.join(when['ticks'])}"})
+                continue
+        if isinstance(m.get("repeat"), dict):
+            out.update(ruolo_row(row, who))
+        elif "repeat" in m:
+            out.update(table_row(row, values, household, answers))
+        elif "party" in m:
+            out.update(party_row(row, who, answers))
+        elif "ask" in m:
+            # A list is rows for a table; "no" or "nessuno" leaves a text box
+            # empty, but is an answer to boxes to tick.
+            answer = answers.get(row["label"])
+            if answer is None or answer == "":
+                out.update(status="ask", question=m["ask"])
+            elif answer == [] or (not isinstance(answer, list) and not row.get("choices") and said(answer) in NOTHING):
+                out.update(status="blank", reason=f"answered {answer!r}")
+            else:
+                out.update(status="answered", value=answer)
+        elif "blank_with_reason" in m:
+            out.update(status="blank", reason=m["blank_with_reason"])
+        else:
+            out.update(scalar_row(row, values))
+        rows.append(out)
+    return rows
+
+
+class Who:
+    """Whose data the rows read: the raw values (people prefixed), who
+    signs, the person categories, the people --party named by role, and
+    each person's ruolo (from *:ruolo.tipo)."""
+
+    def __init__(self, raw, signer="io", people=(), parties=None):
+        self.raw, self.signer, self.people, self.parties = raw, signer, people, parties or {}
+        self.roles = {k.split(":", 1)[0]: set(v.split(",")) for k, v in raw.items()
+                      if k.endswith(":ruolo.tipo") and ":" in k.split(".", 1)[0]}
+
+    def holding(self, ruoli):
+        """Everyone whose ruolo includes one of ruoli."""
+        return sorted(p for p, r in self.roles.items() if r & set(ruoli))
+
+
+def party_row(row, who, answers):
+    """A row read from the person --party named for its ruolo; without one,
+    an ask by its label ("no" when the role isn't part of this pratica)."""
+    ruoli = role_list(row["map"]["party"]["ruolo"])
+    named = party_people(row, who.parties)
+    if len(named) > 1:
+        # One person fills the section: the user picks which.
+        return {"status": "ask", "question": f"which one? --party {ruoli[0]}=" + " or ".join(named)}
+    if named:
+        slug = named[0]
+        out = scalar_row(row, as_signer(who.raw, slug, who.people))
+        for m in out.get("missing", []):
+            m["field"] = signer_id(m["field"], slug, who.people)
+        return {**out, "party": slug}
+    answer = answers.get(row["label"])
+    if answer not in (None, ""):
+        if said(answer) in NOTHING:
+            return {"status": "blank", "reason": f"answered {answer!r}"}
+        return {"status": "answered", "value": answer}
+    held = who.holding(ruoli)
+    hint = f"--party {ruoli[0]}=" + (" or ".join(held) if held else "<slug>")
+    return {"status": "ask", "question": f"whose data? {hint}" + ("" if held else f", or the answer (\"no\" if no {human_role(ruoli[0])})")}
+
+
+def ruolo_row(row, who):
+    """A repeat by ruolo: the people --party named with those ruoli (but the
+    signer, with except: dichiarante), each a row of the table (columns) or
+    an allegato; refused when the vault has someone with the ruolo who
+    wasn't named, so nobody is left off."""
+    m = row["map"]
+    spec = m["repeat"]
+    ruoli = role_list(spec["ruolo"])
+    people = repeat_people(spec, who.parties, who.signer)
+    left = [p for p in who.holding(ruoli) if p not in people and not (spec.get("except") == "dichiarante" and p == who.signer)]
+    if left:
+        return {"status": "ask", "question": "also " + ", ".join(left) + f" (with --party {ruoli[0]}=" + ",".join(people + left) + ")"}
+    wrong = [p for p in people if not who.roles.get(p, set()) & set(ruoli)]
+    if wrong:
+        return {"status": "ask", "question": f"{', '.join(wrong)} isn't {' or '.join(human_role(r) for r in ruoli)} in the vault"}
+    if not people:
+        return {"status": "blank", "reason": f"nobody is {' or '.join(human_role(r) for r in ruoli)}"}
+    optional = {o["field"]: o for o in row.get("optional", [])}
+    columns = m.get("columns") or [{"label": "", "template": " ".join("{" + f + "}" for f in m["fields"])}]
+    lines, missing = [], []
+    for slug in people:
+        def lookup(name, slug=slug):
+            if name == "*:ruolo.tipo":
+                # The role this repeat is about, as a form writes it, never the list.
+                return human_role(next(r for r in ruoli if r in who.roles[slug]))
+            return who.raw.get(f"{slug}:{name[2:]}") if name.startswith("*:") else who.raw.get(name)
+        cells = {}
+        for col in columns:
+            text, _ = render(col["template"], lookup)
+            cells[col["label"]] = " ".join(text.split())
+            missing += gaps(placed_names(col["template"]), lookup, optional, lookup,
+                            lambda n, slug=slug: f"{slug}:{n[2:]}" if n.startswith("*:") else n)
+        lines.append({"slug": slug, "cells": cells} if m.get("columns") else {"slug": slug, "text": cells[""]})
+    out = {"status": "value", "value": lines}
+    if missing:
+        out["missing"] = list({x["field"]: x for x in missing}.values())
+    return out
+
+
+def scalar_row(row, values):
+    """A direct, concat or fallback row: its template's text (fields joined by
+    spaces without one), or what it lacks. A row of boxes to tick keeps the
+    field's own value, which picks the box."""
+    m = row["map"]
+    optional = {o["field"]: o for o in row.get("optional", [])}
+    source = None
+    if "fallback" in m:
+        first = next((r for r in m["fallback"] if values.get(r)), None)
+        if first is None:
+            return {"status": "missing", "missing": [{"field": f, "needed": None} for f in m["fallback"]]}
+        source = category(first)
+        template = m.get("template") or "{" + first + "}"
+    else:
+        template = m.get("template") or " ".join("{" + r + "}" for r in refs(m))
+
+    def lookup(name):
+        return values.get(f"{source}.{name[1:]}") if name.startswith(".") else values.get(name)
+    text, _ = render(template, lookup)
+    missing = gaps(placed_names(template), lookup, optional, values.get,
+                   lambda n: f"{source}.{n[1:]}" if n.startswith(".") else n)
+    if missing:
+        return {"status": "missing", "missing": missing}
+    text = " ".join(text.split())
+    if not text:
+        return {"status": "blank", "reason": "optional, and empty"}
+    if row.get("choices"):
+        # The field's own value picks the box (a fallback's, the first set).
+        text = values.get(m["direct"], "") if "direct" in m else values.get(first, "")
+    return {"status": "value", "value": text, "source": source}
+
+
+def table_row(row, values, household, answers):
+    """A repeat: famiglia row: the people in the stato di famiglia, each with
+    the text of every column, and what any of them lacks."""
+    m = row["map"]
+    optional = {o["field"]: o for o in row.get("optional", [])}
+    people, unknown = [], []
+    for member in household.get("members", []):
+        stato = member.get("famiglia", {}).get("stato_famiglia")
+        if stato is None:
+            # Unset isn't no: who lives with the dichiarante can't be guessed.
+            unknown.append({"field": f"{member['slug']}:famiglia.stato_famiglia", "needed": None})
+        if stato == "si":
+            people.append(member)
+    # The entry's step 2: whoever is intestatario della scheda declares.
+    intestatario = values.get("famiglia.intestatario_scheda")
+    if unknown:
+        return {"status": "missing", "missing": unknown}
+    if people and intestatario is None:
+        return {"status": "missing", "missing": [{"field": "famiglia.intestatario_scheda", "needed": None}]}
+    if intestatario not in (None, "io"):
+        sys.exit(f"the intestatario della scheda is {intestatario}: they sign, which this tool doesn't do yet")
+    if not people and said(answers.get(row["label"], "")) not in NOBODY:
+        # An empty stato di famiglia may only mean nobody was added to the vault.
+        return {"status": "ask", "question": "Nessuno nello stato di famiglia del vault: confermare che non convive "
+                "nessuno (risposta \"nessuno\"), oppure aggiungere i conviventi al vault"}
+    rows, missing = [], []
+    for member in people:
+        slug = member["slug"]
+
+        def lookup(name, slug=slug, member=member):
+            if name == "relazione":
+                return member.get("relazione_label", "")
+            return values.get(f"{slug}:{name[2:]}") if name.startswith("*:") else None
+        cells = {}
+        for col in m["columns"]:
+            cells[col["label"]], _ = render(col["template"], lookup)
+            missing += gaps(placed_names(col["template"]), lookup, optional, lookup,
+                            lambda n, slug=slug: f"{slug}:famiglia.relazione" if n == "relazione" else f"{slug}:{n[2:]}")
+        rows.append({"slug": slug, "cells": cells})
+    out = {"status": "value", "value": rows}
+    if missing:
+        out["missing"] = list({m["field"]: m for m in missing}.values())
+    return out
+
+
+# --- Filling and reading back -----------------------------------------------
+
+def strings(value):
+    """Every string in a row's value (a text, a table's cells, an allegato's copies)."""
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for v in value.values():
+            yield from strings(v)
+    elif isinstance(value, list):
+        for v in value:
+            yield from strings(v)
+
+
+class Pen:
+    """Writes on the form's pages in one font, shrinking text to fit its box,
+    or sets its fillable fields; remembers what went where for read_back."""
+
+    def __init__(self, fitz, doc, size, texts):
+        self.fitz, self.doc, self.size = fitz, doc, size
+        self.written, self.problems = [], []
+        # The form's printed fonts, and Helvetica if it has a text field: PyMuPDF draws a field it
+        # sets in Helvetica whatever font the field names.
+        used = {f[3].split("+")[-1] for page in doc for f in page.get_fonts()}
+        if any(w.field_type_string == "Text" for page in doc for w in page.widgets()):
+            used.add("Helvetica")
+        base = next(((code, name) for code, name in BASE14 if name not in used), None)
+        self.file = None
+        if base is None or any(ord(c) > 255 for t in texts for c in t.translate(PLAIN)):
+            self.file = next((f for f in UNICODE_FONTS if os.path.exists(f)), None)
+        if self.file:
+            self.font, self.fontname = fitz.Font(fontfile=self.file), "pvfill"
+        else:
+            code = base[0] if base else "helv"
+            self.font, self.fontname = fitz.Font(code), code
+        self.fonted = set()
+        # The form's own printed words, by page, read before anything is written.
+        self.words = [page.get_text("words") for page in doc]
+
+    def name(self):
+        return self.font.name
+
+    def page(self, n):
+        """Page n to write on, or None (a problem) if the form has no such page."""
+        if not 1 <= n <= len(self.doc):
+            problem = f"page {n}: the form has {len(self.doc)} pages"
+            if problem not in self.problems:
+                self.problems.append(problem)
+            return None
+        page = self.doc[n - 1]
+        if self.file and n not in self.fonted:
+            page.insert_font(fontname="pvfill", fontfile=self.file)
+            self.fonted.add(n)
+        return page
+
+    def printed_before(self, n, rect):
+        """The word the form prints just left of a box, on its line."""
+        x0, top, _, bottom = rect
+        # A word may run on into its blank (via*_____), so it starts left of
+        # the box; the blank itself is no word.
+        left = [w for w in self.words[n - 1] if w[0] < x0 - 1 and top - 3 <= (w[1] + w[3]) / 2 <= bottom + 3
+                and w[4].strip("_*:.")]
+        if not left:
+            return ""
+        return max(left, key=lambda w: w[0])[4].strip("_*:.").lower()
+
+    def address(self, n, rect, text):
+        """An address without the word the form already prints before it.
+        Only for rows that read an address (is_address)."""
+        if not 1 <= n <= len(self.doc):
+            return text
+        word = self.printed_before(n, rect)
+        first, _, rest = text.partition(" ")
+        if word in TOPONYMS and first.strip(",").lower() == word and rest.strip():
+            return rest.strip()
+        return text
+
+    def latin1(self, text):
+        if not self.file:
+            text = text.translate(PLAIN)
+            if any(ord(c) > 255 for c in text):
+                self.problems.append(f"{text!r} has characters {self.font.name} can't print, and no Unicode font was embedded")
+        return text
+
+    def fit(self, text, width):
+        s = self.size
+        while self.font.text_length(text, fontsize=s) > width - 2 and s > 5.5:
+            s -= 0.25
+        return s, self.font.text_length(text, fontsize=s)
+
+    def put(self, rect, text, center=False, page=1):
+        text = self.latin1(text)
+        x0, y0, x1, y1 = rect
+        s, width = self.fit(text, x1 - x0)
+        if width > x1 - x0:
+            self.problems.append(f"{text!r} doesn't fit its box even at {s}pt")
+        x = x0 + (x1 - x0 - width) / 2 if center else x0 + 1
+        target = self.page(page)
+        if target is None:
+            return
+        target.insert_text((x, y1 - 2.6), text, fontname=self.fontname, fontsize=s, color=INK)
+        self.written.append({"page": page, "rect": rect, "text": text})
+
+    def lines(self, places, text):
+        """Text over a box and its continuation lines (page, rect), word by
+        word; shrunk only if the words don't fit on all of them."""
+        s = self.size
+        while True:
+            words, out = text.split(), []
+            for _, (x0, _, x1, _) in places:
+                line = ""
+                while words and self.font.text_length((line + " " + words[0]).strip(), fontsize=s) <= x1 - x0 - 2:
+                    line = (line + " " + words.pop(0)).strip()
+                out.append(line)
+            if not words or s <= 5.5:
+                break
+            s -= 0.25
+        if words:
+            self.problems.append(f"{text!r} doesn't fit its {len(places)} lines")
+        saved, self.size = self.size, s
+        for (page, rect), line in zip(places, out):
+            if line:
+                self.put(rect, line, page=page)
+        self.size = saved
+
+    def widget(self, page, name, text=None):
+        """A fillable field set to text, or ticked; name#i is the i-th field
+        of that name on the page (a radio group's buttons share one)."""
+        # A widget belongs to its page object, which must outlive the update.
+        pg = self.page(page)
+        if pg is None:
+            return
+        w = find_widget(pg, name)
+        if w is None:
+            self.problems.append(f"no fillable field {name!r} on page {page}")
+            return
+        if text is None:
+            w.field_value = w.on_state() if w.field_type_string == "RadioButton" else True
+        else:
+            w.field_value = self.latin1(text)
+        w.update()
+        self.written.append({"page": page, "widget": name, "text": "X" if text is None else w.field_value})
+
+
+def find_widget(page, name):
+    """name, or name#i: the i-th field of that name on the page; on an
+    allegato's copy, the field as the copy renamed it ("name [n]")."""
+    name, _, i = name.partition("#")
+    copy = re.compile(re.escape(name) + r" \[\d+\]")
+    found = [w for w in page.widgets() if w.field_name == name or copy.fullmatch(w.field_name)]
+    i = int(i or 0)
+    return found[i] if i < len(found) else None
+
+
+def is_address(row):
+    """A row that reads an address (an indirizzo field, or a fallback's
+    {.indirizzo}), whose value may repeat the street word a form prints."""
+    m = row["map"]
+    names = refs(m) + template_names(m.get("template", ""))
+    return any("indirizzo" in n.rsplit(".", 1)[-1] for n in names)
+
+
+def put_write(pen, place, value, page):
+    """A write_value's text: a rect to write in, or a fillable field's name."""
+    if isinstance(place, str):
+        pen.widget(page, place, value)
+    else:
+        pen.put(place, value, page=page)
+
+
+def continuation(box):
+    """A box's continuation lines as (page, rect): a rect on the box's page,
+    or {"page", "rect"} on another."""
+    page = box.get("page", 1)
+    return [(c["page"], c["rect"]) if isinstance(c, dict) else (page, c) for c in box.get("continuation", [])]
+
+
+def allegati(fitz, pdf_in, layout, library, by_label, doc):
+    """The pages of each allegato (a repeat by ruolo without columns), copied
+    at the end of the form once per person after the first: {page: [its
+    page for each person]}. An allegato nobody is in keeps its one page, so
+    the other rows on it are still filled. Problems too."""
+    groups, problems = {}, []
+    for box in layout["boxes"]:
+        lib = library.get(box["label"])
+        if not lib or not is_allegato(lib):
+            continue
+        g = groups.setdefault(json.dumps(lib["map"]["repeat"], sort_keys=True), {"pages": set(), "n": 0})
+        g["pages"] |= {box.get("page", 1)} | {p for p, _ in continuation(box)}
+        row = by_label.get(box["label"])
+        if row and row["status"] == "value":
+            g["n"] = len(row["value"])
+    copies = {}
+    for g in groups.values():
+        pages = sorted(p for p in g["pages"] if 1 <= p <= len(doc))
+        if any(p in copies for p in pages):
+            problems.append(f"pages {pages} belong to two allegati")
+            continue
+        for p in pages:
+            copies[p] = [p]
+        # From a second open of the form: its fillable fields come renamed
+        # ("name [n]"), so each copy's are its own, radio groups too.
+        source = fitz.open(pdf_in)
+        for _ in range(1, g["n"]):
+            for p in pages:
+                doc.insert_pdf(source, from_page=p - 1, to_page=p - 1)
+                copies[p].append(len(doc))
+    return copies, problems
+
+
+def fill_pdf(fitz, pdf_in, pdf_out, layout, form, rows):
+    by_label = {r["label"]: r for r in rows}
+    library = {r["label"]: r for r in form["fields"]}
+    doc = fitz.open(pdf_in)
+    copies, problems = allegati(fitz, pdf_in, layout, library, by_label, doc)
+    pen = Pen(fitz, doc, layout.get("font_size", 9),
+              list(strings([r.get("value") for r in rows if r["status"] in ("value", "answered")])))
+    pen.problems += problems
+    ticked = set()
+
+    for box in layout["boxes"]:
+        label, page = box["label"], box.get("page", 1)
+        row = by_label.get(label)
+        if row is None or "skip" in box or "into_table" in box:
+            continue
+        # An allegato's page is filled once per person, on its copy for them.
+        for k, _ in enumerate(copies.get(page, [page])):
+            def place(p, k=k):
+                return copies[p][k] if copies.get(p) else p
+            if "table" in box:
+                fill_table(pen, box, row, [by_label[b["label"]] for b in layout["boxes"]
+                                           if b.get("into_table") == label and b["label"] in by_label], place(page))
+                continue
+            if row["status"] not in ("value", "answered"):
+                continue
+            value = row["value"][k]["text"] if is_allegato(library[label]) else row["value"]
+            fill_box(pen, box, library[label], value, place, ticked)
+    for u in layout.get("unmapped", []):
+        w = u.get("needed_when")
+        if w and (w["field"], w["box"]) in ticked:
+            pen.problems.append(f"{w['box']} is ticked, so {u['box']} must be filled by hand: {u['why']}")
+    if pen.fonted:
+        doc.subset_fonts()
+    doc.save(pdf_out, garbage=3, deflate=True)
+    return pen.written, pen.problems, pen.name()
+
+
+def fill_box(pen, box, row, value, place, ticked):
+    """One box's value, on the page place gives (an allegato's copy)."""
+    label, page = box["label"], place(box.get("page", 1))
+    if isinstance(value, str) and "parts" not in box:
+        value = italian_date(value.strip())
+    if "choices" in box or "choice_widgets" in box:
+        hit = ticks(row, value)
+        # A field's value must tick a box; an answer may also say no.
+        if not hit and ("ask" not in row["map"] or said(value) not in NOTHING):
+            boxes = "; ".join(f"{c['box']}: {', '.join(c['values'])}" for c in row["choices"])
+            pen.problems.append(f"{label}: {value!r} ticks none of its boxes ({boxes})")
+        for c in hit:
+            if "choice_widgets" in box:
+                pen.widget(page, box["choice_widgets"][c["box"]])
+            else:
+                pen.put(box["choices"][c["box"]], "X", center=True, page=page)
+            ticked.add((label, c["box"]))
+            if c.get("write_value") and said(value) != said(c["box"]):
+                put_write(pen, box["write"][c["box"]], value, page)
+    elif "widget" in box:
+        pen.widget(page, box["widget"], value)
+    elif "cells" in box:
+        # A date in cells is its digits: the form prints the slashes.
+        if re.fullmatch(r"\d{2}/\d{2}/\d{4}", value):
+            value = value.replace("/", "")
+        for (cx0, cx1), ch in zip(box["cells"], value):
+            pen.put([cx0, box["baseline"] - 9, cx1, box["baseline"] + 2.6], ch, center=True, page=page)
+        # partial: a shorter value (a REA number) leaves the last cells empty.
+        if len(value) > len(box["cells"]) or (len(value) < len(box["cells"]) and not box.get("partial")):
+            pen.problems.append(f"{label}: {len(value)} characters for {len(box['cells'])} cells")
+    elif "parts" in box:
+        m = ISO_DATE.fullmatch(value)
+        parts = [m[3], m[2], m[1]] if m else value.split("/")  # DD, MM, YYYY
+        for rect, part in zip(box["parts"], parts):
+            pen.put(rect, part, center=True, page=page)
+    else:
+        if is_address(row):
+            value = pen.address(page, box["rect"], value)
+        if "continuation" in box:
+            pen.lines([(page, box["rect"])] + [(place(p), r) for p, r in continuation(box)], value)
+        else:
+            pen.put(box["rect"], value, page=page)
+
+
+def fill_table(pen, box, row, extra_rows, page=None):
+    """A table: the row's people, then the answers of the asks that go into
+    it, each a row by column label."""
+    table, label = box["table"], box["label"]
+    lines = [p["cells"] for p in row.get("value", [])] if row["status"] == "value" else []
+    for extra in extra_rows:
+        if extra["status"] != "answered":
+            continue
+        if not all(isinstance(e, dict) and set(e) <= set(table["columns"]) for e in extra["value"]):
+            pen.problems.append(f"{extra['label']}: answer with one entry per person, by column ({', '.join(table['columns'])})")
+            continue
+        lines += extra["value"]
+    if len(lines) > len(table["rows"]):
+        pen.problems.append(f"{label}: {len(lines)} people for {len(table['rows'])} rows")
+    for (top, bottom), cells in zip(table["rows"], lines):
+        for column, (x0, x1) in table["columns"].items():
+            if cells.get(column):
+                pen.put([x0, top, x1, bottom], italian_date(cells[column]), page=page or box.get("page", 1))
+
+
+def read_back(fitz, pdf_path, written, font):
+    """Every value we wrote, read from the saved PDF in its box or field; and
+    anything of ours found outside the boxes."""
+    doc = fitz.open(pdf_path)
+    ours = {}  # page -> [(bbox, char)] in our font
+    for n in {w["page"] for w in written} | {1}:
+        ours[n] = []
+        for block in doc[n - 1].get_text("rawdict")["blocks"]:
+            for line in block.get("lines", []):
+                for span in line["spans"]:
+                    if span["font"].split("+")[-1] == font:
+                        ours[n] += [(c["bbox"], c["c"]) for c in span["chars"]]
+    used, results = set(), []
+    for w in written:
+        if "widget" in w:
+            found = find_widget(doc[w["page"] - 1], w["widget"])
+            got = found.field_value if found else None
+            if w["text"] == "X":
+                got = "X" if found and got not in (None, False, "", "Off") else repr(got)
+            results.append({"page": w["page"], "expected": w["text"], "got": got, "ok": got == w["text"]})
+            continue
+        x0, y0, x1, y1 = w["rect"]
+        inside = [(i, b, c) for i, (b, c) in enumerate(ours[w["page"]])
+                  if x0 - 1.5 <= (b[0] + b[2]) / 2 <= x1 + 1.5 and y0 - 1.5 <= (b[1] + b[3]) / 2 <= y1 + 1.5]
+        got = "".join(c for _, _, c in sorted(inside, key=lambda t: t[1][0])).strip()
+        used |= {(w["page"], i) for i, _, _ in inside}
+        results.append({"page": w["page"], "expected": w["text"], "got": got, "ok": got == w["text"]})
+    stray = "".join(c for n, chars in ours.items() for i, (_, c) in enumerate(chars) if (n, i) not in used).strip()
+    return results, stray
+
+
+def grid_rows(bands):
+    """The plain rows of a form drawn as a grid: under each shaded band, down to the next band
+    across the same columns (40 points at most)."""
+    rows = []
+    for b in bands:
+        below = [c.y0 for c in bands if c is not b and c.y0 >= b.y1 - 0.5 and c.x0 < b.x1 and c.x1 > b.x0]
+        rows.append(type(b)(b.x0, b.y1, b.x1, min(below + [b.y1 + 40])))
+    return rows
+
+
+def layout_problems(fitz, pdf_path, layout):
+    """Boxes that don't sit on the blank form's own marks: a text box on its
+    underscores (or, on a form drawn as a grid, in a plain row under a shaded
+    band, clear of every band) and over no printed word or fillable field, a cell on its
+    underline, a checkbox on its square (drawn, or a box character of the
+    form's font), a table's rows and columns on its lines, a fillable field
+    that is there. The read-back can't see a misplaced box; this can."""
+    doc = fitz.open(pdf_path)
+    pages = {}
+
+    def marks(n):
+        if n not in pages:
+            if not 1 <= n <= len(doc):
+                return None
+            page = doc[n - 1]
+            chars = [(c["bbox"], c["c"]) for b in page.get_text("rawdict")["blocks"] for l in b.get("lines", [])
+                     for s in l["spans"] for c in s["chars"]]
+            pages[n] = {
+                "underscores": [b for b, c in chars if c == "_"],
+                "printed": [(b, c) for b, c in chars if c not in "_  "],
+                "shapes": [d["rect"] for d in page.get_drawings()],
+                # A grid form's shaded bands (labels), not its thin rules; and the span of rows its
+                # bands enclose, where the blanks are.
+                "bands": [d["rect"] for d in page.get_drawings() if d.get("fill") and d["fill"] != (1.0, 1.0, 1.0)
+                          and d["rect"].width > 3 and d["rect"].height > 3],
+                "rows": grid_rows([d["rect"] for d in page.get_drawings() if d.get("fill") and d["fill"] != (1.0, 1.0, 1.0)
+                                   and d["rect"].width > 3 and d["rect"].height > 3]),
+                "widgets": [(w.field_name, w.field_type_string, w.rect) for w in page.widgets()],
+            }
+        return pages[n]
+
+    def blank_problem(n, rect):
+        m = marks(n)
+        if m is None:
+            return f"is on page {n}, which the form doesn't have"
+        x0, top, x1, bottom = rect
+        field = next((name for name, _, r in m["widgets"] if r.intersects(fitz.Rect(rect))), None)
+        if field:
+            return f"covers the fillable field {field!r}: name it as the box's widget"
+        covered = sorted((max(u[0], x0), min(u[2], x1)) for u in m["underscores"]
+                         if top - 1 <= (u[1] + u[3]) / 2 <= bottom + 2 and u[2] > x0 and u[0] < x1)
+        width, end = 0.0, x0
+        for a, b in covered:
+            width, end = width + max(0.0, b - max(a, end)), max(end, b)
+        if covered and width < 0.8 * (x1 - x0):
+            return "isn't on the form's blank line"
+        if not covered:
+            # A form drawn as a grid (the Comune's Modello DP): the blank is the plain row under a
+            # shaded row of labels, with no line to write on. It must clear every shaded band, the
+            # form's thin rules aside.
+            band = next((s for s in m["bands"] if fitz.Rect(rect).intersect(s).get_area() > 1.0), None)
+            if band is not None:
+                return f"isn't on the form's blank: it overlaps a shaded band {[round(v, 1) for v in band]}"
+            if not any(s.contains(fitz.Rect(rect)) or s.intersects(fitz.Rect(rect)) for s in m["rows"]):
+                return "isn't on the form's blank line, nor in a cell of its grid"
+        over = "".join(c for b, c in m["printed"]
+                       if x0 + 0.5 <= (b[0] + b[2]) / 2 <= x1 - 0.5 and top <= (b[1] + b[3]) / 2 <= bottom)
+        return f"covers the printed {over!r}" if over else None
+
+    def near(r, target, tol=1.0):
+        return all(abs(p - q) <= tol for p, q in zip((r.x0, r.y0, r.x1, r.y1), target))
+
+    def box_char(m, square):
+        # A box drawn by a character of the form's font (Symbol, Wingdings),
+        # which may not even render: the square starts where it does. Its
+        # advance width isn't the box's, so only the start is compared.
+        x0, top, _, bottom = square
+        return any(abs(b[0] - x0) <= 1.5 and b[1] <= (top + bottom) / 2 <= b[3] and not c.isalnum()
+                   for b, c in m["printed"])
+
+    def widget_problem(n, name, kinds):
+        if marks(n) is None:
+            return f"is on page {n}, which the form doesn't have"
+        page = doc[n - 1]  # kept while its widget is read
+        w = find_widget(page, name)
+        if w is None:
+            return f"no fillable field {name!r} on page {n}"
+        if w.field_type_string not in kinds:
+            return f"{name!r} is a {w.field_type_string}, not a {' or '.join(kinds)}"
+        return None
+
+    out = []
+    for box in layout["boxes"]:
+        name, n = box["label"], box.get("page", 1)
+        places = ([(n, box["rect"])] if "rect" in box else []) + continuation(box)
+        writes = list(box.get("write", {}).values())
+        places += [(n, r) for r in box.get("parts", []) + [w for w in writes if not isinstance(w, str)]]
+        for page, rect in places:
+            problem = blank_problem(page, rect)
+            if problem:
+                out.append(f"{name}: {rect} {problem}")
+        if "widget" in box and (problem := widget_problem(n, box["widget"], ("Text", "ComboBox"))):
+            out.append(f"{name}: {problem}")
+        for widget in box.get("choice_widgets", {}).values():
+            if problem := widget_problem(n, widget, ("CheckBox", "RadioButton")):
+                out.append(f"{name}: {problem}")
+        for widget in (w for w in writes if isinstance(w, str)):
+            if problem := widget_problem(n, widget, ("Text", "ComboBox")):
+                out.append(f"{name}: {problem}")
+        if any(k in box for k in ("cells", "choices", "table")):
+            m = marks(n)
+            if m is None:
+                out.append(f"{name}: is on page {n}, which the form doesn't have")
+                continue
+        for x0, x1 in box.get("cells", []):
+            # Drawn, or typed as |__|__| (underscores between the cell's bars).
+            drawn = any(abs(r.x0 - x0) <= 1 and abs(r.x1 - x1) <= 1 and 0 <= r.y0 - box["baseline"] <= 3 for r in m["shapes"])
+            typed = any(x0 - 0.5 <= (u[0] + u[2]) / 2 <= x1 + 0.5 and u[1] - 1 <= box["baseline"] <= u[3] + 1
+                        for u in m["underscores"])
+            # Or boxed, as a grid form draws them: on each side a rule, or the edge of the grid's
+            # frame, across the baseline.
+            side = lambda x: any((abs(r.x0 - x) <= 1 or abs(r.x1 - x) <= 1) and r.y0 - 3 <= box["baseline"] <= r.y1 + 3
+                                 for r in m["shapes"])
+            boxed = side(x0) and side(x1)
+            if not drawn and not typed and not boxed:
+                out.append(f"{name}: cell {x0}-{x1} has no underline")
+        for square in box.get("choices", {}).values():
+            if not any(near(r, square) for r in m["shapes"]) and not box_char(m, square):
+                out.append(f"{name}: no checkbox at {square}")
+        if "table" in box:
+            rows = box["table"]["rows"]
+            for top, bottom in rows:
+                for y in (top, bottom):
+                    if not any(abs(r.y0 - y) <= 0.5 and r.width > 100 for r in m["shapes"]):
+                        out.append(f"{name}: no table line at y={y}")
+            verticals = [r.x0 for r in m["shapes"] if r.width < 1 and r.height > 5 and rows[0][0] - 1 <= r.y0 <= rows[-1][1]]
+            for column, (x0, x1) in box["table"]["columns"].items():
+                if not any(0 <= x0 - v <= 3 for v in verticals) or not any(-1 <= v - x1 <= 3 for v in verticals):
+                    out.append(f"{name}: column {column} {[x0, x1]} isn't between the table's lines")
+    return out
+
+
+# --- The run -----------------------------------------------------------------
+
+def pratiche_by_slug(values):
+    out = {}
+    for field_id, value in values.items():
+        if field_id.startswith("pratiche."):
+            slug, _, campo = field_id[len("pratiche."):].partition("_")
+            out.setdefault(slug, {})[campo] = value
+    return out
+
+
+def run(a):
+    import fitz  # PyMuPDF
+
+    entry = entry_of(a)
+    layout = load(a.layout or library_file(a, "layouts", ".json"))
+    form = form_of(entry, a.form)
+    signer = getattr(a, "for")
+    parties = parse_parties(a.party)
+    check_supported(entry, form, signer)
+    vaults = connect(a)
+    answered = load(a.answers) if a.answers else {}
+    answers, given = answered.get("answers", {}), answered.get("values", {})
+    checks = []
+
+    def check(name, ok, detail=""):
+        checks.append({"check": name, "ok": bool(ok), "detail": detail})
+        print(f"  {'ok  ' if ok else 'FAIL'} {name}{': ' + detail if detail else ''}")
+        return ok
+
+    print(f"{entry['id']} #{form['id']}" + (f" for {signer}" if signer != "io" else ""))
+    os.makedirs(a.out, exist_ok=True)
+    a.pdf = form_pdf(a, form)
+    with open(a.pdf, "rb") as f:
+        pdf_hash = hashlib.sha256(f.read()).hexdigest()
+    check("form is the version the library maps", pdf_hash == form.get("sha256"), pdf_hash[:12])
+    check("layout is for that version", layout["sha256"] == form.get("sha256"))
+    misplaced = layout_problems(fitz, a.pdf, layout)
+    check("every layout box sits on the form's own blank", not misplaced, "; ".join(misplaced))
+    library_labels = {r["label"] for r in form["fields"]}
+    layout_labels = {b["label"] for b in layout["boxes"]}
+    check("every library row has a place on the form", library_labels <= layout_labels,
+          ", ".join(sorted(library_labels - layout_labels)))
+    check("every layout box is a library row", layout_labels <= library_labels,
+          ", ".join(sorted(layout_labels - library_labels)))
+
+    prepare = vaults["draft"] if a.draft and "draft" in vaults else vaults["prepare"]
+    _, info = prepare.call("GET", "/vault/status")
+    business = isinstance(info, dict) and info.get("kind") == "impresa"
+    status, schema = prepare.call("GET", "/vault/schema")
+    if status != 200:
+        sys.exit(f"reading the vault's schema: {status} {schema}")
+    if "pratiche" not in schema:
+        sys.exit("the running vault is older than this fill.py (schema 18): pvault lock, then pvault unlock")
+    people = person_categories(schema)
+    values = prepare.values()
+    read = form_fields(form)
+    for written, value in given.items():
+        # What the vault can't hold, such as N/E for someone with no codice
+        # fiscale: the user's word for this run, never in place of the vault's.
+        # Unprefixed, a person's field is the signer's, as the rows read it.
+        field = signer_id(written, signer, people) if "." in written else written
+        if not re.fullmatch(r"([a-z][a-z0-9-]{0,31}:)?[a-z0-9_-]+\.[a-z0-9_]+", field) or local_id(field) not in read:
+            check(f"answers.json value {field} is a field this form reads", False)
+        elif category(field) == "ruolo":
+            # Who may sign, and who --party may name, is the vault's to say.
+            check(f"answers.json value {field} is no ruolo", False, "who holds a ruolo is set in the vault, not here")
+        elif field in values:
+            check(f"answers.json value {field} is not in the vault", False, "the vault has it: change it there")
+        elif not isinstance(value, str) or not value.strip():
+            check(f"answers.json value {field} is text", False, repr(value))
+        else:
+            values[field] = value.strip()
+            check(f"{field} from answers.json, not the vault", True, values[field])
+    status, household = prepare.call("GET", "/vault/members")
+    check("prepare token reads the household", status == 200, str(status))
+    if signer != "io":
+        known = [m["slug"] for m in household.get("members", [])] if status == 200 else []
+        check(f"{signer} is a person in the vault", signer in known, "" if signer in known else "not in the household this token sees")
+    who = Who(values, signer, people, parties)
+    signer_roles = role_list(entry["dichiarante"]["ruolo"]) if "dichiarante" in entry else []
+    client = False
+    if business and signer_roles:
+        # The business signs through a person whose ruolo is one of these.
+        can = who.holding(signer_roles)
+        if signer == "io":
+            sys.exit(f"a business vault's form is signed by a person who is {' or '.join(human_role(r) for r in signer_roles)}: "
+                     f"pass --for to needs and run, " + (f"one of {', '.join(can)}" if can else "and add them to the vault first"))
+        # Or a client declares in their own name, never for the business: an architect's studio
+        # files its client's own pratica, which the client signs.
+        client = signer not in can and "cliente" in who.roles.get(signer, ())
+        if client:
+            check(f"{signer} declares in proprio, as the business's client", True)
+        else:
+            check(f"{signer} signs as {' or '.join(human_role(r) for r in signer_roles)}", signer in can,
+                  "" if signer in can else f"their ruolo is {', '.join(sorted(who.roles.get(signer, ()))) or 'not in the vault'}")
+    for role, slugs in parties.items():
+        for p in slugs:
+            check(f"{p} is {human_role(role)}", role in who.roles.get(p, ()),
+                  "" if role in who.roles.get(p, ()) else f"their ruolo is {', '.join(sorted(who.roles.get(p, ()))) or 'not in the vault'}")
+    view = as_signer(values, signer, people)
+    # "In qualità di" is the one role the signer signs as, as a form writes it.
+    if "ruolo.tipo" in view and signer != "io":
+        held = [r for r in signer_roles if r in view["ruolo.tipo"].split(",")]
+        view["ruolo.tipo"] = human_role(held[0] if held else view["ruolo.tipo"].replace(",", ", "))
+    if "business.qualita_dichiarante" in view:
+        view["business.qualita_dichiarante"] = human_role(view["business.qualita_dichiarante"])
+    if isinstance(prepare, Given) and any("repeat" in r["map"] and not isinstance(r["map"]["repeat"], dict)
+                                          for r in form["fields"]):
+        sys.exit("this form has the stato di famiglia, which --values doesn't carry: use the token needs prints")
+    rows = resolve(form, view, household if status == 200 else {}, answers, who)
+    for r in rows:
+        for m in r.get("missing", []):
+            m["field"] = signer_id(m["field"], signer, people)
+        if r.get("missing"):
+            check(f"row {r['label']!r} has a value", False, "; ".join(
+                f"{m['field']} {prepare.why_missing(m['field'])}" + (f" (needed: {m['needed']})" if m["needed"] else "")
+                for m in r["missing"]))
+        if r["status"] == "ask":
+            check(f"row {r['label']!r} is answered", False, r["question"])
+
+    if client:
+        # The vault's own business.* and locale.* are the business's, not its client's.
+        library = {f["label"]: f["map"] for f in form["fields"]}
+        own = sorted({ref for r in rows if r["status"] in ("value", "answered") for ref in
+                      refs(library[r["label"]]) + template_names(library[r["label"]].get("template", ""))
+                      if "." in ref and ":" not in ref.split(".", 1)[0] and ref not in SIGNERS_OWN
+                      and schema_category(ref) in ("business", "locale")})
+        check("no data of the business itself is on its client's form", not own,
+              f"{', '.join(own)}: the client declares in proprio, so these would be the business's, not theirs")
+
+    written, problems, font = fill_pdf(fitz, a.pdf, f"{a.out}/filled.pdf", layout, form, rows)
+    check("everything the rows hold is on the form", not problems, "; ".join(problems))
+    results, stray = read_back(fitz, f"{a.out}/filled.pdf", written, font)
+    bad = [r for r in results if not r["ok"]]
+    check(f"all {len(results)} values read back in their boxes", not bad,
+          "; ".join(f"{r['expected']!r} read as {r['got']!r}" for r in bad))
+    check("nothing written outside a box", not stray, stray)
+    filled = fitz.open(f"{a.out}/filled.pdf")
+    for n in sorted({1} | {w["page"] for w in written}):
+        filled[n - 1].get_pixmap(dpi=110).save(f"{a.out}/page-{n}.png")
+
+    procedure = entry["id"].rsplit("/", 1)[1]
+    # The library's deadline, when it runs from a date the vault keeps.
+    compute = next((r["compute"] for r in entry.get("deadline", {}).get("rules", []) if "compute" in r), None)
+    start = view.get(compute["from"]) if compute else None
+    slug = f"{procedure}-{(start or dt.date.today().isoformat())[:4]}"
+    failed = [c["check"] for c in checks if not c["ok"]]
+    ready = check("the form is ready", not failed, f"{len(failed)} checks failed" if failed else "")
+    if a.draft:
+        print("  draft: nothing written to the vault")
+        return finish(a, entry, form, pdf_hash, slug, rows, results, checks)
+    if not ready:
+        return finish(a, entry, form, pdf_hash, slug, rows, results, checks)
+
+    # As the skill's step 0: an open pratica is resumed, never opened again; a
+    # closed one with this slug (a second move this year, a refused filing
+    # redone) leaves the slug to it, and this one takes -2, -3...
+    pratiche = pratiche_by_slug(values)
+    base, n = slug, 1
+    resume = False
+    while slug in pratiche:
+        stato = pratiche[slug].get("stato")
+        if stato not in schema["pratiche"]["chiusi"]:
+            if a.sign and stato == "pronta":
+                # The record is open (an earlier run, or one whose signing request
+                # expired or failed): only the signing request is filed again.
+                resume = True
+                break
+            check(f"no pratica {slug} is open yet", False, f"stato {stato}: resume it instead")
+            return finish(a, entry, form, pdf_hash, slug, rows, results, checks)
+        n += 1
+        slug = f"{base}-{n}"
+
+    channels, on = procedure_channels(entry, a.channel)
+    if a.channel and not check(f"the entry has a {a.channel} channel for this procedure", bool(on),
+                               ", ".join(sorted({c["type"] for c in channels}))):
+        return finish(a, entry, form, pdf_hash, slug, rows, results, checks)
+    # A portal with its own form never sees this PDF: fill that form there instead.
+    takes = any("upload" in c["use"]["ways"] if "use" in c else True for c in on)
+    if a.channel and not check(f"the {a.channel} route takes this form", takes,
+                               "" if takes else "the portal has its own online form: fill it there from the vault"):
+        return finish(a, entry, form, pdf_hash, slug, rows, results, checks)
+    channel = on[0]
+    destinatario = channel.get("address") or channel.get("url") or channel.get("name", "")
+    signing = request_signature(a, prepare, entry, form, layout, channel, slug, check) if a.sign else None
+    if resume:
+        print(f"  pratica {slug} is already open: only the signing request was filed")
+        return finish(a, entry, form, pdf_hash, slug, rows, results, checks, signing)
+    record = {
+        "titolo": entry["title"],
+        "ente": " – ".join(x for x in (entry["ente"]["name"], entry["ente"].get("office")) if x),
+        "stato": "pronta",
+        "canale": channel["type"],
+        "destinatario": destinatario,
+        "playbook": a.playbook or "",
+        # No request id: it expires in 30 minutes, the record doesn't.
+        "prossimo_passo": (f"Firmare con {' '.join(pvault_command(a.vault_dir) + ['sign', 'review'])} (la richiesta è in "
+                           f"{' '.join(pvault_command(a.vault_dir) + ['sign', 'list'])}), poi inviarlo ({channel['type']}: {destinatario})"
+                           if signing else f"Firmare il modulo e inviarlo ({channel['type']}: {destinatario})"),
+        "persona": signer if signer != "io" else "",
+    }
+    if start:
+        record["data_scadenza"] = (dt.date.fromisoformat(start) + dt.timedelta(days=compute["days"])).isoformat()
+    for campo, value in record.items():
+        if value:
+            status, got = prepare.set(f"pratiche.{slug}_{campo}", value)
+            check(f"opens pratiche.{slug}_{campo}", status == 200, "" if status == 200 else f"{status} {got}")
+    deadline_id = f"pratiche.{slug}_data_scadenza"
+
+    def expiring(vault):
+        status, items = vault.call("GET", "/vault/expiring?days=3650")
+        return [i for i in items or [] if i["field_id"] == deadline_id] if status == 200 else None
+    if "data_scadenza" in record:
+        listed = expiring(prepare)
+        check("the deadline shows in expiring", listed and listed[0]["expires_on"] == record["data_scadenza"],
+              f"{record['data_scadenza']} ({listed[0]['days_left']} days left)" if listed else "not listed")
+
+    if a.reply:
+        # Step 6 of the skill: sent, then the ente answers.
+        track = vaults["track"]
+        today = dt.date.today().isoformat()
+        reply = load(a.reply)["records"]
+        steps = [("stato", "inviata"), ("data_invio", today)]
+        steps += [(None, (field, value)) for field, value in reply.items()]
+        steps += [("stato", "completata"), ("data_esito", today)]
+        for campo, value in steps:
+            field, value = (f"pratiche.{slug}_{campo}", value) if campo else (signer_id(value[0], signer, people), value[1])
+            status, got = track.set(field, str(value))
+            check(f"track sets {field}", status == 200, "" if status == 200 else f"{status} {got}")
+        others = sum(len(r["value"]) for r in rows if isinstance(r.get("value"), list))
+        for field, want in (("tari.superficie_tassata_mq", values.get("abitazione.superficie_calpestabile_mq")),
+                            ("tari.componenti_tassati", str(1 + others))):
+            if field in reply:
+                check(f"the ente's {field} matches what was declared", str(reply[field]) == want, f"{reply[field]} vs {want}")
+        if "data_scadenza" in record:
+            check("a closed pratica leaves expiring", expiring(track) == [])
+    return finish(a, entry, form, pdf_hash, slug, rows, results, checks, signing)
+
+
+def request_signature(a, prepare, entry, form, layout, channel, slug, check):
+    """--sign: ask the vault to stamp the user's signature on filled.pdf and
+    hold it for their approval. Returns the request (id, the command the user
+    runs, when it expires) or None, having recorded why as a failed check.
+    This tool can neither approve the request nor read the signed file."""
+    if getattr(a, "for") != "io":
+        check("the signer is the vault's owner", False, "only the owner can sign through the vault so far")
+        return None
+    if not signable(form, layout):
+        check("the layout has a signature box on a signed form", False, "nothing says where to sign")
+        return None
+    if any(b.get("for", "dichiarante") != "dichiarante" for b in layout["signatures"]):
+        check("every signature box is the dichiarante's", False, "only the owner can sign through the vault so far")
+        return None
+    way = signing_rule(a, form, channel["type"])
+    if not way or "handwritten" not in way["ways"] or way["status"] == "disputed":
+        check(f"the library lists a handwritten signature for {channel['type']}", False,
+              no_rule(a, channel) if not way else "sign it by hand, or have the library say how this channel takes a signature")
+        return None
+    if way["status"] != "verified":
+        print(f"  note: the library has not verified that {channel['type']} takes a handwritten signature; "
+              "the ente has not confirmed it")
+    with open(f"{a.out}/filled.pdf", "rb") as f:
+        pdf = f.read()
+    placements = [{"page": b.get("page", 1), "rect": b["rect"], **({"date_rect": b["date_rect"]} if "date_rect" in b else {})}
+                  for b in layout["signatures"]]
+    # The vault takes 200 bytes, and Italian titles have accents.
+    purpose = " ".join(f"{entry['title']}: {form['name']}".split()).encode()[:200].decode(errors="ignore")
+    status, got = prepare.call("POST", "/vault/signing", {
+        "name": f"{slug}-{form['id']}.pdf", "purpose": purpose,
+        "pdf": base64.b64encode(pdf).decode(), "placements": placements})
+    if status != 200:
+        check("the vault takes the signing request", False,
+              f"{status} {got.get('error') if isinstance(got, dict) else got}")
+        return None
+    review = " ".join(pvault_command(a.vault_dir) + ["sign", "review", got["id"]])
+    check(f"signing request {got['id'][:8]} is waiting for the user", True, review)
+    return {"id": got["id"], "review": review, "expires_at": got["expires_at"], "date": got["date"]}
+
+
+def signing_rule(a, form, channel_type):
+    """How channel_type takes the signature on form: the form's own entry,
+    else the law's rule for that channel type (the library's
+    contract/signing.json, so verified), else None."""
+    own = next((x for x in form.get("signing", []) if x["channel"] == channel_type), None)
+    if own:
+        return own
+    path = os.path.join(a.library, "contract", "signing.json") if getattr(a, "library", None) else ""
+    rule = load(path)["channels"].get(channel_type) if os.path.isfile(path) else None
+    return {"channel": channel_type, "status": "verified", **rule} if rule else None
+
+
+def no_rule(a, channel):
+    """Why a channel has no signing rule, as the user should hear it: the
+    law sets none for a channel signing.json leaves out (a portal or app).
+    Only its auth says whether a login identifies the person; without one
+    (ComUnica wants a firma digitale) the library hasn't said. Its use says
+    whether it takes the form as an upload."""
+    if not getattr(a, "library", None):
+        return "the law's rule for this channel is in the library's contract/signing.json: pass --library"
+    logins = [x.upper() for x in channel.get("auth", []) if x in ("spid", "cie", "cns")]
+    if not logins:
+        return f"as the {channel['type']} asks: the library doesn't say how it takes a signature, so check before filing"
+    if "upload" in channel.get("use", {}).get("ways", []):
+        return f"as the {channel['type']} asks: its {'/'.join(logins)} login identifies you; whether the uploaded form must be signed too, check before filing"
+    return f"as the {channel['type']} asks: its {'/'.join(logins)} login identifies you, and it may not use this form at all"
+
+
+def procedure_channels(entry, channel_type=None):
+    """The entry's channels that carry out the procedure, and the ones of
+    channel_type (default: the preferred one, else the first)."""
+    channels = [c for c in entry["channels"] if c["purpose"] == "procedure"]
+    if channel_type:
+        return channels, [c for c in channels if c["type"] == channel_type]
+    return channels, [next((c for c in channels if c.get("preferred")), channels[0])] if channels else []
+
+
+# --- The route card ----------------------------------------------------------
+
+ROUTE = {"portal": "online", "pec": "via PEC", "email": "by email", "post": "by post", "desk": "at the desk",
+         "app": "in the app", "phone": "by phone"}
+# What you do on a portal (the channel's use): its own form, or the PDF uploaded.
+USE = {"web_form": "fill in the portal's own online form", "upload": "upload the signed form or documents",
+       "read": "only read or download"}
+ID_COPY = {"required": "with a copy of the ID document", "handwritten": "with a copy of the ID document if signed by hand",
+           "not_needed": "no ID copy needed", "unknown": "unclear whether an ID copy is needed"}
+
+
+def route(a):
+    """What to do on one route of a procedure, from start to finish: the
+    shared steps and the route's own, in order; where (the person's office
+    when the desk depends on where they live); how to sign there; what to
+    attach; what proof it gives back; the deadline."""
+    entry = entry_of(a)
+    channels, on = procedure_channels(entry, a.channel)
+    if not channels:
+        sys.exit(f"{entry['id']} lists no channel to carry it out")
+    if not on:
+        sys.exit(f"{entry['id']} has no {a.channel} channel; it has {', '.join(sorted({c['type'] for c in channels}))}")
+    kind = on[0]["type"]
+    steps = [{k: s[k] for k in ("do", "who", "human_only", "gate") if k in s}
+             for s in entry["steps"] if kind in s.get("channel", [kind])]
+    where = []
+    for c in on:
+        place = {k: c[k] for k in ("name", "address", "url", "hours", "booking", "notes", "use") if k in c}
+        if c.get("office"):
+            place["office"] = office_for(a, c["office"])
+        where.append(place)
+    # A portal that takes no upload has its own form: the entry's PDFs aren't used there.
+    own_form = all(c.get("use") and "upload" not in c["use"]["ways"] for c in on)
+    signed = [] if own_form else [f for f in entry.get("forms", []) if f.get("signature_required")]
+    signing = []
+    for f in signed:
+        rule = signing_rule(a, f, kind)
+        signing.append({"form": f["name"], **({k: rule[k] for k in ("ways", "id_copy", "status", "text", "notes") if k in rule}
+                                             if rule else {"text": no_rule(a, on[0])})})
+    # The entry's required documents (the forms among them), else its forms.
+    attach = [d["name"] for d in entry.get("documents", []) if d.get("required")] or ([] if own_form else [f["name"] for f in entry.get("forms", [])])
+    card = {"procedure": entry["id"], "title": entry.get("headline", entry["title"]), "route": kind,
+            "routes": sorted({c["type"] for c in channels}), "steps": steps, "where": where, "signing": signing,
+            "attach": attach, "forms_used": not own_form, "receipt": on[0].get("receipt"),
+            "deadline": (entry.get("deadline", {}).get("summary") or (entry.get("deadline", {}).get("rules") or [{}])[0]).get("text")}
+    if a.json:
+        print(json.dumps(card, ensure_ascii=False, indent=2))
+        return 0
+    print(f"{card['title']}: {ROUTE.get(kind, kind)} (other routes: {', '.join(r for r in card['routes'] if r != kind) or 'none'})")
+    if card["deadline"]:
+        print(f"Deadline: {card['deadline']}")
+    print("Steps:")
+    for i, s in enumerate(steps, 1):
+        gate = " (run --sign: the vault's sign gate)" if s.get("gate") == "sign" else ""
+        print(f"  {i}. {s['do']}{' [you]' if s.get('human_only') else ''}{gate}")
+    for place in where:
+        office = place.pop("office", None)
+        use = place.pop("use", None)
+        print("Where: " + "; ".join(place.values()))
+        if use:
+            print("There: " + " and ".join(USE.get(w, w) for w in use["ways"])
+                  + ("" if use["status"] == "verified" else f" ({use['status']})") + (f". {use['notes']}" if use.get("notes") else ""))
+        if office:
+            print(f"  Your office ({office.get('name', office['list'])}): "
+                  + ("; ".join(office["office"].values()) if "office" in office else office["why"]))
+    if own_form and entry.get("forms"):
+        print("Forms: not used on this route; the portal has its own")
+    for x in signing:
+        how = x.get("text") or f"{' or '.join(x['ways'])}, {ID_COPY.get(x['id_copy'], x['id_copy'])}"
+        print(f"Signing ({x['form']}): {how}{' ' + x['notes'] if x.get('notes') else ''}")
+    if attach:
+        print("Attach or bring: " + "; ".join(attach))
+    if card["receipt"]:
+        print(f"Proof: {card['receipt']} receipt")
+    return 0
+
+
+def office_lists(a):
+    """The library's office lists (offices/<list>.json), by list."""
+    folder = os.path.join(a.library or "", "offices")
+    if not a.library or not os.path.isdir(folder):
+        return {}
+    return {f.removesuffix(".json"): load(os.path.join(folder, f)) for f in sorted(os.listdir(folder)) if f.endswith(".json")}
+
+
+def office_for(a, office, vault=None, value=None):
+    """The person's desk in one list (office: { list, from }): the value of
+    the from field, given, else read from the vault when one is given."""
+    name, field = office["list"], office["from"]
+    offices = office_lists(a).get(name)
+    if not offices:
+        return {"list": name, "field": field, "why": f"no offices/{name}.json in the library"}
+    out = {"list": name, "name": offices["name"], "serves": offices["serves"], "field": field}
+    pick = f"pick from offices/{name}.json"
+    if value is not None and value not in offices["offices"]:
+        return {**out, "why": f"no office for {value!r}: the list has {', '.join(offices['offices'])}"}
+    if value is None:
+        if vault is None and not (a.server or a.vault_dir):
+            return {**out, "why": f"pass the vault to pick yours ({field})"}
+        try:
+            vault = vault or next(iter(connect(a).values()))
+        except SystemExit as e:  # no token, or a locked vault: the card still names the offices
+            return {**out, "why": f"{e} (or {pick})"}
+        status, got = vault.call("GET", vault.field_path(field))
+        got = got if isinstance(got, dict) else {}
+        if status == 403:
+            return {**out, "why": f"the token can't read {field}: give it that scope, or {pick}"}
+        if got.get("constraint") == "not_resolved":
+            # A street across a boundary: the quartieri to choose from.
+            return {**out, "why": f"{got.get('error')}; store the quartiere (pvault set {field.rsplit('.', 1)[0]}.quartiere ...), or {pick}"}
+        value = got.get("value") if status == 200 else None
+    desk = offices["offices"].get(value or "")
+    if not desk:
+        return {**out, "why": f"{field} isn't in the vault (no address, or one outside Napoli): {pick}"}
+    return {**out, "value": value, "office": {k: desk[k] for k in ("name", "address", "hours", "phone", "email", "pec", "notes")
+                                              if k in desk}}
+
+
+def address_field(address, field):
+    """The vault field of an address's area: residenza.municipalita,
+    leo:residenza.distretto_asl, business.sede_legale_municipalita."""
+    person, _, place = address.rpartition(":")
+    local = f"business.sede_legale_{field}" if place == "sede_legale" else f"{place}.{field}"
+    return f"{person}:{local}" if person else local
+
+
+def offices(a):
+    """The person's office in every list of the library, and what each serves."""
+    lists = office_lists(a)
+    if not lists:
+        sys.exit(f"no offices/ in {a.library}: is it a pratiche-napoli checkout on main?")
+    given = {"municipalita": a.municipalita, "distretto_asl": a.distretto_asl}
+    vault = None
+    if None in (given[o["field"]] for o in lists.values()) and (a.server or a.vault_dir):
+        vault = next(iter(connect(a).values()))
+    found = [office_for(a, {"list": name, "from": address_field(a.address, o["field"])}, vault, given[o["field"]])
+             for name, o in lists.items()]
+    if a.json:
+        print(json.dumps(found, ensure_ascii=False, indent=2))
+        return 0
+    for x in found:
+        print(f"{x['name']} ({x['field']} {x.get('value', '?')})")
+        print(f"  {x['serves']}")
+        print("  " + ("; ".join(x["office"].values()) if "office" in x else x["why"]))
+    return 0
+
+
+def finish(a, entry, form, pdf_hash, slug, rows, results, checks, signing=None):
+    report = {"entry": entry["id"], "form": form["id"], "pdf_sha256": pdf_hash, "slug": slug,
+              "rows": rows, "read_back": results, "checks": checks}
+    if signing:
+        report["signing"] = signing
+    with open(f"{a.out}/report.json", "w", encoding="utf-8") as f:
+        json.dump(report, f, ensure_ascii=False, indent=2)
+    failed = [c for c in checks if not c["ok"]]
+    print(f"{len(checks) - len(failed)}/{len(checks)} checks passed; {a.out}/filled.pdf")
+    return 1 if failed else 0
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = p.add_subparsers(dest="cmd", required=True)
+    for name in ("needs", "run"):
+        s = sub.add_parser(name)
+        s.add_argument("--library", help="a pratiche-napoli checkout: the procedure (with --procedure) and its contract")
+        s.add_argument("--entry", help="the procedure as JSON, in place of the library's file")
+        s.add_argument("--procedure", help="the library procedure ID, e.g. napoli/comune/tari-iscrizione-uso-abitativo")
+        s.add_argument("--form", required=True)
+        s.add_argument("--draft", action="store_true", help="read only: no pratica record, no reply")
+        s.add_argument("--for", default="io", metavar="SLUG",
+                       help="who signs: io, the vault's owner (default), or a person's slug")
+        s.add_argument("--party", action="append", metavar="ROLE=SLUG[,SLUG]",
+                       help="who has a ruolo the form reads (a procuratore, the soci); repeatable")
+    sub.choices["needs"].add_argument("--vault-dir", default="~/.pvault",
+                                      help="the vault the token commands are for (default ~/.pvault)")
+    for name in ("needs", "run"):
+        sub.choices[name].add_argument("--layout", help="the library's layouts/<procedure>/<form>.json (--entry only)")
+    r = sub.choices["run"]
+    r.add_argument("--channel", help="the channel type the user chose (pec, email, post, portal...); default: the entry's preferred one")
+    r.add_argument("--sign", action="store_true",
+                   help="file a signing request for the filled PDF, to be approved with pvault sign review")
+    where = r.add_mutually_exclusive_group(required=True)
+    where.add_argument("--server", help="the synthetic vault's server.json")
+    where.add_argument("--vault-dir", help="a real vault's folder, e.g. ~/.pvault")
+    r.add_argument("--keychain", help="Keychain service holding the token (default: the one needs names)")
+    r.add_argument("--values", metavar="-",
+                   help="with --vault-dir and --draft: what needs' get command printed, piped in (- or a file), "
+                        "in place of a token")
+    r.add_argument("--pdf", help="the form (default: downloaded from the entry's url into --out)")
+    r.add_argument("--out", required=True)
+    r.add_argument("--answers")
+    r.add_argument("--reply")
+    r.add_argument("--playbook")
+    c = sub.add_parser("route")
+    c.add_argument("--library", help="a pratiche-napoli checkout: the procedure (with --procedure), signing rules, offices")
+    c.add_argument("--entry", help="the procedure as JSON, in place of the library's file")
+    c.add_argument("--procedure")
+    c.add_argument("--channel", help="the route by channel type (pec, post, desk...); default: the entry's preferred one")
+    vault = c.add_mutually_exclusive_group()
+    vault.add_argument("--server", help="the synthetic vault's server.json")
+    vault.add_argument("--vault-dir", help="a real vault's folder, to pick the person's office")
+    c.add_argument("--keychain", help="Keychain service holding the token (default: the one needs names)")
+    c.add_argument("--json", action="store_true", help="the card as JSON")
+    o = sub.add_parser("offices")
+    o.add_argument("--library", required=True, help="a pratiche-napoli checkout: its offices/")
+    o.add_argument("--address", default="residenza", help="whose address: residenza (default), leo:residenza, domicilio, locale, sede_legale")
+    o.add_argument("--municipalita", help="the municipalità (1-10), instead of reading it from the vault")
+    o.add_argument("--distretto-asl", help="the ASL distretto (24/73, 25-33), instead of reading it from the vault")
+    vault = o.add_mutually_exclusive_group()
+    vault.add_argument("--server", help="the synthetic vault's server.json")
+    vault.add_argument("--vault-dir", help="a real vault's folder")
+    o.add_argument("--keychain", help="Keychain service holding the token (default: the one needs names)")
+    o.add_argument("--json", action="store_true", help="the offices as JSON")
+    a = p.parse_args()
+    if a.cmd == "offices":
+        if not re.fullmatch(r"([a-z][a-z0-9-]{0,31}:)?(residenza|domicilio|locale[0-9]*|sede_legale)", a.address):
+            p.error(f"--address {a.address!r}: residenza, domicilio, locale, sede_legale, or a person's (leo:residenza)")
+        return offices(a)
+    if not a.entry and not (a.library and a.procedure):
+        p.error("give --library and --procedure, or --entry")
+    if a.procedure and not a.library:
+        p.error("--procedure is the library's: give --library")
+    if a.cmd == "route":
+        return route(a)
+    if getattr(a, "for") != "io" and not SLUG.fullmatch(getattr(a, "for")):
+        p.error(f"--for {getattr(a, 'for')!r} isn't io or a person's slug")
+    if a.cmd == "run" and bool(a.entry) != bool(a.layout):
+        p.error("--entry takes --layout; --library finds the layout itself")
+    if a.cmd == "needs":
+        entry = entry_of(a)
+        form = form_of(entry, a.form)
+        layout = load(a.layout) if a.layout else (load(library_file(a, "layouts", ".json")) if a.procedure else None)
+        signer = getattr(a, "for")
+        parties = parse_parties(a.party)
+        out = needs(entry, form, a.draft, signer, person_categories(needs_schema(a)) if signer != "io" else (),
+                    parties, layout)
+        # run --vault-dir reads one token from one Keychain service, and saving
+        # another there revokes it: so only the token it uses. track is the
+        # synthetic vault's, for --reply.
+        out["commands"] = {name: token_command(a.vault_dir, t) for name, t in out["tokens"].items() if name != "track"}
+        if a.draft and (get := get_command(a.vault_dir, out["tokens"]["draft"]["scope"])):
+            out["commands"]["get"] = get
+        out["ask"] = asks(form, layout, parties)
+        print(json.dumps(out, ensure_ascii=False, indent=2))
+        return 0
+    if a.draft and a.reply:
+        p.error("--draft writes nothing, so it takes no --reply")
+    if a.reply and not a.server:
+        p.error("--reply plays the ente's answer on the synthetic vault (--server) only")
+    if a.sign and a.draft:
+        p.error("--sign files a request in the vault, which a --draft never writes")
+    if a.values and not (a.draft and a.vault_dir):
+        p.error("--values reads a draft's fields: give --draft and --vault-dir")
+    return run(a)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

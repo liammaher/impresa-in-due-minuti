@@ -1,0 +1,47 @@
+#!/bin/sh
+# Runs the skill's Python scripts: `sh py script.py args...`. They need Python 3.9+ and no
+# packages. A real one already on the computer is used as it is; never the macOS stub
+# /usr/bin/python3 without the Command Line Tools (it opens an install dialog) nor the Windows
+# Store alias (it opens the Store). PORTALE_SUE_PYTHON=<path> picks one. Messages for the person are
+# in Italian, on stderr.
+#
+# plugin/build.yaml's python_download picks which of the two parts marked below a build keeps
+# (their marker lines go). This file as it is in the repo behaves as the build that keeps none:
+# with no Python it says how to install one (that none() comes last).
+set -eu
+
+ok() { # a usable Python: runs, is 3.9 or newer
+  "$1" -c 'import sys; sys.exit(sys.version_info < (3, 9))' >/dev/null 2>&1
+}
+
+installed() {
+  for c in python3 python; do
+    p=$(command -v "$c" 2>/dev/null) || continue
+    case "$p" in *WindowsApps*) continue ;; esac  # the Store alias
+    if [ "$p" = /usr/bin/python3 ] && [ "$(uname -s)" = Darwin ]; then
+      xcode-select -p >/dev/null 2>&1 || continue  # the stub, until the Command Line Tools are in
+    fi
+    if ok "$p"; then echo "$p"; return 0; fi
+  done
+  return 1
+}
+
+none() { # no Python 3.9+ on this computer: say how to get one, and stop
+  case "$(uname -s)" in
+    Darwin)
+      # The same window the stub opens: Apple's developer tools, which bring Python 3.
+      xcode-select --install >/dev/null 2>&1 || true
+      echo "Portale SUE: su questo Mac manca Python. macOS apre una finestra per installare gli «strumenti per sviluppatori» di Apple: li installi (gratis, qualche minuto), poi riprovi." >&2 ;;
+    MINGW* | MSYS* | CYGWIN*)
+      echo "Portale SUE: su questo computer manca Python 3. Lo installi da python.org (spunti «Add python.exe to PATH»), riapra l'app e riprovi." >&2 ;;
+    *)
+      echo "Portale SUE: su questo computer manca Python 3 (3.9 o più recente): lo installi, poi riprovi." >&2 ;;
+  esac
+  return 1
+}
+
+case "${PORTALE_SUE_PYTHON:-}" in
+  "") py=$(installed) || py=$(none) ;;
+  *) py=$PORTALE_SUE_PYTHON ;;
+esac
+exec "$py" "$@"
