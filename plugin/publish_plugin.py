@@ -41,11 +41,12 @@ def publish(version, plugin, push=False, remote="origin"):
         sys.exit("the plugin has a top-level bin/: the Claude app refuses such a plugin")
     tag = tag_name(version)
     if git("rev-parse", "-q", "--verify", f"refs/tags/{tag}", check=False) or \
-            git("ls-remote", "--exit-code", "--tags", remote, tag, check=False):
+            git("ls-remote", "--exit-code", remote, f"refs/tags/{tag}", check=False):
         sys.exit(f"{tag} exists already: a published plugin is never replaced, release a new version")
     # The branch's history is one commit per release, each on the one before.
     parent = None
-    if git("ls-remote", "--exit-code", "--heads", remote, BRANCH, check=False):
+    # Full refs: ls-remote matches a pattern's last components, so "plugin" is also claude/plugin.
+    if git("ls-remote", "--exit-code", remote, f"refs/heads/{BRANCH}", check=False):
         git("fetch", "-q", remote, f"refs/heads/{BRANCH}")
         parent = git("rev-parse", "--verify", "FETCH_HEAD^{commit}")
     with tempfile.TemporaryDirectory() as tmp:

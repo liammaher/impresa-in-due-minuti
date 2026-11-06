@@ -42,8 +42,14 @@ def main():
         git("init", "-q", str(work), cwd=tmp)
         git("remote", "add", "origin", str(remote), cwd=work)
         os.chdir(work)
+        # A branch and a tag whose names end the same are not the plugin's (ls-remote matches tails).
+        decoy = built(tmp / "decoy", "0.1.0")
+        git("init", "-q", cwd=decoy)
+        git("add", "-A", "-f", cwd=decoy)
+        git("commit", "-q", "-m", "decoy", cwd=decoy)
+        git("push", "-q", str(remote), "HEAD:refs/heads/claude/plugin", "HEAD:refs/tags/x/plugin-v0.1.0", cwd=decoy)
 
-        first = publish_plugin.publish("0.1.0", built(tmp / "b1", "0.1.0"), push=True)
+        first =publish_plugin.publish("0.1.0", built(tmp / "b1", "0.1.0"), push=True)
         second = publish_plugin.publish("0.1.1", built(tmp / "b2", "0.1.1"), push=True)
         assert git("rev-parse", "plugin", cwd=remote) == second
         assert git("rev-parse", f"{second}^", cwd=remote) == first
