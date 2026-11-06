@@ -2,7 +2,7 @@
 """One page for the person to review a pratica Claude prepared: what's left for them, what
 was checked, and every value as it went on the form or portal.
 
-  review.py OUT [--route ROUTE.json]
+  review.py OUT [--route ROUTE.json] [--job DIR]
 
 OUT is the folder fill.py run or run.py run wrote (its report.json), or the one run.py page
 wrote with the pane's `__pv.last()` saved there as report.json (its private/shown.json adds the
@@ -10,11 +10,19 @@ values and the person's steps; private/declarations.json the declarations' own t
 private/anteprima.pdf the portal's PDF preview, which only `run.py run` copies); --route is
 `fill.py route --json` for a form, for where it goes and the person's steps. Writes
 OUT/review.html: one self-contained file (the form's pages inlined), to show the person
-before they sign anything. It reads only those files.
+before they sign anything. It reads only those files, and for a portal draft two more:
+
+- OUT/check.json, Claude's check of the portal's own preview (portal/preview_text.js) against
+  the job's documents: {"rows": [{"section", "label", "portal", "document", "source", "ok",
+  "note"}], "not_in_preview": [section, ...]}. The mismatches come first on the page.
+- OUT/portal-files.json, what portal/attachments.js returned ({"files": [{"slot", "name",
+  "size", "sha256"}]}): each file is matched by its bytes to a file of the job (--job, default
+  OUT's parent folder), hashed here.
 """
 
 import argparse
 import base64
+import hashlib
 import html
 import json
 import sys
@@ -184,7 +192,79 @@ def preview(report, folder):
     return "".join(out), [("L'anteprima PDF del portale copiata", True)]
 
 
-def portal_review(report, out=None):
+def check(out):
+    """Claude's check of the portal's preview against the documents (OUT/check.json): (html, checks)."""
+    f = out / "check.json" if out else None
+    if not (f and f.exists()):
+        return "", [("Anteprima del portale non ancora confrontata con i documenti", False)]
+    c = json.loads(f.read_text())
+    rows = c.get("rows", [])
+    bad = [r for r in rows if not r.get("ok")]
+    n = lambda k: f"{k} valore" if k == 1 else f"{k} valori"  # noqa: E731
+    checks = [(f"Anteprima del portale confrontata con i documenti: {n(len(rows))}, "
+               + ("coincide" if len(rows) == 1 else "tutti coincidono") if not bad
+               else f"Anteprima del portale confrontata con i documenti: {n(len(bad))} su {len(rows)} da guardare",
+               not bad and bool(rows))]
+    if not rows:
+        checks[0] = ("Anteprima del portale: nessun valore confrontato", False)
+    out_ = ["<h2>Controllo con i documenti</h2><p class='sub'>Ogni valore come lo mostra l'anteprima del portale, "
+            "il documento che riceverà il Comune, accanto a ciò che dice il documento da cui viene.</p>"]
+    if bad:
+        out_.append("<div class='you'><b>Da guardare</b><ul>" + "".join(
+            f"<li>{esc(r.get('section'))}, {esc(r.get('label'))}: sul portale «{esc(r.get('portal'))}», "
+            f"{esc(r.get('source') or 'nei documenti')} «{esc(r.get('document'))}»"
+            + (f" ({esc(r['note'])})" if r.get("note") else "") + "</li>" for r in bad) + "</ul></div>")
+    groups = {}
+    for r in rows:
+        groups.setdefault(r.get("section") or "", []).append(r)
+    for name, rs in groups.items():
+        out_.append(f"<details><summary>{esc(name)} ({sum(1 for r in rs if r.get('ok'))}/{len(rs)})</summary><table>"
+                    + "".join(f"<tr><td>{'✓' if r.get('ok') else '✗'} {esc(r.get('label'))}</td><td>{esc(r.get('portal'))}"
+                              f"<br><span class='blank'>{esc(r.get('source'))}"
+                              + (f": «{esc(r.get('document'))}»" if r.get("document") != r.get("portal") else "")
+                              + (f" · {esc(r['note'])}" if r.get("note") else "") + "</span></td></tr>" for r in rs)
+                    + "</table></details>")
+    missing = c.get("not_in_preview") or []
+    if missing:
+        out_.append("<p class='sub'>Non compaiono nell'anteprima del portale, e sono stati confrontati con ciò che la "
+                    "compilazione ha scritto e riletto: " + esc("; ".join(missing)) + ".</p>")
+    return "".join(out_), checks
+
+
+def attachments(out, job):
+    """The draft's files as the portal holds them (OUT/portal-files.json), each matched by its bytes
+    to a file of the job: (html, checks)."""
+    f = out / "portal-files.json" if out else None
+    if not (f and f.exists()):
+        return "", [("Allegati non riscaricati dal portale per il confronto", False)]
+    files = json.loads(f.read_text()).get("files", [])
+    local = {}
+    for p in sorted(job.rglob("*")) if job else []:
+        # Not the run's own folder, not hidden files; a file that can't be read is skipped.
+        if out in p.parents or any(part.startswith(".") for part in p.relative_to(job).parts):
+            continue
+        try:
+            if p.is_file() and p.stat().st_size <= 50 * 2**20:
+                local.setdefault(hashlib.sha256(p.read_bytes()).hexdigest(), p.relative_to(job).as_posix())
+        except OSError:
+            continue
+    rows, bad = [], 0
+    for x in files:
+        same = local.get(x.get("sha256"))
+        bad += not same
+        rows.append(f"<tr><td>{'✓' if same else '✗'} {esc(x.get('slot'))}</td><td>{esc(x.get('name'))}<br>"
+                    f"<span class='blank'>{'uguale byte per byte a ' + esc(same) if same else 'nessun file del lavoro ha questi byte'}"
+                    "</span></td></tr>")
+    checks = [("Allegati: 1 file sul portale, uguale byte per byte a un file del lavoro" if len(files) == 1 and not bad
+               else f"Allegati: {len(files)} file sul portale, ognuno uguale byte per byte a un file del lavoro" if files and not bad
+               else "Allegati: nessun file sul portale" if not files
+               else "Allegati: 1 file sul portale diverso da ogni file del lavoro" if bad == 1
+               else f"Allegati: {bad} file sul portale diversi da ogni file del lavoro", bool(files) and not bad)]
+    return ("<h2>Gli allegati sul portale</h2><p class='sub'>Riscaricati dal portale e confrontati con i file del "
+            "lavoro.</p><details open><summary>Allegati</summary><table>" + "".join(rows) + "</table></details>"), checks
+
+
+def portal_review(report, out=None, job=None):
     ok = report.get("result") == "filled"
     # The runner's own reasons are for Claude, who recovers a stop; the person reads where.
     checks = [(f"{s['section']}: salvata, ogni campo riletto ({s['seconds']} s)"
@@ -210,24 +290,34 @@ def portal_review(report, out=None):
     # A stopped run hasn't reached either, so it says nothing about them.
     decl_html, decl_checks = declarations(report, folder) if ok else ("", [])
     prev_html, prev_checks = preview(report, folder) if ok else ("", [])
-    checks += decl_checks + prev_checks
+    # The check against the documents is the skill's (review.py OUT, with the job's folder);
+    # run.py run's own review, which calls this with no job, has no such step.
+    checked = ok and job is not None
+    check_html, check_checks = check(out) if checked else ("", [])
+    files_html, files_checks = attachments(out, job) if checked else ("", [])
+    if out and (out / "check.json").exists():
+        prev_checks = []  # the preview was read and checked: that line says more than "not copied"
+    checks += check_checks + files_checks + decl_checks + prev_checks
     return page(report.get("title") or report["procedure"], "Bozza sul portale", ok,
                 f"Bozza salvata in {report.get('total_seconds')} s: pronta da rivedere" if ok
                 else "Si è fermata prima della fine", report.get("yours", []), [("Bozza", report.get("url"))],
-                checks, list(groups.items()), prev_html, decisions(report) + decl_html)
+                checks, list(groups.items()), prev_html, check_html + files_html + decisions(report) + decl_html)
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("out", type=Path)
     ap.add_argument("--route", type=Path)
+    ap.add_argument("--job", type=Path, help="the job's folder, whose files the portal's are matched to "
+                    "(default: OUT's parent)")
     a = ap.parse_args()
     report = json.loads((a.out / "report.json").read_text())
     shown = a.out / "private" / "shown.json"  # run.py page: the pane's report has only the run
     if shown.exists():
         report |= json.loads(shown.read_text())
     route = json.loads(a.route.read_text()) if a.route else None
-    doc = form_review(a.out, report, route) if "rows" in report else portal_review(report, a.out)
+    job = (a.job or a.out.resolve().parent).resolve()
+    doc = form_review(a.out, report, route) if "rows" in report else portal_review(report, a.out.resolve(), job)
     (a.out / "review.html").write_text(doc, encoding="utf-8")
     print(a.out / "review.html")
     return 0

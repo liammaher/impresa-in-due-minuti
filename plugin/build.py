@@ -189,7 +189,9 @@ def copy_runner(skill):
     # the portal, so a plugin update carries the refusal (drift.json, not the crawls).
     (skill / "intake").mkdir()
     shutil.copy2(PRATICA / "intake" / "intake.py", skill / "intake" / "intake.py")  # reads the job's documents
-    for name in ("run.py", "rules.py", "route.py", "inpage.js"):
+    # preview_text.js and attachments.js: the check after a compilation (the portal's preview as
+    # text, its files fetched back), each one call on the open draft.
+    for name in ("run.py", "rules.py", "route.py", "inpage.js", "preview_text.js", "attachments.js"):
         shutil.copy2(PRATICA / "portal" / name, portal / name)
     (portal / "catalogue" / "F839").mkdir(parents=True)
     shutil.copy2(PRATICA / "portal" / "catalogue" / "F839" / "drift.json", portal / "catalogue" / "F839" / "drift.json")

@@ -35,6 +35,7 @@ jobs:
           python3 plugin/test_build.py
           python3 plugin/test_check.py
           python3 plugin/test_py.py
+          python3 claude/skills/pratica/portal/bench/test_review_check.py
 
   # peer_darwin.go and the Swift Touch ID helper compile only here, and their
   # tests skip elsewhere.

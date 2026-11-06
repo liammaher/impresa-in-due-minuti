@@ -482,6 +482,51 @@ Seen on the real portal 2026-10-29 (pane, the SCIA rehearsal): all 7 declaration
 unticked, the 9-page preview fetched (165 KB). Not yet seen: a real client's text (it may carry a
 name), a resumed run, the review in a narrow pane.
 
+### The preview as text, for a check against the documents
+
+Spike of 2026-11-05 (pane, the CILA rehearsal "quattro gruppi e quattro titolari", made-up data),
+for a check that doesn't trust the mapping: read what the portal will send, under its own labels,
+and hold every value to the source documents.
+
+- **Text with no Python and no pdf.js.** `preview_text.js`, one JavaScript call on any
+  page of the open draft (the file's text as it is: the pane awaits it), returns the preview's
+  text using the browser's own `DecompressionStream`. The preview is iText 2.1.7: Flate streams,
+  no object streams, WinAnsi fonts with no ToUnicode, and pages drawn only with `BT/ET/Tm/Td/Tj/q/Q`
+  (no `TJ`, `cm` or form XObjects; 95 objects, all read). 13 pages, 103 KB, 23k characters (one
+  tool result). Rows come out as label line, then value line ("Nome  Cognome  Cod.Fiscale" /
+  "Ugo  Fittizio  FTTGUO71D08F839S"), tick boxes as `[ X ]` / `[  ]`. It also reads what another
+  writer may use (`TJ`, `'`, `"`, `T*`, `TL`, `cm`, hex strings, an indirect or wrong `/Length`);
+  what it can't read faithfully (object streams, encryption, CID or remapped fonts, a form
+  XObject drawn on a page, another filter) returns `{error}`, never a wrong or partial text.
+  `bench/test_preview_text.py` holds it to both. Its XMP metadata stream is not compressed:
+  decompressing every stream fails, and Chrome reports that as "TypeError: Failed to fetch",
+  which reads like a network error but isn't.
+- **What it holds:** every section of the form but one, the procuratore, each "+" row (4 catasto
+  groups, 4 titolari, the firm with INPS/INAIL), the declarations unticked, the diritti total.
+  About half the text is the portal's boilerplate (privacy notice, domicilio digitale).
+- **What it leaves out:** the "Relazione Tecnica di Asseverazione C.I.L.A." section. The form's
+  "Visualizza anteprima" is the same `/fnsuap/preview.do` (same 102,912 bytes from the form and
+  from Allega documenti), and the portal has no other preview. That section's values read from
+  the page itself (14 set fields after opening it from the menu), so a check covers it there.
+- **Its quirks:** a long cell wraps onto its own line ("edil.fittizia@pec.exampl" / "e.it": the
+  portal's two strings, each placed by its own Tm), the portal writes its own wording ("Maschile"
+  in the dichiarante, "Maschio" in TITOLARI), and its boilerplate has its own typos ("D.lgs lgs.",
+  "professionist i": one string each, as the portal wrote them). Compare values, not lines.
+- **The attachments come back byte for byte.** Each slot's `/fnsuap/download.do?id=…` (a GET with
+  the session) gives the stored file. Its sha256 matched the rehearsal's file for all 8 slots
+  (`relazione-tecnica.pdf` c760ad6d…, `prospetto-contributo.pdf` f7536169…). `attachments.js`
+  returns each file's slot, name, size and sha256 (from "Allega documenti", which it opens if
+  another screen is up); a slot's title is the nearest row above its files that is no file, no
+  "+", no blank and not the "Tipologie ammesse" line. Run on the rehearsal: 8 files, every slot
+  named right.
+- **The check.** The skill (step 5) holds each value of the preview to its document in
+  `run/check.json` and saves `attachments.js`'s answer as `run/portal-files.json`; `review.py`
+  puts the mismatches first on the review page and matches each portal file to the job's own by
+  its bytes (`bench/test_review_check.py`).
+
+Not yet seen: a SCIA or permesso preview (other forms, maybe other writers), a draft with
+accented values (the labels' "Località", "è" decode right; no value here had one), a real client's.
+
 ## Made-up data and the code window
 
 `run.py page` seals `run.js` and opens a window with the code, which the person types into the
