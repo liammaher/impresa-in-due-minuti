@@ -29,6 +29,11 @@ the point is that they see a whole pratica filled, fast.
    Pre-flight says `ready` (the build checks it); its warnings are the Prova's own, never for
    the tecnico. If it isn't ready, that is Portale SUE's fault: SKILL.md,
    **When Portale SUE itself goes wrong**.
+   No browser in this session (no tool opens a page): say in three lines that the Prova is ready,
+   that it fills on the portal from the Claude app, where its browser is ("Mi scriva «fammi
+   vedere una prova» dall'app Claude per computer, con il suo browser"), and that the draft
+   «PROVA NON INVIARE - CILA di prova», with invented data, is then to be deleted from «Pratiche
+   in bozza». Then stop.
 3. Open the portal and wait for their «fatto» as in SKILL.md, step 4.1 (they have the line
    already: don't send it again). There is no code to type (`--plain`): skip step 4.2. Then steps
    4.3 and 4.4 (the scripts, `__pv.wait`), save `JSON.stringify(__pv.last())` to `run/report.json`,
