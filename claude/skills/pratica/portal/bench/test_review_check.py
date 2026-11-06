@@ -96,7 +96,9 @@ def main():
         h = (out / "review.html").read_text() if not r.returncode else r.stderr
         check("the Prova: no check lines, a made-up value's warning expected, said to be a test",
               "confrontata" not in h and "riscaricati" not in h and "normale con dati inventati" in h
-              and "Bozza di prova" in h and "lo controlli" not in h, h)
+              and "Bozza di prova" in h and "lo controlli" not in h
+              and "In una pratica vera, poi toccherebbe a Lei" in h and "Cosa resta da fare a Lei" not in h
+              and "li class='bad'" not in h, h)
 
     print(f"{failed} failed" if failed else "all passed")
     return 1 if failed else 0

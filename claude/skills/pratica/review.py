@@ -66,14 +66,14 @@ def esc(x):
     return html.escape("" if x is None else str(x))
 
 
-def page(title, subtitle, ok, status, yours, facts, checks, groups, extra="", top=""):
+def page(title, subtitle, ok, status, yours, facts, checks, groups, extra="", top="", yours_title="Cosa resta da fare a Lei"):
     out = [f"<!doctype html><html lang='it'><head><meta charset='utf-8'>"
            f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
            f"<title>{esc(title)}</title><style>{CSS}</style></head><body><main>",
            f"<h1>{esc(title)}</h1><p class='sub'>{esc(subtitle)}</p>",
            f"<span class='status {'ok' if ok else 'bad'}'>{esc(status)}</span>"]
     if yours:
-        out.append("<h2>Cosa resta da fare a Lei</h2><div class='you'><ol>"
+        out.append(f"<h2>{esc(yours_title)}</h2><div class='you'><ol>"
                    + "".join(f"<li>{esc(y)}</li>" for y in yours) + "</ol></div>")
     out.append(top)
     if facts:
@@ -293,6 +293,9 @@ def portal_review(report, out=None, job=None, prova=False):
     # A stopped run hasn't reached either, so it says nothing about them.
     decl_html, decl_checks = declarations(report, folder) if ok else ("", [])
     prev_html, prev_checks = preview(report, folder) if ok else ("", [])
+    if prova:  # a draft never declared or signed: what it would hold back before that is no line
+        decl_checks = [c for c in decl_checks if c[1]]
+        prev_checks = [c for c in prev_checks if c[1]]
     # The check against the documents is the skill's (review.py OUT, with the job's folder);
     # run.py run's own review, which calls this with no job, has no such step.
     checked = ok and job is not None and not prova
@@ -305,7 +308,9 @@ def portal_review(report, out=None, job=None, prova=False):
                 (f"Bozza di prova compilata in {report.get('total_seconds')} s, con dati inventati: non va inviata"
                  if prova else f"Bozza salvata in {report.get('total_seconds')} s: pronta da rivedere") if ok
                 else "Si è fermata prima della fine", report.get("yours", []), [("Bozza", report.get("url"))],
-                checks, list(groups.items()), prev_html, check_html + files_html + decisions(report) + decl_html)
+                checks, list(groups.items()), prev_html, check_html + files_html + decisions(report) + decl_html,
+                # A Prova's draft is never sent: what would be theirs on a real one, said as that.
+                yours_title="In una pratica vera, poi toccherebbe a Lei" if prova else "Cosa resta da fare a Lei")
 
 
 def main():
