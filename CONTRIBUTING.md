@@ -1,15 +1,15 @@
 # Contribuire / Contributing
 
-Portali resta aggiornato grazie a chi lo usa: nulla è ospitato, quindi richieste e segnalazioni
+Portale SUE resta aggiornato grazie a chi lo usa: nulla è ospitato, quindi richieste e segnalazioni
 arrivano come issue e pull request. Prima, leggi l'[uso responsabile](docs/responsible-use.md).
 
-Portali stays current through the people who use it: nothing is hosted, so requests and reports come in
+Portale SUE stays current through the people who use it: nothing is hosted, so requests and reports come in
 as issues and pull requests. First, read [responsible use](docs/responsible-use.md).
 
 ## Senza scrivere codice / Without writing code
 
 - **Chiedi una pratica / Request a pratica:** the
-  [issue form](https://github.com/liammaher/portali/issues/new/choose). How often you file it and how
+  [issue form](https://github.com/liammaher/portale-sue/issues/new/choose). How often you file it and how
   long it takes decide what is mapped next ([north star](docs/north-star.md#what-to-map-next)).
 - **Il portale è cambiato / The portal changed:** when a run stops on a section that is no longer as
   mapped, the same page has a form for it. Structure only, meaning the section and the fields' labels

@@ -97,7 +97,7 @@ func touchIDEnrolled() bool {
 func runTouchID(stdin string, args ...string) (string, error) {
 	helper, ok := touchIDHelper()
 	if !ok {
-		return "", fmt.Errorf("%s is not installed next to pvault — Portali's setup installs it (from source: 'make build')", touchIDHelperName)
+		return "", fmt.Errorf("%s is not installed next to pvault — Portale SUE's setup installs it (from source: 'make build')", touchIDHelperName)
 	}
 	cmd := exec.Command(helper, args...)
 	var out bytes.Buffer

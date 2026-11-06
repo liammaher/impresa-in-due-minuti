@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Build the Portali plugin for Cowork: plugin/portali plus the runner, the rehearsals'
+"""Build the Portale SUE plugin for Cowork: plugin/portale-sue plus the runner, the rehearsals'
 steps files and the pratiche-napoli library, as one installable file.
 
   build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off] [--python-download on|off]
            [--cowork-test] [--evals]
 
-Writes OUT/portali/ (default plugin/dist) and OUT/portali.plugin (the same, zipped), then
+Writes OUT/portale-sue/ (default plugin/dist) and OUT/portale-sue.plugin (the same, zipped), then
 pre-flights the test fixture with the built plugin through its launcher (sh py, which picks this
 computer's python3), as the skill runs it. --library is a pratiche-napoli checkout (default
 $PRATICHE_NAPOLI_DIR). Needs PyYAML (the pratica venv's Python): the plugin itself needs no
 packages, because every YAML file
-the runner reads goes in as JSON (rules.load reads it). --connector adds the Portali
+the runner reads goes in as JSON (rules.load reads it). --connector adds the Portale SUE
 connector (connector/, serving this same build) as the plugin's .mcp.json. --vault overrides
 build.yaml's `vault` for this build: off, the plugin carries no setup skill and its texts keep
 only their no-vault parts. --python-download overrides build.yaml's `python_download`: off, the
@@ -46,21 +46,23 @@ sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
 import gen  # noqa: E402  (the steps files, built; a combination's recipe, resolved)
 # The library's parts a Cowork session reads: its tools, reports backend and layouts
 # (PDF filling, which needs PyMuPDF) stay out of this version.
-LIBRARY_PARTS = ["procedures", "rules", "offices", "situations", "contract/signing.json",
-                 "README.md", "LICENSE", "LICENSE-CONTENT.md"]
+# Its situations (opening a shop, a new home) aren't a SUE's: they stay out too.
+LIBRARY_PARTS = ["offices", "contract/signing.json", "README.md", "LICENSE", "LICENSE-CONTENT.md"]
+# A procedure's id where a rules table names it.
+PROCEDURE_ID = re.compile(r"\b(?:napoli|italia)/[a-z0-9-]+/[a-z0-9-]+\b")
 # What coverage.json can't derive: comuni, who files each sportello's pratiche, what's coming.
 COVERAGE = yaml.safe_load((HERE / "coverage.yaml").read_text())
 # The fixture the test skill runs: the CILA rehearsal's P6 case, made-up people.
 TEST_CASE = "cila-fittizia"
 # The archive switch: whether the plugin ships pvault (build.yaml says what each means).
-SETUP_SKILL = "portali-setup"
-TEST_SKILL = "portali-cowork-test"
+SETUP_SKILL = "portale-sue-setup"
+TEST_SKILL = "portale-sue-cowork-test"
 MARKER = re.compile(r"^<!-- (/?)(vault|no-vault) -->$")
 # The second switch, python_download: its parts in the texts, and in the launcher (a shell
 # script, so its marker lines are comments: `# <download>` ... `# </download>`).
 DOWNLOAD = re.compile(r"^<!-- (/?)(download|no-download) -->$")
 DOWNLOAD_SH = re.compile(r"^# <(/?)(download|no-download)>$")
-LAUNCHER = "skills/portali-pratica/py"
+LAUNCHER = "skills/portale-sue-pratica/py"
 
 
 def switch(key):
@@ -72,6 +74,19 @@ def switch(key):
 
 def vault_default():
     return switch("vault")
+
+
+def sportelli():
+    """build.yaml's `sportelli`: the sportelli whose pratiche the plugin carries."""
+    got = yaml.safe_load((HERE / "build.yaml").read_text()).get("sportelli")
+    if not isinstance(got, list) or not got or not all(isinstance(s, str) and re.fullmatch(r"[a-z]+", s) for s in got):
+        sys.exit("plugin/build.yaml: `sportelli` must be a list of sportelli, like [sue]")
+    return set(got)
+
+
+def table_sportello(table):
+    """A rules table's sportello, from its name: sue-napoli-adempimenti.yaml is the SUE's."""
+    return table.stem.split("-")[0]
 
 
 def keep(text, on, part, marker, name):
@@ -170,7 +185,22 @@ def lines_json(entries):
     return "[\n" + ",\n".join(json.dumps(e, ensure_ascii=False, default=str) for e in entries) + "\n]"
 
 
-def copy_library(library, skill):
+def copy_library(library, skill, catalog, desks):
+    """The library's parts a session reads, with only the carried sportelli's rules tables and the
+    procedures their pratiche and tables name."""
+    procedures = {e["procedure"] for e in catalog}
+    for table in sorted((library / "rules").glob("*.yaml")):
+        if table_sportello(table) in desks:
+            dst = skill / "library" / "rules" / table.name
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(table, dst)
+            procedures |= set(PROCEDURE_ID.findall(table.read_text()))
+    for proc in sorted(procedures):
+        src = library / "procedures" / f"{proc}.yaml"
+        if src.is_file():  # a table may name one the library doesn't have yet
+            dst = skill / "library" / "procedures" / f"{proc}.yaml"
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dst)
     for part in LIBRARY_PARTS:
         src, dst = library / part, skill / "library" / part
         if not src.exists():
@@ -182,7 +212,7 @@ def copy_library(library, skill):
             shutil.copy2(src, dst)
 
 
-def copy_runner(skill):
+def copy_runner(skill, desks):
     portal = skill / "portal"
     portal.mkdir(parents=True)
     # rules.py's drifted(): pre-flight refuses a pratica the last drift check found changed on
@@ -197,6 +227,8 @@ def copy_runner(skill):
     shutil.copy2(PRATICA / "portal" / "catalogue" / "F839" / "drift.json", portal / "catalogue" / "F839" / "drift.json")
     (portal / "rules").mkdir()
     for table in sorted((PRATICA / "portal" / "rules").glob("*.yaml")):
+        if table_sportello(table) not in desks:
+            continue
         # BaseLoader, as rules.py reads it: every scalar stays a string.
         (portal / "rules" / f"{table.stem}.json").write_text(as_json(yaml.load(table.read_text(), Loader=yaml.BaseLoader)))
     (skill / "fill").mkdir()
@@ -206,11 +238,17 @@ def copy_runner(skill):
     shutil.copy2(REPO / "schema.json", skill / "reference" / "schema.json")
 
 
-def copy_pratiche(skill, library):
-    """Each rehearsal's steps file as pratiche/<name>.json, and catalog.json listing them."""
+def copy_pratiche(skill, library, desks):
+    """Each rehearsal's steps file of a carried sportello as pratiche/<name>.json, and catalog.json
+    listing them."""
     (skill / "pratiche").mkdir()
     catalog = []
     for d in sorted(p for p in REHEARSALS.iterdir() if p.is_dir()):
+        # Resolved: a combination takes its comune and sportello from its main pratica.
+        recipe = gen.resolved(gen.load_yaml(d / "recipe.yaml")) if (d / "recipe.yaml").is_file() else {}
+        sportello = recipe.get("sportello") or COVERAGE["sportello"].get(d.name)
+        if sportello not in desks:
+            continue
         src = steps_file(d)
         if not src:
             continue
@@ -218,15 +256,13 @@ def copy_pratiche(skill, library):
         steps = yaml.safe_load(text)
         out = skill / "pratiche" / f"{d.name}.json"
         out.write_text(as_json(steps))
-        # Resolved: a combination takes its comune and sportello from its main pratica.
-        recipe = gen.resolved(gen.load_yaml(d / "recipe.yaml")) if (d / "recipe.yaml").is_file() else {}
         proc = steps["procedure"]
         catalog.append({
             "name": d.name,
             "procedure": proc,
             "title": steps.get("title") or recipe.get("title"),
             "comune": recipe.get("comune") or COVERAGE["default_comune"],
-            "sportello": recipe.get("sportello") or COVERAGE["sportello"].get(d.name),
+            "sportello": sportello,
             "library": f"library/procedures/{proc}.yaml" if (library / "procedures" / f"{proc}.yaml").is_file() else None,
             "notes": notes(text),
             # The connector serves the same hash: a different one means this copy is stale.
@@ -275,7 +311,7 @@ def write_coverage(skill, catalog, library, version):
         entries.append({"name": None, "procedure": proc, "title": title and title.group(1).strip().strip('"'),
                         "comune": "F839" if proc.startswith("napoli/") else "IT", "sportello": None,
                         "status": "guide", "avatars": [], "library": True})
-    entries += [c | {"name": None, "status": "coming"} for c in COVERAGE["coming"]]
+    entries += [c | {"name": None, "status": "coming"} for c in COVERAGE["coming"] if c.get("sportello") in sportelli()]
     head = {"plugin_version": version, "built": dt.date.today().isoformat(), "comuni": COVERAGE["comuni"] | {"IT": "nazionale"}}
     (skill / "coverage.json").write_text(json.dumps(head, ensure_ascii=False)[:-1] + ', "pratiche": ' + lines_json(entries) + "}\n")
     return entries
@@ -331,7 +367,7 @@ def make_pdf(path, size):
 def self_check(plugin):
     """The test case through check.py and pre-flight, run as the skill runs them: through its
     py launcher (sh py), which picks this computer's python3."""
-    skill = plugin / "skills" / "portali-pratica"
+    skill = plugin / "skills" / "portale-sue-pratica"
     case = plugin / "skills" / TEST_SKILL / "cila"
     py = ["sh", str(skill / "py")]
     with tempfile.TemporaryDirectory() as tmp:
@@ -404,7 +440,9 @@ def write_pvault_release(setup, version, checksums):
 def private_terms():
     """The maintainer's own details the plugin must never carry (codice fiscale, address, CIE, ...),
     one per line, # for comments. The list is the maintainer's, outside the repo: it is the data."""
-    path = Path(os.environ.get("PORTALI_PRIVATE_TERMS") or Path.home() / ".config" / "portali" / "private-terms.txt")
+    path = Path(os.environ.get("PORTALE_SUE_PRIVATE_TERMS") or Path.home() / ".config" / "portale-sue" / "private-terms.txt")
+    if not path.is_file() and "PORTALE_SUE_PRIVATE_TERMS" not in os.environ:
+        path = Path.home() / ".config" / "portali" / "private-terms.txt"  # where it was before the rename
     if not path.is_file():
         return []
     lines = (l.strip() for l in path.read_text().splitlines())
@@ -435,7 +473,7 @@ def main():
     ap.add_argument("--out", type=Path, default=HERE / "dist")
     ap.add_argument("--pvault-version", help="the pvault release the setup skill installs, e.g. 0.1.0 (with --pvault-checksums)")
     ap.add_argument("--pvault-checksums", type=Path, help="that release's checksums.txt")
-    ap.add_argument("--connector", help="the Portali connector's https URL (connector/): the plugin brings it")
+    ap.add_argument("--connector", help="the Portale SUE connector's https URL (connector/): the plugin brings it")
     ap.add_argument("--vault", choices=("on", "off"), help="ship the archive or not, for this build (default: build.yaml's)")
     ap.add_argument("--python-download", choices=("on", "off"),
                     help="let the skill's launcher fetch a Python where there is none, for this build (default: build.yaml's)")
@@ -455,25 +493,27 @@ def main():
     # The repo's runner names a procedure by its library title from here, as the plugin's does
     # from its own library/ (run.procedure_name): the self-check compares their pre-flights.
     os.environ["PRATICHE_NAPOLI_DIR"] = str(Path(a.library).resolve())
-    plugin = a.out / "portali"
+    plugin = a.out / "portale-sue"
     if plugin.exists():
         shutil.rmtree(plugin)
-    shutil.copytree(HERE / "portali", plugin, ignore=shutil.ignore_patterns(".DS_Store", "__pycache__"))
+    shutil.copytree(HERE / "portale-sue", plugin, ignore=shutil.ignore_patterns(".DS_Store", "__pycache__"))
     select_vault(plugin, vault)  # before anything else goes in: only the hand-written texts
     select_download(plugin, download)
     # The licence and notices travel with the plugin: it bundles the library's CC BY-SA texts.
     for name in ("LICENSE", "NOTICE.md"):
         shutil.copy2(REPO / name, plugin / name)
     if a.connector:  # without one the skill uses coverage.json, as of the build
-        (plugin / ".mcp.json").write_text(as_json({"mcpServers": {"portali": {"type": "http", "url": a.connector}}}))
+        (plugin / ".mcp.json").write_text(as_json({"mcpServers": {"portale-sue": {"type": "http", "url": a.connector}}}))
     if a.pvault_version:  # without one the setup skill says there is no release to install from
         write_pvault_release(plugin / "skills" / SETUP_SKILL, a.pvault_version, a.pvault_checksums)
-    skill = plugin / "skills" / "portali-pratica"
-    copy_runner(skill)
-    catalog = copy_pratiche(skill, a.library)
-    copy_library(a.library, skill)
+    skill = plugin / "skills" / "portale-sue-pratica"
+    desks = sportelli()
+    copy_runner(skill, desks)
+    catalog = copy_pratiche(skill, a.library, desks)
+    copy_library(a.library, skill, catalog, desks)
     manifest = json.loads((plugin / ".claude-plugin" / "plugin.json").read_text())
-    coverage = write_coverage(skill, catalog, a.library, manifest["version"])
+    # The guides: the procedures the plugin's library copy holds, the carried sportelli's only.
+    coverage = write_coverage(skill, catalog, skill / "library", manifest["version"])
     make_test_case(plugin / "skills" / TEST_SKILL)
     self_check(plugin)
     if a.evals:
