@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: bug-report
+tags: [skill, rules]
+context:
+  scaffold_script: fixture.sh
