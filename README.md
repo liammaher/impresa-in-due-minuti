@@ -24,7 +24,7 @@ You enter your details and scan your documents once. Agents that prepare forms (
 
 ## Quick start
 
-**As a Claude plugin** (once the first release is out; see [docs/install.md](docs/install.md)): in Claude Code, `/plugin install portale-sue --marketplace liammaher/portale-sue`, then say "set me up". No compiler.
+**As a Claude plugin** (a paid plan; no terminal, no Python or Git to install first): in the Claude app open **Customize → Plugins → Add → Add marketplace**, type `liammaher/portale-sue`, click **Install**, and turn on **Sync automatically** so updates arrive on their own. Details and the Claude Code commands: [docs/install.md](docs/install.md).
 
 **From source.** Requires Go 1.26+.
 

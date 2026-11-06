@@ -34,7 +34,8 @@ Create a release for personal-vault. Version argument (if provided): $ARGUMENTS
    - Run `go test -race ./...` and confirm they pass
    - Do NOT proceed if tests fail
 
-6. **Create and push tag**
+6. **Create and push tag** (or, with no terminal: Actions → Release → Run workflow on `main`, which
+   tags the version `plugin/portale-sue/.claude-plugin/plugin.json` says)
    - Run `git tag -a <version> -m "Release <version>"`
    - Ask the user for confirmation before pushing
    - Run `git push origin <version>`
