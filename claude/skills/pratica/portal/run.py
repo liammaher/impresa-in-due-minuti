@@ -1571,7 +1571,7 @@ def message(report, asks, held_need=None, short=False):
     if short:
         if proposals:
             n = len(proposals)
-            blocks.append([f"Per il resto imposto il caso più comune ({'una risposta' if n == 1 else f'{n} risposte'}): "
+            blocks.append([f"Per il resto propongo il caso più comune ({'una risposta' if n == 1 else f'{n} risposte'}): "
                            "scriva «ok», o «rivediamole» per vederle una per una."])
         return "\n\n".join("\n".join(b) for b in blocks)
     if use:

@@ -392,7 +392,7 @@ are in the JSON:
   (a checklist: "Altre voci"); if picked, a second question with the next ones, the same way.
   Never drop an option.
 - A short header for each (at most 12 characters: "Paesaggio", "Terre/rocce").
-- The proposals: one question, "Per il resto imposto il caso più comune (<n> risposte). Va
+- The proposals: one question, "Per il resto propongo il caso più comune (<n> risposte). Va
   bene?", options "Sì, va bene" and "Voglio rivederle"; on the
   second, list them, a line each, as pre-flight's `message` has them.
 - Free text and dates are not choices: ask them in the text after the call. Files: **After they
