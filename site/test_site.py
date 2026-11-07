@@ -76,6 +76,12 @@ class InstallPage(unittest.TestCase):
             if tag == "a":
                 self.assertRegex(attrs.get("href", ""), r"^https://", attrs)
 
+    def test_labels_of_the_italian_app(self):
+        # support.claude.com/it/articles/13837440: Personalizza → Plugin → Aggiungi → Aggiungi marketplace.
+        labels = re.findall(r'<span class="ui">([^<]+)</span>', PAGE)
+        for label in ("Personalizza", "Plugin", "+ Aggiungi", "Aggiungi marketplace", "Installa"):
+            self.assertIn(label, labels)
+
     def test_italian_and_not_official(self):
         self.assertRegex(PAGE, r'<html lang="it">')
         self.assertIn("Non è uno strumento ufficiale", PAGE)
