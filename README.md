@@ -24,10 +24,12 @@ terminale:
 
 1. Apra **Personalizzazione** (Customize) e la scheda **Plugin**.
 2. Clicchi **Aggiungi** (Add), poi **Aggiungi marketplace** (Add marketplace) e **Aggiungi da un repository**
-   (Add from a repository), scriva `liammaher/portale-sue` e clicchi **Sincronizza** (Sync).
-3. Trovi Portale SUE nell'elenco e clicchi **Installa** (Install).
-4. Sul marketplace attivi la sincronizzazione automatica, **Sync automatically**: così riceve da solo ogni aggiornamento, anche quando
-   il portale cambia e una pratica va rimappata.
+   (Add from a repository), scriva `liammaher/portale-sue` nella casella, lo scelga nell'elenco sotto,
+   lasci acceso **Sincronizza automaticamente** e clicchi **Sincronizza** (Sync).
+3. Apra Portale SUE, tra i **Nuovi plugin**, e clicchi **Aggiungi** (Add).
+4. Per ricevere da solo ogni aggiornamento (anche quando il portale cambia e una pratica va rimappata),
+   conceda a Claude l'accesso alla sua app GitHub quando lo propone (**Concedi accesso**): serve un
+   account GitHub gratuito. Senza, si aggiorna rimuovendo il marketplace e aggiungendolo di nuovo.
 
 Tra parentesi i nomi dell'app in inglese. In uno studio con piano Team o Enterprise basta che lo
 aggiunga l'amministratore: arriva a tutti. Se l'app mostra ancora una versione vecchia anche dopo

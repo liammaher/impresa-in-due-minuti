@@ -81,7 +81,8 @@ class InstallPage(unittest.TestCase):
         # the app says «Personalizzazione».
         labels = re.findall(r'<span class="ui">([^<]+)</span>', PAGE)
         for label in ("Personalizzazione", "Plugin", "+ Aggiungi", "Aggiungi marketplace",
-                      "Aggiungi da un repository", "Sincronizza"):
+                      "Aggiungi da un repository", "Seleziona un repository",
+                      "Sincronizza automaticamente", "Sincronizza", "Aggiungi", "Concedi accesso"):
             self.assertIn(label, labels)
 
     def test_italian_and_not_official(self):

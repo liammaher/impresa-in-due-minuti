@@ -14,9 +14,12 @@ client's details pass through the conversation (the plugin's README says so to t
 
 1. **Add the plugin**, on a paid plan (Anthropic lists plugins for Pro, Max, Team and
    Enterprise). In the Claude app, with no terminal: **Customize → Plugins → Add → Add marketplace**,
-   type `liammaher/portale-sue`, then **Install** on Portale SUE. Turn on **Sync automatically** on the
-   marketplace: a plugin installed this way updates from its marketplace, which is how a remapped
-   pratica or a portal-drift refusal reaches the tecnico. It is saved to the account, so it is in chat,
+   choose **Add from a repository**, type `liammaher/portale-sue`, pick it in the list, **Sync**, then
+   **Add** on Portale SUE. Keep **Sync automatically** on (it is, in the dialog): a plugin installed this
+   way updates from its marketplace, which is how a remapped pratica or a portal-drift refusal reaches
+   the tecnico. Read on claude.ai on 2026-11-07: syncing also needs the person to grant Claude's GitHub
+   app access (a notice after Sync, «Concedi accesso»), so a tecnico with no GitHub account gets no
+   automatic update and must remove and re-add the marketplace. It is saved to the account, so it is in chat,
    Cowork and Claude Code too. On a Team or Enterprise plan an owner can install it for everyone (or
    require it) instead. In Claude Code the same is
    `/plugin install portale-sue --marketplace liammaher/portale-sue`.
