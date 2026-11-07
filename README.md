@@ -24,16 +24,18 @@ terminale:
 
 1. Apra **Personalizzazione** (Customize) e la scheda **Plugin**.
 2. Clicchi **Aggiungi** (Add), poi **Aggiungi marketplace** (Add marketplace) e **Aggiungi da un repository**
-   (Add from a repository), scriva `liammaher/portale-sue` nella casella, lo scelga nell'elenco sotto,
-   lasci acceso **Sincronizza automaticamente** e clicchi **Sincronizza** (Sync).
+   (Add from a repository), scriva `liammaher/portale-sue` nella casella, lo scelga nell'elenco sotto e
+   clicchi **Sincronizza** (Sync).
 3. Apra Portale SUE, tra i **Nuovi plugin**, e clicchi **Aggiungi** (Add).
-4. Per ricevere da solo ogni aggiornamento (anche quando il portale cambia e una pratica va rimappata),
-   conceda a Claude l'accesso alla sua app GitHub quando lo propone (**Concedi accesso**): serve un
-   account GitHub gratuito. Senza, si aggiorna rimuovendo il marketplace e aggiungendolo di nuovo.
+4. Per aggiornarlo (Portale SUE cambia quando cambia il portale): **Aggiungi** → **Gestisci marketplace**
+   (Manage marketplaces) → **⋯** accanto a portale-sue → **Verifica aggiornamenti** (Check for updates).
+   Lo faccia ogni tanto e prima di una pratica importante. Un avviso che propone **Concedi accesso** a
+   GitHub lo può chiudere: non serve.
 
 Tra parentesi i nomi dell'app in inglese. In uno studio con piano Team o Enterprise basta che lo
-aggiunga l'amministratore: arriva a tutti. Se l'app mostra ancora una versione vecchia anche dopo
-**Update**, rimuova il marketplace, chiuda e riapra l'app e lo aggiunga di nuovo (punto 2).
+aggiunga l'amministratore: arriva a tutti. Se dopo **Verifica aggiornamenti** vede ancora una versione
+vecchia, rimuova il marketplace (**Rimuovi**, stesso menu), chiuda e riapra l'app e lo aggiunga di nuovo
+(punto 2).
 
 Poi apra nell'app la cartella dei Suoi lavori, con una sottocartella per ogni lavoro. I dati dello
 studio li chiede Claude alla prima pratica, una volta sola. Serve Python 3 sul computer: su un Mac che
