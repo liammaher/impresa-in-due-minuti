@@ -77,9 +77,11 @@ class InstallPage(unittest.TestCase):
                 self.assertRegex(attrs.get("href", ""), r"^https://", attrs)
 
     def test_labels_of_the_italian_app(self):
-        # support.claude.com/it/articles/13837440: Personalizza → Plugin → Aggiungi → Aggiungi marketplace.
+        # As read in claude.ai set to italiano (Italia), 2026-11-07. The help article says «Personalizza»;
+        # the app says «Personalizzazione».
         labels = re.findall(r'<span class="ui">([^<]+)</span>', PAGE)
-        for label in ("Personalizza", "Plugin", "+ Aggiungi", "Aggiungi marketplace", "Installa"):
+        for label in ("Personalizzazione", "Plugin", "+ Aggiungi", "Aggiungi marketplace",
+                      "Aggiungi da un repository", "Sincronizza"):
             self.assertIn(label, labels)
 
     def test_italian_and_not_official(self):

@@ -22,8 +22,9 @@ La guida passo passo, da mandare a un collega: **https://liammaher.github.io/por
 Serve un piano Claude a pagamento (Pro, Max, Team o Enterprise). Nell'app Claude per computer, senza
 terminale:
 
-1. Apra **Personalizza** (Customize) e la scheda **Plugin**.
-2. Clicchi **Aggiungi** (Add), poi **Aggiungi marketplace** (Add marketplace), e scriva `liammaher/portale-sue`.
+1. Apra **Personalizzazione** (Customize) e la scheda **Plugin**.
+2. Clicchi **Aggiungi** (Add), poi **Aggiungi marketplace** (Add marketplace) e **Aggiungi da un repository**
+   (Add from a repository), scriva `liammaher/portale-sue` e clicchi **Sincronizza** (Sync).
 3. Trovi Portale SUE nell'elenco e clicchi **Installa** (Install).
 4. Sul marketplace attivi la sincronizzazione automatica, **Sync automatically**: così riceve da solo ogni aggiornamento, anche quando
    il portale cambia e una pratica va rimappata.
