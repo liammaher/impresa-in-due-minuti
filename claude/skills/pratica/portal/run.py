@@ -2128,7 +2128,7 @@ input.addEventListener("change", async () => {{
   if (got !== "{sha}") {{ msg.textContent = "Non è il file giusto: scelga «{path.stem}» nella cartella Download."; return; }}
   input.disabled = true;
   try {{ window.pvPicked = String(await (0, eval)(text)); msg.textContent = "Caricato."; setTimeout(() => box.remove(), 3000); }}
-  catch (e) {{ window.pvPicked = "error " + e.message; msg.textContent = window.pvPicked; }}
+  catch (e) {{ window.pvPicked = "error " + e.message; msg.textContent = "Non sono riuscito ad avviarla: lo scriva a Claude."; }}
 }});
 "box shown: the person picks {path.name}, then poll __pv.wait()"
 """)

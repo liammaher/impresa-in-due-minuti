@@ -51,8 +51,12 @@ def build(tmp, check=None, files=None, report=None, shown=None, *args):
 def main():
     failed = 0
 
+    said_all = []
+
     def check(name, ok, said):
         nonlocal failed
+        if isinstance(said, dict) and said.get("message"):
+            said_all.append(said["message"])
         print(("ok   " if ok else "FAIL ") + name)
         if not ok:
             failed += 1
@@ -64,9 +68,9 @@ def main():
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t), {"rows": [row]}, [good])
         check("a real job that worked: two lines, the pratica by its short name, no warning",
-              r["message"] == "✅ CILA compilata sul portale in 95 secondi: ogni valore è stato riletto.\n"
-              "Resta a Lei, sul portale: 1. controlli l'anteprima della bozza 2. spunti le dichiarazioni "
-              "3. firmi 4. paghi 5. invii" and r["warnings"] == [], r)
+              r["message"] == "✅ CILA compilata sul portale in 95 secondi: ogni valore è stato riletto.\nResta a Lei:\n"
+              "1. Controlli l'anteprima della bozza\n2. Spunti le dichiarazioni\n3. Firmi\n4. Paghi\n5. Invii"
+              and r["warnings"] == [], r)
         check("the steps in full stay for Claude to answer from, unsaid", r["yours"] == SHOWN["yours"]
               and "120 €" not in r["message"], r)
     with tempfile.TemporaryDirectory() as t:
@@ -74,22 +78,21 @@ def main():
         r = build(Path(t), {"rows": [row, bad]}, [good], {"alerts": [ALERT, ALERT]})
         lines = r["message"].split("\n")
         check("a mismatch and the portal's warning are each a ⚠️ line, between done and what's left",
-              lines[0].startswith("✅") and lines[-1].startswith("Resta a Lei")
-              and "⚠️ Dati catastali, foglio: sul portale «4», Visura catastale, p. 1 «3» (la visura dice 3)" in lines
-              and "⚠️ Domicilio elettronico, PEC: il portale segnala «Indirizzo Pec non valido» (il valore è salvato: "
-              "lo controlli)" in lines and len(lines) == 4, r)
+              lines[0].startswith("✅") and lines[3] == "Resta a Lei:"
+              and "⚠️ Dati catastali, foglio: sul portale «4», nel documento «3» (Visura catastale, p. 1)." in lines
+              and "⚠️ Domicilio elettronico: il portale segnala «Indirizzo Pec non valido». Lo controlli." in lines, r)
     with tempfile.TemporaryDirectory() as t:
-        parcel = [{"section": "Dati catastali", "label": x, "text": "Attenzione! Dati catastali sconosciuti"}
-                  for x in ("foglio", "particella/mappale")]
+        parcel = [{"section": "DATI CATASTALI", "label": x, "text": "Attenzione! Dati catastali sconosciuti"}
+                  for x in ("foglio", "se non presente indicare il numero 0")]
         r = build(Path(t), report={"alerts": parcel})
-        check("one warning on several boxes of a section is one line, the boxes together",
-              r["warnings"] == ["Dati catastali, foglio; particella/mappale: il portale segnala «Attenzione! Dati "
-                                "catastali sconosciuti» (i valori sono salvati: li controlli)"], r)
+        check("one warning on several boxes of a section is one line, by the section, in plain case",
+              r["warnings"] == ["Dati catastali: il portale segnala «Attenzione! Dati catastali sconosciuti». "
+                                "Lo controlli."], r)
     with tempfile.TemporaryDirectory() as t:
         other = {"slot": "Procura speciale", "name": "x.pdf", "size": 3, "sha256": sha(b"%PDF only in run")}
         r = build(Path(t), {"rows": [row]}, [good, other])
         check("a file whose bytes no job file has (one in run/ doesn't count)",
-              r["warnings"] == ["Procura speciale: il file sul portale (x.pdf) non è uguale a nessun file del lavoro"], r)
+              r["warnings"] == ["Allegato «Procura speciale»: il file sul portale (x.pdf) non è nessuno dei Suoi file."], r)
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t))
         check("nothing checked against the documents (the archive's flow): no warning made up", r["warnings"] == [], r)
@@ -98,12 +101,13 @@ def main():
                  "copia attestazione versamento oneri, diritti e spese"]
         r = build(Path(t), shown={"second_run": later})
         check("a second compilation: the diritti paid first, its receipt and the procura then attached",
-              r["steps"] == ["controlli l'anteprima della bozza", "spunti le dichiarazioni", "paghi",
-                             "mi dia firmati i file che il portale crea dopo le dichiarazioni (" + "; ".join(later)
-                             + "): li allego io con una seconda compilazione", "firmi", "invii"], r)
+              r["steps"] == ["controlli l'anteprima della bozza", "spunti le dichiarazioni", "paghi i diritti",
+                             "mi mandi i file firmati (la procura, la ricevuta del pagamento e gli altri documenti): "
+                             "li allego io", "firmi", "invii"], r)
         r2 = build(Path(t) / "2", shown={"second_run": later[:1]})
         check("a second compilation with nothing paid first: paying after signing, as on any pratica",
-              r2["steps"][-3:] == ["firmi", "paghi", "invii"] and "paghi" not in r2["steps"][:3], r2)
+              r2["steps"][-3:] == ["firmi", "paghi", "invii"] and "paghi" not in r2["steps"][:3]
+              and "mi mandi i file firmati (la procura): li allego io" in r2["steps"], r2)
         r3 = build(Path(t) / "3", report={"reopened": True}, shown={"second_run": later})
         check("the second compilation itself: the signed files attached, then sign and send",
               r3["message"].startswith("✅ CILA: file firmati allegati sul portale in 95 secondi")
@@ -126,6 +130,11 @@ def main():
         r = build(Path(t), report={"result": "stopped", "error": "a reason for Claude"})
         check("a stopped run: no message (Claude recovers it, or says what's left)",
               r["result"] == "stopped" and r["message"] is None, r)
+
+    # What the tecnico reads is Italian: none of the words an English message would have.
+    english = re.compile(r"\b(the|your|you|and|of|was|draft|saved|every|value|left|filled|sign|send|pay|file was)\b", re.I)
+    hits = sorted({w.lower() for m in said_all for w in english.findall(m)})
+    check(f"every message is Italian ({len(said_all)} read)", len(said_all) >= 8 and not hits, hits)
 
     # Every pratica's short name reads as one: no sportello, no role, no subtitle.
     sys.path.insert(0, str(REVIEW.parent))

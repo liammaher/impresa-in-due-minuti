@@ -206,7 +206,7 @@
       box.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:#fff;display:flex;flex-direction:column;" +
         "align-items:center;justify-content:center;gap:12px;font:16px system-ui,sans-serif;padding:24px";
       const title = document.createElement("div");
-      title.textContent = "Scelga questi file dalla cartella della pratica: vanno dal suo computer al portale, e da nessun'altra parte.";
+      title.textContent = "Scelga questi file dalla cartella della pratica: vanno dal Suo computer al portale, e da nessun'altra parte.";
       const list = document.createElement("ul");
       list.style.cssText = "margin:0;max-height:40vh;overflow:auto";
       const pickFiles = document.createElement("input");

@@ -125,8 +125,8 @@ def mismatches(out):
     each value that doesn't match, with what the portal and the document each say."""
     f = out / "check.json" if out else None
     rows = json.loads(f.read_text()).get("rows", []) if f and f.exists() else []
-    return [f"{r.get('section')}, {r.get('label')}: sul portale «{r.get('portal')}», "
-            f"{r.get('source') or 'nei documenti'} «{r.get('document')}»" + (f" ({r['note']})" if r.get("note") else "")
+    return [f"{section(r.get('section'))}, {r.get('label')}: sul portale «{r.get('portal')}», nel documento "
+            f"«{r.get('document')}»" + (f" ({r['source']})" if r.get("source") else "") + "."
             for r in rows if not r.get("ok")]
 
 
@@ -147,8 +147,14 @@ def stray_files(out, job):
                 local.add(hashlib.sha256(p.read_bytes()).hexdigest())
         except OSError:
             continue
-    return [f"{x.get('slot')}: il file sul portale ({x.get('name')}) non è uguale a nessun file del lavoro"
+    return [f"Allegato «{x.get('slot')}»: il file sul portale ({x.get('name')}) non è nessuno dei Suoi file."
             for x in files if x.get("sha256") not in local]
+
+
+def section(name):
+    """A section's name as a sentence: the portal writes some in capitals ("DOMICILIO ELETTRONICO")."""
+    name = name or ""
+    return name[:1] + name[1:].lower() if name.isupper() else name
 
 
 # The pratiche whose name is masculine ("il permesso di costruire"): the rest are feminine (CILA,
@@ -181,14 +187,11 @@ def summary(report, out=None, job=None, prova=False):
         return {"result": "filled", "warnings": [], "steps": [],
                 "message": f"✅ {name} di prova {done} in {duration(report.get('total_seconds'))}, con dati inventati.\n"
                            "Nulla da inviare: la cancelli da «Pratiche in bozza»."}
-    # One line for each warning in a section, its boxes together: on made-up data the catasto's
-    # comes four times, one for each box of the parcel (2026-11-07).
-    boxes = {}
-    for a in report.get("alerts", []):
-        boxes.setdefault((a["section"], a["text"]), []).append(a.get("label") or "una casella")
-    warnings = [f"{sec}, {'; '.join(dict.fromkeys(ls))}: il portale segnala «{text}» "
-                + ("(il valore è salvato: lo controlli)" if len(set(ls)) == 1 else "(i valori sono salvati: li controlli)")
-                for (sec, text), ls in boxes.items()]
+    # One line for each warning in a section, by the section alone: the portal shows it beside the
+    # box, and its labels read badly out of the page ("se non presente indicare il numero 0"). On
+    # made-up data the catasto's comes four times, one for each box of the parcel (2026-11-07).
+    warnings = list(dict.fromkeys(f"{section(a['section'])}: il portale segnala «{a['text'].strip()}». Lo controlli."
+                                  for a in report.get("alerts", [])))
     warnings += mismatches(out) + stray_files(out, job)
     # The second compilation (after the declarations) attaches what the portal makes only then, signed:
     # the procura, the quadro riepilogativo, and the receipt of what is paid first (the diritti).
@@ -201,12 +204,18 @@ def summary(report, out=None, job=None, prova=False):
         head = f"✅ {name} {done} sul portale in {duration(report.get('total_seconds'))}: ogni valore è stato riletto."
         steps = ["controlli l'anteprima della bozza", "spunti le dichiarazioni"]
         if later:
-            steps += (["paghi"] if pay_first else []) + [
-                f"mi dia firmati i file che il portale crea dopo le dichiarazioni ({'; '.join(later)}): li allego io "
-                "con una seconda compilazione"]
+            # What they sign and send back, in their words; the slots' own names are in `yours`.
+            what = (["la procura"] if any(re.search(r"procura", x, re.I) for x in later) else []) \
+                + (["la ricevuta del pagamento"] if pay_first else [])
+            rest = [x for x in later if not re.search(r"procura|versament|ricevut|pagament", x, re.I)]
+            what += ["gli altri documenti" if what else "i documenti da firmare"] if rest else []
+            steps += (["paghi i diritti"] if pay_first else []) + [
+                f"mi mandi i file firmati ({' e '.join([', '.join(what[:-1]), what[-1]] if len(what) > 1 else what)}): "
+                "li allego io"]
         steps += ["firmi"] + ([] if pay_first and later else ["paghi"]) + ["invii"]
     lines = [head] + [f"⚠️ {w}" for w in warnings]
-    lines.append("Resta a Lei, sul portale: " + " ".join(f"{i}. {s}" for i, s in enumerate(steps, 1)))
+    lines.append("Resta a Lei:")
+    lines += [f"{i}. {s[0].upper()}{s[1:]}" for i, s in enumerate(steps, 1)]
     lines += [f"{a}." for a in report.get("apart") or []]
     # `yours`, the steps file's own steps in full (how the diritti are paid, the files' rules), is
     # not said: Claude answers from it when the tecnico asks how.

@@ -1555,7 +1555,7 @@ def _all(x, key):
     return []
 
 
-@case("what the tecnico reads is Italian: every question, checklist item, refusal and end step, no role codes")
+@case("what the tecnico reads is Italian: every title, question, checklist item, refusal and end step, no role codes")
 def _():
     english = re.compile(r"\b(the|which|what|does|will|have|with|your|their|tick|every|must|before|after|only|of|and|"
                          r"new|other|another|number|time|systems|how|many|something|lifts|protection|beer)\b", re.I)
@@ -1566,6 +1566,7 @@ def _():
         texts += [v for a in steps.get("asks", {}).values() for v in (a.get("labels") or {}).values()]
         texts += [g.get("question") for g in steps.get("groups", {}).values()]
         texts += [c.get("else") for c in steps.get("supports", [])] + list(steps.get("yours", []))
+        texts.append(steps.get("title"))  # the catalog's and the closing line's name (2026-11-07: "… of a CILA")
         # every refusal, a field's own included (2026-11-06: the tolerances' one was in English)
         texts += [x for x in _all(steps, "else") if isinstance(x, str)]
         for t in filter(None, texts):

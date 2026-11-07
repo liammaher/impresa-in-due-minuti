@@ -544,8 +544,8 @@ three minutes; then stop, leave the draft saved, and say plainly what's left.
 `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run` prints its `message`: say it as
 written, its lines as they are, and nothing else. It is three things: did it work (`✅`), what
 they must check (a `⚠️` line for each warning the portal put beside a value it kept, or a value or
-file that doesn't match the documents; none, no line), and what is left to them on the portal,
-numbered (the second compilation among them when the case has one). Send no file, list no
+file that doesn't match the documents; none, no line), and what is left to them, a numbered step
+a line (sending you the signed files among them when the case has a second compilation). Send no file, list no
 values and never paraphrase a declaration: they read the portal's own preview and declarations
 on the portal, where they tick them. Asked how to pay or what a step involves, answer from its
 `yours` (their steps in full). Stop: they check, declare, sign, pay and send.
@@ -586,8 +586,8 @@ portal and the document each say; once they say which is right, correct `values.
 
 Then say its `message` as written, its lines as they are, and nothing else. It is three things: did it work (`✅`), what
 they must check (a `⚠️` line for each warning the portal put beside a value it kept, or a value or
-file that doesn't match the documents; none, no line), and what is left to them on the portal,
-numbered (the second compilation among them when the case has one). Send no file, list no
+file that doesn't match the documents; none, no line), and what is left to them, a numbered step
+a line (sending you the signed files among them when the case has a second compilation). Send no file, list no
 values and never paraphrase a declaration: they read the portal's own preview and declarations
 on the portal, where they tick them. Asked how to pay or what a step involves, answer from its
 `yours` (their steps in full). Stop: they check, declare, sign, pay and send.
