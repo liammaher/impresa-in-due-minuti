@@ -17,6 +17,8 @@ prova, inventa i dati».
 
 ## Installazione
 
+La guida passo passo, da mandare a un collega: **https://liammaher.github.io/portale-sue/**
+
 Serve un piano Claude a pagamento (Pro, Max, Team o Enterprise). Nell'app Claude per computer, senza
 terminale:
 

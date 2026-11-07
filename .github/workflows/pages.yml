@@ -1,0 +1,45 @@
+name: Install page
+
+# Publishes site/index.html, the tecnico's install page, at https://liammaher.github.io/portale-sue/.
+# Needs the repository's Pages source set to "GitHub Actions" (Settings → Pages), once.
+
+on:
+  push:
+    branches: [main]
+    paths: [site/**, .claude-plugin/marketplace.json, .github/workflows/pages.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the page
+        run: python3 site/test_site.py
+
+      # Only the page: the test stays out of the site.
+      - name: Collect
+        run: mkdir _site && cp site/index.html _site/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
