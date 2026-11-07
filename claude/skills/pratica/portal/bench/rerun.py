@@ -58,10 +58,9 @@ CHUNK = 40_000
 
 def values_of(run_js, proc):
     """The values run.js starts its run with."""
-    line = run_js.splitlines()[1]
-    head = f"__pv.start({json.dumps(proc)}, "
-    assert line.startswith(head) and line.endswith(")"), "run.js changed shape"
-    return line[len(head):-1]
+    args = run.run_args(run_js)
+    assert args[0] == proc, "run.js is another procedure's"
+    return json.dumps(args[1], ensure_ascii=False, separators=(",", ":"))
 
 
 def fnv1a(text):
