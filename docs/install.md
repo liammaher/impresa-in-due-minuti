@@ -12,8 +12,7 @@ client's details pass through the conversation (the plugin's README says so to t
 
 ## What you do
 
-1. **Add the plugin**, on a paid plan (Anthropic lists plugins for Pro, Max, Team and
-   Enterprise). In the Claude app, with no terminal: **Customize → Plugins → Add → Add marketplace**,
+1. **Add the plugin**. In the Claude app, with no terminal: **Customize → Plugins → Add → Add marketplace**,
    choose **Add from a repository**, type `liammaher/portale-sue`, pick it in the list, **Sync**, then
    **Add** on Portale SUE. Updates (how a remapped pratica or a portal-drift refusal reaches the
    tecnico) come by **Add → Manage marketplaces → ⋯ → Check for updates**, which works with no GitHub
