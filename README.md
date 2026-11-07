@@ -19,8 +19,7 @@ prova, inventa i dati».
 
 La guida passo passo, da mandare a un collega: **https://liammaher.github.io/portale-sue/**
 
-Serve un piano Claude a pagamento (Pro, Max, Team o Enterprise). Nell'app Claude per computer, senza
-terminale:
+Nell'app Claude per computer, senza terminale:
 
 1. Apra **Personalizzazione** (Customize) e la scheda **Plugin**.
 2. Clicchi **Aggiungi** (Add), poi **Aggiungi marketplace** (Add marketplace) e **Aggiungi da un repository**
