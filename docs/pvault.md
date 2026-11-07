@@ -1,0 +1,288 @@
+# pvault
+
+An encrypted local vault that keeps the details out of the conversation. Today's Portale SUE plugin doesn't ship it (`plugin/build.yaml` `vault: false`); the front page for tecnici is the [README](../README.md).
+
+---
+
+**pvault: a local, encrypted vault for the personal data Italian bureaucracy keeps asking for — codice fiscale, CIE, residenza, permesso di soggiorno, document scans — with scoped, read-only-by-default access for AI agents that fill in forms for you.**
+
+---
+
+You enter your details and scan your documents once. Agents that prepare forms (TARI, residenza, INPS, Agenzia delle Entrate…) read exactly the fields you allow, for as long as you allow, and never see your SPID or CIE credentials.
+
+- **Local-first.** One SQLite database and an encrypted `documents/` folder in `~/.pvault/`. No cloud, no account.
+- **Encrypted per field and per file.** Argon2id → AES-256-GCM with per-category keys; filenames are encrypted too.
+- **Italian-aware.** Validates codice fiscale (incl. omocodia and real birth dates), partita IVA, CIE number and IBAN, checks the format of CAP and provincia; normalizes dates; tracks document expiry.
+- **Agent-safe by design.** Service tokens are scoped, short-lived, capped by sensitivity, and **read-only unless you say otherwise**.
+- **A personal tier only you can see.** SPID login, CIE PIN/PUK and similar secrets are stored as `personal`: no agent token, whatever its scope or cap, can read, list or change them. To a token they look absent; the only trace is that a token with write access is refused if it tries to write one.
+
+> Fork of [lovincyrus/personal-vault](https://github.com/lovincyrus/personal-vault) (MIT), extended with the Italian schema, document storage and a hardened agent access model. Third-party material, what is known about reusing it, and the fact that this is not an official tool: [NOTICE.md](../NOTICE.md).
+
+## Quick start
+
+**From source.** Requires Go 1.26+.
+
+```sh
+git clone https://github.com/liammaher/portale-sue.git
+cd portale-sue
+make build                      # → bin/pvault
+ln -s "$PWD/bin/pvault" /opt/homebrew/bin/pvault   # or: sudo make install
+
+pvault init      # choose a profile password; save the secret key it prints
+pvault unlock    # starts the local server on 127.0.0.1:7200
+pvault ui        # opens the onboarding form in your browser
+```
+
+You need both the profile password and the secret key to unlock.
+
+For secrets (SPID password, CIE PIN/PUK), run `pvault set <id>` **without** a value: you'll type it hidden, so it never lands in your shell history. `pvault export` leaves personal fields out unless you add `--include-personal`. While unlocked, every CLI command that reads or changes data asks for your password again (interactive terminal only), so an agent running shell commands can't use your session.
+
+### On Windows
+
+pvault runs on Windows 10 and 11; Windows Hello needs Windows 11. Download `pvault_<version>_windows_amd64.zip` (or `_arm64`) from the releases, or build it with Go 1.26+:
+
+```powershell
+git clone https://github.com/liammaher/portale-sue.git
+cd portale-sue
+go build -o bin\pvault.exe .\cmd\pvault
+```
+
+Put `pvault.exe` in a folder on your PATH (e.g. `%LOCALAPPDATA%\Programs\pvault`), then in Windows Terminal or PowerShell:
+
+```powershell
+pvault init           # choose a profile password; save the secret key it prints
+pvault unlock         # starts the local server
+pvault hello enable   # optional: Windows Hello instead of your password for data commands
+```
+
+- The vault lives in `%USERPROFILE%\.pvault`, a folder only your Windows account can open. The CLI talks to the server over a named pipe only you can open.
+- Passwords are typed in a console (Windows Terminal, PowerShell, cmd). Git Bash's terminal isn't one: run `winpty pvault ...` there.
+- `--keychain` saves tokens in Windows Credential Manager, and `pvault credential write` stores other secrets there (the PEC app password).
+- The release binaries aren't code-signed, so SmartScreen may warn the first time: choose More info, then Run anyway.
+- Windows support hasn't been run on Windows yet: [docs/design/windows.md](design/windows.md) is the checklist for that first run, and what's left.
+
+## What it stores
+
+| Category | Fields (examples) |
+|---|---|
+| `identity` | name, `codice_fiscale` (validated), date/place of birth, sex, citizenship |
+| `cie` | `numero` (CA12345AB, validated), issue/expiry date, issuing comune |
+| `residenza` / `domicilio` | `indirizzo` (via/piazza), `civico`, `interno` (flat number), `cap` (validated), `comune`, `provincia` (2-letter sigla, format checked), `data_inizio` (residenza only) |
+| `abitazione` | `titolo` (locatario, proprietario…), catasto `foglio`/`particella`/`subalterno`, `catasto_categoria` (A/2, validated), rendita, `superficie_calpestabile_mq`, APE class |
+| `locazione` | contract type, start/end dates (end tracked by `pvault expiring`), rent and deposit (sensitive), cedolare secca, RLI registration details, landlord's name, `locatore_codice_fiscale` and `locatore_iban` (validated) |
+| `utenze` | `luce_pod` and `gas_pdr` (validated), supplier and customer code per utility |
+| `tari` | `codice_contribuente`, declaration date and protocollo, taxed area and occupants |
+| contacts & bank | `identity.phone` (+39…), `identity.pec`, `financial.iban` (validated) |
+| `famiglia` | how each family member relates to you: `relazione` (mapped to ANPR codes), `stato_famiglia`, `a_carico_percentuale`, `genitori`, `rappresentanza`; your `intestatario_scheda` |
+| `business` | `partita_iva` (validated), `forma_giuridica` (validated), PEC, ATECO, regime fiscale, REA, CCIAA, capital, start/end dates, INPS/INAIL positions, PEC and DURC expiry, `qualita_dichiarante` (titolare / legale_rappresentante; personal vaults), sede legale address (`sede_legale_cap`, `sede_legale_provincia` validated) |
+| `locale` | the business premises: address, `titolo`, `data_inizio`, catasto data and `catasto_categoria` (C/1, validated), `superficie_mq`, `destinazione_uso` |
+| `immobile` | the property a pratica is about (building works, a client's flat; `luca:immobile`, a second one `immobile2`): address, catasto data and `catasto_categoria` (validated), `superficie_mq`, `destinazione_uso`, `titolo` (proprietario, comproprietario…) |
+| `albo`, `cassa`, `firma_digitale` | a professional's albo registration and pension fund; a digital signature's issuer and expiry |
+| `ruolo` | business vaults: what each person is to the business (`tipo`: titolare, socio, dipendente, cliente…), dates, quota, poteri |
+| `spid` (personal) | provider, livello, username, password, renewal date — plus `cie.pin` / `cie.puk` |
+| `permesso_soggiorno` | numero, tipo, questura, issue/expiry date |
+| `passaporto`, `patente`, `tessera_sanitaria` | numero, issuing authority/country, expiry date |
+
+`pvault schema` lists every recommended field. You can add any `category.field` of your own.
+
+### Your family
+
+Keep your spouse's, children's or parents' data in the same vault: each family member has the same categories as you under a prefix, e.g. `leo:identity.codice_fiscale`, `leo:cie.data_scadenza`, documents in `leo:cie`. Only the home (`abitazione`, `locazione`, `utenze`, `tari`) and your `pratiche` are yours alone.
+
+```sh
+pvault person add giulia --relazione moglie --nome Giulia
+pvault person add leo --relazione figlio --nome Leo --data-nascita 2019-05-01
+pvault set leo:famiglia.genitori io,giulia      # who holds responsabilità genitoriale
+pvault set leo:famiglia.stato_famiglia si       # lives with you (stato di famiglia)
+pvault set leo:cie.data_scadenza 20/11/2026     # tracked by pvault expiring as "cie (leo)"
+pvault person list                              # relazione, age, stato di famiglia, a carico
+pvault person remove giulia                     # refused while another field still names her; with Touch ID
+                                                # the prompt reads "read, change and delete everything about giulia"
+pvault person migrate --dry-run                 # turn old nucleo_familiare.membro<N> fields into people
+```
+
+Relationships are recorded relative to you, as ANPR records them relative to the intestatario della scheda; each procedure's playbook decides who counts (stato di famiglia for TARI, the ISEE nucleo, dependants for the 730). The onboarding page (`pvault ui`) has a person switcher and an "Aggiungi persona" form. Removing a member deletes their fields and documents and revokes the agent tokens that named them.
+
+### A business vault
+
+A business (an SRL, a studio, a ditta with employees or clients) gets its own vault, separate from yours: its own password, server, port, Touch ID and backups. Every command takes `--vault <name>` first.
+
+```sh
+pvault --vault studio init --impresa             # ~/.pvault-studio, on its own port (pvault --vault studio status shows it)
+pvault --vault studio unlock
+pvault --vault studio set business.denominazione "Studio Bianchi"
+pvault --vault studio set business.forma_giuridica srls
+pvault --vault studio person add bianchi --ruolo "titolare, legale rappresentante" --nome Anna --cognome Bianchi
+pvault --vault studio set bianchi:albo.numero 1234
+pvault --vault studio person add rossi --ruolo cliente --nome Mario
+pvault --vault studio person add edil --ruolo "impresa esecutrice" --denominazione "Edil SRL"
+pvault --vault studio person list                # each person's ruolo
+```
+
+The vault's own data is the business's (`business.*`, `locale.*`, `pratiche.*`); people — the titolare, soci, employees, clients, suppliers — each have their own fields under a slug and a `ruolo` instead of `famiglia`. A business vault never holds other people's SPID/CieID accounts or PINs: each person logs in with their own. The onboarding page (`pvault --vault studio ui`) shows an Impresa section and a Persone section. See `docs/design/business-vaults.md` for the model.
+
+```sh
+pvault set identity.codice_fiscale "RSSMRA85T10A562S"
+pvault set permesso_soggiorno.data_scadenza 15/12/2026     # stored as 2026-12-15
+pvault set spid.password                                   # prompts hidden; stored as personal — only you can read it
+pvault set-sensitivity spid.password sensitive             # refused — credentials can only be personal
+```
+
+## Document scans
+
+```sh
+pvault doc add permesso_soggiorno ~/Desktop/permesso.pdf   # encrypted, max 20 MB
+pvault doc list
+pvault doc get <id> --out /tmp/permesso.pdf                # decrypted copy, owner-only, never overwrites
+pvault doc delete <id>
+```
+
+After importing, delete or securely archive the unencrypted originals.
+
+## Expiry tracking
+
+```sh
+pvault expiring          # expired or expiring in the next 90 days
+pvault expiring 365
+```
+
+It lists every `*data_scadenza` field and the deadline of every open pratica (see the pratica skill below).
+
+```
+passaporto           2026-09-30  EXPIRED 24 days ago
+permesso_soggiorno   2026-12-15  in 52 days
+```
+
+## Backups
+
+```sh
+pvault backup --to ~/Library/Mobile\ Documents/com~apple~CloudDocs/pvault-backups   # set the folder, back up now
+pvault backup                             # back up now
+pvault restore <file>.pvbackup --check    # verify a backup unlocks, without restoring
+pvault restore <file>.pvbackup            # recreate ~/.pvault (only if it's missing or empty)
+```
+
+Once a folder is set, the vault backs itself up a minute after each change and when it locks; `pvault status` shows the last backup or why it failed. Each `.pvbackup` holds the database and documents, encrypted again under your vault key, so even field names and the audit log are hidden; a cloud folder is fine. It keeps the 10 newest plus one per day for 30 days.
+
+The secret key is **not** in the backup: restoring needs your password and the secret key you saved at `pvault init`. Service tokens aren't either, so a token revoked after a backup never comes back; create new ones after a restore. `pvault restore <file> --check --ask-key` lets you type the saved key to test that your copy is right.
+
+## Giving an agent access
+
+Create a token for each agent, scoped to what it needs:
+
+```sh
+pvault create-service-token tari-agent --scope "identity.*,residenza.*" --ttl 2h
+pvault create-service-token archiver   --scope "residenza.*" --access append
+pvault list-service-tokens
+pvault revoke-service-token <token_prefix>
+```
+
+| Option | Default | Meaning |
+|---|---|---|
+| `--scope` | required | `category.*`, exact `category.field`, `category.documents`, or `*`. These reach only your own data; for family members add a prefix: `leo:cie.*`, `leo:*` (everything about leo), `*:identity.*` (you and every member). `*` reaches everyone |
+| `--access` | `read` | `append` = may add new fields/documents but never overwrite or delete; `write` = full |
+| `--max-sensitivity` | `sensitive` | `critical` fields (e.g. payment cards) stay hidden unless you opt in; `personal` is never available |
+| `--ttl` | `24h` | maximum 90 days |
+| `--keychain` | — | save the token in your Keychain (macOS) or Credential Manager (Windows) under this name instead of printing it, revoking the token it replaces |
+
+Agent activity never keeps the vault unlocked: it auto-locks after 30 minutes without *your* activity.
+
+### MCP server (Claude and other MCP clients)
+
+Build it from this repo (the `personal-vault-mcp` package on npm is unrelated; don't install it):
+
+```sh
+cd mcp && npm ci && npm run build
+```
+
+```json
+{
+  "mcpServers": {
+    "vault": {
+      "command": "node",
+      "args": ["/path/to/portale-sue/mcp/dist/index.js"],
+      "env": { "VAULT_KEYCHAIN_SERVICE": "pvault-mcp" }
+    }
+  }
+}
+```
+
+With that config, `pvault create-service-token claude --scope "residenza.*" --ttl 2h --keychain pvault-mcp` grants access mid-session, with no restart and no token on screen. On Windows the same works through Credential Manager; add `"PVAULT_BIN": "C:\\path\\to\\pvault.exe"` to `env` if `pvault.exe` isn't on PATH. Elsewhere, set `"VAULT_TOKEN": "<token>"` instead.
+
+The tools are listed in [mcp/README.md](../mcp/README.md#tools), with the read-only PEC tools that appear when `PEC_ADDRESS` is set. The MCP server only ever uses the token you give it, and `vault_document_add` and `vault_sign_request` only read files from `~/Downloads` (configurable with `VAULT_IMPORT_DIRS`).
+
+### Claude Code setup
+
+[`claude/`](../claude/) has optional pieces that make Claude Code use the vault safely:
+
+- **Vault skill** ([`claude/skills/vault/SKILL.md`](../claude/skills/vault/SKILL.md)): how to check the vault, read or change fields through the MCP tools, ask for a narrow short-lived token when it needs one, and send you to the web UI in your own browser rather than one Claude controls. Link it for all projects, from your main checkout (not a temporary git worktree, or the link breaks when the worktree is removed), so it stays in step with the code:
+
+  ```sh
+  mkdir -p ~/.claude/skills && ln -s "$PWD/claude/skills/vault" ~/.claude/skills/vault
+  ```
+
+- **Pratica skill** ([`claude/skills/pratica/SKILL.md`](../claude/skills/pratica/SKILL.md)): runs an Italian procedure end to end (research, gap check against the vault, filling the form or portal, handing you the login, signature, payment and sending, then tracking the reply). Before researching, it looks the procedure up in the [pratiche-napoli](https://github.com/liammaher/pratiche-napoli) library (from GitHub, or a local clone at `$PRATICHE_NAPOLI_DIR`). Each procedure gets a playbook in [`claude/skills/pratica/playbooks/`](../claude/skills/pratica/playbooks/) after its first run, so later runs follow it. Playbooks hold field IDs, never your data. Open procedures are tracked in the vault as `pratiche.<slug>_<campo>` fields, and their deadlines show in `pvault expiring`. Link it the same way, so new playbooks land in this repo:
+
+  ```sh
+  ln -s "$PWD/claude/skills/pratica" ~/.claude/skills/pratica
+  ```
+
+- **Permission rules** ([`claude/settings.example.json`](../claude/settings.example.json)): deny rules that stop Claude's own tools from reading `~/.pvault/` (and a business vault's `~/.pvault-<name>/`) or Keychain passwords (including the MCP token), so it goes through the MCP's scope and sensitivity checks. Merge the `permissions.deny` list into `~/.claude/settings.json`; don't replace the file.
+
+The rules match command text, so they stop direct or accidental access, not a determined attempt (a script that reads the Keychain internally isn't caught). For a hard boundary, also enable Claude Code's sandbox with `~/.pvault` in `sandbox.filesystem.denyRead`.
+
+Whatever a token allows, Claude sees: values returned by the MCP tools enter the conversation like any other text. What it never sees is your password, your secret key, `personal`-tier items (login secrets such as SPID/CIE credentials or a PIN) unless you approve them by fingerprint (see Touch ID), and anything outside the token's scope or after it expires.
+
+### Touch ID (macOS)
+
+Touch ID needs a build from source: the release archives carry neither the helper nor the hardened-runtime signature it requires of `pvault`. `make build` also builds `bin/pvault-touchid`, a small signed helper; keep it next to `pvault` (`make install` copies both). Then:
+
+```sh
+pvault touchid enable    # asks for your password once, then a fingerprint
+```
+
+From then on `pvault unlock` and every data command ask for your fingerprint instead of your password, and typing the password stays the fallback. Each prompt is worded from the exact request and covers only that command for 2 minutes, e.g. *"pvault-touchid" is trying to read spid.password from your vault for 2 minutes*. Commands Claude runs from its shell show the same prompt, so Claude can ask and you approve with a touch.
+
+How it works: the password sits in your login Keychain in an item only this exact helper build may read; any other program would make macOS ask for your login password. Apple's fingerprint-locked Keychain items need a paid developer signature, so the helper checks Touch ID itself before reading the item. It never prints the password: it sends it only to the `pvault` build you enabled Touch ID with, over the vault's private socket (`~/.pvault/run/pvault.sock`), and hands back only a short, scoped token. So after rebuilding or moving `pvault` or the helper, run `pvault touchid enable` again, then `pvault lock` and `pvault unlock`; until then a server left running from the old build is refused. `pvault touchid disable` removes the saved password.
+
+### Windows Hello (Windows)
+
+On Windows 11, Windows Hello (face, fingerprint or PIN) does the same job:
+
+```sh
+pvault hello enable      # asks for your password once
+```
+
+From then on data commands ask Windows Hello instead of your password, with a prompt worded from the exact request, e.g. *pvault wants to read spid.password from your vault for 2 minutes.* Here the vault server shows the prompt itself and issues only that grant, so no password is saved anywhere; `pvault unlock` still takes your password. `pvault hello status` shows whether it's on; `pvault hello disable` turns it off.
+
+## Security model
+
+```
+Profile password + 128-bit secret key
+  → Argon2id (64 MB, 3 iterations) → vault key (memory only, zeroed on lock)
+  → HKDF per category → AES-256-GCM per field, and per document (bound to its ID)
+```
+
+- The server listens on 127.0.0.1 only and rejects non-loopback `Host` headers (DNS rebinding).
+- The CLI sends your password only over a private Unix socket (`~/.pvault/run/pvault.sock`; on Windows a named pipe only you can open) and only after checking that the server on it is this same `pvault`, so a program squatting on port 7200 while the vault is down never sees it. (The onboarding page still uses the port; browsers can't use sockets.)
+- No session token is ever written to disk; the CLI and onboarding page get short-lived grants by re-entering the password (or approving with Touch ID). Wrong passwords are rate-limited.
+- Service tokens are stored hashed; scope, sensitivity cap and access level are enforced server-side.
+- Sensitivity tiers: `public` < `standard` < `sensitive` < `critical` < `personal`. Agent tokens can be capped up to `critical`; `personal` is reachable only by your own session, or by a Touch ID prompt you approve. Login secrets (any field whose name has a word like pin, puk, password or otp: `spid.password`, `fisconline.pin`) can only be stored as `personal`, and SPID/CieID categories default to it. Field IDs are lower-case.
+
+**What it can't protect against:** malware or an agent running as your macOS user can still stop the vault, read `~/.pvault/secret.key` (useless without your password), or tamper with the `pvault` binary to capture your password. Keep the vault locked when you're not using it.
+
+**On automating government portals:** the vault prepares data; it doesn't log in for you. SPID and CIE credentials are strictly personal — authenticate yourself, and use each portal's official delegation (e.g. Agenzia delle Entrate intermediaries) for anything done on someone else's behalf.
+
+## More
+
+- [docs/usage.md](usage.md) — full CLI and HTTP API reference, including:
+  - [signing a filled form](usage.md#signing-forms-the-sign-gate) with your handwritten signature, after you review the exact file (`pvault sign`)
+  - [Naples addresses](usage.md#naples-addresses-municipalità-quartiere-asl): municipalità, quartiere and distretto ASL, worked out offline (`pvault locate`)
+  - [the file index](usage.md#finding-files-elsewhere-file-index): where your files are on disk and in OneDrive, SharePoint, Google Drive or Dropbox, linked to people and pratiche (`pvault files`)
+  - [retention](usage.md#retention): in a business vault, what may be due for deletion, once you set the periods (`pvault retention`)
+- [mcp/README.md](../mcp/README.md) — MCP server setup and errors
+- `make test` — run the test suite (race detector on)
+
+## License
+
+MIT — see [LICENSE](../LICENSE). Original work © Cyrus Goh ([lovincyrus/personal-vault](https://github.com/lovincyrus/personal-vault)); Italian extensions and security changes © Liam Maher.

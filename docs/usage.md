@@ -399,7 +399,7 @@ POST /vault/backup                       # { dir? } → { path } (your session o
 
 ## Security Model
 
-How the keys are derived is in the [README](../README.md#security-model).
+How the keys are derived is in [pvault.md](pvault.md#security-model).
 
 - Profile password is never stored, unless you turn on Touch ID (`pvault touchid enable`): then it is kept in your login Keychain, readable only by the signed `pvault-touchid` helper
 - Secret key lives at `~/.pvault/secret.key` (mode 0600), never in the database or a backup
