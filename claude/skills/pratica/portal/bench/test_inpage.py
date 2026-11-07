@@ -178,7 +178,7 @@ def main():
     sha = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (planimetria, ricevuta)}
     answers = {"den": "PIZZERIA FITTIZIA DI GENNARO FITTIZIO", "planimetria": str(planimetria),
                "ricevuta": str(ricevuta), "impresa": "EDIL FITTIZIA DI MARCO ESEMPIO"}
-    # What the pane can carry (256 KB of files at most), for the sealed runs that stop and resume:
+    # What the pane can carry (16 KB of files at most), for the sealed runs that stop and resume:
     # the tab keeps the sealed values in sessionStorage, which a 3 MB drawing would overflow.
     tiny = tmp / "tiny.pdf"
     tiny.write_bytes(b"%PDF-1.4 tiny\n")
@@ -1014,7 +1014,7 @@ def main():
         browser.close()
 
     def pane_limit():
-        # Over 256 KB the pane's run.js carries what to pick, not bytes; a batch (pick=False),
+        # Over 16 KB the pane's run.js carries what to pick, not bytes; a batch (pick=False),
         # with no one to pick for each run, still refuses.
         values = run.Values(answers, fields={"x:ruolo.tipo": "titolare"})
         _, run_js = run.page_scripts(steps(base), values)
@@ -1022,10 +1022,22 @@ def main():
         try:
             run.page_scripts(steps(base), values, pick=False)
         except run.StepError as e:
-            assert "256 KB" in str(e), str(e)
+            assert "16 KB" in str(e), str(e)
         else:
             raise AssertionError("3 MB of files went into run.js for a batch")
-    case("over 256 KB the pane's run.js names the files to pick; a batch still refuses", pane_limit)
+        # Under the old 256 KB but over one pane call (2026-11-07): picked, so run.js stays one call,
+        # sealed or clear; tiny files still ride in it.
+        mid = tmp / "mid.pdf"
+        mid.write_bytes(b"%PDF-1.4\n" + os.urandom(30 * 1024))
+        for code in (None, run.new_code()):
+            files = run.page_files(steps(base), run.Values(answers | {"planimetria": str(mid), "ricevuta": str(mid)},
+                                                           fields={"x:ruolo.tipo": "titolare"}), code=code)
+            assert len(files["run.js"].encode()) <= run.RUN_JS_LIMIT, (code, len(files["run.js"]))
+            if code is None:
+                assert '"picked":true' in files["run.js"] and '"b64"' not in files["run.js"], files["run.js"][:300]
+        small_js = run.page_files(steps(base), run.Values(small, fields={"x:ruolo.tipo": "titolare"}))["run.js"]
+        assert '"b64"' in small_js and '"picked"' not in small_js, "tiny files no longer ride in run.js"
+    case("over 16 KB the pane's run.js names the files to pick and stays one call; a batch still refuses", pane_limit)
 
     with sync_playwright() as pw:
         browser = pw.chromium.launch()

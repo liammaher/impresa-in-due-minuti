@@ -84,7 +84,7 @@ lasts as long as the portal keeps it.
 
 A `kind: file` field attaches a file: its value is a path (usually an {{ask.x}}), and
 its bytes travel in run.js. With `page` they pass through the conversation, so all of a
-run's files together may be at most 256 KB (PAGE_FILES_LIMIT); `run` evaluates run.js
+run's files together may be at most 16 KB (PAGE_FILES_LIMIT: run.js is one pane call); `run` evaluates run.js
 itself and takes any size. Over that, `page` carries each file's name, size and sha256
 instead (`picked`): before the run starts the runner shows a box on the portal's page where
 the person chooses them, and keeps only those whose bytes are the ones pre-flight read, so
@@ -169,7 +169,13 @@ DUG_DETTAGLIO = frozenset((
 # run.js for the pane is one tool call's text: a receipt or a small scan, not a planimetria.
 # Larger files need another route into the page (docs/north-star.md, open question 7).
 REHEARSAL_DRAFT = "PROVA NON INVIARE"
-PAGE_FILES_LIMIT = 256 * 1024
+# run.js, files and all, is one pane call (about 40 KB, 2026-11-04) that Claude copies: it
+# carries 16 KB of files at most (a receipt, a small scan); more are picked in the page. Until
+# 2026-11-07 it was 256 KB, which no call could take. Pre-flight's `pick` reads the same limit.
+PAGE_FILES_LIMIT = 16 * 1024
+RUN_JS_LIMIT = 30_000
+# A batch (bench/rerun.py) loads from a picked file, not a call: its own limit.
+BATCH_FILES_LIMIT = 256 * 1024
 # What impresainungiorno takes in one slot: "Max: 9,77 MB" beside each, 10,000 KB.
 SLOT_MAX_BYTES = 10_000 * 1024
 FILE_TYPES = {".p7m": "application/pkcs7-mime", ".pdf": "application/pdf"}
@@ -2310,21 +2316,46 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=N
             raise StepError(f"the attachments come to {size // 1024} KB, more than the {files_limit // 1024} KB "
                             "run.js can carry in the pane: let the person pick them in the page, or use `run`")
         if size > files_limit:
-            # Too big to carry: every file the run attaches is chosen in the page, so the person
-            # picks them all once, from the job's folder, and none is in the conversation.
-            for f in files:
-                data = base64.b64decode(f.pop("b64"))
-                f.update(size=len(data), sha256=hashlib.sha256(data).hexdigest(), picked=True)
+            to_pick(files)
     proc = steps["procedure"]
     if blocks:
         # Its "+" blocks as this case counts them: a case with other counts has other steps, so
         # they are stored apart in the pane (the same counts, the same key).
         proc += "#" + hashlib.sha256(json.dumps(skeleton["sections"], sort_keys=True).encode()).hexdigest()[:8]
     runner_js, steps_js, stored = pane_parts(proc, skeleton)
+    run_js = clear_or_sealed(proc, vals, resume, code)
+    carried = [v for s in vals["sections"] for v in s if isinstance(v, dict) and "b64" in v]
+    if files_limit is not None and pick and carried and len(run_js.encode()) > RUN_JS_LIMIT:
+        # run.js is one pane call, copied by Claude: files that would push it past one call are
+        # picked in the page with the rest (2026-11-07: up to 256 KB rode in run.js, a call takes 40).
+        to_pick(carried)
+        run_js = clear_or_sealed(proc, vals, resume, code)
+    if files_limit is not None and pick and len(run_js.encode()) > RUN_JS_LIMIT:
+        raise StepError(f"run.js is {len(run_js.encode()) // 1024} KB without its files, more than one pane call "
+                        f"takes ({RUN_JS_LIMIT // 1000} KB): use `run`")
+    origin = re.match(r"https?://[^/]+", steps["logged_in"])[0]
+    files = {"install.js": runner_js + steps_js + "'installed'\n", "runner.js": runner_js, "steps.js": steps_js}
+    fetch = fetch_script(source, proc, skeleton, stored)
+    if fetch:
+        files["fetch.js"] = fetch
+    return files | {"check.js": check_script(stored, origin, {k: "fetch.js" for k in stored} if fetch else None),
+                    "run.js": run_js}, stored
+
+
+def to_pick(files):
+    """Every file the run attaches is chosen in the page instead, so the person picks them all
+    once, from the job's folder, and none is in the conversation."""
+    for f in files:
+        data = base64.b64decode(f.pop("b64"))
+        f.update(size=len(data), sha256=hashlib.sha256(data).hexdigest(), picked=True)
+
+
+def clear_or_sealed(proc, vals, resume, code):
+    """run.js: the run's values in the clear (checked by sha256), or sealed under the code."""
     load = "if (!window.__pv) (0, eval)(localStorage.getItem('pv-runner'));\n"
     if code:
         plain = json.dumps({"vals": vals, "resume": resume or {}}, ensure_ascii=False, separators=(",", ":"))
-        run_js = load + f"__pv.startSealed({json.dumps(proc)}, {json.dumps(seal(plain.encode(), code), separators=(',', ':'))})\n"
+        return load + f"__pv.startSealed({json.dumps(proc)}, {json.dumps(seal(plain.encode(), code), separators=(',', ':'))})\n"
     else:
         # Claude copies run.js into the pane by hand, and a long one can arrive changed (2026-11-07:
         # four `false` of 124 dropped, and the run looked for a box this case hasn't): it carries
@@ -2335,13 +2366,7 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=N
         # one spread, it is a few characters to copy, and the check still reads every value.
         short = re.sub(r"false(?:,false){4,}", lambda m: f"...Array({m.group().count('false')}).fill(false)", args)
         run_js = load + RUN_CHECKED.format(args=short, sha=json.dumps(hashlib.sha256(args.encode()).hexdigest()))
-    origin = re.match(r"https?://[^/]+", steps["logged_in"])[0]
-    files = {"install.js": runner_js + steps_js + "'installed'\n", "runner.js": runner_js, "steps.js": steps_js}
-    fetch = fetch_script(source, proc, skeleton, stored)
-    if fetch:
-        files["fetch.js"] = fetch
-    return files | {"check.js": check_script(stored, origin, {k: "fetch.js" for k in stored} if fetch else None),
-                    "run.js": run_js}, stored
+    return run_js
 
 
 # run.js in the clear: the run starts only with the bytes run.py wrote (see page_bundle).

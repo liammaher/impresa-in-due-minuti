@@ -652,7 +652,7 @@ data pass `--plain`; `bench/rerun.py` builds its scripts without a code. Where n
 
 ## Large files: the person picks them
 
-In the pane run.js carries at most 256 KB of files (`PAGE_FILES_LIMIT`). Over that, `run.py page`
+In the pane run.js carries at most 16 KB of files (`PAGE_FILES_LIMIT`; 256 KB until 2026-11-07, which no pane call of about 40 KB could take, and run.js stays under 30 KB, `RUN_JS_LIMIT`). Over that, `run.py page`
 puts each of the run's files in run.js as `{name, type, size, sha256, picked: true}`, and pre-flight
 lists them under `pick`. The runner starts by drawing a box over the portal's page (`askFiles`,
 beside the code's `askCode`) that names them with their sizes, takes the files or the job's folder
