@@ -29,21 +29,25 @@ documenti, basta dire «è una prova, inventa i dati».
 
 ## Installazione
 
+La guida passo passo, da mandare a un collega: **https://liammaher.github.io/portale-sue/**
+
 Serve un piano Claude a pagamento (Pro, Max, Team o Enterprise). Nell'app Claude per
 computer, senza terminale:
 
-1. Apra **Customize** e la scheda **Plugins**.
-2. Clicchi **Add**, poi **Add marketplace**, e scriva `liammaher/portale-sue`.
-3. Trovi Portale SUE nell'elenco e clicchi **Install**.
-4. Sul marketplace attivi **Sync automatically**: così riceve da solo ogni aggiornamento, anche
-   quando il portale cambia e una pratica va rimappata.
+1. Apra **Personalizzazione** (Customize) e la scheda **Plugin**.
+2. Clicchi **Aggiungi** (Add), poi **Aggiungi marketplace** (Add marketplace) e **Aggiungi da un repository**
+   (Add from a repository), scriva `liammaher/portale-sue` nella casella, lo scelga nell'elenco sotto e
+   clicchi **Sincronizza** (Sync).
+3. Apra Portale SUE, tra i **Nuovi plugin**, e clicchi **Aggiungi** (Add).
+4. Per aggiornarlo (Portale SUE cambia quando cambia il portale): **Aggiungi** → **Gestisci marketplace**
+   (Manage marketplaces) → **⋯** accanto a portale-sue → **Verifica aggiornamenti** (Check for updates).
+   Lo faccia ogni tanto e prima di una pratica importante. Un avviso che propone **Concedi accesso** a
+   GitHub lo può chiudere: non serve.
 
-Se l'app mostra ancora una versione vecchia di Portale SUE anche dopo **Update**, rimuova il
-marketplace, chiuda e riapra l'app e lo aggiunga di nuovo (punto 2): a volte l'app tiene una copia
-vecchia (2026-11-07: una prova finita male su una versione superata).
-
-I nomi dei menu sono quelli dell'app in inglese. In uno studio con piano Team o Enterprise basta che
-lo aggiunga l'amministratore: arriva a tutti.
+Tra parentesi i nomi dell'app in inglese. In uno studio con piano Team o Enterprise basta che lo
+aggiunga l'amministratore: arriva a tutti. Se dopo **Verifica aggiornamenti** vede ancora una versione
+vecchia, rimuova il marketplace (**Rimuovi**, stesso menu), chiuda e riapra l'app e lo aggiunga di nuovo
+(punto 2).
 
 Poi apra nell'app la cartella dei Suoi lavori, con una sottocartella per ogni lavoro. I dati dello
 studio li chiede Claude alla prima pratica, una volta sola.
