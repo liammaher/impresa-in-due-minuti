@@ -9,8 +9,8 @@ open source.
 
 Dopo l'installazione scriva **«Fammi vedere una prova»**. Claude compila sul portale vero una CILA
 di prova, con committente, studio e documenti inventati, senza farLe domande: Lei accede con SPID,
-e in un paio di minuti vede la bozza «PROVA NON INVIARE - CILA di prova» compilata e la pagina di
-riepilogo. Poi la cancelli da «Pratiche in bozza». Anche su un Suo caso, se non ha ancora i
+e in un paio di minuti vede sul portale la bozza «PROVA NON INVIARE - CILA di prova» compilata.
+Poi la cancelli da «Pratiche in bozza». Anche su un Suo caso, se non ha ancora i
 documenti, basta dire «è una prova, inventa i dati».
 
 ## Cosa copre, e cosa no
@@ -81,8 +81,8 @@ installi da python.org.
 4. Acceda con SPID nel browser dell'app e scriva a Claude «fatto». Claude compila la bozza: non
    tocchi la pagina finché non Le scrive. Poi confronta l'anteprima del portale con i documenti.
 <!-- /no-vault -->
-5. Quando la bozza è pronta, legga la pagina di riepilogo: cosa resta da fare a Lei, ogni
-   controllo fatto, ogni valore inserito.
+5. Quando la bozza è pronta, Claude Le scrive in poche righe cosa controllare e cosa resta a Lei
+   sul portale: l'anteprima, le dichiarazioni, la firma, il pagamento e l'invio.
 6. Dopo l'invio, Claude Le dice le prossime scadenze e la pratica che di solito segue.
 
 ## Dove vanno i dati dei Suoi clienti

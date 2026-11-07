@@ -23,8 +23,8 @@ test data; say that you don't invent data (in a test you do). The tecnico and pr
 invented too, though they log in with their own SPID: the portal takes a made-up procuratore
 (the live Prova of 2026-11-06 filled it). Never make, send or show a file (the Prova's own PDFs
 are attached by the compilation; they never see or pick them), and never list the data you
-invented: the review page has it. No file rules, nothing to pay, sign
-or send: the point is that they see a whole pratica filled, fast.
+invented. No file rules, nothing to pay, sign or send: the point is that they see a whole
+pratica filled, fast.
 
 ## The Prova
 
@@ -58,15 +58,13 @@ or send: the point is that they see a whole pratica filled, fast.
 3. Wait for their «fatto» (the portal is open since step 1). There is no code to type (`--plain`): skip step 4.2. Then steps
    4.3 and 4.4 (the scripts, `__pv.wait`) and 4.6, save `JSON.stringify(__pv.last())` to `run/report.json`,
    and run `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova`. No check
-   against the documents: they are made up (`--prova` leaves those lines out, and calls the
-   portal's warnings on made-up values, such as the PEC, expected).
-4. Hand over in four lines, then send `run/review.html`:
-   "La bozza di prova è compilata sul portale in <T> secondi: ogni valore è stato riletto.
-   Nella pagina di riepilogo vede cosa ho compilato e cosa resterebbe a Lei.
-   Con una pratica vera parto dai documenti del Suo cliente e mi fermo sempre prima di dichiarazioni, firma, pagamento e invio.
-   Ora cancelli la bozza di prova da «Pratiche in bozza». Per una pratica vera mi scriva il lavoro in una riga."
-   (<T>: the report's `total_seconds`.) Nothing else: no verdict, no list of their steps, no
-   diritti, no procura, no second compilation.
+   against the documents: they are made up.
+4. Hand over with its `message`, as written, its two lines and nothing else:
+   "✅ CILA di prova compilata in <T>, con dati inventati.
+   Nulla da inviare: la cancelli da «Pratiche in bozza»."
+   No file, no list of values, no warnings (the portal's warnings on made-up values, such as the
+   PEC, are expected), no declarations' text, no list of their steps, no diritti, no procura, no
+   second compilation.
 
 ## Their own case, as a test
 
@@ -90,8 +88,8 @@ and open the portal (SKILL.md, step 4.1, without sending its line again). Then, 
    `studio.json`, used in place of `../studio.json` (`check.py studio.json values.json`). Never
    write the tecnico's own `../studio.json` with made-up data.
 3. Pre-flight with `--made-up`. Answer every open question yourself: the proposals as proposed,
-   the rest with the simplest case that keeps the pratica. Never ask; the review page shows what
-   you chose.
+   the rest with the simplest case that keeps the pratica. Never ask, and never list what you
+   chose.
 4. Invent every value it lists under `missing`, plainly fictitious ("Prova" in the names), into
    the job's `values.json`. `check.py` checks a codice fiscale's control character and date and a
    partita IVA's check digit: when it refuses one, make a valid one and run it again.

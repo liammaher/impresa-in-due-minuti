@@ -2,7 +2,7 @@
 
 How a pratica on impresainungiorno (the SUAP and SUE front office) goes from crawled to
 filled, as the 23 SUE recipes did. The crawl itself is in `catalogue/README.md`; the
-person-facing flow (pre-flight questions, the review page) is in the pratica skill. How far the
+person-facing flow (pre-flight questions, the closing lines in the chat) is in the pratica skill. How far the
 SUE's five most common cases fill, and why each part that doesn't is refused: `docs/sue-common-cases.md`.
 
 ## Adding a pratica
@@ -269,8 +269,9 @@ that also cites a Comune page may only confirm a national one there.
   80133 got as well, with no scala or interno), and foglio, particella, subalterno and categoria
   ("Attenzione! Dati catastali sconosciuti", not tried with a real parcel). The portal keeps each
   value, and a person couldn't clear the address one, so a warning never stops a run: the report's
-  `alerts` lists each by section and the box's label (no value), results.js counts them, and the
-  person's review shows them to check.
+  `alerts` lists each by section and the box's label (no value), results.js counts them, and
+  review.py's closing lines name each for the person to check (none in a Prova: made-up data
+  raises them).
 - **Required oddities.** The voltura's co-holder sex is two radio groups, each required: the
   section saves only with both ticked (the recipe says so in `yours`).
 - **Acknowledgements** in the person's name are `theirs` in the dictionary (their wording
@@ -575,28 +576,36 @@ those is signing or sending, so nothing there is the runner's: `FILING`'s `yours
 
 ## What the person reads before they declare
 
-The person reads the portal's own words, not Claude's summary, and in the window where they tick. A
-filled run (in the pane or in `run`) draws a review over the portal from what it holds in memory
-(`showReview`, inpage.js), so none of it passes through Claude:
+The person reads the portal's own words, not Claude's summary, on the portal, where they tick: its
+preview ("Visualizza anteprima") and each declarations section. A filled run leaves the draft open
+in its frame and draws nothing over it. Claude then says three things in the chat (`review.py`,
+`bench/test_review_check.py`): it worked, what to check (the `alerts`, and in the skill's check a
+value or file that doesn't match the documents), and what is left on the portal, numbered: the
+preview, the declarations, the second compilation when the case has one, signing, paying, sending.
+A Prova says two lines: done in so many seconds with made-up data, and delete the draft.
+
+Until 2026-11-07 a filled run drew a review over the portal (the declarations' text, the PDF, every
+value) and `review.py` wrote review.html. Both repeated what the portal already shows where the
+person ticks and signs, and were noise in a test; keeping values out of Claude, their reason, was
+dropped on 2026-11-05. The run still reads both, kept only in the run's private folder:
 
 - **The declarations.** After the fresh load, `readDeclarations` opens each section the steps file
   leaves out (`DECLARATIONS`) by its menu link, copies the open section's text (`li#corrente`'s
   `innerText`, minus the portal's Salva and Annulla) and each tick box's label and state (a radio is
   one box: its `_clone` input is skipped, its label is the one beside it), ticks nothing, and goes
-  back to the section the steps left open. A box already ticked is flagged. A section that won't
-  open is `declarations_note` in the report, never a stop. Held in `__pv.held().declarations`.
+  back to the section the steps left open. A section that won't open is `declarations_note` in the
+  report, never a stop. Held in `__pv.held().declarations`, never in the report.
 - **The portal's PDF preview.** `fetchPreview` does a plain GET of `/fnsuap/preview.do` (a steps file's
-  `preview_url` changes it) with the person's session and shows the PDF in the review. Pressing
-  "Visualizza anteprima" instead navigates the whole page to that PDF, which would end the run's page.
-  Not a PDF, or an error: `preview_note`, and the review says to press the button in the portal.
-- **Every value typed**, by section.
+  `preview_url` changes it) with the person's session. Pressing "Visualizza anteprima" instead
+  navigates the whole page to that PDF, which would end the run's page. Not a PDF, or an error:
+  `preview_note`. The skill reads it as text (`preview_text.js`, below) for the check.
 
-`run.py run` also writes the same to `private/` (declarations.json, anteprima.pdf, from
-`__pv.previewPdf()`) and into review.html. In the pane they stay in the page.
+`run.py run` writes both to `private/` (declarations.json, anteprima.pdf, from `__pv.previewPdf()`).
+In the pane they stay in the page.
 
 Seen on the real portal 2026-10-29 (pane, the SCIA rehearsal): all 7 declarations copied, every box
 unticked, the 9-page preview fetched (165 KB). Not yet seen: a real client's text (it may carry a
-name), a resumed run, the review in a narrow pane.
+name), a resumed run.
 
 ### The preview as text, for a check against the documents
 
@@ -637,8 +646,8 @@ and hold every value to the source documents.
   named right.
 - **The check.** The skill (step 5) holds each value of the preview to its document in
   `run/check.json` and saves `attachments.js`'s answer as `run/portal-files.json`; `review.py`
-  puts the mismatches first on the review page and matches each portal file to the job's own by
-  its bytes (`bench/test_review_check.py`).
+  makes a `⚠️` line of each mismatch and of each portal file whose bytes no file of the job has
+  (`bench/test_review_check.py`).
 
 Not yet seen: a SCIA or permesso preview (other forms, maybe other writers), a draft with
 accented values (the labels' "Località", "è" decode right; no value here had one), a real client's.
@@ -810,7 +819,7 @@ and results, no values) into `rerun.py --record -`: each run goes in its rehears
 table: schema_branches.py counts a box as filled on the portal only from there. Stopped runs are recorded too. Record a batch
 before bundling the next (a bundle clears the tab's results), and leave `--date` out for a batch
 run today: it defaults to today (a guessed date filed a batch under the day before, 2026-11-02).
-The batch clears the runner's review from the page when it ends. A run "unreached" is retried by nobody: bundle the
+The batch clears the runner's frame from the page when it ends. A run "unreached" is retried by nobody: bundle the
 batch's unreached names (results.js lists them) once it ends. "The page didn't load" on the big SCIA and SCIA
 alternativa combinations was the portal composing the pratica past act()'s 60 s ("Composizione della pratica",
 2026-11-05). The runner and the crawler now wait on what the portal shows, not on a clock from the click

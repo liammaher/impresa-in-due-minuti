@@ -452,5 +452,14 @@
   "browser": "pane",
   "case": "The Prova, runner and steps fetched by the page from the plugin's GitHub release (`fetch.js`, `plugin-v0.4.5`), after removing both from the pane's storage",
   "note": "**filled** in 106 s, 20 sections, wizard 8.8 s, fresh load 15.5 s, nothing picked; fetch.js installed both byte for byte. A first run.js copied by hand had lost four of its 124 `false` and stopped on Scheda anagrafica (a box the case hasn't, retried twice): run.js now carries its sha256 and writes runs of `false` as one spread"
+ },
+ {
+  "date": "2026-11-07",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 106.1,
+  "browser": "pane",
+  "case": "The Prova on 0.4.7 (no review drawn over the portal, the closing lines from `review.py --prova`), unreleased: runner and steps by `page --bundle` and `pick.js`, since fetch.js finds no `plugin-v0.4.7` release yet",
+  "note": "**filled** in 106 s, 20 sections, wizard 8.5 s, fresh load 15.3 s, 4 declarations read, preview PDF fetched; nothing drawn over the portal, no `__pv.review`, the draft left open in the frame; `review.py run --prova` said its two lines and wrote no file. 5 alerts (the made-up PEC, four boxes of the parcel), as one line each per section and warning in a real job's message"
  }
 ]

@@ -328,22 +328,17 @@ def shutil_rmtree(p):
     shutil.rmtree(p, ignore_errors=True)
 
 
-def bollo_chosen():
-    # The imposta di bollo route is a choice made in the person's name: the review lists it
-    # apart from the table of values, with the serials when marche are used.
+def second_run_shown():
+    # review.py's closing lines name the second compilation from shown.json: what this case attaches
+    # after the declarations, read from the steps before phase() keeps the first run's fields only.
     steps = copy.deepcopy(STEPS)
-    steps["asks"]["serial"] = {"type": "text", "question": "Serial?"}
-    steps["sections"].append({"section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo", "fields": [
-        {"kind": "radio", "label": "Il pagamento è dovuto e si intende assolvere l'obbligo tramite pagoPA"},
-        {"kind": "text", "label": "numero seriale (1)", "value": "{{ask.serial}}"}]})
-    shown = run.review_shown(steps, values(steps=steps, answers=ANSWERS | {"serial": "01234567890123"}))
-    assert shown["decisions"] == [{"section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo", "choices": [
-        "Il pagamento è dovuto e si intende assolvere l'obbligo tramite pagoPA", "numero seriale (1): 01234567890123"]}], shown["decisions"]
-    assert not run.review_shown(STEPS, values())["decisions"], "a pratica with no bollo section lists a decision"
-    filled = {"procedure": "x", "result": "filled", "sections": [], "total_seconds": 1, "values": [], "yours": []}
-    page = run.review.portal_review(filled | shown)
-    assert "Scelto a suo nome" in page and "tramite pagoPA" in page and "01234567890123" in page
-    assert "Scelto a suo nome" not in run.review.portal_review(filled | {"decisions": []})
+    steps["sections"].append({"section": "Allega documenti", "go": True, "fields": [
+        {"kind": "file", "label": "Procura speciale", "after_declarations": True}]})
+    first = run.phase(steps)
+    assert run.review_shown(first, values(steps=steps))["second_run"] == [], "phase() kept the procura"
+    shown = run.review_shown(first, values(steps=steps), steps)
+    assert shown["second_run"] == ["Procura speciale"] and "decisions" not in shown, shown
+    assert run.review_shown(STEPS, values())["second_run"] == []
 
 
 def checklist_forms():
@@ -1003,7 +998,7 @@ def short_message():
     assert short.startswith("Domande") and len(short) < len(message) / 2, short
     for words in ("Risposte che propongo", "Mi mancano", "vanno sistemati", "(PDF)", "Alla fine restano"):
         assert words not in short, (words, short)
-    assert f"({len(r['proposals'])} risposte, tutte nella pagina di riepilogo)" in short, short
+    assert f"({len(r['proposals'])} risposte): scriva «ok»" in short and "riepilogo" not in short, short
     assert short.rstrip().endswith("per vederle una per una."), short
     assert "Risposte che propongo" in message, message
 
@@ -1187,7 +1182,7 @@ CASES = [
     ("the wizard's description longer than its 60 characters is asked again at pre-flight", wizard_description_too_long),
     ("a .p7m is read: signed by the dichiarante, by someone else (a warning without any codice fiscale), or not a signature (not ready)", p7m_signer),
     ("Napoli's SUE: PDF/A, signed (.p7m or PAdES), plain names, else not ready; made-up files only warned; the SUAP unchecked", napoli_filing),
-    ("the imposta di bollo route is listed as a choice made in the person's name", bollo_chosen),
+    ("what the second compilation attaches is named for the closing lines", second_run_shown),
     ("a condition's words gate each other: a later question waits on the earlier answer (CILA contributo)", nested_when),
     ("a supports check with `if` applies, and is asked, only once its gate holds (permesso contributo)", gated_support),
     ("a premises or a client's property outside the Comune di Napoli is refused before anything opens", outside_napoli),

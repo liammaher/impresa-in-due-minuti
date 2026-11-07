@@ -90,8 +90,8 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      the page, each checked by sha256; a signed-only slot takes the person's .p7m, which the portal checks on
                      upload, and what the portal makes once the declarations are ticked, the procura,
                      goes in a second run, `--after-declarations`, which carries no other value, picks every
-                     file in the page and so needs no code: one code a pratica), never declares, pays or sends; a filled run draws the declarations' own text, the
-                     portal's PDF preview and every value over the portal (`run` also writes review.html); Claude never reads them. A label
+                     file in the page and so needs no code: one code a pratica), never declares, pays or sends; a filled run leaves the draft open and draws nothing over
+                     it (the declarations' text and the portal's PDF preview are read into the run's private folder). A label
                      names the boxes whose own text it is first (`nth` counts those), and a
                      section is read only once it is the open one. `run.py preflight` first: the steps file's
                      `supports:` (cases it maps), `rules:` (the library's rules tables, SUAP and SUE,
@@ -128,7 +128,8 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      private values file and proposed facts and answers, each with its source, for
                      the person to confirm (`accept`); Claude reads only intake.json, never the
                      documents' values (intake/README.md)
-  pratica/review.py  the page the person reviews: what's left for them, the checks, every value
+  pratica/review.py  the closing lines Claude says once a portal run ends (it worked, what to check,
+                     what is left), as JSON; for a fill.py form, the page the person reviews
 plugin/              the Portale SUE plugin for Cowork (docs/design/packaging.md): build.py copies the
                      runner, the rehearsals' steps files (as JSON: no packages in Cowork) and the
                      library into it; it stops unless each pratica's pre-flight matches the repo's.
@@ -490,7 +491,7 @@ CI runs `regress.py` against the library's main (`fill.yml`); the library runs i
 The portal runner has offline tests on a fake portal: `claude/skills/pratica/portal/bench/test_inpage.py`,
 run with the pratica venv's Python (`~/.cache/pratica-portal/venv`, Playwright's Chromium, headless; no
 network, vault or model); `bench/test_preview_text.py` the preview PDF's reader (`preview_text.js`),
-`bench/test_review_check.py` review.py's check against the documents; `bench/test_preflight.py` tests pre-flight on the SCIA rehearsal's files, `bench/test_gen.py`
+`bench/test_review_check.py` review.py's closing lines (the check against the documents as warnings); `bench/test_preflight.py` tests pre-flight on the SCIA rehearsal's files, `bench/test_gen.py`
 gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the SUE choice count
 (`branches.py --write` writes `docs/sue-branches.md`), `bench/test_portability.py` the national/Campania/Napoli
 split (`portability.py --write`, `docs/portability.md`), `bench/test_tolleranze.py` the asseverazioni's

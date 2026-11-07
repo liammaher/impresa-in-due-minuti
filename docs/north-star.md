@@ -15,7 +15,7 @@ source, for every city and every portal in the end.**
 Napoli and impresainungiorno come first. They are where the map is built and proved, not the limit.
 
 You log in yourself (SPID, in the Claude desktop app's browser). Claude then picks the procedure,
-checks what's missing, fills the portal, reads every value back and hands you a review page. You
+checks what's missing, fills the portal, reads every value back and tells you, in a few lines, what is left. You
 make the declarations, sign, pay and send.
 
 ## What doesn't bend
@@ -45,7 +45,8 @@ What the person should meet after installing, and what each step needs.
 4. **One sentence on privacy**: what Claude reads, and what goes straight to the form.
 5. **"Log in with SPID, then tell me."** In the desktop app's browser.
 6. **About a minute of run**, narrated in plain language, with no screenshot of a filled page.
-7. **A review page**: what's left for you, and every value. You sign and send.
+7. **A few lines in the chat**: it worked, what to check, what is left on the portal. You read the
+   portal's own preview and declarations there, sign and send.
 8. **A failure is specific and early.** A refusal says why and gives the manual steps; a changed
    portal can be reported as structure only (field labels and ids, never values). *(Reporting isn't
    built; question 11.)*
@@ -60,7 +61,7 @@ What the person should meet after installing, and what each step needs.
 | Fill, in the separate window (`run.py run`) | The run's `report.json`: per section, saved and read back, pass or fail and why (`empty`, `different`, `missing`); when it stops, a `snapshot` of the page (each box's id, label and whether it holds anything) | The values: `pvault get` is piped into the runner after your approval (Touch ID, Hello or password), no report holds one, a portal message that repeats one is scrubbed, and Claude has no handle on that window |
 | Fill, in the pane (`run.py page`) | The same report and snapshot; `run.js` as a sealed blob | The values: they travel sealed under a 15-character code that a window on your screen shows (not printed, not in a file, not in the arguments of anything Claude runs) and that you type into a box the runner opens on the portal's page. The box is masked and goes the moment the code is complete. No storage in the tab holds a value or the code in the clear. |
 | A run that stops | The report and snapshot above; `__pv.look()` in the pane | The page itself: no screenshot is saved, and the skill forbids reading a filled page |
-| Review | Nothing: the page is shown to you | `review.html` and `private/` (what each section typed, what a failed read-back wanted and found) are written for you; the skill sends the page and never opens either |
+| Hand-over | The closing lines `review.py` prints (the pratica's name, the time, the portal's warnings by box label, what is left) | `private/` (what each section typed, what a failed read-back wanted and found, the declarations' text, the portal's PDF), kept in the run's folder; the skill never opens it |
 | Login | Nothing | Your SPID or CIE credentials, which are `personal` tier and which you type yourself |
 
 **Where the promise doesn't hold** (found 2026-10-29):
@@ -82,14 +83,14 @@ What the person should meet after installing, and what each step needs.
 - **Browser reads after a fill: a rule in the pane, a fact in the window.** In the separate window
   Claude has no handle on the page. In the pane the skill forbids reading a filled page, and nothing
   enforces it.
-- **Files on disk: a rule.** `review.html` and `private/` hold the values for the person. Claude's
-  shell runs as the same user and could read them; the skill says to send the page and never open
-  either. Both are mode 0600/0700, which does not stop that (and Windows ignores the mode).
+- **Files on disk: a rule.** `private/` holds the values. Claude's shell runs as the same user and
+  could read it; the skill says never to open it. It is mode 0600/0700, which does not stop that
+  (and Windows ignores the mode).
 
 ## Where we stop
 
 In: choosing the pratica, checking the case against the law and the portal's rules, collecting what's
-missing, filling every section, attaching the files, reading everything back, the review page,
+missing, filling every section, attaching the files, reading everything back, what is left to you,
 tracking.
 
 Out, and the person's: the login, the declarations (false ones carry penal consequences for whoever

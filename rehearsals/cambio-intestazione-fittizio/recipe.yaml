@@ -2,7 +2,7 @@
 # (catalogue/F839/sections/sue-cambio-intestazione-cia-scia-dia.json). The CILA rehearsal's architect (with procura) and
 # client (rehearsals/cila-fittizia).
 procedure: napoli/comune/cambio-intestazione-cila-scia
-title: "Cambio d'intestazione of a CILA, SCIA or DIA, SUE Napoli (tecnico con procura)"
+title: "Cambio d'intestazione di una CILA, SCIA o DIA, SUE Napoli (tecnico con procura)"
 comune: F839
 sportello: sue
 crawl: sue-cambio-intestazione-cia-scia-dia
