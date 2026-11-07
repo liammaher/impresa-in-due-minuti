@@ -924,7 +924,8 @@ def main():
         def echoed():
             # A portal message that repeats a value is scrubbed from the error.
             PORTAL.reset()
-            r = fill(browser, base, steps(base, start="/portal.html?rename=1"), answers | {"impresa": "Ditta esecutrice"})
+            # "presa" is a value too: inside "Impresa" it isn't one, and the label stays readable.
+            r = fill(browser, base, steps(base, start="/portal.html?rename=1"), answers | {"impresa": "Ditta esecutrice", "den": "presa"})
             assert "expected the label Impresa esecutrice" in r["error"], r["error"]
             assert "ditta esecutrice" not in r["error"].lower() and "‹value›" in r["error"], r["error"]
         case("a portal label that repeats a value is scrubbed from the error", echoed)

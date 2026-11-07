@@ -185,6 +185,8 @@ jobs:
       # The marketplace file in the repository points at one release's commit of the plugin branch.
       # A pull request moves it to this one. If the repository doesn't let Actions open pull
       # requests, the release still stands: run plugin/pin_marketplace.py by hand.
+      # A pull request this token opens runs its checks only once a maintainer approves them
+      # (2026-11-07: "Some checks are waiting for approval", merge blocked): the body says how.
       - name: Open a pull request pinning the marketplace to this release
         continue-on-error: true
         env:
@@ -199,4 +201,4 @@ jobs:
           git push origin "$branch"
           gh pr create --base main --head "$branch" \
             --title "Marketplace: point at the $PLUGIN_VERSION plugin" \
-            --body "Pins .claude-plugin/marketplace.json to plugin-v$PLUGIN_VERSION (commit $PLUGIN_COMMIT on the plugin branch). Merge it and adding the marketplace liammaher/portale-sue gives this release."
+            --body "Pins .claude-plugin/marketplace.json to plugin-v$PLUGIN_VERSION (commit $PLUGIN_COMMIT on the plugin branch). Merge it and adding the marketplace liammaher/portale-sue gives this release. Its checks wait for approval (the workflow opened it): press Approve workflows to run, or gh api -X POST repos/$GITHUB_REPOSITORY/actions/runs/RUN_ID/approve; once they pass, an ordinary merge."

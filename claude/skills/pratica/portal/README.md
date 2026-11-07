@@ -678,7 +678,14 @@ case's steps from the file: fetch.js carries only the sections that differ from 
 byte for byte. Nothing of the job's is fetched or sent. `published()` finds the release from the
 plugin's `.claude-plugin/plugin.json`; the repo's own copy has none, so it writes no fetch.js.
 When fetch.js says `fetch failed` (no network, a host down, bytes other than released), the
-bundle below. Offline test: `bench/test_inpage.py` (`fetched`). run.js in the clear (`--plain`) carries the
+bundle below. Offline test: `bench/test_inpage.py` (`fetched`). On the portal (2026-11-07, the
+pane, logged in) both hosts answered the page's fetch and the Prova filled with nothing picked.
+To try it before a release: the URLs name `plugin-v<version>`, which exists only once released,
+so build with plugin.json's version still at the last release (its inpage.js and steps files must
+be the same bytes, or fetch.js says `fetch failed`); and the pane keeps the runner and steps
+across sessions, so remove `pv-runner` and the case's `pv-steps:` key from the portal's
+localStorage first, or check.js names only run.js and nothing is fetched. The pane's storage
+held 223 of our keys (8.6 MB) that day, with room for 20 MB more: nothing to prune. run.js in the clear (`--plain`) carries the
 sha256 of what it starts with and starts nothing on other bytes (`run.js arrived changed`): on
 2026-11-07 a 14 KB run.js copied into the pane lost four of its `false`, and the run looked for a
 box the case hasn't. A sealed one needs no check: its seal refuses any change.
