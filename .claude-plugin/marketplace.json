@@ -12,8 +12,8 @@
       "source": {
         "source": "github",
         "repo": "liammaher/portale-sue",
-        "ref": "plugin-v0.4.7",
-        "sha": "8bd577ea747c6b96ad193488d9da5fe8f168106f"
+        "ref": "plugin-v0.4.8",
+        "sha": "10d2a831d87948b4d238d66571cc2d44defdd4f7"
       }
     }
   ]
