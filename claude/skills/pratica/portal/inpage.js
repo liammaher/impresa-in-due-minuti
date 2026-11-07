@@ -85,8 +85,10 @@
       else if (v && typeof v === "object") add(v.name);
     };
     add([values.wizard, values.sections]);
+    // Whole words only: inside a longer word it isn't the value (2026-11-07: the name "Chiara"
+    // made the section "dati del dichiarante" read "di‹value›nte" in a stopped run's report).
     secrets = [...out].flatMap((s) => [s, norm(s)]).filter(Boolean).sort((a, b) => b.length - a.length)
-      .map((t) => new RegExp(esc(t).replace(/\s+/g, "\\s+"), "gi"));
+      .map((t) => new RegExp("(?<![\\p{L}\\p{N}])" + esc(t).replace(/\s+/g, "\\s+") + "(?![\\p{L}\\p{N}])", "giu"));
   }
   const scrub = (s) => secrets.reduce((t, rx) => t.replace(rx, "‹value›"), String(s));
   // Why a read-back failed, without what it wanted or found.

@@ -434,5 +434,23 @@
   "browser": "pane",
   "case": "Five units in four catasto groups and four other holders (`answers-quattro`, fixture `ugo` with a third plot `immobile5`; `r:`-`r4:` marta, bruno, giulia with her company, dario)",
   "note": "**filled** in 152 s, `bench/rerun.py` bundle: NCEU, NCT, NCEU, NCT by the group's \"+\", the fourth holder's row by its \"+\", nothing moved or loose"
+ },
+ {
+  "date": "2026-11-06",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 103.4,
+  "browser": "pane",
+  "case": "The Prova as the released plugin (0.4.3) ships it: `prova.py`, `--made-up --plain`",
+  "note": "**filled** in 103 s, 20 sections, wizard 8.4 s, fresh load 14.7 s; runner and steps (130 KB) by `page --bundle` from Downloads and `pick.js`, one file picked; 6 alerts, all the made-up PEC, address and catasto"
+ },
+ {
+  "date": "2026-11-07",
+  "answers": "answers-p6.json",
+  "result": "filled",
+  "seconds": 105.8,
+  "browser": "pane",
+  "case": "The Prova, runner and steps fetched by the page from the plugin's GitHub release (`fetch.js`, `plugin-v0.4.5`), after removing both from the pane's storage",
+  "note": "**filled** in 106 s, 20 sections, wizard 8.8 s, fresh load 15.5 s, nothing picked; fetch.js installed both byte for byte. A first run.js copied by hand had lost four of its 124 `false` and stopped on Scheda anagrafica (a box the case hasn't, retried twice): run.js now carries its sha256 and writes runs of `false` as one spread"
  }
 ]

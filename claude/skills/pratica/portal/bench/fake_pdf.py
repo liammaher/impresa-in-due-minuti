@@ -5,7 +5,7 @@ and a made-up address, as every file under rehearsals/*/files/ reads.
     python3 claude/skills/pratica/portal/bench/fake_pdf.py OUT.pdf "Title" ["Address"] [--size MB]
 
 --size pads it with a stream of random bytes to that many MB, the weight of a real drawing, for a
-run that tries files over the pane's 256 KB (the person picks them: portal/README.md, "Large files").
+run that tries files over the pane's 16 KB (the person picks them: portal/README.md, "Large files").
 Such files stay out of the repo (a folder outside it, as ~/Downloads/pv-pick-prova on 2026-11-04).
 """
 import argparse

@@ -49,16 +49,14 @@ or send: the point is that they see a whole pratica filled, fast.
    sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
      --answers answers.json --values run/values.json --made-up
    sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
-     --answers answers.json --values run/values.json --made-up --plain --out run \
-     --bundle ~/Downloads/portale-sue-prova.js
+     --answers answers.json --values run/values.json --made-up --plain --out run
    ```
-   Before `page`, the one line on the file it saves in Downloads (SKILL.md, step 4); `<name>` is
-   `prova` in the lines of step 4.3.
+   `<name>` is `prova` in the fallback of SKILL.md, step 4.3 (with `--made-up --plain`, as here).
    Pre-flight says `ready` (the build checks it); its warnings are the Prova's own, never for
    the tecnico. If it isn't ready, that is Portale SUE's fault: SKILL.md,
    **When Portale SUE itself goes wrong**.
 3. Wait for their «fatto» (the portal is open since step 1). There is no code to type (`--plain`): skip step 4.2. Then steps
-   4.3 and 4.4 (the scripts, `__pv.wait`) and 4.6 (delete the file), save `JSON.stringify(__pv.last())` to `run/report.json`,
+   4.3 and 4.4 (the scripts, `__pv.wait`) and 4.6, save `JSON.stringify(__pv.last())` to `run/report.json`,
    and run `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova`. No check
    against the documents: they are made up (`--prova` leaves those lines out, and calls the
    portal's warnings on made-up values, such as the PEC, expected).

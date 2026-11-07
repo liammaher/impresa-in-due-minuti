@@ -58,10 +58,9 @@ CHUNK = 40_000
 
 def values_of(run_js, proc):
     """The values run.js starts its run with."""
-    line = run_js.splitlines()[1]
-    head = f"__pv.start({json.dumps(proc)}, "
-    assert line.startswith(head) and line.endswith(")"), "run.js changed shape"
-    return line[len(head):-1]
+    args = run.run_args(run_js)
+    assert args[0] == proc, "run.js is another procedure's"
+    return json.dumps(args[1], ensure_ascii=False, separators=(",", ":"))
 
 
 def fnv1a(text):
@@ -157,7 +156,7 @@ def main_patch(steps_file, values, key, new_json, fallback):
                              capture_output=True, text=True, check=True).stdout
         old_steps = yaml.safe_load(old)
         v = run.Values(values.answers, fields=values.fields, asks=old_steps.get("asks"))
-        _, parts = run.page_bundle(run.phase(run.expand(old_steps, v), made_up=True), v, pick=False)
+        _, parts = run.page_bundle(run.phase(run.expand(old_steps, v), made_up=True), v, files_limit=run.BATCH_FILES_LIMIT, pick=False)
     except (subprocess.CalledProcessError, run.StepError, KeyError, ValueError):
         return None
     return parts.get(key) and run.patch_script(key, parts[key], new_json, fallback)
@@ -205,7 +204,7 @@ def main():
             continue
         try:
             # Made-up files: no slot that takes only signed files (the portal refuses the signature).
-            files, parts = run.page_bundle(run.phase(run.expand(steps, values), made_up=True), values, pick=False)
+            files, parts = run.page_bundle(run.phase(run.expand(steps, values), made_up=True), values, files_limit=run.BATCH_FILES_LIMIT, pick=False)
         except run.StepError as e:
             failed.append(f"{label}: {e}")
             continue

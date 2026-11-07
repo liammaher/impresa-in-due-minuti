@@ -652,7 +652,7 @@ data pass `--plain`; `bench/rerun.py` builds its scripts without a code. Where n
 
 ## Large files: the person picks them
 
-In the pane run.js carries at most 256 KB of files (`PAGE_FILES_LIMIT`). Over that, `run.py page`
+In the pane run.js carries at most 16 KB of files (`PAGE_FILES_LIMIT`; 256 KB until 2026-11-07, which no pane call of about 40 KB could take, and run.js stays under 30 KB, `RUN_JS_LIMIT`). Over that, `run.py page`
 puts each of the run's files in run.js as `{name, type, size, sha256, picked: true}`, and pre-flight
 lists them under `pick`. The runner starts by drawing a box over the portal's page (`askFiles`,
 beside the code's `askCode`) that names them with their sizes, takes the files or the job's folder
@@ -667,13 +667,34 @@ and a 2 MB file filled in 127 s from a folder picked once; the browser asks befo
 folder to the page. Offline tests: `bench/test_inpage.py` (a 3 MB file, a wrong one, a folder,
 Stop). The choice and its alternatives: docs/design/large-attachments.md.
 
-A pane without the runner (check.js names `runner.js`) can't take it in one call: it is about
-80 KB and a call about 40 KB (2026-11-04), and a long script copied through the conversation can
-arrive garbled (2026-10-30). `run.py page --bundle FILE` writes runner.js, steps.js and run.js as one
+A pane without the runner can't take it in one call: it is about 80 KB and a call about 40 KB
+(2026-11-04), and a long script copied through the conversation can arrive garbled (2026-10-30).
+From an installed plugin, `run.py page` writes `fetch.js` (9 KB for the Prova, 18 KB at most over
+the rehearsals' 315 cases), and check.js names it: the page downloads inpage.js and the pratica's
+steps file from the plugin's release on GitHub (`plugin-v<version>`, raw.githubusercontent.com,
+then cdn.jsdelivr.net; both let any page fetch them), checks each by sha256, and rebuilds this
+case's steps from the file: fetch.js carries only the sections that differ from it (choices,
+"+" blocks), each field the file has as a reference, and stores the result only if it is run.py's
+byte for byte. Nothing of the job's is fetched or sent. `published()` finds the release from the
+plugin's `.claude-plugin/plugin.json`; the repo's own copy has none, so it writes no fetch.js.
+When fetch.js says `fetch failed` (no network, a host down, bytes other than released), the
+bundle below. Offline test: `bench/test_inpage.py` (`fetched`). On the portal (2026-11-07, the
+pane, logged in) both hosts answered the page's fetch and the Prova filled with nothing picked.
+To try it before a release: the URLs name `plugin-v<version>`, which exists only once released,
+so build with plugin.json's version still at the last release (its inpage.js and steps files must
+be the same bytes, or fetch.js says `fetch failed`); and the pane keeps the runner and steps
+across sessions, so remove `pv-runner` and the case's `pv-steps:` key from the portal's
+localStorage first, or check.js names only run.js and nothing is fetched. The pane's storage
+held 223 of our keys (8.6 MB) that day, with room for 20 MB more: nothing to prune. run.js in the clear (`--plain`) carries the
+sha256 of what it starts with and starts nothing on other bytes (`run.js arrived changed`): on
+2026-11-07 a 14 KB run.js copied into the pane lost four of its `false`, and the run looked for a
+box the case hasn't. A sealed one needs no check: its seal refuses any change.
+
+The fallback: `run.py page --bundle FILE` writes runner.js, steps.js and run.js as one
 file (in the person's Downloads) and `pick.js`, a box on the portal's page where the person picks
 it once; it is checked by sha256 and evaluated, which starts the run (then, with big files, the
 files box). The batches' `bench/rerun.py --bundle` does the same for many runs.
-The skill always passes `--bundle ~/Downloads/portale-sue-<name>.js` and asks the app for the
+The skill passes `--bundle ~/Downloads/portale-sue-<name>.js` only after fetch.js failed, and asks the app for the
 Downloads folder when it can't write there (`could not write`, e.g. Cowork's sandbox): a tecnico
 never downloads or saves a file by hand (2026-11-06, a test where Claude sent files to download).
 The box names the file without its extension, and the skill deletes it after the run (it holds
@@ -737,7 +758,7 @@ the Registro Imprese: the dictionary's `made_up_stops`) isn't written into a bat
 on other values than the fixture's (an architect born abroad, from a copy of it) goes in the same
 batch as `NAME:ANSWERS.json:VALUES.json`; its result is `NAME/ANSWERS@VALUES` and isn't recorded. Pass `--bundle <file in Downloads>`, run `pick.js` in the pane, and the person picks
 that file once in the box it shows; it is checked by sha256, loaded once, and starts the batch.
-No way around the pick: the pane blocks the portal's page from fetching a local server
+A batch has no fetch.js (its steps aren't a released plugin's): it needs the pick. The pane blocks the portal's page from fetching a local server
 (`net::ERR_BLOCKED_BY_CLIENT`, tried 2026-11-01), and its file box can't be set by a script.
 A hidden pane slows the page's timers, so a script waiting inside the page outlasts the 45 s
 call limit (2026-11-01): `results.js` and catalogue.py's `status.js` wait only while the page

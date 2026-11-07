@@ -178,7 +178,7 @@ def main():
     sha = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in (planimetria, ricevuta)}
     answers = {"den": "PIZZERIA FITTIZIA DI GENNARO FITTIZIO", "planimetria": str(planimetria),
                "ricevuta": str(ricevuta), "impresa": "EDIL FITTIZIA DI MARCO ESEMPIO"}
-    # What the pane can carry (256 KB of files at most), for the sealed runs that stop and resume:
+    # What the pane can carry (16 KB of files at most), for the sealed runs that stop and resume:
     # the tab keeps the sealed values in sessionStorage, which a 3 MB drawing would overflow.
     tiny = tmp / "tiny.pdf"
     tiny.write_bytes(b"%PDF-1.4 tiny\n")
@@ -924,7 +924,8 @@ def main():
         def echoed():
             # A portal message that repeats a value is scrubbed from the error.
             PORTAL.reset()
-            r = fill(browser, base, steps(base, start="/portal.html?rename=1"), answers | {"impresa": "Ditta esecutrice"})
+            # "presa" is a value too: inside "Impresa" it isn't one, and the label stays readable.
+            r = fill(browser, base, steps(base, start="/portal.html?rename=1"), answers | {"impresa": "Ditta esecutrice", "den": "presa"})
             assert "expected the label Impresa esecutrice" in r["error"], r["error"]
             assert "ditta esecutrice" not in r["error"].lower() and "‹value›" in r["error"], r["error"]
         case("a portal label that repeats a value is scrubbed from the error", echoed)
@@ -1014,7 +1015,7 @@ def main():
         browser.close()
 
     def pane_limit():
-        # Over 256 KB the pane's run.js carries what to pick, not bytes; a batch (pick=False),
+        # Over 16 KB the pane's run.js carries what to pick, not bytes; a batch (pick=False),
         # with no one to pick for each run, still refuses.
         values = run.Values(answers, fields={"x:ruolo.tipo": "titolare"})
         _, run_js = run.page_scripts(steps(base), values)
@@ -1022,10 +1023,22 @@ def main():
         try:
             run.page_scripts(steps(base), values, pick=False)
         except run.StepError as e:
-            assert "256 KB" in str(e), str(e)
+            assert "16 KB" in str(e), str(e)
         else:
             raise AssertionError("3 MB of files went into run.js for a batch")
-    case("over 256 KB the pane's run.js names the files to pick; a batch still refuses", pane_limit)
+        # Under the old 256 KB but over one pane call (2026-11-07): picked, so run.js stays one call,
+        # sealed or clear; tiny files still ride in it.
+        mid = tmp / "mid.pdf"
+        mid.write_bytes(b"%PDF-1.4\n" + os.urandom(30 * 1024))
+        for code in (None, run.new_code()):
+            files = run.page_files(steps(base), run.Values(answers | {"planimetria": str(mid), "ricevuta": str(mid)},
+                                                           fields={"x:ruolo.tipo": "titolare"}), code=code)
+            assert len(files["run.js"].encode()) <= run.RUN_JS_LIMIT, (code, len(files["run.js"]))
+            if code is None:
+                assert '"picked":true' in files["run.js"] and '"b64"' not in files["run.js"], files["run.js"][:300]
+        small_js = run.page_files(steps(base), run.Values(small, fields={"x:ruolo.tipo": "titolare"}))["run.js"]
+        assert '"b64"' in small_js and '"picked"' not in small_js, "tiny files no longer ride in run.js"
+    case("over 16 KB the pane's run.js names the files to pick and stays one call; a batch still refuses", pane_limit)
 
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
@@ -1108,6 +1121,94 @@ def main():
             finally:
                 page.close()
         case("run.py page --bundle: runner, steps and run.js picked as one file start the run", picked_bundle)
+
+        def fetched():
+            # fetch.js: the page downloads the runner and the steps file from the released plugin
+            # (GitHub, two hosts) and rebuilds this case's steps byte for byte, so no one picks a
+            # file. A "+" list (expanded by its count) and a section this case drops (`when`),
+            # as real cases have; the hosts here are routed to the local files.
+            PORTAL.reset()
+            st = steps(base, start="/portal.html?liste=1")
+            st["sections"][1]["fields"] += [
+                {"kind": "text", "label": "Tipologia di atto", "anchor": "Tipologia di atto", "block": 1, "value": "{{ask.atto_1}}"},
+                {"kind": "add", "anchor": "Tipologia di atto", "block": "#N", "each": {"count": "{{ask.atti}}", "from": 2}},
+                {"kind": "text", "label": "Tipologia di atto", "anchor": "Tipologia di atto", "block": "#N", "value": "{{ask.atto_#K}}"}]
+            st["sections"].append({"section": "Solo con altri titolari", "when": "{{ask.altri}}", "fields": [
+                {"id": "altri_txt", "kind": "text", "label": "Altri", "value": "{{ask.den}}"}]})
+            src = tmp / "fetched-steps.json"
+            src.write_text(json.dumps(st, ensure_ascii=False, indent=2))
+            vals = run.Values(small | {"atti": "3", "atto_1": "uno", "atto_2": "due", "atto_3": "tre", "altri": ""},
+                              fields={"x:ruolo.tipo": "titolare"})
+            hosts = ("https://raw.githubusercontent.com/o/p/plugin-v9/", "https://cdn.jsdelivr.net/gh/o/p@plugin-v9/")
+            real = run.published
+            run.published = lambda path: [h + Path(path).name for h in hosts]
+            try:
+                files = run.page_files(json.loads(src.read_text()), vals, source=src)
+            finally:
+                run.published = real
+            assert "fetch.js" in files and len(files["fetch.js"]) < 10_000, len(files.get("fetch.js", ""))
+            served = {"inpage.js": Path(run.__file__).with_name("inpage.js").read_bytes(), src.name: src.read_bytes()}
+
+            def open_page(down=(), wrong=False):
+                page = browser.new_page()
+
+                def serve(route):
+                    url = route.request.url
+                    if url.startswith(tuple(down)):
+                        return route.fulfill(status=404, body="")
+                    body = served[url.rsplit("/", 1)[1]]
+                    route.fulfill(status=200, body=body + (b"//" if wrong else b""), headers={"Access-Control-Allow-Origin": "*"})
+                for h in hosts:
+                    page.route(h + "**", serve)
+                page.goto(base + "/")
+                return page
+            page = open_page()
+            try:
+                assert page.evaluate(files["check.js"]) == "run fetch.js, then run.js"
+                assert page.evaluate(files["fetch.js"]) == "installed"
+                assert page.evaluate(files["check.js"]) == "run run.js", "the steps or the runner aren't byte for byte"
+                page.evaluate(files["run.js"])
+                done = settle(page)
+                assert done["result"] == "filled", done.get("error")
+                got = {k.split(":")[-1]: v for k, v in PORTAL.fields.items() if "atto" in k}
+                assert got == {"atto1_txt": "uno", "atto2_txt": "due", "atto3_txt": "tre"}, got
+            finally:
+                page.close()
+            # The first host down: the second serves. Both down, or bytes other than released: the bundle.
+            for down, wrong, want in ((hosts[:1], False, "installed"), (hosts, False, "fetch failed"), ((), True, "fetch failed")):
+                page = open_page(down, wrong)
+                try:
+                    got = page.evaluate(files["fetch.js"])
+                    assert got.startswith(want), (down, wrong, got)
+                    if want != "installed":
+                        assert page.evaluate(files["check.js"]) == "run fetch.js, then run.js", "a refused file was stored"
+                finally:
+                    page.close()
+            # Where GitHub serves a file of the installed plugin; none for the repo's own copy.
+            plugin = tmp / "plugin"
+            (plugin / ".claude-plugin").mkdir(parents=True, exist_ok=True)
+            (plugin / ".claude-plugin" / "plugin.json").write_text(json.dumps({"version": "1.2.3", "repository": "https://github.com/o/p"}))
+            (plugin / "skills" / "s").mkdir(parents=True, exist_ok=True)
+            (plugin / "skills" / "s" / "inpage.js").write_text("")
+            assert run.published(plugin / "skills" / "s" / "inpage.js") == [
+                "https://raw.githubusercontent.com/o/p/plugin-v1.2.3/skills/s/inpage.js",
+                "https://cdn.jsdelivr.net/gh/o/p@plugin-v1.2.3/skills/s/inpage.js"], run.published(plugin / "skills" / "s" / "inpage.js")
+            assert run.published(Path(run.__file__).with_name("inpage.js")) == []
+            assert "fetch.js" not in run.page_files(steps(base), vals, source=src)
+            # A run.js copied by hand that lost a value starts nothing (2026-11-07 on the portal:
+            # four `false` dropped, and the run looked for a box this case hasn't).
+            PORTAL.reset()
+            page = open_page()
+            try:
+                page.evaluate(files["fetch.js"])
+                garbled = files["run.js"].replace(',"due"', "", 1)
+                assert garbled != files["run.js"]
+                assert page.evaluate(garbled) == run.RUN_CHANGED
+                assert page.evaluate("__pv.last()") is None and not PORTAL.fields, "a changed run.js started a run"
+                assert run.run_args(files["run.js"])[0].startswith("test/allegati#")
+            finally:
+                page.close()
+        case("fetch.js: the page downloads the runner and steps from the released plugin, byte for byte, or says to bundle", fetched)
 
         def bundle_unwritable():
             # Cowork's sandbox can't reach the person's Downloads until they allow it: a clear stop
