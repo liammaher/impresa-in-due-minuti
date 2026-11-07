@@ -1,6 +1,6 @@
 ---
 name: portale-sue-setup
-description: Configura Portale SUE su questo computer - installa l'archivio cifrato (pvault, verificato con il checksum che il plugin porta con sé), lo crea o lo apre in una pagina del browser e attiva Touch ID o Windows Hello, senza terminale. Use when the user says "configura Portale SUE", "set me up", asks to set up, install, open or update the archive (vault, pvault), or when a pratica needs the archive and it isn't installed, created, open or confirmable.
+description: Configura Portale SUE su questo computer - installa l'archivio cifrato (pvault, verificato con il checksum che il plugin porta con sé), lo crea o lo apre in una pagina del browser e attiva Touch ID o Windows Hello, senza terminale. Da usare quando l'utente scrive «configura Portale SUE» o «set me up», chiede di installare, aprire o aggiornare l'archivio (vault, pvault), o quando una pratica ha bisogno dell'archivio e questo non è installato, creato, aperto o confermabile.
 ---
 
 # Configurare Portale SUE

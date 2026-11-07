@@ -46,6 +46,18 @@ def main():
         assert said["displayName"] == "Portale SUE", said
         assert "pratiche edilizie" in said["description"] and "prepares" not in said["description"].lower(), said
 
+    # Each shipped skill's description is Italian: the app shows it, and writes its "Prova nella chat"
+    # prompt from it (2026-11-07: an English "Use when … see a demo" gave "show me a demo CILA").
+    import re
+    english = re.compile(r"\b(the|use|when|asks|wants|show|demo|test with|made-up|set me up|or update|it isn't)\b", re.I)
+    for skill in sorted((HERE / "portale-sue" / "skills").iterdir()):
+        if skill.name == build.TEST_SKILL:  # never shipped
+            continue
+        front = (skill / "SKILL.md").read_text().split("---")[1]
+        said = next(line for line in front.splitlines() if line.startswith("description:"))
+        plain = re.sub(r"«[^»]*»", "", said)  # what the tecnico may type, quoted, is theirs
+        assert not english.search(plain), f"{skill.name}: English in its description: {english.search(plain).group(0)!r}"
+
     with tempfile.TemporaryDirectory() as tmp:
         for vault in (True, False):
             plugin = Path(tmp) / str(vault)
