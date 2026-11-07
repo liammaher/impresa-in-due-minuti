@@ -669,13 +669,15 @@ def main():
                 assert ok, why
                 assert (folder / "anteprima.pdf").read_bytes().startswith(b"%PDF-1.4\n"), "not the portal's PDF"
                 assert (folder / "anteprima.pdf").stat().st_mode & 0o777 == 0o600
-                assert page.query_selector('[data-pv="review"] iframe[src^="blob:"]'), "the preview isn't on the review"
                 assert page.url.startswith(base + "/"), "the preview moved the page"
             finally:
                 page.close()
-        case("the portal's PDF is fetched with the person's session, kept private and shown on the review, with no navigation", preview_copied)
+        case("the portal's PDF is fetched with the person's session and kept private, with no navigation", preview_copied)
 
-        def review_drawn():
+        def nothing_drawn():
+            # 2026-11-07: the review drawn over the portal is gone. The person reads the portal's own
+            # preview and declarations on the portal, and Claude says in the chat what is left
+            # (review.py); the run still reads the declarations, for the run's private folder only.
             PORTAL.reset()
             values = run.Values(answers, fields={"x:ruolo.tipo": "titolare"})
             install, run_js = run.page_scripts(steps(base, start=decl_start), values, None)
@@ -687,23 +689,16 @@ def main():
                 while (report := page.evaluate("__pv.wait(5000)"))["result"] == "running":
                     pass
                 assert report["result"] == "filled", report.get("error")
-                inside = "document.querySelector('[data-pv=review]').shadowRoot"  # drawn in a shadow root
-                text = page.evaluate(f"{inside}.firstElementChild.nextElementSibling.innerText")
-                assert "Bozza salvata sul portale" in text and "nulla è stato dichiarato" in text.lower(), text[:200]
-                english = re.findall(r"\b(the|your|you|and|was|draft|saved|every|value|declarations?|show|download)\b", text, re.I)
-                assert not english, f"English on the review over the portal: {sorted(set(english))}"
-                assert "dichiara quanto segue" in text and "Per presa visione" in text, "the declaration isn't on the review"
-                assert "che i locali possiedono i requisiti di sorvegliabilità" in text, "the radio's own label is missing"
-                everything = page.evaluate(f"{inside}.textContent")  # the values sit in closed <details>
-                assert answers["den"] in everything and answers["impresa"] in everything, "the values typed aren't on the review"
+                assert page.query_selector('[data-pv="review"]') is None, "a review drawn over the portal"
+                assert page.evaluate("typeof __pv.review") == "undefined", "__pv.review() is still there"
+                assert page.query_selector('iframe[data-pv="runner"]'), "the draft isn't left open in the frame"
+                held = page.evaluate("__pv.held()")
+                assert "dichiara quanto segue" in json.dumps(held["declarations"]), "the declaration wasn't read"
                 assert "dichiara quanto segue" not in json.dumps(report), "the report carries the declaration"
-                page.click("text=Mostra la bozza")
-                assert page.query_selector('[data-pv="review"]') is None, "Mostra la bozza left the review up"
-                page.evaluate("__pv.review()")
-                assert page.query_selector('[data-pv="review"]'), "__pv.review() didn't draw it again"
             finally:
                 page.close()
-        case("a filled run draws the declarations and every value over the portal, none of it in the report", review_drawn)
+        case("a filled run draws nothing over the portal and leaves the draft open; the declarations stay out of the report",
+             nothing_drawn)
 
         def preview_missing():
             PORTAL.reset()
@@ -723,11 +718,9 @@ def main():
                 ok, why = run.capture_preview(page, folder)
                 assert not ok and "no preview" in why, (ok, why)
                 assert not (folder / "anteprima.pdf").exists()
-                assert "Non sono riuscito a copiarla" in page.evaluate("document.querySelector('[data-pv=review]').shadowRoot.textContent"), \
-                    "the review doesn't say it has no preview"
             finally:
                 page.close()
-        case("a portal that gives no preview is a note on the review, not a stop", preview_missing)
+        case("a portal that gives no preview is a note in the report, not a stop", preview_missing)
 
 
         def recovered():
@@ -1320,38 +1313,6 @@ def main():
         else:
             raise AssertionError("a missing file passed the plan")
     case("a file that isn't there stops the plan", missing)
-
-    def reviewed():
-        filled = {"procedure": "test/allegati", "result": "filled", "sections": [], "total_seconds": 3.0,
-                  "url": "https://example.invalid/d", "values": [], "yours": ["Firmare"]}
-        folder = tmp / "review"
-        (folder / "private").mkdir(parents=True, exist_ok=True)
-        decl = [{"section": "Dichiarazione di consapevolezza", "text": "Il sottoscritto dichiara il vero.",
-                 "boxes": [{"label": "Per presa visione", "kind": "checkbox", "ticked": False}]}]
-        (folder / "private" / "declarations.json").write_text(json.dumps(decl))
-        (folder / "private" / "anteprima.pdf").write_bytes(b"%PDF-1.4\nfinto\n")
-        page = run.review.portal_review(filled | {"declarations_read": 1, "preview_pdf": True}, folder)
-        assert "Il sottoscritto dichiara il vero." in page and "Le dichiarazioni che spunterà" in page
-        assert "1 copiate parola per parola dal portale; nessuna spuntata" in page, "no check that none is ticked"
-        assert "Scarica il PDF" in page and "L&#x27;anteprima PDF del portale copiata" in page
-        decl[0]["boxes"][0]["ticked"] = True
-        (folder / "private" / "declarations.json").write_text(json.dumps(decl))
-        page = run.review.portal_review(filled | {"declarations_read": 1}, folder)
-        assert "già spuntate prima che Lei le aprisse" in page and "Dichiarazione di consapevolezza" in page
-        # Nothing copied (the pane, or an older run): the page says so, and never shows a stand-in.
-        pane = run.review.portal_review(filled | {"declarations_read": 2}, tmp / "nowhere")
-        assert "Dichiarazioni: non copiate in questa compilazione" in pane, "no note for the pane"
-        assert "non è stata copiata" in pane and "Le dichiarazioni che spunterà" not in pane
-        stopped = run.review.portal_review(filled | {"result": "stopped", "error": "a reason for Claude"}, tmp / "nowhere")
-        assert "Dichiarazioni" not in stopped and "anteprima" not in stopped.lower(), "a stopped run reports on what it never reached"
-        assert "a reason for Claude" not in stopped and "si è fermata" in stopped.lower(), "the runner's reason on the person's page"
-        # The page the person reads is Italian: none of the words an English page would have.
-        english = re.compile(r"\b(the|your|you|and|of|was|draft|saved|every|value|left|declarations?)\b", re.I)
-        for doc in (page, pane, stopped):
-            text = re.sub(r"<[^>]+>", " ", doc.split("</style>", 1)[1])
-            hits = {w.lower() for w in english.findall(text)} - {"draft"}  # test/allegati, example.invalid/d
-            assert not hits, f"English on the review page: {sorted(hits)}"
-    case("the review page shows the declarations' text and the portal's PDF, or says it has neither", reviewed)
 
     server.shutdown()
     shutil.rmtree(tmp)

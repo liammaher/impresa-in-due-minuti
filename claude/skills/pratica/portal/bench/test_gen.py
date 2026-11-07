@@ -302,7 +302,7 @@ def _():
         assert bundle.index('sessionStorage.removeItem("pv-batch")') < bundle.index("window.pvBatchRun = ")
         loop = (t / "out" / "loop.js").read_text()
         assert "moved: r.moved || []" in loop and "r.snapshot.boxes" in loop and "gaps" in loop
-        assert 'querySelectorAll(\'[data-pv="review"]' in loop, "the batch leaves the review over the portal"
+        assert 'querySelectorAll(\'iframe[data-pv="runner"]' in loop, "the batch leaves the run's frame over the portal"
         queue = (t / "out" / "queue-0.js").read_text()
         check = (t / "out" / "check.js").read_text()
         # Each steps file by name; one that differs from main's in some sections by its patch first,

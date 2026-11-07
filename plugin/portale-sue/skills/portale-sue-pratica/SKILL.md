@@ -47,7 +47,6 @@ your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
   | studio.json, values.json | i dati dello studio, i dati del lavoro |
 <!-- /no-vault -->
   | slug, field id, JSON, hash, sha256, .js, a path | (never) |
-  | review.html | la pagina di riepilogo |
   | browser pane, built-in browser | il browser dell'app |
   | unsupported, refused | non posso prepararla, perché … |
 
@@ -87,7 +86,7 @@ your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
 <!-- vault -->
 - **You never see their data.** Values go from the archive and the documents to the portal
   without passing through this conversation: never print `pvault get`'s output, never open the
-  documents, `run/intake/private/`, `run/private/` or `run/review.html`. You read only what the
+  documents, `run/intake/private/` or `run/private/`. You read only what the
   tools print for you (which fields exist or are missing, never their values).
 - **No guesses.** Every value comes from the archive, a document or the tecnico.
 <!-- /vault -->
@@ -112,19 +111,19 @@ your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
 5. The files are checked (pre-flight again). Nothing else to ask, unless they changed a proposal.
 6. They log in with SPID in the app's browser; you fill (step 4).
 <!-- vault -->
-7. The review page and a short list of their steps (step 5).
+7. A few lines here: it is done, what to check, what is left to them (step 5). No file.
 <!-- /vault -->
 <!-- no-vault -->
-7. You check the draft against the documents; then the review page and a short list of their
-   steps (step 5).
+7. You check the draft against the documents; then a few lines here: it is done, what to check,
+   what is left to them (step 5). No file.
 <!-- /no-vault -->
 8. After they send it: the next dates, and the next pratica (step 7).
 
 <!-- vault -->
-Between 3 and 7 they hear nothing from you but the login, the code and the review page.
+Between 3 and 7 they hear nothing from you but the login, the code and those few lines.
 <!-- /vault -->
 <!-- no-vault -->
-Between 3 and 7 they hear nothing from you but the login and the review page.
+Between 3 and 7 they hear nothing from you but the login and those few lines.
 <!-- /no-vault -->
 
 ## La prova
@@ -393,8 +392,8 @@ are in the JSON:
   (a checklist: "Altre voci"); if picked, a second question with the next ones, the same way.
   Never drop an option.
 - A short header for each (at most 12 characters: "Paesaggio", "Terre/rocce").
-- The proposals: one question, "Per il resto imposto il caso più comune (<n> risposte, tutte
-  nella pagina di riepilogo). Va bene?", options "Sì, va bene" and "Voglio rivederle"; on the
+- The proposals: one question, "Per il resto imposto il caso più comune (<n> risposte). Va
+  bene?", options "Sì, va bene" and "Voglio rivederle"; on the
   second, list them, a line each, as pre-flight's `message` has them.
 - Free text and dates are not choices: ask them in the text after the call. Files: **After they
   answer**.
@@ -447,18 +446,18 @@ opened, or an `error`, is asked as before, with the tool.
   Napoli's SUE, DD 501/2026: not PDF/A, not signed digitally, or a name with spaces, accents or
   signs; the fix is in the "Questi file vanno sistemati" block of `message`): the checklist's
   documents. `pick`: they choose the files once in a box on the portal's page; say so in one line.
-- `yours` and `second_run`: what is left to them comes with the review page (step 5); now, at
+- `yours` and `second_run`: what is left to them comes in the closing lines (step 5); now, at
   most one line.
 - `ready` with no `message`: nothing to ask. Say in one line what you read and the pratica, and
   go on.
 
 <!-- vault -->
 Only when it says `ready` go on. From here they hear nothing from you but the login, the code
-and the review page.
+and the closing lines.
 <!-- /vault -->
 <!-- no-vault -->
 Only when it says `ready` go on. From here they hear nothing from you but the login and the
-review page.
+closing lines.
 <!-- /no-vault -->
 
 ## 4. The compilation
@@ -512,12 +511,10 @@ step 3 says how. Never send them a file, never ask them to download or save one,
    `stopped`. `waiting` means the page waits for the tecnico (the files to pick in its box, or a
    code to type): say so once, gently.
 <!-- vault -->
-5. Save `JSON.stringify(__pv.last())` to `run/report.json`, then `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run`
-   writes `run/review.html`.
+5. Save `JSON.stringify(__pv.last())` to `run/report.json`. Then step 5.
 <!-- /vault -->
 <!-- no-vault -->
-5. Save `JSON.stringify(__pv.last())` to `run/report.json`. The review page comes after the
-   check (step 5).
+5. Save `JSON.stringify(__pv.last())` to `run/report.json`. Then the check (step 5).
 <!-- /no-vault -->
 6. If you saved a file in Downloads (step 3), delete it (`rm ~/Downloads/portale-sue-<name>.js`):
    it holds the job's values.
@@ -544,12 +541,17 @@ three minutes; then stop, leave the draft saved, and say plainly what's left.
 <!-- vault -->
 ## 5. Hand over
 
-Lead with what is done: "La bozza è salvata sul portale e ogni valore è stato riletto." Send
-`run/review.html` (show it, never open it): what's left for them, every check, every value as it
-went on the portal, the declarations' own words. A report's `alerts` (the portal's warnings
-beside boxes it kept) are each one line for them to check. Then their steps (`yours`), numbered,
-in order: the first sentence of each only (the page has them whole). Then, as the last line, always: "Prima di dichiarare, firmare e inviare, controlli con attenzione ogni valore e ogni allegato nella pagina di riepilogo e sul portale: la pratica la presenta Lei." Stop:
-they review, declare, sign, pay and send.
+`sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run` prints its `message`: say it as
+written, its lines as they are, and nothing else. It is three things: did it work (`✅`), what
+they must check (a `⚠️` line for each warning the portal put beside a value it kept, or a value or
+file that doesn't match the documents; none, no line), and what is left to them on the portal,
+numbered (the second compilation among them when the case has one). Send no file, list no
+values and never paraphrase a declaration: they read the portal's own preview and declarations
+on the portal, where they tick them. Asked how to pay or what a step involves, answer from its
+`yours` (their steps in full). Stop: they check, declare, sign, pay and send.
+
+A compilation that stopped and wasn't recovered prints no `message`: say plainly what's left
+(step 4).
 <!-- /vault -->
 <!-- no-vault -->
 ## 5. Check against the documents, then hand over
@@ -560,8 +562,7 @@ Comune will receive, before you tell the tecnico anything:
 1. Run `${CLAUDE_SKILL_DIR}/portal/preview_text.js` as one JavaScript call on the draft, its text
    exactly as the file has it. It returns the portal's own preview of the pratica as text
    (`text`: a line per row, labels above their values, `[ X ]` for a ticked box), or `error`
-   (then the review page says the preview wasn't compared: tell them to read it in the portal,
-   "Visualizza anteprima").
+   (then nothing is compared: go to 3; the closing lines' first step, the preview, is theirs).
 2. Hold every value in it that comes from the job (people, codici fiscali, dates, addresses, the
    catasto, the works, amounts, the tecnico and the studio; not the portal's own wording) to its
    source: the document and page you noted (step 2), or what the tecnico wrote. Same meaning is
@@ -575,21 +576,24 @@ Comune will receive, before you tell the tecnico anything:
 3. Run `${CLAUDE_SKILL_DIR}/portal/attachments.js` the same way. `{"opening": true}` means it
    opened Allega documenti: wait for the page, then run it again. Save what it returns as
    `run/portal-files.json`.
-4. `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run` writes `run/review.html`: it
-   matches each file on the portal to the job's own by its bytes.
+4. `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run` prints the closing lines: it
+   matches each file on the portal to the job's own by its bytes, and makes a `⚠️` line of each
+   row of `run/check.json` that doesn't match and each file no file of the job has.
 
 A value that doesn't match is never fixed by hand on the portal. Say it first, with what the
 portal and the document each say; once they say which is right, correct `values.json` or
 `answers.json` and compile again (a new bozza: the old one they delete from Pratiche in bozza).
 
-Then lead with what is done and what the check found: "La bozza è salvata sul portale. Ho
-confrontato l'anteprima del portale con i documenti: 61 valori, tutti coincidono; gli 8 allegati
-sono identici ai Suoi file." (a mismatch first, if any). Send `run/review.html`: what's left for
-them, every check, every value and its document, the files, the declarations' own words. A
-report's `alerts` (the portal's warnings beside boxes it kept) are each one line for them to
-check. Then their steps (`yours`), numbered, in order: the first sentence of each only (the page
-has them whole). Then, as the last line, always: "Prima di dichiarare, firmare e inviare, controlli con attenzione ogni valore e ogni allegato nella pagina di riepilogo e sul portale: la pratica la presenta Lei." Stop: they review, declare, sign, pay and
-send.
+Then say its `message` as written, its lines as they are, and nothing else. It is three things: did it work (`✅`), what
+they must check (a `⚠️` line for each warning the portal put beside a value it kept, or a value or
+file that doesn't match the documents; none, no line), and what is left to them on the portal,
+numbered (the second compilation among them when the case has one). Send no file, list no
+values and never paraphrase a declaration: they read the portal's own preview and declarations
+on the portal, where they tick them. Asked how to pay or what a step involves, answer from its
+`yours` (their steps in full). Stop: they check, declare, sign, pay and send.
+
+A compilation that stopped and wasn't recovered prints no `message`: say plainly what's left
+(step 4).
 <!-- /no-vault -->
 
 ## 6. The second compilation, after the declarations
@@ -615,7 +619,8 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${
 Write the signed files' paths into `answers.json` first (pre-flight with `--after-declarations`
 says which keys). It opens the draft by its name and attaches those files alone. It carries no
 other value, so there is **no code** this time: they choose the signed files once in the box on
-the page. Same calls as step 4, from `check.js`.
+the page. Same calls as step 4, from `check.js`, saving the report to `run2/report.json`; then
+`review.py run2` and its `message`, as in step 5.
 
 ## 7. After they send it
 

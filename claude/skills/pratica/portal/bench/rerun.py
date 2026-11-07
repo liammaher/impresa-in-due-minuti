@@ -298,9 +298,9 @@ if (!pvAlready) window.pvBatchRun = (async () => {
       ...(r.alerts ? { alerts: r.alerts } : {}) });
     sessionStorage.setItem("pv-batch", JSON.stringify(done));
   }
-  // Each filled run drew the person's review over the portal: nobody reads it in a batch, and it
-  // covers what the next click needs (2026-10-31).
-  document.querySelectorAll('[data-pv="review"], iframe[data-pv="runner"]').forEach((e) => e.remove());
+  // Each filled run leaves its frame over the portal: nobody reads it in a batch, and it covers
+  // what the next click needs (2026-10-31).
+  document.querySelectorAll('iframe[data-pv="runner"]').forEach((e) => e.remove());
   return "done";
 })().finally(() => { window.pvBatchBusy = false; });
 pvAlready ? "a batch is already running in this tab: nothing started" : `started: ${(window.pvBatch || []).length} queued`

@@ -82,7 +82,7 @@ remote MCP server, listed together in the directory
 
 **The plugin** (`plugin/`, `plugin/README.md`, built by `plugin/build.py`):
 
-- **The skill:** the job from the client's documents to the review page, and the rules that
+- **The skill:** the job from the client's documents to the closing lines, and the rules that
   never bend (all or nothing; the architect's declarations, signature, payment and sending
   stay theirs; no credentials; the built-in browser).
 - **The runner and the map:** `run.py`, `inpage.js` and every rehearsal's steps file (44,
@@ -125,8 +125,7 @@ listing all read it. 2026-10-29: 38 available, 6 mapped, 22 guide.
 The user learns what to do from the product, at the moment it matters, not from a manual:
 the listing and the first job (`studio.json`, once); every request (pre-flight and
 `get_pratica`'s one line: go, paused, coming soon, or advice only); and "what can you do?"
-anywhere (`coverage`). An MCP App could show that as a card in the conversation, and later
-the review page.
+anywhere (`coverage`). An MCP App could show that as a card in the conversation.
 
 **No vault in the first version.** The client's documents stay in the Cowork folder for that
 job. `studio.json` at the folder's root holds the studio and the architect (`business.*`, the
@@ -153,7 +152,8 @@ the next content work.
 3. The browser opens on impresainungiorno; they log in with SPID.
 4. Claude runs `check.js`, what it names, then `run.js`: the wizard, every section, the
    attachments, the read-back, the fresh load.
-5. They read the review page (`review.py`): what's left for them and every value.
+5. Claude says what is left to them in a few lines (`review.py`); they read the portal's own
+   preview and declarations on the portal.
 6. They make the declarations, sign the procura and the modules with their firma digitale,
    and send.
 
@@ -189,7 +189,7 @@ Then measure:
 
 **3. What a pratica costs on Pro.** Chat, Cowork and the browser share one allowance, and browsing
 uses it faster than chat. Count the tokens of the SCIA rehearsal in Cowork, from the first message to
-the review page; the target is several pratiche in one 5-hour window.
+the closing lines; the target is several pratiche in one 5-hour window.
 
 ## Things to settle
 
@@ -207,7 +207,7 @@ the review page; the target is several pratiche in one 5-hour window.
   ([SUAP Molise](https://suap.regione.molise.it/faq/posso-allegare-alla-pratica-suap-una-procura-non-firmata/printable/pdf),
   [Unioncamere Veneto](https://www.unioncamereveneto.it/wp-content/uploads/2021/10/20211006-Suap-Veneto-5.pdf)).
   Find what Napoli's SUAP and SUE accept, put it in the library's `contract/signing.json`
-  (north-star question 2), and have the review page say which.
+  (north-star question 2), and have the closing lines say which.
 - **Distribution.** The `.plugin` file first (`plugin/build.py`), for the Cowork tests and
   the first architects; then the directory: the plugin from a public repo and the connector
   as its own listing, paired, so one "Add" gives both and every release reaches everyone.

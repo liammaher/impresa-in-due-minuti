@@ -10,12 +10,12 @@ body:
         > **Incolla solo struttura**: il nome della sezione, le etichette e gli id dei campi.
         > **Mai** valori, nomi, codici fiscali, indirizzi, dati catastali, numeri di pratica o screenshot.
         > Il report del runner (`run/report.json`) e `__pv.look()` non contengono valori, e un'etichetta che ne ripete uno è oscurata:
-        > rileggili comunque prima di incollare. Non incollare mai `run/review.html` né niente da `run/private/`.
+        > rileggili comunque prima di incollare. Non incollare mai niente da `run/private/`.
         >
         > **Paste structure only**: the section's name, the fields' labels and ids.
         > **Never** values, names, codici fiscali, addresses, cadastral data, case numbers or screenshots.
         > The runner's report (`run/report.json`) and `__pv.look()` hold no values, and a label that repeats one is scrubbed:
-        > read them again before pasting anyway. Never paste `run/review.html` or anything from `run/private/`.
+        > read them again before pasting anyway. Never paste anything from `run/private/`.
   - type: input
     id: pratica
     attributes:

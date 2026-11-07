@@ -48,13 +48,13 @@
       them unless --close. Writes DIR/report.json (timings, what each section kept, and when
       it stops a `snapshot` of the page with no value in it): no value is in it, so Claude
       may read it. DIR/private/ (kept.json, held.json, shown.json, declarations.json,
-      anteprima.pdf) and DIR/review.html (the page the person reviews: what's left for them,
-      the steps file's `yours`, the declarations' own text, the portal's PDF preview, every
-      value, and what a failed read-back wanted and found) are the person's, for Claude to
-      send and never to read. There is no screenshot: a failed page holds the person's data.
+      anteprima.pdf: what each section typed, what a failed read-back wanted and found, the
+      declarations' own text, the portal's PDF preview) stays in the run's folder for
+      debugging. It prints review.py's message: did it work, what to check, what is left.
+      There is no screenshot: a failed page holds the person's data.
       Reading the declarations opens their sections and copies their text, ticking nothing;
       the preview is the PDF the portal's "Visualizza anteprima" shows, fetched with the person's session. Neither can stop a saved draft:
-      a failure is a note (`declarations_note`, `preview_note`) in the report and the page.
+      a failure is a note (`declarations_note`, `preview_note`) in the report.
 
 A run that stops says where (report.json `at`: the wizard screen, or the section and
 field). `page` or `run` with --resume REPORT picks it up on the same draft, from that
@@ -120,7 +120,7 @@ sys.path[:0] = [str(Path(__file__).resolve().parent.parent / "fill"), str(Path(_
 sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
 import fill  # noqa: E402  (its vault client: the pilot over TCP, a real vault over its socket)
 import rules  # noqa: E402  (the library's rules tables: which pratica a case needs)
-import review  # noqa: E402  (the page the person reviews)
+import review  # noqa: E402  (what Claude says when a run ends)
 
 # Never clicked, whatever a steps file says: these are the person's taps.
 FORBIDDEN = re.compile(r"pago\s*pa|\binvia\b|\bpaga\b|procedi con il pagamento|firma", re.I)
@@ -131,10 +131,6 @@ DECLARATIONS = re.compile(
 
 # A codice fiscale as it sits in a firma digitale certificate's subject ("TINIT-RSSMRA80A01H501U").
 CF = re.compile(r"\b[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]\b")
-# Choices the form takes in the person's name and the review page lists apart from the long table:
-# how the imposta di bollo is settled (pagoPA, or marche whose serial numbers go in the form).
-DECIDED = re.compile(r"imposta di bollo", re.I)
-
 # The Scheda anagrafica's "Toponimo (DUG)" list (crawled: these and ALTRO). Any other street type
 # is ALTRO, and the portal then requires it in "Dettaglio DUG": a list of 190 that is the national
 # toponimo list (InfoCamere's `specie`, 194 in schema/mod_acconciatori_estetisti_apertura_v1.0.7-fields.json:
@@ -1575,8 +1571,8 @@ def message(report, asks, held_need=None, short=False):
     if short:
         if proposals:
             n = len(proposals)
-            blocks.append([f"Per il resto imposto il caso più comune ({'una risposta' if n == 1 else f'{n} risposte'}, "
-                           "tutte nella pagina di riepilogo): scriva «ok», o «rivediamole» per vederle una per una."])
+            blocks.append([f"Per il resto imposto il caso più comune ({'una risposta' if n == 1 else f'{n} risposte'}): "
+                           "scriva «ok», o «rivediamole» per vederle una per una."])
         return "\n\n".join("\n".join(b) for b in blocks)
     if use:
         blocks.append(["Risposte che propongo (scriva «ok», o mi dica cosa cambiare):"] + use)
@@ -2570,18 +2566,16 @@ def drift(out, steps, resume):
                                                     "draft": resume["url"]}, indent=2, ensure_ascii=False))
 
 
-def review_shown(steps, values):
-    """What the review page shows besides the run: each value, the choices made in the person's
-    name (DECIDED), and the person's own steps."""
+def review_shown(steps, values, whole=None):
+    """What review.py needs besides the run: the pratica's title, each value (the check against the
+    documents holds the sections the preview leaves out to these), what this case's second
+    compilation attaches (from `whole`, the steps before phase() kept one run's fields), what is
+    filed apart, and the person's own steps in full."""
+    later = after_declarations(expand(whole or steps, values), values)
     steps = expand(steps, values)
     rows = plan(steps, values)
-    decisions = {}
-    for v in rows:
-        if DECIDED.search(v["section"]):
-            what = v["label"] or v["id"]
-            decisions.setdefault(v["section"], []).append(what if v["value"] is None else f"{what}: {v['value']}")
     return {"title": steps.get("title"), "yours": [values.render(y) for y in steps.get("yours", [])] + asked_yours(steps, values) + apart(steps, values),
-            "decisions": [{"section": s, "choices": c} for s, c in decisions.items()],
+            "second_run": later, "apart": apart(steps, values),
             "values": [{"section": v["section"], "label": v["label"] or v["id"],
                         "value": "chosen" if v["value"] is None
                         else "attached: " + Path(v["value"]).name if v["kind"] == "file" else v["value"]}
@@ -2597,8 +2591,8 @@ def private_dir(out):
 
 def private(out, shown, held=None):
     """What no report holds: what each section typed (to resume), what a failed read-back wanted
-    and found, every value for the review page, and the declarations' own text. A folder only the
-    person reads; the skill tells Claude to send the review page and never to open these."""
+    and found, every value (for the check against the documents), and the declarations' own text.
+    Kept in the run's folder for review.py and for debugging; with the archive, Claude never opens it."""
     folder = private_dir(out)
     parts = [("shown", shown)]
     if held is not None:  # a run in the pane has only shown: __pv.held() stays in its tab
@@ -2614,7 +2608,7 @@ def private(out, shown, held=None):
 
 def capture_preview(page, folder):
     """The portal's own PDF of the draft, which the filled run fetched in the person's logged-in
-    browser (__pv.previewPdf), kept as folder/anteprima.pdf for the review page: what the person
+    browser (__pv.previewPdf), kept as folder/anteprima.pdf in the run's folder: what the person
     declares is the portal's rendering, not our list of values. None of it passes through Claude.
     Returns (True, "") or (False, why); a missing preview never stops a filled draft."""
     try:
@@ -2632,7 +2626,7 @@ def capture_preview(page, folder):
     return True, ""
 
 
-def run(steps, values, out, cdp=None, profile=None, close=False, resume=None):
+def run(steps, values, out, cdp=None, profile=None, close=False, resume=None, whole=None):
     """inpage.js in a Playwright window: the runner the Claude browser pane uses, without
     the pane's 45 s call limit and slowed timers. A window behind others keeps full speed
     with no call of ours: Playwright turns on focus emulation for each page it drives
@@ -2643,7 +2637,7 @@ def run(steps, values, out, cdp=None, profile=None, close=False, resume=None):
     install, run_js = page_scripts(steps, values, files_limit=None, resume=resume)
     out.mkdir(parents=True, exist_ok=True)
     drift(out, steps, resume)
-    shown = review_shown(steps, values)
+    shown = review_shown(steps, values, whole)
     report = {"procedure": steps["procedure"], "result": "stopped"}
     held = {}
     with sync_playwright() as pw:
@@ -2699,10 +2693,9 @@ def run(steps, values, out, cdp=None, profile=None, close=False, resume=None):
             # kept apart and goes to them, never into the conversation.
             (out / "report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False))
             private(out, shown, held)
-            (out / "review.html").write_text(review.portal_review(report | shown | {"details": held.get("details", [])}, out),
-                                             encoding="utf-8")
-            (out / "review.html").chmod(0o600)
-            print(f"review: {out / 'review.html'}", flush=True)
+            said = review.summary(report | shown, out.resolve(), out.resolve().parent)["message"]
+            if said:
+                print(said, flush=True)
             print(json.dumps({k: report.get(k) for k in ("result", "error", "wizard_seconds", "total_seconds")}),
                   flush=True)
             if not close and not page.is_closed():
@@ -2772,7 +2765,7 @@ def main():
             if a.server and a.token not in vaults:
                 ap.error(f"{a.server} has no token {a.token!r}")
             values = Values(answers, vault=vaults[a.token if a.server else "prepare"], asks=asks)
-        steps = expand(steps, values)
+        steps = whole = expand(steps, values)
         if a.command != "preflight":
             steps = phase(steps, a.after_declarations, a.made_up)
         resume = None
@@ -2815,9 +2808,9 @@ def main():
                 bundle(a.out, a.bundle, files)
                 print(f"{a.bundle}: if check.js names runner.js, run pick.js in the pane instead of the files it "
                       "names: the person picks this file once in the box, then poll __pv.wait()")
-            # The pane's report has no values or person's steps: review.py OUT adds these, from
-            # private/ (Claude sends the review page and never opens that folder).
-            private(a.out, review_shown(steps, values))
+            # The pane's report has no title, values or second run: review.py OUT adds these, from
+            # private/ (with the archive, Claude never opens that folder).
+            private(a.out, review_shown(steps, values, whole))
             if code:
                 try:
                     show_code(code)
@@ -2836,10 +2829,10 @@ def main():
                   + ("fetch.js, which has the page download runner.js and steps.js from the released plugin; "
                      "if it says `fetch failed`, page again with --bundle" if "fetch.js" in files else
                      "runner.js, steps.js: what the pane lacks; install.js is both")
-                  + f"), then run.js. Save __pv.last() as report.json here, then review.py {a.out}. "
+                  + f"), then run.js. Save __pv.last() as report.json here, then review.py {a.out}: its `message` is what to say. "
                   + ", ".join(f"{n} {len(t)} bytes" for n, t in files.items()))
             return 0
-        return run(steps, values, a.out, a.cdp, a.profile, a.close, resume)
+        return run(steps, values, a.out, a.cdp, a.profile, a.close, resume, whole)
     except StepError as e:
         print(f"stopped: {e}", file=sys.stderr)
         return 1
