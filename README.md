@@ -17,16 +17,21 @@ prova, inventa i dati».
 
 ## Installazione
 
+La guida passo passo, da mandare a un collega: **https://liammaher.github.io/portale-sue/**
+
 Serve un piano Claude a pagamento (Pro, Max, Team o Enterprise). Nell'app Claude per computer, senza
 terminale:
 
-1. Apra **Customize** e la scheda **Plugins**.
-2. Clicchi **Add**, poi **Add marketplace**, e scriva `liammaher/portale-sue`.
-3. Trovi Portale SUE nell'elenco e clicchi **Install**.
-4. Sul marketplace attivi **Sync automatically**: così riceve da solo ogni aggiornamento, anche quando
-   il portale cambia e una pratica va rimappata.
+1. Apra **Personalizzazione** (Customize) e la scheda **Plugin**.
+2. Clicchi **Aggiungi** (Add), poi **Aggiungi marketplace** (Add marketplace) e **Aggiungi da un repository**
+   (Add from a repository), scriva `liammaher/portale-sue` nella casella, lo scelga nell'elenco sotto,
+   lasci acceso **Sincronizza automaticamente** e clicchi **Sincronizza** (Sync).
+3. Apra Portale SUE, tra i **Nuovi plugin**, e clicchi **Aggiungi** (Add).
+4. Per ricevere da solo ogni aggiornamento (anche quando il portale cambia e una pratica va rimappata),
+   conceda a Claude l'accesso alla sua app GitHub quando lo propone (**Concedi accesso**): serve un
+   account GitHub gratuito. Senza, si aggiorna rimuovendo il marketplace e aggiungendolo di nuovo.
 
-I nomi dei menu sono quelli dell'app in inglese. In uno studio con piano Team o Enterprise basta che lo
+Tra parentesi i nomi dell'app in inglese. In uno studio con piano Team o Enterprise basta che lo
 aggiunga l'amministratore: arriva a tutti. Se l'app mostra ancora una versione vecchia anche dopo
 **Update**, rimuova il marketplace, chiuda e riapra l'app e lo aggiunga di nuovo (punto 2).
 

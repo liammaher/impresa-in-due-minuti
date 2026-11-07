@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Installare Portale SUE</title>
+<meta name="description" content="Come installare Portale SUE in Claude: quattro passi, senza terminale, poi una CILA di prova sul portale vero.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f5f4a'/%3E%3Cpath d='M8 23V13l8-5 8 5v10h-5v-6h-6v6z' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --text: #1d1d1b;
+    --muted: #5d5d58;
+    --line: #dedcd4;
+    --accent: #1f5f4a;
+    --accent-text: #ffffff;
+    --accent-soft: #e4efe9;
+    --chip: #f0efe9;
+    --focus: #2f7d63;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #161715;
+      --surface: #1f201e;
+      --text: #ecebe6;
+      --muted: #a9a8a1;
+      --line: #363733;
+      --accent: #5fb592;
+      --accent-text: #0f1a15;
+      --accent-soft: #1f2e27;
+      --chip: #2a2b28;
+      --focus: #7fcfae;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #161715; --surface: #1f201e; --text: #ecebe6; --muted: #a9a8a1; --line: #363733;
+    --accent: #5fb592; --accent-text: #0f1a15; --accent-soft: #1f2e27; --chip: #2a2b28; --focus: #7fcfae;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 17px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  main { max-width: 640px; margin: 0 auto; padding: 48px 16px 64px; }
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  .eyebrow { margin: 0 0 8px; font-size: 14px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); }
+  h1 { margin: 0 0 12px; font-size: clamp(28px, 6vw, 36px); line-height: 1.15; letter-spacing: -.01em; }
+  .lead { margin: 0 0 28px; font-size: 19px; color: var(--muted); }
+
+  .before { margin: 0 0 36px; padding: 16px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+  .before h2 { margin: 0 0 8px; font-size: 16px; }
+  .before ul { margin: 0; padding-left: 20px; }
+  .before li + li { margin-top: 4px; }
+
+  ol.steps { list-style: none; margin: 0; padding: 0; counter-reset: step; }
+  .steps > li { position: relative; padding: 0 0 32px 52px; counter-increment: step; }
+  .steps > li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 0;
+    width: 34px; height: 34px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--accent); color: var(--accent-text);
+    font-weight: 700; font-size: 17px;
+  }
+  .steps > li:not(:last-child)::after {
+    content: ""; position: absolute; left: 16px; top: 40px; bottom: 6px; width: 2px; background: var(--line);
+  }
+  .steps h2 { margin: 3px 0 6px; font-size: 20px; line-height: 1.3; }
+  .steps p { margin: 0 0 10px; }
+  .note { font-size: 15px; color: var(--muted); }
+
+  .ui {
+    display: inline-block; padding: 1px 8px; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--chip); font-size: .92em; font-weight: 600; white-space: nowrap;
+  }
+
+  .button {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin: 4px 0 10px; padding: 12px 20px; border-radius: 10px;
+    background: var(--accent); color: var(--accent-text);
+    font-weight: 650; text-decoration: none;
+  }
+  .button:hover { filter: brightness(1.08); }
+
+  .copy {
+    display: flex; align-items: stretch; max-width: 100%;
+    margin: 4px 0 10px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface);
+  }
+  .copy code, .copy q {
+    flex: 1; min-width: 0; padding: 11px 14px; overflow-wrap: anywhere;
+    font-size: 17px; quotes: "«" "»";
+  }
+  .copy code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 16px; }
+  .copy button {
+    flex: none; padding: 0 16px; border: 0; border-left: 1px solid var(--line);
+    background: var(--accent-soft); color: var(--text); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+  }
+  .copy button:hover { filter: brightness(.97); }
+
+  .en { color: var(--muted); font-size: .9em; white-space: nowrap; }
+
+  .help { margin: 8px 0 0; border-top: 1px solid var(--line); }
+  .help h2 { margin: 28px 0 8px; font-size: 20px; }
+  details { border-bottom: 1px solid var(--line); }
+  summary { padding: 14px 0; cursor: pointer; font-weight: 600; }
+  details p { margin: 0 0 14px; }
+
+  footer { margin-top: 40px; font-size: 15px; color: var(--muted); }
+  footer p { margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Portale SUE</p>
+  <h1>Installi Portale SUE in Claude</h1>
+  <p class="lead">Quattro passi, pochi minuti, nessun terminale. Poi Claude Le mostra una CILA di prova compilata sul portale vero, con dati inventati.</p>
+
+  <section class="before" aria-labelledby="before">
+    <h2 id="before">Prima di cominciare</h2>
+    <ul>
+      <li>Un piano Claude a pagamento.</li>
+      <li>L'app Claude per computer, Mac o Windows: <a href="https://claude.ai/download">la scarica qui</a>.</li>
+      <li>Il Suo SPID, solo per la prova sul portale.</li>
+    </ul>
+  </section>
+
+  <ol class="steps">
+    <li>
+      <h2>Apra i plugin di Claude</h2>
+      <a class="button" href="https://claude.ai/customize/plugins" target="_blank" rel="noopener">Apri i plugin in Claude <span aria-hidden="true">↗</span></a>
+      <p class="note">Si apre la pagina dei plugin di Claude: se lo chiede, entri con il Suo account. Oppure, nell'app: <span class="ui">Personalizzazione</span> <span class="en">(Customize)</span> nella barra a sinistra, poi la scheda <span class="ui">Plugin</span>.</p>
+    </li>
+    <li>
+      <h2>Aggiunga il marketplace</h2>
+      <p>In alto a destra clicchi <span class="ui">+ Aggiungi</span> <span class="en">(+ Add)</span>, poi <span class="ui">Aggiungi marketplace</span> <span class="en">(Add marketplace)</span>, poi <span class="ui">Aggiungi da un repository</span> <span class="en">(Add from a repository)</span>. Clicchi la casella <span class="ui">Seleziona un repository</span> e incolli questo nome:</p>
+      <div class="copy"><code id="marketplace">liammaher/portale-sue</code><button type="button" data-copy="marketplace">Copia</button></div>
+      <p>Nell'elenco che compare sotto, clicchi la riga con questo nome. Lasci acceso <span class="ui">Sincronizza automaticamente</span> e clicchi <span class="ui">Sincronizza</span> <span class="en">(Sync)</span>.</p>
+      <p class="note">Claude avverte di aggiungere solo marketplace di cui si fida: è un avviso per tutti i plugin che non vengono da Anthropic. Il codice di Portale SUE è pubblico, su GitHub.</p>
+    </li>
+    <li>
+      <h2>Installi Portale SUE</h2>
+      <p>Portale SUE compare nella pagina dei plugin, tra i <span class="ui">Nuovi plugin</span>. Lo apra e clicchi <span class="ui">Aggiungi</span> <span class="en">(Add)</span>.</p>
+      <p class="note">Se Claude Le propone <span class="ui">Concedi accesso</span> all'app GitHub di Claude, serve per ricevere da solo gli aggiornamenti: vedi «Gli aggiornamenti» qui sotto.</p>
+    </li>
+    <li>
+      <h2>Veda una prova</h2>
+      <p>Apra l'app Claude per computer e scriva:</p>
+      <div class="copy"><q id="prova">Fammi vedere una prova</q><button type="button" data-copy="prova">Copia</button></div>
+      <p class="note">Claude compila sul portale vero una CILA di prova con dati inventati, e non invia nulla. Quando Claude glielo chiede, Lei accede con SPID nel browser dell'app. Alla fine cancelli la bozza «PROVA NON INVIARE» da «Pratiche in bozza».</p>
+    </li>
+  </ol>
+
+  <section class="help" aria-labelledby="help">
+    <h2 id="help">Se qualcosa non va</h2>
+    <details>
+      <summary>Sul Mac compare «installare gli strumenti per sviluppatori»</summary>
+      <p>Portale SUE usa Python, che sul Mac arriva con questi strumenti di Apple. Clicchi <span class="ui">Installa</span> e aspetti la fine: serve una volta sola. Su Windows, installi Python da <a href="https://www.python.org/downloads/">python.org</a>.</p>
+    </details>
+    <details>
+      <summary>Il nome del marketplace non viene accettato</summary>
+      <p>Lo incolli esattamente com'è, senza spazi: <code>liammaher/portale-sue</code>.</p>
+    </details>
+    <details>
+      <summary>Gli aggiornamenti</summary>
+      <p>Portale SUE si aggiorna quando il portale cambia. Per riceverlo da solo, Claude chiede di concedere l'accesso alla sua app GitHub (<span class="ui">Concedi accesso</span>), con un account GitHub gratuito. Senza, o se vede ancora una versione vecchia: rimuova il marketplace, chiuda e riapra l'app Claude, poi lo aggiunga di nuovo (passo 2).</p>
+    </details>
+    <details>
+      <summary>Siamo uno studio con piano Team o Enterprise</summary>
+      <p>Basta che lo aggiunga l'amministratore, una volta: arriva a tutti.</p>
+    </details>
+    <details>
+      <summary>L'app è in inglese</summary>
+      <p>I nomi tra parentesi sono quelli dell'app in inglese. Per averla in italiano: l'icona del profilo in basso a sinistra, poi la lingua.</p>
+    </details>
+  </section>
+
+  <footer>
+    <p>Portale SUE è gratuito e open source. Non è uno strumento ufficiale: non è affiliato al Comune di Napoli né a InfoCamere.</p>
+    <p><a href="https://github.com/liammaher/portale-sue#dove-vanno-i-dati-dei-suoi-clienti">Dove vanno i dati dei Suoi clienti</a> · <a href="https://github.com/liammaher/portale-sue">Codice e documentazione</a></p>
+  </footer>
+</main>
+<script>
+  document.querySelectorAll("button[data-copy]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var text = document.getElementById(button.dataset.copy).textContent;
+      var done = function () {
+        button.textContent = "Copiato";
+        setTimeout(function () { button.textContent = "Copia"; }, 2000);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(done, function () { select(button); });
+      } else {
+        select(button);
+      }
+    });
+  });
+  // Without the clipboard API (an old browser, a file:// page), select the text so Ctrl/Cmd+C copies it.
+  function select(button) {
+    var range = document.createRange();
+    range.selectNodeContents(document.getElementById(button.dataset.copy));
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    button.textContent = "Selezionato";
+  }
+</script>
+</body>
+</html>
