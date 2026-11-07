@@ -28,7 +28,9 @@
       Writes the scripts for the Claude browser pane, each run with one call on the
       portal's page: check.js says which of runner.js (inpage.js) and steps.js (the steps,
       no personal data) the pane's storage doesn't already hold byte for byte; run.js starts
-      a run with the person's values; install.js is runner.js and steps.js together.
+      a run with the person's values; install.js is runner.js and steps.js together. From an
+      installed plugin, fetch.js has the page download those two from the plugin's release on
+      GitHub instead (public code, checked by sha256), so nothing big passes through a call.
       Claude writes every byte of a call, so run.js would put the values through the
       conversation. It doesn't: run.js carries them sealed under a code that a window on
       the person's screen shows (not printed, not in a file) and that they type into a box
@@ -82,7 +84,7 @@ lasts as long as the portal keeps it.
 
 A `kind: file` field attaches a file: its value is a path (usually an {{ask.x}}), and
 its bytes travel in run.js. With `page` they pass through the conversation, so all of a
-run's files together may be at most 256 KB (PAGE_FILES_LIMIT); `run` evaluates run.js
+run's files together may be at most 16 KB (PAGE_FILES_LIMIT: run.js is one pane call); `run` evaluates run.js
 itself and takes any size. Over that, `page` carries each file's name, size and sha256
 instead (`picked`): before the run starts the runner shows a box on the portal's page where
 the person chooses them, and keeps only those whose bytes are the ones pre-flight read, so
@@ -110,6 +112,7 @@ import sys
 import time
 from datetime import date
 from pathlib import Path
+from urllib.parse import quote
 
 
 sys.path[:0] = [str(Path(__file__).resolve().parent.parent / "fill"), str(Path(__file__).resolve().parent.parent),
@@ -166,7 +169,13 @@ DUG_DETTAGLIO = frozenset((
 # run.js for the pane is one tool call's text: a receipt or a small scan, not a planimetria.
 # Larger files need another route into the page (docs/north-star.md, open question 7).
 REHEARSAL_DRAFT = "PROVA NON INVIARE"
-PAGE_FILES_LIMIT = 256 * 1024
+# run.js, files and all, is one pane call (about 40 KB, 2026-11-04) that Claude copies: it
+# carries 16 KB of files at most (a receipt, a small scan); more are picked in the page. Until
+# 2026-11-07 it was 256 KB, which no call could take. Pre-flight's `pick` reads the same limit.
+PAGE_FILES_LIMIT = 16 * 1024
+RUN_JS_LIMIT = 30_000
+# A batch (bench/rerun.py) loads from a picked file, not a call: its own limit.
+BATCH_FILES_LIMIT = 256 * 1024
 # What impresainungiorno takes in one slot: "Max: 9,77 MB" beside each, 10,000 KB.
 SLOT_MAX_BYTES = 10_000 * 1024
 FILE_TYPES = {".p7m": "application/pkcs7-mime", ".pdf": "application/pdf"}
@@ -2122,7 +2131,7 @@ input.addEventListener("change", async () => {{
   const got = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)))).map((b) => b.toString(16).padStart(2, "0")).join("");
   if (got !== "{sha}") {{ msg.textContent = "Non è il file giusto: scelga «{path.stem}» nella cartella Download."; return; }}
   input.disabled = true;
-  try {{ window.pvPicked = String((0, eval)(text)); msg.textContent = "Caricato."; setTimeout(() => box.remove(), 3000); }}
+  try {{ window.pvPicked = String(await (0, eval)(text)); msg.textContent = "Caricato."; setTimeout(() => box.remove(), 3000); }}
   catch (e) {{ window.pvPicked = "error " + e.message; msg.textContent = window.pvPicked; }}
 }});
 "box shown: the person picks {path.name}, then poll __pv.wait()"
@@ -2149,10 +2158,11 @@ def page_scripts(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=
     return files["install.js"], files["run.js"]
 
 
-def page_files(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=None, pick=True):
+def page_files(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=None, pick=True, source=None):
     """Every file `run.py page` writes, by name: install.js is runner.js and steps.js, and
-    check.js says which of those two the pane's storage lacks."""
-    return page_bundle(steps, values, files_limit, resume, code, pick)[0]
+    check.js says which of those two the pane's storage lacks (or fetch.js, which has the page
+    download both from the released plugin)."""
+    return page_bundle(steps, values, files_limit, resume, code, pick, source)[0]
 
 
 # --- sealing run.js ---------------------------------------------------------------
@@ -2242,10 +2252,23 @@ def show_code(code, give_up=None):
     return child
 
 
-def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=None, pick=True):
+# Only these keys of a section and a field reach the page: a new one inpage.js reads goes here
+# too (`last` didn't, 2026-11-04, and the run ticked the first group's radio). fetch.js keeps
+# the same lists, so it builds a section from the published steps file byte for byte.
+PANE_SECTION_KEYS = ("save", "theirs", "go", "step")
+PANE_FIELD_KEYS = ("id", "css", "kind", "label", "anchor", "block", "nth", "last", "describe", "if_present")
+
+
+def pane_section(s):
+    """A steps section as the page holds it."""
+    return ({"section": s["section"], "open": s.get("open", True)} | {k: s[k] for k in PANE_SECTION_KEYS if k in s}
+            | {"fields": [{k: f[k] for k in PANE_FIELD_KEYS if k in f} for f in s["fields"]]})
+
+
+def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=None, pick=True, source=None):
     """page_files, and what runner.js and steps.js leave in the pane's localStorage. code: seal the values under it (see above); None carries them in the clear. pick: files
     over files_limit are chosen by the person in the page (`picked`); False refuses them (a
-    batch has no one to pick for each run)."""
+    batch has no one to pick for each run). source: the steps file on disk, for fetch.js."""
     expanded = expand(steps, values)
     # Steps expanded already (rerun.py passes them so) still have their blocks: an `add` per
     # block. Missed until 2026-11-05: two CILA cases with other counts shared one pane key, and
@@ -2259,16 +2282,7 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=N
         "start": steps["start"], "logged_in": steps["logged_in"],
         "wizard": [{k: v for k, v in w.items() if k != "fill"} | (
             {"fill": {"css": w["fill"]["css"]}} if "fill" in w else {}) for w in steps["wizard"]],
-        "sections": [{"section": s["section"], "open": s.get("open", True)}
-                     | ({"save": s["save"]} if "save" in s else {})
-                     | ({"theirs": s["theirs"]} if "theirs" in s else {})
-                     | ({"go": s["go"]} if "go" in s else {})
-                     | ({"step": s["step"]} if "step" in s else {})
-                     # Only these keys reach the page: a new one inpage.js reads goes here too
-                     # (`last` didn't, 2026-11-04, and the run ticked the first group's radio).
-                     | {"fields": [{k: f[k] for k in ("id", "css", "kind", "label", "anchor", "block", "nth", "last", "describe", "if_present") if k in f}
-                                   for f in s["fields"]]}
-                     for s in steps["sections"]],
+        "sections": [pane_section(s) for s in steps["sections"]],
         "forbidden": FORBIDDEN.pattern, "declarations": DECLARATIONS.pattern,
         "label_js": LABEL_JS,
     } | ({"preview_url": steps["preview_url"]} if "preview_url" in steps else {})
@@ -2302,27 +2316,74 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=N
             raise StepError(f"the attachments come to {size // 1024} KB, more than the {files_limit // 1024} KB "
                             "run.js can carry in the pane: let the person pick them in the page, or use `run`")
         if size > files_limit:
-            # Too big to carry: every file the run attaches is chosen in the page, so the person
-            # picks them all once, from the job's folder, and none is in the conversation.
-            for f in files:
-                data = base64.b64decode(f.pop("b64"))
-                f.update(size=len(data), sha256=hashlib.sha256(data).hexdigest(), picked=True)
+            to_pick(files)
     proc = steps["procedure"]
     if blocks:
         # Its "+" blocks as this case counts them: a case with other counts has other steps, so
         # they are stored apart in the pane (the same counts, the same key).
         proc += "#" + hashlib.sha256(json.dumps(skeleton["sections"], sort_keys=True).encode()).hexdigest()[:8]
     runner_js, steps_js, stored = pane_parts(proc, skeleton)
+    run_js = clear_or_sealed(proc, vals, resume, code)
+    carried = [v for s in vals["sections"] for v in s if isinstance(v, dict) and "b64" in v]
+    if files_limit is not None and pick and carried and len(run_js.encode()) > RUN_JS_LIMIT:
+        # run.js is one pane call, copied by Claude: files that would push it past one call are
+        # picked in the page with the rest (2026-11-07: up to 256 KB rode in run.js, a call takes 40).
+        to_pick(carried)
+        run_js = clear_or_sealed(proc, vals, resume, code)
+    if files_limit is not None and pick and len(run_js.encode()) > RUN_JS_LIMIT:
+        raise StepError(f"run.js is {len(run_js.encode()) // 1024} KB without its files, more than one pane call "
+                        f"takes ({RUN_JS_LIMIT // 1000} KB): use `run`")
+    origin = re.match(r"https?://[^/]+", steps["logged_in"])[0]
+    files = {"install.js": runner_js + steps_js + "'installed'\n", "runner.js": runner_js, "steps.js": steps_js}
+    fetch = fetch_script(source, proc, skeleton, stored)
+    if fetch:
+        files["fetch.js"] = fetch
+    return files | {"check.js": check_script(stored, origin, {k: "fetch.js" for k in stored} if fetch else None),
+                    "run.js": run_js}, stored
+
+
+def to_pick(files):
+    """Every file the run attaches is chosen in the page instead, so the person picks them all
+    once, from the job's folder, and none is in the conversation."""
+    for f in files:
+        data = base64.b64decode(f.pop("b64"))
+        f.update(size=len(data), sha256=hashlib.sha256(data).hexdigest(), picked=True)
+
+
+def clear_or_sealed(proc, vals, resume, code):
+    """run.js: the run's values in the clear (checked by sha256), or sealed under the code."""
     load = "if (!window.__pv) (0, eval)(localStorage.getItem('pv-runner'));\n"
     if code:
         plain = json.dumps({"vals": vals, "resume": resume or {}}, ensure_ascii=False, separators=(",", ":"))
-        run_js = load + f"__pv.startSealed({json.dumps(proc)}, {json.dumps(seal(plain.encode(), code), separators=(',', ':'))})\n"
+        return load + f"__pv.startSealed({json.dumps(proc)}, {json.dumps(seal(plain.encode(), code), separators=(',', ':'))})\n"
     else:
-        run_js = (load + f"__pv.start({json.dumps(proc)}, {json.dumps(vals, ensure_ascii=False, separators=(',', ':'))}"
-                  + (f", {json.dumps(resume, ensure_ascii=False, separators=(',', ':'))}" if resume else "") + ")\n")
-    origin = re.match(r"https?://[^/]+", steps["logged_in"])[0]
-    return {"install.js": runner_js + steps_js + "'installed'\n", "runner.js": runner_js, "steps.js": steps_js,
-            "check.js": check_script(stored, origin), "run.js": run_js}, stored
+        # Claude copies run.js into the pane by hand, and a long one can arrive changed (2026-11-07:
+        # four `false` of 124 dropped, and the run looked for a box this case hasn't): it carries
+        # the sha256 of what it starts with and starts nothing on other bytes. A sealed run.js
+        # needs none: its seal refuses any change.
+        args = json.dumps([proc, vals] + ([resume] if resume else []), ensure_ascii=False, separators=(",", ":"))
+        # A long run of `false` (the boxes this case leaves alone) is what a copy loses: written as
+        # one spread, it is a few characters to copy, and the check still reads every value.
+        short = re.sub(r"false(?:,false){4,}", lambda m: f"...Array({m.group().count('false')}).fill(false)", args)
+        run_js = load + RUN_CHECKED.format(args=short, sha=json.dumps(hashlib.sha256(args.encode()).hexdigest()))
+    return run_js
+
+
+# run.js in the clear: the run starts only with the bytes run.py wrote (see page_bundle).
+RUN_CHANGED = "run.js arrived changed (a value lost or altered on the way): run it again, exactly as the file has it"
+RUN_CHECKED = ("(async (args, want) => Array.from(new Uint8Array(await crypto.subtle.digest(\"SHA-256\", "
+               "new TextEncoder().encode(JSON.stringify(args))))).map((b) => b.toString(16).padStart(2, \"0\")).join(\"\") === want "
+               "? __pv.start(...args) : " + json.dumps(RUN_CHANGED) + ")({args}, {sha})\n")
+
+
+def run_args(run_js):
+    """What a clear run.js starts its run with: [procedure, values] (and the resume, if any)."""
+    line = run_js.splitlines()[1]
+    head = RUN_CHECKED.split("{args}")[0]
+    sha = re.search(r', ("[0-9a-f]{64}"\)\n?$)', line)
+    assert line.startswith(head) and sha, "run.js changed shape"
+    return json.loads(re.sub(r"\.\.\.Array\((\d+)\)\.fill\(false\)", lambda m: ",".join(["false"] * int(m[1])),
+                              line[len(head):sha.start()]))
 
 
 def pane_parts(proc, skeleton):
@@ -2337,6 +2398,100 @@ def pane_parts(proc, skeleton):
     # JSON.stringify of that literal gives back these same bytes; the runner is stored as its source.
     stored = {"pv-runner": "(function () {\n" + runner + "})()", "pv-steps:" + proc: steps_json}
     return runner_js, steps_js, stored
+
+
+def published(path):
+    """Where GitHub serves this file of the released plugin (its tag, on two hosts that let any
+    page fetch it), or [] when it isn't in an installed plugin (the repo's own copy)."""
+    path = Path(path).resolve()
+    root = next((r for r in path.parents if (r / ".claude-plugin" / "plugin.json").is_file()), None)
+    if root is None:
+        return []
+    try:
+        manifest = json.loads((root / ".claude-plugin" / "plugin.json").read_text())
+        repo = re.fullmatch(r"https://github\.com/([\w.-]+/[\w.-]+?)(?:\.git)?/?", manifest["repository"])[1]
+        tag = "plugin-v" + manifest["version"]
+    except (OSError, ValueError, KeyError, TypeError):
+        return []
+    rel = "/".join(quote(p) for p in path.relative_to(root).parts)
+    return [f"https://raw.githubusercontent.com/{repo}/{tag}/{rel}", f"https://cdn.jsdelivr.net/gh/{repo}@{tag}/{rel}"]
+
+
+FETCH_LIMIT = 30_000  # bytes: a pane call takes about 40 KB (2026-11-04), and Claude types each one
+
+
+def fetch_script(source, proc, skeleton, stored):
+    """fetch.js: the page downloads the runner (inpage.js) and the steps file from the released
+    plugin on GitHub, checks each by sha256 and stores them as runner.js and steps.js would, so
+    no one picks a file (the two are 130 KB, a pane call about 40 KB). It carries only what the
+    steps file alone doesn't give: this case's sections where they differ from the file's (its
+    choices and "+" blocks), each field the file has as a reference. None in the repo's copy,
+    for a steps file outside the plugin, or when that is still too much to send: then the
+    bundle (pick.js). Nothing of the person's is fetched or sent: both files are public code."""
+    runner = Path(__file__).with_name("inpage.js")
+    runner_urls, steps_urls = published(runner), published(source) if source and Path(source).suffix == ".json" else []
+    if not runner_urls or not steps_urls:
+        return None
+    sha = lambda s: hashlib.sha256(s.encode()).hexdigest()
+    dump = lambda x: json.dumps(x, ensure_ascii=False, separators=(",", ":"))
+    raw = Path(source).read_text()
+    base = [pane_section(s) for s in json.loads(raw)["sections"]]
+    whole, exact, loose = {}, {}, {}
+    for i, s in enumerate(base):
+        whole.setdefault(dump(s), i)
+        for j, f in enumerate(s["fields"]):
+            exact.setdefault(dump(f), [i, j])
+            loose.setdefault(dump({k: v for k, v in f.items() if k != "block"}), [i, j])
+
+    def field(f):
+        if dump(f) in exact:
+            return exact[dump(f)]
+        ref = loose.get(dump({k: v for k, v in f.items() if k != "block"}))
+        if ref and "block" in f:
+            # A "+" block's copy of a template field: the file's field with its number.
+            b = base[ref[0]]["fields"][ref[1]] | {"block": f["block"]}
+            if dump({k: b[k] for k in PANE_FIELD_KEYS if k in b}) == dump(f):
+                return ref + [{"block": f["block"]}]
+        return f
+    lite = {**skeleton, "sections": [whole[dump(s)] if dump(s) in whole else {**s, "fields": [field(f) for f in s["fields"]]}
+                                     for s in skeleton["sections"]]}
+    key = "pv-steps:" + proc
+    script = ("(async () => {\n"
+              "  const sha = async (s) => s === null ? null : Array.from(new Uint8Array(await crypto.subtle.digest(\"SHA-256\", new TextEncoder().encode(s)))).map((b) => b.toString(16).padStart(2, \"0\")).join(\"\");\n"
+              "  const get = async (urls, want) => {\n"
+              "    for (const u of urls) {\n"
+              "      try {\n"
+              "        const r = await fetch(u, {signal: AbortSignal.timeout(15000), credentials: \"omit\", referrerPolicy: \"no-referrer\"});\n"
+              "        const t = r.ok ? await r.text() : null;\n"
+              "        if (t !== null && await sha(t) === want) return t;\n"
+              "      } catch (e) {}\n"
+              "    }\n"
+              "    return null;\n"
+              "  };\n"
+              "  const failed = \"fetch failed: run page again with --bundle, then pick.js\";\n"
+              f"  if (await sha(localStorage.getItem(\"pv-runner\")) !== {json.dumps(sha(stored['pv-runner']))}) {{\n"
+              f"    const src = await get({json.dumps(runner_urls)}, {json.dumps(sha(runner.read_text()))});\n"
+              "    if (src === null) return failed;\n"
+              "    localStorage.setItem(\"pv-runner\", \"(function () {\\n\" + src + \"})()\");\n"
+              "    delete window.__pv;\n"
+              "  }\n"
+              f"  const key = {json.dumps(key)};\n"
+              f"  if (await sha(localStorage.getItem(key)) !== {json.dumps(sha(stored[key]))}) {{\n"
+              f"    const raw = await get({json.dumps(steps_urls)}, {json.dumps(sha(raw))});\n"
+              "    if (raw === null) return failed;\n"
+              f"    const SK = {json.dumps(PANE_SECTION_KEYS)}, FK = {json.dumps(PANE_FIELD_KEYS)};\n"
+              "    const pick = (x, keys) => { const o = {}; for (const k of keys) if (k in x) o[k] = x[k]; return o; };\n"
+              "    const base = JSON.parse(raw).sections.map((s) => ({section: s.section, open: \"open\" in s ? s.open : true, ...pick(s, SK), fields: s.fields.map((f) => pick(f, FK))}));\n"
+              "    const field = (f) => !Array.isArray(f) ? f : f[2] ? pick({...base[f[0]].fields[f[1]], ...f[2]}, FK) : base[f[0]].fields[f[1]];\n"
+              f"    const s = {dump(lite)};\n"
+              "    s.sections = s.sections.map((x) => typeof x === \"number\" ? base[x] : {...x, fields: x.fields.map(field)});\n"
+              "    const txt = JSON.stringify(s);\n"
+              f"    if (await sha(txt) !== {json.dumps(sha(stored[key]))}) return \"the steps came out other than run.py's: \" + failed;\n"
+              "    localStorage.setItem(key, txt);\n"
+              "  }\n"
+              "  return \"installed\";\n"
+              "})()\n")
+    return script if len(script.encode()) <= FETCH_LIMIT else None
 
 
 def patch_script(key, old_json, new_json, fallback):
@@ -2381,7 +2536,7 @@ def check_script(stored, origin, files=None, then="run.js"):
             "  for (const [k, v] of Object.entries(want)) if (await sha(localStorage.getItem(k)) !== v) stale.push(k);\n"
             f"  if (location.origin !== {json.dumps(origin)}) return {json.dumps('go to ' + origin + ' first: its storage holds the runner')};\n"
             f"  const files = {json.dumps(files)};\n"
-            f"  return \"run \" + stale.map((k) => files[k]).concat([{json.dumps(then)}]).join(\", then \");\n"
+            f"  return \"run \" + [...new Set(stale.map((k) => files[k]))].concat([{json.dumps(then)}]).join(\", then \");\n"
             "})()\n")
 
 
@@ -2652,7 +2807,7 @@ def main():
             a.out.mkdir(parents=True, exist_ok=True)
             # The second run carries no values (page_bundle), so it is never sealed: one code a pratica.
             code = None if a.plain or a.after_declarations else new_code()
-            files = page_files(steps, values, resume=resume, code=code)
+            files = page_files(steps, values, resume=resume, code=code, source=a.steps)
             drift(a.out, steps, resume)
             for name, text in files.items():
                 (a.out / name).write_text(text)
@@ -2677,8 +2832,11 @@ def main():
             else:
                 print("The second run carries no value and no file's bytes (the person picks the signed files in "
                       "the page's box), so there is no code to type.")
-            print(f"{a.out}: check.js first (which of runner.js, steps.js the pane lacks), then run.js; "
-                  f"install.js is both. Save __pv.last() as report.json here, then review.py {a.out}. "
+            print(f"{a.out}: check.js first: it names what to run, in order ("
+                  + ("fetch.js, which has the page download runner.js and steps.js from the released plugin; "
+                     "if it says `fetch failed`, page again with --bundle" if "fetch.js" in files else
+                     "runner.js, steps.js: what the pane lacks; install.js is both")
+                  + f"), then run.js. Save __pv.last() as report.json here, then review.py {a.out}. "
                   + ", ".join(f"{n} {len(t)} bytes" for n, t in files.items()))
             return 0
         return run(steps, values, a.out, a.cdp, a.profile, a.close, resume)

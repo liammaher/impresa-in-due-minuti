@@ -38,6 +38,10 @@ computer, senza terminale:
 4. Sul marketplace attivi **Sync automatically**: così riceve da solo ogni aggiornamento, anche
    quando il portale cambia e una pratica va rimappata.
 
+Se l'app mostra ancora una versione vecchia di Portale SUE anche dopo **Update**, rimuova il
+marketplace, chiuda e riapra l'app e lo aggiunga di nuovo (punto 2): a volte l'app tiene una copia
+vecchia (2026-11-07: una prova finita male su una versione superata).
+
 I nomi dei menu sono quelli dell'app in inglese. In uno studio con piano Team o Enterprise basta che
 lo aggiunga l'amministratore: arriva a tutti.
 

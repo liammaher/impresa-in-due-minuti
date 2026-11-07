@@ -1,7 +1,7 @@
 {
   "name": "portale-sue",
   "displayName": "Portale SUE",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Portale SUE: prepara le pratiche edilizie del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, fino ai passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio). Con la biblioteca pratiche-napoli di regole e procedure.",
   "author": {
     "name": "Liam Maher"

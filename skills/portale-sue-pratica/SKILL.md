@@ -368,36 +368,39 @@ review page.
 
 ```sh
 sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json \
-  --values run/values.json --values run/intake/private/values.json --plain --out run \
-  --bundle ~/Downloads/portale-sue-<name>.js
+  --values run/values.json --values run/intake/private/values.json --plain --out run
 ```
 
 `--plain`: run.js carries the values itself, so there is no code to type.
 
-`--bundle` saves in their Downloads folder the one file the portal's page needs to start (the
-runner is too big to send otherwise). Say first, in one line: "Salvo nella cartella Download il
-file che avvia la compilazione: se l'app Le chiede il permesso, lo consenta." When it can't write
-there (`could not write`: the app refused, or this session can't reach that folder), ask for the
-Downloads folder with the app's own tool that asks the person to allow a folder, and run `page`
-again. Never send them the file, never ask them to download or save one, never say "JS".
+The portal's page downloads the compilation's code itself, from this plugin's public release on
+GitHub, checked byte for byte (`fetch.js`): nothing of the job's leaves the computer, and the
+tecnico does nothing. Only when that fails does the page need a file from their Downloads folder:
+step 3 says how. Never send them a file, never ask them to download or save one, never say "JS".
 
 1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser:
    "Acceda con SPID nella finestra del browser; quando vede la pagina del portale mi scriva
    «fatto»." Wait until the page is the portal's own, past the login.
 2. Say: "Compilo ora la bozza: non tocchi la pagina finché non Le scrivo."
 3. Run each script as **one** JavaScript call on the portal's page, its text exactly as the
-   file has it: `run/check.js` first. It returns what to run next. When it names only `run.js`,
-   run that. When it names `runner.js` or `steps.js`, run `run/pick.js` instead (it carries all
-   three): a box on the portal asks them to choose the file you saved. Say: "Sul portale compare
-   un riquadro: scelga lì il file «portale-sue-<name>» dalla cartella Download. Una volta sola."
-   Then `__pv.wait` as below (`window.pvPicked` says once the file is in).
+   file has it: `run/check.js` first. It returns what to run next, in order (`fetch.js`, then
+   `run.js`; or `run.js` alone): run each, silently. If `run.js` answers `run.js arrived changed`, a value
+   was lost on the way: run it again, its text exactly as the file has it.
+   **Only when `fetch.js` returns `fetch failed`** (or `check.js` names `runner.js` or
+   `steps.js`): run `page` again with `--bundle ~/Downloads/portale-sue-<name>.js` added. It
+   saves the file in their Downloads; say first: "Salvo nella cartella Download il file che avvia
+   la compilazione: se l'app Le chiede il permesso, lo consenta." (`could not write`: ask for the
+   Downloads folder with the app's own tool that asks the person to allow a folder, and run it
+   again). Then run `run/pick.js` and say: "Sul portale compare un riquadro: scelga lì il file
+   «portale-sue-<name>» dalla cartella Download. Una volta sola." Then `__pv.wait` as below
+   (`window.pvPicked` says once the file is in).
 4. `run.js` returns at once: call `await __pv.wait(40000)` until `result` is `filled` or
    `stopped`. `waiting` means the page waits for the tecnico (the files to pick in its box, or a
    code to type): say so once, gently.
 5. Save `JSON.stringify(__pv.last())` to `run/report.json`. The review page comes after the
    check (step 5).
-6. Delete the file from Downloads (`rm ~/Downloads/portale-sue-<name>.js`): it holds the job's
-   values. The next compilation saves it again.
+6. If you saved a file in Downloads (step 3), delete it (`rm ~/Downloads/portale-sue-<name>.js`):
+   it holds the job's values.
 
 While it runs, don't click, type or take screenshots on the page: the compilation is using it.
 One compilation per login at a time: the portal keeps one pratica open per login.
