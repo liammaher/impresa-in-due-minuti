@@ -77,13 +77,18 @@ class InstallPage(unittest.TestCase):
                 self.assertRegex(attrs.get("href", ""), r"^https://", attrs)
 
     def test_labels_of_the_italian_app(self):
-        # As read in claude.ai set to italiano (Italia), 2026-11-07. The help article says «Personalizza»;
-        # the app says «Personalizzazione».
-        labels = re.findall(r'<span class="ui">([^<]+)</span>', PAGE)
-        for label in ("Personalizzazione", "Plugin", "+ Aggiungi", "Aggiungi marketplace",
-                      "Aggiungi da un repository", "Seleziona un repository", "Sincronizza",
-                      "Aggiungi", "Gestisci marketplace", "Verifica aggiornamenti", "Rimuovi"):
+        # As read in claude.ai set to italiano (Italia), and its it-IT strings, on 2026-11-07. The help
+        # article says «Personalizza»; the app says «Personalizzazione».
+        labels = re.findall(r'<span class="ui"[^>]*>([^<]+)</span>', PAGE)
+        for label in ("+ Aggiungi", "Aggiungi marketplace", "Aggiungi da un repository", "Sincronizza",
+                      "Nuovi plugin", "Aggiungi", "Gestisci marketplace", "Verifica aggiornamenti", "Rimuovi"):
             self.assertIn(label, labels)
+
+    def test_every_label_has_its_english(self):
+        # The IT/EN switch swaps each label for the English app's; a label without one would stay Italian.
+        for tag, attrs in page.tags:
+            if tag == "span" and attrs.get("class") == "ui":
+                self.assertIn("data-en", attrs, attrs)
 
     def test_italian_and_not_official(self):
         self.assertRegex(PAGE, r'<html lang="it">')
