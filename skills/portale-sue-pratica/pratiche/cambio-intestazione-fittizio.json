@@ -1,6 +1,6 @@
 {
  "procedure": "napoli/comune/cambio-intestazione-cila-scia",
- "title": "Cambio d'intestazione of a CILA, SCIA or DIA, SUE Napoli (tecnico con procura)",
+ "title": "Cambio d'intestazione di una CILA, SCIA o DIA, SUE Napoli (tecnico con procura)",
  "generated": "gen.py from sue-cambio-intestazione-cia-scia-dia (2026-10-31) and dictionary/fnsuap.yaml",
  "yours": [
   "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina",

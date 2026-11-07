@@ -1,23 +1,26 @@
 #!/usr/bin/env python3
-"""One page for the person to review a pratica Claude prepared: what's left for them, what
-was checked, and every value as it went on the form or portal.
+"""After Claude prepares a pratica: for a portal draft, what Claude says in the chat; for a form,
+one page for the person to review.
 
-  review.py OUT [--route ROUTE.json] [--job DIR]
+  review.py OUT [--prova] [--job DIR] [--route ROUTE.json]
 
-OUT is the folder fill.py run or run.py run wrote (its report.json), or the one run.py page
-wrote with the pane's `__pv.last()` saved there as report.json (its private/shown.json adds the
-values and the person's steps; private/declarations.json the declarations' own text, and
-private/anteprima.pdf the portal's PDF preview, which only `run.py run` copies); --route is
-`fill.py route --json` for a form, for where it goes and the person's steps. Writes
-OUT/review.html: one self-contained file (the form's pages inlined), to show the person
-before they sign anything. It reads only those files, and for a portal draft two more:
+OUT is the folder run.py page wrote, with the pane's `__pv.last()` saved there as report.json (its
+private/shown.json adds the pratica's title and what comes after: the second compilation, what is
+filed apart), or the one run.py run or fill.py run wrote. For a portal draft it prints JSON:
+{"result", "message", "warnings", "steps", "yours"}; `message` is what Claude says, as written: did it
+work, what the tecnico must check, what is left to them. --prova: made-up data, two lines. It
+reads two more files of a real job:
 
 - OUT/check.json, Claude's check of the portal's own preview (portal/preview_text.js) against
   the job's documents: {"rows": [{"section", "label", "portal", "document", "source", "ok",
-  "note"}], "not_in_preview": [section, ...]}. The mismatches come first on the page.
+  "note"}], "not_in_preview": [section, ...]}. Each value that doesn't match is a warning.
 - OUT/portal-files.json, what portal/attachments.js returned ({"files": [{"slot", "name",
   "size", "sha256"}]}): each file is matched by its bytes to a file of the job (--job, default
-  OUT's parent folder), hashed here.
+  OUT's parent folder), hashed here; one no file of the job has is a warning.
+
+For a form (fill.py's report, --route `fill.py route --json`: where it goes and the person's
+steps) it writes OUT/review.html: one self-contained file, the form's pages inlined, to show the
+person before they sign anything.
 """
 
 import argparse
@@ -25,6 +28,7 @@ import base64
 import hashlib
 import html
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -55,9 +59,6 @@ table { width: 100%; border-collapse: collapse; }
 td { padding: 6px 14px; border-top: 1px solid var(--line); vertical-align: top; overflow-wrap: anywhere; }
 td:first-child { color: var(--muted); width: 42%; }
 .blank { color: var(--muted); font-style: italic; }
-.decl { white-space: pre-wrap; padding: 6px 14px 10px; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
-.decl ul { list-style: none; margin: 8px 0 0; padding: 0; } .decl li.on { color: var(--bad); font-weight: 600; }
-a.dl { display:inline-block; margin: 4px 0 8px; }
 img.page { width: 100%; border: 1px solid var(--line); border-radius: 6px; margin: 8px 0; background: #fff; }
 """
 
@@ -66,16 +67,15 @@ def esc(x):
     return html.escape("" if x is None else str(x))
 
 
-def page(title, subtitle, ok, status, yours, facts, checks, groups, extra="", top="", yours_title="Cosa resta da fare a Lei"):
+def page(title, subtitle, ok, status, yours, facts, checks, groups, extra=""):
     out = [f"<!doctype html><html lang='it'><head><meta charset='utf-8'>"
            f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
            f"<title>{esc(title)}</title><style>{CSS}</style></head><body><main>",
            f"<h1>{esc(title)}</h1><p class='sub'>{esc(subtitle)}</p>",
            f"<span class='status {'ok' if ok else 'bad'}'>{esc(status)}</span>"]
     if yours:
-        out.append(f"<h2>{esc(yours_title)}</h2><div class='you'><ol>"
+        out.append("<h2>Cosa resta da fare a Lei</h2><div class='you'><ol>"
                    + "".join(f"<li>{esc(y)}</li>" for y in yours) + "</ol></div>")
-    out.append(top)
     if facts:
         out.append("<h2>Dove va</h2><dl class='facts'>"
                    + "".join(f"<dt>{esc(k)}</dt><dd>{esc(v)}</dd>" for k, v in facts if v) + "</dl>")
@@ -120,197 +120,107 @@ def form_review(out, report, route):
                 [("Campi del modulo", rows)], f"<h2>Il modulo compilato</h2>{pages}" if pages else "")
 
 
-def decisions(report):
-    """Choices the form took in the person's name (run.py DECIDED), apart from the long table of
-    values: they state how an obligation will be met, so the person confirms each. html."""
-    items = report.get("decisions") or []
-    if not items:
-        return ""
-    out = ["<h2>Scelto a suo nome</h2><p class='sub'>Il modulo è stato compilato con queste scelte. Ognuna dice "
-           "come adempirà a un obbligo: controlli che sia ciò che farà.</p><div class='you'><ul>"]
-    for d in items:
-        out.append(f"<li><b>{esc(d['section'])}</b><ul>" + "".join(f"<li>{esc(c)}</li>" for c in d["choices"])
-                   + "</ul></li>")
-    return "".join(out) + "</ul></div>"
-
-
-def declarations(report, folder):
-    """The declarations' own text, as the runner copied it from the portal (private/declarations.json):
-    the page shows these, never Claude's summary of them. (html, checks)."""
-    f = folder / "declarations.json" if folder else None
-    items = json.loads(f.read_text()) if f and f.exists() else None
-    note = report.get("declarations_note")
-    checks = []
-    if items:
-        ticked = [i["section"] for i in items if any(b["ticked"] for b in i["boxes"])]
-        checks.append((f"Dichiarazioni: {len(items)} copiate parola per parola dal portale; nessuna spuntata" if not ticked
-                       else "Dichiarazioni già spuntate prima che Lei le aprisse (non da questa compilazione): "
-                       + "; ".join(ticked), not ticked))
-    elif items is not None and not note:
-        checks.append(("Dichiarazioni: nessuna nel menu del portale; le legga lì una per una prima di spuntarle", False))
-    elif items is None:
-        checks.append(("Dichiarazioni: non copiate in questa compilazione; le legga nel portale una per una prima di "
-                       "spuntarle", False))
-    if note:
-        checks.append(("Dichiarazioni: non tutte copiate; legga le altre nel portale", False))
-    if not items:
-        return "", checks
-    out = ["<h2>Le dichiarazioni che spunterà</h2><p class='sub'>Le parole del portale, copiate così come sono, "
-           "non un riassunto. Le legga prima di spuntarle: le rende a suo nome, e una dichiarazione falsa è "
-           "un reato (DPR 445/2000, art. 76).</p>"]
-    for i in items:
-        boxes = "".join(f"<li class='{'on' if b['ticked'] else ''}'>{'☑ già spuntata' if b['ticked'] else '☐'} "
-                        f"{esc(b['label'])}</li>" for b in i["boxes"])
-        out.append(f"<details open><summary>{esc(i['section'])}</summary><div class='decl'>{esc(i['text'])}"
-                   + (f"<ul>{boxes}</ul>" if boxes else "") + "</div></details>")
-    return "".join(out), checks
-
-
-def preview(report, folder):
-    """The portal's PDF preview of the draft (private/anteprima.pdf): pages as images when PyMuPDF is
-    there, always a download. (html, checks)."""
-    f = folder / "anteprima.pdf" if folder else None
-    if not (f and f.exists()):
-        return "", [("L'anteprima PDF del portale non è stata copiata: apra Visualizza anteprima nel portale e la "
-                     "legga prima di firmare", False)]
-    data = f.read_bytes()
-    out = ["<h2>L'anteprima del portale</h2><p class='sub'>Il documento che il portale depositerà, così come lo mostra.</p>",
-           f"<a class='dl' download='anteprima.pdf' href='data:application/pdf;base64,"
-           f"{base64.b64encode(data).decode()}'>Scarica il PDF</a>"]
-    try:
-        import fitz  # noqa: PLC0415  (optional, as in fill.py)
-        with fitz.open(stream=data, filetype="pdf") as doc:
-            for n, pg in enumerate(doc):
-                if n == 20:
-                    out.append(f"<p class='sub'>Altre {len(doc) - 20} pagine nel PDF.</p>")
-                    break
-                png = pg.get_pixmap(matrix=fitz.Matrix(1.4, 1.4)).tobytes("png")
-                out.append(f"<img class='page' alt='pagina {n + 1}' src='data:image/png;base64,"
-                           f"{base64.b64encode(png).decode()}'>")
-    except Exception:
-        out.append("<p class='sub'>(Apra il PDF per leggerlo.)</p>")
-    return "".join(out), [("L'anteprima PDF del portale copiata", True)]
-
-
-def check(out):
-    """Claude's check of the portal's preview against the documents (OUT/check.json): (html, checks)."""
+def mismatches(out):
+    """Claude's check of the portal's preview against the documents (OUT/check.json): a line for
+    each value that doesn't match, with what the portal and the document each say."""
     f = out / "check.json" if out else None
-    if not (f and f.exists()):
-        return "", [("Anteprima del portale non ancora confrontata con i documenti", False)]
-    c = json.loads(f.read_text())
-    rows = c.get("rows", [])
-    bad = [r for r in rows if not r.get("ok")]
-    n = lambda k: f"{k} valore" if k == 1 else f"{k} valori"  # noqa: E731
-    checks = [(f"Anteprima del portale confrontata con i documenti: {n(len(rows))}, "
-               + ("coincide" if len(rows) == 1 else "tutti coincidono") if not bad
-               else f"Anteprima del portale confrontata con i documenti: {n(len(bad))} su {len(rows)} da guardare",
-               not bad and bool(rows))]
-    if not rows:
-        checks[0] = ("Anteprima del portale: nessun valore confrontato", False)
-    out_ = ["<h2>Controllo con i documenti</h2><p class='sub'>Ogni valore come lo mostra l'anteprima del portale, "
-            "il documento che riceverà il Comune, accanto a ciò che dice il documento da cui viene.</p>"]
-    if bad:
-        out_.append("<div class='you'><b>Da guardare</b><ul>" + "".join(
-            f"<li>{esc(r.get('section'))}, {esc(r.get('label'))}: sul portale «{esc(r.get('portal'))}», "
-            f"{esc(r.get('source') or 'nei documenti')} «{esc(r.get('document'))}»"
-            + (f" ({esc(r['note'])})" if r.get("note") else "") + "</li>" for r in bad) + "</ul></div>")
-    groups = {}
-    for r in rows:
-        groups.setdefault(r.get("section") or "", []).append(r)
-    for name, rs in groups.items():
-        out_.append(f"<details><summary>{esc(name)} ({sum(1 for r in rs if r.get('ok'))}/{len(rs)})</summary><table>"
-                    + "".join(f"<tr><td>{'✓' if r.get('ok') else '✗'} {esc(r.get('label'))}</td><td>{esc(r.get('portal'))}"
-                              f"<br><span class='blank'>{esc(r.get('source'))}"
-                              + (f": «{esc(r.get('document'))}»" if r.get("document") != r.get("portal") else "")
-                              + (f" · {esc(r['note'])}" if r.get("note") else "") + "</span></td></tr>" for r in rs)
-                    + "</table></details>")
-    missing = c.get("not_in_preview") or []
-    if missing:
-        out_.append("<p class='sub'>Non compaiono nell'anteprima del portale, e sono stati confrontati con ciò che la "
-                    "compilazione ha scritto e riletto: " + esc("; ".join(missing)) + ".</p>")
-    return "".join(out_), checks
+    rows = json.loads(f.read_text()).get("rows", []) if f and f.exists() else []
+    return [f"{section(r.get('section'))}, {r.get('label')}: sul portale «{r.get('portal')}», nel documento "
+            f"«{r.get('document')}»" + (f" ({r['source']})" if r.get("source") else "") + "."
+            for r in rows if not r.get("ok")]
 
 
-def attachments(out, job):
+def stray_files(out, job):
     """The draft's files as the portal holds them (OUT/portal-files.json), each matched by its bytes
-    to a file of the job: (html, checks)."""
+    to a file of the job: a line for each that no file of the job has."""
     f = out / "portal-files.json" if out else None
-    if not (f and f.exists()):
-        return "", [("Allegati non riscaricati dal portale per il confronto", False)]
+    if not (f and f.exists() and job):
+        return []
     files = json.loads(f.read_text()).get("files", [])
-    local = {}
-    for p in sorted(job.rglob("*")) if job else []:
+    local = set()
+    for p in sorted(job.rglob("*")):
         # Not the run's own folder, not hidden files; a file that can't be read is skipped.
         if out in p.parents or any(part.startswith(".") for part in p.relative_to(job).parts):
             continue
         try:
             if p.is_file() and p.stat().st_size <= 50 * 2**20:
-                local.setdefault(hashlib.sha256(p.read_bytes()).hexdigest(), p.relative_to(job).as_posix())
+                local.add(hashlib.sha256(p.read_bytes()).hexdigest())
         except OSError:
             continue
-    rows, bad = [], 0
-    for x in files:
-        same = local.get(x.get("sha256"))
-        bad += not same
-        rows.append(f"<tr><td>{'✓' if same else '✗'} {esc(x.get('slot'))}</td><td>{esc(x.get('name'))}<br>"
-                    f"<span class='blank'>{'uguale byte per byte a ' + esc(same) if same else 'nessun file del lavoro ha questi byte'}"
-                    "</span></td></tr>")
-    checks = [("Allegati: 1 file sul portale, uguale byte per byte a un file del lavoro" if len(files) == 1 and not bad
-               else f"Allegati: {len(files)} file sul portale, ognuno uguale byte per byte a un file del lavoro" if files and not bad
-               else "Allegati: nessun file sul portale" if not files
-               else "Allegati: 1 file sul portale diverso da ogni file del lavoro" if bad == 1
-               else f"Allegati: {bad} file sul portale diversi da ogni file del lavoro", bool(files) and not bad)]
-    return ("<h2>Gli allegati sul portale</h2><p class='sub'>Riscaricati dal portale e confrontati con i file del "
-            "lavoro.</p><details open><summary>Allegati</summary><table>" + "".join(rows) + "</table></details>"), checks
+    return [f"Allegato «{x.get('slot')}»: il file sul portale ({x.get('name')}) non è nessuno dei Suoi file."
+            for x in files if x.get("sha256") not in local]
 
 
-def portal_review(report, out=None, job=None, prova=False):
-    """prova: the skill's Prova (made-up data): no check against documents, and the portal's
-    warnings on made-up values are expected, not for the person to chase."""
-    ok = report.get("result") == "filled"
-    # The runner's own reasons are for Claude, who recovers a stop; the person reads where.
-    checks = [(f"{s['section']}: salvata, ogni campo riletto ({s['seconds']} s)"
-               if not s["errors"] and not s["bad"] else f"{s['section']}: un valore non è rimasto come doveva",
-               not s["errors"] and not s["bad"]) for s in report.get("sections", [])]
-    if report.get("wizard_seconds") is not None:
-        checks.insert(0, (f"Procedura guidata: ogni schermata confermata ({report['wizard_seconds']} s)", True))
-    if report.get("verify_seconds") is not None:
-        checks.append((f"Bozza riaperta dal portale: ogni valore è ancora lì ({report['verify_seconds']} s)"
-                       if ok else "Bozza riaperta dal portale: un valore non è rimasto", ok))
-    if report.get("error"):
-        checks.append(("La compilazione si è fermata prima della fine: Claude sa dove e perché", False))
-    # The portal's warnings beside boxes it kept (inpage.js alerts()): the person checks each.
-    for a in report.get("alerts", []):
-        checks.append((f"{a['section']}, {a.get('label') or 'una casella'}: il portale segnala «{a['text']}» "
-                       + ("(normale con dati inventati)" if prova else "(valore salvato: lo controlli)"), prova))
-    # The report says only why a read-back failed; the person sees what it wanted and found.
-    for d in report.get("details", []):
-        checks.append((f"{d['section']}, {d['label']}: doveva essere «{d['want']}», il portale ha «{d['got']}»", False))
-    groups = {}
-    for v in report.get("values", []):
-        groups.setdefault(v["section"], []).append((v["label"], v["value"], False))
-    folder = out / "private" if out else None
-    # A stopped run hasn't reached either, so it says nothing about them.
-    decl_html, decl_checks = declarations(report, folder) if ok else ("", [])
-    prev_html, prev_checks = preview(report, folder) if ok else ("", [])
-    if prova:  # a draft never declared or signed: what it would hold back before that is no line
-        decl_checks = [c for c in decl_checks if c[1]]
-        prev_checks = [c for c in prev_checks if c[1]]
-    # The check against the documents is the skill's (review.py OUT, with the job's folder);
-    # run.py run's own review, which calls this with no job, has no such step.
-    checked = ok and job is not None and not prova
-    check_html, check_checks = check(out) if checked else ("", [])
-    files_html, files_checks = attachments(out, job) if checked else ("", [])
-    if out and (out / "check.json").exists():
-        prev_checks = []  # the preview was read and checked: that line says more than "not copied"
-    checks += check_checks + files_checks + decl_checks + prev_checks
-    return page(report.get("title") or report["procedure"], "Bozza sul portale", ok,
-                (f"Bozza di prova compilata in {report.get('total_seconds')} s, con dati inventati: non va inviata"
-                 if prova else f"Bozza salvata in {report.get('total_seconds')} s: pronta da rivedere") if ok
-                else "Si è fermata prima della fine", report.get("yours", []), [("Bozza", report.get("url"))],
-                checks, list(groups.items()), prev_html, check_html + files_html + decisions(report) + decl_html,
-                # A Prova's draft is never sent: what would be theirs on a real one, said as that.
-                yours_title="In una pratica vera, poi toccherebbe a Lei" if prova else "Cosa resta da fare a Lei")
+def section(name):
+    """A section's name as a sentence: the portal writes some in capitals ("DOMICILIO ELETTRONICO")."""
+    name = name or ""
+    return name[:1] + name[1:].lower() if name.isupper() else name
+
+
+# The pratiche whose name is masculine ("il permesso di costruire"): the rest are feminine (CILA,
+# SCIA, comunicazione, proroga, autorizzazione...), as the message's past participle agrees.
+MASCULINE = re.compile(r"(Permesso|PdC|Accertamento|Ampliamento|Cambio|Inizio|Rinnovo|Parere|Subingresso)\b")
+
+
+def pratica_name(report):
+    """The pratica as the tecnico calls it: the steps file's title without the sportello and the
+    role ("CILA: lavori interni non strutturali, SUE Napoli (tecnico con procura)" is "CILA")."""
+    t = report.get("title") or report.get("procedure") or "La pratica"
+    return re.sub(r",\s*SU[AE]P? Napoli\b.*$", "", t).split(":")[0].strip()
+
+
+def duration(s):
+    s = round(s or 0)
+    return f"{s} secondi" if s < 120 else f"{round(s / 60)} minuti"
+
+
+def summary(report, out=None, job=None, prova=False):
+    """What Claude says in the chat once a portal compilation ends: did it work, what the tecnico
+    must check (the portal's warnings beside values it kept, a value or a file that doesn't match
+    the documents), and what is left to them. `message` is said as written. A Prova (made-up
+    data) is two lines: its warnings are expected, and nothing of it is sent."""
+    if report.get("result") != "filled":
+        return {"result": report.get("result") or "stopped", "message": None, "warnings": [], "steps": []}
+    name = pratica_name(report)
+    done = "compilato" if MASCULINE.match(name) else "compilata"
+    if prova:
+        return {"result": "filled", "warnings": [], "steps": [],
+                "message": f"✅ {name} di prova {done} in {duration(report.get('total_seconds'))}, con dati inventati.\n"
+                           "Nulla da inviare: la cancelli da «Pratiche in bozza»."}
+    # One line for each warning in a section, by the section alone: the portal shows it beside the
+    # box, and its labels read badly out of the page ("se non presente indicare il numero 0"). On
+    # made-up data the catasto's comes four times, one for each box of the parcel (2026-11-07).
+    warnings = list(dict.fromkeys(f"{section(a['section'])}: il portale segnala «{a['text'].strip()}». Lo controlli."
+                                  for a in report.get("alerts", [])))
+    warnings += mismatches(out) + stray_files(out, job)
+    # The second compilation (after the declarations) attaches what the portal makes only then, signed:
+    # the procura, the quadro riepilogativo, and the receipt of what is paid first (the diritti).
+    later = list(dict.fromkeys(report.get("second_run") or []))
+    pay_first = any(re.search(r"versament|ricevut|pagament", x, re.I) for x in later)
+    if report.get("reopened"):  # this is the second compilation: the declarations are ticked
+        head = f"✅ {name}: file firmati allegati sul portale in {duration(report.get('total_seconds'))}; ogni valore è stato riletto."
+        steps = ["controlli l'anteprima della bozza", "firmi"] + ([] if pay_first else ["paghi"]) + ["invii"]
+    else:
+        head = f"✅ {name} {done} sul portale in {duration(report.get('total_seconds'))}: ogni valore è stato riletto."
+        steps = ["controlli l'anteprima della bozza", "spunti le dichiarazioni"]
+        if later:
+            # What they sign and send back, in their words; the slots' own names are in `yours`.
+            what = (["la procura"] if any(re.search(r"procura", x, re.I) for x in later) else []) \
+                + (["la ricevuta del pagamento"] if pay_first else [])
+            rest = [x for x in later if not re.search(r"procura|versament|ricevut|pagament", x, re.I)]
+            what += ["gli altri documenti" if what else "i documenti da firmare"] if rest else []
+            steps += (["paghi i diritti"] if pay_first else []) + [
+                f"mi mandi i file firmati ({' e '.join([', '.join(what[:-1]), what[-1]] if len(what) > 1 else what)}): "
+                "li allego io"]
+        steps += ["firmi"] + ([] if pay_first and later else ["paghi"]) + ["invii"]
+    lines = [head] + [f"⚠️ {w}" for w in warnings]
+    lines.append("Resta a Lei:")
+    lines += [f"{i}. {s[0].upper()}{s[1:]}" for i, s in enumerate(steps, 1)]
+    lines += [f"{a}." for a in report.get("apart") or []]
+    # `yours`, the steps file's own steps in full (how the diritti are paid, the files' rules), is
+    # not said: Claude answers from it when the tecnico asks how.
+    return {"result": "filled", "warnings": warnings, "steps": steps, "yours": report.get("yours", []),
+            "message": "\n".join(lines)}
 
 
 def main():
@@ -322,14 +232,16 @@ def main():
                     "(default: OUT's parent)")
     a = ap.parse_args()
     report = json.loads((a.out / "report.json").read_text())
+    if "rows" in report:  # fill.py's form
+        route = json.loads(a.route.read_text()) if a.route else None
+        (a.out / "review.html").write_text(form_review(a.out, report, route), encoding="utf-8")
+        print(a.out / "review.html")
+        return 0
     shown = a.out / "private" / "shown.json"  # run.py page: the pane's report has only the run
     if shown.exists():
         report |= json.loads(shown.read_text())
-    route = json.loads(a.route.read_text()) if a.route else None
     job = (a.job or a.out.resolve().parent).resolve()
-    doc = form_review(a.out, report, route) if "rows" in report else portal_review(report, a.out.resolve(), job, a.prova)
-    (a.out / "review.html").write_text(doc, encoding="utf-8")
-    print(a.out / "review.html")
+    print(json.dumps(summary(report, a.out.resolve(), job, a.prova), indent=1, ensure_ascii=False))
     return 0
 
 
