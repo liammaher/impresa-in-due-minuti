@@ -30,9 +30,12 @@ pratica filled, fast.
 
 1. Say only this, and in the same turn open the portal (SKILL.md, step 4.1, without sending its
    line), so they log in while you prepare:
-   "Le mostro Portale SUE su una CILA di prova: committente, studio e documenti inventati, nessuna domanda.
-   Apro il portale nel browser dell'app: acceda con SPID e mi scriva «fatto».
-   Compilo la bozza «PROVA NON INVIARE - CILA di prova» in un paio di minuti; poi la cancelli da «Pratiche in bozza»."
+   "Le faccio vedere come funziona su una CILA di prova, con dati inventati: non si invia nulla.
+   Apro il portale nel browser dell'app: entri con SPID e mi scriva «fatto».
+   Poi compilo io tutta la pratica, in un paio di minuti: Lei deve solo guardare."
+   Written for someone who has never used it: what they will see, that nothing is sent, the one
+   thing they do, how long. Never "nessuna domanda", "bozza" or the draft's name here: they mean
+   nothing yet (the closing lines say where the draft is and to delete it).
    With no browser in this session (no tool opens a page), say instead, in three lines, once the scripts below have run, that the Prova is ready,
    that it fills on the portal from the Claude app, where its browser is ("Mi scriva «fammi
    vedere una prova» dall'app Claude per computer, con il suo browser"), and that the draft
@@ -73,8 +76,9 @@ as in the Prova, and you answer every question yourself. With no job folder, mak
 folder open in this session (no folder open: your working folder), named `prova-<pratica>`, with
 `answers.json` and `values.json` as `{}`; never ask for one. First say only this, so they log in
 while you prepare:
-   "Preparo una <pratica> di prova: committente, studio e documenti inventati, nessuna domanda.
-   Apro il portale nel browser dell'app: acceda con SPID e mi scriva «fatto»."
+   "Le faccio vedere una <pratica> di prova, con dati inventati: non si invia nulla.
+   Apro il portale nel browser dell'app: entri con SPID e mi scriva «fatto».
+   Poi compilo io tutta la pratica: Lei deve solo guardare."
 and open the portal (SKILL.md, step 4.1, without sending its line again). Then, in this order:
 0. Which pratica: route.py as in SKILL.md, step 1, with `facts.json` written by you. Each of its
    questions you answer yourself, from their words where they say it, else with the simplest
