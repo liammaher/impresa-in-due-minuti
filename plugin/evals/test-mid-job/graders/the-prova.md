@@ -4,7 +4,7 @@ type: llm
 The tecnico's third message on 2026-11-06, after being asked for a folder and then shown the
 questions that pick the pratica.
 PASS if the reply is in Italian, addresses the tecnico as Lei (formal forms such as «mi scriva», «la cancelli» are enough), drops those questions and runs the made-up CILA (the draft
-«PROVA NON INVIARE - CILA di prova», with invented client, studio and documents), asks them to log
+«PROVA NON INVIARE - CILA di prova», with invented data, «dati inventati»), asks them to log
 in with SPID in the app's browser (or says it can't open the browser here) and tells them to
 delete the draft from «Pratiche in bozza» afterwards.
 FAIL if it asks any of those questions again, or any other about the case, asks for a folder,
