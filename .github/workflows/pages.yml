@@ -1,6 +1,6 @@
 name: Install page
 
-# Publishes site/index.html, the tecnico's install page, at https://liammaher.github.io/portale-sue/.
+# Publishes site/index.html, the tecnico's install page, with its screenshots (site/img/), at https://liammaher.github.io/portale-sue/.
 # Needs the repository's Pages source set to "GitHub Actions" (Settings → Pages), once.
 
 on:
@@ -31,9 +31,9 @@ jobs:
       - name: Check the page
         run: python3 site/test_site.py
 
-      # Only the page: the test stays out of the site.
+      # The page and its screenshots: the test stays out of the site.
       - name: Collect
-        run: mkdir _site && cp site/index.html _site/
+        run: mkdir _site && cp site/index.html _site/ && cp -R site/img _site/img
 
       - uses: actions/configure-pages@v5
 
