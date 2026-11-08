@@ -82,7 +82,7 @@ class InstallPage(unittest.TestCase):
         self.assertNotRegex(PAGE, r"@import|url\(\s*['\"]?https?:")
 
     def test_screenshots(self):
-        # Each screenshot exists at the size the page gives it (no jump while it loads), says in Italian
+        # Each screenshot exists at twice the size the page gives it (no jump while it loads), says in Italian
         # what it shows, and site/img/ holds nothing the page doesn't show: everything there is published.
         shown = set()
         for tag, attrs in page.tags:
@@ -90,7 +90,8 @@ class InstallPage(unittest.TestCase):
                 continue
             path = HERE / attrs["src"]
             self.assertTrue(path.is_file(), path)
-            self.assertEqual(png_size(path), (int(attrs["width"]), int(attrs["height"])), path)
+            # Twice the size it is shown at: a 1x screenshot is blurry on a Retina screen.
+            self.assertEqual(png_size(path), (2 * int(attrs["width"]), 2 * int(attrs["height"])), path)
             self.assertGreater(len(attrs.get("alt", "")), 20, attrs)
             shown.add(path.name)
         self.assertTrue(shown)

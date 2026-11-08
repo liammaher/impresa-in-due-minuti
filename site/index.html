@@ -60,14 +60,14 @@
   }
   .button:hover { filter: brightness(1.08); }
 
-  /* A screenshot of Claude's own screen, cropped to the step, with the one thing to click ringed. */
+  /* A screenshot of Claude's own screen at 2x (width/height are half its pixels, so it is sharp on
+     Retina), cropped to the step, with the one thing to click ringed. */
   .shot { position: relative; margin: 14px 0 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
   .shot img { display: block; width: 100%; height: auto; }
   .ring {
     position: absolute; border: 2.5px solid #1f9d6b; border-radius: 8px;
     box-shadow: 0 0 0 4px rgba(31, 157, 107, .22); pointer-events: none;
   }
-  .ring.round { border-radius: 50%; }
   @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .shot img { filter: brightness(.93); } }
   :root[data-theme="dark"] .shot img { filter: brightness(.93); }
 
@@ -125,9 +125,9 @@
       <h2>Aggiungi il marketplace</h2>
       <p>In alto a destra: <span class="ui" data-en="+ Add">+ Aggiungi</span> › <span class="nw"><span class="ui" data-en="Add marketplace">Aggiungi marketplace</span>.</span></p>
       <figure class="shot">
-        <img src="img/aggiungi-marketplace.png" width="550" height="210"
-             alt="La pagina Personalizzazione di Claude con il menu «+ Aggiungi» aperto e la voce «Aggiungi marketplace» evidenziata.">
-        <span class="ring" style="left:68.7%;top:40.5%;width:27.6%;height:11.4%" aria-hidden="true"></span>
+        <img src="img/aggiungi-marketplace.png" width="605" height="172"
+             alt="I plugin di Claude con il menu «+ Aggiungi» aperto e la voce «Aggiungi marketplace» evidenziata.">
+        <span class="ring" style="left:71.7%;top:25%;width:25.3%;height:13.1%" aria-hidden="true"></span>
       </figure>
     </li>
     <li>
@@ -136,18 +136,18 @@
       <div class="copy"><span><code id="marketplace">liammaher/portale-sue</code></span><button type="button" data-copy="marketplace">Copia</button></div>
       <p>Poi clicca <span class="nw"><span class="ui" data-en="Sync">Sincronizza</span>.</span></p>
       <figure class="shot">
-        <img src="img/sincronizza.png" width="562" height="266" loading="lazy"
+        <img src="img/sincronizza.png" width="718" height="338" loading="lazy"
              alt="La finestra «Aggiungi marketplace» con liammaher/portale-sue nel campo URL e il pulsante «Sincronizza» evidenziato.">
-        <span class="ring" style="left:84.5%;top:86.1%;width:13.9%;height:9.8%" aria-hidden="true"></span>
+        <span class="ring" style="left:84.8%;top:86.7%;width:13.1%;height:9.3%" aria-hidden="true"></span>
       </figure>
     </li>
     <li>
       <h2>Aggiungi Portale SUE</h2>
       <p>Lo trovi tra i <span class="ui" data-en="New plugins">Nuovi plugin</span>: <span class="nw">clicca <span class="ui" data-en="+">+</span>.</span></p>
       <figure class="shot">
-        <img src="img/aggiungi-plugin.png" width="550" height="130" loading="lazy"
+        <img src="img/aggiungi-plugin.png" width="515" height="175" loading="lazy"
              alt="Portale SUE nell'elenco «Nuovi plugin», con il pulsante «+» evidenziato.">
-        <span class="ring round" style="left:90.9%;top:38.5%;width:5.1%;height:21.5%" aria-hidden="true"></span>
+        <span class="ring" style="left:89.3%;top:41.7%;width:6.5%;height:18%" aria-hidden="true"></span>
       </figure>
     </li>
   </ol>
