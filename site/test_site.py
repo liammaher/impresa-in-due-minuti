@@ -41,6 +41,12 @@ page = Page()
 page.feed(PAGE)
 
 
+def png_size(path):
+    head = path.read_bytes()[:24]
+    assert head[:8] == b"\x89PNG\r\n\x1a\n", path
+    return int.from_bytes(head[16:20], "big"), int.from_bytes(head[20:24], "big")
+
+
 class InstallPage(unittest.TestCase):
     def test_marketplace_name(self):
         market = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text())
@@ -61,15 +67,34 @@ class InstallPage(unittest.TestCase):
                 self.assertTrue(page.ids.get(attrs["data-copy"]), attrs["data-copy"])
 
     def test_loads_nothing_from_elsewhere(self):
-        # Links are fine; nothing the browser fetches on its own (scripts, styles, images, fonts, frames).
+        # Links are fine; nothing the browser fetches on its own (scripts, styles, fonts, frames) but
+        # the page's own screenshots, served next to it from site/img/.
         for tag, attrs in page.tags:
             for key in ("src", "srcset", "data", "poster"):
-                self.assertNotIn(key, attrs, f"<{tag} {key}=...>")
+                if tag == "img" and key == "src":
+                    self.assertRegex(attrs["src"], r"^img/[a-z0-9-]+\.png$", attrs)
+                else:
+                    self.assertNotIn(key, attrs, f"<{tag} {key}=...>")
             if tag == "link":
                 self.assertTrue(attrs.get("href", "").startswith("data:"), attrs)
-            if tag in ("iframe", "object", "embed", "img", "video", "audio"):
+            if tag in ("iframe", "object", "embed", "video", "audio"):
                 self.fail(f"<{tag}> on the page")
         self.assertNotRegex(PAGE, r"@import|url\(\s*['\"]?https?:")
+
+    def test_screenshots(self):
+        # Each screenshot exists at the size the page gives it (no jump while it loads), says in Italian
+        # what it shows, and site/img/ holds nothing the page doesn't show: everything there is published.
+        shown = set()
+        for tag, attrs in page.tags:
+            if tag != "img":
+                continue
+            path = HERE / attrs["src"]
+            self.assertTrue(path.is_file(), path)
+            self.assertEqual(png_size(path), (int(attrs["width"]), int(attrs["height"])), path)
+            self.assertGreater(len(attrs.get("alt", "")), 20, attrs)
+            shown.add(path.name)
+        self.assertTrue(shown)
+        self.assertEqual(shown, {p.name for p in (HERE / "img").iterdir()})
 
     def test_links_are_https(self):
         for tag, attrs in page.tags:
@@ -77,11 +102,11 @@ class InstallPage(unittest.TestCase):
                 self.assertRegex(attrs.get("href", ""), r"^https://", attrs)
 
     def test_labels_of_the_italian_app(self):
-        # As read in claude.ai set to italiano (Italia), and its it-IT strings, on 2026-11-07. The help
+        # As read in claude.ai set to italiano (Italia), and its it-IT strings, on 2026-11-07 («+»: 11-08). The help
         # article says «Personalizza»; the app says «Personalizzazione».
         labels = re.findall(r'<span class="ui"[^>]*>([^<]+)</span>', PAGE)
         for label in ("+ Aggiungi", "Aggiungi marketplace", "Aggiungi da un repository", "Sincronizza",
-                      "Nuovi plugin", "Aggiungi", "Gestisci marketplace", "Verifica aggiornamenti", "Rimuovi"):
+                      "Nuovi plugin", "+", "Gestisci marketplace", "Verifica aggiornamenti", "Rimuovi"):
             self.assertIn(label, labels)
 
     def test_every_label_has_its_english(self):
