@@ -7,6 +7,7 @@ it; python_download: off by default, and then no download in the launcher or the
 """
 
 import json
+import re
 import shutil
 import sys
 import tempfile
@@ -41,16 +42,16 @@ def main():
         assert ("vault" in said) == vault, said
     # What the app lists, in Italian and under the plugin's name, entry and manifest alike.
     entry = pin_marketplace.marketplace("0.1.0", "0" * 40, vault=False)["plugins"][0]
-    manifest = json.loads((HERE / "portale-sue" / ".claude-plugin" / "plugin.json").read_text())
+    manifest = json.loads(build.with_scope((HERE / "portali" / ".claude-plugin" / "plugin.json").read_text(), "plugin.json"))
     for said in (entry, manifest):
-        assert said["displayName"] == "Portale SUE", said
-        assert "pratiche edilizie" in said["description"] and "prepares" not in said["description"].lower(), said
+        assert said["displayName"] == "Portali", said
+        assert "SUE del Comune di Napoli" in said["description"] and "prepares" not in said["description"].lower(), said
 
     # Each shipped skill's description is Italian: the app shows it, and writes its "Prova nella chat"
     # prompt from it (2026-11-07: an English "Use when … see a demo" gave "show me a demo CILA").
     import re
     english = re.compile(r"\b(the|use|when|asks|wants|show|demo|test with|made-up|set me up|or update|it isn't)\b", re.I)
-    for skill in sorted((HERE / "portale-sue" / "skills").iterdir()):
+    for skill in sorted((HERE / "portali" / "skills").iterdir()):
         if skill.name == build.TEST_SKILL:  # never shipped
             continue
         front = (skill / "SKILL.md").read_text().split("---")[1]
@@ -61,7 +62,7 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         for vault in (True, False):
             plugin = Path(tmp) / str(vault)
-            shutil.copytree(HERE / "portale-sue", plugin)
+            shutil.copytree(HERE / "portali", plugin)
             build.select_vault(plugin, vault)
             assert (plugin / "skills" / build.SETUP_SKILL).is_dir() == vault
             for f in plugin.rglob("*.md"):
@@ -72,8 +73,8 @@ def main():
                         assert word not in text, f"{f.relative_to(plugin)} says {word!r} without the archive"
         # A text naming the archive outside a vault part stops a no-vault build.
         plugin = Path(tmp) / "leak"
-        shutil.copytree(HERE / "portale-sue", plugin)
-        (plugin / "skills" / "portale-sue-pratica" / "EXTRA.md").write_text("run pvault status\n")
+        shutil.copytree(HERE / "portali", plugin)
+        (plugin / "skills" / "pratiche" / "EXTRA.md").write_text("run pvault status\n")
         try:
             build.select_vault(plugin, False)
         except SystemExit:
@@ -104,28 +105,39 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         for download in (True, False):
             plugin = Path(tmp) / str(download)
-            shutil.copytree(HERE / "portale-sue", plugin)
+            shutil.copytree(HERE / "portali", plugin)
             build.select_vault(plugin, False)
             build.select_download(plugin, download)
             py = (plugin / build.LAUNCHER).read_text()
             assert ("python-build-standalone" in py) == download and "# <" not in py
-            skill = (plugin / "skills" / "portale-sue-pratica" / "SKILL.md").read_text()
+            skill = (plugin / "skills" / "pratiche" / "SKILL.md").read_text()
             assert ("scarico Python" in skill) == download and ("Never install Python yourself" in skill) != download
             for f in plugin.rglob("*.md"):
                 assert not any(build.DOWNLOAD.match(line.strip()) for line in f.read_text().splitlines()), f
         # A text that says the plugin downloads Python, outside a download part, stops an off build.
         plugin = Path(tmp) / "leak-dl"
-        shutil.copytree(HERE / "portale-sue", plugin)
-        (plugin / "skills" / "portale-sue-pratica" / "EXTRA.md").write_text("it fetches python-build-standalone\n")
+        shutil.copytree(HERE / "portali", plugin)
+        (plugin / "skills" / "pratiche" / "EXTRA.md").write_text("it fetches python-build-standalone\n")
         try:
             build.select_download(plugin, False)
         except SystemExit:
             pass
         else:
             raise AssertionError("an off build kept a text about downloading Python")
-    # Portale SUE carries the SUE's pratiche only: the switch says so, and a table's name says its
-    # sportello (the SUAP's table stays out).
-    assert build.sportelli() == {"sue"}, build.sportelli()
+    # The texts say what the build carries, from build.yaml's sportelli and coverage.yaml's comuni:
+    # today the SUE of Napoli; the day the SUAP or another comune is carried, the same texts say so.
+    assert build.scope() == {"copertura": f"{' e '.join(n for d, n in build.SPORTELLO_NAMES.items() if d in build.sportelli())}"
+                             " del Comune di Napoli", "comuni": "il Comune di Napoli", "città": "Napoli"}, build.scope()
+    assert build.scope({"sue", "suap"}, {"F839": "Napoli", "H501": "Roma"}) == {
+        "copertura": "SUE e SUAP dei Comuni di Napoli e Roma", "comuni": "i Comuni di Napoli e Roma", "città": "Napoli e Roma"}
+    text = "Solo il {{copertura}}.\n<!-- no-suap -->\nIl SUAP no.\n<!-- /no-suap -->\n<!-- suap -->\nIl SUAP sì.\n<!-- /suap -->\n"
+    assert build.with_scope(text, "t", {"sue"}) == "Solo il SUE del Comune di Napoli.\nIl SUAP no.\n"
+    assert build.with_scope(text, "t", {"sue", "suap"}) == "Solo il SUE e SUAP del Comune di Napoli.\nIl SUAP sì.\n"
+    # Every shipped text has its placeholders filled.
+    for f in [*(HERE / "portali").rglob("*.md"), HERE / "portali" / ".claude-plugin" / "plugin.json"]:
+        left = re.findall(r"\{\{(?:copertura|comuni|città)\}\}", build.with_scope(f.read_text(), f.name))
+        assert not left, (f, left)
+    # A table's name says its sportello (the SUAP's table stays out while it isn't carried).
     assert build.table_sportello(Path("sue-napoli-adempimenti.yaml")) == "sue"
     assert build.table_sportello(Path("suap-napoli.yaml")) == "suap"
     print("ok: build.py's vault, python_download and sportelli switches, and private terms")

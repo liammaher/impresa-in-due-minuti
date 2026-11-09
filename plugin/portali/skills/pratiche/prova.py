@@ -4,7 +4,7 @@
   prova.py [DEST]
   prova.py --files DIR
 
-DEST defaults to portale-sue-prova in the current folder; when that exists, portale-sue-prova-2,
+DEST defaults to portali-prova in the current folder; when that exists, portali-prova-2,
 -3 and so on. Prints the folder it made. --files copies only the Prova's made-up PDFs into DIR
 (made if missing, a file there already kept), for a test of the tecnico's own case, and prints
 each one's path. Never writes into the plugin's own folder: the copy is
@@ -38,7 +38,7 @@ def main():
         return 0
     if len(sys.argv) > 2 or (len(sys.argv) == 2 and sys.argv[1].startswith("-")):
         sys.exit("usage: prova.py [DEST] | prova.py --files DIR")
-    dest = target(Path(sys.argv[1] if len(sys.argv) == 2 else "portale-sue-prova").resolve())
+    dest = target(Path(sys.argv[1] if len(sys.argv) == 2 else "portali-prova").resolve())
     shutil.copytree(CASE, dest)
     (dest / "run").mkdir(exist_ok=True)
     print(dest)

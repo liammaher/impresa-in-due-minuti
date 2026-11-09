@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Writes .claude-plugin/marketplace.json for one release: the marketplace people add
-(in the Claude app, or `claude plugin marketplace add liammaher/portale-sue`) and the one entry in
-it, the Portale SUE plugin, as the release's commit on the `plugin` branch (publish_plugin.py),
+(in the Claude app, or `claude plugin marketplace add liammaher/portali`) and the one entry in
+it, the Portali plugin, as the release's commit on the `plugin` branch (publish_plugin.py),
 tagged plugin-v<version> and pinned by its commit SHA, so a moved tag installs nothing else.
 
   pin_marketplace.py --version 0.4.1 --commit <40 hex of plugin-v0.4.1's commit> [--out FILE]
@@ -18,8 +18,8 @@ import re
 import sys
 from pathlib import Path
 
-REPO = "liammaher/portale-sue"
-DISPLAY_NAME = "Portale SUE"  # shown in place of the id; the entry's wins over plugin.json's
+REPO = "liammaher/portali"
+DISPLAY_NAME = "Portali"  # shown in place of the id; the entry's wins over plugin.json's
 HERE = Path(__file__).resolve().parent
 
 
@@ -30,16 +30,23 @@ def vault():
     return build.vault_default()
 
 
+def copertura():
+    """What the plugin covers, as its texts say it (build.py scope)."""
+    sys.path.insert(0, str(HERE))
+    import build
+    return build.scope()["copertura"]
+
+
 def marketplace(version, commit, repo=REPO, vault=True):
     return {
-        "name": "portale-sue",
-        "description": "Portale SUE: Claude prepara le Sue pratiche sui portali della pubblica amministrazione, fino ai "
+        "name": "portali",
+        "description": "Portali: Claude prepara le Sue pratiche sui portali della pubblica amministrazione, fino ai "
                        "passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio).",
         "owner": {"name": "Liam Maher"},
         "plugins": [{
-            "name": "portale-sue",
+            "name": "portali",
             "displayName": DISPLAY_NAME,
-            "description": "Prepara le pratiche edilizie del SUE del Comune di Napoli, su impresainungiorno, dai "
+            "description": f"Prepara le pratiche del {copertura()}, su impresainungiorno, dai "
                            f"documenti del cliente{' o dal Suo archivio cifrato (vault)' if vault else ''}, con la "
                            "biblioteca pratiche-napoli di regole e procedure.",
             "source": {

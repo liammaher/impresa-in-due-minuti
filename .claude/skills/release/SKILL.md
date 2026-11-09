@@ -35,12 +35,12 @@ Create a release for personal-vault. Version argument (if provided): $ARGUMENTS
    - Do NOT proceed if tests fail
 
 6. **Create and push tag** (or, with no terminal: Actions → Release → Run workflow on `main`, which
-   tags the version `plugin/portale-sue/.claude-plugin/plugin.json` says)
+   tags the version `plugin/portali/.claude-plugin/plugin.json` says)
    - Run `git tag -a <version> -m "Release <version>"`
    - Ask the user for confirmation before pushing
    - Run `git push origin <version>`
 
 7. **Confirm**
-   - Print the GitHub Actions URL: `https://github.com/liammaher/portale-sue/actions`
-   - Print the releases URL: `https://github.com/liammaher/portale-sue/releases`
+   - Print the GitHub Actions URL: `https://github.com/liammaher/portali/actions`
+   - Print the releases URL: `https://github.com/liammaher/portali/releases`
    - Tell the user to check CI for the goreleaser build

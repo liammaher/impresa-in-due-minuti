@@ -46,7 +46,7 @@ func promptScope(scope string) ([]string, error) {
 // PromptVaultLabel names the vault in prompts: "suo archivio", or "suo archivio
 // «studio»" for a folder .pvault-studio (pvault --vault studio), so with several
 // vaults an approval is never given for the wrong one. Prompts are in Italian:
-// Portale SUE's users are Italian, and a prompt completes the system's own sentence
+// Portali's users are Italian, and a prompt completes the system's own sentence
 // ("… sta tentando di …" on a Mac set to Italian), so it starts with a verb.
 func PromptVaultLabel(dir string) string {
 	if name, ok := strings.CutPrefix(filepath.Base(dir), ".pvault-"); ok && ValidPersonSlug(name) {
@@ -55,7 +55,7 @@ func PromptVaultLabel(dir string) string {
 	return "suo archivio"
 }
 
-// GrantPrompt completes "Portale SUE chiede di …" for a grant of scope with access
+// GrantPrompt completes "Portali chiede di …" for a grant of scope with access
 // (read if empty), lasting ttl; an empty scope (and access) is full access.
 // A scope or access it can't word is an error, never a vaguer prompt.
 func GrantPrompt(label, scope, access string, ttl time.Duration) (string, error) {
@@ -103,7 +103,7 @@ func GrantPrompt(label, scope, access string, ttl time.Duration) (string, error)
 	return fmt.Sprintf("%s, per %s: %s", verb, promptDuration(ttl), what), nil
 }
 
-// SignPrompt completes "Portale SUE chiede di …" for reviewing a signing request,
+// SignPrompt completes "Portali chiede di …" for reviewing a signing request,
 // from the vault's own summary of it. The grant it unlocks reads the signed
 // file and approves it, so the wording says sign, not read.
 func SignPrompt(label, name string, pages int, hash8, requester string, ttl time.Duration) string {

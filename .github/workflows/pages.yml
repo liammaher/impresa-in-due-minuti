@@ -1,6 +1,6 @@
 name: Install page
 
-# Publishes site/index.html, the tecnico's install page, with its screenshots (site/img/), at https://liammaher.github.io/portale-sue/.
+# Publishes site/index.html, the tecnico's install page, with its screenshots (site/img/), at https://liammaher.github.io/portali/.
 # Needs the repository's Pages source set to "GitHub Actions" (Settings → Pages), once.
 
 on:

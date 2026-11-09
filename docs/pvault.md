@@ -1,6 +1,6 @@
 # pvault
 
-An encrypted local vault that keeps the details out of the conversation. Today's Portale SUE plugin doesn't ship it (`plugin/build.yaml` `vault: false`); the front page for tecnici is the [README](../README.md).
+An encrypted local vault that keeps the details out of the conversation. Today's Portali plugin doesn't ship it (`plugin/build.yaml` `vault: false`); the front page for tecnici is the [README](../README.md).
 
 ---
 
@@ -23,8 +23,8 @@ You enter your details and scan your documents once. Agents that prepare forms (
 **From source.** Requires Go 1.26+.
 
 ```sh
-git clone https://github.com/liammaher/portale-sue.git
-cd portale-sue
+git clone https://github.com/liammaher/portali.git
+cd portali
 make build                      # → bin/pvault
 ln -s "$PWD/bin/pvault" /opt/homebrew/bin/pvault   # or: sudo make install
 
@@ -42,8 +42,8 @@ For secrets (SPID password, CIE PIN/PUK), run `pvault set <id>` **without** a va
 pvault runs on Windows 10 and 11; Windows Hello needs Windows 11. Download `pvault_<version>_windows_amd64.zip` (or `_arm64`) from the releases, or build it with Go 1.26+:
 
 ```powershell
-git clone https://github.com/liammaher/portale-sue.git
-cd portale-sue
+git clone https://github.com/liammaher/portali.git
+cd portali
 go build -o bin\pvault.exe .\cmd\pvault
 ```
 
@@ -200,7 +200,7 @@ cd mcp && npm ci && npm run build
   "mcpServers": {
     "vault": {
       "command": "node",
-      "args": ["/path/to/portale-sue/mcp/dist/index.js"],
+      "args": ["/path/to/portali/mcp/dist/index.js"],
       "env": { "VAULT_KEYCHAIN_SERVICE": "pvault-mcp" }
     }
   }

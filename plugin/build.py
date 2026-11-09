@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Build the Portale SUE plugin for Cowork: plugin/portale-sue plus the runner, the rehearsals'
+"""Build the Portali plugin for Cowork: plugin/portali plus the runner, the rehearsals'
 steps files and the pratiche-napoli library, as one installable file.
 
   build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off] [--python-download on|off]
            [--cowork-test] [--evals]
 
-Writes OUT/portale-sue/ (default plugin/dist) and OUT/portale-sue.plugin (the same, zipped), then
+Writes OUT/portali/ (default plugin/dist) and OUT/portali.plugin (the same, zipped), then
 pre-flights the test fixture with the built plugin through its launcher (sh py, which picks this
 computer's python3), as the skill runs it. --library is a pratiche-napoli checkout (default
 $PRATICHE_NAPOLI_DIR). Needs PyYAML (the pratica venv's Python): the plugin itself needs no
 packages, because every YAML file
-the runner reads goes in as JSON (rules.load reads it). --connector adds the Portale SUE
+the runner reads goes in as JSON (rules.load reads it). --connector adds the Portali
 connector (connector/, serving this same build) as the plugin's .mcp.json. --vault overrides
 build.yaml's `vault` for this build: off, the plugin carries no setup skill and its texts keep
 only their no-vault parts. --python-download overrides build.yaml's `python_download`: off, the
 skill's launcher (py) and its texts keep only their no-download parts, so nothing in the plugin
-fetches a Python. Every build carries the made-up CILA (portale-sue-pratica/prova/): the skill's
+fetches a Python. Every build carries the made-up CILA (pratiche/prova/): the skill's
 Prova, a draft on the real portal with nothing of the tecnico's, and the build's self-check.
 --cowork-test keeps the Cowork test skill, for whoever runs those tests (it adds a 3 MB PDF): a
 release leaves it out. --evals adds plugin/evals/ (how Claude follows the skill, for
@@ -59,14 +59,14 @@ TEST_CASE = "cila-fittizia"
 PROVA = "prova"
 PROVA_DRAFT = "PROVA NON INVIARE - CILA di prova"
 # The archive switch: whether the plugin ships pvault (build.yaml says what each means).
-SETUP_SKILL = "portale-sue-setup"
-TEST_SKILL = "portale-sue-cowork-test"
+SETUP_SKILL = "setup"
+TEST_SKILL = "cowork-test"
 MARKER = re.compile(r"^<!-- (/?)(vault|no-vault) -->$")
 # The second switch, python_download: its parts in the texts, and in the launcher (a shell
 # script, so its marker lines are comments: `# <download>` ... `# </download>`).
 DOWNLOAD = re.compile(r"^<!-- (/?)(download|no-download) -->$")
 DOWNLOAD_SH = re.compile(r"^# <(/?)(download|no-download)>$")
-LAUNCHER = "skills/portale-sue-pratica/py"
+LAUNCHER = "skills/pratiche/py"
 
 
 def switch(key):
@@ -86,6 +86,39 @@ def sportelli():
     if not isinstance(got, list) or not got or not all(isinstance(s, str) and re.fullmatch(r"[a-z]+", s) for s in got):
         sys.exit("plugin/build.yaml: `sportelli` must be a list of sportelli, like [sue]")
     return set(got)
+
+
+# The sportelli a build can carry, in the order a text names them, with that name.
+SPORTELLO_NAMES = {"sue": "SUE", "suap": "SUAP"}
+
+
+def scope(desks=None, comuni=None):
+    """What the plugin covers, said in Italian, for the texts' placeholders: {{copertura}} «SUE del
+    Comune di Napoli» (later «SUE e SUAP dei Comuni di Napoli e Roma»), {{comuni}} «il Comune di
+    Napoli», {{città}} «Napoli». From build.yaml's sportelli and coverage.yaml's comuni, so a text
+    never says less or more than the build carries."""
+    desks = desks or sportelli()
+    unknown = sorted(set(desks) - set(SPORTELLO_NAMES))
+    if unknown:
+        sys.exit(f"plugin/build.yaml: no name for the sportelli {unknown} (build.py SPORTELLO_NAMES)")
+    names = list((comuni or COVERAGE["comuni"]).values())
+    città = names[0] if len(names) == 1 else ", ".join(names[:-1]) + " e " + names[-1]
+    one = len(names) == 1
+    return {"copertura": " e ".join(n for d, n in SPORTELLO_NAMES.items() if d in desks)
+            + (" del Comune di " if one else " dei Comuni di ") + città,
+            "comuni": ("il Comune di " if one else "i Comuni di ") + città, "città": città}
+
+
+def with_scope(text, name, desks=None):
+    """text for this build's sportelli: its {{copertura}}, {{comuni}} and {{città}} filled, and its
+    `<!-- suap -->` ... parts kept only when the build carries that sportello (`<!-- no-suap -->`
+    ... only when not), as the archive's parts are."""
+    desks = desks or sportelli()
+    for d in SPORTELLO_NAMES:
+        text = keep(text, d in desks, d, re.compile(rf"^<!-- (/?)({d}|no-{d}) -->$"), name)
+    for k, v in scope(desks).items():
+        text = text.replace("{{" + k + "}}", v)
+    return text
 
 
 def table_sportello(table):
@@ -126,7 +159,7 @@ def select_vault(plugin, vault):
     if not vault:
         shutil.rmtree(plugin / "skills" / SETUP_SKILL)
     for f in sorted(plugin.rglob("*.md")):
-        text = keep_parts(f.read_text(), vault, f.relative_to(plugin))
+        text = with_scope(keep_parts(f.read_text(), vault, f.relative_to(plugin)), f.relative_to(plugin))
         if not vault:
             said = re.search(r"pvault|" + SETUP_SKILL, text)
             if said:
@@ -371,13 +404,13 @@ def make_pdf(path, size):
 def self_check(plugin):
     """The test case through check.py and pre-flight, run as the skill runs them: through its
     py launcher (sh py), which picks this computer's python3."""
-    skill = plugin / "skills" / "portale-sue-pratica"
+    skill = plugin / "skills" / "pratiche"
     py = ["sh", str(skill / "py")]
     with tempfile.TemporaryDirectory() as tmp:
         # The Prova as prova.md starts it: prova.py copies it out of the plugin's folder.
         r = subprocess.run([*py, skill / "prova.py"], cwd=tmp, capture_output=True, text=True)
         case = Path(r.stdout.strip())
-        if r.returncode or case != (Path(tmp) / "portale-sue-prova").resolve() or not (case / "answers.json").is_file():
+        if r.returncode or case != (Path(tmp) / "portali-prova").resolve() or not (case / "answers.json").is_file():
             sys.exit(f"prova.py didn't copy the Prova:\n{r.stdout}{r.stderr}")
         values = Path(tmp) / "values.json"
         r = subprocess.run([*py, skill / "check.py", "studio.json", "values.json", "--out", values],
@@ -448,9 +481,10 @@ def write_pvault_release(setup, version, checksums):
 def private_terms():
     """The maintainer's own details the plugin must never carry (codice fiscale, address, CIE, ...),
     one per line, # for comments. The list is the maintainer's, outside the repo: it is the data."""
-    path = Path(os.environ.get("PORTALE_SUE_PRIVATE_TERMS") or Path.home() / ".config" / "portale-sue" / "private-terms.txt")
-    if not path.is_file() and "PORTALE_SUE_PRIVATE_TERMS" not in os.environ:
-        path = Path.home() / ".config" / "portali" / "private-terms.txt"  # where it was before the rename
+    path = Path(os.environ.get("PORTALI_PRIVATE_TERMS") or Path.home() / ".config" / "portali" / "private-terms.txt")
+    if not path.is_file() and "PORTALI_PRIVATE_TERMS" not in os.environ:
+        # Where it was before the renames (Portale SUE, then Portali again, 2026-11-09).
+        path = Path.home() / ".config" / "portale-sue" / "private-terms.txt"
     if not path.is_file():
         return []
     lines = (l.strip() for l in path.read_text().splitlines())
@@ -481,7 +515,7 @@ def main():
     ap.add_argument("--out", type=Path, default=HERE / "dist")
     ap.add_argument("--pvault-version", help="the pvault release the setup skill installs, e.g. 0.1.0 (with --pvault-checksums)")
     ap.add_argument("--pvault-checksums", type=Path, help="that release's checksums.txt")
-    ap.add_argument("--connector", help="the Portale SUE connector's https URL (connector/): the plugin brings it")
+    ap.add_argument("--connector", help="the Portali connector's https URL (connector/): the plugin brings it")
     ap.add_argument("--vault", choices=("on", "off"), help="ship the archive or not, for this build (default: build.yaml's)")
     ap.add_argument("--python-download", choices=("on", "off"),
                     help="let the skill's launcher fetch a Python where there is none, for this build (default: build.yaml's)")
@@ -501,20 +535,22 @@ def main():
     # The repo's runner names a procedure by its library title from here, as the plugin's does
     # from its own library/ (run.procedure_name): the self-check compares their pre-flights.
     os.environ["PRATICHE_NAPOLI_DIR"] = str(Path(a.library).resolve())
-    plugin = a.out / "portale-sue"
+    plugin = a.out / "portali"
     if plugin.exists():
         shutil.rmtree(plugin)
-    shutil.copytree(HERE / "portale-sue", plugin, ignore=shutil.ignore_patterns(".DS_Store", "__pycache__"))
+    shutil.copytree(HERE / "portali", plugin, ignore=shutil.ignore_patterns(".DS_Store", "__pycache__"))
     select_vault(plugin, vault)  # before anything else goes in: only the hand-written texts
+    manifest_file = plugin / ".claude-plugin" / "plugin.json"
+    manifest_file.write_text(with_scope(manifest_file.read_text(), "plugin.json"))
     select_download(plugin, download)
     # The licence and notices travel with the plugin: it bundles the library's CC BY-SA texts.
     for name in ("LICENSE", "NOTICE.md"):
         shutil.copy2(REPO / name, plugin / name)
     if a.connector:  # without one the skill uses coverage.json, as of the build
-        (plugin / ".mcp.json").write_text(as_json({"mcpServers": {"portale-sue": {"type": "http", "url": a.connector}}}))
+        (plugin / ".mcp.json").write_text(as_json({"mcpServers": {"portali": {"type": "http", "url": a.connector}}}))
     if a.pvault_version:  # without one the setup skill says there is no release to install from
         write_pvault_release(plugin / "skills" / SETUP_SKILL, a.pvault_version, a.pvault_checksums)
-    skill = plugin / "skills" / "portale-sue-pratica"
+    skill = plugin / "skills" / "pratiche"
     desks = sportelli()
     copy_runner(skill, desks)
     catalog = copy_pratiche(skill, a.library, desks)

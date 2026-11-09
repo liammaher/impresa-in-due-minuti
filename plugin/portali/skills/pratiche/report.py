@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A problem report for Portale SUE's developers, as a link to the repository's bug form filled in.
+"""A problem report for Portali's developers, as a link to the repository's bug form filled in.
 
   report.py REPORT.json [--values VALUES.json ...]
 
@@ -23,7 +23,7 @@ import sys
 from pathlib import Path
 from urllib.parse import quote, urlencode
 
-FORM = "https://github.com/liammaher/portale-sue/issues/new"
+FORM = "https://github.com/liammaher/portali/issues/new"
 TEMPLATE = "3-qualcosa-non-funziona.yml"
 SKILL = Path(__file__).resolve().parent
 PLUGIN_JSON = SKILL.parents[1] / ".claude-plugin" / "plugin.json"
@@ -105,9 +105,9 @@ def system():
 
 def version():
     try:
-        return "portale-sue " + json.loads(PLUGIN_JSON.read_text())["version"]
+        return "portali " + json.loads(PLUGIN_JSON.read_text())["version"]
     except (OSError, ValueError, KeyError):
-        return "portale-sue (versione sconosciuta)"
+        return "portali (versione sconosciuta)"
 
 
 def link(report):

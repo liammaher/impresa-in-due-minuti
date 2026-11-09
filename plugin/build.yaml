@@ -1,4 +1,4 @@
-# Whether the plugin ships Portale SUE's archive (pvault). Flip it and rebuild; nothing else changes.
+# Whether the plugin ships Portali's archive (pvault). Flip it and rebuild; nothing else changes.
 #
 # false: the plugin carries no setup skill and no installer, its texts say nothing of an archive,
 #        and a release builds no pvault (release.yml). A job's details live in files in the
@@ -10,20 +10,20 @@
 # <!-- no-vault --> ... <!-- /no-vault -->; build.py keeps one set and drops the markers.
 vault: false
 
-# Whether the skill's launcher (skills/portale-sue-pratica/py) may fetch a Python where the computer
+# Whether the skill's launcher (skills/pratiche/py) may fetch a Python where the computer
 # has none.
 #
 # false: it uses the computer's own Python 3.9+ only; where there is none it says how to install
 #        one (on a Mac it opens Apple's installer of the developer tools, which bring Python) and
 #        stops. Nothing in the plugin downloads anything.
 # true:  where there is none it downloads python-build-standalone 3.12 once (about 25 MB, checked
-#        by its pinned SHA-256) into ~/.cache/portale-sue.
+#        by its pinned SHA-256) into ~/.cache/portali.
 #
 # Its parts are <!-- download --> / <!-- no-download --> in the texts, `# <download>` /
 # `# <no-download>` in the launcher.
 python_download: false
 
-# The sportelli whose pratiche the plugin carries. Portale SUE carries the SUE's: the steps files
+# The sportelli whose pratiche the plugin carries. Portali carries the SUE's: the steps files
 # of its rehearsals, its rules tables (rules/<sportello>-*.yaml), and the library's procedures
 # those name. The SUAP's rehearsals and tables stay in the repo, unchanged, out of the plugin.
 sportelli: [sue]
