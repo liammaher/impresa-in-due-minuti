@@ -1,4 +1,4 @@
-# Portali
+# Impresa in due minuti
 
 Prepara una pratica del {{copertura}}, su impresainungiorno, dai documenti del Suo
 cliente. Si ferma dove comincia la Sua parte: le dichiarazioni, la firma digitale, il pagamento e
@@ -21,29 +21,29 @@ documenti, basta dire «è una prova, inventa i dati».
   Una pratica del SUAP (un negozio, un ristorante) non è ancora coperta.
 <!-- /no-suap -->
   Un immobile in un altro comune, un altro ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia
-  delle Entrate, Regione) o una pratica che Portali non conosce: Claude Le dice subito che non è
+  delle Entrate, Regione) o una pratica che Impresa in due minuti non conosce: Claude Le dice subito che non è
   coperta dall'automazione, e non apre nulla.
 - Per ogni lavoro Claude Le dice prima se la pratica è **coperta dall'automazione** (la prepara per
   intero), se ha **solo indicazioni** (non la compila) o se **non è coperta**, e perché. Poi Lei
   conferma, e solo allora si comincia.
 - **Coperta** vuol dire: compilata sul portale vero con dati di prova, rileggendo ogni valore.
-  Nessuna pratica reale è ancora stata inviata con Portali.
+  Nessuna pratica reale è ancora stata inviata con Impresa in due minuti.
 - Le regole vengono dalla biblioteca pratiche-napoli, ogni fatto con la sua fonte. Ciò che la
   biblioteca non copre, Claude lo dice.
 
 ## Installazione
 
-La guida passo passo, da mandare a un collega: **https://liammaher.github.io/portali/**
+La guida passo passo, da mandare a un collega: **https://liammaher.github.io/impresa-in-due-minuti/**
 
 Nell'app Claude per computer, senza terminale:
 
 1. Apra **Personalizzazione** (Customize) e la scheda **Plugin**.
 2. Clicchi **Aggiungi** (Add), poi **Aggiungi marketplace** (Add marketplace) e **Aggiungi da un repository**
-   (Add from a repository), scriva `liammaher/portali` nella casella, lo scelga nell'elenco sotto e
+   (Add from a repository), scriva `liammaher/impresa-in-due-minuti` nella casella, lo scelga nell'elenco sotto e
    clicchi **Sincronizza** (Sync).
-3. Apra Portali, tra i **Nuovi plugin**, e clicchi **Aggiungi** (Add).
-4. Per aggiornarlo (Portali cambia quando cambia il portale): **Aggiungi** → **Gestisci marketplace**
-   (Manage marketplaces) → **⋯** accanto a portali → **Verifica aggiornamenti** (Check for updates).
+3. Apra Impresa in due minuti, tra i **Nuovi plugin**, e clicchi **Aggiungi** (Add).
+4. Per aggiornarlo (Impresa in due minuti cambia quando cambia il portale): **Aggiungi** → **Gestisci marketplace**
+   (Manage marketplaces) → **⋯** accanto a impresa-in-due-minuti → **Verifica aggiornamenti** (Check for updates).
    Lo faccia ogni tanto e prima di una pratica importante. Un avviso che propone **Concedi accesso** a
    GitHub lo può chiudere: non serve.
 
@@ -53,14 +53,14 @@ vecchia, rimuova il marketplace (**Rimuovi**, stesso menu), chiuda e riapra l'ap
 (punto 2).
 
 <!-- vault -->
-Poi scriva «Configura Portali»: Claude prepara il Suo archivio privato, cifrato, su questo
+Poi scriva «Configura Impresa in due minuti»: Claude prepara il Suo archivio privato, cifrato, su questo
 computer. Lì restano i dati Suoi, dello studio e dei clienti; Claude non li vede mai.
 <!-- /vault -->
 <!-- no-vault -->
 Poi apra nell'app la cartella dei Suoi lavori, con una sottocartella per ogni lavoro. I dati dello
 studio li chiede Claude alla prima pratica, una volta sola.
 <!-- download -->
-Non serve installare altro: se sul computer non c'è Python, alla prima pratica Portali ne scarica
+Non serve installare altro: se sul computer non c'è Python, alla prima pratica Impresa in due minuti ne scarica
 uno (circa 25 MB, verificato), una volta sola.
 <!-- /download -->
 <!-- no-download -->
@@ -95,16 +95,16 @@ installi da python.org.
 ## Dove vanno i dati dei Suoi clienti
 
 <!-- vault -->
-Nel Suo archivio su questo computer e sul portale. Da nessun'altra parte: Portali non ha un
+Nel Suo archivio su questo computer e sul portale. Da nessun'altra parte: Impresa in due minuti non ha un
 server.
 <!-- /vault -->
 <!-- no-vault -->
 Nella cartella dei Suoi lavori su questo computer, nella conversazione con Claude e sul portale.
-Portali non ha un server suo.
+Impresa in due minuti non ha un server suo.
 **Claude legge i documenti del lavoro**, compila la bozza e la confronta con essi: i dati dei
 clienti (nomi, codici fiscali, indirizzi, dati catastali) passano quindi dalla conversazione con
 Claude, come ogni documento che Lei vi apre. Claude glielo dice alla prima pratica. Se un cliente
-non vuole che i suoi documenti passino da Claude, non usi Portali per quel lavoro.
+non vuole che i suoi documenti passino da Claude, non usi Impresa in due minuti per quel lavoro.
 Password, PIN e accesso SPID mai: l'accesso al portale lo fa Lei.
 <!-- /no-vault -->
 Lei è titolare del trattamento dei dati dei Suoi clienti. In Claude disattivi «Aiuta a
@@ -112,11 +112,15 @@ migliorare Claude» (Impostazioni → Privacy) e usi il browser dell'app, non Cl
 
 ## Prima di usarlo
 
-Legga l'[uso responsabile](https://github.com/liammaher/portali/blob/main/docs/responsible-use.md).
+Impresa in due minuti **non è uno strumento ufficiale**: non è affiliato al Comune di Napoli, a
+InfoCamere (che gestisce impresainungiorno) né ad altri enti, e non è una consulenza legale. Il nome
+gioca con quello del portale, ma è un progetto indipendente, gratuito e open source.
+
+Legga l'[uso responsabile](https://github.com/liammaher/impresa-in-due-minuti/blob/main/docs/responsible-use.md).
 In breve: Lei firma e risponde della pratica; una pratica alla volta, con il Suo SPID; nessun dato
 personale in una segnalazione. Per chiedere una pratica o segnalare un portale cambiato apra una
-[segnalazione](https://github.com/liammaher/portali/issues/new/choose).
-Se qualcosa di Portali non funziona, lo dica a Claude: Le prepara la segnalazione già
+[segnalazione](https://github.com/liammaher/impresa-in-due-minuti/issues/new/choose).
+Se qualcosa di Impresa in due minuti non funziona, lo dica a Claude: Le prepara la segnalazione già
 compilata, senza i dati dei clienti, e Lei la rilegge prima di inviarla.
 
 ## Per qualcosa in più

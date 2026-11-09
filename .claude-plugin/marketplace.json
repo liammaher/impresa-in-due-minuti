@@ -11,7 +11,7 @@
       "description": "Prepara le pratiche edilizie del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, con la biblioteca pratiche-napoli di regole e procedure.",
       "source": {
         "source": "github",
-        "repo": "liammaher/portali",
+        "repo": "liammaher/impresa-in-due-minuti",
         "ref": "plugin-v0.4.11",
         "sha": "bd787fdff37f6fcade10e624cc1bfb4c77a7162f"
       }

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Writes .claude-plugin/marketplace.json for one release: the marketplace people add
-(in the Claude app, or `claude plugin marketplace add liammaher/portali`) and the one entry in
-it, the Portali plugin, as the release's commit on the `plugin` branch (publish_plugin.py),
+(in the Claude app, or `claude plugin marketplace add liammaher/impresa-in-due-minuti`) and the one entry in
+it, the Impresa in due minuti plugin, as the release's commit on the `plugin` branch (publish_plugin.py),
 tagged plugin-v<version> and pinned by its commit SHA, so a moved tag installs nothing else.
 
   pin_marketplace.py --version 0.4.1 --commit <40 hex of plugin-v0.4.1's commit> [--out FILE]
@@ -18,8 +18,8 @@ import re
 import sys
 from pathlib import Path
 
-REPO = "liammaher/portali"
-DISPLAY_NAME = "Portali"  # shown in place of the id; the entry's wins over plugin.json's
+REPO = "liammaher/impresa-in-due-minuti"
+DISPLAY_NAME = "Impresa in due minuti"  # shown in place of the id; the entry's wins over plugin.json's
 HERE = Path(__file__).resolve().parent
 
 
@@ -39,12 +39,12 @@ def copertura():
 
 def marketplace(version, commit, repo=REPO, vault=True):
     return {
-        "name": "portali",
-        "description": "Portali: Claude prepara le Sue pratiche sui portali della pubblica amministrazione, fino ai "
+        "name": "impresa-in-due-minuti",
+        "description": "Impresa in due minuti: Claude prepara le Sue pratiche sui portali della pubblica amministrazione, fino ai "
                        "passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio).",
         "owner": {"name": "Liam Maher"},
         "plugins": [{
-            "name": "portali",
+            "name": "impresa-in-due-minuti",
             "displayName": DISPLAY_NAME,
             "description": f"Prepara le pratiche del {copertura()}, su impresainungiorno, dai "
                            f"documenti del cliente{' o dal Suo archivio cifrato (vault)' if vault else ''}, con la "

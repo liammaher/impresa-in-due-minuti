@@ -35,10 +35,10 @@ jobs:
             echo "Run it on main: a release is cut from main only" >&2
             exit 1
           fi
-          version=$(python3 -c 'import json; print(json.load(open("plugin/portali/.claude-plugin/plugin.json"))["version"])')
+          version=$(python3 -c 'import json; print(json.load(open("plugin/impresa-in-due-minuti/.claude-plugin/plugin.json"))["version"])')
           tag="v$version"
           if git rev-parse -q --verify "refs/tags/$tag" >/dev/null || gh release view "$tag" >/dev/null 2>&1; then
-            echo "$tag is released already: bump version in plugin/portali/.claude-plugin/plugin.json first" >&2
+            echo "$tag is released already: bump version in plugin/impresa-in-due-minuti/.claude-plugin/plugin.json first" >&2
             exit 1
           fi
           git config user.name "github-actions[bot]"
@@ -141,7 +141,7 @@ jobs:
       # The plugin people install in Claude (plugin/): built from this tag and the pratiche-napoli
       # library, with this release's checksums (when it ships the archive) so its setup skill can
       # check the pvault download.
-      # It is attached to the release as portali-<version>.zip.
+      # It is attached to the release as impresa-in-due-minuti-<version>.zip.
       - uses: actions/checkout@v4
         with:
           repository: liammaher/pratiche-napoli
@@ -157,9 +157,9 @@ jobs:
         run: |
           set -euo pipefail
           version="${TAG#v}"
-          manifest=$(python3 -c 'import json; print(json.load(open("plugin/portali/.claude-plugin/plugin.json"))["version"])')
+          manifest=$(python3 -c 'import json; print(json.load(open("plugin/impresa-in-due-minuti/.claude-plugin/plugin.json"))["version"])')
           if [ "$manifest" != "$version" ]; then
-            echo "plugin/portali/.claude-plugin/plugin.json says $manifest, the tag says $version: bump the plugin first" >&2
+            echo "plugin/impresa-in-due-minuti/.claude-plugin/plugin.json says $manifest, the tag says $version: bump the plugin first" >&2
             exit 1
           fi
           python3 -m pip install pyyaml
@@ -168,8 +168,8 @@ jobs:
             pin=(--pvault-version "$version" --pvault-checksums dist/checksums.txt)
           fi
           python3 plugin/build.py --library pratiche-napoli --out "$RUNNER_TEMP/plugin" "${pin[@]}"
-          cp "$RUNNER_TEMP/plugin/portali.plugin" "portali-$version.zip"
-          gh release upload "$TAG" "portali-$version.zip"
+          cp "$RUNNER_TEMP/plugin/impresa-in-due-minuti.plugin" "impresa-in-due-minuti-$version.zip"
+          gh release upload "$TAG" "impresa-in-due-minuti-$version.zip"
           echo "PLUGIN_VERSION=$version" >> "$GITHUB_ENV"
 
       # The zip stays on the release for Upload plugin; the marketplace installs the same build from
@@ -179,7 +179,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          commit=$(python3 plugin/publish_plugin.py --version "$PLUGIN_VERSION" --dir "$RUNNER_TEMP/plugin/portali" --push)
+          commit=$(python3 plugin/publish_plugin.py --version "$PLUGIN_VERSION" --dir "$RUNNER_TEMP/plugin/impresa-in-due-minuti" --push)
           echo "PLUGIN_COMMIT=$commit" >> "$GITHUB_ENV"
 
       # The marketplace file in the repository points at one release's commit of the plugin branch.
@@ -201,4 +201,4 @@ jobs:
           git push origin "$branch"
           gh pr create --base main --head "$branch" \
             --title "Marketplace: point at the $PLUGIN_VERSION plugin" \
-            --body "Pins .claude-plugin/marketplace.json to plugin-v$PLUGIN_VERSION (commit $PLUGIN_COMMIT on the plugin branch). Merge it and adding the marketplace liammaher/portali gives this release. Its checks wait for approval (the workflow opened it): press Approve workflows to run, or gh api -X POST repos/$GITHUB_REPOSITORY/actions/runs/RUN_ID/approve; once they pass, an ordinary merge."
+            --body "Pins .claude-plugin/marketplace.json to plugin-v$PLUGIN_VERSION (commit $PLUGIN_COMMIT on the plugin branch). Merge it and adding the marketplace liammaher/impresa-in-due-minuti gives this release. Its checks wait for approval (the workflow opened it): press Approve workflows to run, or gh api -X POST repos/$GITHUB_REPOSITORY/actions/runs/RUN_ID/approve; once they pass, an ordinary merge."

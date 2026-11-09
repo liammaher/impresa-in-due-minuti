@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""Build the Portali plugin for Cowork: plugin/portali plus the runner, the rehearsals'
+"""Build the Impresa in due minuti plugin for Cowork: plugin/impresa-in-due-minuti plus the runner, the rehearsals'
 steps files and the pratiche-napoli library, as one installable file.
 
   build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off] [--python-download on|off]
            [--cowork-test] [--evals]
 
-Writes OUT/portali/ (default plugin/dist) and OUT/portali.plugin (the same, zipped), then
+Writes OUT/impresa-in-due-minuti/ (default plugin/dist) and OUT/impresa-in-due-minuti.plugin (the same, zipped), then
 pre-flights the test fixture with the built plugin through its launcher (sh py, which picks this
 computer's python3), as the skill runs it. --library is a pratiche-napoli checkout (default
 $PRATICHE_NAPOLI_DIR). Needs PyYAML (the pratica venv's Python): the plugin itself needs no
 packages, because every YAML file
-the runner reads goes in as JSON (rules.load reads it). --connector adds the Portali
+the runner reads goes in as JSON (rules.load reads it). --connector adds the Impresa in due minuti
 connector (connector/, serving this same build) as the plugin's .mcp.json. --vault overrides
 build.yaml's `vault` for this build: off, the plugin carries no setup skill and its texts keep
 only their no-vault parts. --python-download overrides build.yaml's `python_download`: off, the
@@ -410,7 +410,7 @@ def self_check(plugin):
         # The Prova as prova.md starts it: prova.py copies it out of the plugin's folder.
         r = subprocess.run([*py, skill / "prova.py"], cwd=tmp, capture_output=True, text=True)
         case = Path(r.stdout.strip())
-        if r.returncode or case != (Path(tmp) / "portali-prova").resolve() or not (case / "answers.json").is_file():
+        if r.returncode or case != (Path(tmp) / "impresa-in-due-minuti-prova").resolve() or not (case / "answers.json").is_file():
             sys.exit(f"prova.py didn't copy the Prova:\n{r.stdout}{r.stderr}")
         values = Path(tmp) / "values.json"
         r = subprocess.run([*py, skill / "check.py", "studio.json", "values.json", "--out", values],
@@ -481,10 +481,11 @@ def write_pvault_release(setup, version, checksums):
 def private_terms():
     """The maintainer's own details the plugin must never carry (codice fiscale, address, CIE, ...),
     one per line, # for comments. The list is the maintainer's, outside the repo: it is the data."""
-    path = Path(os.environ.get("PORTALI_PRIVATE_TERMS") or Path.home() / ".config" / "portali" / "private-terms.txt")
-    if not path.is_file() and "PORTALI_PRIVATE_TERMS" not in os.environ:
-        # Where it was before the renames (Portale SUE, then Portali again, 2026-11-09).
-        path = Path.home() / ".config" / "portale-sue" / "private-terms.txt"
+    path = Path(os.environ.get("IMPRESA_IN_DUE_MINUTI_PRIVATE_TERMS") or Path.home() / ".config" / "impresa-in-due-minuti" / "private-terms.txt")
+    if not path.is_file() and "IMPRESA_IN_DUE_MINUTI_PRIVATE_TERMS" not in os.environ:
+        # Where it was under the plugin's earlier names (Portali, Portale SUE).
+        path = next((p for p in (Path.home() / ".config" / old / "private-terms.txt" for old in ("portali", "portale-sue"))
+                     if p.is_file()), path)
     if not path.is_file():
         return []
     lines = (l.strip() for l in path.read_text().splitlines())
@@ -515,7 +516,7 @@ def main():
     ap.add_argument("--out", type=Path, default=HERE / "dist")
     ap.add_argument("--pvault-version", help="the pvault release the setup skill installs, e.g. 0.1.0 (with --pvault-checksums)")
     ap.add_argument("--pvault-checksums", type=Path, help="that release's checksums.txt")
-    ap.add_argument("--connector", help="the Portali connector's https URL (connector/): the plugin brings it")
+    ap.add_argument("--connector", help="the Impresa in due minuti connector's https URL (connector/): the plugin brings it")
     ap.add_argument("--vault", choices=("on", "off"), help="ship the archive or not, for this build (default: build.yaml's)")
     ap.add_argument("--python-download", choices=("on", "off"),
                     help="let the skill's launcher fetch a Python where there is none, for this build (default: build.yaml's)")
@@ -535,10 +536,10 @@ def main():
     # The repo's runner names a procedure by its library title from here, as the plugin's does
     # from its own library/ (run.procedure_name): the self-check compares their pre-flights.
     os.environ["PRATICHE_NAPOLI_DIR"] = str(Path(a.library).resolve())
-    plugin = a.out / "portali"
+    plugin = a.out / "impresa-in-due-minuti"
     if plugin.exists():
         shutil.rmtree(plugin)
-    shutil.copytree(HERE / "portali", plugin, ignore=shutil.ignore_patterns(".DS_Store", "__pycache__"))
+    shutil.copytree(HERE / "impresa-in-due-minuti", plugin, ignore=shutil.ignore_patterns(".DS_Store", "__pycache__"))
     select_vault(plugin, vault)  # before anything else goes in: only the hand-written texts
     manifest_file = plugin / ".claude-plugin" / "plugin.json"
     manifest_file.write_text(with_scope(manifest_file.read_text(), "plugin.json"))
@@ -547,7 +548,7 @@ def main():
     for name in ("LICENSE", "NOTICE.md"):
         shutil.copy2(REPO / name, plugin / name)
     if a.connector:  # without one the skill uses coverage.json, as of the build
-        (plugin / ".mcp.json").write_text(as_json({"mcpServers": {"portali": {"type": "http", "url": a.connector}}}))
+        (plugin / ".mcp.json").write_text(as_json({"mcpServers": {"impresa-in-due-minuti": {"type": "http", "url": a.connector}}}))
     if a.pvault_version:  # without one the setup skill says there is no release to install from
         write_pvault_release(plugin / "skills" / SETUP_SKILL, a.pvault_version, a.pvault_checksums)
     skill = plugin / "skills" / "pratiche"

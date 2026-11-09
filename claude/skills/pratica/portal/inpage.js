@@ -168,7 +168,7 @@
       box.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:#fff;display:flex;flex-direction:column;" +
         "align-items:center;justify-content:center;gap:12px;font:16px system-ui,sans-serif";
       const msg = document.createElement("div");
-      msg.textContent = (note ? note + " " : "") + "Scriva qui il codice che vede nella finestra «Portali» sullo schermo.";
+      msg.textContent = (note ? note + " " : "") + "Scriva qui il codice che vede nella finestra «Impresa in due minuti» sullo schermo.";
       const input = document.createElement("input");
       input.type = "password";
       input.autocomplete = "off";

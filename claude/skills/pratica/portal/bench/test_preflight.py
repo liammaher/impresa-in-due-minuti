@@ -71,7 +71,7 @@ def outside_napoli():
     r = run.preflight(STEPS, values(answers=ANSWERS | people, fields=FIELDS | {"luca:immobile.comune": "Pozzuoli"}),
                       made_up=True)
     assert any("fuori dal Comune di Napoli" in u for u in r["unsupported"]), r
-    # A sportello of another comune isn't Portali's to judge.
+    # A sportello of another comune isn't Impresa in due minuti's to judge.
     other = copy.deepcopy(STEPS)
     other["start"] = "https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=G964"
     assert run.outside_comune(other, values(fields=FIELDS | {"locale.comune": "Pozzuoli"})) == []

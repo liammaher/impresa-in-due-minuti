@@ -703,7 +703,7 @@ The fallback: `run.py page --bundle FILE` writes runner.js, steps.js and run.js 
 file (in the person's Downloads) and `pick.js`, a box on the portal's page where the person picks
 it once; it is checked by sha256 and evaluated, which starts the run (then, with big files, the
 files box). The batches' `bench/rerun.py --bundle` does the same for many runs.
-The skill passes `--bundle ~/Downloads/portali-<name>.js` only after fetch.js failed, and asks the app for the
+The skill passes `--bundle ~/Downloads/impresa-in-due-minuti-<name>.js` only after fetch.js failed, and asks the app for the
 Downloads folder when it can't write there (`could not write`, e.g. Cowork's sandbox): a tecnico
 never downloads or saves a file by hand (2026-11-06, a test where Claude sent files to download).
 The box names the file without its extension, and the skill deletes it after the run (it holds

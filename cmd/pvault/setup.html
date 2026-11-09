@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Portali · Il suo archivio</title>
+<title>Impresa in due minuti · Il suo archivio</title>
 <style>
 :root { --bg: #f7f6f2; --card: #ffffff; --ink: #1d1d1b; --muted: #5f5e58; --line: #dedcd3; --accent: #1f5f4a; --accent-ink: #ffffff; --warn: #8a3b12; }
 @media (prefers-color-scheme: dark) { :root { --bg: #161614; --card: #22221f; --ink: #ecebe6; --muted: #a8a69d; --line: #3a3934; --accent: #5fb393; --accent-ink: #10201a; --warn: #f0a27a; } }
@@ -31,8 +31,8 @@ button:disabled { opacity: .6; cursor: wait; }
 </head>
 <body>
 <main>
-  <h1>Il suo archivio Portali</h1>
-  <p class="lead">Qui Portali tiene, cifrati, i dati suoi, dello studio e dei suoi clienti. Restano su questo computer: Claude non li vede mai, li riceve solo il portale.</p>
+  <h1>Il suo archivio Impresa in due minuti</h1>
+  <p class="lead">Qui Impresa in due minuti tiene, cifrati, i dati suoi, dello studio e dei suoi clienti. Restano su questo computer: Claude non li vede mai, li riceve solo il portale.</p>
 
   <section id="create" hidden>
     <h2>Scelga una password</h2>
@@ -64,7 +64,7 @@ button:disabled { opacity: .6; cursor: wait; }
 
   <section id="approvals" hidden>
     <h2 id="approvals-title">Attivi Touch ID</h2>
-    <p id="approvals-note">Da ora, quando Portali deve leggere i dati di una pratica, le chiederà l'impronta invece della password. Il riquadro dice sempre esattamente cosa viene letto.</p>
+    <p id="approvals-note">Da ora, quando Impresa in due minuti deve leggere i dati di una pratica, le chiederà l'impronta invece della password. Il riquadro dice sempre esattamente cosa viene letto.</p>
     <button id="approvals-go">Attiva</button>
     <div class="error" id="approvals-error"></div>
   </section>
@@ -94,7 +94,7 @@ async function refresh() {
   $("approvals-title").textContent = "Attivi " + name;
   $("approvals-go").textContent = "Attiva " + name;
   if (state.approver === "hello") {
-    $("approvals-note").textContent = "Da ora, quando Portali deve leggere i dati di una pratica, Windows Hello le chiederà il volto, l'impronta o il PIN invece della password. Il riquadro dice sempre esattamente cosa viene letto.";
+    $("approvals-note").textContent = "Da ora, quando Impresa in due minuti deve leggere i dati di una pratica, Windows Hello le chiederà il volto, l'impronta o il PIN invece della password. Il riquadro dice sempre esattamente cosa viene letto.";
   }
   if (!state.exists) return show("create");
   const wantsApprovals = state.can_approve && !state.approver_on;

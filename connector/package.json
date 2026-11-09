@@ -1,8 +1,8 @@
 {
-  "name": "@liammaher/portali-connector",
+  "name": "@liammaher/impresa-in-due-minuti-connector",
   "version": "0.1.0",
   "private": true,
-  "description": "Remote MCP server for the Portali plugin: what pratiche can be prepared, and the law behind them. No personal data.",
+  "description": "Remote MCP server for the Impresa in due minuti plugin: what pratiche can be prepared, and the law behind them. No personal data.",
   "type": "module",
   "license": "MIT",
   "main": "dist/index.js",

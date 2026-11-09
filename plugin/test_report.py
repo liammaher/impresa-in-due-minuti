@@ -15,7 +15,7 @@ from urllib.parse import parse_qs, urlsplit
 import yaml
 
 HERE = Path(__file__).resolve().parent
-SKILL = HERE / "portali" / "skills" / "pratiche"
+SKILL = HERE / "impresa-in-due-minuti" / "skills" / "pratiche"
 FORM = HERE.parent / ".github" / "ISSUE_TEMPLATE"
 sys.path.insert(0, str(SKILL))
 sys.dont_write_bytecode = True
@@ -63,7 +63,7 @@ def main():
     expect("title", q.get("title") == "[Bug] " + GOOD["title"])
     expect("text kept, accents and line breaks", q.get("cosa") == GOOD["cosa"])
     expect("dove", q.get("dove") == GOOD["dove"])
-    expect("version from plugin.json", q.get("versione", "").startswith("portali ") and "sconosciuta" not in q["versione"])
+    expect("version from plugin.json", q.get("versione", "").startswith("impresa-in-due-minuti ") and "sconosciuta" not in q["versione"])
     expect("system", bool(q.get("sistema")))
     expect("one line", "\n" not in out and " " not in out)
 
