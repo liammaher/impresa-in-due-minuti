@@ -13,7 +13,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parent
-sys.path.insert(0, str(HERE / "impresa-in-due-minuti" / "skills" / "pratiche"))
+sys.path.insert(0, str(HERE / "impresa-in-un-minuto" / "skills" / "pratiche"))
 sys.dont_write_bytecode = True
 import check  # noqa: E402
 

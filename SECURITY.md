@@ -1,12 +1,12 @@
 # Security
 
-Impresa in due minuti fills Italian government portals for you, and `pvault`, its encrypted local vault, holds the
+Impresa in un minuto fills Italian government portals for you, and `pvault`, its encrypted local vault, holds the
 details it uses. A flaw here can expose someone's identity data, so please report it privately.
 
 ## How to report
 
 Use GitHub's private vulnerability reporting:
-[Security tab, "Report a vulnerability"](https://github.com/liammaher/impresa-in-due-minuti/security/advisories/new).
+[Security tab, "Report a vulnerability"](https://github.com/liammaher/impresa-in-un-minuto/security/advisories/new).
 Please don't open a public issue or pull request for a vulnerability, and don't put real personal data in
 a report: made-up values show the problem just as well.
 
@@ -18,7 +18,7 @@ report is read.
 - **The vault (`pvault`):** how keys and sessions are handled; a service token or grant reaching more than
   its scope, or any token reaching the `personal` tier; the sign gate approving a file other than the one
   shown; backups or documents readable without the key.
-- **Impresa in due minuti's runner and plugin:** any way for the values it fills to reach the conversation (a report, an
+- **Impresa in un minuto's runner and plugin:** any way for the values it fills to reach the conversation (a report, an
   error, a screenshot, the code window's code); the runner declaring, signing, paying or sending
   something it must leave to the person.
 - **The release chain:** the installer accepting a download that doesn't match its checksum; the

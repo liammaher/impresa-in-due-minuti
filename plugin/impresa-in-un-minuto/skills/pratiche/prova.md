@@ -1,6 +1,6 @@
 # La prova
 
-A test run, for a tecnico who wants to see Impresa in due minuti work before a real job, or who calls a job
+A test run, for a tecnico who wants to see Impresa in un minuto work before a real job, or who calls a job
 of theirs a test. `${CLAUDE_SKILL_DIR}` is this skill's folder, as in SKILL.md.
 
 **Which test.** Decide from their words alone, and ask nothing:
@@ -48,7 +48,7 @@ pratica filled, fast.
    «PROVA NON INVIARE - CILA di prova», with invented data, is then to be deleted from «Pratiche
    in bozza». Then stop.
 2. From the folder open in this session (no folder open: your working folder), `prova.py` copies
-   the Prova into a new `impresa-in-due-minuti-prova/` (`-2`, `-3` when one is there) and prints it: run
+   the Prova into a new `impresa-in-un-minuto-prova/` (`-2`, `-3` when one is there) and prints it: run
    everything in that folder. Never `cd` into `${CLAUDE_SKILL_DIR}` and never `cp` from it: the
    plugin's folder can't be written, and a session's rules may refuse a copy that names it. It
    has its own `studio.json`: never read or write the tecnico's `../studio.json` for the Prova.
@@ -62,8 +62,8 @@ pratica filled, fast.
    ```
    `<name>` is `prova` in the fallback of SKILL.md, step 4.3 (with `--made-up --plain`, as here).
    Pre-flight says `ready` (the build checks it); its warnings are the Prova's own, never for
-   the tecnico. If it isn't ready, that is Impresa in due minuti's fault: SKILL.md,
-   **When Impresa in due minuti itself goes wrong**.
+   the tecnico. If it isn't ready, that is Impresa in un minuto's fault: SKILL.md,
+   **When Impresa in un minuto itself goes wrong**.
 3. Wait for their «fatto» (the portal is open since step 1). There is no code to type (`--plain`): skip step 4.2. Then steps
    4.3 and 4.4 (the scripts, `__pv.wait`) and 4.6, save `JSON.stringify(__pv.last())` to `run/report.json`,
    and run `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova`. No check

@@ -19,7 +19,7 @@
   "keywords": ["mcp", "model-context-protocol", "personal-vault", "vault"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/liammaher/impresa-in-due-minuti.git",
+    "url": "https://github.com/liammaher/impresa-in-un-minuto.git",
     "directory": "mcp"
   },
   "dependencies": {

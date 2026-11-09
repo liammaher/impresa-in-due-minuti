@@ -35,7 +35,7 @@ your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
   | Never | Say |
   |---|---|
 <!-- vault -->
-  | vault, pvault | il suo archivio (Impresa in due minuti's private archive on this computer) |
+  | vault, pvault | il suo archivio (Impresa in un minuto's private archive on this computer) |
 <!-- /vault -->
   | steps file, pre-flight, runner, run.js, check.js, script | (nothing: say what happens) |
   | draft | bozza |
@@ -58,9 +58,9 @@ your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
 - A pratica's status: `available` = disponibile; `mapped` / `coming` = in arrivo (non ancora
   provata sul portale); `guide` = solo indicazioni; `paused` = sospesa (il portale è cambiato).
 
-## What Impresa in due minuti covers, said plainly
+## What Impresa in un minuto covers, said plainly
 
-- **Only what Impresa in due minuti carries: the {{copertura}}**, on impresainungiorno. Another sportello's
+- **Only what Impresa in un minuto carries: the {{copertura}}**, on impresainungiorno. Another sportello's
   pratica, another comune, another ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia delle
   Entrate, Regione) or a pratica whose status isn't `available` is **not covered by the
   automation**: say so first, in one line, and open nothing. A property outside {{città}} is refused
@@ -69,10 +69,10 @@ your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
 - A SUAP pratica (a shop, a restaurant, an activity) is another sportello's: not covered yet.
 <!-- /no-suap -->
 - **Coperta** means: filled on the real portal with made-up data, every value read back. No real
-  pratica has been sent through Impresa in due minuti yet: the verdict says so (step 3).
+  pratica has been sent through Impresa in un minuto yet: the verdict says so (step 3).
 - **Facts come from the library, each with its source** in brackets after it ("(DD 501/2026)").
-  What the library doesn't cover: "La biblioteca di Impresa in due minuti non lo copre." Anything you add from
-  your own knowledge is marked "(non verificato da Impresa in due minuti)", and is never a figure, a deadline or
+  What the library doesn't cover: "La biblioteca di Impresa in un minuto non lo copre." Anything you add from
+  your own knowledge is marked "(non verificato da Impresa in un minuto)", and is never a figure, a deadline or
   a list of documents.
 
 ## Rules that never bend
@@ -204,7 +204,7 @@ confirmation each) or have them type them in the archive's page (`pvault ui`).
 <!-- no-vault -->
 ## 0. The folder of jobs
 
-Impresa in due minuti installs nothing and keeps nothing of its own: the details live in files in the
+Impresa in un minuto installs nothing and keeps nothing of its own: the details live in files in the
 tecnico's folder of jobs (the folder open in this session, one subfolder per job; each command
 below runs in the job's subfolder).
 
@@ -262,12 +262,12 @@ already held.
   and run it again; if the answer about the works changes, keep only that one.
 - `unsupported`: its `message` says why. Send it and stop; don't open the portal.
 
-Any other pratica: search `catalog.json`, or the Impresa in due minuti
+Any other pratica: search `catalog.json`, or the Impresa in un minuto
 connector's `find_pratica` when it is there (describe a case to it by its facts only, never by a
 name, codice fiscale or address). A status other than `available` (its line in `coverage.json`,
 or the connector's `get_pratica`) is the verdict: "Non coperta dall'automazione: …" (in arrivo,
 sospesa) or "Solo indicazioni: questa pratica non la compilo." with what the library says, its
-sources, and stop. Nothing in `catalog.json` or `coverage.json`: "Non coperta: Impresa in due minuti non la
+sources, and stop. Nothing in `catalog.json` or `coverage.json`: "Non coperta: Impresa in un minuto non la
 conosce."
 
 ## 2. The documents
@@ -445,7 +445,7 @@ to confirm (a test is the one exception: `prova.md`).
 **A complete folder.** Pre-flight gives `riepilogo` when nothing is left to ask but its
 proposals: no question, no detail missing, every file as the sportello takes it. It is short on
 purpose, so it is read rather than waved through: first "Da controllare", a line for each answer
-only Impresa in due minuti proposes; then the rest counted by where it comes from (the relazione tecnica,
+only Impresa in un minuto proposes; then the rest counted by where it comes from (the relazione tecnica,
 their note, the rules), the files, and «tutte» to see every answer; then the closing lines and
 «Scriva «sì» e apro il portale». The one message is points 1-3 above (the verdict, what you
 understood, the pratica), at most one line for each document that can't be read or disagrees
@@ -575,12 +575,12 @@ step 3 says how. Never send them a file, never ask them to download or save one,
    `run.js`; or `run.js` alone): run each, silently. If `run.js` answers `run.js arrived changed`, a value
    was lost on the way: run it again, its text exactly as the file has it.
    **Only when `fetch.js` returns `fetch failed`** (or `check.js` names `runner.js` or
-   `steps.js`): run `page` again with `--bundle ~/Downloads/impresa-in-due-minuti-<name>.js` added. It
+   `steps.js`): run `page` again with `--bundle ~/Downloads/impresa-in-un-minuto-<name>.js` added. It
    saves the file in their Downloads; say first: "Salvo nella cartella Download il file che avvia
    la compilazione: se l'app Le chiede il permesso, lo consenta." (`could not write`: ask for the
    Downloads folder with the app's own tool that asks the person to allow a folder, and run it
    again). Then run `run/pick.js` and say: "Sul portale compare un riquadro: scelga lì il file
-   «impresa-in-due-minuti-<name>» dalla cartella Download. Una volta sola." Then `__pv.wait` as below
+   «impresa-in-un-minuto-<name>» dalla cartella Download. Una volta sola." Then `__pv.wait` as below
    (`window.pvPicked` says once the file is in).
 4. `run.js` returns at once: call `await __pv.wait(40000)` until `result` is `filled` or
    `stopped`. `waiting` means the page waits for the tecnico (the files to pick in its box, or a
@@ -591,7 +591,7 @@ step 3 says how. Never send them a file, never ask them to download or save one,
 <!-- no-vault -->
 5. Save `JSON.stringify(__pv.last())` to `run/report.json`. Then the check (step 5).
 <!-- /no-vault -->
-6. If you saved a file in Downloads (step 3), delete it (`rm ~/Downloads/impresa-in-due-minuti-<name>.js`):
+6. If you saved a file in Downloads (step 3), delete it (`rm ~/Downloads/impresa-in-un-minuto-<name>.js`):
    it holds the job's values.
 
 <!-- vault -->
@@ -721,13 +721,13 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/check.py" ../studio.json values
 ```
 <!-- /vault -->
 
-## When Impresa in due minuti itself goes wrong
+## When Impresa in un minuto itself goes wrong
 
-Only for Impresa in due minuti's own faults, never their pratica's: a compilation that stopped and wasn't
+Only for Impresa in un minuto's own faults, never their pratica's: a compilation that stopped and wasn't
 recovered within the budget (step 4), a value the compilation put wrong that no document
-explains (step 5), a script that fails, or the tecnico saying something of Impresa in due minuti doesn't work.
+explains (step 5), a script that fails, or the tecnico saying something of Impresa in un minuto doesn't work.
 Then offer once, in one line, after saying what happened: "Se vuole, preparo una segnalazione per
-chi sviluppa Impresa in due minuti: la legge prima di inviarla." Nothing more unless they say yes.
+chi sviluppa Impresa in un minuto: la legge prima di inviarla." Nothing more unless they say yes.
 
 On a yes, write `run/segnalazione.json` (in the job's folder; with no job, in the folder you are
 in), in Italian:
@@ -754,7 +754,7 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/report.py" run/segnalazione.jso
 ```
 <!-- /no-vault -->
 
-It adds the plugin's version and the computer's system, and prints a link to Impresa in due minuti's bug form
+It adds the plugin's version and the computer's system, and prints a link to Impresa in un minuto's bug form
 on GitHub with every box filled in, or what in the report is the job's (then rewrite that part
 and run it again). Give the tecnico the report's text first, as it will appear, then the link:
 "Apra il link: trova il modulo già compilato. Lo rilegga, spunti la casella sui dati personali e
@@ -773,5 +773,5 @@ write or send the email, never put the client's details in it.
 "Cosa serve per una CILA in centro storico?", "È una CILA o una SCIA?": answer from
 `get_procedure` (else `library/procedures`) and `library/rules`, each fact with its source in
 brackets after it, never one list of sources for the whole answer. Say when the library doesn't
-cover it rather than filling the gap from memory. Outside {{comuni}}: "Impresa in due minuti copre
+cover it rather than filling the gap from memory. Outside {{comuni}}: "Impresa in un minuto copre
 solo {{comuni}}", and nothing more about another comune's rules.

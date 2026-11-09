@@ -22,7 +22,7 @@ def git(*args, cwd):
 
 def built(root, version):
     (root / ".claude-plugin").mkdir(parents=True)
-    (root / ".claude-plugin" / "plugin.json").write_text(json.dumps({"name": "impresa-in-due-minuti", "version": version}))
+    (root / ".claude-plugin" / "plugin.json").write_text(json.dumps({"name": "impresa-in-un-minuto", "version": version}))
     (root / "skills" / "s").mkdir(parents=True)
     (root / "skills" / "s" / "SKILL.md").write_text(f"v{version}\n")
     (root / "skills" / "s" / "py").write_text("#!/bin/sh\n")
@@ -70,7 +70,7 @@ def main():
                 raise AssertionError(f"published {case}")
 
         src = pin_marketplace.marketplace("0.1.1", second)["plugins"][0]["source"]
-        assert src == {"source": "github", "repo": "liammaher/impresa-in-due-minuti", "ref": "plugin-v0.1.1", "sha": second}, src
+        assert src == {"source": "github", "repo": "liammaher/impresa-in-un-minuto", "ref": "plugin-v0.1.1", "sha": second}, src
     print("ok: publish and pin")
 
 

@@ -52,11 +52,11 @@ class InstallPage(unittest.TestCase):
         market = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text())
         repo = market["plugins"][0]["source"]["repo"]
         self.assertEqual(page.ids["marketplace"], repo)
-        self.assertEqual(repo, "liammaher/impresa-in-due-minuti")
+        self.assertEqual(repo, "liammaher/impresa-in-un-minuto")
 
     def test_prova_phrase_is_the_skills(self):
         # The skill's description names the phrase that starts the Prova; the page must give the same.
-        skill = (ROOT / "plugin" / "impresa-in-due-minuti" / "skills" / "pratiche" / "SKILL.md").read_text()
+        skill = (ROOT / "plugin" / "impresa-in-un-minuto" / "skills" / "pratiche" / "SKILL.md").read_text()
         phrase = page.ids["prova"]
         self.assertIn(phrase.lower(), skill.lower())
         self.assertIn(f"«{phrase}»", (ROOT / "README.md").read_text())

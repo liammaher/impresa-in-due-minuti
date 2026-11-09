@@ -1,15 +1,15 @@
-# The Impresa in due minuti plugin
+# The Impresa in un minuto plugin
 
-What a tecnico in Naples installs in the Claude desktop app, or in Cowork (`impresa-in-due-minuti/README.md` is
+What a tecnico in Naples installs in the Claude desktop app, or in Cowork (`impresa-in-un-minuto/README.md` is
 what they read): the portal runner, the rehearsals' steps files and the pratiche-napoli library,
-with no server (`docs/design/packaging.md`; the archive only as `build.yaml` says). `impresa-in-due-minuti/` is
+with no server (`docs/design/packaging.md`; the archive only as `build.yaml` says). `impresa-in-un-minuto/` is
 what's written by hand; `build.py` adds the rest.
 
 ```sh
 PRATICHE_NAPOLI_DIR=../pratiche-napoli ~/.cache/pratica-portal/venv/bin/python plugin/build.py
 ```
 
-writes `plugin/dist/impresa-in-due-minuti/` and `plugin/dist/impresa-in-due-minuti.plugin` (install it in Cowork
+writes `plugin/dist/impresa-in-un-minuto/` and `plugin/dist/impresa-in-un-minuto.plugin` (install it in Cowork
 from a file). The build:
 
 - copies `run.py`, `rules.py` (with `drift.json`, for its drift refusal), `inpage.js`,
@@ -25,8 +25,8 @@ from a file). The build:
   an architect's folder holds them) and a 3 MB test PDF;
 - stops unless the test case passes `check.py` and pre-flight under the system `python3`,
   and every pratica's pre-flight prints the same from the plugin as from the repo's runner;
-- stops if any file holds a term from the maintainer's private list (`IMPRESA_IN_DUE_MINUTI_PRIVATE_TERMS`,
-  default `~/.config/impresa-in-due-minuti/private-terms.txt`, else the old `~/.config/portali/` or `~/.config/portale-sue/` one, one per line; outside the repo, since it is the
+- stops if any file holds a term from the maintainer's private list (`IMPRESA_IN_UN_MINUTO_PRIVATE_TERMS`,
+  default `~/.config/impresa-in-un-minuto/private-terms.txt`, else the old `~/.config/impresa-in-due-minuti/`, `~/.config/portali/` or `~/.config/portale-sue/` one, one per line; outside the repo, since it is the
   data): their codice fiscale, address, CIE and the like. It names the file and the list's
   line, never the term.
 
@@ -35,7 +35,7 @@ rehearsals of that sportello (a combination's from its main pratica), its rules 
 (`rules/<sportello>-*.yaml`) and the library procedures those pratiche and tables name, so its guides
 are the SUE's too. The SUAP's rehearsals and table stay in the repo, out of the plugin.
 
-**The archive switch.** `build.yaml`'s `vault` says whether the plugin ships Impresa in due minuti's archive
+**The archive switch.** `build.yaml`'s `vault` says whether the plugin ships Impresa in un minuto's archive
 (pvault). Off (as now), the plugin has no `setup` skill and no installer, the skill and
 README keep only their `<!-- no-vault -->` parts (a job's details live in files in the tecnico's
 folder of jobs, still sealed under the on-screen code on their way to the portal), and a release
@@ -44,11 +44,11 @@ rebuild. `--vault on|off` overrides it for one build; `test_build.py` checks bot
 
 One skill, `pratiche` (the job). `--cowork-test` keeps a second, `cowork-test` (the
 tests that decide the design: script calls in Cowork's browser, a 3 MB attachment, a run's cost;
-it writes `impresa-in-due-minuti-test-results.md` to bring back), for whoever runs them: a release leaves it out.
+it writes `impresa-in-un-minuto-test-results.md` to bring back), for whoever runs them: a release leaves it out.
 `--evals` adds `evals/`, how Claude follows the skill on made-up data, for `claude plugin eval`
 (`evals/README.md`): a release leaves them out too.
 
 Rebuild after a change to the runner, a steps file, the dictionary or the library, and bump
-`version` in `impresa-in-due-minuti/.claude-plugin/plugin.json`. The generated steps files are built here from
+`version` in `impresa-in-un-minuto/.claude-plugin/plugin.json`. The generated steps files are built here from
 their recipes (they are never committed), and the build stops unless each is the one
 `rehearsals/steps.lock` names.
