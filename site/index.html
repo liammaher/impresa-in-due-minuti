@@ -132,11 +132,15 @@
       <h2 lang="en">Add the marketplace</h2>
       <p lang="it">In alto a destra: <span class="ui">+ Aggiungi</span> › <span class="nw"><span class="ui">Aggiungi marketplace</span>.</span></p>
       <p lang="en">Top right: <span class="ui">+ Add</span> › <span class="nw"><span class="ui">Add marketplace</span>.</span></p>
-      <figure class="shot">
+      <figure class="shot" lang="it">
         <img src="img/aggiungi-marketplace.png" width="605" height="172"
-             alt="I plugin di Claude con il menu «+ Aggiungi» aperto e la voce «Aggiungi marketplace» evidenziata."
-             data-alt-en="Claude's plugins with the «+ Add» menu open and «Add marketplace» highlighted (the screenshot is of the Italian app).">
+             alt="I plugin di Claude con il menu «+ Aggiungi» aperto e la voce «Aggiungi marketplace» evidenziata.">
         <span class="ring" style="left:71.7%;top:25%;width:25.3%;height:13.1%" aria-hidden="true"></span>
+      </figure>
+      <figure class="shot" lang="en">
+        <img src="img/add-marketplace-en.png" width="710" height="210"
+             alt="Claude's plugins with the «+ Add» menu open and «Add marketplace» highlighted.">
+        <span class="ring" style="left:71.1%;top:26.2%;width:24.6%;height:11.4%" aria-hidden="true"></span>
       </figure>
     </li>
     <li>
@@ -147,11 +151,15 @@
       <div class="copy"><span><code id="marketplace">liammaher/impresa-in-un-minuto</code></span><button type="button" data-copy="marketplace">Copia</button></div>
       <p lang="it">Poi clicca <span class="nw"><span class="ui">Sincronizza</span>.</span></p>
       <p lang="en">Then click <span class="nw"><span class="ui">Sync</span>.</span></p>
-      <figure class="shot">
+      <figure class="shot" lang="it">
         <img src="img/sincronizza.png" width="724" height="375" loading="lazy"
-             alt="La finestra «Aggiungi marketplace» con liammaher/impresa-in-un-minuto nel campo URL e il pulsante «Sincronizza» evidenziato."
-             data-alt-en="The «Add marketplace» window with liammaher/impresa-in-un-minuto in the URL field and the «Sync» button highlighted (the screenshot is of the Italian app).">
+             alt="La finestra «Aggiungi marketplace» con liammaher/impresa-in-un-minuto nel campo URL e il pulsante «Sincronizza» evidenziato.">
         <span class="ring" style="left:84.5%;top:87.4%;width:13.2%;height:8.6%" aria-hidden="true"></span>
+      </figure>
+      <figure class="shot" lang="en">
+        <img src="img/sync-en.png" width="722" height="338" loading="lazy"
+             alt="The «Add marketplace» window with liammaher/impresa-in-un-minuto in the URL field and the «Sync» button highlighted.">
+        <span class="ring" style="left:90%;top:86.8%;width:7.8%;height:9.5%" aria-hidden="true"></span>
       </figure>
     </li>
     <li>
@@ -159,11 +167,15 @@
       <h2 lang="en">Add Impresa in un minuto</h2>
       <p lang="it">Lo trovi tra i <span class="ui">Nuovi plugin</span>: <span class="nw">clicca <span class="ui">+</span>.</span></p>
       <p lang="en">You'll find it under <span class="ui">New plugins</span>: <span class="nw">click <span class="ui">+</span>.</span></p>
-      <figure class="shot">
+      <figure class="shot" lang="it">
         <img src="img/aggiungi-plugin.png" width="510" height="174" loading="lazy"
-             alt="Impresa in un minuto nell'elenco «Nuovi plugin», con il pulsante «+» evidenziato."
-             data-alt-en="Impresa in un minuto in the «New plugins» list, with the «+» button highlighted (the screenshot is of the Italian app).">
+             alt="Impresa in un minuto nell'elenco «Nuovi plugin», con il pulsante «+» evidenziato.">
         <span class="ring" style="left:89%;top:42.5%;width:6.7%;height:18.4%" aria-hidden="true"></span>
+      </figure>
+      <figure class="shot" lang="en">
+        <img src="img/add-plugin-en.png" width="494" height="166" loading="lazy"
+             alt="Impresa in un minuto in the «New plugins» list, with the «+» button highlighted.">
+        <span class="ring" style="left:89%;top:37.3%;width:6.8%;height:18.7%" aria-hidden="true"></span>
       </figure>
     </li>
   </ol>
@@ -211,14 +223,11 @@
     en: { copy: "Copy", copied: "Copied", selected: "Selected", title: "Installing Impresa in un minuto" }
   };
   var lang = "it";
-  var images = document.querySelectorAll("img[data-alt-en]");
-  images.forEach(function (i) { i.dataset.altIt = i.alt; });
   function setLang(next) {
     lang = next;
     document.documentElement.dataset.lang = lang;
     document.documentElement.lang = lang;
     document.title = TEXT[lang].title;
-    images.forEach(function (i) { i.alt = lang === "en" ? i.dataset.altEn : i.dataset.altIt; });
     document.querySelectorAll("button[data-copy]").forEach(function (b) { b.textContent = TEXT[lang].copy; });
     document.querySelectorAll(".lang button").forEach(function (b) {
       b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
