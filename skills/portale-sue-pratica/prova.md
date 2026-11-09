@@ -30,11 +30,17 @@ pratica filled, fast.
 
 1. Say only this, and in the same turn open the portal (SKILL.md, step 4.1, without sending its
    line), so they log in while you prepare:
-   "Le faccio vedere come funziona su una CILA di prova, con dati inventati: non si invia nulla.
-   Apro il portale nel browser dell'app: entri con SPID e mi scriva «fatto».
-   Poi compilo io tutta la pratica, in un paio di minuti: Lei deve solo guardare."
-   Written for someone who has never used it: what they will see, that nothing is sent, the one
-   thing they do, how long. Never "nessuna domanda", "bozza" or the draft's name here: they mean
+   > 1. Apro impresainungiorno nel browser dell'app.
+   > 2. Lei entra con SPID come fa di solito, e mi scrive «fatto». Le credenziali le scrive solo Lei: io non le chiedo e non le conservo.
+   > 3. Io compilo una CILA di prova con dati inventati, in un paio di minuti. Non si invia nulla.
+
+   Send it as this numbered list (a sequence: each step starts with who acts, their one step in
+   the middle), nothing before or after.
+   Written for someone who has never used it and may balk at logging in through an assistant:
+   the portal they already use, logged in the way they always do; who types the credentials; then
+   what they will see, how long, and that nothing is sent. Never "non le vedo": the browser's
+   pages can be read, and the SPID username shows on them.
+   Never "nessuna domanda", "bozza" or the draft's name here: they mean
    nothing yet (the closing lines say where the draft is and to delete it).
    With no browser in this session (no tool opens a page), say instead, in three lines, once the scripts below have run, that the Prova is ready,
    that it fills on the portal from the Claude app, where its browser is ("Mi scriva «fammi
@@ -76,10 +82,11 @@ as in the Prova, and you answer every question yourself. With no job folder, mak
 folder open in this session (no folder open: your working folder), named `prova-<pratica>`, with
 `answers.json` and `values.json` as `{}`; never ask for one. First say only this, so they log in
 while you prepare:
-   "Le faccio vedere una <pratica> di prova, con dati inventati: non si invia nulla.
-   Apro il portale nel browser dell'app: entri con SPID e mi scriva «fatto».
-   Poi compilo io tutta la pratica: Lei deve solo guardare."
-and open the portal (SKILL.md, step 4.1, without sending its line again). Then, in this order:
+   > 1. Apro impresainungiorno nel browser dell'app.
+   > 2. Lei entra con SPID come fa di solito, e mi scrive «fatto». Le credenziali le scrive solo Lei: io non le chiedo e non le conservo.
+   > 3. Io compilo una <pratica> di prova con dati inventati. Non si invia nulla.
+
+(a numbered list, as the Prova's step 1 says why) and open the portal (SKILL.md, step 4.1, without sending its line again). Then, in this order:
 0. Which pratica: route.py as in SKILL.md, step 1, with `facts.json` written by you. Each of its
    questions you answer yourself, from their words where they say it, else with the simplest
    answer that leads to the pratica they named (no landscape protection, no structures, no change
