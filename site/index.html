@@ -101,6 +101,9 @@
   details p { color: var(--muted); }
 
   footer { margin-top: 40px; font-size: 14px; color: var(--muted); }
+
+  /* Each text is written twice, lang="it" and lang="en"; the switch (and the person's own language) shows one. */
+  html[data-lang="en"] body [lang="it"], html:not([data-lang="en"]) body [lang="en"] { display: none; }
 </style>
 </head>
 <body>
@@ -108,9 +111,10 @@
   <header>
     <div>
       <h1>Impresa in un minuto in Claude</h1>
-      <p class="lead">Quattro passi, due minuti, nessun terminale.</p>
+      <p class="lead" lang="it">Quattro passi, due minuti, nessun terminale.</p>
+      <p class="lead" lang="en">Four steps, two minutes, no terminal.</p>
     </div>
-    <div class="lang" role="group" aria-label="Lingua dell'app Claude">
+    <div class="lang" role="group" aria-label="Lingua / Language">
       <button type="button" data-lang="it" aria-pressed="true">IT</button>
       <button type="button" data-lang="en" aria-pressed="false">EN</button>
     </div>
@@ -118,68 +122,104 @@
 
   <ol>
     <li>
-      <h2>Apri i plugin di Claude</h2>
-      <p><a class="button" href="https://claude.ai/customize/plugins" target="_blank" rel="noopener">Apri Claude <span aria-hidden="true">↗</span></a></p>
+      <h2 lang="it">Apri i plugin di Claude</h2>
+      <h2 lang="en">Open Claude's plugins</h2>
+      <p lang="it"><a class="button" href="https://claude.ai/customize/plugins" target="_blank" rel="noopener">Apri Claude <span aria-hidden="true">↗</span></a></p>
+      <p lang="en"><a class="button" href="https://claude.ai/customize/plugins" target="_blank" rel="noopener">Open Claude <span aria-hidden="true">↗</span></a></p>
     </li>
     <li>
-      <h2>Aggiungi il marketplace</h2>
-      <p>In alto a destra: <span class="ui" data-en="+ Add">+ Aggiungi</span> › <span class="nw"><span class="ui" data-en="Add marketplace">Aggiungi marketplace</span>.</span></p>
+      <h2 lang="it">Aggiungi il marketplace</h2>
+      <h2 lang="en">Add the marketplace</h2>
+      <p lang="it">In alto a destra: <span class="ui">+ Aggiungi</span> › <span class="nw"><span class="ui">Aggiungi marketplace</span>.</span></p>
+      <p lang="en">Top right: <span class="ui">+ Add</span> › <span class="nw"><span class="ui">Add marketplace</span>.</span></p>
       <figure class="shot">
         <img src="img/aggiungi-marketplace.png" width="605" height="172"
-             alt="I plugin di Claude con il menu «+ Aggiungi» aperto e la voce «Aggiungi marketplace» evidenziata.">
+             alt="I plugin di Claude con il menu «+ Aggiungi» aperto e la voce «Aggiungi marketplace» evidenziata."
+             data-alt-en="Claude's plugins with the «+ Add» menu open and «Add marketplace» highlighted (the screenshot is of the Italian app).">
         <span class="ring" style="left:71.7%;top:25%;width:25.3%;height:13.1%" aria-hidden="true"></span>
       </figure>
     </li>
     <li>
-      <h2>Collega Impresa in un minuto</h2>
-      <p>Scegli <span class="ui" data-en="Add from a repository">Aggiungi da un repository</span> e incolla:</p>
+      <h2 lang="it">Collega Impresa in un minuto</h2>
+      <h2 lang="en">Connect Impresa in un minuto</h2>
+      <p lang="it">Scegli <span class="ui">Aggiungi da un repository</span> e incolla:</p>
+      <p lang="en">Choose <span class="ui">Add from a repository</span> and paste:</p>
       <div class="copy"><span><code id="marketplace">liammaher/impresa-in-un-minuto</code></span><button type="button" data-copy="marketplace">Copia</button></div>
-      <p>Poi clicca <span class="nw"><span class="ui" data-en="Sync">Sincronizza</span>.</span></p>
+      <p lang="it">Poi clicca <span class="nw"><span class="ui">Sincronizza</span>.</span></p>
+      <p lang="en">Then click <span class="nw"><span class="ui">Sync</span>.</span></p>
       <figure class="shot">
         <img src="img/sincronizza.png" width="724" height="375" loading="lazy"
-             alt="La finestra «Aggiungi marketplace» con liammaher/impresa-in-un-minuto nel campo URL e il pulsante «Sincronizza» evidenziato.">
+             alt="La finestra «Aggiungi marketplace» con liammaher/impresa-in-un-minuto nel campo URL e il pulsante «Sincronizza» evidenziato."
+             data-alt-en="The «Add marketplace» window with liammaher/impresa-in-un-minuto in the URL field and the «Sync» button highlighted (the screenshot is of the Italian app).">
         <span class="ring" style="left:84.5%;top:87.4%;width:13.2%;height:8.6%" aria-hidden="true"></span>
       </figure>
     </li>
     <li>
-      <h2>Aggiungi Impresa in un minuto</h2>
-      <p>Lo trovi tra i <span class="ui" data-en="New plugins">Nuovi plugin</span>: <span class="nw">clicca <span class="ui" data-en="+">+</span>.</span></p>
+      <h2 lang="it">Aggiungi Impresa in un minuto</h2>
+      <h2 lang="en">Add Impresa in un minuto</h2>
+      <p lang="it">Lo trovi tra i <span class="ui">Nuovi plugin</span>: <span class="nw">clicca <span class="ui">+</span>.</span></p>
+      <p lang="en">You'll find it under <span class="ui">New plugins</span>: <span class="nw">click <span class="ui">+</span>.</span></p>
       <figure class="shot">
         <img src="img/aggiungi-plugin.png" width="510" height="174" loading="lazy"
-             alt="Impresa in un minuto nell'elenco «Nuovi plugin», con il pulsante «+» evidenziato.">
+             alt="Impresa in un minuto nell'elenco «Nuovi plugin», con il pulsante «+» evidenziato."
+             data-alt-en="Impresa in un minuto in the «New plugins» list, with the «+» button highlighted (the screenshot is of the Italian app).">
         <span class="ring" style="left:89%;top:42.5%;width:6.7%;height:18.4%" aria-hidden="true"></span>
       </figure>
     </li>
   </ol>
 
   <section class="done" aria-labelledby="done">
-    <h2 id="done">Fatto. Ora provalo</h2>
-    <p>Nell'<a href="https://claude.ai/download">app Claude per computer</a> scrivi:</p>
+    <h2 id="done" lang="it">Fatto. Ora provalo</h2>
+    <h2 lang="en">Done. Now try it</h2>
+    <p lang="it">Nell'<a href="https://claude.ai/download">app Claude per computer</a> scrivi:</p>
+    <p lang="en">In the <a href="https://claude.ai/download">Claude desktop app</a> type (in Italian, as shown):</p>
     <div class="copy"><span><q id="prova">Fammi vedere una prova</q></span><button type="button" data-copy="prova">Copia</button></div>
-    <p class="muted">Claude compila una CILA con dati inventati sul portale vero. Tu devi solo accedere con SPID: non viene inviato nulla.</p>
+    <p class="muted" lang="it">Claude compila una CILA con dati inventati sul portale vero. Tu devi solo accedere con SPID: non viene inviato nulla.</p>
+    <p class="muted" lang="en">Claude fills in a CILA with made-up data on the real portal. You only have to log in with SPID: nothing is sent.</p>
   </section>
 
-  <details>
+  <details lang="it">
     <summary>Aggiornare Impresa in un minuto</summary>
-    <p>Prima di una pratica importante, controlla gli aggiornamenti: <span class="ui" data-en="+ Add">+ Aggiungi</span> › <span class="ui" data-en="Manage marketplaces">Gestisci marketplace</span> › <span class="ui" data-en="⋯">⋯</span> › <span class="ui" data-en="Check for updates">Verifica aggiornamenti</span>. Se resta la versione vecchia: <span class="ui" data-en="Remove">Rimuovi</span>, riapri Claude e ripeti i passi 2 e 3.</p>
+    <p>Prima di una pratica importante, controlla gli aggiornamenti: <span class="ui">+ Aggiungi</span> › <span class="ui">Gestisci marketplace</span> › <span class="ui">⋯</span> › <span class="ui">Verifica aggiornamenti</span>. Se resta la versione vecchia: <span class="ui">Rimuovi</span>, riapri Claude e ripeti i passi 2 e 3.</p>
   </details>
-  <details>
+  <details lang="en">
+    <summary>Updating Impresa in un minuto</summary>
+    <p>Before an important pratica, check for updates: <span class="ui">+ Add</span> › <span class="ui">Manage marketplaces</span> › <span class="ui">⋯</span> › <span class="ui">Check for updates</span>. If the old version stays: <span class="ui">Remove</span>, reopen Claude and repeat steps 2 and 3.</p>
+  </details>
+  <details lang="it">
     <summary>Un avviso o una richiesta che non capisci</summary>
-    <p>«Aggiungi solo marketplace di cui ti fidi» è l'avviso che Claude mostra per ogni plugin non suo: il codice di Impresa in un minuto è pubblico. <span class="ui" data-en="Grant access">Concedi accesso</span> a GitHub non serve: chiudi l'avviso. Sul Mac, se ti chiede di installare gli strumenti per sviluppatori, accetta: contengono Python, che serve a Impresa in un minuto.</p>
+    <p>«Aggiungi solo marketplace di cui ti fidi» è l'avviso che Claude mostra per ogni plugin non suo: il codice di Impresa in un minuto è pubblico. <span class="ui">Concedi accesso</span> a GitHub non serve: chiudi l'avviso. Sul Mac, se ti chiede di installare gli strumenti per sviluppatori, accetta: contengono Python, che serve a Impresa in un minuto.</p>
+  </details>
+  <details lang="en">
+    <summary>A warning or request you don't understand</summary>
+    <p>«Only add marketplaces you trust» is the warning Claude shows for every plugin that isn't its own: Impresa in un minuto's code is public. You don't need to <span class="ui">Grant access</span> to GitHub: close the warning. On a Mac, if it asks you to install the developer tools, accept: they include Python, which Impresa in un minuto needs.</p>
   </details>
 
   <footer>
-    Gratuito e open source. Non è uno strumento ufficiale: non è affiliato al Comune di Napoli né a InfoCamere.
+    <span lang="it">Gratuito e open source. Non è uno strumento ufficiale: non è affiliato al Comune di Napoli né a InfoCamere.
     <a href="https://github.com/liammaher/impresa-in-un-minuto#dove-vanno-i-dati-dei-suoi-clienti">Dati dei clienti</a> ·
-    <a href="https://github.com/liammaher/impresa-in-un-minuto">Codice</a>
+    <a href="https://github.com/liammaher/impresa-in-un-minuto">Codice</a></span>
+    <span lang="en">Free and open source. Not an official tool: not affiliated with the Comune di Napoli or InfoCamere.
+    <a href="https://github.com/liammaher/impresa-in-un-minuto#dove-vanno-i-dati-dei-suoi-clienti">Client data (in Italian)</a> ·
+    <a href="https://github.com/liammaher/impresa-in-un-minuto">Code</a></span>
   </footer>
 </main>
 <script>
-  // The app's own button names, in the language the person's Claude is in.
-  var chips = document.querySelectorAll(".ui[data-en]");
-  chips.forEach(function (c) { c.dataset.it = c.textContent; });
-  function setLang(lang) {
-    chips.forEach(function (c) { c.textContent = c.dataset[lang]; });
+  // The page is written in Italian and English; the switch shows one (the app's own button names go with it).
+  var TEXT = {
+    it: { copy: "Copia", copied: "Copiato", selected: "Selezionato", title: document.title },
+    en: { copy: "Copy", copied: "Copied", selected: "Selected", title: "Installing Impresa in un minuto" }
+  };
+  var lang = "it";
+  var images = document.querySelectorAll("img[data-alt-en]");
+  images.forEach(function (i) { i.dataset.altIt = i.alt; });
+  function setLang(next) {
+    lang = next;
+    document.documentElement.dataset.lang = lang;
+    document.documentElement.lang = lang;
+    document.title = TEXT[lang].title;
+    images.forEach(function (i) { i.alt = lang === "en" ? i.dataset.altEn : i.dataset.altIt; });
+    document.querySelectorAll("button[data-copy]").forEach(function (b) { b.textContent = TEXT[lang].copy; });
     document.querySelectorAll(".lang button").forEach(function (b) {
       b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
     });
@@ -194,8 +234,8 @@
     button.addEventListener("click", function () {
       var el = document.getElementById(button.dataset.copy);
       var done = function () {
-        button.textContent = "Copiato";
-        setTimeout(function () { button.textContent = "Copia"; }, 2000);
+        button.textContent = TEXT[lang].copied;
+        setTimeout(function () { button.textContent = TEXT[lang].copy; }, 2000);
       };
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(el.textContent).then(done, function () { select(el, button); });
@@ -211,7 +251,7 @@
     var sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
-    button.textContent = "Selezionato";
+    button.textContent = TEXT[lang].selected;
   }
 </script>
 </body>

@@ -110,11 +110,48 @@ class InstallPage(unittest.TestCase):
                       "Nuovi plugin", "+", "Gestisci marketplace", "Verifica aggiornamenti", "Rimuovi"):
             self.assertIn(label, labels)
 
-    def test_every_label_has_its_english(self):
-        # The IT/EN switch swaps each label for the English app's; a label without one would stay Italian.
+    def test_every_text_has_its_english(self):
+        # The IT/EN switch shows one of two texts, each block written twice (lang="it", lang="en"), the app's
+        # button names with them. Pairs sit next to each other, with the same tag and the same buttons.
+        blocks = []   # (lang, tag, [app labels inside])
+        stack = []    # open elements: (tag, index in blocks or None)
+        class Walk(HTMLParser):
+            def handle_starttag(self, tag, attrs):
+                attrs = dict(attrs)
+                if tag in ("meta", "link", "img", "br", "input"):
+                    return
+                if tag != "html" and attrs.get("lang") in ("it", "en"):
+                    blocks.append((attrs["lang"], tag, []))
+                    stack.append((tag, len(blocks) - 1))
+                else:
+                    stack.append((tag, None))
+                if tag == "span" and attrs.get("class") == "ui":
+                    self.chip = True
+                    inside = [i for _, i in stack if i is not None]
+                    self.target = inside[-1] if inside else None
+            def handle_endtag(self, tag):
+                while stack and stack.pop()[0] != tag:
+                    pass
+                self.chip = False
+            chip, target = False, None
+            def handle_data(self, data):
+                if self.chip and self.target is not None:
+                    blocks[self.target][2].append(data.strip())
+        Walk().feed(PAGE)
+        self.assertTrue(blocks)
+        langs = [b[0] for b in blocks]
+        self.assertEqual(langs.count("it"), langs.count("en"))
+        for it, en in zip(blocks[::2], blocks[1::2]):
+            self.assertEqual((it[0], en[0]), ("it", "en"), "an it block is followed by its en block")
+            self.assertEqual(it[1], en[1], it)
+            self.assertEqual(len(it[2]), len(en[2]), (it, en))
+        english = {label for b in blocks if b[0] == "en" for label in b[2]}
+        for label in ("+ Add", "Add marketplace", "Add from a repository", "Sync", "New plugins", "+",
+                      "Manage marketplaces", "Check for updates", "Remove"):
+            self.assertIn(label, english)
         for tag, attrs in page.tags:
-            if tag == "span" and attrs.get("class") == "ui":
-                self.assertIn("data-en", attrs, attrs)
+            if tag == "img":
+                self.assertGreater(len(attrs.get("data-alt-en", "")), 20, attrs)
 
     def test_italian_and_not_official(self):
         self.assertRegex(PAGE, r'<html lang="it">')
