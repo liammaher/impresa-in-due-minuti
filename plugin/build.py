@@ -527,6 +527,9 @@ def main():
     if a.evals:
         shutil.copytree(HERE / "evals", plugin / "evals", ignore=shutil.ignore_patterns(".DS_Store", "results"))
         shutil.copytree(skill / PROVA, plugin / "evals" / "_job")
+        # The P6 case as a tecnico hands it over, in the documents' real formats (complete-folder).
+        subprocess.run([sys.executable, "-I", REPO / "claude" / "skills" / "pratica" / "intake" / "bench" / "dossier.py",
+                        plugin / "evals" / "_dossier"], check=True, capture_output=True)
     if a.cowork_test:
         make_pdf(plugin / "skills" / TEST_SKILL / "planimetria-3mb.pdf", 3 * 1024 * 1024)
     else:  # the tests that decided the design, never the customer's

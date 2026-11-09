@@ -1,0 +1,22 @@
+Appunti per la CILA di Luca Fittizio (dati inventati, per prova)
+
+Committente Luca Fittizio: cittadinanza italiana, nato in provincia di Napoli (NA).
+Residente in Via Domenico Fontana 40, 80128 Napoli.
+Email luca.fittizio@example.com, telefono +39 333 000 0102.
+
+Proprietaria Immobiliare Fittizia S.r.l.: PEC immobiliare.fittizia@pec.example.it, telefono +39 081 000 0103.
+Legale rappresentante: Giulia Esempio, codice fiscale SMPGLI70S70F839A, nata a Napoli (NA) il 30/11/1970, sesso F.
+Residente in Via Toledo 256, 80134 Napoli (NA).
+
+Imprese esecutrici, già scelte:
+1. Edil Fittizia di Marco Esempio, P. IVA 46733740636, CCIAA di Napoli, REA NA-999102.
+   Sede legale: Via Epomeo 300, 80126 Napoli (NA). PEC edil.fittizia@pec.example.it.
+   Titolare Marco Esempio, codice fiscale SMPMRC78D09F839U, nato a Napoli (NA) il 09/04/1978, telefono +39 333 000 0104.
+   INPS matricola 5109990001; INAIL sede Napoli, codice ditta 19999001, PAT 99990011.
+2. Impianti Fittizi S.n.c., P. IVA e codice fiscale 25609610636, CCIAA di Napoli, REA NA-999103.
+   Sede legale: Via Terracina 15, 80125 Napoli (NA). PEC impianti.fittizi@pec.example.it.
+   Legale rappresentante Roberto Fittizio, codice fiscale FTTRRT80E12F839Q, nato a Napoli (NA) il 12/05/1980, sesso M, telefono +39 333 000 0105.
+   INPS matricola 5109990002; INAIL sede Napoli, codice ditta 19999002, PAT 99990022.
+
+Il progettista e direttore dei lavori sono io; nessun altro tecnico, ora o dopo.
+Nessun altro adempimento insieme alla CILA.

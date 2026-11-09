@@ -4,7 +4,9 @@ What an architect hands over for a pratica (the visura, the lease or the deed, t
 tecnica, the drawings, the receipts) holds most of what pre-flight asks. `intake.py scan` reads it,
 puts the people's and the property's fields in a private values file, and proposes the router's
 facts and the pratica's answers, each with the document and the words it comes from. The person
-confirms them in one "ok" (`accept`); pre-flight then asks only what no document says.
+confirms them in one "ok" (`accept`); pre-flight then asks only what no document says. `accept`
+also records each answer's document under the answers file's `fonti`, so pre-flight's summary of
+a complete folder (`riepilogo`) can say where every answer comes from.
 
 ## What it reads, and from where
 

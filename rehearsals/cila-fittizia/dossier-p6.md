@@ -43,7 +43,7 @@ isn't in the vault is what pre-flight has to ask). All of it is made up.
 - Luca has no debts to the Comune di Napoli and no collection procedure against him (what he
   declares in the Allegato A). He has no PEC and no landline.
 - The penalty for the late CILA is paid before filing and its receipt attached, like the
-  151 € diritti.
+  166 € diritti (SUE 15, a CILA with works started: G.C. 239/2026).
 
 ## The attachments (FAC-SIMILE, made up)
 
@@ -57,7 +57,7 @@ isn't in the vault is what pre-flight has to ask). All of it is made up.
 | `relazione-tecnica.pdf` | Technical report |
 | `documentazione-fotografica.pdf` | Colour photos with viewing cones |
 | `notifica-preliminare.pdf` | The notifica preliminare already sent |
-| `ricevuta-diritti.pdf` | The 151 € diritti receipt |
+| `ricevuta-diritti.pdf` | The 166 € diritti receipt |
 | `ricevuta-sanzione.pdf` | The receipt of the penalty for the late CILA (art. 6-bis, c. 5) |
 
 Which of them need a firma digitale, and the penalty's amount and how it's paid, are what the

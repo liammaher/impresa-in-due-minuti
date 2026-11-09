@@ -242,7 +242,7 @@ DOCUMENTS = {
     "Ricevuta_diritti.pdf": lambda: one_page([
         "Poste Italiane - BancoPosta", "RICEVUTA DI VERSAMENTO - Bollettino",
         "sul C/C n. 57060964 intestato a COMUNE DI NAPOLI SERVIZIO TESORERIA EDILIZIA PRIVATA",
-        "Importo: Euro 151,00",
+        "Importo: Euro 166,00",  # SUE 15, a CILA with works started (G.C. 239/2026)
         "Causale: N1051_SUE - Fittizio Luca - Via Domenico Fontana 40", "Data: 28/10/2026"]),
     "Ricevuta_sanzione.pdf": lambda: one_page([
         "Banca Fittizia - Disposizione di bonifico SEPA eseguita",

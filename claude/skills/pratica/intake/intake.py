@@ -704,6 +704,13 @@ def main():
                 if role not in roles:
                     roles[role] = slug
                     added.append(f"people.{role}")
+        # Where each answer comes from, for the one message's summary (run.py `riepilogo`): every
+        # proposal of the documents that the file holds as proposed, the facts route.py passed on too.
+        if a.part == "answers":
+            fonti = have.setdefault("fonti", {})
+            for p in json.loads((a.out / "intake.json").read_text()).get("proposals", []):
+                if p["key"] in have and have[p["key"]] == p["value"] and p.get("from"):
+                    fonti.setdefault(p["key"], p["from"])
         a.into.write_text(json.dumps(have, indent=1, ensure_ascii=False))
         print(json.dumps({"added": added, "into": str(a.into)}, ensure_ascii=False))
         return 0

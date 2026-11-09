@@ -97,7 +97,9 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      `supports:` (cases it maps), `rules:` (the library's rules tables, SUAP and SUE,
                      copied in `rules/`: whether the law makes the case this pratica, the others it
                      adds with it, and those filed apart, which go in `yours`)
-                     and `asks:` (questions, asked in one message, or proposed to confirm). Before it, for
+                     and `asks:` (questions, asked in one message, or proposed to confirm; with only
+                     proposals left, `riepilogo`: every answer, for one «sì», which `run.py confirm`
+                     writes while the summary is unchanged). Before it, for
                      the SUE's pratiche (`sue-napoli`: new works; `sue-napoli-adempimenti`: filings on a
                      title held), `route.py` asks the table's facts and names the one steps
                      file whose `rules:` main and `handles` are the case's pratiche, with the answers to
@@ -502,7 +504,9 @@ before and after a change, `bench/test_schema_branches.py` schema_branches.py an
 route.py on every case the SUE table decides (it prints the combinations not mapped yet), `bench/test_rounds.py`
 that every rehearsal's pre-flight is ready after one message (a proposal reading another answer of the same
 message comes with it: `assumes`, `cases`, `otherwise`; what a proposal holds back is `if_changed`, asked only
-if it is changed), `bench/test_message.py` that one message (pre-flight's `message`, which the skill sends as
+if it is changed), `bench/test_one_yes.py` that a complete real folder (the P6 dossier, its files
+signed PDF/A, the tecnico's note) asks nothing but its summary of every answer (`riepilogo`, each with its
+source, answers.json `fonti`) and that `run.py confirm` makes it ready, `bench/test_message.py` that one message (pre-flight's `message`, which the skill sends as
 it is) holds every question, proposal and missing detail and no field id,
 `bench/test_pairs.py` the wizard's pairs against `catalogue/F839/sue-pairs.yaml` (filed together or
 not, and why), and

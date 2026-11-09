@@ -15,7 +15,10 @@ claude plugin eval plugin/dist/portale-sue --scaffold --allow-tools Bash Write
 
 `--evals` copies this folder into the build as `evals/`, with the made-up CILA job
 (`_job/`: the CILA rehearsal's P6 fixture, split as a tecnico's folder holds it) that
-`pre-flight-message`, `no-credentials`, `bug-report` and `test-own-case` start from; `prova`,
+`pre-flight-message`, `no-credentials`, `bug-report` and `test-own-case` start from (`complete-folder` instead starts from the same case complete as a tecnico hands it over: the
+made-up dossier in its real formats, `_dossier/`, its files signed PDF/A, and the tecnico's
+`note.txt`; it must take one message with every answer, for a single «sì»; the «sì» itself,
+`confirm`, is bench/test_one_yes.py's: a one-turn case can't hold the summary the tecnico read); `prova`,
 `first-contact` and the three tests asked as a tecnico asked them on 2026-11-06 (`test-in-a-job`: a CILA
 called a test in its first line; `test-mid-job`: a test after the folder and the questions were asked;
 `test-other-pratica`: a SCIA as a test) start from an empty folder, as a tecnico who has just installed the plugin.
