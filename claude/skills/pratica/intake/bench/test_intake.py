@@ -99,7 +99,7 @@ def notes():
     n = [x["note"] for x in REPORT["notes"]]
     assert "licenza edilizia n. 1234 del 1960-03-12" in n and "licenza edilizia n. 567 del 1961-06-05" in n, n
     assert any(x.startswith("planimetria depositata il 1962-05-18: non è di primo impianto") for x in n), n
-    assert any(x.startswith("diritti 151,00 €: sul conto") for x in n), n
+    assert any(x.startswith("diritti 166,00 €: sul conto") for x in n), n
     assert any(x.startswith("sanzione 333,00 €: sul conto") for x in n), n
 
 

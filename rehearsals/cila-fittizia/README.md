@@ -42,7 +42,7 @@ The run ends when all of this holds:
   pane, files over 256 KB are listed as the architect's step, see "Two browsers");
 - the fresh load of the draft found every value still there;
 - the review page is open, listing what's left: sign the procura, the Allegato A and the
-  Modello DP digitally and attach the `.p7m` files, pay the 151 € diritti and attach the
+  Modello DP digitally and attach the `.p7m` files, pay the 166 € diritti and attach the
   receipt, then sign and send the CILA.
 
 Nothing after that point is part of the test, and none of it is ever done here.

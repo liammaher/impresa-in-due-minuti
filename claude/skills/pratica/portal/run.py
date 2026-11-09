@@ -14,7 +14,14 @@
       not in PDF/A, unsigned or oddly named, FILING) and whether they fit the pane, and the
       person's own steps; `message` is the questions, proposals and missing details as the one
       Italian message to send. Exits 0 when `ready`, 3 when not. --made-up (a rehearsal's made-up
-      files, never sent) reports the sportello's refusals as warnings instead.
+      files, never sent) reports the sportello's refusals as warnings instead. When nothing is
+      left but proposals (or nothing at all), `riepilogo` is the one message's summary for the
+      tecnico's one «sì»: the proposals a line each, the rest counted by source (answers.json
+      `fonti`); `riepilogo_tutte` every answer, a line each.
+
+  run.py confirm --steps STEPS.yaml --answers A.json VAULT --riepilogo ID
+      The «sì» to that summary: writes its proposals into A.json, only while `riepilogo_id` is
+      still ID (exit 4 otherwise, with the new summary), then prints pre-flight again.
 
   run.py scope --steps STEPS.yaml
       Prints the `pvault get` patterns for every vault field the steps read (a role's as
@@ -1382,12 +1389,23 @@ def assumed_proposals(steps, values, report):
     given.cache, given._titolare_slug = values.cache, values._titolare_slug
     need = needed(steps, given)
     later = {}
+    # A follow-up may hang on another that is itself held (a "+" list's second item hangs on the
+    # proposal and on the count that proposal holds): held too, under the proposals holding its
+    # parents (P6, 2026-11-09: comunicazione_2 and _3 were asked though "altri adempimenti" was "no").
+    everything = report["questions"] + [i for q in report["questions"] for i in q.get("items", [])] + report["proposals"]
+    roots = {}
+    while True:
+        more = {x["key"]: [r for h in x["only_if"] for r in ([h] if h in held else roots[h])]
+                for x in everything if x["key"] not in roots and x.get("only_if") and x["key"] not in need
+                and all(h in held or h in roots for h in x["only_if"])}
+        if not more:
+            break
+        roots |= more
 
     def stays(x):
-        hangs = x.get("only_if") or []
-        if not hangs or not set(hangs) <= set(held) or x["key"] in need:
+        if x["key"] not in roots:
             return True
-        for h in hangs:
+        for h in dict.fromkeys(roots[x["key"]]):
             later.setdefault(h, []).append(x["key"])
         return False
     for q in report["questions"]:
@@ -1407,6 +1425,120 @@ def head(question):
     i = question.find("?")
     q = question[:i + 1] if 0 < i < len(question) - 1 else question
     return re.sub(r" \([^()\d]*\)", "", q)
+
+
+# --- The one message of a complete folder: every answer, for one «sì» -------------------
+
+PROPOSED = "proposta"
+LONG_TEXT = 70  # a longer text answer shows its first words
+
+
+def shown(a, v):
+    """An answer as the summary shows it, in Italian."""
+    if a.get("type") == "yes_no" or "group" in a:
+        return "sì" if truthy(v) else "no"
+    if a.get("type") == "choice":
+        return (a.get("labels") or {}).get(v) or str(v).replace("_", " ")
+    if a.get("type") == "date" and re.fullmatch(r"\d{4}-\d\d-\d\d", str(v)):
+        return "/".join(reversed(str(v).split("-")))
+    if a.get("type") == "file":
+        return Path(str(v)).name
+    s = " ".join(str(v).split())
+    return s if len(s) <= LONG_TEXT else "«" + s[:LONG_TEXT - 10].rsplit(" ", 1)[0] + " …»"
+
+
+def summary_rows(steps, values, proposed=()):
+    """Every answer this case's compilation uses, in the order the questions are asked: its
+    question as the message shows it, the answer, and where it comes from (answers.json's
+    `fonti`, which intake.py accept and the tecnico's own note or request write; `proposed`: a
+    proposal the «sì» confirms). A checklist is one row of the items ticked; the files one row."""
+    steps = expand(steps, values)
+    asks, groups = steps.get("asks", {}), steps.get("groups", {})
+    need, fonti = needed(steps, values), values.answers.get("fonti") or {}
+    rows, lists, files = [], {}, []
+    for k in check_asks(steps):
+        if k not in need:
+            continue
+        a, v = asks[k], values.raw(k)
+        if v is None:
+            v = values.field("ask." + k)  # a default
+            if v in (None, ""):
+                continue
+            source = "calcolata dai dati" if "{{" in str(a.get("default", "")) else "predefinita"
+        else:
+            source = PROPOSED if k in proposed else fonti.get(k, "")
+        if a.get("type") == "file":
+            files.append(shown(a, v))
+            continue
+        if "group" in a:
+            g = a["group"]
+            if g not in lists:
+                lists[g] = {"key": g, "question": head(values.render(groups[g]["question"]) or groups[g]["question"]),
+                            "ticked": [], "sources": [fonti[g]] if fonti.get(g) else []}
+                rows.append(lists[g])
+            if truthy(v):
+                lists[g]["ticked"].append(a["item"])
+            if source and source not in lists[g]["sources"]:
+                lists[g]["sources"].append(source)
+            continue
+        rows.append({"key": k, "question": head(a["question"]), "answer": shown(a, v), "source": source})
+    for r in rows:
+        if "ticked" in r:
+            r["answer"] = "; ".join(r.pop("ticked")) or "nessuna"
+            r["source"] = ", ".join(r.pop("sources"))
+    if files:
+        rows.append({"key": "allegati", "question": f"I file da allegare ({len(files)})", "answer": ", ".join(files),
+                     "source": "cartella del lavoro"})
+    return rows
+
+
+AUTOMATIC = ("calcolata dai dati", "predefinita")  # the rules' own, not the tecnico's choices
+YES = "Scriva «sì» e apro il portale; se una risposta va cambiata, me lo dica."
+
+
+def summary_text(rows, end=()):
+    """The one message's summary, as a review by exception (GOV.UK's "check answers", kept short so
+    it is read, not rubber-stamped): first what only Portale SUE proposes, a line each; then the
+    rest counted by where it comes from; every answer one word away («tutte»: summary_all)."""
+    check = [r for r in rows if r["source"] == PROPOSED]
+    files = [r for r in rows if r["key"] == "allegati"]
+    rest = [r for r in rows if r not in check and r not in files]
+    by = {}
+    for r in rest:
+        src = "calcolate dalle regole" if r["source"] in AUTOMATIC else r["source"].split(", ")[0] or "già date"
+        by[src] = by.get(src, 0) + 1
+    lines = []
+    if check:
+        lines.append("Da controllare (le propongo io):")
+        lines += [f"– {r['question']} → {r['answer']}" for r in check]
+        lines.append("")
+    lines.append(f"Il resto ({len(rest)} risposte) viene da: " + ", ".join(f"{k} {n}" for k, n in sorted(by.items(), key=lambda x: -x[1])) + "."
+                 + (f" I file da allegare sono {files[0]['question'].split('(')[1].rstrip(')')}, già controllati."
+                    if files else "")
+                 + " Per vederle una per una, scriva «tutte».")
+    return "\n".join(lines) + "\n\n" + "\n".join([*end, YES])
+
+
+def summary_all(rows):
+    """Every answer, a line each with its source: the summary's «tutte»."""
+    lines = ["Tutte le risposte che userò (le assevera Lei; «proposta»: la propongo io):"]
+    lines += [f"– {r['question']} → {r['answer']}" + (f" ({r['source']})" if r["source"] else "") for r in rows]
+    return "\n".join(lines) + "\n\n" + YES
+
+
+def summary_id(rows):
+    """What the «sì» confirms: `confirm` refuses it once the answers have changed since."""
+    return hashlib.sha256(json.dumps(rows, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:12]
+
+
+def with_proposals(values, report):
+    """The values once the «sì» confirms every proposal; None when one waits for another answer."""
+    if any("proposal" not in p for p in report["proposals"]):
+        return None
+    held = {p["key"]: p["proposal"] for p in report["proposals"]}
+    given = Values(values.answers | held, vault=values.vault, fields=values.fields, asks=values.asks)
+    given.cache, given._titolare_slug = values.cache, values._titolare_slug
+    return given, held
 
 
 def refusal_text(report):
@@ -1617,14 +1749,15 @@ def message(report, asks, held_need=None, short=False):
     return "\n\n".join("\n".join(b) for b in blocks)
 
 
-def preflight(steps, values, made_up=False, after=False):
+def preflight(steps, values, made_up=False, after=False, summarize=True):
     """Everything a run needs, settled before any browser opens: why this case isn't
     supported, the questions still to ask, the vault fields missing or expired, the files
     to attach, and the person's own steps. ready: nothing is left before the run. A file the
     sportello would refuse (FILING) is a problem, or with made_up (a rehearsal's made-up data,
     never sent) only its `filing` and a warning, and no slot that takes only signed files is
-    filled (phase). after: the second run's, after the declarations (phase)."""
-    steps = expand(steps, values)
+    filled (phase). after: the second run's, after the declarations (phase). summarize: a case
+    whose only open items are proposals, or none, gets `riepilogo` (and `riepilogo_tutte`), for one «sì»."""
+    given_steps, steps = steps, expand(steps, values)
     later = [] if after else after_declarations(steps, values)
     unsigned = [f.get("label") for s in steps["sections"] for f in s["fields"]
                 if made_up and signed_only(f) and applies(f, values)]
@@ -1858,15 +1991,32 @@ def preflight(steps, values, made_up=False, after=False):
         report["second_run"] = after_declarations(steps, values)
     report["ready"] = not (report["questions"] or report["proposals"] or report["missing"]
                            or any(not x["exists"] or x.get("problem") for x in report["files"] if x["path"]))
+    # What comes after, in a line, so nothing at the end surprises them (`yours` has it all).
+    end = ["All'inizio della compilazione le chiederò di scegliere i file del lavoro, una volta sola."] \
+        if report.get("pick") else []
+    end.append("Alla fine restano a Lei: le dichiarazioni, la firma, il pagamento e l'invio."
+               + (" Dopo le dichiarazioni mi darà i file firmati (la procura e gli altri): li allego con una "
+                  "seconda compilazione." if later else ""))
+    if summarize and not after and not report["questions"]:
+        # A complete folder: nothing left to ask but the proposals. The one message shows every
+        # answer the compilation will use, the proposals among them, and the tecnico's «sì»
+        # confirms them all (`confirm`, which holds it to this `riepilogo_id`). Short of that, the
+        # details the proposals make needed are asked with the rest.
+        confirmed = with_proposals(values, report)
+        if confirmed:
+            given, held = confirmed
+            inner = report if report["ready"] else preflight(given_steps, given, made_up, after, summarize=False)
+            if inner["ready"] and not report["missing"]:
+                rows = summary_rows(given_steps, given, proposed=set(held))
+                report |= {"riepilogo": summary_text(rows, end), "riepilogo_tutte": summary_all(rows), "riepilogo_id": summary_id(rows), "riepilogo_rows": rows}
+            else:
+                # The details only the proposals make needed (a proposed second firm's VAT number)
+                # are asked now, with the rest, not after the «ok» in a second message.
+                known = {m["field"] for m in report["missing"]}
+                report["missing"] += [m for m in inner["missing"] if m["field"] not in known]
     text = message(report, asks, held_need)
     if text:
         report["short"] = message(report, asks, held_need, short=True)
-        # What comes after, in a line, so nothing at the end surprises them (`yours` has it all).
-        end = ["All'inizio della compilazione le chiederò di scegliere i file del lavoro, una volta sola."] \
-            if report.get("pick") else []
-        end.append("Alla fine restano a Lei: le dichiarazioni, la firma, il pagamento e l'invio."
-                   + (" Dopo le dichiarazioni mi darà i file firmati (la procura e gli altri): li allego con una "
-                      "seconda compilazione." if later else ""))
         report["message"] = text + "\n\n" + "\n".join(end)
     return report
 
@@ -2713,7 +2863,7 @@ def run(steps, values, out, cdp=None, profile=None, close=False, resume=None, wh
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("command", choices=["preflight", "plan", "page", "run", "scope"])
+    ap.add_argument("command", choices=["preflight", "confirm", "plan", "page", "run", "scope"])
     ap.add_argument("--steps", required=True, type=Path)
     ap.add_argument("--answers", type=Path, help="the asks' answers as JSON (none yet: preflight lists them all)")
     src = ap.add_mutually_exclusive_group()
@@ -2734,6 +2884,7 @@ def main():
                     "declarations: only what the portal makes then (the procura, signed), on the draft reopened by its name")
     ap.add_argument("--resume", type=Path, help="page/run: a stopped run's report.json, to pick it up where it stopped")
     ap.add_argument("--fix", type=Path, help="with --resume: JSON list of {section, field, set: {id|label|css}}")
+    ap.add_argument("--riepilogo", help="confirm: the `riepilogo_id` of the summary the tecnico said «sì» to")
     ap.add_argument("--bundle", type=Path, help="page: also write runner.js, steps.js and run.js as this one file "
                     "(in the person's Downloads), and pick.js, a box where the person picks it once")
     a = ap.parse_args()
@@ -2766,7 +2917,7 @@ def main():
                 ap.error(f"{a.server} has no token {a.token!r}")
             values = Values(answers, vault=vaults[a.token if a.server else "prepare"], asks=asks)
         steps = whole = expand(steps, values)
-        if a.command != "preflight":
+        if a.command not in ("preflight", "confirm"):
             steps = phase(steps, a.after_declarations, a.made_up)
         resume = None
         if a.after_declarations and a.command in ("page", "run"):
@@ -2787,6 +2938,27 @@ def main():
             report = preflight(steps, values, a.made_up,
                                a.after_declarations)
             print(json.dumps(report, indent=2, ensure_ascii=False))
+            return 0 if report["ready"] else 3
+        if a.command == "confirm":
+            # The tecnico's «sì» to the one message: the proposals it showed go into answers.json,
+            # only while the summary is still the one they read.
+            if not (a.answers and a.riepilogo):
+                ap.error("confirm needs --answers and --riepilogo")
+            report = preflight(steps, values, a.made_up)
+            if report.get("riepilogo_id") != a.riepilogo:
+                why = ("the answers are not those of that summary: show the tecnico this one and ask again"
+                       if report.get("riepilogo") else "no summary to confirm: pre-flight still asks (its message)")
+                print(json.dumps({"confirmed": False, "why": why} | report, indent=2, ensure_ascii=False))
+                return 4
+            held = {p["key"]: p["proposal"] for p in report["proposals"]}
+            answers |= held
+            fonti = answers.setdefault("fonti", {})
+            for k in held:
+                fonti.setdefault(k, PROPOSED)
+            a.answers.write_text(json.dumps(answers, indent=1, ensure_ascii=False))
+            values.answers = answers
+            report = preflight(rules.load(a.steps), values, a.made_up)
+            print(json.dumps({"confirmed": sorted(held)} | report, indent=2, ensure_ascii=False))
             return 0 if report["ready"] else 3
         if a.command == "plan":
             require_supported(steps, values)
