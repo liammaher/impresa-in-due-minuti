@@ -317,8 +317,9 @@ neither: the one message says what each says (its point 4).
 client's document never is) is the tecnico's own note for this job: what no document holds (the
 client's email and phone, the owner's legale rappresentante, the firms) and their answers in their
 words ("nessun altro adempimento", "il progettista sono io"). Read it like their request: its
-details go into the job's `values.json` (or `../studio.json`, the studio's), then `check.py`. Say
-once, in the one message, which file you took as their note ("Dalla Sua nota (note.txt): …").
+details go into the job's `values.json` (or `../studio.json`, the studio's), then `check.py`. In
+the one message it is "la Sua nota" ("Dalla Sua nota: i recapiti e le due imprese"), never a file
+name; only with several text files in the folder, say once which one you took.
 <!-- /no-vault -->
 <!-- vault -->
 **The tecnico's note** is never read here: its values would pass through this conversation. What
