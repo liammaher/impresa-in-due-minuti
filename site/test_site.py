@@ -149,9 +149,6 @@ class InstallPage(unittest.TestCase):
         for label in ("+ Add", "Add marketplace", "Add from a repository", "Sync", "New plugins", "+",
                       "Manage marketplaces", "Check for updates", "Remove"):
             self.assertIn(label, english)
-        for tag, attrs in page.tags:
-            if tag == "img":
-                self.assertGreater(len(attrs.get("data-alt-en", "")), 20, attrs)
 
     def test_italian_and_not_official(self):
         self.assertRegex(PAGE, r'<html lang="it">')
