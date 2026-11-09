@@ -3,9 +3,10 @@
 **Status:** the marketplace installs the release its file pins (the latest is on the
 [releases page](https://github.com/liammaher/impresa-in-un-minuto/releases)). Since 0.3.0 the plugin ships
 without the archive (`plugin/build.yaml` `vault: false`: the release builds no pvault); 0.2.0
-(2026-10-29) shipped it. From 0.4.0 it was Portale SUE, the SUE's pratiche only; from 0.5.0 it is
-Impresa in un minuto, one plugin for every sportello and comune it covers. Whoever has Portale SUE adds the
-marketplace `liammaher/impresa-in-un-minuto`, installs `impresa-in-un-minuto` once and removes `portale-sue`. Installed in an isolated Claude config; not
+(2026-10-29) shipped it. From 0.4.0 it was Portale SUE, the SUE's pratiche only; from 0.5.0 it was
+Impresa in due minuti, and from 0.6.0 it is Impresa in un minuto, one plugin for every sportello and comune it
+covers. Whoever has Portale SUE or Impresa in due minuti adds the marketplace `liammaher/impresa-in-un-minuto`,
+installs `impresa-in-un-minuto` once and removes the old plugin (`portale-sue` or `impresa-in-due-minuti`). Installed in an isolated Claude config; not
 yet on a clean Mac or Windows (*What is not done*).
 
 Without the archive, Claude reads the job's documents and checks the draft against them, so the
