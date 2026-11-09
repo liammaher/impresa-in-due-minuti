@@ -15,8 +15,9 @@
       person's own steps; `message` is the questions, proposals and missing details as the one
       Italian message to send. Exits 0 when `ready`, 3 when not. --made-up (a rehearsal's made-up
       files, never sent) reports the sportello's refusals as warnings instead. When nothing is
-      left but proposals (or nothing at all), `riepilogo` is every answer the compilation will
-      use, each with its source (answers.json `fonti`), for the tecnico's one «sì».
+      left but proposals (or nothing at all), `riepilogo` is the one message's summary for the
+      tecnico's one «sì»: the proposals a line each, the rest counted by source (answers.json
+      `fonti`); `riepilogo_tutte` every answer, a line each.
 
   run.py confirm --steps STEPS.yaml --answers A.json VAULT --riepilogo ID
       The «sì» to that summary: writes its proposals into A.json, only while `riepilogo_id` is
@@ -1491,12 +1492,38 @@ def summary_rows(steps, values, proposed=()):
     return rows
 
 
+AUTOMATIC = ("calcolata dai dati", "predefinita")  # the rules' own, not the tecnico's choices
+YES = "Scriva «sì» e apro il portale; se una risposta va cambiata, me lo dica."
+
+
 def summary_text(rows, end=()):
-    lines = ["Userò queste risposte: le assevera Lei. Dove i documenti non lo dicono, «proposta» è la "
-             "risposta che propongo io."]
+    """The one message's summary, as a review by exception (GOV.UK's "check answers", kept short so
+    it is read, not rubber-stamped): first what only Portale SUE proposes, a line each; then the
+    rest counted by where it comes from; every answer one word away («tutte»: summary_all)."""
+    check = [r for r in rows if r["source"] == PROPOSED]
+    files = [r for r in rows if r["key"] == "allegati"]
+    rest = [r for r in rows if r not in check and r not in files]
+    by = {}
+    for r in rest:
+        src = "calcolate dalle regole" if r["source"] in AUTOMATIC else r["source"].split(", ")[0] or "già date"
+        by[src] = by.get(src, 0) + 1
+    lines = []
+    if check:
+        lines.append("Da controllare (le propongo io):")
+        lines += [f"– {r['question']} → {r['answer']}" for r in check]
+        lines.append("")
+    lines.append(f"Il resto ({len(rest)} risposte) viene da: " + ", ".join(f"{k} {n}" for k, n in sorted(by.items(), key=lambda x: -x[1])) + "."
+                 + (f" I file da allegare sono {files[0]['question'].split('(')[1].rstrip(')')}, già controllati."
+                    if files else "")
+                 + " Per vederle una per una, scriva «tutte».")
+    return "\n".join(lines) + "\n\n" + "\n".join([*end, YES])
+
+
+def summary_all(rows):
+    """Every answer, a line each with its source: the summary's «tutte»."""
+    lines = ["Tutte le risposte che userò (le assevera Lei; «proposta»: la propongo io):"]
     lines += [f"– {r['question']} → {r['answer']}" + (f" ({r['source']})" if r["source"] else "") for r in rows]
-    return "\n".join(lines) + "\n\n" + "\n".join([*end, "Scriva «sì» e apro il portale; se una risposta va "
-                                                    "cambiata, me lo dica."])
+    return "\n".join(lines) + "\n\n" + YES
 
 
 def summary_id(rows):
@@ -1729,7 +1756,7 @@ def preflight(steps, values, made_up=False, after=False, summarize=True):
     sportello would refuse (FILING) is a problem, or with made_up (a rehearsal's made-up data,
     never sent) only its `filing` and a warning, and no slot that takes only signed files is
     filled (phase). after: the second run's, after the declarations (phase). summarize: a case
-    whose only open items are proposals, or none, gets `riepilogo`, every answer for one «sì»."""
+    whose only open items are proposals, or none, gets `riepilogo` (and `riepilogo_tutte`), for one «sì»."""
     given_steps, steps = steps, expand(steps, values)
     later = [] if after else after_declarations(steps, values)
     unsigned = [f.get("label") for s in steps["sections"] for f in s["fields"]
@@ -1981,7 +2008,7 @@ def preflight(steps, values, made_up=False, after=False, summarize=True):
             inner = report if report["ready"] else preflight(given_steps, given, made_up, after, summarize=False)
             if inner["ready"] and not report["missing"]:
                 rows = summary_rows(given_steps, given, proposed=set(held))
-                report |= {"riepilogo": summary_text(rows, end), "riepilogo_id": summary_id(rows), "riepilogo_rows": rows}
+                report |= {"riepilogo": summary_text(rows, end), "riepilogo_tutte": summary_all(rows), "riepilogo_id": summary_id(rows), "riepilogo_rows": rows}
             else:
                 # The details only the proposals make needed (a proposed second firm's VAT number)
                 # are asked now, with the rest, not after the «ok» in a second message.

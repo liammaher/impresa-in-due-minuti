@@ -439,13 +439,16 @@ point 2, and the question stays theirs; only their own words answer one (step 2)
 to confirm (a test is the one exception: `prova.md`).
 
 **A complete folder.** Pre-flight gives `riepilogo` when nothing is left to ask but its
-proposals: no question, no detail missing, every file as the sportello takes it. It is every
-answer the compilation will use, a line each with where it comes from ("proposta": one of its
-own), then the closing line and «Scriva «sì» e apro il portale». The tecnico asseverates these
-answers, so they see them all before the one «sì»; a single yes is enough because nothing is
-hidden. The one message is points 1-3 above (the verdict, what you understood, the pratica), then
-`riepilogo` **as it is**, every line. No clickable question, no checklist, nothing else: nothing
-opens before their reply.
+proposals: no question, no detail missing, every file as the sportello takes it. It is short on
+purpose, so it is read rather than waved through: first "Da controllare", a line for each answer
+only Portale SUE proposes; then the rest counted by where it comes from (the relazione tecnica,
+their note, the rules), the files, and «tutte» to see every answer; then the closing lines and
+«Scriva «sì» e apro il portale». The one message is points 1-3 above (the verdict, what you
+understood, the pratica), at most one line for each document that can't be read or disagrees
+with an answer (point 4), then `riepilogo` **as it is**. No clickable question, no checklist,
+nothing else: nothing opens before their reply.
+- «tutte»: `riepilogo_tutte` as it is (every answer, a line each with its source). Their «sì»
+  after it confirms the same answers.
 - «sì» («ok», «va bene», «proceda»): their confirmation of every line. Run `confirm` with the
   `riepilogo_id` of the summary they read, and the same values as pre-flight:
 <!-- vault -->
