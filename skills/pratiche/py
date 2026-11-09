@@ -2,7 +2,7 @@
 # Runs the skill's Python scripts: `sh py script.py args...`. They need Python 3.9+ and no
 # packages. A real one already on the computer is used as it is; never the macOS stub
 # /usr/bin/python3 without the Command Line Tools (it opens an install dialog) nor the Windows
-# Store alias (it opens the Store). PORTALE_SUE_PYTHON=<path> picks one. Messages for the person are
+# Store alias (it opens the Store). IMPRESA_IN_DUE_MINUTI_PYTHON=<path> picks one. Messages for the person are
 # in Italian, on stderr.
 #
 # plugin/build.yaml's python_download picks which of the two parts marked below a build keeps
@@ -31,17 +31,17 @@ none() { # no Python 3.9+ on this computer: say how to get one, and stop
     Darwin)
       # The same window the stub opens: Apple's developer tools, which bring Python 3.
       xcode-select --install >/dev/null 2>&1 || true
-      echo "Portale SUE: su questo Mac manca Python. macOS apre una finestra per installare gli «strumenti per sviluppatori» di Apple: li installi (gratis, qualche minuto), poi riprovi." >&2 ;;
+      echo "Impresa in due minuti: su questo Mac manca Python. macOS apre una finestra per installare gli «strumenti per sviluppatori» di Apple: li installi (gratis, qualche minuto), poi riprovi." >&2 ;;
     MINGW* | MSYS* | CYGWIN*)
-      echo "Portale SUE: su questo computer manca Python 3. Lo installi da python.org (spunti «Add python.exe to PATH»), riapra l'app e riprovi." >&2 ;;
+      echo "Impresa in due minuti: su questo computer manca Python 3. Lo installi da python.org (spunti «Add python.exe to PATH»), riapra l'app e riprovi." >&2 ;;
     *)
-      echo "Portale SUE: su questo computer manca Python 3 (3.9 o più recente): lo installi, poi riprovi." >&2 ;;
+      echo "Impresa in due minuti: su questo computer manca Python 3 (3.9 o più recente): lo installi, poi riprovi." >&2 ;;
   esac
   return 1
 }
 
-case "${PORTALE_SUE_PYTHON:-}" in
+case "${IMPRESA_IN_DUE_MINUTI_PYTHON:-}" in
   "") py=$(installed) || py=$(none) ;;
-  *) py=$PORTALE_SUE_PYTHON ;;
+  *) py=$IMPRESA_IN_DUE_MINUTI_PYTHON ;;
 esac
 exec "$py" "$@"

@@ -519,11 +519,11 @@ def scan(dossier, steps=None, client=None):
         propose("answers", "titolo_esclusivo", True, "visura", "unico proprietario, 1/1")
     if people:
         proposals["people"] = people
-    # Portale SUE files only on the Comune di Napoli's sportelli: a property elsewhere is said first.
+    # Impresa in due minuti files only on the Comune di Napoli's sportelli: a property elsewhere is said first.
     where = unit.get("comune") or lease_unit.get("comune")
     if where and norm(where) != "napoli":
         report["notes"].append({"from": "visura" if unit.get("comune") else "contratto di locazione",
-                                "note": "l'immobile non è nel Comune di Napoli: Portale SUE prepara solo pratiche "
+                                "note": "l'immobile non è nel Comune di Napoli: Impresa in due minuti prepara solo pratiche "
                                         "del Comune di Napoli, quindi questa non la posso preparare"})
     if planimetria:
         report["notes"].append({"from": "visura", "note": f"planimetria depositata il {planimetria}"
@@ -704,6 +704,13 @@ def main():
                 if role not in roles:
                     roles[role] = slug
                     added.append(f"people.{role}")
+        # Where each answer comes from, for the one message's summary (run.py `riepilogo`): every
+        # proposal of the documents that the file holds as proposed, the facts route.py passed on too.
+        if a.part == "answers":
+            fonti = have.setdefault("fonti", {})
+            for p in json.loads((a.out / "intake.json").read_text()).get("proposals", []):
+                if p["key"] in have and have[p["key"]] == p["value"] and p.get("from"):
+                    fonti.setdefault(p["key"], p["from"])
         a.into.write_text(json.dumps(have, indent=1, ensure_ascii=False))
         print(json.dumps({"added": added, "into": str(a.into)}, ensure_ascii=False))
         return 0

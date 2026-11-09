@@ -1,6 +1,6 @@
 ---
-name: portale-sue-pratica
-description: Prepara una pratica edilizia del SUE del Comune di Napoli su impresainungiorno a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti, e fa vedere una prova su una CILA con dati inventati. Da usare quando un architetto, un geometra o un ingegnere chiede, in italiano o in inglese, di preparare, compilare o presentare una pratica per un cliente a Napoli («prepara una CILA», «compila la SCIA»), chiede cosa serve per un caso, o vuole vedere come funziona con una prova su dati inventati («fammi vedere una prova», «fai una prova», «fai tu come esempio»).
+name: pratiche
+description: Prepara una pratica del SUE del Comune di Napoli su impresainungiorno a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti, e fa vedere una prova su una CILA con dati inventati. Da usare quando un architetto, un geometra o un ingegnere chiede, in italiano o in inglese, di preparare, compilare o presentare una pratica per un cliente a Napoli («prepara una CILA», «compila la SCIA»), chiede cosa serve per un caso, o vuole vedere come funziona con una prova su dati inventati («fammi vedere una prova», «fai una prova», «fai tu come esempio»).
 ---
 
 # Pratiche a Napoli
@@ -44,18 +44,19 @@ your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
 - A pratica's status: `available` = disponibile; `mapped` / `coming` = in arrivo (non ancora
   provata sul portale); `guide` = solo indicazioni; `paused` = sospesa (il portale è cambiato).
 
-## What Portale SUE covers, said plainly
+## What Impresa in due minuti covers, said plainly
 
-- **Only the Comune di Napoli's SUE (Campania)**, on impresainungiorno. A SUAP pratica (a shop, a
-  restaurant, an activity), another comune, another ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia delle Entrate, Regione) or a
-  pratica whose status isn't `available` is **not covered by the automation**: say so first, in one
-  line, and open nothing. A property outside Napoli is refused by the intake's `notes` and by
-  pre-flight; when the documents don't say where it is, ask.
+- **Only what Impresa in due minuti carries: the SUE del Comune di Napoli**, on impresainungiorno. Another sportello's
+  pratica, another comune, another ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia delle
+  Entrate, Regione) or a pratica whose status isn't `available` is **not covered by the
+  automation**: say so first, in one line, and open nothing. A property outside Napoli is refused
+  by the intake's `notes` and by pre-flight; when the documents don't say where it is, ask.
+- A SUAP pratica (a shop, a restaurant, an activity) is another sportello's: not covered yet.
 - **Coperta** means: filled on the real portal with made-up data, every value read back. No real
-  pratica has been sent through Portale SUE yet: the verdict says so (step 3).
+  pratica has been sent through Impresa in due minuti yet: the verdict says so (step 3).
 - **Facts come from the library, each with its source** in brackets after it ("(DD 501/2026)").
-  What the library doesn't cover: "La biblioteca di Portale SUE non lo copre." Anything you add from
-  your own knowledge is marked "(non verificato da Portale SUE)", and is never a figure, a deadline or
+  What the library doesn't cover: "La biblioteca di Impresa in due minuti non lo copre." Anything you add from
+  your own knowledge is marked "(non verificato da Impresa in due minuti)", and is never a figure, a deadline or
   a list of documents.
 
 ## Rules that never bend
@@ -83,6 +84,9 @@ your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
 2. They say the job in one line and hand over the folder (documents attached here instead: step 2).
 3. You answer in **one short message**: the verdict, what you understood, the pratica you
    propose, then the open questions as clickable choices (step 3, **Asking**). Steps 1-3.
+   **A complete folder** (every answer and detail in the documents or the tecnico's own words,
+   every file as the sportello takes it): the message ends instead with every answer the
+   compilation will use, and they say «sì» once (step 3, **A complete folder**). Then 6.
 4. They answer: nothing opens before it. Then, in one more short message, the details and files
    still missing.
 5. The files are checked (pre-flight again). Nothing else to ask, unless they changed a proposal.
@@ -102,7 +106,7 @@ another pratica the same way.
 **When they come without a job** ("come funziona?", "ciao", "cosa fa?"), the Prova is the answer:
 seeing it beats any description. Your whole reply is these two lines, nothing before or after,
 no list of features or steps:
-  "Preparo le pratiche edilizie del SUE di Napoli sul portale, fino alla Sua firma.
+  "Preparo le pratiche del SUE del Comune di Napoli sul portale, fino alla Sua firma.
   Vuole vedere una CILA di prova? Lei entra nel portale con il Suo SPID, io la compilo con dati inventati: non si invia nulla."
 The second line says the one thing they will do (their own SPID login) before they agree to it, so
 the login that follows is no surprise. Never "bozza" here: it means nothing yet.
@@ -121,7 +125,7 @@ Where there is none, it stops with a message in Italian saying how to install it
 opens Apple's own installer of the developer tools, which bring Python). Give that message as it
 is, in one line, wait for "fatto", and run the command again. Never install Python yourself.
 
-- `catalog.json`: each pratica with a steps file, one a line (`name`, `procedure`, `title`,
+- `catalog.json`: each pratica with a steps file, one a line (`name`, `procedure`, `title`, `comune`,
   `sportello`, `notes`: who the roles are, `steps_sha256`); `coverage.json`: every pratica's
   `status`, one a line; `pratiche/<name>.json`: its steps file. Search the two
   (`grep -i proroga "${CLAUDE_SKILL_DIR}/catalog.json"`), never read them whole: they are long.
@@ -133,7 +137,7 @@ is, in one line, wait for "fatto", and run the command again. Never install Pyth
 
 ## 0. The folder of jobs
 
-Portale SUE installs nothing and keeps nothing of its own: the details live in files in the
+Impresa in due minuti installs nothing and keeps nothing of its own: the details live in files in the
 tecnico's folder of jobs (the folder open in this session, one subfolder per job; each command
 below runs in the job's subfolder).
 
@@ -181,8 +185,8 @@ already held.
 - `routed`: it names the pratica (`pratica`, its `steps`), the `answers` to start `answers.json`
   with, and a `message` of a line or two (the pratica, what goes apart): it goes in the one
   message (step 3). Go on to step 2 with `--steps`.
-- `questions`: the documents don't settle it. What the tecnico wrote in their request is a
-  source too: a question their own words answer plainly ("lavori interni, niente strutture" →
+- `questions`: the documents don't settle it. What the tecnico wrote in their request (or their
+  note, step 2) is a source too: a question their own words answer plainly ("lavori interni, niente strutture" →
   manutenzione straordinaria, no structures) goes into `facts.json` with that answer, and the
   one message shows it as "Dalla Sua richiesta: …" to confirm with the rest; never infer one
   they didn't say. Run it again, then send its `message` as it is, with what you read, as the
@@ -190,12 +194,12 @@ already held.
   and run it again; if the answer about the works changes, keep only that one.
 - `unsupported`: its `message` says why. Send it and stop; don't open the portal.
 
-Any other pratica: search `catalog.json`, or the Portale SUE
+Any other pratica: search `catalog.json`, or the Impresa in due minuti
 connector's `find_pratica` when it is there (describe a case to it by its facts only, never by a
 name, codice fiscale or address). A status other than `available` (its line in `coverage.json`,
 or the connector's `get_pratica`) is the verdict: "Non coperta dall'automazione: …" (in arrivo,
 sospesa) or "Solo indicazioni: questa pratica non la compilo." with what the library says, its
-sources, and stop. Nothing in `catalog.json` or `coverage.json`: "Non coperta: Portale SUE non la
+sources, and stop. Nothing in `catalog.json` or `coverage.json`: "Non coperta: Impresa in due minuti non la
 conosce."
 
 ## 2. The documents
@@ -241,10 +245,28 @@ the intake left empty (pre-flight's `missing` names them, with their ids: step 3
 into the job's `values.json`, then `check.py` again. Keep, for each value you take, the document
 and page it comes from: the one message cites them, and so does the check after the compilation
 (step 5). Where two documents disagree (the visura and the deed give two subalterni), take
-neither: the one message says what each says (its point 4). A document never answers one of
-pre-flight's questions for them: what it says is a fact in what you understood ("dalla notifica
-preliminare: due imprese"), and the question stays in the one message for the tecnico. Write
-nothing into `answers.json` but the intake's proposals and their replies.
+neither: the one message says what each says (its point 4).
+
+**The tecnico's note.** A text file in the job's folder or its `docs/` (`.txt`, `.md`: what a
+client's document never is) is the tecnico's own note for this job: what no document holds (the
+client's email and phone, the owner's legale rappresentante, the firms) and their answers in their
+words ("nessun altro adempimento", "il progettista sono io"). Read it like their request: its
+details go into the job's `values.json` (or `../studio.json`, the studio's), then `check.py`. In
+the one message it is "la Sua nota" ("Dalla Sua nota: i recapiti e le due imprese"), never a file
+name; only with several text files in the folder, say once which one you took.
+
+**Answers come from the intake and from the tecnico's own words, never from your reading.** A
+document you read yourself never answers one of pre-flight's questions: what it says is a fact in
+what you understood ("dalla notifica preliminare: due imprese"), and the question stays theirs. An
+amount, a date or a choice in a document can be stale or another case's (an old receipt's
+diritti), so only the tecnico's word settles it. What the tecnico wrote plainly, in their request
+or their note ("nessun altro adempimento", "il progettista sono io"), answers the question it
+names: write it into `answers.json` under its `key`, and under `fonti` where it comes from
+(`{"fonti": {"<key>": "Sua nota"}}`, or "Sua richiesta"); never one you infer from their words.
+Write nothing else into `answers.json` but the intake's proposals (they carry their documents
+already) and their replies. Nothing is answered until they confirm it: the one message shows
+every answer with its source, and their «sì» or their reply to the questions confirms them
+(step 3).
 
 The roles: `t:` is the tecnico; the others are people that `answers.json` names under
 `people` (the entry's `notes` say which: `{"people": {"c": "bianchi"}}` makes the client
@@ -266,6 +288,7 @@ one message asks only what no document holds.
 
 - `unsupported`: its `message` is the refusal, already written: the exact case, whether it is
   the portal's flaw, what you prepare instead, the choices. Send it as it is and stop.
+- `riepilogo`: **A complete folder**, below. It wins over `message`.
 - `message`: the questions, the proposals, the details no document holds and the files to fix,
   already in Italian. **The one message** is short: the tecnico should read it in ten seconds and
   answer with clicks. Written to them (never about them), nothing before the verdict, not even
@@ -322,7 +345,35 @@ else from `message` yet: the files and the details wait for **After they answer*
 «rivediamole», the "Risposte che propongo" block of `message`, as it is.
 
 Never answer a question for them, in either form: what a document says about one is a fact in
-point 2, and the question stays theirs (a test is the one exception: `prova.md`).
+point 2, and the question stays theirs; only their own words answer one (step 2), shown for them
+to confirm (a test is the one exception: `prova.md`).
+
+**A complete folder.** Pre-flight gives `riepilogo` when nothing is left to ask but its
+proposals: no question, no detail missing, every file as the sportello takes it. It is short on
+purpose, so it is read rather than waved through: first "Da controllare", a line for each answer
+only Impresa in due minuti proposes; then the rest counted by where it comes from (the relazione tecnica,
+their note, the rules), the files, and «tutte» to see every answer; then the closing lines and
+«Scriva «sì» e apro il portale». The one message is points 1-3 above (the verdict, what you
+understood, the pratica), at most one line for each document that can't be read or disagrees
+with an answer (point 4), then `riepilogo` **as it is**. No clickable question, no checklist,
+nothing else: nothing opens before their reply.
+- «tutte»: `riepilogo_tutte` as it is (every answer, a line each with its source). Their «sì»
+  after it confirms the same answers.
+- «sì» («ok», «va bene», «proceda»): their confirmation of every line. Run `confirm` with the
+  `riepilogo_id` of the summary they read, and the same values as pre-flight:
+  ```sh
+  sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" confirm --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
+    --answers answers.json --values run/values.json --values run/intake/private/values.json --riepilogo <riepilogo_id>
+  ```
+  It writes the proposals into `answers.json` and prints pre-flight again: exit 0, `ready`, go
+  straight to step 4 (its login line is your next message). Exit 4: the answers are no longer
+  those of the summary they read; send its new `riepilogo` and ask again (none: its `message`,
+  as in **Asking**). Exit 3: something is still open; its `message`, as in **After they
+  answer**. Never write the proposals into `answers.json` yourself.
+- A change ("le parti comuni sono condominiali"): into `answers.json` (`fonti`: "Sua risposta"),
+  pre-flight again, and its new `riepilogo` (or the questions the change opened) as the next
+  message.
+- Anything else they ask: answer it, and ask again for «sì».
 
 **After they answer**, the answers in `answers.json`, then pre-flight again. Built from the
 answers, its `files`, its questions that ask for a file and its `missing` are what this pratica
@@ -344,6 +395,9 @@ a document is "✓ … (dalla visura)": they correct it in one reply if it's wro
 how to give the rest (the files in the job's `docs/`, the details in a message), and, last: "Se è
 solo una prova, scriva «prova»: invento io il resto." (then `prova.md`). A follow-up the answers
 opened, or an `error`, is asked as before, with the tool.
+The first time a folder comes incomplete, add one line before the last: "La prossima volta può
+scrivere questi dati in una nota nella cartella del lavoro (un file di testo): con i documenti
+completi, Le basterà un «sì»."
 - The replies go under each `key` of `questions` (dates YYYY-MM-DD, files as paths; a clicked
   option as its value in `options`, never its label; a checklist as the list of its ticked items'
   `key`s under its own `key`, `[]` for none). "ok" confirms
@@ -388,18 +442,18 @@ step 3 says how. Never send them a file, never ask them to download or save one,
    `run.js`; or `run.js` alone): run each, silently. If `run.js` answers `run.js arrived changed`, a value
    was lost on the way: run it again, its text exactly as the file has it.
    **Only when `fetch.js` returns `fetch failed`** (or `check.js` names `runner.js` or
-   `steps.js`): run `page` again with `--bundle ~/Downloads/portale-sue-<name>.js` added. It
+   `steps.js`): run `page` again with `--bundle ~/Downloads/impresa-in-due-minuti-<name>.js` added. It
    saves the file in their Downloads; say first: "Salvo nella cartella Download il file che avvia
    la compilazione: se l'app Le chiede il permesso, lo consenta." (`could not write`: ask for the
    Downloads folder with the app's own tool that asks the person to allow a folder, and run it
    again). Then run `run/pick.js` and say: "Sul portale compare un riquadro: scelga lì il file
-   «portale-sue-<name>» dalla cartella Download. Una volta sola." Then `__pv.wait` as below
+   «impresa-in-due-minuti-<name>» dalla cartella Download. Una volta sola." Then `__pv.wait` as below
    (`window.pvPicked` says once the file is in).
 4. `run.js` returns at once: call `await __pv.wait(40000)` until `result` is `filled` or
    `stopped`. `waiting` means the page waits for the tecnico (the files to pick in its box, or a
    code to type): say so once, gently.
 5. Save `JSON.stringify(__pv.last())` to `run/report.json`. Then the check (step 5).
-6. If you saved a file in Downloads (step 3), delete it (`rm ~/Downloads/portale-sue-<name>.js`):
+6. If you saved a file in Downloads (step 3), delete it (`rm ~/Downloads/impresa-in-due-minuti-<name>.js`):
    it holds the job's values.
 
 While it runs, don't click, type or take screenshots on the page: the compilation is using it.
@@ -482,13 +536,13 @@ Then offer, in one line, the pratica that usually follows (the fine lavori, the 
 line in `catalog.json`), and stop.
 
 
-## When Portale SUE itself goes wrong
+## When Impresa in due minuti itself goes wrong
 
-Only for Portale SUE's own faults, never their pratica's: a compilation that stopped and wasn't
+Only for Impresa in due minuti's own faults, never their pratica's: a compilation that stopped and wasn't
 recovered within the budget (step 4), a value the compilation put wrong that no document
-explains (step 5), a script that fails, or the tecnico saying something of Portale SUE doesn't work.
+explains (step 5), a script that fails, or the tecnico saying something of Impresa in due minuti doesn't work.
 Then offer once, in one line, after saying what happened: "Se vuole, preparo una segnalazione per
-chi sviluppa Portale SUE: la legge prima di inviarla." Nothing more unless they say yes.
+chi sviluppa Impresa in due minuti: la legge prima di inviarla." Nothing more unless they say yes.
 
 On a yes, write `run/segnalazione.json` (in the job's folder; with no job, in the folder you are
 in), in Italian:
@@ -508,7 +562,7 @@ never the surname. Then:
 sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/report.py" run/segnalazione.json --values run/values.json --values run/intake/private/values.json
 ```
 
-It adds the plugin's version and the computer's system, and prints a link to Portale SUE's bug form
+It adds the plugin's version and the computer's system, and prints a link to Impresa in due minuti's bug form
 on GitHub with every box filled in, or what in the report is the job's (then rewrite that part
 and run it again). Give the tecnico the report's text first, as it will appear, then the link:
 "Apra il link: trova il modulo già compilato. Lo rilegga, spunti la casella sui dati personali e
@@ -527,5 +581,5 @@ write or send the email, never put the client's details in it.
 "Cosa serve per una CILA in centro storico?", "È una CILA o una SCIA?": answer from
 `get_procedure` (else `library/procedures`) and `library/rules`, each fact with its source in
 brackets after it, never one list of sources for the whole answer. Say when the library doesn't
-cover it rather than filling the gap from memory. Outside the Comune di Napoli: "Portale SUE copre
+cover it rather than filling the gap from memory. Outside il Comune di Napoli: "Impresa in due minuti copre
 solo il Comune di Napoli", and nothing more about another comune's rules.
