@@ -519,11 +519,11 @@ def scan(dossier, steps=None, client=None):
         propose("answers", "titolo_esclusivo", True, "visura", "unico proprietario, 1/1")
     if people:
         proposals["people"] = people
-    # Portale SUE files only on the Comune di Napoli's sportelli: a property elsewhere is said first.
+    # Impresa in due minuti files only on the Comune di Napoli's sportelli: a property elsewhere is said first.
     where = unit.get("comune") or lease_unit.get("comune")
     if where and norm(where) != "napoli":
         report["notes"].append({"from": "visura" if unit.get("comune") else "contratto di locazione",
-                                "note": "l'immobile non è nel Comune di Napoli: Portale SUE prepara solo pratiche "
+                                "note": "l'immobile non è nel Comune di Napoli: Impresa in due minuti prepara solo pratiche "
                                         "del Comune di Napoli, quindi questa non la posso preparare"})
     if planimetria:
         report["notes"].append({"from": "visura", "note": f"planimetria depositata il {planimetria}"

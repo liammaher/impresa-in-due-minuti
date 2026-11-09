@@ -1577,7 +1577,7 @@ def _():
 
 
 # What the tecnico reads, short and with no software word: a path, a file type, a library id
-# (napoli/comune/...), or the words of how Portale SUE is built.
+# (napoli/comune/...), or the words of how Impresa in due minuti is built.
 SOFTWARE = re.compile(r"docs/|rehearsals/|catalogue/|schema/|\b(napoli|italia)/[a-z]|\.(md|json|ya?ml|js)\b|"
                       r"\b(slug|recipe|steps file|json|pre-?flight|sha256|runner|script|crawl|mappat[oa]|gestit[oa])\b",
                       re.I)

@@ -277,7 +277,7 @@ A portal someone has walked has a steps file in `rehearsals/<name>/`
 (`portal-steps.generated.yaml`, else `portal-steps.yaml`). Find one for the entry with
 `grep -l "procedure: <entry id>" "$(cd ~/.claude/skills/pratica && pwd -P)"/../../../rehearsals/*/portal-steps*.yaml`.
 
-**Follow `plugin/portale-sue/skills/portale-sue-pratica/SKILL.md`**: the one set of instructions for a
+**Follow `plugin/impresa-in-due-minuti/skills/pratiche/SKILL.md`**: the one set of instructions for a
 portal pratica, the same the plugin ships (how to speak to the person, the archive, routing,
 the intake, pre-flight, the compilation in the browser pane, the hand-over, the second
 compilation). In this repo its `SKILL/` is `~/.claude/skills/pratica/` (`portal/`, `intake/`,

@@ -1,8 +1,8 @@
-<h1 align="center">Portale SUE</h1>
+<h1 align="center">Impresa in due minuti</h1>
 
-<p align="center">Le pratiche edilizie del SUE del Comune di Napoli, preparate da Claude. Gratuito e open source.</p>
+<p align="center">Le pratiche dei portali della pubblica amministrazione, preparate da Claude. Per ora: il SUE del Comune di Napoli. Gratuito e open source.</p>
 
-Portale SUE prepara una pratica del SUE del Comune di Napoli (CILA, SCIA, permesso di costruire e le
+Impresa in due minuti prepara una pratica del SUE del Comune di Napoli (CILA, SCIA, permesso di costruire e le
 altre), su impresainungiorno, dai documenti del Suo cliente. Si ferma dove comincia la Sua parte:
 l'accesso con SPID, le dichiarazioni, la firma digitale, il pagamento e l'invio. Claude non spunta mai
 una dichiarazione, non firma, non paga e non invia.
@@ -17,17 +17,17 @@ prova, inventa i dati».
 
 ## Installazione
 
-La guida passo passo, da mandare a un collega: **https://liammaher.github.io/portale-sue/**
+La guida passo passo, da mandare a un collega: **https://liammaher.github.io/impresa-in-due-minuti/**
 
 Nell'app Claude per computer, senza terminale:
 
 1. Apra **Personalizzazione** (Customize) e la scheda **Plugin**.
 2. Clicchi **Aggiungi** (Add), poi **Aggiungi marketplace** (Add marketplace) e **Aggiungi da un repository**
-   (Add from a repository), scriva `liammaher/portale-sue` nella casella, lo scelga nell'elenco sotto e
+   (Add from a repository), scriva `liammaher/impresa-in-due-minuti` nella casella, lo scelga nell'elenco sotto e
    clicchi **Sincronizza** (Sync).
-3. Apra Portale SUE, tra i **Nuovi plugin**, e clicchi **Aggiungi** (Add).
-4. Per aggiornarlo (Portale SUE cambia quando cambia il portale): **Aggiungi** → **Gestisci marketplace**
-   (Manage marketplaces) → **⋯** accanto a portale-sue → **Verifica aggiornamenti** (Check for updates).
+3. Apra Impresa in due minuti, tra i **Nuovi plugin**, e clicchi **Aggiungi** (Add).
+4. Per aggiornarlo (Impresa in due minuti cambia quando cambia il portale): **Aggiungi** → **Gestisci marketplace**
+   (Manage marketplaces) → **⋯** accanto a impresa-in-due-minuti → **Verifica aggiornamenti** (Check for updates).
    Lo faccia ogni tanto e prima di una pratica importante. Un avviso che propone **Concedi accesso** a
    GitHub lo può chiudere: non serve.
 
@@ -56,27 +56,28 @@ lo contengono; accetti. Su Windows lo installi da python.org.
 
 ## Cosa copre, e cosa no
 
-- **Solo il SUE del Comune di Napoli**, su impresainungiorno. Una pratica del SUAP (un negozio, un
+- **Per ora il SUE del Comune di Napoli**, su impresainungiorno; altri sportelli (il SUAP) e altri
+  comuni si aggiungono nel tempo, nello stesso plugin. Oggi una pratica del SUAP (un negozio, un
   ristorante), un immobile in un altro comune, un altro ente (Genio Civile, Soprintendenza, ASL,
-  Catasto, Agenzia delle Entrate, Regione) o una pratica che Portale SUE non conosce: Claude Le dice
+  Catasto, Agenzia delle Entrate, Regione) o una pratica che Impresa in due minuti non conosce: Claude Le dice
   subito che non è coperta, e non apre nulla.
 - Per ogni lavoro Claude Le dice prima se la pratica è **coperta** (la prepara per intero), se ha
   **solo indicazioni** (non la compila) o se **non è coperta**, e perché. Poi Lei conferma, e solo
   allora si comincia.
 - **Coperta** vuol dire: compilata sul portale vero con dati di prova, rileggendo ogni valore. Nessuna
-  pratica reale è ancora stata inviata con Portale SUE.
+  pratica reale è ancora stata inviata con Impresa in due minuti.
 - Le regole vengono dalla biblioteca [pratiche-napoli](https://github.com/liammaher/pratiche-napoli),
   ogni fatto con la sua fonte. Ciò che la biblioteca non copre, Claude lo dice.
 
 ## Dove vanno i dati dei Suoi clienti
 
 Nella cartella dei Suoi lavori su questo computer, nella conversazione con Claude e sul portale.
-Portale SUE non ha un server suo.
+Impresa in due minuti non ha un server suo.
 
 **Claude legge i documenti del lavoro**, compila la bozza e la confronta con essi: i dati dei clienti
 (nomi, codici fiscali, indirizzi, dati catastali) passano quindi dalla conversazione con Claude, come
 ogni documento che Lei vi apre. Claude glielo dice alla prima pratica. Se un cliente non vuole che i
-suoi documenti passino da Claude, non usi Portale SUE per quel lavoro. Password, PIN e accesso SPID
+suoi documenti passino da Claude, non usi Impresa in due minuti per quel lavoro. Password, PIN e accesso SPID
 mai: l'accesso al portale lo fa Lei.
 
 Lei è titolare del trattamento dei dati dei Suoi clienti. In Claude disattivi «Aiuta a migliorare
@@ -84,13 +85,14 @@ Claude» (Impostazioni → Privacy) e usi il browser dell'app, non Claude in Chr
 
 ## Prima di usarlo
 
-- Portale SUE **non è uno strumento ufficiale**: non è affiliato al Comune di Napoli, a InfoCamere né ad
-  altri enti, e non è una consulenza legale ([NOTICE.md](NOTICE.md)).
+- Impresa in due minuti **non è uno strumento ufficiale**: non è affiliato al Comune di Napoli, a
+  InfoCamere (che gestisce impresainungiorno) né ad altri enti, e non è una consulenza legale; il nome
+  gioca con quello del portale ([NOTICE.md](NOTICE.md)).
 - Legga l'[uso responsabile](docs/responsible-use.md). In breve: Lei firma e risponde della pratica;
   una pratica alla volta, con il Suo SPID; nessun dato personale in una segnalazione.
 - Per chiedere una pratica o segnalare un portale cambiato apra una
-  [segnalazione](https://github.com/liammaher/portale-sue/issues/new/choose); come contribuire è in
-  [CONTRIBUTING.md](CONTRIBUTING.md). Se qualcosa di Portale SUE non funziona, lo dica a Claude: Le
+  [segnalazione](https://github.com/liammaher/impresa-in-due-minuti/issues/new/choose); come contribuire è in
+  [CONTRIBUTING.md](CONTRIBUTING.md). Se qualcosa di Impresa in due minuti non funziona, lo dica a Claude: Le
   prepara la segnalazione già compilata, senza i dati dei clienti, e Lei la rilegge prima di inviarla.
 
 Per collegarlo agli altri strumenti dello studio, usarlo su molti lavori insieme o automatizzare altro,
@@ -99,7 +101,7 @@ scriva a liampmaher1996@gmail.com.
 ## Per sviluppatori
 
 - **Il plugin**: [plugin/README.md](plugin/README.md) (come si costruisce) e
-  [plugin/portale-sue/README.md](plugin/portale-sue/README.md) (il testo che il tecnico legge
+  [plugin/impresa-in-due-minuti/README.md](plugin/impresa-in-due-minuti/README.md) (il testo che il tecnico legge
   nell'app, da tenere allineato con questa pagina). Installazione e aggiornamenti:
   [docs/install.md](docs/install.md); dove va il progetto: [docs/north-star.md](docs/north-star.md).
 - **Il compilatore del portale**: [claude/skills/pratica/portal/README.md](claude/skills/pratica/portal/README.md).
@@ -112,7 +114,7 @@ Build dai sorgenti e test (Go 1.26+; Python della venv del compilatore, `~/.cach
 make build                       # bin/pvault (+ bin/pvault-touchid su macOS)
 make test                        # test Go con -race
 (cd mcp && npx tsc -p tsconfig.test.json && npm test)
-~/.cache/pratica-portal/venv/bin/python plugin/build.py --library ../pratiche-napoli --out /tmp/portale-sue
+~/.cache/pratica-portal/venv/bin/python plugin/build.py --library ../pratiche-napoli --out /tmp/impresa-in-due-minuti
 ~/.cache/pratica-portal/venv/bin/python plugin/test_build.py
 ```
 

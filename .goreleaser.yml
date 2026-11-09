@@ -1,7 +1,7 @@
 version: 2
 
 # The release assets are named pvault_<version>_<os>_<arch>; the plugin's installer
-# (plugin/portale-sue/skills/portale-sue-setup) builds those names, so keep this fixed.
+# (plugin/impresa-in-due-minuti/skills/setup) builds those names, so keep this fixed.
 project_name: pvault
 
 builds:
@@ -39,6 +39,6 @@ checksum:
 release:
   github:
     owner: liammaher
-    name: portale-sue
+    name: impresa-in-due-minuti
   extra_files:
     - glob: ./touchid/pvault-touchid_*.tar.gz
