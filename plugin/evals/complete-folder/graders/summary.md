@@ -13,7 +13,7 @@ otherwise), and that after the declarations they give the signed files the porta
 PASS if the final reply is in Italian, addresses the tecnico as Lei, opens with whether the pratica
 is covered by the automation, says in a few sentences what it understood (naming the documents
 and the tecnico's note it comes from) and that it proposes a CILA, then a short summary: under
-«Da controllare» each answer Impresa in due minuti proposes itself, a line each; the rest counted by where it
+«Da controllare» each answer Impresa in un minuto proposes itself, a line each; the rest counted by where it
 comes from, with «tutte» to see every answer; what is left to the tecnico at the end
 (declarations, signature, payment, sending); and one «sì» before opening the portal.
 FAIL if it asks a question with options to pick, asks for documents, details or files that the

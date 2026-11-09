@@ -1498,7 +1498,7 @@ YES = "Scriva «sì» e apro il portale; se una risposta va cambiata, me lo dica
 
 def summary_text(rows, end=()):
     """The one message's summary, as a review by exception (GOV.UK's "check answers", kept short so
-    it is read, not rubber-stamped): first what only Impresa in due minuti proposes, a line each; then the
+    it is read, not rubber-stamped): first what only Impresa in un minuto proposes, a line each; then the
     rest counted by where it comes from; every answer one word away («tutte»: summary_all)."""
     check = [r for r in rows if r["source"] == PROPOSED]
     files = [r for r in rows if r["key"] == "allegati"]
@@ -2186,7 +2186,7 @@ def outside_comune(steps, values):
         except StepError:
             v = None
         if v and plain(v) != plain(comune):
-            return [f"L'immobile è fuori dal Comune di {comune}. Impresa in due minuti prepara solo le pratiche del Comune "
+            return [f"L'immobile è fuori dal Comune di {comune}. Impresa in un minuto prepara solo le pratiche del Comune "
                     f"di {comune} (Campania), sui suoi sportelli: per un altro comune non c'è nulla di "
                     "automatico, e non preparo niente."]
     return []
@@ -2373,15 +2373,15 @@ def show_code(code, give_up=None):
             "Tenga aperta questa finestra fino alla fine della compilazione. Non lo dica a nessuno, "
             "nemmeno a Claude.")
     if sys.platform == "darwin":
-        script = (f'display dialog {json.dumps(text)} with title "Impresa in due minuti" buttons {{"Fatto"}} default button "Fatto"'
+        script = (f'display dialog {json.dumps(text)} with title "Impresa in un minuto" buttons {{"Fatto"}} default button "Fatto"'
                   + (f" giving up after {give_up}" if give_up else ""))
         cmd, feed = ["osascript", "-"], script
     elif sys.platform == "win32":
         cmd = [sys.executable, "-I", "-c",
-               "import ctypes, sys; ctypes.windll.user32.MessageBoxW(0, sys.stdin.read(), 'Impresa in due minuti', 0x40 | 0x40000)"]
+               "import ctypes, sys; ctypes.windll.user32.MessageBoxW(0, sys.stdin.read(), 'Impresa in un minuto', 0x40 | 0x40000)"]
         feed = text
     elif shutil.which("zenity"):
-        cmd, feed = ["zenity", "--text-info", "--title=Impresa in due minuti", "--width=420", "--height=200"], text
+        cmd, feed = ["zenity", "--text-info", "--title=Impresa in un minuto", "--width=420", "--height=200"], text
     else:
         raise StepError("no way to show the code outside this conversation here: use `run` (its window "
                         "needs no code), or --plain if the values may pass through the conversation")

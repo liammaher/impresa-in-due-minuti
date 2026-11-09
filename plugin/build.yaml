@@ -1,4 +1,4 @@
-# Whether the plugin ships Impresa in due minuti's archive (pvault). Flip it and rebuild; nothing else changes.
+# Whether the plugin ships Impresa in un minuto's archive (pvault). Flip it and rebuild; nothing else changes.
 #
 # false: the plugin carries no setup skill and no installer, its texts say nothing of an archive,
 #        and a release builds no pvault (release.yml). A job's details live in files in the
@@ -17,13 +17,13 @@ vault: false
 #        one (on a Mac it opens Apple's installer of the developer tools, which bring Python) and
 #        stops. Nothing in the plugin downloads anything.
 # true:  where there is none it downloads python-build-standalone 3.12 once (about 25 MB, checked
-#        by its pinned SHA-256) into ~/.cache/impresa-in-due-minuti.
+#        by its pinned SHA-256) into ~/.cache/impresa-in-un-minuto.
 #
 # Its parts are <!-- download --> / <!-- no-download --> in the texts, `# <download>` /
 # `# <no-download>` in the launcher.
 python_download: false
 
-# The sportelli whose pratiche the plugin carries. Impresa in due minuti carries the SUE's: the steps files
+# The sportelli whose pratiche the plugin carries. Impresa in un minuto carries the SUE's: the steps files
 # of its rehearsals, its rules tables (rules/<sportello>-*.yaml), and the library's procedures
 # those name. The SUAP's rehearsals and tables stay in the repo, unchanged, out of the plugin.
 sportelli: [sue]

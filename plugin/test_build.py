@@ -42,16 +42,16 @@ def main():
         assert ("vault" in said) == vault, said
     # What the app lists, in Italian and under the plugin's name, entry and manifest alike.
     entry = pin_marketplace.marketplace("0.1.0", "0" * 40, vault=False)["plugins"][0]
-    manifest = json.loads(build.with_scope((HERE / "impresa-in-due-minuti" / ".claude-plugin" / "plugin.json").read_text(), "plugin.json"))
+    manifest = json.loads(build.with_scope((HERE / "impresa-in-un-minuto" / ".claude-plugin" / "plugin.json").read_text(), "plugin.json"))
     for said in (entry, manifest):
-        assert said["displayName"] == "Impresa in due minuti", said
+        assert said["displayName"] == "Impresa in un minuto", said
         assert "SUE del Comune di Napoli" in said["description"] and "prepares" not in said["description"].lower(), said
 
     # Each shipped skill's description is Italian: the app shows it, and writes its "Prova nella chat"
     # prompt from it (2026-11-07: an English "Use when … see a demo" gave "show me a demo CILA").
     import re
     english = re.compile(r"\b(the|use|when|asks|wants|show|demo|test with|made-up|set me up|or update|it isn't)\b", re.I)
-    for skill in sorted((HERE / "impresa-in-due-minuti" / "skills").iterdir()):
+    for skill in sorted((HERE / "impresa-in-un-minuto" / "skills").iterdir()):
         if skill.name == build.TEST_SKILL:  # never shipped
             continue
         front = (skill / "SKILL.md").read_text().split("---")[1]
@@ -62,7 +62,7 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         for vault in (True, False):
             plugin = Path(tmp) / str(vault)
-            shutil.copytree(HERE / "impresa-in-due-minuti", plugin)
+            shutil.copytree(HERE / "impresa-in-un-minuto", plugin)
             build.select_vault(plugin, vault)
             assert (plugin / "skills" / build.SETUP_SKILL).is_dir() == vault
             for f in plugin.rglob("*.md"):
@@ -73,7 +73,7 @@ def main():
                         assert word not in text, f"{f.relative_to(plugin)} says {word!r} without the archive"
         # A text naming the archive outside a vault part stops a no-vault build.
         plugin = Path(tmp) / "leak"
-        shutil.copytree(HERE / "impresa-in-due-minuti", plugin)
+        shutil.copytree(HERE / "impresa-in-un-minuto", plugin)
         (plugin / "skills" / "pratiche" / "EXTRA.md").write_text("run pvault status\n")
         try:
             build.select_vault(plugin, False)
@@ -105,7 +105,7 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         for download in (True, False):
             plugin = Path(tmp) / str(download)
-            shutil.copytree(HERE / "impresa-in-due-minuti", plugin)
+            shutil.copytree(HERE / "impresa-in-un-minuto", plugin)
             build.select_vault(plugin, False)
             build.select_download(plugin, download)
             py = (plugin / build.LAUNCHER).read_text()
@@ -116,7 +116,7 @@ def main():
                 assert not any(build.DOWNLOAD.match(line.strip()) for line in f.read_text().splitlines()), f
         # A text that says the plugin downloads Python, outside a download part, stops an off build.
         plugin = Path(tmp) / "leak-dl"
-        shutil.copytree(HERE / "impresa-in-due-minuti", plugin)
+        shutil.copytree(HERE / "impresa-in-un-minuto", plugin)
         (plugin / "skills" / "pratiche" / "EXTRA.md").write_text("it fetches python-build-standalone\n")
         try:
             build.select_download(plugin, False)
@@ -134,7 +134,7 @@ def main():
     assert build.with_scope(text, "t", {"sue"}) == "Solo il SUE del Comune di Napoli.\nIl SUAP no.\n"
     assert build.with_scope(text, "t", {"sue", "suap"}) == "Solo il SUE e SUAP del Comune di Napoli.\nIl SUAP sì.\n"
     # Every shipped text has its placeholders filled.
-    for f in [*(HERE / "impresa-in-due-minuti").rglob("*.md"), HERE / "impresa-in-due-minuti" / ".claude-plugin" / "plugin.json"]:
+    for f in [*(HERE / "impresa-in-un-minuto").rglob("*.md"), HERE / "impresa-in-un-minuto" / ".claude-plugin" / "plugin.json"]:
         left = re.findall(r"\{\{(?:copertura|comuni|città)\}\}", build.with_scope(f.read_text(), f.name))
         assert not left, (f, left)
     # A table's name says its sportello (the SUAP's table stays out while it isn't carried).

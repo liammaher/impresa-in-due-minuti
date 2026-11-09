@@ -6,10 +6,10 @@ body:
   - type: markdown
     attributes:
       value: |
-        Una vulnerabilità di sicurezza va segnalata in privato ([SECURITY.md](https://github.com/liammaher/impresa-in-due-minuti/blob/main/SECURITY.md)).
+        Una vulnerabilità di sicurezza va segnalata in privato ([SECURITY.md](https://github.com/liammaher/impresa-in-un-minuto/blob/main/SECURITY.md)).
         **Nessun dato personale**: dove serve un esempio, usa valori inventati.
 
-        Report a security vulnerability privately ([SECURITY.md](https://github.com/liammaher/impresa-in-due-minuti/blob/main/SECURITY.md)).
+        Report a security vulnerability privately ([SECURITY.md](https://github.com/liammaher/impresa-in-un-minuto/blob/main/SECURITY.md)).
         **No personal data**: where an example is needed, use made-up values.
   - type: textarea
     id: cosa
@@ -36,8 +36,8 @@ body:
     id: versione
     attributes:
       label: Versioni / Versions
-      description: Impresa in due minuti (`/plugin`) e `pvault version`, se lo usi. / Impresa in due minuti (`/plugin`) and `pvault version`, if you use it.
-      placeholder: impresa-in-due-minuti 0.3.0
+      description: Impresa in un minuto (`/plugin`) e `pvault version`, se lo usi. / Impresa in un minuto (`/plugin`) and `pvault version`, if you use it.
+      placeholder: impresa-in-un-minuto 0.3.0
     validations:
       required: true
   - type: input

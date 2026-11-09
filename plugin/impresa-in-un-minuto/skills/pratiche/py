@@ -2,7 +2,7 @@
 # Runs the skill's Python scripts: `sh py script.py args...`. They need Python 3.9+ and no
 # packages. A real one already on the computer is used as it is; never the macOS stub
 # /usr/bin/python3 without the Command Line Tools (it opens an install dialog) nor the Windows
-# Store alias (it opens the Store). IMPRESA_IN_DUE_MINUTI_PYTHON=<path> picks one. Messages for the person are
+# Store alias (it opens the Store). IMPRESA_IN_UN_MINUTO_PYTHON=<path> picks one. Messages for the person are
 # in Italian, on stderr.
 #
 # plugin/build.yaml's python_download picks which of the two parts marked below a build keeps
@@ -28,7 +28,7 @@ installed() {
 
 # <download>
 # Where there is none: python-build-standalone 3.12 (the build uv uses), downloaded once,
-# checked against the SHA-256 pinned here, kept in ~/.cache/impresa-in-due-minuti. IMPRESA_IN_DUE_MINUTI_PYTHON=download
+# checked against the SHA-256 pinned here, kept in ~/.cache/impresa-in-un-minuto. IMPRESA_IN_UN_MINUTO_PYTHON=download
 # skips the installed one (tests).
 TAG=20261013
 VER=3.12.15
@@ -61,31 +61,31 @@ sha256() {
 }
 
 bundled() {
-  t=$(triple) || { echo "Impresa in due minuti: questo computer ($(uname -s) $(uname -m)) non è tra quelli previsti." >&2; return 1; }
+  t=$(triple) || { echo "Impresa in un minuto: questo computer ($(uname -s) $(uname -m)) non è tra quelli previsti." >&2; return 1; }
   want=$(sha_of "$t")
   # $HOME in Git Bash too (/c/Users/...): its tar reads "C:\..." as a remote host.
-  root=${XDG_CACHE_HOME:-$HOME/.cache}/impresa-in-due-minuti
+  root=${XDG_CACHE_HOME:-$HOME/.cache}/impresa-in-un-minuto
   case "$t" in *windows*) exe=python/python.exe ;; *) exe=python/bin/python3 ;; esac
   dir=$root/python-$VER-$TAG
   # Ready: unpacked from an archive with the pinned hash (written last, so a half-done one isn't).
   if [ -f "$dir/.sha256" ] && [ "$(cat "$dir/.sha256")" = "$want" ] && ok "$dir/$exe"; then
     echo "$dir/$exe"; return 0
   fi
-  echo "Impresa in due minuti: scarico Python (circa 25 MB), una volta sola..." >&2
+  echo "Impresa in un minuto: scarico Python (circa 25 MB), una volta sola..." >&2
   mkdir -p "$root"
   tmp=$(mktemp -d "$root/.dl.XXXXXX")
   trap 'rm -rf "$tmp"' EXIT
   name=cpython-$VER+$TAG-$t-install_only_stripped.tar.gz
   if ! curl -fsSL --retry 3 -o "$tmp/$name" "https://github.com/astral-sh/python-build-standalone/releases/download/$TAG/$name"; then
-    echo "Impresa in due minuti: non riesco a scaricare Python (connessione?). Riprovi tra poco." >&2; return 1
+    echo "Impresa in un minuto: non riesco a scaricare Python (connessione?). Riprovi tra poco." >&2; return 1
   fi
   got=$(sha256 "$tmp/$name")
   if [ "$got" != "$want" ]; then
-    echo "Impresa in due minuti: il file scaricato non è quello atteso (SHA-256 $got): non lo uso." >&2; return 1
+    echo "Impresa in un minuto: il file scaricato non è quello atteso (SHA-256 $got): non lo uso." >&2; return 1
   fi
   mkdir "$tmp/x"
-  tar -xzf "$tmp/$name" -C "$tmp/x" || { echo "Impresa in due minuti: il Python scaricato non si apre." >&2; return 1; }
-  ok "$tmp/x/$exe" || { echo "Impresa in due minuti: il Python scaricato non parte su questo computer." >&2; return 1; }
+  tar -xzf "$tmp/$name" -C "$tmp/x" || { echo "Impresa in un minuto: il Python scaricato non si apre." >&2; return 1; }
+  ok "$tmp/x/$exe" || { echo "Impresa in un minuto: il Python scaricato non parte su questo computer." >&2; return 1; }
   rm -rf "$dir"
   mv "$tmp/x" "$dir"
   echo "$want" > "$dir/.sha256"
@@ -100,21 +100,21 @@ none() { # no Python 3.9+ on this computer: say how to get one, and stop
     Darwin)
       # The same window the stub opens: Apple's developer tools, which bring Python 3.
       xcode-select --install >/dev/null 2>&1 || true
-      echo "Impresa in due minuti: su questo Mac manca Python. macOS apre una finestra per installare gli «strumenti per sviluppatori» di Apple: li installi (gratis, qualche minuto), poi riprovi." >&2 ;;
+      echo "Impresa in un minuto: su questo Mac manca Python. macOS apre una finestra per installare gli «strumenti per sviluppatori» di Apple: li installi (gratis, qualche minuto), poi riprovi." >&2 ;;
     MINGW* | MSYS* | CYGWIN*)
-      echo "Impresa in due minuti: su questo computer manca Python 3. Lo installi da python.org (spunti «Add python.exe to PATH»), riapra l'app e riprovi." >&2 ;;
+      echo "Impresa in un minuto: su questo computer manca Python 3. Lo installi da python.org (spunti «Add python.exe to PATH»), riapra l'app e riprovi." >&2 ;;
     *)
-      echo "Impresa in due minuti: su questo computer manca Python 3 (3.9 o più recente): lo installi, poi riprovi." >&2 ;;
+      echo "Impresa in un minuto: su questo computer manca Python 3 (3.9 o più recente): lo installi, poi riprovi." >&2 ;;
   esac
   return 1
 }
 # </no-download>
 
-case "${IMPRESA_IN_DUE_MINUTI_PYTHON:-}" in
+case "${IMPRESA_IN_UN_MINUTO_PYTHON:-}" in
   "") py=$(installed) || py=$(none) ;;
 # <download>
   download) py=$(bundled) ;;
 # </download>
-  *) py=$IMPRESA_IN_DUE_MINUTI_PYTHON ;;
+  *) py=$IMPRESA_IN_UN_MINUTO_PYTHON ;;
 esac
 exec "$py" "$@"

@@ -1,6 +1,6 @@
-# The Impresa in due minuti connector
+# The Impresa in un minuto connector
 
-A remote MCP server, read-only and without sign-in, that the Impresa in due minuti plugin brings: what
+A remote MCP server, read-only and without sign-in, that the Impresa in un minuto plugin brings: what
 pratiche can be prepared, by comune and by who files them, and the law behind each
 (`docs/design/packaging.md`). It holds and receives no one's data: its tools take a case's
 facts, and filling runs in the plugin, on the user's computer.
@@ -21,7 +21,7 @@ since), `paused` (the drift check found it changed), `mapped` (steps, no run yet
 
 ```sh
 npm install && npm run build
-REGISTRY_DIR=../plugin/dist/impresa-in-due-minuti/skills/pratiche PORT=8080 npm start   # POST /mcp, GET /healthz
+REGISTRY_DIR=../plugin/dist/impresa-in-un-minuto/skills/pratiche PORT=8080 npm start   # POST /mcp, GET /healthz
 npm test                         # REGISTRY_DIR set: also checks the real build's files
 ```
 

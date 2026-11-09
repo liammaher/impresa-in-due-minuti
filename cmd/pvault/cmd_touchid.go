@@ -54,7 +54,7 @@ func cmdTouchID() {
 // this, so an agent can't enroll a password it learned some other way.
 func cmdTouchIDEnable() {
 	if _, ok := touchIDHelper(); !ok {
-		fatal("%s is not installed next to pvault — Impresa in due minuti's setup installs it (from source: 'make build')", touchIDHelperName)
+		fatal("%s is not installed next to pvault — Impresa in un minuto's setup installs it (from source: 'make build')", touchIDHelperName)
 	}
 	if !term.IsTerminal(int(syscall.Stdin)) {
 		fatal("Touch ID can only be turned on from an interactive terminal")

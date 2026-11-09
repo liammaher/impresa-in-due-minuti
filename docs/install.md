@@ -1,11 +1,11 @@
 # Installing
 
 **Status:** the marketplace installs the release its file pins (the latest is on the
-[releases page](https://github.com/liammaher/impresa-in-due-minuti/releases)). Since 0.3.0 the plugin ships
+[releases page](https://github.com/liammaher/impresa-in-un-minuto/releases)). Since 0.3.0 the plugin ships
 without the archive (`plugin/build.yaml` `vault: false`: the release builds no pvault); 0.2.0
 (2026-10-29) shipped it. From 0.4.0 it was Portale SUE, the SUE's pratiche only; from 0.5.0 it is
-Impresa in due minuti, one plugin for every sportello and comune it covers. Whoever has Portale SUE adds the
-marketplace `liammaher/impresa-in-due-minuti`, installs `impresa-in-due-minuti` once and removes `portale-sue`. Installed in an isolated Claude config; not
+Impresa in un minuto, one plugin for every sportello and comune it covers. Whoever has Portale SUE adds the
+marketplace `liammaher/impresa-in-un-minuto`, installs `impresa-in-un-minuto` once and removes `portale-sue`. Installed in an isolated Claude config; not
 yet on a clean Mac or Windows (*What is not done*).
 
 Without the archive, Claude reads the job's documents and checks the draft against them, so the
@@ -14,15 +14,15 @@ client's details pass through the conversation (the plugin's README says so to t
 ## What you do
 
 1. **Add the plugin**. In the Claude app, with no terminal: **Customize → Plugins → Add → Add marketplace**,
-   choose **Add from a repository**, type `liammaher/impresa-in-due-minuti`, pick it in the list, **Sync**, then
-   **Add** on Impresa in due minuti. Updates (how a remapped pratica or a portal-drift refusal reaches the
+   choose **Add from a repository**, type `liammaher/impresa-in-un-minuto`, pick it in the list, **Sync**, then
+   **Add** on Impresa in un minuto. Updates (how a remapped pratica or a portal-drift refusal reaches the
    tecnico) come by **Add → Manage marketplaces → ⋯ → Check for updates**, which works with no GitHub
    account (tried 2026-11-07: "Updated to 55ae7a9"). **Sync automatically** does not: on claude.ai it
    needs the person to grant Claude's GitHub app access («Concedi accesso»), stays off without it, and
    for personal marketplaces it does not fire even then (anthropics/claude-code#93825). It is saved to the account, so it is in chat,
    Cowork and Claude Code too. On a Team or Enterprise plan an owner can install it for everyone (or
    require it) instead. In Claude Code the same is
-   `/plugin install impresa-in-due-minuti --marketplace liammaher/impresa-in-due-minuti`.
+   `/plugin install impresa-in-un-minuto --marketplace liammaher/impresa-in-un-minuto`.
 
    One way only: there is no separate skill to upload. An uploaded skill has no update channel, so it
    would go stale the first time the portal changed.
@@ -69,23 +69,23 @@ install-pvault.sh | .ps1  downloads  pvault_<version>_<os>_<arch>  and refuses i
   a Mac with Touch ID a closed vault opens by fingerprint (`pvault unlock`); on Windows it is the page
   again. Creating, opening and the refusals are tested end to end on a Mac (`TestSetup_*`); the Touch ID
   and Windows Hello buttons are untried, since they need a person's fingerprint or face.
-- **Python.** The skill runs its scripts through `sh py` (`plugin/impresa-in-due-minuti/skills/pratiche/py`):
+- **Python.** The skill runs its scripts through `sh py` (`plugin/impresa-in-un-minuto/skills/pratiche/py`):
   the computer's own Python 3.9+ if there is one. Where there is none, `plugin/build.yaml`'s
   `python_download` decides: off (the default), it says how to install one (on a Mac it opens Apple's
   installer of the developer tools) and stops, and the plugin downloads nothing; on, it downloads
-  python-build-standalone 3.12 (release 20261013) once into `~/.cache/impresa-in-due-minuti` and runs it only if its
+  python-build-standalone 3.12 (release 20261013) once into `~/.cache/impresa-in-un-minuto` and runs it only if its
   SHA-256 is the one pinned there. `plugin/test_py.py` tests both builds offline. Untried: the download
   on a clean Mac, and anything on Windows (Git Bash's `sh`, `curl` and `tar`).
 - **A listing in Anthropic's directory** (stage four) would make step 1 a single "Add".
 
 ## Releasing (maintainers)
 
-1. Bump `version` in `plugin/impresa-in-due-minuti/.claude-plugin/plugin.json` (in a pull request, merged); the
+1. Bump `version` in `plugin/impresa-in-un-minuto/.claude-plugin/plugin.json` (in a pull request, merged); the
    release workflow refuses a tag that differs from it.
 2. On GitHub, **Actions → Release → Run workflow** on `main`: it tags `v<that version>` itself and runs
    the release (it refuses a version released already). Pushing a tag `vX.Y.Z` by hand does the
    same. The workflow runs the tests, builds the six `pvault` archives and
-   `checksums.txt` (goreleaser), builds the plugin with them and attaches it as `impresa-in-due-minuti-X.Y.Z.zip`, commits the same build
+   `checksums.txt` (goreleaser), builds the plugin with them and attaches it as `impresa-in-un-minuto-X.Y.Z.zip`, commits the same build
    to the `plugin` branch as `plugin-vX.Y.Z` (`plugin/publish_plugin.py`), then opens a pull request
    that pins `.claude-plugin/marketplace.json` to that commit.
 3. Merge that pull request (a bot's pull request gets no CI run, so it takes an admin merge). Until

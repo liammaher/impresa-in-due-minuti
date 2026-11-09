@@ -1,16 +1,16 @@
 ---
 name: cowork-test
-description: Run the Impresa in due minuti plugin's three Cowork tests with made-up data - whether the built-in browser runs the portal runner's scripts, whether a planimetria-sized file can be attached, and what one run costs - and write the results to a file. Use only when the user asks to run the Napoli Cowork tests.
+description: Run the Impresa in un minuto plugin's three Cowork tests with made-up data - whether the built-in browser runs the portal runner's scripts, whether a planimetria-sized file can be attached, and what one run costs - and write the results to a file. Use only when the user asks to run the Napoli Cowork tests.
 ---
 
 # Napoli Cowork tests
 
-Three questions decide how the Impresa in due minuti plugin works in Cowork. Answer them with the CILA
+Three questions decide how the Impresa in un minuto plugin works in Cowork. Answer them with the CILA
 rehearsal's made-up client (architetto Chiara Fittizia, client Luca Fittizio: no real
 person, codici fiscali chosen at random) on the real portal, as a draft named "PROVA NON
 INVIARE", never sent. `${CLAUDE_SKILL_DIR}` in a command is this skill's
 folder, and the pratiche skill's is its sibling, `${CLAUDE_SKILL_DIR}/../pratiche` (should
-a command show a `$` variable instead of a path, put this skill's base directory in its place). Keep notes as you go and write them all to `impresa-in-due-minuti-test-results.md` in the
+a command show a `$` variable instead of a path, put this skill's base directory in its place). Keep notes as you go and write them all to `impresa-in-un-minuto-test-results.md` in the
 user's folder at the end, even when a test fails.
 
 ## 0. Before anything
@@ -22,7 +22,7 @@ user's folder at the end, even when a test fails.
    a page's file input. Note which browser the browser setting uses (it must be the
    built-in one).
 3. Copy the made-up case into the user's folder and work from there:
-   `cd "$(python3 "${CLAUDE_SKILL_DIR}/../pratiche/prova.py" impresa-in-due-minuti-test)"` (a `cp`
+   `cd "$(python3 "${CLAUDE_SKILL_DIR}/../pratiche/prova.py" impresa-in-un-minuto-test)"` (a `cp`
    from the plugin's folder can be refused).
 4. Check and pre-flight it:
    ```sh
@@ -100,10 +100,10 @@ calls since step 0.
 
 ## The results file
 
-Write `impresa-in-due-minuti-test-results.md` in the user's folder:
+Write `impresa-in-un-minuto-test-results.md` in the user's folder:
 
 ```markdown
-# Impresa in due minuti plugin: Cowork tests, <date>
+# Impresa in un minuto plugin: Cowork tests, <date>
 
 | Test | Result | Detail |
 |---|---|---|
@@ -117,6 +117,6 @@ Write `impresa-in-due-minuti-test-results.md` in the user's folder:
 check.py, pre-flight and run.py page as printed; the report's result, error and at.
 ```
 
-Then attach `impresa-in-due-minuti-test-results.md` and `impresa-in-due-minuti-test/run/report.json`, and tell the user to
+Then attach `impresa-in-un-minuto-test-results.md` and `impresa-in-un-minuto-test/run/report.json`, and tell the user to
 send both back. The draft "PROVA NON INVIARE - CILA di prova" stays in their Pratiche in
 bozza: tell them it's there, for them to delete when they like.
