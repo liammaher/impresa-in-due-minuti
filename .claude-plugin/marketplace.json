@@ -1,19 +1,19 @@
 {
-  "name": "portale-sue",
-  "description": "Portale SUE: Claude prepara le Sue pratiche sui portali della pubblica amministrazione, fino ai passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio).",
+  "name": "impresa-in-due-minuti",
+  "description": "Impresa in due minuti: Claude prepara le Sue pratiche sui portali della pubblica amministrazione, fino ai passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio).",
   "owner": {
     "name": "Liam Maher"
   },
   "plugins": [
     {
-      "name": "portale-sue",
-      "displayName": "Portale SUE",
-      "description": "Prepara le pratiche edilizie del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, con la biblioteca pratiche-napoli di regole e procedure.",
+      "name": "impresa-in-due-minuti",
+      "displayName": "Impresa in due minuti",
+      "description": "Prepara le pratiche del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, con la biblioteca pratiche-napoli di regole e procedure.",
       "source": {
         "source": "github",
         "repo": "liammaher/impresa-in-due-minuti",
-        "ref": "plugin-v0.4.11",
-        "sha": "bd787fdff37f6fcade10e624cc1bfb4c77a7162f"
+        "ref": "plugin-v0.5.0",
+        "sha": "13652c51b08f88b77f912211ab8681d5e91cb249"
       }
     }
   ]
