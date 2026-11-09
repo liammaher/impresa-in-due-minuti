@@ -1,4 +1,4 @@
-# Impresa in due minuti
+# Impresa in un minuto
 
 Prepara una pratica del SUE del Comune di Napoli, su impresainungiorno, dai documenti del Suo
 cliente. Si ferma dove comincia la Sua parte: le dichiarazioni, la firma digitale, il pagamento e
@@ -19,29 +19,29 @@ documenti, basta dire «è una prova, inventa i dati».
   nel tempo.
   Una pratica del SUAP (un negozio, un ristorante) non è ancora coperta.
   Un immobile in un altro comune, un altro ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia
-  delle Entrate, Regione) o una pratica che Impresa in due minuti non conosce: Claude Le dice subito che non è
+  delle Entrate, Regione) o una pratica che Impresa in un minuto non conosce: Claude Le dice subito che non è
   coperta dall'automazione, e non apre nulla.
 - Per ogni lavoro Claude Le dice prima se la pratica è **coperta dall'automazione** (la prepara per
   intero), se ha **solo indicazioni** (non la compila) o se **non è coperta**, e perché. Poi Lei
   conferma, e solo allora si comincia.
 - **Coperta** vuol dire: compilata sul portale vero con dati di prova, rileggendo ogni valore.
-  Nessuna pratica reale è ancora stata inviata con Impresa in due minuti.
+  Nessuna pratica reale è ancora stata inviata con Impresa in un minuto.
 - Le regole vengono dalla biblioteca pratiche-napoli, ogni fatto con la sua fonte. Ciò che la
   biblioteca non copre, Claude lo dice.
 
 ## Installazione
 
-La guida passo passo, da mandare a un collega: **https://liammaher.github.io/impresa-in-due-minuti/**
+La guida passo passo, da mandare a un collega: **https://liammaher.github.io/impresa-in-un-minuto/**
 
 Nell'app Claude per computer, senza terminale:
 
 1. Apra **Personalizzazione** (Customize) e la scheda **Plugin**.
 2. Clicchi **Aggiungi** (Add), poi **Aggiungi marketplace** (Add marketplace) e **Aggiungi da un repository**
-   (Add from a repository), scriva `liammaher/impresa-in-due-minuti` nella casella, lo scelga nell'elenco sotto e
+   (Add from a repository), scriva `liammaher/impresa-in-un-minuto` nella casella, lo scelga nell'elenco sotto e
    clicchi **Sincronizza** (Sync).
-3. Apra Impresa in due minuti, tra i **Nuovi plugin**, e clicchi **Aggiungi** (Add).
-4. Per aggiornarlo (Impresa in due minuti cambia quando cambia il portale): **Aggiungi** → **Gestisci marketplace**
-   (Manage marketplaces) → **⋯** accanto a impresa-in-due-minuti → **Verifica aggiornamenti** (Check for updates).
+3. Apra Impresa in un minuto, tra i **Nuovi plugin**, e clicchi **Aggiungi** (Add).
+4. Per aggiornarlo (Impresa in un minuto cambia quando cambia il portale): **Aggiungi** → **Gestisci marketplace**
+   (Manage marketplaces) → **⋯** accanto a impresa-in-un-minuto → **Verifica aggiornamenti** (Check for updates).
    Lo faccia ogni tanto e prima di una pratica importante. Un avviso che propone **Concedi accesso** a
    GitHub lo può chiudere: non serve.
 
@@ -73,26 +73,26 @@ installi da python.org.
 ## Dove vanno i dati dei Suoi clienti
 
 Nella cartella dei Suoi lavori su questo computer, nella conversazione con Claude e sul portale.
-Impresa in due minuti non ha un server suo.
+Impresa in un minuto non ha un server suo.
 **Claude legge i documenti del lavoro**, compila la bozza e la confronta con essi: i dati dei
 clienti (nomi, codici fiscali, indirizzi, dati catastali) passano quindi dalla conversazione con
 Claude, come ogni documento che Lei vi apre. Claude glielo dice alla prima pratica. Se un cliente
-non vuole che i suoi documenti passino da Claude, non usi Impresa in due minuti per quel lavoro.
+non vuole che i suoi documenti passino da Claude, non usi Impresa in un minuto per quel lavoro.
 Password, PIN e accesso SPID mai: l'accesso al portale lo fa Lei.
 Lei è titolare del trattamento dei dati dei Suoi clienti. In Claude disattivi «Aiuta a
 migliorare Claude» (Impostazioni → Privacy) e usi il browser dell'app, non Claude in Chrome.
 
 ## Prima di usarlo
 
-Impresa in due minuti **non è uno strumento ufficiale**: non è affiliato al Comune di Napoli, a
+Impresa in un minuto **non è uno strumento ufficiale**: non è affiliato al Comune di Napoli, a
 InfoCamere (che gestisce impresainungiorno) né ad altri enti, e non è una consulenza legale. Il nome
 gioca con quello del portale, ma è un progetto indipendente, gratuito e open source.
 
-Legga l'[uso responsabile](https://github.com/liammaher/impresa-in-due-minuti/blob/main/docs/responsible-use.md).
+Legga l'[uso responsabile](https://github.com/liammaher/impresa-in-un-minuto/blob/main/docs/responsible-use.md).
 In breve: Lei firma e risponde della pratica; una pratica alla volta, con il Suo SPID; nessun dato
 personale in una segnalazione. Per chiedere una pratica o segnalare un portale cambiato apra una
-[segnalazione](https://github.com/liammaher/impresa-in-due-minuti/issues/new/choose).
-Se qualcosa di Impresa in due minuti non funziona, lo dica a Claude: Le prepara la segnalazione già
+[segnalazione](https://github.com/liammaher/impresa-in-un-minuto/issues/new/choose).
+Se qualcosa di Impresa in un minuto non funziona, lo dica a Claude: Le prepara la segnalazione già
 compilata, senza i dati dei clienti, e Lei la rilegge prima di inviarla.
 
 ## Per qualcosa in più

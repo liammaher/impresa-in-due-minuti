@@ -1,13 +1,13 @@
 {
-  "name": "impresa-in-due-minuti",
-  "displayName": "Impresa in due minuti",
-  "version": "0.5.0",
-  "description": "Impresa in due minuti: prepara le pratiche del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, fino ai passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio). Con la biblioteca pratiche-napoli di regole e procedure.",
+  "name": "impresa-in-un-minuto",
+  "displayName": "Impresa in un minuto",
+  "version": "0.6.0",
+  "description": "Impresa in un minuto: prepara le pratiche del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, fino ai passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio). Con la biblioteca pratiche-napoli di regole e procedure.",
   "author": {
     "name": "Liam Maher"
   },
-  "homepage": "https://liammaher.github.io/impresa-in-due-minuti/",
-  "repository": "https://github.com/liammaher/impresa-in-due-minuti",
+  "homepage": "https://liammaher.github.io/impresa-in-un-minuto/",
+  "repository": "https://github.com/liammaher/impresa-in-un-minuto",
   "license": "MIT",
-  "keywords": ["impresa-in-due-minuti", "italia", "napoli", "sue", "cila", "scia", "architetti", "pratiche"]
+  "keywords": ["impresa-in-un-minuto", "italia", "napoli", "sue", "cila", "scia", "architetti", "pratiche"]
 }
