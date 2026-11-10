@@ -492,7 +492,7 @@ says what to load; then the skill runs in a fresh session, in the app's browser 
 («fammi vedere una prova»). `run.py`, `rerun.py`, a Playwright window and the CILA fixture are the same engine in
 another wrapper: they are for developing the runner. The build refuses a plugin whose runner files differ from the
 repo's (`build.RUNNER_FILES`) or whose Prova card (`run.py card`, "Cosa succede") differs from the repo runner's;
-`bench/test_card.py` holds the card (three lines: the pratica and why, what Claude does, what the tecnico does) to
+`bench/test_card.py` holds the card (two lines: the pratica and why, what Claude does) to
 review.py's closing lines for every rehearsal.
 
 **The tecnico is addressed as tu, never Lei**, in everything they read: the skills, the plugin's README, the
@@ -501,7 +501,7 @@ rules tables and, for the library's own rules tables, pratiche-napoli's). Verb f
 («scrivimi», «controlla», «allegala»), and a formal imperative that is also the tu present («firmi», «paghi») is
 told by its capital at the start of a sentence or by a clitic. `bench/test_voice.py` reads all of it for the
 formal forms and fails on one; a quotation from the law or the portal keeps its own words. **One message per
-moment**: the Prova says five lines before the login, one while it fills, and the closing lines at the end
+moment**: the Prova says three lines before the login, one while it fills, and three at the end
 (`prova.md`); what only a real filing needs (the c/c, the signing order, the PEC receipt) comes with the step it
 belongs to in the closing lines, never in the card or the Prova.
 

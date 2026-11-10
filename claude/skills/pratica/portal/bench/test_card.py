@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """The card ("Cosa succede") pre-flight gives a case that is ready: for every rehearsal that gets one, it
-is three lines in Italian (the pratica and why, what Claude does, what the tecnico does), in tu, shows no
-field id, role code or personal value, none of the machine workings (wizard path, sources, byte for byte) or
-of a real filing's details (c/c, signing order, PEC), and says it reads the PDF preview back only when the
-skill does. review.py's closing lines carry those details next to the steps, and say the same steps. The
-Prova's, by hand: the made-up marker, nothing to send; its quadri are the count review.py says.
+is two lines in Italian (the pratica and why, what Claude does), in tu, shows no field id, role code or
+personal value, none of the machine workings (wizard path, sources, quadri, byte for byte), of what the tecnico
+does (the verdict and review.py's closing lines say it) or of a real filing's details (c/c, signing order, PEC),
+and says it reads the PDF preview back only when the skill does. review.py's closing lines carry those details
+next to the steps, and say the same steps. The Prova's, by hand: the made-up marker, nothing to send.
 
   ~/.cache/pratica-portal/venv/bin/python -I claude/skills/pratica/portal/bench/test_card.py
 """
@@ -29,8 +29,8 @@ REH = ROOT / "rehearsals"
 LEAK = re.compile(r"\b[a-z][a-z0-9-]*:[a-z_]+\.[a-z_]+\b|(?<![\w/])(?:t|c|cr|o|r|p|f\d?):(?=\w)")
 CF = re.compile(r"\b[A-Z]{6}\d\d[A-Z]\d\d[A-Z]\d{3}[A-Z]\b")
 ENGLISH = re.compile(r"\b(the|your|you|and|of|was|draft|saved|every|value|left|filled|sign|send|pay)\b")
-MAX_LINES = 7
-GONE = re.compile(r"settore|operazione|byte|c/c|PEC|distinta|«tutte»|Lei\b|Sua\b|Suoi?\b|\bPerché è questa|i fatti che")
+MAX_LINES = 3  # heading, what Claude does, and in a Prova (made up, as these run) that nothing is sent
+GONE = re.compile(r"settore|operazione|byte|c/c|PEC|distinta|«tutte»|Lei\b|Sua\b|Suoi?\b|\bPerché è questa|i fatti che|quadr|\bTu\b|\btu\b")
 
 
 def problems(card, fields, later, sportello, rows):
@@ -49,16 +49,11 @@ def problems(card, fields, later, sportello, rows):
     personal = {v for k, v in fields.items()
                 if re.search(r"first_name|last_name|codice_fiscale|\.civico|\.via$", k) and len(str(v)) > 3}
     bad += [f"shows the value {v!r}" for v in personal if str(v) in card]
-    if not (lines[0].startswith("**") and lines[1].startswith("Io compilo ")):
-        bad.append("not the heading and «Io compilo …»")
-    # What they do: the card's one line has the verbs of review.py's steps, in the same order.
-    mine = next((x for x in lines if x.startswith("Tu ") or x.startswith("In una pratica vera tu ")), None)
-    verbs = ["controlli l'anteprima", "spunti le dichiarazioni", "paghi", "firmi", "invii"]
-    if mine is None or [v for v in verbs if v in mine] != verbs:
-        bad.append(f"what they do: {mine!r}")
+    if not (lines[0].startswith("**") and lines[1].startswith("Io compilo la bozza")):
+        bad.append("not the heading and «Io compilo la bozza …»")
     asked = {s.split(" ")[0] for s in run.tu_steps(later)}
     if not {"controlla", "spunta", "paga", "firma", "invia"} <= asked:
-        bad.append(f"the steps {run.tu_steps(later)} lack a verb the card says")
+        bad.append(f"the steps {run.tu_steps(later)} lack a verb of the real filing")
     return bad
 
 
@@ -82,12 +77,6 @@ def main():
             said = review.summary({"result": "filled", "title": steps["title"], "second_run": later}, None, None)["steps"]
             if said != run.tu_steps(later):
                 found.append(f"review.py says {said}, the runner {run.tu_steps(later)}")
-            # And the quadri the card counts are the ones the report review.py reads carries.
-            if f"Io compilo {run.count(run.quadri(r_steps := run.phase(run.expand(steps, values), False, True)), 'quadro', 'quadri')}" not in r["card"]:
-                found.append("the card's quadri are not the report's")
-            shown = run.review_shown(run.phase(run.expand(steps, values), False, True), values, steps)
-            if shown["quadri"] != run.quadri(r_steps):
-                found.append(f"review_shown says {shown['quadri']} quadri, the card {run.quadri(r_steps)}")
             bad += [f"{name}: {b}" for b in found]
             print(("ok    " if not found else "FAIL  ") + name)
 
@@ -97,7 +86,7 @@ def main():
                             fields=fields, asks=steps.get("asks"))
         r = run.preflight(steps, values, made_up=True)
         card = r["card"]
-        for want in ("(prova, dati inventati)", "In una pratica vera tu", "file di prova", "Qui non c'è nulla da inviare",
+        for want in ("(prova, dati inventati)", "Io compilo la bozza", "file di prova", "Qui non c'è nulla da inviare",
                      "cancella la bozza"):
             if want.lower() not in card.lower():
                 bad.append(f"Prova card lacks {want!r}")
@@ -130,18 +119,13 @@ def main():
             if cli.returncode or cli.stdout.count("\n– ") != len(rows) or "«sì»" in cli.stdout or "Lei" in cli.stdout:
                 bad.append(f"`run.py details --made-up` isn't the answers' list:\n{cli.stdout[:400]}{cli.stderr}")
         real = run.card(run.expand(steps, values), values, r, False, r.get("riepilogo_rows"))
-        if "(prova" in real or "Qui non c'è nulla da inviare" in real or "In una pratica vera" in real:
+        if "(prova" in real or "Qui non c'è nulla da inviare" in real or "di prova" in real:
             bad.append("a real job's card carries the Prova's words")
         if not real.splitlines()[0].startswith("**CILA, "):
             bad.append(f"a real job's card doesn't say why it is this pratica: {real.splitlines()[0]!r}")
-        # review.py's Prova lines say who did what with the same count of quadri.
-        said = review.summary({"result": "filled", "title": steps["title"], "quadri": run.quadri(
-            run.phase(run.expand(steps, values), False, True))}, None, None, True)["message"]
-        if f"ho compilato {run.quadri(run.phase(run.expand(steps, values), False, True))} quadri" not in said:
-            bad.append(f"the Prova's closing lines don't count the quadri: {said}")
         # What the sportello adds goes next to each step in the closing lines, never in the card.
         det = run.step_details(steps)
-        if set(det) != {"paga i diritti", "paga", "firma", "invia"} or any(v in real or v in card for v in det.values()):
+        if set(det) != {"paga i diritti", "paga", "firma la pratica", "invia"} or any(v in real or v in card for v in det.values()):
             bad.append(f"step details {det}: missing, or in the card")
     finally:
         os.chdir(here)
