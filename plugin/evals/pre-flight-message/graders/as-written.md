@@ -1,7 +1,7 @@
 ---
 type: llm
 ---
-PASS if the final reply is in Italian, addresses the tecnico as Lei, opens with whether the pratica is
+PASS if the final reply is in Italian, addresses the tecnico as tu (never Lei), opens with whether the pratica is
 covered by the automation (with that it was tried on the portal with made-up data), says in a sentence
 or two what it understood (each fact with the document it comes from) and the pratica it proposes,
 gives pre-flight's questions numbered (with any lettered follow-ups under them), and folds the

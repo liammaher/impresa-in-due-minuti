@@ -13,12 +13,12 @@ after: [Pagamento degli oneri, Gestione degli allegati]
 asks:
   descrizione: {default: "scavo fuori sito {{c:identity.last_name}}"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
   - "Nessuna imposta di bollo da pagare con questo modulo: il modulo del portale per questa pratica non ha una sezione né uno spazio per il bollo"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 # Routed by the rules table sue-napoli: works with no building title in a protected area.
 rules:
   table: sue-napoli
-  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}

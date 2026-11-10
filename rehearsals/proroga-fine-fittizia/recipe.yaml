@@ -14,12 +14,12 @@ asks:
   diritti_euro: {propose: "{{ask.titolo_tipo|diritti_proroga_pdc}}", why: "Voce SUE 11 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 501 € per la proroga di un permesso di costruire; la proroga di un altro titolo non è nel tariffario"}
   descrizione: {default: "proroga fine lavori {{c:identity.last_name}}"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 # Routed by the rules table sue-napoli-adempimenti: what is filed on the title held.
 rules:
   table: sue-napoli-adempimenti
-  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {adempimento: "proroga_fine", proroga: "ordinaria"}

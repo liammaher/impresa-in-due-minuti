@@ -118,11 +118,11 @@ def complete_folder(tmp):
             assert rows[k]["source"] == source, (k, rows[k])
     assert rows["cila_stato"]["source"] == "relazione tecnica" and rows["cila_stato"]["answer"] == "in corso", rows["cila_stato"]
     # Short, as a review by exception: a line for each proposal, the rest counted by source; every
-    # answer, a line each, under «tutte».
-    short, full = r["riepilogo"], r["riepilogo_tutte"]
-    assert short.count("– ") == len(r["proposals"]) and "«tutte»" in short and "Scriva «sì»" in short, short
+    # answer, a line each, under «dettagli».
+    short, full = r["riepilogo"], r["riepilogo_dettagli"]
+    assert short.count("– ") == len(r["proposals"]) and "«dettagli»" in short and "Scrivi «sì»" in short, short
     assert "relazione tecnica" in short and len(short.splitlines()) <= 6 + len(r["proposals"]) + 3, short
-    assert full.count("\n– ") == len(rows) and "Scriva «sì»" in full, full
+    assert full.count("\n– ") == len(rows) and "Scrivi «sì»" in full, full
     assert rows["allegati"]["answer"].count(",") >= 5, rows["allegati"]
     # The «sì» to another summary changes nothing.
     stale = preflight(folder, steps, "confirm", "--riepilogo", "000000000000", ok=(4,))

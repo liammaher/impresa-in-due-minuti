@@ -20,7 +20,8 @@ REPORT = {"result": "filled", "procedure": "cila", "sections": [], "total_second
           "url": "https://example.invalid/draft"}
 # What run.py page writes to private/shown.json for the pane's report.
 SHOWN = {"title": "CILA: lavori interni non strutturali, SUE Napoli (tecnico con procura)", "values": [],
-         "yours": ["Paghi i diritti di 120 € prima della seconda compilazione"], "second_run": [], "apart": []}
+         "yours": ["Paga i diritti di 120 € prima della seconda compilazione"], "second_run": [], "apart": [],
+         "quadri": 19}
 ALERT = {"section": "Domicilio elettronico", "label": "PEC", "text": "Indirizzo Pec non valido"}
 
 
@@ -68,8 +69,8 @@ def main():
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t), {"rows": [row]}, [good])
         check("a real job that worked: two lines, the pratica by its short name, no warning",
-              r["message"] == "✅ CILA compilata sul portale in 95 secondi: ogni valore è stato riletto.\nResta a Lei:\n"
-              "1. Controlli l'anteprima della bozza\n2. Spunti le dichiarazioni\n3. Firmi\n4. Paghi\n5. Invii"
+              r["message"] == "✅ CILA compilata sul portale in 95 secondi: ogni valore è stato riletto.\nTocca a te:\n"
+              "1. Controlla l'anteprima della bozza\n2. Spunta le dichiarazioni\n3. Firma\n4. Paga\n5. Invia"
               and r["warnings"] == [], r)
         check("the steps in full stay for Claude to answer from, unsaid", r["yours"] == SHOWN["yours"]
               and "120 €" not in r["message"], r)
@@ -78,21 +79,21 @@ def main():
         r = build(Path(t), {"rows": [row, bad]}, [good], {"alerts": [ALERT, ALERT]})
         lines = r["message"].split("\n")
         check("a mismatch and the portal's warning are each a ⚠️ line, between done and what's left",
-              lines[0].startswith("✅") and lines[3] == "Resta a Lei:"
+              lines[0].startswith("✅") and lines[3] == "Tocca a te:"
               and "⚠️ Dati catastali, foglio: sul portale «4», nel documento «3» (Visura catastale, p. 1)." in lines
-              and "⚠️ Domicilio elettronico: il portale segnala «Indirizzo Pec non valido». Lo controlli." in lines, r)
+              and "⚠️ Domicilio elettronico: il portale segnala «Indirizzo Pec non valido». Controllalo." in lines, r)
     with tempfile.TemporaryDirectory() as t:
         parcel = [{"section": "DATI CATASTALI", "label": x, "text": "Attenzione! Dati catastali sconosciuti"}
                   for x in ("foglio", "se non presente indicare il numero 0")]
         r = build(Path(t), report={"alerts": parcel})
         check("one warning on several boxes of a section is one line, by the section, in plain case",
               r["warnings"] == ["Dati catastali: il portale segnala «Attenzione! Dati catastali sconosciuti». "
-                                "Lo controlli."], r)
+                                "Controllalo."], r)
     with tempfile.TemporaryDirectory() as t:
         other = {"slot": "Procura speciale", "name": "x.pdf", "size": 3, "sha256": sha(b"%PDF only in run")}
         r = build(Path(t), {"rows": [row]}, [good, other])
         check("a file whose bytes no job file has (one in run/ doesn't count)",
-              r["warnings"] == ["Allegato «Procura speciale»: il file sul portale (x.pdf) non è nessuno dei Suoi file."], r)
+              r["warnings"] == ["Allegato «Procura speciale»: il file sul portale (x.pdf) non è nessuno dei tuoi file."], r)
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t))
         check("nothing checked against the documents (the archive's flow): no warning made up", r["warnings"] == [], r)
@@ -101,17 +102,28 @@ def main():
                  "copia attestazione versamento oneri, diritti e spese"]
         r = build(Path(t), shown={"second_run": later})
         check("a second compilation: the diritti paid first, its receipt and the procura then attached",
-              r["steps"] == ["controlli l'anteprima della bozza", "spunti le dichiarazioni", "paghi i diritti",
-                             "mi mandi i file firmati (la procura, la ricevuta del pagamento e gli altri documenti): "
-                             "li allego io", "firmi", "invii"], r)
+              r["steps"] == ["controlla l'anteprima della bozza", "spunta le dichiarazioni", "paga i diritti",
+                             "firma la procura, la ricevuta del pagamento e gli altri documenti e scrivimi «ho firmato»",
+                             "firma", "invia"], r)
+        d = {"paga i diritti": "solo sul c/c postale 57060964", "firma": "prima il PDF della pratica, poi la distinta",
+             "invia": "il codice pratica compare a video, la ricevuta arriva in PEC"}
+        r1 = build(Path(t) / "1", shown={"second_run": later, "details": d})
+        lines = r1["message"].split("\n")
+        check("the sportello's details sit next to their step, and what Claude does afterwards is its own line",
+              "3. Paga i diritti (solo sul c/c postale 57060964)" in lines
+              and "5. Firma (prima il PDF della pratica, poi la distinta)" in lines
+              and "6. Invia (il codice pratica compare a video, la ricevuta arriva in PEC)" in lines
+              and lines[lines.index("4. Firma la procura, la ricevuta del pagamento e gli altri documenti e scrivimi «ho firmato»") + 1]
+              == "   Io poi li allego con una seconda compilazione.", r1)
         r2 = build(Path(t) / "2", shown={"second_run": later[:1]})
         check("a second compilation with nothing paid first: paying after signing, as on any pratica",
-              r2["steps"][-3:] == ["firmi", "paghi", "invii"] and "paghi" not in r2["steps"][:3]
-              and "mi mandi i file firmati (la procura): li allego io" in r2["steps"], r2)
+              r2["steps"][-3:] == ["firma", "paga", "invia"] and "paga" not in r2["steps"][:3]
+              and "firma la procura e scrivimi «ho firmato»" in r2["steps"], r2)
         r3 = build(Path(t) / "3", report={"reopened": True}, shown={"second_run": later})
         check("the second compilation itself: the signed files attached, then sign and send",
               r3["message"].startswith("✅ CILA: file firmati allegati sul portale in 95 secondi")
-              and r3["steps"] == ["controlli l'anteprima della bozza", "firmi", "invii"], r3)
+              and r3["steps"] == ["controlla l'anteprima della bozza", "firma", "invia"]
+              and "Io poi" not in r3["message"], r3)
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t), shown={"apart": ["Da presentare a parte, al suo ufficio: Deposito sismico"]})
         check("what is filed apart is its own line, after the portal's steps",
@@ -127,7 +139,10 @@ def main():
               r["message"] == "✅ CILA di prova compilata in 95 secondi, con dati inventati.\n"
               "✅ Anteprima PDF del portale letta e confrontata con il caso di prova: tutti i 2 dati corrispondono.\n"
               "✅ 1 file allegato sul portale è proprio quello del caso di prova (stessi byte).\n"
-              "Nulla da inviare: la cancelli da «Pratiche in bozza»." and r["warnings"] == [], r)
+              "Io: ho compilato 19 quadri, allegato i file e riletto tutto dal portale.\n"
+              "Tu, in una pratica vera: controlli l'anteprima, spunti le dichiarazioni, paghi, firmi e invii.\n"
+              "Per vedere ogni risposta e da dove viene, scrivi «dettagli».\n"
+              "Nulla da inviare: cancella la bozza da «Pratiche in bozza»." and r["warnings"] == [], r)
     with tempfile.TemporaryDirectory() as t:
         # The compilation attached two files; «Allega documenti» lists the one (in two slots), the other sits in a quadro.
         receipt = {"name": "ricevuta-sanzione.pdf", "sha256": sha(b"%PDF ricevuta")}

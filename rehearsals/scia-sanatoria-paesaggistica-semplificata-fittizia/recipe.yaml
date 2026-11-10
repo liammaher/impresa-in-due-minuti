@@ -16,14 +16,14 @@ asks:
   # The landscape works are still to come: the asseverazione names the semplificata procedure.
   sanatoria_paesaggio: {default: "false"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: sono Sue, e le firma con la pratica"
-  - "Prima dell'inizio dei lavori, nomini chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di progettista, verifica ogni asseverazione di questa pagina: sono tue, e le firmi con la pratica"
+  - "Prima dell'inizio dei lavori, nomina chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
   - "I lavori in corso si sospendono finché il SUE non comunica che l'autorizzazione paesaggistica è stata acquisita; solo allora iniziano i lavori sulla facciata"
-  - "Paghi la sanzione di 516 € (art. 37 c. 5) prima della compilazione, che ne allega la ricevuta, e i diritti prima della seconda compilazione (dopo le dichiarazioni), che allega la relativa ricevuta"
+  - "Paga la sanzione di 516 € (art. 37 c. 5) prima della compilazione, che ne allega la ricevuta, e i diritti prima della seconda compilazione (dopo le dichiarazioni), che allega la relativa ricevuta"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 supports:
   # The authorization is only for works not yet done (art. 146 c. 4): a sanatoria of works all done
   # (art. 36-bis) has none left, and takes the landscape compatibility on its own.

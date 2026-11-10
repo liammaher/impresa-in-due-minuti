@@ -11,13 +11,13 @@ asks:
   descrizione: {default: "SCIA alt ord. e terre e rocce {{c:identity.last_name}}"}
 # scia-alt-paesaggistica-ordinaria-fittizia's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: sono Sue, e le firma con la pratica"
-  - "Prima dell'inizio dei lavori, nomini chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di progettista, verifica ogni asseverazione di questa pagina: sono tue, e le firmi con la pratica"
+  - "Prima dell'inizio dei lavori, nomina chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
   - "La dichiarazione di utilizzo (Allegato 6 DPR 120/2017) è il documento del portale in Allega documenti dopo aver spuntato le dichiarazioni: la firma il produttore, Claude la allega nella seconda compilazione (dopo le dichiarazioni); lo scavo inizia almeno 15 giorni dopo l'invio"
-  - "Quando tutte le terre e rocce da scavo saranno state utilizzate, entro la validità della dichiarazione, presenti sul SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)"
-  - "Paghi il bollo come chiede il portale, poi firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Quando tutte le terre e rocce da scavo saranno state utilizzate, entro la validità della dichiarazione, presenta sul SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)"
+  - "Paga il bollo come chiede il portale, poi firma e invia (Firma e invio); conserva la ricevuta"
   - "I 30 giorni prima dei quali i lavori non possono iniziare decorrono dal rilascio dell'autorizzazione paesaggistica, non dalla presentazione (art. 23 c. 3 DPR 380/2001); il contributo, se dovuto, si paga come indica il quadro g)"
 answers:
   descrizione: PROVA NON INVIARE - SCIA alt ord. e terre e rocce P6

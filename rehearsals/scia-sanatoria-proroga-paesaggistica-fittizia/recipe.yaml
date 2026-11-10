@@ -31,18 +31,18 @@ asks:
   # authorization only "quando oggetto di autonoma istanza".
   diritti_euro:
     propose: "{{ask.sanatoria_caso|diritti_sanatoria_scia}}"
-    why: "Voce SUE 16 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 441 € alla presentazione per un accertamento di conformità (art. 36-bis) o una regolarizzazione (art. 34-ter), il resto una volta determinato; art. 36-bis c. 5 b, SUE 17-18. I lavori ancora in corso (art. 37 c. 5) non sono nel tariffario: chieda al SUE"
+    why: "Voce SUE 16 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 441 € alla presentazione per un accertamento di conformità (art. 36-bis) o una regolarizzazione (art. 34-ter), il resto una volta determinato; art. 36-bis c. 5 b, SUE 17-18. I lavori ancora in corso (art. 37 c. 5) non sono nel tariffario: chiedi al SUE"
 yours:
-- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-- "In qualità di progettista, verifichi ogni asseverazione di questa pagina: sono Sue, e le firma con la pratica"
-- "Prima dell'inizio dei lavori, nomini chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
-- "La presenti prima che l'autorizzazione paesaggistica scada: la proroga dell'art. 10-septies si comunica mentre è ancora in vigore"
-- "Paghi la sanzione di 516 € (art. 37 c. 5) prima della compilazione, che ne allega la ricevuta, e i diritti prima della seconda compilazione (dopo le dichiarazioni), che allega la relativa ricevuta"
-- "Firmi e invii (Firma e invio); conservi la ricevuta"
+- "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+- "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "In qualità di progettista, verifica ogni asseverazione di questa pagina: sono tue, e le firmi con la pratica"
+- "Prima dell'inizio dei lavori, nomina chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
+- "Presentala prima che l'autorizzazione paesaggistica scada: la proroga dell'art. 10-septies si comunica mentre è ancora in vigore"
+- "Paga la sanzione di 516 € (art. 37 c. 5) prima della compilazione, che ne allega la ricevuta, e i diritti prima della seconda compilazione (dopo le dichiarazioni), che allega la relativa ricevuta"
+- "Firma e invia (Firma e invio); conserva la ricevuta"
 rules:
   table: sue-napoli
-  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
   # A combination's facts replace its parents' whole: the main pratica's, restated.
   facts:
     permesso_per_scelta: 'false'

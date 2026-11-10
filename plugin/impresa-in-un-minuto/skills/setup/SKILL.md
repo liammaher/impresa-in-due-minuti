@@ -12,7 +12,7 @@ browser, and turns on Touch ID (Mac) or Windows Hello (Windows). It needs a shel
 computer (the Claude desktop app's Code tab); in a sandbox with no access to it (Cowork's) say so
 in one line and stop: `pratiche` then works from a folder.
 
-Speak Italian to the tecnico, as Lei, with no software words: "l'archivio", "la pagina", "la
+Speak Italian to the tecnico, as tu, with no software words: "l'archivio", "la pagina", "la
 password", "la chiave di recupero", "Touch ID". Never "vault", "pvault", "server", "checksum",
 "PATH", "token".
 
@@ -29,7 +29,7 @@ A download needs their explicit yes. Ask once, in Italian, saying what it is:
 
 > Scarico il programma dell'archivio (pvault <version>, per <Mac / Windows / Linux>) dalla pagina
 > ufficiale del progetto su GitHub: qualche decina di MB. Prima di installarlo controllo che sia
-> identico a quello atteso, poi lo metto nella sua cartella utente. Non servono permessi di
+> identico a quello atteso, poi lo metto nella tua cartella utente. Non servono permessi di
 > amministratore e non cambia nient'altro sul computer. Procedo?
 
 On yes, run the script next to this file, as it is:
@@ -50,9 +50,9 @@ Run `pvault setup --impresa` (a studio's archive: the studio, the tecnico and th
 opens a page in their default browser and waits until they finish there (at most 15 minutes), so
 run it in the background and tell them first:
 
-> Si è aperta una pagina nel suo browser. Lì sceglie la password dell'archivio (o la scrive, se
-> l'archivio c'è già), conserva la chiave di recupero e attiva Touch ID. Quando la pagina dice
-> «Fatto», torni qui.
+> Si è aperta una pagina nel tuo browser. Lì scegli la password dell'archivio (o la scrivi, se
+> l'archivio c'è già), conservi la chiave di recupero e attivi Touch ID. Quando la pagina dice
+> «Fatto», torna qui.
 
 - Never open that page in the Claude browser pane, never read it, and never ask them to type the
   password, the key or anything from that page into this conversation.

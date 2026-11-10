@@ -17,10 +17,10 @@ asks:
   titolo: {question: "Il titolo dell'intestatario del permesso sull'immobile (proprietario, locatario, ...)"}
   proroga_data_prevista: {question: "La nuova data prevista di inizio dei lavori"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 supports:
   - when: "{{ask.titolo_tipo|is_permesso_di_costruire}}"
     else: "Per ora solo per un permesso di costruire: il caso della DIA non è ancora stato provato."
@@ -28,5 +28,5 @@ supports:
 # Routed by the rules table sue-napoli-adempimenti: what is filed on the title held.
 rules:
   table: sue-napoli-adempimenti
-  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {adempimento: "proroga_inizio", proroga: "ordinaria"}

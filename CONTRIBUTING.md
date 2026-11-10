@@ -38,7 +38,7 @@ you're done. The name goes in the rehearsal's answers (`descrizione`), never in 
 dictionary's default: those are the names real users' drafts get. Pre-flight with `--made-up` refuses
 a draft name without it.
 
-**Italian for the tecnico.** What the person reads is written in Italian, addressing them as Lei,
+**Italian for the tecnico.** What the person reads is written in Italian, addressing them as tu (never Lei),
 with no software words and no role codes: every `question`, checklist `item`, `how`, `why`, a
 `supports` entry's `else`, `yours`, and a defect's `title`, `what`, `law`, `checked` and `choices`
 (`bench/test_gen.py` checks the steps files). Comments, docs for contributors and the runner's

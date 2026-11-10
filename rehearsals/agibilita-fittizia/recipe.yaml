@@ -21,11 +21,11 @@ asks:
   modello_dp: {default: "true"}
   descrizione: {default: "agibilità {{c:identity.last_name}}"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "In qualità di direttore dei lavori (o professionista abilitato), verifichi ogni attestazione di questa pagina: sono Sue, e le firma con la pratica"
-  - "Attestazione tecnica - Agibilità: il portale richiede una delle caselle dell'art. 24 c. 5-bis/5-ter o 5-quater; Claude spunta quella corrispondente al caso, e nessuna quando non ricorre nessuno dei due casi (in tal caso chieda al SUE)"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di direttore dei lavori (o professionista abilitato), verifica ogni attestazione di questa pagina: sono tue, e le firmi con la pratica"
+  - "Attestazione tecnica - Agibilità: il portale richiede una delle caselle dell'art. 24 c. 5-bis/5-ter o 5-quater; Claude spunta quella corrispondente al caso, e nessuna quando non ricorre nessuno dei due casi (in tal caso chiedi al SUE)"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 supports:
   # Art. 24 c. 5-bis only with c. 5-ter's adattabilità met; the one-room flat also names its
   # c. 5-ter condition.
@@ -45,5 +45,5 @@ attachments:
 # Routed by the rules table sue-napoli-adempimenti: what is filed on the title held.
 rules:
   table: sue-napoli-adempimenti
-  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {adempimento: "agibilita"}

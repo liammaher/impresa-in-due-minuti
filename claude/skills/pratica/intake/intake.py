@@ -604,7 +604,7 @@ def scan(dossier, steps=None, client=None):
             # A receipt that names no account says nothing either way: never call it irricevibile.
             where = ("sul conto che il SUE di Napoli accetta" if ok else
                      "NON sul conto che il SUE di Napoli accetta: irricevibile" if r["names_account"] else
-                     "la ricevuta non indica il conto: verifichi che sia quello che il SUE di Napoli accetta")
+                     "la ricevuta non indica il conto: verifica che sia quello che il SUE di Napoli accetta")
             report["notes"].append({"from": p.name, "note": f"{kind.split('_')[1]} {r['importo'] or '?'} €: {where}"})
 
     # The files, each in the steps file's slot for its kind.

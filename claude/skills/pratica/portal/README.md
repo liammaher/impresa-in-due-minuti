@@ -39,7 +39,7 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    crawl, operation (or a list of them), scelte, `first`, `asks`, `yours` (what's left to the
    person: declarations, attachments, payment, signing), `supports` (the cases refused, with
    why: all or nothing; `if:` checks one only once its gate holds, asking it only then).
-   What the tecnico reads (questions, items, `else`, `yours`) is Italian, as Lei, one idea a
+   What the tecnico reads (questions, items, `else`, `yours`) is Italian, as tu (never Lei: bench/test_voice.py), one idea a
    sentence, with no path, library id or software word; an `else` names the exact case in at
    most 300 characters, an end step at most 350 (test_gen). A refusal behind a portal defect
    names it (`defect:`), and `defects.yaml` says the rest: what still fills, the choices.

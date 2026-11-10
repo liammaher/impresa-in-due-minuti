@@ -22,11 +22,11 @@ asks:
   oggetto: {question: "La pratica in una frase (300 caratteri), es. la fine dei lavori della CILA"}
   planimetria_parziale: {type: file, question: "La planimetria della parte ultimata (PDF), firmata digitalmente dal direttore dei lavori", when: "{{ask.fine_completa|not}}"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 # Routed by the rules table sue-napoli-adempimenti: what is filed on the title held.
 rules:
   table: sue-napoli-adempimenti
-  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {adempimento: "fine_lavori"}

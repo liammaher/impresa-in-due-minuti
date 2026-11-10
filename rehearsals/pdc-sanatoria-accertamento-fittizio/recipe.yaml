@@ -15,21 +15,21 @@ crawl: sue-combo-pdc-sanatoria-accertamento
 asks:
   descrizione: {default: "PdC sanatoria e accertamento {{c:identity.last_name}}"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali, art. 75 DPR 445/2000"
-  - "Come progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma. Il quadro paesaggistico dichiara che i lavori alterano i luoghi e non spunta alcuna procedura: la compatibilità è nell'accertamento presentato insieme (lo scriva nella relazione tecnica)"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali, art. 75 DPR 445/2000"
+  - "Come progettista, verifica ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che firmi. Il quadro paesaggistico dichiara che i lavori alterano i luoghi e non spunta alcuna procedura: la compatibilità è nell'accertamento presentato insieme (scrivilo nella relazione tecnica)"
   - "Nell'asseverazione, «non interessa aree percorse dal fuoco» e la dichiarazione sui terreni sono una sola scelta sul portale (un suo difetto): Claude spunta quella sui terreni. Le aree bruciate le dichiari nella relazione tecnica, se il SUE lo chiede"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
-  - "Il Comune decide prima sulla compatibilità, con il parere vincolante della Soprintendenza: se è accertata, paghi la somma che stabilisce (art. 167 c. 5 D.Lgs. 42/2004, la maggiore tra il danno arrecato e il profitto conseguito); in caso contrario, le opere devono essere rimosse e il permesso in sanatoria non può essere rilasciato"
-  - "Una volta concesso il permesso: paghi l'oblazione che il SUE determina (il doppio del contributo di costruzione, art. 36 c. 2) e ritiri il permesso in sanatoria"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+  - "Il Comune decide prima sulla compatibilità, con il parere vincolante della Soprintendenza: se è accertata, paga la somma che stabilisce (art. 167 c. 5 D.Lgs. 42/2004, la maggiore tra il danno arrecato e il profitto conseguito); in caso contrario, le opere devono essere rimosse e il permesso in sanatoria non può essere rilasciato"
+  - "Una volta concesso il permesso: paga l'oblazione che il SUE determina (il doppio del contributo di costruzione, art. 36 c. 2) e ritira il permesso in sanatoria"
 # The permesso's landscape quadro wants one of its three procedures once the works alter the place,
 # and none is the accertamento of art. 167 (the run of 2026-11-02 stopped there): a known defect,
 # refused with it. The rest of the pratica fills; the mapping stays for the day the quadro has the line.
 supports:
   - when: "{{ask.paesaggio_accertamento|not}}"
     defect: pdc-36-paesaggio
-    else: "Sanatoria dell'art. 36 in area tutelata: il quadro paesaggistico del permesso non ha la voce dell'accertamento dell'art. 167. È un difetto del portale; chieda al SUE."
+    else: "Sanatoria dell'art. 36 in area tutelata: il quadro paesaggistico del permesso non ha la voce dell'accertamento dell'art. 167. È un difetto del portale; chiedi al SUE."
 # The case: the main pratica's P6 answers, the part's, then these (a null drops one);
 # `gen.py --answers` writes answers-p6.json.
 answers:

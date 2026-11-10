@@ -27,13 +27,13 @@ asks:
     default: '0'
     why: "Non presente nel tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): nessun diritto (non previsti dal tariffario)"
 yours:
-- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
-- "Firmi e invii (Firma e invio); conservi la ricevuta"
+- "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+- "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Firma e invia (Firma e invio); conserva la ricevuta"
 rules:
   table: sue-napoli-adempimenti
-  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
   facts:
     adempimento: fine_lavori
     dau: 'true'

@@ -25,16 +25,16 @@ wizard:
 after: [Pagamento degli oneri, Gestione degli allegati]
 groups:
   extras:
-    question: "Qualcuna di queste voci vale per l'attività? Spunti tutte quelle che valgono, o nessuna."
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
 asks:
   altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   descrizione: {default: "acconciatore {{business.denominazione}}"}
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti Lei le dichiarazioni: la casella di presa d'atto sotto la PEC, la dichiarazione antimafia, consapevolezza (artt. 46-47), informativa privacy, altre dichiarazioni, tasse comunali, art. 75 DPR 445/2000"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: la casella di presa d'atto sotto la PEC, la dichiarazione antimafia, consapevolezza (artt. 46-47), informativa privacy, altre dichiarazioni, tasse comunali, art. 75 DPR 445/2000"
   - "In Allega documenti: la planimetria quotata e la relazione descrittiva dei locali, firmate digitalmente (.p7m)"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 # Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica or that needs a pratica this one doesn't file.
 rules:
