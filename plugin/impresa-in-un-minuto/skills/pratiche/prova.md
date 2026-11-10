@@ -85,7 +85,7 @@ real filing's details (the c/c, the order of the signatures, the PEC receipt).
    then `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova` (no check against the preview here).
 <!-- /vault -->
 4. Hand over with its `message`, as written, its lines and nothing else. Everything matched:
-   "✅ CILA di prova compilata in <T>. Riletti dal portale <N> dati e <M> file: tutto corrisponde.
+   "✅ CILA di prova compilata in <T>. Riletti dal portale: scheda anagrafica, dati catastali, lavori e altri <N> quadri, più <M> file. Tutto corrisponde.
    In una pratica vera restano a te: controllare l'anteprima, spuntare le dichiarazioni, pagare, firmare, inviare.
    Guarda la bozza qui accanto (Pratiche in bozza › PROVA NON INVIARE), poi cancellala."
    Something didn't match, or wasn't read: the head `✅ … compilata in <T>.`, then a `✅` line for what was read

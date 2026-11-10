@@ -137,7 +137,7 @@ def main():
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t), {"rows": [row, row]}, [good], {"alerts": [ALERT]}, None, "--prova")
         check("the Prova, everything matched: one line, what a real filing leaves to them, the draft to look at; no portal warning (made-up data raises them)",
-              r["message"] == "✅ CILA di prova compilata in 95 secondi. Riletti dal portale 2 dati e 1 file: tutto corrisponde.\n"
+              r["message"] == "✅ CILA di prova compilata in 95 secondi. Riletti dal portale: dati catastali, più 1 file. Tutto corrisponde.\n"
               "In una pratica vera restano a te: controllare l'anteprima, spuntare le dichiarazioni, pagare, firmare, inviare.\n"
               "Guarda la bozza qui accanto (Pratiche in bozza › PROVA NON INVIARE), poi cancellala." and r["warnings"] == [], r)
     with tempfile.TemporaryDirectory() as t:
@@ -162,12 +162,18 @@ def main():
         r = json.loads(subprocess.run([sys.executable, "-I", str(REVIEW), str(out), "--prova"],
                                       capture_output=True, text=True).stdout)
         check("once the quadro was read (portal-files-2.json): nothing left to open, every file read back, no warning",
-              q == {"quadri": []} and r["warnings"] == [] and "Riletti dal portale 1 dato e 2 file: tutto corrisponde."
+              q == {"quadri": []} and r["warnings"] == [] and "Riletti dal portale: dati catastali, più 2 file. Tutto corrisponde."
               in r["message"].split("\n")[0], r)
         r = build(Path(t) / "2", {"rows": [row]}, slots, None, {"attached": [listed]}, "--prova")
         check("the Prova: every attached file read back is a plain count, no warning",
-              "Riletti dal portale 1 dato e 1 file: tutto corrisponde." in r["message"].split("\n")[0]
+              "Riletti dal portale: dati catastali, più 1 file. Tutto corrisponde." in r["message"].split("\n")[0]
               and r["warnings"] == [], r)
+    with tempfile.TemporaryDirectory() as t:
+        many = [dict(row, section=s) for s in ("SCHEDA ANAGRAFICA", "Dati catastali", "Lavori", "Impresa", "Allegati liberi", "Dati catastali")]
+        r = build(Path(t), {"rows": many}, [good], None, None, "--prova")
+        check("the Prova names what was read (the portal's quadri, three, the rest counted), not a count of data",
+              r["message"].split("\n")[0] == "✅ CILA di prova compilata in 95 secondi. Riletti dal portale: "
+              "scheda anagrafica, dati catastali, lavori e altri 2 quadri, più 1 file. Tutto corrisponde.", r)
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t), {"rows": [row, dict(row, portal="4", ok=False)]}, [good], None, None, "--prova")
         check("the Prova: a value that doesn't match the case is a ⚠️ line, not hidden",

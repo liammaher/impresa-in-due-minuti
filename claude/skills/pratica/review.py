@@ -220,14 +220,25 @@ def verified(out, job, prova=False, attached=None):
     return lines
 
 
+SECTIONS_NAMED = 3  # quadri named in the Prova's ✅ line; the rest counted
+
+
 def whole_read(out, job, attached):
-    """«24 dati e 6 file» when every value of the preview and every attached file was read back and held equal;
-    "" when anything wasn't (the separate ✅ lines then say what was)."""
+    """What was read back, when every value of the preview and every attached file was held equal: «scheda
+    anagrafica, dati catastali, lavori e altri 9 quadri, più 6 file», named by the portal's own sections so the
+    tecnico sees what was checked, not a count. "" when anything wasn't (the separate ✅ lines then say what was)."""
     f = out / "check.json" if out else None
     rows = json.loads(f.read_text()).get("rows", []) if f and f.exists() else []
     if not rows or not all(r.get("ok") for r in rows):
         return ""
-    said = f"{len(rows)} dat{'o' if len(rows) == 1 else 'i'}"
+    names = list(dict.fromkeys(section(r["section"]) for r in rows if r.get("section")))
+    names = [n[:1].lower() + n[1:] if n[1:2].islower() else n for n in names]
+    if names:
+        shown = ", ".join(names[:SECTIONS_NAMED])
+        rest = len(names) - SECTIONS_NAMED
+        said = shown if rest <= 0 else f"{shown} e altri {rest} quadri" if rest > 1 else f"{shown} e un altro quadro"
+    else:
+        said = f"{len(rows)} dat{'o' if len(rows) == 1 else 'i'}"
     files = portal_files(out)
     if not files:
         return said
@@ -236,7 +247,7 @@ def whole_read(out, job, attached):
     read = {a["sha256"] for a in attached if a["sha256"] in on_portal} if attached else {h for h in on_portal if h in local}
     if attached and len(read) < len(attached) or not read:
         return ""
-    return f"{said} e {len(read)} file" if len(read) > 1 else f"{said} e 1 file"
+    return f"{said}, più {len(read)} file" if len(read) > 1 else f"{said}, più 1 file"
 
 
 def unchecked(out):
@@ -318,7 +329,7 @@ def summary(report, out=None, job=None, prova=False):
         checks = verified(out, job, prova=True, attached=report.get("attached"))
         read = whole_read(out, job, report.get("attached"))
         if read and not warns:  # everything matched: one line, not a ✅ for each check
-            lines = [f"{head} Riletti dal portale {read}: tutto corrisponde."]
+            lines = [f"{head} Riletti dal portale: {read}. Tutto corrisponde."]
         else:
             lines = [head] + checks + [f"⚠️ {w}" for w in warns]
         lines.append("In una pratica vera restano a te: controllare l'anteprima, spuntare le dichiarazioni, pagare, firmare, inviare.")
