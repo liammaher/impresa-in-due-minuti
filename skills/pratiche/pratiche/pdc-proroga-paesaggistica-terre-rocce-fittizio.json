@@ -2197,7 +2197,8 @@
     "mutamento uso",
     "altro"
    ],
-   "else": "Il piano casa (L.R. Campania 19/2009) non accetta nuove richieste dal 30 settembre 2022 (L.R. 31/2021 art. 28 c. 6; la L.R. 13/2022 art. 4 c. 17 disciplina solo quelle pendenti a quella data). Una variante a un permesso rilasciato in base al piano casa per ora non la preparo."
+   "else": "Il piano casa (L.R. Campania 19/2009) non accetta nuove richieste dal 30 settembre 2022 (L.R. 31/2021 art. 28 c. 6; la L.R. 13/2022 art. 4 c. 17 disciplina solo quelle pendenti a quella data). Una variante a un permesso rilasciato in base al piano casa per ora non la preparo.",
+   "unmapped": true
   },
   {
    "if": "{{ask.pdc_tipo|is_mutamento_uso}}",
@@ -2236,7 +2237,8 @@
     "mutamento uso",
     "altro"
    ],
-   "else": "Il permesso in sanatoria (art. 36 DPR 380/2001) lo preparo per gli interventi dell'art. 10 e i mutamenti di destinazione d'uso: non per interventi da SCIA richiesti come permesso (si presentano con la SCIA in sanatoria), per una tipologia regionale campana o per una variante."
+   "else": "Il permesso in sanatoria (art. 36 DPR 380/2001) lo preparo per gli interventi dell'art. 10 e i mutamenti di destinazione d'uso: non per interventi da SCIA richiesti come permesso (si presentano con la SCIA in sanatoria), per una tipologia regionale campana o per una variante.",
+   "unmapped": true
   },
   {
    "if": "{{ask.sanatoria_titolo|is_permesso}}",

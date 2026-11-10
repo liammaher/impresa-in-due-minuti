@@ -240,7 +240,8 @@
  "supports": [
   {
    "when": "{{ask.titolo_tipo|is_permesso_di_costruire}}",
-   "else": "Per ora solo per un permesso di costruire: il caso della DIA non è ancora stato provato."
+   "else": "Per ora solo per un permesso di costruire: il caso della DIA non è ancora stato provato.",
+   "unmapped": true
   },
   {
    "if": "{{ask.bollo_esenzione|is_onlus}}",

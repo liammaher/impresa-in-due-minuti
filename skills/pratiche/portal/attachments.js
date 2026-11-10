@@ -10,7 +10,7 @@
     const links = [...document.querySelectorAll('a[href*="download.do"]')];
     if (!links.length) {
       const menu = [...document.querySelectorAll("li a")].find((a) => /^allega documenti$/i.test(a.innerText.trim()));
-      if (!menu) return { error: "no attachments here and no Allega Documenti link: is the draft open?" };
+      if (!menu) return { error: "no attachments here and no Allega Documenti link: is the draft open? After a compilation the pane can be back on the list of drafts: url = await __pv.reopen(<the draft's descrizione>), navigate the pane to it, run this again" };
       setTimeout(() => menu.click(), 50);
       return { opening: true };
     }

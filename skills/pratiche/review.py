@@ -8,7 +8,7 @@ OUT is the folder run.py page wrote, with the pane's `__pv.last()` saved there a
 private/shown.json adds the pratica's title and what comes after: the second compilation, what is
 filed apart), or the one run.py run or fill.py run wrote. For a portal draft it prints JSON:
 {"result", "message", "warnings", "steps", "yours"}; `message` is what Claude says, as written: did it
-work, what the tecnico must check, what is left to them. --prova: made-up data, two lines. It
+work, what the tecnico must check, what is left to them. --prova: made-up data, a line, the check's ✅ and a line. It
 reads two more files of a real job:
 
 - OUT/check.json, Claude's check of the portal's own preview (portal/preview_text.js) against
@@ -130,13 +130,8 @@ def mismatches(out):
             for r in rows if not r.get("ok")]
 
 
-def stray_files(out, job):
-    """The draft's files as the portal holds them (OUT/portal-files.json), each matched by its bytes
-    to a file of the job: a line for each that no file of the job has."""
-    f = out / "portal-files.json" if out else None
-    if not (f and f.exists() and job):
-        return []
-    files = json.loads(f.read_text()).get("files", [])
+def job_hashes(out, job):
+    """The sha256 of each file of the job (not the run's own folder, not hidden files)."""
     local = set()
     for p in sorted(job.rglob("*")):
         # Not the run's own folder, not hidden files; a file that can't be read is skipped.
@@ -147,8 +142,69 @@ def stray_files(out, job):
                 local.add(hashlib.sha256(p.read_bytes()).hexdigest())
         except OSError:
             continue
+    return local
+
+
+def not_read_back(out, attached):
+    """The files the compilation attached that the portal's «Allega documenti» doesn't list (one sits in a
+    quadro of the form, such as the receipt of a sanction): not read back, so the tecnico looks at them."""
+    f = out / "portal-files.json" if out else None
+    if not (f and f.exists() and attached):
+        return []
+    on_portal = {x.get("sha256") for x in json.loads(f.read_text()).get("files", [])}
+    return [f"Il file «{a['name']}» sta in un quadro del modulo, non in «Allega documenti»: non l'ho riletto sul portale, "
+            "lo controlli Lei sul portale." for a in attached if a["sha256"] not in on_portal]
+
+
+def stray_files(out, job):
+    """The draft's files as the portal holds them (OUT/portal-files.json), each matched by its bytes
+    to a file of the job: a line for each that no file of the job has."""
+    f = out / "portal-files.json" if out else None
+    if not (f and f.exists() and job):
+        return []
+    files = json.loads(f.read_text()).get("files", [])
+    local = job_hashes(out, job)
     return [f"Allegato «{x.get('slot')}»: il file sul portale ({x.get('name')}) non è nessuno dei Suoi file."
             for x in files if x.get("sha256") not in local]
+
+
+def verified(out, job, prova=False, attached=None):
+    """The ✅ lines of the check against the documents: what the preview read held equal (OUT/check.json),
+    and the attached files that are the job's own (OUT/portal-files.json). [] when it wasn't done:
+    `unchecked` says so, never silence."""
+    lines = []
+    f = out / "check.json" if out else None
+    if f and f.exists():
+        rows = json.loads(f.read_text()).get("rows", [])
+        ok = sum(1 for r in rows if r.get("ok"))
+        if rows:
+            source = "con il caso di prova" if prova else "con i Suoi documenti"
+            lines.append(f"✅ Anteprima PDF del portale letta e confrontata {source}: "
+                         + ("un dato corrisponde." if len(rows) == 1 and ok else f"tutti i {ok} dati corrispondono." if ok == len(rows) else f"{ok} dati su {len(rows)} corrispondono."))
+    g = out / "portal-files.json" if out else None
+    if g and g.exists():
+        on_portal = {x.get("sha256") for x in json.loads(g.read_text()).get("files", [])}
+        local = job_hashes(out, job) if job else set()
+        # Distinct files, as the card counts them: one file may fill several slots. `attached` is what the
+        # compilation attached (run.py page); without it (an older run) the portal's own list is all there is.
+        read = {a["sha256"] for a in attached if a["sha256"] in on_portal} if attached else {h for h in on_portal if h in local}
+        total, m = (len(attached) if attached else len(read)), len(read)
+        if m:
+            who = ("del caso di prova", "del caso di prova") if prova else ("il Suo", "i Suoi")
+            what = (f"{'quello' if m == 1 else 'quelli'} {who[0]}" if prova else f"{who[0] if m == 1 else who[1]}")
+            if total > m:  # some attached file isn't on the screen read: not_read_back names it
+                lines.append(f"✅ Dei {total} file allegati ne ho {'riletto 1' if m == 1 else f'riletti {m}'} sul portale: "
+                             f"{'è' if m == 1 else 'sono'} proprio {what} (stessi byte).")
+            else:
+                lines.append(f"✅ {m} file allegat{'o' if m == 1 else 'i'} sul portale {'è' if m == 1 else 'sono'} proprio {what} (stessi byte).")
+    return lines
+
+
+def unchecked(out):
+    """Why there is no ✅ for the preview: the check was not done or the preview couldn't be read."""
+    f = out / "check.json" if out else None
+    rows = json.loads(f.read_text()).get("rows", []) if f and f.exists() else []
+    return [] if rows else ["Il confronto con l'anteprima del portale non è stato fatto: la legga Lei prima di firmare."]
 
 
 def section(name):
@@ -184,15 +240,19 @@ def summary(report, out=None, job=None, prova=False):
     name = pratica_name(report)
     done = "compilato" if MASCULINE.match(name) else "compilata"
     if prova:
-        return {"result": "filled", "warnings": [], "steps": [],
-                "message": f"✅ {name} di prova {done} in {duration(report.get('total_seconds'))}, con dati inventati.\n"
-                           "Nulla da inviare: la cancelli da «Pratiche in bozza»."}
+        # The portal's own warnings on made-up values (the PEC) are expected; a value that doesn't match
+        # the case, or a file that isn't the Prova's, is not.
+        warns = mismatches(out) + stray_files(out, job) + not_read_back(out, report.get("attached")) + unchecked(out)
+        lines = [f"✅ {name} di prova {done} in {duration(report.get('total_seconds'))}, con dati inventati."]
+        lines += verified(out, job, prova=True, attached=report.get("attached")) + [f"⚠️ {w}" for w in warns]
+        lines.append("Nulla da inviare: la cancelli da «Pratiche in bozza».")
+        return {"result": "filled", "warnings": warns, "steps": [], "message": "\n".join(lines)}
     # One line for each warning in a section, by the section alone: the portal shows it beside the
     # box, and its labels read badly out of the page ("se non presente indicare il numero 0"). On
     # made-up data the catasto's comes four times, one for each box of the parcel (2026-11-07).
     warnings = list(dict.fromkeys(f"{section(a['section'])}: il portale segnala «{a['text'].strip()}». Lo controlli."
                                   for a in report.get("alerts", [])))
-    warnings += mismatches(out) + stray_files(out, job)
+    warnings += mismatches(out) + stray_files(out, job) + not_read_back(out, report.get("attached"))
     # The second compilation (after the declarations) attaches what the portal makes only then, signed:
     # the procura, the quadro riepilogativo, and the receipt of what is paid first (the diritti).
     later = list(dict.fromkeys(report.get("second_run") or []))
@@ -227,7 +287,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("out", type=Path)
     ap.add_argument("--route", type=Path)
-    ap.add_argument("--prova", action="store_true", help="the skill's Prova: made-up data, no check against documents")
+    ap.add_argument("--prova", action="store_true", help="the skill's Prova: made-up data, two lines and the check's ✅")
     ap.add_argument("--job", type=Path, help="the job's folder, whose files the portal's are matched to "
                     "(default: OUT's parent)")
     a = ap.parse_args()

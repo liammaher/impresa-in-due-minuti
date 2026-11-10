@@ -355,7 +355,10 @@ only Impresa in un minuto proposes; then the rest counted by where it comes from
 their note, the rules), the files, and «tutte» to see every answer; then the closing lines and
 «Scriva «sì» e apro il portale». The one message is points 1-3 above (the verdict, what you
 understood, the pratica), at most one line for each document that can't be read or disagrees
-with an answer (point 4), then `riepilogo` **as it is**. No clickable question, no checklist,
+with an answer (point 4), then pre-flight's `card` ("Cosa succede": the pratica, how it fills the
+portal and why, how it checks, what stays theirs) **as it is**, a blank line, and `riepilogo`
+**as it is**. The card is generated from the steps file: never shorten it, add to it or word it
+yourself. No clickable question, no checklist,
 nothing else: nothing opens before their reply.
 - «tutte»: `riepilogo_tutte` as it is (every answer, a line each with its source). Their «sì»
   after it confirms the same answers.
@@ -371,8 +374,8 @@ nothing else: nothing opens before their reply.
   as in **Asking**). Exit 3: something is still open; its `message`, as in **After they
   answer**. Never write the proposals into `answers.json` yourself.
 - A change ("le parti comuni sono condominiali"): into `answers.json` (`fonti`: "Sua risposta"),
-  pre-flight again, and its new `riepilogo` (or the questions the change opened) as the next
-  message.
+  pre-flight again, and its new `card` and `riepilogo` (or the questions the change opened) as the
+  next message.
 - Anything else they ask: answer it, and ask again for «sì».
 
 **After they answer**, the answers in `answers.json`, then pre-flight again. Built from the
@@ -435,7 +438,15 @@ step 3 says how. Never send them a file, never ask them to download or save one,
 
 1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser:
    "Acceda con SPID nella finestra del browser; quando vede la pagina del portale mi scriva
-   «fatto»." Wait until the page is the portal's own, past the login.
+   «fatto»." Wait until the page is the portal's own, past the login. Send this line after the
+   `card` when the tecnico hasn't read it yet in this job (they answered questions and no
+   `riepilogo` came). Leave out `--values run/intake/private/values.json` when the intake didn't run.
+   The card is printed by:
+   ```sh
+   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" card --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
+     --answers answers.json --values run/values.json --values run/intake/private/values.json
+   ```
+   Send it as it is, so they read it while they log in.
 2. Say: "Compilo ora la bozza: non tocchi la pagina finché non Le scrivo."
 3. Run each script as **one** JavaScript call on the portal's page, its text exactly as the
    file has it: `run/check.js` first. It returns what to run next, in order (`fetch.js`, then
@@ -490,7 +501,11 @@ Comune will receive, before you tell the tecnico anything:
    compilation read each back on the portal).
 3. Run `${CLAUDE_SKILL_DIR}/portal/attachments.js` the same way. `{"opening": true}` means it
    opened Allega documenti: wait for the page, then run it again. Save what it returns as
-   `run/portal-files.json`.
+   `run/portal-files.json`. `error: "no attachments here and no Allega Documenti link"` means the
+   pane went back to the list of drafts when the compilation ended (the preview above still read,
+   it needs only the session): `url = await __pv.reopen("<the draft's descrizione>")`, navigate the
+   pane to `url`, and run it again. It never reads the file inside a quadro (a sanction's receipt):
+   review.py says which attached file it did not read back.
 4. `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run` prints the closing lines: it
    matches each file on the portal to the job's own by its bytes, and makes a `⚠️` line of each
    row of `run/check.json` that doesn't match and each file no file of the job has.
