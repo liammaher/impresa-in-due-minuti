@@ -130,13 +130,8 @@ def mismatches(out):
             for r in rows if not r.get("ok")]
 
 
-def stray_files(out, job):
-    """The draft's files as the portal holds them (OUT/portal-files.json), each matched by its bytes
-    to a file of the job: a line for each that no file of the job has."""
-    f = out / "portal-files.json" if out else None
-    if not (f and f.exists() and job):
-        return []
-    files = json.loads(f.read_text()).get("files", [])
+def job_hashes(out, job):
+    """The sha256 of each file of the job (not the run's own folder, not hidden files)."""
     local = set()
     for p in sorted(job.rglob("*")):
         # Not the run's own folder, not hidden files; a file that can't be read is skipped.
@@ -147,11 +142,33 @@ def stray_files(out, job):
                 local.add(hashlib.sha256(p.read_bytes()).hexdigest())
         except OSError:
             continue
+    return local
+
+
+def not_read_back(out, attached):
+    """The files the compilation attached that the portal's «Allega documenti» doesn't list (one sits in a
+    quadro of the form, such as the receipt of a sanction): not read back, so the tecnico looks at them."""
+    f = out / "portal-files.json" if out else None
+    if not (f and f.exists() and attached):
+        return []
+    on_portal = {x.get("sha256") for x in json.loads(f.read_text()).get("files", [])}
+    return [f"Il file «{a['name']}» sta in un quadro del modulo, non in «Allega documenti»: non l'ho riletto sul portale, "
+            "lo controlli Lei sul portale." for a in attached if a["sha256"] not in on_portal]
+
+
+def stray_files(out, job):
+    """The draft's files as the portal holds them (OUT/portal-files.json), each matched by its bytes
+    to a file of the job: a line for each that no file of the job has."""
+    f = out / "portal-files.json" if out else None
+    if not (f and f.exists() and job):
+        return []
+    files = json.loads(f.read_text()).get("files", [])
+    local = job_hashes(out, job)
     return [f"Allegato «{x.get('slot')}»: il file sul portale ({x.get('name')}) non è nessuno dei Suoi file."
             for x in files if x.get("sha256") not in local]
 
 
-def verified(out, job, prova=False):
+def verified(out, job, prova=False, attached=None):
     """The ✅ lines of the check against the documents: what the preview read held equal (OUT/check.json),
     and the attached files that are the job's own (OUT/portal-files.json). [] when it wasn't done:
     `unchecked` says so, never silence."""
@@ -166,14 +183,20 @@ def verified(out, job, prova=False):
                          + ("un dato corrisponde." if len(rows) == 1 and ok else f"tutti i {ok} dati corrispondono." if ok == len(rows) else f"{ok} dati su {len(rows)} corrispondono."))
     g = out / "portal-files.json" if out else None
     if g and g.exists():
-        n = len(json.loads(g.read_text()).get("files", []))
-        stray = len(stray_files(out, job))
-        if n and n > stray:
-            m = n - stray
+        on_portal = {x.get("sha256") for x in json.loads(g.read_text()).get("files", [])}
+        local = job_hashes(out, job) if job else set()
+        # Distinct files, as the card counts them: one file may fill several slots. `attached` is what the
+        # compilation attached (run.py page); without it (an older run) the portal's own list is all there is.
+        read = {a["sha256"] for a in attached if a["sha256"] in on_portal} if attached else {h for h in on_portal if h in local}
+        total, m = (len(attached) if attached else len(read)), len(read)
+        if m:
             who = ("del caso di prova", "del caso di prova") if prova else ("il Suo", "i Suoi")
-            lines.append(f"✅ {m} file allegat{'o' if m == 1 else 'i'} sul portale {'è' if m == 1 else 'sono'} proprio "
-                         + (f"{'quello' if m == 1 else 'quelli'} {who[0]}" if prova else f"{who[0] if m == 1 else who[1]}")
-                         + " (stessi byte).")
+            what = (f"{'quello' if m == 1 else 'quelli'} {who[0]}" if prova else f"{who[0] if m == 1 else who[1]}")
+            if total > m:  # some attached file isn't on the screen read: not_read_back names it
+                lines.append(f"✅ Dei {total} file allegati ne ho {'riletto 1' if m == 1 else f'riletti {m}'} sul portale: "
+                             f"{'è' if m == 1 else 'sono'} proprio {what} (stessi byte).")
+            else:
+                lines.append(f"✅ {m} file allegat{'o' if m == 1 else 'i'} sul portale {'è' if m == 1 else 'sono'} proprio {what} (stessi byte).")
     return lines
 
 
@@ -219,9 +242,9 @@ def summary(report, out=None, job=None, prova=False):
     if prova:
         # The portal's own warnings on made-up values (the PEC) are expected; a value that doesn't match
         # the case, or a file that isn't the Prova's, is not.
-        warns = mismatches(out) + stray_files(out, job) + unchecked(out)
+        warns = mismatches(out) + stray_files(out, job) + not_read_back(out, report.get("attached")) + unchecked(out)
         lines = [f"✅ {name} di prova {done} in {duration(report.get('total_seconds'))}, con dati inventati."]
-        lines += verified(out, job, prova=True) + [f"⚠️ {w}" for w in warns]
+        lines += verified(out, job, prova=True, attached=report.get("attached")) + [f"⚠️ {w}" for w in warns]
         lines.append("Nulla da inviare: la cancelli da «Pratiche in bozza».")
         return {"result": "filled", "warnings": warns, "steps": [], "message": "\n".join(lines)}
     # One line for each warning in a section, by the section alone: the portal shows it beside the
@@ -229,7 +252,7 @@ def summary(report, out=None, job=None, prova=False):
     # made-up data the catasto's comes four times, one for each box of the parcel (2026-11-07).
     warnings = list(dict.fromkeys(f"{section(a['section'])}: il portale segnala «{a['text'].strip()}». Lo controlli."
                                   for a in report.get("alerts", [])))
-    warnings += mismatches(out) + stray_files(out, job)
+    warnings += mismatches(out) + stray_files(out, job) + not_read_back(out, report.get("attached"))
     # The second compilation (after the declarations) attaches what the portal makes only then, signed:
     # the procura, the quadro riepilogativo, and the receipt of what is paid first (the diritti).
     later = list(dict.fromkeys(report.get("second_run") or []))

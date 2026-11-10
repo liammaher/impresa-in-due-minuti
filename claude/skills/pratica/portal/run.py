@@ -1497,6 +1497,7 @@ def summary_rows(steps, values, proposed=()):
         if "ticked" in r:
             r["answer"] = "; ".join(r.pop("ticked")) or "nessuna"
             r["source"] = ", ".join(r.pop("sources"))
+    files = list(dict.fromkeys(files))  # a file that fills several slots is one file, as review.py counts it
     if files:
         rows.append({"key": "allegati", "question": f"I file da allegare ({len(files)})", "answer": ", ".join(files),
                      "source": "cartella del lavoro"})
@@ -2847,7 +2848,12 @@ def review_shown(steps, values, whole=None):
     later = after_declarations(expand(whole or steps, values), values)
     steps = expand(steps, values)
     rows = plan(steps, values)
-    return {"title": steps.get("title"), "yours": [values.render(y) for y in steps.get("yours", [])] + asked_yours(steps, values) + apart(steps, values),
+    attached = {}  # each distinct file the compilation attaches, by its bytes: review.py reads them back from the portal
+    for v in rows:
+        if v["kind"] == "file" and v["value"]:
+            data = Path(v["value"]).expanduser().read_bytes()
+            attached.setdefault(hashlib.sha256(data).hexdigest(), Path(v["value"]).name)
+    return {"title": steps.get("title"), "attached": [{"name": n, "sha256": h} for h, n in attached.items()], "yours": [values.render(y) for y in steps.get("yours", [])] + asked_yours(steps, values) + apart(steps, values),
             "second_run": later, "apart": apart(steps, values),
             "values": [{"section": v["section"], "label": v["label"] or v["id"],
                         "value": "chosen" if v["value"] is None
