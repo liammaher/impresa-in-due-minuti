@@ -412,7 +412,7 @@ one message asks only what no document holds.
   > Dalla notifica preliminare e dall'assenso: lavori in via Domenico Fontana 40 per il locatario
   > Luca Fittizio, con due imprese; la proprietaria Immobiliare Fittizia ha dato l'assenso.
   > Propongo una CILA (art. 6-bis DPR 380/2001).
-  > La ricevuta della sanzione (333 €) è per una CILA tardiva: ne tenga conto alla domanda 1.
+  > La ricevuta della sanzione (333 €) è per una CILA tardiva: tienine conto alla domanda 1.
 
 **Asking.** If you have a tool that asks multiple-choice questions with clickable options
 (AskUserQuestion, or the app's clickable options), ask pre-flight's `questions` with it, after
@@ -564,7 +564,9 @@ GitHub, checked byte for byte (`fetch.js`): nothing of the job's leaves the comp
 tecnico does nothing. Only when that fails does the page need a file from their Downloads folder:
 step 3 says how. Never send them a file, never ask them to download or save one, never say "JS".
 
-1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser:
+1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser (check first that its pane is
+   showing: `tabs_context` says displayed or hidden; if hidden, tell them in one line: «Se non vedi il portale, premi
+   Cmd+Shift+B (Ctrl+Shift+B su Windows) o clicca l'icona del globo.»):
    "Entra con SPID nella finestra del browser; quando vedi la pagina del portale scrivimi
    «fatto»." Wait until the page is the portal's own, past the login. Send this line after the
    `card` when the tecnico hasn't read it yet in this job (they answered questions and no

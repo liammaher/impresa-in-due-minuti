@@ -59,14 +59,17 @@ real filing's details (the c/c, the order of the signatures, the PEC receipt).
    > 3. **Io**: rileggo tutto dal portale e ti dico se i dati corrispondono.
    > Alla fine trovi la bozza «PROVA NON INVIARE»: cancellala.
 
-   As it is, a word not changed, added or left out: nothing before, nothing after, no card. Each step starts
+   Before saying the portal is open «qui accanto», check that the browser pane is showing (`tabs_context` says
+   displayed or hidden). If hidden, add one line after the others: «Se non vedi il portale, premi Cmd+Shift+B
+   (Ctrl+Shift+B su Windows) o clicca l'icona del globo.»
+   As it is, a word not changed, added or left out (but for that line): nothing before, nothing after, no card. Each step starts
    with who acts, and their one step is the first. Written for someone who has never used it and may balk at
    logging in through an assistant: the portal they already use, logged in the way they always do, who types the
    credentials, then what happens and how long. Never "non le vedo": the browser's pages can be read, and the
    SPID username shows on them.
    With no browser in this session (no tool opens a page), say in two lines that the Prova is ready, that it
    fills on the portal from the Claude app, where its browser is, once they log in there with their own SPID
-   ("Scrivimi «fammi vedere una prova» dall'app Claude per computer, con il suo browser: lì entri con il tuo
+   ("Scrivimi «fammi vedere una prova» dall'app Claude per computer, con il suo browser: lì entra con il tuo
    SPID"), and that the draft «PROVA NON INVIARE - CILA di prova», with invented data, is then to be deleted
    from «Pratiche in bozza». Then stop.
 3. Wait for their «fatto» (the portal is open since step 2). Then say one line: "Sto compilando, non toccare la
