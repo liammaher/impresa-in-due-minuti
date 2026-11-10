@@ -3,27 +3,27 @@
  "title": "Segnalazione certificata per l'agibilità, SUE Napoli (tecnico con procura)",
  "generated": "gen.py from sue-segnalazione-certificata-per-l-agibilita (2026-10-31) and dictionary/fnsuap.yaml",
  "yours": [
-  "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina",
-  "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000",
-  "In qualità di direttore dei lavori (o professionista abilitato), verifichi ogni attestazione di questa pagina: sono Sue, e le firma con la pratica",
-  "Attestazione tecnica - Agibilità: il portale richiede una delle caselle dell'art. 24 c. 5-bis/5-ter o 5-quater; Claude spunta quella corrispondente al caso, e nessuna quando non ricorre nessuno dei due casi (in tal caso chieda al SUE)",
-  "Firmi e invii (Firma e invio); conservi la ricevuta"
+  "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina",
+  "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000",
+  "In qualità di direttore dei lavori (o professionista abilitato), verifica ogni attestazione di questa pagina: sono tue, e le firmi con la pratica",
+  "Attestazione tecnica - Agibilità: il portale richiede una delle caselle dell'art. 24 c. 5-bis/5-ter o 5-quater; Claude spunta quella corrispondente al caso, e nessuna quando non ricorre nessuno dei due casi (in tal caso chiedi al SUE)",
+  "Firma e invia (Firma e invio); conserva la ricevuta"
  ],
  "groups": {
   "impianti_dichiarazione": {
-   "question": "Per quali impianti è allegata la dichiarazione di conformità o di rispondenza (DM 37/2008)? Spunti tutti quelli che valgono."
+   "question": "Per quali impianti è allegata la dichiarazione di conformità o di rispondenza (DM 37/2008)? Spunta tutti quelli che valgono."
   },
   "impianti_depositato": {
-   "question": "Per quali impianti il certificato (la dichiarazione, o il collaudo) è già depositato al Comune, così che il modulo ne riporta invece il numero di protocollo (P.G.)? Spunti tutti quelli che valgono."
+   "question": "Per quali impianti il certificato (la dichiarazione, o il collaudo) è già depositato al Comune, così che il modulo ne riporta invece il numero di protocollo (P.G.)? Spunta tutti quelli che valgono."
   },
   "impianti_collaudo": {
-   "question": "Quali impianti hanno un collaudo, dove è richiesto (quello di un ascensore, di un impianto antincendio, ...)? Spunti tutti quelli che valgono."
+   "question": "Quali impianti hanno un collaudo, dove è richiesto (quello di un ascensore, di un impianto antincendio, ...)? Spunta tutti quelli che valgono."
   },
   "impianti_atto_notorio": {
-   "question": "Quali impianti sono certificati da un atto di notorietà (art. 6 DPR 392/1994: impianti preesistenti adeguati alla L. 46/1990)? Spunti tutti quelli che valgono."
+   "question": "Quali impianti sono certificati da un atto di notorietà (art. 6 DPR 392/1994: impianti preesistenti adeguati alla L. 46/1990)? Spunta tutti quelli che valgono."
   },
   "fatti": {
-   "question": "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+   "question": "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   }
  },
  "asks": {
@@ -65,7 +65,7 @@
   },
   "altri_titolari": {
    "type": "number",
-   "question": "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conti il suo legale rappresentante",
+   "question": "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conta il suo legale rappresentante",
    "default": "{{r2:identity.last_name|empty|single_unit}}",
    "propose": "{{r:identity.last_name,r2:identity.last_name,r3:identity.last_name,r4:identity.last_name,r5:identity.last_name,r6:identity.last_name,r7:identity.last_name,r8:identity.last_name,r9:identity.last_name|filled_count}}"
   },
@@ -657,11 +657,11 @@
   },
   "modello_dp_firmato": {
    "type": "file",
-   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da Lei e dal committente (.p7m), con la lettera d'incarico o il contratto"
+   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da te e dal committente (.p7m), con la lettera d'incarico o il contratto"
   },
   "procura_firmata": {
    "type": "file",
-   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da Lei (.p7m)"
+   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da te (.p7m)"
   },
   "dsc_firmato": {
    "type": "file",

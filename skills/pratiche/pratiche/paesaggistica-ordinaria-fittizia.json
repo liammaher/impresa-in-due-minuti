@@ -3,14 +3,14 @@
  "title": "Autorizzazione paesaggistica ordinaria (art. 146 D.Lgs. 42/2004), SUE Napoli (tecnico con procura)",
  "generated": "gen.py from sue-autorizzazione-paesaggistica-ordinaria (2026-10-31) and dictionary/fnsuap.yaml",
  "yours": [
-  "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina",
-  "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali",
+  "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina",
+  "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali",
   "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}",
-  "Firmi e invii (Firma e invio); conservi la ricevuta"
+  "Firma e invia (Firma e invio); conserva la ricevuta"
  ],
  "groups": {
   "fatti": {
-   "question": "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+   "question": "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   }
  },
  "asks": {
@@ -71,7 +71,7 @@
    "type": "yes_no",
    "question": "Il progettista architettonico è un tecnico diverso dal tecnico che presenta la pratica? In tal caso va indicato tra le persone della pratica come progettista architettonico: il modulo lo indica come progettista e come autore dell'asseverazione",
    "propose": "false",
-   "yours": "L'asseverazione è del progettista architettonico: prima di Firma e invio, gli faccia firmare digitalmente la pratica, oltre al procuratore"
+   "yours": "L'asseverazione è del progettista architettonico: prima di Firma e invio, fagli firmare digitalmente la pratica, oltre al procuratore"
   },
   "oggetto": {
    "type": "text",
@@ -263,11 +263,11 @@
   },
   "modello_dp_firmato": {
    "type": "file",
-   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da Lei e dal committente (.p7m), con la lettera d'incarico o il contratto"
+   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da te e dal committente (.p7m), con la lettera d'incarico o il contratto"
   },
   "procura_firmata": {
    "type": "file",
-   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da Lei (.p7m)"
+   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da te (.p7m)"
   },
   "ricevuta_diritti": {
    "type": "file",
@@ -480,13 +480,13 @@
     "law": "La relazione paesaggistica la firmano i tecnici che l'hanno redatta (DPCM 12/12/2005; DPR 31/2017).",
     "checked": "05/11/2026, su una bozza con dati fittizi, senza salvare.",
     "choices": [
-     "Chieda al SUE come presentarla finché il portale non mostra il secondo tecnico.",
-     "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE.",
-     "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
+     "Chiedi al SUE come presentarla finché il portale non mostra il secondo tecnico.",
+     "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE.",
+     "Presentala tu sul portale, come ti indica il SUE: io non la compilo."
     ],
     "report": "docs/portal-defects.md"
    },
-   "else": "I tecnici del modulo paesaggistico: se l'architetto che presenta la pratica è il suo tecnico, il portale mostra il blocco di un altro tecnico («+») senza nome né codice fiscale, quindi un secondo tecnico non si può indicare. È un difetto del portale: chieda al SUE."
+   "else": "I tecnici del modulo paesaggistico: se l'architetto che presenta la pratica è il suo tecnico, il portale mostra il blocco di un altro tecnico («+») senza nome né codice fiscale, quindi un secondo tecnico non si può indicare. È un difetto del portale: chiedi al SUE."
   },
   {
    "if": "{{ask.bollo_esenzione|is_onlus}}",

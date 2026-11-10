@@ -3,22 +3,22 @@
  "title": "CILA: lavori interni non strutturali, SUE Napoli (tecnico con procura)",
  "generated": "gen.py from sue-comunicazione-inizio-lavoro-asseverata (2026-10-31) and dictionary/fnsuap.yaml",
  "yours": [
-  "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina",
-  "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000",
-  "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (come, è indicato sotto): la ricevuta firmata va allegata lì. La sanzione della CILA tardiva si paga prima della prima compilazione: la sua ricevuta è nel quadro d)",
-  "Per la DSC della CILA può usare quella che compila Claude (un riquadro per ogni documento caricato) invece di quella del portale: firmata e in PDF/A, va nella seconda compilazione",
-  "Se è un bene culturale: i lavori iniziano solo dopo l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004). È allegata in Allegati liberi: la conservi con la pratica",
-  "Firmi e invii (Firma e invio); conservi la ricevuta"
+  "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina",
+  "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000",
+  "Paga i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (come, è indicato sotto): la ricevuta firmata va allegata lì. La sanzione della CILA tardiva si paga prima della prima compilazione: la sua ricevuta è nel quadro d)",
+  "Per la DSC della CILA puoi usare quella che compila Claude (un riquadro per ogni documento caricato) invece di quella del portale: firmata e in PDF/A, va nella seconda compilazione",
+  "Se è un bene culturale: i lavori iniziano solo dopo l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004). È allegata in Allegati liberi: conservala con la pratica",
+  "Firma e invia (Firma e invio); conserva la ricevuta"
  ],
  "groups": {
   "cila_interventi": {
-   "question": "Quali sono i lavori, per la relazione tecnica della CILA? Spunti tutte le voci che valgono."
+   "question": "Quali sono i lavori, per la relazione tecnica della CILA? Spunta tutte le voci che valgono."
   },
   "tolleranze_tipi": {
-   "question": "Quali tolleranze costruttive dichiara la relazione? Spunti tutte quelle che valgono."
+   "question": "Quali tolleranze costruttive dichiara la relazione? Spunta tutte quelle che valgono."
   },
   "fatti": {
-   "question": "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+   "question": "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   }
  },
  "asks": {
@@ -60,7 +60,7 @@
   },
   "altri_titolari": {
    "type": "number",
-   "question": "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conti il suo legale rappresentante",
+   "question": "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conta il suo legale rappresentante",
    "default": "{{r2:identity.last_name|empty|single_unit}}",
    "propose": "{{r:identity.last_name,r2:identity.last_name,r3:identity.last_name,r4:identity.last_name,r5:identity.last_name,r6:identity.last_name,r7:identity.last_name,r8:identity.last_name,r9:identity.last_name|filled_count}}"
   },
@@ -136,7 +136,7 @@
    "type": "yes_no",
    "question": "Il progettista architettonico è un tecnico diverso dal tecnico che presenta la pratica? In tal caso va indicato tra le persone della pratica come progettista architettonico: il modulo lo indica come progettista e come autore dell'asseverazione",
    "propose": "false",
-   "yours": "L'asseverazione è del progettista architettonico: prima di Firma e invio, gli faccia firmare digitalmente la pratica, oltre al procuratore"
+   "yours": "L'asseverazione è del progettista architettonico: prima di Firma e invio, fagli firmare digitalmente la pratica, oltre al procuratore"
   },
   "direttore_lavori": {
    "type": "choice",
@@ -369,7 +369,7 @@
   },
   "atti_da_acquisire": {
    "type": "yes_no",
-   "question": "I lavori richiedono atti di assenso non ancora ottenuti (un nulla osta, un'autorizzazione, una deroga) che il SUE deve acquisire sulla base dei documenti che Lei allega (art. 23-bis DPR 380/2001)? In tal caso i lavori iniziano solo quando il SUE comunica di averli acquisiti. Un atto di assenso già ottenuto non rientra qui: va allegato",
+   "question": "I lavori richiedono atti di assenso non ancora ottenuti (un nulla osta, un'autorizzazione, una deroga) che il SUE deve acquisire sulla base dei documenti che alleghi (art. 23-bis DPR 380/2001)? In tal caso i lavori iniziano solo quando il SUE comunica di averli acquisiti. Un atto di assenso già ottenuto non rientra qui: va allegato",
    "propose": "false"
   },
   "atti_quanti": {
@@ -504,11 +504,11 @@
   },
   "modello_dp_firmato": {
    "type": "file",
-   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da Lei e dal committente (.p7m), con la lettera d'incarico o il contratto"
+   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da te e dal committente (.p7m), con la lettera d'incarico o il contratto"
   },
   "procura_firmata": {
    "type": "file",
-   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da Lei (.p7m)"
+   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da te (.p7m)"
   },
   "dsc_firmato": {
    "type": "file",
@@ -701,13 +701,13 @@
     "law": "Art. 90 c. 9 c D.Lgs. 81/2008: i documenti dell'impresa vanno dati prima dell'inizio dei lavori.",
     "checked": "01/11/2026, su una bozza con dati fittizi.",
     "choices": [
-     "Presenti la pratica quando l'impresa è scelta: allora la preparo.",
-     "Chieda al SUE se e come presentarla prima.",
-     "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+     "Presenta la pratica quando l'impresa è scelta: allora la preparo.",
+     "Chiedi al SUE se e come presentarla prima.",
+     "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
     ],
     "report": "docs/portal-defects.md"
    },
-   "else": "La CILA indica la sua impresa esecutrice: il suo quadro h) non prevede un'impresa ancora da scegliere, e il portale richiede i dati dell'impresa (verificato il 01/11/2026). Presenti la CILA una volta scelta l'impresa."
+   "else": "La CILA indica la sua impresa esecutrice: il suo quadro h) non prevede un'impresa ancora da scegliere, e il portale richiede i dati dell'impresa (verificato il 01/11/2026). Presenta la CILA una volta scelta l'impresa."
   },
   {
    "if": "{{ask.intervento|in_manutenzione_straordinaria__restauro}} {{ask.cila_stato|is_da_iniziare}} {{ask.bene_culturale}}",
@@ -715,7 +715,7 @@
    "in": [
     "true"
    ],
-   "else": "Su un bene culturale serve prima l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004), e il SUE non la chiede con questa pratica. La chieda alla Soprintendenza ABAP di Napoli (PEC sabap-na@pec.cultura.gov.it, bollo da 16 €, fino a 120 giorni), poi presenti questa pratica."
+   "else": "Su un bene culturale serve prima l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004), e il SUE non la chiede con questa pratica. La chiedi alla Soprintendenza ABAP di Napoli (PEC sabap-na@pec.cultura.gov.it, bollo da 16 €, fino a 120 giorni), poi presenta questa pratica."
   },
   {
    "if": "{{ask.cila_stato|is_da_iniziare}} {{ask.atti_da_acquisire}}",
@@ -723,7 +723,7 @@
    "in": [
     "true"
    ],
-   "else": "Con assensi che il SUE deve acquisire, i lavori iniziano solo quando il SUE comunica che sono stati acquisiti (art. 23-bis c. 2 DPR 380/2001): risponda che i lavori iniziano dopo la sua comunicazione, non a una data."
+   "else": "Con assensi che il SUE deve acquisire, i lavori iniziano solo quando il SUE comunica che sono stati acquisiti (art. 23-bis c. 2 DPR 380/2001): rispondi che i lavori iniziano dopo la sua comunicazione, non a una data."
   },
   {
    "if": "{{ask.cila_stato|is_da_iniziare|not}}",
@@ -731,7 +731,7 @@
    "in": [
     "false"
    ],
-   "else": "I lavori già in corso o eseguiti non possono avere assensi ancora da acquisire (art. 23-bis c. 2 DPR 380/2001: i lavori iniziano solo una volta acquisiti): chieda al SUE come regolarizzarli."
+   "else": "I lavori già in corso o eseguiti non possono avere assensi ancora da acquisire (art. 23-bis c. 2 DPR 380/2001: i lavori iniziano solo una volta acquisiti): chiedi al SUE come regolarizzarli."
   },
   {
    "if": "{{ask.tolleranze}}",

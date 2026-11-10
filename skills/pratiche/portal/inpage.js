@@ -168,7 +168,7 @@
       box.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:#fff;display:flex;flex-direction:column;" +
         "align-items:center;justify-content:center;gap:12px;font:16px system-ui,sans-serif";
       const msg = document.createElement("div");
-      msg.textContent = (note ? note + " " : "") + "Scriva qui il codice che vede nella finestra «Impresa in un minuto» sullo schermo.";
+      msg.textContent = (note ? note + " " : "") + "Scrivi qui il codice che vedi nella finestra «Impresa in un minuto» sullo schermo.";
       const input = document.createElement("input");
       input.type = "password";
       input.autocomplete = "off";
@@ -206,7 +206,7 @@
       box.style.cssText = "position:fixed;inset:0;z-index:2147483647;background:#fff;display:flex;flex-direction:column;" +
         "align-items:center;justify-content:center;gap:12px;font:16px system-ui,sans-serif;padding:24px";
       const title = document.createElement("div");
-      title.textContent = "Scelga questi file dalla cartella della pratica: vanno dal Suo computer al portale, e da nessun'altra parte.";
+      title.textContent = "Scegli questi file dalla cartella della pratica: vanno dal tuo computer al portale, e da nessun'altra parte.";
       const list = document.createElement("ul");
       list.style.cssText = "margin:0;max-height:40vh;overflow:auto";
       const pickFiles = document.createElement("input");
@@ -228,7 +228,7 @@
           li.textContent = `${picked.has(w.sha256) ? "✓" : "…"} ${w.name} (${(w.size / 1024 / 1024).toFixed(1)} MB)`;
           return li;
         }));
-        note.textContent = other.size ? `Non è il file controllato prima: ${[...other].join(", ")}. Scelga quello giusto.` : "";
+        note.textContent = other.size ? `Non è il file controllato prima: ${[...other].join(", ")}. Scegli quello giusto.` : "";
       };
       const take = async (chosen) => {
         for (const f of chosen) {
@@ -253,7 +253,7 @@
     for (let tries = 0; tries < 5; tries++) {
       const keys = await sealKeys(await askCode(note), sealed);
       try { return { keys, plain: JSON.parse(utf8d.decode(await openSealed(keys, sealed))) }; }
-      catch (e) { note = "Questo codice non apre i dati: lo riscriva."; }
+      catch (e) { note = "Questo codice non apre i dati: riscrivilo."; }
     }
     throw new StepError("the code didn't open the values");
   }

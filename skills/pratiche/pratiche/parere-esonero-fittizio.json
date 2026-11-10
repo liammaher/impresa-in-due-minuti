@@ -3,14 +3,14 @@
  "title": "Domanda di parere per esonero dall'autorizzazione paesaggistica, SUE Napoli (tecnico con procura)",
  "generated": "gen.py from sue-domanda-di-parere-per-esonero-dallobbligo-di-autorizzazione-paesaggistic (2026-10-31) and dictionary/fnsuap.yaml",
  "yours": [
-  "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina",
-  "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali",
+  "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina",
+  "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali",
   "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}",
-  "Firmi e invii (Firma e invio); conservi la ricevuta"
+  "Firma e invia (Firma e invio); conserva la ricevuta"
  ],
  "groups": {
   "fatti": {
-   "question": "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+   "question": "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   }
  },
  "asks": {
@@ -278,11 +278,11 @@
   },
   "modello_dp_firmato": {
    "type": "file",
-   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da Lei e dal committente (.p7m), con la lettera d'incarico o il contratto"
+   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da te e dal committente (.p7m), con la lettera d'incarico o il contratto"
   },
   "procura_firmata": {
    "type": "file",
-   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da Lei (.p7m)"
+   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da te (.p7m)"
   },
   "elaborati_paesaggistici": {
    "type": "file",

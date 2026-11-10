@@ -3,19 +3,19 @@
  "title": "CIL e proroga paesaggistica e terre e rocce in una pratica, SUE Napoli (tecnico con procura)",
  "generated": "gen.py from sue-combo-cil-proroga-paesaggistica-dichiarazione-utilizzo (2026-11-04) and dictionary/fnsuap.yaml",
  "yours": [
-  "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina",
-  "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000",
-  "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella; il bollo prima dell'invio",
+  "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina",
+  "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000",
+  "Paga i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella; il bollo prima dell'invio",
   "I lavori iniziano solo quando il SUE comunica che l'autorizzazione paesaggistica è stata acquisita: la data di inizio è la prima possibile",
-  "Se è dovuta la notifica preliminare (art. 99 D.Lgs. 81/2008): la alleghi negli Allegati liberi, firmata digitalmente (solo .p7m): la CIL non ha uno spazio apposito",
+  "Se è dovuta la notifica preliminare (art. 99 D.Lgs. 81/2008): allegala negli Allegati liberi, firmata digitalmente (solo .p7m): la CIL non ha uno spazio apposito",
   "La dichiarazione di utilizzo (Allegato 6 DPR 120/2017) è il documento che il portale genera in Allega documenti una volta spuntate le dichiarazioni: la firma il produttore, Claude la allega nella seconda compilazione; lo scavo inizia almeno 15 giorni dopo l'invio",
-  "Quando le terre sono state tutte utilizzate, entro la validità della dichiarazione, presenti al SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)",
-  "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente",
-  "Firmi e invii (Firma e invio); conservi la ricevuta"
+  "Quando le terre sono state tutte utilizzate, entro la validità della dichiarazione, presenta al SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)",
+  "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente",
+  "Firma e invia (Firma e invio); conserva la ricevuta"
  ],
  "groups": {
   "fatti": {
-   "question": "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+   "question": "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   }
  },
  "asks": {
@@ -57,7 +57,7 @@
   },
   "altri_titolari": {
    "type": "number",
-   "question": "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conti il suo legale rappresentante",
+   "question": "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conta il suo legale rappresentante",
    "default": "{{r2:identity.last_name|empty|single_unit}}",
    "propose": "{{r:identity.last_name,r2:identity.last_name,r3:identity.last_name,r4:identity.last_name,r5:identity.last_name,r6:identity.last_name,r7:identity.last_name,r8:identity.last_name,r9:identity.last_name|filled_count}}"
   },
@@ -143,7 +143,7 @@
   },
   "atti_da_acquisire": {
    "type": "yes_no",
-   "question": "I lavori richiedono atti di assenso non ancora ottenuti (un nulla osta, un'autorizzazione, una deroga) che il SUE deve acquisire sulla base dei documenti che Lei allega (art. 23-bis DPR 380/2001)? In tal caso i lavori iniziano solo quando il SUE comunica di averli acquisiti. Un atto di assenso già ottenuto non rientra qui: va allegato",
+   "question": "I lavori richiedono atti di assenso non ancora ottenuti (un nulla osta, un'autorizzazione, una deroga) che il SUE deve acquisire sulla base dei documenti che alleghi (art. 23-bis DPR 380/2001)? In tal caso i lavori iniziano solo quando il SUE comunica di averli acquisiti. Un atto di assenso già ottenuto non rientra qui: va allegato",
    "propose": "false"
   },
   "oggetto": {
@@ -266,11 +266,11 @@
   },
   "modello_dp_firmato": {
    "type": "file",
-   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da Lei e dal committente (.p7m), con la lettera d'incarico o il contratto"
+   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da te e dal committente (.p7m), con la lettera d'incarico o il contratto"
   },
   "procura_firmata": {
    "type": "file",
-   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da Lei (.p7m)"
+   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da te (.p7m)"
   },
   "dsc_firmato": {
    "type": "file",
@@ -472,13 +472,13 @@
     "law": "Art. 90 c. 9 c D.Lgs. 81/2008: i documenti dell'impresa vanno dati prima dell'inizio dei lavori.",
     "checked": "01/11/2026, su una bozza con dati fittizi.",
     "choices": [
-     "Presenti la pratica quando l'impresa è scelta: allora la preparo.",
-     "Chieda al SUE se e come presentarla prima.",
-     "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+     "Presenta la pratica quando l'impresa è scelta: allora la preparo.",
+     "Chiedi al SUE se e come presentarla prima.",
+     "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
     ],
     "report": "docs/portal-defects.md"
    },
-   "else": "La CIL indica la sua impresa esecutrice: il suo quadro f) non prevede un'impresa ancora da scegliere, e il portale richiede i dati dell'impresa (verificato il 01/11/2026). Presenti la CIL una volta scelta l'impresa."
+   "else": "La CIL indica la sua impresa esecutrice: il suo quadro f) non prevede un'impresa ancora da scegliere, e il portale richiede i dati dell'impresa (verificato il 01/11/2026). Presenta la CIL una volta scelta l'impresa."
   },
   {
    "if": "{{ask.intervento|is_opere_temporanee}} {{ask.bene_culturale}}",
@@ -486,11 +486,11 @@
    "in": [
     "true"
    ],
-   "else": "Su un bene culturale serve prima l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004), e il SUE non la chiede con questa pratica. La chieda alla Soprintendenza ABAP di Napoli (PEC sabap-na@pec.cultura.gov.it, bollo da 16 €, fino a 120 giorni), poi presenti questa pratica."
+   "else": "Su un bene culturale serve prima l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004), e il SUE non la chiede con questa pratica. La chiedi alla Soprintendenza ABAP di Napoli (PEC sabap-na@pec.cultura.gov.it, bollo da 16 €, fino a 120 giorni), poi presenta questa pratica."
   },
   {
    "when": "{{ask.atti_da_acquisire|not}}",
-   "else": "Il modulo della CIL non prevede la richiesta di assensi da acquisire a cura del SUE (solo le comunicazioni presentate insieme a essa, quadro e): li ottenga prima (un nulla osta, un'autorizzazione), poi presenti la CIL e li alleghi in Allegati liberi."
+   "else": "Il modulo della CIL non prevede la richiesta di assensi da acquisire a cura del SUE (solo le comunicazioni presentate insieme a essa, quadro e): ottienili prima (un nulla osta, un'autorizzazione), poi presenta la CIL e allegali in Allegati liberi."
   }
  ],
  "rules": {

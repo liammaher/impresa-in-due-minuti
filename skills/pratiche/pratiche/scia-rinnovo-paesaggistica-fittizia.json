@@ -3,43 +3,43 @@
  "title": "SCIA e rinnovo paesaggistica in una pratica, SUE Napoli (tecnico con procura)",
  "generated": "gen.py from sue-combo-scia-rinnovo-paesaggistica (2026-11-04) and dictionary/fnsuap.yaml",
  "yours": [
-  "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina",
-  "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000",
-  "In qualità di progettista, verifichi ogni asseverazione di questa pagina: sono Sue, e le firma con la pratica",
-  "Prima dell'inizio dei lavori, nomini chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE",
+  "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina",
+  "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000",
+  "In qualità di progettista, verifica ogni asseverazione di questa pagina: sono tue, e le firmi con la pratica",
+  "Prima dell'inizio dei lavori, nomina chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE",
   "Nessuna data di inizio: i lavori iniziano quando il SUE comunica che l'autorizzazione paesaggistica (e ogni altro assenso) è stata acquisita",
-  "Paghi i diritti prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella",
+  "Paga i diritti prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella",
   "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}",
-  "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente",
-  "Firmi e invii (Firma e invio); conservi la ricevuta"
+  "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente",
+  "Firma e invia (Firma e invio); conserva la ricevuta"
  ],
  "groups": {
   "tolleranze_tipi": {
-   "question": "Quali tolleranze costruttive dichiara la relazione? Spunti tutte quelle che valgono."
+   "question": "Quali tolleranze costruttive dichiara la relazione? Spunta tutte quelle che valgono."
   },
   "fasce_funzionali": {
-   "question": "In quali fasce di rispetto ricade l'immobile? Spunti tutte quelle che valgono."
+   "question": "In quali fasce di rispetto ricade l'immobile? Spunta tutte quelle che valgono."
   },
   "barriere_requisiti": {
-   "question": "Quali requisiti della normativa sulle barriere architettoniche soddisfa il progetto (D.M. 236/1989)? Spunti tutti quelli che valgono."
+   "question": "Quali requisiti della normativa sulle barriere architettoniche soddisfa il progetto (D.M. 236/1989)? Spunta tutti quelli che valgono."
   },
   "acustica_documenti": {
-   "question": "Quali documenti acustici sono allegati (art. 8 L. 447/1995, art. 4 DPR 227/2011)? Spunti tutti quelli che valgono."
+   "question": "Quali documenti acustici sono allegati (art. 8 L. 447/1995, art. 4 DPR 227/2011)? Spunta tutti quelli che valgono."
   },
   "precedenti": {
-   "question": "Quali titoli edilizi o pratiche costituiscono lo stato legittimo dell'edificio (art. 9-bis c. 1-bis DPR 380/2001: quello che lo ha costruito o che per ultimo lo ha interessato per intero, e quelli parziali successivi)? Spunti tutti quelli che valgono. Il modulo ha una voce per ciascun tipo: un secondo titolo di un tipo già spuntato (due DIA) va in \"Un altro titolo o pratica\"."
+   "question": "Quali titoli edilizi o pratiche costituiscono lo stato legittimo dell'edificio (art. 9-bis c. 1-bis DPR 380/2001: quello che lo ha costruito o che per ultimo lo ha interessato per intero, e quelli parziali successivi)? Spunta tutti quelli che valgono. Il modulo ha una voce per ciascun tipo: un secondo titolo di un tipo già spuntato (due DIA) va in \"Un altro titolo o pratica\"."
   },
   "prova_documenti": {
-   "question": "Cosa documenta lo stato originario dell'edificio? Spunti tutte le voci che valgono."
+   "question": "Cosa documenta lo stato originario dell'edificio? Spunta tutte le voci che valgono."
   },
   "tolleranze_precedenti": {
-   "question": "Dove sono state rese le dichiarazioni di tolleranza costruttiva (art. 34-bis o 34-ter c. 4)? Spunti tutte quelle che valgono."
+   "question": "Dove sono state rese le dichiarazioni di tolleranza costruttiva (art. 34-bis o 34-ter c. 4)? Spunta tutte quelle che valgono."
   },
   "strumenti": {
-   "question": "Quali strumenti urbanistici, oltre al PRG, interessano l'area dell'immobile? Spunti tutti quelli che valgono."
+   "question": "Quali strumenti urbanistici, oltre al PRG, interessano l'area dell'immobile? Spunta tutti quelli che valgono."
   },
   "fatti": {
-   "question": "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+   "question": "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   }
  },
  "asks": {
@@ -81,7 +81,7 @@
   },
   "altri_titolari": {
    "type": "number",
-   "question": "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conti il suo legale rappresentante",
+   "question": "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conta il suo legale rappresentante",
    "default": "{{r2:identity.last_name|empty|single_unit}}",
    "propose": "{{r:identity.last_name,r2:identity.last_name,r3:identity.last_name,r4:identity.last_name,r5:identity.last_name,r6:identity.last_name,r7:identity.last_name,r8:identity.last_name,r9:identity.last_name|filled_count}}"
   },
@@ -136,7 +136,7 @@
    "type": "yes_no",
    "question": "Il progettista architettonico è un tecnico diverso dal tecnico che presenta la pratica? In tal caso va indicato tra le persone della pratica come progettista architettonico: il modulo lo indica come progettista e come autore dell'asseverazione",
    "propose": "false",
-   "yours": "L'asseverazione è del progettista architettonico: prima di Firma e invio, gli faccia firmare digitalmente la pratica, oltre al procuratore"
+   "yours": "L'asseverazione è del progettista architettonico: prima di Firma e invio, fagli firmare digitalmente la pratica, oltre al procuratore"
   },
   "direttore_lavori": {
    "type": "choice",
@@ -353,7 +353,7 @@
   "paes_rinnovo_variazioni": {
    "type": "yes_no",
    "question": "Il rinnovo modifica il progetto, oppure sono intervenute nuove prescrizioni di tutela dopo l'autorizzazione?",
-   "yours": "Nella sezione del rinnovo, alleghi la relazione paesaggistica semplificata per le modifiche, firmata digitalmente (.p7m)"
+   "yours": "Nella sezione del rinnovo, allega la relazione paesaggistica semplificata per le modifiche, firmata digitalmente (.p7m)"
   },
   "domicilio_inad": {
    "type": "yes_no",
@@ -971,7 +971,7 @@
   },
   "sanzione_prova": {
    "type": "choice",
-   "question": "Come dimostra il quadro f) il pagamento delle sanzioni? ricevuta (se ne allega la ricevuta); estremi (Lei indica gli estremi del pagamento)",
+   "question": "Come dimostra il quadro f) il pagamento delle sanzioni? ricevuta (se ne allega la ricevuta); estremi (tu indichi gli estremi del pagamento)",
    "options": [
     "ricevuta",
     "estremi"
@@ -1592,7 +1592,7 @@
   },
   "diritti_euro": {
    "type": "number",
-   "question": "I diritti del SUE in euro: una SCIA onerosa non è in alcuna voce della tabella 2026 del Comune; chieda al SUE",
+   "question": "I diritti del SUE in euro: una SCIA onerosa non è in alcuna voce della tabella 2026 del Comune; chiedi al SUE",
    "propose": "{{ask.scia_onerosa|diritti_gratuito}}",
    "why": "Voce SUE 10 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 401 € per una SCIA non soggetta al contributo. Una SCIA onerosa (art. 22) non è in alcuna voce: le fasce SUE 7-9 nominano solo il permesso a titolo oneroso e la SCIA alternativa, quindi l'importo si chiede (da confermare con il SUE)"
   },
@@ -1645,11 +1645,11 @@
   },
   "modello_dp_firmato": {
    "type": "file",
-   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da Lei e dal committente (.p7m), con la lettera d'incarico o il contratto"
+   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da te e dal committente (.p7m), con la lettera d'incarico o il contratto"
   },
   "procura_firmata": {
    "type": "file",
-   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da Lei (.p7m)"
+   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da te (.p7m)"
   },
   "dsc_firmato": {
    "type": "file",
@@ -1795,7 +1795,7 @@
    "in": [
     "false"
    ],
-   "else": "Il modulo della SCIA non prevede terre scavate oltre 6000 m³ soggette a VIA o AIA, utilizzate come sottoprodotti secondo un Piano di Utilizzo (DPR 120/2017 art. 9): lavori di tale entità richiedono il permesso di costruire; chieda al SUE."
+   "else": "Il modulo della SCIA non prevede terre scavate oltre 6000 m³ soggette a VIA o AIA, utilizzate come sottoprodotti secondo un Piano di Utilizzo (DPR 120/2017 art. 9): lavori di tale entità richiedono il permesso di costruire; chiedi al SUE."
   },
   {
    "if": "{{ask.sanatoria_titolo|is_permesso}}",
@@ -1803,7 +1803,7 @@
    "in": [
     "parziale"
    ],
-   "else": "I lavori eseguiti senza permesso di costruire (o SCIA alternativa) si regolarizzano con il permesso in sanatoria (art. 36 DPR 380/2001), non con una SCIA: presenti il permesso in sanatoria."
+   "else": "I lavori eseguiti senza permesso di costruire (o SCIA alternativa) si regolarizzano con il permesso in sanatoria (art. 36 DPR 380/2001), non con una SCIA: presenta il permesso in sanatoria."
   },
   {
    "if": "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}",
@@ -1816,7 +1816,7 @@
   {
    "if": "{{ask.paes_rinnovo_di|is_semplificata}}",
    "when": "{{ask.paes_rinnovo_variazioni|not}}",
-   "else": "Il rinnovo di un'autorizzazione semplificata sul portale non ha una casella per le modifiche progettuali (ce l'ha solo quello di un'ordinaria): chieda al SUE come presentarlo."
+   "else": "Il rinnovo di un'autorizzazione semplificata sul portale non ha una casella per le modifiche progettuali (ce l'ha solo quello di un'ordinaria): chiedi al SUE come presentarlo."
   },
   {
    "if": "{{ask.stato_legittimo|is_titoli}}",
@@ -1857,13 +1857,13 @@
     "law": "La relazione paesaggistica la firmano i tecnici che l'hanno redatta (DPCM 12/12/2005; DPR 31/2017).",
     "checked": "05/11/2026, su una bozza con dati fittizi, senza salvare.",
     "choices": [
-     "Chieda al SUE come presentarla finché il portale non mostra il secondo tecnico.",
-     "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE.",
-     "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
+     "Chiedi al SUE come presentarla finché il portale non mostra il secondo tecnico.",
+     "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE.",
+     "Presentala tu sul portale, come ti indica il SUE: io non la compilo."
     ],
     "report": "docs/portal-defects.md"
    },
-   "else": "I tecnici del modulo paesaggistico: se l'architetto che presenta la pratica è il suo tecnico, il portale mostra il blocco di un altro tecnico («+») senza nome né codice fiscale, quindi un secondo tecnico non si può indicare. È un difetto del portale: chieda al SUE."
+   "else": "I tecnici del modulo paesaggistico: se l'architetto che presenta la pratica è il suo tecnico, il portale mostra il blocco di un altro tecnico («+») senza nome né codice fiscale, quindi un secondo tecnico non si può indicare. È un difetto del portale: chiedi al SUE."
   },
   {
    "if": "{{ask.tolleranze}}",
@@ -1930,7 +1930,7 @@
     "depuratori",
     "altro"
    ],
-   "else": "Il modulo della SCIA non ha una voce specifica per la fascia di rispetto di un pozzo (art. 94 D.Lgs. 152/2006): risponda altro e la indichi."
+   "else": "Il modulo della SCIA non ha una voce specifica per la fascia di rispetto di un pozzo (art. 94 D.Lgs. 152/2006): rispondi altro e indicala."
   },
   {
    "if": "{{ask.bollo_esenzione|is_onlus}}",

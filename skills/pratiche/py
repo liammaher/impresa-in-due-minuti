@@ -31,11 +31,11 @@ none() { # no Python 3.9+ on this computer: say how to get one, and stop
     Darwin)
       # The same window the stub opens: Apple's developer tools, which bring Python 3.
       xcode-select --install >/dev/null 2>&1 || true
-      echo "Impresa in un minuto: su questo Mac manca Python. macOS apre una finestra per installare gli «strumenti per sviluppatori» di Apple: li installi (gratis, qualche minuto), poi riprovi." >&2 ;;
+      echo "Impresa in un minuto: su questo Mac manca Python. macOS apre una finestra per installare gli «strumenti per sviluppatori» di Apple: installali (gratis, qualche minuto), poi riprova." >&2 ;;
     MINGW* | MSYS* | CYGWIN*)
-      echo "Impresa in un minuto: su questo computer manca Python 3. Lo installi da python.org (spunti «Add python.exe to PATH»), riapra l'app e riprovi." >&2 ;;
+      echo "Impresa in un minuto: su questo computer manca Python 3. Installalo da python.org (spunta «Add python.exe to PATH»), riapri l'app e riprova." >&2 ;;
     *)
-      echo "Impresa in un minuto: su questo computer manca Python 3 (3.9 o più recente): lo installi, poi riprovi." >&2 ;;
+      echo "Impresa in un minuto: su questo computer manca Python 3 (3.9 o più recente): installalo, poi riprova." >&2 ;;
   esac
   return 1
 }

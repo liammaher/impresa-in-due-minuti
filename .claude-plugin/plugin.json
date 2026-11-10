@@ -1,8 +1,8 @@
 {
   "name": "impresa-in-un-minuto",
   "displayName": "Impresa in un minuto",
-  "version": "0.6.2",
-  "description": "Impresa in un minuto: prepara le pratiche del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, fino ai passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio). Con la biblioteca pratiche-napoli di regole e procedure.",
+  "version": "0.7.0",
+  "description": "Impresa in un minuto: prepara le pratiche del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, fino ai passi che spettano solo a te (accesso con SPID, dichiarazioni, firma, pagamento, invio). Con la biblioteca pratiche-napoli di regole e procedure.",
   "author": {
     "name": "Liam Maher"
   },

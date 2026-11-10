@@ -3,45 +3,45 @@
  "title": "Permesso di costruire in sanatoria con accertamento di compatibilità paesaggistica, SUE Napoli (tecnico con procura)",
  "generated": "gen.py from sue-combo-pdc-sanatoria-accertamento (2026-11-02) and dictionary/fnsuap.yaml",
  "yours": [
-  "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina",
-  "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali, art. 75 DPR 445/2000",
-  "Come progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma. Il quadro paesaggistico dichiara che i lavori alterano i luoghi e non spunta alcuna procedura: la compatibilità è nell'accertamento presentato insieme (lo scriva nella relazione tecnica)",
+  "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina",
+  "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, art. 181 (PER PRESA VISIONE), tasse comunali, art. 75 DPR 445/2000",
+  "Come progettista, verifica ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che firmi. Il quadro paesaggistico dichiara che i lavori alterano i luoghi e non spunta alcuna procedura: la compatibilità è nell'accertamento presentato insieme (scrivilo nella relazione tecnica)",
   "Nell'asseverazione, «non interessa aree percorse dal fuoco» e la dichiarazione sui terreni sono una sola scelta sul portale (un suo difetto): Claude spunta quella sui terreni. Le aree bruciate le dichiari nella relazione tecnica, se il SUE lo chiede",
   "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}",
-  "Firmi e invii (Firma e invio); conservi la ricevuta",
-  "Il Comune decide prima sulla compatibilità, con il parere vincolante della Soprintendenza: se è accertata, paghi la somma che stabilisce (art. 167 c. 5 D.Lgs. 42/2004, la maggiore tra il danno arrecato e il profitto conseguito); in caso contrario, le opere devono essere rimosse e il permesso in sanatoria non può essere rilasciato",
-  "Una volta concesso il permesso: paghi l'oblazione che il SUE determina (il doppio del contributo di costruzione, art. 36 c. 2) e ritiri il permesso in sanatoria"
+  "Firma e invia (Firma e invio); conserva la ricevuta",
+  "Il Comune decide prima sulla compatibilità, con il parere vincolante della Soprintendenza: se è accertata, paga la somma che stabilisce (art. 167 c. 5 D.Lgs. 42/2004, la maggiore tra il danno arrecato e il profitto conseguito); in caso contrario, le opere devono essere rimosse e il permesso in sanatoria non può essere rilasciato",
+  "Una volta concesso il permesso: paga l'oblazione che il SUE determina (il doppio del contributo di costruzione, art. 36 c. 2) e ritira il permesso in sanatoria"
  ],
  "groups": {
   "tolleranze_tipi": {
-   "question": "Quali tolleranze costruttive dichiara la relazione? Spunti tutte quelle che valgono."
+   "question": "Quali tolleranze costruttive dichiara la relazione? Spunta tutte quelle che valgono."
   },
   "fasce_funzionali": {
-   "question": "In quali fasce di rispetto ricade l'immobile? Spunti tutte quelle che valgono."
+   "question": "In quali fasce di rispetto ricade l'immobile? Spunta tutte quelle che valgono."
   },
   "barriere_requisiti": {
-   "question": "Quali requisiti della normativa sulle barriere architettoniche soddisfa il progetto (D.M. 236/1989)? Spunti tutti quelli che valgono."
+   "question": "Quali requisiti della normativa sulle barriere architettoniche soddisfa il progetto (D.M. 236/1989)? Spunta tutti quelli che valgono."
   },
   "acustica_documenti": {
-   "question": "Quali documenti acustici sono allegati (art. 8 L. 447/1995, art. 4 DPR 227/2011)? Spunti tutti quelli che valgono."
+   "question": "Quali documenti acustici sono allegati (art. 8 L. 447/1995, art. 4 DPR 227/2011)? Spunta tutti quelli che valgono."
   },
   "precedenti": {
-   "question": "Quali titoli edilizi o pratiche costituiscono lo stato legittimo dell'edificio (art. 9-bis c. 1-bis DPR 380/2001: quello che lo ha costruito o che per ultimo lo ha interessato per intero, e quelli parziali successivi)? Spunti tutti quelli che valgono. Il modulo ha una voce per ciascun tipo: un secondo titolo di un tipo già spuntato (due DIA) va in \"Un altro titolo o pratica\"."
+   "question": "Quali titoli edilizi o pratiche costituiscono lo stato legittimo dell'edificio (art. 9-bis c. 1-bis DPR 380/2001: quello che lo ha costruito o che per ultimo lo ha interessato per intero, e quelli parziali successivi)? Spunta tutti quelli che valgono. Il modulo ha una voce per ciascun tipo: un secondo titolo di un tipo già spuntato (due DIA) va in \"Un altro titolo o pratica\"."
   },
   "prova_documenti": {
-   "question": "Cosa documenta lo stato originario dell'edificio? Spunti tutte le voci che valgono."
+   "question": "Cosa documenta lo stato originario dell'edificio? Spunta tutte le voci che valgono."
   },
   "tolleranze_precedenti": {
-   "question": "Dove sono state rese le dichiarazioni di tolleranza costruttiva (art. 34-bis o 34-ter c. 4)? Spunti tutte quelle che valgono."
+   "question": "Dove sono state rese le dichiarazioni di tolleranza costruttiva (art. 34-bis o 34-ter c. 4)? Spunta tutte quelle che valgono."
   },
   "strumenti": {
-   "question": "Quali strumenti urbanistici, oltre al PRG, interessano l'area dell'immobile? Spunti tutti quelli che valgono."
+   "question": "Quali strumenti urbanistici, oltre al PRG, interessano l'area dell'immobile? Spunta tutti quelli che valgono."
   },
   "deroga_parametri": {
-   "question": "Da quali limiti dello strumento urbanistico deroga il permesso (art. 14 c. 3 DPR 380/2001)? Spunti tutti quelli che valgono."
+   "question": "Da quali limiti dello strumento urbanistico deroga il permesso (art. 14 c. 3 DPR 380/2001)? Spunta tutti quelli che valgono."
   },
   "fatti": {
-   "question": "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+   "question": "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   }
  },
  "asks": {
@@ -83,7 +83,7 @@
   },
   "altri_titolari": {
    "type": "number",
-   "question": "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conti il suo legale rappresentante",
+   "question": "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conta il suo legale rappresentante",
    "default": "{{r2:identity.last_name|empty|single_unit}}",
    "propose": "{{r:identity.last_name,r2:identity.last_name,r3:identity.last_name,r4:identity.last_name,r5:identity.last_name,r6:identity.last_name,r7:identity.last_name,r8:identity.last_name,r9:identity.last_name|filled_count}}"
   },
@@ -128,7 +128,7 @@
    "type": "yes_no",
    "question": "Il progettista architettonico è un tecnico diverso dal tecnico che presenta la pratica? In tal caso va indicato tra le persone della pratica come progettista architettonico: il modulo lo indica come progettista e come autore dell'asseverazione",
    "propose": "false",
-   "yours": "L'asseverazione è del progettista architettonico: prima di Firma e invio, gli faccia firmare digitalmente la pratica, oltre al procuratore"
+   "yours": "L'asseverazione è del progettista architettonico: prima di Firma e invio, fagli firmare digitalmente la pratica, oltre al procuratore"
   },
   "direttore_lavori": {
    "type": "choice",
@@ -1214,7 +1214,7 @@
   },
   "sanzione_prova": {
    "type": "choice",
-   "question": "Come dimostra il quadro f) il pagamento delle sanzioni? ricevuta (se ne allega la ricevuta); estremi (Lei indica gli estremi del pagamento)",
+   "question": "Come dimostra il quadro f) il pagamento delle sanzioni? ricevuta (se ne allega la ricevuta); estremi (tu indichi gli estremi del pagamento)",
    "options": [
     "ricevuta",
     "estremi"
@@ -2016,11 +2016,11 @@
   },
   "modello_dp_firmato": {
    "type": "file",
-   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da Lei e dal committente (.p7m), con la lettera d'incarico o il contratto"
+   "question": "Il Modello DP (lo compila Claude), firmato digitalmente da te e dal committente (.p7m), con la lettera d'incarico o il contratto"
   },
   "procura_firmata": {
    "type": "file",
-   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da Lei (.p7m)"
+   "question": "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da te (.p7m)"
   },
   "dsc_firmato": {
    "type": "file",
@@ -2197,7 +2197,7 @@
     "art 14 c7",
     "bonus volumetrico"
    ],
-   "else": "Il modulo del permesso sul portale richiede di dichiarare un incentivo energetico (art. 14 c. 6 o 7 D.Lgs. 102/2014, o il bonus del 5% del D.Lgs. 28/2011) anche senza opere energetiche: un progetto che non ne prevede non può essere presentato così com'è; chieda al SUE."
+   "else": "Il modulo del permesso sul portale richiede di dichiarare un incentivo energetico (art. 14 c. 6 o 7 D.Lgs. 102/2014, o il bonus del 5% del D.Lgs. 28/2011) anche senza opere energetiche: un progetto che non ne prevede non può essere presentato così com'è; chiedi al SUE."
   },
   {
    "value": "{{ask.pdc_sanatoria_caso}}",
@@ -2213,9 +2213,9 @@
     "law": "Art. 36-bis DPR 380/2001: la data delle opere, l'oblazione e se si propongono lavori, insieme.",
     "checked": "30/10/2026, su una bozza con dati fittizi.",
     "choices": [
-     "Chieda al SUE come presentarlo finché il portale non lo accetta.",
-     "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE.",
-     "Lo presenti Lei sul portale, come Le indica il SUE: io non lo compilo."
+     "Chiedi al SUE come presentarlo finché il portale non lo accetta.",
+     "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE.",
+     "Presentalo tu sul portale, come ti indica il SUE: io non lo compilo."
     ],
     "report": "docs/portal-defects.md"
    },
@@ -2256,13 +2256,13 @@
     "law": "Le opere dell'art. 36 in area vincolata si regolarizzano con l'accertamento dell'art. 167 c. 4-5 D.Lgs. 42/2004.",
     "checked": "02/11/2026, su una bozza con dati fittizi.",
     "choices": [
-     "Chieda al SUE come compilare il quadro paesaggistico in questo caso.",
-     "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE.",
-     "Lo presenti Lei sul portale, come Le indica il SUE: io non lo compilo."
+     "Chiedi al SUE come compilare il quadro paesaggistico in questo caso.",
+     "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE.",
+     "Presentalo tu sul portale, come ti indica il SUE: io non lo compilo."
     ],
     "report": "docs/portal-defects.md"
    },
-   "else": "Sanatoria dell'art. 36 in area tutelata: il quadro paesaggistico del permesso non ha la voce dell'accertamento dell'art. 167. È un difetto del portale; chieda al SUE."
+   "else": "Sanatoria dell'art. 36 in area tutelata: il quadro paesaggistico del permesso non ha la voce dell'accertamento dell'art. 167. È un difetto del portale; chiedi al SUE."
   },
   {
    "value": "{{ask.pdc_tipo}}",
@@ -2290,7 +2290,7 @@
     "intero immobile",
     "altro"
    ],
-   "else": "Un mutamento di destinazione d'uso ai sensi dell'art. 2 L.R. 19/2001 cambia la destinazione d'uso: indichi quale (stessa categoria, tra categorie, intero immobile o altro)."
+   "else": "Un mutamento di destinazione d'uso ai sensi dell'art. 2 L.R. 19/2001 cambia la destinazione d'uso: indica quale (stessa categoria, tra categorie, intero immobile o altro)."
   },
   {
    "if": "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}}",
@@ -2370,13 +2370,13 @@
     "law": "In Campania questo cambio richiede la SCIA alternativa o il permesso (art. 2 c. 6 L.R. 13/2022).",
     "checked": "03/11/2026, dai moduli del portale e dello schema nazionale; non provato su una bozza.",
     "choices": [
-     "Chieda al SUE quale voce spuntare, o se dichiararlo nella relazione.",
-     "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE.",
-     "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
+     "Chiedi al SUE quale voce spuntare, o se dichiararlo nella relazione.",
+     "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE.",
+     "Presentala tu sul portale, come ti indica il SUE: io non la compilo."
     ],
     "report": "docs/portal-defects.md"
    },
-   "else": "Il modulo non ha una voce per questo cambio d'uso della legge campana (un intero edificio verso un'altra categoria, un'unità fuori dalle zone A, B e C, da o verso il rurale): è un difetto del modulo; chieda al SUE."
+   "else": "Il modulo non ha una voce per questo cambio d'uso della legge campana (un intero edificio verso un'altra categoria, un'unità fuori dalle zone A, B e C, da o verso il rurale): è un difetto del modulo; chiedi al SUE."
   },
   {
    "if": "{{ask.tolleranze}}",
@@ -2442,7 +2442,7 @@
    "in": [
     "convenzione"
    ],
-   "else": "Senza opere di urbanizzazione primaria il portale chiede la data di una convenzione, anche dove il Comune prevede di realizzarle direttamente entro tre anni: quel caso non si può dichiarare sul portale così com'è; chieda al SUE."
+   "else": "Senza opere di urbanizzazione primaria il portale chiede la data di una convenzione, anche dove il Comune prevede di realizzarle direttamente entro tre anni: quel caso non si può dichiarare sul portale così com'è; chiedi al SUE."
   },
   {
    "if": "{{ask.bollo_esenzione|is_onlus}}",

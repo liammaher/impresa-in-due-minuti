@@ -38,7 +38,7 @@ sys.dont_write_bytecode = True
 import rules  # noqa: E402
 import run  # noqa: E402  (Values, ruled, refs_in: a steps file's own reading of its facts)
 
-CHECKLIST = "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+CHECKLIST = "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
 GROUP = "fatti"
 
 
