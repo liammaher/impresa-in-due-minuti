@@ -2825,8 +2825,8 @@ def review_shown(steps, values, whole=None):
     for v in rows:
         if v["kind"] == "file" and v["value"]:
             data = Path(v["value"]).expanduser().read_bytes()
-            attached.setdefault(hashlib.sha256(data).hexdigest(), Path(v["value"]).name)
-    return {"title": steps.get("title"), "quadri": quadri(steps), "details": step_details(steps), "attached": [{"name": n, "sha256": h} for h, n in attached.items()], "yours": [values.render(y) for y in steps.get("yours", [])] + asked_yours(steps, values) + apart(steps, values),
+            attached.setdefault(hashlib.sha256(data).hexdigest(), (Path(v["value"]).name, v["section"]))
+    return {"title": steps.get("title"), "quadri": quadri(steps), "details": step_details(steps), "attached": [{"name": n, "section": sec, "sha256": h} for h, (n, sec) in attached.items()], "yours": [values.render(y) for y in steps.get("yours", [])] + asked_yours(steps, values) + apart(steps, values),
             "second_run": later, "apart": apart(steps, values),
             "values": [{"section": v["section"], "label": v["label"] or v["id"],
                         "value": "chosen" if v["value"] is None

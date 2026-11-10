@@ -145,14 +145,28 @@ def main():
               "Nulla da inviare: cancella la bozza da «Pratiche in bozza»." and r["warnings"] == [], r)
     with tempfile.TemporaryDirectory() as t:
         # The compilation attached two files; «Allega documenti» lists the one (in two slots), the other sits in a quadro.
-        receipt = {"name": "ricevuta-sanzione.pdf", "sha256": sha(b"%PDF ricevuta")}
-        listed = {"name": "relazione.pdf", "sha256": sha(b"%PDF relazione")}
+        receipt = {"name": "ricevuta-sanzione.pdf", "section": "d) Qualificazione dell'intervento", "sha256": sha(b"%PDF ricevuta")}
+        listed = {"name": "relazione.pdf", "section": "Gestione degli allegati", "sha256": sha(b"%PDF relazione")}
         slots = [good, dict(good, slot="Allegati liberi 2")]
         r = build(Path(t), {"rows": [row]}, slots, None, {"attached": [listed, receipt]}, "--prova")
         lines = r["message"].split("\n")
         check("the Prova: two slots of one file count once, and the file in a quadro is said not read back",
               "✅ Dei 2 file allegati ne ho riletto 1 sul portale: è proprio quello del caso di prova (stessi byte)." in lines
-              and any(l.startswith("⚠️ Il file «ricevuta-sanzione.pdf» sta in un quadro del modulo") for l in lines), r)
+              and any(l.startswith("⚠️ Il file «ricevuta-sanzione.pdf» non l'ho ritrovato sul portale") for l in lines), r)
+        out = Path(t) / "Bianchi" / "run"
+        q = json.loads(subprocess.run([sys.executable, "-I", str(REVIEW), str(out), "--quadri"],
+                                      capture_output=True, text=True).stdout)
+        check("--quadri names the quadro holding the file «Allega documenti» lacks, not «Gestione degli allegati»",
+              q == {"quadri": ["d) Qualificazione dell'intervento"]}, q)
+        (out.parent / "docs" / "ricevuta-sanzione.pdf").write_bytes(b"%PDF ricevuta")  # the job has the receipt too
+        (out / "portal-files-2.json").write_text(json.dumps({"files": [dict(receipt, slot="allegare qui la ricevuta", size=13)]}))
+        q = json.loads(subprocess.run([sys.executable, "-I", str(REVIEW), str(out), "--quadri"],
+                                      capture_output=True, text=True).stdout)
+        r = json.loads(subprocess.run([sys.executable, "-I", str(REVIEW), str(out), "--prova"],
+                                      capture_output=True, text=True).stdout)
+        check("once the quadro was read (portal-files-2.json): nothing left to open, every file read back, no warning",
+              q == {"quadri": []} and r["warnings"] == [] and "✅ 2 file allegati sul portale sono proprio quelli del caso di prova (stessi byte)."
+              in r["message"].split("\n"), r)
         r = build(Path(t) / "2", {"rows": [row]}, slots, None, {"attached": [listed]}, "--prova")
         check("the Prova: every attached file read back is a plain count, no warning",
               "✅ 1 file allegato sul portale è proprio quello del caso di prova (stessi byte)." in r["message"].split("\n")

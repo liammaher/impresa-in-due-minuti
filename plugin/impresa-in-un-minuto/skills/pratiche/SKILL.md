@@ -679,8 +679,16 @@ Comune will receive, before you tell the tecnico anything:
    `run/portal-files.json`. `error: "no attachments here and no Allega Documenti link"` means the
    pane went back to the list of drafts when the compilation ended (the preview above still read,
    it needs only the session): `url = await __pv.reopen("<the draft's descrizione>")`, navigate the
-   pane to `url`, and run it again. It never reads the file inside a quadro (a sanction's receipt):
-   review.py says which attached file it did not read back.
+   pane to `url`, and run it again. It reads only what the screen it is on holds. A file attached in
+   a quadro of the form (a sanction's receipt, in quadro d) is not on Allega documenti:
+   `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --quadri` prints `{"quadri": [...]}`, the
+   quadri still to read (none: skip this). For each, in order, as separate JavaScript calls on the page,
+   each followed by `await new Promise((r) => setTimeout(r, 2500))` for the page to load:
+   - the menu: `const a = [...document.querySelectorAll("li a")].find((x) => /^compilazione pratica$/i.test(x.innerText.trim())); setTimeout(() => a.click(), 50); "opening"`
+   - the quadro, its name in lower case as `review.py` printed it: `const a = [...document.querySelectorAll("a")].find((x) => x.innerText.trim().toLowerCase().startsWith("<quadro>")); setTimeout(() => a.click(), 50); "opening"`
+   - `attachments.js` again (it reads the files of the screen it is on): save its answer as
+     `run/portal-files-2.json`, then `-3`, and so on.
+   Never click anything else in a quadro and never change a box.
 4. `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run` prints the closing lines: it
    matches each file on the portal to the job's own by its bytes, and makes a `⚠️` line of each
    row of `run/check.json` that doesn't match and each file no file of the job has.
