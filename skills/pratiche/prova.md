@@ -76,17 +76,16 @@ pratica filled, fast.
    4.3 and 4.4 (the scripts, `__pv.wait`) and 4.6, save `JSON.stringify(__pv.last())` to `run/report.json`,
    then the check of SKILL.md step 5, with the case itself as the documents: hold each value in the
    preview to `values.json` and `answers.json` (their `source` is "caso di prova"), run
-   `attachments.js`, then `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova`.
+   `attachments.js` (and, for the quadro that holds the receipt, what step 5.3 says after `review.py run --quadri`),
+   then `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova`.
    Never fix a mismatch by hand on the portal: say it.
 4. Hand over with its `message`, as written, its lines and nothing else:
    "✅ CILA di prova compilata in <T>, con dati inventati.
    ✅ Anteprima PDF del portale letta e confrontata con il caso di prova: tutti i <N> dati corrispondono.
-   ✅ Dei <M> file allegati ne ho riletti <K> sul portale: sono proprio quelli del caso di prova (stessi byte).
-   ⚠️ Il file «ricevuta-sanzione.pdf» sta in un quadro del modulo, non in «Allega documenti»: non l'ho riletto sul portale, lo controlli Lei sul portale.
+   ✅ <N> file allegati sul portale sono proprio quelli del caso di prova (stessi byte).
    Nulla da inviare: la cancelli da «Pratiche in bozza»."
-   (The files line is "✅ <M> file allegati sul portale sono proprio quelli del caso di prova (stessi byte)." when it read
-   them all back; the ⚠️ file line only when the Prova's receipt sits in a quadro, as above. A `⚠️` line for a value
-   that doesn't match or a check not done.) No file, no list of values, no
+   (A `⚠️` line for a value that doesn't match, a file the portal doesn't hold or a check not done. The Prova's
+   receipt sits in quadro d: SKILL.md step 5.3 reads it there, with `review.py run --quadri`.) No file, no list of values, no
    portal warnings (the portal's warnings on made-up values, such as the PEC, are expected), no
    declarations' text, no list of their steps, no diritti, no procura, no second compilation: the card
    already said what stays theirs in a real filing.
