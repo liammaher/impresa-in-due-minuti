@@ -647,6 +647,13 @@ and hold every value to the source documents.
   another screen is up); a slot's title is the nearest row above its files that is no file, no
   "+", no blank and not the "Tipologie ammesse" line. Run on the rehearsal: 8 files, every slot
   named right.
+- **A file in a quadro.** A file attached in a quadro of the form (the receipt of a sanction, quadro d
+  of the CILA) is not on Allega documenti: its `download.do?id=…` is on the quadro's own page, which
+  the JSF accordion opens by a click that reloads the page (checked 2026-11-10: 894 bytes, the file's
+  own hash). `run.py page` records each attached file with its section (`private/shown.json`,
+  `attached`); `review.py OUT --quadri` names the quadri whose files no list read so far holds; the skill
+  opens each (menu «Compilazione Pratica», then the quadro's link) and runs `attachments.js` there,
+  saved as `portal-files-2.json`, `-3`… (review.py merges them). A file no list holds is a `⚠️`.
 - **The check.** The skill (step 5) holds each value of the preview to its document in
   `run/check.json` and saves `attachments.js`'s answer as `run/portal-files.json`; `review.py`
   makes a `⚠️` line of each mismatch and of each portal file whose bytes no file of the job has

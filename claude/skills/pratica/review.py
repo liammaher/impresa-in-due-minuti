@@ -2,7 +2,7 @@
 """After Claude prepares a pratica: for a portal draft, what Claude says in the chat; for a form,
 one page for the person to review.
 
-  review.py OUT [--prova] [--job DIR] [--route ROUTE.json]
+  review.py OUT [--prova] [--quadri] [--job DIR] [--route ROUTE.json]
 
 OUT is the folder run.py page wrote, with the pane's `__pv.last()` saved there as report.json (its
 private/shown.json adds the pratica's title and what comes after: the second compilation, what is
@@ -16,7 +16,9 @@ reads two more files of a real job:
   "note"}], "not_in_preview": [section, ...]}. Each value that doesn't match is a warning.
 - OUT/portal-files.json, what portal/attachments.js returned ({"files": [{"slot", "name",
   "size", "sha256"}]}): each file is matched by its bytes to a file of the job (--job, default
-  OUT's parent folder), hashed here; one no file of the job has is a warning.
+  OUT's parent folder), hashed here; one no file of the job has is a warning. A file the compilation
+  attached in a quadro (a sanction's receipt in quadro d) isn't on «Allega documenti»: `--quadri`
+  names the quadri to open, and attachments.js run on each is saved as OUT/portal-files-2.json, -3...
 
 For a form (fill.py's report, --route `fill.py route --json`: where it goes and the person's
 steps) it writes OUT/review.html: one self-contained file, the form's pages inlined, to show the
@@ -130,6 +132,25 @@ def mismatches(out):
             for r in rows if not r.get("ok")]
 
 
+def portal_files(out):
+    """The files the portal holds, as read back: OUT/portal-files.json («Allega documenti», attachments.js)
+    and OUT/portal-files-*.json (the same script run on a quadro that holds a file, such as the receipt of a
+    sanction in quadro d)."""
+    files = []
+    for f in sorted(out.glob("portal-files*.json")) if out else []:
+        files += json.loads(f.read_text()).get("files", [])
+    return files
+
+
+def quadri_to_open(out, attached):
+    """The quadri whose files are not in the portal's lists read so far: the skill opens each one and runs
+    attachments.js there (SKILL.md step 5). «Gestione degli allegati» is «Allega documenti», read already."""
+    on_portal = {x.get("sha256") for x in portal_files(out)}
+    return list(dict.fromkeys(a["section"] for a in attached or []
+                              if a["sha256"] not in on_portal and a.get("section")
+                              and not re.match(r"gestione degli allegati", a["section"], re.I)))
+
+
 def job_hashes(out, job):
     """The sha256 of each file of the job (not the run's own folder, not hidden files)."""
     local = set()
@@ -146,23 +167,21 @@ def job_hashes(out, job):
 
 
 def not_read_back(out, attached):
-    """The files the compilation attached that the portal's «Allega documenti» doesn't list (one sits in a
-    quadro of the form, such as the receipt of a sanction): not read back, so the tecnico looks at them."""
-    f = out / "portal-files.json" if out else None
-    if not (f and f.exists() and attached):
+    """The files the compilation attached that no screen read back from the portal lists: the tecnico looks at
+    them (a file in a quadro of the form, such as a sanction's receipt, is read there: quadri_to_open)."""
+    if not (out and portal_files(out) and attached):
         return []
-    on_portal = {x.get("sha256") for x in json.loads(f.read_text()).get("files", [])}
-    return [f"Il file «{a['name']}» sta in un quadro del modulo, non in «Allega documenti»: non l'ho riletto sul portale, "
-            "lo controlli Lei sul portale." for a in attached if a["sha256"] not in on_portal]
+    on_portal = {x.get("sha256") for x in portal_files(out)}
+    return [f"Il file «{a['name']}» non l'ho ritrovato sul portale: "
+            "lo controlli Lei." for a in attached if a["sha256"] not in on_portal]
 
 
 def stray_files(out, job):
-    """The draft's files as the portal holds them (OUT/portal-files.json), each matched by its bytes
+    """The draft's files as the portal holds them (OUT/portal-files*.json), each matched by its bytes
     to a file of the job: a line for each that no file of the job has."""
-    f = out / "portal-files.json" if out else None
-    if not (f and f.exists() and job):
+    files = portal_files(out)
+    if not (files and job):
         return []
-    files = json.loads(f.read_text()).get("files", [])
     local = job_hashes(out, job)
     return [f"Allegato «{x.get('slot')}»: il file sul portale ({x.get('name')}) non è nessuno dei Suoi file."
             for x in files if x.get("sha256") not in local]
@@ -170,7 +189,7 @@ def stray_files(out, job):
 
 def verified(out, job, prova=False, attached=None):
     """The ✅ lines of the check against the documents: what the preview read held equal (OUT/check.json),
-    and the attached files that are the job's own (OUT/portal-files.json). [] when it wasn't done:
+    and the attached files that are the job's own (OUT/portal-files*.json). [] when it wasn't done:
     `unchecked` says so, never silence."""
     lines = []
     f = out / "check.json" if out else None
@@ -181,9 +200,8 @@ def verified(out, job, prova=False, attached=None):
             source = "con il caso di prova" if prova else "con i Suoi documenti"
             lines.append(f"✅ Anteprima PDF del portale letta e confrontata {source}: "
                          + ("un dato corrisponde." if len(rows) == 1 and ok else f"tutti i {ok} dati corrispondono." if ok == len(rows) else f"{ok} dati su {len(rows)} corrispondono."))
-    g = out / "portal-files.json" if out else None
-    if g and g.exists():
-        on_portal = {x.get("sha256") for x in json.loads(g.read_text()).get("files", [])}
+    if portal_files(out):
+        on_portal = {x.get("sha256") for x in portal_files(out)}
         local = job_hashes(out, job) if job else set()
         # Distinct files, as the card counts them: one file may fill several slots. `attached` is what the
         # compilation attached (run.py page); without it (an older run) the portal's own list is all there is.
@@ -287,6 +305,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("out", type=Path)
     ap.add_argument("--route", type=Path)
+    ap.add_argument("--quadri", action="store_true", help="print the quadri whose attached files the portal's lists "
+                    "read so far don't hold (the skill opens each and runs attachments.js there), and stop")
     ap.add_argument("--prova", action="store_true", help="the skill's Prova: made-up data, two lines and the check's ✅")
     ap.add_argument("--job", type=Path, help="the job's folder, whose files the portal's are matched to "
                     "(default: OUT's parent)")
@@ -300,6 +320,9 @@ def main():
     shown = a.out / "private" / "shown.json"  # run.py page: the pane's report has only the run
     if shown.exists():
         report |= json.loads(shown.read_text())
+    if a.quadri:
+        print(json.dumps({"quadri": quadri_to_open(a.out.resolve(), report.get("attached"))}, ensure_ascii=False))
+        return 0
     job = (a.job or a.out.resolve().parent).resolve()
     print(json.dumps(summary(report, a.out.resolve(), job, a.prova), indent=1, ensure_ascii=False))
     return 0
