@@ -2,6 +2,7 @@
 """Fill a portal pratica from the vault in a real browser, then hand it to the person.
 
   run.py preflight --steps STEPS.yaml [--answers A.json] VAULT [--made-up]
+  run.py card      the same arguments: "Cosa succede" as text (what it fills and why, how it checks, what stays theirs)
       Before anything opens: prints JSON with why this case isn't supported (the steps
       file's `supports:`, and its `rules:` table, which says whether the case is this pratica
       at all; a refusal behind a known portal defect also under `defects`, with the person's
@@ -1302,6 +1303,16 @@ def after_declarations(steps, values):
             if f.get("after_declarations") and applies(f, values)]
 
 
+def card_later(steps, values, made_up):
+    """What the second compilation attaches, for the card's list of their steps. A real case: this case's
+    (after_declarations). A Prova has no files for those slots, but a real filing of the pratica does, so
+    its card shows every slot the pratica waits to attach (the procura, the receipt, the signed annexes)."""
+    if not made_up:
+        return after_declarations(steps, values)
+    return list(dict.fromkeys(f.get("label") or f.get("id") for s in steps["sections"] for f in s["fields"]
+                              if f.get("after_declarations")))
+
+
 def reopening(steps):
     """How the second run starts: the draft opened from Pratiche in bozza by its name (the
     person's clicks since have moved its address on), then the attachments screen alone."""
@@ -1529,6 +1540,98 @@ def summary_all(rows):
 def summary_id(rows):
     """What the «sì» confirms: `confirm` refuses it once the answers have changed since."""
     return hashlib.sha256(json.dumps(rows, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:12]
+
+
+def card_section(name):
+    """A section's name as a sentence: the portal writes some in capitals ("DOMICILIO ELETTRONICO")."""
+    name = " ".join((name or "").split())
+    return name[:1] + name[1:].lower() if name.isupper() else name
+
+
+def lei_steps(later):
+    """The tecnico's steps after the first compilation, in order, as review.py's closing lines say them
+    (bench/test_card.py holds the two to the same list). later: what the second compilation attaches."""
+    pay_first = any(re.search(r"versament|ricevut|pagament", x, re.I) for x in later)
+    steps = ["controlli l'anteprima della bozza", "spunti le dichiarazioni"]
+    if later:
+        # What they sign and send back, in their words (the slots' own names are in `yours`).
+        what = (["la procura"] if any(re.search(r"procura", x, re.I) for x in later) else []) \
+            + (["la ricevuta del pagamento"] if pay_first else [])
+        rest = [x for x in later if not re.search(r"procura|versament|ricevut|pagament", x, re.I)]
+        what += ["gli altri documenti" if what else "i documenti da firmare"] if rest else []
+        steps += (["paghi i diritti"] if pay_first else []) + [
+            f"mi mandi i file firmati ({' e '.join([', '.join(what[:-1]), what[-1]] if len(what) > 1 else what)}): "
+            "li allego io"]
+    return steps + ["firmi"] + ([] if pay_first and later else ["paghi"]) + ["invii"]
+
+
+CARD_WIDTH = 8  # section names named in the card; the rest counted
+
+
+def card(steps, values, report, made_up=False, rows=None, preview_check=True, later=None, summary=False):
+    """"Cosa succede": what this compilation is, how it fills the portal and why that way, how it
+    checks, and what stays the tecnico's, in an architect's words, from the steps file and the case
+    (so it can't promise what the runner doesn't do). One text, sent as it is before the portal
+    opens: for a Prova (made_up) it says nothing is sent. preview_check: the skill reads the portal's
+    PDF preview back and holds it to the documents (SKILL.md step 5); False for a variant without it.
+    later: what the second compilation attaches (card_later). summary: the riepilogo goes with it (a real job's
+    message), so the card leaves out what the summary says (the answers' sources, «tutte»)."""
+    rows = summary_rows(steps, values) if rows is None else rows
+    title = re.sub(r",\s*SU[AE]P? Napoli\b.*$", "", steps.get("title") or "La pratica").strip()
+    screens = {w.get("screen", ""): [x if isinstance(x, str) else x.get("leaf", "") for x in leaves(w)]
+               for w in steps.get("wizard", []) if "tree" in w}
+    pick = lambda start: next((" › ".join(v) for k, v in screens.items() if k.lower().startswith(start)), "")
+    settore, operazione = pick("scelta settore"), pick("scelta operazion")
+    sportello = filing_rules(steps)
+    detail = (sportello or {}).get("card", {})
+    lines = [f"**{title}**" + (" (prova, dati inventati)" if made_up else ""), ""]
+    lines.append("Che pratica è")
+    path = ", ".join(x for x in (f"settore «{settore}»" if settore else "", f"operazione «{operazione}»" if operazione else "") if x)
+    lines.append(f"– Si presenta {detail.get('ente', 'sul portale')} su impresainungiorno" + (f": {path}." if path else "."))
+    facts = set(re.findall(r"ask\.(\w+)", json.dumps((steps.get("rules") or {}).get("facts", {}))))
+    why = [r for r in rows if r["key"] in facts and "answer" in r]
+    if why:
+        lines.append("– Perché è questa (le risposte che la decidono):")
+        for r in why[:4]:
+            lines.append(f"   · {r['question'].rstrip('?: ')}: {r['answer'].split(':')[0][:60]}")
+        if len(why) > 4:
+            lines.append(f"   · e altre {len(why) - 4}")
+    lines += ["", "Cosa compilo"]
+    names = [card_section(s["section"]) for s in steps["sections"] if s.get("fields")]
+    lines.append(f"– {len(names)} quadri del modulo: " + "; ".join(names[:CARD_WIDTH])
+                 + (f"; e altri {len(names) - CARD_WIDTH}." if len(names) > CARD_WIDTH else "."))
+    answers = [r for r in rows if r["key"] != "allegati"]
+    with_summary = summary and not made_up
+    by = {}
+    for r in answers:
+        src = "calcolate dalle regole" if r["source"] in AUTOMATIC else \
+            f"da {r['source'].split(', ')[0]}" if r["source"] else "dal caso di prova" if made_up else "date da Lei"
+        by[src] = by.get(src, 0) + 1
+    if not with_summary:  # the summary sent after the card counts them, and has «tutte»
+        lines.append(f"– Ogni risposta ha la sua fonte ({len(answers)} in tutto: "
+                     + ", ".join(f"{n} {k}" for k, n in sorted(by.items(), key=lambda x: -x[1]))
+                     + "). Per vederle una per una, scriva «tutte».")
+    allegati = next((r for r in rows if r["key"] == "allegati"), None)
+    n_files = int(re.search(r"\((\d+)\)", allegati["question"]).group(1)) if allegati else 0
+    if n_files:
+        lines.append(f"– Allego {n_files} file " + ("di prova" if made_up else "del lavoro")
+                     + (f": {detail['files']}" if detail.get("files") and not made_up else "") + ".")
+    lines += ["", "Come controllo", "– Rileggo ogni casella sul portale e poi ricarico la bozza: ogni valore deve esserci ancora."]
+    if preview_check:
+        lines.append("– Leggo l'anteprima PDF del portale e confronto ogni dato con "
+                     + ("il caso di prova." if made_up else "i Suoi documenti.")
+                     + " Confronto anche i file allegati con i Suoi, byte per byte.")
+    lines += ["", "Cosa non faccio mai", "– Spuntare le dichiarazioni, pagare, firmare, inviare: sono Suoi."]
+    later = after_declarations(steps, values) if later is None else later
+    mine = {"firmi": "firmi" + (f" ({detail['sign']})" if detail.get("sign") else ""),
+            "paghi": "paghi" + (f" ({detail['pay']})" if detail.get("pay") else ""),
+            "paghi i diritti": "paghi i diritti" + (f" ({detail['pay']})" if detail.get("pay") else ""),
+            "invii": "invii" + (f" ({detail['send']})" if detail.get("send") else "")}
+    lines += ["", "Resta a Lei, in ordine" if not made_up else "In una pratica vera restano a Lei, in ordine"]
+    lines += [f"{i}. {mine.get(s, s)[:1].upper()}{mine.get(s, s)[1:]}" for i, s in enumerate(lei_steps(later), 1)]
+    if made_up:
+        lines += ["", "Qui non c'è nulla da inviare: finita la prova, cancelli la bozza da «Pratiche in bozza»."]
+    return "\n".join(lines)
 
 
 def with_proposals(values, report):
@@ -2008,12 +2111,18 @@ def preflight(steps, values, made_up=False, after=False, summarize=True):
             inner = report if report["ready"] else preflight(given_steps, given, made_up, after, summarize=False)
             if inner["ready"] and not report["missing"]:
                 rows = summary_rows(given_steps, given, proposed=set(held))
-                report |= {"riepilogo": summary_text(rows, end), "riepilogo_tutte": summary_all(rows), "riepilogo_id": summary_id(rows), "riepilogo_rows": rows}
+                # The card ("Cosa succede"), sent before it, already says what stays theirs: the summary keeps
+                # only the line on picking the files.
+                report |= {"riepilogo": summary_text(rows, end[:1] if report.get("pick") else []), "riepilogo_tutte": summary_all(rows), "riepilogo_id": summary_id(rows), "riepilogo_rows": rows}
             else:
                 # The details only the proposals make needed (a proposed second firm's VAT number)
                 # are asked now, with the rest, not after the «ok» in a second message.
                 known = {m["field"] for m in report["missing"]}
                 report["missing"] += [m for m in inner["missing"] if m["field"] not in known]
+    if (report["ready"] or "riepilogo_rows" in report) and not after:
+        report["card"] = card(steps, values, report, made_up, report.get("riepilogo_rows"),
+                               later=card_later(expand(given_steps, values), values, made_up),
+                               summary="riepilogo" in report)
     text = message(report, asks, held_need)
     if text:
         report["short"] = message(report, asks, held_need, short=True)
@@ -2105,6 +2214,10 @@ FILING = {
         "pdfa": True,
         "signed": True,
         "names": True,
+        # Short forms of the steps below, for the card ("Cosa succede"): what a tecnico sees at a glance.
+        "card": {"ente": "al SUE di Napoli", "files": "PDF/A, firmati digitalmente, nomi senza spazi né accenti (DD 501/2026)",
+                 "pay": "solo sul c/c postale 57060964", "sign": "prima il PDF della pratica, poi la distinta",
+                 "send": "codice pratica a video, ricevuta in PEC"},
         "yours": [
             "Il SUE di Napoli accetta solo file PDF/A, firmati digitalmente, sotto i 20 MB (immagini entro "
             "200 DPI), con nomi senza spazi, accenti o segni (Tavola01_inquadramento). Altrimenti la pratica è "
@@ -2863,7 +2976,7 @@ def run(steps, values, out, cdp=None, profile=None, close=False, resume=None, wh
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("command", choices=["preflight", "confirm", "plan", "page", "run", "scope"])
+    ap.add_argument("command", choices=["preflight", "card", "confirm", "plan", "page", "run", "scope"])
     ap.add_argument("--steps", required=True, type=Path)
     ap.add_argument("--answers", type=Path, help="the asks' answers as JSON (none yet: preflight lists them all)")
     src = ap.add_mutually_exclusive_group()
@@ -2878,6 +2991,8 @@ def main():
     ap.add_argument("--profile", type=Path, default=Path.home() / ".cache/pratica-portal/profile")
     ap.add_argument("--close", action="store_true")
     ap.add_argument("--plain", action="store_true", help="page: run.js carries the values in the clear, through the conversation")
+    ap.add_argument("--no-preview-check", action="store_true", help="card: the skill won't read the PDF preview back "
+                    "(a variant without that step), so the card doesn't say it will")
     ap.add_argument("--made-up", action="store_true", help="made-up files, never sent: preflight takes the sportello's "
                     "refusals as warnings, and no slot that takes only signed files is filled")
     ap.add_argument("--after-declarations", action="store_true", help="the second run, once the person has ticked the "
@@ -2939,6 +3054,16 @@ def main():
                                a.after_declarations)
             print(json.dumps(report, indent=2, ensure_ascii=False))
             return 0 if report["ready"] else 3
+        if a.command == "card":
+            # "Cosa succede", as pre-flight makes it, as text: sent as it is before the portal opens.
+            report = preflight(steps, values, a.made_up)
+            if "card" not in report:
+                print("stopped: pre-flight isn't ready, so there is no card yet (run preflight)", file=sys.stderr)
+                return 3
+            print(report["card"] if not a.no_preview_check else
+                  card(expand(steps, values), values, report, a.made_up, report.get("riepilogo_rows"), preview_check=False,
+                       later=card_later(expand(steps, values), values, a.made_up)))
+            return 0
         if a.command == "confirm":
             # The tecnico's «sì» to the one message: the proposals it showed go into answers.json,
             # only while the summary is still the one they read.

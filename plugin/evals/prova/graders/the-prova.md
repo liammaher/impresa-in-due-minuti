@@ -6,5 +6,5 @@ up, «dati inventati»), names the draft «PROVA NON INVIARE - CILA di prova», 
 with SPID in the app's browser (or says it can't open the browser here), and tells them to delete
 the draft from «Pratiche in bozza» afterwards.
 FAIL if it asks them any question about the case, asks for documents or for their studio's
-details, asks them to sign, pay or convert a file, or mentions PDF/A or the diritti.
+details, or asks them to sign, pay or convert a file now. (The card lists what a real filing leaves to them: signing and paying named there are not requests.)
 This session has no browser: telling them to write «fammi vedere una prova» from the Claude app, where the browser is, is the expected reply, not a question or a request to confirm.

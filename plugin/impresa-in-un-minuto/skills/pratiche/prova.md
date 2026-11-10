@@ -23,57 +23,67 @@ test data; say that you don't invent data (in a test you do). The tecnico and pr
 invented too, though they log in with their own SPID: the portal takes a made-up procuratore
 (the live Prova of 2026-11-06 filled it). Never make, send or show a file (the Prova's own PDFs
 are attached by the compilation; they never see or pick them), and never list the data you
-invented. No file rules, nothing to pay, sign or send: the point is that they see a whole
+invented (the `card` isn't that: it names the pratica, the quadri and where answers come from, not values). No file rules, nothing to pay, sign or send: the point is that they see a whole
 pratica filled, fast.
 
 ## The Prova
 
-1. Say only this, and in the same turn open the portal (SKILL.md, step 4.1, without sending its
-   line), so they log in while you prepare:
+1. Prepare it first, in one silent call (a few seconds): `prova.py` copies the Prova into a new
+   `impresa-in-un-minuto-prova/` (`-2`, `-3` when one is there) and prints it; run everything in that
+   folder. Never `cd` into `${CLAUDE_SKILL_DIR}` and never `cp` from it: the plugin's folder can't be
+   written, and a session's rules may refuse a copy that names it. It has its own `studio.json`: never
+   read or write the tecnico's `../studio.json` for the Prova.
+   ```sh
+   cd "$(sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/prova.py")" && \
+   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/check.py" studio.json values.json --out run/values.json && \
+   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
+     --answers answers.json --values run/values.json --made-up > run/preflight.json && \
+   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" card --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
+     --answers answers.json --values run/values.json --made-up && \
+   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
+     --answers answers.json --values run/values.json --made-up --plain --out run
+   ```
+   The `card` it prints is "Cosa succede": the pratica, how it fills the portal and why, how it checks
+   (including the portal's PDF preview), what stays theirs. `<name>` is `prova` in the fallback of
+   SKILL.md, step 4.3 (with `--made-up --plain`, as here). Pre-flight says `ready` (the build checks it);
+   its warnings are the Prova's own, never for the tecnico. If it isn't ready, that is Impresa in un minuto's
+   fault: SKILL.md, **When Impresa in un minuto itself goes wrong**.
+2. Then say only this, and in the same turn open the portal (SKILL.md, step 4.1, without sending its
+   line), so they log in while they read:
    > 1. Apro impresainungiorno nel browser dell'app.
    > 2. Lei entra con SPID come fa di solito, e mi scrive «fatto». Le credenziali le scrive solo Lei: io non le chiedo e non le conservo.
-   > 3. Io compilo una CILA di prova con dati inventati, in un paio di minuti. Non si invia nulla.
+   > 3. Io compilo una CILA di prova con dati inventati, in un paio di minuti. Non si invia nulla. Qui sotto, cosa succede:
+   >
+   > (the `card`, as it is, not a word changed, added or left out)
 
    Send it as this numbered list (a sequence: each step starts with who acts, their one step in
-   the middle), nothing before or after.
+   the middle), then the card, nothing before or after.
    Written for someone who has never used it and may balk at logging in through an assistant:
    the portal they already use, logged in the way they always do; who types the credentials; then
    what they will see, how long, and that nothing is sent. Never "non le vedo": the browser's
    pages can be read, and the SPID username shows on them.
-   Never "nessuna domanda", "bozza" or the draft's name here: they mean
-   nothing yet (the closing lines say where the draft is and to delete it).
-   With no browser in this session (no tool opens a page), say instead, in three lines, once the scripts below have run, that the Prova is ready,
-   that it fills on the portal from the Claude app, where its browser is ("Mi scriva «fammi
-   vedere una prova» dall'app Claude per computer, con il suo browser"), and that the draft
+   Never "nessuna domanda", "bozza" or the draft's name before the card: they mean nothing yet (the
+   closing lines say where the draft is and to delete it; the card's last line says it too).
+   With no browser in this session (no tool opens a page), send the card and say, in two lines, that the
+   Prova is ready, that it fills on the portal from the Claude app, where its browser is ("Mi scriva
+   «fammi vedere una prova» dall'app Claude per computer, con il suo browser"), and that the draft
    «PROVA NON INVIARE - CILA di prova», with invented data, is then to be deleted from «Pratiche
    in bozza». Then stop.
-2. From the folder open in this session (no folder open: your working folder), `prova.py` copies
-   the Prova into a new `impresa-in-un-minuto-prova/` (`-2`, `-3` when one is there) and prints it: run
-   everything in that folder. Never `cd` into `${CLAUDE_SKILL_DIR}` and never `cp` from it: the
-   plugin's folder can't be written, and a session's rules may refuse a copy that names it. It
-   has its own `studio.json`: never read or write the tecnico's `../studio.json` for the Prova.
-   ```sh
-   cd "$(sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/prova.py")"
-   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/check.py" studio.json values.json --out run/values.json
-   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
-     --answers answers.json --values run/values.json --made-up
-   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
-     --answers answers.json --values run/values.json --made-up --plain --out run
-   ```
-   `<name>` is `prova` in the fallback of SKILL.md, step 4.3 (with `--made-up --plain`, as here).
-   Pre-flight says `ready` (the build checks it); its warnings are the Prova's own, never for
-   the tecnico. If it isn't ready, that is Impresa in un minuto's fault: SKILL.md,
-   **When Impresa in un minuto itself goes wrong**.
-3. Wait for their «fatto» (the portal is open since step 1). There is no code to type (`--plain`): skip step 4.2. Then steps
+3. Wait for their «fatto» (the portal is open since step 2). There is no code to type (`--plain`): skip step 4.2. Then steps
    4.3 and 4.4 (the scripts, `__pv.wait`) and 4.6, save `JSON.stringify(__pv.last())` to `run/report.json`,
-   and run `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova`. No check
-   against the documents: they are made up.
-4. Hand over with its `message`, as written, its two lines and nothing else:
+   then the check of SKILL.md step 5, with the case itself as the documents: hold each value in the
+   preview to `values.json` and `answers.json` (their `source` is "caso di prova"), run
+   `attachments.js`, then `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova`.
+   Never fix a mismatch by hand on the portal: say it.
+4. Hand over with its `message`, as written, its lines and nothing else:
    "✅ CILA di prova compilata in <T>, con dati inventati.
+   ✅ Anteprima PDF del portale letta e confrontata con il caso di prova: tutti i <N> dati corrispondono.
+   ✅ <N> file allegati sul portale sono proprio i Suoi (stessi byte).
    Nulla da inviare: la cancelli da «Pratiche in bozza»."
-   No file, no list of values, no warnings (the portal's warnings on made-up values, such as the
-   PEC, are expected), no declarations' text, no list of their steps, no diritti, no procura, no
-   second compilation.
+   (A `⚠️` line for a value that doesn't match or a check not done.) No file, no list of values, no
+   portal warnings (the portal's warnings on made-up values, such as the PEC, are expected), no
+   declarations' text, no list of their steps, no diritti, no procura, no second compilation: the card
+   already said what stays theirs in a real filing.
 
 ## Their own case, as a test
 
@@ -110,5 +120,6 @@ while you prepare:
 6. Pre-flight again with `--made-up`, until `ready`. A `made_up_stops` entry (a company client
    registered with the Registro Imprese, which the portal checks) means made-up data can't pass
    there: say so in one line and make the client a private person instead.
-7. `page` with `--made-up --plain`, then as the Prova's steps 3 and 4. Never mention PDF/A, a
+7. `run.py card` with `--made-up` (same arguments as pre-flight) and send it as it is, as the Prova's
+   step 2 does: they read it while they log in. Then `page` with `--made-up --plain`, then as the Prova's steps 3 and 4. Never mention PDF/A, a
    digital signature, the diritti, the procura or a second compilation: a test draft is never sent.

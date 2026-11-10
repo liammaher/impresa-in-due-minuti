@@ -10,6 +10,10 @@ Two closing lines are expected and are not requests for files the folder holds: 
 picks the job's files once at the start of the compilation (the portal's page can't receive them
 otherwise), and that after the declarations they give the signed files the portal makes only then
 (the procura), for a second compilation.
+The reply may carry, between what it understood and the summary, the card «Cosa succede» (parts «Che pratica è»,
+«Cosa compilo», «Come controllo», «Cosa non faccio mai» and the numbered steps that stay to the tecnico, with
+the sportello's file rules in «Cosa compilo»): it is generated, it is not a list of every answer and it is not a
+request. A reply without it fails.
 PASS if the final reply is in Italian, addresses the tecnico as Lei, opens with whether the pratica
 is covered by the automation, says in a few sentences what it understood (naming the documents
 and the tecnico's note it comes from) and that it proposes a CILA, then a short summary: under

@@ -8,7 +8,7 @@ OUT is the folder run.py page wrote, with the pane's `__pv.last()` saved there a
 private/shown.json adds the pratica's title and what comes after: the second compilation, what is
 filed apart), or the one run.py run or fill.py run wrote. For a portal draft it prints JSON:
 {"result", "message", "warnings", "steps", "yours"}; `message` is what Claude says, as written: did it
-work, what the tecnico must check, what is left to them. --prova: made-up data, two lines. It
+work, what the tecnico must check, what is left to them. --prova: made-up data, a line, the check's ✅ and a line. It
 reads two more files of a real job:
 
 - OUT/check.json, Claude's check of the portal's own preview (portal/preview_text.js) against
@@ -151,6 +151,36 @@ def stray_files(out, job):
             for x in files if x.get("sha256") not in local]
 
 
+def verified(out, job, prova=False):
+    """The ✅ lines of the check against the documents: what the preview read held equal (OUT/check.json),
+    and the attached files that are the job's own (OUT/portal-files.json). [] when it wasn't done:
+    `unchecked` says so, never silence."""
+    lines = []
+    f = out / "check.json" if out else None
+    if f and f.exists():
+        rows = json.loads(f.read_text()).get("rows", [])
+        ok = sum(1 for r in rows if r.get("ok"))
+        if rows:
+            source = "con il caso di prova" if prova else "con i Suoi documenti"
+            lines.append(f"✅ Anteprima PDF del portale letta e confrontata {source}: "
+                         + ("un dato corrisponde." if len(rows) == 1 and ok else f"tutti i {ok} dati corrispondono." if ok == len(rows) else f"{ok} dati su {len(rows)} corrispondono."))
+    g = out / "portal-files.json" if out else None
+    if g and g.exists():
+        n = len(json.loads(g.read_text()).get("files", []))
+        stray = len(stray_files(out, job))
+        if n and n > stray:
+            m = n - stray
+            lines.append(f"✅ {m} file allegat{'o' if m == 1 else 'i'} sul portale {'è' if m == 1 else 'sono'} proprio "
+                         f"{'il Suo' if m == 1 else 'i Suoi'} (stessi byte).")
+    return lines
+
+
+def unchecked(out):
+    """Why there is no ✅ for the preview: the check was not done or the preview couldn't be read."""
+    f = out / "check.json" if out else None
+    return [] if f and f.exists() else ["Il confronto con l'anteprima del portale non è stato fatto: la legga Lei prima di firmare."]
+
+
 def section(name):
     """A section's name as a sentence: the portal writes some in capitals ("DOMICILIO ELETTRONICO")."""
     name = name or ""
@@ -184,9 +214,13 @@ def summary(report, out=None, job=None, prova=False):
     name = pratica_name(report)
     done = "compilato" if MASCULINE.match(name) else "compilata"
     if prova:
-        return {"result": "filled", "warnings": [], "steps": [],
-                "message": f"✅ {name} di prova {done} in {duration(report.get('total_seconds'))}, con dati inventati.\n"
-                           "Nulla da inviare: la cancelli da «Pratiche in bozza»."}
+        # The portal's own warnings on made-up values (the PEC) are expected; a value that doesn't match
+        # the case, or a file that isn't the Prova's, is not.
+        warns = mismatches(out) + stray_files(out, job) + unchecked(out)
+        lines = [f"✅ {name} di prova {done} in {duration(report.get('total_seconds'))}, con dati inventati."]
+        lines += verified(out, job, prova=True) + [f"⚠️ {w}" for w in warns]
+        lines.append("Nulla da inviare: la cancelli da «Pratiche in bozza».")
+        return {"result": "filled", "warnings": warns, "steps": [], "message": "\n".join(lines)}
     # One line for each warning in a section, by the section alone: the portal shows it beside the
     # box, and its labels read badly out of the page ("se non presente indicare il numero 0"). On
     # made-up data the catasto's comes four times, one for each box of the parcel (2026-11-07).
@@ -227,7 +261,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("out", type=Path)
     ap.add_argument("--route", type=Path)
-    ap.add_argument("--prova", action="store_true", help="the skill's Prova: made-up data, no check against documents")
+    ap.add_argument("--prova", action="store_true", help="the skill's Prova: made-up data, two lines and the check's ✅")
     ap.add_argument("--job", type=Path, help="the job's folder, whose files the portal's are matched to "
                     "(default: OUT's parent)")
     a = ap.parse_args()

@@ -249,6 +249,33 @@ def copy_library(library, skill, catalog, desks):
             shutil.copy2(src, dst)
 
 
+# The runner files the plugin ships unchanged, plugin path (under skills/pratiche) -> the repo file.
+# Tests of the plugin run these and nothing else (plugin/live.py): the build refuses a copy that differs.
+RUNNER_FILES = {f"portal/{n}": PRATICA / "portal" / n
+                for n in ("run.py", "rules.py", "route.py", "inpage.js", "preview_text.js", "attachments.js")}
+RUNNER_FILES |= {"review.py": PRATICA / "review.py", "fill/fill.py": PRATICA / "fill" / "fill.py",
+                 "intake/intake.py": PRATICA / "intake" / "intake.py"}
+
+
+def sha256_file(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def sources_digest():
+    """One hash of everything a build is made from: the runner files, the hand-written plugin, the
+    steps lock and build.yaml. plugin/live.py rebuilds when it differs from dist/build.json's."""
+    parts = {f"runner/{k}": sha256_file(v) for k, v in sorted(RUNNER_FILES.items())}
+    for f in sorted((HERE / "impresa-in-un-minuto").rglob("*")):
+        if f.is_file() and ".DS_Store" not in f.parts and "__pycache__" not in f.parts:
+            parts[f"plugin/{f.relative_to(HERE / 'impresa-in-un-minuto')}"] = sha256_file(f)
+    for f in sorted((HERE / "evals").rglob("*")):  # a build with --evals carries them
+        if f.is_file() and ".DS_Store" not in f.parts and "results" not in f.parts:
+            parts[f"evals/{f.relative_to(HERE / 'evals')}"] = sha256_file(f)
+    for f in (REHEARSALS / "steps.lock", HERE / "build.yaml"):
+        parts[f.name] = sha256_file(f)
+    return hashlib.sha256(json.dumps(parts, sort_keys=True).encode()).hexdigest()
+
+
 def copy_runner(skill, desks):
     portal = skill / "portal"
     portal.mkdir(parents=True)
@@ -273,6 +300,11 @@ def copy_runner(skill, desks):
     shutil.copy2(PRATICA / "review.py", skill / "review.py")
     (skill / "reference").mkdir()
     shutil.copy2(REPO / "schema.json", skill / "reference" / "schema.json")
+
+
+def git_head():
+    r = subprocess.run(["git", "-C", str(REPO), "rev-parse", "HEAD"], capture_output=True, text=True)
+    return r.stdout.strip() if r.returncode == 0 else None
 
 
 def copy_pratiche(skill, library, desks):
@@ -403,9 +435,13 @@ def make_pdf(path, size):
 
 def self_check(plugin):
     """The test case through check.py and pre-flight, run as the skill runs them: through its
-    py launcher (sh py), which picks this computer's python3."""
+    py launcher (sh py), which picks this computer's python3. And the plugin is the repo's runner:
+    every runner file byte for byte, and the Prova's card the same text from both."""
     skill = plugin / "skills" / "pratiche"
     py = ["sh", str(skill / "py")]
+    for rel, src in sorted(RUNNER_FILES.items()):
+        if sha256_file(skill / rel) != sha256_file(src):
+            sys.exit(f"{rel}: the plugin's copy differs from {src.relative_to(REPO)}")
     with tempfile.TemporaryDirectory() as tmp:
         # The Prova as prova.md starts it: prova.py copies it out of the plugin's folder.
         r = subprocess.run([*py, skill / "prova.py"], cwd=tmp, capture_output=True, text=True)
@@ -422,6 +458,18 @@ def self_check(plugin):
                             "--values", values, "--made-up"], cwd=case, capture_output=True, text=True)
         if r.returncode:
             sys.exit(f"pre-flight of the test case isn't ready:\n{r.stdout}{r.stderr}")
+        # The card the Prova shows, from the plugin under python3 and from the repo's runner: the same
+        # text, so what a test shows is what the tecnico reads.
+        card = ["card", "--steps", skill / "pratiche" / f"{TEST_CASE}.json", "--answers", "answers.json",
+                "--values", values, "--made-up"]
+        ours = subprocess.run([*py, skill / "portal" / "run.py", *card], cwd=case, capture_output=True, text=True)
+        theirs = subprocess.run([sys.executable, PRATICA / "portal" / "run.py", *card[:2], steps_file(REHEARSALS / TEST_CASE),
+                                 *card[3:]], cwd=case, capture_output=True, text=True)
+        if ours.returncode or "Cosa compilo" not in ours.stdout or "Resta a Lei" not in ours.stdout \
+                and "restano a Lei" not in ours.stdout:
+            sys.exit(f"the Prova's card isn't made:\n{ours.stdout}{ours.stderr}")
+        if (ours.returncode, ours.stdout) != (theirs.returncode, theirs.stdout):
+            sys.exit("the Prova's card differs between the plugin and the repo's runner")
         # A first pratica in a new folder of jobs, as the skill starts it: studio.json holds only
         # the tecnico's role, and pre-flight must then list the tecnico's details to ask for.
         first = Path(tmp) / "first"
@@ -574,6 +622,8 @@ def main():
     if not re.fullmatch(r"[a-z0-9-]+", manifest["name"]):
         sys.exit(f"plugin name {manifest['name']!r} isn't kebab-case")
     check_private(plugin, private_terms())
+    (a.out / "build.json").write_text(json.dumps({"sources": sources_digest(), "version": manifest["version"],
+                                                  "git": git_head(), "evals": a.evals}, indent=1) + "\n")
     zipped = a.out / f"{manifest['name']}.plugin"
     with zipfile.ZipFile(zipped, "w", zipfile.ZIP_DEFLATED) as z:
         for f in sorted(plugin.rglob("*")):

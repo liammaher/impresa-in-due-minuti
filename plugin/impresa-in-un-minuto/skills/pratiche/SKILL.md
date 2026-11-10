@@ -449,7 +449,10 @@ only Impresa in un minuto proposes; then the rest counted by where it comes from
 their note, the rules), the files, and «tutte» to see every answer; then the closing lines and
 «Scriva «sì» e apro il portale». The one message is points 1-3 above (the verdict, what you
 understood, the pratica), at most one line for each document that can't be read or disagrees
-with an answer (point 4), then `riepilogo` **as it is**. No clickable question, no checklist,
+with an answer (point 4), then pre-flight's `card` ("Cosa succede": the pratica, how it fills the
+portal and why, how it checks, what stays theirs) **as it is**, a blank line, and `riepilogo`
+**as it is**. The card is generated from the steps file: never shorten it, add to it or word it
+yourself. No clickable question, no checklist,
 nothing else: nothing opens before their reply.
 - «tutte»: `riepilogo_tutte` as it is (every answer, a line each with its source). Their «sì»
   after it confirms the same answers.
@@ -560,7 +563,14 @@ step 3 says how. Never send them a file, never ask them to download or save one,
 
 1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser:
    "Acceda con SPID nella finestra del browser; quando vede la pagina del portale mi scriva
-   «fatto»." Wait until the page is the portal's own, past the login.
+   «fatto»." Wait until the page is the portal's own, past the login. Send this line after the
+   `card` when the tecnico hasn't read it yet in this job (they answered questions and no
+   `riepilogo` came): `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" card --steps
+   "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json --values run/values.json
+   --values run/intake/private/values.json` prints it, to send as it is, so they read it while they log in.
+<!-- vault -->
+   (With the archive's compilation there is no check against the preview: add `--no-preview-check`.)
+<!-- /vault -->
 <!-- vault -->
 2. `page` opened a small window with a code on their screen. You never see it: never ask for
    it or look for it. Say: "Sullo schermo c'è una finestra con un codice. Tra poco sul portale
