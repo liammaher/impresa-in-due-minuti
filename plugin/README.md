@@ -51,8 +51,10 @@ it writes `impresa-in-un-minuto-test-results.md` to bring back), for whoever run
 **Trying it as a tecnico does.** `plugin/live.py` builds the plugin when `plugin/dist` is stale (`dist/build.json`
 holds a digest of its sources) and says what to load; a test of how the plugin behaves (the Prova, a demo, a wording
 change) runs through that build, in the app's browser pane, never through the repo's scripts. The build refuses a copy
-of a runner file that differs from the repo's, and a Prova card (`run.py card`, "Cosa succede": the pratica, how it
-fills the portal and why, how it checks, what stays theirs) that differs from the repo runner's.
+of a runner file that differs from the repo's, and a Prova card (`run.py card`, "Cosa succede": three lines, the pratica and why,
+what Claude does, what the tecnico does) that differs from the repo runner's. The Prova itself sends the tecnico
+five lines before the login, one while it fills and review.py's closing lines (with the split of who does what and
+«dettagli») at the end; the card goes with a real job's summary.
 
 Rebuild after a change to the runner, a steps file, the dictionary or the library, and bump
 `version` in `impresa-in-un-minuto/.claude-plugin/plugin.json`. The generated steps files are built here from

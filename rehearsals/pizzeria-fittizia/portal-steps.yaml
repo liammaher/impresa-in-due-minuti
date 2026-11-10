@@ -13,11 +13,11 @@ procedure: napoli/comune/scia-somministrazione-alimenti-bevande
 title: "SCIA: apertura di un bar o ristorante (somministrazione) con notifica sanitaria, SUAP Napoli"
 # The person's own steps once the draft is saved (portal-map.yaml, the taps): the review lists them.
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti Lei le sette dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
-  - "Paghi con pagoPA, nella schermata del pagamento, i diritti di segreteria ({{ask.diritti_euro}} €) e la tariffa forfettaria ASL"
-  - "Alleghi, firmate digitalmente (.p7m): la planimetria quotata del locale e la ricevuta della tariffa ASL"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le sette dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga con pagoPA, nella schermata del pagamento, i diritti di segreteria ({{ask.diritti_euro}} €) e la tariffa forfettaria ASL"
+  - "Allega, firmate digitalmente (.p7m): la planimetria quotata del locale e la ricevuta della tariffa ASL"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 # Every {{ask.x}} the run needs, asked in one message before the portal opens
 # (`run.py preflight` lists the ones answers.json lacks; one with a default isn't asked,
 # and one no field of this case reads isn't either). The yes/no ones are items of one
@@ -26,7 +26,7 @@ yours:
 # reads come first: their answers can end the pratica before it starts.
 groups:
   extras:
-    question: "Quali di queste cose valgono per l'attività? Spunti quelle vere, anche nessuna."
+    question: "Quali di queste cose valgono per l'attività? Spunta quelle vere, anche nessuna."
 
 asks:
   zona_tutelata:
@@ -48,7 +48,7 @@ asks:
   insegna_esterna:
     group: extras
     type: yes_no
-    item: "Avrà un'insegna esterna"
+    item: "Avrai un'insegna esterna"
     why: "Un'insegna esterna aggiunge la SCIA dell'insegna: un caso che non preparo ancora."
   centro_commerciale:
     group: extras

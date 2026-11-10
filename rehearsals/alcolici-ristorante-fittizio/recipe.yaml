@@ -22,21 +22,21 @@ wizard:
   - {screen: Scelte eventuali, confirm: CONFERMA}
 groups:
   extras:
-    question: "Qualcuna di queste voci vale per l'attività? Spunti tutte quelle che valgono, o nessuna."
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
 asks:
   altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "alcolici {{business.denominazione}}"}
-  diritti_euro: {type: number, question: "I diritti SUAP in euro (voce del tariffario 2026 per la sola comunicazione alle Dogane: verifichi; 0 se non dovuti)"}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (voce del tariffario 2026 per la sola comunicazione alle Dogane: verifica; 0 se non dovuti)"}
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti Lei le dichiarazioni: nessuna condanna per produzione illecita di alcolici, e avvio solo dopo la presentazione dell'avviso; poi consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Paghi i diritti di segreteria, se dovuti, con pagoPA nella schermata di pagamento"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: nessuna condanna per produzione illecita di alcolici, e avvio solo dopo la presentazione dell'avviso; poi consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria, se dovuti, con pagoPA nella schermata di pagamento"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 supports:
   - value: "{{business.forma_giuridica}}"
     in: [ditta_individuale, srl, srls, snc, sas, spa]
     else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
   - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
   - {when: "{{ask.alcol_con_scia|not}}", else: "Gli alcolici insieme alla SCIA di una nuova attività si dichiarano all'interno dell'apertura (una scelta della procedura guidata che non preparo ancora), non con questa comunicazione."}
-  - {when: "{{ask.titolo_attivita_tipo|is_dia|not}}", else: "L'elenco dei titoli del portale qui non comprende la DIA: indichi quale sia, autorizzazione, comunicazione o SCIA."}
+  - {when: "{{ask.titolo_attivita_tipo|is_dia|not}}", else: "L'elenco dei titoli del portale qui non comprende la DIA: indica quale sia, autorizzazione, comunicazione o SCIA."}

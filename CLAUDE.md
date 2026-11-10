@@ -492,7 +492,18 @@ says what to load; then the skill runs in a fresh session, in the app's browser 
 («fammi vedere una prova»). `run.py`, `rerun.py`, a Playwright window and the CILA fixture are the same engine in
 another wrapper: they are for developing the runner. The build refuses a plugin whose runner files differ from the
 repo's (`build.RUNNER_FILES`) or whose Prova card (`run.py card`, "Cosa succede") differs from the repo runner's;
-`bench/test_card.py` holds the card to review.py's closing lines for every rehearsal.
+`bench/test_card.py` holds the card (three lines: the pratica and why, what Claude does, what the tecnico does) to
+review.py's closing lines for every rehearsal.
+
+**The tecnico is addressed as tu, never Lei**, in everything they read: the skills, the plugin's README, the
+runner's messages and refusals, the steps files (so their sources: recipes, `defects.yaml`, the dictionary, the
+rules tables and, for the library's own rules tables, pratiche-napoli's). Verb forms change with the pronoun
+(«scrivimi», «controlla», «allegala»), and a formal imperative that is also the tu present («firmi», «paghi») is
+told by its capital at the start of a sentence or by a clitic. `bench/test_voice.py` reads all of it for the
+formal forms and fails on one; a quotation from the law or the portal keeps its own words. **One message per
+moment**: the Prova says five lines before the login, one while it fills, and the closing lines at the end
+(`prova.md`); what only a real filing needs (the c/c, the signing order, the PEC receipt) comes with the step it
+belongs to in the closing lines, never in the card or the Prova.
 
 Tests use temp directories and run with `-race`. `internal/vault` and `internal/api` call
 `crypto.UseFastKDFForTests` in `TestMain` (cheap Argon2id; it panics outside a test binary).
@@ -520,7 +531,7 @@ route.py on every case the SUE table decides (it prints the combinations not map
 that every rehearsal's pre-flight is ready after one message (a proposal reading another answer of the same
 message comes with it: `assumes`, `cases`, `otherwise`; what a proposal holds back is `if_changed`, asked only
 if it is changed), `bench/test_one_yes.py` that a complete real folder (the P6 dossier, its files
-signed PDF/A, the tecnico's note) asks nothing but its short summary (`riepilogo`; every answer in `riepilogo_tutte`, each with its
+signed PDF/A, the tecnico's note) asks nothing but its short summary (`riepilogo`; every answer in `riepilogo_dettagli`, each with its
 source, answers.json `fonti`) and that `run.py confirm` makes it ready, `bench/test_message.py` that one message (pre-flight's `message`, which the skill sends as
 it is) holds every question, proposal and missing detail and no field id,
 `bench/test_pairs.py` the wizard's pairs against `catalogue/F839/sue-pairs.yaml` (filed together or

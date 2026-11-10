@@ -27,16 +27,16 @@ asks:
     default: '100'
     why: "Voce SUE 14 del tariffario 2026 dei diritti del Comune: 100 € per una CIL."
 yours:
-- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-- "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella; il bollo prima dell'invio"
+- "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+- "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "Paga i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella; il bollo prima dell'invio"
 - 'I lavori iniziano solo quando il SUE comunica che l''autorizzazione paesaggistica è stata acquisita: la data di inizio è la prima possibile'
-- "Se è dovuta la notifica preliminare (art. 99 D.Lgs. 81/2008): la alleghi negli Allegati liberi, firmata digitalmente (solo .p7m): la CIL non ha uno spazio apposito"
-- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
-- "Firmi e invii (Firma e invio); conservi la ricevuta"
+- "Se è dovuta la notifica preliminare (art. 99 D.Lgs. 81/2008): allegala negli Allegati liberi, firmata digitalmente (solo .p7m): la CIL non ha uno spazio apposito"
+- "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
+- "Firma e invia (Firma e invio); conserva la ricevuta"
 rules:
   table: sue-napoli
-  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
   facts:
     permesso_per_scelta: 'false'
     parere_esonero: 'false'
@@ -48,4 +48,4 @@ answers:
   paesaggio: rinnovo
 groups:
   fatti:
-    question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+    question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.

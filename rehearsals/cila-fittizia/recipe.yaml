@@ -38,28 +38,28 @@ asks:
   bene_culturale: {group: fatti, item: "L'edificio è un bene culturale tutelato dalla Parte II del D.Lgs. 42/2004 (vincolo storico-artistico)?"}
   descrizione: {default: "CILA {{c:identity.last_name}}"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "Paghi i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (come, è indicato sotto): la ricevuta firmata va allegata lì. La sanzione della CILA tardiva si paga prima della prima compilazione: la sua ricevuta è nel quadro d)"
-  - "Per la DSC della CILA può usare quella che compila Claude (un riquadro per ogni documento caricato) invece di quella del portale: firmata e in PDF/A, va nella seconda compilazione"
-  - "Se è un bene culturale: i lavori iniziano solo dopo l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004). È allegata in Allegati liberi: la conservi con la pratica"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC (domicilio elettronico), c) PER PRESA VISIONE, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di {{ask.diritti_euro}} € prima della seconda compilazione (come, è indicato sotto): la ricevuta firmata va allegata lì. La sanzione della CILA tardiva si paga prima della prima compilazione: la sua ricevuta è nel quadro d)"
+  - "Per la DSC della CILA puoi usare quella che compila Claude (un riquadro per ogni documento caricato) invece di quella del portale: firmata e in PDF/A, va nella seconda compilazione"
+  - "Se è un bene culturale: i lavori iniziano solo dopo l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004). È allegata in Allegati liberi: conservala con la pratica"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
 rules:
   table: sue-napoli
-  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {sanatoria: "{{ask.cila_stato|in_in_corso__realizzato}}", permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
   # A firm still to be chosen: the CILA's quadro h) has no line for it, and the portal requires the
   # firm's details whatever its site-safety quadro says (a CILA case stopped on them, 2026-11-01).
-  - {if: "{{ask.lavori_in_proprio|not}}", value: "{{ask.impresa_dopo}}", in: ["false"], defect: cila-impresa-dopo, else: "La CILA indica la sua impresa esecutrice: il suo quadro h) non prevede un'impresa ancora da scegliere, e il portale richiede i dati dell'impresa (verificato il 01/11/2026). Presenti la CILA una volta scelta l'impresa."}
+  - {if: "{{ask.lavori_in_proprio|not}}", value: "{{ask.impresa_dopo}}", in: ["false"], defect: cila-impresa-dopo, else: "La CILA indica la sua impresa esecutrice: il suo quadro h) non prevede un'impresa ancora da scegliere, e il portale richiede i dati dell'impresa (verificato il 01/11/2026). Presenta la CILA una volta scelta l'impresa."}
   # A bene culturale: the Soprintendenza's authorization first, obtained apart (rules:
   # soprintendenza-cila-*), then attached under Allegati liberi. The relazione's assents list is
   # for assents the SUE is still to acquire (art. 23-bis), so one already obtained isn't listed.
-  - {if: "{{ask.intervento|in_manutenzione_straordinaria__restauro}} {{ask.cila_stato|is_da_iniziare}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "Su un bene culturale serve prima l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004), e il SUE non la chiede con questa pratica. La chieda alla Soprintendenza ABAP di Napoli (PEC sabap-na@pec.cultura.gov.it, bollo da 16 €, fino a 120 giorni), poi presenti questa pratica."}
+  - {if: "{{ask.intervento|in_manutenzione_straordinaria__restauro}} {{ask.cila_stato|is_da_iniziare}} {{ask.bene_culturale}}", value: "{{ask.soprintendenza_autorizzata}}", in: ["true"], else: "Su un bene culturale serve prima l'autorizzazione della Soprintendenza (art. 21 c. 4 D.Lgs. 42/2004), e il SUE non la chiede con questa pratica. La chiedi alla Soprintendenza ABAP di Napoli (PEC sabap-na@pec.cultura.gov.it, bollo da 16 €, fino a 120 giorni), poi presenta questa pratica."}
   # Assents the SUE acquires (art. 23-bis c. 2-3 DPR 380/2001): the works start only once it says
   # they are in, so quadro d) gives no start date.
-  - {if: "{{ask.cila_stato|is_da_iniziare}} {{ask.atti_da_acquisire}}", value: "{{ask.inizio_dopo_assensi}}", in: ["true"], else: "Con assensi che il SUE deve acquisire, i lavori iniziano solo quando il SUE comunica che sono stati acquisiti (art. 23-bis c. 2 DPR 380/2001): risponda che i lavori iniziano dopo la sua comunicazione, non a una data."}
+  - {if: "{{ask.cila_stato|is_da_iniziare}} {{ask.atti_da_acquisire}}", value: "{{ask.inizio_dopo_assensi}}", in: ["true"], else: "Con assensi che il SUE deve acquisire, i lavori iniziano solo quando il SUE comunica che sono stati acquisiti (art. 23-bis c. 2 DPR 380/2001): rispondi che i lavori iniziano dopo la sua comunicazione, non a una data."}
   # Works under way or done can't wait for an assent: one still missing makes them unlawful.
-  - {if: "{{ask.cila_stato|is_da_iniziare|not}}", value: "{{ask.atti_da_acquisire}}", in: ["false"], else: "I lavori già in corso o eseguiti non possono avere assensi ancora da acquisire (art. 23-bis c. 2 DPR 380/2001: i lavori iniziano solo una volta acquisiti): chieda al SUE come regolarizzarli."}
+  - {if: "{{ask.cila_stato|is_da_iniziare|not}}", value: "{{ask.atti_da_acquisire}}", in: ["false"], else: "I lavori già in corso o eseguiti non possono avere assensi ancora da acquisire (art. 23-bis c. 2 DPR 380/2001: i lavori iniziano solo una volta acquisiti): chiedi al SUE come regolarizzarli."}

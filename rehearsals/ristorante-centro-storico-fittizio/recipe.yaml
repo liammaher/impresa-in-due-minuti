@@ -26,7 +26,7 @@ wizard:
 scelte: ["richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale"]
 groups:
   extras:
-    question: "Qualcuna di queste voci vale per l'attività? Spunti tutte quelle che valgono, o nessuna."
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
   piano:
     question: "I requisiti del Piano 2026 per il centro storico: spunti ciascuno di quelli che i locali soddisfano (un tecnico li assevera in CS 1 e CG 1)."
 asks:
@@ -36,16 +36,16 @@ asks:
   sicurezza: {group: piano, type: yes_no, item: "C'è un sistema di sicurezza (videosorveglianza, allarme o sistemi passivi)"}
   punteggio: {group: piano, type: yes_no, item: "Il CG 1 del tecnico raggiunge il punteggio minimo di gestione previsto per la zona e l'area dei locali (secondo lo stradario del Comune)"}
   alcolici: {group: extras, type: yes_no, item: "Venderà bevande alcoliche", why: "Alcolici e nulla osta insieme non sono ancora stati rilevati sul portale."}
-  insegna_esterna: {group: extras, type: yes_no, item: "Avrà un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
-  diritti_euro: {type: number, question: "I diritti SUAP in euro (voci S74-S76 del tariffario 2026 per le zone tutelate: con la notifica 420, più il nulla osta acustico: verifichi)"}
+  insegna_esterna: {group: extras, type: yes_no, item: "Avrai un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (voci S74-S76 del tariffario 2026 per le zone tutelate: con la notifica 420, più il nulla osta acustico: verifica)"}
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Faccia firmare al Suo tecnico il CS 1 (criteri strutturali), il CG 1 (il punteggio gestionale) e i documenti acustici, e li alleghi con la nota di condivisione"
-  - "Spunti Lei le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, norme del Comune di Napoli (normative comunali), requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
-  - "Paghi i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA, e la tariffa forfettaria ASL"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Fai firmare al tuo tecnico il CS 1 (criteri strutturali), il CG 1 (il punteggio gestionale) e i documenti acustici, e allegali con la nota di condivisione"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, norme del Comune di Napoli (normative comunali), requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA, e la tariffa forfettaria ASL"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "Firmi e invii (Firma e invio); non apra prima che arrivi l'autorizzazione"
+  - "Firma e invia (Firma e invio); non aprire prima che arrivi l'autorizzazione"
 # Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica or that needs a pratica this one doesn't file.
 rules:

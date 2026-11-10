@@ -483,11 +483,17 @@ def self_check(plugin):
         ours = subprocess.run([*py, skill / "portal" / "run.py", *card], cwd=case, capture_output=True, text=True)
         theirs = subprocess.run([sys.executable, PRATICA / "portal" / "run.py", *card[:2], steps_file(REHEARSALS / TEST_CASE),
                                  *card[3:]], cwd=case, capture_output=True, text=True)
-        if ours.returncode or "Cosa compilo" not in ours.stdout or "Resta a Lei" not in ours.stdout \
-                and "restano a Lei" not in ours.stdout:
+        if ours.returncode or "Io compilo" not in ours.stdout or "In una pratica vera tu" not in ours.stdout:
             sys.exit(f"the Prova's card isn't made:\n{ours.stdout}{ours.stderr}")
         if (ours.returncode, ours.stdout) != (theirs.returncode, theirs.stdout):
             sys.exit("the Prova's card differs between the plugin and the repo's runner")
+        # «dettagli», the answers the Prova used and where they come from: the same from both, and a list.
+        det = ["details", *card[1:]]
+        mine = subprocess.run([*py, skill / "portal" / "run.py", *det], cwd=case, capture_output=True, text=True)
+        repo = subprocess.run([sys.executable, PRATICA / "portal" / "run.py", *det[:2], steps_file(REHEARSALS / TEST_CASE),
+                               *det[3:]], cwd=case, capture_output=True, text=True)
+        if mine.returncode or "\n– " not in mine.stdout or (mine.returncode, mine.stdout) != (repo.returncode, repo.stdout):
+            sys.exit(f"the Prova's «dettagli» isn't made, or differs between the plugin and the repo's runner:\n{mine.stdout}{mine.stderr}")
         # And the command prints the card pre-flight makes (it once phased the steps first and lost the second run).
         said = json.loads(pre.stdout).get("card")
         if said is None or ours.stdout.rstrip("\n") != said:

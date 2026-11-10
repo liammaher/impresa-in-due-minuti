@@ -28,17 +28,17 @@ asks:
     propose: "{{ask.scia_onerosa,ask.contributo_fascia|diritti_scia_alt}}"
     why: "Voci del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): SUE 10, 401 € se non soggetta al contributo; se onerosa, SUE 7-9 in base al contributo (oneri di urbanizzazione + costo di costruzione): 1.003 € fino a 5.000 €, 1.505 € da 5.000 a 30.000 €, 1.998 € oltre"
 yours:
-- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-- 'In qualità di progettista, verifichi ogni asseverazione di questa pagina: sono Sue, e le firma con la pratica'
-- "Prima dell'inizio dei lavori, nomini chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
-- "Paghi il bollo come chiede il portale, poi firmi e invii (Firma e invio); conservi la ricevuta"
+- "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+- "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- 'In qualità di progettista, verifica ogni asseverazione di questa pagina: sono tue, e le firmi con la pratica'
+- "Prima dell'inizio dei lavori, nomina chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
+- "Paga il bollo come chiede il portale, poi firma e invia (Firma e invio); conserva la ricevuta"
 - "I 30 giorni prima dell'inizio dei lavori decorrono dal rilascio dell'autorizzazione paesaggistica, non dalla presentazione (art. 23 c. 3 DPR 380/2001); il contributo, se dovuto, si paga come indica il quadro g)"
-- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
-- "Firmi e invii (Firma e invio); conservi la ricevuta"
+- "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Firma e invia (Firma e invio); conserva la ricevuta"
 rules:
   table: sue-napoli
-  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
   facts:
     permesso_per_scelta: 'false'
     parere_esonero: 'false'

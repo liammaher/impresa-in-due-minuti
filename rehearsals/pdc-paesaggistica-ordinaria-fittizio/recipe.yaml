@@ -14,13 +14,13 @@ crawl: sue-combo-pdc-paesaggistica-ordinaria
 asks:
   descrizione: {default: "PdC e paesaggistica {{c:identity.last_name}}"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma con la richiesta"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di progettista, verifica ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che firmi con la richiesta"
   - "Nell'asseverazione, «non interessa aree percorse dal fuoco» e la dichiarazione sui terreni sono una sola scelta sul portale (un suo difetto): Claude spunta quella sui terreni. Le aree bruciate le dichiari nella relazione tecnica, se il SUE lo chiede"
-  - "Paghi il bollo come chiede il portale, poi firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Paga il bollo come chiede il portale, poi firma e invia (Firma e invio); conserva la ricevuta"
   - "L'autorizzazione paesaggistica precede il permesso (art. 146 c. 4 D.Lgs. 42/2004): i lavori iniziano solo quando sono stati ottenuti entrambi"
-  - "Una volta rilasciato il permesso: lo ritiri (pagando il contributo, se dovuto, come indica il quadro f)), nomini il progettista strutturale e i direttori dei lavori, e presenti la comunicazione di inizio lavori con la relazione energetica e i depositi strutturali"
+  - "Una volta rilasciato il permesso: ritiralo (pagando il contributo, se dovuto, come indica il quadro f)), nomina il progettista strutturale e i direttori dei lavori, e presenta la comunicazione di inizio lavori con la relazione energetica e i depositi strutturali"
 # The case: the main pratica's P6 answers, the part's, then these (a null drops one);
 # `gen.py --answers` writes answers-p6.json.
 answers:

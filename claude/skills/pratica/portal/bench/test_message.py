@@ -27,7 +27,7 @@ LEAK = re.compile(r"\b[a-z][a-z0-9-]*:[a-z_]+\.[a-z_]+\b|(?<![\w/])(?:t|c|cr|o|r
 def holds(m, report):
     """What the message lacks or shows that it mustn't."""
     bad = []
-    # A question that hangs on a proposal is counted under it ("se la cambia, le farò altre 2
+    # A question that hangs on a proposal is counted under it ("se la cambi, ti farò altre 2
     # domande"), not printed: asked only if the tecnico changes that proposal. So are its own.
     counted = {p["key"] for p in report["proposals"]}
     for q in report["questions"]:
@@ -75,9 +75,9 @@ def by_hand():
                            "for": "Scheda anagrafica: Cod.Fiscale"}]}
     m = run.message(report, asks, held_need={"impianti": [], "stato": []})
     want = ["1. Ci sono impianti? (sì/no)", "   1.a. Quali impianti?", "2. I lavori sono iniziati? (in corso / realizzato)",
-            "– Ci sono tolleranze? → no", "   (se la cambia, le farò un'altra domanda)",
+            "– Ci sono tolleranze? → no", "   (se la cambi, ti farò un'altra domanda)",
             "– I diritti → 166 se alla 2 risponde in corso o realizzato",
-            "– Suoi e dello studio (una volta sola: valgono per le prossime pratiche): Cod.Fiscale"]
+            "– Tuoi e dello studio (una volta sola: valgono per le prossime pratiche): Cod.Fiscale"]
     return [f"by hand: no line {w!r} in:\n{m}" for w in want if w not in m.splitlines()]
 
 

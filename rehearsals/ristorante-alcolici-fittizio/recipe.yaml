@@ -26,7 +26,7 @@ wizard:
 scelte: [in caso di vendita di alcolici]
 groups:
   extras:
-    question: "Qualcuna di queste voci vale per l'attività? Spunti tutte quelle che valgono, o nessuna."
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
 asks:
   altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "ristorante alcolici {{business.denominazione}}"}
@@ -36,17 +36,17 @@ asks:
     item: "Si trova nel centro storico: l'area UNESCO o la sua buffer zone"
     why: "Dal 25 luglio 2026 un'apertura in quella zona richiede un'autorizzazione, non una SCIA, e per ora preparo solo la SCIA."
   musica: {group: extras, type: yes_no, item: "Avrà musica o un impianto audio", why: "La musica comporta la documentazione di impatto acustico: un caso che non preparo ancora."}
-  insegna_esterna: {group: extras, type: yes_no, item: "Avrà un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
-  diritti_euro: {type: number, question: "I diritti SUAP in euro (voce del tariffario 2026 per un bar o ristorante con notifica sanitaria e alcolici: verifichi)"}
+  insegna_esterna: {group: extras, type: yes_no, item: "Avrai un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (voce del tariffario 2026 per un bar o ristorante con notifica sanitaria e alcolici: verifica)"}
   alcol_con_scia: {type: yes_no, question: "Presentata con la SCIA", default: "true"}
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti Lei le due dichiarazioni dell'avviso alle Dogane (nessuna condanna per produzione illecita di alcolici; avvio solo dopo la presentazione)"
-  - "Spunti Lei le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
-  - "Paghi i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento, e la tariffa forfettaria ASL"
-  - "Alleghi, firmate con la Sua firma digitale (.p7m): la planimetria quotata dei locali e la ricevuta della tariffa ASL"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le due dichiarazioni dell'avviso alle Dogane (nessuna condanna per produzione illecita di alcolici; avvio solo dopo la presentazione)"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento, e la tariffa forfettaria ASL"
+  - "Allega, firmate con la tua firma digitale (.p7m): la planimetria quotata dei locali e la ricevuta della tariffa ASL"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 supports:
   - value: "{{business.forma_giuridica}}"
     in: [ditta_individuale, srl, srls, snc, sas, spa]

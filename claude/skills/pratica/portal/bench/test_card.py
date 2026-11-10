@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """The card ("Cosa succede") pre-flight gives a case that is ready: for every rehearsal that gets one, it
-is Italian, short, shows no field id, role code or personal value, names what stays the tecnico's in
-the order review.py's closing lines give it, and says it reads the PDF preview back only when the skill
-does. The Prova's, by hand: the made-up marker, the whole real journey, nothing to send.
+is three lines in Italian (the pratica and why, what Claude does, what the tecnico does), in tu, shows no
+field id, role code or personal value, none of the machine workings (wizard path, sources, byte for byte) or
+of a real filing's details (c/c, signing order, PEC), and says it reads the PDF preview back only when the
+skill does. review.py's closing lines carry those details next to the steps, and say the same steps. The
+Prova's, by hand: the made-up marker, nothing to send; its quadri are the count review.py says.
 
   ~/.cache/pratica-portal/venv/bin/python -I claude/skills/pratica/portal/bench/test_card.py
 """
@@ -27,12 +29,13 @@ REH = ROOT / "rehearsals"
 LEAK = re.compile(r"\b[a-z][a-z0-9-]*:[a-z_]+\.[a-z_]+\b|(?<![\w/])(?:t|c|cr|o|r|p|f\d?):(?=\w)")
 CF = re.compile(r"\b[A-Z]{6}\d\d[A-Z]\d\d[A-Z]\d{3}[A-Z]\b")
 ENGLISH = re.compile(r"\b(the|your|you|and|of|was|draft|saved|every|value|left|filled|sign|send|pay)\b")
-MAX_LINES = 34
+MAX_LINES = 7
+GONE = re.compile(r"settore|operazione|byte|c/c|PEC|distinta|«tutte»|Lei\b|Sua\b|Suoi?\b|\bPerché è questa|i fatti che")
 
 
-def problems(card, fields, later, sportello):
+def problems(card, fields, later, sportello, rows):
     bad = []
-    lines = card.splitlines()
+    lines = [x for x in card.splitlines() if x.strip()]
     if len(lines) > MAX_LINES:
         bad.append(f"{len(lines)} lines (max {MAX_LINES})")
     if LEAK.search(card):
@@ -41,20 +44,21 @@ def problems(card, fields, later, sportello):
         bad.append("shows a codice fiscale")
     if ENGLISH.search(card):
         bad.append(f"English: {ENGLISH.search(card).group(0)!r}")
+    if GONE.search(card):
+        bad.append(f"says {GONE.search(card).group(0)!r}: it belongs to the closing lines, or nowhere")
     personal = {v for k, v in fields.items()
                 if re.search(r"first_name|last_name|codice_fiscale|\.civico|\.via$", k) and len(str(v)) > 3}
     bad += [f"shows the value {v!r}" for v in personal if str(v) in card]
-    for sect in ("Che pratica è", "Cosa compilo", "Come controllo", "Cosa non faccio mai"):
-        if sect not in card:
-            bad.append(f"no {sect!r}")
-    # What stays theirs, in the order the closing lines say it.
-    start = next((i for i, x in enumerate(lines) if "a Lei, in ordine" in x), None)
-    mine = [re.sub(r"^\d+\. ", "", ln) for ln in lines[(start or 0) + 1:] if re.match(r"\d+\. ", ln)]
-    want = [s[:1].upper() + s[1:] for s in run.lei_steps(later)]
-    if start is None or len(mine) != len(want) or not all(m.startswith(w) for m, w in zip(mine, want)):
-        bad.append(f"their steps {mine} are not {want}")
-    if sportello and sportello.get("card", {}).get("sign") and sportello["card"]["sign"] not in card:
-        bad.append("the sportello's signing detail is missing")
+    if not (lines[0].startswith("**") and lines[1].startswith("Io compilo ")):
+        bad.append("not the heading and «Io compilo …»")
+    # What they do: the card's one line has the verbs of review.py's steps, in the same order.
+    mine = next((x for x in lines if x.startswith("Tu ") or x.startswith("In una pratica vera tu ")), None)
+    verbs = ["controlli l'anteprima", "spunti le dichiarazioni", "paghi", "firmi", "invii"]
+    if mine is None or [v for v in verbs if v in mine] != verbs:
+        bad.append(f"what they do: {mine!r}")
+    asked = {s.split(" ")[0] for s in run.tu_steps(later)}
+    if not {"controlla", "spunta", "paga", "firma", "invia"} <= asked:
+        bad.append(f"the steps {run.tu_steps(later)} lack a verb the card says")
     return bad
 
 
@@ -72,12 +76,18 @@ def main():
             if r["unsupported"] or "card" not in r:
                 continue
             n += 1
-            later = run.card_later(run.expand(steps, values), values, True)  # made-up, as pre-flight ran
-            found = problems(r["card"], fields, later, run.filing_rules(steps))
+            later = run.after_declarations(run.expand(steps, values), values)
+            found = problems(r["card"], fields, later, run.filing_rules(steps), r.get("riepilogo_rows"))
             # review.py's closing lines for the same case say the same steps, word for word.
             said = review.summary({"result": "filled", "title": steps["title"], "second_run": later}, None, None)["steps"]
-            if said != run.lei_steps(later):
-                found.append(f"review.py says {said}, the card {run.lei_steps(later)}")
+            if said != run.tu_steps(later):
+                found.append(f"review.py says {said}, the runner {run.tu_steps(later)}")
+            # And the quadri the card counts are the ones the report review.py reads carries.
+            if f"Io compilo {run.count(run.quadri(r_steps := run.phase(run.expand(steps, values), False, True)), 'quadro', 'quadri')}" not in r["card"]:
+                found.append("the card's quadri are not the report's")
+            shown = run.review_shown(run.phase(run.expand(steps, values), False, True), values, steps)
+            if shown["quadri"] != run.quadri(r_steps):
+                found.append(f"review_shown says {shown['quadri']} quadri, the card {run.quadri(r_steps)}")
             bad += [f"{name}: {b}" for b in found]
             print(("ok    " if not found else "FAIL  ") + name)
 
@@ -87,14 +97,12 @@ def main():
                             fields=fields, asks=steps.get("asks"))
         r = run.preflight(steps, values, made_up=True)
         card = r["card"]
-        for want in ("(prova, dati inventati)", "In una pratica vera restano a Lei", "Leggo l'anteprima PDF",
-                     "con il caso di prova", "Qui non c'è nulla da inviare", "c/c postale 57060964", "Firma"):
+        for want in ("(prova, dati inventati)", "In una pratica vera tu", "file di prova", "Qui non c'è nulla da inviare",
+                     "cancella la bozza"):
             if want.lower() not in card.lower():
                 bad.append(f"Prova card lacks {want!r}")
-        if "Paghi i diritti" not in card:
-            bad.append("Prova card doesn't show the diritti before the second compilation (the real journey)")
         plain = run.card(run.expand(steps, values), values, r, True, r.get("riepilogo_rows"), preview_check=False)
-        if "Leggo l'anteprima" in plain:
+        if "rileggo ogni casella" not in plain or "tutto dal portale" in plain:
             bad.append("promises the preview check when the skill won't do it")
         # The command a skill runs prints the very card pre-flight makes (2026-11-10: it once phased the steps first
         # and lost the second compilation), with and without the preview check.
@@ -111,11 +119,30 @@ def main():
                                      made_up=True, preview_check=check)["card"]
                 if cli.returncode or cli.stdout.rstrip("\n") != want:
                     bad.append(f"`run.py card {' '.join(flag)}` prints another card than pre-flight's:\n{cli.stdout}{cli.stderr}")
-                if ("Leggo l'anteprima" in want) != check:
+                if ("tutto dal portale" in want) != check:
                     bad.append(f"preview_check={check}, but the card says otherwise")
+            # «dettagli»: every answer and where it comes from, the same rows as the summary's, and no «sì» to wait for.
+            cli = subprocess.run([sys.executable, "-I", str(HERE.parent / "run.py"), "details", "--steps", str(sf),
+                                  "--answers", str(REH / "cila-fittizia" / "answers-p6.json"),
+                                  "--values", str(REH / "cila-fittizia" / "fixture-p6.json"), "--made-up"],
+                                 capture_output=True, text=True)
+            rows = run.summary_rows(steps, values)
+            if cli.returncode or cli.stdout.count("\n– ") != len(rows) or "«sì»" in cli.stdout or "Lei" in cli.stdout:
+                bad.append(f"`run.py details --made-up` isn't the answers' list:\n{cli.stdout[:400]}{cli.stderr}")
         real = run.card(run.expand(steps, values), values, r, False, r.get("riepilogo_rows"))
-        if "(prova" in real or "Qui non c'è nulla da inviare" in real:
+        if "(prova" in real or "Qui non c'è nulla da inviare" in real or "In una pratica vera" in real:
             bad.append("a real job's card carries the Prova's words")
+        if not real.splitlines()[0].startswith("**CILA, "):
+            bad.append(f"a real job's card doesn't say why it is this pratica: {real.splitlines()[0]!r}")
+        # review.py's Prova lines say who did what with the same count of quadri.
+        said = review.summary({"result": "filled", "title": steps["title"], "quadri": run.quadri(
+            run.phase(run.expand(steps, values), False, True))}, None, None, True)["message"]
+        if f"ho compilato {run.quadri(run.phase(run.expand(steps, values), False, True))} quadri" not in said:
+            bad.append(f"the Prova's closing lines don't count the quadri: {said}")
+        # What the sportello adds goes next to each step in the closing lines, never in the card.
+        det = run.step_details(steps)
+        if set(det) != {"paga i diritti", "paga", "firma", "invia"} or any(v in real or v in card for v in det.values()):
+            bad.append(f"step details {det}: missing, or in the card")
     finally:
         os.chdir(here)
     if n < 20:

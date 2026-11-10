@@ -27,14 +27,14 @@ asks:
   diritti_euro:
     why: "La tabella 2026 dei diritti SUE del Comune (G.C. 239/2026) non ha una voce per il rinnovo di un'autorizzazione paesaggistica; se la copra SUE 2 (401 €, autorizzazioni paesaggistiche chieste da sole) lo dice il SUE"
 yours:
-- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
+- "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+- "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
 - '{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}'
-- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
-- "Firmi e invii (Firma e invio); conservi la ricevuta"
+- "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le eventuali prese visione a nome del committente"
+- "Firma e invia (Firma e invio); conserva la ricevuta"
 rules:
   table: sue-napoli
-  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
   facts:
     permesso_per_scelta: 'false'
     parere_esonero: 'false'

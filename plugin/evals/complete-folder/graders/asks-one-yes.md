@@ -1,4 +1,4 @@
 ---
 type: regex
-pattern: 'Scriva «sì»'
+pattern: 'Scrivi «sì»'
 ---

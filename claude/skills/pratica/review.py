@@ -8,7 +8,8 @@ OUT is the folder run.py page wrote, with the pane's `__pv.last()` saved there a
 private/shown.json adds the pratica's title and what comes after: the second compilation, what is
 filed apart), or the one run.py run or fill.py run wrote. For a portal draft it prints JSON:
 {"result", "message", "warnings", "steps", "yours"}; `message` is what Claude says, as written: did it
-work, what the tecnico must check, what is left to them. --prova: made-up data, a line, the check's ✅ and a line. It
+work, what the tecnico must check, what is left to them, each step with what the sportello adds to it (the
+report's `details`). --prova: made-up data, a line, the check's ✅, who did what and «dettagli». It
 reads two more files of a real job:
 
 - OUT/check.json, Claude's check of the portal's own preview (portal/preview_text.js) against
@@ -76,7 +77,7 @@ def page(title, subtitle, ok, status, yours, facts, checks, groups, extra=""):
            f"<h1>{esc(title)}</h1><p class='sub'>{esc(subtitle)}</p>",
            f"<span class='status {'ok' if ok else 'bad'}'>{esc(status)}</span>"]
     if yours:
-        out.append("<h2>Cosa resta da fare a Lei</h2><div class='you'><ol>"
+        out.append("<h2>Cosa resta da fare a te</h2><div class='you'><ol>"
                    + "".join(f"<li>{esc(y)}</li>" for y in yours) + "</ol></div>")
     if facts:
         out.append("<h2>Dove va</h2><dl class='facts'>"
@@ -173,7 +174,7 @@ def not_read_back(out, attached):
         return []
     on_portal = {x.get("sha256") for x in portal_files(out)}
     return [f"Il file «{a['name']}» non l'ho ritrovato sul portale: "
-            "lo controlli Lei." for a in attached if a["sha256"] not in on_portal]
+            "controllalo tu." for a in attached if a["sha256"] not in on_portal]
 
 
 def stray_files(out, job):
@@ -183,7 +184,7 @@ def stray_files(out, job):
     if not (files and job):
         return []
     local = job_hashes(out, job)
-    return [f"Allegato «{x.get('slot')}»: il file sul portale ({x.get('name')}) non è nessuno dei Suoi file."
+    return [f"Allegato «{x.get('slot')}»: il file sul portale ({x.get('name')}) non è nessuno dei tuoi file."
             for x in files if x.get("sha256") not in local]
 
 
@@ -197,7 +198,7 @@ def verified(out, job, prova=False, attached=None):
         rows = json.loads(f.read_text()).get("rows", [])
         ok = sum(1 for r in rows if r.get("ok"))
         if rows:
-            source = "con il caso di prova" if prova else "con i Suoi documenti"
+            source = "con il caso di prova" if prova else "con i tuoi documenti"
             lines.append(f"✅ Anteprima PDF del portale letta e confrontata {source}: "
                          + ("un dato corrisponde." if len(rows) == 1 and ok else f"tutti i {ok} dati corrispondono." if ok == len(rows) else f"{ok} dati su {len(rows)} corrispondono."))
     if portal_files(out):
@@ -208,7 +209,7 @@ def verified(out, job, prova=False, attached=None):
         read = {a["sha256"] for a in attached if a["sha256"] in on_portal} if attached else {h for h in on_portal if h in local}
         total, m = (len(attached) if attached else len(read)), len(read)
         if m:
-            who = ("del caso di prova", "del caso di prova") if prova else ("il Suo", "i Suoi")
+            who = ("del caso di prova", "del caso di prova") if prova else ("il tuo", "i tuoi")
             what = (f"{'quello' if m == 1 else 'quelli'} {who[0]}" if prova else f"{who[0] if m == 1 else who[1]}")
             if total > m:  # some attached file isn't on the screen read: not_read_back names it
                 lines.append(f"✅ Dei {total} file allegati ne ho {'riletto 1' if m == 1 else f'riletti {m}'} sul portale: "
@@ -222,7 +223,7 @@ def unchecked(out):
     """Why there is no ✅ for the preview: the check was not done or the preview couldn't be read."""
     f = out / "check.json" if out else None
     rows = json.loads(f.read_text()).get("rows", []) if f and f.exists() else []
-    return [] if rows else ["Il confronto con l'anteprima del portale non è stato fatto: la legga Lei prima di firmare."]
+    return [] if rows else ["Il confronto con l'anteprima del portale non è stato fatto: leggila tu prima di firmare."]
 
 
 def section(name):
@@ -248,11 +249,41 @@ def duration(s):
     return f"{s} secondi" if s < 120 else f"{round(s / 60)} minuti"
 
 
+def tu_steps(later, reopened=False):
+    """The tecnico's steps, in order, as the card says them (bench/test_card.py holds run.tu_steps to the same
+    list): only what they do. later: what the second compilation attaches (the procura, the quadro riepilogativo
+    and the receipt of what is paid first, the diritti), which the second line of the signing step names."""
+    pay_first = any(re.search(r"versament|ricevut|pagament", x, re.I) for x in later)
+    if reopened:  # the second compilation: the declarations are ticked, the signed files are on the portal
+        return ["controlla l'anteprima della bozza", "firma"] + ([] if pay_first else ["paga"]) + ["invia"]
+    steps = ["controlla l'anteprima della bozza", "spunta le dichiarazioni"]
+    if later:
+        what = (["la procura"] if any(re.search(r"procura", x, re.I) for x in later) else []) \
+            + (["la ricevuta del pagamento"] if pay_first else [])
+        rest = [x for x in later if not re.search(r"procura|versament|ricevut|pagament", x, re.I)]
+        what += ["gli altri documenti" if what else "i documenti da firmare"] if rest else []
+        steps += (["paga i diritti"] if pay_first else []) + [
+            f"firma {' e '.join([', '.join(what[:-1]), what[-1]] if len(what) > 1 else what)} e scrivimi «ho firmato»"]
+    return steps + ["firma"] + ([] if pay_first and later else ["paga"]) + ["invia"]
+
+
+def numbered(steps, details, then=None):
+    """The steps a line each, with what the sportello adds in brackets (where the diritti are paid, the order of
+    the signatures, what comes back after sending). `then`: a line of Claude's own under the step that hands the
+    signed files over."""
+    lines = []
+    for i, s in enumerate(steps, 1):
+        lines.append(f"{i}. {s[0].upper()}{s[1:]}" + (f" ({details[s]})" if details.get(s) else ""))
+        if then and s.endswith("«ho firmato»"):
+            lines.append(f"   {then}")
+    return lines
+
+
 def summary(report, out=None, job=None, prova=False):
     """What Claude says in the chat once a portal compilation ends: did it work, what the tecnico
     must check (the portal's warnings beside values it kept, a value or a file that doesn't match
     the documents), and what is left to them. `message` is said as written. A Prova (made-up
-    data) is two lines: its warnings are expected, and nothing of it is sent."""
+    data) says who did what instead of the steps: its warnings are expected, and nothing of it is sent."""
     if report.get("result") != "filled":
         return {"result": report.get("result") or "stopped", "message": None, "warnings": [], "steps": []}
     name = pratica_name(report)
@@ -263,37 +294,32 @@ def summary(report, out=None, job=None, prova=False):
         warns = mismatches(out) + stray_files(out, job) + not_read_back(out, report.get("attached")) + unchecked(out)
         lines = [f"✅ {name} di prova {done} in {duration(report.get('total_seconds'))}, con dati inventati."]
         lines += verified(out, job, prova=True, attached=report.get("attached")) + [f"⚠️ {w}" for w in warns]
-        lines.append("Nulla da inviare: la cancelli da «Pratiche in bozza».")
+        # Who does what in a real filing, in two lines; every answer and its source are one word away.
+        n = report.get("quadri")
+        lines.append("Io: " + (f"ho compilato {n} quadri" if n and n > 1 else "ho compilato il modulo")
+                     + ", allegato i file e riletto tutto dal portale.")
+        lines.append("Tu, in una pratica vera: controlli l'anteprima, spunti le dichiarazioni, paghi, firmi e invii.")
+        lines.append("Per vedere ogni risposta e da dove viene, scrivi «dettagli».")
+        lines.append("Nulla da inviare: cancella la bozza da «Pratiche in bozza».")
         return {"result": "filled", "warnings": warns, "steps": [], "message": "\n".join(lines)}
     # One line for each warning in a section, by the section alone: the portal shows it beside the
     # box, and its labels read badly out of the page ("se non presente indicare il numero 0"). On
     # made-up data the catasto's comes four times, one for each box of the parcel (2026-11-07).
-    warnings = list(dict.fromkeys(f"{section(a['section'])}: il portale segnala «{a['text'].strip()}». Lo controlli."
+    warnings = list(dict.fromkeys(f"{section(a['section'])}: il portale segnala «{a['text'].strip()}». Controllalo."
                                   for a in report.get("alerts", [])))
     warnings += mismatches(out) + stray_files(out, job) + not_read_back(out, report.get("attached"))
     # The second compilation (after the declarations) attaches what the portal makes only then, signed:
     # the procura, the quadro riepilogativo, and the receipt of what is paid first (the diritti).
     later = list(dict.fromkeys(report.get("second_run") or []))
-    pay_first = any(re.search(r"versament|ricevut|pagament", x, re.I) for x in later)
-    if report.get("reopened"):  # this is the second compilation: the declarations are ticked
+    reopened = bool(report.get("reopened"))  # this is the second compilation: the declarations are ticked
+    if reopened:
         head = f"✅ {name}: file firmati allegati sul portale in {duration(report.get('total_seconds'))}; ogni valore è stato riletto."
-        steps = ["controlli l'anteprima della bozza", "firmi"] + ([] if pay_first else ["paghi"]) + ["invii"]
     else:
         head = f"✅ {name} {done} sul portale in {duration(report.get('total_seconds'))}: ogni valore è stato riletto."
-        steps = ["controlli l'anteprima della bozza", "spunti le dichiarazioni"]
-        if later:
-            # What they sign and send back, in their words; the slots' own names are in `yours`.
-            what = (["la procura"] if any(re.search(r"procura", x, re.I) for x in later) else []) \
-                + (["la ricevuta del pagamento"] if pay_first else [])
-            rest = [x for x in later if not re.search(r"procura|versament|ricevut|pagament", x, re.I)]
-            what += ["gli altri documenti" if what else "i documenti da firmare"] if rest else []
-            steps += (["paghi i diritti"] if pay_first else []) + [
-                f"mi mandi i file firmati ({' e '.join([', '.join(what[:-1]), what[-1]] if len(what) > 1 else what)}): "
-                "li allego io"]
-        steps += ["firmi"] + ([] if pay_first and later else ["paghi"]) + ["invii"]
+    steps = tu_steps(later, reopened)
     lines = [head] + [f"⚠️ {w}" for w in warnings]
-    lines.append("Resta a Lei:")
-    lines += [f"{i}. {s[0].upper()}{s[1:]}" for i, s in enumerate(steps, 1)]
+    lines.append("Tocca a te:")
+    lines += numbered(steps, report.get("details") or {}, None if reopened else "Io poi li allego con una seconda compilazione.")
     lines += [f"{a}." for a in report.get("apart") or []]
     # `yours`, the steps file's own steps in full (how the diritti are paid, the files' rules), is
     # not said: Claude answers from it when the tecnico asks how.
@@ -307,7 +333,7 @@ def main():
     ap.add_argument("--route", type=Path)
     ap.add_argument("--quadri", action="store_true", help="print the quadri whose attached files the portal's lists "
                     "read so far don't hold (the skill opens each and runs attachments.js there), and stop")
-    ap.add_argument("--prova", action="store_true", help="the skill's Prova: made-up data, two lines and the check's ✅")
+    ap.add_argument("--prova", action="store_true", help="the skill's Prova: made-up data, the check's ✅, who did what")
     ap.add_argument("--job", type=Path, help="the job's folder, whose files the portal's are matched to "
                     "(default: OUT's parent)")
     a = ap.parse_args()

@@ -11,16 +11,16 @@ asks:
   descrizione: {default: "SCIA ord. e terre e rocce {{c:identity.last_name}}"}
 # scia-paesaggistica-ordinaria-fittizia's steps for the person (a recipe's `yours` replaces the one it extends), then the dichiarazione's.
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: sono Sue, e le firma con la pratica"
-  - "Prima dell'inizio dei lavori, nomini chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di progettista, verifica ogni asseverazione di questa pagina: sono tue, e le firmi con la pratica"
+  - "Prima dell'inizio dei lavori, nomina chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
   - "Nessuna data di inizio: i lavori iniziano quando il SUE comunica che l'autorizzazione paesaggistica (e ogni altro assenso) è stata acquisita"
-  - "Paghi i diritti prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella"
+  - "Paga i diritti prima della seconda compilazione (dopo le dichiarazioni): la ricevuta, firmata, va allegata in quella"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
   - "La dichiarazione di utilizzo (Allegato 6 DPR 120/2017) è il documento del portale in Allega documenti dopo aver spuntato le dichiarazioni: la firma il produttore, Claude la allega nella seconda compilazione (dopo le dichiarazioni); lo scavo inizia almeno 15 giorni dopo l'invio"
-  - "Quando tutte le terre e rocce da scavo saranno state utilizzate, entro la validità della dichiarazione, presenti sul SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Quando tutte le terre e rocce da scavo saranno state utilizzate, entro la validità della dichiarazione, presenta sul SUE la dichiarazione di avvenuto utilizzo (art. 7 DPR 120/2017)"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 answers:
   descrizione: PROVA NON INVIARE - SCIA ord. e terre e rocce P6
   # Works, not the landscape case's change of use without works (nothing would be dug): the SCIA's

@@ -24,21 +24,21 @@ wizard:
   - {screen: Scelte eventuali, confirm: CONFERMA}
 groups:
   extras:
-    question: "Qualcuna di queste voci vale per il panificio? Spunti tutte quelle che valgono, o nessuna."
+    question: "Qualcuna di queste voci vale per il panificio? Spunta tutte quelle che valgono, o nessuna."
 asks:
   altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "panificio {{business.denominazione}}"}
   caldaia: {group: extras, type: yes_no, item: "Forni o riscaldamento oltre 116 kW, o alimentati a combustibile solido o liquido", why: "Ciò comporta la documentazione di prevenzione incendi: un caso che non preparo ancora."}
   farina: {group: extras, type: yes_no, item: "Più di 300 kg di farina al giorno", why: "Ciò comporta la documentazione di prevenzione incendi: un caso che non preparo ancora."}
   sotterraneo: {group: extras, type: yes_no, item: "Locali interrati (sotterranei o semisotterranei)", why: "Ciò comporta l'autorizzazione ASL per il lavoro in locali sotterranei: un caso che non preparo ancora."}
-  insegna_esterna: {group: extras, type: yes_no, item: "Avrà un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
+  insegna_esterna: {group: extras, type: yes_no, item: "Avrai un'insegna esterna", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
   diritti_euro: {type: number, question: "I diritti SUAP in euro (voce del tariffario 2026 per un panificio con notifica sanitaria)"}
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti Lei le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti antimafia e quanto garantisce il responsabile della produzione, altre dichiarazioni, art. 75 DPR 445/2000, art. 6 Reg. 852/2004, tasse comunali"
-  - "Paghi i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento, e la tariffa forfettaria ASL"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti antimafia e quanto garantisce il responsabile della produzione, altre dichiarazioni, art. 75 DPR 445/2000, art. 6 Reg. 852/2004, tasse comunali"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento, e la tariffa forfettaria ASL"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 supports:
   - value: "{{business.forma_giuridica}}"
     in: [ditta_individuale, srl, srls, snc, sas, spa]

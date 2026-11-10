@@ -83,32 +83,32 @@ attachments:
     - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: "{{ask.igienico_deroga_doc}}", when: "{{ask.igienico_conforme|not}}", on_page: true}
     - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: "{{ask.cimiteriale_doc}}", when: "{{ask.fascia_cimiteriale|is_non_consentito}}", on_page: true}
 asks:
-  diritti_euro: {question: "I diritti del SUE in euro: una SCIA onerosa non è in alcuna voce della tabella 2026 del Comune; chieda al SUE", propose: "{{ask.scia_onerosa|diritti_gratuito}}", why: "Voce SUE 10 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 401 € per una SCIA non soggetta al contributo. Una SCIA onerosa (art. 22) non è in alcuna voce: le fasce SUE 7-9 nominano solo il permesso a titolo oneroso e la SCIA alternativa, quindi l'importo si chiede (da confermare con il SUE)"}
+  diritti_euro: {question: "I diritti del SUE in euro: una SCIA onerosa non è in alcuna voce della tabella 2026 del Comune; chiedi al SUE", propose: "{{ask.scia_onerosa|diritti_gratuito}}", why: "Voce SUE 10 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 401 € per una SCIA non soggetta al contributo. Una SCIA onerosa (art. 22) non è in alcuna voce: le fasce SUE 7-9 nominano solo il permesso a titolo oneroso e la SCIA alternativa, quindi l'importo si chiede (da confermare con il SUE)"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}
   descrizione: {default: "SCIA {{c:identity.last_name}}"}
   data_inizio_lavori: {question: "Quando inizieranno i lavori"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: sono Sue, e le firma con la pratica"
-  - "Prima dell'inizio dei lavori, nomini chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di progettista, verifica ogni asseverazione di questa pagina: sono tue, e le firmi con la pratica"
+  - "Prima dell'inizio dei lavori, nomina chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
   - "Una SCIA che richiede atti di assenso (la Soprintendenza, un parco, un vincolo): nessuna data di inizio; i lavori iniziano quando il SUE comunica che gli atti di assenso sono stati acquisiti"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
 rules:
   table: sue-napoli
-  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   facts: {permesso_per_scelta: "false", parere_esonero: "false"}
 supports:
   # The SCIA's form has no line for a large site under VIA or AIA (its Piano di Utilizzo line is
   # for sites up to 6000 m³, under the repealed DM 161/2012).
-  - {if: "{{ask.scavo|is_sottoprodotti}}", value: "{{ask.scavo_piano_utilizzo}}", in: ["false"], else: "Il modulo della SCIA non prevede terre scavate oltre 6000 m³ soggette a VIA o AIA, utilizzate come sottoprodotti secondo un Piano di Utilizzo (DPR 120/2017 art. 9): lavori di tale entità richiedono il permesso di costruire; chieda al SUE."}
+  - {if: "{{ask.scavo|is_sottoprodotti}}", value: "{{ask.scavo_piano_utilizzo}}", in: ["false"], else: "Il modulo della SCIA non prevede terre scavate oltre 6000 m³ soggette a VIA o AIA, utilizzate come sottoprodotti secondo un Piano di Utilizzo (DPR 120/2017 art. 9): lavori di tale entità richiedono il permesso di costruire; chiedi al SUE."}
   # Works done without a permesso di costruire (or a SCIA alternativa) are regularized by the
   # permesso in sanatoria the Comune issues (art. 36 DPR 380/2001), never by a SCIA: the asseverazione's
   # "in assenza" row is the permesso's (rehearsals/pdc-sanatoria-fittizio). Partial difformity from a
   # permesso can go by SCIA (art. 36-bis c. 1).
-  - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_sanatoria_caso}}", in: [parziale], else: "I lavori eseguiti senza permesso di costruire (o SCIA alternativa) si regolarizzano con il permesso in sanatoria (art. 36 DPR 380/2001), non con una SCIA: presenti il permesso in sanatoria."}
+  - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_sanatoria_caso}}", in: [parziale], else: "I lavori eseguiti senza permesso di costruire (o SCIA alternativa) si regolarizzano con il permesso in sanatoria (art. 36 DPR 380/2001), non con una SCIA: presenta il permesso in sanatoria."}
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "Il modulo consente l'art. 24 c. 5-bis solo se è soddisfatto il requisito di adattabilità (art. 24 c. 5-ter): l'unità non rientra."}

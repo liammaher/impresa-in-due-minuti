@@ -52,43 +52,43 @@
 # items that apply.
 groups:
   audiovisivi:
-    question: "Cosa farà con film o musica su dischi o nastri? Spunti tutte le voci che valgono."
+    question: "Cosa farai con film o musica su dischi o nastri? Spunta tutte le voci che valgono."
   alcolici:
-    question: "Quali prodotti alcolici venderà? Spunti tutte le voci che valgono."
+    question: "Quali prodotti alcolici venderai? Spunta tutte le voci che valgono."
   variazioni:
-    question: "Cosa è cambiato? Spunti tutte le voci che valgono."
+    question: "Cosa è cambiato? Spunta tutte le voci che valgono."
   attivita_852:
-    question: "Che cosa fa l'attività alimentare? Spunti tutte le voci che valgono."
+    question: "Che cosa fa l'attività alimentare? Spunta tutte le voci che valgono."
   allegato_b:
-    question: "In quali voci dell'Allegato B del DPR 31/2017 rientrano i lavori? Spunti tutte quelle che valgono."
+    question: "In quali voci dell'Allegato B del DPR 31/2017 rientrano i lavori? Spunta tutte quelle che valgono."
   cila_interventi:
-    question: "Quali sono i lavori, per la relazione tecnica della CILA? Spunti tutte le voci che valgono."
+    question: "Quali sono i lavori, per la relazione tecnica della CILA? Spunta tutte le voci che valgono."
   tolleranze_tipi:
-    question: "Quali tolleranze costruttive dichiara la relazione? Spunti tutte quelle che valgono."
+    question: "Quali tolleranze costruttive dichiara la relazione? Spunta tutte quelle che valgono."
   fasce_funzionali:
-    question: "In quali fasce di rispetto ricade l'immobile? Spunti tutte quelle che valgono."
+    question: "In quali fasce di rispetto ricade l'immobile? Spunta tutte quelle che valgono."
   barriere_requisiti:
-    question: "Quali requisiti della normativa sulle barriere architettoniche soddisfa il progetto (D.M. 236/1989)? Spunti tutti quelli che valgono."
+    question: "Quali requisiti della normativa sulle barriere architettoniche soddisfa il progetto (D.M. 236/1989)? Spunta tutti quelli che valgono."
   acustica_documenti:
-    question: "Quali documenti acustici sono allegati (art. 8 L. 447/1995, art. 4 DPR 227/2011)? Spunti tutti quelli che valgono."
+    question: "Quali documenti acustici sono allegati (art. 8 L. 447/1995, art. 4 DPR 227/2011)? Spunta tutti quelli che valgono."
   precedenti:
-    question: "Quali titoli edilizi o pratiche costituiscono lo stato legittimo dell'edificio (art. 9-bis c. 1-bis DPR 380/2001: quello che lo ha costruito o che per ultimo lo ha interessato per intero, e quelli parziali successivi)? Spunti tutti quelli che valgono. Il modulo ha una voce per ciascun tipo: un secondo titolo di un tipo già spuntato (due DIA) va in \"Un altro titolo o pratica\"."
+    question: "Quali titoli edilizi o pratiche costituiscono lo stato legittimo dell'edificio (art. 9-bis c. 1-bis DPR 380/2001: quello che lo ha costruito o che per ultimo lo ha interessato per intero, e quelli parziali successivi)? Spunta tutti quelli che valgono. Il modulo ha una voce per ciascun tipo: un secondo titolo di un tipo già spuntato (due DIA) va in \"Un altro titolo o pratica\"."
   prova_documenti:
-    question: "Cosa documenta lo stato originario dell'edificio? Spunti tutte le voci che valgono."
+    question: "Cosa documenta lo stato originario dell'edificio? Spunta tutte le voci che valgono."
   tolleranze_precedenti:
-    question: "Dove sono state rese le dichiarazioni di tolleranza costruttiva (art. 34-bis o 34-ter c. 4)? Spunti tutte quelle che valgono."
+    question: "Dove sono state rese le dichiarazioni di tolleranza costruttiva (art. 34-bis o 34-ter c. 4)? Spunta tutte quelle che valgono."
   strumenti:
-    question: "Quali strumenti urbanistici, oltre al PRG, interessano l'area dell'immobile? Spunti tutti quelli che valgono."
+    question: "Quali strumenti urbanistici, oltre al PRG, interessano l'area dell'immobile? Spunta tutti quelli che valgono."
   deroga_parametri:
-    question: "Da quali limiti dello strumento urbanistico deroga il permesso (art. 14 c. 3 DPR 380/2001)? Spunti tutti quelli che valgono."
+    question: "Da quali limiti dello strumento urbanistico deroga il permesso (art. 14 c. 3 DPR 380/2001)? Spunta tutti quelli che valgono."
   impianti_dichiarazione:
-    question: "Per quali impianti è allegata la dichiarazione di conformità o di rispondenza (DM 37/2008)? Spunti tutti quelli che valgono."
+    question: "Per quali impianti è allegata la dichiarazione di conformità o di rispondenza (DM 37/2008)? Spunta tutti quelli che valgono."
   impianti_depositato:
-    question: "Per quali impianti il certificato (la dichiarazione, o il collaudo) è già depositato al Comune, così che il modulo ne riporta invece il numero di protocollo (P.G.)? Spunti tutti quelli che valgono."
+    question: "Per quali impianti il certificato (la dichiarazione, o il collaudo) è già depositato al Comune, così che il modulo ne riporta invece il numero di protocollo (P.G.)? Spunta tutti quelli che valgono."
   impianti_collaudo:
-    question: "Quali impianti hanno un collaudo, dove è richiesto (quello di un ascensore, di un impianto antincendio, ...)? Spunti tutti quelli che valgono."
+    question: "Quali impianti hanno un collaudo, dove è richiesto (quello di un ascensore, di un impianto antincendio, ...)? Spunta tutti quelli che valgono."
   impianti_atto_notorio:
-    question: "Quali impianti sono certificati da un atto di notorietà (art. 6 DPR 392/1994: impianti preesistenti adeguati alla L. 46/1990)? Spunti tutti quelli che valgono."
+    question: "Quali impianti sono certificati da un atto di notorietà (art. 6 DPR 392/1994: impianti preesistenti adeguati alla L. 46/1990)? Spunta tutti quelli che valgono."
 
 asks:
   descrizione:
@@ -121,7 +121,7 @@ asks:
   # (with `o:`, `o2:` ... where one is a company). One unasked while the job names no `r2:`.
   altri_titolari:
     type: number
-    question: "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conti il suo legale rappresentante"
+    question: "Quanti altri titolari danno il loro assenso (comproprietari, il proprietario locatore)? Se l'immobile è di una società, conta il suo legale rappresentante"
     default: "{{r2:identity.last_name|empty|single_unit}}"
     propose: "{{r:identity.last_name,r2:identity.last_name,r3:identity.last_name,r4:identity.last_name,r5:identity.last_name,r6:identity.last_name,r7:identity.last_name,r8:identity.last_name,r9:identity.last_name|filled_count}}"
   # The building firms on site (Impresa esecutrice's blocks, one each by "+"): `f1:`, `f2:`,
@@ -195,7 +195,7 @@ asks:
     type: yes_no
     question: "Il progettista architettonico è un tecnico diverso dal tecnico che presenta la pratica? In tal caso va indicato tra le persone della pratica come progettista architettonico: il modulo lo indica come progettista e come autore dell'asseverazione"
     propose: "false"
-    yours: "L'asseverazione è del progettista architettonico: prima di Firma e invio, gli faccia firmare digitalmente la pratica, oltre al procuratore"
+    yours: "L'asseverazione è del progettista architettonico: prima di Firma e invio, fagli firmare digitalmente la pratica, oltre al procuratore"
   direttore_lavori:
     type: choice
     question: "Chi dirige i lavori? progettista (il progettista dei lavori: il tecnico che presenta la pratica, o il progettista architettonico se è un altro tecnico); da nominare (nessun direttore dei lavori indicato nella pratica: va nominato prima dell'inizio dei lavori); altro tecnico (un altro tecnico, indicato come direttore dei lavori tra i soggetti dell'incarico)"
@@ -299,7 +299,7 @@ asks:
   comunicazione_#K: {type: text, question: "Adempimento #K: che cosa si presenta con esso?"}
   comunicazione_#K_autorita: {type: text, question: "Adempimento #K: l'autorità competente"}
   comunicazioni_doc: {type: file, question: "I documenti necessari per quelle presentazioni, in un unico PDF (la voce 'Documentazione necessaria per la presentazione di altre comunicazioni, segnalazioni')"}
-  atti_da_acquisire: {type: yes_no, question: "I lavori richiedono atti di assenso non ancora ottenuti (un nulla osta, un'autorizzazione, una deroga) che il SUE deve acquisire sulla base dei documenti che Lei allega (art. 23-bis DPR 380/2001)? In tal caso i lavori iniziano solo quando il SUE comunica di averli acquisiti. Un atto di assenso già ottenuto non rientra qui: va allegato", propose: "false"}
+  atti_da_acquisire: {type: yes_no, question: "I lavori richiedono atti di assenso non ancora ottenuti (un nulla osta, un'autorizzazione, una deroga) che il SUE deve acquisire sulla base dei documenti che alleghi (art. 23-bis DPR 380/2001)? In tal caso i lavori iniziano solo quando il SUE comunica di averli acquisiti. Un atto di assenso già ottenuto non rientra qui: va allegato", propose: "false"}
   atti_quanti: {type: number, question: "Quanti?"}
   atto_1: {type: text, question: "Il primo: quale atto (es. parere igienico-sanitario, deroga)?"}
   atto_1_autorita: {type: text, question: "Quale ente lo rilascia (ad es. ASL Napoli 1 Centro)?"}
@@ -443,7 +443,7 @@ asks:
     type: choice
     question: "Cosa si rinnova: una semplificata (DPR 31/2017) o un'ordinaria (art. 146 D.Lgs. 42/2004)?"
     options: [semplificata, ordinaria]
-  paes_rinnovo_variazioni: {type: yes_no, question: "Il rinnovo modifica il progetto, oppure sono intervenute nuove prescrizioni di tutela dopo l'autorizzazione?", yours: "Nella sezione del rinnovo, alleghi la relazione paesaggistica semplificata per le modifiche, firmata digitalmente (.p7m)"}
+  paes_rinnovo_variazioni: {type: yes_no, question: "Il rinnovo modifica il progetto, oppure sono intervenute nuove prescrizioni di tutela dopo l'autorizzazione?", yours: "Nella sezione del rinnovo, allega la relazione paesaggistica semplificata per le modifiche, firmata digitalmente (.p7m)"}
   paes_variante_numero: {type: text, question: "Il numero di quell'autorizzazione"}
   paes_variante_data: {type: date, question: "La sua data"}
   paes_variante_ente: {type: text, question: "L'ente di rilascio (es. Comune di Napoli)", propose: "Comune di Napoli"}
@@ -694,7 +694,7 @@ asks:
   # "subordinata al pagamento"): the quadro gives the payment by its estremi or attaches its receipt.
   sanatoria_prova:
     type: choice
-    question: "Come dimostra il quadro della sanatoria la sanzione o l'oblazione, pagata prima della presentazione? estremi (i suoi estremi: importo, data e, per la sanzione di 516 €, il riferimento); ricevuta (la ricevuta, che Lei allega firmata)"
+    question: "Come dimostra il quadro della sanatoria la sanzione o l'oblazione, pagata prima della presentazione? estremi (i suoi estremi: importo, data e, per la sanzione di 516 €, il riferimento); ricevuta (la ricevuta, che alleghi firmata)"
     options: [estremi, ricevuta]
     when: "{{ask.sanatoria_titolo|is_scia}}"
   sanatoria_estremi: {type: text, question: "Il riferimento del pagamento della sanzione di 516 € (IUV o numero di transazione)", when: "{{ask.sanatoria_titolo|is_scia}} {{ask.sanatoria_caso|is_in_corso}} {{ask.sanatoria_prova|is_estremi}}"}
@@ -944,7 +944,7 @@ asks:
   prova_catasto_data: {type: date, question: "La sua data", when: "{{ask.prova_catasto}} {{ask.prova_catasto_modo|is_estremi}}"}
   sanzione_prova:
     type: choice
-    question: "Come dimostra il quadro f) il pagamento delle sanzioni? ricevuta (se ne allega la ricevuta); estremi (Lei indica gli estremi del pagamento)"
+    question: "Come dimostra il quadro f) il pagamento delle sanzioni? ricevuta (se ne allega la ricevuta); estremi (tu indichi gli estremi del pagamento)"
     options: [ricevuta, estremi]
     when: "{{ask.stato_legittimo|is_sanzioni}}"
   sanzione_ricevuta: {type: file, question: "La ricevuta di pagamento delle sanzioni (PDF)", when: "{{ask.sanzione_prova|is_ricevuta}}"}
@@ -1191,8 +1191,8 @@ asks:
   napoli_allegato_a: {type: yes_no, default: "false", question: "Questa pratica richiede l'Allegato A Programma 100 di Napoli (ogni titolo edilizio, DD 603/2025)?"}
   napoli_allegato_a_firmato: {type: file, question: "L'Allegato A Programma 100 del committente (lo compila Claude), firmato digitalmente (.p7m)"}
   modello_dp: {type: yes_no, default: "false", question: "Questa pratica richiede il Modello DP di Napoli (titoli, agibilità, autorizzazioni paesaggistiche: L.R. Campania 59/2018)?"}
-  modello_dp_firmato: {type: file, question: "Il Modello DP (lo compila Claude), firmato digitalmente da Lei e dal committente (.p7m), con la lettera d'incarico o il contratto"}
-  procura_firmata: {type: file, question: "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da Lei (.p7m)"}
+  modello_dp_firmato: {type: file, question: "Il Modello DP (lo compila Claude), firmato digitalmente da te e dal committente (.p7m), con la lettera d'incarico o il contratto"}
+  procura_firmata: {type: file, question: "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da te (.p7m)"}
   dsc_firmato: {type: file, question: "Il Quadro riepilogativo della documentazione della pratica (DSC: quello del portale, Scarica il documento dopo aver spuntato le dichiarazioni, o quello che Claude compila per una CILA), completato e firmato digitalmente (.p7m)"}
   ricevuta_diritti: {type: file, question: "La ricevuta dei diritti pagati (prima dell'invio, come li riscuote lo sportello), firmata digitalmente (.p7m)"}
   relazione_semplificata_firmata: {type: file, question: "La Relazione Paesaggistica Semplificata del portale (Allegato D DPR 31/2017, Scarica il documento dopo aver spuntato le dichiarazioni), firmata digitalmente (.p7m)"}
@@ -2192,7 +2192,7 @@ sections:
   - section: dati relativi al nome del tecnico
     leave: [Fax]
     supports:
-      - {if: "{{ask.progettista_altro|not}}", value: "{{p2:identity.last_name|empty}}", in: ["true"], defect: paesaggio-altri-tecnici, else: "I tecnici del modulo paesaggistico: se l'architetto che presenta la pratica è il suo tecnico, il portale mostra il blocco di un altro tecnico («+») senza nome né codice fiscale, quindi un secondo tecnico non si può indicare. È un difetto del portale: chieda al SUE."}
+      - {if: "{{ask.progettista_altro|not}}", value: "{{p2:identity.last_name|empty}}", in: ["true"], defect: paesaggio-altri-tecnici, else: "I tecnici del modulo paesaggistico: se l'architetto che presenta la pratica è il suo tecnico, il portale mostra il blocco di un altro tecnico («+») senza nome né codice fiscale, quindi un secondo tecnico non si può indicare. È un difetto del portale: chiedi al SUE."}
     fields:
       - {kind: radio, label: è colui che presenta la pratica, when: "{{ask.progettista_altro|not}}"}
       - {kind: text, label: ordine/collegio/albo, value: "{{t:albo.ordine}}", when: "{{ask.progettista_altro|not}}"}
@@ -2404,7 +2404,7 @@ sections:
     leave: ["Allega Relazione paesaggistica semplificata"]
     theirs: ["Allega Relazione paesaggistica semplificata"]
     supports:
-      - {if: "{{ask.paes_rinnovo_di|is_semplificata}}", when: "{{ask.paes_rinnovo_variazioni|not}}", else: "Il rinnovo di un'autorizzazione semplificata sul portale non ha una casella per le modifiche progettuali (ce l'ha solo quello di un'ordinaria): chieda al SUE come presentarlo."}
+      - {if: "{{ask.paes_rinnovo_di|is_semplificata}}", when: "{{ask.paes_rinnovo_variazioni|not}}", else: "Il rinnovo di un'autorizzazione semplificata sul portale non ha una casella per le modifiche progettuali (ce l'ha solo quello di un'ordinaria): chiedi al SUE come presentarlo."}
     fields:
       - {kind: text, label: Num., value: "{{ask.paes_protocollo}}"}
       - {kind: date, label: Data, value: "{{ask.paes_data|date_it}}"}
@@ -3545,7 +3545,7 @@ sections:
   # another named), self-certified or with the request for their assent.
   - section: Asseverazione SCIA - Altri Vincoli
     supports:
-      - {if: "{{ask.altri_vincoli_eco|is_nessuno|not}}", value: "{{ask.altri_vincoli_eco_tipo}}", in: [depuratori, altro], else: "Il modulo della SCIA non ha una voce specifica per la fascia di rispetto di un pozzo (art. 94 D.Lgs. 152/2006): risponda altro e la indichi."}
+      - {if: "{{ask.altri_vincoli_eco|is_nessuno|not}}", value: "{{ask.altri_vincoli_eco_tipo}}", in: [depuratori, altro], else: "Il modulo della SCIA non ha una voce specifica per la fascia di rispetto di un pozzo (art. 94 D.Lgs. 152/2006): rispondi altro e indicala."}
     fields:
       - {kind: radio, label: nel comune NON è presente, when: "{{ask.rir|is_no}}"}
       - {kind: radio, label: "nel comune E' presente un'attività a rischio d'incidente rilevante e la relativa “area di danno” è individuata", when: "{{ask.rir|is_fuori_area}}"}
@@ -3593,7 +3593,7 @@ sections:
   - section: Qualificazione dell'intervento
     # Its change-of-use line, required, has no row for Campania's own SCIA alternativa changes.
     supports:
-      - {value: "{{ask.scia_cambio_uso}}", in: ["no", stessa categoria, tra categorie, intero immobile], defect: cambio-uso-regionale, else: "Il modulo non ha una voce per questo cambio d'uso della legge campana (un intero edificio verso un'altra categoria, un'unità fuori dalle zone A, B e C, da o verso il rurale): è un difetto del modulo; chieda al SUE."}
+      - {value: "{{ask.scia_cambio_uso}}", in: ["no", stessa categoria, tra categorie, intero immobile], defect: cambio-uso-regionale, else: "Il modulo non ha una voce per questo cambio d'uso della legge campana (un intero edificio verso un'altra categoria, un'unità fuori dalle zone A, B e C, da o verso il rurale): è un difetto del modulo; chiedi al SUE."}
     fields:
       - {kind: checkbox, label: interventi per i quali è possibile presentare la SCIA alternativa}
       - {kind: radio, label: non comporta mutamento di destinazione d’uso, when: "{{ask.scia_cambio_uso|is_no}}"}
@@ -3792,7 +3792,7 @@ sections:
     # The portal requires "stipulata in data" with "non è dotata" (seen on the SCIA alternativa
     # 2026-11-01), though the form puts it only after "ovvero ... convenzione".
     supports:
-      - {if: "{{ask.urbanizzazione|not}}", value: "{{ask.urbanizzazione_attuazione}}", in: [convenzione], else: "Senza opere di urbanizzazione primaria il portale chiede la data di una convenzione, anche dove il Comune prevede di realizzarle direttamente entro tre anni: quel caso non si può dichiarare sul portale così com'è; chieda al SUE."}
+      - {if: "{{ask.urbanizzazione|not}}", value: "{{ask.urbanizzazione_attuazione}}", in: [convenzione], else: "Senza opere di urbanizzazione primaria il portale chiede la data di una convenzione, anche dove il Comune prevede di realizzarle direttamente entro tre anni: quel caso non si può dichiarare sul portale così com'è; chiedi al SUE."}
     fields:
       - {kind: radio, label: non richiede indagini ambientali preventive, when: "{{ask.indagini_ambientali|not}}"}
       # Analyses done, no remediation: the SCIA alternativa ticks "si allegano i risultati" (its
@@ -3855,7 +3855,7 @@ sections:
     law: ["piano casa, ai sensi della l.r. n. 19/2009", interventi di ampliamento (articolo 4), interventi di demolizione e ricostruzione (articolo 5), interventi edilizi in zona agricola, riqualificazione di aree urbane degradate (articolo 7)]
     supports:
       - {value: "{{ask.pdc_tipo}}", in: [nuova costruzione, ristrutturazione urbanistica, ristrutturazione edilizia, facolta scia, variante essenziale, variante sagoma, sottotetti, parcheggi, mutamento uso, altro], else: "Il piano casa (L.R. Campania 19/2009) non accetta nuove richieste dal 30 settembre 2022 (L.R. 31/2021 art. 28 c. 6; la L.R. 13/2022 art. 4 c. 17 disciplina solo quelle pendenti a quella data). Una variante a un permesso rilasciato in base al piano casa per ora non la preparo.", unmapped: true}
-      - {if: "{{ask.pdc_tipo|is_mutamento_uso}}", value: "{{ask.scia_cambio_uso}}", in: [stessa categoria, tra categorie, intero immobile, altro], else: "Un mutamento di destinazione d'uso ai sensi dell'art. 2 L.R. 19/2001 cambia la destinazione d'uso: indichi quale (stessa categoria, tra categorie, intero immobile o altro)."}
+      - {if: "{{ask.pdc_tipo|is_mutamento_uso}}", value: "{{ask.scia_cambio_uso}}", in: [stessa categoria, tra categorie, intero immobile, altro], else: "Un mutamento di destinazione d'uso ai sensi dell'art. 2 L.R. 19/2001 cambia la destinazione d'uso: indica quale (stessa categoria, tra categorie, intero immobile o altro)."}
       - {if: "{{ask.pdc_tipo|in_nuova_costruzione__ristrutturazione_urbanistica__ristrutturazione_edilizia}} {{ask.pdc_procedura|is_deroga}}", value: "{{ask.deroga_densita,ask.deroga_altezza,ask.deroga_distanza,ask.deroga_destinazione|any}}", in: ["true"], else: "Un permesso in deroga (art. 14 DPR 380/2001) deroga ad almeno un limite: densità, altezza, distanza o destinazione d'uso."}
       - {if: "{{ask.pdc_tipo|is_altro}}", value: "{{ask.pdc_procedura}}", in: [ordinaria], else: "I lavori che nessun'altra voce indica si chiedono ai sensi dell'art. 10 in quanto tali: non come convenzionato né in deroga."}
       # A change of use that needed a SCIA alternativa or a permesso, done without it, is legalized by
@@ -4073,7 +4073,7 @@ sections:
     leave: [che i lavori riguardano l'immobile individuato]
     # Its change-of-use line, required, as the SCIA alternativa's (cambio-uso-regionale).
     supports:
-      - {value: "{{ask.scia_cambio_uso}}", in: ["no", stessa categoria, tra categorie, intero immobile], defect: cambio-uso-regionale, else: "Il modulo non ha una voce per questo cambio d'uso della legge campana (un intero edificio verso un'altra categoria, un'unità fuori dalle zone A, B e C, da o verso il rurale): è un difetto del modulo; chieda al SUE."}
+      - {value: "{{ask.scia_cambio_uso}}", in: ["no", stessa categoria, tra categorie, intero immobile], defect: cambio-uso-regionale, else: "Il modulo non ha una voce per questo cambio d'uso della legge campana (un intero edificio verso un'altra categoria, un'unità fuori dalle zone A, B e C, da o verso il rurale): è un difetto del modulo; chiedi al SUE."}
 
     # The piano casa: closed to new requests (quadro a's note).
     law: ["Opere edilizie straordinarie di cui alla l.r. n. 19/2009", interventi straordinari di ampliamento, ampliamento fino al venti per cento, modifica della destinazione d'uso da volumetria esistente non residenziale, realizzazione di opere interne finalizzate all'utilizzo dei volumi esistenti, interventi straordinari di demolizione e ricostruzione, aumento entro il limite del trentacinque per cento, ricostruzione a parità di volume, interventi edilizi in zona agricola (articolo 6-bis), mutamento di destinazione d'uso di immobili o loro parti per uso residenziale, realizzazione di nuove costruzioni ad uso produttivo, riqualificazione di aree urbane degradate (articolo 7), mutamento di destinazione d'uso ai fini abitativi, ricostruzione in sito di edifici diruti]

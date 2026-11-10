@@ -17,9 +17,9 @@ scia-36bis-c1:
   law: "Art. 36-bis DPR 380/2001: la data delle opere, l'oblazione (c. 5) e se si propongono lavori (c. 2), insieme."
   checked: "01/11/2026, su una bozza con dati fittizi."
   choices:
-    - "Chieda al SUE come presentarla finché il portale non la accetta (PEC, o il portale con i dati nella relazione)."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
-    - "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
+    - "Chiedi al SUE come presentarla finché il portale non la accetta (PEC, o il portale con i dati nella relazione)."
+    - "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Presentala tu sul portale, come ti indica il SUE: io non la compilo."
   report: docs/portal-defects.md
   page:
     heading: "SCIA in sanatoria, art. 36-bis c. 1: dating, oblazione and works proposal saved as one field"
@@ -39,9 +39,9 @@ scia-34ter:
   law: "Art. 34-ter c. 2 e 3 DPR 380/2001: la data della variante e l'oblazione dell'art. 36-bis c. 5."
   checked: "02/11/2026, su una bozza con dati fittizi."
   choices:
-    - "Chieda al SUE come presentarla finché il portale non la accetta (PEC, o il portale con i dati nella relazione)."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
-    - "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
+    - "Chiedi al SUE come presentarla finché il portale non la accetta (PEC, o il portale con i dati nella relazione)."
+    - "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Presentala tu sul portale, come ti indica il SUE: io non la compilo."
   report: docs/portal-defects.md
   page:
     heading: "SCIA in sanatoria, art. 34-ter: a pre-1977 variant's dating and oblazione saved as one field"
@@ -61,9 +61,9 @@ pdc-36bis:
   law: "Art. 36-bis DPR 380/2001: la data delle opere, l'oblazione e se si propongono lavori, insieme."
   checked: "30/10/2026, su una bozza con dati fittizi."
   choices:
-    - "Chieda al SUE come presentarlo finché il portale non lo accetta."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
-    - "Lo presenti Lei sul portale, come Le indica il SUE: io non lo compilo."
+    - "Chiedi al SUE come presentarlo finché il portale non lo accetta."
+    - "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Presentalo tu sul portale, come ti indica il SUE: io non lo compilo."
   report: docs/portal-defects.md
   page:
     heading: "Permesso in sanatoria, art. 36-bis: the same, on the permesso's asseverazione"
@@ -80,9 +80,9 @@ pdc-36-paesaggio:
   law: "Le opere dell'art. 36 in area vincolata si regolarizzano con l'accertamento dell'art. 167 c. 4-5 D.Lgs. 42/2004."
   checked: "02/11/2026, su una bozza con dati fittizi."
   choices:
-    - "Chieda al SUE come compilare il quadro paesaggistico in questo caso."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
-    - "Lo presenti Lei sul portale, come Le indica il SUE: io non lo compilo."
+    - "Chiedi al SUE come compilare il quadro paesaggistico in questo caso."
+    - "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Presentalo tu sul portale, come ti indica il SUE: io non lo compilo."
   report: docs/portal-defects.md
   page:
     heading: "Permesso in sanatoria, art. 36, in a protected area: no line for the accertamento of art. 167"
@@ -101,9 +101,9 @@ cila-impresa-dopo:
   law: "Art. 90 c. 9 c D.Lgs. 81/2008: i documenti dell'impresa vanno dati prima dell'inizio dei lavori."
   checked: "01/11/2026, su una bozza con dati fittizi."
   choices:
-    - "Presenti la pratica quando l'impresa è scelta: allora la preparo."
-    - "Chieda al SUE se e come presentarla prima."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Presenta la pratica quando l'impresa è scelta: allora la preparo."
+    - "Chiedi al SUE se e come presentarla prima."
+    - "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
   report: docs/portal-defects.md
   page:
     heading: "CILA and CIL: a firm still to be chosen is offered, then refused"
@@ -123,8 +123,8 @@ pdc-incentivo-energetico:
   law: "Gli incentivi (art. 14 D.Lgs. 102/2014, bonus del 5% D.Lgs. 28/2011) sono facoltativi."
   checked: "29/10/2026, su bozze con dati fittizi."
   choices:
-    - "Chieda al SUE come presentare il permesso senza incentivo."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Chiedi al SUE come presentare il permesso senza incentivo."
+    - "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
   report: docs/portal-defects.md
   page:
     heading: "Permesso: an energy incentive must be claimed, even for a project with none"
@@ -145,7 +145,7 @@ coholder-sesso:
   checked: "31/10/2026 e 02/11/2026, su bozze con dati fittizi."
   choices:
     - "Spunto entrambe: il codice fiscale indica quale vale."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
   report: docs/portal-defects.md
   page:
     heading: "Voltura and cambio d'intestazione: the co-holder's sex is two required boxes"
@@ -166,7 +166,7 @@ agibilita-art24:
   checked: "31/10/2026, su bozze con dati fittizi: le bozze conservano i valori."
   choices:
     - "Spunto solo l'eccezione che vale; il direttore dei lavori vede il messaggio."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
   report: docs/portal-defects.md
   page:
     heading: "Agibilità: the art. 24 exceptions are marked required"
@@ -186,7 +186,7 @@ pdc-aree-fuoco:
   checked: "01/11/2026, su una bozza con dati fittizi."
   choices:
     - "Spunto la dichiarazione sui terreni; le aree bruciate le dichiari nella relazione, se il SUE lo chiede."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
   report: docs/portal-defects.md
   page:
     heading: "Permesso: the burned-area line is one choice with the soil statement"
@@ -204,9 +204,9 @@ cambio-uso-regionale:
   law: "In Campania questo cambio richiede la SCIA alternativa o il permesso (art. 2 c. 6 L.R. 13/2022)."
   checked: "03/11/2026, dai moduli del portale e dello schema nazionale; non provato su una bozza."
   choices:
-    - "Chieda al SUE quale voce spuntare, o se dichiararlo nella relazione."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
-    - "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
+    - "Chiedi al SUE quale voce spuntare, o se dichiararlo nella relazione."
+    - "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Presentala tu sul portale, come ti indica il SUE: io non la compilo."
   report: docs/portal-defects.md
   page:
     heading: "SCIA alternativa and permesso: no line for Campania's own changes of use"
@@ -225,9 +225,9 @@ paesaggio-altri-tecnici:
   law: "La relazione paesaggistica la firmano i tecnici che l'hanno redatta (DPCM 12/12/2005; DPR 31/2017)."
   checked: "05/11/2026, su una bozza con dati fittizi, senza salvare."
   choices:
-    - "Chieda al SUE come presentarla finché il portale non mostra il secondo tecnico."
-    - "Segnali il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
-    - "La presenti Lei sul portale, come Le indica il SUE: io non la compilo."
+    - "Chiedi al SUE come presentarla finché il portale non mostra il secondo tecnico."
+    - "Segnala il difetto a InfoCamere (assistenza impresainungiorno) o al SUE."
+    - "Presentala tu sul portale, come ti indica il SUE: io non la compilo."
   report: docs/portal-defects.md
   page:
     heading: "Landscape authorization: another technician beside the architect presenting can't be named"

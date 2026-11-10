@@ -82,7 +82,7 @@ attachments:
     - {kind: file, label: Documentazione per la richiesta di deroga alla conformità ai requisiti igienico sanitari, value: "{{ask.igienico_deroga_doc}}", when: "{{ask.igienico_conforme|not}}", on_page: true}
     - {kind: file, label: Documentazione necessaria per la richiesta di deroga alla fascia di rispetto cimiteriale, value: "{{ask.cimiteriale_doc}}", when: "{{ask.fascia_cimiteriale|is_non_consentito}}", on_page: true}
 asks:
-  diritti_euro: {propose: "{{ask.sanatoria_caso|diritti_sanatoria_scia}}", why: "Voce SUE 16 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 441 € alla presentazione per un accertamento di conformità (art. 36-bis) o una regolarizzazione (art. 34-ter), il resto una volta determinato; art. 36-bis c. 5 b, SUE 17-18. I lavori ancora in corso (art. 37 c. 5) non sono nel tariffario: chieda al SUE"}
+  diritti_euro: {propose: "{{ask.sanatoria_caso|diritti_sanatoria_scia}}", why: "Voce SUE 16 del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): 441 € alla presentazione per un accertamento di conformità (art. 36-bis) o una regolarizzazione (art. 34-ter), il resto una volta determinato; art. 36-bis c. 5 b, SUE 17-18. I lavori ancora in corso (art. 37 c. 5) non sono nel tariffario: chiedi al SUE"}
   # Napoli's own annexes, attached by the second run under Allegati liberi (DD 603/2025; L.R. 59/2018).
   napoli_allegato_a: {default: "true"}
   modello_dp: {default: "true"}
@@ -90,47 +90,47 @@ asks:
   sanatoria_titolo: {default: scia}
   sanatoria_paesaggio: {default: "true"}
 yours:
-  - "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-  - "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-  - "In qualità di progettista, verifichi ogni asseverazione di questa pagina: sono Sue, e le firma con la pratica"
-  - "Prima dell'inizio dei lavori, nomini chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, b) PER PRESA VISIONE, m) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+  - "In qualità di progettista, verifica ogni asseverazione di questa pagina: sono tue, e le firmi con la pratica"
+  - "Prima dell'inizio dei lavori, nomina chi la pratica lascia da nominare (il direttore dei lavori, il direttore dei lavori strutturali, l'impresa) con la comunicazione di nomina del SUE"
   - "Una SCIA che richiede atti di assenso (la Soprintendenza, un parco, un vincolo): nessuna data di inizio; i lavori iniziano quando il SUE comunica che gli atti di assenso sono stati acquisiti"
   - "Per opere sulle strutture: l'autorizzazione sismica in sanatoria del Genio Civile di Napoli su S.I.smi.C.A. (art. 4 c. 1 e L.R. 9/1983), con l'attestazione dello strutturista che le opere rispettavano le norme tecniche dell'epoca (art. 36-bis c. 3-bis DPR 380/2001). I documenti vanno nel loro spazio di caricamento"
   - "Lavori eseguiti in area vincolata (art. 36-bis c. 4): in Allega documenti, i documenti per il parere vincolante sulla loro compatibilità paesaggistica vanno in \"Documentazione necessaria ai fini del rilascio del parere vincolante\", firmati digitalmente (solo .p7m)"
   - "Una sanzione o oblazione la cui ricevuta il quadro della sanatoria dichiara allegata: in Allega documenti, la ricevuta va in \"copia attestazione versamento oneri, diritti e spese\", firmata (solo .p7m): il quadro non aggiunge uno spazio di caricamento proprio"
-  - "Firmi e invii (Firma e invio); conservi la ricevuta"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
 # Which pratica a case is: the library's rules table (rules/sue-napoli.yaml) decides, and pre-flight
 # refuses a case it gives to another pratica, or that needs a pratica this one doesn't file with it.
 rules:
   table: sue-napoli
-  question: "Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna."
+  question: "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
   main: napoli/comune/scia-in-sanatoria
   facts: {permesso_per_scelta: "false", sanatoria: "true", parere_esonero: "false"}
 supports:
   # The SCIA's form has no line for a large site under VIA or AIA (its Piano di Utilizzo line is
   # for sites up to 6000 m³, under the repealed DM 161/2012).
-  - {if: "{{ask.scavo|is_sottoprodotti}}", value: "{{ask.scavo_piano_utilizzo}}", in: ["false"], else: "Il modulo della SCIA non prevede terre scavate oltre 6000 m³ soggette a VIA o AIA, utilizzate come sottoprodotti secondo un Piano di Utilizzo (DPR 120/2017 art. 9): lavori di tale entità richiedono il permesso di costruire; chieda al SUE."}
+  - {if: "{{ask.scavo|is_sottoprodotti}}", value: "{{ask.scavo_piano_utilizzo}}", in: ["false"], else: "Il modulo della SCIA non prevede terre scavate oltre 6000 m³ soggette a VIA o AIA, utilizzate come sottoprodotti secondo un Piano di Utilizzo (DPR 120/2017 art. 9): lavori di tale entità richiedono il permesso di costruire; chiedi al SUE."}
   # Works done without a permesso di costruire (or a SCIA alternativa) are regularized by the
   # permesso in sanatoria the Comune issues (art. 36 DPR 380/2001), never by a SCIA: the asseverazione's
   # "in assenza" row is the permesso's (rehearsals/pdc-sanatoria-fittizio). Partial difformity from a
   # permesso can go by SCIA (art. 36-bis c. 1).
-  - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_sanatoria_caso}}", in: [parziale], else: "I lavori eseguiti senza permesso di costruire (o SCIA alternativa) si regolarizzano con il permesso in sanatoria (art. 36 DPR 380/2001), non con una SCIA: presenti il permesso in sanatoria."}
+  - {if: "{{ask.sanatoria_titolo|is_permesso}}", value: "{{ask.pdc_sanatoria_caso}}", in: [parziale], else: "I lavori eseguiti senza permesso di costruire (o SCIA alternativa) si regolarizzano con il permesso in sanatoria (art. 36 DPR 380/2001), non con una SCIA: presenta il permesso in sanatoria."}
   # Works already done that needed a landscape authorization: their compatibility goes with the
   # art. 36-bis sanatoria (c. 4), not with the SCIA of works still under way (art. 37 c. 5). Landscape
   # works still to come take the authorization with the sanatoria (rehearsals/scia-sanatoria-paesaggistica-*).
-  - {if: "{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}", value: "{{ask.sanatoria_caso}}", in: [doppia conformita], else: "Lavori già eseguiti che chiedevano l'autorizzazione paesaggistica: rientrano solo nella sanatoria dell'art. 36-bis c. 4. Se i lavori sono in corso ma le opere paesaggistiche in parte già fatte, l'autorizzazione non si rilascia più (art. 146 c. 4 D.Lgs. 42/2004): chieda al SUE."}
+  - {if: "{{ask.sanatoria_paesaggio}} {{ask.paesaggio|in_semplificata__ordinaria}}", value: "{{ask.sanatoria_caso}}", in: [doppia conformita], else: "Lavori già eseguiti che chiedevano l'autorizzazione paesaggistica: rientrano solo nella sanatoria dell'art. 36-bis c. 4. Se i lavori sono in corso ma le opere paesaggistiche in parte già fatte, l'autorizzazione non si rilascia più (art. 146 c. 4 D.Lgs. 42/2004): chiedi al SUE."}
   # Art. 36-bis c. 1 (Salva Casa): the portal saves its dating, oblazione and works proposal as one
   # field. A known defect: pre-flight tells the person and lists their choices (defects.yaml).
   - value: "{{ask.sanatoria_caso}}"
     in: [in corso, doppia conformita, variante pre 1977]
     defect: scia-36bis-c1
-    else: "SCIA in sanatoria per l'art. 36-bis c. 1: il portale salva una sola voce tra data delle opere, oblazione e proposta di interventi. È un difetto del portale; chieda al SUE."
+    else: "SCIA in sanatoria per l'art. 36-bis c. 1: il portale salva una sola voce tra data delle opere, oblazione e proposta di interventi. È un difetto del portale; chiedi al SUE."
   # Art. 34-ter (a variant to a pre-1977 title): the asseverazione saves its dating and its oblazione
   # as one field (read 2026-11-02); the sanatoria quadro's title and payment rows work.
   - value: "{{ask.sanatoria_caso}}"
     in: [in corso, doppia conformita, conformita urbanistica]
     defect: scia-34ter
-    else: "Variante a un titolo anteriore al 1977 (art. 34-ter): il portale salva la data della variante oppure l'oblazione, non entrambe. È un difetto del portale; chieda al SUE."
+    else: "Variante a un titolo anteriore al 1977 (art. 34-ter): il portale salva la data della variante oppure l'oblazione, non entrambe. È un difetto del portale; chiedi al SUE."
   - {if: "{{ask.igienico_conforme}} {{ask.igienico_24_5bis}}", value: "{{ask.igienico_adattabilita}}", in: ["true"], else: "Il modulo consente l'art. 24 c. 5-bis solo se è soddisfatto il requisito di adattabilità (art. 24 c. 5-ter): l'unità non rientra."}
   # Works on structures begun without the seismic filing always need the autorizzazione sismica
   # in Campania (art. 4 c. 1 e L.R. 9/1983): the asseverazione's sismica row says so, and the

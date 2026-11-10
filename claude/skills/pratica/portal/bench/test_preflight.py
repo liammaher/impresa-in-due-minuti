@@ -277,7 +277,7 @@ def napoli_filing():
     r, f = check(signed_file(tmp, "Relazione_tecnica.pdf.p7m", own, content=PDFA_CONTENT))
     assert r["ready"] and "problem" not in f, f
     r, f = check(signed_file(tmp, "Relazione_vecchia.pdf.p7m", own))
-    assert not r["ready"] and f["problem"].endswith("(lo esporti di nuovo come PDF/A)"), f
+    assert not r["ready"] and f["problem"].endswith("(esportalo di nuovo come PDF/A)"), f
     # A PDF that says it's signed and isn't readable as a signature: refused, as a bad .p7m is.
     broken = tmp / "Relazione_rotta.pdf"
     broken.write_bytes(PDFA_CONTENT + b"/ByteRange [0 1 2 3] /Contents <30" + b"AB" * 300 + b">")
@@ -600,7 +600,7 @@ def scelte_follow_the_case():
         assert len(ticks(steps, v("subentro"))) == 4 and run.preflight(steps, v("subentro"), made_up=True)["ready"]
         sub = json.loads((root / "cambio-intestazione-fittizio" / "answers-subentro.json").read_text())
         r = run.preflight(steps, v(sub | {"cambio_dl": False, "cambio_ditta": False}), made_up=True)
-        assert any("indichi quale" in u for u in r["unsupported"]), r["unsupported"]
+        assert any("indica quale" in u for u in r["unsupported"]), r["unsupported"]
 
         steps, v = load("proroga-paesaggistica-fittizia")
         assert len(ticks(steps, v("p6"))) == 1 and len(ticks(steps, v("assenso"))) == 2
@@ -878,7 +878,7 @@ def exemptions_and_other_kinds():
         assert any(l.startswith("Per gli Enti autorizzati") for l, _ in b), b
         assert ("dichiarazione relativa all'assolvimento dell'imposta di bollo", "rehearsals/scia-fittizia/files/dichiarazione-bollo-virtuale.pdf") in b, b
         r, _ = case(semplificata, "p6")
-        assert "Paghi l'imposta di bollo con pagoPA, come chiede il portale" in r["yours"], r["yours"]
+        assert "Paga l'imposta di bollo con pagoPA, come chiede il portale" in r["yours"], r["yours"]
         # The reason's box, wherever the crawl didn't see it (a SUAP draft), goes as the text box it reads as.
         for name in ("dehors-fittizio", "cila-fittizia"):
             steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
@@ -998,7 +998,7 @@ def short_message():
     assert short.startswith("Domande") and len(short) < len(message) / 2, short
     for words in ("Risposte che propongo", "Mi mancano", "vanno sistemati", "(PDF)", "Alla fine restano"):
         assert words not in short, (words, short)
-    assert f"({len(r['proposals'])} risposte): scriva «ok»" in short and "riepilogo" not in short, short
+    assert f"({len(r['proposals'])} risposte): scrivi «ok»" in short and "riepilogo" not in short, short
     assert short.rstrip().endswith("per vederle una per una."), short
     assert "Risposte che propongo" in message, message
 

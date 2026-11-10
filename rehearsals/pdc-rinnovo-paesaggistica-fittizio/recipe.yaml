@@ -28,18 +28,18 @@ asks:
     propose: "{{ask.pdc_tipo,ask.scia_onerosa,ask.contributo_fascia,ask.parcheggio_fascia|diritti_pdc}}"
     why: "Voci del tariffario 2026 dei diritti SUE del Comune (G.C. 239/2026): SUE 10, 401 € per un permesso non soggetto al contributo; SUE 11, 501 € per una variante a un permesso rilasciato; se oneroso, SUE 7-9 in base al contributo (oneri di urbanizzazione + costo di costruzione): 1.003 € fino a 5.000 €, 1.505 € da 5.000 a 30.000 €, 1.998 € oltre; parcheggi su suolo libero (L.R. Campania 19/2001 art. 6 c. 2, parcheggi pertinenziali), SUE 4-6 in base alla superficie: 677 € fino a 300 m², 1.129 € da 301 a 1.000 m², 1.998 € oltre 1.001 m²"
 yours:
-- "Apra la bozza in Pratiche in bozza ({{ask.descrizione}}) e la confronti con questa pagina"
-- "Spunti le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
-- "Come progettista, verifichi ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che Lei firma con la richiesta"
+- "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+- "Spunta le dichiarazioni del dichiarante: la casella di presa d'atto sotto la PEC, j) diritti di terzi, consapevolezza (artt. 46-47), informativa privacy, tasse comunali, art. 75 DPR 445/2000"
+- "Come progettista, verifica ogni asseverazione di questa pagina: il portale ne ricava la Relazione tecnica di asseverazione che firmi con la richiesta"
 - "Nell'asseverazione, «non interessa aree percorse dal fuoco» e la dichiarazione sui terreni sono una sola scelta sul portale (un suo difetto): Claude spunta quella sui terreni. Le aree bruciate le dichiari nella relazione tecnica, se il SUE lo chiede"
-- "Paghi il bollo come chiede il portale, poi firmi e invii (Firma e invio); conservi la ricevuta"
+- "Paga il bollo come chiede il portale, poi firma e invia (Firma e invio); conserva la ricevuta"
 - "L'autorizzazione paesaggistica precede il permesso (art. 146 c. 4 D.Lgs. 42/2004): i lavori iniziano solo quando ci sono entrambi"
-- "Una volta rilasciato il permesso: lo ritiri (pagando il contributo, se dovuto, come indica il quadro f)), nomini il progettista strutturale e i direttori dei lavori, e presenti la comunicazione di inizio lavori con la relazione energetica e i depositi strutturali"
-- "Spunti le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
-- "Firmi e invii (Firma e invio); conservi la ricevuta"
+- "Una volta rilasciato il permesso: ritiralo (pagando il contributo, se dovuto, come indica il quadro f)), nomina il progettista strutturale e i direttori dei lavori, e presenta la comunicazione di inizio lavori con la relazione energetica e i depositi strutturali"
+- "Spunta le dichiarazioni del dichiarante: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, e le prese visione a nome del committente"
+- "Firma e invia (Firma e invio); conserva la ricevuta"
 rules:
   table: sue-napoli
-  question: Quali di queste cose valgono per i lavori? Spunti quelle vere, anche nessuna.
+  question: Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna.
   facts:
     permesso_per_scelta: 'true'
     parere_esonero: 'false'

@@ -81,7 +81,7 @@ class GenError(Exception):
     pass
 
 
-FATTI = "Quali di queste cose valgono per l'attività? Spunti quelle vere, anche nessuna."
+FATTI = "Quali di queste cose valgono per l'attività? Spunta quelle vere, anche nessuna."
 
 
 def rules_block(spec, asks, groups):

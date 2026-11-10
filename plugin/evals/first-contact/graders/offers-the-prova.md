@@ -1,7 +1,7 @@
 ---
 type: llm
 ---
-PASS if the reply is in Italian, addresses the tecnico as Lei, is at most about three lines (no
+PASS if the reply is in Italian, addresses the tecnico as tu (never Lei), is at most about three lines (no
 list of features or steps), and offers to show it working on a CILA di prova with made-up data,
 saying before they agree that they log in to the portal with their own SPID and that nothing is
 sent, leaving them the choice of telling a real case instead.
