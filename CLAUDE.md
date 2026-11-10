@@ -21,6 +21,7 @@ make touchid                      # Rebuild only the Touch ID helper
 make test                         # Go tests with race detector (not the MCP ones)
 make schema                       # Regenerate schema.json after a schema change (a test checks)
 make steps                        # Build the rehearsals' steps files and rehearsals/steps.lock (commit the lock)
+make coverage                     # Rewrite docs/coverage.md and docs/ready.md (what the plugin ships), a few minutes
 make clean                        # Remove build artifacts
 go test -race ./internal/vault/   # One layer: crypto, store, vault, api
 ```
@@ -142,6 +143,11 @@ plugin/              the Impresa in un minuto plugin for Cowork (docs/design/pac
                      follows the skill, `claude plugin eval`); a release has neither.
                      The skill's report.py: a Impresa in un minuto fault as a link to the bug form, filled in,
                      refused if it holds a job's value (test_report.py); the tecnico submits it
+                     ready.py writes docs/ready.md, the one list of what the plugin ships (a row per
+                     steps file: library slug, portal name, mapped / fillable / run on the portal, refusals),
+                     from build.py's catalog and scoreboard.py's counts; `scoreboard.py --write` (`make
+                     coverage`) writes it with coverage.md, same counts and date, so they never drift
+                     (test_ready.py). Marketing reads it; nothing in it is typed by hand
 connector/           the Impresa in un minuto connector (remote MCP, read-only, no sign-in): coverage, search, a
                      pratica's status and freshness, library entries, from plugin/build.py's output.
                      It never takes personal data: its tools take a case's facts
