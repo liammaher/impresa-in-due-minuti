@@ -85,6 +85,9 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    Pre-flight refuses a case the table gives to another pratica, and adds to `yours` a
    pratica it needs from another office (the seismic filing at the Genio Civile).
    A recipe's `supports` keeps only what the table doesn't decide (an unmapped branch).
+   A `supports` entry whose refusal is a case the map can't fill yet (not one the law makes, not a
+   portal limit) carries `unmapped: true`: that marker, not the wording, is what coverage.md's
+   Level 2 counts (`scoreboard.unmapped_refusals`; test_gen checks the markers still count).
    A new fact multiplies the table's cases by its values: with `terre_rocce` (three) the library's
    validator walks 34 million combinations (8 minutes; it built them as one array and ran out of memory
    until 2026-11-03). `bench/test_rules.py` walks only the cases `route.cases()` reaches, each fact as

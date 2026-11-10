@@ -304,30 +304,36 @@ def pairs_line(reh):
             + ", ".join(f"{n} {k.replace('_', ' ')}" for k, n in sorted(other.items())) + ".")
 
 
+def unmapped_refusals(supports):
+    """The messages of the `supports` entries marked `unmapped: true`: a case the map can't fill
+    yet. Not the refusals the law makes (the piano casa closed, the ONLUS exemption ended), and not
+    the portal's own limits (`defect`, or a form with no box for the case): those stay refusals,
+    uncounted here. The marker, not the wording: a regex on the English messages went quiet when
+    they were rewritten in Italian (2026-11-06) and this line read 0 until 2026-11-10.
+    `is True`, so a quoted `"true"` is no marker; bench/test_gen.py checks the markers still count."""
+    return list(dict.fromkeys(c["else"].strip() for c in supports if c.get("unmapped") is True and c.get("else")))
+
+
 def sue_completeness(reh, status):
-    """The refusals the SUE recipes still carry, counted from their `else:` messages: the
-    recipe's own and those its sections bring from the dictionary (gen.py adds them)."""
+    """The refusals the SUE recipes still carry as unmapped (`unmapped_refusals`): the recipe's
+    own, those it extends, and those its sections bring from the dictionary (gen.py adds them)."""
     refusals = {}  # message -> recipes
     per = {}
     slots = {}  # (section, label) -> recipes: a ticked "si allega" with no slot under its condition
     for name, v in reh.items():
         if v["sportello"] != "sue":
             continue
-        text = (REHEARSALS / name / "recipe.yaml").read_text()
-        # As YAML reads them: an escaped quote left raw counted one refusal twice (2026-11-02).
-        msgs = [yaml.safe_load('"' + m.group(1) + '"') for m in re.finditer(r'else:\s*"((?:[^"\\]|\\.)*)"', text)]
+        recipe = gen.load_yaml(REHEARSALS / name / "recipe.yaml")
         try:
-            steps = gen.generate(gen.load_yaml(REHEARSALS / name / "recipe.yaml"))
-            msgs += [c["else"] for c in steps["supports"] if "else" in c and c["else"] not in msgs]
+            steps = gen.generate(recipe)
+            msgs = unmapped_refusals(steps["supports"])
             for sec, label, _ in gen.unslotted(steps):
                 slots.setdefault((sec, label), set()).add(name)
         except (gen.GenError, FileNotFoundError):  # a recipe whose crawl isn't imported yet (2026-11-04)
-            pass  # not fillable yet: the recipe's own refusals only
+            msgs = unmapped_refusals(gen.resolved(recipe).get("supports", []))  # not fillable yet: the recipe's own
         for msg in msgs:
-            msg = msg.strip()
-            if re.search(r"(isn't|aren't|not) (yet )?mapped|not mapped yet|mapped yet", msg):
-                refusals.setdefault(msg, set()).add(name)
-                per[name] = per.get(name, 0) + 1
+            refusals.setdefault(msg, set()).add(name)
+            per[name] = per.get(name, 0) + 1
     sue = {k: v for k, v in status.items() if v["sportello"] == "sue"}
     fill = [k for k, v in sue.items() if not v["missing"]]
     short = ", ".join("`" + k + "`" for k, v in sue.items() if v["missing"])
@@ -349,7 +355,9 @@ def sue_completeness(reh, status):
         f"- Which pratiche a case needs: of the {c['cases']} cases the rules tables decide, **{c['routed']} reach a "
         f"steps file**, {c['refused']} are refused with a reason or need no pratica, and **{to_map} have no steps "
         f"file yet**: {len(c['unmapped'])} combinations of pratiche, listed below (`bench/test_route.py`).",
-        f"- Level 2: **{sum(per.values())} refusals across {len(per)} recipes**, {len(refusals)} distinct messages.",
+        f"- Level 2: **{sum(per.values())} refusals across {len(per)} recipes**, {len(refusals)} distinct messages, "
+        "each a case the map can't fill yet (marked `unmapped: true`; the law's own refusals and the portal's "
+        "limits are not counted).",
         f"- Level 3, in part: **{len(slots)} ticked \"si allega\" boxes with no attachment slot** under their"
         " condition (listed below): each may add a required slot. A box read on a filled draft says what it adds"
         " (the dictionary's `slot`).",
