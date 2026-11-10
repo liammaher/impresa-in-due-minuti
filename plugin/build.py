@@ -483,7 +483,7 @@ def self_check(plugin):
         ours = subprocess.run([*py, skill / "portal" / "run.py", *card], cwd=case, capture_output=True, text=True)
         theirs = subprocess.run([sys.executable, PRATICA / "portal" / "run.py", *card[:2], steps_file(REHEARSALS / TEST_CASE),
                                  *card[3:]], cwd=case, capture_output=True, text=True)
-        if ours.returncode or "Io compilo" not in ours.stdout or "In una pratica vera tu" not in ours.stdout:
+        if ours.returncode or "Io compilo la bozza" not in ours.stdout or "Qui non c'è nulla da inviare" not in ours.stdout:
             sys.exit(f"the Prova's card isn't made:\n{ours.stdout}{ours.stderr}")
         if (ours.returncode, ours.stdout) != (theirs.returncode, theirs.stdout):
             sys.exit("the Prova's card differs between the plugin and the repo's runner")

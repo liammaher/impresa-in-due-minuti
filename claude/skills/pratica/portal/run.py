@@ -1553,21 +1553,16 @@ def tu_steps(later):
         rest = [x for x in later if not re.search(r"procura|versament|ricevut|pagament", x, re.I)]
         what += ["gli altri documenti" if what else "i documenti da firmare"] if rest else []
         steps += (["paga i diritti"] if pay_first else []) + [
-            f"firma {' e '.join([', '.join(what[:-1]), what[-1]] if len(what) > 1 else what)} e scrivimi «ho firmato»"]
-    return steps + ["firma"] + ([] if pay_first and later else ["paga"]) + ["invia"]
+            f"firma {' e '.join([', '.join(what[:-1]), what[-1]] if len(what) > 1 else what)}, poi scrivimi «ho firmato»"]
+    return steps + ["firma la pratica"] + ([] if pay_first and later else ["paga"]) + ["invia"]
 
 
 def step_details(steps):
     """What the sportello adds to a step, shown next to it in the closing lines (review.py): where the diritti
     are paid, in which order the files are signed, what comes back after sending. Never in the card."""
     d = (filing_rules(steps) or {}).get("card", {})
-    return {k: v for k, v in {"paga i diritti": d.get("pay"), "paga": d.get("pay"), "firma": d.get("sign"),
+    return {k: v for k, v in {"paga i diritti": d.get("pay"), "paga": d.get("pay"), "firma la pratica": d.get("sign"),
                               "invia": d.get("send")}.items() if v}
-
-
-def quadri(steps):
-    """How many sections of the form the compilation fills."""
-    return sum(1 for s in steps["sections"] if s.get("fields"))
 
 
 def count(n, one, many):
@@ -1599,23 +1594,22 @@ def card_why(steps, values, rows):
 
 
 def card(steps, values, report, made_up=False, rows=None, preview_check=True):
-    """"Cosa succede", in three lines: the pratica and why it is this one, what Claude does, what the tecnico does.
-    From the steps file and the case (so it can't promise what the runner doesn't do). One text, sent as it is
-    before the portal opens: for a Prova (made_up) it says nothing is sent. preview_check: the skill reads the
-    portal's PDF preview back and holds it to the documents (SKILL.md step 5); False for a variant without it.
-    The rest waits: the sportello's details come with each step in the closing lines (review.py), every answer
-    and where it comes from with «dettagli»."""
+    """"Cosa succede", in two lines: the pratica and why it is this one, and what Claude does. What the tecnico does
+    is in the verdict (SKILL.md) and the closing lines (review.py), where each step comes with the sportello's
+    details; every answer and where it comes from is «dettagli». From the steps file and the case (so it can't
+    promise what the runner doesn't do). One text, sent as it is before the portal opens: for a Prova (made_up)
+    it says nothing is sent. preview_check: the skill reads the portal's PDF preview back and holds it to the
+    documents (SKILL.md step 5); False for a variant without it."""
     rows = summary_rows(steps, values) if rows is None else rows
     title = re.sub(r",\s*SU[AE]P? Napoli\b.*$", "", steps.get("title") or "La pratica").split(":")[0].strip()
     n_files = next((int(re.search(r"\((\d+)\)", r["question"]).group(1)) for r in rows if r["key"] == "allegati"), 0)
     heading = f"**{title}** (prova, dati inventati)" if made_up else "**" + ", ".join([title, *[w for w in card_why(steps, values, rows) if w.lower() not in title.lower()]]) + "**"
-    does = [f"compilo {count(quadri(steps), 'quadro', 'quadri')}"]
+    does = ["compilo la bozza"]
     if n_files:
         does.append(f"allego {count(n_files, 'file', 'file')}" + (" di prova" if made_up else ""))
     does.append("rileggo tutto dal portale" + ("" if made_up or not preview_check else ", confrontandolo con i tuoi documenti")
                 if preview_check else "rileggo ogni casella del portale")
-    lines = [heading, "", f"Io {', '.join(does[:-1])} e {does[-1]}." if len(does) > 1 else f"Io {does[0]}.",
-             ("In una pratica vera tu" if made_up else "Tu") + " controlli l'anteprima, spunti le dichiarazioni, paghi, firmi e invii."]
+    lines = [heading, f"Io {', '.join(does[:-1])} e {does[-1]}."]
     if made_up:
         lines += ["", "Qui non c'è nulla da inviare: finita la prova, cancella la bozza da «Pratiche in bozza»."]
     return "\n".join(lines)
@@ -2082,11 +2076,9 @@ def preflight(steps, values, made_up=False, after=False, summarize=True, preview
     report["ready"] = not (report["questions"] or report["proposals"] or report["missing"]
                            or any(not x["exists"] or x.get("problem") for x in report["files"] if x["path"]))
     # What comes after, in a line, so nothing at the end surprises them (`yours` has it all).
+    # The verdict says what stays theirs and the closing lines how, so only what changes the start is said here.
     end = ["All'inizio della compilazione ti chiederò di scegliere i file del lavoro, una volta sola."] \
         if report.get("pick") else []
-    end.append("Alla fine restano a te: le dichiarazioni, la firma, il pagamento e l'invio."
-               + (" Dopo le dichiarazioni mi dai i file firmati (la procura e gli altri): li allego con una "
-                  "seconda compilazione." if later else ""))
     if summarize and not after and not report["questions"]:
         # A complete folder: nothing left to ask but the proposals. The one message shows every
         # answer the compilation will use, the proposals among them, and the tecnico's «sì»
@@ -2111,7 +2103,7 @@ def preflight(steps, values, made_up=False, after=False, summarize=True, preview
     text = message(report, asks, held_need)
     if text:
         report["short"] = message(report, asks, held_need, short=True)
-        report["message"] = text + "\n\n" + "\n".join(end)
+        report["message"] = text + ("\n\n" + "\n".join(end) if end else "")
     return report
 
 
@@ -2826,7 +2818,7 @@ def review_shown(steps, values, whole=None):
         if v["kind"] == "file" and v["value"]:
             data = Path(v["value"]).expanduser().read_bytes()
             attached.setdefault(hashlib.sha256(data).hexdigest(), (Path(v["value"]).name, v["section"]))
-    return {"title": steps.get("title"), "quadri": quadri(steps), "details": step_details(steps), "attached": [{"name": n, "section": sec, "sha256": h} for h, (n, sec) in attached.items()], "yours": [values.render(y) for y in steps.get("yours", [])] + asked_yours(steps, values) + apart(steps, values),
+    return {"title": steps.get("title"), "details": step_details(steps), "attached": [{"name": n, "section": sec, "sha256": h} for h, (n, sec) in attached.items()], "yours": [values.render(y) for y in steps.get("yours", [])] + asked_yours(steps, values) + apart(steps, values),
             "second_run": later, "apart": apart(steps, values),
             "values": [{"section": v["section"], "label": v["label"] or v["id"],
                         "value": "chosen" if v["value"] is None

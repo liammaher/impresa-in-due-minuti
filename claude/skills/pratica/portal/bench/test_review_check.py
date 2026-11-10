@@ -70,7 +70,7 @@ def main():
         r = build(Path(t), {"rows": [row]}, [good])
         check("a real job that worked: two lines, the pratica by its short name, no warning",
               r["message"] == "✅ CILA compilata sul portale in 95 secondi: ogni valore è stato riletto.\nTocca a te:\n"
-              "1. Controlla l'anteprima della bozza\n2. Spunta le dichiarazioni\n3. Firma\n4. Paga\n5. Invia"
+              "1. Controlla l'anteprima della bozza\n2. Spunta le dichiarazioni\n3. Firma la pratica\n4. Paga\n5. Invia"
               and r["warnings"] == [], r)
         check("the steps in full stay for Claude to answer from, unsaid", r["yours"] == SHOWN["yours"]
               and "120 €" not in r["message"], r)
@@ -103,27 +103,28 @@ def main():
         r = build(Path(t), shown={"second_run": later})
         check("a second compilation: the diritti paid first, its receipt and the procura then attached",
               r["steps"] == ["controlla l'anteprima della bozza", "spunta le dichiarazioni", "paga i diritti",
-                             "firma la procura, la ricevuta del pagamento e gli altri documenti e scrivimi «ho firmato»",
-                             "firma", "invia"], r)
-        d = {"paga i diritti": "solo sul c/c postale 57060964", "firma": "prima il PDF della pratica, poi la distinta",
+                             "firma la procura, la ricevuta del pagamento e gli altri documenti, poi scrivimi «ho firmato»",
+                             "firma la pratica", "invia"], r)
+        d = {"paga i diritti": "solo sul c/c postale 57060964", "firma la pratica": "prima il PDF della pratica, poi la distinta",
              "invia": "il codice pratica compare a video, la ricevuta arriva in PEC"}
         r1 = build(Path(t) / "1", shown={"second_run": later, "details": d})
         lines = r1["message"].split("\n")
-        check("the sportello's details sit next to their step, and what Claude does afterwards is its own line",
-              "3. Paga i diritti (solo sul c/c postale 57060964)" in lines
-              and "5. Firma (prima il PDF della pratica, poi la distinta)" in lines
-              and "6. Invia (il codice pratica compare a video, la ricevuta arriva in PEC)" in lines
-              and lines[lines.index("4. Firma la procura, la ricevuta del pagamento e gli altri documenti e scrivimi «ho firmato»") + 1]
-              == "   Io poi li allego con una seconda compilazione.", r1)
+        check("with a second compilation the list says who acts when (they, Claude, they), the sportello's details next to their step",
+              lines[1:] == ["Ora tocca a te:", "1. Controlla l'anteprima della bozza", "2. Spunta le dichiarazioni",
+                            "3. Paga i diritti (solo sul c/c postale 57060964)",
+                            "4. Firma la procura, la ricevuta del pagamento e gli altri documenti, poi scrivimi «ho firmato»",
+                            "Poi io: allego i file firmati con una seconda compilazione e ti avviso.", "Poi di nuovo tu:",
+                            "5. Firma la pratica (prima il PDF della pratica, poi la distinta)",
+                            "6. Invia (il codice pratica compare a video, la ricevuta arriva in PEC)"], r1)
         r2 = build(Path(t) / "2", shown={"second_run": later[:1]})
         check("a second compilation with nothing paid first: paying after signing, as on any pratica",
-              r2["steps"][-3:] == ["firma", "paga", "invia"] and "paga" not in r2["steps"][:3]
-              and "firma la procura e scrivimi «ho firmato»" in r2["steps"], r2)
+              r2["steps"][-3:] == ["firma la pratica", "paga", "invia"] and "paga" not in r2["steps"][:3]
+              and "firma la procura, poi scrivimi «ho firmato»" in r2["steps"], r2)
         r3 = build(Path(t) / "3", report={"reopened": True}, shown={"second_run": later})
         check("the second compilation itself: the signed files attached, then sign and send",
               r3["message"].startswith("✅ CILA: file firmati allegati sul portale in 95 secondi")
-              and r3["steps"] == ["controlla l'anteprima della bozza", "firma", "invia"]
-              and "Io poi" not in r3["message"], r3)
+              and r3["steps"] == ["controlla l'anteprima della bozza", "firma la pratica", "invia"]
+              and "Poi io" not in r3["message"] and r3["message"].split("\n")[1] == "Tocca a te:", r3)
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t), shown={"apart": ["Da presentare a parte, al suo ufficio: Deposito sismico"]})
         check("what is filed apart is its own line, after the portal's steps",
@@ -135,14 +136,10 @@ def main():
               r["message"].startswith("✅ Permesso di costruire compilato sul portale in 4 minuti"), r)
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t), {"rows": [row, row]}, [good], {"alerts": [ALERT]}, None, "--prova")
-        check("the Prova: the work, the PDF check and the files as ✅, no portal warning (made-up data raises them), nothing to send",
-              r["message"] == "✅ CILA di prova compilata in 95 secondi, con dati inventati.\n"
-              "✅ Anteprima PDF del portale letta e confrontata con il caso di prova: tutti i 2 dati corrispondono.\n"
-              "✅ 1 file allegato sul portale è proprio quello del caso di prova (stessi byte).\n"
-              "Io: ho compilato 19 quadri, allegato i file e riletto tutto dal portale.\n"
-              "Tu, in una pratica vera: controlli l'anteprima, spunti le dichiarazioni, paghi, firmi e invii.\n"
-              "Per vedere ogni risposta e da dove viene, scrivi «dettagli».\n"
-              "Nulla da inviare: cancella la bozza da «Pratiche in bozza»." and r["warnings"] == [], r)
+        check("the Prova, everything matched: one line, what a real filing leaves to them, the draft to look at; no portal warning (made-up data raises them)",
+              r["message"] == "✅ CILA di prova compilata in 95 secondi. Riletti dal portale 2 dati e 1 file: tutto corrisponde.\n"
+              "In una pratica vera restano a te: controllare l'anteprima, spuntare le dichiarazioni, pagare, firmare, inviare.\n"
+              "Guarda la bozza qui accanto (Pratiche in bozza › PROVA NON INVIARE), poi cancellala." and r["warnings"] == [], r)
     with tempfile.TemporaryDirectory() as t:
         # The compilation attached two files; «Allega documenti» lists the one (in two slots), the other sits in a quadro.
         receipt = {"name": "ricevuta-sanzione.pdf", "section": "d) Qualificazione dell'intervento", "sha256": sha(b"%PDF ricevuta")}
@@ -165,11 +162,11 @@ def main():
         r = json.loads(subprocess.run([sys.executable, "-I", str(REVIEW), str(out), "--prova"],
                                       capture_output=True, text=True).stdout)
         check("once the quadro was read (portal-files-2.json): nothing left to open, every file read back, no warning",
-              q == {"quadri": []} and r["warnings"] == [] and "✅ 2 file allegati sul portale sono proprio quelli del caso di prova (stessi byte)."
-              in r["message"].split("\n"), r)
+              q == {"quadri": []} and r["warnings"] == [] and "Riletti dal portale 1 dato e 2 file: tutto corrisponde."
+              in r["message"].split("\n")[0], r)
         r = build(Path(t) / "2", {"rows": [row]}, slots, None, {"attached": [listed]}, "--prova")
         check("the Prova: every attached file read back is a plain count, no warning",
-              "✅ 1 file allegato sul portale è proprio quello del caso di prova (stessi byte)." in r["message"].split("\n")
+              "Riletti dal portale 1 dato e 1 file: tutto corrisponde." in r["message"].split("\n")[0]
               and r["warnings"] == [], r)
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t), {"rows": [row, dict(row, portal="4", ok=False)]}, [good], None, None, "--prova")
