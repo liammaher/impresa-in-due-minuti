@@ -10,4 +10,5 @@ delete the draft from «Pratiche in bozza» afterwards.
 FAIL if it asks any of those questions again, or any other about the case, asks for a folder,
 documents, test data or the studio's details, asks them to confirm before starting, or says it
 doesn't invent data.
+The card the reply carries states, as plain lines with no question mark, the answers that decide the pratica: that is not asking the questions again.
 This session has no browser: telling them to write «fammi vedere una prova» from the Claude app, where the browser is, is the expected reply, not a question or a request to confirm.

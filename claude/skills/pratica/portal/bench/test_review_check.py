@@ -122,10 +122,23 @@ def main():
         check("a masculine pratica, in minutes",
               r["message"].startswith("✅ Permesso di costruire compilato sul portale in 4 minuti"), r)
     with tempfile.TemporaryDirectory() as t:
-        r = build(Path(t), {"rows": [dict(row, portal="4", ok=False)]}, [], {"alerts": [ALERT]}, None, "--prova")
-        check("the Prova: two lines, no warning (made-up data raises them), nothing to send",
+        r = build(Path(t), {"rows": [row, row]}, [good], {"alerts": [ALERT]}, None, "--prova")
+        check("the Prova: the work, the PDF check and the files as ✅, no portal warning (made-up data raises them), nothing to send",
               r["message"] == "✅ CILA di prova compilata in 95 secondi, con dati inventati.\n"
+              "✅ Anteprima PDF del portale letta e confrontata con il caso di prova: tutti i 2 dati corrispondono.\n"
+              "✅ 1 file allegato sul portale è proprio quello del caso di prova (stessi byte).\n"
               "Nulla da inviare: la cancelli da «Pratiche in bozza»." and r["warnings"] == [], r)
+    with tempfile.TemporaryDirectory() as t:
+        r = build(Path(t), {"rows": [row, dict(row, portal="4", ok=False)]}, [good], None, None, "--prova")
+        check("the Prova: a value that doesn't match the case is a ⚠️ line, not hidden",
+              "⚠️ Dati catastali, foglio: sul portale «4», nel documento «3» (Visura catastale, p. 1)." in r["message"].split("\n")
+              and "✅ Anteprima PDF del portale letta e confrontata con il caso di prova: 1 dati su 2 corrispondono."
+              in r["message"].split("\n"), r)
+    with tempfile.TemporaryDirectory() as t:
+        r = build(Path(t), None, None, None, None, "--prova")
+        check("the Prova: no check made says so, never silence",
+              any(l.startswith("⚠️ Il confronto con l'anteprima") for l in r["message"].split("\n"))
+              and not any(l.startswith("✅ Anteprima") for l in r["message"].split("\n")), r)
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t), report={"result": "stopped", "error": "a reason for Claude"})
         check("a stopped run: no message (Claude recovers it, or says what's left)",

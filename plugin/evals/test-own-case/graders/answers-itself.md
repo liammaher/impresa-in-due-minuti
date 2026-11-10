@@ -8,3 +8,4 @@ the browser here), naming a draft that starts with «PROVA NON INVIARE».
 FAIL if it asks the tecnico to answer questions or to provide data or documents, stops on a
 refusal about the draft's name, or says the compilation can't start because of file formats,
 signatures or a payment.
+The card the reply carries states, as plain lines, the answers that decide the pratica (under «Perché è questa»): that is the reply showing what it chose, not asking the tecnico the questions.

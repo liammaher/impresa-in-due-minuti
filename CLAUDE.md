@@ -479,6 +479,15 @@ server's are in `mcp/README.md`.
 
 ## Testing
 
+**A test of how Impresa in un minuto behaves for a tecnico (the Prova, a demo, a wording or flow change) is run
+through the built plugin, never through the repo's scripts.** `plugin/live.py` builds when `plugin/dist` is stale
+(`dist/build.json` holds a digest of every runner file, the hand-written plugin, `steps.lock` and `build.yaml`) and
+says what to load; then the skill runs in a fresh session, in the app's browser pane, as a tecnico writes it
+(«fammi vedere una prova»). `run.py`, `rerun.py`, a Playwright window and the CILA fixture are the same engine in
+another wrapper: they are for developing the runner. The build refuses a plugin whose runner files differ from the
+repo's (`build.RUNNER_FILES`) or whose Prova card (`run.py card`, "Cosa succede") differs from the repo runner's;
+`bench/test_card.py` holds the card to review.py's closing lines for every rehearsal.
+
 Tests use temp directories and run with `-race`. `internal/vault` and `internal/api` call
 `crypto.UseFastKDFForTests` in `TestMain` (cheap Argon2id; it panics outside a test binary).
 API requests go through `newTestRequest` (loopback Host); socket tests use
