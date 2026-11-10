@@ -34,15 +34,20 @@ pratica filled, fast.
    written, and a session's rules may refuse a copy that names it. It has its own `studio.json`: never
    read or write the tecnico's `../studio.json` for the Prova.
    ```sh
-   cd "$(sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/prova.py")" && \
-   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/check.py" studio.json values.json --out run/values.json && \
+   cd "$(sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/prova.py")" && pwd >&2 && \
+   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/check.py" studio.json values.json --out run/values.json >/dev/null && \
    sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
      --answers answers.json --values run/values.json --made-up > run/preflight.json && \
-   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" card --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
-     --answers answers.json --values run/values.json --made-up && \
    sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
-     --answers answers.json --values run/values.json --made-up --plain --out run
+     --answers answers.json --values run/values.json --made-up --plain --out run > run/page.txt && \
+   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" card --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
+     --answers answers.json --values run/values.json --made-up
    ```
+<!-- vault -->
+   With the archive's compilation nothing reads the preview back: add `--no-preview-check` to `preflight` and `card`.
+<!-- /vault -->
+   (`pwd` prints the Prova's folder on the error output, and `page`'s own lines go to `run/page.txt`: stdout is
+   the card alone.)
    The `card` it prints is "Cosa succede": the pratica, how it fills the portal and why, how it checks
    (including the portal's PDF preview), what stays theirs. `<name>` is `prova` in the fallback of
    SKILL.md, step 4.3 (with `--made-up --plain`, as here). Pre-flight says `ready` (the build checks it);
@@ -65,16 +70,22 @@ pratica filled, fast.
    Never "nessuna domanda", "bozza" or the draft's name before the card: they mean nothing yet (the
    closing lines say where the draft is and to delete it; the card's last line says it too).
    With no browser in this session (no tool opens a page), send the card and say, in two lines, that the
-   Prova is ready, that it fills on the portal from the Claude app, where its browser is ("Mi scriva
-   «fammi vedere una prova» dall'app Claude per computer, con il suo browser"), and that the draft
+   Prova is ready, that it fills on the portal from the Claude app, where its browser is, once they log in there
+   with their own SPID ("Mi scriva «fammi vedere una prova» dall'app Claude per computer, con il suo browser:
+   lì entra con il Suo SPID"), and that the draft
    «PROVA NON INVIARE - CILA di prova», with invented data, is then to be deleted from «Pratiche
    in bozza». Then stop.
 3. Wait for their «fatto» (the portal is open since step 2). There is no code to type (`--plain`): skip step 4.2. Then steps
    4.3 and 4.4 (the scripts, `__pv.wait`) and 4.6, save `JSON.stringify(__pv.last())` to `run/report.json`,
+<!-- no-vault -->
    then the check of SKILL.md step 5, with the case itself as the documents: hold each value in the
    preview to `values.json` and `answers.json` (their `source` is "caso di prova"), run
    `attachments.js`, then `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova`.
    Never fix a mismatch by hand on the portal: say it.
+<!-- /no-vault -->
+<!-- vault -->
+   then `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova` (no check against the preview here).
+<!-- /vault -->
 4. Hand over with its `message`, as written, its lines and nothing else:
    "✅ CILA di prova compilata in <T>, con dati inventati.
    ✅ Anteprima PDF del portale letta e confrontata con il caso di prova: tutti i <N> dati corrispondono.

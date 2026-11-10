@@ -9,7 +9,9 @@ does. The Prova's, by hand: the made-up marker, the whole real journey, nothing 
 import json
 import os
 import re
+import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -94,6 +96,23 @@ def main():
         plain = run.card(run.expand(steps, values), values, r, True, r.get("riepilogo_rows"), preview_check=False)
         if "Leggo l'anteprima" in plain:
             bad.append("promises the preview check when the skill won't do it")
+        # The command a skill runs prints the very card pre-flight makes (2026-11-10: it once phased the steps first
+        # and lost the second compilation), with and without the preview check.
+        with tempfile.TemporaryDirectory() as t:
+            sf = Path(t) / "steps.yaml"
+            sf.write_text(gen.dump(steps))
+            for flag, check in (([], True), (["--no-preview-check"], False)):
+                cli = subprocess.run([sys.executable, "-I", str(HERE.parent / "run.py"), "card", "--steps", str(sf),
+                                      "--answers", str(REH / "cila-fittizia" / "answers-p6.json"),
+                                      "--values", str(REH / "cila-fittizia" / "fixture-p6.json"), "--made-up", *flag],
+                                     capture_output=True, text=True)
+                want = run.preflight(steps, run.Values(json.loads((REH / "cila-fittizia" / "answers-p6.json").read_text()),
+                                                       fields=fields, asks=steps.get("asks")),
+                                     made_up=True, preview_check=check)["card"]
+                if cli.returncode or cli.stdout.rstrip("\n") != want:
+                    bad.append(f"`run.py card {' '.join(flag)}` prints another card than pre-flight's:\n{cli.stdout}{cli.stderr}")
+                if ("Leggo l'anteprima" in want) != check:
+                    bad.append(f"preview_check={check}, but the card says otherwise")
         real = run.card(run.expand(steps, values), values, r, False, r.get("riepilogo_rows"))
         if "(prova" in real or "Qui non c'è nulla da inviare" in real:
             bad.append("a real job's card carries the Prova's words")

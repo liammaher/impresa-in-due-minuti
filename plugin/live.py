@@ -28,13 +28,22 @@ import build  # noqa: E402
 DIST = HERE / "dist"
 
 
+def WANTED():
+    """The options live.py builds with: build.yaml's defaults, and the evals."""
+    return {"vault": build.vault_default(), "python_download": build.switch("python_download"), "evals": True,
+            "cowork_test": False, "connector": None, "pvault": None}
+
+
 def stale():
     """Why dist is not this checkout's plugin, or None."""
     f = DIST / "build.json"
     if not (DIST / "impresa-in-un-minuto").is_dir() or not f.is_file():
         return "no build in plugin/dist"
-    if json.loads(f.read_text()).get("sources") != build.sources_digest():
+    done = json.loads(f.read_text())
+    if done.get("sources") != build.sources_digest():
         return "plugin/dist was built from other files than this checkout's"
+    if done.get("flags") != WANTED():
+        return "plugin/dist was built with other options than live.py's (the defaults, with the evals)"
     return None
 
 

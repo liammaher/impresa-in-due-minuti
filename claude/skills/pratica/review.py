@@ -170,15 +170,18 @@ def verified(out, job, prova=False):
         stray = len(stray_files(out, job))
         if n and n > stray:
             m = n - stray
+            who = ("del caso di prova", "del caso di prova") if prova else ("il Suo", "i Suoi")
             lines.append(f"✅ {m} file allegat{'o' if m == 1 else 'i'} sul portale {'è' if m == 1 else 'sono'} proprio "
-                         f"{'il Suo' if m == 1 else 'i Suoi'} (stessi byte).")
+                         + (f"{'quello' if m == 1 else 'quelli'} {who[0]}" if prova else f"{who[0] if m == 1 else who[1]}")
+                         + " (stessi byte).")
     return lines
 
 
 def unchecked(out):
     """Why there is no ✅ for the preview: the check was not done or the preview couldn't be read."""
     f = out / "check.json" if out else None
-    return [] if f and f.exists() else ["Il confronto con l'anteprima del portale non è stato fatto: la legga Lei prima di firmare."]
+    rows = json.loads(f.read_text()).get("rows", []) if f and f.exists() else []
+    return [] if rows else ["Il confronto con l'anteprima del portale non è stato fatto: la legga Lei prima di firmare."]
 
 
 def section(name):

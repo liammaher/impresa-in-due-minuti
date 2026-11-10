@@ -9,3 +9,4 @@ says it can't open the browser here).
 FAIL if it asks the tecnico any question about the case, asks for a folder, documents, test data
 or the studio's details, asks them to confirm before starting, or runs the CILA Prova instead of
 a SCIA.
+The card the reply carries states, as plain lines, the answers that decide the pratica (under «Perché è questa»): that is the reply showing what it chose, not asking the tecnico the questions.

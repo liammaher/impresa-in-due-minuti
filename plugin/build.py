@@ -261,10 +261,21 @@ def sha256_file(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def sources_digest():
-    """One hash of everything a build is made from: the runner files, the hand-written plugin, the
-    steps lock and build.yaml. plugin/live.py rebuilds when it differs from dist/build.json's."""
+def sources_digest(library=None):
+    """One hash of everything a build is made from: the runner files, the rules tables, the drift record,
+    the schema, the hand-written plugin and its evals, the steps lock, build.yaml, this script, the licence
+    texts and the library's files. plugin/live.py rebuilds when it differs from dist/build.json's."""
     parts = {f"runner/{k}": sha256_file(v) for k, v in sorted(RUNNER_FILES.items())}
+    extra = [*sorted((PRATICA / "portal" / "rules").glob("*.yaml")),
+             PRATICA / "portal" / "catalogue" / "F839" / "drift.json", REPO / "schema.json",
+             REPO / "LICENSE", REPO / "NOTICE.md", HERE / "build.py", HERE / "coverage.yaml"]
+    parts |= {f"extra/{f.relative_to(REPO)}": sha256_file(f) for f in extra if f.is_file()}
+    library = library or os.environ.get("PRATICHE_NAPOLI_DIR")
+    if library:
+        for sub in ("procedures", "rules", "offices", "contract"):
+            for f in sorted((Path(library) / sub).rglob("*")):
+                if f.is_file() and not any(x.startswith(".") for x in f.relative_to(library).parts):
+                    parts[f"library/{f.relative_to(library)}"] = sha256_file(f)
     for f in sorted((HERE / "impresa-in-un-minuto").rglob("*")):
         if f.is_file() and ".DS_Store" not in f.parts and "__pycache__" not in f.parts:
             parts[f"plugin/{f.relative_to(HERE / 'impresa-in-un-minuto')}"] = sha256_file(f)
@@ -300,6 +311,13 @@ def copy_runner(skill, desks):
     shutil.copy2(PRATICA / "review.py", skill / "review.py")
     (skill / "reference").mkdir()
     shutil.copy2(REPO / "schema.json", skill / "reference" / "schema.json")
+
+
+def build_flags(a):
+    """What this build was asked for besides the sources, as live.py compares it with what it asks for."""
+    return {"vault": vault_default() if a.vault is None else a.vault == "on",
+            "python_download": switch("python_download") if a.python_download is None else a.python_download == "on",
+            "evals": a.evals, "cowork_test": a.cowork_test, "connector": a.connector, "pvault": a.pvault_version}
 
 
 def git_head():
@@ -453,9 +471,9 @@ def self_check(plugin):
                            cwd=case, capture_output=True, text=True)
         if r.returncode:
             sys.exit(f"check.py refused the test case:\n{r.stdout}{r.stderr}")
-        r = subprocess.run([*py, skill / "portal" / "run.py", "preflight", "--steps",
-                            skill / "pratiche" / f"{TEST_CASE}.json", "--answers", "answers.json",
-                            "--values", values, "--made-up"], cwd=case, capture_output=True, text=True)
+        r = pre = subprocess.run([*py, skill / "portal" / "run.py", "preflight", "--steps",
+                                  skill / "pratiche" / f"{TEST_CASE}.json", "--answers", "answers.json",
+                                  "--values", values, "--made-up"], cwd=case, capture_output=True, text=True)
         if r.returncode:
             sys.exit(f"pre-flight of the test case isn't ready:\n{r.stdout}{r.stderr}")
         # The card the Prova shows, from the plugin under python3 and from the repo's runner: the same
@@ -470,6 +488,10 @@ def self_check(plugin):
             sys.exit(f"the Prova's card isn't made:\n{ours.stdout}{ours.stderr}")
         if (ours.returncode, ours.stdout) != (theirs.returncode, theirs.stdout):
             sys.exit("the Prova's card differs between the plugin and the repo's runner")
+        # And the command prints the card pre-flight makes (it once phased the steps first and lost the second run).
+        said = json.loads(pre.stdout).get("card")
+        if said is None or ours.stdout.rstrip("\n") != said:
+            sys.exit("the Prova's `run.py card` prints another card than pre-flight's `card`")
         # A first pratica in a new folder of jobs, as the skill starts it: studio.json holds only
         # the tecnico's role, and pre-flight must then list the tecnico's details to ask for.
         first = Path(tmp) / "first"
@@ -585,6 +607,7 @@ def main():
     # from its own library/ (run.procedure_name): the self-check compares their pre-flights.
     os.environ["PRATICHE_NAPOLI_DIR"] = str(Path(a.library).resolve())
     plugin = a.out / "impresa-in-un-minuto"
+    (a.out / "build.json").unlink(missing_ok=True)  # a build that dies must not leave a record saying "current"
     if plugin.exists():
         shutil.rmtree(plugin)
     shutil.copytree(HERE / "impresa-in-un-minuto", plugin, ignore=shutil.ignore_patterns(".DS_Store", "__pycache__"))
@@ -622,8 +645,8 @@ def main():
     if not re.fullmatch(r"[a-z0-9-]+", manifest["name"]):
         sys.exit(f"plugin name {manifest['name']!r} isn't kebab-case")
     check_private(plugin, private_terms())
-    (a.out / "build.json").write_text(json.dumps({"sources": sources_digest(), "version": manifest["version"],
-                                                  "git": git_head(), "evals": a.evals}, indent=1) + "\n")
+    (a.out / "build.json").write_text(json.dumps({"sources": sources_digest(a.library), "version": manifest["version"],
+                                                  "git": git_head(), "flags": build_flags(a)}, indent=1) + "\n")
     zipped = a.out / f"{manifest['name']}.plugin"
     with zipfile.ZipFile(zipped, "w", zipfile.ZIP_DEFLATED) as z:
         for f in sorted(plugin.rglob("*")):

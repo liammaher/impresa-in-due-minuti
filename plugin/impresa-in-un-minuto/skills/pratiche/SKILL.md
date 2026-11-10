@@ -357,11 +357,12 @@ The values come from one confirmation:
 ```sh
 pvault get $(sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" scope --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json") \
   | sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" preflight --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
-      --answers answers.json --values - --values run/intake/private/values.json
+      --answers answers.json --values - --values run/intake/private/values.json --no-preview-check
 ```
 
 Leave out `--values run/intake/private/values.json` when the intake didn't run (here and
-below). Say first, in one line, that Touch ID (or Windows Hello) will ask to read the details
+below). `--no-preview-check`: the archive's compilation reads nothing back from the portal's
+preview, so the `card` doesn't say it does. Say first, in one line, that Touch ID (or Windows Hello) will ask to read the details
 this pratica needs. Pre-flight prints JSON and exits 0 only when `ready`.
 <!-- /vault -->
 <!-- no-vault -->
@@ -477,8 +478,8 @@ nothing else: nothing opens before their reply.
   as in **Asking**). Exit 3: something is still open; its `message`, as in **After they
   answer**. Never write the proposals into `answers.json` yourself.
 - A change ("le parti comuni sono condominiali"): into `answers.json` (`fonti`: "Sua risposta"),
-  pre-flight again, and its new `riepilogo` (or the questions the change opened) as the next
-  message.
+  pre-flight again, and its new `card` and `riepilogo` (or the questions the change opened) as the
+  next message.
 - Anything else they ask: answer it, and ask again for «sì».
 
 **After they answer**, the answers in `answers.json`, then pre-flight again. Built from the
@@ -565,12 +566,23 @@ step 3 says how. Never send them a file, never ask them to download or save one,
    "Acceda con SPID nella finestra del browser; quando vede la pagina del portale mi scriva
    «fatto»." Wait until the page is the portal's own, past the login. Send this line after the
    `card` when the tecnico hasn't read it yet in this job (they answered questions and no
-   `riepilogo` came): `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" card --steps
-   "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" --answers answers.json --values run/values.json
-   --values run/intake/private/values.json` prints it, to send as it is, so they read it while they log in.
+   `riepilogo` came). Leave out `--values run/intake/private/values.json` when the intake didn't run.
+   The card is printed by:
 <!-- vault -->
-   (With the archive's compilation there is no check against the preview: add `--no-preview-check`.)
+   ```sh
+   pvault get $(sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" scope --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json") \
+     | sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" card --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
+         --answers answers.json --values - --values run/intake/private/values.json --no-preview-check
+   ```
+   (`--no-preview-check`: with the archive's compilation nothing reads the preview back, so the card doesn't say it does.)
 <!-- /vault -->
+<!-- no-vault -->
+   ```sh
+   sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" card --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
+     --answers answers.json --values run/values.json --values run/intake/private/values.json
+   ```
+<!-- /no-vault -->
+   Send it as it is, so they read it while they log in.
 <!-- vault -->
 2. `page` opened a small window with a code on their screen. You never see it: never ask for
    it or look for it. Say: "Sullo schermo c'è una finestra con un codice. Tra poco sul portale

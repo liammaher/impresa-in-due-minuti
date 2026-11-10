@@ -1299,8 +1299,8 @@ def rehearsal(steps, values):
 
 def after_declarations(steps, values):
     """The labels of what this case's second run attaches (phase's `after_declarations`)."""
-    return [f.get("label") or f.get("id") for s in steps["sections"] for f in s["fields"]
-            if f.get("after_declarations") and applies(f, values)]
+    return [l for l in (f.get("label") or f.get("id") for s in steps["sections"] for f in s["fields"]
+                        if f.get("after_declarations") and applies(f, values)) if l]
 
 
 def card_later(steps, values, made_up):
@@ -1309,8 +1309,8 @@ def card_later(steps, values, made_up):
     its card shows every slot the pratica waits to attach (the procura, the receipt, the signed annexes)."""
     if not made_up:
         return after_declarations(steps, values)
-    return list(dict.fromkeys(f.get("label") or f.get("id") for s in steps["sections"] for f in s["fields"]
-                              if f.get("after_declarations")))
+    return list(dict.fromkeys(l for l in (f.get("label") or f.get("id") for s in steps["sections"] for f in s["fields"]
+                                          if f.get("after_declarations")) if l))
 
 
 def reopening(steps):
@@ -1590,12 +1590,21 @@ def card(steps, values, report, made_up=False, rows=None, preview_check=True, la
     lines.append(f"– Si presenta {detail.get('ente', 'sul portale')} su impresainungiorno" + (f": {path}." if path else "."))
     facts = set(re.findall(r"ask\.(\w+)", json.dumps((steps.get("rules") or {}).get("facts", {}))))
     why = [r for r in rows if r["key"] in facts and "answer" in r]
+    no = [r for r in why if str(r["answer"]).split(":")[0].strip().lower() in ("no", "false", "nessuna")]
+
+    def short(q, n=60):  # the question's first words, cut at a word
+        q = re.split(r"\s*[(,:]", q.rstrip("?: "))[0]
+        return q if len(q) <= n else q[:n].rsplit(" ", 1)[0] + " …"
     if why:
-        lines.append("– Perché è questa (le risposte che la decidono):")
-        for r in why[:4]:
-            lines.append(f"   · {r['question'].rstrip('?: ')}: {r['answer'].split(':')[0][:60]}")
-        if len(why) > 4:
-            lines.append(f"   · e altre {len(why) - 4}")
+        lines.append("– Perché è questa (i fatti che la decidono):")
+        yes = [r for r in why if r not in no]
+        for r in yes[:4]:
+            lines.append(f"   · {short(r['question'])}: {str(r['answer']).split(':')[0][:60]}")
+        if len(yes) > 4:
+            lines.append(f"   · e altri {len(yes) - 4}")
+        if no:
+            lines.append(f"   · Per altri {len(no)} fatti la risposta è «no»: li vede con «tutte»." if len(no) > 1
+                         else "   · Per un altro fatto la risposta è «no»: lo vede con «tutte».")
     lines += ["", "Cosa compilo"]
     names = [card_section(s["section"]) for s in steps["sections"] if s.get("fields")]
     lines.append(f"– {len(names)} quadri del modulo: " + "; ".join(names[:CARD_WIDTH])
@@ -1620,7 +1629,8 @@ def card(steps, values, report, made_up=False, rows=None, preview_check=True, la
     if preview_check:
         lines.append("– Leggo l'anteprima PDF del portale e confronto ogni dato con "
                      + ("il caso di prova." if made_up else "i Suoi documenti.")
-                     + " Confronto anche i file allegati con i Suoi, byte per byte.")
+                     + " Confronto anche i file allegati con quelli " + ("del caso di prova" if made_up else "del lavoro")
+                     + ", byte per byte.")
     lines += ["", "Cosa non faccio mai", "– Spuntare le dichiarazioni, pagare, firmare, inviare: sono Suoi."]
     later = after_declarations(steps, values) if later is None else later
     mine = {"firmi": "firmi" + (f" ({detail['sign']})" if detail.get("sign") else ""),
@@ -1852,7 +1862,7 @@ def message(report, asks, held_need=None, short=False):
     return "\n\n".join("\n".join(b) for b in blocks)
 
 
-def preflight(steps, values, made_up=False, after=False, summarize=True):
+def preflight(steps, values, made_up=False, after=False, summarize=True, preview_check=True):
     """Everything a run needs, settled before any browser opens: why this case isn't
     supported, the questions still to ask, the vault fields missing or expired, the files
     to attach, and the person's own steps. ready: nothing is left before the run. A file the
@@ -2122,7 +2132,7 @@ def preflight(steps, values, made_up=False, after=False, summarize=True):
     if (report["ready"] or "riepilogo_rows" in report) and not after:
         report["card"] = card(steps, values, report, made_up, report.get("riepilogo_rows"),
                                later=card_later(expand(given_steps, values), values, made_up),
-                               summary="riepilogo" in report)
+                               summary="riepilogo" in report, preview_check=preview_check)
     text = message(report, asks, held_need)
     if text:
         report["short"] = message(report, asks, held_need, short=True)
@@ -2991,8 +3001,8 @@ def main():
     ap.add_argument("--profile", type=Path, default=Path.home() / ".cache/pratica-portal/profile")
     ap.add_argument("--close", action="store_true")
     ap.add_argument("--plain", action="store_true", help="page: run.js carries the values in the clear, through the conversation")
-    ap.add_argument("--no-preview-check", action="store_true", help="card: the skill won't read the PDF preview back "
-                    "(a variant without that step), so the card doesn't say it will")
+    ap.add_argument("--no-preview-check", action="store_true", help="preflight/card: the skill won't read the PDF preview "
+                    "back (a variant without that step), so the card doesn't say it will")
     ap.add_argument("--made-up", action="store_true", help="made-up files, never sent: preflight takes the sportello's "
                     "refusals as warnings, and no slot that takes only signed files is filled")
     ap.add_argument("--after-declarations", action="store_true", help="the second run, once the person has ticked the "
@@ -3032,7 +3042,7 @@ def main():
                 ap.error(f"{a.server} has no token {a.token!r}")
             values = Values(answers, vault=vaults[a.token if a.server else "prepare"], asks=asks)
         steps = whole = expand(steps, values)
-        if a.command not in ("preflight", "confirm"):
+        if a.command not in ("preflight", "card", "confirm"):
             steps = phase(steps, a.after_declarations, a.made_up)
         resume = None
         if a.after_declarations and a.command in ("page", "run"):
@@ -3051,18 +3061,16 @@ def main():
             ap.error("--plain is for page: run keeps the values out of the conversation without it")
         if a.command == "preflight":
             report = preflight(steps, values, a.made_up,
-                               a.after_declarations)
+                               a.after_declarations, preview_check=not a.no_preview_check)
             print(json.dumps(report, indent=2, ensure_ascii=False))
             return 0 if report["ready"] else 3
         if a.command == "card":
             # "Cosa succede", as pre-flight makes it, as text: sent as it is before the portal opens.
-            report = preflight(steps, values, a.made_up)
+            report = preflight(steps, values, a.made_up, preview_check=not a.no_preview_check)
             if "card" not in report:
                 print("stopped: pre-flight isn't ready, so there is no card yet (run preflight)", file=sys.stderr)
                 return 3
-            print(report["card"] if not a.no_preview_check else
-                  card(expand(steps, values), values, report, a.made_up, report.get("riepilogo_rows"), preview_check=False,
-                       later=card_later(expand(steps, values), values, a.made_up)))
+            print(report["card"])
             return 0
         if a.command == "confirm":
             # The tecnico's «sì» to the one message: the proposals it showed go into answers.json,
