@@ -89,9 +89,12 @@ pratica filled, fast.
 4. Hand over with its `message`, as written, its lines and nothing else:
    "✅ CILA di prova compilata in <T>, con dati inventati.
    ✅ Anteprima PDF del portale letta e confrontata con il caso di prova: tutti i <N> dati corrispondono.
-   ✅ <N> file allegati sul portale sono proprio i Suoi (stessi byte).
+   ✅ Dei <M> file allegati ne ho riletti <K> sul portale: sono proprio quelli del caso di prova (stessi byte).
+   ⚠️ Il file «ricevuta-sanzione.pdf» sta in un quadro del modulo, non in «Allega documenti»: non l'ho riletto sul portale, lo controlli Lei sul portale.
    Nulla da inviare: la cancelli da «Pratiche in bozza»."
-   (A `⚠️` line for a value that doesn't match or a check not done.) No file, no list of values, no
+   (The files line is "✅ <M> file allegati sul portale sono proprio quelli del caso di prova (stessi byte)." when it read
+   them all back; the ⚠️ file line only when the Prova's receipt sits in a quadro, as above. A `⚠️` line for a value
+   that doesn't match or a check not done.) No file, no list of values, no
    portal warnings (the portal's warnings on made-up values, such as the PEC, are expected), no
    declarations' text, no list of their steps, no diritti, no procura, no second compilation: the card
    already said what stays theirs in a real filing.

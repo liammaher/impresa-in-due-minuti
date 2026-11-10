@@ -129,6 +129,20 @@ def main():
               "✅ 1 file allegato sul portale è proprio quello del caso di prova (stessi byte).\n"
               "Nulla da inviare: la cancelli da «Pratiche in bozza»." and r["warnings"] == [], r)
     with tempfile.TemporaryDirectory() as t:
+        # The compilation attached two files; «Allega documenti» lists the one (in two slots), the other sits in a quadro.
+        receipt = {"name": "ricevuta-sanzione.pdf", "sha256": sha(b"%PDF ricevuta")}
+        listed = {"name": "relazione.pdf", "sha256": sha(b"%PDF relazione")}
+        slots = [good, dict(good, slot="Allegati liberi 2")]
+        r = build(Path(t), {"rows": [row]}, slots, None, {"attached": [listed, receipt]}, "--prova")
+        lines = r["message"].split("\n")
+        check("the Prova: two slots of one file count once, and the file in a quadro is said not read back",
+              "✅ Dei 2 file allegati ne ho riletto 1 sul portale: è proprio quello del caso di prova (stessi byte)." in lines
+              and any(l.startswith("⚠️ Il file «ricevuta-sanzione.pdf» sta in un quadro del modulo") for l in lines), r)
+        r = build(Path(t) / "2", {"rows": [row]}, slots, None, {"attached": [listed]}, "--prova")
+        check("the Prova: every attached file read back is a plain count, no warning",
+              "✅ 1 file allegato sul portale è proprio quello del caso di prova (stessi byte)." in r["message"].split("\n")
+              and r["warnings"] == [], r)
+    with tempfile.TemporaryDirectory() as t:
         r = build(Path(t), {"rows": [row, dict(row, portal="4", ok=False)]}, [good], None, None, "--prova")
         check("the Prova: a value that doesn't match the case is a ⚠️ line, not hidden",
               "⚠️ Dati catastali, foglio: sul portale «4», nel documento «3» (Visura catastale, p. 1)." in r["message"].split("\n")

@@ -672,7 +672,11 @@ Comune will receive, before you tell the tecnico anything:
    compilation read each back on the portal).
 3. Run `${CLAUDE_SKILL_DIR}/portal/attachments.js` the same way. `{"opening": true}` means it
    opened Allega documenti: wait for the page, then run it again. Save what it returns as
-   `run/portal-files.json`.
+   `run/portal-files.json`. `error: "no attachments here and no Allega Documenti link"` means the
+   pane went back to the list of drafts when the compilation ended (the preview above still read,
+   it needs only the session): `url = await __pv.reopen("<the draft's descrizione>")`, navigate the
+   pane to `url`, and run it again. It never reads the file inside a quadro (a sanction's receipt):
+   review.py says which attached file it did not read back.
 4. `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run` prints the closing lines: it
    matches each file on the portal to the job's own by its bytes, and makes a `⚠️` line of each
    row of `run/check.json` that doesn't match and each file no file of the job has.
