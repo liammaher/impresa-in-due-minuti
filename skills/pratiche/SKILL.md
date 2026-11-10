@@ -357,8 +357,8 @@ only Impresa in un minuto proposes; then the rest counted by where it comes from
 their note, the rules), the files, and «dettagli» to see every answer; then the closing lines and
 «Scrivi «sì» e apro il portale». The one message is points 1-3 above (the verdict, what you
 understood, the pratica), at most one line for each document that can't be read or disagrees
-with an answer (point 4), then pre-flight's `card` ("Cosa succede", three lines: the pratica and why
-it is this one, what you do, what they do) **as it is**, a blank line, and `riepilogo`
+with an answer (point 4), then pre-flight's `card` ("Cosa succede", two lines: the pratica and why
+it is this one, what you do) **as it is**, a blank line, and `riepilogo`
 **as it is**. The card is generated from the steps file: never shorten it, add to it or word it
 yourself. No clickable question, no checklist,
 nothing else: nothing opens before their reply.
@@ -530,8 +530,9 @@ Then say its `message` as written, its lines as they are, and nothing else. It i
 they must check (a `⚠️` line for each warning the portal put beside a value it kept, or a value or
 file that doesn't match the documents; none, no line), and what is left to them ("Tocca a te:"), a numbered
 step a line, each with what the sportello adds to it in brackets (where the diritti are paid, the order of
-the signatures, what comes back after sending: here, not before), and only what they do; what you do
-afterwards (the second compilation) is its own line "Io poi …". Send no file, list no
+the signatures, what comes back after sending: here, not before), and only what they do. With a second
+compilation the list says who acts when: «Ora tocca a te» up to «ho firmato», «Poi io» (you attach the signed
+files), «Poi di nuovo tu» (sign and send). Send no file, list no
 values and never paraphrase a declaration: they read the portal's own preview and declarations
 on the portal, where they tick them. Asked how to pay or what a step involves, answer from its
 `yours` (their steps in full). Stop: they check, declare, sign, pay and send.

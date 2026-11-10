@@ -51,18 +51,17 @@ real filing's details (the c/c, the order of the signatures, the PEC receipt).
 2. Then say only this, and in the same turn open the portal (SKILL.md, step 4.1, without sending its
    line), so they log in while they read:
    > Ho aperto il portale impresainungiorno qui accanto.
-   > 1. **Tu**: entra con il tuo SPID e scrivimi «fatto». Le credenziali le scrivi solo tu.
-   > 2. **Io**: compilo una CILA di prova con dati inventati (circa 2 minuti). Non spunto dichiarazioni, non pago, non firmo, non invio.
-   > 3. **Io**: rileggo tutto dal portale e ti dico se i dati corrispondono.
-   > Alla fine trovi la bozza «PROVA NON INVIARE»: cancellala.
+   > **Entra con il tuo SPID e scrivimi «fatto».** Le credenziali le scrivi solo tu.
+   > Poi, in circa 2 minuti, compilo una CILA con dati inventati e la rileggo dal portale. Non spunto dichiarazioni, non pago, non firmo, non invio.
 
    Before saying the portal is open «qui accanto», check that the browser pane is showing (`tabs_context` says
    displayed or hidden). If hidden, add one line after the others: «Se non vedi il portale, premi Cmd+Shift+B
    (Ctrl+Shift+B su Windows) o clicca l'icona del globo.»
-   As it is, a word not changed, added or left out (but for that line): nothing before, nothing after, no card. Each step starts
-   with who acts, and their one step is the first. Written for someone who has never used it and may balk at
+   As it is, a word not changed, added or left out (but for that line): nothing before, nothing after, no card.
+   The one thing they do comes first, in bold. Written for someone who has never used it and may balk at
    logging in through an assistant: the portal they already use, logged in the way they always do, who types the
-   credentials, then what happens and how long. Never "non le vedo": the browser's pages can be read, and the
+   credentials, then what happens, how long and what is never done. The draft is not mentioned yet: it is said
+   at the end, when it matters. Never "non le vedo": the browser's pages can be read, and the
    SPID username shows on them.
    With no browser in this session (no tool opens a page), say in two lines that the Prova is ready, that it
    fills on the portal from the Claude app, where its browser is, once they log in there with their own SPID
@@ -77,24 +76,26 @@ real filing's details (the c/c, the order of the signatures, the PEC receipt).
    `attachments.js` (and, for the quadro that holds the receipt, what step 5.3 says after `review.py run --quadri`),
    then `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/review.py" run --prova`.
    Never fix a mismatch by hand on the portal: say it.
-4. Hand over with its `message`, as written, its lines and nothing else:
-   "✅ CILA di prova compilata in <T>, con dati inventati.
-   ✅ Anteprima PDF del portale letta e confrontata con il caso di prova: tutti i <N> dati corrispondono.
-   ✅ <N> file allegati sul portale sono proprio quelli del caso di prova (stessi byte).
-   Io: ho compilato <Q> quadri, allegato i file e riletto tutto dal portale.
-   Tu, in una pratica vera: controlli l'anteprima, spunti le dichiarazioni, paghi, firmi e invii.
-   Per vedere ogni risposta e da dove viene, scrivi «dettagli».
-   Nulla da inviare: cancella la bozza da «Pratiche in bozza»."
-   (A `⚠️` line for a value that doesn't match, a file the portal doesn't hold or a check not done. The Prova's
-   receipt sits in quadro d: SKILL.md step 5.3 reads it there, with `review.py run --quadri`.) No file, no list of values, no
+4. Hand over with its `message`, as written, its lines and nothing else. Everything matched:
+   "✅ CILA di prova compilata in <T>. Riletti dal portale: scheda anagrafica, dati catastali, lavori e altri <N> quadri, più <M> file. Tutto corrisponde.
+   In una pratica vera restano a te: controllare l'anteprima, spuntare le dichiarazioni, pagare, firmare, inviare.
+   Guarda la bozza qui accanto (Pratiche in bozza › PROVA NON INVIARE), poi cancellala."
+   Something didn't match, or wasn't read: the head `✅ … compilata in <T>.`, then a `✅` line for what was read
+   and a `⚠️` line for a value that doesn't match, a file the portal doesn't hold or a check not done, then the
+   last two lines. (The Prova's receipt sits in quadro d: SKILL.md step 5.3 reads it there, with
+   `review.py run --quadri`.) No file, no list of values, no
    portal warnings (the portal's warnings on made-up values, such as the PEC, are expected), no
-   declarations' text, no list of their steps, no diritti, no procura, no second compilation.
-5. On «dettagli»: every answer the Prova used and where each comes from, as printed, nothing added (they are
-   the case's answers, never invented values):
+   declarations' text, no list of their steps, no diritti, no procura, no second compilation, no offer of
+   anything more.
+5. Only if they ask for the answers («dettagli», «cosa hai risposto?»): every answer the Prova used and where
+   each comes from, as printed, nothing added (they are the case's answers, never invented values):
    ```sh
    sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" details --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" \
      --answers answers.json --values run/values.json --made-up
    ```
+6. If it stops and isn't recovered (SKILL.md, step 4): "Non sono riuscito a finire la prova: nulla è stato
+   inviato. Cancella la bozza «PROVA NON INVIARE» da «Pratiche in bozza».", then the offer to prepare a report
+   (SKILL.md, **When Impresa in un minuto itself goes wrong**).
 
 ## Their own case, as a test
 
@@ -104,10 +105,8 @@ folder open in this session (no folder open: your working folder), named `prova-
 `answers.json` and `values.json` as `{}`; never ask for one. First say only this, so they log in
 while you prepare:
    > Ho aperto il portale impresainungiorno qui accanto.
-   > 1. **Tu**: entra con il tuo SPID e scrivimi «fatto». Le credenziali le scrivi solo tu.
-   > 2. **Io**: compilo una <pratica> di prova con dati inventati. Non spunto dichiarazioni, non pago, non firmo, non invio.
-   > 3. **Io**: rileggo tutto dal portale e ti dico se i dati corrispondono.
-   > Alla fine trovi la bozza «PROVA NON INVIARE»: cancellala.
+   > **Entra con il tuo SPID e scrivimi «fatto».** Le credenziali le scrivi solo tu.
+   > Poi compilo una <pratica> con dati inventati e la rileggo dal portale. Non spunto dichiarazioni, non pago, non firmo, non invio.
 
 (as the Prova's step 2, and open the portal the same way: SKILL.md, step 4.1, without sending its line again). Then, in this order:
 0. Which pratica: route.py as in SKILL.md, step 1, with `facts.json` written by you. Each of its
@@ -134,5 +133,5 @@ while you prepare:
    registered with the Registro Imprese, which the portal checks) means made-up data can't pass
    there: say so in one line and make the client a private person instead.
 7. `page` with `--made-up --plain`, then as the Prova's steps 3 and 4 (the line while it fills, the closing lines,
-   «dettagli» with `run.py details ... --made-up`). Never mention PDF/A, a digital signature, the diritti, the
+   the answers with `run.py details ... --made-up` only if asked). Never mention PDF/A, a digital signature, the diritti, the
    procura or a second compilation: a test draft is never sent.
