@@ -455,6 +455,37 @@ def _():
         assert "no-such-defect" in str(e)
 
 
+@case("coverage.md's Level 2 counts the refusals marked `unmapped: true`: each marker is well formed and reaches the scoreboard "
+      "(2026-11-10: it read 0 for four days, after a regex on the English messages met the Italian ones)")
+def _():
+    import scoreboard
+
+    def marked(x):
+        """Every dict anywhere in x that has an `unmapped` key."""
+        if isinstance(x, dict):
+            return ([x] if "unmapped" in x else []) + [m for v in x.values() for m in marked(v)]
+        return [m for v in x for m in marked(v)] if isinstance(x, list) else []
+
+    own = {}  # recipe -> its own marked refusals
+    for f in sorted(REH.glob("*/recipe.yaml")):
+        for c in marked(yaml.safe_load(f.read_text())):
+            own.setdefault(f.parent.name, []).append(c)
+    from_dictionary = marked(yaml.safe_load((HERE.parent / "dictionary" / "fnsuap.yaml").read_text()))
+    assert own and from_dictionary, "no recipe and no dictionary entry carries `unmapped`: the marker is renamed or gone"
+    for c in [c for cs in own.values() for c in cs] + from_dictionary:
+        assert c["unmapped"] is True and isinstance(c.get("else"), str), f"`unmapped` must be `true` on a refusal with an `else`: {c}"
+    # What the page counts is what steps files carry, so read it there: each recipe's own marked
+    # refusals, and the dictionary's through a permesso (its sections bring them).
+    for name, cs in own.items():
+        counted = scoreboard.unmapped_refusals(generated(name)["supports"])
+        assert all(c["else"].strip() in counted for c in cs), (name, "a marked refusal does not reach the count")
+    counted = scoreboard.unmapped_refusals(generated("pdc-fittizio")["supports"])
+    assert all(c["else"].strip() in counted for c in from_dictionary if "pdc_tipo" in c.get("value", "")), \
+        "a marked dictionary refusal of the permesso does not reach its count"
+    # A quoted "true" or a typo is no marker: it must not count by accident, nor silently not count.
+    assert scoreboard.unmapped_refusals([{"else": "x", "unmapped": "true"}, {"else": "y", "unmapped": True}]) == ["y"]
+
+
 @case("the agibilità's art. 24 boxes stay theirs: the portal asks for one even where neither applies")
 def _():
     # a592b60 mapped the boxes and dropped the section's `theirs`: every case ticking neither stopped
