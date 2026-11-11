@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Build the Impresa in un minuto plugin for Cowork: plugin/impresa-in-un-minuto plus the runner, the rehearsals'
-steps files and the pratiche-napoli library, as one installable file.
+steps files and the library (library/), as one installable file.
 
   build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off] [--python-download on|off]
            [--cowork-test] [--evals]
 
 Writes OUT/impresa-in-un-minuto/ (default plugin/dist) and OUT/impresa-in-un-minuto.plugin (the same, zipped), then
 pre-flights the test fixture with the built plugin through its launcher (sh py, which picks this
-computer's python3), as the skill runs it. --library is a pratiche-napoli checkout (default
-$PRATICHE_NAPOLI_DIR). Needs PyYAML (the pratica venv's Python): the plugin itself needs no
+computer's python3), as the skill runs it. --library is a library folder (default $PRATICHE_NAPOLI_DIR,
+else this repository's library/). Needs PyYAML (the pratica venv's Python): the plugin itself needs no
 packages, because every YAML file
 the runner reads goes in as JSON (rules.load reads it). --connector adds the Impresa in un minuto
 connector (connector/, serving this same build) as the plugin's .mcp.json. --vault overrides
@@ -277,11 +277,10 @@ def sources_digest(library=None):
     the schema, the hand-written plugin and its evals, the steps lock, build.yaml, this script, the licence
     texts and the library's files. plugin/live.py rebuilds when it differs from dist/build.json's."""
     parts = {f"runner/{k}": sha256_file(v) for k, v in sorted(RUNNER_FILES.items())}
-    extra = [*sorted((PRATICA / "portal" / "rules").glob("*.yaml")),
-             PRATICA / "portal" / "catalogue" / "F839" / "drift.json", REPO / "schema.json",
+    extra = [PRATICA / "portal" / "catalogue" / "F839" / "drift.json", REPO / "schema.json",
              REPO / "LICENSE", REPO / "NOTICE.md", HERE / "build.py", HERE / "coverage.yaml"]
     parts |= {f"extra/{f.relative_to(REPO)}": sha256_file(f) for f in extra if f.is_file()}
-    library = library or os.environ.get("PRATICHE_NAPOLI_DIR")
+    library = library or os.environ.get("PRATICHE_NAPOLI_DIR") or REPO / "library"
     if library:
         for sub in ("procedures", "rules", "offices", "contract"):
             for f in sorted((Path(library) / sub).rglob("*")):
@@ -298,7 +297,7 @@ def sources_digest(library=None):
     return hashlib.sha256(json.dumps(parts, sort_keys=True).encode()).hexdigest()
 
 
-def copy_runner(skill, desks):
+def copy_runner(skill, desks, library):
     portal = skill / "portal"
     portal.mkdir(parents=True)
     # rules.py's drifted(): pre-flight refuses a pratica the last drift check found changed on
@@ -312,7 +311,7 @@ def copy_runner(skill, desks):
     (portal / "catalogue" / "F839").mkdir(parents=True)
     shutil.copy2(PRATICA / "portal" / "catalogue" / "F839" / "drift.json", portal / "catalogue" / "F839" / "drift.json")
     (portal / "rules").mkdir()
-    for table in sorted((PRATICA / "portal" / "rules").glob("*.yaml")):
+    for table in sorted((Path(library) / "rules").glob("*.yaml")):
         if table_sportello(table) not in desks:
             continue
         # BaseLoader, as rules.py reads it: every scalar stays a string.
@@ -599,7 +598,7 @@ def check_private(plugin, terms):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--library", type=Path, default=os.environ.get("PRATICHE_NAPOLI_DIR"))
+    ap.add_argument("--library", type=Path, default=os.environ.get("PRATICHE_NAPOLI_DIR") or REPO / "library")
     ap.add_argument("--out", type=Path, default=HERE / "dist")
     ap.add_argument("--pvault-version", help="the pvault release the setup skill installs, e.g. 0.1.0 (with --pvault-checksums)")
     ap.add_argument("--pvault-checksums", type=Path, help="that release's checksums.txt")
@@ -618,8 +617,6 @@ def main():
         ap.error("--pvault-version and --pvault-checksums go together")
     if a.pvault_version and not vault:
         ap.error("--pvault-version: this build ships no archive (vault off in plugin/build.yaml or --vault off)")
-    if not a.library:
-        ap.error("--library or $PRATICHE_NAPOLI_DIR: a pratiche-napoli checkout")
     # The repo's runner names a procedure by its library title from here, as the plugin's does
     # from its own library/ (run.procedure_name): the self-check compares their pre-flights.
     os.environ["PRATICHE_NAPOLI_DIR"] = str(Path(a.library).resolve())
@@ -641,7 +638,7 @@ def main():
         write_pvault_release(plugin / "skills" / SETUP_SKILL, a.pvault_version, a.pvault_checksums)
     skill = plugin / "skills" / "pratiche"
     desks = sportelli()
-    copy_runner(skill, desks)
+    copy_runner(skill, desks, a.library)
     catalog = copy_pratiche(skill, a.library, desks)
     copy_library(a.library, skill, catalog, desks)
     manifest = json.loads((plugin / ".claude-plugin" / "plugin.json").read_text())

@@ -72,7 +72,7 @@ const share = values.all ? targets : tonight(targets, dayNumber(today), state);
 console.log(`checking ${share.length} of ${targets.length} addresses…`);
 
 const checked = await checkTargets(share, fetch, {
-  userAgent: "pratiche-napoli-source-monitor/1.0 (+https://github.com/liammaher/pratiche-napoli)",
+  userAgent: "pratiche-napoli-source-monitor/1.0 (+https://github.com/liammaher/impresa-in-un-minuto)",
   validators: validatorsTonight(state, share, dayNumber(today)),
 });
 const why = inconclusive(checked);

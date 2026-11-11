@@ -1,9 +1,20 @@
-name: CI
+name: Library
 
+# The procedure library (library/): types, tests, procedures validated against their schema, the
+# `updated` dates of changed procedures, the site, the reports backend. Runs when library/** or the
+# vault's schema.json (which library/contract/vault-schema.json must equal) changes.
 on:
   push:
     branches: [main]
+    paths:
+      - library/**
+      - schema.json
+      - .github/workflows/library.yml
   pull_request:
+    paths:
+      - library/**
+      - schema.json
+      - .github/workflows/library.yml
 
 permissions:
   contents: read
@@ -11,6 +22,9 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: library
     steps:
       - uses: actions/checkout@v5
         with:
@@ -20,6 +34,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: library/package-lock.json
 
       - name: Install
         run: npm ci --ignore-scripts
@@ -33,6 +48,11 @@ jobs:
       - name: Validate procedures
         run: npm run validate
 
+      # The vault's schema.json is in this repository: the library's copy and the field
+      # registry built from it must follow it (make schema).
+      - name: Vault schema
+        run: npm run check:vault-schema
+
       - name: Check updated dates
         if: github.event_name == 'pull_request'
         run: npm run check:updated -- origin/${{ github.base_ref }}
@@ -44,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: reports/functions
+        working-directory: library/reports/functions
     steps:
       - uses: actions/checkout@v5
 
@@ -52,7 +72,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: reports/functions/package-lock.json
+          cache-dependency-path: library/reports/functions/package-lock.json
 
       - uses: actions/setup-java@v5 # the Firestore emulator runs on Java
         with:

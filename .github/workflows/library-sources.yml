@@ -1,4 +1,4 @@
-name: Sources
+name: Library sources
 
 # Every night, re-fetch the official forms and a seventh of the pages the
 # procedures cite and keep one issue listing what changed or stopped
@@ -28,6 +28,9 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: library
     # The check gives up on a site that stalls and stops asking after an hour
     # (see checkTargets), so this only catches the unexpected; cut short, the
     # job saves nothing.
@@ -39,6 +42,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: library/package-lock.json
 
       - name: Install
         run: npm ci --ignore-scripts
@@ -46,7 +50,7 @@ jobs:
       - name: Restore the last results
         uses: actions/cache/restore@v4
         with:
-          path: .cache/sources-state.json
+          path: library/.cache/sources-state.json
           key: sources-state-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: sources-state-
 
@@ -57,7 +61,7 @@ jobs:
       - name: Save the results
         uses: actions/cache/save@v4
         with:
-          path: .cache/sources-state.json
+          path: library/.cache/sources-state.json
           key: sources-state-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Update the issue

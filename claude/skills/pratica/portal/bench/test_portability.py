@@ -19,7 +19,8 @@ import portability  # noqa: E402
 results = []
 ROWS = branches.rows()
 CHOICES = portability.choices(ROWS)
-LIB = os.environ.get("PRATICHE_NAPOLI_DIR")
+import rules as rules_mod  # noqa: E402
+LIB = str(rules_mod.library_dir())
 
 
 def case(name):
@@ -118,7 +119,7 @@ def _():
 @case("the page renders without the library, saying the rules weren't counted")
 def _():
     text = portability.render(CHOICES, None, {})
-    assert f"**{len(CHOICES)} choices**" in text and "PRATICHE_NAPOLI_DIR is unset" in text
+    assert f"**{len(CHOICES)} choices**" in text and "no library/ next to the tools" in text
 
 
 print(f"{sum(results)}/{len(results)} passed")

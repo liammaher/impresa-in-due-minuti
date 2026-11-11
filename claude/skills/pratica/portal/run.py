@@ -1144,9 +1144,10 @@ def ruled(steps, values):
 
 def procedure_name(pid):
     """A library procedure as the tecnico reads it: its title up to " – " (no "Comune di Napoli,
-    sul SUE"), from the plugin's library/ or $PRATICHE_NAPOLI_DIR (plugin/build.py sets it, so
+    sul SUE"), from the plugin's library/, the repository's library/ or $PRATICHE_NAPOLI_DIR (plugin/build.py sets it, so
     both runners name it alike), else its id's last part in words. Never the id itself."""
-    roots = [Path(__file__).resolve().parent.parent / "library"]
+    here = Path(__file__).resolve().parent
+    roots = [here.parent / "library", here.parents[3] / "library"]  # the plugin's, then the repository's
     if os.environ.get("PRATICHE_NAPOLI_DIR"):
         roots.append(Path(os.environ["PRATICHE_NAPOLI_DIR"]))
     for root in roots:

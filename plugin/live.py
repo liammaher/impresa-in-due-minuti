@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The one way to try the plugin as a tecnico gets it: build it when it is stale, then say what to load.
 
-  PRATICHE_NAPOLI_DIR=../pratiche-napoli ~/.cache/pratica-portal/venv/bin/python plugin/live.py [--check]
+  ~/.cache/pratica-portal/venv/bin/python plugin/live.py [--check]
 
 A test of how Impresa in un minuto behaves (the Prova, a demo, a UX change) is run through the built
 plugin's own skill, in the Claude app's browser pane, from a fresh folder, saying what a tecnico says

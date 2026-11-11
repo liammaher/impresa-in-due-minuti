@@ -15,8 +15,8 @@ import { ROOT, SIGNING, loadRegistry, procedureIdFromPath, todayInRome, validate
 
 const library = path.join(ROOT, "procedures");
 const out = path.resolve(process.argv[2] ?? path.join(ROOT, "site"));
-const baseUrl = (process.env.SITE_URL ?? "https://liammaher.github.io/pratiche-napoli").replace(/\/+$/, "");
-const repoUrl = "https://github.com/liammaher/pratiche-napoli";
+const baseUrl = (process.env.SITE_URL ?? "https://liammaher.github.io/impresa-in-un-minuto/library").replace(/\/+$/, "");
+const repoUrl = "https://github.com/liammaher/impresa-in-un-minuto/tree/main/library";
 
 const results = validateDir(library, loadRegistry(), todayInRome());
 const situationResults = validateSituations(

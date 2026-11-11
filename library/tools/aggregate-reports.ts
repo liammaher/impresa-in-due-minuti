@@ -74,8 +74,13 @@ const git = (...args: string[]) =>
   execFileSync("git", ["-C", ROOT, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"], maxBuffer: 1 << 30 });
 try {
   const top = git("rev-parse", "--show-toplevel").trim();
-  if (realpathSync(top) !== realpathSync(ROOT)) {
-    console.error(`not aggregating: ${ROOT} isn't a git checkout of its own (git found ${top}), so earlier versions can't be read`);
+  // The library may be a folder of a larger checkout (library/ of impresa-in-un-minuto), but not a
+  // downloaded copy sitting inside some other repository: ROOT must be the checkout's top or a
+  // folder named library directly under it.
+  const here = realpathSync(ROOT);
+  const root = realpathSync(top);
+  if (here !== root && here !== path.join(root, "library")) {
+    console.error(`not aggregating: ${ROOT} isn't a git checkout of its own or its library/ folder (git found ${top}), so earlier versions can't be read`);
     process.exit(2);
   }
   if (git("rev-parse", "--is-shallow-repository").trim() === "true") {
@@ -140,7 +145,7 @@ function publishedBlocks(): { blocks: { id: string; block: Reported }[]; unread:
     // "<sha>:<path>" for each file with a block. git grep exits 1 when no
     // file has one, and may still say it couldn't read a file (exit 0 or 1):
     // an error or a failure stops the run, a warning doesn't.
-    const grep = spawnSync("git", ["-C", ROOT, "grep", "-l", "^reported:", sha, "--", "procedures"], { encoding: "utf8", maxBuffer: 1 << 30 });
+    const grep = spawnSync("git", ["-C", ROOT, "grep", "-l", "--full-name", "^reported:", sha, "--", "procedures"], { encoding: "utf8", maxBuffer: 1 << 30 });
     if (grep.error || (grep.status !== 0 && grep.status !== 1) || /^(error|fatal):/m.test(grep.stderr)) {
       throw Object.assign(new Error(`git grep in ${sha}`), { stderr: grep.stderr || String(grep.error ?? grep.status) });
     }

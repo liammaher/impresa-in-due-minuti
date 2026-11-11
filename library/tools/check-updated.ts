@@ -19,9 +19,11 @@ function git(...args: string[]): string {
 }
 
 let top: string;
+let prefix: string; // where the library sits in the repository ("library/", or "" when it is the repository)
 let mergeBase: string;
 try {
   top = git("rev-parse", "--show-toplevel");
+  prefix = git("rev-parse", "--show-prefix");
   mergeBase = git("-C", top, "merge-base", base, "HEAD");
 } catch (e) {
   console.error(`can't compare with ${base}: ${(e as Error).message.split("\n")[0]}`);
@@ -36,7 +38,7 @@ interface Change {
 
 const isYaml = (p: string) => /\.ya?ml$/i.test(p);
 const changes: Change[] = [];
-for (const line of git("-C", top, "diff", "--name-status", "-M", mergeBase, "--", "procedures", "situations").split("\n")) {
+for (const line of git("-C", top, "diff", "--name-status", "-M", mergeBase, "--", `${prefix}procedures`, `${prefix}situations`).split("\n")) {
   if (!line) continue;
   const [status, a, b] = line.split("\t");
   if (status === "D") continue;
@@ -44,7 +46,7 @@ for (const line of git("-C", top, "diff", "--name-status", "-M", mergeBase, "--"
   if (!isYaml(p)) continue;
   changes.push({ path: p, oldPath: status === "A" ? undefined : a });
 }
-for (const p of git("-C", top, "ls-files", "--others", "--exclude-standard", "--", "procedures", "situations").split("\n")) {
+for (const p of git("-C", top, "ls-files", "--others", "--exclude-standard", "--", `${prefix}procedures`, `${prefix}situations`).split("\n")) {
   if (p && isYaml(p)) changes.push({ path: p });
 }
 

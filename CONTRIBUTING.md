@@ -15,7 +15,7 @@ as issues and pull requests. First, read [responsible use](docs/responsible-use.
   mapped, the same page has a form for it. Structure only, meaning the section and the fields' labels
   and ids from `run/report.json` (`error`, `at`, `snapshot`) or `__pv.look()`, never a value.
 - **Un errore su cosa chiede la legge / A mistake in what the law asks:** documents, costs, deadlines
-  and offices live in [pratiche-napoli](https://github.com/liammaher/pratiche-napoli), with sources.
+  and offices live in [`library/`](library/), with sources.
   Correct them there.
 - **Sicurezza / Security:** privately, as [SECURITY.md](SECURITY.md) says.
 
@@ -27,8 +27,8 @@ the portal (`claude/skills/pratica/portal/catalogue/<comune>/sections/`), the sh
 (`rehearsals/<name>/recipe.yaml`). A changed section is usually fixed by changing a dictionary entry or a
 recipe and regenerating (`make steps`): the steps files are built, never committed, and
 `rehearsals/steps.lock` holds their hashes, so commit the lock and `bench/plan_diff.py` shows what
-the change does to each case. The rules tables in `claude/skills/pratica/portal/rules/` are copies of the
-library's, byte for byte: change the library first. How to add a pratica is in
+the change does to each case. The rules tables are `library/rules/`, read where they are (no copy): a rule and the
+procedure claim it cites change in the same pull request. How to add a pratica is in
 [the runner's README](claude/skills/pratica/portal/README.md).
 
 **Made-up data only.** Never map, test or rehearse with a real person's or business's data, and never
@@ -64,7 +64,7 @@ PY=~/.cache/pratica-portal/venv/bin/python
 $PY claude/skills/pratica/portal/bench/test_inpage.py      # inpage.js, on a fake portal
 $PY claude/skills/pratica/portal/bench/test_preflight.py
 $PY claude/skills/pratica/portal/bench/test_gen.py
-PRATICHE_NAPOLI_DIR=../pratiche-napoli $PY claude/skills/pratica/portal/bench/test_rules.py
+$PY claude/skills/pratica/portal/bench/test_rules.py
 ```
 
 After a change to `inpage.js`, the dictionary or `gen.py`, regenerate every rehearsal and read the diff:

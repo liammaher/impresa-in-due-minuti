@@ -35,7 +35,7 @@ documenti, basta dire «è una prova, inventa i dati».
   confermi, e solo allora si comincia.
 - **Coperta** vuol dire: compilata sul portale vero con dati di prova, rileggendo ogni valore.
   Nessuna pratica reale è ancora stata inviata con Impresa in un minuto.
-- Le regole vengono dalla biblioteca pratiche-napoli, ogni fatto con la sua fonte. Ciò che la
+- Le regole vengono dalla biblioteca delle procedure, ogni fatto con la sua fonte. Ciò che la
   biblioteca non copre, Claude lo dice.
 
 ## Installazione
