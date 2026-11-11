@@ -13,6 +13,28 @@ crawl: suap-016-aprire-l-attivita
 subject: impresa
 operation: Aprire l'attività
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+# The payment and attachments screens. The sign adds its own slots, which the opening's crawl
+# (shared with rehearsals/negozio-fittizio) hasn't: read on this pratica's filled draft
+# "PROVA NON INVIARE - negozio insegna generato" (2026-11-10, crawl.js slotsOf), before the
+# declarations: the restaurant's sign slots, the same 14. Every one but Allegati liberi takes only
+# signed files: the person's.
+after: [Pagamento degli oneri, Gestione degli allegati]
+slots:
+  Gestione degli allegati:
+    - {"title": "Documenti relativi alle caratteristiche illuminotecniche del corpo illuminante, emesso in regime di sistema di qualità aziendale certificato o rilasciato da ent", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "per gli edifici oggetto di notifica o di interesse culturale, qualora il richiedente intenda delegare il SUAP ad acquisire il Nulla Osta della Soprintendenza pe", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "per gli edifici oggetto di notifica o di interesse culturale, qualora il richiedente intenda delegare il SUAP ad acquisire il Nulla Osta della Soprintendenza pe", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "autorizzazione/nulla osta tecnico dell'ente proprietario della strada (diverso dal Comune)", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "documentazione fotografica che illustra il punto di collocazione del mezzo pubblicitario nell'ambiente circostante", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "planimetria catastale aggiornata con indicazione del punto preciso dove verrà collocato l’impianto pubblicitario da installare (SI RACCOMANDA L'USO DEI FORMATI ", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "progetto quotato dell'opera e relativa descrizione tecnica, dai quali sono individuabili gli elementi essenziali dell'opera e la sua eventuale collocazione sul ", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "per le aree soggette a tutela ambientale: relazione paesaggistica semplificata, redatta da un tecnico abilitato, secondo la normativa vigente", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "Modello autodichiarazione dpr 445-2000 per canoni pregressi", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": true}
+    - {"title": "Dichiarazione programma 100", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": true}
+    - {"title": "asseverazione di tecnico abilitato attestante che “Le installazioni dei mezzi pubblicitari oggetto della SCIA rispettano i requisiti di legge, dei regolamenti c", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "bozzetto colorato del messaggio pubblicitario", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "copia attestazione versamento oneri, diritti e spese", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "Allegati liberi", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg", "required": false, "portal_document": false}
 wizard:
   - screen: Assegna una descrizione alla pratica
     fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}

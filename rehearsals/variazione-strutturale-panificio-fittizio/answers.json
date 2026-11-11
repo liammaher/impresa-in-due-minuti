@@ -1,0 +1,20 @@
+{
+ "extras": [],
+ "variazioni": ["var_consumo_sul_posto"],
+ "attivita_852": [
+  "forno",
+  "pane",
+  "dettaglio_alimenti"
+ ],
+ "descrizione": "PROVA NON INVIARE - variazione panificio generato",
+ "oggetto": "Variazione del panificio in via Foria 120: si aggiunge la vendita dei prodotti di propria produzione per il consumo sul posto, senza servizio ai tavoli.",
+ "titolo_attivita_protocollo": "0999999",
+ "titolo_attivita_data": "2021-02-22",
+ "notifica_852_protocollo": "0999998",
+ "notifica_852_data": "2021-02-22",
+ "consumo_sul_posto": "true",
+ "stagionale": "false",
+ "responsabile_produzione_altro": "false",
+ "diritti_euro": "96",
+ "diritti_esente": false
+}

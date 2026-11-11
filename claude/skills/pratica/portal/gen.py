@@ -774,7 +774,9 @@ def generate(recipe, base=HERE):
                     # The same pratica crawled with its ticks (`<crawl>-interventi`) is its own; another
                     # pratica's are a guess: the nulla osta's bollo section, right for the normal zones'
                     # SCIA, wasn't on the protected zones' move (2026-11-10). Pre-flight names them.
-                    if not other.stem.startswith(recipe["crawl"]):
+                    # `scelte_seen`: this pratica's own draft, read with the tick, has those same sections
+                    # (the shop's opening with a sign, 2026-11-10): no longer a guess.
+                    if not other.stem.startswith(recipe["crawl"]) and sc not in crawl.get("scelte_seen", {}):
                         borrowed.append({"scelta": sc, "from": other.stem, "sections": [s["section"] for s in found]})
                     crawl["sections"] += [{"section": s["section"], "same_as": f"{other.stem}#{s['section']}", "scelta": sc} for s in found]
                     names += [s["section"] for s in found]

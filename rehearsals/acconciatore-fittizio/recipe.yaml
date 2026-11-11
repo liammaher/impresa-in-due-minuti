@@ -39,7 +39,7 @@ yours:
 # refuses a case it gives to another pratica or that needs a pratica this one doesn't file.
 rules:
   table: suap-napoli
-  facts: {attivita: acconciatore_estetista, evento: apertura}
+  facts: {attivita: acconciatore, evento: apertura}
 supports:
   - value: "{{business.forma_giuridica}}"
     in: [ditta_individuale, srl, srls, snc, sas, spa]

@@ -145,7 +145,18 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
 
 A recipe with `rules:` is routed to by its combination: its main pratica (`main`, else its
 procedure) and its `handles`. `route.py` reads that from every steps file each time, so a new
-recipe is routed once its steps file is generated; two steps files for one combination stop it.
+recipe is routed once its steps file is generated; two steps files for one combination stop it,
+unless the facts their recipes fix (`rules.facts` given as values) tell their cases apart. The SUAP
+needs that (2026-11-10): the restaurant's SCIA opens, moves and enlarges (`evento`), and the normal
+and protected zones' pratiche share a procedure, told apart by the wizard's sector the table names
+(`portal.settore`), which a steps file must pick to be found (`run.at_portal`).
+A rule that names no sector lets every steps file of its procedure through, and the yes/no facts a
+recipe fixes only choose among several: the food shop's move in its own sector (`consumo_sul_posto:
+false`) and the protected zones' consumo immediato move (`true`) both fitted a zone C case with
+consumo sul posto, so route stopped (2026-11-10, pratiche-napoli#93 names the sector on those rules).
+Where the table has one value for two portal operations, only one steps file can carry `rules:`; the
+other waits for the table: until 2026-11-10 `acconciatore_estetista` was the hairdresser's and the
+beautician's (the move, the opening), and the library split it into `acconciatore` and `estetista`.
 `bench/test_route.py` walks every case the table decides: each must reach the steps file for its
 combination, read the same way there, or be refused with the reason. It prints the combinations
 no steps file files yet ("to map"), most cases first: the SUE's mapping still to do.
@@ -199,6 +210,18 @@ that also cites a Comune page may only confirm a national one there.
 
 ## What the portal does that bit us
 
+- **Street names without their particles.** The location's street lookup and the Comune's
+  stradario (`internal/napoli`, 2025) don't always name a street alike: the stradario's VIA DEI
+  TRIBUNALI is VIA TRIBUNALI on the portal (2026-11-10, a move's old premises: "matches 0 of 20
+  listed"). inpage.js `lookup` first wants every word of the value; with no hit, it takes the one
+  street of the same type whose name is the same without di/del/della/dei/degli/delle, never one
+  of several. The centro storico rehearsals' premises are on that street: the opening filled there too
+  (2026-11-10).
+A crawl can read a box a choice reveals as an earlier box of the same label moving: the bakery's move
+shows a second "del" (the C.C.N.'s delibera date) under its Si, and the crawl recorded the title's
+"del" as moved there, with no second date anywhere (2026-11-10). gen.py then says "no date labelled
+'del' (only 1)": map the second one `on_page` (found by label once Si is ticked), as
+`dati relativi al trasferimento dell'attività` does.
 - **Street types.** The Scheda anagrafica's "Toponimo (DUG)" offers only ALTRO, CORSO, LARGO,
   PIAZZA, VIA and VIALE; ALTRO opens "Dettaglio DUG" ("da compilare obbligatoriamente nel caso si
   sia selezionato 'ALTRO'"), a list of 190 street types that the crawl recorded only as a count:
@@ -261,8 +284,17 @@ that also cites a Comune page may only confirm a national one there.
   scelta the case needs; gen.py ticks them all. A section a scelta drops for a case takes its asks
   with it (run.py `chosen`): the co-holders' count, with no co-holders (2026-11-05: pre-flight
   stopped on "no field reads asks.cointestatari_quanti").
+  A SUAP scelta the batch tried only on another pratica has its sections from there, which may be
+  wrong: the acoustic nulla osta's tick adds a bollo section to the normal zones' SCIA and nothing to
+  the protected zones' authorization, which has its own, and a move run stopped on the borrowed one
+  (2026-11-10). gen.py lists such sections in the steps file (`borrowed`), pre-flight warns about them,
+  and a crawl's `scelte_none` records a scelta read on that pratica's draft that adds nothing (the
+  protected zones' opening's is inferred from its move's draft until its first run), its `scelte_seen`
+  one whose borrowed sections that draft shows as they are (the shop's outside sign: its draft held the
+  restaurant's seven sign sections and nothing else, 2026-11-10, read after the first run filled).
 - **Values the portal checks.** Codici fiscali and partite IVA by their check digit (the P6
-  fixture's pass), the draft's name at most 60 characters, a P.G. box may take 10. The landscape
+  fixture's pass), the draft's name at most 60 characters (gen.py holds every wizard to it, a
+  recipe's own included: a 68-character name stopped a SUAP run on the first screen, 2026-11-10), a P.G. box may take 10. The landscape
   pratiche's other technician's PEC is looked up at Salva: kept, but "Indirizzo Pec non valido" under
   any address that isn't a real one, `@pec.it` included (a real public PEC cleared it, 2026-11-02).
   That warning is an `.alert-message-text` beside the box, not the `.error-message-text` the runner
@@ -408,6 +440,22 @@ that also cites a Comune page may only confirm a national one there.
   li.ui-autocomplete-item" before, 2026-10-29).
 - **A counter is no label.** A text area the crawl labels "500 Caratteri restanti" is named by
   its own text ("e che consistono in", the crawl's `context`): the counter changes as it fills.
+  The outside sign's text was still "Caratteri restanti" in the dictionary: its first run (the shop's
+  opening with a sign, 2026-11-10) filled it only by the crawled id, listed in `loose`. Named by its
+  context since, and `test_gen.py` refuses a counter as any field's label.
+- **One fingerprint, two meanings.** A section's fingerprint is its boxes alone, so every section of
+  one date box "in data" is the same one: the bakery's takeover's "dichiarazione di denuncia occupazione
+  dei locali ai fini TARSU" resolves (`same_as`) to the SUE's inizio lavori, whose text the crawl then
+  shows. catalogue.py count lists it under both names, and an alias would have filled the date the works
+  started (2026-11-10). Alias a section only where its name says it is the same; read a short section's
+  meaning from its own name, never from the `same_as` text.
+- **A rules table's fact and an ask of the same name** are one question to gen.py: the SUAP table's
+  `insegna` (a yes/no, "Avrai un'insegna?") stopped the salons' steps ("the fact insegna is also
+  asks.insegna, a text"), whose sign box wanted the sign's words. A box's value takes an ask the table
+  doesn't name (`insegna_testo`, 2026-11-10). Check `rules/<table>.yaml`'s `facts` before naming a new ask.
+- **The form's word isn't the regime.** The salons' structural change says "SCIA" in its own boxes
+  ("per l'attività oggetto della presente SCIA") where Napoli's regolamento asks a comunicazione within
+  30 days (artt. 16 and 32): the rules table follows the law, the recipe's comment says both (2026-11-10).
 - **Radios with their own names can still be one choice.** The permesso's asseverazione keeps
   only one of its two opening radios after Salva: the read-back says so; keep the one it keeps.
   A line that reads as a question of its own can be one choice with another's: the permesso's
@@ -916,6 +964,20 @@ its Allega Documenti slots from the menu at the top, so the sections need not be
 an empty "catalogo" draft gives a pratica's base slots (those its answers add are missing).
 In a tab where a rerun batch ran, `__crawl` isn't loaded: `catalogue.py pane`'s `load.js` loads the
 stored wizard.js and crawl.js once their sha256 is the repo's (2026-11-02, after the receipts' runs).
+Read drafts only once the batch has ended (two scripts on one login make the portal's errors), in a
+second tab opened on `/fnsuap/cmd/home` with `load.js`, several drafts in one async loop that keeps its
+results on `window` (the pane is often hidden: wait outside the page, then read them; 2026-11-10, nine
+drafts this way). A draft can open on the portal's own error page (`.content-title` "ERRORE"), which
+`sectionOf` reports as "no section <name>": remove the iframes and call again (it opened the second
+time, 2026-11-10). A slot's title is cut at 160 characters (crawl.js `slots`): keep it as read, gen.py
+matches slots by the start of their titles.
+
+What a draft holds, its section list, settles a scelta read on another pratica (`borrowed`): open any
+section with `__crawl.sectionOf(draft, "Oggetto della pratica")` and read the frame's `a.linkmenu` texts,
+the declarations included (the person's: not in a steps file). A list with nothing besides the steps
+file's sections and the declarations goes in the crawl as `scelte_seen` (the tick adds those sections
+here) or `scelte_none` (it adds nothing), with where and when it was read (2026-11-10: the shop's sign,
+and the protected zones' opening's nulla osta tick, first inferred from the move's draft).
 A slot is marked `required` only once the portal has checked the screen. A run stops on a
 required slot left empty unless it is the person's: a signed-only slot, or one the screen's
 `theirs` names. A `theirs` entry covers the slots whose titles start with it, except where it is

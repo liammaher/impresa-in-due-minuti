@@ -1,0 +1,53 @@
+# A bakery's change of name (variazioni soggetti), as gen.py writes its steps file from the batch crawl
+# (catalogue/F839/sections/suap-004-variazioni-soggetti.json), for the bakery rehearsal's made-up ditta
+# individuale (rehearsals/panificio-fittizio/fixture.json): the vault holds the new name, the old one is
+# asked. Its own sections were written from the crawl's text: the title it runs under, the changes
+# (only the name is mapped: a company's other changes bring the new people's statements), and the
+# antimafia and Comune's-rules statements, the person's. The library's rules table has no bakery yet.
+procedure: napoli/comune/variazioni-attivita
+title: "Variazione della denominazione di un panificio, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-004-variazioni-soggetti
+subject: impresa
+operation: Variazioni soggetti
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+# The payment and attachments screens: its slots read on a filled draft (2026-11-10).
+after: [Pagamento degli oneri, Gestione degli allegati]
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [Panificio], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: [Variazioni soggetti], confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per il panificio? Spunta tutte quelle che valgono, o nessuna."
+asks:
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "variazione {{business.denominazione}}"}
+  var_trasformazione: {group: variazioni, type: yes_no, item: "La società ha cambiato forma giuridica (trasformazione societaria)"}
+  var_legale_rappresentante: {group: variazioni, type: yes_no, item: "Il legale rappresentante è cambiato"}
+  var_requisiti: {group: variazioni, type: yes_no, item: "Chi possiede i requisiti professionali è cambiato (responsabile tecnico, preposto, ...)"}
+  var_compagine: {group: variazioni, type: yes_no, item: "I soci sono cambiati (compagine sociale)"}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (la riga della tabella 2026 per la variazione di un panificio: controllala)"}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, antimafia (D.Lgs. 159/2011), le regole del Comune (Regolamenti del Comune), tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento"
+  - "Allega quanto chiede la schermata degli allegati dopo aver spuntato le dichiarazioni"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+supports:
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
+  - {when: "{{ask.var_denominazione}}", else: "Sul modulo del panificio per ora preparo solo il cambio di denominazione dell'attività."}
+  - {when: "{{ask.var_trasformazione|not}}", else: "Un cambio di forma giuridica per ora non lo preparo: comporta le dichiarazioni della nuova società."}
+  - {when: "{{ask.var_legale_rappresentante|not}}", else: "Un nuovo legale rappresentante per ora non lo preparo: presenta le proprie dichiarazioni."}
+  - {when: "{{ask.var_requisiti|not}}", else: "Un nuovo titolare dei requisiti professionali per ora non lo preparo: presenta la propria dichiarazione."}
+  - {when: "{{ask.var_compagine|not}}", else: "Un cambio di soci per ora non lo preparo: i nuovi soci presentano le proprie dichiarazioni."}
