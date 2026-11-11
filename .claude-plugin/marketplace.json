@@ -8,12 +8,12 @@
     {
       "name": "impresa-in-un-minuto",
       "displayName": "Impresa in un minuto",
-      "description": "Per chi presenta già queste pratiche: compila quelle del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, con la biblioteca pratiche-napoli di regole e procedure. Non è una consulenza: il controllo è tuo.",
+      "description": "Per chi presenta già queste pratiche: compila quelle del SUE e SUAP del Comune di Napoli, su impresainungiorno, dai documenti del cliente, con la biblioteca pratiche-napoli di regole e procedure. Non è una consulenza: il controllo è tuo.",
       "source": {
         "source": "github",
         "repo": "liammaher/impresa-in-un-minuto",
-        "ref": "plugin-v0.7.1",
-        "sha": "9b4204991308d61a6426ebd3babaddface4bd4f9"
+        "ref": "plugin-v0.7.2",
+        "sha": "fc7658741442941cca902bf3b78c48923edfa3b9"
       }
     }
   ]
