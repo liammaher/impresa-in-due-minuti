@@ -7,7 +7,7 @@ The single list of what the plugin ships, written by `claude/skills/pratica/port
 | | |
 |---|---|
 | Plugin version | 0.7.2 (`plugin/impresa-in-un-minuto/.claude-plugin/plugin.json`) |
-| Repo commit | `c9f6eecf3d4724ab2228149abb23ab2ecf96bd45` plus uncommitted changes |
+| Repo commit | `862b0de3774a2adf3b1a6959a995928360582698` plus uncommitted changes |
 | Generated | 2026-11-11 |
 | Sportelli shipped | SUE (building works), SUAP (businesses), as `plugin/build.yaml` `sportelli` says |
 | Not shipped | none |
@@ -30,28 +30,28 @@ Per pratica on the portal, as coverage.md counts them:
 | Sportello | Mapped | Fillable | Run on the portal |
 |---|---:|---:|---:|
 | SUE (building works) | 104 | 104 | 102 |
-| SUAP (businesses) | 278 | 155 | 41 |
+| SUAP (businesses) | 278 | 155 | 51 |
 
-The plugin carries 169 steps files for 158 pratiche on the portal (a few steps files share one pratica, filled with other choices); 152 of the 169 have a run that filled the draft. The rows below are per steps file.
+The plugin carries 169 steps files for 158 pratiche on the portal (a few steps files share one pratica, filled with other choices); 162 of the 169 have a run that filled the draft. The rows below are per steps file.
 
 ## Pratiche
 
 | Library slug | Portal name | Steps file | Mapped | Fillable | Run on the portal | Refusals |
 |---|---|---|---|---|---|---|
-| `napoli/comune/autorizzazione-media-struttura-vendita` | Aprire l'attività | `media-struttura-fittizia` | yes | yes | no | `r3487df` `rc0f612` `r868dc0` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
-| `napoli/comune/autorizzazione-media-struttura-vendita` | Aprire l'attività | `media-struttura-grande-fittizia` | yes | yes | no | `r3487df` `rc0f612` `r868dc0` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
-| `napoli/comune/autorizzazione-media-struttura-vendita` | Trasferire la sede dell'attività | `trasferimento-media-struttura-fittizio` | yes | yes | no | `r3487df` `rc0f612` `r868dc0` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
-| `napoli/comune/autorizzazione-media-struttura-vendita` | Trasferire la sede dell'attività | `trasferimento-media-struttura-grande-fittizio` | yes | yes | no | `r3487df` `rc0f612` `r868dc0` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
+| `napoli/comune/autorizzazione-media-struttura-vendita` | Aprire l'attività | `media-struttura-fittizia` | yes | yes | yes | `r3487df` `rc0f612` `r868dc0` `rb7b0ad` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
+| `napoli/comune/autorizzazione-media-struttura-vendita` | Aprire l'attività | `media-struttura-grande-fittizia` | yes | yes | yes | `r3487df` `rc0f612` `r868dc0` `rb7b0ad` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
+| `napoli/comune/autorizzazione-media-struttura-vendita` | Trasferire la sede dell'attività | `trasferimento-media-struttura-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r868dc0` `rb7b0ad` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
+| `napoli/comune/autorizzazione-media-struttura-vendita` | Trasferire la sede dell'attività | `trasferimento-media-struttura-grande-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r868dc0` `rb7b0ad` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
 | `napoli/comune/avvio-bed-and-breakfast` | Aprire l'attività | `affittacamere-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rc2c5fd` `rc52190` `rccc098` `r760f15` `r51e876` |
 | `napoli/comune/cessazione-attivita-commerciale` | Cessare l'attività | `cessazione-fittizia` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/cessazione-attivita-commerciale` | Cessare l'attività | `cessazione-panificio-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/concessione-suolo-pubblico-dehors` | Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande | `dehors-fittizio` | yes | yes | no | `r3487df` `rc0f612` `r45eade` `r855339` `r4a4ffe` `rad9d56` |
 | `napoli/comune/insegna-esercizio` | SCIA per installazione insegna di esercizio | `insegna-ristorante-scia-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rcef9c4` `ra6788d` `r449d35` `r9b0e62` |
-| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-alimentari-fittizio` | yes | yes | no | `r3487df` `rad9d56` |
-| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-media-fittizio` | yes | yes | no | `r3487df` `rad9d56` |
-| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-media-grande-fittizio` | yes | yes | no | `r3487df` `rad9d56` |
-| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-negozio-fittizio` | yes | yes | no | `r3487df` `rad9d56` |
-| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-ristorante-fittizio` | yes | yes | no | `r3487df` `rad9d56` |
+| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-alimentari-fittizio` | yes | yes | yes | `r3487df` `rad9d56` |
+| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-media-fittizio` | yes | yes | yes | `r3487df` `rad9d56` |
+| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-media-grande-fittizio` | yes | yes | yes | `r3487df` `rad9d56` |
+| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-negozio-fittizio` | yes | yes | yes | `r3487df` `rad9d56` |
+| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-ristorante-fittizio` | yes | yes | yes | `r3487df` `rad9d56` |
 | `napoli/comune/scia-acconciatore-estetista` | Aprire l'attività di acconciatore | `acconciatore-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/scia-acconciatore-estetista` | Aprire l'attività di acconciatore | `acconciatore-procura-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/scia-acconciatore-estetista` | Affitto di poltrona/cabina per esercizio attività di acconciatore e/o estetista | `affitto-poltrona-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
@@ -96,7 +96,7 @@ The plugin carries 169 steps files for 158 pratiche on the portal (a few steps f
 | `napoli/comune/subingresso-attivita-commerciale` | Subentrare nell'esercizio dell'attività | `subingresso-panificio-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `re379be` `ra19106` `r2ac400` `r756563` `rfb86a0` |
 | `napoli/comune/subingresso-attivita-commerciale` | Subentrare nell'esercizio dell'attività | `subingresso-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r2ec47f` |
 | `napoli/comune/subingresso-attivita-commerciale` | Subentrare nell'esercizio dell'attività | `subingresso-ristorante-procura-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r2ec47f` |
-| `napoli/comune/variazione-preposto-somministrazione` | Variazione del preposto in attività di somministrazione e vendita di alimenti e bevande (quando non vi siano anche variazioni societarie) | `preposto-ristorante-fittizio` | yes | yes | no | `r3487df` `rc0f612` |
+| `napoli/comune/variazione-preposto-somministrazione` | Variazione del preposto in attività di somministrazione e vendita di alimenti e bevande (quando non vi siano anche variazioni societarie) | `preposto-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/variazioni-attivita` | Variazioni soggetti | `variazione-negozio-fittizio` | yes | yes | no | `r3487df` `rc0f612` `rbd1160` `r346ebd` |
 | `napoli/comune/variazioni-attivita` | Variazioni soggetti | `variazione-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rbd1160` |
 | `napoli/comune/variazioni-attivita` | Variazioni soggetti | `variazione-soggetti-panificio-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r0d723c` `rfa2b18` `rd18382` `r7281d1` `r8fd38e` |
@@ -272,6 +272,7 @@ What a steps file turns away, in the words the person reads (Italian), by the id
 | `r63c0e0` | 4 | Una media struttura dentro un parco commerciale per ora non la preparo. |
 | `r868dc0` | 4 | Una media struttura che vende solo con distributori automatici per ora non la preparo. |
 | `r98237c` | 4 | Con l'autorizzazione paesaggistica sono previsti solo i lavori ancora in corso (art. 37 c. 5): per i lavori già eseguiti non restano lavori da autorizzare (art. 146 c. 4 D.Lgs. 42/2004); la loro compatibilità paesaggistica rientra nella sola sanatoria dell'art. 36-bis (c. 4). |
+| `rb7b0ad` | 4 | Una media struttura organizzata come centro commerciale, parco commerciale o outlet per ora non la preparo. |
 | `r05d666` | 3 | Armi, metalli preziosi, prodotti fitosanitari, medicinali o mangimi per ora non li preparo. |
 | `r320610` | 3 | Nuovi locali dentro un centro commerciale per ora non li preparo: Napoli chiede il tipo di centro. |
 | `r449d35` | 3 | Le insegne oltre 5 m² pagano anche il canone unico, che non preparo ancora. |

@@ -22,7 +22,7 @@ branch no rehearsal took.
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
 | SUE (building works) | 104 | 104 | 102 | 27 checked, 0 changed |
-| SUAP (businesses) | 278 | 155 | 41 | 0 checked, 0 changed |
+| SUAP (businesses) | 278 | 155 | 51 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
@@ -32,20 +32,10 @@ By section use (how much of what pratiche show the dictionary fills):
 Rehearsals with no recorded run (written, never confirmed on the portal):
 
 - `dehors-fittizio`
-- `media-struttura-fittizia`
-- `media-struttura-grande-fittizia`
-- `orario-deroga-alimentari-fittizio`
-- `orario-deroga-media-fittizio`
-- `orario-deroga-media-grande-fittizio`
-- `orario-deroga-negozio-fittizio`
-- `orario-deroga-ristorante-fittizio`
 - `parere-esonero-fittizio`
 - `pdc-sanatoria-accertamento-fittizio`
-- `preposto-ristorante-fittizio`
 - `ristorante-alcolici-fittizio`
 - `sospensione-srl-fittizia`
-- `trasferimento-media-struttura-fittizio`
-- `trasferimento-media-struttura-grande-fittizio`
 - `variazione-negozio-fittizio`
 
 SUAP pratiche one or two sections short of fillable (the cheapest gaps):

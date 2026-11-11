@@ -1889,14 +1889,16 @@ def _():
         # else a wrong one would fill boxes by position: the mode radios and the title are the proof.
         assert (("radio", "Vendita al dettaglio", 1) in labels) == opening, (name, labels)
         assert (("text", "prot./n.", 1) in labels) == (not opening), (name, labels)
-        # The "No" of the four places (centre, park, outlet, C.C.N.) counted after the autonomo one:
-        # the person answers that SI/NO, whose SI opens rows no crawl read.
-        assert [n for k, l, n in labels if l.lower() == "no"] == [2, 3, 4, 5], (name, labels)
-        assert not any(l.lower() == "si" for k, l, n in labels), (name, labels)
+        # "Esercizio autonomo" is required and its SI opens four required rows ("Organizzato come ...",
+        # read on a draft 2026-11-11): SI, then NO for those four and the four "collocato in" ones, the
+        # 2nd to 9th "NO" of the page, the last four found by label (no crawled field).
+        assert [n for k, l, n in labels if l.lower() == "si"] == [1], (name, labels)
+        assert [n for k, l, n in labels if l.lower() == "no"] == [2, 3, 4, 5, 6, 7, 8, 9], (name, labels)
+        total = next(f for f in section(steps, MEDIA)["fields"] if f.get("label") == "mq")
+        assert total["value"].endswith("|decimal}}"), total  # the portal refuses "300" for the total
         refused = " ".join(c.get("else", "") for c in steps["supports"])
         for place in ("centro commerciale", "parco commerciale", "factory outlet", "C.C.N."):
             assert place in refused, (name, place)
-        assert "Esercizio autonomo" in " ".join(steps["yours"]), name
         a = steps["asks"]
         assert a["media_struttura_tipo"]["options"] == ["MA/M", "ME"], name
 
@@ -1917,7 +1919,8 @@ def _():
     steps = generated("preposto-ristorante-fittizio")
     sec = section(steps, "insegna dell'esercizio")
     assert [f["label"] for f in sec["fields"]] == ["Insegna (nome dell'esercizio):"], sec
-    # The declarations of the new preposto are the person's (the crawl skipped them): the recipe says so.
+    # The new preposto is named only inside the person's declaration ("posseduti dal Sig./ra", read on a
+    # draft): the recipe says so.
     assert "nuovo preposto" in " ".join(steps["yours"]), steps["yours"]
 
 
