@@ -1197,6 +1197,10 @@ asks:
   ricevuta_diritti: {type: file, question: "La ricevuta dei diritti pagati (prima dell'invio, come li riscuote lo sportello), firmata digitalmente (.p7m)"}
   planimetria_firmata: {type: file, question: "La planimetria quotata dei locali, firmata da chi l'ha disegnata (firma digitale, .p7m, dove il portale accetta solo file firmati)"}
   ricevuta_tariffa_asl: {type: file, question: "La ricevuta della tariffa sanitaria forfettaria ASL per la registrazione ai sensi del Reg. 852, firmata digitalmente (.p7m)"}
+  relazione_locali: {type: file, question: "La relazione descrittiva dei locali (caratteristiche, localizzazione e attrezzatura usata per il servizio), firmata digitalmente (.p7m)"}
+  curs_dati: {type: file, question: "La sezione dati per la determinazione del CURS (il modulo del portale: Scarica il documento dopo aver spuntato le dichiarazioni), firmata digitalmente (.p7m)"}
+  criterio_strutturale_firmato: {type: file, question: "Il modello CS 1 (criterio strutturale) del Piano del centro storico, quello che il portale genera dopo aver spuntato le dichiarazioni, firmato digitalmente dal tecnico (.p7m)"}
+  criterio_gestionale_firmato: {type: file, question: "Il modello CG 1 (criterio gestionale, punteggio di gestione) del Piano del centro storico, quello che il portale genera dopo aver spuntato le dichiarazioni, firmato digitalmente (.p7m)"}
   relazione_semplificata_firmata: {type: file, question: "La Relazione Paesaggistica Semplificata del portale (Allegato D DPR 31/2017, Scarica il documento dopo aver spuntato le dichiarazioni), firmata digitalmente (.p7m)"}
   elaborati_paesaggistici: {type: file, question: "Gli elaborati paesaggistici: stato attuale, progetto e opere, con il contesto (firmati digitalmente, .p7m)"}
   foto_paesaggistiche: {type: file, question: "Fotografie a colori dell'edificio e del contesto paesaggistico, da vicino e da lontano (firmate digitalmente, .p7m)"}
@@ -5290,6 +5294,16 @@ after:
       # ticked and take only signed files (read on the portal 2026-10-28), so the second run.
       - {kind: file, label: Planimetria quotata dei locali, value: "{{ask.planimetria_firmata}}", after_declarations: true}
       - {kind: file, label: Ricevuta di pagamento della tariffa sanitaria forfettaria, value: "{{ask.ricevuta_tariffa_asl}}", after_declarations: true}
+      # Optional-looking in the crawl (read before the first Prosegui), but the regional model asks the
+      # relazione always, bar the affitto di poltrona (a pratica of its own): library scia-acconciatore-estetista.
+      - {kind: file, label: Relazione descrittiva delle caratteristiche dei locali, value: "{{ask.relazione_locali}}", after_declarations: true}
+      - {kind: file, label: sezione dati per la determinazione del CURS, value: "{{ask.curs_dati}}", after_declarations: true}
+      # The Piano del centro storico's models, made by the portal once the declarations are ticked and
+      # signed by the tecnico: the alimentari transfer numbers them 5 and 6, the restaurant's 1 and 3.
+      - {kind: file, label: Allegato 5 CS 1 Criterio strutturale, value: "{{ask.criterio_strutturale_firmato}}", after_declarations: true}
+      - {kind: file, label: Allegato 1 CS 1 Criterio strutturale, value: "{{ask.criterio_strutturale_firmato}}", after_declarations: true}
+      - {kind: file, label: Allegato 6 CG 1 Criterio gestionale, value: "{{ask.criterio_gestionale_firmato}}", after_declarations: true}
+      - {kind: file, label: Allegato 3 CG 1 Criterio gestionale, value: "{{ask.criterio_gestionale_firmato}}", after_declarations: true}
       - {kind: file, label: "Copia del documento di identità del/i titolare/i e/o del tecnico", value: "{{ask.documento_identita_cliente}}"}
       # The landscape authorization's own documents (the ordinaria's, the semplificata's; each
       # signed only), and the portal's Allegato D of a semplificata.
