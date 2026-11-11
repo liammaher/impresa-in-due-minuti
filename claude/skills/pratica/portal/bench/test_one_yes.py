@@ -120,8 +120,15 @@ def complete_folder(tmp):
     # Short, as a review by exception: a line for each proposal, the rest counted by source; every
     # answer, a line each, under «dettagli».
     short, full = r["riepilogo"], r["riepilogo_dettagli"]
-    assert short.count("– ") == len(r["proposals"]) and "«dettagli»" in short and "Scrivi «sì»" in short, short
-    assert "relazione tecnica" in short and len(short.splitlines()) <= 6 + len(r["proposals"]) + 3, short
+    quoted = short.split("\n\n")[0] if short.startswith("Dai tuoi documenti:") else ""  # the documents' words: at most 3 lines
+    assert quoted.count("– ") <= 3, quoted
+    assert short.count("– ") - quoted.count("– ") == len(r["proposals"]) and "«dettagli»" in short and "Scrivi «sì»" in short, short
+    assert "Controllami a campione" in short, "the summary doesn't invite a spot check"
+    # The documents' own words on the answers that decide the pratica, each with its document.
+    assert short.startswith("Dai tuoi documenti:\n– Lavori: «manutenzione straordinaria», «non strutturali»"), short[:300]
+    assert "– Stato: «lavori sono iniziati in data 19/10/2026» (relazione tecnica)" in short, short[:500]
+    assert "– Titolo: «serve l'assenso del proprietario» (contratto di locazione)" in short, short[:600]
+    assert "relazione tecnica" in short and len(short.splitlines()) <= 6 + len(r["proposals"]) + 3 + len(quoted.splitlines()) + 1, short
     assert full.count("\n– ") == len(rows) and "Scrivi «sì»" in full, full
     assert rows["allegati"]["answer"].count(",") >= 5, rows["allegati"]
     # The «sì» to another summary changes nothing.

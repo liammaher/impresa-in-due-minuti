@@ -40,15 +40,17 @@ def copertura():
 def marketplace(version, commit, repo=REPO, vault=True):
     return {
         "name": "impresa-in-un-minuto",
-        "description": "Impresa in un minuto: Claude prepara le Sue pratiche sui portali della pubblica amministrazione, fino ai "
-                       "passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio).",
+        "description": "Per tecnici e professionisti (architetti, geometri, ingegneri, commercialisti, consulenti) che queste pratiche "
+                       "le presentano già: Claude le compila sui portali della "
+                       "pubblica amministrazione, fino ai passi che spettano solo a te (accesso con SPID, dichiarazioni, firma, "
+                       "pagamento, invio). Non è una consulenza: Claude può sbagliare, il controllo è tuo.",
         "owner": {"name": "Liam Maher"},
         "plugins": [{
             "name": "impresa-in-un-minuto",
             "displayName": DISPLAY_NAME,
-            "description": f"Prepara le pratiche del {copertura()}, su impresainungiorno, dai "
-                           f"documenti del cliente{' o dal Suo archivio cifrato (vault)' if vault else ''}, con la "
-                           "biblioteca pratiche-napoli di regole e procedure.",
+            "description": f"Per chi presenta già queste pratiche: compila quelle del {copertura()}, su impresainungiorno, dai "
+                           f"documenti del cliente{' o dal tuo archivio cifrato (vault)' if vault else ''}, con la "
+                           "biblioteca pratiche-napoli di regole e procedure. Non è una consulenza: il controllo è tuo.",
             "source": {
                 "source": "github",
                 "repo": repo,

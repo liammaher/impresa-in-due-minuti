@@ -5,6 +5,10 @@ cliente (o della tua impresa). Si ferma dove comincia la tua parte: le dichiaraz
 l'invio: Claude non spunta mai una dichiarazione, non firma, non paga e non invia. Gratuito e
 open source.
 
+> **Per chi queste pratiche le presenta già.** Impresa in un minuto compila: non è una consulenza e non
+> decide al posto tuo. Claude può sbagliare, e il controllo finale è tuo. Se non sai riconoscere un errore
+> in una pratica, non usarlo.
+
 ## Provalo in pochi minuti
 
 Dopo l'installazione scrivi **«Fammi vedere una prova»**. Claude compila sul portale vero una CILA

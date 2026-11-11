@@ -68,8 +68,9 @@ def main():
     good = {"slot": "Allegati liberi", "name": "relazione.pdf", "size": 14, "sha256": sha(b"%PDF relazione")}
     with tempfile.TemporaryDirectory() as t:
         r = build(Path(t), {"rows": [row]}, [good])
-        check("a real job that worked: two lines, the pratica by its short name, no warning",
-              r["message"] == "✅ CILA compilata sul portale in 95 secondi: ogni valore è stato riletto.\nTocca a te:\n"
+        check("a real job that worked: the pratica by its short name, what the preview check held equal, no warning",
+              r["message"] == "✅ CILA compilata sul portale in 95 secondi: ogni valore è stato riletto.\n"
+              "✅ Anteprima del portale confrontata con i tuoi documenti: dati catastali, più 1 file. Tutto corrisponde.\nTocca a te:\n"
               "1. Controlla l'anteprima della bozza\n2. Spunta le dichiarazioni\n3. Firma la pratica\n4. Paga\n5. Invia"
               and r["warnings"] == [], r)
         check("the steps in full stay for Claude to answer from, unsaid", r["yours"] == SHOWN["yours"]
@@ -139,7 +140,7 @@ def main():
         check("the Prova, everything matched: one line, what a real filing leaves to them, the draft to look at; no portal warning (made-up data raises them)",
               r["message"] == "✅ CILA di prova compilata in 95 secondi. Riletti dal portale: dati catastali, più 1 file. Tutto corrisponde.\n"
               "In una pratica vera restano a te: controllare l'anteprima, spuntare le dichiarazioni, pagare, firmare, inviare.\n"
-              "Guarda la bozza qui accanto (Pratiche in bozza › PROVA NON INVIARE), poi cancellala." and r["warnings"] == [], r)
+              "Guarda la bozza qui accanto (Pratiche in bozza › PROVA NON INVIARE): scegli una casella e chiedimi cosa ho scritto e perché. Poi cancellala." and r["warnings"] == [], r)
     with tempfile.TemporaryDirectory() as t:
         # The compilation attached two files; «Allega documenti» lists the one (in two slots), the other sits in a quadro.
         receipt = {"name": "ricevuta-sanzione.pdf", "section": "d) Qualificazione dell'intervento", "sha256": sha(b"%PDF ricevuta")}

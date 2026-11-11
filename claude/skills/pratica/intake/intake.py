@@ -189,6 +189,16 @@ KINDS = [
     ("identita", r"carta d'?identita|repubblica italiana.*identity card", r"identit|\bcie\b|carta|passaporto|patente"),
     ("procura", r"procura speciale", r"procura"),
 ]
+# Each kind as the tecnico reads it ("Ho riconosciuto: visura, contratto di locazione, ...").
+KIND_NAMES = {
+    "visura": "visura", "planimetria": "planimetria", "locazione": "contratto di locazione",
+    "comodato": "contratto di comodato", "atto_obbligo": "atto d'obbligo", "atto": "atto di compravendita",
+    "notifica": "notifica preliminare", "programma100": "Programma 100", "modello_dp": "Modello DP",
+    "relazione": "relazione tecnica", "tipo_edilizio": "tipo edilizio", "assenso": "assenso",
+    "elaborati": "elaborati grafici", "foto": "documentazione fotografica", "ricevuta_diritti": "ricevuta dei diritti",
+    "ricevuta_sanzione": "ricevuta della sanzione", "prospetto_contributo": "prospetto del contributo",
+    "ricevuta_contributo": "ricevuta del contributo", "identita": "documento d'identità", "procura": "procura",
+}
 # The steps file asks that take each kind of file, in the order they're tried.
 SLOTS = {
     "identita": ["documento_identita_cliente"],
@@ -431,7 +441,7 @@ def read_receipt(text):
 def scan(dossier, steps=None, client=None):
     """What the dossier holds: (report for Claude, private values, proposals)."""
     files = sorted(p for p in Path(dossier).iterdir() if p.is_file() and not p.name.startswith("."))
-    report = {"documents": [], "unread": [], "notes": [], "proposals": [], "filled": []}
+    report = {"documents": [], "unread": [], "notes": [], "proposals": [], "filled": [], "riconosciuti": [], "non_riconosciuti": 0}
     values, proposals, docs = {}, {"facts": {}, "answers": {}, "people": {}}, {}
 
     def propose(part, key, value, source, words=None):
@@ -449,6 +459,11 @@ def scan(dossier, steps=None, client=None):
             docs.setdefault(kind, []).append((p, text))
         if not text:
             report["unread"].append(p.name)
+        # What the tecnico is told was recognised, by kind (never a file name: it may hold a name).
+        if kind and KIND_NAMES.get(kind, kind) not in report["riconosciuti"]:
+            report["riconosciuti"].append(KIND_NAMES.get(kind, kind))
+        elif not kind:
+            report["non_riconosciuti"] += 1
 
     # Who: the lease's tenant is the client (they file it); else the visura's one owner.
     unit, owners, planimetria = {}, [], None
@@ -711,6 +726,9 @@ def main():
             for p in json.loads((a.out / "intake.json").read_text()).get("proposals", []):
                 if p["key"] in have and have[p["key"]] == p["value"] and p.get("from"):
                     fonti.setdefault(p["key"], p["from"])
+                    # The document's own words behind it: the summary quotes the few that decide the pratica.
+                    if p.get("words"):
+                        have.setdefault("evidenze", {}).setdefault(p["key"], p["words"])
         a.into.write_text(json.dumps(have, indent=1, ensure_ascii=False))
         print(json.dumps({"added": added, "into": str(a.into)}, ensure_ascii=False))
         return 0

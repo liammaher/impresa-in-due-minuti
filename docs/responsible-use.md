@@ -4,6 +4,10 @@
 
 ## Italiano
 
+**È per chi queste pratiche le presenta già.** Impresa in un minuto compila: non è una consulenza e non decide
+al posto tuo. Claude può sbagliare, e il controllo finale è tuo. Se non sai riconoscere un errore in una
+pratica, non usarlo.
+
 Impresa in un minuto prepara una pratica sul portale e si ferma prima dei passi che la legge lascia a te. Usarlo
 bene vuol dire:
 
@@ -32,6 +36,10 @@ bene vuol dire:
    cancellare dopo, mai con una pratica vera.
 
 ## English
+
+**It is for people who already file these pratiche.** Impresa in un minuto fills in forms: it is not a
+consultancy and does not decide for you. Claude can make mistakes, and the final check is yours. If you
+can't tell when a pratica is filled in wrongly, don't use it.
 
 Impresa in un minuto prepares a pratica on the portal and stops before the steps the law leaves to you. Using it
 well means:

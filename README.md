@@ -1,6 +1,10 @@
 <h1 align="center">Impresa in un minuto</h1>
 
-<p align="center">Le pratiche dei portali della pubblica amministrazione, preparate da Claude. Per ora: il SUE del Comune di Napoli. Gratuito e open source.</p>
+<p align="center">Le pratiche dei portali della pubblica amministrazione, preparate da Claude per tecnici e professionisti (architetti, geometri, ingegneri, commercialisti, consulenti). Per ora: il SUE del Comune di Napoli. Gratuito e open source.</p>
+
+> **Per chi queste pratiche le presenta già.** Impresa in un minuto compila: non è una consulenza e non
+> decide al posto tuo. Claude può sbagliare, e il controllo finale è tuo. Se non sai riconoscere un errore
+> in una pratica, non usarlo.
 
 Impresa in un minuto prepara una pratica del SUE del Comune di Napoli (CILA, SCIA, permesso di costruire e le
 altre), su impresainungiorno, dai documenti del tuo cliente. Si ferma dove comincia la tua parte:

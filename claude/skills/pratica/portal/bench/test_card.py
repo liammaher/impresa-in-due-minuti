@@ -123,6 +123,10 @@ def main():
             bad.append("a real job's card carries the Prova's words")
         if not real.splitlines()[0].startswith("**CILA, "):
             bad.append(f"a real job's card doesn't say why it is this pratica: {real.splitlines()[0]!r}")
+        if not real.splitlines()[0].endswith("(art. 6-bis DPR 380/2001)"):
+            bad.append(f"the CILA's card doesn't carry the library's article: {real.splitlines()[0]!r}")
+        if "DPR" in card:
+            bad.append("the Prova's card carries an article")
         # What the sportello adds goes next to each step in the closing lines, never in the card.
         det = run.step_details(steps)
         if set(det) != {"paga i diritti", "paga", "firma la pratica", "invia"} or any(v in real or v in card for v in det.values()):
