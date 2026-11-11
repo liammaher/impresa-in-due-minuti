@@ -48,3 +48,8 @@ supports:
     else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
   - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
   - {when: "{{ask.trasferisce_acconciatore|not}}", else: "Trasferire entrambe le attività spunta entrambe le operazioni nella procedura guidata: una combinazione che non preparo ancora."}
+# Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides, by the activity
+# (the hairdresser's move fixes `acconciatore`).
+rules:
+  table: suap-napoli
+  facts: {attivita: estetista, evento: trasferimento}

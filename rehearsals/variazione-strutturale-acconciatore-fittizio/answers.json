@@ -1,0 +1,23 @@
+{
+ "extras": [],
+ "fatti": [],
+ "descrizione": "PROVA NON INVIARE - variazione acconciatore generato",
+ "oggetto": "Ampliamento del locale dell'attività di acconciatore in via Luca Giordano 50, Napoli, da 40 a 55 mq, con due posti di lavoro in più.",
+ "titolo_attivita_tipo": "SCIA",
+ "titolo_attivita_protocollo": "1111111",
+ "titolo_attivita_data": "2022-10-03",
+ "data_inizio_attivita": "2026-12-01",
+ "stagionale": "false",
+ "insegna_testo": "Acconciature Fittizie",
+ "superficie_prima_mq": "40",
+ "superficie_complessiva": "55",
+ "var_superficie": "ampliamento",
+ "var_attrezzature": "true",
+ "var_attrezzature_descrizione": "due nuove postazioni di taglio e un lavatesta",
+ "posti_lavoro_prima": "3",
+ "posti_lavoro_dopo": "5",
+ "planimetria_layout_doc": "rehearsals/variazione-strutturale-acconciatore-fittizio/files/planimetria-layout.pdf",
+ "tari_denuncia_doc": "rehearsals/variazione-strutturale-acconciatore-fittizio/files/denuncia-tari.pdf",
+ "diritti_euro": "50",
+ "diritti_esente": false
+}

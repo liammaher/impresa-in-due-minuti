@@ -300,6 +300,22 @@ def _():
         # A bundle is a new batch: an earlier batch's result under the same name would skip a run.
         bundle = (t / "bundle.js").read_text()
         assert bundle.index('sessionStorage.removeItem("pv-batch")') < bundle.index("window.pvBatchRun = ")
+        # ...but a batch not recorded yet isn't lost to the next one (2026-11-10: the move's run, when
+        # the two pratiche it spoiled were run again): record.js gives today's earlier batches too,
+        # a later run of a name over an earlier one. Replayed in node with a stand-in sessionStorage.
+        import shutil
+        if shutil.which("node"):
+            js = ("const m = new Map(); globalThis.sessionStorage = { getItem: (k) => m.has(k) ? m.get(k) : null,"
+                  " setItem: (k, v) => m.set(k, String(v)), removeItem: (k) => m.delete(k) };\n"
+                  "const run = (f) => (0, eval)(require('fs').readFileSync(f, 'utf8'));\n"
+                  "sessionStorage.setItem('pv-batch', JSON.stringify([{name: 'move', result: 'filled', total_seconds: 70},"
+                  " {name: 'enlarge', result: 'stopped'}]));\n"
+                  f"run({json.dumps(str(t / 'out' / 'fresh.js'))});\n"
+                  "sessionStorage.setItem('pv-batch', JSON.stringify([{name: 'enlarge', result: 'filled', total_seconds: 62}]));\n"
+                  f"console.log(run({json.dumps(str(t / 'out' / 'record.js'))}));\n")
+            out = subprocess.run(["node", "-e", js], check=True, capture_output=True, text=True).stdout
+            assert json.loads(out) == [{"name": "move", "result": "filled", "total_seconds": 70},
+                                       {"name": "enlarge", "result": "filled", "total_seconds": 62}], out
         loop = (t / "out" / "loop.js").read_text()
         assert "moved: r.moved || []" in loop and "r.snapshot.boxes" in loop and "gaps" in loop
         assert 'querySelectorAll(\'iframe[data-pv="runner"]' in loop, "the batch leaves the run's frame over the portal"
@@ -1758,6 +1774,82 @@ def _():
             if entries and not any(lists(e) for e, _ in entries):
                 bad.add(f"{s['section']} ({f.stem})")
     assert not bad, sorted(bad)
+
+
+def suap_move(name):
+    return gen.load_yaml(REH / f"trasferimento-{name}-fittizio" / "recipe.yaml")
+
+
+@case("an attachments slot that takes plain files is named by an entry, theirs, or left with why: the portal requires what a screen read before Prosegui didn't mark (2026-11-10)")
+def _():
+    r = suap_move("ristorante-centro-storico")
+    crawl = json.loads((HERE.parent / "catalogue" / "F839" / "sections" / f"{r['crawl']}.json").read_text())
+    slots = crawl["slots"]["Gestione degli allegati"] + [{"title": "Relazione inventata per la prova", "accepts": "pdf;pdf.p7m", "required": False}]
+    try:
+        gen.generate({**r, "slots": {"Gestione degli allegati": slots}})
+    except gen.GenError as e:
+        assert "Relazione inventata per la prova" in str(e) and "takes plain files" in str(e), str(e)
+    else:
+        raise AssertionError("an unnamed plain-file slot passed")
+    # The acoustic report, plain or signed, is mapped: the first run attaches it.
+    after = next(x for x in gen.generate(r)["sections"] if x["section"] == "Gestione degli allegati")
+    assert any(f["label"].startswith("documentazione di impatto acustico") and f["value"] == "{{ask.acustica_impatto_doc}}"
+               for f in after["fields"]), after["fields"]
+
+
+@case("a recipe's own attachments slots win over its crawl's, shared with another pratica (the opening with a sign, 2026-11-10)")
+def _():
+    after = next(x for x in gen.generate(gen.load_yaml(REH / "ristorante-insegna-fittizio" / "recipe.yaml"))["sections"]
+                 if x["section"] == "Gestione degli allegati")
+    assert any(t.startswith("bozzetto colorato del messaggio pubblicitario") for t in after["theirs"]), after["theirs"]
+
+
+@case("a scelta another pratica's crawl tried is `borrowed` (pre-flight names it); `scelte_none` says it adds nothing here, `scelte_seen` that it adds the same (2026-11-10)")
+def _():
+    move = gen.generate(suap_move("ristorante-centro-storico"))
+    assert "borrowed" not in move, move.get("borrowed")
+    assert not any(x["section"] == "dichiarazione relativa all'imposta di bollo" for x in move["sections"])
+    # The shop's opening with a sign: read on its own draft (`scelte_seen`), so no longer borrowed; the
+    # same crawl without that note borrows the restaurant's sign sections, and pre-flight names them.
+    recipe = gen.load_yaml(REH / "negozio-insegna-fittizio" / "recipe.yaml")
+    assert "borrowed" not in gen.generate(recipe), "scelte_seen should settle the sign's sections"
+    import tempfile, shutil
+    with tempfile.TemporaryDirectory() as tmp:
+        base = Path(tmp)
+        (base / "catalogue").mkdir()
+        shutil.copytree(gen.HERE / "catalogue" / "F839", base / "catalogue" / "F839")
+        (base / "dictionary").symlink_to(gen.HERE / "dictionary")
+        crawl = base / "catalogue" / "F839" / "sections" / "suap-016-aprire-l-attivita.json"
+        c = json.loads(crawl.read_text()); c.pop("scelte_seen"); crawl.write_text(json.dumps(c))
+        shop = gen.generate(recipe, base=base)
+    assert [b["from"] for b in shop.get("borrowed", [])] == ["suap-060-aprire-l-attivita-interventi"], shop.get("borrowed")
+    import run
+    report = run.preflight(shop, run.Values({}, fields={}, asks=shop.get("asks")), made_up=True)
+    assert any("su un'altra pratica, non su questa" in w and "TITOLARITA' DELL'INTERVENTO" in w for w in report["warnings"]), report["warnings"]
+
+
+@case("a box the crawl saw as an earlier box of its label moving is found on the page: the bakery move's C.C.N. date (2026-11-10)")
+def _():
+    sec = next(x for x in gen.generate(suap_move("panificio"))["sections"] if x["section"] == "dati relativi al trasferimento dell'attività")
+    dels = [f for f in sec["fields"] if f.get("label") == "del"]
+    assert len(dels) == 2 and "id" not in dels[1] and dels[1].get("nth") == 2, dels
+
+@case("no dictionary field is named by a text area's counter (\"300 Caratteri restanti\"): the outside sign's ran `loose` (2026-11-10)")
+def _():
+    d = gen.load_yaml(gen.HERE / "dictionary" / "fnsuap.yaml")
+    bad = [(e["section"], f["label"]) for e in d["sections"] + d.get("after", []) for f in e.get("fields", [])
+           if re.search(r"caratteri restanti", str(f.get("label", "")), re.I)]
+    assert not bad, bad
+
+
+@case("every steps file's draft name is held to the box's 60 characters, a recipe's own wizard too (2026-11-10)")
+def _():
+    # The SUAP recipes write their own wizard, and gen.py put the limit only on the one it writes:
+    # a 68-character name passed pre-flight and stopped the run on the wizard's first screen.
+    bad = [f.parent.name for f in sorted(REH.glob("*/portal-steps.generated.yaml"))
+           for w in yaml.safe_load(f.read_text()).get("wizard", [])
+           if "descrizione" in w.get("fill", {}).get("css", "") and w["fill"].get("max") != gen.DESCRIPTION_MAX]
+    assert not bad, bad
 
 
 print(f"{sum(results)}/{len(results)} passed")

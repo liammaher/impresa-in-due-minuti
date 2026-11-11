@@ -314,5 +314,58 @@
    "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Dichiarazione relativa ai diritti di segreteria/istruttori",
    "seconds": 0.7
   }
- ]
+ ],
+ "slots": {
+  "Gestione degli allegati": [
+   {
+    "title": "copia documento d'identità in corso di validità ai sensi del D.P.R. 445/2000 del preposto",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "attestazione e/o asseverazione di tecnici abilitati ai sensi art. 19 Legge 241/90 e s.m.i.",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "certificato attestante la qualificazione professionale per l'attività rilasciato dalla Commissione Provinciale Artigianato c/o la Camera di Commercio, indicante",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Copia denuncia occupazione dei locali ai fini TARSU (tassa smaltimento rifiuti) oppure dichiarazione sostitutiva con indicazione della data di presentazione",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "planimetria relativa allo stato dei locali utilizzati per l'attività, completa di layout aziendale e delle attrezzature in uso",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Relazione descrittiva delle caratteristiche dei locali medesimi, della loro localizzazione e attrezzatura utilizzata per il servizio",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Allegati liberi",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   }
+  ]
+ },
+ "slots_note": "read 2026-11-10 on the filled draft \"PROVA NON INVIARE - variazione acconciatore generato\" after its run (crawl.js slotsOf), before the declarations: none required yet"
 }
