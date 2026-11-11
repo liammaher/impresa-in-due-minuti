@@ -620,6 +620,8 @@ def main():
     # The repo's runner names a procedure by its library title from here, as the plugin's does
     # from its own library/ (run.procedure_name): the self-check compares their pre-flights.
     os.environ["PRATICHE_NAPOLI_DIR"] = str(Path(a.library).resolve())
+    import rules as rules_mod  # noqa: E402  (gen imported it before this: its tables follow --library too)
+    rules_mod.TABLES = rules_mod._tables_dir()
     plugin = a.out / "impresa-in-un-minuto"
     (a.out / "build.json").unlink(missing_ok=True)  # a build that dies must not leave a record saying "current"
     if plugin.exists():
