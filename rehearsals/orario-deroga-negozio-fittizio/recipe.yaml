@@ -1,0 +1,36 @@
+# A request for opening hours outside the Comune's rules (orario in deroga) for a non-food shop (vicinato, settore NON alimentare),
+# as gen.py writes its steps file from the batch crawl
+# (catalogue/F839/sections/suap-016-richiedere-l-orario-di-apertura-in-deroga-a-quanto.json), for the made-up ditta individuale of
+# rehearsals/negozio-fittizio/fixture.json.
+procedure: napoli/comune/orario-apertura-deroga
+title: "Richiesta di orario di apertura in deroga, negozio di vicinato non alimentare, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-016-richiedere-l-orario-di-apertura-in-deroga-a-quanto
+subject: impresa
+operation: "Richiedere l'orario di apertura in deroga a quanto disposto"
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [Vicinato - settore merceologico NON alimentare], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Richiedere l'orario di apertura in deroga a quanto disposto"], confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+asks:
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "deroga orario negozio {{business.denominazione}}"}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (controlla la voce nel tariffario 2026; 0 se non dovuti)"}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, tasse comunali"
+  - "Paga i diritti di segreteria, se dovuti, con pagoPA nella schermata di pagamento"
+  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
+  - "Allega quanto chiede la schermata degli allegati dopo aver spuntato le dichiarazioni"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+supports:
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."

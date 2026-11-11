@@ -1,0 +1,14 @@
+{
+ "descrizione": "PROVA NON INVIARE - deroga orario ristorante generato",
+ "oggetto": "Richiesta di orario di apertura in deroga per la pizzeria di viale Augusto 74: chiusura alle 02:00 il venerdì e il sabato.",
+ "titolo_attivita_tipo": "SCIA",
+ "titolo_attivita_protocollo": "0777777",
+ "titolo_attivita_data": "2026-03-02",
+ "insegna": "Pizzeria Esempio",
+ "orario_deroga": "Venerdì e sabato dalle 12:00 alle 02:00.",
+ "deroga_motivazione": "La pizzeria è in una zona con molta vita serale nei fine settimana.",
+ "diritti_euro": "0",
+ "diritti_esente": false,
+ "bollo_marche": false,
+ "bollo_esenzione": "no"
+}

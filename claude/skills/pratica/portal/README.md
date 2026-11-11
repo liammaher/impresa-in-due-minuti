@@ -208,6 +208,63 @@ Napoli, or neither; each rule of `rules/sue-napoli.yaml` by where its cited sour
 (the library's URLs, in `library/`). Counted, not read: a rule
 that also cites a Comune page may only confirm a national one there.
 
+## The SUAP's opening hours in deroga, medium shops and the preposto (2026-11-11)
+
+Three sections the coverage review of 2026-11-11 found missing, each in the wedge's sectors, and the
+ten pratiche they were the only gap of (149 of 278 crawled SUAP pratiche were unfillable; 139 now):
+
+- **`dichiarazione relativa alla deroga dell'orario di apertura`**: `suap-016`, `017`, `019`, `020` and
+  `060-richiedere-l-orario-di-apertura-in-deroga-a-quanto` (a shop, a food shop, a shop up to and over
+  400 m², a bar or restaurant). Two text areas (350 characters each), named by the line above them
+  (`orario di apertura richiesto`, `motivazione della richiesta di deroga`): the counter beside each,
+  "350 Caratteri restanti", changes as it fills. Rehearsals `orario-deroga-*`. No national schema covers it
+  (`draft.py` has only the vicinato, somministrazione, acconciatori, subingresso and notifica forms), so it is
+  written from the crawl's text.
+- **`SPECIFICHE DELLA MEDIA STRUTTURA DI VENDITA`**: the opening and the move of a medium shop (`suap-019`
+  and `020`, up to and over 400 m² gross). It is the vicinato's section with the form's own twists: the
+  "MA/M" and "ME" boxes (the page explains neither: asked as `media_struttura_tipo`) and four places asked
+  (a centre, a park, a factory outlet, a C.C.N.). Two entries, the opening's (its sales-mode radios) and the
+  move's (its title, `prot./n.`): each is tried on the other's crawl and fails there, so neither fills the
+  other's boxes by position. `draft.py` against the vicinato's schema aligned 26 of 38 boxes by label, the
+  rest wrongly (the delibera's number read as a codice fiscale): the entries were written by hand from the
+  vicinato's, checked against the four crawls. Rehearsals `media-struttura-*`, `trasferimento-media-struttura-*`.
+- **`insegna dell'esercizio`** (no "dichiarazione dell'"): one box, "Insegna (nome dell'esercizio):", in
+  `suap-060-variazione-del-preposto-...` (rehearsal `preposto-ristorante-fittizio`).
+
+What the crawls did not read, so the entries leave it:
+
+- **"Esercizio autonomo" (SI/NO) is the person's.** In the opening's crawl a SI moved 29 boxes: four more
+  rows of SI/NO radios appear above the centre question, in none of the branch's `reveals`, and `suap-020`'s opening already shows a lone "SI" there. What the
+  rows ask is unread. The entry ticks only the four "No" boxes after it (`nth` 2 to 5) and the recipes'
+  `yours` says so (a detector for "a choice moves boxes it doesn't list" was tried on all SUAP crawls: every
+  radio choice looks the same in crawl.js's pairing, 29 sections flagged, so it isn't shipped; only a read of
+  the draft tells). **To do on the portal**: tick SI on a draft and read the section
+  (`__crawl.sectionOf`), then map it.
+- **A "Si" for a centre, park, outlet or C.C.N. is refused** (entry `supports`): each opens boxes, and a
+  C.C.N.'s delibera date is a base box of the 019 move's crawl (`r19c1p40reg:calendar_input`, where the
+  reveal puts the delibera's number) but a reveal of the openings' and absent from the 020 move's. The 019
+  move's entry therefore `leave`s "del".
+- **The preposto's declarations** (`dichiarazioni sul possesso dei requisiti di onorabilità e
+  professionali`) were skipped by the crawl as the person's, so whether the form names the new preposto is
+  unknown; the recipe's `yours` says to check it in the draft. The pre-existing recipe for a change of the
+  ditta's name still refuses "un nuovo preposto" (`var_altro`).
+- **Which wizard sector** (`bench/test_gen.py` holds every SUAP recipe to it: a label the tree repeats is `{leaf, nth}`, the nth its crawl's sector index says, else inpage.js stops on "N nodes named"). `esercizio con superficie ... fino a 400 mq` appears under four parents; the
+  crawls' sector 19 and 20 are the first node of their label, so the recipes pick `{leaf, nth: 1}`. The
+  019 deroga's operation text calls its sector "del settore alimentare" while the sector's opening and move
+  are a non-food medium shop: read the pratica's name on the draft.
+- **Attachments and the payment screen are not read** (no `after:`): their slots need a filled draft.
+- **Fees**: asked ("controlla la voce nel tariffario 2026; 0 se non dovuti"); the made-up cases say 0.
+  No bollo is made up: the bollo section's answers are the dehors' (pagoPA).
+
+**No rule in the library's SUAP table** (`library/rules/suap-napoli.yaml`) for the deroga or the medium
+shop, on purpose: a rule claims nothing of its own, and the library has no procedure for either, so there is
+nothing verified to cite (the only line on hours is the somministrazione's "gli orari sono liberi ma vanno
+comunicati", a different thing). The table's `evento` values are the business's events (apertura,
+trasferimento, ...) and `attivita` has no medium shop; a `refuse` rule would block these pratiche, and an
+`also`/`main` one would assert a regime (the portal calls it an "Autorizzazione alla deroga") with no source.
+The recipes carry no `rules:`, so pre-flight decides nothing and the person names the pratica. A rule goes in
+when a procedure with sourced claims for the deroga's regime exists, as `scia-esercizio-vicinato`'s do.
+
 ## What the portal does that bit us
 
 - **Street names without their particles.** The location's street lookup and the Comune's
@@ -817,6 +874,10 @@ run.py `page_bundle`), so a pratica and its procura variant, or the shop's and t
 share a batch. Until that key (2026-11-10/11) the last one stored ran for every run of its procedure: runs of
 2026-11-11 stopped on a section of the other (`TypeError: ... normalize` at «dati dell'impresa a cui si subentra»,
 a procuratore section the parent hasn't) and a "filled" was a run of another rehearsal's steps; each was rerun alone.
+`loop.js` refuses to start (`halted` in results.js) when the runner in the pane's storage isn't the one
+the batch was built for: on 2026-11-11 the pane held another checkout's (86,595 characters against this
+branch's 80,592), and nothing but a manual check.js would have said so; a batch on it files its runs as
+this branch's. Swapping the runner is the person's pick (the pane's storage is shared by every session of the app).
 A stopped one: rerun it alone, unchanged, before
 calling it a bug (the portal is sometimes slow); twice the same is a bug. 2026-10-29: 20 of
 23 on the first pass, 23 of 23 once the runner waited for each section to open.

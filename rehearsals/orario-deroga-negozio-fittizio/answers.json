@@ -1,0 +1,14 @@
+{
+ "descrizione": "PROVA NON INVIARE - deroga orario negozio generato",
+ "oggetto": "Richiesta di orario di apertura in deroga per il negozio di via Luca Giordano 50: aperto anche la domenica.",
+ "titolo_attivita_tipo": "SCIA",
+ "titolo_attivita_protocollo": "0777777",
+ "titolo_attivita_data": "2026-03-02",
+ "insegna": "Bottega Fittizia",
+ "orario_deroga": "Domenica dalle 10:00 alle 20:00, tutte le domeniche dell'anno.",
+ "deroga_motivazione": "Il negozio è vicino a un'area pedonale molto frequentata la domenica.",
+ "diritti_euro": "0",
+ "diritti_esente": false,
+ "bollo_marche": false,
+ "bollo_esenzione": "no"
+}

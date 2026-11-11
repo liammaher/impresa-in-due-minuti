@@ -1878,5 +1878,79 @@ def _():
     assert not any(re.search(r"c:|cr:", r) for r in refs(own)), "the titolare's file reads no client"
 
 
+@case("the medium shop's section: its opening and its move each fit only their own crawls, \"Esercizio autonomo\" is left to the person, and a centre, park, outlet or C.C.N. is refused (2026-11-11)")
+def _():
+    MEDIA = "SPECIFICHE DELLA MEDIA STRUTTURA DI VENDITA"
+    for name, opening in (("media-struttura-fittizia", True), ("media-struttura-grande-fittizia", True),
+                          ("trasferimento-media-struttura-fittizio", False), ("trasferimento-media-struttura-grande-fittizio", False)):
+        steps = generated(name)
+        labels = [(f["kind"], f["label"], f.get("nth", 1)) for f in section(steps, MEDIA)["fields"]]
+        # Each entry fails on the other's crawl (the move has no sales mode, the opening has no title),
+        # else a wrong one would fill boxes by position: the mode radios and the title are the proof.
+        assert (("radio", "Vendita al dettaglio", 1) in labels) == opening, (name, labels)
+        assert (("text", "prot./n.", 1) in labels) == (not opening), (name, labels)
+        # The "No" of the four places (centre, park, outlet, C.C.N.) counted after the autonomo one:
+        # the person answers that SI/NO, whose SI opens rows no crawl read.
+        assert [n for k, l, n in labels if l.lower() == "no"] == [2, 3, 4, 5], (name, labels)
+        assert not any(l.lower() == "si" for k, l, n in labels), (name, labels)
+        refused = " ".join(c.get("else", "") for c in steps["supports"])
+        for place in ("centro commerciale", "parco commerciale", "factory outlet", "C.C.N."):
+            assert place in refused, (name, place)
+        assert "Esercizio autonomo" in " ".join(steps["yours"]), name
+        a = steps["asks"]
+        assert a["media_struttura_tipo"]["options"] == ["MA/M", "ME"], name
+
+
+@case("the opening-hours deroga has two text areas, each named by the line above it and capped at the portal's 350, in all five pratiche (2026-11-11)")
+def _():
+    DEROGA = "dichiarazione relativa alla deroga dell'orario di apertura"
+    for name in ("orario-deroga-negozio-fittizio", "orario-deroga-alimentari-fittizio", "orario-deroga-media-fittizio",
+                 "orario-deroga-media-grande-fittizio", "orario-deroga-ristorante-fittizio"):
+        sec = section(generated(name), DEROGA)
+        assert [(f["label"], f["max"]) for f in sec["fields"]] == [("orario di apertura richiesto", 350),
+                                                                 ("motivazione della richiesta di deroga", 350)], (name, sec)
+        assert not any(re.search(r"Caratteri restanti", f["label"], re.I) for f in sec["fields"]), name
+
+
+@case("a restaurant's change of preposto fills the sign under its own section name, and refuses nothing the pratica can state (2026-11-11)")
+def _():
+    steps = generated("preposto-ristorante-fittizio")
+    sec = section(steps, "insegna dell'esercizio")
+    assert [f["label"] for f in sec["fields"]] == ["Insegna (nome dell'esercizio):"], sec
+    # The declarations of the new preposto are the person's (the crawl skipped them): the recipe says so.
+    assert "nuovo preposto" in " ".join(steps["yours"]), steps["yours"]
+
+
+@case("a SUAP recipe picks its wizard sector as the tree has it: a label the tree repeats (\"esercizio con superficie ... fino a 400 mq\" four times) is `{leaf, nth}`, the nth the crawl's sector index says (2026-11-11)")
+def _():
+    # inpage.js tree() fails with "N nodes named ..." for a repeated label picked as a bare string, and
+    # takes the nth node of that label in the tree's order: suap-wizard.json's sectors are in that
+    # order and a crawl is named by its sector's index (`suap-019-...`), so the nth is its count + 1.
+    sectors = json.loads((HERE.parent / "catalogue" / "F839" / "suap-wizard.json").read_text())["sectors"]
+    seen, upto = {}, []
+    for sec in sectors:
+        seen[sec["sector"]] = seen.get(sec["sector"], 0) + 1
+        upto.append(seen[sec["sector"]])  # 1-based position among its label
+    checked = 0
+    for d in sorted((ROOT / "rehearsals").iterdir()):
+        if not (d / "recipe.yaml").exists():
+            continue
+        r = gen.load_yaml(d / "recipe.yaml")
+        m = re.match(r"suap-(\d{3})-", r.get("crawl", "") or "")
+        if not m or r.get("extends"):
+            continue
+        i = int(m[1])
+        for st in r["wizard"]:
+            if st.get("screen") != "Scelta settore attività":
+                continue
+            t = st["tree"][0] if isinstance(st["tree"], list) else st["tree"]
+            leaf, nth = (t, 0) if isinstance(t, str) else (t["leaf"], t["nth"])
+            repeated = sum(1 for x in sectors if x["sector"] == sectors[i]["sector"]) > 1
+            assert leaf == sectors[i]["sector"], (d.name, leaf)
+            assert nth == (upto[i] if repeated else 0), (d.name, nth, upto[i], repeated)
+            checked += 1
+    assert checked >= 40, checked
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

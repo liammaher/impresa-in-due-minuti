@@ -63,6 +63,7 @@ def batch(*args, values=None):
     finally:
         sys.argv = old
         os.chdir(here)
+    batch.out = out
     q = out / "queue-0.js"
     batch.steps = sorted(p.name for p in (out / "steps").glob("*.js")) if (out / "steps").is_dir() else []
     return msg, q.read_text() if q.exists() else None
@@ -130,6 +131,31 @@ def _():
     finally:
         rerun.REHEARSALS = real
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+@case("loop.js refuses a pane whose stored runner isn't the one the batch was built for (2026-11-11: the pane held another checkout's, 86,595 characters against 80,592)")
+def _():
+    import re
+    import subprocess
+    msg, q = batch("ristorante-fittizio")
+    assert msg is None, msg
+    loop = (batch.out / "loop.js").read_text()
+    # the sha check.js holds for the stored runner (runner.js is the script that stores it)
+    want = re.search(r'"pv-runner": "([0-9a-f]{64})"', (batch.out / "check.js").read_text())[1]
+    assert want in loop and "__RUNNER_SHA__" not in loop, "loop.js doesn't name the runner it was built for"
+    if not shutil.which("node"):
+        return
+    # loop.js in node with a stub page whose stored runner is another: it must not start a run.
+    harness = (
+        "global.window = {pvBatch: [['x', 'p', {}]]}; global.document = {querySelectorAll: () => []};\n"
+        "const store = {'pv-runner': 'window.__pv = {start() { window.started = true; }, wait: async () => ({result: \"filled\"})};'};\n"
+        "global.localStorage = {getItem: (k) => store[k] ?? null}; const ss = {}; global.sessionStorage = {getItem: (k) => ss[k] ?? null, setItem: (k, v) => { ss[k] = v; }};\n"
+        "global.window.__pv = null; (0, eval)(" + json.dumps(loop) + ");\n"
+        "window.pvBatchRun.then((r) => console.log(JSON.stringify({r, started: !!window.started, halted: window.pvBatchHalted})));\n"
+    )
+    out = subprocess.run(["node", "-e", harness], capture_output=True, text=True, timeout=30)
+    got = json.loads(out.stdout.strip().splitlines()[-1]) if out.stdout.strip() else out.stderr
+    assert got == {"r": "refused", "started": False, "halted": got["halted"]} and "runner" in got["halted"], got
 
 
 print(f"{sum(results)}/{len(results)} passed")

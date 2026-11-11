@@ -1240,6 +1240,10 @@ asks:
   ccn_delibera_data: {type: date, question: "La sua data"}
   ccn_delibera_ente: {type: text, question: "Chi lo ha approvato (ad es. Giunta comunale)"}
   in_factory_outlet: {type: yes_no, question: "Si trova in un factory outlet centre?", propose: "false"}
+  in_parco_commerciale: {type: yes_no, question: "Si trova in un parco commerciale?", propose: "false"}
+  # The medium-sized shop's two boxes before the sales mode (SPECIFICHE DELLA MEDIA STRUTTURA DI
+  # VENDITA): the form names them "MA/M" and "ME" and the section's text explains neither.
+  media_struttura_tipo: {type: choice, question: "Quale delle due caselle del modulo vale per la struttura: «MA/M» o «ME»? Il modulo non le spiega: se non lo sai, chiedilo al SUAP", options: ["MA/M", "ME"]}
 
   forno: {type: yes_no, group: attivita_852, item: "Pane, pizza, pasticceria, gelati o piatti pronti prodotti nei locali"}
   pane: {type: yes_no, group: attivita_852, item: "Pane, pizza e altri prodotti da forno"}
@@ -1381,6 +1385,9 @@ asks:
   orario_dalle: {type: text, question: "Orario di apertura, uguale per tutti i giorni di apertura (hh:mm)"}
   orario_alle: {type: text, question: "Orario di chiusura (hh:mm)"}
   giorno_chiusura: {type: text, question: "Il giorno di chiusura settimanale ('nessuno' se non c'è)", propose: "nessuno"}
+  # The request for hours outside the Comune's rules (350 characters each, as the portal counts them).
+  orario_deroga: {type: text, question: "Quale orario di apertura chiedi in deroga? Scrivi i giorni e le ore (350 caratteri al massimo)"}
+  deroga_motivazione: {type: text, question: "Perché chiedi la deroga? La motivazione, in poche righe (350 caratteri al massimo)"}
   area_privata_uso_pubblico: {type: yes_no, question: "Il suolo è privato ma aperto al pubblico (anziché pubblico)?", propose: "false"}
   dehors_dal: {type: date, question: "Il primo giorno della stagione per il dehors"}
   dehors_al: {type: date, question: "Il suo ultimo giorno"}
@@ -4687,6 +4694,17 @@ sections:
       - {kind: text, label: specificare la tipologia del titolo, value: "{{ask.titolo_attivita_tipo}}"}
       - {kind: text, label: n. autorizzazione/comunicazione o n. protocollo DIA/SCIA, value: "{{ask.titolo_attivita_protocollo}}"}
       - {kind: date, label: data, value: "{{ask.titolo_attivita_data|date_it}}"}
+  # Hours outside the Comune's rules (a shop's or a bar's "orario in deroga"): two free-text boxes,
+  # named by the line above them (the counter beside each reads "350 Caratteri restanti" and
+  # changes as it fills). No national schema covers this form: written from the crawl.
+  - section: dichiarazione relativa alla deroga dell'orario di apertura
+    fields:
+      - {kind: textarea, label: orario di apertura richiesto, value: "{{ask.orario_deroga}}"}
+      - {kind: textarea, label: motivazione della richiesta di deroga, value: "{{ask.deroga_motivazione}}"}
+  # The sign as a bar or restaurant's change of preposto asks for it (the one box, the name).
+  - section: insegna dell'esercizio
+    fields:
+      - {kind: text, label: "Insegna (nome dell'esercizio):", value: "{{ask.insegna}}"}
   # A ditta's new name (the bakery's and the tattooist's form). A company's changes (its form, its
   # legal representative, the professional manager, the partners) each bring statements of the new
   # people: their boxes stay empty and recipes refuse them.
@@ -5283,6 +5301,73 @@ sections:
       - {kind: date, label: del, nth: 2, value: "{{ask.ccn_delibera_data|date_it}}", when: "{{ask.in_ccn}}"}
       - {kind: text, label: emanata da, value: "{{ask.ccn_delibera_ente}}", when: "{{ask.in_ccn}}"}
       - {kind: radio, label: "NO", nth: 3, when: "{{ask.in_factory_outlet|not}}"}
+      - {kind: checkbox, label: Alimentare, when: "{{ask.superficie_alimentare_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, value: "{{ask.superficie_alimentare_mq}}", when: "{{ask.superficie_alimentare_mq|positive}}"}
+      - {kind: checkbox, label: Non alimentare, when: "{{ask.superficie_non_alimentare_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 2, value: "{{ask.superficie_non_alimentare_mq}}", when: "{{ask.superficie_non_alimentare_mq|positive}}"}
+      - {kind: text, label: mq, value: "{{ask.superficie_vendita_mq}}"}
+      - {kind: checkbox, label: Generi di monopolio, when: "{{ask.superficie_monopolio_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 3, value: "{{ask.superficie_monopolio_mq}}", when: "{{ask.superficie_monopolio_mq|positive}}"}
+
+  # A medium-sized shop's authorization (SUAP sectors 019 and 020: up to and over 400 m² gross),
+  # opening and move. Read from the four crawls' text; the national forms have none for it.
+  # The dettaglio/ingrosso mode and the season exist only at an opening, so the move's entry
+  # (its title: "prot./n.") and the opening's (the mode radios) each fail on the other's crawl.
+  # Only a stand-alone shop is mapped: a "Si" for a shopping centre, a parco commerciale, a factory
+  # outlet or a C.C.N. opens boxes (a name, the delibera) the four crawls place differently (a
+  # delibera's date is in one crawl's base and another's reveal), so those cases are refused.
+  # "Esercizio autonomo" (the first SI/NO) is the person's: the crawl saw SI move 29 boxes of the
+  # section (four more rows of SI/NO radios above the shopping-centre question, 2026-10-28, in
+  # none of its `reveals`) and 020's opening shows one of them already (a lone SI), so what SI opens
+  # is unread. Its "No" boxes are counted from it (`nth` 2 to 5).
+  - section: SPECIFICHE DELLA MEDIA STRUTTURA DI VENDITA
+    leave: [Farmacie, Carburanti]
+    plus: "the season's own \"+\" (a second period): one period is mapped"
+    supports:
+      - {when: "{{ask.solo_distributori|not}}", else: "Una media struttura che vende solo con distributori automatici per ora non la preparo."}
+      - {when: "{{ask.in_centro_commerciale|not}}", else: "Una media struttura dentro un centro commerciale per ora non la preparo."}
+      - {when: "{{ask.in_parco_commerciale|not}}", else: "Una media struttura dentro un parco commerciale per ora non la preparo."}
+      - {when: "{{ask.in_factory_outlet|not}}", else: "Una media struttura in un factory outlet per ora non la preparo."}
+      - {when: "{{ask.in_ccn|not}}", else: "Una media struttura in un centro commerciale naturale (C.C.N.) riconosciuto per ora non la preparo."}
+    fields:
+      - {kind: checkbox, label: MA/M, when: "{{ask.media_struttura_tipo|is_ma_m}}"}
+      - {kind: checkbox, label: ME, when: "{{ask.media_struttura_tipo|is_me}}"}
+      - {kind: radio, label: Vendita al dettaglio, when: "{{ask.anche_ingrosso|not}}"}
+      - {kind: text, label: superficie di vendita mq, value: "{{ask.superficie_vendita_mq}}", when: "{{ask.anche_ingrosso|not}}"}
+      - {kind: radio, label: Vendita congiunta al dettaglio e all'ingrosso, when: "{{ask.anche_ingrosso}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 2, value: "{{ask.superficie_vendita_mq}}", when: "{{ask.anche_ingrosso}}"}
+      - {kind: radio, label: Permanente, when: "{{ask.stagionale|not}}"}
+      - {kind: radio, label: Stagionale, when: "{{ask.stagionale}}"}
+      - {kind: text, label: dal (gg/mm), value: "{{ask.stagione_dal}}", when: "{{ask.stagionale}}"}
+      - {kind: text, label: al (gg/mm), value: "{{ask.stagione_al}}", when: "{{ask.stagionale}}"}
+      - {kind: radio, label: "No", nth: 2}
+      - {kind: radio, label: "No", nth: 3}
+      - {kind: radio, label: "No", nth: 4}
+      - {kind: radio, label: "NO", nth: 5}
+      - {kind: checkbox, label: Alimentare, when: "{{ask.superficie_alimentare_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 3, value: "{{ask.superficie_alimentare_mq}}", when: "{{ask.superficie_alimentare_mq|positive}}"}
+      - {kind: checkbox, label: Non alimentare, when: "{{ask.superficie_non_alimentare_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 4, value: "{{ask.superficie_non_alimentare_mq}}", when: "{{ask.superficie_non_alimentare_mq|positive}}"}
+      - {kind: text, label: mq, value: "{{ask.superficie_vendita_mq}}"}
+      - {kind: checkbox, label: Generi di monopolio, when: "{{ask.superficie_monopolio_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 5, value: "{{ask.superficie_monopolio_mq}}", when: "{{ask.superficie_monopolio_mq|positive}}"}
+  - section: SPECIFICHE DELLA MEDIA STRUTTURA DI VENDITA
+    leave: [Farmacie, Carburanti, del]
+    supports:
+      - {when: "{{ask.solo_distributori|not}}", else: "Una media struttura che vende solo con distributori automatici per ora non la preparo."}
+      - {when: "{{ask.in_centro_commerciale|not}}", else: "Una media struttura dentro un centro commerciale per ora non la preparo."}
+      - {when: "{{ask.in_parco_commerciale|not}}", else: "Una media struttura dentro un parco commerciale per ora non la preparo."}
+      - {when: "{{ask.in_factory_outlet|not}}", else: "Una media struttura in un factory outlet per ora non la preparo."}
+      - {when: "{{ask.in_ccn|not}}", else: "Una media struttura in un centro commerciale naturale (C.C.N.) riconosciuto per ora non la preparo."}
+    fields:
+      - {kind: checkbox, label: MA/M, when: "{{ask.media_struttura_tipo|is_ma_m}}"}
+      - {kind: checkbox, label: ME, when: "{{ask.media_struttura_tipo|is_me}}"}
+      - {kind: text, label: prot./n., value: "{{ask.titolo_attivita_protocollo}}"}
+      - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
+      - {kind: radio, label: "No", nth: 2}
+      - {kind: radio, label: "No", nth: 3}
+      - {kind: radio, label: "No", nth: 4}
+      - {kind: radio, label: "NO", nth: 5}
       - {kind: checkbox, label: Alimentare, when: "{{ask.superficie_alimentare_mq|positive}}"}
       - {kind: text, label: superficie di vendita mq, value: "{{ask.superficie_alimentare_mq}}", when: "{{ask.superficie_alimentare_mq|positive}}"}
       - {kind: checkbox, label: Non alimentare, when: "{{ask.superficie_non_alimentare_mq|positive}}"}

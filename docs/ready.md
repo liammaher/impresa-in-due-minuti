@@ -7,7 +7,7 @@ The single list of what the plugin ships, written by `claude/skills/pratica/port
 | | |
 |---|---|
 | Plugin version | 0.7.1 (`plugin/impresa-in-un-minuto/.claude-plugin/plugin.json`) |
-| Repo commit | `e51680ad33a1d25e20bcc78aab46ae75bae0a6f4` plus uncommitted changes |
+| Repo commit | `6e5635498df046ee312ceab190a631385fb51b35` plus uncommitted changes |
 | Generated | 2026-11-11 |
 | Sportelli shipped | SUE (building works), SUAP (businesses), as `plugin/build.yaml` `sportelli` says |
 | Not shipped | none |
@@ -30,19 +30,29 @@ Per pratica on the portal, as coverage.md counts them:
 | Sportello | Mapped | Fillable | Run on the portal |
 |---|---:|---:|---:|
 | SUE (building works) | 104 | 104 | 102 |
-| SUAP (businesses) | 278 | 129 | 29 |
+| SUAP (businesses) | 278 | 139 | 29 |
 
-The plugin carries 143 steps files for 136 pratiche on the portal (a few steps files share one pratica, filled with other choices); 136 of the 143 have a run that filled the draft. The rows below are per steps file.
+The plugin carries 157 steps files for 146 pratiche on the portal (a few steps files share one pratica, filled with other choices); 140 of the 157 have a run that filled the draft. The rows below are per steps file.
 
 ## Pratiche
 
 | Library slug | Portal name | Steps file | Mapped | Fillable | Run on the portal | Refusals |
 |---|---|---|---|---|---|---|
+| `napoli/comune/autorizzazione-media-struttura-vendita` | Aprire l'attività | `media-struttura-fittizia` | yes | yes | no | `r3487df` `rc0f612` `r868dc0` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
+| `napoli/comune/autorizzazione-media-struttura-vendita` | Aprire l'attività | `media-struttura-grande-fittizia` | yes | yes | no | `r3487df` `rc0f612` `r868dc0` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
+| `napoli/comune/autorizzazione-media-struttura-vendita` | Trasferire la sede dell'attività | `trasferimento-media-struttura-fittizio` | yes | yes | no | `r3487df` `rc0f612` `r868dc0` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
+| `napoli/comune/autorizzazione-media-struttura-vendita` | Trasferire la sede dell'attività | `trasferimento-media-struttura-grande-fittizio` | yes | yes | no | `r3487df` `rc0f612` `r868dc0` `r5409c5` `r63c0e0` `r419d46` `r3ce7cf` `rad9d56` |
 | `napoli/comune/avvio-bed-and-breakfast` | Aprire l'attività | `affittacamere-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rc2c5fd` `rc52190` `rccc098` `r760f15` `r51e876` |
 | `napoli/comune/cessazione-attivita-commerciale` | Cessare l'attività | `cessazione-fittizia` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/cessazione-attivita-commerciale` | Cessare l'attività | `cessazione-panificio-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/concessione-suolo-pubblico-dehors` | Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande | `dehors-fittizio` | yes | yes | no | `r3487df` `rc0f612` `r45eade` `r855339` `r4a4ffe` `rad9d56` |
+| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-alimentari-fittizio` | yes | yes | no | `r3487df` `rad9d56` |
+| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-media-fittizio` | yes | yes | no | `r3487df` `rad9d56` |
+| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-media-grande-fittizio` | yes | yes | no | `r3487df` `rad9d56` |
+| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-negozio-fittizio` | yes | yes | no | `r3487df` `rad9d56` |
+| `napoli/comune/orario-apertura-deroga` | Richiedere l'orario di apertura in deroga a quanto disposto | `orario-deroga-ristorante-fittizio` | yes | yes | no | `r3487df` `rad9d56` |
 | `napoli/comune/scia-acconciatore-estetista` | Aprire l'attività di acconciatore | `acconciatore-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
+| `napoli/comune/scia-acconciatore-estetista` | Aprire l'attività di acconciatore | `acconciatore-procura-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/scia-acconciatore-estetista` | Trasferire la sede dell'attività di acconciatore | `trasferimento-acconciatore-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r88fc60` |
 | `napoli/comune/scia-acconciatore-estetista` | Trasferire la sede dell'attività di estetista | `trasferimento-estetista-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r88fc60` |
 | `napoli/comune/scia-acconciatore-estetista` | Variazioni strutturali in attività di acconciatore | `variazione-strutturale-acconciatore-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r5b640d` `ra6b30c` |
@@ -50,6 +60,7 @@ The plugin carries 143 steps files for 136 pratiche on the portal (a few steps f
 | `napoli/comune/scia-esercizio-vicinato` | Variazioni strutturali | `ampliamento-negozio-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r4e8597` `r8abb33` `r3f53b4` |
 | `napoli/comune/scia-esercizio-vicinato` | Aprire l'attività | `negozio-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rfcb6c3` `r17daf0` `r469d27` `ra2396a` |
 | `napoli/comune/scia-esercizio-vicinato` | Aprire l'attività | `negozio-insegna-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r5d9d4e` `rcef9c4` `r449d35` `rfcb6c3` `r17daf0` `r469d27` `ra2396a` |
+| `napoli/comune/scia-esercizio-vicinato` | Aprire l'attività | `negozio-procura-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rfcb6c3` `r17daf0` `r469d27` `ra2396a` |
 | `napoli/comune/scia-esercizio-vicinato` | Trasferire la sede dell'attività | `trasferimento-alimentari-centro-storico-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r05d666` `r320610` `rba9569` `r627e79` `r4056a6` `rad9d56` |
 | `napoli/comune/scia-esercizio-vicinato` | Trasferire la sede dell'attività | `trasferimento-alimentari-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r05d666` `r320610` `rba9569` `r627e79` `r4056a6` |
 | `napoli/comune/scia-esercizio-vicinato` | Trasferire la sede dell'attività | `trasferimento-negozio-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r05d666` `r320610` `rba9569` `rd0c697` |
@@ -69,8 +80,11 @@ The plugin carries 143 steps files for 136 pratiche on the portal (a few steps f
 | `napoli/comune/sospensione-attivita` | Sospendere l'attività | `sospensione-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/sospensione-attivita` | Sospendere l'attività | `sospensione-srl-fittizia` | yes | yes | no | `r3487df` `rc0f612` |
 | `napoli/comune/subingresso-attivita-commerciale` | Subentrare nell'esercizio dell'attività | `subingresso-negozio-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r2ec47f` |
+| `napoli/comune/subingresso-attivita-commerciale` | Subentrare nell'esercizio dell'attività | `subingresso-negozio-procura-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r2ec47f` |
 | `napoli/comune/subingresso-attivita-commerciale` | Subentrare nell'esercizio dell'attività | `subingresso-panificio-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `re379be` `ra19106` `r2ac400` `r756563` `rfb86a0` |
 | `napoli/comune/subingresso-attivita-commerciale` | Subentrare nell'esercizio dell'attività | `subingresso-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r2ec47f` |
+| `napoli/comune/subingresso-attivita-commerciale` | Subentrare nell'esercizio dell'attività | `subingresso-ristorante-procura-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r2ec47f` |
+| `napoli/comune/variazione-preposto-somministrazione` | Variazione del preposto in attività di somministrazione e vendita di alimenti e bevande (quando non vi siano anche variazioni societarie) | `preposto-ristorante-fittizio` | yes | yes | no | `r3487df` `rc0f612` |
 | `napoli/comune/variazioni-attivita` | Variazioni soggetti | `variazione-negozio-fittizio` | yes | yes | no | `r3487df` `rc0f612` `rbd1160` `r346ebd` |
 | `napoli/comune/variazioni-attivita` | Variazioni soggetti | `variazione-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rbd1160` |
 | `napoli/comune/variazioni-attivita` | Variazioni soggetti | `variazione-soggetti-panificio-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r0d723c` `rfa2b18` `rd18382` `r7281d1` `r8fd38e` |
@@ -188,11 +202,13 @@ What a steps file turns away, in the words the person reads (Italian), by the id
 
 | Id | Rows | Refusal |
 |---|---:|---|
-| `rad9d56` | 71 | L'esenzione ONLUS è cessata con il regime ONLUS il 1° gennaio 2026, salvo per un periodo d'imposta iniziato prima di tale data: un'ex ONLUS iscritta al RUNTS è esente come ets. |
+| `rad9d56` | 80 | L'esenzione ONLUS è cessata con il regime ONLUS il 1° gennaio 2026, salvo per un periodo d'imposta iniziato prima di tale data: un'ex ONLUS iscritta al RUNTS è esente come ets. |
 | `r62ab7e` | 54 | I tecnici del modulo paesaggistico: se l'architetto che presenta la pratica è il suo tecnico, il portale mostra il blocco di un altro tecnico («+») senza nome né codice fiscale, quindi un secondo tecnico non si può indicare. È un difetto del portale: chiedi al SUE. |
+| `r3487df` | 50 | Per ora per una ditta individuale o una srl, srls, snc, sas o spa. |
 | `r30992c` | 47 | Le tolleranze costruttive dichiarate richiedono almeno un tipo (art. 34-bis o 34-ter c. 4). |
 | `r39bc67` | 47 | Una tolleranza strutturale di minore rilevanza o priva di rilevanza per la pubblica incolumità può essere dichiarata solo una volta decorso il termine del controllo regionale, senza richieste pendenti e senza esito negativo: art. 34-bis c. 3-bis DPR 380/2001. |
 | `rb48478` | 47 | Una tolleranza strutturale rilevante per la pubblica incolumità (art. 94-bis c. 1 a) può essere dichiarata solo con l'autorizzazione sismica del Genio Civile (art. 94 c. 2) o con il suo silenzio assenso (c. 2-bis): art. 34-bis c. 3-bis DPR 380/2001. |
+| `rc0f612` | 45 | Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora. |
 | `r020c8f` | 37 | La dichiarazione di utilizzo riguarda un cantiere fino a 6000 m³ o uno non soggetto a VIA/AIA: non la voce dell'asseverazione per i grandi cantieri. |
 | `r2438a9` | 37 | Per un edificio senza titolo agli atti servono il catasto di primo impianto o altri documenti. |
 | `r3d6a49` | 37 | Uno stato legittimo dalle dichiarazioni di tolleranze richiede dove sono state rese: la pratica o l'atto. |
@@ -200,8 +216,6 @@ What a steps file turns away, in the words the person reads (Italian), by the id
 | `r96b1fa` | 37 | Uno stato legittimo desunto dai titoli dell'edificio richiede almeno un titolo. |
 | `rbfae70` | 37 | La pratica presenta la dichiarazione o il piano delle terre e rocce, quindi i materiali di risulta dell'asseverazione devono essere dichiarati come sottoprodotti. |
 | `rd9c607` | 37 | Il piano di utilizzo riguarda un cantiere di oltre 6000 m³ soggetto a VIA o AIA: la voce dell'asseverazione per i cantieri di grandi dimensioni. |
-| `r3487df` | 36 | Per ora per una ditta individuale o una srl, srls, snc, sas o spa. |
-| `rc0f612` | 36 | Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora. |
 | `raa3cb1` | 25 | Il modulo consente l'art. 24 c. 5-bis solo se è soddisfatto il requisito di adattabilità (art. 24 c. 5-ter): l'unità non rientra. |
 | `raec43f` | 25 | Il modulo della SCIA non prevede terre scavate oltre 6000 m³ soggette a VIA o AIA, utilizzate come sottoprodotti secondo un Piano di Utilizzo (DPR 120/2017 art. 9): lavori di tale entità richiedono il permesso di costruire; chiedi al SUE. |
 | `r5a7590` | 22 | Senza opere di urbanizzazione primaria il portale chiede la data di una convenzione, anche dove il Comune prevede di realizzarle direttamente entro tre anni: quel caso non si può dichiarare sul portale così com'è; chiedi al SUE. |
@@ -235,32 +249,37 @@ What a steps file turns away, in the words the person reads (Italian), by the id
 | `r83933b` | 5 | Un bar o ristorante che produce anche prodotti da forno o gestisce un negozio alimentare per ora non lo preparo: queste voci insieme non sono ancora state mappate. |
 | `ra5099f` | 5 | SCIA in sanatoria per l'art. 36-bis c. 1: il portale salva una sola voce tra data delle opere, oblazione e proposta di interventi. È un difetto del portale; chiedi al SUE. |
 | `rccc098` | 5 | Un'insegna esterna per ora non la preparo: include in questa la SCIA dell'insegna. |
+| `r2ec47f` | 4 | Un atto ancora in corso di registrazione per ora non lo preparo: in quel caso il portale accetta la sua copia firmata, che spetta a te caricare. Presenta la pratica dopo la registrazione. |
+| `r3ce7cf` | 4 | Una media struttura in un centro commerciale naturale (C.C.N.) riconosciuto per ora non la preparo. |
+| `r419d46` | 4 | Una media struttura in un factory outlet per ora non la preparo. |
+| `r5409c5` | 4 | Una media struttura dentro un centro commerciale per ora non la preparo. |
+| `r63c0e0` | 4 | Una media struttura dentro un parco commerciale per ora non la preparo. |
+| `r868dc0` | 4 | Una media struttura che vende solo con distributori automatici per ora non la preparo. |
 | `r98237c` | 4 | Con l'autorizzazione paesaggistica sono previsti solo i lavori ancora in corso (art. 37 c. 5): per i lavori già eseguiti non restano lavori da autorizzare (art. 146 c. 4 D.Lgs. 42/2004); la loro compatibilità paesaggistica rientra nella sola sanatoria dell'art. 36-bis (c. 4). |
 | `r05d666` | 3 | Armi, metalli preziosi, prodotti fitosanitari, medicinali o mangimi per ora non li preparo. |
+| `r17daf0` | 3 | Un negozio all'interno di un centro commerciale per ora non lo preparo: Napoli chiede la tipologia del centro. |
 | `r320610` | 3 | Nuovi locali dentro un centro commerciale per ora non li preparo: Napoli chiede il tipo di centro. |
+| `r469d27` | 3 | Un negozio in un factory outlet non lo preparo ancora. |
 | `ra19106` | 3 | Più di 300 kg di farina al giorno per ora non li preparo: aggiungono la prevenzione incendi. |
+| `ra2396a` | 3 | Questa è la pratica del negozio non alimentare: un negozio che vende alimenti presenta quella del settore alimentare (con la notifica ai sensi del Reg. 852). |
 | `rba9569` | 3 | Un negozio in un factory outlet per ora non lo preparo. |
 | `re379be` | 3 | Forni o riscaldamento sopra i 116 kW, o a combustibile solido o liquido, per ora non li preparo: aggiungono la prevenzione incendi. |
+| `rfcb6c3` | 3 | Armi, metalli preziosi, prodotti fitosanitari, medicinali o mangimi non sono ancora previsti. |
 | `r04164b` | 2 | La somministrazione non è di un panificio: è la pratica del bar o ristorante. |
 | `r0a78ce` | 2 | È la pratica di un panificio: devono valere le voci della notifica sui prodotti da forno. |
-| `r17daf0` | 2 | Un negozio all'interno di un centro commerciale per ora non lo preparo: Napoli chiede la tipologia del centro. |
-| `r2ec47f` | 2 | Un atto ancora in corso di registrazione per ora non lo preparo: in quel caso il portale accetta la sua copia firmata, che spetta a te caricare. Presenta la pratica dopo la registrazione. |
 | `r4056a6` | 2 | Un negozio che serve anche cibo o produce prodotti da forno per ora non lo preparo: queste voci della notifica non sono ancora mappate insieme. |
 | `r406540` | 2 | Locali sotterranei per ora non li preparo: aggiungono l'autorizzazione ASL. |
-| `r469d27` | 2 | Un negozio in un factory outlet non lo preparo ancora. |
 | `r5b640d` | 2 | Un responsabile tecnico diverso dal titolare per ora non lo preparo su questo modulo. |
 | `r5d9d4e` | 2 | Un'insegna che richiede il consenso del proprietario o del condominio per ora non la preparo. |
 | `r627e79` | 2 | È la pratica di un negozio alimentare: deve valere la voce della notifica sul commercio al dettaglio di alimenti. |
 | `r7f85e2` | 2 | In sanatoria il rilascio è subordinato al pagamento dell'oblazione (art. 36 c. 2, art. 36-bis c. 5): si paga al ritiro del permesso, non a rate né in corso d'opera, trattandosi di opere già realizzate. |
 | `r88fc60` | 2 | Trasferire entrambe le attività spunta entrambe le operazioni nella procedura guidata: una combinazione che non preparo ancora. |
-| `ra2396a` | 2 | Questa è la pratica del negozio non alimentare: un negozio che vende alimenti presenta quella del settore alimentare (con la notifica ai sensi del Reg. 852). |
 | `ra6b30c` | 2 | Una valutazione di impatto acustico per ora non la preparo su questo modulo. |
 | `rae45b6` | 2 | L'art. 24 c. 5-bis si applica solo se è soddisfatto il requisito di adattabilità (art. 24 c. 5-ter): l'unità non ne ha i requisiti. |
 | `rbd1160` | 2 | Per ora sono gestiti solo il cambio di denominazione o il trasferimento della sede legale. |
 | `rcb2d09` | 2 | Un bar o ristorante che produce anche prodotti da forno o gestisce un negozio alimentare per ora non lo preparo. |
 | `rdc0c3a` | 2 | Permesso in sanatoria dell'art. 36-bis: il portale salva una sola voce tra documenti, data dei lavori e proposta di interventi. È un difetto del portale; l'art. 36 lo preparo. |
 | `rf163bf` | 2 | I lavori che richiedevano una SCIA si regolarizzano con una SCIA in sanatoria, che è una pratica a sé: non nel permesso in sanatoria. |
-| `rfcb6c3` | 2 | Armi, metalli preziosi, prodotti fitosanitari, medicinali o mangimi non sono ancora previsti. |
 | `r009615` | 1 | L'elenco dei titoli del portale qui non comprende la DIA: indica quale sia, autorizzazione, comunicazione o SCIA. |
 | `r0d723c` | 1 | Sul modulo del panificio per ora preparo solo il cambio di denominazione dell'attività. |
 | `r12168d` | 1 | Un ampliamento che cambia la cucina o i locali di lavorazione aggiorna anche la registrazione ai sensi del Reg. 852, che non preparo ancora. |

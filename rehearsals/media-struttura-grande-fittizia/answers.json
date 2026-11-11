@@ -1,0 +1,22 @@
+{
+ "extras": [],
+ "stagionale": "false",
+ "solo_distributori": "false",
+ "anche_ingrosso": "false",
+ "in_centro_commerciale": "false",
+ "in_ccn": "false",
+ "in_factory_outlet": "false",
+ "in_parco_commerciale": "false",
+ "media_struttura_tipo": "MA/M",
+ "superficie_alimentare_mq": "0",
+ "superficie_monopolio_mq": "0",
+ "diritti_euro": "0",
+ "diritti_esente": false,
+ "fatti": [],
+ "descrizione": "PROVA NON INVIARE - media struttura oltre 400 generato",
+ "oggetto": "Apertura di una media struttura di vendita non alimentare (arredamento) in via Luca Giordano 50, vendita al dettaglio, 900 mq.",
+ "superficie_vendita_mq": "900",
+ "superficie_non_alimentare_mq": "900",
+ "bollo_marche": false,
+ "bollo_esenzione": "no"
+}
