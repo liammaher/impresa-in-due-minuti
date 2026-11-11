@@ -20,10 +20,22 @@ wizard:
   - {screen: Scelta interventi eventuali, confirm: CONFERMA}
   - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
   - {screen: Scelte eventuali, tree: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE], confirm: CONFERMA}
+# The attachments screen as this pratica's draft shows it (read 2026-11-11 on "PROVA NON INVIARE -
+# ristorante procura generato", crawl.js slotsOf, before the declarations): the procura's slots are
+# its own, and the opening's crawl hasn't them. The procura takes only signed files and is made by
+# the portal; the grantor's identity document takes a plain PDF, so the first run attaches it.
+slots:
+  Gestione degli allegati:
+    - {"title": "Planimetria quotata dei locali", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": true, "portal_document": false}
+    - {"title": "Ricevuta di pagamento della tariffa sanitaria forfettaria, per la registrazione/aggiornamento", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": true, "portal_document": false}
+    - {"title": "Procura speciale", "accepts": "jpg.p7m;pdf.p7m", "required": true, "portal_document": true}
+    - {"title": "Fotocopia di un documento di identita' del soggetto che conferisce la procura speciale", "accepts": "pdf;pdf.p7m", "required": true, "portal_document": false}
+    - {"title": "copia attestazione versamento oneri, diritti e spese", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "Allegati liberi", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg", "required": false, "portal_document": false}
 yours:
   - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
   - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
-  - "Scarica dal portale la procura speciale e il quadro riepilogativo (Allega documenti, Scarica il documento), dopo aver spuntato le dichiarazioni; fai firmare la procura al cliente (a mano e digitalmente) e firma tu il quadro"
+  - "Scarica dal portale la procura speciale (Allega documenti, Scarica il documento), dopo aver spuntato le dichiarazioni; fai firmare la procura al cliente (a mano e digitalmente) e mandamela: la allego con una seconda compilazione"
   - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento, e la tariffa forfettaria ASL"
   - "Firma e invia (Firma e invio); conserva la ricevuta"
 rules:

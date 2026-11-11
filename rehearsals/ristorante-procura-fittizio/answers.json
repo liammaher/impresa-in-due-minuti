@@ -1,6 +1,6 @@
 {
  "people": {
-  "c": "pizzeria",
+  "c": "trattoria",
   "cr": "luca"
  },
  "cliente_carica": "legale rappresentante",
@@ -10,7 +10,7 @@
   "ristorante"
  ],
  "descrizione": "PROVA NON INVIARE - ristorante procura generato",
- "oggetto": "Apertura di una pizzeria con somministrazione (SCIA e notifica sanitaria), fuori dalle zone tutelate.",
+ "oggetto": "Apertura di una trattoria con somministrazione (SCIA e notifica sanitaria), fuori dalle zone tutelate.",
  "insegna": "Pizzeria Fittizia",
  "superficie_somministrazione_mq": "35",
  "in_centro_commerciale": "false",
@@ -18,5 +18,6 @@
  "zona": "c",
  "fatti": [],
  "stagionale": "false",
- "diritti_esente": false
+ "diritti_esente": false,
+ "documento_identita_cliente": "rehearsals/cila-fittizia/files/documento-identita-luca.pdf"
 }
