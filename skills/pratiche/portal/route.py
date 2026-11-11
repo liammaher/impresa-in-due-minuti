@@ -3,6 +3,7 @@
 
   route.py --table sue-napoli [--answers A.json] [--pratiche DIR]
   route.py --table sue-napoli-adempimenti ...   (a filing on a title held: proroga, fine lavori, ...)
+  route.py --table suap-napoli ...              (a business: a shop, a bar or restaurant, ...)
 
 Asks the rules table's own facts (rules/<table>.yaml) in one message, as pre-flight would: the
 first fact (what the works are), then every other one some kind of works needs, each one not
@@ -22,12 +23,15 @@ and those filed with it) name exactly one steps file: the one whose `rules:` has
 DIR holds the steps files: rehearsals/ (each folder's portal-steps.generated.yaml, else
 portal-steps.yaml) or the plugin's pratiche/ (<name>.json). The default is whichever is
 next to this skill. In the repo the generated ones are gen.py's build outputs, never committed:
-a missing one (a fresh clone, a pull) is generated first (gen.ensure). Two steps files for one combination is an error: the index is read
-from them every time, so a new recipe is routed once its steps file is generated.
+a missing one (a fresh clone, a pull) is generated first (gen.ensure). Two steps files for one
+combination is an error, unless the facts their recipes fix (`rules.facts` given as values, not
+asks) tell their cases apart, as the SUAP's `evento` does: the index is read from them every
+time, so a new recipe is routed once its steps file is generated.
 """
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -40,6 +44,26 @@ import run  # noqa: E402  (Values, ruled, refs_in: a steps file's own reading of
 
 CHECKLIST = "Quali di queste cose valgono per i lavori? Spunta quelle vere, anche nessuna."
 GROUP = "fatti"
+
+
+# The plugin's coverage.json (beside this folder): every pratica's status. In the repo there is none.
+COVERAGE = HERE.parent / "coverage.json"
+NOT_AVAILABLE = {"mapped": "è in arrivo: non è ancora stata provata sul portale, quindi non la compilo",
+                 "coming": "è in arrivo: non è ancora stata provata sul portale, quindi non la compilo",
+                 "paused": "è sospesa: il portale è cambiato dall'ultima prova, quindi non la compilo"}
+
+
+def not_available(name):
+    """Why a pratica that is routed to still isn't prepared: the plugin's coverage.json says its status
+    isn't `available` (never filled on the real portal, or the portal changed). None when it is, or
+    where there is no coverage.json (the repo): the skill's own rule, held in code too, so a mapped
+    pratica is never compiled because a rules table happens to route to it."""
+    try:
+        entries = json.loads(COVERAGE.read_text())["pratiche"]
+    except (OSError, ValueError, KeyError):
+        return None
+    status = next((e["status"] for e in entries if e.get("name") == name), None)
+    return NOT_AVAILABLE.get(status)
 
 
 def default_dir():
@@ -66,16 +90,78 @@ def key(main, also):
     return main, tuple(sorted(also))
 
 
+def fixed_facts(t, steps):
+    """The facts a steps file's recipe fixes (a value, not an ask): a case is this file's only
+    if it agrees. The SUAP files one procedure at several events (the restaurant's SCIA opens,
+    moves, enlarges: `evento`), so its pratiche share their procedures and differ only here."""
+    out = {}
+    for name, v in ((steps.get("rules") or {}).get("facts") or {}).items():
+        if name in t["facts"] and not (isinstance(v, str) and "{{" in v):
+            fv = rules.fact_value(t["facts"][name], v)
+            if fv is not None:
+                out[name] = fv
+    return out
+
+
+def clash(a, b):
+    """Whether two indexed steps files could both be one case's: the same wizard choices, and
+    no fact both recipes fix differs."""
+    return run.wizard_labels(a[2]) == run.wizard_labels(b[2]) and all(a[3][f] == b[3][f] for f in a[3].keys() & b[3].keys()) \
+        and via_of(a[2]) == via_of(b[2])
+
+
+def entries(idx):
+    """Every (name, path, steps) indexed."""
+    return [e[:3] for es in idx.values() for e in es]
+
+
+def via_of(steps):
+    """Who presents, when the recipe says (`rules.via`): "procura" is the same pratica filed by a
+    tecnico for the client, with the portal's procuratore section. It isn't a fact of any rules
+    table (it changes no pratica), so the case says it apart (`via` in the answers)."""
+    return (steps.get("rules") or {}).get("via")
+
+
+def find(idx, d, facts, via=None):
+    """The (name, path, steps) that files the pratiche of this decision (`rules.decide`'s) for
+    this case, or None: its main pratica at the sector and operation the table names, with
+    those it adds, whose recipe fixes each choice or number (`evento`) as the case has it; a
+    fact the case left unknown doesn't rule one out. The yes/no facts it fixes only choose
+    between several: the permesso in sanatoria fixes `permesso_per_scelta`, which the table
+    doesn't ask there and a checklist leaves unticked, and run.ruled judges the case after."""
+    main = d["main"]["procedure"]
+    agree = lambda e, yes_no: all(facts.get(f) is None or facts[f] == v for f, v in e[3].items()
+                                  if isinstance(v, bool) == yes_no)
+    hits = [e for e in idx.get(key(main, [a["procedure"] for a in d["also"]]), [])
+            if run.at_portal(e[2], d["main"]) and agree(e, False) and via_of(e[2]) == via]
+    if len(hits) > 1:
+        hits = [e for e in hits if agree(e, True)]
+    if len(hits) > 1:
+        raise run.StepError(f"{' and '.join(e[0] for e in hits)} both fit this case of {main}: "
+                            "their recipes' fixed facts must tell them apart")
+    return hits[0][:3] if hits else None
+
+
 def cases(table):
     """Every case the table decides, as the facts it asked on the way (each fact as it asks
     it, the first one first): [(facts, decision)]."""
     t, out = rules.table(table), []
 
+    def values(name):
+        f = t["facts"][name]
+        if f["type"] == "yes_no":
+            return [True, False]
+        if f["type"] == "number":
+            # One value on each side of every threshold a rule reads (the SUAP's 250 m² of sales area).
+            cuts = sorted({float(c[k]) for r in t["rules"] for c in [r["when"].get(name)] if isinstance(c, dict)
+                           for k in ("over", "upto") if k in c})
+            return sorted({x for c in cuts for x in (c, c + 1)}) or [0.0]
+        return list(f["values"])
+
     def walk(facts):
         d = rules.decide(t, facts)
         if d["ask"]:
-            f = t["facts"][d["ask"][0]]
-            for v in [True, False] if f["type"] == "yes_no" else list(f["values"]):
+            for v in values(d["ask"][0]):
                 walk({**facts, d["ask"][0]: v})
         else:
             out.append((facts, d))
@@ -89,14 +175,14 @@ def coverage(table, root):
     steps file files yet, with their cases, most first (`unmapped`): the mapping still to do.
     A combination is its main pratica and those filed with it; scoreboard.py prints this."""
     idx, routed, refused, unmapped = index(table, root), 0, 0, {}
-    for _, d in cases(table):
+    for facts, d in cases(table):
         if d["refused"] or d["none"]:
             refused += 1
             continue
-        k = key(d["main"]["procedure"], [a["procedure"] for a in d["also"]])
-        if k in idx:
+        if find(idx, d, facts):
             routed += 1
         else:
+            k = key(d["main"]["procedure"], [a["procedure"] for a in d["also"]])
             unmapped[k] = unmapped.get(k, 0) + 1
     return {"cases": routed + refused + sum(unmapped.values()), "routed": routed, "refused": refused,
             "unmapped": sorted(unmapped.items(), key=lambda kv: (-kv[1], kv[0])),
@@ -107,24 +193,26 @@ _indexes = {}
 
 
 def index(table, root):
-    """{(main, also): (name, path, steps)} for the steps files that read this rules table."""
+    """{(main, also): [(name, path, steps, fixed facts)]} for the steps files that read this
+    rules table (`find` picks a case's)."""
     if (table, root) not in _indexes:
         _indexes[table, root] = _index(table, root)
     return _indexes[table, root]
 
 
 def _index(table, root):
-    out = {}
+    t, out = rules.table(table), {}
     for name, path in steps_files(root):
         steps = rules.load(path)
         r = (steps or {}).get("rules") or {}
         if r.get("table") != table:
             continue
-        k = key(r.get("main", steps["procedure"]), r.get("handles", []))
-        if k in out:
-            raise run.StepError(f"{out[k][0]} and {name} both file {k[0]} with {list(k[1]) or 'nothing else'}: "
-                                "one steps file per combination")
-        out[k] = (name, path, steps)
+        k, fixed = key(r.get("main", steps["procedure"]), r.get("handles", [])), fixed_facts(t, steps)
+        other = next((e for e in out.get(k, []) if clash(e, (name, path, steps, fixed))), None)
+        if other:
+            raise run.StepError(f"{other[0]} and {name} both file {k[0]} with {list(k[1]) or 'nothing else'}: "
+                                "one steps file per combination (or recipes whose fixed facts differ)")
+        out.setdefault(k, []).append((name, path, steps, fixed))
     return out
 
 
@@ -280,6 +368,9 @@ def route(table, answers, root=None):
     if not isinstance(answers, dict):
         raise run.StepError("answers: a JSON object, each fact's answer under its key")
     facts, errors = read_facts(t, answers)
+    via = answers.get("via")
+    if via not in (None, "procura"):
+        raise run.StepError('via: "procura" when a tecnico files for the client with a procura, else leave it out')
     d = rules.decide(t, facts)
     if d["conflict"]:
         raise run.StepError(f"rules table {table}: rules {', '.join(d['conflict'])} disagree (validate the library)")
@@ -298,7 +389,7 @@ def route(table, answers, root=None):
             ask, works = works_and_facts(t, facts, first)
 
         # The recipes word the checklist (their rules.question, gen.py's groups.fatti).
-        group = next((s["groups"][GROUP]["question"] for _, _, s in idx.values() if GROUP in s.get("groups", {})),
+        group = next((s["groups"][GROUP]["question"] for _, _, s in entries(idx) if GROUP in s.get("groups", {})),
                      CHECKLIST)
         report["questions"] = questions(t, [f for f in t["facts"] if f in ask], errors, group, facts, works)
         # In pre-flight's format, for Claude to send as it is (with what it read in the documents).
@@ -317,13 +408,18 @@ def route(table, answers, root=None):
     also = [a["procedure"] for a in d["also"]]
     report["main"], report["also"] = m["procedure"], also
     report["apart"] = [f"Da presentare a parte, al suo ufficio: {run.procedure_name(a['procedure'])}" for a in d["apart"]]
-    hit = idx.get(key(m["procedure"], also))
+    hit = find(idx, d, facts, via)
     if not hit:
-        report["unsupported"] = [f"Non ancora prevista: {run.procedure_name(m['procedure'])}"
+        report["unsupported"] = [f"Non ancora prevista{' con procura' if via else ''}: {run.procedure_name(m['procedure'])}"
                                  + (f", insieme a {', '.join(map(run.procedure_name, also))}" if also else "") + "."]
         report["message"] = run.refusal_text(report)
         return report
     name, path, steps = hit
+    why = not_available(name)
+    if why:
+        report["unsupported"] = [f"Questa pratica ({run.procedure_name(m['procedure'])}) {why}."]
+        report["message"] = run.refusal_text(report)
+        return report
     carried, again = carry(t, steps, facts, answers)
     # The steps file's own reading of the case must agree: its fixed facts, its wizard.
     out, _ = run.ruled(steps, run.Values(carried, fields={}, asks=steps.get("asks", {})))
@@ -332,7 +428,12 @@ def route(table, answers, root=None):
         report["message"] = run.refusal_text(report)
         return report
     # The route in a line or two, for the one message: the pratica and what goes apart.
-    report["message"] = "\n".join([f"La pratica: {run.procedure_name(m['procedure'])}"
+    # A procedure several steps files share (the SUAP's SCIA opens, moves, enlarges: `evento`) is named by
+    # the steps file's own title, which says which: «trasferimento di un bar o ristorante», not «Aprire».
+    shared = len([e for e in idx[key(m["procedure"], also)] if via_of(e[2]) == via]) > 1
+    what = re.sub(r",? SUAP \w+$", "", steps["title"]) if shared and steps.get("title") else run.procedure_name(m["procedure"])
+    law = run.basis(table, m["rule"])  # the article is the library's, never Claude's
+    report["message"] = "\n".join([f"La pratica: {what}" + (f" ({law})" if law else "")
                                    + (f", insieme a {', '.join(map(run.procedure_name, also))}" if also else "") + "."]
                                   + report["apart"])
     report.update(routed=True, pratica=name, steps=str(path), answers=carried, asked_again=again)

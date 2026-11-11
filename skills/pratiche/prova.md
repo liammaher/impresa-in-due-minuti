@@ -23,7 +23,11 @@ test data; say that you don't invent data (in a test you do). The tecnico and pr
 invented too, though they log in with their own SPID: the portal takes a made-up procuratore
 (the live Prova of 2026-11-06 filled it). Never make, send or show a file (the Prova's own PDFs
 are attached by the compilation; they never see or pick them), and never list the data you
-invented (the closing lines and «dettagli» show the case's answers, never its values). No file rules, nothing to pay, sign or send: the point is that they see a whole
+invented (the closing lines and «dettagli» show the case's answers, never its values). The one exception
+is a box they ask about («cosa hai scritto in X?»), the spot check the closing lines invite: answer that one
+box, one line, from the plan, never the list:
+`sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" plan --steps "${CLAUDE_SKILL_DIR}/pratiche/cila-fittizia.json" --answers answers.json --values run/values.json --made-up`,
+its source «dal caso di prova». No file rules, nothing to pay, sign or send: the point is that they see a whole
 pratica filled, fast. **One message per moment**: before the login the five lines of step 2, while it fills one
 line, at the end the closing lines. Nothing else: no card, no list of quadri, no wizard path, no sources, no
 real filing's details (the c/c, the order of the signatures, the PEC receipt).
@@ -52,9 +56,10 @@ real filing's details (the c/c, the order of the signatures, the PEC receipt).
    line), so they log in while they read:
    > Ho aperto il portale impresainungiorno qui accanto.
    > **Entra con il tuo SPID e scrivimi «fatto».** Le credenziali le scrivi solo tu.
-   > Poi, in circa 2 minuti, compilo una CILA con dati inventati e la rileggo dal portale. Non spunto dichiarazioni, non pago, non firmo, non invio.
+   > Poi, in circa 2 minuti, compilo una CILA inventata (manutenzione straordinaria in un appartamento, lavori già in corso, per un locatario, con due imprese) e la rileggo dal portale. Non spunto dichiarazioni, non pago, non firmo, non invio.
 
-   Before saying the portal is open «qui accanto», check that the browser pane is showing (`tabs_context` says
+   The parenthesis says what the case is, so they can hold what appears on the portal to it; never its
+   names, codici fiscali, addresses or figures. Before saying the portal is open «qui accanto», check that the browser pane is showing (`tabs_context` says
    displayed or hidden). If hidden, add one line after the others: «Se non vedi il portale, premi Cmd+Shift+B
    (Ctrl+Shift+B su Windows) o clicca l'icona del globo.»
    As it is, a word not changed, added or left out (but for that line): nothing before, nothing after, no card.
@@ -79,7 +84,7 @@ real filing's details (the c/c, the order of the signatures, the PEC receipt).
 4. Hand over with its `message`, as written, its lines and nothing else. Everything matched:
    "✅ CILA di prova compilata in <T>. Riletti dal portale: scheda anagrafica, dati catastali, lavori e altri <N> quadri, più <M> file. Tutto corrisponde.
    In una pratica vera restano a te: controllare l'anteprima, spuntare le dichiarazioni, pagare, firmare, inviare.
-   Guarda la bozza qui accanto (Pratiche in bozza › PROVA NON INVIARE), poi cancellala."
+   Guarda la bozza qui accanto (Pratiche in bozza › PROVA NON INVIARE): scegli una casella e chiedimi cosa ho scritto e perché. Poi cancellala."
    Something didn't match, or wasn't read: the head `✅ … compilata in <T>.`, then a `✅` line for what was read
    and a `⚠️` line for a value that doesn't match, a file the portal doesn't hold or a check not done, then the
    last two lines. (The Prova's receipt sits in quadro d: SKILL.md step 5.3 reads it there, with

@@ -1,4 +1,6 @@
-# pratiche-napoli
+# Library (pratiche-napoli)
+
+> Since 2026-11-11 this is the `library/` folder of [impresa-in-un-minuto](https://github.com/liammaher/impresa-in-un-minuto); the former repository liammaher/pratiche-napoli is archived. Run the commands below from here.
 
 **Ogni procedura burocratica che un'impresa di Napoli può incontrare, descritta in modo
 chiaro, verificato e leggibile anche dalle intelligenze artificiali.**
@@ -12,8 +14,8 @@ its official sources and how far it has been verified.
 **Where this is going:** the library is meant to be the rules behind one connector that lets a
 Naples business's own AI assistant handle its dealings with public offices, together with
 anonymised outcomes of how pratiche actually went. The library stays data, site and reports, and
-never depends on any vault. The direction and its decisions are in `docs/north-star.md` in the
-(private) personal-vault-italia repository.
+never depends on any vault. The direction and its decisions are in `docs/north-star.md` at the
+root of the repository.
 
 ## Verification levels
 
@@ -52,7 +54,7 @@ The site shows the date on each page and publishes it in the structured data, th
 | `/offices/<list>.json` | one service's desks by area (the Municipalità's sede or URP, its Anagrafe, the ASL's Anagrafe Sanitaria, its Prevenzione Collettiva), keyed by the vault field that picks one (`municipalita`, `distretto_asl`) |
 | `/sitemap.xml`, `/robots.txt`, `/llms.txt` | for search engines and AI assistants |
 
-Set `SITE_URL` to the public address (default `https://liammaher.github.io/pratiche-napoli`);
+Set `SITE_URL` to the public address (default `https://liammaher.github.io/impresa-in-un-minuto/library`);
 it is used for canonical links, the sitemap and the JSON index. Links between pages are
 relative. The build refuses a library that doesn't validate.
 
@@ -278,7 +280,7 @@ tools/site/style.css             the site's stylesheet
 ```
 
 Form fields map to IDs in `contract/fields.json`, never to personal values. The same IDs are
-used by [personal-vault-italia](https://github.com/liammaher/personal-vault-italia), so an
+used by the vault in the same repository, so an
 agent with the person's consent can pre-fill a form, but the library never depends on it.
 Every procedure carries the format's `schema_version`; the vault's pratica skill reads
 version 0 and uses only the sources, deadline, channels and steps of any other. Its form
@@ -303,15 +305,11 @@ Regenerate the field registry after a vault schema change: save the vault's `sch
 the schema as `contract/vault-schema.json` and rebuilds `contract/fields.json`; never edit
 `fields.json` by hand (a test checks). The vault's credential words come with it, and the
 validator refuses any field name that uses one, so the library never keeps its own list.
-`npm run check:vault-schema` compares the saved copy with `schema.json` on the vault's main
-branch; the `Vault schema` workflow runs it on every pull request and push to main, with the
-`VAULT_SCHEMA_TOKEN` secret (read access to the vault repository's contents). It has no
-scheduled run, so after a schema change in the vault alone, start it from the Actions tab
-(or `gh workflow run vault-schema.yml`). The `Fill pilots` workflow, with the same secret, runs
-the vault's form filler on its pilot forms (TARI Mod. 1, ricorso al Prefetto, CILA Allegato A,
-scheda anagrafica) and its office lookups against every change to `procedures/`, `layouts/`,
-`contract/` or `offices/`; the vault
-runs the same pilots against this repository's main on its own changes.
+`npm run check:vault-schema` compares the saved copy with `schema.json` at the repository root
+(`make schema` at the root writes both and runs `gen:fields`; the `Library` workflow checks it on every
+change to `library/` or `schema.json`). The `Fill pilots` workflow runs the vault's form filler on its
+pilot forms (TARI Mod. 1, ricorso al Prefetto, CILA Allegato A, scheda anagrafica) and its office lookups
+against every change to `procedures/`, `layouts/`, `contract/` or `offices/`, and to the filler itself.
 
 ## Not legal advice
 

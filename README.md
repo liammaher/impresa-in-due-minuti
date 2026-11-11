@@ -1,9 +1,13 @@
 # Impresa in un minuto
 
-Prepara una pratica del SUE del Comune di Napoli, su impresainungiorno, dai documenti del tuo
-cliente. Si ferma dove comincia la tua parte: le dichiarazioni, la firma digitale, il pagamento e
+Prepara una pratica del SUE e SUAP del Comune di Napoli, su impresainungiorno, dai documenti del tuo
+cliente (o della tua impresa). Si ferma dove comincia la tua parte: le dichiarazioni, la firma digitale, il pagamento e
 l'invio: Claude non spunta mai una dichiarazione, non firma, non paga e non invia. Gratuito e
 open source.
+
+> **Per chi queste pratiche le presenta già.** Impresa in un minuto compila: non è una consulenza e non
+> decide al posto tuo. Claude può sbagliare, e il controllo finale è tuo. Se non sai riconoscere un errore
+> in una pratica, non usarlo.
 
 ## Provalo in pochi minuti
 
@@ -15,9 +19,13 @@ documenti, basta dire «è una prova, inventa i dati».
 
 ## Cosa copre, e cosa no
 
-- **Per ora il SUE del Comune di Napoli**, su impresainungiorno; altri sportelli e comuni si aggiungono
+- **Per ora il SUE e SUAP del Comune di Napoli**, su impresainungiorno; altri sportelli e comuni si aggiungono
   nel tempo.
-  Una pratica del SUAP (un negozio, un ristorante) non è ancora coperta.
+  Per il SUAP: aprire, trasferire, ampliare, subentrare, sospendere o chiudere un negozio, un bar o
+  ristorante, un acconciatore o un'estetista, per l'impresa che presenta con il proprio SPID. Un
+  caso fuori da questi (alcolici, un edificio tutelato, un centro commerciale, un'impresa con altri
+  soci) Claude lo rifiuta subito, con il motivo. Gli allegati del SUAP vanno firmati digitalmente:
+  li alleghi tu, Claude non ne carica nessuno.
   Un immobile in un altro comune, un altro ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia
   delle Entrate, Regione) o una pratica che Impresa in un minuto non conosce: Claude ti dice subito che non è
   coperta dall'automazione, e non apre nulla.
@@ -26,7 +34,7 @@ documenti, basta dire «è una prova, inventa i dati».
   confermi, e solo allora si comincia.
 - **Coperta** vuol dire: compilata sul portale vero con dati di prova, rileggendo ogni valore.
   Nessuna pratica reale è ancora stata inviata con Impresa in un minuto.
-- Le regole vengono dalla biblioteca pratiche-napoli, ogni fatto con la sua fonte. Ciò che la
+- Le regole vengono dalla biblioteca delle procedure, ogni fatto con la sua fonte. Ciò che la
   biblioteca non copre, Claude lo dice.
 
 ## Installazione

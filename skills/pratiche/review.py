@@ -333,7 +333,7 @@ def summary(report, out=None, job=None, prova=False):
         else:
             lines = [head] + checks + [f"⚠️ {w}" for w in warns]
         lines.append("In una pratica vera restano a te: controllare l'anteprima, spuntare le dichiarazioni, pagare, firmare, inviare.")
-        lines.append("Guarda la bozza qui accanto (Pratiche in bozza › PROVA NON INVIARE), poi cancellala.")
+        lines.append("Guarda la bozza qui accanto (Pratiche in bozza › PROVA NON INVIARE): scegli una casella e chiedimi cosa ho scritto e perché. Poi cancellala.")
         return {"result": "filled", "warnings": warns, "steps": [], "message": "\n".join(lines)}
     # One line for each warning in a section, by the section alone: the portal shows it beside the
     # box, and its labels read badly out of the page ("se non presente indicare il numero 0"). On
@@ -350,7 +350,11 @@ def summary(report, out=None, job=None, prova=False):
     else:
         head = f"✅ {name} {done} sul portale in {duration(report.get('total_seconds'))}: ogni valore è stato riletto."
     steps = tu_steps(later, reopened)
-    lines = [head] + [f"⚠️ {w}" for w in warnings]
+    # What the preview check held equal, named by the portal's own sections (as the Prova says it), only when
+    # nothing differed or wasn't read back: otherwise the ⚠️ lines say what.
+    read = whole_read(out, job, report.get("attached"))
+    clean = not (mismatches(out) + stray_files(out, job) + not_read_back(out, report.get("attached")))
+    lines = [head] + ([f"✅ Anteprima del portale confrontata con i tuoi documenti: {read}. Tutto corrisponde."] if read and clean else []) + [f"⚠️ {w}" for w in warnings]
     lines += numbered(steps, report.get("details") or {}, phased=not reopened and bool(later))
     lines += [f"{a}." for a in report.get("apart") or []]
     # `yours`, the steps file's own steps in full (how the diritti are paid, the files' rules), is

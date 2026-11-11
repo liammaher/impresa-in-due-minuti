@@ -605,6 +605,9 @@
     return "checked";
   }
 
+  const PARTICLES = new Set(["DI", "D", "DA", "DE", "DEL", "DELLO", "DELLA", "DEI", "DEGLI", "DELLE"]);
+  const bare = (s) => norm(s).toUpperCase().split(/[^A-Z0-9À-Ü]+/).filter((w) => w && !PARTICLES.has(w)).join(" ");
+
   async function lookup(f, value) {
     // The street's first word is its type, whatever it is: the comune's list names its streets
     // VIA, VICO, TRAVERSA, CUPA, GRADINI... first (a third of Naples' aren't a VIA, VIALE, PIAZZA,
@@ -627,6 +630,13 @@
       // "Via Foria" is also inside "Via Santa Maria Avvocata a Foria": the street named exactly wins.
       const exact = hits.filter((t) => t === norm(`${dug} ${street}`).toUpperCase());
       if (hits.length > 1 && exact.length === 1) hits = exact;
+      // The portal's list and the Comune's stradario don't always agree on the particles: the
+      // stradario's "VIA DEI TRIBUNALI" is the portal's "VIA TRIBUNALI" (2026-11-10). Without its
+      // dei/della/... the one street of that type named the same is taken, never a guess among several.
+      if (!hits.length) {
+        const loose = items.filter((t) => t.split(" ")[0] === dug && bare(t) === bare(`${dug} ${street}`));
+        if (loose.length === 1) hits = loose;
+      }
       if (hits.length) break;
     }
     if (hits.length !== 1) fail(`${f.id}: the value matches ${hits.length} of ${items.length} listed`);

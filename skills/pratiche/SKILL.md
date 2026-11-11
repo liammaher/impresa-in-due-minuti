@@ -1,6 +1,6 @@
 ---
 name: pratiche
-description: Prepara una pratica del SUE del Comune di Napoli su impresainungiorno a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti, e fa vedere una prova su una CILA con dati inventati. Da usare quando un architetto, un geometra o un ingegnere chiede, in italiano o in inglese, di preparare, compilare o presentare una pratica per un cliente a Napoli («prepara una CILA», «compila la SCIA»), chiede cosa serve per un caso, o vuole vedere come funziona con una prova su dati inventati («fammi vedere una prova», «fai una prova», «fai tu come esempio»).
+description: Per chi queste pratiche le presenta già (tecnici e professionisti: architetti, geometri, ingegneri, commercialisti, consulenti; Claude compila, il controllo è loro). Prepara una pratica del SUE e SUAP del Comune di Napoli su impresainungiorno a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - SCIA per aprire, trasferire, ampliare, subentrare, sospendere o chiudere un negozio, un bar o ristorante, un acconciatore o un'estetista - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti, e fa vedere una prova su una CILA con dati inventati. Da usare quando un architetto, un geometra o un ingegnere o il titolare di un'impresa chiede, in italiano o in inglese, di preparare, compilare o presentare una pratica a Napoli («prepara una CILA», «compila la SCIA»), chiede cosa serve per un caso, o vuole vedere come funziona con una prova su dati inventati («fammi vedere una prova», «fai una prova», «fai tu come esempio»).
 ---
 
 # Pratiche a Napoli
@@ -8,6 +8,18 @@ description: Prepara una pratica del SUE del Comune di Napoli su impresainungior
 The user is a **tecnico** (architetto, geometra, ingegnere) filing for clients in Napoli with a
 procura. You prepare the draft on impresainungiorno; they log in with their own SPID, then make
 the declarations, sign, pay and send.
+For a **SUAP** pratica (a shop, a bar or restaurant, an acconciatore or estetista, a B&B) the person
+is either the **titolare of the business** filing for their own business (a commercialista or
+consulente who files with the titolare's own SPID works the same way), or a **tecnico** filing for a
+client business with a procura. The second exists only for the pratiche that have a procura
+variant (a bar or restaurant's opening so far); ask «presenti tu per il titolare, o presenta un
+tecnico con procura?» when the request doesn't say, and put `"via": "procura"` in route.py's
+answers for the second. Where there is none, route.py says «Non ancora prevista con procura»: say
+so, never file it as the titolare's. The flow below is the same: in step 0 the details are the
+business's (the client's, with a procura), and the documents are the business's (visura camerale,
+the lease of the premises, an identity document). Most of the SUAP's attachments take only signed
+files (.p7m): the ones the pratica's steps name are attached by you in the second run from the
+files the person signs and puts in the folder; any other slot is the person's own step.
 
 **A test** ("do a test", "prova", "esempio", "fai tu", "inventa", even inside a job or after
 your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
@@ -48,12 +60,11 @@ your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
 
 ## What Impresa in un minuto covers, said plainly
 
-- **Only what Impresa in un minuto carries: the SUE del Comune di Napoli**, on impresainungiorno. Another sportello's
+- **Only what Impresa in un minuto carries: the SUE e SUAP del Comune di Napoli**, on impresainungiorno. Another sportello's
   pratica, another comune, another ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia delle
   Entrate, Regione) or a pratica whose status isn't `available` is **not covered by the
   automation**: say so first, in one line, and open nothing. A property outside Napoli is refused
   by the intake's `notes` and by pre-flight; when the documents don't say where it is, ask.
-- A SUAP pratica (a shop, a restaurant, an activity) is another sportello's: not covered yet.
 - **Coperta** means: filled on the real portal with made-up data, every value read back. No real
   pratica has been sent through Impresa in un minuto yet: the verdict says so (step 3).
 - **Facts come from the library, each with its source** in brackets after it ("(DD 501/2026)").
@@ -72,6 +83,13 @@ your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
   or a client's. They log in to the portal themselves. If they write one: don't use or repeat
   it, say you will never need a password or PIN, that they should change it, and that they log
   in themselves when the time comes.
+- **You fill in, you don't advise.** This is for people who already file these pratiche and can tell
+  when a box is wrong; the choice and the signature are theirs. Facts from the library, with their
+  source, are fine; "cosa mi conviene?" or "cosa devo fare?" is not yours to answer. If someone shows
+  they can't tell right from wrong in a pratica (they ask what a CILA is, what to tick, whether they
+  must sign), say it once, kindly: «Impresa in un minuto è per chi queste pratiche le presenta già: per
+  capire cosa serve a te, rivolgiti a un tecnico.» Then give the library's facts if asked, and open
+  nothing.
 - **You read the documents, and you check the work against them.** Read every file of the job
   yourself (step 2), and what the intake read from them; after the compilation, read the portal's
   own preview of the pratica and hold each value to its document (step 5). Their data passes
@@ -108,7 +126,7 @@ another pratica the same way.
 **When they come without a job** ("come funziona?", "ciao", "cosa fa?"), the Prova is the answer:
 seeing it beats any description. Your whole reply is these two lines, nothing before or after,
 no list of features or steps:
-  "Preparo le pratiche del SUE del Comune di Napoli sul portale, fino alla tua firma.
+  "Preparo le pratiche del SUE e SUAP del Comune di Napoli sul portale, fino alla tua firma, per chi le presenta già: compilo io, il controllo è tuo.
   Vuoi vedere una CILA di prova? Tu entri nel portale con il tuo SPID, io la compilo con dati inventati: non si invia nulla."
 The second line says the one thing they will do (their own SPID login) before they agree to it, so
 the login that follows is no surprise. Never "bozza" here: it means nothing yet.
@@ -154,7 +172,8 @@ below runs in the job's subfolder).
 When it doesn't exist, create `../studio.json` as `{"tecnico:ruolo.tipo": "titolare"}` (this
 makes `tecnico` the `t:` role; without it pre-flight lists none of their details) and
 `values.json` as `{}`. The first time, say once, in one line, how their data travels: "Leggo io i
-documenti: i loro dati passano da questa conversazione e poi sul portale. Password e SPID mai." It
+documenti: i loro dati passano da questa conversazione e poi sul portale. Password e SPID mai.
+Posso sbagliare: il controllo finale è tuo." It
 goes in the one message (step 3), right after the verdict, never before it. The first
 pratica's pre-flight lists the studio's and the tecnico's details under `missing`: ask for them
 once, in one message, and write them into `../studio.json`.
@@ -183,6 +202,21 @@ A filing on a title already held (start or end of works, agibilità, a proroga, 
 of holder, a new direttore dei lavori or firm, the DAU) the same way, with
 `--table sue-napoli-adempimenti`. Ask which only when the request doesn't say: new works, or a title
 already held.
+
+A business's pratica (open, move, enlarge, take over or close a shop, a bar or restaurant, an
+acconciatore or estetista, a B&B) is chosen by the activity and what happens to it, not by its name,
+with the SUAP's own table:
+
+```sh
+sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/route.py" --table suap-napoli --answers facts.json
+```
+
+It asks what the activity is, what happens to it and where the premises are, in one message, then
+names the one pratica (the wizard's sector and operation included), and answers as below. Which table
+is the request's: a building title or works are the SUE's, an activity is the SUAP's; ask only when it
+doesn't say. A SUAP case the table refuses (alcohol, a protected building, a shopping centre, ...) is
+refused with its reason before anything opens, like a SUE one. Who presents is not a question of the
+table: `"via": "procura"` in the answers picks the procura variant of the pratica.
 
 - `routed`: it names the pratica (`pratica`, its `steps`), the `answers` to start `answers.json`
   with, and a `message` of a line or two (the pratica, what goes apart): it goes in the one
@@ -231,7 +265,7 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" scan docs --o
 
 Before step 1 the same without `--steps`. A `notes` line saying the property isn't in the Comune
 di Napoli is the verdict: send it and stop. Of what the intake wrote, read `run/intake/intake.json`
-first: each file's kind,
+first: each file's kind (`riconosciuti` the kinds in Italian, `non_riconosciuti` how many files have none),
 the fields filled (ids, not values), `unread` files (scans and photos: you read those yourself,
 below), `notes` (in Italian), and `proposals` with the document and words each comes from. Take them now, so pre-flight doesn't ask
 them again: `sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" accept run/intake --into answers.json`
@@ -300,9 +334,13 @@ one message asks only what no document holds.
      or a status other than `available` is its own verdict: send that instead, and stop.)
      The first time, right after it: the line on how their data travels (step 0).
   2. What you understood, in at most two sentences of prose (never a list): only the facts that
-     decide the pratica, each with the document it comes from.
+     decide the pratica, each with the document it comes from. Then one short line of which kinds
+     of document you recognised, as the intake lists them in `riconosciuti` («Ho riconosciuto:
+     visura, contratto di locazione, relazione tecnica, assenso.»), and, when `non_riconosciuti`
+     isn't 0, «N file non riconosciuti» (never guess their kind, never a file name).
   3. route.py's `message`, as your proposal: "Propongo una CILA (art. 6-bis DPR 380/2001)." The
-     choice is the tecnico's: they sign the asseverazione. It names the pratica only.
+     choice is the tecnico's: they sign the asseverazione. It names the pratica only, and the
+     article is the one route.py's `message` gives (the library's), never one you add or change.
   4. Only where the documents and a proposal disagree (a sanzione's receipt, but works proposed
      as not started): one sentence each, at most two, with what the document shows and which
      question it bears on, never the answer it suggests.
@@ -316,6 +354,7 @@ one message asks only what no document holds.
   > invio); provata sul portale con dati di prova.
   > Dalla notifica preliminare e dall'assenso: lavori in via Domenico Fontana 40 per il locatario
   > Luca Fittizio, con due imprese; la proprietaria Immobiliare Fittizia ha dato l'assenso.
+  > Ho riconosciuto: visura, contratto di locazione, relazione tecnica, assenso, notifica preliminare.
   > Propongo una CILA (art. 6-bis DPR 380/2001).
   > La ricevuta della sanzione (333 €) è per una CILA tardiva: tienine conto alla domanda 1.
 
@@ -352,13 +391,16 @@ to confirm (a test is the one exception: `prova.md`).
 
 **A complete folder.** Pre-flight gives `riepilogo` when nothing is left to ask but its
 proposals: no question, no detail missing, every file as the sportello takes it. It is short on
-purpose, so it is read rather than waved through: first "Da controllare", a line for each answer
+purpose, so it is read rather than waved through: first "Dai tuoi documenti" (up to three lines, the
+documents' own words behind the answers that decide the pratica, each with its document; the tecnico
+holds them to a document they know), then "Da controllare", a line for each answer
 only Impresa in un minuto proposes; then the rest counted by where it comes from (the relazione tecnica,
 their note, the rules), the files, and «dettagli» to see every answer; then the closing lines and
-«Scrivi «sì» e apro il portale». The one message is points 1-3 above (the verdict, what you
-understood, the pratica), at most one line for each document that can't be read or disagrees
-with an answer (point 4), then pre-flight's `card` ("Cosa succede", two lines: the pratica and why
-it is this one, what you do) **as it is**, a blank line, and `riepilogo`
+«Scrivi «sì» e apro il portale». The one message is points 1 and 2 above (the verdict, what you
+understood), without point 3: the card's heading is the pratica, with its article, so it is said once,
+not as a «Propongo» line and then again in the card. At most one line for each document that can't be read or disagrees
+with an answer (point 4), then pre-flight's `card` ("Cosa succede", three lines: the pratica and why
+it is this one, what you do, and that it stays a draft) **as it is**, a blank line, and `riepilogo`
 **as it is**. The card is generated from the steps file: never shorten it, add to it or word it
 yourself. No clickable question, no checklist,
 nothing else: nothing opens before their reply.
@@ -378,7 +420,29 @@ nothing else: nothing opens before their reply.
 - A change ("le parti comuni sono condominiali"): into `answers.json` (`fonti`: "Tua risposta"),
   pre-flight again, and its new `card` and `riepilogo` (or the questions the change opened) as the
   next message.
-- Anything else they ask: answer it, and ask again for «sì».
+- Anything else they ask: answer it (a box or an answer: **Asked what goes in a box**, below), and ask
+  again for «sì».
+
+**Asked what goes in a box** ("cosa scrivi in X?", "perché hai risposto no a Y?", "dove va il Z?"), at
+any point before the compilation and after it. An expert asks it to check you, so the answer is
+the runner's own plan, never your memory of the documents (a plausible answer that differs from
+what the runner types is the one mistake that costs their trust):
+- A box: run `plan` (no browser; the same values and answers as pre-flight) and read the row of that box
+  (`section | box | value`):
+  ```sh
+  sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" plan --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json" \
+    --answers answers.json --values run/values.json --values run/intake/private/values.json
+  ```
+  Answer in one line: the value, then where it comes from (the document, or "tua nota", "tua risposta",
+  "calcolata dalle regole"). «In "In qualità di": Altro, specificare «Locatario», dal contratto di locazione.»
+- An answer (the pratica's questions): `run.py details` (the same arguments as pre-flight), its line:
+  the answer and its source. One you proposed says so, and why ("L'ho proposto io: nei documenti non
+  c'è un altro progettista, quindi ho messo che sei tu. Se non è così, dimmelo."); a change is the
+  bullet above.
+- What neither lists (a choice made on the portal's own screens, a box the portal fills by itself): say
+  "Questa non la compilo io dal piano: la vedi nell'anteprima." Never guess it, never read it off the
+  page to answer.
+- One line, no list of other boxes, no offer of more. Asked about several, a line each.
 
 **After they answer**, the answers in `answers.json`, then pre-flight again. Built from the
 answers, its `files`, its questions that ask for a file and its `missing` are what this pratica
@@ -441,8 +505,12 @@ step 3 says how. Never send them a file, never ask them to download or save one,
 1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser (check first that its pane is
    showing: `tabs_context` says displayed or hidden; if hidden, tell them in one line: «Se non vedi il portale, premi
    Cmd+Shift+B (Ctrl+Shift+B su Windows) o clicca l'icona del globo.»):
-   "Entra con SPID nella finestra del browser; quando vedi la pagina del portale scrivimi
-   «fatto»." Wait until the page is the portal's own, past the login. Send this line after the
+   "**Entra con il tuo SPID** nella finestra del browser; quando vedi la pagina del portale scrivimi
+   **«fatto»**. Le credenziali le scrivi solo tu.
+   Poi compilo la bozza, in pochi minuti, e ti dico cosa ho riletto. Non spunto dichiarazioni, non pago, non firmo, non invio."
+   (the Prova's login message, the same words for the same moment: what they do first, in bold, who types
+   the credentials, what happens, how long, what is never done). Wait until the page is the portal's own, past
+   the login. Send these lines after the
    `card` when the tecnico hasn't read it yet in this job (they answered questions and no
    `riepilogo` came). Leave out `--values run/intake/private/values.json` when the intake didn't run.
    The card is printed by:
