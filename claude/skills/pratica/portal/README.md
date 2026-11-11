@@ -812,12 +812,12 @@ result only if its sha256 is the new file's, else it says to send the full `step
 (2026-11-04: the CILA's and the permesso's Dati catastali went this way, by hand, the first time).
 The patch is main's steps run through this run.py, so none is written when they no longer plan
 here (a filter they name was renamed, a case they refused): then the whole file, or the bundle.
-The pane keeps a batch's steps under one key per procedure (`pv-steps:<procedure>`), so two rehearsals of one
-procedure (a pratica and its procura variant, the shop's and the restaurant's subingresso) share it, and the
-last one's steps run for both: on 2026-11-11 runs stopped on a section of the other
-(`TypeError: ... normalize` at «dati dell'impresa a cui si subentra», a procuratore section the parent hasn't)
-and a "filled" was a run of another rehearsal's steps. `rerun.py` now refuses such a batch: run each in a
-batch of its own. A stopped one: rerun it alone, unchanged, before
+The pane keeps each steps file under the procedure and a hash of what it fills (`pv-steps:<procedure>#<hash>`,
+run.py `page_bundle`), so a pratica and its procura variant, or the shop's and the restaurant's subingresso, can
+share a batch. Until that key (2026-11-10/11) the last one stored ran for every run of its procedure: runs of
+2026-11-11 stopped on a section of the other (`TypeError: ... normalize` at «dati dell'impresa a cui si subentra»,
+a procuratore section the parent hasn't) and a "filled" was a run of another rehearsal's steps; each was rerun alone.
+A stopped one: rerun it alone, unchanged, before
 calling it a bug (the portal is sometimes slow); twice the same is a bug. 2026-10-29: 20 of
 23 on the first pass, 23 of 23 once the runner waited for each section to open.
 
@@ -996,7 +996,6 @@ titolare's, `as_client: true`, `rules: {via: procura}`).
   "ISCRITTA ALLA CCIAA" makes pre-flight and `rerun.py` refuse it before anyone picks a file.
 - **Not proven**: the signed procura in the second run needs a real firma digitale (the portal checks the .p7m at
   upload, as for the SUE).
-- **Run each variant in a batch of its own** (see `rerun.py` above).
 
 ## Attachments screens
 

@@ -9,9 +9,9 @@ digitale).
 Its attachments slots weren't read on its own draft: they are the parent's crawl slots with the procura's
 two in front, and the run attached the grantor's identity document in them (2026-11-11).
 
-Run it in a batch of its own: with another rehearsal of the same procedure (its parent, the restaurant's
-variant) their steps share the pane's one key, and it stopped twice on the other's sections
-(`TypeError: (s || "").normalize is not a function`). Alone it filled.
+Twice it stopped on another rehearsal's sections (`TypeError: (s || "").normalize is not a function`) in a batch
+with another run of its procedure: the pane then kept one steps file per procedure (now keyed by a hash of
+what it fills). The run below is its own, alone.
 
 <!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
 

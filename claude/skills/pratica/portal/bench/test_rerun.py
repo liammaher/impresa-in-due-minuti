@@ -5,8 +5,9 @@
 
 No browser, vault or network. Each case was learned on the real portal (2026-11-11, the procura variants):
 
-  - the pane keeps steps under the procedure's key alone, so two steps files of one procedure in one batch
-    share it and the last wins for every run of that procedure: refused, run them in batches of their own;
+  - two steps files of one procedure (a pratica and its procura variant) in one batch are keyed apart in the
+    pane (run.py page_bundle: the procedure and a hash of what it fills); until that key, the last one's steps
+    ran for both (2026-11-11);
   - a SUAP rehearsal answers in answers.json (the SUE's in answers-p6.json): named alone it is found, and
     recorded under its own file;
   - values that are the rehearsal's own fixture.json are what its run is recorded on (no "@" in the name);
@@ -63,16 +64,18 @@ def batch(*args, values=None):
         sys.argv = old
         os.chdir(here)
     q = out / "queue-0.js"
+    batch.steps = sorted(p.name for p in (out / "steps").glob("*.js")) if (out / "steps").is_dir() else []
     return msg, q.read_text() if q.exists() else None
 
 
-@case("two steps files of one procedure in one batch are refused: they share the pane's one key")
+@case("two steps files of one procedure in one batch are keyed apart: each runs on its own steps")
 def _():
     own = lambda n: f"{n}:answers.json:rehearsals/{n}/fixture.json"
-    msg, _q = batch("ristorante-fittizio", own(OWN))
-    assert msg and "separate batches" in msg and "scia-somministrazione" in msg, msg
-    msg, _q = batch(own("subingresso-ristorante-procura-fittizio"), own("subingresso-negozio-procura-fittizio"))
-    assert msg and "separate batches" in msg, msg
+    msg, q = batch("ristorante-fittizio", own(OWN))
+    assert msg is None and q, msg
+    assert len(batch.steps) == 2 and len(set(batch.steps)) == 2, batch.steps  # two steps files, two keys
+    msg, q = batch(own("subingresso-ristorante-procura-fittizio"), own("subingresso-negozio-procura-fittizio"))
+    assert msg is None and len(batch.steps) == 2, (msg, batch.steps)
 
 
 @case("each of them alone builds")

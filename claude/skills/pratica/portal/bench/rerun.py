@@ -38,8 +38,8 @@ other values than --values' (an architect born abroad, from a copy of the fixtur
 holds both: its result is `NAME/ANSWERS@VALUES`, which --record leaves out of runs.json (the
 repo's fixture wouldn't give that run again). Values that are the rehearsal's own rehearsals/NAME/fixture.json
 (`NAME:answers.json:rehearsals/NAME/fixture.json`) are its run's, recorded as any.
-One steps file per procedure in a batch: the pane keeps steps under the procedure's key, so two (a pratica and its
-procura variant) would run on the last one's; such a batch is refused, run each in one of its own.
+Steps files of one procedure (a pratica and its procura variant) may share a batch: the pane keys each by
+its procedure and a hash of what it fills (run.py page_bundle).
 A rehearsal with no answers-p6.json (the SUAP's) answers in answers.json.
 """
 
@@ -189,7 +189,7 @@ def main():
                                    if (d / "portal-steps.generated.yaml").exists() and (d / a.answers).exists())
     fields = run.fields_of(a.values.read_text())
     (a.out / "steps").mkdir(parents=True, exist_ok=True)
-    stored, sources, origin, queue, failed, holders = {}, {}, None, [], [], {}
+    stored, sources, origin, queue, failed = {}, {}, None, [], []
     for item in names:
         name, _, answers = item.partition(":")
         answers, _, own = answers.partition(":")
@@ -233,16 +233,6 @@ def main():
         # The pane's key: a case's "+" blocks give its steps their own (run.page_bundle).
         proc = next(k for k in parts if k.startswith("pv-steps:"))[len("pv-steps:"):]
         js = f"steps/{name}{'-' + proc.partition('#')[2] if '#' in proc else ''}.js"
-        # The pane keeps steps under the procedure's key alone (`pv-steps:<procedure>`): two steps files of
-        # one procedure in a batch share it, the last one wins, and every run of that procedure runs on it
-        # (2026-11-11: a pratica and its procura variant, two subingressi: runs stopped on the other's
-        # sections and a "filled" ran on another rehearsal's steps). So one steps file per key per batch.
-        key = f"pv-steps:{proc}"
-        if key in stored and stored[key] != parts[key]:
-            failed.append(f"{label}: its steps are not {holders[key]}'s, under the one key the pane keeps "
-                          f"for {proc}: run them in separate batches")
-            continue
-        holders[key] = name
         (a.out / "runner.js").write_text(files["runner.js"])
         (a.out / js).write_text(files["steps.js"] + "'installed'\n")
         stored |= parts
