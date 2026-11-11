@@ -1,0 +1,30 @@
+# The bar or restaurant's SCIA (rehearsals/ristorante-fittizio) filed by a tecnico for the client with
+# a procura speciale: the portal's "Scelte eventuali" tick "il presentatore della domanda è un
+# professionista / altro soggetto munito di procura speciale" adds the section "Qualifica e dati del
+# procuratore" (the tecnico), and the business is the client's. gen.py `as_client` reads the
+# business and its premises as the client's (`c:business.*`, `c:locale.*`) and the person declaring
+# for it as `cr:`, the SUE's roles; the tecnico is `t:`. The procura and the DSC are documents the
+# portal makes once the declarations are ticked, so they go in the second run.
+extends: ristorante-fittizio
+title: "SCIA: apertura di un bar o ristorante (somministrazione) con notifica sanitaria, presentata da un tecnico con procura, SUAP Napoli"
+as_client: true
+first: [Scheda anagrafica, Qualifica e dati del procuratore]
+scelte: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE]
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [Esercizio di somministrazione di alimenti e bevande in zone NON tutelate], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Aprire l'attività"], confirm: CONFERMA}
+  - {screen: Scelta interventi eventuali, confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, tree: [IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE], confirm: CONFERMA}
+yours:
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
+  - "Scarica dal portale la procura speciale e il quadro riepilogativo (Allega documenti, Scarica il documento), dopo aver spuntato le dichiarazioni; fai firmare la procura al cliente (a mano e digitalmente) e firma tu il quadro"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento, e la tariffa forfettaria ASL"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+rules:
+  via: procura

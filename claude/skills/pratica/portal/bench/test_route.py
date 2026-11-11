@@ -292,6 +292,8 @@ def rehearsal_cases_come_home(table=TABLE, least=30):
             if out or waiting:
                 continue
             facts = {k: x for k, t in steps["rules"]["facts"].items() if (x := v.render(t)) is not None}
+            if steps["rules"].get("via"):
+                facts["via"] = steps["rules"]["via"]  # who presents: the case says it apart from the table's facts
             r = route.route(table, facts, REHEARSALS)
             assert r["pratica"] == name, (name, f.name, r["unsupported"] or r["questions"])
             n += 1
@@ -526,13 +528,30 @@ def suap_routed():
     assert not r["routed"] and r["unsupported"][0].startswith("Non ancora prevista"), r
 
 
+def suap_with_procura():
+    """A tecnico filing for the client with a procura (2026-11-11): `via: procura` isn't a fact of the
+    table (it changes no pratica), so the case says it apart and picks the recipe's variant; without
+    it the titolare files. A pratica with no variant says so, and never falls back to the titolare's."""
+    base = {"attivita": "somministrazione", "zona": "c", "fatti": [], "evento": "apertura"}
+    assert route.route(SUAP, base, REHEARSALS)["pratica"] == "ristorante-fittizio"
+    r = route.route(SUAP, {**base, "via": "procura"}, REHEARSALS)
+    assert r["routed"] and r["pratica"] == "ristorante-procura-fittizio", r
+    r = route.route(SUAP, {**base, "evento": "trasferimento", "via": "procura"}, REHEARSALS)
+    assert not r["routed"] and "con procura" in r["unsupported"][0], r
+    try:
+        route.route(SUAP, {**base, "via": "tecnico"}, REHEARSALS)
+        raise AssertionError("a via that is not procura should stop")
+    except run.StepError as e:
+        assert "procura" in str(e)
+
+
 def main():
     tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, as_a_conversation,
              wrong_answers, gated_items_stay_unknown, own_words_kept_only_if_they_agree, missing_answers_file,
              cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso, sanatoria_zona_a, sanatoria_titoli, cambio_uso_fuori_23ter,
              rehearsal_cases_come_home, asks_as_the_table_asks, refusals_say_why, apart_is_the_persons,
              one_steps_file_per_combination, plugin_layout, landscape_kept_in_force, edilizia_libera_that_digs,
-             follow_ups_routed, follow_ups_as_the_law_reads_them, suap_routed, status_gate]
+             follow_ups_routed, follow_ups_as_the_law_reads_them, suap_routed, suap_with_procura, status_gate]
     for t in tests:
         t()
         print(f"ok  {t.__name__}")

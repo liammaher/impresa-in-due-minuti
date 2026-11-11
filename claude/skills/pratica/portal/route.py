@@ -106,7 +106,8 @@ def fixed_facts(t, steps):
 def clash(a, b):
     """Whether two indexed steps files could both be one case's: the same wizard choices, and
     no fact both recipes fix differs."""
-    return run.wizard_labels(a[2]) == run.wizard_labels(b[2]) and all(a[3][f] == b[3][f] for f in a[3].keys() & b[3].keys())
+    return run.wizard_labels(a[2]) == run.wizard_labels(b[2]) and all(a[3][f] == b[3][f] for f in a[3].keys() & b[3].keys()) \
+        and via_of(a[2]) == via_of(b[2])
 
 
 def entries(idx):
@@ -114,7 +115,14 @@ def entries(idx):
     return [e[:3] for es in idx.values() for e in es]
 
 
-def find(idx, d, facts):
+def via_of(steps):
+    """Who presents, when the recipe says (`rules.via`): "procura" is the same pratica filed by a
+    tecnico for the client, with the portal's procuratore section. It isn't a fact of any rules
+    table (it changes no pratica), so the case says it apart (`via` in the answers)."""
+    return (steps.get("rules") or {}).get("via")
+
+
+def find(idx, d, facts, via=None):
     """The (name, path, steps) that files the pratiche of this decision (`rules.decide`'s) for
     this case, or None: its main pratica at the sector and operation the table names, with
     those it adds, whose recipe fixes each choice or number (`evento`) as the case has it; a
@@ -125,7 +133,7 @@ def find(idx, d, facts):
     agree = lambda e, yes_no: all(facts.get(f) is None or facts[f] == v for f, v in e[3].items()
                                   if isinstance(v, bool) == yes_no)
     hits = [e for e in idx.get(key(main, [a["procedure"] for a in d["also"]]), [])
-            if run.at_portal(e[2], d["main"]) and agree(e, False)]
+            if run.at_portal(e[2], d["main"]) and agree(e, False) and via_of(e[2]) == via]
     if len(hits) > 1:
         hits = [e for e in hits if agree(e, True)]
     if len(hits) > 1:
@@ -360,6 +368,9 @@ def route(table, answers, root=None):
     if not isinstance(answers, dict):
         raise run.StepError("answers: a JSON object, each fact's answer under its key")
     facts, errors = read_facts(t, answers)
+    via = answers.get("via")
+    if via not in (None, "procura"):
+        raise run.StepError('via: "procura" when a tecnico files for the client with a procura, else leave it out')
     d = rules.decide(t, facts)
     if d["conflict"]:
         raise run.StepError(f"rules table {table}: rules {', '.join(d['conflict'])} disagree (validate the library)")
@@ -397,9 +408,9 @@ def route(table, answers, root=None):
     also = [a["procedure"] for a in d["also"]]
     report["main"], report["also"] = m["procedure"], also
     report["apart"] = [f"Da presentare a parte, al suo ufficio: {run.procedure_name(a['procedure'])}" for a in d["apart"]]
-    hit = find(idx, d, facts)
+    hit = find(idx, d, facts, via)
     if not hit:
-        report["unsupported"] = [f"Non ancora prevista: {run.procedure_name(m['procedure'])}"
+        report["unsupported"] = [f"Non ancora prevista{' con procura' if via else ''}: {run.procedure_name(m['procedure'])}"
                                  + (f", insieme a {', '.join(map(run.procedure_name, also))}" if also else "") + "."]
         report["message"] = run.refusal_text(report)
         return report
@@ -419,7 +430,7 @@ def route(table, answers, root=None):
     # The route in a line or two, for the one message: the pratica and what goes apart.
     # A procedure several steps files share (the SUAP's SCIA opens, moves, enlarges: `evento`) is named by
     # the steps file's own title, which says which: «trasferimento di un bar o ristorante», not «Aprire».
-    shared = len(idx[key(m["procedure"], also)]) > 1
+    shared = len([e for e in idx[key(m["procedure"], also)] if via_of(e[2]) == via]) > 1
     what = re.sub(r",? SUAP \w+$", "", steps["title"]) if shared and steps.get("title") else run.procedure_name(m["procedure"])
     report["message"] = "\n".join([f"La pratica: {what}"
                                    + (f", insieme a {', '.join(map(run.procedure_name, also))}" if also else "") + "."]
