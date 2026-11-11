@@ -36,7 +36,11 @@ named `NAME:ANSWERS.json` runs with that answers file instead (one pratica, seve
 its own run, `NAME/ANSWERS` in the results). `NAME:ANSWERS.json:VALUES.json` runs that case on
 other values than --values' (an architect born abroad, from a copy of the fixture), so one bundle
 holds both: its result is `NAME/ANSWERS@VALUES`, which --record leaves out of runs.json (the
-repo's fixture wouldn't give that run again).
+repo's fixture wouldn't give that run again). Values that are the rehearsal's own rehearsals/NAME/fixture.json
+(`NAME:answers.json:rehearsals/NAME/fixture.json`) are its run's, recorded as any.
+Steps files of one procedure (a pratica and its procura variant) may share a batch: the pane keys each by
+its procedure and a hash of what it fills (run.py page_bundle).
+A rehearsal with no answers-p6.json (the SUAP's) answers in answers.json.
 """
 
 import argparse
@@ -140,7 +144,9 @@ def record(done, default, day):
         name, _, stem = d["name"].partition("/")
         f = REHEARSALS / name / "runs.json"
         runs = json.loads(f.read_text()) if f.is_file() else []
-        entry = {"date": day, "answers": f"{stem}.json" if stem else default, "result": d["result"],
+        # The SUE's rehearsals answer in answers-p6.json, the SUAP's in answers.json.
+        own_default = default if (REHEARSALS / name / default).exists() or not (REHEARSALS / name / "answers.json").exists() else "answers.json"
+        entry = {"date": day, "answers": f"{stem}.json" if stem else own_default, "result": d["result"],
                  **({"seconds": d["total_seconds"]} if d.get("total_seconds") else {}), "browser": "pane"}
         if not any(all(r.get(k) == entry[k] for k in ("date", "answers", "result")) for r in runs):
             runs.append(entry)
@@ -187,20 +193,34 @@ def main():
     for item in names:
         name, _, answers = item.partition(":")
         answers, _, own = answers.partition(":")
+        d = REHEARSALS / name
         answers = answers or a.answers
-        label = f"{name}/{Path(answers).stem}" if answers != a.answers or own else name
+        usual = a.answers  # the answers file this rehearsal's plain name stands for
+        if answers == a.answers and not (d / answers).exists() and (d / "answers.json").exists():
+            answers = usual = "answers.json"  # a SUAP rehearsal: its one answers file
+        # Values that are the rehearsal's own fixture (rehearsals/<name>/fixture.json) are what its run
+        # is recorded on; any other values are another case's, and its result isn't.
+        if own and Path(own).resolve() == (d / "fixture.json").resolve():
+            own, own_fixture = "", Path(own)
+        else:
+            own_fixture = None
+        label = f"{name}/{Path(answers).stem}" if answers != usual or own else name
         if own:
             label += f"@{Path(own).stem}"
-        d = REHEARSALS / name
         steps_file = d / "portal-steps.generated.yaml"
         if not steps_file.exists():
             steps_file = d / "portal-steps.yaml"
         steps = yaml.safe_load(steps_file.read_text())
-        values = run.Values(json.loads((d / answers).read_text()), fields=run.fields_of(Path(own).read_text()) if own else fields,
+        values = run.Values(json.loads((d / answers).read_text()),
+                            fields=run.fields_of((own_fixture or Path(own)).read_text()) if own or own_fixture else fields,
                             asks=steps.get("asks"))
         # A box the portal checks against a real register (a company in the Registro Imprese)
         # refuses made-up data: such a run only stops there (2026-11-02, one did).
-        stops = run.preflight(steps, values, made_up=True)["made_up_stops"]
+        ready = run.preflight(steps, values, made_up=True)
+        if ready.get("unsupported") or ready.get("missing"):
+            failed.append(f"{label}: {'; '.join(ready.get('unsupported') or ready['missing'])}")
+            continue
+        stops = ready.get("made_up_stops")
         if stops:
             failed.append(f"{label}: made-up data can't pass {'; '.join(stops)}")
             continue

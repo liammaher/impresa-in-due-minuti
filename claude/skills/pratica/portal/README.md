@@ -812,6 +812,11 @@ result only if its sha256 is the new file's, else it says to send the full `step
 (2026-11-04: the CILA's and the permesso's Dati catastali went this way, by hand, the first time).
 The patch is main's steps run through this run.py, so none is written when they no longer plan
 here (a filter they name was renamed, a case they refused): then the whole file, or the bundle.
+The pane keeps each steps file under the procedure and a hash of what it fills (`pv-steps:<procedure>#<hash>`,
+run.py `page_bundle`), so a pratica and its procura variant, or the shop's and the restaurant's subingresso, can
+share a batch. Until that key (2026-11-10/11) the last one stored ran for every run of its procedure: runs of
+2026-11-11 stopped on a section of the other (`TypeError: ... normalize` at «dati dell'impresa a cui si subentra»,
+a procuratore section the parent hasn't) and a "filled" was a run of another rehearsal's steps; each was rerun alone.
 A stopped one: rerun it alone, unchanged, before
 calling it a bug (the portal is sometimes slow); twice the same is a bug. 2026-10-29: 20 of
 23 on the first pass, 23 of 23 once the runner waited for each section to open.
@@ -833,6 +838,15 @@ shows and otherwise answer at once, so while it's hidden, wait between polls out
 (the pane's `wait` actions in one batch, then `results.js`).
 The pane's profile, and so the SPID session, is the same for every session of the app: before a
 batch, check that no other chat is running the portal (2026-11-03: one was, with its own batches).
+The file box `pick.js` shows lives in the page: anything that reloads it (`__crawl.slotsOf` leaves the page on
+Pratiche in bozza, a navigation, the portal's own reloads) removes it, and the person finds nowhere to pick
+(2026-11-11): look at the pane, and put the box back (the same `pick.js` text; its sha256 is the bundle's, so a
+rebuilt bundle needs its new `pick.js` and a new pick). Each batch's bundle gets its own name in Downloads.
+A SUAP rehearsal answers in `answers.json` (the SUE's in `answers-p6.json`): `rerun.py` finds the one it has,
+and `--record` files the run under it; values that are the rehearsal's own `fixture.json`
+(`NAME:answers.json:rehearsals/NAME/fixture.json`) are recorded like any run (`NAME/answers`), other values
+(`@`) aren't. Every run leaves a draft "PROVA NON INVIARE - ..." in Pratiche in bozza: the person deletes
+them there now and then (never the runner: it never presses Elimina).
 Check the sign-in too, and that the pane shows: a hidden pane on InfoCamere's sign-in page is one the person
 can't see to sign in on (2026-11-05: the pane's `tabs_context` says hidden; ask them to show it). An old page
 keeps showing Pratiche in bozza after the session has ended, and a
@@ -957,11 +971,41 @@ crawled whole at that depth too (minutes each); keep the store. A section whose 
 changed is refused: crawl the pratica again. Export with a download (the person's yes), checked by
 sha256; `CATALOGUE_PRIVATE` is checked as on import.
 
+## A tecnico filing the SUAP's pratica with a procura
+
+A tecnico files for a client business with a procura speciale (a commercialista, a geometra, an agenzia): the same
+pratica, a variant recipe (`rehearsals/<name>-procura-fittizio`, from `ristorante-procura-fittizio`; `extends` the
+titolare's, `as_client: true`, `rules: {via: procura}`).
+
+- **On the portal** (read 2026-11-11 on made-up drafts, pane): the wizard's "Scelte eventuali" shows «il presentatore
+  della domanda è un professionista / altro soggetto munito di procura speciale»; ticked, it adds the section
+  "Qualifica e dati del procuratore" (the tecnico: the SUE's, same fields) and, in Allega documenti, two slots:
+  "Procura speciale" (portal-made once the declarations are ticked, signed only: `jpg.p7m;pdf.p7m`: the second run)
+  and "Fotocopia di un documento di identita' del soggetto che conferisce la procura speciale" (a plain PDF, required:
+  the first run attaches it). The SUAP has no "Quadro riepilogativo" (DSC) slot. The crawls the openings were made from
+  lack the procura's slots, so a variant's `slots:` are read on its own draft (`slotsOf`).
+- **Roles** (gen.py `as_client`): the SUAP's `business.*` and `locale.*` become the client's (`c:`), the titolare `t:`
+  the person declaring for it (`cr:`, its carica from `ask.cliente_carica`), as the SUE reads a client company; the
+  procuratore section keeps `t:`, the tecnico. A client that is a person is `c:` and `cr:` both. answers.json
+  `people: {"c": "...", "cr": "..."}`.
+- **Routing** (route.py `via`): who presents isn't a fact of the rules table (it changes no pratica), so the case
+  says it apart, `"via": "procura"`, and the variant is picked; none for that pratica is «Non ancora prevista con
+  procura», never the titolare's file. A pratica with no `rules` table (panificio, affittacamere) has no variant.
+- **Made-up data**: a client company with a REA stops the first section (the portal looks its codice fiscale up in the
+  real Registro Imprese at Salva): a rehearsal's client is «non ancora iscritta» (no REA); `made_up_stops` on
+  "ISCRITTA ALLA CCIAA" makes pre-flight and `rerun.py` refuse it before anyone picks a file.
+- **Not proven**: the signed procura in the second run needs a real firma digitale (the portal checks the .p7m at
+  upload, as for the SUE).
+
 ## Attachments screens
 
 `__crawl.slotsOf("<draft name>")` (crawl.js) opens a draft from Pratiche in bozza and reads
 its Allega Documenti slots from the menu at the top, so the sections need not be complete;
 an empty "catalogo" draft gives a pratica's base slots (those its answers add are missing).
+The pane's `localStorage["pv-crawl"]` holds the crawler (compare its sha256 with `crawl.js`'s: 2026-11-11 it was
+the repo's byte for byte): `(0, eval)(localStorage.getItem("pv-crawl"))` loads it with no file pick. A `slotsOf`
+takes 20-30 s, over the pane's 45 s call: start it in an async loop that stores each draft's slots on `window`
+(one draft after the other: they share the page), then read the variable. It leaves the page on Pratiche in bozza.
 In a tab where a rerun batch ran, `__crawl` isn't loaded: `catalogue.py pane`'s `load.js` loads the
 stored wizard.js and crawl.js once their sha256 is the repo's (2026-11-02, after the receipts' runs).
 Read drafts only once the batch has ended (two scripts on one login make the portal's errors), in a
