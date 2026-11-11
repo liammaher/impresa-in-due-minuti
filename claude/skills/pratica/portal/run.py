@@ -1654,7 +1654,8 @@ def card_why(steps, values, rows):
 
 
 def card(steps, values, report, made_up=False, rows=None, preview_check=True):
-    """"Cosa succede", in two lines: the pratica and why it is this one, and what Claude does. What the tecnico does
+    """"Cosa succede", in two lines: the pratica and why it is this one, and what Claude does (then, for a real job,
+    that it stays a draft; for a Prova, that nothing is sent). What the tecnico does
     is in the verdict (SKILL.md) and the closing lines (review.py), where each step comes with the sportello's
     details; every answer and where it comes from is «dettagli». From the steps file and the case (so it can't
     promise what the runner doesn't do). One text, sent as it is before the portal opens: for a Prova (made_up)
@@ -1686,6 +1687,8 @@ def card(steps, values, report, made_up=False, rows=None, preview_check=True):
     lines = [heading, f"Io {', '.join(does[:-1])} e {does[-1]}."]
     if made_up:
         lines += ["", "Qui non c'è nulla da inviare: finita la prova, cancella la bozza da «Pratiche in bozza»."]
+    else:
+        lines += ["", "Resta una bozza: non parte nulla finché non la invii."]
     return "\n".join(lines)
 
 

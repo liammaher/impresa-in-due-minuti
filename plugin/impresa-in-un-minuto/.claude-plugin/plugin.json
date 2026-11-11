@@ -1,7 +1,7 @@
 {
   "name": "impresa-in-un-minuto",
   "displayName": "Impresa in un minuto",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Per tecnici e professionisti (architetti, geometri, ingegneri, commercialisti, consulenti) che queste pratiche le presentano già: Claude compila le pratiche del {{copertura}} su impresainungiorno dai documenti del cliente, e tu controlli. Si ferma ai passi che spettano solo a te (accesso con SPID, dichiarazioni, firma, pagamento, invio). Non è una consulenza: Claude può sbagliare. Con la biblioteca pratiche-napoli di regole e procedure.",
   "author": {
     "name": "Liam Maher"

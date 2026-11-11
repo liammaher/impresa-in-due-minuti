@@ -499,8 +499,8 @@ their note, the rules), the files, and «dettagli» to see every answer; then th
 «Scrivi «sì» e apro il portale». The one message is points 1 and 2 above (the verdict, what you
 understood), without point 3: the card's heading is the pratica, with its article, so it is said once,
 not as a «Propongo» line and then again in the card. At most one line for each document that can't be read or disagrees
-with an answer (point 4), then pre-flight's `card` ("Cosa succede", two lines: the pratica and why
-it is this one, what you do) **as it is**, a blank line, and `riepilogo`
+with an answer (point 4), then pre-flight's `card` ("Cosa succede", three lines: the pratica and why
+it is this one, what you do, and that it stays a draft) **as it is**, a blank line, and `riepilogo`
 **as it is**. The card is generated from the steps file: never shorten it, add to it or word it
 yourself. No clickable question, no checklist,
 nothing else: nothing opens before their reply.
@@ -651,8 +651,12 @@ step 3 says how. Never send them a file, never ask them to download or save one,
 1. Open `https://suap.impresainungiorno.gov.it/fnsuap/cmd/home` in the built-in browser (check first that its pane is
    showing: `tabs_context` says displayed or hidden; if hidden, tell them in one line: «Se non vedi il portale, premi
    Cmd+Shift+B (Ctrl+Shift+B su Windows) o clicca l'icona del globo.»):
-   "Entra con SPID nella finestra del browser; quando vedi la pagina del portale scrivimi
-   «fatto»." Wait until the page is the portal's own, past the login. Send this line after the
+   "**Entra con il tuo SPID** nella finestra del browser; quando vedi la pagina del portale scrivimi
+   **«fatto»**. Le credenziali le scrivi solo tu.
+   Poi compilo la bozza, in pochi minuti, e ti dico cosa ho riletto. Non spunto dichiarazioni, non pago, non firmo, non invio."
+   (the Prova's login message, the same words for the same moment: what they do first, in bold, who types
+   the credentials, what happens, how long, what is never done). Wait until the page is the portal's own, past
+   the login. Send these lines after the
    `card` when the tecnico hasn't read it yet in this job (they answered questions and no
    `riepilogo` came). Leave out `--values run/intake/private/values.json` when the intake didn't run.
    The card is printed by:

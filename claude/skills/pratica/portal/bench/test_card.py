@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """The card ("Cosa succede") pre-flight gives a case that is ready: for every rehearsal that gets one, it
-is two lines in Italian (the pratica and why, what Claude does), in tu, shows no field id, role code or
+is two lines in Italian (the pratica and why, what Claude does) and a last one that it stays a draft, in tu, shows no field id, role code or
 personal value, none of the machine workings (wizard path, sources, quadri, byte for byte), of what the tecnico
 does (the verdict and review.py's closing lines say it) or of a real filing's details (c/c, signing order, PEC),
 and says it reads the PDF preview back only when the skill does. review.py's closing lines carry those details
@@ -127,6 +127,10 @@ def main():
             bad.append(f"the CILA's card doesn't carry the library's article: {real.splitlines()[0]!r}")
         if "DPR" in card:
             bad.append("the Prova's card carries an article")
+        if not real.rstrip().endswith("Resta una bozza: non parte nulla finché non la invii."):
+            bad.append("a real job's card doesn't say it stays a draft")
+        if "Resta una bozza" in card:
+            bad.append("the Prova's card says «Resta una bozza»: it says nothing is sent")
         # What the sportello adds goes next to each step in the closing lines, never in the card.
         det = run.step_details(steps)
         if set(det) != {"paga i diritti", "paga", "firma la pratica", "invia"} or any(v in real or v in card for v in det.values()):
