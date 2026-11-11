@@ -1852,5 +1852,31 @@ def _():
     assert not bad, bad
 
 
+@case("a SUAP pratica filed by a tecnico with a procura reads the client's business and its declarant, the tecnico as procuratore")
+def _():
+    # `as_client` (2026-11-11): business.* and locale.* become the client's, the titolare `t:` the
+    # person declaring for it (`cr:`); the procuratore's own section keeps `t:`. The titolare's
+    # file is untouched, so one steps file per way of presenting.
+    import re
+    own, proc = generated("ristorante-fittizio"), generated("ristorante-procura-fittizio")
+    assert (proc["rules"].get("via"), own["rules"].get("via")) == ("procura", None)
+    assert proc["wizard"][-1]["tree"] == ["IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"]
+    names = [x["section"] for x in proc["sections"]]
+    assert names[:2] == ["Scheda anagrafica", "Qualifica e dati del procuratore"], names[:3]
+    refs = lambda x: re.findall(r"\{\{[^}]*\}\}", json.dumps(x, ensure_ascii=False))
+    for sec in proc["sections"]:
+        for r in refs(sec):
+            if sec["section"] == "Qualifica e dati del procuratore":
+                assert not re.search(r"(?<![\w:.])(c:|cr:|business\.|locale\.)", r), r
+            else:
+                assert not re.search(r"(?<![\w:.])(t:|business\.|locale\.)", r), (sec["section"], r)
+    assert any("{{cr:identity.first_name}}" in r for r in refs(section(proc, "Scheda anagrafica")))
+    assert any("{{c:business.denominazione}}" in r for r in refs(section(proc, "Scheda anagrafica")))
+    assert any("{{c:locale.cap}}" in r for r in refs(section(proc, "ubicazione")))
+    assert "{{t:identity.first_name}}" in json.dumps(section(proc, "Qualifica"))
+    assert "cliente_carica" in proc["asks"] and "{{c:business.denominazione}}" in proc["asks"]["descrizione"]["default"]
+    assert not any(re.search(r"c:|cr:", r) for r in refs(own)), "the titolare's file reads no client"
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

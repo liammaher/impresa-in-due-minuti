@@ -507,6 +507,13 @@ the page never copies a rule.
   (`vault.RestrictDir`). It rewrites the access of what the folder holds, so `Init` on Windows
   takes only a new or empty folder.
 
+- **Private terms never leave the machine.** The maintainer's own details live in a 0600 list outside every repo
+  (`~/.config/portali/private-terms.txt`, or `$PORTALI_PRIVATE_TERMS`; `plugin/private_terms.py` reads it). The
+  plugin build scans its files for them, and `.githooks/pre-push` scans every line a push adds (switch it on once
+  per clone: `git config core.hooksPath .githooks`). Output names a file and a line, never the term. Never add a
+  remote to another clone of this project and never fetch or merge from the archived private repository: its
+  history holds the values the 2026-11-06 rewrite removed.
+
 ## Environment Variables
 
 `VAULT_DIR`, `PVAULT_VAULT`, `VAULT_ADDR` and `VAULT_PORT` are in `docs/usage.md`; the MCP

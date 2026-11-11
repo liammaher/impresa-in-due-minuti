@@ -1,0 +1,4 @@
+#!/bin/sh
+# Refuses a push that adds one of the maintainer's private terms (plugin/private_terms.py's list,
+# outside every repo). Switch on once per clone: git config core.hooksPath .githooks
+exec python3 "$(dirname "$0")/scan_push.py" "$@"

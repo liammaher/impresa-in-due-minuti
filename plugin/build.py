@@ -43,8 +43,10 @@ REPO = HERE.parent
 PRATICA = REPO / "claude" / "skills" / "pratica"
 REHEARSALS = REPO / "rehearsals"
 sys.path.insert(0, str(PRATICA / "portal"))
+sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
 import gen  # noqa: E402  (the steps files, built; a combination's recipe, resolved)
+import private_terms as private_terms_list  # noqa: E402  (the maintainer's list, shared with the pre-push hook)
 import runs  # noqa: E402  (a rehearsal's runs.json: which runs filled the draft)
 # The library's parts a Cowork session reads: its tools, reports backend and layouts
 # (PDF filling, which needs PyMuPDF) stay out of this version.
@@ -567,30 +569,20 @@ def write_pvault_release(setup, version, checksums):
 def private_terms():
     """The maintainer's own details the plugin must never carry (codice fiscale, address, CIE, ...),
     one per line, # for comments. The list is the maintainer's, outside the repo: it is the data."""
-    path = Path(os.environ.get("IMPRESA_IN_UN_MINUTO_PRIVATE_TERMS") or Path.home() / ".config" / "impresa-in-un-minuto" / "private-terms.txt")
-    if not path.is_file() and "IMPRESA_IN_UN_MINUTO_PRIVATE_TERMS" not in os.environ:
-        # Where it was under the plugin's earlier names (Impresa in due minuti, Portali, Portale SUE).
-        path = next((p for p in (Path.home() / ".config" / old / "private-terms.txt" for old in ("impresa-in-due-minuti", "portali", "portale-sue"))
-                     if p.is_file()), path)
-    if not path.is_file():
-        return []
-    lines = (l.strip() for l in path.read_text().splitlines())
-    return [l for l in lines if l and not l.startswith("#")]
+    return private_terms_list.load()
 
 
 def check_private(plugin, terms):
     """Stop the build if a private term is in any file, as a whole word (a number inside a hash
     doesn't count), or, for a long one, spaced out as a form prints a codice fiscale."""
     found = {}
-    pats = [re.compile(r"(?<![0-9A-Za-z])" + re.escape(t) + r"(?![0-9A-Za-z])", re.I) for t in terms]
+    pats = private_terms_list.patterns(terms)
     for f in sorted(plugin.rglob("*")):
         if not f.is_file():
             continue
         text = f.read_bytes().decode("utf-8", "ignore")
-        flat = re.sub(r"\s+", "", text)
-        for i, p in enumerate(pats):
-            if p.search(text) or (len(terms[i]) >= 9 and p.search(flat)):
-                found.setdefault(str(f.relative_to(plugin)), []).append(i + 1)
+        for n in private_terms_list.hits(text, terms, pats):
+            found.setdefault(str(f.relative_to(plugin)), []).append(n)
     if found:  # line numbers of the list, never the terms: this output may end up in a log
         sys.exit("private terms in the plugin (line numbers in the private list):\n"
                  + "\n".join(f"  {f}: {n}" for f, n in found.items()))

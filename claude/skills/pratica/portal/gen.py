@@ -131,8 +131,11 @@ def rules_block(spec, asks, groups):
             asks[name] = asks.pop(name)  # in the facts checklist at the table's place
 
         out[name] = "{{ask.%s}}" % name
+    if spec.get("via") not in (None, "procura"):
+        raise GenError('rules: via is "procura" (a tecnico filing for the client) or left out')
     return {"table": spec["table"], **({"main": spec["main"]} if spec.get("main") else {}), "facts": out,
-            **({"handles": spec["handles"]} if spec.get("handles") else {})}
+            **({"handles": spec["handles"]} if spec.get("handles") else {}),
+            **({"via": spec["via"]} if spec.get("via") else {})}
 
 
 def norm(s):
@@ -737,6 +740,33 @@ def unslotted(steps):
             and re.match(r"(si )?alleg[ao]\b", norm(f.get("label")))
             and not any(terms(f["when"]) <= t for t in files)]
 
+# The SUAP's sections read the business itself and its titolare (`business.*`, `locale.*`, `t:`). A
+# tecnico filing for a client business with a procura (`as_client: true`) reads the client's:
+# `c:business.*`, `c:locale.*`, and the person declaring for it is `cr:` (the SUE's roles: `t:` is
+# the tecnico, who is the portal's procuratore). The procuratore's own section keeps `t:`.
+CLIENT_KEEPS = {"Qualifica e dati del procuratore"}
+
+
+def client_ref(text):
+    """A template string with its references moved to the client's roles."""
+    def inner(m):
+        x = m.group(0).replace("{{t:ruolo.tipo|carica}}", "{{ask.cliente_carica|carica_cliente}}")
+        x = re.sub(r"(?<![\w:.])t:", "cr:", x)
+        return re.sub(r"(?<![\w:.])(business|locale)\.", r"c:\1.", x)
+    return re.sub(r"\{\{.+?\}\}", inner, text)
+
+
+def as_client(node):
+    """client_ref over every string of a JSON-like value."""
+    if isinstance(node, str):
+        return client_ref(node)
+    if isinstance(node, list):
+        return [as_client(x) for x in node]
+    if isinstance(node, dict):
+        return {k: as_client(v) for k, v in node.items()}
+    return node
+
+
 def generate(recipe, base=HERE):
     recipe = resolved(recipe)
     # A scelta is its option, or {option, when}: ticked only for the cases `when` holds (co-holders).
@@ -1065,10 +1095,19 @@ def generate(recipe, base=HERE):
         wizard.append({"screen": "Scelte eventuali", **({"tree": tree[0] if len(tree) == 1 else tree} if tree else {}),
                        **({"answers": recipe["si_no"]} if recipe.get("si_no") else {}),
                        "confirm": "CONFERMA"})
+    yours = recipe["yours"]
+    if recipe.get("as_client"):
+        out_sections = [x if x["section"] in CLIENT_KEEPS else as_client(x) for x in out_sections]
+        supports, yours = as_client(supports), as_client(yours)
+        asks = {k: as_client(a) for k, a in asks.items()}
+        # The roles' own questions (the client's carica) come in with the references that read them.
+        for k in ASKED.findall(json.dumps([out_sections, supports, asks])):
+            if k not in asks and k in dictionary["asks"]:
+                asks[k] = {**dictionary["asks"][k], **recipe.get("asks", {}).get(k, {})}
     return {
         "procedure": recipe["procedure"], "title": recipe["title"],
         "generated": f"gen.py from {recipe['crawl']} ({crawl.get('crawled', '?')[:10]}) and dictionary/{recipe.get('dictionary', 'fnsuap')}.yaml",
-        "yours": recipe["yours"], **({"groups": groups} if groups else {}), "asks": asks, "supports": supports,
+        "yours": yours, **({"groups": groups} if groups else {}), "asks": asks, "supports": supports,
         **({"rules": ruled} if ruled else {}),
         "start": recipe.get("start", catalogue["start"]), "logged_in": recipe.get("logged_in", "https://suap.impresainungiorno.gov.it/fnsuap/"),
         "wizard": wizard, "sections": out_sections,

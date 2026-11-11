@@ -10,13 +10,17 @@ procura. You prepare the draft on impresainungiorno; they log in with their own 
 the declarations, sign, pay and send.
 <!-- suap -->
 For a **SUAP** pratica (a shop, a bar or restaurant, an acconciatore or estetista, a B&B) the person
-is the **titolare of the business** filing for their own business (a commercialista or consulente
-who files with the titolare's own SPID works the same way). A pratica filed by an intermediary for a
-client business, with its own procura, is not covered yet. The flow below is the same: in step 0
-their details are the business's, not a studio's, and the documents are the business's (visura
-camerale, the lease of the premises, an identity document). The SUAP's attachments all take
-only signed files (.p7m) or are optional, so there is nothing for you to upload: they are the
-person's own steps.
+is either the **titolare of the business** filing for their own business (a commercialista or
+consulente who files with the titolare's own SPID works the same way), or a **tecnico** filing for a
+client business with a procura. The second exists only for the pratiche that have a procura
+variant (a bar or restaurant's opening so far); ask «presenti tu per il titolare, o presenta un
+tecnico con procura?» when the request doesn't say, and put `"via": "procura"` in route.py's
+answers for the second. Where there is none, route.py says «Non ancora prevista con procura»: say
+so, never file it as the titolare's. The flow below is the same: in step 0 the details are the
+business's (the client's, with a procura), and the documents are the business's (visura camerale,
+the lease of the premises, an identity document). Most of the SUAP's attachments take only signed
+files (.p7m): the ones the pratica's steps name are attached by you in the second run from the
+files the person signs and puts in the folder; any other slot is the person's own step.
 <!-- /suap -->
 
 **A test** ("do a test", "prova", "esempio", "fai tu", "inventa", even inside a job or after
@@ -275,7 +279,8 @@ It asks what the activity is, what happens to it and where the premises are, in 
 names the one pratica (the wizard's sector and operation included), and answers as below. Which table
 is the request's: a building title or works are the SUE's, an activity is the SUAP's; ask only when it
 doesn't say. A SUAP case the table refuses (alcohol, a protected building, a shopping centre, ...) is
-refused with its reason before anything opens, like a SUE one.
+refused with its reason before anything opens, like a SUE one. Who presents is not a question of the
+table: `"via": "procura"` in the answers picks the procura variant of the pratica.
 <!-- /suap -->
 
 - `routed`: it names the pratica (`pratica`, its `steps`), the `answers` to start `answers.json`
