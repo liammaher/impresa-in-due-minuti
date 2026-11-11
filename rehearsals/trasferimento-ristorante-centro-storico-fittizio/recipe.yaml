@@ -1,0 +1,71 @@
+# A bar or restaurant moving to new premises in the historic centre (UNESCO zone A or buffer zone
+# B): since the 2026 Piano an authorization (rules/suap-napoli.yaml, somministrazione-trasferimento-
+# zone-tutelate), with the Reg. 852/2004 notifica for the new premises and the acoustic nulla osta
+# the Piano requires there (the wizard's "interventi eventuali" tick, as the opening: its sections
+# from catalogue/F839/sections/suap-060-aprire-l-attivita-interventi.json). gen.py writes its steps
+# file from the batch crawl (catalogue/F839/sections/suap-061-trasferire-la-sede-dell-attivita.json),
+# for the centro storico rehearsal's made-up ditta individuale
+# (rehearsals/ristorante-centro-storico-fittizio/fixture.json): the vault's `locale` is the new
+# premises (via dei Tribunali 150), the old ones are asked. The Piano's requirements are facts the
+# person (and their technician's CS 1 and CG 1) confirm; pre-flight refuses a case that misses one.
+procedure: napoli/comune/scia-somministrazione-alimenti-bevande
+title: "Autorizzazione: trasferimento di un bar o ristorante nelle zone tutelate (centro storico), SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-061-trasferire-la-sede-dell-attivita
+subject: impresa
+operation: Trasferire la sede dell'attività
+# The payment and attachments screens: its slots read on its draft (2026-11-10). The Piano's CS 1 and
+# CG 1 are documents the portal makes once the declarations are ticked; the acoustic documentation
+# takes plain or signed files and isn't required before the declarations: the person's (`yours`).
+after: [Pagamento degli oneri, Gestione degli allegati]
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [Esercizio di somministrazione di alimenti e bevande in zone tutelate], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Trasferire la sede dell'attività"], confirm: CONFERMA}
+  - {screen: Scelta interventi eventuali, tree: ["richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale"], confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+scelte: ["richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale"]
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
+  piano:
+    question: "I requisiti del Piano 2026 per il centro storico: spunta quelli che i nuovi locali rispettano (un tecnico li assevera in CS 1 e CG 1)."
+asks:
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "trasferimento centro storico {{business.denominazione}}"}
+  accessibile: {group: piano, type: yes_no, item: "I locali sono accessibili alle persone con disabilità"}
+  sicurezza: {group: piano, type: yes_no, item: "C'è un sistema di sicurezza (videosorveglianza, allarme o sistemi passivi)"}
+  punteggio: {group: piano, type: yes_no, item: "Il CG 1 del tecnico raggiunge il punteggio minimo di gestione della zona e dell'area dei locali (elenco delle strade del Comune)"}
+  alcolici: {group: extras, type: yes_no, item: "Venderà bevande alcoliche", why: "Alcolici e nulla osta insieme non sono ancora stati mappati."}
+  insegna_esterna: {group: extras, type: yes_no, item: "Avrai un'insegna esterna nei nuovi locali", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (la colonna VCA della tabella 2026 per le voci S74-S76 delle zone tutelate, con la notifica e il nulla osta acustico: controllala)"}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Fai firmare al tuo tecnico CS 1 (criteri strutturali), CG 1 (punteggio di gestione) e i documenti acustici, e allegali con la nota di condivisione"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, le regole di Napoli (normative comunali), requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA, e la tariffa forfettaria ASL"
+  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
+  - "Allega, firmato con la tua firma digitale (.p7m), quanto chiede la schermata degli allegati dopo aver spuntato le dichiarazioni"
+  - "Firma e invia (Firma e invio); non aprire nei nuovi locali prima che arrivi l'autorizzazione"
+# Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides, and pre-flight
+# refuses a case it gives to another pratica or that needs a pratica this one doesn't file.
+rules:
+  table: suap-napoli
+  facts: {attivita: somministrazione, evento: trasferimento, somministrazione_particolare: false, insegna: "{{ask.insegna_esterna}}"}
+  handles: [napoli/comune/nulla-osta-impatto-acustico, napoli/asl-napoli-1/registrazione-attivita-alimentare]
+supports:
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
+  - {when: "{{ask.superficie_somministrazione_mq|atleast_20}}", else: "Il Piano richiede almeno 20 m² dove i clienti mangiano e bevono nel centro storico (art. 7), anche nei nuovi locali: l'autorizzazione sarebbe respinta."}
+  - {when: "{{ask.accessibile}} {{ask.sicurezza}} {{ask.punteggio}}", else: "I requisiti del Piano (accessibilità, un sistema di sicurezza, il punteggio minimo dell'area) devono essere tutti rispettati (artt. 7, 9, 12): l'autorizzazione sarebbe respinta."}
+  - {when: "{{ask.ristorazione}}", else: "Per ora solo bar o ristorante: le altre voci di attività della notifica non sono gestite."}
+  - {when: "{{ask.forno|not}} {{ask.dettaglio_alimenti|not}}", else: "Un bar o ristorante che produce anche prodotti da forno o gestisce un negozio alimentare per ora non lo preparo."}

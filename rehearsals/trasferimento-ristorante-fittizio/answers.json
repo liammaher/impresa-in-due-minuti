@@ -1,0 +1,23 @@
+{
+ "extras": [],
+ "attivita_852": [
+  "ristorazione",
+  "ristorante"
+ ],
+ "descrizione": "PROVA NON INVIARE - trasferimento ristorante generato",
+ "oggetto": "Trasferimento della pizzeria con somministrazione da via Giulio Cesare 30 a viale Augusto 74, con notifica sanitaria per il nuovo locale, fuori dalle zone tutelate.",
+ "titolo_attivita_protocollo": "4444444",
+ "titolo_attivita_data": "2024-03-18",
+ "locale_precedente_comune": "Napoli",
+ "locale_precedente_provincia": "NA",
+ "locale_precedente_cap": "80125",
+ "locale_precedente_indirizzo": "Via Giulio Cesare",
+ "locale_precedente_civico": "30",
+ "precedente_centro_commerciale": "false",
+ "in_centro_commerciale": "false",
+ "superficie_somministrazione_mq": "35",
+ "diritti_euro": "96",
+ "zona": "c",
+ "fatti": [],
+ "diritti_esente": false
+}

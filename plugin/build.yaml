@@ -23,7 +23,9 @@ vault: false
 # `# <no-download>` in the launcher.
 python_download: false
 
-# The sportelli whose pratiche the plugin carries. Impresa in un minuto carries the SUE's: the steps files
-# of its rehearsals, its rules tables (rules/<sportello>-*.yaml), and the library's procedures
-# those name. The SUAP's rehearsals and tables stay in the repo, unchanged, out of the plugin.
-sportelli: [sue]
+# The sportelli whose pratiche the plugin carries: the steps files of their rehearsals, their
+# rules tables (rules/<sportello>-*.yaml), and the library's procedures those name. Impresa in un
+# minuto carries the SUE's and the SUAP's. A sportello's pratica ships only with a steps file the
+# rules table routes to and a recorded run that filled the draft on the portal (docs/ready.md lists
+# them); one without that ships as `mapped`: Claude says it is in arrivo and opens nothing.
+sportelli: [sue, suap]

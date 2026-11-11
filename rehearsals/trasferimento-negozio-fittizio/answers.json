@@ -1,0 +1,22 @@
+{
+ "extras": [],
+ "fatti": [],
+ "descrizione": "PROVA NON INVIARE - trasferimento negozio generato",
+ "oggetto": "Trasferimento del negozio di vicinato non alimentare (cartoleria) da via Cimarosa 12 a via Luca Giordano 50, stessa superficie di vendita.",
+ "titolo_attivita_protocollo": "0777777",
+ "titolo_attivita_data": "2023-05-10",
+ "titolo_attivita_comune": "Napoli",
+ "locale_precedente_comune": "Napoli",
+ "locale_precedente_provincia": "NA",
+ "locale_precedente_cap": "80127",
+ "locale_precedente_indirizzo": "Via Domenico Cimarosa",
+ "locale_precedente_civico": "12",
+ "in_ccn": "false",
+ "in_factory_outlet": "false",
+ "superficie_vendita_mq": "40",
+ "superficie_alimentare_mq": "0",
+ "superficie_non_alimentare_mq": "40",
+ "superficie_monopolio_mq": "0",
+ "diritti_euro": "80",
+ "diritti_esente": false
+}

@@ -45,6 +45,7 @@ REHEARSALS = REPO / "rehearsals"
 sys.path.insert(0, str(PRATICA / "portal"))
 sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
 import gen  # noqa: E402  (the steps files, built; a combination's recipe, resolved)
+import runs  # noqa: E402  (a rehearsal's runs.json: which runs filled the draft)
 # The library's parts a Cowork session reads: its tools, reports backend and layouts
 # (PDF filling, which needs PyMuPDF) stay out of this version.
 # Its situations (opening a shop, a new home) aren't a SUE's: they stay out too.
@@ -90,12 +91,20 @@ def sportelli():
 
 # The sportelli a build can carry, in the order a text names them, with that name.
 SPORTELLO_NAMES = {"sue": "SUE", "suap": "SUAP"}
+# What each carried sportello adds to the texts' {{pratiche}} (what is prepared) and {{chi}} (who asks).
+SPORTELLO_PRATICHE = {
+    "sue": "CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine "
+           "lavori, proroghe, volture",
+    "suap": "SCIA per aprire, trasferire, ampliare, subentrare, sospendere o chiudere un negozio, un bar o ristorante, "
+            "un acconciatore o un'estetista",
+}
+SPORTELLO_CHI = {"sue": "un architetto, un geometra o un ingegnere", "suap": "il titolare di un'impresa"}
 
 
 def scope(desks=None, comuni=None):
     """What the plugin covers, said in Italian, for the texts' placeholders: {{copertura}} «SUE del
     Comune di Napoli» (later «SUE e SUAP dei Comuni di Napoli e Roma»), {{comuni}} «il Comune di
-    Napoli», {{città}} «Napoli». From build.yaml's sportelli and coverage.yaml's comuni, so a text
+    Napoli», {{città}} «Napoli», {{pratiche}} what each carried sportello prepares, {{chi}} who asks. From build.yaml's sportelli and coverage.yaml's comuni, so a text
     never says less or more than the build carries."""
     desks = desks or sportelli()
     unknown = sorted(set(desks) - set(SPORTELLO_NAMES))
@@ -106,7 +115,9 @@ def scope(desks=None, comuni=None):
     one = len(names) == 1
     return {"copertura": " e ".join(n for d, n in SPORTELLO_NAMES.items() if d in desks)
             + (" del Comune di " if one else " dei Comuni di ") + città,
-            "comuni": ("il Comune di " if one else "i Comuni di ") + città, "città": città}
+            "comuni": ("il Comune di " if one else "i Comuni di ") + città, "città": città,
+            "pratiche": " - ".join(v for d, v in SPORTELLO_PRATICHE.items() if d in desks),
+            "chi": " o ".join(v for d, v in SPORTELLO_CHI.items() if d in desks)}
 
 
 def with_scope(text, name, desks=None):
@@ -362,16 +373,16 @@ def copy_pratiche(skill, library, desks):
 
 
 def last_run(d):
-    """The latest date in a rehearsal README's runs table (`| 2026-10-28 | ...`): the last
-    time it was run on the real portal, whatever that run's result."""
-    readme = d / "README.md"
-    dates = re.findall(r"^\| *(\d{4}-\d{2}-\d{2}) *\|", readme.read_text(), re.M) if readme.is_file() else []
+    """The latest date of a run that FILLED the rehearsal's draft (runs.json, as runs.py reads it): the
+    last time it was run on the real portal and read back. A run that only stopped doesn't make a
+    pratica `available`: a pratica ships as coperta only with a filled run."""
+    dates = [r["date"] for r in runs.load(d) if runs.filled([r])]
     return max(dates, default=None)
 
 
 def write_coverage(skill, catalog, library, version):
     """coverage.json: every pratica's status, from what the repo says rather than by hand.
-    available: a steps file run on the real portal (its README's runs table) that the last
+    available: a steps file with a run that filled the draft on the real portal (its runs.json) that the last
     drift check found unchanged; paused: one it found changed (pre-flight refuses it);
     mapped: a steps file with no recorded run yet, shown as coming soon; guide: a library
     procedure with no steps file, where Claude can say what it needs but not fill it;

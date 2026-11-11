@@ -22,12 +22,12 @@ branch no rehearsal took.
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
 | SUE (building works) | 104 | 104 | 102 | 27 checked, 0 changed |
-| SUAP (businesses) | 278 | 112 | 13 | 0 checked, 0 changed |
+| SUAP (businesses) | 278 | 122 | 22 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
 - SUE: 104 pratiche, 128 distinct sections, 125 in the dictionary; 2231 of 2231 uses (100%)
-- SUAP: 278 pratiche, 477 distinct sections, 77 in the dictionary; 2432 of 3365 uses (72%)
+- SUAP: 278 pratiche, 477 distinct sections, 85 in the dictionary; 2447 of 3365 uses (72%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
 
@@ -42,7 +42,7 @@ Rehearsals with no recorded run (written, never confirmed on the portal):
 
 SUAP pratiche one or two sections short of fillable (the cheapest gaps):
 
-- 75 pratiche; 166 in all are short at least one section.
+- 65 pratiche; 156 in all are short at least one section.
 
 SUE pratiche not yet fillable:
 
@@ -215,38 +215,38 @@ What a Napoli architect or pratiche agency files again and again, so what has to
 
 | Sector | open | take over | close | suspend | move | change people | change premises |
 |---|---|---|---|---|---|---|---|
-| Bakery (panificio) | run | map | map | fill | map | map | map |
+| Bakery (panificio) | run | map | map | fill | run | map | map |
 | Food workshop (pizza al taglio, gelateria) | fill | fill | fill | - | fill | - | - |
-| Hairdresser (acconciatore) | fill | fill | fill | fill | map | fill | map |
-| Beautician (estetista) | fill | fill | fill | fill | map | fill | map |
-| Shop, non-food | run | run | fill | run | map | fill | run |
-| Shop, food or mixed | fill | fill | fill | fill | map | fill | fill |
-| Shop, food eaten on the spot (protected zones) | fill | fill | fill | - | map | fill | fill |
+| Hairdresser (acconciatore) | fill | fill | fill | fill | run | fill | map |
+| Beautician (estetista) | fill | fill | fill | fill | run | fill | map |
+| Shop, non-food | run | run | fill | run | run | fill | run |
+| Shop, food or mixed | fill | fill | fill | fill | run | fill | fill |
+| Shop, food eaten on the spot (protected zones) | fill | fill | fill | - | run | fill | fill |
 | B&B, affittacamere (extralberghiere) | run | - | fill | fill | - | - | - |
-| Bar / restaurant, normal zones | run | run | run | run | map | run | - |
-| Bar / restaurant, protected zones (centro storico) | fill | fill | fill | - | map | fill | fill |
+| Bar / restaurant, normal zones | run | run | run | run | run | run | - |
+| Bar / restaurant, protected zones (centro storico) | fill | fill | fill | - | run | fill | fill |
 
 `run` = run on the portal; `fill` = fillable, never run; `map` = crawled, sections missing from the dictionary; `crawl` = not crawled; `-` = the sector doesn't offer it.
 
-Of 60 cells: **11 run, 35 fillable but not run, 14 need dictionary work, 0 not crawled yet.**
+Of 60 cells: **19 run, 35 fillable but not run, 6 need dictionary work, 0 not crawled yet.**
 
 Also in the wedge: the dehors (fillable, never run), the outside sign and the alcohol notice as ticks inside an opening (their rehearsals have no recorded run), and the sectors' own notices (food safety, sanitary).
 
 ### What each gap needs
 
 - **35 cells to run**: run it in the pane with made-up people (40-150 s; needs Liam logged in).
-- **14 cells to map**: add the missing sections to the dictionary (draft.py drafts them; a person checks).
+- **6 cells to map**: add the missing sections to the dictionary (draft.py drafts them; a person checks).
 - **0 cells to crawl**: crawl it in the pane on the scratch draft (20-60 s each; needs Liam logged in).
 - **Every cell**: the legal choice of which pratica a case needs (the library's rules table covers shops, bars and restaurants, hairdressers and beauticians and B&Bs; the bakery, the food workshop and moving premises have no entry in it), and a real case run past someone who knows the pratica.
 
 Sections that block the most wedge cells (the cheapest way to turn `map` into `fill`):
 
 - 5 cells: dichiarazione del rispetto dei Regolamenti del Comune
-- 5 cells: precedente ubicazione dell'esercizio
 - 4 cells: dichiarazione antimafia D.LGS. 159/2011
 - 3 cells: dichiarazione di titolarità autorizzazione/DIA/SCIA
-- 2 cells: Dati sull'attività
-- 2 cells: Dichiarazioni
 - 2 cells: dichiarazione della data di inizio dell'attività
 - 2 cells: dichiarazione di conformità alle norme in materia edilizia, urbanistica, igienico sanitaria e accessibilità
+- 2 cells: dichiarazione della tipologia dell'esercizio (permanente/stagionale)
+- 2 cells: dichiarazione del rispetto delle leggi e regolamenti vigenti in materia
+- 2 cells: dichiarazione dell'insegna dell'esercizio
 

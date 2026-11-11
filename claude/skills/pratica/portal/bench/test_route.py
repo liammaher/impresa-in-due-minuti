@@ -3,7 +3,7 @@
 
   ~/.cache/pratica-portal/venv/bin/python -I claude/skills/pratica/portal/bench/test_route.py
 
-No browser, vault or network. Walks every case the SUE rules tables decide (each fact
+No browser, vault or network. Walks every case the SUE and SUAP rules tables decide (each fact
 asked as the table asks it): sue-napoli, the title for new works, and sue-napoli-adempimenti,
 what is filed on a title held. Checks each is routed to a steps file that agrees or refused
 with a reason, that every rules-gated SUE rehearsal is reached, and that each rehearsal's own
@@ -30,11 +30,12 @@ import run  # noqa: E402
 REHEARSALS = HERE.parents[4] / "rehearsals"
 TABLE = "sue-napoli"
 FOLLOW = "sue-napoli-adempimenti"  # filings on a title held (2026-11-04)
+SUAP = "suap-napoli"  # a business's pratiche: a shop, a bar or restaurant, ... (2026-11-10)
 T = rules.table(TABLE)
 
 
 LEAVES = route.cases(TABLE)
-CASES = {TABLE: LEAVES, FOLLOW: route.cases(FOLLOW)}
+CASES = {TABLE: LEAVES, FOLLOW: route.cases(FOLLOW), SUAP: route.cases(SUAP)}
 
 
 def every_case_routed_or_refused(table=TABLE):
@@ -48,13 +49,13 @@ def every_case_routed_or_refused(table=TABLE):
         if d["refused"] or d["none"]:
             assert not r["routed"] and r["unsupported"], (facts, r)
             continue
-        k = route.key(d["main"]["procedure"], [a["procedure"] for a in d["also"]])
-        if k not in idx:
+        hit = route.find(idx, d, facts)
+        if not hit:
             assert not r["routed"] and r["unsupported"][0].startswith("Non ancora prevista"), (facts, r)
-            unmapped[k] += 1
+            unmapped[route.key(d["main"]["procedure"], [a["procedure"] for a in d["also"]])] += 1
             continue
         assert r["routed"], (facts, r["unsupported"])
-        assert r["pratica"] == idx[k][0]
+        assert r["pratica"] == hit[0]
         routed += 1
     c = route.coverage(table, REHEARSALS)  # what scoreboard.py prints: the same count
     assert (c["routed"], dict(c["unmapped"])) == (routed, dict(unmapped)), c
@@ -69,15 +70,15 @@ def every_recipe_reached():
     reached = {route.route(TABLE, facts, REHEARSALS)["pratica"] for facts, d in LEAVES if d["main"]}
     named = {r["then"]["procedure"] for r in T["rules"] if r["then"].get("role") == "main"}
     idx = route.index(TABLE, REHEARSALS)
-    names = {n for (main, _), (n, _, _) in idx.items() if main in named}
+    names = {e[0] for (main, _), es in idx.items() for e in es if main in named}
     assert names <= reached, f"never routed to: {sorted(names - reached)}"
-    assert len(idx) >= 14 and {n for n, _, _ in idx.values()} - names == {"parere-esonero-fittizio"}, sorted(idx)
+    assert len(idx) >= 14 and {n for n, _, _ in route.entries(idx)} - names == {"parere-esonero-fittizio"}, sorted(idx)
 
 
 def answers_carry_into_preflight(table=TABLE):
     """The answers route.py hands on fit the steps file's own asks, and leave its rules
     waiting on nothing but what it says it asks again."""
-    by_name = {n: s for n, _, s in route.index(table, REHEARSALS).values()}
+    by_name = {n: s for n, _, s in route.entries(route.index(table, REHEARSALS))}
     for facts, d in CASES[table]:
         if not d["main"] or d["refused"]:
             continue
@@ -283,7 +284,7 @@ def rehearsal_cases_come_home(table=TABLE, least=30):
     """Each rehearsal's answers files, read as its steps file reads the facts, route back to it
     (a case its own rules refuse is left out: it tests the refusal)."""
     n = 0
-    for name, path, steps in route.index(table, REHEARSALS).values():
+    for name, path, steps in route.entries(route.index(table, REHEARSALS)):
         for f in sorted(path.parent.glob("answers*.json")):
             a = json.loads(f.read_text())
             v = run.Values(a, fields={}, asks=steps["asks"])
@@ -371,7 +372,7 @@ def plugin_layout():
         steps = yaml.safe_load((REHEARSALS / "scia-fittizia" / "portal-steps.generated.yaml").read_text())
         (Path(tmp) / "scia-fittizia.json").write_text(json.dumps(steps, default=str))
         (Path(tmp) / "catalog.json").write_text("[]")
-        assert [n for n, _, _ in route.index(TABLE, Path(tmp)).values()] == ["scia-fittizia"]
+        assert [n for n, _, _ in route.entries(route.index(TABLE, Path(tmp)))] == ["scia-fittizia"]
 
 
 def landscape_kept_in_force():
@@ -431,7 +432,7 @@ def follow_ups_routed():
     every_case_routed_or_refused(FOLLOW)
     assert not route.coverage(FOLLOW, REHEARSALS)["unmapped"]
     reached = {route.route(FOLLOW, f, REHEARSALS)["pratica"] for f, d in CASES[FOLLOW] if d["main"]}
-    names = {n for n, _, _ in route.index(FOLLOW, REHEARSALS).values()}
+    names = {n for n, _, _ in route.entries(route.index(FOLLOW, REHEARSALS))}
     assert names == reached - {None} and len(names) >= 37, sorted(names ^ reached)
     answers_carry_into_preflight(FOLLOW)
     rehearsal_cases_come_home(FOLLOW, least=20)
@@ -442,7 +443,7 @@ def follow_ups_routed():
     # ("valgono per l'attività": the recipes named no question, 2026-11-05).
     r = route.route(FOLLOW, {"adempimento": "fine_lavori"}, REHEARSALS)
     assert {q["key"]: q for q in r["questions"]}["fatti"]["question"] == route.CHECKLIST, r
-    for name, _, steps in route.index(FOLLOW, REHEARSALS).values():
+    for name, _, steps in route.entries(route.index(FOLLOW, REHEARSALS)):
         assert steps.get("groups", {}).get("fatti", {}).get("question", route.CHECKLIST) == route.CHECKLIST, name
     # Asked as a person answers: the filing alone, then one reply with the checklist ticked.
     global TABLE, T, LEAVES
@@ -477,13 +478,61 @@ def follow_ups_as_the_law_reads_them():
     assert not r["routed"] and "art. 15" in r["unsupported"][0], r
 
 
+def status_gate():
+    """A pratica the plugin lists as not `available` (never filled on the portal, or paused) is refused
+    when a table routes to it, never compiled: the skill's rule, held by route.py. No coverage.json
+    (the repo): no gate."""
+    base = {"attivita": "somministrazione", "zona": "c", "fatti": [], "evento": "apertura"}
+    real = route.COVERAGE
+    try:
+        with tempfile.TemporaryDirectory() as tmp:
+            f = Path(tmp) / "coverage.json"
+            for status, said in (("available", None), ("mapped", "in arrivo"), ("coming", "in arrivo"), ("paused", "sospesa")):
+                f.write_text(json.dumps({"pratiche": [{"name": "ristorante-fittizio", "status": status}]}))
+                route.COVERAGE = f
+                r = route.route(SUAP, base, REHEARSALS)
+                if said is None:
+                    assert r["routed"], r
+                else:
+                    assert not r["routed"] and said in r["unsupported"][0] and "non la compilo" in r["unsupported"][0], r
+                    assert r["message"] and "napoli/" not in r["message"], r
+            f.write_text("not json")  # unreadable: no gate, as with none
+            assert route.route(SUAP, base, REHEARSALS)["routed"]
+    finally:
+        route.COVERAGE = real
+    assert route.route(SUAP, base, REHEARSALS)["routed"]  # the repo has none
+
+
+def suap_routed():
+    """The SUAP's table (2026-11-10): every case reaches its steps file or is refused with why.
+    A bar or restaurant opens, moves, enlarges, is taken over and closes under one procedure,
+    so the facts each recipe fixes (`evento`) pick its steps file; an outside sign at the
+    opening adds the sign's SCIA, which only the opening with the sign files."""
+    every_case_routed_or_refused(SUAP)
+    answers_carry_into_preflight(SUAP)
+    rehearsal_cases_come_home(SUAP, least=8)
+    base = {"attivita": "somministrazione", "zona": "c", "fatti": []}
+    for evento, name in (("apertura", "ristorante-fittizio"), ("trasferimento", "trasferimento-ristorante-fittizio"),
+                         ("ampliamento", "ampliamento-ristorante-fittizio"),
+                         ("subingresso", "subingresso-ristorante-fittizio"), ("cessazione", "cessazione-fittizia")):
+        r = route.route(SUAP, {**base, "evento": evento}, REHEARSALS)
+        assert r["pratica"] == name, (evento, r)
+    # The message says which event: the procedure alone is «Aprire un bar o un ristorante» at every one.
+    r = route.route(SUAP, {**base, "evento": "trasferimento"}, REHEARSALS)
+    assert "trasferimento" in r["message"].split("\n")[0] and "SUAP" not in r["message"], r["message"]
+    r = route.route(SUAP, {**base, "evento": "apertura", "fatti": ["insegna"]}, REHEARSALS)
+    assert r["pratica"] == "ristorante-insegna-fittizio", r
+    r = route.route(SUAP, {**base, "evento": "trasferimento", "fatti": ["insegna"]}, REHEARSALS)
+    assert not r["routed"] and r["unsupported"][0].startswith("Non ancora prevista"), r
+
+
 def main():
     tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, as_a_conversation,
              wrong_answers, gated_items_stay_unknown, own_words_kept_only_if_they_agree, missing_answers_file,
              cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso, sanatoria_zona_a, sanatoria_titoli, cambio_uso_fuori_23ter,
              rehearsal_cases_come_home, asks_as_the_table_asks, refusals_say_why, apart_is_the_persons,
              one_steps_file_per_combination, plugin_layout, landscape_kept_in_force, edilizia_libera_that_digs,
-             follow_ups_routed, follow_ups_as_the_law_reads_them]
+             follow_ups_routed, follow_ups_as_the_law_reads_them, suap_routed, status_gate]
     for t in tests:
         t()
         print(f"ok  {t.__name__}")

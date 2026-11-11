@@ -1,7 +1,7 @@
 # Impresa in un minuto
 
 Prepara una pratica del {{copertura}}, su impresainungiorno, dai documenti del tuo
-cliente. Si ferma dove comincia la tua parte: le dichiarazioni, la firma digitale, il pagamento e
+cliente (o della tua impresa). Si ferma dove comincia la tua parte: le dichiarazioni, la firma digitale, il pagamento e
 l'invio: Claude non spunta mai una dichiarazione, non firma, non paga e non invia. Gratuito e
 open source.
 
@@ -20,6 +20,13 @@ documenti, basta dire «è una prova, inventa i dati».
 <!-- no-suap -->
   Una pratica del SUAP (un negozio, un ristorante) non è ancora coperta.
 <!-- /no-suap -->
+<!-- suap -->
+  Per il SUAP: aprire, trasferire, ampliare, subentrare, sospendere o chiudere un negozio, un bar o
+  ristorante, un acconciatore o un'estetista, per l'impresa che presenta con il proprio SPID. Un
+  caso fuori da questi (alcolici, un edificio tutelato, un centro commerciale, un'impresa con altri
+  soci) Claude lo rifiuta subito, con il motivo. Gli allegati del SUAP vanno firmati digitalmente:
+  li alleghi tu, Claude non ne carica nessuno.
+<!-- /suap -->
   Un immobile in un altro comune, un altro ente (Genio Civile, Soprintendenza, ASL, Catasto, Agenzia
   delle Entrate, Regione) o una pratica che Impresa in un minuto non conosce: Claude ti dice subito che non è
   coperta dall'automazione, e non apre nulla.

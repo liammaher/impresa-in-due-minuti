@@ -1,0 +1,14 @@
+[
+ {
+  "date": "2026-11-10",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 1.3
+ },
+ {
+  "date": "2026-11-10",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 82.3
+ }
+]

@@ -1090,6 +1090,22 @@ def _decision(steps, values):
     return d
 
 
+def wizard_labels(steps):
+    """What the steps file's wizard picks: a screen's tree is one label, or a list of them
+    (several operations: the SUE's CILA with its landscape authorization), each a label or a
+    {leaf: ...}."""
+    trees = [w["tree"] for w in steps.get("wizard", []) if "tree" in w]
+    return {x if isinstance(x, str) else x.get("leaf") for t in trees for x in (t if isinstance(t, list) else [t])}
+
+
+def at_portal(steps, main):
+    """Whether the steps file's wizard picks the sector and operation the rules table names for
+    its main pratica (`portal`), when it names them: the same procedure is the normal zones'
+    SCIA and the protected zones' authorization, told apart only by the sector."""
+    labels, seen = wizard_labels(steps), main.get("portal", {})
+    return all(seen[k] in labels for k in ("settore", "operazione") if k in seen)
+
+
 def ruled(steps, values):
     """What the rules table says of this case: why it isn't this pratica, and the facts it
     still waits on. The table's main pratica must be the one this steps file files (`main`,
@@ -1114,12 +1130,7 @@ def ruled(steps, values):
         + ")" if "portal" in o else ""
     if not m:
         return out or ["Le regole del SUE non indicano alcuna pratica per questo caso."], []
-    # A wizard screen's tree is one label, or a list of them (several operations: the SUE's
-    # CILA with its landscape authorization), each a label or a {leaf: ...}.
-    trees = [w["tree"] for w in steps.get("wizard", []) if "tree" in w]
-    labels = {x if isinstance(x, str) else x.get("leaf") for t in trees for x in (t if isinstance(t, list) else [t])}
-    seen = m.get("portal", {})
-    if m["procedure"] != r.get("main", steps["procedure"]) or any(seen[k] not in labels for k in ("settore", "operazione") if k in seen):
+    if m["procedure"] != r.get("main", steps["procedure"]) or not at_portal(steps, m):
         out.append(f"Questo caso è un'altra pratica: {procedure_name(m['procedure'])}{where(m)}.")
     handles = r.get("handles", [])
     for a in d["also"]:
@@ -1851,6 +1862,12 @@ def preflight(steps, values, made_up=False, after=False, summarize=True, preview
     asks = steps.get("asks", {})
     report = {"ready": False, "unsupported": [], "proposals": [], "questions": [], "missing": [], "files": [],
               "warnings": [], "yours": []}
+    # A scelta's sections gen.py took from another pratica's crawl (`borrowed`): right there, maybe
+    # not here (2026-11-10: a bollo section the protected zones' move doesn't have). A run, or the
+    # pratica's own draft read with the tick (`scelte_none` or a crawl), settles it.
+    for b in steps.get("borrowed", []):
+        report["warnings"].append(f"{', '.join(b['sections'])}: ciò che la scelta «{b['scelta'][:60]}» aggiunge è stato letto "
+                                  "su un'altra pratica, non su questa: la compilazione potrebbe non trovarlo")
     if any(r.startswith("t:") for _, t, _ in templates(steps) for r, _ in refs_in(t)):
         try:
             values.titolare

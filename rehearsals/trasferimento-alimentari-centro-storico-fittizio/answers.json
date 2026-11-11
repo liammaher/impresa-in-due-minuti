@@ -1,0 +1,31 @@
+{
+ "extras": [],
+ "fatti": [],
+ "attivita_852": [
+  "dettaglio_alimenti"
+ ],
+ "descrizione": "PROVA NON INVIARE - trasf. alimentari zone tutelate generato",
+ "oggetto": "Trasferimento del negozio di vicinato alimentare con consumo sul posto (senza servizio) da via dei Tribunali 30 a via Luca Giordano 50, nelle zone tutelate, con notifica sanitaria per il nuovo locale.",
+ "titolo_attivita_protocollo": "0888888",
+ "titolo_attivita_data": "2023-09-14",
+ "titolo_attivita_comune": "Napoli",
+ "locale_precedente_comune": "Napoli",
+ "locale_precedente_provincia": "NA",
+ "locale_precedente_cap": "80138",
+ "locale_precedente_indirizzo": "Via dei Tribunali",
+ "locale_precedente_civico": "30",
+ "in_ccn": "false",
+ "in_factory_outlet": "false",
+ "superficie_vendita_mq": "40",
+ "superficie_alimentare_mq": "40",
+ "superficie_non_alimentare_mq": "0",
+ "superficie_monopolio_mq": "0",
+ "diritti_euro": "96",
+ "diritti_esente": false,
+ "zona": "a",
+ "consumo_sul_posto": "true",
+ "superficie_consumo_mq": "10",
+ "bollo_marche": false,
+ "bollo_esenzione": "no",
+ "bollo_onlus_esercizio": "false"
+}

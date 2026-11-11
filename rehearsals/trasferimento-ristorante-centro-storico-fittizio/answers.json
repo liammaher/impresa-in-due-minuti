@@ -1,0 +1,33 @@
+{
+ "extras": [],
+ "attivita_852": [
+  "ristorazione",
+  "ristorante"
+ ],
+ "descrizione": "PROVA NON INVIARE - trasferimento centro storico generato",
+ "bollo_marche": false,
+ "oggetto": "Trasferimento della pizzeria con somministrazione da via San Biagio dei Librai 20 a via dei Tribunali 150, nella zona A area 3 del centro storico (autorizzazione, notifica sanitaria, nulla osta di impatto acustico).",
+ "insegna": "Pizzeria Fittizia",
+ "superficie_somministrazione_mq": "35",
+ "in_centro_commerciale": "false",
+ "diritti_euro": "420",
+ "piano": [
+  "accessibile",
+  "sicurezza",
+  "punteggio"
+ ],
+ "zona": "a",
+ "fatti": [],
+ "stagionale": "false",
+ "acustica_impatto_doc": "rehearsals/trasferimento-ristorante-centro-storico-fittizio/files/impatto-acustico.pdf",
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "titolo_attivita_protocollo": "5555555",
+ "titolo_attivita_data": "2022-06-07",
+ "titolo_attivita_comune": "Napoli",
+ "locale_precedente_comune": "Napoli",
+ "locale_precedente_provincia": "NA",
+ "locale_precedente_cap": "80138",
+ "locale_precedente_indirizzo": "Via San Biagio dei Librai",
+ "locale_precedente_civico": "20"
+}

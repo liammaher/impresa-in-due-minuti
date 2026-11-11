@@ -267,7 +267,8 @@ if (location.search.includes("catasto=1")) {
 // search() lists the comune's streets holding the word, each starting with its type (VIA, VICO,
 // CUPA), and a click on one fills the box.
 if (location.search.includes("via=1")) {
-  const streets = ["VIA FORIA", "VIA SANTA MARIA AVVOCATA A FORIA", "VIA GELSO", "VICO LUNGO GELSO", "CUPA CAIAFA"];
+  const streets = ["VIA FORIA", "VIA SANTA MARIA AVVOCATA A FORIA", "VIA GELSO", "VICO LUNGO GELSO", "CUPA CAIAFA",
+    "VIA TRIBUNALI", "VIA DELLE ZITE AI TRIBUNALI", "VICO DETTO DEI TRIBUNALI"];
   const tr = document.createElement("tr");
   tr.innerHTML = '<td><label class="labelDynaFormControl">Via, Viale, Piazza</label></td><td>' +
     '<input type="text" id="form:r11c1:dynaForm:via:txtws_input">' +

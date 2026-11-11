@@ -111,8 +111,9 @@ def main():
         got = re.search(rf"^\| {re.escape(name)} \| (\d+) \| (\d+) \| (\d+) \|$", section(committed, "Counts"), re.M)
         assert (got and got.groups()) == (row if sp in desks else None), f"{name}: coverage.md {row}, ready.md {got and got.groups()}"
     rows = table(section(committed, "Pratiche"))
-    slugs = [r[0] for r in rows]
-    assert rows and len(slugs) == len(set(slugs)), "one row per library slug"
+    # One row per steps file: several share a library procedure (the SUAP's SCIA opens, moves, enlarges).
+    files = [r[2] for r in rows]
+    assert rows and len(files) == len(set(files)), "one row per steps file"
     assert f"carries {len(rows)} steps files for " in committed
     for r in rows:
         assert (REPO / "rehearsals" / r[2].strip("`")).is_dir(), r

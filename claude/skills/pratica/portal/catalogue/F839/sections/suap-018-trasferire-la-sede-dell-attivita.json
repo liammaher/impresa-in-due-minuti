@@ -391,5 +391,40 @@
    "seconds": 2.4,
    "scelta": "Trattasi di ente del Terzo settore o associazione di volontariato (Art. 1 co.6 Dlgs 32/2021)"
   }
- ]
+ ],
+ "slots": {
+  "Gestione degli allegati": [
+   {
+    "title": "Allegato 5 CS 1 Criterio strutturale",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Allegato 6 CG 1 Criterio gestionale",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Ricevuta di pagamento della tariffa sanitaria forfettaria, per la registrazione/aggiornamento",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Allegati liberi",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg",
+    "required": false,
+    "portal_document": false
+   }
+  ]
+ },
+ "slots_note": "read 2026-11-10 on the filled draft \"PROVA NON INVIARE - trasf. alimentari zone tutelate generato\" after its run (crawl.js slotsOf), before the declarations: none required yet"
 }

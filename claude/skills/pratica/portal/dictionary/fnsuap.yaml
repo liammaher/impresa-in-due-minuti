@@ -1195,6 +1195,8 @@ asks:
   procura_firmata: {type: file, question: "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da te (.p7m)"}
   dsc_firmato: {type: file, question: "Il Quadro riepilogativo della documentazione della pratica (DSC: quello del portale, Scarica il documento dopo aver spuntato le dichiarazioni, o quello che Claude compila per una CILA), completato e firmato digitalmente (.p7m)"}
   ricevuta_diritti: {type: file, question: "La ricevuta dei diritti pagati (prima dell'invio, come li riscuote lo sportello), firmata digitalmente (.p7m)"}
+  planimetria_firmata: {type: file, question: "La planimetria quotata dei locali, firmata da chi l'ha disegnata (firma digitale, .p7m, dove il portale accetta solo file firmati)"}
+  ricevuta_tariffa_asl: {type: file, question: "La ricevuta della tariffa sanitaria forfettaria ASL per la registrazione ai sensi del Reg. 852, firmata digitalmente (.p7m)"}
   relazione_semplificata_firmata: {type: file, question: "La Relazione Paesaggistica Semplificata del portale (Allegato D DPR 31/2017, Scarica il documento dopo aver spuntato le dichiarazioni), firmata digitalmente (.p7m)"}
   elaborati_paesaggistici: {type: file, question: "Gli elaborati paesaggistici: stato attuale, progetto e opere, con il contesto (firmati digitalmente, .p7m)"}
   foto_paesaggistiche: {type: file, question: "Fotografie a colori dell'edificio e del contesto paesaggistico, da vicino e da lontano (firmate digitalmente, .p7m)"}
@@ -1326,6 +1328,15 @@ asks:
   locale_precedente_civico: {type: text, question: "Il suo numero civico"}
   precedente_centro_commerciale: {type: yes_no, question: "I locali precedenti si trovavano in un centro commerciale?", propose: "false"}
   precedente_centro_commerciale_nome: {type: text, question: "Il suo nome"}
+  # The bakery's old premises also say whether they were in a C.C.N. (its move's form asks both).
+  precedente_in_ccn: {type: yes_no, question: "I vecchi locali erano in un centro commerciale naturale (C.C.N.) riconosciuto?", propose: "false"}
+  precedente_ccn_delibera: {type: text, question: "La delibera di riconoscimento di quel C.C.N.: numero"}
+  precedente_ccn_delibera_data: {type: date, question: "La data della delibera"}
+  precedente_ccn_delibera_ente: {type: text, question: "Chi l'ha approvata (ad esempio la Giunta comunale)"}
+  # A hairdresser's or beautician's move: which of the two activities moves (the form ticks
+  # either or both; each recipe proposes its own).
+  trasferisce_acconciatore: {type: yes_no, question: "Si trasferisce l'attività di acconciatore?"}
+  trasferisce_estetista: {type: yes_no, question: "Si trasferisce l'attività di estetista?"}
 
   settore_eliminato: {type: choice, question: "Il settore merceologico che il negozio cessa di vendere", options: [Alimentare, Non alimentare]}
   temporary_dal: {type: date, question: "Il primo giorno del negozio temporaneo"}
@@ -4513,6 +4524,21 @@ sections:
       - {kind: text, label: denominazione, nth: 2, value: "{{ask.centro_commerciale_denominazione}}", when: "{{ask.in_centro_commerciale}}", if_present: true}
       - {kind: text, label: Superficie di somministrazione, value: "{{ask.superficie_somministrazione_mq}}"}
 
+  # The same title in a move (trasferimento): the title the bar or restaurant runs under, the new
+  # premises' shopping centre, the area where customers eat and drink there. Drafted by draft.py from
+  # mod_somministrazione_zone_non_tutelate_trasferimento (all six boxes exact). "già avviat": the
+  # protected zones' form says "avviato", the others' "avviata" (as the ampliamento). The protected
+  # zones' move has no shopping-centre question and names the comune the title was filed with.
+  - section: Dati dell'esercizio di somministrazione
+    fields:
+      - {kind: text, label: già avviat, value: "{{ask.titolo_attivita_protocollo}}"}
+      - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
+      - {kind: text, label: presentata al SUAP del Comune di, value: "{{ask.titolo_attivita_comune}}", if_present: true}
+      - {kind: radio, label: Si, when: "{{ask.in_centro_commerciale}}", if_present: true}
+      - {kind: radio, label: "No", when: "{{ask.in_centro_commerciale|not}}", if_present: true}
+      - {kind: text, label: denominazione, value: "{{ask.centro_commerciale_denominazione}}", when: "{{ask.in_centro_commerciale}}", if_present: true}
+      - {kind: text, label: Superficie di somministrazione, value: "{{ask.superficie_somministrazione_mq}}"}
+
   # The Reg. 852/2004 notifica (mod_notifica_sanitaria): when the activity starts, and if it
   # ends on a date (a temporary one).
   - section: notifica avvio e inizio attività
@@ -4918,7 +4944,8 @@ sections:
       - {kind: date, label: a decorrere dal, value: "{{ask.audiovisivi_dal|date_it}}"}
 
   # A move (trasferimento): the old premises (the new ones are `locale`). Its shopping-centre
-  # question as for the new one.
+  # question as for the new one: the restaurant's form outside the protected zones and the
+  # hairdresser's have it; the shops' and the protected zones' restaurant's have the address alone.
   - section: precedente ubicazione dell'esercizio
     leave: [Frazione]
     fields:
@@ -4930,9 +4957,57 @@ sections:
       - {kind: text, label: scala, value: "", optional: true}
       - {kind: text, label: piano, value: "", optional: true}
       - {kind: text, label: interno, value: "", optional: true}
-      - {kind: radio, label: Si, when: "{{ask.precedente_centro_commerciale}}"}
-      - {kind: radio, label: "No", when: "{{ask.precedente_centro_commerciale|not}}"}
+      - {kind: radio, label: Si, when: "{{ask.precedente_centro_commerciale}}", if_present: true}
+      - {kind: radio, label: "No", when: "{{ask.precedente_centro_commerciale|not}}", if_present: true}
+      - {kind: text, label: denominazione, value: "{{ask.precedente_centro_commerciale_nome}}", when: "{{ask.precedente_centro_commerciale}}", if_present: true}
+  # The bakery's (mod_panifici, trasferimento): the old premises' C.C.N. first ("Esercizio in
+  # Centro Commerciale Naturale riconosciuto", its delibera), then the shopping centre or covered
+  # market ("Attività collocata in centro commerciale/mercato coperto/altra struttura di vendita").
+  - section: precedente ubicazione dell'esercizio
+    leave: [Frazione]
+    fields:
+      - {kind: text, label: Comune, value: "{{ask.locale_precedente_comune}}"}
+      - {kind: text, label: Prov., value: "{{ask.locale_precedente_provincia}}"}
+      - {kind: text, label: CAP, value: "{{ask.locale_precedente_cap}}"}
+      - {kind: lookup, label: "Via, Viale, Piazza", value: "{{ask.locale_precedente_indirizzo}}"}
+      - {kind: text, label: n° civico, value: "{{ask.locale_precedente_civico}}"}
+      - {kind: text, label: scala, value: "", optional: true}
+      - {kind: text, label: piano, value: "", optional: true}
+      - {kind: text, label: interno, value: "", optional: true}
+      - {kind: radio, label: Si, when: "{{ask.precedente_in_ccn}}"}
+      - {kind: radio, label: "No", when: "{{ask.precedente_in_ccn|not}}"}
+      - {kind: text, label: n., value: "{{ask.precedente_ccn_delibera}}", when: "{{ask.precedente_in_ccn}}"}
+      - {kind: date, label: del, value: "{{ask.precedente_ccn_delibera_data|date_it}}", when: "{{ask.precedente_in_ccn}}"}
+      - {kind: text, label: emanata da, value: "{{ask.precedente_ccn_delibera_ente}}", when: "{{ask.precedente_in_ccn}}"}
+      - {kind: radio, label: Si, nth: 2, when: "{{ask.precedente_centro_commerciale}}"}
+      - {kind: radio, label: "No", nth: 2, when: "{{ask.precedente_centro_commerciale|not}}"}
       - {kind: text, label: denominazione, value: "{{ask.precedente_centro_commerciale_nome}}", when: "{{ask.precedente_centro_commerciale}}"}
+
+  # The bakery's move: the title it runs under, then the new premises as at its opening (the
+  # C.C.N., the shopping centre or covered market, selling its own products to eat on the spot,
+  # the season). Read from the crawl's text (no national schema for the bakery's form).
+  - section: dati relativi al trasferimento dell'attività
+    plus: "the season's own \"+\" (a second period): one period is mapped"
+    fields:
+      - {kind: text, label: prot./n., value: "{{ask.titolo_attivita_protocollo}}"}
+      - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
+      - {kind: text, label: presentata al Comune di, value: "{{ask.titolo_attivita_comune}}"}
+      - {kind: radio, label: Si, when: "{{ask.in_ccn}}"}
+      - {kind: radio, label: "No", when: "{{ask.in_ccn|not}}"}
+      - {kind: text, label: n., value: "{{ask.ccn_delibera}}", when: "{{ask.in_ccn}}"}
+      # The crawl saw the delibera's date as the title's "del" moving (one label twice): it is
+      # the second "del" once Si is ticked, found on the page.
+      - {kind: date, label: del, nth: 2, on_page: true, value: "{{ask.ccn_delibera_data|date_it}}", when: "{{ask.in_ccn}}"}
+      - {kind: text, label: emanata da, value: "{{ask.ccn_delibera_ente}}", when: "{{ask.in_ccn}}"}
+      - {kind: radio, label: Si, nth: 2, when: "{{ask.in_centro_commerciale}}"}
+      - {kind: radio, label: "No", nth: 2, when: "{{ask.in_centro_commerciale|not}}"}
+      - {kind: text, label: denominazione, value: "{{ask.centro_commerciale_denominazione}}", when: "{{ask.in_centro_commerciale}}"}
+      - {kind: radio, label: Si, nth: 3, when: "{{ask.consumo_sul_posto}}"}
+      - {kind: radio, label: "No", nth: 3, when: "{{ask.consumo_sul_posto|not}}"}
+      - {kind: radio, label: Permanente, when: "{{ask.stagionale|not}}"}
+      - {kind: radio, label: Stagionale, when: "{{ask.stagionale}}"}
+      - {kind: text, label: dal (gg/mm), value: "{{ask.stagione_dal}}", when: "{{ask.stagionale}}"}
+      - {kind: text, label: al (gg/mm), value: "{{ask.stagione_al}}", when: "{{ask.stagionale}}"}
 
   # Reopening after a voluntary suspension (Reg. 852 registration): the whole establishment, by
   # its registration number; single activity lines are refused by recipes.
@@ -5027,10 +5102,11 @@ sections:
       - {kind: radio, label: Avvio con decorrenza, when: "{{ask.avvio_data|empty|not}}"}
       - {kind: date, label: dal, value: "{{ask.avvio_data|date_it}}", when: "{{ask.avvio_data|empty|not}}"}
 
-  # A bar or restaurant's larger customer area (ampliamento).
+  # A bar or restaurant's larger customer area (ampliamento). The title's box reads "già avviato"
+  # in the protected zones' form and "già avviata" in the others': the label is their common start.
   - section: Ampliamento dell' esercizio di somministrazione
     fields:
-      - {kind: text, label: già avviato con la SCIA/DIA/autorizzazione prot./n., value: "{{ask.titolo_attivita_protocollo}}"}
+      - {kind: text, label: già avviat, value: "{{ask.titolo_attivita_protocollo}}"}
       - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
       - {kind: text, label: da mq, value: "{{ask.superficie_somministrazione_prima_mq}}"}
       - {kind: text, label: a mq, value: "{{ask.superficie_somministrazione_mq}}"}
@@ -5121,6 +5197,27 @@ sections:
       - {kind: "text", label: "prot./n.", value: "{{ask.nr_protocollo}}", when: "{{ask.attivita_esercita|not}}"}
       - {kind: "date", label: "del", value: "{{ask.data_protocollo|date_it}}", when: "{{ask.attivita_esercita|not}}"}
 
+  # The same title in a hairdresser's or beautician's move: which activity moves, the title it
+  # runs under, the new premises' shopping centre. Read from the crawl's text (the national
+  # schema in schema/ is the opening's).
+  - section: "Dati sull'attività"
+    fields:
+      - {kind: checkbox, label: Acconciatore, when: "{{ask.trasferisce_acconciatore}}"}
+      - {kind: checkbox, label: Estetista, when: "{{ask.trasferisce_estetista}}"}
+      - {kind: text, label: prot./n., value: "{{ask.titolo_attivita_protocollo}}"}
+      - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
+      - {kind: radio, label: Si, when: "{{ask.in_centro_commerciale}}"}
+      - {kind: radio, label: "No", when: "{{ask.in_centro_commerciale|not}}"}
+      - {kind: text, label: denominazione, value: "{{ask.centro_commerciale_denominazione}}", when: "{{ask.in_centro_commerciale}}"}
+
+  # The hairdresser's or beautician's move: what the person declares having complied with
+  # (hygiene, the Comune's rules, safety, building and environmental rules) and undertakes. Theirs.
+  - section: Dichiarazioni
+    theirs: ["i regolamenti di igiene e sanità", "il regolamento comunale per la disciplina", "le norme sulla sicurezza sui luoghi di lavoro",
+             "le norme edilizie, urbanistiche", "la normativa vigente in materia ambientale", "di impegnarsi a comunicare ogni variazione",
+             "di consentire i controlli nei locali"]
+    fields: []
+
   - section: "Dichiarazione sul possesso dei requisiti antimafia"
     aliases: [DICHIARAZIONI SUL POSSESSO DEI REQUISITI ANTIMAFIA]
     schema: modulo_acconciatori_estetisti_apertura/scheda_anagrafica
@@ -5175,12 +5272,24 @@ after:
     go: Prosegui
     step: Allega Documenti
     theirs: [Procura speciale, Quadro riepilogativo della documentazione, Scarica il documento]
+    # Slots that take plain files, read on the portal and left empty on purpose (gen.py refuses an
+    # unnamed one): the identity document is only for whoever doesn't sign digitally, and every
+    # pratica here is signed digitally (the SUE's extensions filled without it, 2026-11-05).
+    leave: ["copia del documento d'identità in corso di validità"]
     fields:
       - {kind: file, label: Procura speciale, value: "{{ask.procura_firmata}}"}
       - {kind: file, label: Allegati liberi, value: "{{ask.napoli_allegato_a_firmato}}", describe: Allegato A Programma 100, when: "{{ask.napoli_allegato_a}}", after_declarations: true}
       - {kind: file, label: Allegati liberi, value: "{{ask.modello_dp_firmato}}", describe: Modello DP (L.R. Campania 59/2018), when: "{{ask.modello_dp}}", after_declarations: true}
       - {kind: file, label: Quadro riepilogativo della documentazione, value: "{{ask.dsc_firmato}}"}
       - {kind: file, label: "copia attestazione versamento oneri, diritti e spese", value: "{{ask.ricevuta_diritti}}", when: "{{ask.diritti_euro|positive}}", after_declarations: true}
+      # The acoustic nulla osta's report, on a protected-zone bar or restaurant's move: required on the
+      # first pass of the screen and taking plain or signed files (read on the portal 2026-11-10), so
+      # the first run attaches it. Not the SUE's "Documentazione di impatto acustico": the label is longer.
+      - {kind: file, label: "documentazione di impatto acustico, redatta da un tecnico competente", value: "{{ask.acustica_impatto_doc}}"}
+      # A bar or restaurant's opening (SUAP): both slots are required once the declarations are
+      # ticked and take only signed files (read on the portal 2026-10-28), so the second run.
+      - {kind: file, label: Planimetria quotata dei locali, value: "{{ask.planimetria_firmata}}", after_declarations: true}
+      - {kind: file, label: Ricevuta di pagamento della tariffa sanitaria forfettaria, value: "{{ask.ricevuta_tariffa_asl}}", after_declarations: true}
       - {kind: file, label: "Copia del documento di identità del/i titolare/i e/o del tecnico", value: "{{ask.documento_identita_cliente}}"}
       # The landscape authorization's own documents (the ordinaria's, the semplificata's; each
       # signed only), and the portal's Allegato D of a semplificata.

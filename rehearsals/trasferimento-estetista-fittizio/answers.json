@@ -1,0 +1,19 @@
+{
+ "extras": [],
+ "fatti": [],
+ "descrizione": "PROVA NON INVIARE - trasferimento estetista generato",
+ "oggetto": "Trasferimento dell'attività di estetista da via Bernini 30 a via Luca Giordano 50, Napoli.",
+ "titolo_attivita_protocollo": "2222222",
+ "titolo_attivita_data": "2022-10-03",
+ "trasferisce_estetista": "true",
+ "trasferisce_acconciatore": "false",
+ "locale_precedente_comune": "Napoli",
+ "locale_precedente_provincia": "NA",
+ "locale_precedente_cap": "80129",
+ "locale_precedente_indirizzo": "Via Gian Lorenzo Bernini",
+ "locale_precedente_civico": "30",
+ "precedente_centro_commerciale": "false",
+ "in_centro_commerciale": "false",
+ "diritti_euro": "50",
+ "diritti_esente": false
+}

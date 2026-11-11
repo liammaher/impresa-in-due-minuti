@@ -1,0 +1,27 @@
+{
+ "extras": [],
+ "attivita_852": [
+  "ristorazione",
+  "ristorante"
+ ],
+ "descrizione": "PROVA NON INVIARE - ristorante insegna generato",
+ "oggetto": "Apertura di una pizzeria con somministrazione (SCIA e notifica sanitaria) con insegna d'esercizio esterna, fuori dalle zone tutelate.",
+ "insegna": "Pizzeria Fittizia",
+ "superficie_somministrazione_mq": "35",
+ "in_centro_commerciale": "false",
+ "diritti_euro": "220",
+ "zona": "c",
+ "fatti": [],
+ "stagionale": "false",
+ "insegna_titolo_tipo": "altro",
+ "insegna_titolo_altro": "locatario",
+ "insegna_descrizione": "insegna frontale sopra l'ingresso",
+ "insegna_larghezza_m": "3",
+ "insegna_altezza_m": "0.6",
+ "insegna_superficie_mq": "1.8",
+ "insegna_monofacciale": "true",
+ "insegna_luce": "Opaca",
+ "insegna_testo": "PIZZERIA FITTIZIA",
+ "immobile_proprietario": "Immobiliare Esempio S.r.l.",
+ "diritti_esente": false
+}
