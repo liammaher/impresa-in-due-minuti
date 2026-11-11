@@ -1,0 +1,22 @@
+{
+ "extras": [],
+ "fatti": [],
+ "descrizione": "PROVA NON INVIARE - variazione soggetti tatuatore generato",
+ "oggetto": "Variazione della denominazione della ditta dello studio di tatuaggi e piercing di via Luca Giordano 50, Napoli.",
+ "titolo_attivita_protocollo": "0999999",
+ "titolo_attivita_data": "2023-05-10",
+ "titolo_attivita_tipo": "SCIA",
+ "diritti_euro": "100",
+ "diritti_esente": false,
+ "variazioni": [
+  "var_denominazione"
+ ],
+ "var_decorrenza": "2026-11-02",
+ "denominazione_precedente": "Studio Tatuaggi Vecchio Nome",
+ "qualifica_artigiana": "certificato",
+ "qualifica_artigiana_camera": "Napoli",
+ "qualifica_artigiana_data": "2019-06-20",
+ "qualifica_artigiana_numero": "554433",
+ "superficie_complessiva": "35",
+ "acustica_sorgenti": "nessuna"
+}

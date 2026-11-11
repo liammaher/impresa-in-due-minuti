@@ -1,0 +1,10 @@
+[
+ {
+  "date": "2026-11-11",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 79.7,
+  "browser": "pane",
+  "note": "An earlier run stopped at \"ulteriori dichiarazioni (mezzi pubblicitari)\" (the two required Si/No facts). Filled once mapped; the designer's order province \"SA\" read back in its own box."
+ }
+]

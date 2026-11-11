@@ -1,0 +1,16 @@
+{
+ "extras": [],
+ "fatti": [],
+ "descrizione": "PROVA NON INVIARE - affitto poltrona generato",
+ "oggetto": "Affitto di una poltrona nel salone di via Luca Giordano 50, Napoli, per l'attività di acconciatore.",
+ "diritti_euro": "0",
+ "diritti_esente": true,
+ "diritti_esenzione_motivo": "PROVA NON INVIARE - esenzione inventata per una prova del portale",
+ "poltrona_attivita": "acconciatore",
+ "poltrona_esercizio": "Salone Fittizio di Anna Fittizia",
+ "poltrona_contratto_forma": "scrittura privata",
+ "poltrona_contratto_numero": "123451",
+ "poltrona_contratto_data": "2026-10-20",
+ "poltrona_contratto_scadenza": "2027-10-19",
+ "poltrona_contratto_file": "rehearsals/affitto-poltrona-fittizio/files/contratto-affitto-poltrona.pdf"
+}

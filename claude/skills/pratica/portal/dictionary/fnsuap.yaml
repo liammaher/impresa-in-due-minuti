@@ -1388,6 +1388,68 @@ asks:
   # The request for hours outside the Comune's rules (350 characters each, as the portal counts them).
   orario_deroga: {type: text, question: "Quale orario di apertura chiedi in deroga? Scrivi i giorni e le ore (350 caratteri al massimo)"}
   deroga_motivazione: {type: text, question: "Perché chiedi la deroga? La motivazione, in poche righe (350 caratteri al massimo)"}
+  # A tattooist's or piercer's forms (sector 11) and the hairdressers' chair or booth rental.
+  stato_luoghi_tipo: {type: choice, question: "Con quale atto si attesta lo stato dei locali? edilizia libera (la comunicazione di attività edilizia libera); certificato (di conformità edilizia e agibilità del locale); fine lavori (la dichiarazione di fine lavori di una DIA o di un permesso di costruire); altro (un atto diverso)", options: [edilizia libera, certificato, fine lavori, altro]}
+  stato_luoghi_numero: {type: text, question: "Il numero di quell'atto (10 caratteri al massimo)"}
+  stato_luoghi_data: {type: date, question: "La data di quell'atto"}
+  stato_luoghi_altro: {type: text, question: "Quale atto, in poche parole (350 caratteri al massimo)"}
+  albo_artigiane: {type: yes_no, question: "L'impresa è iscritta all'albo delle imprese artigiane (la sezione speciale del Registro delle imprese)?"}
+  albo_artigiane_sede: {type: text, question: "La Camera di commercio della sezione speciale (es. Napoli)", propose: "Napoli"}
+  albo_artigiane_numero: {type: text, question: "Il numero di iscrizione all'albo delle imprese artigiane (10 caratteri al massimo)"}
+  albo_artigiane_dal: {type: date, question: "La data di iscrizione all'albo delle imprese artigiane"}
+  acustica_sorgenti: {type: choice, question: "Rumore dell'attività: nessuna (non ci sono sorgenti sonore significative); previsione (è stata presentata al Comune la previsione di impatto acustico, redatta da un tecnico abilitato); altro", options: [nessuna, previsione, altro]}
+  acustica_previsione_data: {type: date, question: "La data in cui è stata presentata al Comune la previsione di impatto acustico"}
+  acustica_sorgenti_altro: {type: text, question: "Cosa dichiari sul rumore, in poche parole (350 caratteri al massimo)"}
+  locali_invariati: {type: yes_no, question: "I locali del laboratorio non hanno subito modifiche strutturali né di superficie dalla data della precedente autorizzazione?", propose: "true"}
+  qualifica_artigiana: {type: choice, question: "Il titolare ha la qualificazione professionale per l'attività come certificato (della Commissione provinciale dell'artigianato presso la Camera di commercio) o come altro titolo professionale?", options: [certificato, altro titolo]}
+  qualifica_artigiana_camera: {type: text, question: "La Camera di commercio che ha rilasciato il certificato (es. Napoli)", propose: "Napoli"}
+  qualifica_artigiana_data: {type: date, question: "La data del certificato"}
+  qualifica_artigiana_numero: {type: text, question: "Il numero del certificato (30 caratteri al massimo)"}
+  qualifica_artigiana_altro: {type: text, question: "Quale altro titolo professionale (150 caratteri al massimo)"}
+  poltrona_attivita: {type: text, question: "L'attività per cui prendi in affitto la poltrona o la cabina (es. acconciatore, estetista; 50 caratteri al massimo)"}
+  poltrona_esercizio: {type: text, question: "L'esercizio che affitta la poltrona o la cabina: il nome del locale (50 caratteri al massimo)"}
+  poltrona_contratto_forma: {type: choice, question: "Il contratto di affitto è un atto pubblico o una scrittura privata registrata? atto pubblico; scrittura privata (con firme autenticate)", options: [atto pubblico, scrittura privata]}
+  poltrona_contratto_numero: {type: text, question: "Il numero di repertorio dell'atto pubblico, o di registrazione della scrittura privata (solo cifre: la casella non accetta lettere né barre)"}
+  poltrona_contratto_data: {type: date, question: "La data dell'atto pubblico o della scrittura privata"}
+  poltrona_contratto_scadenza: {type: date, question: "Fino a quando vale il contratto (almeno un anno)"}
+  poltrona_contratto_file: {type: file, question: "La copia del contratto di affitto di poltrona, registrato all'Agenzia delle entrate (PDF)"}
+  # Giving a shop's department (reparto) to another business to run (the form's "affidamento in gestione di reparto").
+  reparto_dal: {type: date, question: "Da quando l'altra ditta si occupa del reparto"}
+  reparto_nome: {type: text, question: "Il reparto che affidi in gestione (es. calzature; 170 caratteri al massimo)"}
+  reparto_marchio: {type: text, question: "Il marchio del reparto (150 caratteri al massimo)"}
+  reparto_ditta: {type: text, question: "La ditta a cui lo affidi: nome o denominazione (150 caratteri al massimo)"}
+  reparto_cf: {type: text, question: "Il codice fiscale o la partita IVA di quella ditta"}
+  reparto_comune: {type: text, question: "Il comune della sede di quella ditta", propose: "Napoli"}
+  reparto_cap: {type: text, question: "Il CAP della sede di quella ditta"}
+  reparto_indirizzo: {type: text, question: "La via della sede di quella ditta (70 caratteri al massimo)"}
+  reparto_civico: {type: text, question: "Il numero civico della sede di quella ditta"}
+  reparto_alimentare_mq: {type: number, question: "La superficie di vendita del reparto per i prodotti alimentari, in m² (0 se non ne vende)"}
+  reparto_non_alimentare_mq: {type: number, question: "La superficie di vendita del reparto per i prodotti non alimentari, in m² (0 se non ne vende)"}
+  # The sign's SCIA (the "dove è prevista la SCIA" version): a director of works, who installs it, who drew it.
+  # (Whether it is in zone A of the PRG is a checklist item of each recipe, `insegna_zona_a`, as `insegna_vincolo` is.)
+  insegna_dl: {type: yes_no, question: "È prevista la nomina di un direttore dei lavori per l'insegna?", propose: "false"}
+  insegna_impresa: {type: yes_no, question: "L'insegna la installa un'impresa specializzata (anziché il titolare in economia)?"}
+  installatore_denominazione: {type: text, question: "L'impresa che installa l'insegna: nome o denominazione (30 caratteri al massimo)"}
+  installatore_cf: {type: text, question: "Il suo codice fiscale o la partita IVA"}
+  installatore_indirizzo: {type: text, question: "La via della sede legale dell'impresa (30 caratteri al massimo)"}
+  installatore_civico: {type: text, question: "Il numero civico della sede legale dell'impresa"}
+  installatore_comune: {type: text, question: "Il comune della sede legale dell'impresa (30 caratteri al massimo)"}
+  installatore_provincia: {type: text, question: "La provincia della sede legale dell'impresa (sigla, 2 lettere)"}
+  installatore_telefono: {type: text, question: "Il telefono dell'impresa (solo cifre, 10 al massimo)"}
+  installatore_email: {type: text, question: "L'e-mail dell'impresa"}
+  installatore_pec: {type: text, question: "La PEC dell'impresa"}
+  insegna_progetto_presentatore: {type: yes_no, question: "Il progetto dell'insegna lo redige chi presenta la pratica (un tecnico con procura)?", propose: "false"}
+  progettista_insegna_cognome: {type: text, question: "Chi ha redatto il progetto dell'insegna: il cognome"}
+  progettista_insegna_nome: {type: text, question: "Il suo nome"}
+  progettista_insegna_cf: {type: text, question: "Il suo codice fiscale"}
+  progettista_insegna_via: {type: text, question: "La sua via di residenza (50 caratteri al massimo)"}
+  progettista_insegna_civico: {type: text, question: "Il numero civico (5 caratteri al massimo)"}
+  progettista_insegna_comune: {type: text, question: "Il suo comune di residenza"}
+  progettista_insegna_provincia: {type: text, question: "La sua provincia di residenza (sigla)"}
+  progettista_insegna_telefono: {type: text, question: "Il suo telefono (solo cifre, 10 al massimo)"}
+  progettista_insegna_albo: {type: text, question: "Il suo ordine o collegio professionale (es. Ordine degli Architetti; 30 caratteri al massimo)"}
+  progettista_insegna_albo_provincia: {type: text, question: "La provincia dell'ordine o collegio (sigla)"}
+  progettista_insegna_albo_numero: {type: text, question: "Il suo numero di iscrizione (8 caratteri al massimo)"}
   area_privata_uso_pubblico: {type: yes_no, question: "Il suolo è privato ma aperto al pubblico (anziché pubblico)?", propose: "false"}
   dehors_dal: {type: date, question: "Il primo giorno della stagione per il dehors"}
   dehors_al: {type: date, question: "Il suo ultimo giorno"}
@@ -4705,6 +4767,130 @@ sections:
   - section: insegna dell'esercizio
     fields:
       - {kind: text, label: "Insegna (nome dell'esercizio):", value: "{{ask.insegna}}"}
+
+  # A tattooist's or piercer's pratiche (sector 11: opening, take-over, move, change of people) and
+  # the hairdressers' chair or booth rental. Written from the crawls' text: draft.py has no schema
+  # for them. Each box is in the crawl's base (none of these sections' choices lists a `reveals`).
+  # How the premises are certified: one row ticked, with its act's number and date; "altro" a free box.
+  - section: dichiarazione al tipo di attestazione relativa allo stato dei luoghi ove si svolge l'attività
+    fields:
+      - {kind: checkbox, label: comunicazione per attività edilizia libera, when: "{{ask.stato_luoghi_tipo|is_edilizia_libera}}"}
+      - {kind: text, label: n., nth: 1, value: "{{ask.stato_luoghi_numero}}", when: "{{ask.stato_luoghi_tipo|is_edilizia_libera}}"}
+      - {kind: date, label: data, nth: 1, value: "{{ask.stato_luoghi_data|date_it}}", when: "{{ask.stato_luoghi_tipo|is_edilizia_libera}}"}
+      - {kind: checkbox, label: certificato di conformità edilizia e agibilità del locale, when: "{{ask.stato_luoghi_tipo|is_certificato}}"}
+      - {kind: text, label: n., nth: 2, value: "{{ask.stato_luoghi_numero}}", when: "{{ask.stato_luoghi_tipo|is_certificato}}"}
+      - {kind: date, label: data, nth: 2, value: "{{ask.stato_luoghi_data|date_it}}", when: "{{ask.stato_luoghi_tipo|is_certificato}}"}
+      - {kind: checkbox, label: dichiarazione di fine lavori di DIA o Permesso di costruire, when: "{{ask.stato_luoghi_tipo|is_fine_lavori}}"}
+      - {kind: text, label: n., nth: 3, value: "{{ask.stato_luoghi_numero}}", when: "{{ask.stato_luoghi_tipo|is_fine_lavori}}"}
+      - {kind: date, label: data, nth: 3, value: "{{ask.stato_luoghi_data|date_it}}", when: "{{ask.stato_luoghi_tipo|is_fine_lavori}}"}
+      - {kind: checkbox, label: altro, when: "{{ask.stato_luoghi_tipo|is_altro}}"}
+      - {kind: text, label: (specificare), value: "{{ask.stato_luoghi_altro}}", when: "{{ask.stato_luoghi_tipo|is_altro}}"}
+  - section: dichiarazione relativa all'iscrizione all'albo delle imprese artigiane
+    fields:
+      - {kind: radio, label: non è iscritta, when: "{{ask.albo_artigiane|not}}"}
+      - {kind: radio, label: è iscritta, when: "{{ask.albo_artigiane}}"}
+      - {kind: text, label: al R.I. sezione speciale di, value: "{{ask.albo_artigiane_sede}}", when: "{{ask.albo_artigiane}}"}
+      - {kind: text, label: con n., value: "{{ask.albo_artigiane_numero}}", when: "{{ask.albo_artigiane}}"}
+      - {kind: date, label: dal, value: "{{ask.albo_artigiane_dal|date_it}}", when: "{{ask.albo_artigiane}}"}
+  - section: Dichiarazione per inquinamento acustico
+    fields:
+      - {kind: checkbox, label: non sono presenti sorgenti sonore significative, when: "{{ask.acustica_sorgenti|is_nessuna}}"}
+      - {kind: checkbox, label: 'è stata presentata al comune la "previsione di impatto acustico"', when: "{{ask.acustica_sorgenti|is_previsione}}"}
+      - {kind: date, label: "in data:", value: "{{ask.acustica_previsione_data|date_it}}", when: "{{ask.acustica_sorgenti|is_previsione}}"}
+      - {kind: checkbox, label: altro, when: "{{ask.acustica_sorgenti|is_altro}}"}
+      - {kind: text, label: specificare, value: "{{ask.acustica_sorgenti_altro}}", when: "{{ask.acustica_sorgenti|is_altro}}"}
+  # A take-over: the premises are as when the previous holder's authorization was issued. A change
+  # to them is another pratica (the structural change), so the statement is a fact, asked and refused if no.
+  - section: dichiarazione di assenza di modifiche strutturali del laboratorio
+    supports:
+      - {value: "{{ask.locali_invariati}}", in: ["true"], else: "Se i locali sono cambiati dalla precedente autorizzazione, la modifica va comunicata con la sua pratica (variazione strutturale): non la preparo insieme al subingresso."}
+    fields:
+      - {kind: checkbox, label: che i locali costituenti il laboratorio non hanno subito modifiche, when: "{{ask.locali_invariati}}"}
+  # A move: the old premises (the new ones are `locale`). Napoli's "località" (a frazione or district
+  # within the comune) is left: the crawl doesn't say whether it is required.
+  - section: dichiarazione della precedente ubicazione del locale
+    leave: [località]
+    fields:
+      - {kind: text, label: Comune, value: "{{ask.locale_precedente_comune}}"}
+      - {kind: text, label: CAP, value: "{{ask.locale_precedente_cap}}"}
+      - {kind: text, label: "via, viale, piazza", value: "{{ask.locale_precedente_indirizzo}}"}
+      - {kind: text, label: numero civico, value: "{{ask.locale_precedente_civico}}"}
+  # A change of people for a ditta individuale: the titolare's professional qualification, as the
+  # Commissione provinciale dell'artigianato's certificate or another title.
+  - section: "dichiarazione di possesso della qualifica professionale in caso di impresa individuale:"
+    fields:
+      - {kind: checkbox, label: di essere in possesso del certificato attestante la qualificazione professionale, when: "{{ask.qualifica_artigiana|is_certificato}}"}
+      - {kind: text, label: di, value: "{{ask.qualifica_artigiana_camera}}", when: "{{ask.qualifica_artigiana|is_certificato}}"}
+      - {kind: date, label: in data, value: "{{ask.qualifica_artigiana_data|date_it}}", when: "{{ask.qualifica_artigiana|is_certificato}}"}
+      - {kind: text, label: numero, value: "{{ask.qualifica_artigiana_numero}}", when: "{{ask.qualifica_artigiana|is_certificato}}"}
+      - {kind: checkbox, label: di essere in possesso di altro titolo professionale, when: "{{ask.qualifica_artigiana|is_altro_titolo}}"}
+      - {kind: text, label: specificare, value: "{{ask.qualifica_artigiana_altro}}", when: "{{ask.qualifica_artigiana|is_altro_titolo}}"}
+  # Renting a chair or booth in someone else's salon (affitto di poltrona/cabina): the activity and the
+  # salon, then the contract (a public deed or a registered private writing, valid until a date) and its copy.
+  - section: oggetto della comunicazione
+    fields:
+      - {kind: text, label: "per l'attività di:", value: "{{ask.poltrona_attivita}}"}
+      - {kind: text, label: "nell'esercizio di:", value: "{{ask.poltrona_esercizio}}"}
+  - section: dichiarazione relativa al contratto di affitto
+    fields:
+      - {kind: radio, label: atto pubblico, when: "{{ask.poltrona_contratto_forma|is_atto_pubblico}}"}
+      - {kind: text, label: rep. n°, value: "{{ask.poltrona_contratto_numero}}", when: "{{ask.poltrona_contratto_forma|is_atto_pubblico}}"}
+      - {kind: date, label: del, nth: 1, value: "{{ask.poltrona_contratto_data|date_it}}", when: "{{ask.poltrona_contratto_forma|is_atto_pubblico}}"}
+      - {kind: radio, label: scrittura privata, when: "{{ask.poltrona_contratto_forma|is_scrittura_privata}}"}
+      - {kind: text, label: registrata al n°, value: "{{ask.poltrona_contratto_numero}}", when: "{{ask.poltrona_contratto_forma|is_scrittura_privata}}"}
+      - {kind: date, label: del, nth: 2, value: "{{ask.poltrona_contratto_data|date_it}}", when: "{{ask.poltrona_contratto_forma|is_scrittura_privata}}"}
+      - {kind: date, label: con validità fino alla data del, value: "{{ask.poltrona_contratto_scadenza|date_it}}"}
+      - {kind: file, label: Tipologie ammesse, value: "{{ask.poltrona_contratto_file}}"}
+
+  # A food shop's start of eating on the spot (no table service): the title it runs under, and the
+  # Comune's rules for it (the person's "presa visione").
+  - section: Estremi del titolo abilitativo dell'esercizio
+    fields:
+      - {kind: radio, label: autorizzazione, when: "{{ask.titolo_attivita_tipo|is_autorizzazione}}"}
+      - {kind: radio, label: comunicazione, when: "{{ask.titolo_attivita_tipo|is_comunicazione}}"}
+      - {kind: radio, label: D.I.A., when: "{{ask.titolo_attivita_tipo|is_dia}}"}
+      - {kind: radio, label: S.C.I.A., when: "{{ask.titolo_attivita_tipo|is_scia}}"}
+      - {kind: text, label: prot. n°, value: "{{ask.titolo_attivita_protocollo}}"}
+      - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
+  - section: prescrizioni per consumo immediato sul posto
+    theirs: [PRESA VISIONE]
+    fields: []
+  # Giving a department of a shop to another business (SUAP sectors 016 and 017: "Affidare in gestione
+  # reparto"). The shop's total area, the shopping centre it isn't in (a "Si" opens boxes recipes refuse),
+  # the department, who runs it from when, and its sales area by sector (the special tables, tobacco,
+  # pharmacy and fuel, stay empty). The person's: the new business's moral requirements, and who holds the
+  # professional ones in a food business.
+  - section: dichiarazione dell'attuale superficie complessiva dell'esercizio
+    fields:
+      - {kind: text, label: superficie complessiva dell'esercizio (mq), value: "{{ask.superficie_complessiva}}"}
+  - section: dichiarazione relativa all'inserimento dell'esercizio in un centro commerciale
+    leave: [denominazione centro commerciale, numero provvedimento, data, ente che ha effettuato il rilascio del provvedimento]
+    fields:
+      - {kind: radio, label: è inserito in un centro commerciale, when: "{{ask.in_centro_commerciale}}"}
+      - {kind: radio, label: non è inserito in un centro commerciale, when: "{{ask.in_centro_commerciale|not}}"}
+  - section: dichiarazione relativa all'affidamento in gestione di reparto
+    theirs: [il cui titolare/ditta individuale, "in caso di vendita prodotti alimentari o somministrazione"]
+    leave: [fino al (eventuale)]
+    fields:
+      - {kind: date, label: con decorrenza dal, value: "{{ask.reparto_dal|date_it}}"}
+      - {kind: text, label: il reparto, value: "{{ask.reparto_nome}}"}
+      - {kind: text, label: a Marchio, value: "{{ask.reparto_marchio}}"}
+      - {kind: text, label: sarà affidato in gestione alla ditta, value: "{{ask.reparto_ditta}}"}
+      - {kind: text, label: codice fiscale / partita IVA, value: "{{ask.reparto_cf}}"}
+      - {kind: text, label: con sede nel comune di, value: "{{ask.reparto_comune}}"}
+      - {kind: text, label: C.A.P., value: "{{ask.reparto_cap}}"}
+      - {kind: text, label: in via o..., value: "{{ask.reparto_indirizzo}}"}
+      - {kind: text, label: n° civico, value: "{{ask.reparto_civico}}"}
+  - section: dichiarazione relativa al settore ed alla superficie di vendita del reparto
+    leave: [Tabella speciale generi di monopolio, superficie di vendita tabelle speciali generi di monopolio (mq),
+            Tabella speciale farmacie, superficie di vendita tabelle speciali farmacie (mq),
+            Tabella speciale carburanti, superficie di vendita tabelle speciali carburanti (mq)(*)]
+    fields:
+      - {kind: checkbox, label: Alimentare, when: "{{ask.reparto_alimentare_mq|positive}}"}
+      - {kind: text, label: superficie settore alimentare (mq), value: "{{ask.reparto_alimentare_mq}}", when: "{{ask.reparto_alimentare_mq|positive}}"}
+      - {kind: checkbox, label: Non alimentare, when: "{{ask.reparto_non_alimentare_mq|positive}}"}
+      - {kind: text, label: superficie settore non alimentare (mq), value: "{{ask.reparto_non_alimentare_mq}}", when: "{{ask.reparto_non_alimentare_mq|positive}}"}
+
   # A ditta's new name (the bakery's and the tattooist's form). A company's changes (its form, its
   # legal representative, the professional manager, the partners) each bring statements of the new
   # people: their boxes stay empty and recipes refuse them.
@@ -4915,7 +5101,8 @@ sections:
       - {kind: date, label: data, value: "{{ask.titolo_attivita_data|date_it}}"}
   # Shops' and hairdressers' version: the protocol, its date and the Comune that has it.
   - section: estremi del/i titolo/i autorizzatorio/i posseduto/i
-    aliases: [Estremi del titolo/i abilitativo/i, estremi titolo abilitativo, Estremi del titolo abilitativo]
+    aliases: [Estremi del titolo/i abilitativo/i, estremi titolo abilitativo, Estremi del titolo abilitativo,
+              dichiarazione relativa agli estremi dell’atto amministrativo]
     fields:
       - {kind: text, label: AUTORIZZAZIONE/SCIA prot. n°, value: "{{ask.titolo_attivita_protocollo}}"}
       - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
@@ -5087,9 +5274,117 @@ sections:
       - {kind: text, label: mappale, value: "{{locale.catasto_particella}}"}
       - {kind: text, label: subalterno, value: "{{locale.catasto_subalterno}}"}
       - {kind: text, label: di proprietà, value: "{{ask.immobile_proprietario}}"}
+  # The sign's SCIA version of the declarations has two Si/No facts besides the person's checkboxes: whether the
+  # installation is in zone A of the PRG and whether it is under landscape protection. The comunicazione's
+  # entry below fits this crawl too: gen.fill never flags a radio or checkbox no field names (only an entry
+  # with `strict: true` does), so both radios stayed empty and the portal wouldn't go on
+  # (negozio-insegna-scia-fittizio stopped here, 2026-11-11). So this entry comes first; on the
+  # comunicazione's crawl, which has no radios, it fails and the next one fits.
+  - section: ulteriori dichiarazioni (mezzi pubblicitari)
+    theirs: [il manufatto, è a conoscenza, è stato acquisito, ha la piena disponibilità, è stato autorizzato]
+    fields:
+      - {kind: radio, label: si, nth: 1, when: "{{ask.insegna_zona_a}}"}
+      - {kind: radio, label: "no", nth: 1, when: "{{ask.insegna_zona_a|not}}"}
+      - {kind: radio, label: si, nth: 2, when: "{{ask.insegna_vincolo}}"}
+      - {kind: radio, label: "no", nth: 2, when: "{{ask.insegna_vincolo|not}}"}
   - section: ulteriori dichiarazioni (mezzi pubblicitari)
     theirs: [il manufatto, è a conoscenza, è stato acquisito, l'impianto di illuminazione, ha la piena disponibilità, è stato autorizzato, di essere consapevole]
     fields: []
+
+  # The sign's SCIA (the wizard's "insegna esterna (dove è prevista la SCIA)", option 3 of "interventi":
+  # sectors 4, 16, 17 and 56, and the stand-alone "installazione di mezzi pubblicitari - SCIA"). The
+  # "comunicazione" version above has other boxes under the same names (a Tipologia select, the owner's
+  # title, the cadastral place); each version fails on the other's crawl. Written from the crawl's text.
+  - section: luogo dell'installazione
+    plus: "the sign's own \"+\" (a second sign): one sign is mapped"
+    leave: [in area pubblica, insegne incassate nel vano di esercizio, "Lungo la strada/area:"]
+    fields:
+      - {kind: text, label: num. progressivo, value: "1"}
+      - {kind: radio, label: in area privata}
+      - {kind: checkbox, label: sulla facciata del fabbricato / presso il locale}
+      # What that tick opens, as in the comunicazione's version.
+      - {kind: text, label: sito in Via/Piazza, value: "{{locale.indirizzo}}"}
+      - {kind: text, label: n°, nth: 2, value: "{{locale.civico}}"}  # "n°" reads "n": 1 is "num. progressivo"
+      - {kind: radio, label: NCEU}
+      - {kind: text, label: foglio, value: "{{locale.catasto_foglio}}"}
+      - {kind: text, label: mappale, value: "{{locale.catasto_particella}}"}
+      - {kind: text, label: subalterno, value: "{{locale.catasto_subalterno}}"}
+      - {kind: text, label: di proprietà, value: "{{ask.immobile_proprietario}}"}
+  - section: Caratteristiche del manufatto da installare
+    plus: "the sign's own \"+\" (a second sign): one sign is mapped"
+    fields:
+      - {kind: text, label: num. progressivo, value: "1"}
+      - {kind: text, label: larghezza (mt), value: "{{ask.insegna_larghezza_m}}"}
+      - {kind: text, label: altezza (mt), value: "{{ask.insegna_altezza_m}}"}
+      - {kind: text, label: superficie (mq), value: "{{ask.insegna_superficie_mq}}"}
+      - {kind: radio, label: si, nth: 1, when: "{{ask.insegna_monofacciale}}"}
+      - {kind: radio, label: "no", nth: 1, when: "{{ask.insegna_monofacciale|not}}"}
+      - {kind: radio, label: si, nth: 2, when: "{{ask.insegna_monofacciale|not}}"}
+      - {kind: radio, label: "no", nth: 2, when: "{{ask.insegna_monofacciale}}"}
+      - {kind: radio, label: si, nth: 3, when: "{{ask.insegna_luce|is_opaca}}"}
+      - {kind: radio, label: "no", nth: 3, when: "{{ask.insegna_luce|is_opaca|not}}"}
+      - {kind: radio, label: si, nth: 4, when: "{{ask.insegna_luce|is_luminosa}}"}
+      - {kind: radio, label: "no", nth: 4, when: "{{ask.insegna_luce|is_luminosa|not}}"}
+      - {kind: radio, label: si, nth: 5, when: "{{ask.insegna_luce|is_illuminata}}"}
+      - {kind: radio, label: "no", nth: 5, when: "{{ask.insegna_luce|is_illuminata|not}}"}
+      - {kind: radio, label: "no", nth: 6}
+      - {kind: radio, label: "no", nth: 7}
+      - {kind: radio, label: "no", nth: 8}
+      - {kind: textarea, label: Testo del messaggio pubblicitario, value: "{{ask.insegna_testo}}"}
+  # A director of works is optional and his boxes (name, address, order, number) are refused: "NO" only.
+  - section: dichiarazione relativa al direttore dei lavori
+    leave: [cognome, nome, codice fiscale, "via, viale, piazza", numero civico, comune, provincia, telefono, fax,
+            ordine/collegio/albo, della Provincia di, numero iscrizione, è anche il responsabile della sicurezza]
+    supports:
+      - {value: "{{ask.insegna_dl}}", in: ["false"], else: "Un direttore dei lavori per l'insegna: i suoi dati non li compilo ancora."}
+    fields:
+      - {kind: radio, label: "NO"}
+  # Installed by the owner ("in economia") or by a specialized firm, whose boxes come from the answers.
+  - section: dichiarazione relativa all'installazione
+    plus: "the firm's own \"+\" (a second firm): one firm is mapped"
+    leave: [fax]
+    fields:
+      - {kind: radio, label: in economia, when: "{{ask.insegna_impresa|not}}"}
+      - {kind: radio, label: "a cura di impresa specializzata identificata come segue:", when: "{{ask.insegna_impresa}}"}
+      - {kind: text, label: denominazione dell'impresa, value: "{{ask.installatore_denominazione}}", when: "{{ask.insegna_impresa}}"}
+      - {kind: text, label: Codice Fiscale/Partita Iva, value: "{{ask.installatore_cf}}", when: "{{ask.insegna_impresa}}"}
+      - {kind: text, label: n.civico, value: "{{ask.installatore_civico}}", when: "{{ask.insegna_impresa}}"}
+      - {kind: text, label: indirizzo, nth: 2, value: "{{ask.installatore_indirizzo}}", when: "{{ask.insegna_impresa}}"}  # 1: the civico, whose context is "Indirizzo sede legale"
+      - {kind: text, label: Comune, value: "{{ask.installatore_comune}}", when: "{{ask.insegna_impresa}}"}
+      - {kind: text, label: Provincia, value: "{{ask.installatore_provincia}}", when: "{{ask.insegna_impresa}}"}
+      - {kind: text, label: telefono, value: "{{ask.installatore_telefono}}", when: "{{ask.insegna_impresa}}"}
+      - {kind: text, label: e-mail, value: "{{ask.installatore_email}}", when: "{{ask.insegna_impresa}}"}
+      - {kind: text, label: Pec, value: "{{ask.installatore_pec}}", when: "{{ask.insegna_impresa}}"}
+  # Who drew the project: the one presenting the pratica (a tecnico: his order and number) or another
+  # professional, whose boxes come from the answers (the page repeats "ordine/collegio/albo" and
+  # "provincia (sigla)" once each in either branch: the second "provincia (sigla)" is the order's).
+  - section: dichiarazione relativa alla redazione del progetto
+    plus: "the designer's own \"+\" (a second technician): one is mapped"
+    fields:
+      - {kind: radio, label: è colui che presenta la pratica, when: "{{ask.insegna_progetto_presentatore}}"}
+      - {kind: text, label: ordine/collegio/albo, value: "{{t:albo.ordine}}", when: "{{ask.insegna_progetto_presentatore}}"}
+      - {kind: text, label: provincia (sigla), value: "{{t:albo.provincia}}", when: "{{ask.insegna_progetto_presentatore}}"}
+      - {kind: text, label: numero iscrizione, value: "{{t:albo.numero}}", when: "{{ask.insegna_progetto_presentatore}}"}
+      - {kind: radio, label: non è colui che presenta la pratica, when: "{{ask.insegna_progetto_presentatore|not}}"}
+      - {kind: text, label: cognome, value: "{{ask.progettista_insegna_cognome}}", when: "{{ask.insegna_progetto_presentatore|not}}"}
+      - {kind: text, label: nome, value: "{{ask.progettista_insegna_nome}}", when: "{{ask.insegna_progetto_presentatore|not}}"}
+      - {kind: text, label: codice fiscale, value: "{{ask.progettista_insegna_cf}}", when: "{{ask.insegna_progetto_presentatore|not}}"}
+      - {kind: text, label: "via, viale, piazza", value: "{{ask.progettista_insegna_via}}", when: "{{ask.insegna_progetto_presentatore|not}}"}
+      - {kind: text, label: numero civico, value: "{{ask.progettista_insegna_civico}}", when: "{{ask.insegna_progetto_presentatore|not}}"}
+      - {kind: text, label: comune, value: "{{ask.progettista_insegna_comune}}", when: "{{ask.insegna_progetto_presentatore|not}}"}
+      - {kind: text, label: provincia (sigla), value: "{{ask.progettista_insegna_provincia}}", when: "{{ask.insegna_progetto_presentatore|not}}"}
+      - {kind: text, label: telefono, value: "{{ask.progettista_insegna_telefono}}", when: "{{ask.insegna_progetto_presentatore|not}}"}
+      - {kind: text, label: ordine/collegio/albo, value: "{{ask.progettista_insegna_albo}}", when: "{{ask.insegna_progetto_presentatore|not}}"}
+      - {kind: text, label: provincia (sigla), nth: 2, value: "{{ask.progettista_insegna_albo_provincia}}", when: "{{ask.insegna_progetto_presentatore|not}}"}
+      - {kind: text, label: numero iscrizione, value: "{{ask.progettista_insegna_albo_numero}}", when: "{{ask.insegna_progetto_presentatore|not}}"}
+  # The title of the business the sign belongs to: its three boxes are required (the portal's "il valore è
+  # obbligatorio", read 2026-11-11 on an opening filed with the sign, where the opening has no number yet:
+  # what to put there is the SUAP's to say, so it is asked and the recipe tells the person).
+  - section: DICHIARAZIONE RELATIVA AI TITOLI ABILITANTI DELL'ATTIVITA' COMMERCIALE
+    fields:
+      - {kind: text, label: SCIA/DIA/AUTORIZZAZIONE prot. n°, value: "{{ask.titolo_attivita_protocollo}}"}
+      - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
+      - {kind: text, label: per l'attività di, value: "{{ask.attivita_esercitata}}"}
 
   # A pratica sent with ComUnica (the Registro delle imprese): the Telemaco user that imports it
   # (a user ID, not a password); taking note of the size limits is the person's.
@@ -5309,6 +5604,38 @@ sections:
       - {kind: checkbox, label: Generi di monopolio, when: "{{ask.superficie_monopolio_mq|positive}}"}
       - {kind: text, label: superficie di vendita mq, nth: 3, value: "{{ask.superficie_monopolio_mq}}", when: "{{ask.superficie_monopolio_mq|positive}}"}
 
+  # A shop open for a limited time ("MODALITA' TEMPORANEA", sectors 016 and 017): the opening's
+  # boxes, with the two dates of its duration where the season is (the opening's "Permanente" radio
+  # is not on this form, and this form's date boxes are not on the opening's, so each entry fails
+  # on the other's crawl).
+  - section: Dati sull'esercizio di vicinato
+    leave: [Farmacie, Carburanti]
+    fields:
+      - {kind: checkbox, label: Vicinato, when: "{{ask.solo_distributori|not}}"}
+      - {kind: checkbox, label: Vendita esclusivamente mediante apparecchi automatici, when: "{{ask.solo_distributori}}"}
+      - {kind: radio, label: Vendita al dettaglio, when: "{{ask.anche_ingrosso|not}}"}
+      - {kind: text, label: superficie di vendita mq, value: "{{ask.superficie_vendita_mq}}", when: "{{ask.anche_ingrosso|not}}"}
+      - {kind: radio, label: Vendita congiunta al dettaglio e all'ingrosso, when: "{{ask.anche_ingrosso}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 2, value: "{{ask.superficie_vendita_mq}}", when: "{{ask.anche_ingrosso}}"}
+      - {kind: date, label: dal, value: "{{ask.temporary_dal|date_it}}"}
+      - {kind: date, label: al, value: "{{ask.temporary_al|date_it}}"}
+      - {kind: radio, label: Si, when: "{{ask.in_centro_commerciale}}"}
+      - {kind: radio, label: "No", when: "{{ask.in_centro_commerciale|not}}"}
+      - {kind: text, label: denominazione, value: "{{ask.centro_commerciale_denominazione}}", when: "{{ask.in_centro_commerciale}}"}
+      - {kind: radio, label: Si, nth: 2, when: "{{ask.in_ccn}}"}
+      - {kind: radio, label: "No", nth: 2, when: "{{ask.in_ccn|not}}"}
+      - {kind: text, label: Delibera di riconoscimento n., value: "{{ask.ccn_delibera}}", when: "{{ask.in_ccn}}"}
+      - {kind: date, label: del, nth: 2, value: "{{ask.ccn_delibera_data|date_it}}", when: "{{ask.in_ccn}}"}
+      - {kind: text, label: emanata da, value: "{{ask.ccn_delibera_ente}}", when: "{{ask.in_ccn}}"}
+      - {kind: radio, label: "No", nth: 3, when: "{{ask.in_factory_outlet|not}}"}
+      - {kind: checkbox, label: Alimentare, when: "{{ask.superficie_alimentare_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 3, value: "{{ask.superficie_alimentare_mq}}", when: "{{ask.superficie_alimentare_mq|positive}}"}
+      - {kind: checkbox, label: Non alimentare, when: "{{ask.superficie_non_alimentare_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 4, value: "{{ask.superficie_non_alimentare_mq}}", when: "{{ask.superficie_non_alimentare_mq|positive}}"}
+      - {kind: text, label: mq, value: "{{ask.superficie_vendita_mq}}"}
+      - {kind: checkbox, label: Generi di monopolio, when: "{{ask.superficie_monopolio_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 5, value: "{{ask.superficie_monopolio_mq}}", when: "{{ask.superficie_monopolio_mq|positive}}"}
+
   # A medium-sized shop's authorization (SUAP sectors 019 and 020: up to and over 400 m² gross),
   # opening and move. Read from the four crawls' text; the national forms have none for it.
   # The dettaglio/ingrosso mode and the season exist only at an opening, so the move's entry
@@ -5491,6 +5818,11 @@ sections:
       - {kind: radio, label: con ampliamento, when: "{{ask.var_superficie|is_ampliamento}}"}
       - {kind: radio, label: con riduzione, when: "{{ask.var_superficie|is_riduzione}}"}
       - {kind: radio, label: con redistribuzione degli spazi, when: "{{ask.var_superficie|is_redistribuzione}}"}
+  # A tattooist's one box for the premises' area. After the two entries above, which are longer names
+  # that start with this one: an entry matches any section whose name starts with its own, in file order.
+  - section: dichiarazione relativa alla superficie dei locali da adibire all'attività
+    fields:
+      - {kind: text, label: superficie complessiva dell'esercizio (mq), value: "{{ask.superficie_complessiva}}"}
   - section: dichiarazione della superficie complessiva dell'esercizio in seguito alla variazione
     fields:
       - {kind: text, label: superficie complessiva in seguito alla variazione (mq), value: "{{ask.superficie_complessiva}}"}
