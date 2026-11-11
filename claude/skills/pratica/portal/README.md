@@ -764,7 +764,9 @@ result only if its sha256 is the new file's, else it says to send the full `step
 (2026-11-04: the CILA's and the permesso's Dati catastali went this way, by hand, the first time).
 The patch is main's steps run through this run.py, so none is written when they no longer plan
 here (a filter they name was renamed, a case they refused): then the whole file, or the bundle.
-A stopped one: rerun it alone, unchanged, before
+Two rehearsals that share a procedure (a pratica and its procura variant, the shop's and the restaurant's subingresso) mix
+their steps in one batch: runs stopped on a section of the other (2026-11-11, `TypeError: ... normalize` and a procuratore
+section the parent doesn't have), and filled alone. Run each in a batch of its own. A stopped one: rerun it alone, unchanged, before
 calling it a bug (the portal is sometimes slow); twice the same is a bug. 2026-10-29: 20 of
 23 on the first pass, 23 of 23 once the runner waited for each section to open.
 
