@@ -1,0 +1,44 @@
+{
+ "captured": "2026-11-11",
+ "source": "The portal's own model list as the page loaded it (/ms-jdomandeonline/.../nuovaPratica/listaModelli), signed in as an ordinary citizen. The list returns both areas; the page offers only NAPO to this account. The three NAPG models were not opened.",
+ "areas": [
+  {
+   "codice": "NAPO",
+   "descrizione": "Procedimenti Tributi Comune di Napoli",
+   "offered_to_citizen": true,
+   "modelli": [
+    {
+     "codice": "GESTORE",
+     "descrizione": "Nuovo gestore struttura",
+     "autenticato": true,
+     "firmato": false
+    }
+   ]
+  },
+  {
+   "codice": "NAPG",
+   "descrizione": "Istanze Imposta di soggiorno",
+   "offered_to_citizen": false,
+   "modelli": [
+    {
+     "codice": "IMPOSOGGIO",
+     "descrizione": "Nuova struttura - Imposta di soggiorno GEIS",
+     "autenticato": true,
+     "firmato": false
+    },
+    {
+     "codice": "MODIFSOGGI",
+     "descrizione": "Riporta In Bozza Dichiarazione",
+     "autenticato": true,
+     "firmato": false
+    },
+    {
+     "codice": "MODSTRUTT",
+     "descrizione": "Modifica Struttura Imposta di Soggiorno",
+     "autenticato": true,
+     "firmato": false
+    }
+   ]
+  }
+ ]
+}

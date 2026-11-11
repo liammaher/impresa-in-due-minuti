@@ -8,7 +8,7 @@ aka:
   - cancellazione TARI
   - chiusura tassa rifiuti
   - Mod. 8 TARI
-updated: 2026-10-27
+updated: 2026-11-11
 summary: >-
   Un'impresa, un professionista o un'associazione che smette di occupare o detenere locali o aree
   a uso non abitativo a Napoli (chiusura dell'attività, trasferimento in un altro comune, chiusura
@@ -222,18 +222,31 @@ forms:
           già comunicato, si può citare nel testo della PEC. Non è tari.codice_contribuente, che
           è quello della casa.
       - { label: Il/La sottoscritto/a, map: { concat: [identity.last_name, identity.first_name] } }
-      - { label: nato/a a, map: { direct: identity.birth_comune } }
-      - { label: nato/a a (stato estero), map: { direct: identity.birth_country } }
-      - { label: il, map: { direct: identity.date_of_birth } }
+      - label: nato/a a
+        map:
+          concat: [identity.birth_comune, identity.birth_country]
+          template: "{identity.birth_comune}[ ({identity.birth_country})]"
+        optional:
+          - field: identity.birth_country
+            required_if:
+              - { field: identity.birth_province, equals: EE }
+              - { field: identity.codice_fiscale, matches: "^.{11}Z" }
+        notes: >-
+          Il modulo ha una sola riga per il luogo di nascita: per chi è nato all'estero, il luogo
+          come scritto sui documenti e lo stato tra parentesi.
+      - { label: il, map: { direct: identity.date_of_birth, template: "{identity.date_of_birth|date}" } }
       - { label: C.F., map: { direct: identity.codice_fiscale } }
       - { label: residente in, map: { direct: residenza.comune } }
       - { label: Via, map: { direct: residenza.indirizzo } }
       - { label: n°, map: { direct: residenza.civico } }
       - { label: Telefono, map: { direct: identity.phone } }
       - { label: e-mail, map: { direct: identity.email } }
-      - { label: pec, map: { direct: identity.pec } }
+      - { label: pec, map: { direct: identity.pec }, optional: [{ field: identity.pec }] }
       - label: nella sua qualità di (titolare / legale rappresentante)
         map: { fallback: [business.qualita_dichiarante, ruolo.tipo] }
+        choices:
+          - { box: titolare, values: [titolare] }
+          - { box: legale rappresentante, values: [legale_rappresentante] }
       - { label: Ragione Sociale, map: { direct: business.denominazione } }
       - label: C.F. (della ditta)
         map: { direct: business.codice_fiscale }
@@ -243,7 +256,9 @@ forms:
           non c'è, chiederlo.
       - { label: PARTITA IVA, map: { direct: business.partita_iva } }
       - label: Con sede in via
-        map: { concat: [business.sede_legale_indirizzo, business.sede_legale_civico] }
+        map:
+          concat: [business.sede_legale_indirizzo, business.sede_legale_civico]
+          template: "{business.sede_legale_indirizzo}, {business.sede_legale_civico}"
       - { label: Comune di, map: { direct: business.sede_legale_comune } }
       - { label: CAP, map: { direct: business.sede_legale_cap } }
       - label: e-mail (della ditta)
@@ -253,38 +268,62 @@ forms:
         map: { direct: business.pec }
         notes: Obbligatoria sul modulo.
       - label: a decorrere dal (data di cessazione)
-        map: { ask: "Da che giorno è cessata l'occupazione o la detenzione dei locali?" }
+        map: { ask: "Da che giorno è cessata l'occupazione o la detenzione dei locali? (GG/MM/AAAA)" }
       - label: 1. Via (immobile)
-        map: { concat: [locale.indirizzo, locale.civico] }
-      - { label: 1. Dati catastali – sez., map: { direct: locale.catasto_sezione } }
+        map:
+          concat: [locale.indirizzo, locale.civico]
+          template: "{locale.indirizzo}, {locale.civico}"
+      - { label: 1. Dati catastali – sez., map: { direct: locale.catasto_sezione }, optional: [{ field: locale.catasto_sezione }] }
       - { label: 1. Dati catastali – fg., map: { direct: locale.catasto_foglio } }
       - { label: 1. Dati catastali – part., map: { direct: locale.catasto_particella } }
       - { label: 1. Dati catastali – sub, map: { direct: locale.catasto_subalterno } }
       - label: 2. Via (immobile)
-        map: { concat: [locale2.indirizzo, locale2.civico] }
+        map:
+          concat: [locale2.indirizzo, locale2.civico]
+          template: "{locale2.indirizzo}[, {locale2.civico}]"
+        optional: [{ field: locale2.indirizzo }, { field: locale2.civico }]
         notes: Solo se si lascia anche un secondo immobile, nel vault locale2.*; altrimenti vuoto.
-      - { label: 2. Dati catastali – sez., map: { direct: locale2.catasto_sezione } }
-      - { label: 2. Dati catastali – fg., map: { direct: locale2.catasto_foglio } }
-      - { label: 2. Dati catastali – part., map: { direct: locale2.catasto_particella } }
-      - { label: 2. Dati catastali – sub, map: { direct: locale2.catasto_subalterno } }
+      - { label: 2. Dati catastali – sez., map: { direct: locale2.catasto_sezione }, optional: [{ field: locale2.catasto_sezione }] }
+      - { label: 2. Dati catastali – fg., map: { direct: locale2.catasto_foglio }, optional: [{ field: locale2.catasto_foglio }] }
+      - { label: 2. Dati catastali – part., map: { direct: locale2.catasto_particella }, optional: [{ field: locale2.catasto_particella }] }
+      - { label: 2. Dati catastali – sub, map: { direct: locale2.catasto_subalterno }, optional: [{ field: locale2.catasto_subalterno }] }
       - label: Motivo (a, b, c, d, e)
-        map: { ask: "Perché cessa l'occupazione: chiusura definitiva con cessazione della partita IVA, trasferimento in un altro comune, chiusura dell'unità locale, cessione d'azienda o cessione di ramo d'azienda?" }
+        map: { ask: "Perché cessa l'occupazione: chiusura definitiva con cessazione della partita IVA (a), trasferimento in un altro comune (b), chiusura dell'unità locale (c), cessione d'azienda (d), cessione di un ramo d'azienda (e) o altro (altro)?" }
+        choices:
+          - { box: a, values: [a, chiusura definitiva] }
+          - { box: b, values: [b, trasferimento] }
+          - { box: c, values: [c, chiusura unità locale] }
+          - { box: d, values: [d, cessione d'azienda] }
+          - { box: e, values: [e, cessione ramo d'azienda] }
+          - { box: altro, values: [altro] }
+        notes: "Una sola casella: se più di un caso si applica, chiedere all'ufficio."
       - label: a) data di cessazione della Partita IVA
-        map: { direct: business.data_cessazione }
-        notes: Solo per il motivo a).
-      - label: b) Trasferimento dell'attività nel Comune di – via – n°
-        map: { ask: "Comune, via e numero civico della nuova sede (solo per il motivo b)" }
+        map: { direct: business.data_cessazione, template: "{business.data_cessazione|date}" }
+        when: { field: "Motivo (a, b, c, d, e)", ticks: [a] }
+        notes: Solo per il motivo a); va allegata la copia (visura o certificato di cessazione).
+      - label: b) Trasferimento dell'attività nel Comune di
+        map: { ask: "In quale comune si trasferisce l'attività? (solo per il motivo b)" }
+        when: { field: "Motivo (a, b, c, d, e)", ticks: [b] }
+      - label: b) Trasferimento – via
+        map: { ask: "In quale via si trasferisce l'attività? (solo per il motivo b)" }
+        when: { field: "Motivo (a, b, c, d, e)", ticks: [b] }
+      - label: b) Trasferimento – n°
+        map: { ask: "Con quale numero civico? (solo per il motivo b)" }
+        when: { field: "Motivo (a, b, c, d, e)", ticks: [b] }
       - label: Nei casi d) ed e) nominativo/Ragione Sociale del subentrante
         map: { ask: "Nome o ragione sociale di chi subentra (solo per cessione d'azienda o di ramo)" }
+        when: { field: "Motivo (a, b, c, d, e)", ticks: [d, e] }
+        notes: Va allegata la copia dell'atto di cessione.
       - label: C.F. (del subentrante)
         map: { ask: "Codice fiscale di chi subentra (solo per cessione d'azienda o di ramo)" }
+        when: { field: "Motivo (a, b, c, d, e)", ticks: [d, e] }
       - label: PARTITA IVA (del subentrante)
         map: { ask: "Partita IVA di chi subentra (solo per cessione d'azienda o di ramo)" }
+        when: { field: "Motivo (a, b, c, d, e)", ticks: [d, e] }
       - label: "Altro: (specificare)"
         map: { ask: "Se il motivo non è tra quelli elencati, descriverlo" }
-      - { label: Data, map: { ask: Data in cui si firma il modulo } }
-      - label: Firma
-        map: { blank_with_reason: "Firma del dichiarante: la mette solo la persona." }
+        when: { field: "Motivo (a, b, c, d, e)", ticks: [altro] }
+
 steps:
   - do: >-
       Raccogliere le prove della data di cessazione (chiusura della partita IVA, risoluzione del
