@@ -3,13 +3,15 @@
 
   [PRATICHE_NAPOLI_DIR=<another library checkout>] regress.py [--keep DIR] [case ...]
 
-The pilots are seven library forms: the TARI Mod. 1 (drawn on, with the
+The pilots are ten library forms: the TARI Mod. 1 (drawn on, with the
 stato di famiglia's table), the ricorso al Prefetto (drawn on, two pages, tick
 boxes that are font characters), the CILA Allegato A (fillable fields; also
 declared by a studio's client in proprio), the Regione Campania scheda
 anagrafica, in a business vault (signed by its legale rappresentante, a
 procuratore read by --party, typed |__| cells), the TARI Mod. 5 in the Pizzeria
 Fittizia rehearsal's business vault (rehearsals/pizzeria-fittizia/fixture.json),
+the TARI Mod. 6 (its three quadri, a case each, the blanks of quadro C drawn as rules), Mod. 7 and Mod. 8
+in the same vault,
 the CILA DSC checklist, which the SUE gives only inside a draft, so its
 blank is in forms/ (an entry's form with no url is read from there), and the
 Comune's Modello DP, drawn as a grid with no line to write on (declared by a
@@ -56,6 +58,12 @@ PILOTS = {
                "business-fixture.json"),
     "mod-5": ("napoli/comune/tari-iscrizione-non-domestica", "mod-5", "mod5-answers.json", None,
               os.path.join("..", "..", "..", "..", "..", "rehearsals", "pizzeria-fittizia", "fixture.json")),
+    "mod-8": ("napoli/comune/tari-cessazione-non-domestica", "mod-8", "mod8-answers.json", None,
+              os.path.join("..", "..", "..", "..", "..", "rehearsals", "pizzeria-fittizia", "fixture.json")),
+    "mod-7": ("napoli/comune/tari-autotutela-avviso-non-domestica", "mod-7", "mod7-answers.json", None,
+              os.path.join("..", "..", "..", "..", "..", "rehearsals", "pizzeria-fittizia", "fixture.json")),
+    "mod-6": ("napoli/comune/tari-variazione-non-domestica", "mod-6", "mod6-answers.json", None,
+              os.path.join("..", "..", "..", "..", "..", "rehearsals", "pizzeria-fittizia", "fixture.json")),
     # The portal's own checklist, which it gives only inside a draft: the blank is in forms/.
     "dsc": ("napoli/comune/cila-lavori-edilizi", "quadro-riepilogativo-dsc", "dsc-answers.json", None, "fixture.json"),
     # Drawn as a grid, with no line to write on: the studio's architect declares, its client is the committente.
@@ -71,6 +79,13 @@ NERI = [["neri:identity.first_name", "Anna"], ["neri:identity.date_of_birth", "1
         ["neri:identity.codice_fiscale", "NRENNA75C42F839H"], ["neri:identity.email", "anna.neri@example.com"],
         ["neri:identity.phone", "+39 333 444 5555"], ["neri:residenza.comune", "Napoli"], ["neri:residenza.provincia", "NA"],
         ["neri:residenza.indirizzo", "Via Chiaia"], ["neri:residenza.civico", "12"], ["neri:residenza.cap", "80121"]]
+MOD6_Q = "CHIEDE – scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)"
+MOD6_NO = {"Richiesta di detassazione per la produzione di rifiuti speciali": "no", "Eventuali note": "Trasferimento dal 01/03/2026."}
+MOD6_B = {**MOD6_NO, MOD6_Q: "B", **{f"B. Dall'immobile – {k}. {lab}": ans for k, vals in
+          ((1, ("no", "7", "210", "4", "62", "negozio")), (2, ("no",) * 6)) for lab, ans in zip(
+              ("Dati catastali – sez.", "Dati catastali – fg.", "Dati catastali – part.", "Dati catastali – sub",
+               "superficie in mq", "destinazione d'uso"), vals)}}
+MOD6_C = {**MOD6_NO, MOD6_Q: "C", "Eventuali note": "Variazione della superficie dal 01/03/2026."}
 PENDENZE = ("Dichiara di non avere pendenze verso il Comune di Napoli per IMU, Tassa rifiuti, Imposta di soggiorno, "
             "Canone di occupazione suolo pubblico (fino al 2020) e Canone patrimoniale (dal 2021)")
 
@@ -478,6 +493,24 @@ CASES = {
               ["ok   gennaro signs as titolare or legale rappresentante", "ok   every layout box sits on the form's own blank",
                "ok   the form is ready", "wrote: Fittizio Gennaro", "wrote: Viale Augusto, 74", "wrote: X",
                "wrote: 56.10.11", "wrote: negozio"]),
+    "mod-8": ("the TARI Mod. 8 (cessazione) of the Pizzeria Fittizia rehearsal, closing the unit (ticks c)",
+              {"pilot": "mod-8", "for": "gennaro"}, 0,
+              ["ok   gennaro signs as titolare or legale rappresentante", "ok   every layout box sits on the form's own blank",
+               "ok   the form is ready", "wrote: Fittizio Gennaro", "wrote: Viale Augusto, 74", "wrote: 31", "wrote: 10", "wrote: 2026", "wrote: X"]),
+    "mod-7": ("the TARI Mod. 7 (autotutela) of the Pizzeria Fittizia rehearsal, asking the annullamento, long motivi onto its lines",
+              {"pilot": "mod-7", "for": "gennaro"}, 0,
+              ["ok   gennaro signs as titolare or legale rappresentante", "ok   every layout box sits on the form's own blank",
+               "ok   the form is ready", "wrote: Fittizio Gennaro", "wrote: 123456/2026", "wrote: 20/09/2026", "wrote: X"]),
+    "mod-6": ("the TARI Mod. 6, quadro A: the pizzeria takes over a bar's utenza (cessione d'azienda)",
+              {"pilot": "mod-6", "for": "gennaro"}, 0,
+              ["ok   gennaro signs as titolare or legale rappresentante", "ok   every layout box sits on the form's own blank",
+               "ok   the form is ready", "wrote: Fittizio Gennaro", "wrote: Bar Sport di Rossi Mario", "wrote: Via Chiaia 10", "wrote: X"]),
+    "mod-6-trasferimento": ("the Mod. 6, quadro B: the premises left (answered) and the new ones (the vault's), the year in the notes",
+                            {"pilot": "mod-6", "for": "gennaro", "answers": MOD6_B}, 0,
+                            ["ok   every layout box sits on the form's own blank", "ok   the form is ready", "wrote: 412", "wrote: negozio"]),
+    "mod-6-superficie": ("the Mod. 6, quadro C on page 2: drawn rules for its blanks, the surface changing from 96 to 84 mq",
+                         {"pilot": "mod-6", "for": "gennaro", "answers": MOD6_C, "fixture": with_fields(["locale.tari_superficie_tassata_mq", "96"])}, 0,
+                         ["ok   every layout box sits on the form's own blank", "ok   the form is ready", "wrote: 96", "wrote: 60"]),
     "mod-5-sign": ("a business's titolare can't sign through the vault yet: the sign gate is the personal vault owner's",
                    {"pilot": "mod-5", "for": "gennaro", "sign": True, "no_reply": True}, 1,
                    ["FAIL the signer is the vault's owner"]),

@@ -8,7 +8,7 @@ aka:
   - voltura TARI
   - cambio superficie TARI
   - Mod. 6 TARI
-updated: 2026-10-27
+updated: 2026-11-11
 summary: >-
   Un'impresa, un professionista o un'associazione già iscritti alla TARI a Napoli per locali a uso
   non abitativo devono comunicare con il Mod. 6, entro 90 giorni, ogni cambiamento che modifica la
@@ -216,121 +216,260 @@ forms:
     sha256: fc3addc03f676a4da7d6e7a8ffad8c3f1fc4f39c0803c56bf904c855f8205eee
     signature_required: true
     fields:
-      - label: Cod.Contr.
+      - label: "Cod.Contr."
         map: { blank_with_reason: Spazio riservato all'ufficio. }
-        notes: >-
-          Il codice contribuente della ditta (business.tari_codice_contribuente) si può citare nel
-          testo della PEC.
-      - { label: Il/La sottoscritto/a, map: { concat: [identity.last_name, identity.first_name] } }
-      - { label: nato/a a, map: { direct: identity.birth_comune } }
-      - { label: il, map: { direct: identity.date_of_birth } }
-      - { label: C.F., map: { direct: identity.codice_fiscale } }
-      - { label: residente in, map: { direct: residenza.comune } }
-      - { label: Via, map: { direct: residenza.indirizzo } }
-      - { label: n°, map: { direct: residenza.civico } }
-      - { label: Telefono, map: { direct: identity.phone } }
-      - { label: e-mail, map: { direct: identity.email } }
-      - { label: pec, map: { direct: identity.pec } }
-      - label: nella sua qualità di (titolare / legale rappresentante)
+        notes: "Il codice contribuente della ditta (business.tari_codice_contribuente) si può citare nel testo della PEC."
+      - label: "Il/La sottoscritto/a"
+        map: { concat: [identity.last_name, identity.first_name] }
+      - label: "nato/a a"
+        map:
+          concat: [identity.birth_comune, identity.birth_country]
+          template: "{identity.birth_comune}[ ({identity.birth_country})]"
+        optional:
+          - field: identity.birth_country
+            required_if:
+              - { field: identity.birth_province, equals: EE }
+              - { field: identity.codice_fiscale, matches: "^.{11}Z" }
+        notes: "Il modulo ha una sola riga per il luogo di nascita: per chi è nato all'estero, il luogo come scritto sui documenti e lo stato tra parentesi."
+      - label: "il"
+        map: { direct: identity.date_of_birth, template: "{identity.date_of_birth|date}" }
+      - label: "C.F."
+        map: { direct: identity.codice_fiscale }
+      - label: "residente in"
+        map: { direct: residenza.comune }
+      - label: "Via"
+        map: { direct: residenza.indirizzo }
+      - label: "n°"
+        map: { direct: residenza.civico }
+      - label: "Telefono"
+        map: { direct: identity.phone }
+      - label: "e-mail"
+        map: { direct: identity.email }
+      - label: "pec"
+        map: { direct: identity.pec }
+        optional: [{ field: identity.pec }]
+      - label: "nella sua qualità di (titolare / legale rappresentante)"
         map: { fallback: [business.qualita_dichiarante, ruolo.tipo] }
-      - { label: Ragione Sociale, map: { direct: business.denominazione } }
-      - label: C.F. (della ditta)
+        choices:
+          - { box: titolare, values: [titolare] }
+          - { box: legale rappresentante, values: [legale_rappresentante] }
+      - label: "Ragione Sociale"
+        map: { direct: business.denominazione }
+      - label: "C.F. (della ditta)"
         map: { direct: business.codice_fiscale }
-        notes: >-
-          Il codice fiscale dell'impresa: per una società di solito coincide con la partita IVA; per
-          una ditta individuale è quello del titolare, mai la partita IVA. Se business.codice_fiscale
-          non c'è, chiederlo.
-      - { label: PARTITA IVA, map: { direct: business.partita_iva } }
-      - label: Con sede in via
-        map: { concat: [business.sede_legale_indirizzo, business.sede_legale_civico] }
-      - { label: Comune di, map: { direct: business.sede_legale_comune } }
-      - { label: CAP, map: { direct: business.sede_legale_cap } }
-      - { label: e-mail (della ditta), map: { direct: business.email } }
-      - { label: pec (della ditta), map: { direct: business.pec } }
-      - label: CHIEDE – scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)
+        notes: "Il codice fiscale dell'impresa: per una società di solito coincide con la partita IVA; per una ditta individuale è quello del titolare, mai la partita IVA. Se business.codice_fiscale non c'è, chiederlo."
+      - label: "PARTITA IVA"
+        map: { direct: business.partita_iva }
+      - label: "Con sede in via"
+        map:
+          concat: [business.sede_legale_indirizzo, business.sede_legale_civico]
+          template: "{business.sede_legale_indirizzo}, {business.sede_legale_civico}"
+      - label: "Comune di"
+        map: { direct: business.sede_legale_comune }
+      - label: "CAP"
+        map: { direct: business.sede_legale_cap }
+      - label: "e-mail (della ditta)"
+        map: { direct: business.email }
+      - label: "pec (della ditta)"
+        map: { direct: business.pec }
+      - label: "CHIEDE – scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)"
         map: { ask: "Che cosa è cambiato: subentro in un'utenza di un'altra ditta (A), trasferimento in altri locali a Napoli (B) o superficie (C)?" }
-      - label: A. la voltura dal
+        choices:
+          - { box: A, values: [A, voltura] }
+          - { box: B, values: [B, trasferimento, trasferimento interno] }
+          - { box: C, values: [C, superficie, variazione della superficie] }
+        notes: "Il modulo non ha caselle per la scelta: si sceglie compilando il quadro corrispondente."
+      - label: "A. la voltura dal"
         map: { direct: locale.data_inizio }
-        notes: Solo per il quadro A; è la data da cui la ditta occupa i locali.
-      - label: B. trasferimento interno al Comune di Napoli dal
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+        notes: "È la data da cui la ditta occupa i locali."
+      - label: "B. trasferimento interno al Comune di Napoli dal"
         map: { direct: locale.data_inizio }
-        notes: Solo per il quadro B; locale.* deve già contenere i nuovi locali.
-      - label: C. la variazione della superficie
-        map: { ask: "Barrare solo se è cambiata la superficie (quadro C)" }
-      - label: A. Utenza precedentemente intestata a – Ragione Sociale
-        map: { ask: Ragione sociale della ditta che aveva l'utenza prima }
-      - label: A. Utenza precedentemente intestata a – C.F.
-        map: { ask: Codice fiscale della ditta che aveva l'utenza prima }
-      - label: A. Utenza precedentemente intestata a – PARTITA IVA
-        map: { ask: Partita IVA della ditta che aveva l'utenza prima }
-      - label: A. Utenza precedentemente intestata a – Con sede in via
-        map: { ask: Indirizzo della sede della ditta che aveva l'utenza prima }
-      - label: A. Utenza precedentemente intestata a – Comune di
-        map: { ask: Comune della sede della ditta che aveva l'utenza prima }
-      - label: A. Utenza precedentemente intestata a – CAP
-        map: { ask: CAP della sede della ditta che aveva l'utenza prima }
-      - { label: A. Per i seguenti immobili siti in via, map: { direct: locale.indirizzo } }
-      - { label: A. n°, map: { direct: locale.civico } }
-      - { label: A. 1. Dati catastali – sez., map: { direct: locale.catasto_sezione } }
-      - { label: A. 1. Dati catastali – fg., map: { direct: locale.catasto_foglio } }
-      - { label: A. 1. Dati catastali – part., map: { direct: locale.catasto_particella } }
-      - { label: A. 1. Dati catastali – sub, map: { direct: locale.catasto_subalterno } }
-      - { label: A. 1. superficie in mq, map: { direct: locale.superficie_mq } }
-      - { label: A. 1. destinazione d'uso, map: { direct: locale.destinazione_uso } }
-      - label: A. 2. Dati catastali – sez.
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+        notes: "Il modulo lascia solo i posti del giorno e del mese: l'anno si scrive in Eventuali note. locale.* deve già contenere i nuovi locali."
+      - label: "A. Utenza precedentemente intestata a – Ragione Sociale"
+        map: { ask: "Ragione sociale della ditta che aveva l'utenza prima" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. Utenza precedentemente intestata a – C.F."
+        map: { ask: "Codice fiscale della ditta che aveva l'utenza prima" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. Utenza precedentemente intestata a – PARTITA IVA"
+        map: { ask: "Partita IVA della ditta che aveva l'utenza prima" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. Utenza precedentemente intestata a – Con sede in via"
+        map: { ask: "Indirizzo della sede della ditta che aveva l'utenza prima" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. Utenza precedentemente intestata a – Comune di"
+        map: { ask: "Comune della sede della ditta che aveva l'utenza prima" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. Utenza precedentemente intestata a – CAP"
+        map: { ask: "CAP della sede della ditta che aveva l'utenza prima" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. Per i seguenti immobili siti in via"
+        map: { direct: locale.indirizzo }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. n°"
+        map: { direct: locale.civico }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. 1. Dati catastali – sez."
+        map: { direct: locale.catasto_sezione }
+        optional: [{ field: locale.catasto_sezione }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. 1. Dati catastali – fg."
+        map: { direct: locale.catasto_foglio }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. 1. Dati catastali – part."
+        map: { direct: locale.catasto_particella }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. 1. Dati catastali – sub"
+        map: { direct: locale.catasto_subalterno }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. 1. superficie in mq"
+        map: { direct: locale.superficie_mq }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. 1. destinazione d'uso"
+        map: { direct: locale.destinazione_uso }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. 2. Dati catastali – sez."
         map: { direct: locale2.catasto_sezione }
-        notes: >-
-          Solo se la voltura riguarda anche un secondo immobile, nel vault locale2.*; altrimenti
-          vuoto.
-      - { label: A. 2. Dati catastali – fg., map: { direct: locale2.catasto_foglio } }
-      - { label: A. 2. Dati catastali – part., map: { direct: locale2.catasto_particella } }
-      - { label: A. 2. Dati catastali – sub, map: { direct: locale2.catasto_subalterno } }
-      - { label: A. 2. superficie in mq, map: { direct: locale2.superficie_mq } }
-      - { label: A. 2. destinazione d'uso, map: { direct: locale2.destinazione_uso } }
-      - label: A. Motivo della voltura (cessione d'azienda / cessione di ramo d'azienda / altro)
+        optional: [{ field: locale2.catasto_sezione }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+        notes: "Solo se la voltura riguarda anche un secondo immobile, nel vault locale2.*; altrimenti vuoto."
+      - label: "A. 2. Dati catastali – fg."
+        map: { direct: locale2.catasto_foglio }
+        optional: [{ field: locale2.catasto_foglio }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. 2. Dati catastali – part."
+        map: { direct: locale2.catasto_particella }
+        optional: [{ field: locale2.catasto_particella }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. 2. Dati catastali – sub"
+        map: { direct: locale2.catasto_subalterno }
+        optional: [{ field: locale2.catasto_subalterno }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. 2. superficie in mq"
+        map: { direct: locale2.superficie_mq }
+        optional: [{ field: locale2.superficie_mq }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. 2. destinazione d'uso"
+        map: { direct: locale2.destinazione_uso }
+        optional: [{ field: locale2.destinazione_uso }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "A. Motivo della voltura (cessione d'azienda / cessione di ramo d'azienda / altro)"
         map: { ask: "Motivo della voltura: cessione d'azienda, cessione di ramo d'azienda o altro (specificare)" }
-      - label: B. Dall'immobile – 1. Dati catastali, superficie e destinazione d'uso
-        map: { ask: "Dati catastali, superficie e destinazione d'uso dei locali lasciati (come nella dichiarazione precedente)" }
-      - label: B. Dall'immobile – 2. Dati catastali, superficie e destinazione d'uso
-        map: { ask: "Dati del secondo immobile lasciato, se più di uno" }
-      - { label: B. All'immobile – 1. Dati catastali – sez., map: { direct: locale.catasto_sezione } }
-      - { label: B. All'immobile – 1. Dati catastali – fg., map: { direct: locale.catasto_foglio } }
-      - { label: B. All'immobile – 1. Dati catastali – part., map: { direct: locale.catasto_particella } }
-      - { label: B. All'immobile – 1. Dati catastali – sub, map: { direct: locale.catasto_subalterno } }
-      - { label: B. All'immobile – 1. superficie in mq, map: { direct: locale.superficie_mq } }
-      - { label: B. All'immobile – 1. destinazione d'uso, map: { direct: locale.destinazione_uso } }
-      - label: B. All'immobile – 2. Dati catastali – sez.
+        choices:
+          - { box: cessione d'azienda, values: [cessione d'azienda] }
+          - { box: cessione di ramo d'azienda, values: [cessione di ramo d'azienda] }
+          - { box: altro, values: [altro], write_value: true }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [A] }
+      - label: "B. Dall'immobile – 1. Dati catastali – sez."
+        map: { ask: "locali lasciati, immobile 1: dati catastali sez. (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. Dall'immobile – 1. Dati catastali – fg."
+        map: { ask: "locali lasciati, immobile 1: dati catastali fg. (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. Dall'immobile – 1. Dati catastali – part."
+        map: { ask: "locali lasciati, immobile 1: dati catastali part. (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. Dall'immobile – 1. Dati catastali – sub"
+        map: { ask: "locali lasciati, immobile 1: dati catastali sub (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. Dall'immobile – 1. superficie in mq"
+        map: { ask: "locali lasciati, immobile 1: superficie in mq (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. Dall'immobile – 1. destinazione d'uso"
+        map: { ask: "locali lasciati, immobile 1: destinazione d'uso (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. Dall'immobile – 2. Dati catastali – sez."
+        map: { ask: "locali lasciati, immobile 2: dati catastali sez. (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. Dall'immobile – 2. Dati catastali – fg."
+        map: { ask: "locali lasciati, immobile 2: dati catastali fg. (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. Dall'immobile – 2. Dati catastali – part."
+        map: { ask: "locali lasciati, immobile 2: dati catastali part. (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. Dall'immobile – 2. Dati catastali – sub"
+        map: { ask: "locali lasciati, immobile 2: dati catastali sub (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. Dall'immobile – 2. superficie in mq"
+        map: { ask: "locali lasciati, immobile 2: superficie in mq (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. Dall'immobile – 2. destinazione d'uso"
+        map: { ask: "locali lasciati, immobile 2: destinazione d'uso (come nella dichiarazione precedente; 'no' se non c'è)" }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. All'immobile – 1. Dati catastali – sez."
+        map: { direct: locale.catasto_sezione }
+        optional: [{ field: locale.catasto_sezione }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. All'immobile – 1. Dati catastali – fg."
+        map: { direct: locale.catasto_foglio }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. All'immobile – 1. Dati catastali – part."
+        map: { direct: locale.catasto_particella }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. All'immobile – 1. Dati catastali – sub"
+        map: { direct: locale.catasto_subalterno }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. All'immobile – 1. superficie in mq"
+        map: { direct: locale.superficie_mq }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. All'immobile – 1. destinazione d'uso"
+        map: { direct: locale.destinazione_uso }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. All'immobile – 2. Dati catastali – sez."
         map: { direct: locale2.catasto_sezione }
-        notes: >-
-          Solo se i nuovi locali comprendono un secondo immobile, nel vault locale2.* (aggiornato
-          come locale.*); altrimenti vuoto.
-      - { label: B. All'immobile – 2. Dati catastali – fg., map: { direct: locale2.catasto_foglio } }
-      - { label: B. All'immobile – 2. Dati catastali – part., map: { direct: locale2.catasto_particella } }
-      - { label: B. All'immobile – 2. Dati catastali – sub, map: { direct: locale2.catasto_subalterno } }
-      - { label: B. All'immobile – 2. superficie in mq, map: { direct: locale2.superficie_mq } }
-      - { label: B. All'immobile – 2. destinazione d'uso, map: { direct: locale2.destinazione_uso } }
-      - { label: C. Dati catastali – Sez., map: { direct: locale.catasto_sezione } }
-      - { label: C. Dati catastali – Foglio, map: { direct: locale.catasto_foglio } }
-      - { label: C. Dati catastali – Part., map: { direct: locale.catasto_particella } }
-      - { label: C. Dati catastali – Sub., map: { direct: locale.catasto_subalterno } }
-      - label: C. Superficie dichiarata in precedenza mq
+        optional: [{ field: locale2.catasto_sezione }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+        notes: "Solo se i nuovi locali comprendono un secondo immobile, nel vault locale2.* (aggiornato come locale.*); altrimenti vuoto."
+      - label: "B. All'immobile – 2. Dati catastali – fg."
+        map: { direct: locale2.catasto_foglio }
+        optional: [{ field: locale2.catasto_foglio }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. All'immobile – 2. Dati catastali – part."
+        map: { direct: locale2.catasto_particella }
+        optional: [{ field: locale2.catasto_particella }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. All'immobile – 2. Dati catastali – sub"
+        map: { direct: locale2.catasto_subalterno }
+        optional: [{ field: locale2.catasto_subalterno }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. All'immobile – 2. superficie in mq"
+        map: { direct: locale2.superficie_mq }
+        optional: [{ field: locale2.superficie_mq }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "B. All'immobile – 2. destinazione d'uso"
+        map: { direct: locale2.destinazione_uso }
+        optional: [{ field: locale2.destinazione_uso }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [B] }
+      - label: "C. Dati catastali – Sez."
+        map: { direct: locale.catasto_sezione }
+        optional: [{ field: locale.catasto_sezione }]
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [C] }
+      - label: "C. Dati catastali – Foglio"
+        map: { direct: locale.catasto_foglio }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [C] }
+      - label: "C. Dati catastali – Part."
+        map: { direct: locale.catasto_particella }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [C] }
+      - label: "C. Dati catastali – Sub."
+        map: { direct: locale.catasto_subalterno }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [C] }
+      - label: "C. Superficie dichiarata in precedenza mq"
         map: { direct: locale.tari_superficie_tassata_mq }
-        notes: >-
-          La superficie che il Comune tassa finora, dall'ultimo avviso: leggerla prima di
-          aggiornare il vault. Se la dichiarazione precedente ne riportava un'altra, va quella
-          dichiarata: chiederla.
-      - { label: C. Superficie attuale mq, map: { direct: locale.superficie_mq } }
-      - label: Richiesta di detassazione per la produzione di rifiuti speciali
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [C] }
+        notes: "La superficie che il Comune tassa finora, dall'ultimo avviso: leggerla prima di aggiornare il vault. Se la dichiarazione precedente ne riportava un'altra, va quella dichiarata: chiederla."
+      - label: "C. Superficie attuale mq"
+        map: { direct: locale.superficie_mq }
+        when: { field: "CHIEDE \u2013 scelta del quadro (A voltura, B trasferimento interno, C variazione della superficie)", ticks: [C] }
+      - label: "Richiesta di detassazione per la produzione di rifiuti speciali"
         map: { ask: "L'attività produce rifiuti speciali e vuole chiedere la detassazione?" }
-      - label: Eventuali note
-        map: { ask: "Note per l'ufficio: per il quadro C la data della variazione; per un cambio di destinazione d'uso o di attività, la descrizione" }
-        notes: >-
-          Il quadro C non ha una casella per la data della variazione, che il regolamento richiede
-          (art. 26, c. 2, lett. d): scriverla qui.
-      - label: Data
-        map: { blank_with_reason: La scrive chi firma il modulo. }
-      - label: Firma
-        map: { blank_with_reason: Firma autografa del dichiarante. }
+        choices:
+          - { box: Richiesta di detassazione, values: [si, sì] }
+      - label: "Eventuali note"
+        map: { ask: "Note per l'ufficio: per il quadro C la data della variazione; per il quadro B l'anno del trasferimento; per un cambio di destinazione d'uso o di attività, la descrizione" }
+        notes: "Il quadro C non ha una casella per la data della variazione, che il regolamento richiede (art. 26, c. 2, lett. d): scriverla qui."
+
 steps:
   - do: >-
       Stabilire quale quadro del Mod. 6 si applica (A voltura, B trasferimento interno, C

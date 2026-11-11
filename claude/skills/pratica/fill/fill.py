@@ -1553,6 +1553,11 @@ def layout_problems(fitz, pdf_path, layout):
                 "underscores": [b for b, c in chars if c == "_"],
                 "printed": [(b, c) for b, c in chars if c not in "_  "],
                 "shapes": [d["rect"] for d in page.get_drawings()],
+                # A blank drawn as a rule rather than typed underscores (Mod. 7's "prot. N°"): [x0, x1, y].
+                "rules": [(min(i[1].x, i[2].x), max(i[1].x, i[2].x), i[1].y) for d in page.get_drawings()
+                          for i in d["items"] if i[0] == "l" and abs(i[1].y - i[2].y) < 0.3 and abs(i[1].x - i[2].x) > 10]
+                         + [(i[1].x0, i[1].x1, i[1].y0) for d in page.get_drawings()
+                            for i in d["items"] if i[0] == "re" and i[1].height < 1.2 and i[1].width > 10],
                 # A grid form's shaded bands (labels), not its thin rules; and the span of rows its
                 # bands enclose, where the blanks are.
                 "bands": [d["rect"] for d in page.get_drawings() if d.get("fill") and d["fill"] != (1.0, 1.0, 1.0)
@@ -1578,7 +1583,9 @@ def layout_problems(fitz, pdf_path, layout):
             width, end = width + max(0.0, b - max(a, end)), max(end, b)
         if covered and width < 0.8 * (x1 - x0):
             return "isn't on the form's blank line"
-        if not covered:
+        on_rule = any(top - 1 <= r[2] <= bottom + 3 and min(r[1], x1) - max(r[0], x0) >= 0.8 * (x1 - x0)
+                      for r in m["rules"])
+        if not covered and not on_rule:
             # A form drawn as a grid (the Comune's Modello DP): the blank is the plain row under a
             # shaded row of labels, with no line to write on. It must clear every shaded band, the
             # form's thin rules aside.
