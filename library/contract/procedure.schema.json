@@ -1,0 +1,1361 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liammaher/pratiche-napoli/contract/procedure.schema.json",
+  "title": "Procedure",
+  "description": "One bureaucratic procedure, described so people and AIs can understand and prepare it. No personal data: forms refer to field IDs from contract/fields.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "headline",
+    "updated",
+    "summary",
+    "ente",
+    "applies_to",
+    "channels",
+    "steps",
+    "sources",
+    "verification"
+  ],
+  "properties": {
+    "schema_version": {
+      "description": "The format's version. Readers (the vault's pratica skill) set aside the forms and records of a version they don't know, and refuse a map, row or template filter they don't know, so adding one doesn't need a new version. Raise it when an older reader would misread an entry it accepts: a key renamed or given a new meaning",
+      "const": 0
+    },
+    "id": {
+      "description": "Path-like id; must match the file path under procedures/ without .yaml",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "pattern": "\\S"
+    },
+    "headline": {
+      "description": "The page title in the words people search with, a question or an action (\"Come iscriversi alla TARI a Napoli dopo un trasloco\"); title stays the official name",
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 90,
+      "pattern": "\\S"
+    },
+    "aka": {
+      "description": "Everyday names people use for this procedure (\"tassa sulla spazzatura\"), for search",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/text"
+      },
+      "uniqueItems": true
+    },
+    "updated": {
+      "description": "The last day anything in this procedure changed, apart from this field and YAML comments or layout. Bump it with every change: the site and the JSON publish it as the page's last update, and CI checks it on pull requests",
+      "type": "string",
+      "format": "date"
+    },
+    "summary": {
+      "description": "Two or three plain-Italian sentences: what it is and who it is for",
+      "type": "string",
+      "minLength": 10,
+      "pattern": "\\S"
+    },
+    "ente": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "office": {
+          "$ref": "#/$defs/text"
+        },
+        "ipa": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "applies_to": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "events",
+        "audience"
+      ],
+      "properties": {
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "open",
+              "change",
+              "move",
+              "hire",
+              "renovate",
+              "signage",
+              "dehors",
+              "food",
+              "events",
+              "close",
+              "annual",
+              "inspection",
+              "letter",
+              "home"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "audience": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "business",
+              "resident"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "sectors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          },
+          "uniqueItems": true
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/claim"
+          }
+        }
+      }
+    },
+    "legal_basis": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    },
+    "deadline": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "summary": {
+          "description": "The deadline in one or two sentences covering every case, for the page's \"In breve\"; required when there is more than one rule",
+          "$ref": "#/$defs/claim"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/deadlineRule"
+          }
+        },
+        "lateness": {
+          "$ref": "#/$defs/claim"
+        }
+      }
+    },
+    "cost": {
+      "description": "What the procedure costs in total (fees, marche da bollo, diritti), or that it is free; not the tax it registers you for. Shown in the page's \"In breve\"",
+      "$ref": "#/$defs/claim"
+    },
+    "duration": {
+      "description": "How long until the result: the office's time limit or the official practice (\"il SUAP ha 60 giorni per i controlli\"). Shown in \"In breve\"",
+      "$ref": "#/$defs/claim"
+    },
+    "appointment": {
+      "description": "Whether an appointment is needed, and how to book one. Shown in \"In breve\"",
+      "$ref": "#/$defs/claim"
+    },
+    "channels": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "purpose"
+        ],
+        "properties": {
+          "purpose": {
+            "description": "What the channel is for: procedure, to carry out the procedure itself (file, request, read); info, only questions and assistance; payment; related, another service or a linked step. Only procedure channels answer \"can it be done online\"",
+            "enum": [
+              "procedure",
+              "info",
+              "payment",
+              "related"
+            ]
+          },
+          "type": {
+            "enum": [
+              "portal",
+              "pec",
+              "email",
+              "desk",
+              "post",
+              "phone",
+              "app"
+            ]
+          },
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "url": {
+            "$ref": "#/$defs/httpUrl"
+          },
+          "address": {
+            "$ref": "#/$defs/text"
+          },
+          "auth": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "spid",
+                "cie",
+                "cns",
+                "none"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "use": {
+            "description": "What a person does on a portal that carries out the procedure (purpose procedure; required there, and only there): upload, send the filled, signed form or other documents as files; web_form, type the data into the portal's own form, so no PDF is filled for it; read, only read or download (a notice, a receipt, a certificate). Both web_form and upload when the portal's form also asks for files",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["ways", "status"],
+            "properties": {
+              "ways": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": { "enum": ["upload", "web_form", "read"] }
+              },
+              "status": { "$ref": "#/$defs/status" },
+              "source": { "description": "id of the source that says so", "type": "string" },
+              "notes": { "$ref": "#/$defs/text" }
+            }
+          },
+          "hours": {
+            "$ref": "#/$defs/text"
+          },
+          "booking": {
+            "$ref": "#/$defs/text"
+          },
+          "receipt": {
+            "enum": [
+              "legal",
+              "informal",
+              "none"
+            ]
+          },
+          "preferred": {
+            "type": "boolean"
+          },
+          "office": {
+            "description": "A desk that depends on where the person is: which list of offices (offices/<list>.json, one per service: the Municipalità's sede, the ASL's Prevenzione Collettiva, the ASL district's own sede...) and the vault field whose value picks one in it (residenza.municipalita, locale.distretto_asl), which must be the field the list is keyed by. In place of one address",
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["list", "from"],
+            "properties": {
+              "list": { "description": "The list's file name in offices/, without .json", "type": "string", "pattern": "^[a-z0-9-]+$" },
+              "from": { "description": "An address's area field: residenza.municipalita, locale2.distretto_asl, or the sede legale's business.sede_legale_municipalita", "type": "string", "pattern": "^[a-z][a-z0-9_]*[0-9]*\\.(sede_legale_)?(municipalita|distretto_asl)$" }
+            }
+          },
+          "notes": {
+            "$ref": "#/$defs/text"
+          },
+          "source": {
+            "description": "id of the source for these contact details",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "payment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method"
+      ],
+      "properties": {
+        "method": {
+          "enum": [
+            "f24",
+            "pagopa",
+            "bollettino",
+            "marca-da-bollo",
+            "none"
+          ]
+        },
+        "codice_ente": {
+          "$ref": "#/$defs/text"
+        },
+        "codici_tributo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          },
+          "uniqueItems": true
+        },
+        "rateazione": {
+          "$ref": "#/$defs/text"
+        },
+        "status": {
+          "description": "Status of codice_ente, codici_tributo and rateazione; unverified or disputed puts a warning next to each on the site",
+          "$ref": "#/$defs/status"
+        },
+        "source": {
+          "description": "id of the source for codice_ente, codici_tributo and rateazione",
+          "type": "string"
+        },
+        "calculator_url": {
+          "$ref": "#/$defs/httpUrl"
+        },
+        "schedule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "label",
+              "due"
+            ],
+            "properties": {
+              "label": {
+                "$ref": "#/$defs/text"
+              },
+              "due": {
+                "type": "string",
+                "format": "date"
+              },
+              "source": {
+                "type": "string"
+              },
+              "status": {
+                "$ref": "#/$defs/status"
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/claim"
+          }
+        }
+      }
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "required"
+        ],
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "notes": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "dichiarante": {
+      "description": "Who signs the forms for the business. In the forms and records, unprefixed fields of a person's own categories (subject persona, scope person: identity, residenza, cie...) and ruolo.* are the dichiarante's: in a personal vault the owner, whose role is business.qualita_dichiarante; in a business vault the person whose ruolo.tipo includes one of these. business.* and locale.* stay the vault's own. Only a ruolo that signs for the business: see $defs/signer",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruolo"
+      ],
+      "properties": {
+        "ruolo": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/signer"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/signer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "forms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "fields"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "name": {
+            "$ref": "#/$defs/text"
+          },
+          "url": {
+            "$ref": "#/$defs/httpUrl"
+          },
+          "source": {
+            "description": "id of the source where the form is published",
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "signature_required": {
+            "type": "boolean"
+          },
+          "signing": {
+            "description": "Where this form's signature differs from contract/signing.json, the law's rule for each channel type (only with signature_required): the ente's own rule, a portal's (which has no default), or a way it disputes. A channel not listed here takes the default",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "channel",
+                "ways",
+                "id_copy",
+                "status"
+              ],
+              "properties": {
+                "channel": {
+                  "description": "The type of one of the procedure's channels with purpose procedure",
+                  "enum": [
+                    "portal",
+                    "pec",
+                    "email",
+                    "desk",
+                    "post",
+                    "phone",
+                    "app"
+                  ]
+                },
+                "ways": {
+                  "description": "What the channel accepts as the signature: handwritten, a signed scan or paper; digital, a firma digitale; login, the SPID/CIE/CNS login on the channel is the signature (the channel needs an auth); none, the channel itself identifies the sender and nothing is signed",
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": [
+                      "handwritten",
+                      "digital",
+                      "login",
+                      "none"
+                    ]
+                  }
+                },
+                "id_copy": {
+                  "$ref": "#/$defs/id_copy"
+                },
+                "status": {
+                  "$ref": "#/$defs/status"
+                },
+                "source": {
+                  "description": "id of the source for this entry",
+                  "type": "string"
+                },
+                "notes": {
+                  "$ref": "#/$defs/text"
+                }
+              }
+            }
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "map"
+              ],
+              "properties": {
+                "label": {
+                  "$ref": "#/$defs/text"
+                },
+                "map": {
+                  "$ref": "#/$defs/mapping"
+                },
+                "notes": {
+                  "$ref": "#/$defs/text"
+                },
+                "optional": {
+                  "description": "Fields of this row that may be empty (the box, or that part of it, is left blank), unless one of required_if holds. Any other field the row reads must have a value, or the person is asked",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "field"
+                    ],
+                    "properties": {
+                      "field": {
+                        "oneOf": [
+                          {
+                            "$ref": "#/$defs/fieldRef"
+                          },
+                          {
+                            "description": "A field of the place a fallback picked",
+                            "type": "string",
+                            "pattern": "^\\.[a-z0-9_]+$"
+                          }
+                        ]
+                      },
+                      "required_if": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "$ref": "#/$defs/condition"
+                        }
+                      }
+                    }
+                  }
+                },
+                "when": {
+                  "description": "The row is filled only when the answer to another row of the form, an ask with boxes to tick, ticks one of these boxes (as \"legale rappresentante di\" after \"in proprio / legale rappresentante\"); otherwise it is left blank, and what it reads isn't asked for",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "field",
+                    "ticks"
+                  ],
+                  "properties": {
+                    "field": {
+                      "description": "The other row's label",
+                      "$ref": "#/$defs/text"
+                    },
+                    "ticks": {
+                      "type": "array",
+                      "minItems": 1,
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
+                },
+                "choices": {
+                  "description": "The row is boxes to tick: each box is ticked when the field's value (or the answer, for an ask) is one of its values, compared without case, a trailing . or !, and with _ as a space (legale_rappresentante is Legale rappresentante). write_value also writes the value next to the box, as on an \"altro ____\"",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "box",
+                      "values"
+                    ],
+                    "properties": {
+                      "box": {
+                        "$ref": "#/$defs/text"
+                      },
+                      "values": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "write_value": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "do",
+          "who"
+        ],
+        "properties": {
+          "do": {
+            "$ref": "#/$defs/text"
+          },
+          "who": {
+            "enum": [
+              "owner",
+              "facilitator",
+              "professional",
+              "office",
+              "anyone"
+            ]
+          },
+          "human_only": {
+            "description": "Signing, paying, sending, swearing, being present: never done by an agent",
+            "type": "boolean"
+          },
+          "gate": {
+            "description": "sign: the vault's sign gate can carry this step when the way to sign is handwritten. The step stays human_only: the person's approval is the human act, and a consumer without the gate ignores this and hands the step over as any human_only step",
+            "enum": [
+              "sign"
+            ]
+          },
+          "channel": {
+            "description": "The routes this step belongs to, by channel type: a step done one way on one route (send by PEC, by raccomandata, at the desk) and not on the others. A step without it is on every route. Every pec, email, post and desk channel of the procedure has a step of its own",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/channel_type"
+            }
+          }
+        }
+      }
+    },
+    "after": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/text"
+      }
+    },
+    "records": {
+      "description": "Data the procedure produces that is worth keeping (a codice contribuente, a REA number): one registry field each, and where its value comes from. The person's own tracking of the procedure is not listed here",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "field",
+          "from"
+        ],
+        "properties": {
+          "field": {
+            "description": "One exact field ID of the vault owner (or, for a person's own data in a procedure with a dichiarante, of the dichiarante), no wildcard or member prefix. A numbered copy of a category (locale2: a second premises) is allowed, as in fieldRef",
+            "type": "string",
+            "pattern": "^[a-z_]+(?:[2-9]|[1-9][0-9]+)?\\.[a-z0-9_]+$"
+          },
+          "from": {
+            "description": "The document or message the value is read from",
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "pitfalls": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/claim"
+      }
+    },
+    "related": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*(/[a-z0-9]+(-[a-z0-9]+)*)+$"
+      },
+      "uniqueItems": true
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "retrieved"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "label": {
+            "$ref": "#/$defs/text"
+          },
+          "url": {
+            "$ref": "#/$defs/httpUrl"
+          },
+          "retrieved": {
+            "type": "string",
+            "format": "date"
+          },
+          "page_updated": {
+            "type": "string",
+            "format": "date"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "official": {
+            "type": "boolean"
+          },
+          "notes": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "level",
+        "date",
+        "by",
+        "method"
+      ],
+      "properties": {
+        "level": {
+          "description": "L0 draft, L1 desk-checked against official sources, L2 confirmed by the office, L3 a real filing went through",
+          "enum": [
+            "L0",
+            "L1",
+            "L2",
+            "L3"
+          ]
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "by": {
+          "$ref": "#/$defs/text"
+        },
+        "method": {
+          "$ref": "#/$defs/text"
+        },
+        "notes": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "ssu_ref": {
+      "description": "Reference in the national SSU catalogue, when known",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "run_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "date",
+          "note"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "note": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "reported": {
+      "description": "What people who did the procedure reported, generated by npm run reports:aggregate from reviewed reports of the last 12 months; don't edit by hand. It exists only with at least 3 reports. Every count in it, outcome and reason counts included, covers at least 3 reports, and so does what it leaves over beside the total it belongs to (the count, a channel's count, the refusals), unless nothing is; figures are rounded medians, never a smallest or largest value. Tips, rejection reasons and extra documents are written by a maintainer, never quoted",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generated",
+        "period",
+        "count",
+        "basis"
+      ],
+      "properties": {
+        "generated": {
+          "type": "string",
+          "format": "date"
+        },
+        "period": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "from",
+            "to"
+          ],
+          "properties": {
+            "from": {
+              "$ref": "#/$defs/month"
+            },
+            "to": {
+              "$ref": "#/$defs/month"
+            }
+          }
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 3
+        },
+        "outcomes": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "completata": {
+              "type": "integer",
+              "minimum": 3
+            },
+            "chiesto_altro": {
+              "type": "integer",
+              "minimum": 3
+            },
+            "respinta": {
+              "type": "integer",
+              "minimum": 3
+            },
+            "in_attesa": {
+              "type": "integer",
+              "minimum": 3
+            },
+            "rinunciato": {
+              "type": "integer",
+              "minimum": 3
+            }
+          }
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "count"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "portal",
+                  "pec",
+                  "email",
+                  "desk",
+                  "post",
+                  "phone",
+                  "app"
+                ]
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 3
+              },
+              "days_to_answer": {
+                "$ref": "#/$defs/stat"
+              }
+            }
+          }
+        },
+        "desk_wait_minutes": {
+          "$ref": "#/$defs/stat"
+        },
+        "paid_eur": {
+          "$ref": "#/$defs/stat"
+        },
+        "documents": {
+          "description": "Listed documents, with how many of the reports that answered about each said it was asked for; both those asked and those not asked are none or at least 3",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "asked",
+              "of"
+            ],
+            "properties": {
+              "name": {
+                "$ref": "#/$defs/text"
+              },
+              "asked": {
+                "type": "integer",
+                "anyOf": [
+                  {
+                    "const": 0
+                  },
+                  {
+                    "minimum": 3
+                  }
+                ]
+              },
+              "of": {
+                "type": "integer",
+                "minimum": 3
+              }
+            }
+          }
+        },
+        "extra_documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "count"
+            ],
+            "properties": {
+              "text": {
+                "$ref": "#/$defs/text"
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 3
+              }
+            }
+          }
+        },
+        "rejection_reasons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "text",
+              "count"
+            ],
+            "properties": {
+              "text": {
+                "$ref": "#/$defs/text"
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 3
+              }
+            }
+          }
+        },
+        "tips": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          },
+          "uniqueItems": true
+        },
+        "basis": {
+          "description": "A random mark of each report behind the block, given by the backend and unrelated to the report's id or the receipt its sender got, so the next update can tell which reports each version covered: reports come in 3 or more at a time, leave together with those published with them, and each figure holds in every group of reports the same versions cover",
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{12}$"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "channel_type": {
+      "enum": [
+        "portal",
+        "pec",
+        "email",
+        "desk",
+        "post",
+        "phone",
+        "app"
+      ]
+    },
+    "id_copy": {
+      "description": "Whether the channel wants a copy of the signer's identity document with the form: required; handwritten, only when signed by hand (not with a firma digitale); not_needed; or unknown",
+      "enum": [
+        "required",
+        "handwritten",
+        "not_needed",
+        "unknown"
+      ]
+    },
+    "status": {
+      "description": "verified: an official source says so; unverified: believed but not yet checked; disputed: sources disagree",
+      "enum": [
+        "verified",
+        "unverified",
+        "disputed"
+      ]
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "status"
+      ],
+      "properties": {
+        "text": {
+          "$ref": "#/$defs/text"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "source": {
+          "description": "id of a source in this procedure",
+          "type": "string"
+        }
+      }
+    },
+    "ruolo": {
+      "description": "A value of the vault's ruolo.tipo: what a person in a business vault is to the business. The list is the vault's (ruolo.tipo values in fields.json); a test keeps this enum equal to it",
+      "enum": [
+        "titolare",
+        "legale_rappresentante",
+        "socio",
+        "amministratore",
+        "procuratore",
+        "preposto",
+        "responsabile_tecnico",
+        "dipendente",
+        "collaboratore",
+        "cliente",
+        "fornitore",
+        "impresa_esecutrice",
+        "altro"
+      ]
+    },
+    "party": {
+      "description": "A person picked by role: whoever's ruolo.tipo includes the ruolo, or any of the list",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ruolo"
+      ],
+      "properties": {
+        "ruolo": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ruolo"
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/ruolo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "signer": {
+      "description": "A ruolo that signs a business's forms and declarations: the titolare of a ditta individuale, or a società's legale rappresentante. A client, a supplier or an employee never signs for it; a procuratore acts under the procura the business gave, a party of its own",
+      "enum": [
+        "titolare",
+        "legale_rappresentante"
+      ]
+    },
+    "partyRef": {
+      "description": "Read the fields from this person instead of the vault's owner. Nobody with the ruolo (always so in a personal vault): ask the person filling in; several: they pick one. The fields are written without a prefix",
+      "$ref": "#/$defs/party"
+    },
+    "fieldRef": {
+      "description": "A field ID (category.field) or a whole category (category.*), the vault owner's when unprefixed. A family member's carry their slug (leo:identity.first_name; io is reserved for the owner), and *: means each member (*:identity.first_name). A category followed by a number from 2 is the vault's numbered copy of it, with its fields and rules (locale2.indirizzo: a second premises); categories with one_only in the registry have none",
+      "type": "string",
+      "pattern": "^(?:(?:\\*|[a-z][a-z0-9-]{0,31}):)?[a-z_]+(?:[2-9]|[1-9][0-9]+)?\\.([a-z0-9_]+|\\*)$"
+    },
+    "mapping": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "direct"
+          ],
+          "properties": {
+            "party": {
+              "$ref": "#/$defs/partyRef"
+            },
+            "direct": {
+              "$ref": "#/$defs/fieldRef"
+            },
+            "template": {
+              "$ref": "#/$defs/template"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "concat"
+          ],
+          "properties": {
+            "party": {
+              "$ref": "#/$defs/partyRef"
+            },
+            "concat": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/$defs/fieldRef"
+              }
+            },
+            "template": {
+              "$ref": "#/$defs/template"
+            }
+          }
+        },
+        {
+          "description": "Use the first source that has a value",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fallback"
+          ],
+          "properties": {
+            "party": {
+              "$ref": "#/$defs/partyRef"
+            },
+            "fallback": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/$defs/fieldRef"
+              }
+            },
+            "template": {
+              "$ref": "#/$defs/template"
+            }
+          }
+        },
+        {
+          "description": "One row per person, filled from that person's fields, written *:category.field. famiglia: each family member in the vault owner's stato di famiglia (famiglia.stato_famiglia si). { ruolo }: each person whose ruolo.tipo includes it (or any of the list); except: dichiarante leaves out the procedure's dichiarante",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "repeat",
+            "fields"
+          ],
+          "properties": {
+            "repeat": {
+              "oneOf": [
+                {
+                  "const": "famiglia"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "ruolo"
+                  ],
+                  "properties": {
+                    "ruolo": {
+                      "$ref": "#/$defs/party/properties/ruolo"
+                    },
+                    "except": {
+                      "const": "dichiarante"
+                    }
+                  }
+                }
+              ]
+            },
+            "fields": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/fieldRef"
+              }
+            },
+            "columns": {
+              "description": "The form's columns, each filled for every person (a row of the table)",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "label",
+                  "template"
+                ],
+                "properties": {
+                  "label": {
+                    "$ref": "#/$defs/text"
+                  },
+                  "template": {
+                    "$ref": "#/$defs/template"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "blank_with_reason"
+          ],
+          "properties": {
+            "blank_with_reason": {
+              "$ref": "#/$defs/text"
+            }
+          }
+        },
+        {
+          "description": "Not in the field registry yet: ask the person",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ask"
+          ],
+          "properties": {
+            "ask": {
+              "$ref": "#/$defs/text"
+            }
+          }
+        }
+      ]
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "httpUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://[^/?#\\s]+"
+    },
+    "month": {
+      "type": "string",
+      "pattern": "^20[0-9]{2}-(0[1-9]|1[0-2])$"
+    },
+    "stat": {
+      "description": "The median of at least 3 answers, rounded, and how many answered",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "median",
+        "n"
+      ],
+      "properties": {
+        "median": {
+          "type": "number",
+          "minimum": 0
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 3
+        }
+      }
+    },
+    "template": {
+      "description": "How a row's fields make one box's text. {category.field} is a field's value (*:category.field in a repeat's columns), {.field} that field of the place a fallback picked, {relazione} a family member's relazione as forms write it (moglie, figlio); {...|date} writes a YYYY-MM-DD date as DD/MM/YYYY, as a filler writes every date anyway; {...|or:TEXT} writes TEXT when the field is empty (Italia for an empty stato), so it may be; {...|digits} keeps only its digits (NA-123456 is 123456). A part in [...] is left out when a field in it is empty; a field outside [...] must have a value. \\[, \\], \\{ and \\} are the characters themselves",
+      "type": "string",
+      "minLength": 1
+    },
+    "condition": {
+      "description": "A fact about the vault's data: the field equals a value, or matches a regular expression (the subset JavaScript and Python read alike: no lookbehind, no named groups)",
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "field",
+            "equals"
+          ],
+          "properties": {
+            "field": {
+              "$ref": "#/$defs/fieldRef"
+            },
+            "equals": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "field",
+            "matches"
+          ],
+          "properties": {
+            "field": {
+              "$ref": "#/$defs/fieldRef"
+            },
+            "matches": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "deadlineRule": {
+      "description": "A deadline rule; compute, when the rule is a fixed time after a date the vault keeps, lets a tool date it",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "status"
+      ],
+      "properties": {
+        "text": {
+          "$ref": "#/$defs/text"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "source": {
+          "description": "id of a source in this procedure",
+          "type": "string"
+        },
+        "compute": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "from",
+            "days"
+          ],
+          "properties": {
+            "from": {
+              "description": "The date field the time runs from (the vault owner's, or the dichiarante's)",
+              "$ref": "#/$defs/fieldRef"
+            },
+            "days": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

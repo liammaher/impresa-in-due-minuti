@@ -75,7 +75,7 @@ Before mapping anything, look at the other worktrees' branches (`git worktree li
    pratica's. A combination's other cases (`answers-*.json`) aren't generated: an answer a part
    gains goes into each by hand (2026-11-01: the semplificata's new file, missing from
    `answers-impianti.json`, left pre-flight a question). A combination's crawl: below, *Crawling*.
-   **Which pratica it is** is the library's rules table's (`rules/`, a byte-for-byte copy):
+   **Which pratica it is** is the library's rules table's (`library/rules/`, read where it is):
    `rules: {table, facts, handles}`, as the SUAP and SUE recipes have. `facts` fixes what the
    recipe is (`permesso_per_scelta: "true"` for the permesso); a fact it doesn't fix is an ask
    (an ask of the same name, `{{ask.paesaggio}}`, when the pratica has one; its options may
@@ -205,7 +205,7 @@ the art. 94-bis class under a structural tolerance). It flags a section at the 3
 A rough split of the SUE mapping for another comune or region, in `docs/portability.md`: each
 of branches.py's choices as a national form's alternative, a choice naming a Campania law or
 Napoli, or neither; each rule of `rules/sue-napoli.yaml` by where its cited sources are published
-(the library's URLs: `PRATICHE_NAPOLI_DIR`, needed for `--write`). Counted, not read: a rule
+(the library's URLs, in `library/`). Counted, not read: a rule
 that also cites a Comune page may only confirm a national one there.
 
 ## What the portal does that bit us

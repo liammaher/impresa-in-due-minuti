@@ -1,17 +1,34 @@
-"""The pratiche-napoli library's rules tables (rules/*.yaml, a copy of the library's
-rules/): from a few facts about a case to the pratiche the law asks for.
+"""The library's rules tables (library/rules/*.yaml): from a few facts about a case to the
+pratiche the law asks for.
 
 decide() reads a table as the library's tools/lib/rules.ts does (the library validates
 the tables: every combination of facts decided once, every rule citing a verified claim).
-bench/test_rules.py holds the two to the same answers and the copy to the library's.
+bench/test_rules.py holds the two to the same answers.
 """
 
 import json
+import os
 import re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-TABLES = HERE / "rules"
+
+
+def _tables():
+    """Where the tables are: next to this file in the plugin (JSON, built from the library); in
+    the repository the library's own rules/, $PRATICHE_NAPOLI_DIR to try another checkout."""
+    if (HERE / "rules").is_dir():
+        return HERE / "rules"
+    return library_dir() / "rules"
+
+
+def library_dir():
+    """The library checkout the tools read: $PRATICHE_NAPOLI_DIR, else this repository's library/."""
+    lib = os.environ.get("PRATICHE_NAPOLI_DIR")
+    return Path(lib) if lib else HERE.parents[3] / "library"
+
+
+TABLES = _tables()
 # What the last drift check (catalogue.py drift) found changed on the portal, per pratica.
 DRIFT = HERE / "catalogue" / "F839" / "drift.json"
 _tables = {}

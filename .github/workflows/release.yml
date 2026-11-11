@@ -138,15 +138,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release create "$TAG" --verify-tag --title "$TAG" --generate-notes
 
-      # The plugin people install in Claude (plugin/): built from this tag and the pratiche-napoli
-      # library, with this release's checksums (when it ships the archive) so its setup skill can
+      # The plugin people install in Claude (plugin/): built from this tag and its library/, with this release's checksums (when it ships the archive) so its setup skill can
       # check the pvault download.
       # It is attached to the release as impresa-in-un-minuto-<version>.zip.
-      - uses: actions/checkout@v4
-        with:
-          repository: liammaher/pratiche-napoli
-          path: pratiche-napoli
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -167,7 +161,7 @@ jobs:
           if [ "$VAULT" = true ]; then
             pin=(--pvault-version "$version" --pvault-checksums dist/checksums.txt)
           fi
-          python3 plugin/build.py --library pratiche-napoli --out "$RUNNER_TEMP/plugin" "${pin[@]}"
+          python3 plugin/build.py --out "$RUNNER_TEMP/plugin" "${pin[@]}"
           cp "$RUNNER_TEMP/plugin/impresa-in-un-minuto.plugin" "impresa-in-un-minuto-$version.zip"
           gh release upload "$TAG" "impresa-in-un-minuto-$version.zip"
           echo "PLUGIN_VERSION=$version" >> "$GITHUB_ENV"

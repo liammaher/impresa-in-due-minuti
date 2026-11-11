@@ -9,7 +9,7 @@ bene vuol dire:
 
 1. **Non è una consulenza legale né uno strumento ufficiale.** Non è affiliato al Comune di Napoli,
    a InfoCamere né ad altri enti ([NOTICE.md](../NOTICE.md)). Quello che dice della legge viene dalla
-   libreria [pratiche-napoli](https://github.com/liammaher/pratiche-napoli), con le fonti; nel dubbio
+   libreria ([`library/`](../library/)), con le fonti; nel dubbio
    vale la fonte ufficiale.
 2. **Firmi tu, e ne rispondi tu.** Le dichiarazioni, le asseverazioni, la firma, il pagamento e l'invio
    restano tuoi: Impresa in un minuto non li fa mai. Una dichiarazione falsa ha conseguenze penali per chi la firma
@@ -38,7 +38,7 @@ well means:
 
 1. **It is not legal advice and not an official tool.** It is not affiliated with the Comune di
    Napoli, InfoCamere or any other ente ([NOTICE.md](../NOTICE.md)). What it says about the law comes
-   from the [pratiche-napoli](https://github.com/liammaher/pratiche-napoli) library, with its sources;
+   from the library ([`library/`](../library/)), with its sources;
    when in doubt, the official source wins.
 2. **You sign, and you answer for it.** The declarations, asseverazioni, signature, payment and sending
    stay yours: Impresa in un minuto never does them. A false declaration carries penal consequences for whoever

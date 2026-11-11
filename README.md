@@ -66,7 +66,7 @@ lo contengono; accetta. Su Windows installalo da python.org.
   allora si comincia.
 - **Coperta** vuol dire: compilata sul portale vero con dati di prova, rileggendo ogni valore. Nessuna
   pratica reale è ancora stata inviata con Impresa in un minuto.
-- Le regole vengono dalla biblioteca [pratiche-napoli](https://github.com/liammaher/pratiche-napoli),
+- Le regole vengono dalla biblioteca ([`library/`](library/)),
   ogni fatto con la sua fonte. Ciò che la biblioteca non copre, Claude lo dice.
 
 ## Dove vanno i dati dei tuoi clienti
@@ -114,7 +114,7 @@ Build dai sorgenti e test (Go 1.26+; Python della venv del compilatore, `~/.cach
 make build                       # bin/pvault (+ bin/pvault-touchid su macOS)
 make test                        # test Go con -race
 (cd mcp && npx tsc -p tsconfig.test.json && npm test)
-~/.cache/pratica-portal/venv/bin/python plugin/build.py --library ../pratiche-napoli --out /tmp/impresa-in-un-minuto
+~/.cache/pratica-portal/venv/bin/python plugin/build.py --out /tmp/impresa-in-un-minuto
 ~/.cache/pratica-portal/venv/bin/python plugin/test_build.py
 ```
 
