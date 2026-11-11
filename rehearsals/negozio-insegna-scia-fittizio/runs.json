@@ -1,0 +1,10 @@
+[
+ {
+  "date": "2026-11-11",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 98.2,
+  "browser": "pane",
+  "note": "Two earlier runs stopped: at \"ulteriori dichiarazioni (mezzi pubblicitari)\" (two required Si/No facts, zona A del PRG and vincolo paesaggistico, which the comunicazione's entry left empty) and at the title section (its three boxes are required even with the opening filed alongside). Filled once both were mapped; the designer's order province \"SA\" read back in its own box."
+ }
+]

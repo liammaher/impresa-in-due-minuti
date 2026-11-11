@@ -1,0 +1,10 @@
+[
+ {
+  "date": "2026-11-11",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 64.6,
+  "browser": "pane",
+  "note": "First run stopped at the contract section: \"registrata al n°\" and \"rep. n°\" are number boxes (\"il numero immesso non e valido\" for 12345/1T). Filled with digits only."
+ }
+]

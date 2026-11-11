@@ -1,0 +1,21 @@
+{
+ "extras": [],
+ "fatti": [],
+ "descrizione": "PROVA NON INVIARE - reparto-alimentari generato",
+ "oggetto": "Affidamento in gestione del reparto gastronomia del negozio alimentare di via Luca Giordano 50, Napoli.",
+ "reparto_nome": "gastronomia",
+ "reparto_alimentare_mq": "20",
+ "reparto_non_alimentare_mq": "0",
+ "diritti_euro": "100",
+ "diritti_esente": false,
+ "superficie_complessiva": "80",
+ "in_centro_commerciale": "false",
+ "reparto_dal": "2026-12-01",
+ "reparto_marchio": "Marchio Inventato",
+ "reparto_ditta": "Calzature Esempio di Luisa Inventata",
+ "reparto_cf": "SMPMRA70A01F839J",
+ "reparto_comune": "Napoli",
+ "reparto_cap": "80129",
+ "reparto_indirizzo": "Via Alessandro Scarlatti",
+ "reparto_civico": "100"
+}

@@ -1,0 +1,10 @@
+[
+ {
+  "date": "2026-11-11",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 93.4,
+  "browser": "pane",
+  "note": "First run stopped at the previous holder's section: the portal refused the made-up codice fiscale (\"codice fiscale o partita iva non valido\": a made-up one needs a valid check letter). Filled with SMPMRA70A01F839J."
+ }
+]

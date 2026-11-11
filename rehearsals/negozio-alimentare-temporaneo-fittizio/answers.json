@@ -1,0 +1,23 @@
+{
+ "extras": [],
+ "fatti": [],
+ "descrizione": "PROVA NON INVIARE - negozio-alimentare-temporaneo generato",
+ "oggetto": "Negozio temporaneo di generi alimentari confezionati in via Luca Giordano 50, Napoli, aperto per il periodo natalizio.",
+ "temporary_dal": "2026-11-20",
+ "temporary_al": "2027-01-10",
+ "superficie_vendita_mq": "40",
+ "superficie_non_alimentare_mq": "0",
+ "superficie_alimentare_mq": "40",
+ "attivita_852": [
+  "dettaglio_alimenti"
+ ],
+ "stagionale": "false",
+ "solo_distributori": "false",
+ "anche_ingrosso": "false",
+ "in_ccn": "false",
+ "in_factory_outlet": "false",
+ "in_centro_commerciale": "false",
+ "superficie_monopolio_mq": "0",
+ "diritti_esente": false,
+ "diritti_euro": "100"
+}

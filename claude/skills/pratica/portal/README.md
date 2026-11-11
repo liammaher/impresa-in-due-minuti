@@ -274,6 +274,107 @@ trasferimento, ...) and `attivita` has no medium shop; a `refuse` rule would blo
 The recipes carry no `rules:`, so pre-flight decides nothing and the person names the pratica. A rule goes in
 when a procedure with sourced claims for the deroga's regime exists, as `scia-esercizio-vicinato`'s do.
 
+## The hairdressers' sector's tattooists, the chair rental, temporary shops, departments and the sign's SCIA (2026-11-11)
+
+Second round of the same review (139 of 278 SUAP pratiche fillable at the start, 155 after; 39 run on the portal,
+51 after: 12 new rehearsals): the sections that unblock
+the most pratiche in the wedge's own sectors (shops, food, hairdressers), counted from
+`scoreboard.pratica_status` per crawl, a section the crawl `skipped` as the person's declarations never a gap.
+Everything was written by hand from the crawls' text (no national schema covers any of it, so `draft.py` is no
+help), and every pratica rehearsed on the portal in the pane, made-up data, nothing declared, paid or sent:
+
+- **Sector 11, the tattooist and piercer** (`suap-011-*-tatuatore-piercer`: opening, take-over, move, change
+  of people) and **the chair or booth rental** (`affitto-di-poltrona-cabina`): the premises' certificate
+  (`stato_luoghi_*`: one of four acts, its number and date), the artisan register (`albo_artigiane*`), the
+  noise statement (`acustica_sorgenti`), the area, the take-over's "no structural changes" (a fact, refused if no),
+  the move's old premises (its "località" is left: the crawl doesn't say whether it is required, and the run
+  filled without it), the qualification certificate, the rental contract (a public deed or a registered writing,
+  its dates, its copy as an upload). The move's "estremi dell'atto amministrativo" was the shops' title section
+  under another name (an alias). Rehearsals `tatuatore-apertura-`, `subingresso-tatuatore-`,
+  `trasferimento-tatuatore-`, `variazione-soggetti-tatuatore-`, `affitto-poltrona-fittizio`.
+- **Temporary shops** (`suap-016` and `017-inizio-attivita-per-l-esercizio-di-vicinato-nel-se...`, "MODALITA'
+  TEMPORANEA"): the third "Dati sull'esercizio di vicinato" entry, the opening's boxes with the duration's two
+  dates where the season is (each entry fails on the other's crawl). Rehearsals `negozio-temporaneo-` and
+  `negozio-alimentare-temporaneo-fittizio`.
+- **A food shop starting to serve on the spot** (`suap-017-avvio-di-consumo-immediato...`): the title it runs
+  under, and the Comune's rules, the person's "presa visione" (`theirs`). Rehearsal `consumo-immediato-fittizio`.
+- **Giving a department to another business** (`suap-016` and `017-affidare-in-gestione-reparto`): the shop's
+  area, the shopping centre it isn't in, the department, who runs it, its area by sector (tobacco, pharmacy and
+  fuel stay empty). Rehearsals `reparto-negozio-` and `reparto-alimentari-fittizio`.
+- **The sign's SCIA**, the second of the "interventi" sign options ("insegna esterna (dove è prevista la SCIA)";
+  the first, the comunicazione, is `negozio-insegna-fittizio`): six sections shared by the opening-with-works
+  pratiche of sectors 4, 16, 17 and 56 and the stand-alone "SCIA per installazione insegna di esercizio"
+  (`suap-common-mezzi-pubblicitari-...-scia-4`, any sector: rehearsed for a restaurant). The same section names
+  as the comunicazione's, with other boxes, so each version fails on the other's crawl. Place (the facade tick
+  opens the street, the cadastral boxes and the owner), structure (the eight Si/No pairs by `nth`), the
+  installer (in economia, or a firm whose boxes are asked), the designer (the presenter, with `t:albo.*`, or
+  another professional, asked; the order's "provincia (sigla)" is the second box of that label, `nth: 2`, and
+  the run's read-back can't tell a swap, so the case gives it a province unlike the residence's: read the
+  draft's section to be sure), the director of works (only "NO"; "SI" is refused), the title. Rehearsals
+  `negozio-insegna-scia-` and `insegna-ristorante-scia-fittizio`.
+
+**What the portal showed on these runs (2026-11-11)**
+
+- **The sign's declarations have two required Si/No facts** the comunicazione's don't: "L'installazione ricade in
+  zona A di P.R.G." and "... in area sottoposta a vincolo paesaggistico". The comunicazione's entry (`theirs`, no
+  fields) also fits this crawl, and left both radios empty: **gen.fill never flags a radio or a checkbox that no
+  field names** (`strict: true` on an entry does: gen.py "is in no dictionary entry"), so "fillable" can hide a
+  required radio, and only a run on the portal finds it ("il valore è obbligatorio"). The run stopped ×3. The
+  SCIA's entry comes first and fails on the comunicazione's crawl, which has no radios. Both are refused when yes
+  (`insegna_zona_a`, `insegna_vincolo`). **To do**: run it over every SUAP crawl (a few minutes) and read the radios of the older entries on the portal; audit the entries that name no radios of a section whose
+  crawl has some (`bench/strict_audit.py` lists them; run over this round's 12 crawls on 2026-11-11 it left only the person's
+  declaration checkboxes, options a case doesn't take (NCT, a director "SI") and what recipes refuse); the same hole let the ordering bug below
+  drop a section's radios without a problem.
+- **The title section's three boxes are required** ("SCIA/DIA/AUTORIZZAZIONE prot. n°", "del", "per l'attività
+  di") even when the sign is filed with the opening, which has no number yet: asked, and the recipe tells the
+  person to ask the SUAP what to put. **To do on the portal / with the SUAP**: what a real opening-with-sign puts.
+- **"Number" boxes take digits only**: the contract's "rep. n°" and "registrata al n°" refused "12345/1T"
+  ("il numero immesso non e valido"); a codice fiscale needs a valid check letter even for a previous holder.
+- **A dictionary entry matches every section whose name starts with its own, in file order**
+  (`gen.dictionary_entries`). The first version of the tattooist's area entry ("dichiarazione relativa alla
+  superficie dei locali da adibire all'attività") sat before the structural-change forms' two longer ones
+  ("..., prima della variazione", "..., successivamente alla variazione"), took their sections and dropped the
+  radios; the lock diff named it (two existing hairdresser and beautician rehearsals changed hash, `plan_diff.py` said
+  no plan differed, a diff against the baseline's steps showed the dropped boxes). A short entry goes after the
+  longer ones it prefixes: test_gen now fails on a shorter entry that fills a section a later, longer one fills.
+  After a new entry run `regen.py` and read the lock's diff: only the new rehearsals should be in it.
+- **Entry mechanics that cost a round** (all in `gen.py`): `norm` drops accents and non-ASCII (NFKD), so an alias
+  with a curly apostrophe ("dell’atto") matches the crawl's; a choice answer must be exactly one of its options and
+  `is_<answer>` lowercases and turns every non-letter-or-digit into `_` (an accented word loses its tail: keep
+  options ASCII and short); a label also matches a box by its `context`, so "indirizzo" matched the civico whose
+  context is "Indirizzo sede legale" and needed `nth: 2`; the boxes a ticked choice reveals (the facade tick's
+  street and cadastral boxes) must be mapped or `leave`d, those of an unticked choice need not be; two entries
+  of one section name are tried in file order, the first without problems wins, so the one with more boxes
+  goes first; an `interventi` crawl was taken with the option ticked, so its sections are the base ones:
+  a recipe on it states no `scelte:` (it makes pre-flight warn "ciò che la scelta aggiunge è stato letto su
+  un'altra pratica") and only ticks the option in the wizard.
+- **In the pane**: a run takes 60-120 s (the first section 25 s); poll `await __pv.last()` (sections done, `at`)
+  and `__pv.look()` (the open section's boxes), never print `window.pvBatch` (every run's values), read a draft's
+  section (`__crawl.sectionOf`) only after the batch ends and with different values in boxes that share a
+  label; keep the dictionary and `steps.lock` unchanged while the test suite runs in the background (a half-written
+  or broken YAML failed three tests here, and a stale lock one more).
+- The attachments and payment screens of all these rehearsals are not read (no `after:`): their slots need a
+  filled draft. The fees are asked; the made-up cases say 100 or 0.
+- No bundle without a pick: each bundle (`rerun.py --bundle`) wants the person's file pick, so a change that stops
+  a run costs one more. A case whose business isn't the shop's carries its own `fixture.json`
+  (`NAME:answers.json:rehearsals/NAME/fixture.json`) so it is recorded as any.
+
+What was left, and why:
+
+- **Sectors 60 and 61's "stabilimento" pratiche** (20 of the 139, the most by count): Reg. 853/2004
+  recognitions (`avvio delle attività`, `aggiunzione di linee`, `riconoscimento`, `variazione titolarità`, ...), a food
+  producer's, not a bar's. Their "Linee d'attività" radios (ALLEVAMENTI / REGISTRATI / RICONOSCIUTI) open the
+  master list, in none of the crawl's `reveals`, so the boxes beyond them are unread. They share the 12, 8, 7 and 11
+  checkboxes of "ulteriori dichiarazioni" (all declarations: `theirs`) and "periodo dell'attività". **To do on
+  the portal**: tick each radio on a draft and read the section.
+- **The B&B's short-term lets** (`suap-056-*locazione-breve*`, 7 pratiche, about ten sections: "Codici istat e
+  ateco", "Titolo di disponibilità", "Capacità ricettiva", "Apertura", "Variazioni"): not mapped.
+- **The tattooist's other operations** (cessare, sospendere, variazioni strutturali) were already fillable.
+- **The temporary shops, the consumo immediato and the department take no `interventi`** (an outside sign, alcohol,
+  fire prevention, ...: asked and refused in `supports`, as the shops' openings do), and no shopping centre.
+- **The sign with a director of works, the designer's "+" and a second sign or firm**: refused or one mapped (`plus:`).
+- **No rule in the SUAP table** for any of these, as for the deroga: nothing verified in the library to cite.
+
 ## What the portal does that bit us
 
 - **Street names without their particles.** The location's street lookup and the Comune's

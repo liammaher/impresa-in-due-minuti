@@ -1955,5 +1955,85 @@ def _():
     assert checked >= 40, checked
 
 
+@case("an entry whose name starts a later, longer entry's never fills a section the later one fills (an entry matches every section its name starts, in file order: the tattooist's area box took the structural change's two, 2026-11-11)")
+def _():
+    import catalogue as cat
+    entries = gen.load_yaml(HERE.parent / "dictionary" / "fnsuap.yaml")["sections"]
+    names = [[gen.norm(gen.QUADRO.sub("", n)) for n in [e["section"], *e.get("aliases", [])]] for e in entries]
+    pairs = [(i, j) for i in range(len(entries)) for j in range(i + 1, len(entries))
+             if any(a != b and b.startswith(a) for a in names[i] for b in names[j])]
+    assert pairs, "the dictionary has shorter entries before longer ones (qualificazione dell'intervento, ...)"
+    # Known: "Dichiarazioni" (the person's declarations only) also fits the antimafia declarations' sections
+    # that have no boxes of their own, where "DICHIARAZIONI SUL POSSESSO ... ANTIMAFIA E TECNICI" would too: the
+    # first is right there, and the second takes the sections that have boxes (the bakery's production manager).
+    known = {("dichiarazioni", "dichiarazione sul possesso dei requisiti antimafia")}
+    pairs = [(i, j) for i, j in pairs if (names[i][0], names[j][0]) not in known]
+    stored = cat.crawls()
+
+    def fits(entry, sec, name):
+        """Whether the entry fills the section with no problem, for the person or for the business (catalogue.covered)."""
+        for subject in (None, "impresa"):
+            if entry.get("subject", subject) == subject and not gen.fill(entry, entry["section"], sec, {"subject": subject} if subject else {}, name)[1]:
+                return True
+        return False
+    seen = set()
+    for crawl in stored.values():
+        for s in crawl["sections"]:
+            if s.get("skipped") or s.get("error") or s.get("scelta"):
+                continue
+            name = gen.norm(gen.QUADRO.sub("", s["section"]))
+            sec = cat.resolve(s["same_as"], stored) if s.get("same_as") else s
+            sec = {**sec, "section": s["section"]}
+            for i, j in pairs:
+                if (not any(name.startswith(b) for b in names[j]) or not any(name.startswith(a) for a in names[i])
+                        or (i, j, s["section"], sec.get("fingerprint")) in seen):
+                    continue  # the section is not one both entries match, or already checked
+                seen.add((i, j, s["section"], sec.get("fingerprint")))
+                if fits(entries[j], sec, s["section"]):
+                    assert not fits(entries[i], sec, s["section"]), \
+                        f"'{entries[i]['section']}' (entry {i}) fills '{s['section']}', which '{entries[j]['section']}' (entry {j}) fills: move the shorter entry after it"
+
+
+@case("the sign's two versions each fill the pratica with their own boxes: the comunicazione's place has a Tipologia select, the SCIA's (the wizard's \"dove è prevista la SCIA\") has the cadastral boxes its facade tick opens (2026-11-11)")
+def _():
+    comunicazione = generated("negozio-insegna-fittizio")
+    scia = generated("negozio-insegna-scia-fittizio")
+    old, new = section(comunicazione, "luogo dell'installazione"), section(scia, "luogo dell'installazione")
+    assert any(f["kind"] == "select" and f["label"] == "Tipologia" for f in old["fields"]), old
+    assert not any(f["kind"] == "select" for f in new["fields"]), new
+    assert {"in area privata", "sulla facciata del fabbricato / presso il locale", "sito in Via/Piazza", "foglio"} <= {f["label"] for f in new["fields"]}, new
+    # The SCIA's six sections are all there, the director of works refused unless "no" (asked, proposed false).
+    for name in ("dichiarazione relativa al direttore dei lavori", "Caratteristiche del manufatto da installare", "dichiarazione relativa all'installazione",
+                 "dichiarazione relativa alla redazione del progetto", "DICHIARAZIONE RELATIVA AI TITOLI ABILITANTI"):
+        section(scia, name)
+    dl = section(scia, "dichiarazione relativa al direttore dei lavori")
+    assert [f["label"] for f in dl["fields"]] == ["NO"], dl
+    assert "insegna_dl" in scia["asks"], sorted(scia["asks"])
+    # What the portal made the runs stop on (2026-11-11): the declarations' two required Si/No facts (gen.fill
+    # never flags an unnamed radio, so the dictionary must name them), the title's three required boxes (filled
+    # whatever the answers), the installer's street as the second "indirizzo" (the civico's context is
+    # "Indirizzo sede legale") and the designer's order province as the second "provincia (sigla)".
+    dich = section(scia, "ulteriori dichiarazioni (mezzi pubblicitari)")
+    assert [f["label"] for f in dich["fields"]] == ["si", "no", "si", "no"], dich
+    titoli = section(scia, "DICHIARAZIONE RELATIVA AI TITOLI ABILITANTI")
+    assert len(titoli["fields"]) == 3 and not any(f.get("when") for f in titoli["fields"]), titoli
+    inst = section(scia, "dichiarazione relativa all'installazione")
+    assert next(f for f in inst["fields"] if f.get("label") == "indirizzo").get("nth") == 2, inst
+    prog = section(scia, "dichiarazione relativa alla redazione del progetto")
+    assert [f.get("nth") for f in prog["fields"] if f.get("label") == "provincia (sigla)"] == [None, None, 2], prog
+    # The comunicazione's declarations entry (no radios) is still the restaurant's own.
+    assert section(comunicazione, "ulteriori dichiarazioni (mezzi pubblicitari)")["fields"] == [], comunicazione
+
+
+@case("a temporary shop's vicinato section is filled with the duration's two dates where the opening's has the season's radios (2026-11-11)")
+def _():
+    temp = section(generated("negozio-temporaneo-fittizio"), "Dati sull'esercizio di vicinato")
+    opening = section(generated("negozio-fittizio"), "Dati sull'esercizio di vicinato")
+    assert {"dal", "al"} <= {f["label"] for f in temp["fields"] if f["kind"] == "date"}, temp
+    assert not any(f["label"] in ("Permanente", "Stagionale") for f in temp["fields"]), temp
+    assert any(f["label"] == "Permanente" for f in opening["fields"]), opening
+    assert not any(f["kind"] == "date" and f["label"] == "dal" for f in opening["fields"]), opening
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)
