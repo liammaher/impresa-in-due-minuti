@@ -14,7 +14,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 
 
-def _tables():
+def _tables_dir():
     """Where the tables are: next to this file in the plugin (JSON, built from the library); in
     the repository the library's own rules/, $PRATICHE_NAPOLI_DIR to try another checkout."""
     if (HERE / "rules").is_dir():
@@ -25,10 +25,10 @@ def _tables():
 def library_dir():
     """The library checkout the tools read: $PRATICHE_NAPOLI_DIR, else this repository's library/."""
     lib = os.environ.get("PRATICHE_NAPOLI_DIR")
-    return Path(lib) if lib else HERE.parents[3] / "library"
+    return Path(lib) if lib else (HERE.parents[3] if len(HERE.parents) > 3 else HERE) / "library"
 
 
-TABLES = _tables()
+TABLES = _tables_dir()
 # What the last drift check (catalogue.py drift) found changed on the portal, per pratica.
 DRIFT = HERE / "catalogue" / "F839" / "drift.json"
 _tables = {}
