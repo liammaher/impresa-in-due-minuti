@@ -287,6 +287,15 @@ if (window.pvBatch && window.pvBatch.some(([, , d]) => d.base || d.set)) {
 var pvAlready = !!window.pvBatchBusy;  // var: a second run of this script redeclares it
 if (!pvAlready) window.pvBatchRun = (async () => {
   window.pvBatchBusy = true;
+  // The runner this batch was built for: another one in the pane's storage (an older checkout's, or
+  // another chat's, 2026-11-11: 86,595 characters against 80,592) would file its runs as ours.
+  // check.js says it too, but only if somebody runs it first.
+  const have = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(localStorage.getItem("pv-runner") || ""))))
+    .map((b) => b.toString(16).padStart(2, "0")).join("");
+  if (have !== "__RUNNER_SHA__") {
+    window.pvBatchHalted = "the pane's runner is not the one this batch was built for: run check.js and send runner.js (or pick the bundle)";
+    return "refused";
+  }
   const done = JSON.parse(sessionStorage.getItem("pv-batch") || "[]");
   // A run that never reached the portal (no page, a busy portal, signed out) says nothing about
   // its pratica: kept out of the results. Two in a row halt the batch (`halted`): once the portal
@@ -326,7 +335,7 @@ if (!pvAlready) window.pvBatchRun = (async () => {
   return "done";
 })().finally(() => { window.pvBatchBusy = false; });
 pvAlready ? "a batch is already running in this tab: nothing started" : `started: ${(window.pvBatch || []).length} queued`
-""")
+""".replace("__RUNNER_SHA__", run.hashlib.sha256(stored["pv-runner"].encode()).hexdigest()))
     # Waits while the pane shows the page (the pane cuts a call at 45 s); a hidden pane slows its
     # timers past that (2026-11-01), so then it answers at once and the caller waits outside.
     (a.out / "results.js").write_text("""if (!document.hidden) await new Promise((r) => setTimeout(r, 35000));

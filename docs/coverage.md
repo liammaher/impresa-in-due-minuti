@@ -22,25 +22,35 @@ branch no rehearsal took.
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
 | SUE (building works) | 104 | 104 | 102 | 27 checked, 0 changed |
-| SUAP (businesses) | 278 | 129 | 29 | 0 checked, 0 changed |
+| SUAP (businesses) | 278 | 139 | 29 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
 - SUE: 104 pratiche, 128 distinct sections, 126 in the dictionary; 2231 of 2231 uses (100%)
-- SUAP: 278 pratiche, 477 distinct sections, 109 in the dictionary; 2573 of 3365 uses (76%)
+- SUAP: 278 pratiche, 477 distinct sections, 115 in the dictionary; 2583 of 3365 uses (76%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
 
 - `dehors-fittizio`
+- `media-struttura-fittizia`
+- `media-struttura-grande-fittizia`
+- `orario-deroga-alimentari-fittizio`
+- `orario-deroga-media-fittizio`
+- `orario-deroga-media-grande-fittizio`
+- `orario-deroga-negozio-fittizio`
+- `orario-deroga-ristorante-fittizio`
 - `parere-esonero-fittizio`
 - `pdc-sanatoria-accertamento-fittizio`
+- `preposto-ristorante-fittizio`
 - `ristorante-alcolici-fittizio`
 - `sospensione-srl-fittizia`
+- `trasferimento-media-struttura-fittizio`
+- `trasferimento-media-struttura-grande-fittizio`
 - `variazione-negozio-fittizio`
 
 SUAP pratiche one or two sections short of fillable (the cheapest gaps):
 
-- 64 pratiche; 149 in all are short at least one section.
+- 54 pratiche; 139 in all are short at least one section.
 
 SUE pratiche not yet fillable:
 
