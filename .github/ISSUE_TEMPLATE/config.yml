@@ -4,8 +4,8 @@ contact_links:
     url: https://github.com/liammaher/impresa-in-un-minuto/security/advisories/new
     about: Segnalala in privato, non in una issue pubblica (SECURITY.md). / Report it privately, not in a public issue (SECURITY.md).
   - name: Un errore su cosa chiede la legge / A mistake in what the law asks
-    url: https://github.com/liammaher/pratiche-napoli/issues
-    about: Documenti, costi, termini e uffici stanno nella libreria pratiche-napoli. / Documents, costs, deadlines and offices live in the pratiche-napoli library.
+    url: https://github.com/liammaher/impresa-in-un-minuto/issues/new
+    about: Documenti, costi, termini e uffici stanno nella libreria (cartella library/). / Documents, costs, deadlines and offices live in the library (the library/ folder).
   - name: Qualcosa di tuo nel repository / Something of yours in this repository
     url: https://github.com/liammaher/impresa-in-un-minuto/blob/main/NOTICE.md
     about: Per chiedere di citarlo, cambiarlo o toglierlo. / To have it credited, changed or removed.

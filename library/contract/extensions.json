@@ -1,0 +1,4 @@
+{
+  "description": "Fields procedures need that the personal vault's schema doesn't have yet. gen-fields merges them into fields.json with \"vault\": false; add them to the vault, then remove them here.",
+  "categories": []
+}

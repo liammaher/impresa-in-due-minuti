@@ -13,6 +13,9 @@ crawl: suap-061-aprire-l-attivita
 subject: impresa
 operation: Aprire l'attività
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+# The payment and attachments screens: its slots read on a filled draft (2026-11-10), the acoustic
+# report the only plain-file slot (attached), the portal's Allegati 1 and 3 made from the pratica.
+after: [Pagamento degli oneri, Gestione degli allegati]
 wizard:
   - screen: Assegna una descrizione alla pratica
     fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}

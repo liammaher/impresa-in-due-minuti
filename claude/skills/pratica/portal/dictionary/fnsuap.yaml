@@ -1253,6 +1253,35 @@ asks:
   responsabile_produzione_altro: {type: yes_no, question: "Il responsabile dell'attività produttiva è una persona diversa dal titolare?", propose: "false"}
   responsabile_produzione_nome: {type: text, question: "Nome e cognome del responsabile della produzione"}
   responsabile_produzione_dichiarazione: {type: file, question: "La dichiarazione firmata del responsabile della produzione sui propri requisiti (PDF)"}
+  var_ciclo_produttivo: {type: yes_no, group: variazioni, item: "Il ciclo produttivo cambia (forni nuovi, altri prodotti, altre lavorazioni)"}
+  var_ciclo_descrizione: {type: text, question: "Come cambia il ciclo produttivo, in poche parole (300 caratteri)"}
+  var_consumo_sul_posto: {type: yes_no, group: variazioni, item: "Si aggiunge o si toglie la vendita dei propri prodotti da consumare sul posto (senza servizio al tavolo)"}
+  locali_titolo: {type: choice, question: "Il titolo con cui l'attività dispone dei locali", options: [proprietario, affittuario, altro]}
+  locali_titolo_altro: {type: text, question: "Quale titolo (comodato, ...)"}
+  subingresso_atto_data: {type: date, question: "La data in cui l'atto (compravendita, affitto, donazione, fusione) è stato firmato o autenticato"}
+  subingresso_decorrenza: {type: date, question: "La data da cui ha effetto"}
+  notaio_nome: {type: text, question: "Il notaio che lo ha redatto o autenticato"}
+  notaio_sede: {type: text, question: "La sede del notaio (comune)"}
+  notaio_repertorio: {type: text, question: "Il numero di repertorio (10 caratteri)"}
+  subingresso_atto_doc: {type: file, question: "Una copia dell'atto con cui l'attività passa di mano (il certificato del notaio, il contratto di affitto, le carte della successione: PDF)"}
+  planimetria_layout_doc: {type: file, question: "La planimetria dei locali com'è ora, con la disposizione e le attrezzature (PDF)"}
+  tari_denuncia_doc: {type: file, question: "Una copia della denuncia TARI dei locali per la nuova superficie, o un'autodichiarazione di quando è stata presentata (PDF)"}
+  var_atto_doc: {type: file, question: "Una copia dell'atto che registra la variazione (la modifica al Registro delle imprese, la delibera della società: PDF)"}
+  data_inizio_attivita: {type: date, question: "Da quando l'attività funziona come dichiarato qui (l'inizio del nuovo titolare, il primo giorno nei locali modificati)"}
+  tari_denuncia_data: {type: date, question: "La data in cui è stata presentata la denuncia dei rifiuti dei locali (TARI, un tempo TARSU)"}
+  forni_numero: {type: number, question: "Quanti forni da pane"}
+  forni_mq: {type: number, question: "La loro superficie totale in m²"}
+  forni_kg_24h: {type: number, question: "La loro potenzialità teorica nelle 24 ore, in kg"}
+  forni_altre_caratteristiche: {type: text, question: "Altro sull'impianto (350 caratteri, o 'nessuna')", propose: "nessuna"}
+  forno_descrizione: {type: text, question: "I forni: tipo, alimentazione, potenza (ad es. forno elettrico a piani, 30 kW)"}
+  stagione_inizio_data: {type: date, question: "Il primo giorno della stagione"}
+  stagione_fine_data: {type: date, question: "L'ultimo giorno della stagione"}
+  superficie_prima_mq: {type: number, question: "La superficie totale dei locali prima della variazione, in m²"}
+  var_superficie: {type: choice, question: "Come cambia la superficie: ampliamento (più grande), riduzione (più piccola) o redistribuzione (la stessa superficie, disposta diversamente)", options: [ampliamento, riduzione, redistribuzione]}
+  var_attrezzature: {type: yes_no, question: "Cambiano anche le attrezzature?"}
+  var_attrezzature_descrizione: {type: text, question: "Come cambiano le attrezzature, in poche parole (400 caratteri)"}
+  posti_lavoro_prima: {type: number, question: "Il numero di posti di lavoro prima della variazione"}
+  posti_lavoro_dopo: {type: number, question: "E dopo (lo stesso numero se non cambia)"}
 
   tipo_struttura: {type: choice, question: "Che tipo di struttura ricettiva è?", options: [Affittacamere, Bed and breakfast]}
   imprenditoriale: {type: yes_no, question: "È esercitata in forma imprenditoriale?", propose: "true"}
@@ -4644,6 +4673,123 @@ sections:
       - {kind: text, label: il/la Sig./ra, value: "{{ask.responsabile_produzione_nome}}", when: "{{ask.responsabile_produzione_altro}}"}
       - {kind: file, label: Tipologie ammesse, value: "{{ask.responsabile_produzione_dichiarazione}}", when: "{{ask.responsabile_produzione_altro}}"}
 
+  # The bakery's close, take-over and changes (written from the crawls' text: no national schema
+  # for the bakery). Three short sections every one of them shares with other sectors' forms: the
+  # Comune's rules and the antimafia statement are the person's to tick; the title it runs under.
+  - section: dichiarazione del rispetto dei Regolamenti del Comune
+    theirs: ["che per l'attività oggetto della presente SCIA sono stati rispettati"]
+    fields: []
+  - section: dichiarazione antimafia D.LGS. 159/2011
+    theirs: [che nei propri confronti non sussistono le cause di divieto]
+    fields: []
+  - section: dichiarazione di titolarità autorizzazione/DIA/SCIA
+    fields:
+      - {kind: text, label: specificare la tipologia del titolo, value: "{{ask.titolo_attivita_tipo}}"}
+      - {kind: text, label: n. autorizzazione/comunicazione o n. protocollo DIA/SCIA, value: "{{ask.titolo_attivita_protocollo}}"}
+      - {kind: date, label: data, value: "{{ask.titolo_attivita_data|date_it}}"}
+  # A ditta's new name (the bakery's and the tattooist's form). A company's changes (its form, its
+  # legal representative, the professional manager, the partners) each bring statements of the new
+  # people: their boxes stay empty and recipes refuse them.
+  - section: dichiarazione relativa alle variazioni dei soggetti
+    leave: [a far data dal, precedente tipologia societaria, nuova tipologia societaria, cognome, nome, data di nascita,
+            luogo di nascita, prov., residente nel comune di, CAP, Via/Viale/Piazza, n.civico, "via, viale, piazza",
+            numero civico, cittadinanza, codice fiscale, specificare, precedente soggetto titolare dei requisiti,
+            nuovo soggetto titolare dei requisiti, precedente soggetto partecipante, nuovo soggetto partecipante]
+    fields:
+      - {kind: checkbox, label: VARIAZIONE DELLA DENOMINAZIONE O RAGIONE SOCIALE, when: "{{ask.var_denominazione}}"}
+      - {kind: date, label: a far data dal, value: "{{ask.var_decorrenza|date_it}}", when: "{{ask.var_denominazione}}"}
+      - {kind: text, label: precedente denominazione o ragione sociale, value: "{{ask.denominazione_precedente}}", when: "{{ask.var_denominazione}}"}
+      - {kind: text, label: nuova denominazione o ragione sociale, value: "{{business.denominazione}}", when: "{{ask.var_denominazione}}"}
+  # The bakery's structural change: the production cycle, selling for consumption on the spot added
+  # or dropped, the season. "Altro" opens a free box recipes refuse.
+  - section: dati sull'entità delle variazioni
+    plus: "the season's own \"+\" (a second period): one period is mapped"
+    fields:
+      - {kind: text, label: prot. n., value: "{{ask.titolo_attivita_protocollo}}"}
+      - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
+      - {kind: checkbox, label: il ciclo produttivo subirà, when: "{{ask.var_ciclo_produttivo}}"}
+      - {kind: textarea, label: (descrivere), value: "{{ask.var_ciclo_descrizione}}", when: "{{ask.var_ciclo_produttivo}}"}
+      - {kind: checkbox, label: l'attività congiunta di vendita dei prodotti di propria produzione, when: "{{ask.var_consumo_sul_posto}}"}
+      - {kind: radio, label: aggiunta, when: "{{ask.var_consumo_sul_posto}} {{ask.consumo_sul_posto}}"}
+      - {kind: radio, label: eliminata, when: "{{ask.var_consumo_sul_posto}} {{ask.consumo_sul_posto|not}}"}
+      - {kind: radio, label: Permanente, when: "{{ask.stagionale|not}}"}
+      - {kind: radio, label: Stagionale, when: "{{ask.stagionale}}"}
+      - {kind: text, label: dal (gg/mm), value: "{{ask.stagione_dal}}", when: "{{ask.stagionale}}"}
+      - {kind: text, label: al (gg/mm), value: "{{ask.stagione_al}}", when: "{{ask.stagionale}}"}
+  # Taking over a bakery: the title to the premises, how the business changed hands (the deed's
+  # notary), from when, whom from, the TARI declaration, the ovens, what else it sells, the
+  # production manager, fire prevention. The return of a leased business to its owner ("ritorno in
+  # disponibilità") has no answer in the takeover's shared causes: its boxes stay empty.
+  - section: dichiarazione del titolo di disponibilità dei locali
+    fields:
+      - {kind: radio, label: proprietario, when: "{{ask.locali_titolo|is_proprietario}}"}
+      - {kind: radio, label: affittuario, when: "{{ask.locali_titolo|is_affittuario}}"}
+      - {kind: radio, label: altro, when: "{{ask.locali_titolo|is_altro}}"}
+      - {kind: text, label: specificare, value: "{{ask.locali_titolo_altro}}", when: "{{ask.locali_titolo|is_altro}}"}
+  - section: dichiarazione della modalità di subingresso
+    leave: [a decorrere dal, in data, presso il Notaio, con sede a, repertorio]
+    fields:
+      - {kind: radio, label: compravendita (2), when: "{{ask.subingresso_causa|is_compravendita}}"}
+      - {kind: radio, label: affitto d'azienda (2), when: "{{ask.subingresso_causa|is_affitto_d_azienda}}"}
+      - {kind: radio, label: donazione (2), when: "{{ask.subingresso_causa|is_donazione}}"}
+      - {kind: radio, label: fusione (2), when: "{{ask.subingresso_causa|is_fusione}}"}
+      - {kind: radio, label: fallimento, when: "{{ask.subingresso_causa|is_fallimento}}"}
+      - {kind: radio, label: successione, when: "{{ask.subingresso_causa|is_successione}}"}
+      - {kind: radio, label: altre cause, when: "{{ask.subingresso_causa|is_altre_cause}}"}
+      - {kind: text, label: specificare, value: "{{ask.subingresso_causa_altro}}", when: "{{ask.subingresso_causa|is_altre_cause}}"}
+      - {kind: date, label: contratto stipulato / autenticato in data, value: "{{ask.subingresso_atto_data|date_it}}", when: "{{ask.subingresso_causa|in_compravendita__affitto_d_azienda__donazione__fusione}}"}
+      - {kind: date, label: con decorrenza, value: "{{ask.subingresso_decorrenza|date_it}}", when: "{{ask.subingresso_causa|in_compravendita__affitto_d_azienda__donazione__fusione}}"}
+      - {kind: text, label: presso il Notaio, nth: 3, value: "{{ask.notaio_nome}}", when: "{{ask.subingresso_causa|in_compravendita__affitto_d_azienda__donazione__fusione}}"}
+      - {kind: text, label: con sede a, nth: 3, value: "{{ask.notaio_sede}}", when: "{{ask.subingresso_causa|in_compravendita__affitto_d_azienda__donazione__fusione}}"}
+      - {kind: text, label: repertorio, nth: 3, value: "{{ask.notaio_repertorio}}", when: "{{ask.subingresso_causa|in_compravendita__affitto_d_azienda__donazione__fusione}}"}
+  # One date box (the same in a hairdresser's or beautician's structural change).
+  - section: dichiarazione della data di inizio della nuova attività
+    aliases: ["dichiarazione della data di inizio dell'attività"]
+    fields:
+      - {kind: date, label: data inizio attività, value: "{{ask.data_inizio_attivita|date_it}}"}
+  - section: dichiarazione della denominazione dell'attività precedente
+    fields:
+      - {kind: text, label: denominazione attività, value: "{{ask.cedente_denominazione}}"}
+      - {kind: text, label: Codice Fiscale/P.I., value: "{{ask.cedente_cf}}"}
+  # Its crawl kept another form's text for the same one date box ("in data"): the date the premises'
+  # waste-tax declaration (TARSU, now TARI) was filed.
+  - section: dichiarazione di denuncia occupazione dei locali ai fini TARSU
+    fields:
+      - {kind: date, label: in data, value: "{{ask.tari_denuncia_data|date_it}}"}
+  - section: dichiarazione relativa all'attività di panificazione
+    fields:
+      - {kind: text, label: numero forni di panificazione, value: "{{ask.forni_numero}}"}
+      - {kind: number, label: mq complessivi dei forni di panificazione, value: "{{ask.forni_mq}}"}
+      - {kind: number, label: pari a una potenzialità teorica nelle 24 ore di Kg., value: "{{ask.forni_kg_24h}}"}
+      - {kind: textarea, label: altre caratteristiche, value: "{{ask.forni_altre_caratteristiche}}"}
+      - {kind: text, label: descrizione forno, value: "{{ask.forno_descrizione}}"}
+  # Selling its own products over the counter, and to eat on the spot (no table service); another
+  # trade in the same premises, or "altro", has boxes recipes refuse.
+  - section: dichiarazione di esercizio di altra attività commerciale
+    leave: [tipo di attività e la relativa superficie, numero autorizzazione / SCIA / DIA, data di rilascio / presentazione, (specificare)]
+    fields:
+      - {kind: checkbox, label: la vendita diretta al pubblico dei prodotti di propria produzione}
+      - {kind: checkbox, label: l'attività di vendita dei prodotti di propria produzione per il consumo immediato, when: "{{ask.consumo_sul_posto}}"}
+  # The production manager is the titolare (another person's statement is refused by recipes);
+  # what they guarantee is printed under the boxes, with nothing to tick.
+  - section: dichiarazione di responsabilità dell'attività di panificio
+    fields:
+      - {kind: text, label: cognome, value: "{{t:identity.last_name}}"}
+      - {kind: text, label: nome, value: "{{t:identity.first_name}}"}
+      - {kind: text, label: codice fiscale, value: "{{t:identity.codice_fiscale}}"}
+      - {kind: text, label: luogo di nascita, value: "{{t:identity.birth_comune|upper}}"}
+      - {kind: date, label: data di nascita, value: "{{t:identity.date_of_birth|date_it}}"}
+      - {kind: text, label: comune di residenza, value: "{{t:residenza.comune|upper}}"}
+      - {kind: text, label: "via, viale, piazza", value: "{{t:residenza.indirizzo|upper}}"}
+      - {kind: text, label: numero civico, value: "{{t:residenza.civico}}"}
+      - {kind: text, label: rapporto con l'impresa, value: "titolare"}
+  # Fire prevention: outside DPR 151/2011's Allegato I (recipes refuse ovens over 116 kW and more
+  # than 300 kg of flour a day, which bring it in); the certificate's boxes stay empty.
+  - section: dichiarazione relativa alla Prevenzione Incendi
+    leave: [prot. n., n° fascicolo, del, rilasciato dal Comando provinciale, con scadenza il, rilasciata dal Comando Provinciale, in data, ulteriori dichiarazioni]
+    fields:
+      - {kind: radio, label: che l'attività esercitata non ricade tra quelle previste nell'Allegato I}
+
   # An extra-hotel lodging (affittacamere, B&B, holiday homes: mod_attivita_extra_alberghiere_apertura
   # and Napoli's own boxes): its type and form, its name, its season, its services, its rooms.
   - section: TIPOLOGIA
@@ -4896,7 +5042,9 @@ sections:
       - {kind: radio, label: "no", nth: 6}
       - {kind: radio, label: "no", nth: 7}
       - {kind: radio, label: "no", nth: 8}
-      - {kind: textarea, label: Caratteri restanti, value: "{{ask.insegna_testo}}"}
+      # Named by its own text: the counter beside it ("300 Caratteri restanti") changes as it fills, and
+      # the run found the box only by its crawled id ("loose", negozio-insegna-fittizio, 2026-11-10).
+      - {kind: textarea, label: Testo del messaggio pubblicitario, value: "{{ask.insegna_testo}}"}
   - section: dichiarazione relativa al vincolo ambientale
     fields:
       - {kind: radio, label: Non soggetta a tutela ambientale}
@@ -5225,6 +5373,52 @@ sections:
              "di consentire i controlli nei locali"]
     fields: []
 
+  # A hairdresser's or beautician's structural change (variazioni strutturali: the same sections in
+  # both forms), read from the crawl's text; the national schema (mod_acconciatori_estetisti_apertura)
+  # is the opening's and has none of these. The premises' compliance, the rules and the technical
+  # manager's presence are the person's statements; the season, the sign, the area before and after,
+  # the equipment and the workplaces are facts.
+  - section: dichiarazione di conformità alle norme in materia edilizia, urbanistica, igienico sanitaria e accessibilità
+    theirs: ["che il locale ove intende svolgere l'attività è conforme"]
+    fields: []
+  - section: dichiarazione del rispetto delle leggi e regolamenti vigenti in materia
+    theirs: [di rispettare tutte le norme di legge e regolamenti vigenti]
+    fields: []
+  - section: dichiarazione del responsabile tecnico
+    theirs: [di essere a conoscenza che il responsabile tecnico debba garantire]
+    fields: []
+  - section: dichiarazione della tipologia dell'esercizio (permanente/stagionale)
+    leave: [data inizio periodo, data fine periodo]
+    fields:
+      - {kind: radio, label: permanente, when: "{{ask.stagionale|not}}"}
+      - {kind: radio, label: stagionale, when: "{{ask.stagionale}}"}
+      - {kind: date, label: data inizio periodo, value: "{{ask.stagione_inizio_data|date_it}}", when: "{{ask.stagionale}}"}
+      - {kind: date, label: data fine periodo, value: "{{ask.stagione_fine_data|date_it}}", when: "{{ask.stagionale}}"}
+  - section: dichiarazione dell'insegna dell'esercizio
+    fields:
+      - {kind: text, label: "l'insegna è:", value: "{{ask.insegna_testo}}"}
+  - section: dichiarazione relativa alla superficie dei locali da adibire all'attività, prima della variazione
+    fields:
+      - {kind: text, label: superficie complessiva dell'esercizio (mq), value: "{{ask.superficie_prima_mq}}"}
+  - section: dichiarazione relativa alla superficie dei locali da adibire all'attività, successivamente alla variazione
+    fields:
+      - {kind: text, label: superficie complessiva dell'esercizio (mq), value: "{{ask.superficie_complessiva}}"}
+      - {kind: radio, label: con ampliamento, when: "{{ask.var_superficie|is_ampliamento}}"}
+      - {kind: radio, label: con riduzione, when: "{{ask.var_superficie|is_riduzione}}"}
+      - {kind: radio, label: con redistribuzione degli spazi, when: "{{ask.var_superficie|is_redistribuzione}}"}
+  - section: dichiarazione della superficie complessiva dell'esercizio in seguito alla variazione
+    fields:
+      - {kind: text, label: superficie complessiva in seguito alla variazione (mq), value: "{{ask.superficie_complessiva}}"}
+  - section: dichiarazione relativa alla variazione delle attrezzature
+    fields:
+      - {kind: radio, label: SI, when: "{{ask.var_attrezzature}}"}
+      - {kind: textarea, label: specificare, value: "{{ask.var_attrezzature_descrizione}}", when: "{{ask.var_attrezzature}}"}
+      - {kind: radio, label: "NO", when: "{{ask.var_attrezzature|not}}"}
+  - section: modificazione del numero dei posti di lavoro
+    fields:
+      - {kind: number, label: i posti di lavoro sono variati da n., value: "{{ask.posti_lavoro_prima}}"}
+      - {kind: number, label: a n., value: "{{ask.posti_lavoro_dopo}}"}
+
   - section: "Dichiarazione sul possesso dei requisiti antimafia"
     aliases: [DICHIARAZIONI SUL POSSESSO DEI REQUISITI ANTIMAFIA]
     schema: modulo_acconciatori_estetisti_apertura/scheda_anagrafica
@@ -5282,7 +5476,19 @@ after:
     # Slots that take plain files, read on the portal and left empty on purpose (gen.py refuses an
     # unnamed one): the identity document is only for whoever doesn't sign digitally, and every
     # pratica here is signed digitally (the SUE's extensions filled without it, 2026-11-05).
-    leave: ["copia del documento d'identità in corso di validità"]
+    leave: ["copia del documento d'identità in corso di validità",
+            # The other partners' or administrators' IDs: recipes refuse other subjects (altri_soggetti).
+            "copia documento d'identità in corso di validità ai sensi del D.P.R. 445/2000 di altri soggetti",
+            # A technician's statement under art. 19 L. 241/1990, where a SCIA needs one: a takeover or a
+            # change of name has no works to assert (the bakery's, read on the portal 2026-11-10).
+            "attestazione e/o asseverazione di tecnici abilitati ai sensi art. 19",
+            # A salon's structural change (read on the portal 2026-11-10): the preposto's ID and the
+            # technical manager's qualification are the opening's, already filed (recipes refuse a new
+            # technical manager); the beautician's technicians' asseverazioni belong to building works,
+            # which are the SUE's pratica (a CILA), while this one's compliance is the person's statement.
+            "copia documento d'identità in corso di validità ai sensi del D.P.R. 445/2000 del preposto",
+            "certificato attestante la qualificazione professionale per l'attività",
+            "attestazioni e asseverazioni di tecnici abilitati, corredate degli elaborati tecnici"]
     fields:
       - {kind: file, label: Procura speciale, value: "{{ask.procura_firmata}}"}
       - {kind: file, label: Allegati liberi, value: "{{ask.napoli_allegato_a_firmato}}", describe: Allegato A Programma 100, when: "{{ask.napoli_allegato_a}}", after_declarations: true}
@@ -5329,6 +5535,14 @@ after:
       # 81/2008); the new holder's that they have the right to the title.
       - {kind: file, label: "Dichiarazione sostitutiva dell'atto di notorietà, attestante l'avvenuta verifica", value: "{{ask.verifica_impresa_dsan}}"}
       - {kind: file, label: "dichiarazione sostitutiva dell'atto di notorietà corredata da copia di documento di identità", value: "{{ask.titolo_subentrante_dsan}}"}
+      # A SUAP takeover's deed (the notary's sale or lease, a will) and a change's act (the Registro
+      # delle imprese's modifica): plain or signed files (the bakery's, read on the portal 2026-11-10).
+      - {kind: file, label: copia documentazione subingresso, value: "{{ask.subingresso_atto_doc}}"}
+      - {kind: file, label: "copia dell'atto da cui risulti la variazione", value: "{{ask.var_atto_doc}}"}
+      # A salon's structural change: the premises' new plan with the layout and equipment, and the
+      # TARI declaration for the changed area (plain or signed files, read on the portal 2026-11-10).
+      - {kind: file, label: "planimetria relativa allo stato dei locali utilizzati per l'attività", value: "{{ask.planimetria_layout_doc}}"}
+      - {kind: file, label: Copia denuncia occupazione dei locali ai fini TARSU, value: "{{ask.tari_denuncia_doc}}"}
       - {kind: file, label: "Attestazione in merito all'apposizione dell'etichetta", value: "{{ask.etichetta_banda_doc}}", when: "{{ask.banda_ultralarga}}"}
       - {kind: file, label: estremi di atti assenso già acquisiti, value: "{{ask.atti_assenso_acquisiti_doc}}", when: "{{ask.atti_assenso_acquisiti}}"}
       # The terre e rocce filings' own form, made by the portal from the pratica.

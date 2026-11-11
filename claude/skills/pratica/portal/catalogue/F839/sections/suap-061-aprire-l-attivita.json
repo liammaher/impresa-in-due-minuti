@@ -327,6 +327,53 @@
   }
  ],
  "scelte_none": {
-  "richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale": "inferred 2026-11-10 from the move's draft in the same sector (suap-061-trasferire-la-sede-dell-attivita: the tick added no section there, the authorization having its own bollo); not yet read on an opening's draft: its first run confirms"
- }
+  "richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale": "read 2026-11-10 on the filled draft \"PROVA NON INVIARE - centro storico generato\" (rehearsals/ristorante-centro-storico-fittizio, its first run filled): the draft's one bollo section is the authorization's own, the tick added no section (first inferred from the move's draft in the same sector, suap-061-trasferire-la-sede-dell-attivita)"
+ },
+ "slots": {
+  "Gestione degli allegati": [
+   {
+    "title": "Planimetria quotata dei locali",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Allegato 1 CS 1 Criterio strutturale 1",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "Allegato 3 CG 1 Criterio gestionale 1",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": true
+   },
+   {
+    "title": "documentazione di impatto acustico, redatta da un tecnico competente in acustica, con l'indicazione delle misure previste per ridurre o eliminare le emissioni s",
+    "accepts": "xml;dwf;dwf.p7m;svg;svg.p7m;jpg;jpg.p7m;pdf;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Ricevuta di pagamento della tariffa sanitaria forfettaria, per la registrazione/aggiornamento",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Allegati liberi",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg",
+    "required": false,
+    "portal_document": false
+   }
+  ]
+ },
+ "slots_note": "read 2026-11-10 on the filled draft \"PROVA NON INVIARE - centro storico generato\" after its run (crawl.js slotsOf), before the declarations: none required yet"
 }

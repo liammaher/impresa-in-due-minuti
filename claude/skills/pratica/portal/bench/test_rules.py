@@ -4,7 +4,7 @@
   ~/.cache/pratica-portal/venv/bin/python -I claude/skills/pratica/portal/bench/test_rules.py
 
 No browser, vault or network: the non-food shop's and the restaurant's rehearsals, and the
-SUE's building ones (rules/sue-napoli.yaml), changed one fact at a time. With PRATICHE_NAPOLI_DIR set, rules/ is also compared with the library's.
+SUE's building ones (library/rules/sue-napoli.yaml), changed one fact at a time.
 """
 
 import copy
@@ -398,21 +398,19 @@ def gen_checks():
            "the fact paesaggio is also asks.paesaggio", gen.GenError)
 
 
-def same_as_library():
+def tables_are_the_librarys():
+    """The runner reads library/rules/ itself: no copy to drift (until 2026-11-11 portal/rules/ was one)."""
+    assert not (HERE.parent / "rules").exists(), "portal/rules/ was a copy of the library's: read library/rules/"
     lib = os.environ.get("PRATICHE_NAPOLI_DIR")
-    if not lib:
-        print("  (PRATICHE_NAPOLI_DIR unset: rules/ not compared with the library's)")
-        return
-    for p in sorted(rules.TABLES.glob("*.yaml")):
-        theirs = Path(lib) / "rules" / p.name
-        assert theirs.is_file() and theirs.read_bytes() == p.read_bytes(), f"rules/{p.name} differs from {theirs}"
+    assert rules.TABLES == (Path(lib) / "rules" if lib else HERE.parents[4] / "library" / "rules"), rules.TABLES
+    assert {"sue-napoli-adempimenti.yaml", "sue-napoli.yaml", "suap-napoli.yaml"} <= {p.name for p in rules.TABLES.glob("*.yaml")}
 
 
 def main():
     os.chdir(REHEARSALS.parent)  # the rehearsals' files are paths from the repository
     tests = [every_case_decided_once, decide_answers, ready_as_proven, facts_asked, refused_by_the_table, other_pratiche,
              gen_checks, sue_every_case_decided_once, sue_rehearsals_ready, sue_another_pratica, sue_asks_and_apart, sue_proposals,
-             same_as_library]
+             tables_are_the_librarys]
     for t in tests:
         t()
         print(f"ok  {t.__name__}")

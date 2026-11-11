@@ -135,8 +135,9 @@ func TestSchemaCredentialWordsAreTheVaultsOwn(t *testing.T) {
 	}
 }
 
-// schema.json is what pratiche-napoli's CI compares its copy with, so it
-// must be exactly what 'pvault schema --json' prints.
+// schema.json is what the library's validator and field registry are built from
+// (library/contract/vault-schema.json is its copy), so it must be exactly what
+// 'pvault schema --json' prints, and the copy exactly it.
 func TestSchemaJSONIsCommitted(t *testing.T) {
 	committed, err := os.ReadFile(filepath.Join("..", "..", "schema.json"))
 	if err != nil {
@@ -144,5 +145,12 @@ func TestSchemaJSONIsCommitted(t *testing.T) {
 	}
 	if !bytes.Equal(committed, SchemaJSON()) {
 		t.Fatal("schema.json is out of date: run 'make schema'")
+	}
+	copyInLibrary, err := os.ReadFile(filepath.Join("..", "..", "library", "contract", "vault-schema.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Equal(copyInLibrary, committed) {
+		t.Fatal("library/contract/vault-schema.json differs from schema.json: run 'make schema'")
 	}
 }

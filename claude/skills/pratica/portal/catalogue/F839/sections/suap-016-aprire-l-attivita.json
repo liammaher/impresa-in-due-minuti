@@ -1290,5 +1290,8 @@
    }
   ]
  },
- "slots_note": "read on the attachments screen after the generated run (2026-10-28)"
+ "slots_note": "read on the attachments screen after the generated run (2026-10-28)",
+ "scelte_seen": {
+  "in caso di attività che preveda insegna esterna": "read 2026-11-10 on the filled draft \"PROVA NON INVIARE - negozio insegna generato\" (rehearsals/negozio-insegna-fittizio, its first run filled): the tick adds the seven sections of suap-060-aprire-l-attivita-interventi's sign, TITOLARITA' DELL'INTERVENTO to ulteriori dichiarazioni (mezzi pubblicitari), and nothing else"
+ }
 }

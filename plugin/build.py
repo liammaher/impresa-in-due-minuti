@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Build the Impresa in un minuto plugin for Cowork: plugin/impresa-in-un-minuto plus the runner, the rehearsals'
-steps files and the pratiche-napoli library, as one installable file.
+steps files and the library (library/), as one installable file.
 
   build.py [--library DIR] [--out DIR] [--connector URL] [--vault on|off] [--python-download on|off]
            [--cowork-test] [--evals]
 
 Writes OUT/impresa-in-un-minuto/ (default plugin/dist) and OUT/impresa-in-un-minuto.plugin (the same, zipped), then
 pre-flights the test fixture with the built plugin through its launcher (sh py, which picks this
-computer's python3), as the skill runs it. --library is a pratiche-napoli checkout (default
-$PRATICHE_NAPOLI_DIR). Needs PyYAML (the pratica venv's Python): the plugin itself needs no
+computer's python3), as the skill runs it. --library is a library folder (default $PRATICHE_NAPOLI_DIR,
+else this repository's library/). Needs PyYAML (the pratica venv's Python): the plugin itself needs no
 packages, because every YAML file
 the runner reads goes in as JSON (rules.load reads it). --connector adds the Impresa in un minuto
 connector (connector/, serving this same build) as the plugin's .mcp.json. --vault overrides
@@ -43,8 +43,10 @@ REPO = HERE.parent
 PRATICA = REPO / "claude" / "skills" / "pratica"
 REHEARSALS = REPO / "rehearsals"
 sys.path.insert(0, str(PRATICA / "portal"))
+sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
 import gen  # noqa: E402  (the steps files, built; a combination's recipe, resolved)
+import private_terms as private_terms_list  # noqa: E402  (the maintainer's list, shared with the pre-push hook)
 import runs  # noqa: E402  (a rehearsal's runs.json: which runs filled the draft)
 # The library's parts a Cowork session reads: its tools, reports backend and layouts
 # (PDF filling, which needs PyMuPDF) stay out of this version.
@@ -277,11 +279,10 @@ def sources_digest(library=None):
     the schema, the hand-written plugin and its evals, the steps lock, build.yaml, this script, the licence
     texts and the library's files. plugin/live.py rebuilds when it differs from dist/build.json's."""
     parts = {f"runner/{k}": sha256_file(v) for k, v in sorted(RUNNER_FILES.items())}
-    extra = [*sorted((PRATICA / "portal" / "rules").glob("*.yaml")),
-             PRATICA / "portal" / "catalogue" / "F839" / "drift.json", REPO / "schema.json",
+    extra = [PRATICA / "portal" / "catalogue" / "F839" / "drift.json", REPO / "schema.json",
              REPO / "LICENSE", REPO / "NOTICE.md", HERE / "build.py", HERE / "coverage.yaml"]
     parts |= {f"extra/{f.relative_to(REPO)}": sha256_file(f) for f in extra if f.is_file()}
-    library = library or os.environ.get("PRATICHE_NAPOLI_DIR")
+    library = library or os.environ.get("PRATICHE_NAPOLI_DIR") or REPO / "library"
     if library:
         for sub in ("procedures", "rules", "offices", "contract"):
             for f in sorted((Path(library) / sub).rglob("*")):
@@ -298,7 +299,7 @@ def sources_digest(library=None):
     return hashlib.sha256(json.dumps(parts, sort_keys=True).encode()).hexdigest()
 
 
-def copy_runner(skill, desks):
+def copy_runner(skill, desks, library):
     portal = skill / "portal"
     portal.mkdir(parents=True)
     # rules.py's drifted(): pre-flight refuses a pratica the last drift check found changed on
@@ -312,7 +313,7 @@ def copy_runner(skill, desks):
     (portal / "catalogue" / "F839").mkdir(parents=True)
     shutil.copy2(PRATICA / "portal" / "catalogue" / "F839" / "drift.json", portal / "catalogue" / "F839" / "drift.json")
     (portal / "rules").mkdir()
-    for table in sorted((PRATICA / "portal" / "rules").glob("*.yaml")):
+    for table in sorted((Path(library) / "rules").glob("*.yaml")):
         if table_sportello(table) not in desks:
             continue
         # BaseLoader, as rules.py reads it: every scalar stays a string.
@@ -568,30 +569,20 @@ def write_pvault_release(setup, version, checksums):
 def private_terms():
     """The maintainer's own details the plugin must never carry (codice fiscale, address, CIE, ...),
     one per line, # for comments. The list is the maintainer's, outside the repo: it is the data."""
-    path = Path(os.environ.get("IMPRESA_IN_UN_MINUTO_PRIVATE_TERMS") or Path.home() / ".config" / "impresa-in-un-minuto" / "private-terms.txt")
-    if not path.is_file() and "IMPRESA_IN_UN_MINUTO_PRIVATE_TERMS" not in os.environ:
-        # Where it was under the plugin's earlier names (Impresa in due minuti, Portali, Portale SUE).
-        path = next((p for p in (Path.home() / ".config" / old / "private-terms.txt" for old in ("impresa-in-due-minuti", "portali", "portale-sue"))
-                     if p.is_file()), path)
-    if not path.is_file():
-        return []
-    lines = (l.strip() for l in path.read_text().splitlines())
-    return [l for l in lines if l and not l.startswith("#")]
+    return private_terms_list.load()
 
 
 def check_private(plugin, terms):
     """Stop the build if a private term is in any file, as a whole word (a number inside a hash
     doesn't count), or, for a long one, spaced out as a form prints a codice fiscale."""
     found = {}
-    pats = [re.compile(r"(?<![0-9A-Za-z])" + re.escape(t) + r"(?![0-9A-Za-z])", re.I) for t in terms]
+    pats = private_terms_list.patterns(terms)
     for f in sorted(plugin.rglob("*")):
         if not f.is_file():
             continue
         text = f.read_bytes().decode("utf-8", "ignore")
-        flat = re.sub(r"\s+", "", text)
-        for i, p in enumerate(pats):
-            if p.search(text) or (len(terms[i]) >= 9 and p.search(flat)):
-                found.setdefault(str(f.relative_to(plugin)), []).append(i + 1)
+        for n in private_terms_list.hits(text, terms, pats):
+            found.setdefault(str(f.relative_to(plugin)), []).append(n)
     if found:  # line numbers of the list, never the terms: this output may end up in a log
         sys.exit("private terms in the plugin (line numbers in the private list):\n"
                  + "\n".join(f"  {f}: {n}" for f, n in found.items()))
@@ -599,7 +590,7 @@ def check_private(plugin, terms):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--library", type=Path, default=os.environ.get("PRATICHE_NAPOLI_DIR"))
+    ap.add_argument("--library", type=Path, default=os.environ.get("PRATICHE_NAPOLI_DIR") or REPO / "library")
     ap.add_argument("--out", type=Path, default=HERE / "dist")
     ap.add_argument("--pvault-version", help="the pvault release the setup skill installs, e.g. 0.1.0 (with --pvault-checksums)")
     ap.add_argument("--pvault-checksums", type=Path, help="that release's checksums.txt")
@@ -618,11 +609,11 @@ def main():
         ap.error("--pvault-version and --pvault-checksums go together")
     if a.pvault_version and not vault:
         ap.error("--pvault-version: this build ships no archive (vault off in plugin/build.yaml or --vault off)")
-    if not a.library:
-        ap.error("--library or $PRATICHE_NAPOLI_DIR: a pratiche-napoli checkout")
     # The repo's runner names a procedure by its library title from here, as the plugin's does
     # from its own library/ (run.procedure_name): the self-check compares their pre-flights.
     os.environ["PRATICHE_NAPOLI_DIR"] = str(Path(a.library).resolve())
+    import rules as rules_mod  # noqa: E402  (gen imported it before this: its tables follow --library too)
+    rules_mod.TABLES = rules_mod._tables_dir()
     plugin = a.out / "impresa-in-un-minuto"
     (a.out / "build.json").unlink(missing_ok=True)  # a build that dies must not leave a record saying "current"
     if plugin.exists():
@@ -641,7 +632,7 @@ def main():
         write_pvault_release(plugin / "skills" / SETUP_SKILL, a.pvault_version, a.pvault_checksums)
     skill = plugin / "skills" / "pratiche"
     desks = sportelli()
-    copy_runner(skill, desks)
+    copy_runner(skill, desks, a.library)
     catalog = copy_pratiche(skill, a.library, desks)
     copy_library(a.library, skill, catalog, desks)
     manifest = json.loads((plugin / ".claude-plugin" / "plugin.json").read_text())

@@ -19,8 +19,10 @@ and its answers file) goes through run.py's page_files, as `run.py page` would. 
                 sections it changes, its wizard), so six cases of one pratica cost one and a bit
   loop.js       starts the runs in order and returns at once; each result is kept in the tab
                 (sessionStorage pv-batch), so running loop.js again carries on where it stopped
-  results.js    the results so far, one line each (`fresh.js` clears them for a new batch)
-  record.js     every run's name and result, as JSON (small, no values): `rerun.py --record -` reads
+  results.js    the results so far, one line each (`fresh.js` clears them for a new batch, keeping
+                today's earlier batches apart for record.js)
+  record.js     every run's name and result, as JSON (small, no values), today's earlier batches
+                included (a later run of a name over an earlier one): `rerun.py --record -` reads
                 it pasted on stdin (or --record FILE) and adds each run to its rehearsal's runs.json
                 (what schema_branches.py counts as filled)
   pick.js       with --bundle FILE: everything above in FILE, and a box on the page where the
@@ -351,9 +353,27 @@ JSON.stringify({ done: done.length, of: (window.pvBatch || []).length, running: 
   alerts: Object.entries(done.flatMap((d) => [...new Set((d.alerts || []).map((a) => `${a.section}: ${a.text}`))])
     .reduce((n, a) => ({ ...n, [a]: (n[a] || 0) + 1 }), {})) })
 """)
-    (a.out / "record.js").write_text('JSON.stringify(JSON.parse(sessionStorage.getItem("pv-batch") || "[]")'
-                                      '.map((d) => ({ name: d.name, result: d.result, total_seconds: d.total_seconds })))\n')
-    (a.out / "fresh.js").write_text('sessionStorage.removeItem("pv-batch"); sessionStorage.removeItem("pv-batch-unreached"); "cleared"\n')
+    # A new batch clears the tab's results (fresh.js), which once lost a batch not recorded yet
+    # (2026-11-10: the move's run, when the two pratiche it had spoiled were run again). So fresh.js
+    # keeps today's earlier batches (`pv-batch-earlier`), and record.js gives them with this one's,
+    # a run of this batch over an earlier one of the same name (the rerun is what stands).
+    # Functions: both run at the page's top level (the bundle evaluates every part as one script).
+    today = 'new Date().toISOString().slice(0, 10)'
+    (a.out / "record.js").write_text(
+        '(() => {\n'
+        f'  const earlier = JSON.parse(sessionStorage.getItem("pv-batch-earlier") || "[]").filter((b) => b.day === {today});\n'
+        '  const runs = JSON.parse(sessionStorage.getItem("pv-batch") || "[]");\n'
+        '  const names = new Set(runs.map((d) => d.name));\n'
+        '  const old = earlier.reverse().flatMap((b) => b.runs).filter((d) => !names.has(d.name) && (names.add(d.name), true));\n'
+        '  return JSON.stringify([...old, ...runs].map((d) => ({ name: d.name, result: d.result, total_seconds: d.total_seconds })));\n'
+        '})()\n')
+    (a.out / "fresh.js").write_text(
+        '(() => {\n'
+        '  const last = JSON.parse(sessionStorage.getItem("pv-batch") || "[]");\n'
+        f'  const earlier = JSON.parse(sessionStorage.getItem("pv-batch-earlier") || "[]").filter((b) => b.day === {today});\n'
+        f'  if (last.length) sessionStorage.setItem("pv-batch-earlier", JSON.stringify([...earlier, {{ day: {today}, runs: last }}]));\n'
+        '  sessionStorage.removeItem("pv-batch"); sessionStorage.removeItem("pv-batch-unreached"); return "cleared";\n'
+        '})()\n')
     if a.bundle:
         write_bundle(a.out, a.bundle)
     print(f"{a.out}: {len(names)} rehearsals, {len(chunks)} queue file(s). In the pane, on {origin}: "

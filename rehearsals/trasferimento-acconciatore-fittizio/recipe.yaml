@@ -48,9 +48,9 @@ supports:
     else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
   - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
   - {when: "{{ask.trasferisce_estetista|not}}", else: "Trasferire entrambe le attività spunta entrambe le operazioni nella procedura guidata: una combinazione che non preparo ancora."}
-# Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides. Its
-# `acconciatore_estetista` is one activity, so only this move (as the opening) is routed to: the
-# beautician's (trasferimento-estetista-fittizio) has no `rules:` until the table tells them apart.
+# Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides. Since
+# pratiche-napoli split `acconciatore_estetista` (2026-11-10), the hairdresser's and the beautician's
+# moves are told apart by the activity their recipes fix.
 rules:
   table: suap-napoli
-  facts: {attivita: acconciatore_estetista, evento: trasferimento}
+  facts: {attivita: acconciatore, evento: trasferimento}

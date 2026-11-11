@@ -126,12 +126,10 @@ def _():
     assert alone == set(PAIRS["ops"]), f"no rehearsal of {sorted(set(PAIRS['ops']) - alone)} alone"
 
 
-@case("the cites name the library's sources (PRATICHE_NAPOLI_DIR)")
+@case("the cites name the library's sources (library/)")
 def _():
-    lib = os.environ.get("PRATICHE_NAPOLI_DIR")
-    if not lib:
-        print("      (skipped: PRATICHE_NAPOLI_DIR not set)")
-        return
+    import rules
+    lib = rules.library_dir()
     for name, r in PAIRS["reasons"].items():
         for c in r["cites"]:
             f = Path(lib) / "procedures" / f"{c['procedure']}.yaml"
