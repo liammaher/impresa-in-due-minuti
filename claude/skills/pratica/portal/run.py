@@ -596,6 +596,9 @@ FILTERS = Filters({
     "one_catasto": lambda v: (lambda n, cats: "true" if len({bool(c.strip()) for c in cats[:n]}) <= 1 else "false")(
         int(float(v.split("/")[0] or 1)), _categorie(v.split("/", 1)[1] if "/" in v else "")),
     "not": lambda v: "false" if truthy(v) else "true",
+    # A box that wants "300.00", the point and the decimals (the medium shop's total, 2026-11-11: "300" was
+    # refused with "deve essere un numero comprensivo dei decimali").
+    "decimal": lambda v: f"{float(str(v).strip().replace(',', '.')):.2f}",
     "positive": lambda v: "true" if float(str(v or 0).replace(",", ".")) > 0 else "false",
     # The SUE rules table's facts as the forms' own boxes (an ask's `propose`).
     "sue_scia_tipo": _sue_scia_tipo,

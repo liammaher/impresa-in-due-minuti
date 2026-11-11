@@ -1241,6 +1241,7 @@ asks:
   ccn_delibera_ente: {type: text, question: "Chi lo ha approvato (ad es. Giunta comunale)"}
   in_factory_outlet: {type: yes_no, question: "Si trova in un factory outlet centre?", propose: "false"}
   in_parco_commerciale: {type: yes_no, question: "Si trova in un parco commerciale?", propose: "false"}
+  media_autonoma: {type: yes_no, question: "L'esercizio è autonomo, cioè non è organizzato come centro commerciale, parco commerciale o outlet?", propose: "true"}
   # The medium-sized shop's two boxes before the sales mode (SPECIFICHE DELLA MEDIA STRUTTURA DI
   # VENDITA): the form names them "MA/M" and "ME" and the section's text explains neither.
   media_struttura_tipo: {type: choice, question: "Quale delle due caselle del modulo vale per la struttura: «MA/M» o «ME»? Il modulo non le spiega: se non lo sai, chiedilo al SUAP", options: ["MA/M", "ME"]}
@@ -5316,15 +5317,18 @@ sections:
   # Only a stand-alone shop is mapped: a "Si" for a shopping centre, a parco commerciale, a factory
   # outlet or a C.C.N. opens boxes (a name, the delibera) the four crawls place differently (a
   # delibera's date is in one crawl's base and another's reveal), so those cases are refused.
-  # "Esercizio autonomo" (the first SI/NO) is the person's: the crawl saw SI move 29 boxes of the
-  # section (four more rows of SI/NO radios above the shopping-centre question, 2026-10-28, in
-  # none of its `reveals`) and 020's opening shows one of them already (a lone SI), so what SI opens
-  # is unread. Its "No" boxes are counted from it (`nth` 2 to 5).
+  # "Esercizio autonomo" (the first SI/NO, required): SI opens four more required SI/NO rows, "Organizzato
+  # come" a centro commerciale, a parco commerciale, an Outlet and a Factory outlet center (read on a draft,
+  # 2026-11-11; the crawl saw them only as 29 moved boxes). An autonomous shop answers NO to all four; they
+  # have no crawled field, so the last four "NO" are found by label on the page (`on_page`), counted after the
+  # autonomo NO: its "NO" is the 1st, theirs the 2nd to 5th, the "Esercizio collocato in" ones the 6th to 9th.
+  # The total is a decimal ("300.00": the portal refuses "300") and the portal bounds it by the sector.
   - section: SPECIFICHE DELLA MEDIA STRUTTURA DI VENDITA
     leave: [Farmacie, Carburanti]
     plus: "the season's own \"+\" (a second period): one period is mapped"
     supports:
       - {when: "{{ask.solo_distributori|not}}", else: "Una media struttura che vende solo con distributori automatici per ora non la preparo."}
+      - {when: "{{ask.media_autonoma}}", else: "Una media struttura organizzata come centro commerciale, parco commerciale o outlet per ora non la preparo."}
       - {when: "{{ask.in_centro_commerciale|not}}", else: "Una media struttura dentro un centro commerciale per ora non la preparo."}
       - {when: "{{ask.in_parco_commerciale|not}}", else: "Una media struttura dentro un parco commerciale per ora non la preparo."}
       - {when: "{{ask.in_factory_outlet|not}}", else: "Una media struttura in un factory outlet per ora non la preparo."}
@@ -5340,21 +5344,27 @@ sections:
       - {kind: radio, label: Stagionale, when: "{{ask.stagionale}}"}
       - {kind: text, label: dal (gg/mm), value: "{{ask.stagione_dal}}", when: "{{ask.stagionale}}"}
       - {kind: text, label: al (gg/mm), value: "{{ask.stagione_al}}", when: "{{ask.stagionale}}"}
-      - {kind: radio, label: "No", nth: 2}
-      - {kind: radio, label: "No", nth: 3}
-      - {kind: radio, label: "No", nth: 4}
-      - {kind: radio, label: "NO", nth: 5}
+      - {kind: radio, label: SI}
+      - {kind: radio, label: "NO", nth: 2, by_label: true}
+      - {kind: radio, label: "NO", nth: 3, by_label: true}
+      - {kind: radio, label: "NO", nth: 4, by_label: true}
+      - {kind: radio, label: "NO", nth: 5, by_label: true}
+      - {kind: radio, label: "NO", nth: 6, on_page: true}
+      - {kind: radio, label: "NO", nth: 7, on_page: true}
+      - {kind: radio, label: "NO", nth: 8, on_page: true}
+      - {kind: radio, label: "NO", nth: 9, on_page: true}
       - {kind: checkbox, label: Alimentare, when: "{{ask.superficie_alimentare_mq|positive}}"}
       - {kind: text, label: superficie di vendita mq, nth: 3, value: "{{ask.superficie_alimentare_mq}}", when: "{{ask.superficie_alimentare_mq|positive}}"}
       - {kind: checkbox, label: Non alimentare, when: "{{ask.superficie_non_alimentare_mq|positive}}"}
       - {kind: text, label: superficie di vendita mq, nth: 4, value: "{{ask.superficie_non_alimentare_mq}}", when: "{{ask.superficie_non_alimentare_mq|positive}}"}
-      - {kind: text, label: mq, value: "{{ask.superficie_vendita_mq}}"}
+      - {kind: text, label: mq, value: "{{ask.superficie_vendita_mq|decimal}}"}
       - {kind: checkbox, label: Generi di monopolio, when: "{{ask.superficie_monopolio_mq|positive}}"}
       - {kind: text, label: superficie di vendita mq, nth: 5, value: "{{ask.superficie_monopolio_mq}}", when: "{{ask.superficie_monopolio_mq|positive}}"}
   - section: SPECIFICHE DELLA MEDIA STRUTTURA DI VENDITA
     leave: [Farmacie, Carburanti, del]
     supports:
       - {when: "{{ask.solo_distributori|not}}", else: "Una media struttura che vende solo con distributori automatici per ora non la preparo."}
+      - {when: "{{ask.media_autonoma}}", else: "Una media struttura organizzata come centro commerciale, parco commerciale o outlet per ora non la preparo."}
       - {when: "{{ask.in_centro_commerciale|not}}", else: "Una media struttura dentro un centro commerciale per ora non la preparo."}
       - {when: "{{ask.in_parco_commerciale|not}}", else: "Una media struttura dentro un parco commerciale per ora non la preparo."}
       - {when: "{{ask.in_factory_outlet|not}}", else: "Una media struttura in un factory outlet per ora non la preparo."}
@@ -5364,15 +5374,20 @@ sections:
       - {kind: checkbox, label: ME, when: "{{ask.media_struttura_tipo|is_me}}"}
       - {kind: text, label: prot./n., value: "{{ask.titolo_attivita_protocollo}}"}
       - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
-      - {kind: radio, label: "No", nth: 2}
-      - {kind: radio, label: "No", nth: 3}
-      - {kind: radio, label: "No", nth: 4}
-      - {kind: radio, label: "NO", nth: 5}
+      - {kind: radio, label: SI}
+      - {kind: radio, label: "NO", nth: 2, by_label: true}
+      - {kind: radio, label: "NO", nth: 3, by_label: true}
+      - {kind: radio, label: "NO", nth: 4, by_label: true}
+      - {kind: radio, label: "NO", nth: 5, by_label: true}
+      - {kind: radio, label: "NO", nth: 6, on_page: true}
+      - {kind: radio, label: "NO", nth: 7, on_page: true}
+      - {kind: radio, label: "NO", nth: 8, on_page: true}
+      - {kind: radio, label: "NO", nth: 9, on_page: true}
       - {kind: checkbox, label: Alimentare, when: "{{ask.superficie_alimentare_mq|positive}}"}
       - {kind: text, label: superficie di vendita mq, value: "{{ask.superficie_alimentare_mq}}", when: "{{ask.superficie_alimentare_mq|positive}}"}
       - {kind: checkbox, label: Non alimentare, when: "{{ask.superficie_non_alimentare_mq|positive}}"}
       - {kind: text, label: superficie di vendita mq, nth: 2, value: "{{ask.superficie_non_alimentare_mq}}", when: "{{ask.superficie_non_alimentare_mq|positive}}"}
-      - {kind: text, label: mq, value: "{{ask.superficie_vendita_mq}}"}
+      - {kind: text, label: mq, value: "{{ask.superficie_vendita_mq|decimal}}"}
       - {kind: checkbox, label: Generi di monopolio, when: "{{ask.superficie_monopolio_mq|positive}}"}
       - {kind: text, label: superficie di vendita mq, nth: 3, value: "{{ask.superficie_monopolio_mq}}", when: "{{ask.superficie_monopolio_mq|positive}}"}
 

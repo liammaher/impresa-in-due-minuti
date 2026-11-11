@@ -18,5 +18,6 @@
  "superficie_vendita_mq": "300",
  "superficie_non_alimentare_mq": "300",
  "bollo_marche": false,
- "bollo_esenzione": "no"
+ "bollo_esenzione": "no",
+ "media_autonoma": "true"
 }

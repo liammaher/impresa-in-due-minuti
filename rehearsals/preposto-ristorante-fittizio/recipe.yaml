@@ -29,7 +29,7 @@ asks:
   oggetto: {question: "La pratica in una frase (300 caratteri)"}
 yours:
   - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
-  - "Spunta tu le dichiarazioni sui requisiti di onorabilità e professionali, tasse comunali, consapevolezza (artt. 46-47) e informativa privacy: nella bozza controlla anche se il modulo chiede i dati del nuovo preposto, che non ho letto"
+  - "Spunta tu le dichiarazioni sui requisiti di onorabilità e professionali, tasse comunali, consapevolezza (artt. 46-47) e informativa privacy: il nuovo preposto si nomina lì: se non sei tu, spunta «posseduti dal Sig./ra» e scrivi il suo nome"
   - "Paga i diritti di segreteria, se dovuti, con pagoPA nella schermata di pagamento"
   - "Allega quanto chiede la schermata degli allegati dopo aver spuntato le dichiarazioni"
   - "Firma e invia (Firma e invio); conserva la ricevuta"

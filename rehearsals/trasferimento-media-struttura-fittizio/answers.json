@@ -26,5 +26,6 @@
  "superficie_non_alimentare_mq": "300",
  "bollo_marche": false,
  "bollo_esenzione": "no",
- "precedente_centro_commerciale": "false"
+ "precedente_centro_commerciale": "false",
+ "media_autonoma": "true"
 }
