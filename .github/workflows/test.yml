@@ -41,6 +41,7 @@ jobs:
           python3 plugin/test_publish.py
           python3 plugin/test_report.py
           python3 plugin/test_ready.py
+          python3 plugin/test_push_guard.py
           python3 claude/skills/pratica/portal/bench/test_review_check.py
           python3 site/test_site.py
 
