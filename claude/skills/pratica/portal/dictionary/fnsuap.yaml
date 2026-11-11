@@ -4384,7 +4384,10 @@ sections:
       - {kind: radio, label: "DITTA/SOCIETA'/IMPRESA"}
       # A business in the Registro delle imprese names its Camera di commercio; a company's
       # legale rappresentante declares (`t:`, Carica from the ruolo), its forma below.
-      - {kind: radio, label: ISCRITTA ALLA CCIAA, when: "{{business.rea|empty|not}}"}
+      # The same check as the SUE's client company: a business in the Registro delle imprese (a REA) is looked
+      # up by its codice fiscale at Salva, so a made-up one stops the first section (2026-11-11, the procura
+      # variant's client with a REA: "Scheda anagrafica" stopped, fields empty).
+      - {kind: radio, label: ISCRITTA ALLA CCIAA, made_up_stops: true, made_up: "the portal looks the company's codice fiscale up in the Registro Imprese at Salva (\"Il CF inserito non è presente nel RI\"): a made-up company stops there", when: "{{business.rea|empty|not}}"}
       - {kind: select, label: "Camera di commercio di:", value: "{{business.cciaa|provincia_nome}}", when: "{{business.rea|empty|not}}"}
       - {kind: radio, label: NON ANCORA ISCRITTA, when: "{{business.rea|empty}}"}
       - {kind: text, label: Nome, value: "{{t:identity.first_name}}"}

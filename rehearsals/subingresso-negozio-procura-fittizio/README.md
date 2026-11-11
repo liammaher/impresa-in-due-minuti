@@ -9,13 +9,9 @@ digitale).
 Its attachments slots weren't read on its own draft: they are the parent's crawl slots with the procura's
 two in front, and the run attached the grantor's identity document in them (2026-11-11).
 
-Run it in a batch of its own. Twice it stopped on an error from another pratica's section ("TypeError:
-(s || \"\").normalize is not a function" at «dati dell'impresa a cui si subentra»), once in a batch after
-the subingresso ristorante's variant and once in a batch with its parent, whose run then stopped on the
-procuratore section only the variant has: two runs of one procedure in one batch mixed their steps. Alone
-it filled.
-
-## Runs
+Run it in a batch of its own: with another rehearsal of the same procedure (its parent, the restaurant's
+variant) their steps share the pane's one key, and it stopped twice on the other's sections
+(`TypeError: (s || "").normalize is not a function`). Alone it filled.
 
 <!-- Runs: drawn from runs.json by claude/skills/pratica/portal/runs.py; edit runs.json, not this table. -->
 
