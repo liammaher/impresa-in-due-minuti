@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/liammaher/pratiche-napoli/contract/offices.schema.json",
+  "title": "Offices of one service, by area",
+  "description": "The desks of one service across Napoli (offices/<list>.json: the Municipalità's sede, the ASL's Prevenzione Collettiva, the ASL district's sede...), keyed by every value of a vault field: municipalità (1-10) or ASL Napoli 1 Centro distretto (24/73, 25-33), the values the vault lists for it. A procedure's desk channel names the list and the field (office: { list: comune-municipalita, from: residenza.municipalita }) and a reader picks the person's office. The file is named for its service, so a list says what it serves, not only where",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["field", "name", "serves", "offices", "sources"],
+  "properties": {
+    "field": { "description": "The vault field's name the keys are values of", "enum": ["municipalita", "distretto_asl"] },
+    "name": { "description": "What these offices are, as the procedures call them", "type": "string", "minLength": 1 },
+    "serves": { "description": "What these offices handle, in Italian, so nobody takes them for another service of the same area (\"igiene pubblica per le attività: corsi e attestato alimentarista\", not \"l'ASL del distretto\")", "type": "string", "minLength": 1 },
+    "offices": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "address", "source"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "address": { "type": "string", "minLength": 1 },
+          "hours": { "type": "string", "minLength": 1 },
+          "phone": { "type": "string", "minLength": 1 },
+          "email": { "type": "string", "minLength": 1 },
+          "pec": { "type": "string", "minLength": 1 },
+          "notes": { "type": "string", "minLength": 1 },
+          "source": { "description": "id of one of sources", "type": "string" }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "url", "retrieved"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "label": { "type": "string", "minLength": 1 },
+          "url": { "type": "string", "pattern": "^https://" },
+          "retrieved": { "type": "string", "format": "date" }
+        }
+      }
+    }
+  }
+}

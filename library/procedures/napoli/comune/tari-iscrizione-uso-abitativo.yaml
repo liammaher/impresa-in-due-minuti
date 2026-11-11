@@ -1,0 +1,441 @@
+schema_version: 0
+id: napoli/comune/tari-iscrizione-uso-abitativo
+title: TARI – nuova iscrizione per uso abitativo (Comune di Napoli)
+headline: "Come iscriversi alla TARI a Napoli per una casa nuova o dopo un trasloco"
+aka:
+  - tassa sulla spazzatura
+  - tassa rifiuti
+  - denuncia TARI
+  - Mod. 1 TARI
+updated: 2026-10-27
+summary: >-
+  Chi inizia a occupare o detenere un'abitazione a Napoli (proprietario, inquilino o altro)
+  deve presentare la dichiarazione TARI con il Mod. 1 entro 90 giorni. La dichiarazione vale
+  anche per gli anni successivi finché non cambia qualcosa (variazione o cessazione).
+ente:
+  name: Comune di Napoli
+  office: Area Entrate – Servizio IMU e TARI
+  ipa: c_f839
+applies_to:
+  events: [home, move]
+  audience: [resident]
+  conditions:
+    - text: Inizio dell'occupazione o detenzione, a qualsiasi titolo, di un'abitazione nel Comune di Napoli.
+      status: verified
+      source: mod-1
+    - text: >-
+        La dichiarazione spetta all'intestatario della scheda di famiglia; per chi non è iscritto
+        all'anagrafe di Napoli, all'occupante (art. 25, c. 3).
+      status: verified
+      source: regolamento-2023
+legal_basis:
+  - text: Regolamento TARI del Comune di Napoli, artt. 25 (obbligo) e 26 (contenuto e presentazione).
+    status: verified
+    source: regolamento-2023
+deadline:
+  rules:
+    - text: >-
+        Entro 90 giorni dalla data di inizio dell'occupazione o detenzione, o dalla variazione dei
+        dati dichiarati (art. 25, c. 5).
+      status: verified
+      source: regolamento-2023
+      compute: { from: abitazione.data_inizio, days: 90 }
+  lateness:
+    text: >-
+      Per l'omessa dichiarazione il regolamento prevede una sanzione sul primo anno d'imposta dal
+      100% (un anno) al 200% (più di due anni) del tributo, minimo 50 euro (art. 35, c. 3). Farsi
+      calcolare l'importo dall'ufficio: norme nazionali successive possono averlo modificato.
+    status: verified
+    source: regolamento-2023
+cost:
+  text: >-
+    Nessun costo indicato: come dichiarazione tributaria è esente dall'imposta di bollo (D.P.R.
+    642/1972, tabella B, art. 5, testo in vigore fino al 31/12/2026) e né il modulo né la pagina
+    della modulistica chiedono diritti. La TARI si paga a parte, con F24.
+  status: verified
+  source: dpr642-tabella-b
+duration:
+  text: >-
+    Il Comune non indica un termine per rispondere alla dichiarazione. Gli avvisi di pagamento
+    arrivano per posta ordinaria prima della scadenza, ma la TARI va pagata alle scadenze anche se
+    l'avviso non arriva.
+  status: verified
+  source: mod-1
+appointment:
+  text: >-
+    Non serve: la dichiarazione si presenta online sui Servizi Tributari (POTESs, con SPID, CIE o
+    CNS), via PEC, email o raccomandata A/R, oppure agli sportelli URP delle Municipalità, senza
+    che il Comune indichi un appuntamento.
+  status: verified
+  source: modulistica
+channels:
+  - type: pec
+    purpose: procedure
+    address: entrate.tari-tares-tarsu@pec.comune.napoli.it
+    receipt: legal
+    preferred: true
+    source: mod-1
+    notes: Preferibile per chi ha una PEC, perché dà una ricevuta con valore legale.
+  - type: portal
+    purpose: procedure
+    name: POTESs – Servizi Tributari
+    url: https://servizionline.comune.napoli.it/web/napoli/servizi-tributari
+    auth: [spid, cie, cns]
+    use:
+      ways: [web_form, upload]
+      status: unverified
+      source: potess-tributi
+      notes: >-
+        La pagina del servizio indica, per la TARI, «presentare istanze di iscrizione, cessazione e
+        trasferimento», ma non dice se i dati si inseriscono online o se si allega il Mod. 1 firmato;
+        la pagina della modulistica dice che le dichiarazioni si compilano sui moduli del Comune.
+        Non controllato dentro il portale.
+    source: modulistica
+  - type: email
+    purpose: procedure
+    address: entrate.tari-tares-tarsu@comune.napoli.it
+    receipt: informal
+    source: mod-1
+  - type: post
+    purpose: procedure
+    receipt: legal
+    address: Comune di Napoli, Area Entrate, Servizio IMU e TARI, Via Diocleziano 330, 80125 Napoli
+    source: mod-1
+    notes: Raccomandata A/R.
+  - type: desk
+    purpose: procedure
+    name: Sportelli URP delle Municipalità
+    office: { list: comune-municipalita, from: residenza.municipalita }
+    source: modulistica
+    notes: Per le utenze domestiche, l'URP della Municipalità in cui si trova la casa.
+  - type: desk
+    purpose: info
+    name: Sportello TARI
+    address: Via Diocleziano 330, 80125 Napoli
+    hours: lunedì–venerdì 8:30–12:30
+    source: mod-1
+  - type: phone
+    purpose: info
+    address: 081 795 3711
+    hours: 9:00–13:00 (orario indicato sul modulo)
+    source: mod-1
+    notes: >-
+      Il modulo indica per prenotare un appuntamento telefonico o via mail
+      https://servizionline.comune.napoli.it/web/napoli/tributi, ma il 26/10/2026 la pagina
+      non esisteva (errore 404).
+payment:
+  method: f24
+  codice_ente: F839
+  codici_tributo: ["3944", "TEFA"]
+  status: unverified
+  rateazione: 0101 (unica soluzione)
+  calculator_url: https://portaletributi.comune.napoli.it/?ente=NAPO
+  schedule:
+    - { label: Acconto 2026 – rata 1, due: 2026-09-30, source: tari-2026, status: verified }
+    - { label: Acconto 2026 – unica soluzione, due: 2026-10-15, source: tari-2026, status: verified }
+    - { label: Acconto 2026 – rata 2, due: 2026-10-30, source: tari-2026, status: verified }
+    - { label: Acconto 2026 – rata 3, due: 2026-11-30, source: tari-2026, status: verified }
+    - { label: Saldo 2026 (nuovo avviso del Comune), due: 2027-02-16, source: tari-2026, status: verified }
+  notes:
+    - text: >-
+        Codice ente F839 (codice catastale di Napoli), codici tributo 3944 (TARI) e TEFA,
+        rateazione 0101: non riportati nella pagina TARI 2026; controllarli sull'avviso o con il
+        simulatore del Comune.
+      status: unverified
+    - text: L'acconto è il 75% dell'importo calcolato con le tariffe 2025; il saldo usa le tariffe 2026.
+      status: verified
+      source: tari-2026
+    - text: >-
+        Il pagamento è in autoliquidazione: è dovuto alle scadenze anche senza avviso, quindi un
+        nuovo occupante che non ha ricevuto nulla deve comunque la rata 2026.
+      status: verified
+      source: mod-1
+documents:
+  - name: Mod. 1 TARI compilato e firmato
+    required: true
+  - name: Copia di un documento d'identità valido (per esempio CIE o passaporto)
+    required: true
+    notes: Art. 38 DPR 445/2000.
+  - name: Visura catastale
+    required: false
+    notes: Utile se non si conoscono i dati catastali dell'abitazione.
+forms:
+  - id: mod-1
+    name: Mod. 1 TARI – Nuova iscrizione uso abitativo
+    url: https://static-www.comune.napoli.it/wp-content/uploads/2020/09/MOD-1-ISCRIZIONE-USO-ABITATIVO.pdf
+    source: mod-1
+    sha256: 2950daa429f5cfd2e19b03792cf4245638f32c3e8267b55e975443145eb8a218
+    signature_required: true
+    signing:
+      - channel: pec
+        ways: [handwritten, digital]
+        id_copy: required
+        status: unverified
+        source: mod-1
+        notes: >-
+          Il modulo chiede la copia del documento d'identità in ogni caso (AVVERTENZE, punto 2),
+          anche con la firma digitale; il Comune non lo ha confermato.
+      - channel: portal
+        ways: [login]
+        id_copy: unknown
+        status: unverified
+        notes: >-
+          Si presume che l'accesso con SPID, CIE o CNS identifichi chi presenta; la pagina della
+          modulistica non lo dice e non si sa se serva il documento.
+      - channel: email
+        ways: [handwritten, digital]
+        id_copy: required
+        status: unverified
+        source: mod-1
+        notes: Come per la PEC; il Comune non ha detto se accetta l'email ordinaria.
+    fields:
+      - label: Il/La sottoscritto/a
+        map: { concat: [identity.last_name, identity.first_name] }
+        notes: >-
+          Dichiara l'intestatario della scheda di famiglia (famiglia.intestatario_scheda). Se non è
+          il titolare del vault ma un familiare, nome, nascita, C.F. e recapiti del dichiarante
+          vanno presi dai dati di quel familiare, e il titolare del vault va tra i conviventi.
+      - label: nato/a a
+        map:
+          concat: [identity.birth_comune, identity.birth_country]
+          template: "{identity.birth_comune}[ ({identity.birth_country})]"
+        optional:
+          - field: identity.birth_country
+            required_if:
+              - { field: identity.birth_province, equals: EE }
+              - { field: identity.codice_fiscale, matches: "^.{11}Z" }
+        notes: >-
+          Per chi è nato all'estero, il luogo come scritto sui documenti e lo stato tra parentesi: nel
+          codice fiscale, una Z al dodicesimo carattere indica la nascita all'estero.
+      - { label: il, map: { direct: identity.date_of_birth, template: "{identity.date_of_birth|date}" } }
+      - { label: C.F., map: { direct: identity.codice_fiscale } }
+      - { label: residente in, map: { direct: residenza.comune } }
+      - { label: Via, map: { direct: residenza.indirizzo } }
+      - { label: n°, map: { direct: residenza.civico } }
+      - { label: Telefono, map: { direct: identity.phone } }
+      - { label: e-mail, map: { direct: identity.email } }
+      - { label: pec, map: { direct: identity.pec }, optional: [{ field: identity.pec }] }
+      - { label: a decorrere dal, map: { direct: abitazione.data_inizio } }
+      - label: qualità di (proprietario / possessore / locatario / altro)
+        map: { direct: abitazione.titolo }
+        choices:
+          - { box: proprietario, values: [proprietario] }
+          - { box: possessore, values: [] }
+          - { box: locatario, values: [locatario] }
+          - { box: altro, values: [comodatario, usufruttuario, ospite, altro], write_value: true }
+        notes: >-
+          "possessore" non è tra i valori dell'abitazione nel registro: chi lo è sceglie la voce che
+          corrisponde al titolo reale. Comodatario, usufruttuario e ospite vanno in "altro", scritti
+          accanto.
+      - label: Appartamento sito in via
+        map:
+          fallback: [domicilio.indirizzo, residenza.indirizzo]
+          template: "{.indirizzo}, {.civico}[, int. {.interno}][, piano {abitazione.piano}]"
+        notes: >-
+          Una sola riga per l'indirizzo: via, civico, interno e piano dello stesso indirizzo, il
+          domicilio se esiste, altrimenti la residenza. Non mescolare i due: se lì manca il civico,
+          chiederlo; se manca l'interno, non c'è.
+      - { label: Sez., map: { direct: abitazione.catasto_sezione } }
+      - { label: Foglio, map: { direct: abitazione.catasto_foglio } }
+      - { label: Part., map: { direct: abitazione.catasto_particella } }
+      - { label: Sub., map: { direct: abitazione.catasto_subalterno } }
+      - { label: Superficie calpestabile in mq, map: { direct: abitazione.superficie_calpestabile_mq } }
+      - label: Autorimessa/cantinola/posto auto (via, dati catastali, superficie, pertinenza)
+        map: { ask: "Dati del box, cantina o posto auto, se c'è; indicare se è pertinenza dell'abitazione" }
+      - label: Conviventi (nominativo, luogo e data di nascita, rapporto, codice fiscale)
+        map:
+          repeat: famiglia
+          fields:
+            - "*:identity.last_name"
+            - "*:identity.first_name"
+            - "*:identity.birth_comune"
+            - "*:identity.birth_country"
+            - "*:identity.date_of_birth"
+            - "*:identity.codice_fiscale"
+          columns:
+            - { label: Nominativo, template: "{*:identity.last_name} {*:identity.first_name}" }
+            - label: Luogo e data di nascita
+              template: "{*:identity.birth_comune}[ ({*:identity.birth_country})], {*:identity.date_of_birth|date}"
+            - { label: Rapporto di parentela o coabitante, template: "{relazione}" }
+            - { label: Codice fiscale, template: "{*:identity.codice_fiscale}" }
+        optional:
+          - field: "*:identity.birth_country"
+            required_if:
+              - { field: "*:identity.birth_province", equals: EE }
+              - { field: "*:identity.codice_fiscale", matches: "^.{11}Z" }
+        notes: >-
+          Una riga per ogni familiare nello stato di famiglia (famiglia.stato_famiglia si), tranne
+          chi dichiara. Il rapporto non è un campo: è la parentela con il dichiarante, per esteso.
+          Se dichiara il titolare del vault è il relazione_label dell'elenco dei familiari
+          (moglie, figlia), non il codice di famiglia.relazione (coniuge, figlio); se dichiara un
+          altro intestatario, va riferita a lui e chiesta.
+      - label: Coabitanti fuori dallo stato di famiglia (nominativo, luogo e data di nascita, rapporto, codice fiscale)
+        map:
+          ask: >-
+            Abita nella casa, per almeno 60 giorni l'anno, qualcuno che non è nello stato di famiglia?
+            Per ciascuno: nominativo, luogo e data di nascita, rapporto e codice fiscale
+        notes: >-
+          Nella stessa tabella dei conviventi, dopo di loro (Regolamento TARI, art. 14, c. 1). Chi è
+          nello stato di famiglia è già tra i conviventi.
+      - label: Richiesta di riduzione del 40% "Uso stagionale"
+        map: { ask: "Seconda casa tenuta a disposizione, con già una posizione TARI per l'abitazione principale?" }
+        choices:
+          - { box: Richiesta di riduzione del 40%, values: [si, sì] }
+      - { label: Eventuali note, map: { ask: Note facoltative per l'ufficio } }
+      - label: Cod.Contr.
+        map: { blank_with_reason: Spazio riservato all'ufficio; il codice contribuente lo assegna il Comune. }
+steps:
+  - { do: "Verificare se un Mod. 1 è già stato compilato, firmato o inviato", who: anyone }
+  - do: >-
+      Verificare chi è l'intestatario della scheda di famiglia (famiglia.intestatario_scheda): è
+      lui a dichiarare e a firmare
+    who: anyone
+  - { do: Compilare il Mod. 1 (dati dalla tabella dei campi), who: anyone }
+  - { do: Firmare il modulo, who: owner, human_only: true, gate: sign }
+  - do: >-
+      Inviare il modulo firmato e la copia del documento d'identità dalla propria PEC a
+      entrate.tari-tares-tarsu@pec.comune.napoli.it; conservare le ricevute di accettazione e di
+      consegna
+    who: owner
+    human_only: true
+    channel: [pec]
+  - do: >-
+      Accedere con SPID, CIE o CNS ai Servizi Tributari di POTESs
+      (https://servizionline.comune.napoli.it/web/napoli/servizi-tributari, "Accedi al Servizio"),
+      presentare l'istanza di iscrizione TARI con i dati del Mod. 1 e, se il portale lo chiede,
+      allegare il modulo firmato e la copia del documento d'identità; salvare la ricevuta
+      dell'invio con data e protocollo
+    who: owner
+    human_only: true
+    channel: [portal]
+  - do: >-
+      Inviare il modulo firmato e la copia del documento d'identità per email a
+      entrate.tari-tares-tarsu@comune.napoli.it; l'email non dà una ricevuta con valore legale,
+      quindi conservare il messaggio inviato
+    who: owner
+    human_only: true
+    channel: [email]
+  - do: >-
+      Spedire il modulo firmato e la copia del documento d'identità con raccomandata A/R a Comune
+      di Napoli, Area Entrate, Servizio IMU e TARI, Via Diocleziano 330, 80125 Napoli; conservare
+      la ricevuta di spedizione e la cartolina di ritorno
+    who: owner
+    human_only: true
+    channel: [post]
+  - do: >-
+      Consegnare il modulo firmato e la copia del documento d'identità all'URP della Municipalità
+      in cui si trova la casa e chiedere una copia con il timbro di protocollo
+    who: owner
+    human_only: true
+    channel: [desk]
+  - { do: Calcolare l'F24 con il simulatore del Comune o usare l'avviso di pagamento, who: anyone }
+  - { do: Pagare l'F24 alle scadenze, who: owner, human_only: true }
+  - { do: Annotare il codice contribuente quando il Comune lo comunica, who: owner }
+after:
+  - Conservare la ricevuta della PEC o l'email inviata.
+  - >-
+    Il Comune risponde (o arriva un avviso) con il codice contribuente: annotarlo insieme a data
+    e protocollo della dichiarazione.
+  - >-
+    Controllare che superficie tassata e numero di componenti dell'avviso corrispondano alla
+    superficie calpestabile e al nucleo familiare dichiarati.
+records:
+  - field: tari.codice_contribuente
+    from: Risposta del Comune o avviso di pagamento (Cod.Contr.)
+  - field: tari.data_dichiarazione
+    from: Ricevuta della PEC o dell'email inviata, o timbro dello sportello
+  - field: tari.protocollo
+    from: Risposta del Comune, se indica il protocollo della dichiarazione
+  - field: tari.superficie_tassata_mq
+    from: Avviso di pagamento
+  - field: tari.componenti_tassati
+    from: Avviso di pagamento
+pitfalls:
+  - text: >-
+      Tra gli occupanti vanno dichiarate anche le persone che non fanno parte del nucleo familiare
+      anagrafico, se abitano nella casa per almeno 60 giorni nell'anno solare (art. 14, c. 1); se
+      nella casa vivono più nuclei familiari, i componenti di tutti (art. 25, c. 2).
+    status: verified
+    source: regolamento-2023
+  - text: >-
+      La riduzione del 40% per "uso stagionale" vale solo per un'abitazione tenuta a disposizione
+      quando si è già titolari di un'altra posizione TARI per l'abitazione principale.
+    status: verified
+    source: mod-1
+  - text: >-
+      Un convivente senza codice fiscale italiano è stato indicato come "N/E"; il Comune non ha
+      confermato che sia accettato.
+    status: unverified
+  - text: >-
+      Il regolamento (art. 26) indica ancora il portale "Linkmate" per presentare le
+      dichiarazioni.
+    status: verified
+    source: regolamento-2023
+  - text: La pagina della modulistica indica invece il portale POTESs (Servizi Tributari).
+    status: verified
+    source: modulistica
+related: []
+sources:
+  - id: mod-1
+    label: Mod. 1 TARI – Nuova iscrizione uso abitativo (testo, AVVERTENZE, INFORMAZIONI e CONTATTI)
+    url: https://static-www.comune.napoli.it/wp-content/uploads/2020/09/MOD-1-ISCRIZIONE-USO-ABITATIVO.pdf
+    retrieved: 2026-10-25
+    sha256: 2950daa429f5cfd2e19b03792cf4245638f32c3e8267b55e975443145eb8a218
+    official: true
+  - id: modulistica
+    label: TARI – Modalità di presentazione dichiarazioni e modulistica (Comune di Napoli)
+    url: https://www.comune.napoli.it/articolo_tematico/tributi-locali/tari-tassa-sui-rifiuti/modalita-di-presentazione-dichiarazioni-e-modulistica/
+    retrieved: 2026-10-25
+    page_updated: 2026-09-02
+    official: true
+    notes: Modulistica aggiornata al 01/04/2026.
+  - id: tari-2026
+    label: TARI 2026 – Comune di Napoli
+    url: https://www.comune.napoli.it/articolo_tematico/tributi-locali/tari-tassa-sui-rifiuti/tari-2026/
+    retrieved: 2026-10-25
+    page_updated: 2026-10-02
+    official: true
+  - id: regolamento-2023
+    label: Regolamento TARI, allegato alla delibera C.C. n. 37 del 19 giugno 2023
+    url: https://www.comune.napoli.it/flex/files/1/c/7/D.007ae011f89c784022b3/DELIBERA_DI_C.C._N._37_DEL_19_GIUGNO_2023.pdf
+    retrieved: 2026-10-25
+    sha256: 15c491cd7e69bada6fbed48c345c72177cb147bb95cded0314b6cca75635ea6f
+    official: true
+    notes: Modifiche successive al 2023 non controllate.
+  - id: dpr642-tabella-b
+    label: >-
+      D.P.R. 26 ottobre 1972, n. 642, allegato B (atti esenti dall'imposta di bollo in modo
+      assoluto), art. 5 – Normattiva
+    url: https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:1972-10-26;642
+    retrieved: 2026-10-26
+    official: true
+    notes: >-
+      Letto il testo in vigore dal 10-12-2000 al 31-12-2026: esenti le dichiarazioni e denunzie
+      presentate ai competenti uffici ai fini dell'applicazione delle leggi tributarie, esclusi
+      ricorsi, opposizioni e altri atti difensivi del contribuente. Dal 1° gennaio 2027 l'articolo
+      è abrogato dal D.Lgs. 1 agosto 2025, n. 123 (testo unico dell'imposta di registro e degli
+      altri tributi indiretti), come modificato dal D.L. 200/2025: la norma corrispondente non è
+      stata controllata.
+  - id: potess-tributi
+    label: POTESs – Servizi Tributari, descrizione del servizio (Comune di Napoli)
+    url: https://servizionline.comune.napoli.it/web/napoli/servizi-tributari
+    retrieved: 2026-10-27
+    official: true
+verification:
+  level: L1
+  date: 2026-10-25
+  by: liam
+  method: >-
+    Desk: letti il Mod. 1 (versione pubblicata il 2026-10-25), la pagina della modulistica, la
+    pagina TARI 2026 e gli artt. 25, 26 e 35 del regolamento approvato con la delibera C.C.
+    37/2023.
+run_log:
+  - date: 2026-10-25
+    note: >-
+      Primo uso su un caso reale (modulo preparato, non ancora inviato). Termine della
+      dichiarazione ancora da verificare.
+  - date: 2026-10-25
+    note: >-
+      Ricontrollato sul Mod. 1 pubblicato e sul regolamento 2023: termine confermato (90 giorni);
+      il modulo attuale riporta già il nuovo link del simulatore; campi rifatti sul modulo reale
+      (indirizzo su una riga, aggiunta la sezione box/cantina).

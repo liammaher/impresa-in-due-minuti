@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # check:updated compares with the base branch
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Validate procedures
+        run: npm run validate
+
+      - name: Check updated dates
+        if: github.event_name == 'pull_request'
+        run: npm run check:updated -- origin/${{ github.base_ref }}
+
+      - name: Build site
+        run: npm run build
+
+  reports:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: reports/functions
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: reports/functions/package-lock.json
+
+      - uses: actions/setup-java@v5 # the Firestore emulator runs on Java
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/firebase/emulators
+          key: firebase-emulators-15.34.1
+
+      - name: Install
+        run: |
+          npm ci --ignore-scripts
+          npm install --global firebase-tools@15.34.1
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Test against the Firestore emulator
+        run: npm run test:emulator

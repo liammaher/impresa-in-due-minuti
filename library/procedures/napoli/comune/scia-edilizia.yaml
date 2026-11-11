@@ -1,0 +1,428 @@
+schema_version: 0
+id: napoli/comune/scia-edilizia
+title: SCIA edilizia – segnalazione certificata di inizio attività per lavori edilizi (SUE del Comune di Napoli)
+headline: "SCIA edilizia a Napoli per strutture, facciate, ristrutturazioni e cambi d'uso"
+aka:
+  - scia lavori
+  - scia ristrutturazione
+  - cambio di destinazione d'uso
+  - variante in corso d'opera
+updated: 2026-11-05
+summary: >-
+  La SCIA edilizia serve a Napoli per i lavori che toccano le strutture o i prospetti
+  dell'edificio, per le ristrutturazioni edilizie che non richiedono il permesso di costruire,
+  per le varianti in corso d'opera e per i cambi di destinazione d'uso ammessi dalla legge. La
+  presenta un tecnico abilitato per conto del proprietario o di chi ha titolo, allo Sportello
+  Unico per l'Edilizia (SUE) sul portale "Impresa in un giorno". Se servono l'autorizzazione
+  paesaggistica o altri atti di assenso, si chiedono nella stessa pratica (SCIA condizionata) e
+  i lavori iniziano solo dopo il loro rilascio.
+ente:
+  name: Comune di Napoli
+  office: Area Urbanistica – Servizio Sportello Unico Edilizia
+  ipa: c_f839
+applies_to:
+  events: [renovate]
+  audience: [business, resident]
+  sectors: [edilizia privata]
+  conditions:
+    - text: >-
+        Si realizzano con SCIA (art. 22 c. 1 DPR 380/2001): a) la manutenzione straordinaria
+        quando riguarda le parti strutturali dell'edificio o i prospetti; b) il restauro e
+        risanamento conservativo quando riguarda le parti strutturali; c) la ristrutturazione
+        edilizia (art. 3 c. 1 d) diversa da quella dell'art. 10 c. 1 c, che richiede il permesso di
+        costruire.
+      status: verified
+      source: dpr380-art22
+    - text: >-
+        Si realizzano con SCIA anche le varianti a permessi di costruire che non incidono sui
+        parametri urbanistici e sulle volumetrie, non cambiano la destinazione d'uso e la categoria
+        edilizia, non alterano la sagoma di un edificio vincolato e rispettano le prescrizioni del
+        permesso (art. 22 c. 2), e quelle che non sono una variazione essenziale (c. 2-bis, anche
+        comunicate a fine lavori).
+      status: verified
+      source: dpr380-art22
+    - text: >-
+        Tabella A, Sezione II del D.Lgs. 222/2016: le varianti in corso d'opera a permessi di
+        costruire (attività 35) e quelle che non presentano i caratteri delle variazioni essenziali
+        (attività 36) sono a SCIA; le varianti con i caratteri delle variazioni essenziali
+        (attività 37) e quelle che modificano la sagoma nel centro storico (attività 38) chiedono
+        l'autorizzazione, cioè il permesso di costruire.
+      status: verified
+      source: dlgs222-tabella-a
+    - text: >-
+        Il modulo SCIA del Comune prevede anche la variante in corso d'opera a una SCIA, sia quando
+        non è una variazione essenziale (c.5) sia quando lo è ai sensi dell'art. 32 (c.6).
+      status: verified
+      source: scia-modulo
+    - text: >-
+        Il cambio di destinazione d'uso di una singola unità all'interno della stessa categoria
+        funzionale (art. 23-ter c. 1-bis), quello di una singola unità in un immobile delle zone A,
+        B o C del D.M. 1444/1968 tra le categorie residenziale, turistico-ricettiva, produttiva e
+        direzionale, commerciale (c. 1-ter) e quello di un intero immobile nella stessa categoria
+        (c. 3, salvo diversa previsione delle leggi regionali) si fanno con SCIA quando sono senza
+        opere o con le sole opere dell'edilizia libera, e con SCIA anche quando sono accompagnati da
+        opere da CILA (c. 1-quinquies); negli altri casi con il titolo richiesto per le opere.
+      status: verified
+      source: dpr380-art23ter
+    - text: >-
+        Per le unità poste al primo piano fuori terra o seminterrate il cambio di destinazione d'uso
+        è disciplinato dalla legislazione regionale (art. 23-ter c. 1-quater); i cambi tra categorie
+        fuori dei casi del c. 1-ter, compresi quelli verso o dalla categoria rurale, non rientrano
+        nelle ipotesi di SCIA elencate sopra.
+      status: verified
+      source: dpr380-art23ter
+    - text: >-
+        In Campania i cambi di destinazione d'uso seguono l'art. 23-ter DPR 380/2001 insieme alla
+        L.R. 19/2001 (art. 2, c. 5-8), alla L.R. 13/2022 (art. 2, c. 4 e 6) e alla L.R. 31/2021
+        (artt. 26-27). Per i titoli la circolare regionale CI/2025/3 precisa: per una singola unità
+        nella stessa categoria vale l'art. 23-ter c. 1-quinquies (SCIA senza opere o con opere di
+        edilizia libera o da CILA; altrimenti il titolo delle opere); per una singola unità tra le
+        categorie a), a-bis), b) e c) vale lo stesso c. 1-quinquies, salvo il mutamento senza opere
+        tra categorie compatibili con la zona territoriale omogenea, che è libero (art. 2 c. 5 L.R.
+        19/2001); per un intero immobile, nella stessa categoria o tra categorie diverse, serve la
+        SCIA alternativa al permesso di costruire (art. 2 c. 6 L.R. 13/2022), salvi i casi a
+        permesso di costruire dell'art. 2 c. 6-8 L.R. 19/2001 (e, tra categorie, il mutamento senza
+        opere del c. 5); il mutamento, con o senza opere, anche tra categorie diverse, che non
+        aumenta il fabbisogno di standard urbanistici è liberamente attuabile (art. 2 c. 4 L.R.
+        13/2022).
+      status: verified
+      source: circolare-salva-casa-campania
+    - text: >-
+        Non sono urbanisticamente rilevanti le modifiche di destinazione d'uso, con o senza opere,
+        che non generano incremento del fabbisogno degli standard urbanistici (art. 2 c. 4 L.R.
+        Campania 13/2022); sono soggetti a SCIA alternativa al permesso di costruire anche le
+        modifiche della destinazione d'uso urbanisticamente rilevanti, con opere e senza opere (c.
+        6).
+      status: verified
+      source: lr13-2022
+    - text: >-
+        L.R. Campania 19/2001, art. 2: il mutamento di destinazione d'uso senza opere,
+        nell'ambito di categorie compatibili alle singole zone territoriali omogenee, è libero (c.
+        5); con opere che incidano sulla sagoma dell'edificio o determinino un aumento plano
+        volumetrico è soggetto a permesso di costruire (c. 6), come con opere su sagoma, volumi e
+        superfici con passaggio di categoria (c. 7); nelle zone agricole (zona E) è sempre soggetto
+        a permesso di costruire (c. 8).
+      status: verified
+      source: lr19-2001
+    - text: >-
+        Il mutamento d'uso è rilevante quando assegna l'immobile o l'unità a un'altra categoria
+        funzionale e genera incremento del fabbisogno di standard urbanistici; la nuova destinazione
+        è ammissibile solo se lo strumento urbanistico la indica come compatibile per quella parte
+        del territorio (art. 27 c. 2 L.R. Campania 31/2021).
+      status: verified
+      source: lr31-2021
+    - text: >-
+        Un cambio rilevante di una singola unità che l'art. 23-ter non disciplina (al primo piano
+        fuori terra o seminterrata, che il c. 1-quater rimette alla legge regionale; fuori delle zone
+        A, B e C; verso o dalla categoria rurale fuori della zona E) segue la legge della Campania,
+        come la circolare CI/2025/3 fa per l'intero immobile che il TUE non disciplina: è libero senza
+        opere tra categorie compatibili con la zona (art. 2 c. 5 L.R. 19/2001), chiede il permesso con
+        opere sulla sagoma o sui volumi (art. 2 c. 6-7), e altrimenti la SCIA alternativa al permesso,
+        che l'art. 2 c. 6 L.R. 13/2022 dà alle modifiche rilevanti "con opere e senza opere" senza
+        distinguere l'unità dall'immobile. La circolare non ne parla per l'unità singola.
+      status: verified
+      source: lr13-2022
+    - text: >-
+        A Napoli la variante per la salvaguardia dell'offerta abitativa nel centro storico (D.C.C.
+        n. 129 del 15/09/2026) divide la categoria residenziale in sottocategorie: a.1, abitazioni
+        ordinarie; a.2, abitazioni assimilabili a strutture ricettive extralberghiere (B&B della L.R.
+        5/2001, affittacamere, case e appartamenti per vacanze, locazioni brevi non gestite in forma
+        imprenditoriale); a.3, abitazioni specialistiche e collettive (art. 21 delle norme della
+        Variante generale).
+      status: verified
+      source: variante-dcc-129
+    - text: >-
+        Nell'area di regolamentazione della tavola 7a il mutamento d'uso da a.1 ad a.2, da conseguire
+        con idoneo titolo abilitativo, è limitato da una soglia minima di residenzialità ordinaria,
+        applicata all'intera unità edilizia (foglio e particella del catasto): in prima applicazione
+        il 70% della superficie catastale delle sue unità a.1 e a.2 deve restare a.1. Il meccanismo di
+        verifica è rimesso a un separato provvedimento di Giunta (art. 63 c. 8 delle norme).
+      status: verified
+      source: variante-dcc-129
+    - text: La variante è in vigore dal 27 ottobre 2026, dopo l'avviso di approvazione sul BURC n. 58 del 26/10/2026.
+      status: verified
+      source: variante-burc-58
+    - text: >-
+        La pagina del Comune sulla variante (aggiornata al 27/10/2026, letta il 3/11/2026) non
+        riporta il provvedimento di Giunta sul meccanismo di verifica della soglia: finché manca, un
+        passaggio da a.1 ad a.2 nell'area della tavola 7a va chiesto al SUE.
+      status: verified
+      source: variante-pagina
+    - text: >-
+        Il modulo SCIA del Comune elenca gli stessi cambi d'uso: senza opere o con opere dell'art. 6,
+        o con opere dell'art. 6-bis, di una singola unità nella stessa categoria o tra le categorie
+        a), a-bis), b) e c), e di un intero immobile nella stessa categoria (quadro c.7 e c.8).
+      status: verified
+      source: scia-modulo
+    - text: >-
+        È comunque facoltà dell'interessato chiedere il permesso di costruire per gli interventi da
+        SCIA, senza obbligo del contributo di costruzione salvo i casi dell'art. 23 (art. 22 c. 7).
+      status: verified
+      source: dpr380-art22
+    - text: >-
+        A Napoli la Delibera di Giunta comunale n. 454 del 6 giugno 2014 esclude la SCIA per gli
+        interventi di demolizione e ricostruzione e per le varianti a permessi di costruire che
+        modificano la sagoma dei fabbricati in zona A della Variante generale al PRG o della
+        Variante occidentale.
+      status: verified
+      source: scia-pagina
+    - text: >-
+        Gli interventi su immobili sottoposti a tutela storico-artistica, paesaggistico-ambientale o
+        dell'assetto idrogeologico richiedono prima il parere o l'autorizzazione previsti (art. 22
+        c. 6).
+      status: verified
+      source: dpr380-art22
+    - text: >-
+        Con la SCIA si può chiedere al SUE di acquisire gli atti di assenso necessari, per esempio
+        l'autorizzazione paesaggistica semplificata o ordinaria (SCIA condizionata, quadro b.3 e
+        quadro 17.3): i lavori iniziano dopo che lo Sportello comunica il loro rilascio.
+      status: verified
+      source: scia-modulo
+    - text: >-
+        Sul portale del SUE l'operazione della SCIA e quelle dell'autorizzazione paesaggistica
+        semplificata e ordinaria del Comune si scelgono insieme nella stessa pratica.
+      status: verified
+      source: portale-sue-operazioni
+    - text: >-
+        Se l'intervento tocca le strutture, il quadro 15 della SCIA dichiara le opere in cemento
+        armato o metalliche (denuncia dell'art. 65) e quelle da denunciare o autorizzare in zona
+        sismica (artt. 93 e 94 DPR 380/2001 o la normativa regionale), con la relativa
+        documentazione allegata; il deposito o l'autorizzazione sismica sono un procedimento del
+        Genio Civile (napoli/genio-civile/deposito-autorizzazione-sismica).
+      status: verified
+      source: scia-modulo
+    - text: >-
+        Per lavori già eseguiti in assenza o difformità dal titolo il modulo prevede la SCIA in
+        sanatoria (art. 36-bis) e l'accertamento di compatibilità paesaggistica (quadro 17.3.3):
+        sono procedimenti diversi dalla SCIA per lavori da fare.
+      status: verified
+      source: scia-modulo
+    - text: >-
+        Sui beni culturali l'esecuzione di opere e lavori di qualunque genere richiede
+        l'autorizzazione del soprintendente (art. 21 c. 4 D.Lgs. 42/2004).
+      status: verified
+      source: dlgs42-art21
+legal_basis:
+  - text: "D.P.R. 380/2001, art. 22 (SCIA edilizia), art. 3 c. 1 (definizioni), art. 23-ter (mutamento d'uso), nel testo vigente."
+    status: verified
+    source: dpr380-art22
+  - text: "D.Lgs. 222/2016, Tabella A, Sezione II – Edilizia (attività 35-38: varianti)."
+    status: verified
+    source: dlgs222-tabella-a
+  - text: >-
+      Modulistica unificata adottata dal SUE di Napoli (modulo SCIA del 23/06/2025) e Disposizione
+      Dirigenziale SUE n. 501 del 23 giugno 2026 (presentazione su impresainungiorno).
+    status: verified
+    source: dd-501-2026
+deadline:
+  summary:
+    text: >-
+      Prima di iniziare i lavori; con una SCIA condizionata i lavori iniziano solo dopo che lo
+      Sportello comunica il rilascio degli atti di assenso.
+    status: verified
+    source: scia-modulo
+cost:
+  text: >-
+    Diritti d'istruttoria del SUE di 401,00 euro per una SCIA a titolo gratuito (riga SUE 10
+    della tabella 2026, delibera di G.C. 239/2026). A parte il contributo di costruzione se
+    dovuto e il compenso del tecnico.
+  status: verified
+  source: tabella-diritti
+pitfalls:
+  - text: >-
+      La tabella non ha una riga per la SCIA (art. 22) a titolo oneroso: le righe SUE 7-9, per
+      scaglioni di contributo, nominano solo i permessi di costruire a titolo oneroso e la
+      SCIA in alternativa al permesso, la SUE 10 la SCIA a titolo gratuito. L'importo dei
+      diritti di una SCIA onerosa va chiesto al SUE.
+    status: unverified
+    source: tabella-diritti
+channels:
+  - type: portal
+    purpose: procedure
+    name: Impresa in un giorno – Sportello Unico Edilizia del Comune di Napoli
+    url: https://www.impresainungiorno.gov.it/route/suap?codComune=F839&locale=IT&tipoSportello=E
+    auth: [spid, cie, cns]
+    receipt: legal
+    preferred: true
+    source: potess-sue
+    notes: >-
+      Unico canale per le pratiche del SUE dal 6 luglio 2026 (DD 501/2026). La pagina SCIA del sito
+      del Comune descrive ancora l'invio con i servizi online del Comune: è superata su questo punto.
+    use:
+      ways: [web_form, upload]
+      status: verified
+      source: dd-501-2026
+      notes: Si compila online; elaborati e allegati firmati digitalmente.
+  - type: pec
+    purpose: info
+    address: sportello.unico.edilizia@pec.comune.napoli.it
+    receipt: legal
+    source: sue-ufficio
+    notes: Per comunicare con l'ufficio, non per presentare la SCIA.
+steps:
+  - do: Incaricare un tecnico abilitato (architetto, ingegnere, geometra…) e firmare la procura speciale
+    who: owner
+    human_only: true
+  - do: >-
+      Stabilire con il tecnico il titolo giusto (CILA, SCIA, SCIA alternativa o permesso), lo stato
+      legittimo, i vincoli (paesaggio, bene culturale, zona A del PRG) e se l'intervento tocca le
+      strutture
+    who: professional
+  - do: >-
+      Se l'intervento tocca le strutture, preparare con il progettista delle strutture il deposito
+      o la richiesta di autorizzazione sismica per il Genio Civile
+    who: professional
+  - do: Pagare i diritti di segreteria del SUE e allegarne la ricevuta
+    who: owner
+    human_only: true
+  - do: >-
+      Accedere con SPID, CIE o CNS a Impresa in un giorno (SUE di Napoli), scegliere l'operazione
+      SCIA (con l'autorizzazione paesaggistica se serve), compilare, allegare i documenti firmati
+      digitalmente e inviare; conservare la ricevuta
+    who: professional
+    human_only: true
+    channel: [portal]
+  - do: A fine lavori, comunicazione di fine lavori e collaudo finale del progettista, con la ricevuta della variazione catastale
+    who: professional
+    human_only: true
+related:
+  - napoli/comune/cila-lavori-edilizi
+  - napoli/comune/permesso-di-costruire
+  - napoli/comune/scia-alternativa-pdc
+  - napoli/comune/autorizzazione-paesaggistica-semplificata
+  - napoli/comune/autorizzazione-paesaggistica-ordinaria
+  - napoli/genio-civile/deposito-autorizzazione-sismica
+sources:
+  - id: dpr380-art22
+    label: D.P.R. 6 giugno 2001, n. 380, art. 22 (Normattiva)
+    url: https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:2001-06-06;380~art22
+    retrieved: 2026-10-29
+    official: true
+  - id: dpr380-art23ter
+    label: D.P.R. 6 giugno 2001, n. 380, art. 23-ter (Normattiva)
+    url: https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:2001-06-06;380~art23ter
+    retrieved: 2026-10-29
+    official: true
+  - id: circolare-salva-casa-campania
+    label: >-
+      Regione Campania, Direzione Generale Governo del Territorio – Circolare applicativa n.
+      CI/2025/3 del 28/01/2025 (D.L. 69/2024 "Salva Casa" in Campania; art. 33-quater L.R. 16/2004)
+    url: https://www.territorio.regione.campania.it/s/CIRCOLARE-N-CI20253_28012025.pdf
+    retrieved: 2026-10-29
+    page_updated: 2025-01-28
+    sha256: 34ffd93d92c5b61b3a9e9597ff326bc44e0b20b118fbd8b73fd71eb3ce752483
+    official: true
+    notes: Il paragrafo sull'art. 23-ter e i titoli per i mutamenti d'uso (punti a-e).
+  - id: lr13-2022
+    label: Legge Regionale Campania 10 agosto 2022, n. 13, art. 2 (testo vigente, Regione Campania – Normativa)
+    url: https://www.regione.campania.it/normativa/item.php?pgCode=G19I231R1996&id_doc_type=1&id_tema=3
+    retrieved: 2026-10-29
+    official: true
+    notes: Testo vigente con le modifiche delle L.R. 18/2022, 24/2023 e 5/2024, redatto dall'ufficio legislativo del Presidente della Giunta.
+  - id: lr19-2001
+    label: Legge Regionale Campania 28 novembre 2001, n. 19, art. 2 (testo vigente, Regione Campania – Normativa)
+    url: https://www.regione.campania.it/normativa/item.php?pgCode=G19I231R481&id_doc_type=1&id_tema=3
+    retrieved: 2026-10-29
+    official: true
+    notes: Testo vigente con le modifiche fino alla L.R. 16/2014.
+  - id: lr31-2021
+    label: Legge Regionale Campania 28 dicembre 2021, n. 31, art. 27 (testo vigente, Regione Campania – Normativa)
+    url: https://www.regione.campania.it/normativa/item.php?pgCode=G19I231R1973&id_doc_type=1&id_tema=9
+    retrieved: 2026-10-29
+    official: true
+    notes: Il termine del 31/12/2026 dell'art. 26 c. 1 riguarda solo quel comma, non l'art. 27.
+  - id: variante-dcc-129
+    label: >-
+      Deliberazione C.C. n. 129 del 15/9/2026 – approvazione della variante per la salvaguardia
+      dell'offerta abitativa nel centro storico (PDF con il testo degli artt. 21 e 63 delle norme)
+    url: https://static-www.comune.napoli.it/wp-content/uploads/2026/10/delib.-Cc-n.-129-2026-approvazione-variante-offerta-abitativa-centro-storico.pdf
+    retrieved: 2026-10-29
+    sha256: c9e44e5e0fb5fde0cc21c2b8148e8d5cb9b4442b363417135d9f1cf86e7dac4b
+    official: true
+  - id: variante-pagina
+    label: Comune di Napoli – Variante per la salvaguardia dell'offerta abitativa nel centro storico (pagina)
+    url: https://www.comune.napoli.it/articolo_tematico/urbana-urbanistica-napoli/puc/variante-per-la-salvaguardia-dellofferta-abitativa-nel-centro-storico/
+    retrieved: 2026-11-03
+    page_updated: 2026-10-27
+    official: true
+    notes: Gli atti della variante dalla DGC 292/2025 all'avviso sul BURC n. 58/2026; nessun atto sul meccanismo di verifica della soglia.
+  - id: variante-burc-58
+    label: >-
+      BURC Campania n. 58 del 26/10/2026 – Comune di Napoli, avviso di approvazione della variante per
+      la salvaguardia dell'offerta abitativa nel centro storico
+    url: https://static-www.comune.napoli.it/wp-content/uploads/2025/12/BURC-n.-58-del-26.10.2026-Approvazione-variante-CS.pdf
+    retrieved: 2026-10-29
+    sha256: 019b184cf12e0c9383f466e500e06834a0ea79608109fa6dacf77087fbf282d7
+    official: true
+    notes: La pagina del Comune sulla variante (aggiornata al 27/10/2026) indica l'entrata in vigore il 27 ottobre 2026.
+  - id: dlgs222-tabella-a
+    label: D.Lgs. 25 novembre 2016, n. 222, Tabella A, Sezione II – Edilizia (Normattiva)
+    url: https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2016-11-25;222
+    retrieved: 2026-10-29
+    official: true
+    notes: Lette le attività 35-38 (varianti).
+  - id: dlgs42-art21
+    label: D.Lgs. 22 gennaio 2004, n. 42, art. 21 (Normattiva)
+    url: https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2004-01-22;42~art21
+    retrieved: 2026-10-29
+    official: true
+  - id: scia-pagina
+    label: Comune di Napoli – SCIA, Segnalazione Certificata di Inizio Attività Edilizia
+    url: https://www.comune.napoli.it/articolo_tematico/urbanistica-patrimonio-politiche-per-la-casa-cimiteri-cittadini/edilizia-privata/attivita-subordinata-a-titoli-edilizi/scia-segnalazione-certificata-di-inizio-attivita-edilizia/
+    retrieved: 2026-10-29
+    page_updated: 2025-11-11
+    official: true
+    notes: Superata sul canale di presentazione (precede il passaggio a impresainungiorno).
+  - id: scia-modulo
+    label: Mod. SCIA 23/06/2025 – Segnalazione certificata di inizio attività (Comune di Napoli, modulistica unificata)
+    url: https://static-www.comune.napoli.it/wp-content/uploads/2010/11/SCIA_23.06.25.pdf
+    retrieved: 2026-10-29
+    sha256: eed015e7177ad29c8c64e8b7347dafc3b5a600174e183bdbfbb9742e67595484
+    official: true
+  - id: dd-501-2026
+    label: Disposizione Dirigenziale SUE n. 501 del 23 giugno 2026 – Attivazione del SUE su impresainungiorno e Linee guida per la presentazione delle istanze edilizie
+    url: https://static-www.comune.napoli.it/wp-content/uploads/2018/04/LINEE-GUIDA_30.06.2026.pdf
+    retrieved: 2026-10-25
+    sha256: 49e604a61ec34fd88db459761f5b7b07efbfa04b243f4e95881969f1c47796c1
+    official: true
+  - id: potess-sue
+    label: Comune di Napoli, POTESs – Edilizia Privata, "SUE – Piattaforma Impresa In Un Giorno"
+    url: https://servizionline.comune.napoli.it/web/napoli/edilizia-privata
+    retrieved: 2026-10-25
+    official: true
+  - id: sue-ufficio
+    label: Comune di Napoli – Servizio Sportello Unico Edilizia (scheda dell'ufficio)
+    url: https://www.comune.napoli.it/amministrazione/unita_organizzativa/servizio-sportello-unico-edilizia/
+    retrieved: 2026-10-25
+    page_updated: 2026-07-16
+    official: true
+  - id: portale-sue-operazioni
+    label: Impresa in un giorno, SUE di Napoli – "Scelta operazioni" del settore "Edilizia e pianificazione urbana"
+    url: https://www.impresainungiorno.gov.it/route/suap?codComune=F839&locale=IT&tipoSportello=E
+    retrieved: 2026-10-28
+    official: true
+    notes: >-
+      Si vede solo dopo l'accesso con SPID, creando una pratica (bozza di prova, mai inviata). Ogni
+      operazione indica l'adempimento e l'amministrazione ("UFFICI COMUNE DI NAPOLI - SUE"); più
+      operazioni si selezionano insieme in una stessa pratica.
+  - id: tabella-diritti
+    label: Tabella dei diritti d'istruttoria delle pratiche dello Sportello Unico Edilizia (agg. al 16/06/2026, delibera di G.C. n. 239 del 28 maggio 2026)
+    url: https://static-www.comune.napoli.it/wp-content/uploads/2011/08/tabella-diritti-agg.16_06_2026.pdf
+    retrieved: 2026-11-05
+    sha256: f12663fe2ca5d98541071c27b3d0fae169ff9d67c3a229b61922d407d2c85837
+    official: true
+verification:
+  level: L1
+  date: 2026-10-29
+  by: claude
+  method: >-
+    Desk: su Normattiva DPR 380/2001 artt. 3, 22, 23-ter e la Tabella A del D.Lgs. 222/2016
+    (attività 35-38), D.Lgs. 42/2004 art. 21; la pagina SCIA del Comune di Napoli e il modulo SCIA
+    del 23/06/2025; la DD 501/2026; le operazioni del SUE viste sul portale in una bozza di prova;
+    sui cambi d'uso in Campania la circolare regionale CI/2025/3 e i testi vigenti della L.R.
+    19/2001 (art. 2), 13/2022 (art. 2) e 31/2021 (artt. 26-27) sul sito della Regione; la DCC
+    129/2026 (artt. 21 e 63 delle norme) e l'avviso di approvazione sul BURC n. 58/2026.
+  notes: >-
+    Non letti: il testo della DGC 454/2014 (citata dalla pagina del Comune), la L.R. Campania
+    19/2001 e le norme della Variante generale al PRG, la tabella dei diritti per la SCIA. La pagina
+    è minima: dice quando serve la SCIA e come si presenta, non ancora i documenti e i costi.
