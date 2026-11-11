@@ -1,0 +1,27 @@
+{
+ "extras": [],
+ "attivita_852": [
+  "forno",
+  "pane",
+  "dettaglio_alimenti"
+ ],
+ "descrizione": "PROVA NON INVIARE - trasferimento panificio generato",
+ "oggetto": "Trasferimento del panificio (pane e pizza, vendita al banco, senza consumo sul posto) da via Duomo 40 a via Foria 120, con notifica sanitaria per il nuovo locale.",
+ "consumo_sul_posto": "false",
+ "in_centro_commerciale": "false",
+ "diritti_euro": "96",
+ "stagionale": "false",
+ "in_ccn": "false",
+ "responsabile_produzione_altro": "false",
+ "diritti_esente": false,
+ "titolo_attivita_protocollo": "0999999",
+ "titolo_attivita_data": "2021-02-22",
+ "titolo_attivita_comune": "Napoli",
+ "locale_precedente_comune": "Napoli",
+ "locale_precedente_provincia": "NA",
+ "locale_precedente_cap": "80138",
+ "locale_precedente_indirizzo": "Via Duomo",
+ "locale_precedente_civico": "40",
+ "precedente_in_ccn": "false",
+ "precedente_centro_commerciale": "false"
+}

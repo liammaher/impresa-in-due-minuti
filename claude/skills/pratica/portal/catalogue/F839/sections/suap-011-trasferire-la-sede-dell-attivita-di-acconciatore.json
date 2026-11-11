@@ -306,5 +306,34 @@
    "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Dichiarazione relativa ai diritti di segreteria/istruttori",
    "seconds": 0.7
   }
- ]
+ ],
+ "slots": {
+  "Gestione degli allegati": [
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Planimetria quotata dei locali in scala minima 1:100 con layout superfici di vendita, attrezzature, arredi. (Essa è facoltativa solo nel caso di affitto di polt",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Relazione descrittiva delle caratteristiche dei locali medesimi, della loro localizzazione e attrezzatura utilizzata per il servizio (SEMPRE OBBLIGATORIA eccett",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "Allegati liberi",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg",
+    "required": false,
+    "portal_document": false
+   }
+  ]
+ },
+ "slots_note": "read 2026-11-10 on the filled draft \"PROVA NON INVIARE - trasferimento acconciatore generato\" after its run (crawl.js slotsOf), before the declarations: none required yet"
 }

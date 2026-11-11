@@ -1,0 +1,56 @@
+# A hairdresser's (acconciatore) move to new premises (SCIA di trasferimento), as gen.py writes its steps
+# file from the batch crawl (catalogue/F839/sections/suap-011-trasferire-la-sede-dell-attivita-di-acconciatore.json),
+# for the shop rehearsal's made-up ditta individuale (rehearsals/negozio-fittizio/fixture.json) as a salon: the
+# vault's `locale` is the new premises, the old ones are asked. Its own sections ("Dati sull'attività":
+# which activity moves, its title, the shopping centre; "Dichiarazioni", the person's) were written from
+# the crawl's text.
+procedure: napoli/comune/scia-acconciatore-estetista
+title: "SCIA: trasferimento di un'attività di acconciatore, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-011-trasferire-la-sede-dell-attivita-di-acconciatore
+subject: impresa
+operation: Trasferire la sede dell'attività di acconciatore
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+# The payment and attachments screens: its slots read on a filled draft (2026-11-10), every one
+# but Allegati liberi taking only signed files: the person's.
+after: [Pagamento degli oneri, Gestione degli allegati]
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  # The sector sits twice in Napoli's tree; both lead to the same pratica.
+  - {screen: Scelta settore attività, tree: [{leaf: "Acconciatore, barbiere, estetista, tatuatore e piercer", nth: 1}], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Trasferire la sede dell'attività di acconciatore"], confirm: CONFERMA}
+  - {screen: Scelta interventi eventuali, confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
+asks:
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "trasferimento {{business.denominazione}}"}
+  trasferisce_acconciatore: {type: yes_no, question: "Si trasferisce l'attività di acconciatore?", default: "true", why: "È il trasferimento dell'acconciatore: l'operazione che sceglie la procedura guidata."}
+  trasferisce_estetista: {type: yes_no, question: "Si trasferisce anche l'attività di estetista, nella stessa pratica?", propose: "false"}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (la colonna VCA della tabella 2026 per un acconciatore: controllala)"}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, le Dichiarazioni (igiene, regole del Comune, sicurezza, norme edilizie e ambientali), tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento"
+  - "Allega, firmato con la tua firma digitale (.p7m), quanto chiede la schermata degli allegati dopo aver spuntato le dichiarazioni"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+supports:
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
+  - {when: "{{ask.trasferisce_estetista|not}}", else: "Trasferire entrambe le attività spunta entrambe le operazioni nella procedura guidata: una combinazione che non preparo ancora."}
+# Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides. Its
+# `acconciatore_estetista` is one activity, so only this move (as the opening) is routed to: the
+# beautician's (trasferimento-estetista-fittizio) has no `rules:` until the table tells them apart.
+rules:
+  table: suap-napoli
+  facts: {attivita: acconciatore_estetista, evento: trasferimento}

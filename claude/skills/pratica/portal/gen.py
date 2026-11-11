@@ -75,6 +75,8 @@ DECLARATIONS = re.compile(
 ID = re.compile(r"^r(\d+)c(\d+)p(\d+)reg(.*)$")
 # inpage.js matches a field's kind as it reads the page: a date or a textarea is text.
 PAGE_KIND = {"date": "text", "textarea": "text", "number": "text"}
+# The wizard's "Inserire la descrizione" box (the draft's name in Pratiche in bozza).
+DESCRIPTION_MAX = 60
 
 
 class GenError(Exception):
@@ -751,6 +753,7 @@ def generate(recipe, base=HERE):
     dictionary = load_yaml(base / "dictionary" / f"{recipe.get('dictionary', 'fnsuap')}.yaml")
     split_by_yaml(dictionary, recipe)
 
+    borrowed = []  # a scelta's sections taken from another pratica's crawl: a guess until a run
     if "operations" not in catalogue:
         # A catalogue of the wizard's tree only (the SUAP's so far): the pratica's sections are
         # the crawled draft's, in its order, and the recipe gives the wizard.
@@ -760,11 +763,19 @@ def generate(recipe, base=HERE):
         names = [s["section"] for s in crawl["sections"] if not s.get("scelta") or s["scelta"] in scelte]
         # A scelta the batch tried only once (its first pratica): its sections from there.
         for sc in scelte:
-            if any(s.get("scelta") == sc for s in crawl["sections"]):
+            # `scelte_none`: tried on this pratica (read on a draft), it adds no section. The protected
+            # zones' authorization already has its bollo, which the nulla osta's tick adds to the
+            # normal zones' SCIA: borrowed from there, a run stopped on it (2026-11-10).
+            if any(s.get("scelta") == sc for s in crawl["sections"]) or sc in crawl.get("scelte_none", {}):
                 continue
             for other in sorted((cat_dir / "sections").glob("*.json")):
                 found = [s for s in json.loads(other.read_text())["sections"] if s.get("scelta") == sc]
                 if found:
+                    # The same pratica crawled with its ticks (`<crawl>-interventi`) is its own; another
+                    # pratica's are a guess: the nulla osta's bollo section, right for the normal zones'
+                    # SCIA, wasn't on the protected zones' move (2026-11-10). Pre-flight names them.
+                    if not other.stem.startswith(recipe["crawl"]):
+                        borrowed.append({"scelta": sc, "from": other.stem, "sections": [s["section"] for s in found]})
                     crawl["sections"] += [{"section": s["section"], "same_as": f"{other.stem}#{s['section']}", "scelta": sc} for s in found]
                     names += [s["section"] for s in found]
                     break
@@ -903,11 +914,13 @@ def generate(recipe, base=HERE):
         if not entry:
             problems.append(f"{name}: no dictionary entry for the screen")
             continue
-        slots = crawl.get("slots", {}).get(name)
+        # A recipe's own screen, read on its draft, where its crawl is another pratica's too (the
+        # opening with a sign shares the opening's crawl, not its attachments: 2026-11-10).
+        slots = recipe.get("slots", {}).get(name, crawl.get("slots", {}).get(name))
         if slots is None and entry.get("fields"):
             problems.append(f"{name}: this pratica's slots aren't crawled yet (crawl.js slots() on the screen)")
             continue
-        out = {k: v for k, v in entry.items() if k not in ("fields", "note")}
+        out = {k: v for k, v in entry.items() if k not in ("fields", "note", "leave")}
         fields = []
         for d in entry.get("fields", []) + recipe.get("attachments", {}).get(name, []):
             slot = next((s for s in slots if norm(s["title"]).startswith(norm(d["label"]))), None)
@@ -949,6 +962,15 @@ def generate(recipe, base=HERE):
                              for t in entry.get("theirs", []) + out.get("theirs", []))
                 if s.get("required") and not hit and not theirs:
                     problems.append(f"{name}: required slot {s['title'][:70]!r} is in no dictionary entry")
+                # A screen read before its first Prosegui marks nothing required, and the portal then
+                # requires what it wants: the protected-zone move's acoustic report, plain or signed,
+                # stopped a run (2026-11-10). So a slot that takes plain files is named by an entry,
+                # the person's (`theirs`) or left on purpose (`leave`), never passed over.
+                plain = s.get("accepts") and not all(t.endswith(".p7m") for t in s["accepts"].split(";"))
+                left = any(norm(s["title"]).startswith(norm(t)) for t in entry.get("leave", []))
+                if plain and not hit and not theirs and not left:
+                    problems.append(f"{name}: slot {s['title'][:70]!r} takes plain files and no entry names it, "
+                                    "though the portal may require it once the screen is checked: map it, or `leave` it with why")
         if out.get("theirs"):
             out["theirs"] = list(dict.fromkeys(out["theirs"]))
         out["fields"] = fields
@@ -1024,9 +1046,13 @@ def generate(recipe, base=HERE):
             after = after or norm(w["screen"]).startswith("scelta operazioni")
             kept.append(w)
         wizard = kept
+    # The draft's name takes 60 characters, whoever wrote the wizard: a recipe's own wizard (every
+    # SUAP one) lost the limit, and a 68-character name stopped a run on its first screen (2026-11-10).
+    wizard = [{**w, "fill": {**w["fill"], "max": w["fill"].get("max", DESCRIPTION_MAX)}}
+              if "descrizione" in w.get("fill", {}).get("css", "") else w for w in wizard or []]
     wizard = wizard or [
         {"screen": "Assegna una descrizione alla pratica",
-         "fill": {"css": 'input[placeholder^="Inserire la descrizione"]', "value": "{{ask.descrizione}}", "max": 60}, "confirm": "CONFERMA"},
+         "fill": {"css": 'input[placeholder^="Inserire la descrizione"]', "value": "{{ask.descrizione}}", "max": DESCRIPTION_MAX}, "confirm": "CONFERMA"},
         {"screen": "Controlla l'accesso alla pratica", "confirm": "CONFERMA"},
         {"screen": "Scelta settore attività", "tree": catalogue["sector"], "confirm": "CONFERMA"},
         {"screen": "Scelta operazioni", "tree": op["label"], "confirm": "CONFERMA"},
@@ -1044,6 +1070,7 @@ def generate(recipe, base=HERE):
         **({"rules": ruled} if ruled else {}),
         "start": recipe.get("start", catalogue["start"]), "logged_in": recipe.get("logged_in", "https://suap.impresainungiorno.gov.it/fnsuap/"),
         "wizard": wizard, "sections": out_sections,
+        **({"borrowed": borrowed} if borrowed else {}),
     }
 
 

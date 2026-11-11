@@ -45,7 +45,7 @@ def main():
     manifest = json.loads(build.with_scope((HERE / "impresa-in-un-minuto" / ".claude-plugin" / "plugin.json").read_text(), "plugin.json"))
     for said in (entry, manifest):
         assert said["displayName"] == "Impresa in un minuto", said
-        assert "SUE del Comune di Napoli" in said["description"] and "prepares" not in said["description"].lower(), said
+        assert build.scope()["copertura"] in said["description"] and "prepares" not in said["description"].lower(), said
 
     # Each shipped skill's description is Italian: the app shows it, and writes its "Prova nella chat"
     # prompt from it (2026-11-07: an English "Use when … see a demo" gave "show me a demo CILA").
@@ -125,17 +125,22 @@ def main():
         else:
             raise AssertionError("an off build kept a text about downloading Python")
     # The texts say what the build carries, from build.yaml's sportelli and coverage.yaml's comuni:
-    # today the SUE of Napoli; the day the SUAP or another comune is carried, the same texts say so.
-    assert build.scope() == {"copertura": f"{' e '.join(n for d, n in build.SPORTELLO_NAMES.items() if d in build.sportelli())}"
-                             " del Comune di Napoli", "comuni": "il Comune di Napoli", "città": "Napoli"}, build.scope()
-    assert build.scope({"sue", "suap"}, {"F839": "Napoli", "H501": "Roma"}) == {
-        "copertura": "SUE e SUAP dei Comuni di Napoli e Roma", "comuni": "i Comuni di Napoli e Roma", "città": "Napoli e Roma"}
+    # the sportelli it lists (the SUE's and the SUAP's) of Napoli; another comune, the same texts say so.
+    got = build.scope()
+    assert got["copertura"] == " e ".join(n for d, n in build.SPORTELLO_NAMES.items() if d in build.sportelli()) \
+        + " del Comune di Napoli" and got["comuni"] == "il Comune di Napoli" and got["città"] == "Napoli", got
+    assert ("SCIA per aprire" in got["pratiche"]) == ("suap" in build.sportelli()) and "CILA" in got["pratiche"], got
+    assert ("titolare di un'impresa" in got["chi"]) == ("suap" in build.sportelli()), got
+    both = build.scope({"sue", "suap"}, {"F839": "Napoli", "H501": "Roma"})
+    assert (both["copertura"], both["comuni"], both["città"]) == (
+        "SUE e SUAP dei Comuni di Napoli e Roma", "i Comuni di Napoli e Roma", "Napoli e Roma"), both
+    assert build.scope({"sue"})["chi"] == "un architetto, un geometra o un ingegnere" and "SCIA per aprire" not in build.scope({"sue"})["pratiche"]
     text = "Solo il {{copertura}}.\n<!-- no-suap -->\nIl SUAP no.\n<!-- /no-suap -->\n<!-- suap -->\nIl SUAP sì.\n<!-- /suap -->\n"
     assert build.with_scope(text, "t", {"sue"}) == "Solo il SUE del Comune di Napoli.\nIl SUAP no.\n"
     assert build.with_scope(text, "t", {"sue", "suap"}) == "Solo il SUE e SUAP del Comune di Napoli.\nIl SUAP sì.\n"
     # Every shipped text has its placeholders filled.
     for f in [*(HERE / "impresa-in-un-minuto").rglob("*.md"), HERE / "impresa-in-un-minuto" / ".claude-plugin" / "plugin.json"]:
-        left = re.findall(r"\{\{(?:copertura|comuni|città)\}\}", build.with_scope(f.read_text(), f.name))
+        left = re.findall(r"\{\{(?:copertura|comuni|città|pratiche|chi)\}\}", build.with_scope(f.read_text(), f.name))
         assert not left, (f, left)
     # A table's name says its sportello (the SUAP's table stays out while it isn't carried).
     assert build.table_sportello(Path("sue-napoli-adempimenti.yaml")) == "sue"

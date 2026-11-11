@@ -325,5 +325,8 @@
    "seconds": 0.6,
    "scelta": "Trattasi di ente del Terzo settore o associazione di volontariato (Art. 1 co.6 Dlgs 32/2021)"
   }
- ]
+ ],
+ "scelte_none": {
+  "richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale": "inferred 2026-11-10 from the move's draft in the same sector (suap-061-trasferire-la-sede-dell-attivita: the tick added no section there, the authorization having its own bollo); not yet read on an opening's draft: its first run confirms"
+ }
 }

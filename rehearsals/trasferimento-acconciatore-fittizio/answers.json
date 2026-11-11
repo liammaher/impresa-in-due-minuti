@@ -1,0 +1,19 @@
+{
+ "extras": [],
+ "fatti": [],
+ "descrizione": "PROVA NON INVIARE - trasferimento acconciatore generato",
+ "oggetto": "Trasferimento dell'attività di acconciatore da via Bernini 30 a via Luca Giordano 50, Napoli.",
+ "titolo_attivita_protocollo": "1111111",
+ "titolo_attivita_data": "2022-10-03",
+ "trasferisce_acconciatore": "true",
+ "trasferisce_estetista": "false",
+ "locale_precedente_comune": "Napoli",
+ "locale_precedente_provincia": "NA",
+ "locale_precedente_cap": "80129",
+ "locale_precedente_indirizzo": "Via Gian Lorenzo Bernini",
+ "locale_precedente_civico": "30",
+ "precedente_centro_commerciale": "false",
+ "in_centro_commerciale": "false",
+ "diritti_euro": "50",
+ "diritti_esente": false
+}

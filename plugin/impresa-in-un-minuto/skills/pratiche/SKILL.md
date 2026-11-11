@@ -1,6 +1,6 @@
 ---
 name: pratiche
-description: Prepara una pratica del {{copertura}} su impresainungiorno a partire dai documenti del cliente - CILA, CIL, SCIA, permesso di costruire, sanatorie, autorizzazione paesaggistica, agibilità, inizio e fine lavori, proroghe, volture - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti, e fa vedere una prova su una CILA con dati inventati. Da usare quando un architetto, un geometra o un ingegnere chiede, in italiano o in inglese, di preparare, compilare o presentare una pratica per un cliente a {{città}} («prepara una CILA», «compila la SCIA»), chiede cosa serve per un caso, o vuole vedere come funziona con una prova su dati inventati («fammi vedere una prova», «fai una prova», «fai tu come esempio»).
+description: Prepara una pratica del {{copertura}} su impresainungiorno a partire dai documenti del cliente - {{pratiche}} - come bozza controllata che si ferma prima di dichiarazioni, firma, pagamento e invio. Risponde anche su quale pratica serve a un caso e con quali documenti, e fa vedere una prova su una CILA con dati inventati. Da usare quando {{chi}} chiede, in italiano o in inglese, di preparare, compilare o presentare una pratica a {{città}} («prepara una CILA», «compila la SCIA»), chiede cosa serve per un caso, o vuole vedere come funziona con una prova su dati inventati («fammi vedere una prova», «fai una prova», «fai tu come esempio»).
 ---
 
 # Pratiche a {{città}}
@@ -8,6 +8,16 @@ description: Prepara una pratica del {{copertura}} su impresainungiorno a partir
 The user is a **tecnico** (architetto, geometra, ingegnere) filing for clients in {{città}} with a
 procura. You prepare the draft on impresainungiorno; they log in with their own SPID, then make
 the declarations, sign, pay and send.
+<!-- suap -->
+For a **SUAP** pratica (a shop, a bar or restaurant, an acconciatore or estetista, a B&B) the person
+is the **titolare of the business** filing for their own business (a commercialista or consulente
+who files with the titolare's own SPID works the same way). A pratica filed by an intermediary for a
+client business, with its own procura, is not covered yet. The flow below is the same: in step 0
+their details are the business's, not a studio's, and the documents are the business's (visura
+camerale, the lease of the premises, an identity document). The SUAP's attachments all take
+only signed files (.p7m) or are optional, so there is nothing for you to upload: they are the
+person's own steps.
+<!-- /suap -->
 
 **A test** ("do a test", "prova", "esempio", "fai tu", "inventa", even inside a job or after
 your questions): `${CLAUDE_SKILL_DIR}/prova.md` at once. A test asks nothing.
@@ -251,6 +261,22 @@ A filing on a title already held (start or end of works, agibilità, a proroga, 
 of holder, a new direttore dei lavori or firm, the DAU) the same way, with
 `--table sue-napoli-adempimenti`. Ask which only when the request doesn't say: new works, or a title
 already held.
+<!-- suap -->
+
+A business's pratica (open, move, enlarge, take over or close a shop, a bar or restaurant, an
+acconciatore or estetista, a B&B) is chosen by the activity and what happens to it, not by its name,
+with the SUAP's own table:
+
+```sh
+sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/route.py" --table suap-napoli --answers facts.json
+```
+
+It asks what the activity is, what happens to it and where the premises are, in one message, then
+names the one pratica (the wizard's sector and operation included), and answers as below. Which table
+is the request's: a building title or works are the SUE's, an activity is the SUAP's; ask only when it
+doesn't say. A SUAP case the table refuses (alcohol, a protected building, a shopping centre, ...) is
+refused with its reason before anything opens, like a SUE one.
+<!-- /suap -->
 
 - `routed`: it names the pratica (`pratica`, its `steps`), the `answers` to start `answers.json`
   with, and a `message` of a line or two (the pratica, what goes apart): it goes in the one

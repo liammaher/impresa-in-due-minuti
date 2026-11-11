@@ -429,7 +429,9 @@ def main():
             # those five) matched nothing in the list.
             VIA = "form:r11c1:dynaForm:via:txtws_input"
             for value, chosen in (("VICO LUNGO GELSO", "VICO LUNGO GELSO"), ("VIA GELSO", "VIA GELSO"),
-                                  ("VIA FORIA", "VIA FORIA"), ("CUPA CAIAFA", "CUPA CAIAFA")):
+                                  ("VIA FORIA", "VIA FORIA"), ("CUPA CAIAFA", "CUPA CAIAFA"),
+                                  # The stradario's particles the portal's list drops (2026-11-10).
+                                  ("VIA DEI TRIBUNALI", "VIA TRIBUNALI")):
                 PORTAL.reset()
                 st = steps(base, start="/portal.html?via=1")
                 st["sections"][0]["fields"].insert(0, {"id": "via:txtws_input", "kind": "lookup",
@@ -437,7 +439,7 @@ def main():
                 r = fill(browser, base, st, answers | {"via": value})
                 assert r["result"] == "filled", (value, r.get("error"))
                 assert PORTAL.fields.get(VIA) == chosen, (value, PORTAL.fields.get(VIA))
-        case("a street lookup takes a street of any type (a Vico, a Cupa), and the exact one among similar", street_lookup)
+        case("a street lookup takes a street of any type (a Vico, a Cupa), the exact one among similar, and one named without its particles (dei)", street_lookup)
 
         def calendar_left_open():
             # A typed date leaves the calendar open over the next box; a person's click elsewhere

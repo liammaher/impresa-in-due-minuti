@@ -1,0 +1,86 @@
+# The SUAP's opening of a bar or restaurant outside the protected zones with an outside sign: the
+# SCIA, the Reg. 852/2004 notifica and the sign's SCIA (mezzi pubblicitari), added by the wizard's
+# "interventi eventuali" tick (its sections from
+# catalogue/F839/sections/suap-060-aprire-l-attivita-interventi.json), as gen.py writes its steps
+# file from the batch crawl (catalogue/F839/sections/suap-060-aprire-l-attivita.json), for the
+# pizzeria rehearsal's made-up ditta individuale (rehearsals/pizzeria-fittizia/fixture.json). The
+# opening without a sign is rehearsals/ristorante-fittizio; the sign's sections and refusals are
+# the shop's (rehearsals/negozio-insegna-fittizio).
+procedure: napoli/comune/scia-somministrazione-alimenti-bevande
+title: "SCIA: apertura di un bar o ristorante con notifica sanitaria e insegna esterna, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-060-aprire-l-attivita
+subject: impresa
+operation: Aprire l'attività
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+# The payment and attachments screens. The sign adds its own slots, which the opening's crawl
+# (shared with rehearsals/ristorante-fittizio) hasn't: read on this pratica's filled draft
+# "PROVA NON INVIARE - ristorante insegna generato" (2026-11-10, crawl.js slotsOf), before the
+# declarations. Every one but Allegati liberi takes only signed files: the person's.
+after: [Pagamento degli oneri, Gestione degli allegati]
+slots:
+  Gestione degli allegati:
+    - {"title": "Planimetria quotata dei locali", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "Ricevuta di pagamento della tariffa sanitaria forfettaria, per la registrazione/aggiornamento", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "Documenti relativi alle caratteristiche illuminotecniche del corpo illuminante, emesso in regime di sistema di qualità aziendale certificato o rilasciato da ent", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "per gli edifici oggetto di notifica o di interesse culturale, qualora il richiedente intenda delegare il SUAP ad acquisire il Nulla Osta della Soprintendenza pe", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "per gli edifici oggetto di notifica o di interesse culturale, qualora il richiedente intenda delegare il SUAP ad acquisire il Nulla Osta della Soprintendenza pe", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "autorizzazione/nulla osta tecnico dell'ente proprietario della strada (diverso dal Comune)", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "documentazione fotografica che illustra il punto di collocazione del mezzo pubblicitario nell'ambiente circostante", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "planimetria catastale aggiornata con indicazione del punto preciso dove verrà collocato l’impianto pubblicitario da installare (SI RACCOMANDA L'USO DEI FORMATI ", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "progetto quotato dell'opera e relativa descrizione tecnica, dai quali sono individuabili gli elementi essenziali dell'opera e la sua eventuale collocazione sul ", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "per le aree soggette a tutela ambientale: relazione paesaggistica semplificata, redatta da un tecnico abilitato, secondo la normativa vigente", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "Modello autodichiarazione dpr 445-2000 per canoni pregressi", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": true}
+    - {"title": "Dichiarazione programma 100", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": true}
+    - {"title": "asseverazione di tecnico abilitato attestante che “Le installazioni dei mezzi pubblicitari oggetto della SCIA rispettano i requisiti di legge, dei regolamenti c", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "bozzetto colorato del messaggio pubblicitario", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "copia attestazione versamento oneri, diritti e spese", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "Allegati liberi", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg", "required": false, "portal_document": false}
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [Esercizio di somministrazione di alimenti e bevande in zone NON tutelate], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Aprire l'attività"], confirm: CONFERMA}
+  - {screen: Scelta interventi eventuali, tree: [{leaf: in caso di attività che preveda insegna esterna, nth: 1}], confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+scelte: [in caso di attività che preveda insegna esterna]
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
+asks:
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "ristorante insegna {{business.denominazione}}"}
+  alcolici: {group: extras, type: yes_no, item: "Venderà bevande alcoliche, birra e vino compresi", why: "La vendita di alcolici aggiunge a questa pratica la comunicazione alle Dogane: un caso che non preparo ancora."}
+  musica: {group: extras, type: yes_no, item: "Avrà musica o un impianto audio", why: "La musica comporta la documentazione di impatto acustico: un caso che non preparo ancora."}
+  insegna_consenso: {group: extras, type: yes_no, item: "L'insegna richiede il consenso di altri (il proprietario dell'edificio o il condominio)", why: "In quel caso il portale chiede i dati e l'assenso del proprietario: non lo preparo ancora."}
+  insegna_vincolo: {group: extras, type: yes_no, item: "L'edificio è sotto tutela paesaggistica o monumentale", why: "In quel caso l'insegna ha bisogno di una propria autorizzazione: non la preparo ancora."}
+  insegna_grande: {group: extras, type: yes_no, item: "Le insegne insieme superano i 5 m²", why: "Sopra i 5 m² è dovuto anche il canone unico: un pagamento a parte, che non preparo ancora."}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro", propose: "220", why: "La voce del tariffario 2026 per un bar o ristorante con notifica sanitaria fuori dalle zone tutelate (S72, 120 €) più quella dell'insegna (S204, 100 €), sommate per una pratica unita (la «logica del carrello» del Comune)."}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni dell'insegna (ulteriori dichiarazioni, mezzi pubblicitari)"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento, e la tariffa forfettaria ASL"
+  - "Allega, firmati con la tua firma digitale (.p7m): la planimetria quotata dei locali, la ricevuta della tariffa ASL e quanto la schermata degli allegati chiede per l'insegna"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+# Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides, and pre-flight
+# refuses a case it gives to another pratica or that needs a pratica this one doesn't file.
+rules:
+  table: suap-napoli
+  facts: {attivita: somministrazione, evento: apertura, insegna: "true"}
+  handles: [napoli/asl-napoli-1/registrazione-attivita-alimentare, napoli/comune/insegna-esercizio]
+supports:
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
+  - {when: "{{ask.insegna_consenso|not}}", else: "Un'insegna che richiede il consenso del proprietario o del condominio per ora non la preparo."}
+  - {when: "{{ask.insegna_vincolo|not}}", else: "Un'insegna su un edificio tutelato richiede una propria autorizzazione: per ora non la preparo."}
+  - {when: "{{ask.insegna_grande|not}}", else: "Le insegne sopra i 5 m² pagano anche il canone unico: per ora non lo preparo."}
+  - {when: "{{ask.ristorazione}}", else: "Per ora solo bar o ristorante: le altre voci di attività della notifica non sono gestite."}
+  - {when: "{{ask.forno|not}} {{ask.dettaglio_alimenti|not}}", else: "Un bar o ristorante che produce anche prodotti da forno o gestisce un negozio alimentare per ora non lo preparo: queste voci insieme non sono ancora state mappate."}
