@@ -1,0 +1,48 @@
+# Subingresso in un bar o ristorante con notifica sanitaria, SUAP Napoli (rehearsals/subingresso-ristorante-fittizio) filed by a tecnico for the client with a procura speciale:
+# see rehearsals/ristorante-procura-fittizio (gen.py `as_client`, route.py `via`).
+extends: subingresso-ristorante-fittizio
+title: Subingresso in un bar o ristorante con notifica sanitaria, presentata da un tecnico con procura, SUAP Napoli
+as_client: true
+first:
+- Scheda anagrafica
+- Qualifica e dati del procuratore
+scelte:
+- IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+wizard:
+- screen: Assegna una descrizione alla pratica
+  fill:
+    css: input[placeholder^="Inserire la descrizione"]
+    value: '{{ask.descrizione}}'
+  confirm: CONFERMA
+- screen: Controlla l'accesso alla pratica
+  confirm: CONFERMA
+- screen: Scelta settore attività
+  tree:
+  - Esercizio di somministrazione di alimenti e bevande in zone NON tutelate
+  confirm: CONFERMA
+- screen: Scelta operazioni
+  tree:
+  - Subentrare nell'esercizio dell'attività
+  confirm: CONFERMA
+- screen: Scelta del destinatario della pratica
+  confirm: CONFERMA
+- screen: Scelte eventuali
+  confirm: CONFERMA
+  tree:
+  - IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE
+# The attachments screen as this pratica's draft shows it (read 2026-11-11, crawl.js slotsOf, before the declarations):
+slots:
+  Gestione degli allegati:
+    - {"title": "Procura speciale", "accepts": "jpg.p7m;pdf.p7m", "required": true, "portal_document": true}
+    - {"title": "Fotocopia di un documento di identita' del soggetto che conferisce la procura speciale", "accepts": "pdf;pdf.p7m", "required": true, "portal_document": false}
+    - {"title": "copia attestazione versamento oneri, diritti e spese", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": false, "portal_document": false}
+    - {"title": "Allegati liberi", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg", "required": false, "portal_document": false}
+    - {"title": "Ricevuta di pagamento della tariffa sanitaria forfettaria, per la registrazione/aggiornamento", "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m", "required": true, "portal_document": false}
+yours:
+- Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina
+- 'Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, norme del Comune di Napoli (normative comunali), requisiti di onorabilità e professionali, art. 6 Reg. 852/2004, altre dichiarazioni, tasse comunali, art. 75 DPR 445/2000'
+- 'Scarica dal portale la procura speciale (Allega documenti, Scarica il documento), dopo aver spuntato le dichiarazioni; fai firmare la procura al cliente (a mano e digitalmente) e mandamela: la allego con una seconda compilazione'
+- Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento, e la tariffa propria dell'ASL
+- Firma e invia (Firma e invio) entro 90 giorni dall'atto; conserva la ricevuta
+rules:
+  via: procura
