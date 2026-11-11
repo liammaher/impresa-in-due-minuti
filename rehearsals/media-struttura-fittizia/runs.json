@@ -1,0 +1,10 @@
+[
+ {
+  "date": "2026-11-11",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 75.4,
+  "browser": "pane",
+  "note": "Filled (75 s), read back on a fresh load. The first run stopped: «Esercizio autonomo» is required (SI opens four required «Organizzato come» rows) and the total must be a decimal (\"300.00\"); both fixed in the dictionary."
+ }
+]

@@ -211,7 +211,8 @@ that also cites a Comune page may only confirm a national one there.
 ## The SUAP's opening hours in deroga, medium shops and the preposto (2026-11-11)
 
 Three sections the coverage review of 2026-11-11 found missing, each in the wedge's sectors, and the
-ten pratiche they were the only gap of (149 of 278 crawled SUAP pratiche were unfillable; 139 now):
+ten pratiche they were the only gap of (149 of 278 crawled SUAP pratiche were unfillable; 139 now). All ten rehearsals
+filled on the portal on 2026-11-11 (61 to 76 s each, read back on a fresh load, with made-up data):
 
 - **`dichiarazione relativa alla deroga dell'orario di apertura`**: `suap-016`, `017`, `019`, `020` and
   `060-richiedere-l-orario-di-apertura-in-deroga-a-quanto` (a shop, a food shop, a shop up to and over
@@ -233,21 +234,29 @@ ten pratiche they were the only gap of (149 of 278 crawled SUAP pratiche were un
 
 What the crawls did not read, so the entries leave it:
 
-- **"Esercizio autonomo" (SI/NO) is the person's.** In the opening's crawl a SI moved 29 boxes: four more
-  rows of SI/NO radios appear above the centre question, in none of the branch's `reveals`, and `suap-020`'s opening already shows a lone "SI" there. What the
-  rows ask is unread. The entry ticks only the four "No" boxes after it (`nth` 2 to 5) and the recipes'
-  `yours` says so (a detector for "a choice moves boxes it doesn't list" was tried on all SUAP crawls: every
-  radio choice looks the same in crawl.js's pairing, 29 sections flagged, so it isn't shipped; only a read of
-  the draft tells). **To do on the portal**: tick SI on a draft and read the section
-  (`__crawl.sectionOf`), then map it.
+- **"Esercizio autonomo" (SI/NO) is required, and SI opens four required rows** (read on a draft, 2026-11-11):
+  "Organizzato come" a centro commerciale, a parco commerciale, an Outlet and a Factory outlet center. The crawl
+  had seen them only as 29 moved boxes in none of the branch's `reveals` (`suap-020`'s opening showed the first
+  as a lone "SI"). The first run of the four media rehearsals stopped there ("il valore è obbligatorio"), so the
+  entry ticks SI and answers NO to the four and to the four "collocato in" rows: the 2nd to 9th "NO" of the page,
+  the 2nd to 5th by label (`by_label`: SI moves their crawled ids) and the 6th to 9th `on_page` (no crawled
+  field). `media_autonoma` is asked (proposed yes); an organised centre is refused. A detector for "a choice
+  moves boxes it doesn't list" was tried on all SUAP crawls: every radio choice looks the same in crawl.js's
+  pairing, 29 sections flagged, so it isn't shipped; only a read of the draft tells (`__crawl.sectionOf`, or
+  `plusOf` with a `choice` where there is no "+": it throws after ticking, leaving the section open in the crawl
+  frame to read).
+- **The total is a decimal and bounded by the sector**: "300" was refused ("deve essere un numero comprensivo dei
+  decimali, usare il . (punto)"), "300.00" is kept (the `decimal` filter); the portal says "inferiore a 400.00"
+  for sector 019 and "superiore a 150.00" for 020.
 - **A "Si" for a centre, park, outlet or C.C.N. is refused** (entry `supports`): each opens boxes, and a
   C.C.N.'s delibera date is a base box of the 019 move's crawl (`r19c1p40reg:calendar_input`, where the
   reveal puts the delibera's number) but a reveal of the openings' and absent from the 020 move's. The 019
   move's entry therefore `leave`s "del".
-- **The preposto's declarations** (`dichiarazioni sul possesso dei requisiti di onorabilità e
-  professionali`) were skipped by the crawl as the person's, so whether the form names the new preposto is
-  unknown; the recipe's `yours` says to check it in the draft. The pre-existing recipe for a change of the
-  ditta's name still refuses "un nuovo preposto" (`var_altro`).
+- **The preposto's declarations** (`dichiarazioni sul possesso dei requisiti di onorabilità e professionali`) were
+  skipped by the crawl as the person's; read on the draft (2026-11-11) they are: onorabilità (TULPS), antimafia, and
+  the professional requirement either "di essere in possesso" or "posseduti dal Sig./ra" followed by a name. So the
+  new preposto is named only there, and only when it isn't the titolare: the recipe's `yours` says so. The
+  pre-existing recipe for a change of the ditta's name still refuses "un nuovo preposto" (`var_altro`).
 - **Which wizard sector** (`bench/test_gen.py` holds every SUAP recipe to it: a label the tree repeats is `{leaf, nth}`, the nth its crawl's sector index says, else inpage.js stops on "N nodes named"). `esercizio con superficie ... fino a 400 mq` appears under four parents; the
   crawls' sector 19 and 20 are the first node of their label, so the recipes pick `{leaf, nth: 1}`. The
   019 deroga's operation text calls its sector "del settore alimentare" while the sector's opening and move

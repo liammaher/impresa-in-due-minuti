@@ -34,7 +34,6 @@ yours:
   - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità, altre dichiarazioni, tasse comunali, art. 75 DPR 445/2000"
   - "Paga i diritti di segreteria, se dovuti, con pagoPA nella schermata di pagamento"
   - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
-  - "Rispondi tu a «Esercizio autonomo» (SI o NO) nella bozza: «SI» apre altre domande che non ho ancora letto"
   - "Allega quanto chiede la schermata degli allegati dopo aver spuntato le dichiarazioni"
   - "Firma e invia (Firma e invio); conserva la ricevuta"
 supports:
