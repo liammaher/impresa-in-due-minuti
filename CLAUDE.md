@@ -133,6 +133,11 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      documents' values (intake/README.md)
   pratica/review.py  the closing lines Claude says once a portal run ends (it worked, what to check,
                      what is left), as JSON; for a fill.py form, the page the person reviews
+  pratica/portal/municipia/  Napoli's other citizen portals (the Portale Multiservizi, also served as
+                     portaletributi.*, and the GEIS gestori app), read from the public files a browser
+                     loads: extract.py writes catalogue/napoli/*.json (routes with roles, screens, labels,
+                     backend paths named in the code) and `check` finds a changed build; read-only, no login,
+                     no backend call, nothing of a person (municipia/README.md)
 plugin/              the Impresa in un minuto plugin for Cowork (docs/design/packaging.md): build.py copies the
                      runner, the rehearsals' steps files (as JSON: no packages in Cowork) and the
                      library into it; it stops unless each pratica's pre-flight matches the repo's.
@@ -558,7 +563,8 @@ network, vault or model); `bench/test_preview_text.py` the preview PDF's reader 
 `bench/test_review_check.py` review.py's closing lines (the check against the documents as warnings); `bench/test_preflight.py` tests pre-flight on the SCIA rehearsal's files, `bench/test_gen.py`
 gen.py on the crawls in `catalogue/F839/sections`, `bench/test_rerun.py` what a rerun batch holds and refuses (a procedure's steps files keyed apart, a REA company, the SUAP's answers.json), `bench/test_branches.py` the SUE choice count
 (`branches.py --write` writes `docs/sue-branches.md`), `bench/test_portability.py` the national/Campania/Napoli
-split (`portability.py --write`, `docs/portability.md`), `bench/test_tolleranze.py` the asseverazioni's
+split (`portability.py --write`, `docs/portability.md`), `bench/test_municipia.py` municipia/extract.py's
+parsers and its committed catalogue (offline; `extract.py check` is the live drift check), `bench/test_tolleranze.py` the asseverazioni's
 tolerances, `bench/test_rules.py` the rules tables (read from `library/rules/`, no copy;
 the SUE table's every case walked as route.cases() asks the facts, seconds; the
 product of every fact's values, 34.5 million, is the library's validator's), `bench/plan_diff.py` each case's fill plan

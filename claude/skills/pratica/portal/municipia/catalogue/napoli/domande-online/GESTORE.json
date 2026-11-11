@@ -1,0 +1,533 @@
+{
+ "model": {
+  "area": "NAPO",
+  "codice": "GESTORE",
+  "descrizione": "Nuovo gestore struttura",
+  "autenticato": true,
+  "firmato": false
+ },
+ "steps": {
+  "1": "PRIVACY",
+  "2": "Dati nuovo gestore",
+  "3": "RICHIESTA",
+  "4": "Dati struttura"
+ },
+ "captured": "2026-11-11",
+ "source": "The form as the citizen portal renders it, read from the page in the browser pane while signed in with an ordinary account. Nothing was entered, saved or sent, and no value was read: only each field's code, type, requirement, label and options. The portal does not fetch a separate definition for these forms (its authenticated model call lists them only); the fields are built in its own code, so extract.py's files list holds the same labels.",
+ "fields": [
+  {
+   "code": "PRA_OGGETTO",
+   "kind": "input",
+   "type": "hidden",
+   "required": false,
+   "label": "Nuovo gestore struttura",
+   "step": 1
+  },
+  {
+   "code": "ATT_CHK_PRI",
+   "kind": "checkbox",
+   "type": "checkbox",
+   "required": true,
+   "label": "PRESA VISIONE DELL'INFORMATIVA SULLA PRIVACY",
+   "step": 1
+  },
+  {
+   "code": "ATT_SCELTAPERS",
+   "kind": "select",
+   "type": "select-one",
+   "required": true,
+   "label": "Dati per nuovo gestore",
+   "options": [
+    "Persona Fisica",
+    "Persona Giuridica"
+   ],
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_NOME",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Nome",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_COGNOME",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Cognome",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_SESSO",
+   "kind": "select",
+   "type": "select-one",
+   "required": false,
+   "label": "Sesso",
+   "options": [
+    "Nessuna scelta",
+    "F",
+    "M"
+   ],
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_COMUNENASCITA",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Comune di nascita",
+   "step": 2
+  },
+  {
+   "code": "ATT_PROVNASCITA",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Provincia di nascita",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_DATANASCITA",
+   "kind": "input",
+   "type": "date",
+   "required": true,
+   "label": "Data di nascita",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_CODICEFISCALE",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Codice Fiscale",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_PARTITAIVA",
+   "kind": "input",
+   "type": "text",
+   "required": false,
+   "label": "Partita IVA",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_CAP",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "CAP",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_COMUNE",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Comune",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_PROVINCIA",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Provincia",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_INDIRIZZO",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Indirizzo",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_CIVICO",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Civico",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_TELEFONO",
+   "kind": "input",
+   "type": "text",
+   "required": false,
+   "label": "Telefono",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_CELLULARE",
+   "kind": "input",
+   "type": "text",
+   "required": false,
+   "label": "Cellulare",
+   "step": 2
+  },
+  {
+   "code": "SOG_INTESTATARIO-1_EMAIL",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "E-mail",
+   "step": 2
+  },
+  {
+   "code": "ATT_PEC",
+   "kind": "input",
+   "type": "email",
+   "required": false,
+   "label": "PEC",
+   "step": 2
+  },
+  {
+   "code": "ATT_DOMICILIO",
+   "kind": "select",
+   "type": "select-one",
+   "required": false,
+   "label": "Indirizzo recapito/domicilio Da compilare se diverso da residenza",
+   "options": [
+    "Nessuna scelta",
+    "Indirizzo domicilio"
+   ],
+   "step": 2
+  },
+  {
+   "code": "ATT_DOC_IDENTI",
+   "kind": "select",
+   "type": "select-one",
+   "required": true,
+   "label": "Documento di identificazione",
+   "options": [
+    "Carta identità",
+    "Passaporto",
+    "Patente di guida"
+   ],
+   "step": 3
+  },
+  {
+   "code": "ATT_DOC_NRO",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Numero documento",
+   "step": 3
+  },
+  {
+   "code": "ATT_DOC_DT_RIL",
+   "kind": "input",
+   "type": "date",
+   "required": true,
+   "label": "Rilasciato il",
+   "step": 3
+  },
+  {
+   "code": "ATT_DOC_ENTE",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Rilasciato da",
+   "step": 3
+  },
+  {
+   "code": "ATT_STRUTCLASS",
+   "kind": "select",
+   "type": "select-one",
+   "required": true,
+   "label": "Classificazione",
+   "options": [
+    "ALBERGHIERE",
+    "CONVENZIONE",
+    "EXTRA ALBERGHIERE"
+   ],
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTTIPO",
+   "kind": "select",
+   "type": "select-one",
+   "required": true,
+   "label": "Tipo",
+   "options": [],
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTCATEG",
+   "kind": "select",
+   "type": "select-one",
+   "required": true,
+   "label": "Categoria",
+   "options": [],
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTZONA",
+   "kind": "select",
+   "type": "select-one",
+   "required": true,
+   "label": "Zona",
+   "options": [
+    "ZONA UNICA"
+   ],
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUNOME",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Nome Struttura",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTINSEG",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Insegna",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUDATINI",
+   "kind": "input",
+   "type": "date",
+   "required": true,
+   "label": "Data inizio attività",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTCUSR",
+   "kind": "input",
+   "type": "text",
+   "required": false,
+   "label": "CUSR",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTCIN",
+   "kind": "input",
+   "type": "text",
+   "required": false,
+   "label": "CIN",
+   "step": 4
+  },
+  {
+   "code": "ATT_UTEUBICOM",
+   "kind": "select",
+   "type": "select-one",
+   "required": true,
+   "label": "Comune",
+   "options": [
+    "Napoli"
+   ],
+   "step": 4
+  },
+  {
+   "code": "ATT_CUPROV",
+   "kind": "select",
+   "type": "select-one",
+   "required": true,
+   "label": "Provincia",
+   "options": [
+    "NA"
+   ],
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTSCALA",
+   "kind": "input",
+   "type": "text",
+   "required": false,
+   "label": "Scala",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTINTER",
+   "kind": "input",
+   "type": "number",
+   "required": false,
+   "label": "Interno",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTCAP",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "CAP",
+   "step": 4
+  },
+  {
+   "code": "ATT_MUNICIPAL",
+   "kind": "select",
+   "type": "select-one",
+   "required": true,
+   "label": "Municipalità",
+   "options": [],
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTSEZIO",
+   "kind": "select",
+   "type": "select-one",
+   "required": true,
+   "label": "Sezione",
+   "options": [
+    "AVV",
+    "BAR",
+    "CHA",
+    "CHI",
+    "MER",
+    "MON",
+    "PEN",
+    "PIA",
+    "PON",
+    "POR",
+    "SCA",
+    "SEC",
+    "SFE",
+    "SFE",
+    "SGO",
+    "SGU",
+    "SLO",
+    "SOC",
+    "SPI",
+    "STE",
+    "VIC"
+   ],
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTFOGLI",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Foglio",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTNUM",
+   "kind": "input",
+   "type": "number",
+   "required": true,
+   "label": "Numero",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTSUBAL",
+   "kind": "input",
+   "type": "text",
+   "required": true,
+   "label": "Subalterno",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUCAMSIN",
+   "kind": "input",
+   "type": "number",
+   "required": false,
+   "label": "Numero camere singole",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUCAMDOP",
+   "kind": "input",
+   "type": "number",
+   "required": false,
+   "label": "Numero camere doppie",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUCAMTRI",
+   "kind": "input",
+   "type": "number",
+   "required": false,
+   "label": "Numero camere triple",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUCAMQUA",
+   "kind": "input",
+   "type": "number",
+   "required": false,
+   "label": "Numero camere quadruple",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUCAMQUI",
+   "kind": "input",
+   "type": "number",
+   "required": false,
+   "label": "Numero camere quintuple",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUCAMALT",
+   "kind": "input",
+   "type": "number",
+   "required": false,
+   "label": "Numero camere altro tipo",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUCAMTOT",
+   "kind": "input",
+   "type": "number",
+   "required": false,
+   "label": "Numero camere totali",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUAPPTOT",
+   "kind": "input",
+   "type": "number",
+   "required": false,
+   "label": "Numero appartamenti totali",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUTOTLET",
+   "kind": "input",
+   "type": "number",
+   "required": true,
+   "label": "Numero totale posti letto",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUNITIMM",
+   "kind": "input",
+   "type": "number",
+   "required": true,
+   "label": "Numero unità immobiliari",
+   "step": 4
+  },
+  {
+   "code": "ATT_STRUDESGEN",
+   "kind": "input",
+   "type": "text",
+   "required": false,
+   "label": "Descrizione servizi offerti",
+   "step": 4
+  },
+  {
+   "code": "PRA_LETTERA",
+   "kind": "input",
+   "type": "hidden",
+   "required": false,
+   "label": "P",
+   "step": 4
+  }
+ ],
+ "notes": [
+  "Codes are Formly's: the page names an input formly_<n>_<kind>_<code>_<k>; n and k change per session, the code does not.",
+  "ATT_STRUTTIPO, ATT_STRUTCATEG and ATT_MUNICIPAL have no options until the classification or the address is chosen.",
+  "The street and civic number are two address-search inputs with no field code.",
+  "ATT_SCELTAPERS (Persona Fisica or Persona Giuridica) changes the fields of step 2: only the Persona Fisica set was read. The manual lists a Persona Giuridica set (fiscal data, registered office, administrative address, legal representative and their residence).",
+  "The manual adds a mandatory ID document image upload (step 5, 'Documentazione obbligatoria') and a summary and send step; neither has form fields to read.",
+  "The privacy checkbox is the person's own consent and the Send button theirs: a run never ticks or presses either."
+ ]
+}
