@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cases the fill pilots must get right, good and bad.
 
-  PRATICHE_NAPOLI_DIR=<pratiche-napoli checkout> regress.py [--keep DIR] [case ...]
+  [PRATICHE_NAPOLI_DIR=<another library checkout>] regress.py [--keep DIR] [case ...]
 
 The pilots are seven library forms: the TARI Mod. 1 (drawn on, with the
 stato di famiglia's table), the ricorso al Prefetto (drawn on, two pages, tick
@@ -43,7 +43,7 @@ import urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", "..", ".."))
 FILL = os.path.join(HERE, "..", "fill.py")
-LIBRARY = os.environ.get("PRATICHE_NAPOLI_DIR", "")
+LIBRARY = os.environ.get("PRATICHE_NAPOLI_DIR") or os.path.join(REPO, "library")
 sys.path.insert(0, os.path.dirname(FILL))
 sys.dont_write_bytecode = True  # no __pycache__ in the skill's folder
 import fill  # noqa: E402
@@ -688,7 +688,7 @@ def ask_checks(scheda_entry):
 
 
 def main():
-    library = LIBRARY or sys.exit("set PRATICHE_NAPOLI_DIR to a pratiche-napoli checkout")
+    library = LIBRARY
     args = sys.argv[1:]
     keep = None
     if args[:1] == ["--keep"]:

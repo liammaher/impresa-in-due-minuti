@@ -1158,7 +1158,22 @@ def diritti_main_row():
     assert checked >= 60, checked
 
 
+def one_procedure_three_pratiche():
+    """The restaurant's SCIA opens, moves and enlarges under one procedure: each steps file is
+    stored apart in the pane (2026-11-10: a batch of the three ran all on the move's steps)."""
+    root = HERE.parents[4] / "rehearsals"
+    keys = set()
+    for name in ("trasferimento-ristorante-fittizio", "ampliamento-ristorante-fittizio", "ristorante-insegna-fittizio"):
+        steps = yaml.safe_load((root / name / "portal-steps.generated.yaml").read_text())
+        assert steps["procedure"] == "napoli/comune/scia-somministrazione-alimenti-bevande", name
+        v = values(json.loads((root / name / "answers.json").read_text()), FIELDS, steps)
+        _, parts = run.page_bundle(run.rehearsal(steps, v), v, files_limit=None, pick=False)
+        keys.add(next(k for k in parts if k.startswith("pv-steps:")))
+    assert len(keys) == 3, keys
+
+
 CASES = [
+    ("one procedure's three pratiche (open with a sign, move, enlarge) get three keys in the pane", one_procedure_three_pratiche),
     ("the SCIA with its answers is ready", ready),
     ("run.py scope: the pvault get patterns cover every field the steps read, and only those", vault_scope),
     ("a rehearsal's draft must be named PROVA NON INVIARE; a real one takes the steps file's own name", rehearsal_draft_name),

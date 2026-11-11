@@ -1,12 +1,12 @@
 # The Impresa in un minuto plugin
 
 What a tecnico in Naples installs in the Claude desktop app, or in Cowork (`impresa-in-un-minuto/README.md` is
-what they read): the portal runner, the rehearsals' steps files and the pratiche-napoli library,
+what they read): the portal runner, the rehearsals' steps files and the library (`library/`),
 with no server (`docs/design/packaging.md`; the archive only as `build.yaml` says). `impresa-in-un-minuto/` is
 what's written by hand; `build.py` adds the rest.
 
 ```sh
-PRATICHE_NAPOLI_DIR=../pratiche-napoli ~/.cache/pratica-portal/venv/bin/python plugin/build.py
+~/.cache/pratica-portal/venv/bin/python plugin/build.py
 ```
 
 writes `plugin/dist/impresa-in-un-minuto/` and `plugin/dist/impresa-in-un-minuto.plugin` (install it in Cowork

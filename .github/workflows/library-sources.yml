@@ -1,0 +1,94 @@
+name: Library sources
+
+# Every night, re-fetch the official forms and a seventh of the pages the
+# procedures cite and keep one issue listing what changed or stopped
+# answering this week; close it when everything is back as recorded. The
+# latest result per address, with its ETag and Last-Modified, is kept in the
+# Actions cache between runs. A run in which most sites gave no answer fails
+# instead, leaving the issue and the saved state as they are.
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+    inputs:
+      all:
+        description: Check every page tonight, not just tonight's share
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+# One run at a time, so two runs can't each open an issue.
+concurrency:
+  group: sources
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: library
+    # The check gives up on a site that stalls and stops asking after an hour
+    # (see checkTargets), so this only catches the unexpected; cut short, the
+    # job saves nothing.
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: library/package-lock.json
+
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      - name: Restore the last results
+        uses: actions/cache/restore@v4
+        with:
+          path: library/.cache/sources-state.json
+          key: sources-state-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: sources-state-
+
+      - name: Check sources
+        run: npm run -s check:sources -- --out report.md ${{ inputs.all && '--all' || '' }}
+
+      # A re-run keeps the run_id, and a cache key can be saved only once.
+      - name: Save the results
+        uses: actions/cache/save@v4
+        with:
+          path: library/.cache/sources-state.json
+          key: sources-state-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Update the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: Fonti da ricontrollare
+        run: |
+          number=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number,title \
+            --jq "map(select(.title == env.TITLE))[0].number // empty")
+          # The addresses that changed, stopped answering or have been blocked
+          # for a week (not those only listed as uncheckable or blocked lately).
+          urls() { awk '/^## /{keep = /^## (Moduli|Non raggiungibili|Bloccati dal sito da almeno)/} keep && /^- https?:\/\//{print $2}' | sort -u; }
+          if [ -s report.md ]; then
+            if [ -n "$number" ]; then
+              # Editing the body notifies nobody, so new addresses get a comment
+              # (none if the old body can't be read).
+              added=""
+              if old=$(gh issue view "$number" --json body --jq .body); then
+                added=$(comm -13 <(printf '%s\n' "$old" | urls) <(urls < report.md))
+              fi
+              gh issue edit "$number" --body-file report.md
+              if [ -n "$added" ]; then
+                printf 'Nuovi indirizzi nel controllo di oggi:\n\n%s\n' "$added" | gh issue comment "$number" --body-file -
+              fi
+            else
+              gh issue create --title "$TITLE" --body-file report.md
+            fi
+          elif [ -n "$number" ]; then
+            gh issue close "$number" --comment "Al controllo di oggi nessun modulo è cambiato e tutte le pagine controllate rispondono (quelle con un certificato che il controllo non riesce a verificare, o bloccate dal sito da meno di una settimana, restano da guardare a mano)."
+          fi

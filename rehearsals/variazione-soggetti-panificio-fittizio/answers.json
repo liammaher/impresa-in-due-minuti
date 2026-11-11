@@ -1,0 +1,14 @@
+{
+ "extras": [],
+ "variazioni": ["var_denominazione"],
+ "descrizione": "PROVA NON INVIARE - variazione soggetti panificio generato",
+ "oggetto": "Variazione della denominazione della ditta individuale che gestisce il panificio in via Foria 120, Napoli.",
+ "titolo_attivita_tipo": "SCIA",
+ "titolo_attivita_protocollo": "0999999",
+ "titolo_attivita_data": "2021-02-22",
+ "var_decorrenza": "2026-11-02",
+ "denominazione_precedente": "Forno Fittizio di Salvatore Fittizio",
+ "var_atto_doc": "rehearsals/variazione-soggetti-panificio-fittizio/files/visura-modifica.pdf",
+ "diritti_euro": "50",
+ "diritti_esente": false
+}

@@ -151,7 +151,36 @@ plugin/              the Impresa in un minuto plugin for Cowork (docs/design/pac
 connector/           the Impresa in un minuto connector (remote MCP, read-only, no sign-in): coverage, search, a
                      pratica's status and freshness, library entries, from plugin/build.py's output.
                      It never takes personal data: its tools take a case's facts
+library/             the procedure library (until 2026-11-11 liammaher/pratiche-napoli, imported with its
+                     history): procedures/, rules/, offices/, layouts/, situations/, contract/, tools/
+                     (TypeScript), reports/, site/; below, "Library"
 ```
+
+## Library (`library/`)
+
+Open, source-cited procedures, rules tables, offices and form layouts for Naples (and national) enti;
+`library/README.md` and `library/CONTRIBUTING.md` are the full rules. What must stay true:
+
+- **Nothing in `library/` depends on the vault.** It carries no personal data (no names, codici fiscali,
+  addresses, IBANs, amounts or dates of a person); form fields are IDs from `contract/fields.json`, which is
+  built from the vault's `schema.json` (`make schema`), never edited by hand. The vault, the runner and the
+  plugin read `library/`; the library reads none of them.
+- **Verification levels** on every procedure: L0 draft, L1 desk-checked against official sources, L2 confirmed by
+  the office, L3 a real filing went through. Each claim is `verified` (with a `source`), `unverified` or
+  `disputed`; never estimate penalties, interest, costs or durations the sources do not give.
+- **Sources carry a sha256** of what was read; the nightly `library-sources.yml` re-fetches them and keeps one
+  issue of what changed or stopped answering.
+- **`updated` moves with every change to a procedure** (re-checking a source or logging a run included);
+  `npm run check:updated` fails a branch where it did not.
+- A rules table claims nothing of its own: write the claim on the procedure first, verified and sourced, then
+  cite it in the rule. A procedure's claim and the rules citing it change in the same pull request.
+- Tests (in `library/`): `npm ci --ignore-scripts`, then `npm run typecheck`, `npm test`, `npm run validate`
+  (slow: run it in the background), `npm run check:vault-schema`, `npm run check:updated -- origin/main`.
+  The `Library` workflow runs them when `library/**` or `schema.json` changes.
+- Licence: code MIT (`library/LICENSE`), procedure texts CC BY-SA 4.0 (`library/LICENSE-CONTENT.md`); NOTICE.md
+  lists them. The plugin bundles a copy of what it carries, with both licence texts.
+- It splits back out into its own package, consumed by a pinned version and never by byte copy, only if a second
+  city's library or an outside consumer appears.
 
 ## Security Model
 
@@ -293,15 +322,15 @@ the page never copies a rule.
   (`italy_shared_test.go`, `plugin/test_check.py`): a rule changed here gets a case there. Housing categories
   (`abitazione`, `locazione`, `utenze`, `tari`) describe the home at residenza/domicilio;
   the schema exports them as `kinds: [persona]` (set from `IsHousingCategory`).
-  A new field bumps the schema's `Version` (`make schema`); the library's copy
-  (`contract/vault-schema.json`, `npm run gen:fields`) follows in a PR merged after the vault's.
-  New fields the pratiche-napoli library needs are added here, then dropped from its
-  `contract/extensions.json`. `schema.json` is `pvault schema --json`, credential words
+  A new field bumps the schema's `Version` (`make schema` writes `schema.json`, the library's copy
+  `library/contract/vault-schema.json` and its field registry in one go; a Go test and the library's CI hold
+  them equal). New fields the library needs are added here, then dropped from
+  `library/contract/extensions.json`. `schema.json` is `pvault schema --json`, credential words
   included (`Credentials`, the expressions `IsCredentialField` compiles), and `values` for
   the fields with a fixed list (`ruolo.tipo`, an address's municipalità and distretto:
   `schemaValues`) and the pratiche stato and canale lists (`Pratiche`: closed stati, the
   library's channel types as aliases), which the library and fill.py read instead of keeping a copy. It is written without
-  HTML escaping, so the library's copy is the same bytes; its CI compares it with main's.
+  HTML escaping, so the library's copy is the same bytes (`TestSchemaJSONIsCommitted`).
 - **Pratiche** (`pratiche.go`): `pratiche.<slug>_<campo>`, campo/stato/canale from fixed
   lists (canale also takes the library's channel types, `praticaCanaleAliases`), never
   credentials. A deadline shows in `Expiring` until the stato closes. The
@@ -504,7 +533,7 @@ review.py's closing lines for every rehearsal.
 
 **The tecnico is addressed as tu, never Lei**, in everything they read: the skills, the plugin's README, the
 runner's messages and refusals, the steps files (so their sources: recipes, `defects.yaml`, the dictionary, the
-rules tables and, for the library's own rules tables, pratiche-napoli's). Verb forms change with the pronoun
+rules tables, which are `library/rules/`). Verb forms change with the pronoun
 («scrivimi», «controlla», «allegala»), and a formal imperative that is also the tu present («firmi», «paghi») is
 told by its capital at the start of a sentence or by a clitic. `bench/test_voice.py` reads all of it for the
 formal forms and fails on one; a quotation from the law or the portal keeps its own words. **One message per
@@ -520,9 +549,9 @@ tests compile the helper with `-D DEBUG`, which adds `describe-grant` and test e
 (`PVAULT_TOUCHID_TEST_*`). Keychain tests run only with `PVAULT_KEYCHAIN_TEST=1`. The fill
 pilot's synthetic vault (`TestPraticaPilotVault`) runs only with `PVAULT_PILOT_DIR`; run the
 pilots through `claude/skills/pratica/fill/pilot/regress.py` (`--keep DIR` keeps a case's
-output; it needs `PRATICHE_NAPOLI_DIR` and PyMuPDF, which the system `python3` has and the pratica venv lacks; `PILOT_FORM_PDF` gives the TARI Mod. 1
+output; it reads `library/` (`PRATICHE_NAPOLI_DIR` points it at another checkout) and needs PyMuPDF, which the system `python3` has and the pratica venv lacks; `PILOT_FORM_PDF` gives the TARI Mod. 1
 pilot's form from disk; the `sign` case needs a library whose layout has `signatures`).
-CI runs `regress.py` against the library's main (`fill.yml`); the library runs it on its own changes.
+CI runs `regress.py` on every change to the filler, the vault or `library/` (`fill.yml`).
 The portal runner has offline tests on a fake portal: `claude/skills/pratica/portal/bench/test_inpage.py`,
 run with the pratica venv's Python (`~/.cache/pratica-portal/venv`, Playwright's Chromium, headless; no
 network, vault or model); `bench/test_preview_text.py` the preview PDF's reader (`preview_text.js`),
@@ -530,8 +559,8 @@ network, vault or model); `bench/test_preview_text.py` the preview PDF's reader 
 gen.py on the crawls in `catalogue/F839/sections`, `bench/test_branches.py` the SUE choice count
 (`branches.py --write` writes `docs/sue-branches.md`), `bench/test_portability.py` the national/Campania/Napoli
 split (`portability.py --write`, `docs/portability.md`), `bench/test_tolleranze.py` the asseverazioni's
-tolerances, `bench/test_rules.py` the rules tables (with `PRATICHE_NAPOLI_DIR`, `rules/`
-the same bytes as the library's; the SUE table's every case walked as route.cases() asks the facts, seconds; the
+tolerances, `bench/test_rules.py` the rules tables (read from `library/rules/`, no copy;
+the SUE table's every case walked as route.cases() asks the facts, seconds; the
 product of every fact's values, 34.5 million, is the library's validator's), `bench/plan_diff.py` each case's fill plan
 before and after a change, `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
 route.py on every case the SUE table decides (it prints the combinations not mapped yet), `bench/test_rounds.py`

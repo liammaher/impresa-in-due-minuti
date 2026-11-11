@@ -12,8 +12,8 @@ usually somewhere else). A playbook records how the procedure went last time: so
 deadline, channels, form fields mapped to vault field IDs, steps and gotchas. The
 first run of a procedure is research; later runs follow and re-check the playbook.
 
-Before researching, look the procedure up in the **pratiche-napoli library**
-(github.com/liammaher/pratiche-napoli): shared, source-cited procedures for Naples
+Before researching, look the procedure up in the **library**
+(`library/` of github.com/liammaher/impresa-in-un-minuto): shared, source-cited procedures for Naples
 and national enti, with form fields mapped to the same field IDs the vault uses. A
 library entry replaces most of the research; the playbook keeps what is personal to
 this user's runs.
@@ -60,9 +60,9 @@ after the login.
    a local clone if `$PRATICHE_NAPOLI_DIR` is set (`ls -R "$PRATICHE_NAPOLI_DIR/procedures"`),
    otherwise from GitHub `main`, which only changes by reviewed PR:
    ```sh
-   curl -s "https://api.github.com/repos/liammaher/pratiche-napoli/git/trees/main?recursive=1" \
-     | python3 -c 'import json,sys; [print(p["path"]) for p in json.load(sys.stdin)["tree"] if p["path"].startswith("procedures/")]'
-   curl -s https://raw.githubusercontent.com/liammaher/pratiche-napoli/main/procedures/<path>.yaml
+   curl -s "https://api.github.com/repos/liammaher/impresa-in-un-minuto/git/trees/main?recursive=1" \
+     | python3 -c 'import json,sys; [print(p["path"]) for p in json.load(sys.stdin)["tree"] if p["path"].startswith("library/procedures/")]'
+   curl -s https://raw.githubusercontent.com/liammaher/impresa-in-un-minuto/main/library/procedures/<path>.yaml
    ```
    Pick by ente and slug, then confirm with `title`, `summary` and `applies_to`
    (several entries can share an ente: TARI alone has iscrizione, variazione,
@@ -329,13 +329,15 @@ by its label ("no" when the role isn't part of this pratica).
 
 1. **The library, on `main`.** In a cache of your own:
    ```sh
-   lib=~/.cache/pratiche-napoli
-   [ -d "$lib/.git" ] || git clone -q --depth 1 https://github.com/liammaher/pratiche-napoli "$lib"
-   git -C "$lib" fetch -q --depth 1 origin main && git -C "$lib" reset -q --hard origin/main
+   repo=~/.cache/impresa-in-un-minuto
+   [ -d "$repo/.git" ] || git clone -q --depth 1 --filter=blob:none --sparse https://github.com/liammaher/impresa-in-un-minuto "$repo"
+   git -C "$repo" sparse-checkout set library
+   git -C "$repo" fetch -q --depth 1 origin main && git -C "$repo" reset -q --hard origin/main
+   lib=$repo/library
    [ -d "$lib/node_modules/yaml" ] || npm --prefix "$lib" ci --omit=dev --ignore-scripts --silent
    ```
-   Use `$PRATICHE_NAPOLI_DIR` as it is instead only when the user asks to test a library
-   change.
+   Use `$PRATICHE_NAPOLI_DIR` (a `library/` folder) as it is instead only when the user asks to
+   test a library change.
 2. **What it needs**:
    ```sh
    python3 -I ~/.claude/skills/pratica/fill/fill.py needs --library "$lib" \

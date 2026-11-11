@@ -137,5 +137,22 @@
    "same_as": "suap-011-aprire-l-attivita-di-acconciatore-procura#Dichiarazione relativa ai diritti di segreteria/istruttori",
    "seconds": 0.6
   }
- ]
+ ],
+ "slots": {
+  "Gestione degli allegati": [
+   {
+    "title": "Allegati liberi",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m;pdf;xml;dwf;svg;jpg",
+    "required": false,
+    "portal_document": false
+   },
+   {
+    "title": "copia attestazione versamento oneri, diritti e spese",
+    "accepts": "dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m",
+    "required": false,
+    "portal_document": false
+   }
+  ]
+ },
+ "slots_note": "read 2026-11-10 on the filled draft \"PROVA NON INVIARE - cessazione panificio generato\" after its run (crawl.js slotsOf), before the declarations: none required yet"
 }

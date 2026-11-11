@@ -24,10 +24,12 @@ touchid:
 test:
 	go test -v -race ./...
 
-# schema.json is the recommended schema as 'pvault schema --json' prints it;
-# pratiche-napoli's CI compares its copy with the one on main.
+# schema.json is the recommended schema as 'pvault schema --json' prints it; the library keeps a
+# copy (library/contract/vault-schema.json) and the field registry built from it, both written
+# here (needs `npm ci` in library/); CI checks both (check:vault-schema).
 schema:
 	go run ./cmd/pvault schema --json > schema.json
+	npm --prefix library run -s gen:fields -- ../schema.json
 
 # The rehearsals' steps files are gen.py's build outputs, never committed: write them all and
 # rehearsals/steps.lock (commit the lock). Needs the pratica venv (PyYAML).

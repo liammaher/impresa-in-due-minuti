@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fill a pratiche-napoli form from the vault, and check the result.
+"""Fill a library form from the vault, and check the result.
 
   fill.py needs (--library DIR [--procedure ID] | --entry E.json) [--entry E.json] [--layout L.json]
                 --form ID [--for SLUG] [--party ROLE=SLUG[,SLUG]]... [--draft] [--vault-dir DIR]
@@ -84,7 +84,7 @@ server does; the token is the one `pvault create-service-token ...
 service `needs` names: pvault-pratica-fill (pvault-<name>-pratica-fill for
 ~/.pvault-<name>).
 
---library is a pratiche-napoli checkout (npm ci done): the entry is
+--library is the library/ folder (npm ci done in it): the entry is
 procedures/<ID>.yaml, read with the library's own YAML parser (node), and
 the layout layouts/<ID>/<form>.json; its contract/ gives the vault schema
 and the signing rules, offices/ the desks of each service by area. Without --pdf the form is
@@ -248,7 +248,7 @@ def library_file(a, folder, ext):
     parts = [a.library, folder, a.procedure] + ([a.form] if folder == "layouts" else [])
     path = os.path.join(*parts) + ext
     if not os.path.isfile(path):
-        sys.exit(f"no {path}: is {a.library} a pratiche-napoli checkout on main?")
+        sys.exit(f"no {path}: is {a.library} a library/ folder?")
     return path
 
 
@@ -2111,7 +2111,7 @@ def offices(a):
     """The person's office in every list of the library, and what each serves."""
     lists = office_lists(a)
     if not lists:
-        sys.exit(f"no offices/ in {a.library}: is it a pratiche-napoli checkout on main?")
+        sys.exit(f"no offices/ in {a.library}: is it a library/ folder?")
     given = {"municipalita": a.municipalita, "distretto_asl": a.distretto_asl}
     vault = None
     if None in (given[o["field"]] for o in lists.values()) and (a.server or a.vault_dir):
@@ -2145,7 +2145,7 @@ def main():
     sub = p.add_subparsers(dest="cmd", required=True)
     for name in ("needs", "run"):
         s = sub.add_parser(name)
-        s.add_argument("--library", help="a pratiche-napoli checkout: the procedure (with --procedure) and its contract")
+        s.add_argument("--library", help="the library/ folder: the procedure (with --procedure) and its contract")
         s.add_argument("--entry", help="the procedure as JSON, in place of the library's file")
         s.add_argument("--procedure", help="the library procedure ID, e.g. napoli/comune/tari-iscrizione-uso-abitativo")
         s.add_argument("--form", required=True)
@@ -2175,7 +2175,7 @@ def main():
     r.add_argument("--reply")
     r.add_argument("--playbook")
     c = sub.add_parser("route")
-    c.add_argument("--library", help="a pratiche-napoli checkout: the procedure (with --procedure), signing rules, offices")
+    c.add_argument("--library", help="the library/ folder: the procedure (with --procedure), signing rules, offices")
     c.add_argument("--entry", help="the procedure as JSON, in place of the library's file")
     c.add_argument("--procedure")
     c.add_argument("--channel", help="the route by channel type (pec, post, desk...); default: the entry's preferred one")
@@ -2185,7 +2185,7 @@ def main():
     c.add_argument("--keychain", help="Keychain service holding the token (default: the one needs names)")
     c.add_argument("--json", action="store_true", help="the card as JSON")
     o = sub.add_parser("offices")
-    o.add_argument("--library", required=True, help="a pratiche-napoli checkout: its offices/")
+    o.add_argument("--library", required=True, help="the library/ folder: its offices/")
     o.add_argument("--address", default="residenza", help="whose address: residenza (default), leo:residenza, domicilio, locale, sede_legale")
     o.add_argument("--municipalita", help="the municipalità (1-10), instead of reading it from the vault")
     o.add_argument("--distretto-asl", help="the ASL distretto (24/73, 25-33), instead of reading it from the vault")

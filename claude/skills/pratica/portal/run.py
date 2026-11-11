@@ -1144,9 +1144,12 @@ def ruled(steps, values):
 
 def procedure_name(pid):
     """A library procedure as the tecnico reads it: its title up to " – " (no "Comune di Napoli,
-    sul SUE"), from the plugin's library/ or $PRATICHE_NAPOLI_DIR (plugin/build.py sets it, so
+    sul SUE"), from the plugin's library/, the repository's library/ or $PRATICHE_NAPOLI_DIR (plugin/build.py sets it, so
     both runners name it alike), else its id's last part in words. Never the id itself."""
-    roots = [Path(__file__).resolve().parent.parent / "library"]
+    here = Path(__file__).resolve().parent
+    roots = [here.parent / "library"]  # the plugin's, then the repository's
+    if len(here.parents) > 3:
+        roots.append(here.parents[3] / "library")
     if os.environ.get("PRATICHE_NAPOLI_DIR"):
         roots.append(Path(os.environ["PRATICHE_NAPOLI_DIR"]))
     for root in roots:
@@ -2569,11 +2572,13 @@ def page_bundle(steps, values, files_limit=PAGE_FILES_LIMIT, resume=None, code=N
                             "run.js can carry in the pane: let the person pick them in the page, or use `run`")
         if size > files_limit:
             to_pick(files)
-    proc = steps["procedure"]
-    if blocks:
-        # Its "+" blocks as this case counts them: a case with other counts has other steps, so
-        # they are stored apart in the pane (the same counts, the same key).
-        proc += "#" + hashlib.sha256(json.dumps(skeleton["sections"], sort_keys=True).encode()).hexdigest()[:8]
+    # Stored in the pane under the procedure and what this run fills (its wizard and sections): a
+    # case whose "+" blocks count otherwise has other steps (2026-11-05: two CILA cases shared a key
+    # and the second ran on the first's), and so has another pratica of the same procedure (the
+    # restaurant's SCIA opens, moves and enlarges: 2026-11-10, a batch of the three ran all on the
+    # move's steps, the last stored). The same steps, the same key.
+    proc = steps["procedure"] + "#" + hashlib.sha256(json.dumps(
+        {"wizard": skeleton.get("wizard"), "sections": skeleton["sections"]}, sort_keys=True, default=str).encode()).hexdigest()[:8]
     runner_js, steps_js, stored = pane_parts(proc, skeleton)
     run_js = clear_or_sealed(proc, vals, resume, code)
     carried = [v for s in vals["sections"] for v in s if isinstance(v, dict) and "b64" in v]

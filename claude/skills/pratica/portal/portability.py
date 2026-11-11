@@ -16,7 +16,7 @@ Two layers, each counted from what the repository already holds:
                          portal's own boxes. "o della corrispondente normativa regionale" is the
                          national forms' own wording, not a Campania box.
   the rules tables       each rule of the SUE tables (rules/sue-napoli*.yaml) by the sources it cites, each source
-                         placed by the host of its URL in the library (PRATICHE_NAPOLI_DIR):
+                         placed by the host of its URL in the library (library/):
                          Normattiva is national, the Regione Campania's sites Campania's, the
                          Comune's and the Soprintendenza for Napoli Napoli's, impresainungiorno
                          the portal (which operation to pick, not a law). A rule is `national`
@@ -49,11 +49,12 @@ sys.path.insert(0, str(HERE))
 sys.dont_write_bytecode = True
 import branches  # noqa: E402
 import gen  # noqa: E402
+import rules as rules_mod  # noqa: E402  (the library's rules tables, library/rules/)
 
 OUT = HERE.parents[3] / "docs" / "portability.md"
 MATCH = HERE / "schema" / "sue-choice-match.json"
 # New works, and the filings on a title held (2026-11-04).
-RULES = [HERE / "rules" / "sue-napoli.yaml", HERE / "rules" / "sue-napoli-adempimenti.yaml"]
+RULES = [rules_mod.TABLES / "sue-napoli.yaml", rules_mod.TABLES / "sue-napoli-adempimenti.yaml"]
 
 
 def table_rules():
@@ -181,7 +182,7 @@ def render(cs, rs, levels):
     lines.append("")
     lines += ["## The rules tables", ""]
     if rs is None:
-        lines += ["Not counted: PRATICHE_NAPOLI_DIR is unset (the sources' URLs are in the library).", ""]
+        lines += ["Not counted: no library/ next to the tools (the sources' URLs are in the library).", ""]
         return "\n".join(lines)
     rc = collections.Counter(r["level"] for r in rs)
     portal = sum(r["portal"] for r in rs if r["level"] == "national")
@@ -215,12 +216,10 @@ def render(cs, rs, levels):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--write", action="store_true", help=f"rewrite {OUT.name} (needs PRATICHE_NAPOLI_DIR)")
+    ap.add_argument("--write", action="store_true", help=f"rewrite {OUT.name}")
     ap.add_argument("--json", action="store_true", help="the choices and rules, each with its level")
     a = ap.parse_args()
-    lib = os.environ.get("PRATICHE_NAPOLI_DIR")
-    if a.write and not lib:
-        sys.exit("portability.py --write: set PRATICHE_NAPOLI_DIR (the rules' sources are in the library)")
+    lib = rules_mod.library_dir()  # library/, or $PRATICHE_NAPOLI_DIR
     cs = choices()
     try:
         rs, levels = rules(lib) if lib else (None, {})
