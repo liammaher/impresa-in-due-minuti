@@ -403,7 +403,7 @@ def tables_are_the_librarys():
     assert not (HERE.parent / "rules").exists(), "portal/rules/ was a copy of the library's: read library/rules/"
     lib = os.environ.get("PRATICHE_NAPOLI_DIR")
     assert rules.TABLES == (Path(lib) / "rules" if lib else HERE.parents[4] / "library" / "rules"), rules.TABLES
-    assert sorted(p.name for p in rules.TABLES.glob("*.yaml")) >= ["sue-napoli-adempimenti.yaml", "sue-napoli.yaml", "suap-napoli.yaml"]
+    assert {"sue-napoli-adempimenti.yaml", "sue-napoli.yaml", "suap-napoli.yaml"} <= {p.name for p in rules.TABLES.glob("*.yaml")}
 
 
 def main():
