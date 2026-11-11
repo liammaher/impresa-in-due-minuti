@@ -44,6 +44,9 @@ def kinds_and_unread():
                      "Modello_DP.pdf": "modello_dp"}, kinds
     # The identity card is a scan: known by its name, read for nothing.
     assert REPORT["unread"] == ["Documento_identita_Luca.pdf"], REPORT["unread"]
+    # What the tecnico is told was recognised: kinds in Italian, never a file name.
+    assert {"visura", "contratto di locazione", "relazione tecnica", "assenso", "notifica preliminare"} <= set(REPORT["riconosciuti"]), REPORT["riconosciuti"]
+    assert not [x for x in REPORT["riconosciuti"] if ".pdf" in x or "_" in x] and REPORT["non_riconosciuti"] == 0, REPORT
 
 
 def values_match_fixture():

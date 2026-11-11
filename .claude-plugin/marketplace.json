@@ -1,6 +1,6 @@
 {
   "name": "impresa-in-un-minuto",
-  "description": "Impresa in un minuto: Claude prepara le Sue pratiche sui portali della pubblica amministrazione, fino ai passi che spettano solo a Lei (accesso con SPID, dichiarazioni, firma, pagamento, invio).",
+  "description": "Per tecnici e professionisti (architetti, geometri, ingegneri, commercialisti, consulenti) che queste pratiche le presentano già: Claude le compila sui portali della pubblica amministrazione, fino ai passi che spettano solo a te (accesso con SPID, dichiarazioni, firma, pagamento, invio). Non è una consulenza: Claude può sbagliare, il controllo è tuo.",
   "owner": {
     "name": "Liam Maher"
   },
@@ -8,7 +8,7 @@
     {
       "name": "impresa-in-un-minuto",
       "displayName": "Impresa in un minuto",
-      "description": "Prepara le pratiche del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, con la biblioteca pratiche-napoli di regole e procedure.",
+      "description": "Per chi presenta già queste pratiche: compila quelle del SUE del Comune di Napoli, su impresainungiorno, dai documenti del cliente, con la biblioteca pratiche-napoli di regole e procedure. Non è una consulenza: il controllo è tuo.",
       "source": {
         "source": "github",
         "repo": "liammaher/impresa-in-un-minuto",

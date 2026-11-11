@@ -11,11 +11,13 @@ picks the job's files once at the start of the compilation (the portal's page ca
 otherwise), and that after the declarations they give the signed files the portal makes only then
 (the procura), for a second compilation.
 The reply carries, between what it understood and the summary, the card «Cosa succede»: two lines, a heading
-that names the pratica (and why it is this one) and «Io compilo la bozza, allego … file e rileggo tutto dal
-portale…». It is generated, it is not a list of every answer and it is not a request. A reply without it fails.
+that names the pratica (and why it is this one, with its article) and «Io compilo la bozza su impresainungiorno
+(SUE Napoli), allego … file e rileggo tutto dal portale…». It is generated, it is not a list of every answer and it
+is not a request. A reply without it fails. The pratica is said once, in that heading, not again as a «Propongo» line.
 PASS if the final reply is in Italian, addresses the tecnico as tu (never Lei), opens with whether the pratica
 is covered by the automation, says in a few sentences what it understood (naming the documents
-and the tecnico's note it comes from) and that it proposes a CILA, then a short summary: under
+and the tecnico's note it comes from), then the card, whose heading names the CILA, then a short summary: under
+«Dai tuoi documenti» a line for each answer that decides the pratica, in the documents' own words; under
 «Da controllare» each answer Impresa in un minuto proposes itself, a line each; the rest counted by where it
 comes from, with «dettagli» to see every answer; what is left to the tecnico at the end
 (declarations, signature, payment, sending); and one «sì» before opening the portal.

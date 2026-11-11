@@ -1142,17 +1142,44 @@ def ruled(steps, values):
     return out, []
 
 
-def procedure_name(pid):
-    """A library procedure as the tecnico reads it: its title up to " – " (no "Comune di Napoli,
-    sul SUE"), from the plugin's library/, the repository's library/ or $PRATICHE_NAPOLI_DIR (plugin/build.py sets it, so
-    both runners name it alike), else its id's last part in words. Never the id itself."""
+def _library_roots():
     here = Path(__file__).resolve().parent
     roots = [here.parent / "library"]  # the plugin's, then the repository's
     if len(here.parents) > 3:
         roots.append(here.parents[3] / "library")
     if os.environ.get("PRATICHE_NAPOLI_DIR"):
         roots.append(Path(os.environ["PRATICHE_NAPOLI_DIR"]))
-    for root in roots:
+    return roots
+
+
+LAW = [(re.compile(r"D\.\s?P\.\s?R\.\s*(?:\d+\s+\w+\s+)?(\d{4}),?\s*n\.\s*(\d+),?\s*(art\.\s*[\w-]+)", re.I), "{2} DPR {1}/{0}"),
+       (re.compile(r"D\.\s?Lgs\.\s*(?:\d+\s+\w+\s+)?(\d{4}),?\s*n\.\s*(\d+),?\s*(art\.\s*[\w-]+)", re.I), "{2} D.Lgs. {1}/{0}")]
+
+
+def basis(table, rule_id):
+    """The law the rules table's rule cites for a case, as the tecnico writes it ("art. 6-bis DPR 380/2001"):
+    the first source the rule cites whose library label is a statute's article. "" when none is (nothing is
+    claimed): the card and the route say the article only when the library does."""
+    rule = next((r for r in rules.table(table)["rules"] if r["id"] == rule_id), None)
+    for c in (rule or {}).get("cites", []):
+        for root in _library_roots():
+            p = root / "procedures" / f"{c['procedure']}.yaml"
+            if not p.is_file():
+                continue
+            m = re.search(rf"^\s*-\s*id:\s*{re.escape(c['source'])}\s*\n\s*label:\s*(.+)$", p.read_text(), re.M)
+            for pattern, fmt in LAW if m else ():
+                x = pattern.search(m[1])
+                if x:
+                    return fmt.format(*x.groups())
+            break
+    return ""
+
+
+def procedure_name(pid):
+    """A library procedure as the tecnico reads it: its title up to " – " (no "Comune di Napoli,
+    sul SUE"), from the plugin's library/, the repository's library/ or $PRATICHE_NAPOLI_DIR (plugin/build.py sets it, so
+    both runners name it alike), else its id's last part in words. Never the id itself."""
+    for root in _library_roots():
         p = root / "procedures" / f"{pid}.yaml"
         if p.is_file():
             m = re.search(r"^title: *[\"']?(.+?)[\"']? *$", p.read_text(), re.M)
@@ -1513,7 +1540,26 @@ AUTOMATIC = ("calcolata dai dati", "predefinita")  # the rules' own, not the tec
 YES = "Scrivi «sì» e apro il portale; se una risposta va cambiata, dimmelo."
 
 
-def summary_text(rows, end=()):
+# The few answers that decide the pratica, in the documents' own words: what a tecnico can hold to a document they
+# know in seconds. answers.json `evidenze` (intake.py accept) has the words; only the facts the intake read.
+EVIDENCE = [("Lavori", ("intervento", "strutture", "prospetti")), ("Stato", ("cila_stato",)),
+            ("Titolo", ("titolo_esclusivo",))]
+
+
+def evidence_text(values):
+    """«Dai tuoi documenti», a line a group of EVIDENCE: the words and the document they are in. "" when the
+    documents gave none (nothing is quoted that the documents didn't say)."""
+    words, fonti = values.answers.get("evidenze") or {}, values.answers.get("fonti") or {}
+    lines = []
+    for label, keys in EVIDENCE:
+        quotes = list(dict.fromkeys(words[k] for k in keys if words.get(k)))
+        docs = list(dict.fromkeys(fonti[k] for k in keys if words.get(k) and fonti.get(k)))
+        if quotes:
+            lines.append(f"– {label}: " + ", ".join(f"«{q}»" for q in quotes) + (f" ({', '.join(docs)})" if docs else ""))
+    return ("Dai tuoi documenti:\n" + "\n".join(lines) + "\n\n") if lines else ""
+
+
+def summary_text(rows, end=(), evidence=""):
     """The one message's summary, as a review by exception (GOV.UK's "check answers", kept short so
     it is read, not rubber-stamped): first what only Impresa in un minuto proposes, a line each; then the
     rest counted by where it comes from; every answer one word away («dettagli»: summary_all)."""
@@ -1524,7 +1570,7 @@ def summary_text(rows, end=()):
     for r in rest:
         src = "calcolate dalle regole" if r["source"] in AUTOMATIC else r["source"].split(", ")[0] or "già date"
         by[src] = by.get(src, 0) + 1
-    lines = []
+    lines = [evidence.rstrip("\n"), ""] if evidence else []
     if check:
         lines.append("Da controllare (le propongo io):")
         lines += [f"– {r['question']} → {r['answer']}" for r in check]
@@ -1532,7 +1578,7 @@ def summary_text(rows, end=()):
     lines.append(f"Il resto ({len(rest)} risposte) viene da: " + ", ".join(f"{k} {n}" for k, n in sorted(by.items(), key=lambda x: -x[1])) + "."
                  + (f" I file da allegare sono {files[0]['question'].split('(')[1].rstrip(')')}, già controllati."
                     if files else "")
-                 + " Per vederle una per una, scrivi «dettagli».")
+                 + " Per vederle una per una, scrivi «dettagli». Controllami a campione: chiedimi cosa scrivo in una casella qualsiasi.")
     return "\n".join(lines) + "\n\n" + "\n".join([*end, YES])
 
 
@@ -1617,8 +1663,22 @@ def card(steps, values, report, made_up=False, rows=None, preview_check=True):
     rows = summary_rows(steps, values) if rows is None else rows
     title = re.sub(r",\s*SU[AE]P? Napoli\b.*$", "", steps.get("title") or "La pratica").split(":")[0].strip()
     n_files = next((int(re.search(r"\((\d+)\)", r["question"]).group(1)) for r in rows if r["key"] == "allegati"), 0)
-    heading = f"**{title}** (prova, dati inventati)" if made_up else "**" + ", ".join([title, *[w for w in card_why(steps, values, rows) if w.lower() not in title.lower()]]) + "**"
-    does = ["compilo la bozza"]
+    if made_up:
+        heading = f"**{title}** (prova, dati inventati)"
+    else:
+        # The law the rules table cites for this case, said only when the library has its article (basis).
+        try:
+            main = (_decision(steps, values) or {}).get("main")
+        except StepError:
+            main = None
+        law = basis(steps["rules"]["table"], main["rule"]) if main else ""
+        heading = ("**" + ", ".join([title, *[w for w in card_why(steps, values, rows) if w.lower() not in title.lower()]]) + "**"
+                   + (f" ({law})" if law else ""))
+    # Where: the portal and the sportello, from the steps file, so the tecnico sees which one opens.
+    portal = re.search(r"//(?:[\w-]+\.)*([\w-]+)\.gov\.it", steps.get("start") or "")
+    sportello = re.search(r"\bSU[AE]P? \w+", steps.get("title") or "")
+    where = f" su {portal[1]}" + (f" ({sportello[0]})" if sportello else "") if portal else ""
+    does = [f"compilo la bozza{where}"]
     if n_files:
         does.append(f"allego {count(n_files, 'file', 'file')}" + (" di prova" if made_up else ""))
     does.append("rileggo tutto dal portale" + ("" if made_up or not preview_check else ", confrontandolo con i tuoi documenti")
@@ -2112,7 +2172,7 @@ def preflight(steps, values, made_up=False, after=False, summarize=True, preview
                 rows = summary_rows(given_steps, given, proposed=set(held))
                 # The card ("Cosa succede"), sent before it, already says what stays theirs: the summary keeps
                 # only the line on picking the files.
-                report |= {"riepilogo": summary_text(rows, end[:1] if report.get("pick") else []), "riepilogo_dettagli": summary_all(rows), "riepilogo_id": summary_id(rows), "riepilogo_rows": rows}
+                report |= {"riepilogo": summary_text(rows, end[:1] if report.get("pick") else [], evidence_text(given)), "riepilogo_dettagli": summary_all(rows), "riepilogo_id": summary_id(rows), "riepilogo_rows": rows}
             else:
                 # The details only the proposals make needed (a proposed second firm's VAT number)
                 # are asked now, with the rest, not after the «ok» in a second message.

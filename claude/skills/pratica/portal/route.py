@@ -432,7 +432,8 @@ def route(table, answers, root=None):
     # the steps file's own title, which says which: «trasferimento di un bar o ristorante», not «Aprire».
     shared = len([e for e in idx[key(m["procedure"], also)] if via_of(e[2]) == via]) > 1
     what = re.sub(r",? SUAP \w+$", "", steps["title"]) if shared and steps.get("title") else run.procedure_name(m["procedure"])
-    report["message"] = "\n".join([f"La pratica: {what}"
+    law = run.basis(table, m["rule"])  # the article is the library's, never Claude's
+    report["message"] = "\n".join([f"La pratica: {what}" + (f" ({law})" if law else "")
                                    + (f", insieme a {', '.join(map(run.procedure_name, also))}" if also else "") + "."]
                                   + report["apart"])
     report.update(routed=True, pratica=name, steps=str(path), answers=carried, asked_again=again)
