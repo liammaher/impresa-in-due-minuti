@@ -1402,6 +1402,7 @@ asks:
   acustica_previsione_data: {type: date, question: "La data in cui è stata presentata al Comune la previsione di impatto acustico"}
   acustica_sorgenti_altro: {type: text, question: "Cosa dichiari sul rumore, in poche parole (350 caratteri al massimo)"}
   locali_invariati: {type: yes_no, question: "I locali del laboratorio non hanno subito modifiche strutturali né di superficie dalla data della precedente autorizzazione?", propose: "true"}
+  estetista_requisito: {type: choice, question: "Con quale titolo l'estetista è responsabile tecnico? qualificazione (la qualificazione professionale di estetista); altro (l'abilitazione della legge n. 1 del 1990, un corso regionale, una scuola professionale, una qualifica estera: per ora non lo preparo)", options: [qualificazione, altro]}
   qualifica_artigiana: {type: choice, question: "Il titolare ha la qualificazione professionale per l'attività come certificato (della Commissione provinciale dell'artigianato presso la Camera di commercio) o come altro titolo professionale?", options: [certificato, altro titolo]}
   qualifica_artigiana_camera: {type: text, question: "La Camera di commercio che ha rilasciato il certificato (es. Napoli)", propose: "Napoli"}
   qualifica_artigiana_data: {type: date, question: "La data del certificato"}
@@ -5797,7 +5798,8 @@ sections:
   - section: Dichiarazioni
     theirs: ["i regolamenti di igiene e sanità", "il regolamento comunale per la disciplina", "le norme sulla sicurezza sui luoghi di lavoro",
              "le norme edilizie, urbanistiche", "la normativa vigente in materia ambientale", "di impegnarsi a comunicare ogni variazione",
-             "di consentire i controlli nei locali"]
+             "di consentire i controlli nei locali",
+             "che non sussistono nei propri confronti le cause di divieto"]
     fields: []
 
   # A hairdresser's or beautician's structural change (variazioni strutturali: the same sections in
@@ -5856,6 +5858,29 @@ sections:
     schema: modulo_acconciatori_estetisti_apertura/scheda_anagrafica
     theirs: ["che non sussistono nei propri confronti le cause di"]
     fields: []
+
+  # The beautician's version (read on the live draft 2026-11-11: estetista-fittizio stopped on "rilasciata da", 0
+  # fields, then on required radios, then on the boxes below). Ticking "di essere Responsabile tecnico" opens a
+  # choice of the qualification, each a radio: the professional qualification (which opens "rilasciata da",
+  # "in data" and "con atto n.", all required), the abilitazione held when law 1/1990 came into force, or "di
+  # essere in possesso di:" with four sub-options (a regional course, a school, one earned abroad, altro). Only
+  # the first is mapped: the others' boxes are unread, so they are refused. Its crawl borrowed the hairdresser's
+  # reveals (`same_as` by the section's fingerprint before any choice), hence `leave`, and lacks the qualification
+  # radio and its three boxes, hence `on_page`. The radio's label is a short prefix: the full text was not found
+  # by label on the page. "che il/i Responsabile/i tecnico/i è/sono:" asks someone else's details: refused.
+  - section: "Dichiarazione sul possesso dei requisiti professionali (attività di estetista)"
+    leave: [di essere in possesso dell'abilitazione professionale, di essere in possesso di qualifica, di avere conseguito la qualificazione professionale,
+            con decreto n., altro, (specificare), Cognome, Nome, in qualità di, che possiede/ono l'abilitazione professionale, Tipologie ammesse]
+    supports:
+      - {value: "{{ask.responsabile_tecnico}}", in: ["true"], else: "Se il responsabile tecnico è un'altra persona, il modulo chiede i suoi dati e un allegato: per ora non lo preparo."}
+      - {value: "{{ask.estetista_requisito}}", in: [qualificazione], else: "Per l'abilitazione conseguita alla data di entrata in vigore della legge n. 1 del 1990 e per i titoli «di essere in possesso di:» (corso regionale, scuola professionale, qualifica estera, altro) il modulo chiede altri dati che non ho ancora letto: per ora non li preparo."}
+    fields:
+      - {kind: "tick", label: "di essere Responsabile tecnico", when: "{{ask.responsabile_tecnico}}"}
+      - {kind: "radio", label: "di essere in possesso della qualificazione", on_page: true, when: "{{ask.responsabile_tecnico}} {{ask.estetista_requisito|is_qualificazione}}"}
+      - {kind: "text", label: "rilasciata da", on_page: true, value: "{{ask.ente_qualifica_professionale}}", when: "{{ask.responsabile_tecnico}} {{ask.estetista_requisito|is_qualificazione}}"}
+      - {kind: "date", label: "in data", on_page: true, value: "{{ask.data_qualifica_professionale|date_it}}", when: "{{ask.responsabile_tecnico}} {{ask.estetista_requisito|is_qualificazione}}"}
+      - {kind: "text", label: "con atto n.", on_page: true, value: "{{ask.atto_qualifica_professionale}}", when: "{{ask.responsabile_tecnico}} {{ask.estetista_requisito|is_qualificazione}}"}
+      - {kind: "tick", label: "che il/i Responsabile/i tecnico/i è/sono:", when: "{{ask.responsabile_tecnico|not}}"}
 
   - section: "Dichiarazione sul possesso dei requisiti professionali (attività di acconciatore)"
     aliases: ["Dichiarazione sul possesso dei requisiti professionali (attività di estetista)"]

@@ -375,6 +375,42 @@ What was left, and why:
 - **The sign with a director of works, the designer's "+" and a second sign or firm**: refused or one mapped (`plus:`).
 - **No rule in the SUAP table** for any of these, as for the deroga: nothing verified in the library to cite.
 
+## The wedge's cells run on the portal (2026-11-11, third round)
+
+The wedge grid (docs/coverage.md) had 34 cells fillable but never run; 33 had no rehearsal at all. Each got one, **derived
+from the closest sibling's recipe** (`bench/derive_recipe.py NEW TEMPLATE CRAWL` does it, then asks pre-flight and answers from the
+values the other rehearsals use; it reproduced a hand-derived recipe byte for byte) (same operation, nearest sector: the shops' from `negozio-*`, the bars' from
+`*-ristorante-*`, the bakery's and food workshop's from `*-panificio-*`, the hairdresser's from the tattooist's and the
+shops'), with the sector and operation labels, the crawl and the title swapped, the sibling's `after:`/`slots` and `rules:`
+dropped (the attachments aren't read; the rules table has no event for a suspension or a change of people, and one recipe
+already holds each of its other cases, so a second would make `route.py` ambiguous), and its own `fixture.json` of the
+family. Pre-flight then listed what each case still asked and the answers came from the values the siblings use (a draft's
+name is 60 characters at most, "PROVA NON INVIARE - " included). 32 of the 34 filled on the portal; recorded in `runs.json`.
+
+What the real runs found (each fixed in the dictionary):
+
+- **A required antimafia checkbox in "Dichiarazioni"** (the hairdresser's take-over): the move's entry named the person's
+  declarations but not "che non sussistono nei propri confronti le cause di divieto"; the run stopped on it. Added to the
+  entry's `theirs` (the two moves' plans are unchanged).
+- **The beautician's "requisiti professionali" is not the hairdresser's.** Its crawl names the same section with the
+  hairdresser's boxes, borrowed by `same_as` (the fingerprint before any choice is the same: two radios), but the live
+  form is another: "di essere Responsabile tecnico" opens a choice of the qualification (the qualification, which opens
+  "rilasciata da", "in data" and "con atto n.", all required; the abilitazione of law 1/1990; "di essere in possesso di:" with
+  four sub-options) and "che il/i Responsabile/i tecnico/i è/sono:" asks someone else's details. The opening and the take-over
+  of an estetista stopped three times on it. The entry maps the qualification only (the others' boxes unread: refused).
+  **A section a crawl shares by `same_as` shows the first pratica's reveals: where the pratica is another trade's, read its
+  draft.** The new radio and its three boxes are `on_page` (the crawl lacks them), the radio's `kind` is `radio`, and its label
+  a short prefix ("di essere in possesso della qualificazione"): the full sentence was "0 fields with this label".
+- **Sessions end.** The portal signed the pane out once (the runner says "signed out ... sign in again": the person's SPID,
+  then the bundle's pick again) and at the end of the day answered every page with an HTTP 500, which left the last two runs
+  (the beautician's opening and take-over) filled on paper only: **fillable, not run**.
+- **The portal's own error page** ("Internal Server Error", HTTP 500 on every page, session intact) is not a sign-out and
+  not "busy": a run met it as a missing document or label. `inpage.js` now stops with "the portal answered an error page ...
+  wait a while, then rerun" (`portalError`, held by test_inpage.py); the pane's stored runner needs `check.js` to take the new
+  one. Rerun when the page comes back: the person's SPID session may still be good.
+- A bundle of more than about 12 runs is split (the pane's storage is near its limit); each bundle costs the person one
+  file pick. 34 cells took three picks, and the beautician's fixes three more.
+
 ## What the portal does that bit us
 
 - **Street names without their particles.** The location's street lookup and the Comune's

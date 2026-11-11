@@ -53,7 +53,8 @@
   class StepError extends Error {}
   // A stop while the frame sits on a sign-in page is the sign-in, whatever failed first.
   const fail = (m) => {
-    throw new StepError(frame && !/^signed out/.test(m) && signedOut() ? `signed out: the portal sent the page to its sign-in (${m}); sign in again, then rerun` : m);
+    throw new StepError(frame && !/^signed out/.test(m) && signedOut() ? `signed out: the portal sent the page to its sign-in (${m}); sign in again, then rerun`
+      : frame && !/^the portal answered/.test(m) && portalError() ? `the portal answered an error page (${m}); wait a while, then rerun` : m);
   };
   // The pane slows timers to a few ticks a second; message events aren't slowed.
   const channel = new MessageChannel(), waiting = [];
@@ -277,6 +278,10 @@
   // An expired sign-in sends the frame to the identity provider (another origin: no document
   // to read) or to a login page: it looked like "the portal stayed busy" for 20 s (2026-10-30).
   const signedOut = () => { try { const d = frame.contentDocument; return !d || /login|spid|idp/i.test(d.location.pathname); } catch (e) { return true; } };
+  // The portal's own server error: a bare page, "Internal Server Error", no title, no menu (HTTP 500 on every page for the whole
+  // evening of 2026-11-11, session intact). Not a sign-out and not "busy": a run met it as a missing document or a label that
+  // wasn't there.
+  const portalError = () => { try { const d = frame.contentDocument; return !!d && !d.querySelector(".content-title, li#corrente") && /^(internal server error|service unavailable|bad gateway|gateway time-?out)/i.test(((d.body || {}).innerText || "").trim()); } catch (e) { return false; } };
 
   // The portal's own "please wait": a visible box saying "Attendere prego" or "Composizione della
   // pratica" (after the wizard), shown while no request may be in flight from this side.
@@ -300,6 +305,7 @@
       const now = performance.now();
       if (working()) last = now;
       if (signedOut() && now - start > 2000) fail("signed out: the portal sent the page to its sign-in (no document to read); sign in again, then rerun");
+      if (portalError() && now - start > 2000) fail("no page to read");
       if (now - last > QUIET) fail(`${why} (nothing happening for ${QUIET / 1000} s)`);
       if (now - start > cap) fail(`${why} (still working after ${Math.round(cap / 60000)} minutes)`);
       await sleep(100);
@@ -311,6 +317,7 @@
     const start = performance.now(), end = start + ms;
     for (let quiet = 0; quiet < 3;) {
       if (signedOut() && performance.now() - start > 2000) fail("signed out: the portal sent the page to its sign-in (no document to read); sign in again, then rerun");
+      if (portalError() && performance.now() - start > 2000) fail("no page to read");
       if (performance.now() > end) fail("the portal stayed busy");
       quiet = busy() ? 0 : quiet + 1;
       await sleep(30);
@@ -1142,7 +1149,8 @@
       report.result = "stopped";
       // Any other read of a frame left on the sign-in's origin throws a SecurityError of its own.
       report.error = e instanceof StepError ? e.message : frame && signedOut()
-        ? `signed out: the portal sent the page to its sign-in (${e.name}); sign in again, then rerun` : `${e.name}: ${e.message}`;
+        ? `signed out: the portal sent the page to its sign-in (${e.name}); sign in again, then rerun`
+        : frame && portalError() ? `the portal answered an error page (${e.name}); wait a while, then rerun` : `${e.name}: ${e.message}`;
       try { report.snapshot = look(); } catch (x) { /* the page is gone */ }
     } finally {
       report.total_seconds = secs();

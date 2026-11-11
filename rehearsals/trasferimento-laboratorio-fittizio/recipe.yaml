@@ -1,0 +1,49 @@
+# Trasferire la sede dell'attività (laboratorio artigianale alimentare (gelateria, pasticceria, pizza al taglio, kebab, etc.) senza attività di vicinato alimentare), as gen.py writes its steps file from the batch crawl
+# (catalogue/F839/sections/suap-005-trasferire-la-sede-dell-attivita.json), for the made-up business of this folder's fixture.json.
+# Derived from rehearsals/trasferimento-panificio-fittizio; no `rules:` (the table has no entry for it, or one recipe already holds the case) and no `after:`: the attachments and payment screens are not read.
+procedure: napoli/comune/scia-panificio
+title: "Trasferire la sede dell'attività, laboratorio alimentare, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-005-trasferire-la-sede-dell-attivita
+subject: impresa
+operation: Trasferire la sede dell'attività
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: ["laboratorio artigianale alimentare (gelateria, pasticceria, pizza al taglio, kebab, etc.) senza attività di vicinato alimentare"], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Trasferire la sede dell'attività"], confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
+asks:
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "trasferimento {{business.denominazione}}"}
+  caldaia: {group: extras, type: yes_no, item: "Forni o riscaldamento sopra i 116 kW, o che bruciano combustibile solido o liquido", why: "Si aggiungono i documenti di prevenzione incendi: un caso che non preparo ancora."}
+  farina: {group: extras, type: yes_no, item: "Più di 300 kg di farina al giorno", why: "Si aggiungono i documenti di prevenzione incendi: un caso che non preparo ancora."}
+  sotterraneo: {group: extras, type: yes_no, item: "Nuovi locali sotterranei o seminterrati", why: "Si aggiunge l'autorizzazione ASL per i locali sotterranei: un caso che non preparo ancora."}
+  insegna_esterna: {group: extras, type: yes_no, item: "Avrai un'insegna esterna nei nuovi locali", why: "Un'insegna esterna include in questa la SCIA dell'insegna: per ora non la preparo."}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (la colonna VCA della tabella 2026 per un laboratorio alimentare con la notifica sanitaria: controllala)"}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti antimafia e quanto garantisce il responsabile della produzione, altre dichiarazioni, art. 75 DPR 445/2000, art. 6 Reg. 852/2004, tasse comunali"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento, e la tariffa forfettaria ASL"
+  - "Allega quanto chiede la schermata degli allegati dopo aver spuntato le dichiarazioni"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+supports:
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
+  - {when: "{{ask.caldaia|not}}", else: "Forni o riscaldamento sopra i 116 kW, o a combustibile solido o liquido, per ora non li preparo: aggiungono la prevenzione incendi."}
+  - {when: "{{ask.farina|not}}", else: "Più di 300 kg di farina al giorno per ora non li preparo: aggiungono la prevenzione incendi."}
+  - {when: "{{ask.sotterraneo|not}}", else: "Locali sotterranei per ora non li preparo: aggiungono l'autorizzazione ASL."}
+  - {when: "{{ask.insegna_esterna|not}}", else: "Un'insegna esterna per ora non la preparo: include in questa la SCIA dell'insegna."}
+  - {when: "{{ask.forno}}", else: "È la pratica di un laboratorio alimentare: devono valere le voci della notifica sui prodotti da forno."}
+  - {when: "{{ask.ristorazione|not}}", else: "La somministrazione non è di un laboratorio alimentare: è la pratica del bar o laboratorio alimentare."}

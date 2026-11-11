@@ -1,0 +1,24 @@
+{
+ "extras": [],
+ "descrizione": "PROVA NON INVIARE - alimentari centro storico generato",
+ "oggetto": "Aprire l'attività: pratica di prova con dati inventati.",
+ "superficie_vendita_mq": "40",
+ "superficie_non_alimentare_mq": "40",
+ "in_centro_commerciale": "false",
+ "diritti_euro": "100",
+ "fatti": [],
+ "stagionale": "false",
+ "solo_distributori": "false",
+ "anche_ingrosso": "false",
+ "superficie_alimentare_mq": "0",
+ "superficie_monopolio_mq": "0",
+ "in_ccn": "false",
+ "in_factory_outlet": "false",
+ "diritti_esente": false,
+ "attivita_852": [
+  "dettaglio_alimenti"
+ ],
+ "bollo_esenzione": "no",
+ "consumo_sul_posto": "false",
+ "bollo_marche": false
+}
