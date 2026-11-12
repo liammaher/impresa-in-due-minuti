@@ -1265,7 +1265,7 @@ sha256; `CATALOGUE_PRIVATE` is checked as on import.
 
 Before: 25 of the 90 SUAP recipes with a recorded run were reached by some case of the library's SUAP table (the other 65 had no
 `rules:`, or were derived without them on purpose: `derive_recipe.py` drops them, since a second recipe for a case one already
-holds makes route.py ambiguous). After: 38 are reached (+ the two beautician recipes not run yet), and each of the other 52 is named,
+holds makes route.py ambiguous). After: 38 are reached (+ the two beautician recipes, run on the portal on 2026-11-12: `estetista-fittizio` 72.5 s and `subingresso-estetista-fittizio` 75 s, both filled and read back), and each of the other 71 (52, and the 19 recipes #114 added the same day) is named,
 with its reason, in `catalogue/F839/suap-unrouted.yaml`; `bench/test_route.py` holds that list to the facts (a SUAP rehearsal is reached
 or listed, and a listed one that gets reached must leave the list). The numbers are recipes, not pratiche on the portal: 90 recipes
 run on 83 pratiche, as coverage.md counts.
@@ -1302,7 +1302,11 @@ What stays unrouted, and why (the registry has each recipe's reason):
   «interventi eventuali» screen (the wizard offers it), so the combination it files is not the table's. A run with the tick would route it.
 
 Findings of the end-to-end case (a made-up shop's messy folder: `bench/dossier_suap.py` plus a copy of the visura under another name, a
-stray listino, a photo, a note, a sub-folder; offline: intake, route.py, pre-flight; on the portal: below):
+stray listino, a photo, a note, a sub-folder; intake, route.py (it routed `negozio-fittizio`), pre-flight (ready after one «ok»), then the run in
+the pane with one file pick, `rerun.py --bundle`): the draft was **filled in 73.6 s, every value read back on a fresh load**, no stop. The portal's
+only warnings were the made-up PEC, address and catasto (every rehearsal gets them). It is not filed in `negozio-fittizio/runs.json`: its answers
+file is the case's, not the rehearsal's. Drift: the shops' and bars' sections were checked unchanged earlier the same day (the paragraph above);
+the beauticians' have no drift record, only these fills.
 
 - A visura camerale carries a REA number and a date of registration; with them the Scheda anagrafica takes the «company in the Registro Imprese»
   branch and the portal looks the codice fiscale up (a made-up one stops there, `made_up_stops`). The rehearsal's values drop `business.rea`,
