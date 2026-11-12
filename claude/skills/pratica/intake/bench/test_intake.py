@@ -340,6 +340,21 @@ def suap_kinds_and_values():
     assert BAR_VALUES["business.forma_giuridica"] == "srl" and BAR_VALUES["locale.destinazione_uso"] == "bar"
 
 
+def suap_made_up_leaves_the_register_out():
+    """A visura camerale carries the REA; a rehearsal's values can't (the portal looks the company up in the Registro Imprese
+    and stops a made-up one, 2026-11-12). Real by default, left out with --made-up; nothing else changes."""
+    assert {"business.rea", "business.cciaa", "business.data_iscrizione_rea"} <= set(SHOP_VALUES)
+    _, fewer, _ = intake.scan_suap(SHOP_DIR, made_up=True)
+    assert not set(intake.REGISTER_FIELDS) & set(fewer) and {k: v for k, v in SHOP_VALUES.items() if k not in intake.REGISTER_FIELDS} == fewer
+    out = TMP / "cli-made-up"
+    p = subprocess.run([PY, "-I", HERE.parent / "intake.py", "scan", SHOP_DIR, "--out", out, "--table", "suap-napoli", "--made-up"],
+                       capture_output=True, text=True)
+    assert p.returncode == 0 and "business.rea" not in json.dumps(json.loads(p.stdout)["filled"]), p.stderr
+    p = subprocess.run([PY, "-I", HERE.parent / "intake.py", "scan", DOSSIER, "--out", TMP / "cli-sue", "--made-up"],
+                       capture_output=True, text=True)
+    assert p.returncode == 1 and "--made-up is for --table suap-napoli" in p.stderr, p.stderr
+
+
 def suap_nothing_personal_for_claude():
     """intake.json and proposed.json are what Claude reads: kinds, field ids, notes, proposals with their source. No codice
     fiscale, birth date, surname, address or business name of anyone in the dossiers, and the private file is 0600."""
@@ -463,7 +478,7 @@ def suap_end_to_end():
 def main():
     tests = [kinds_and_unread, values_match_fixture, nothing_personal_for_claude, both_readers_agree, router_facts, notes, stato_legittimo_titles,
              wrong_account_and_signed_files, parsers, end_to_end, napoli_annexes, accept_never_replaces,
-             suap_kinds_and_values, suap_nothing_personal_for_claude, suap_proposes_only_what_a_document_says,
+             suap_kinds_and_values, suap_made_up_leaves_the_register_out, suap_nothing_personal_for_claude, suap_proposes_only_what_a_document_says,
              suap_negations_read_as_negations, suap_end_to_end]
     try:
         for t in tests:

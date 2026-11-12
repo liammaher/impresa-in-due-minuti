@@ -1172,7 +1172,28 @@ def one_procedure_three_pratiche():
     assert len(keys) == 3, keys
 
 
+def non_food_shops_propose_all_non_food():
+    """A non-food shop's sales area is all non-food (2026-11-12): the dictionary's «0» for «Di cui, m² per tutto il resto» confirmed
+    with an «ok» left the portal's «Non alimentare» box unticked. The seven non-food shop recipes propose the sales area itself."""
+    reh = HERE.parents[4] / "rehearsals"
+    for name in ("negozio-fittizio", "negozio-procura-fittizio", "negozio-insegna-fittizio", "ampliamento-negozio-fittizio",
+                 "trasferimento-negozio-fittizio"):
+        steps = yaml.safe_load((reh / name / "portal-steps.generated.yaml").read_text())
+        assert steps["asks"]["superficie_non_alimentare_mq"]["propose"] == "{{ask.superficie_vendita_mq}}", name
+    steps = yaml.safe_load((reh / "negozio-fittizio" / "portal-steps.generated.yaml").read_text())
+    answers = json.loads((reh / "negozio-fittizio" / "answers.json").read_text())
+    answers.pop("superficie_non_alimentare_mq")
+    fields = dict(json.loads((reh / "negozio-fittizio" / "fixture.json").read_text())["fields"])
+    for sup in ("40", "25"):
+        r = run.preflight(steps, run.Values({**answers, "superficie_vendita_mq": sup}, fields=fields, asks=steps["asks"]), made_up=True)
+        assert [p["proposal"] for p in r["proposals"] if p["key"] == "superficie_non_alimentare_mq"] == [sup], r["proposals"]
+    # A food shop's split is not known from its total: it keeps the dictionary's proposal for the person to correct.
+    food = yaml.safe_load((reh / "alimentari-fittizio" / "portal-steps.generated.yaml").read_text())
+    assert food["asks"]["superficie_non_alimentare_mq"]["propose"] == "0"
+
+
 CASES = [
+    ("a non-food shop proposes its whole sales area as non-food, not the dictionary's 0", non_food_shops_propose_all_non_food),
     ("one procedure's three pratiche (open with a sign, move, enlarge) get three keys in the pane", one_procedure_three_pratiche),
     ("the SCIA with its answers is ready", ready),
     ("run.py scope: the pvault get patterns cover every field the steps read, and only those", vault_scope),

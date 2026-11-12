@@ -1312,8 +1312,17 @@ the beauticians' have no drift record, only these fills.
   branch and the portal looks the codice fiscale up (a made-up one stops there, `made_up_stops`). The rehearsal's values drop `business.rea`,
   `cciaa` and `data_iscrizione_rea`: that branch is unproven with made-up data, only with a real company.
 - The dictionary proposes `0` for «Di cui, m² per tutto il resto (non alimentare)» whatever the shop sells; confirmed with «ok» in a non-food
-  shop, the portal's «Non alimentare» box stays unticked. The intake proposes the sales area there for a non-food shop (ATECO says it), but the
-  proposal in pre-flight is the dictionary's: a non-food recipe should say so itself (not done: the dictionary was in use by the test run).
+  shop, the portal's «Non alimentare» box stays unticked. Fixed in code: the seven non-food shop recipes propose the sales area itself
+  (`asks: superficie_non_alimentare_mq: {propose: "{{ask.superficie_vendita_mq}}"}`, held by `test_preflight`), and the intake proposes it too.
+  A **food** shop keeps `0` and `0`: its split between food and the rest isn't known from its total, and the person says it. Open: with a
+  total and two zeros no category box is ticked there either.
+- A made-up run takes no REA: `intake.py scan --made-up` leaves it out; `rerun.py` names the three fields when it refuses (`test_rerun`).
+- An answers file from outside the rehearsal's folder (an intake's) is named `NAME/answers@elsewhere` and `--record` leaves it out; before,
+  it came back as `NAME/answers`, the name recorded under the rehearsal as its own run (`test_rerun`).
+- `check.js` on a sign-in page says so: the person signs in with SPID and waits for the portal's list of drafts. A sign-in that ends on the
+  provider's home page (Sielte's, 2026-11-12) did not log in, and the portal home then sends back to the sign-in.
+- Two chats must not use the portal at once: one login is one session, and a second chat's runs (or its login) end the first's. The pane's
+  storage and its `pvBatchBusy` guard only one tab.
 - Folders: a sub-folder is skipped (the intake reads the files of the folder only), a copy of a document under another name is read twice and
   the last one wins, a file it can't read (a scan, a photo, a note) is listed as `unread`, and a PDF it can't classify is counted in
   `non_riconosciuti`.

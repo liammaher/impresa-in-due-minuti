@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """From a folder of a job's documents to the vault values and the answers a pratica needs.
 
-  intake.py scan DOSSIER --out OUT [--steps STEPS] [--client SLUG] [--table sue-napoli|suap-napoli]
+  intake.py scan DOSSIER --out OUT [--steps STEPS] [--client SLUG] [--table sue-napoli|suap-napoli [--made-up]]
       Reads every file in DOSSIER (a PDF's text with pdftotext when installed, else its own
       reader; a .p7m's content; a scan or an image has none), tells what each is (a visura, a
       lease, a deed, the relazione, the owner's assent, the notifica preliminare, the drawings,
@@ -862,8 +862,14 @@ def read_cessione(text):
     return w
 
 
-def scan_suap(dossier, steps=None, client=None):
-    """What a business's dossier holds: (report for Claude, private values, proposals). The router's table is suap-napoli."""
+# What the portal checks against a real register: a made-up company with a REA stops the Scheda anagrafica ("Il CF inserito non è
+# presente nel RI", 2026-11-12), so a rehearsal's values leave it out (`--made-up`).
+REGISTER_FIELDS = ("business.rea", "business.cciaa", "business.data_iscrizione_rea")
+
+
+def scan_suap(dossier, steps=None, client=None, made_up=False):
+    """What a business's dossier holds: (report for Claude, private values, proposals). The router's table is suap-napoli.
+    made_up: the dossier is a rehearsal's, so its values leave out what the portal checks against a real register."""
     files = sorted(p for p in Path(dossier).iterdir() if p.is_file() and not p.name.startswith("."))
     report = {"documents": [], "unread": [], "notes": [], "proposals": [], "filled": [], "riconosciuti": [], "non_riconosciuti": 0}
     values, proposals, docs = {}, {"facts": {}, "answers": {}, "people": {}}, {}
@@ -990,6 +996,9 @@ def scan_suap(dossier, steps=None, client=None):
             report["notes"].append({"from": p.name, "note": f"ricevuta di {r['importo'] or '?'} €: i diritti del SUAP si pagano con pagoPA "
                                     "nella schermata di pagamento, quindi il conto della ricevuta non lo verifico"})
 
+    if made_up:
+        for k in REGISTER_FIELDS:
+            values.pop(k, None)
     table = rules.table("suap-napoli")["facts"]
     for key in list(proposals["facts"]):
         if rules.fact_value(table[key], proposals["facts"][key]) is None:
@@ -1020,6 +1029,8 @@ def main():
     s.add_argument("--out", type=Path, required=True)
     s.add_argument("--steps", type=Path, help="the routed pratica's steps file: bind answers and file slots to it")
     s.add_argument("--client", help="the client's vault slug, when no lease or sole owner names them")
+    s.add_argument("--made-up", action="store_true", dest="made_up",
+                   help="suap-napoli: the dossier is a rehearsal's; leave the REA out of the values (the portal checks it against the real register)")
     s.add_argument("--table", choices=["sue-napoli", "suap-napoli"], default="sue-napoli",
                    help="the router's table: a building title's documents (default) or a business's (suap-napoli)")
     a_ = sub.add_parser("accept")
@@ -1032,7 +1043,10 @@ def main():
             if not a.dossier.is_dir():
                 raise run.StepError(f"no folder {a.dossier}")
             steps = rules.load(a.steps) if a.steps else None
-            report, values, proposals = (scan_suap if a.table == "suap-napoli" else scan)(a.dossier, steps, a.client)
+            if a.made_up and a.table != "suap-napoli":
+                raise run.StepError("--made-up is for --table suap-napoli")
+            report, values, proposals = (scan_suap(a.dossier, steps, a.client, a.made_up) if a.table == "suap-napoli"
+                                         else scan(a.dossier, steps, a.client))
             a.out.mkdir(parents=True, exist_ok=True)
             vfile = private_dir(a.out) / "values.json"
             fd = os.open(vfile, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
