@@ -1,6 +1,6 @@
 # Aprire l'attività (Vicinato - settore alimentare consumo immediato (zone tutelate)), as gen.py writes its steps file from the batch crawl
 # (catalogue/F839/sections/suap-018-aprire-l-attivita.json), for the made-up business of this folder's fixture.json.
-# Derived from rehearsals/negozio-fittizio; no `rules:` (the table has no entry for it, or one recipe already holds the case) and no `after:`: the attachments and payment screens are not read.
+# Derived from rehearsals/negozio-fittizio; no `after:`: the attachments and payment screens are not read.
 procedure: napoli/comune/scia-esercizio-vicinato
 title: "Aprire l'attività, negozio alimentare, zone tutelate, SUAP Napoli"
 comune: F839
@@ -44,3 +44,10 @@ supports:
   - {when: "{{ask.in_centro_commerciale|not}}", else: "Un negozio alimentare all'interno di un centro commerciale per ora non lo preparo: Napoli chiede la tipologia del centro."}
   - {when: "{{ask.in_factory_outlet|not}}", else: "Un negozio alimentare in un factory outlet non lo preparo ancora."}
   - {when: "{{ask.superficie_alimentare_mq|positive|not}}", else: "Questa è la pratica del negozio alimentare non alimentare: un negozio alimentare che vende alimenti presenta quella del settore alimentare (con la notifica ai sensi del Reg. 852)."}
+
+# Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides (route.py reaches this file by
+# the table's portal sector and operation, and the facts fixed here).
+rules:
+  table: suap-napoli
+  facts: {attivita: vicinato_alimentare, evento: apertura, consumo_sul_posto: true}
+  handles: [napoli/asl-napoli-1/registrazione-attivita-alimentare]

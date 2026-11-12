@@ -7,7 +7,7 @@ The single list of what the plugin ships, written by `claude/skills/pratica/port
 | | |
 |---|---|
 | Plugin version | 0.7.2 (`plugin/impresa-in-un-minuto/.claude-plugin/plugin.json`) |
-| Repo commit | `ba305a59ffd87f4e5a397019dfc58a0e765fa5ad` plus uncommitted changes |
+| Repo commit | `3adbcb126befa2721e44c8fd47da1ded884de6a1` |
 | Generated | 2026-11-12 |
 | Sportelli shipped | SUE (building works), SUAP (businesses), as `plugin/build.yaml` `sportelli` says |
 | Not shipped | none |
@@ -30,9 +30,9 @@ Per pratica on the portal, as coverage.md counts them:
 | Sportello | Mapped | Fillable | Run on the portal |
 |---|---:|---:|---:|
 | SUE (building works) | 104 | 104 | 102 |
-| SUAP (businesses) | 278 | 174 | 102 |
+| SUAP (businesses) | 278 | 174 | 104 |
 
-The plugin carries 221 steps files for 210 pratiche on the portal (a few steps files share one pratica, filled with other choices); 213 of the 221 have a run that filled the draft. The rows below are per steps file.
+The plugin carries 221 steps files for 210 pratiche on the portal (a few steps files share one pratica, filled with other choices); 215 of the 221 have a run that filled the draft. The rows below are per steps file.
 
 ## Pratiche
 
@@ -79,11 +79,11 @@ The plugin carries 221 steps files for 210 pratiche on the portal (a few steps f
 | `napoli/comune/scia-acconciatore-estetista` | Affitto di poltrona/cabina per esercizio attività di acconciatore e/o estetista | `affitto-poltrona-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/scia-acconciatore-estetista` | Cessare l'attività di acconciatore | `cessazione-acconciatore-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/scia-acconciatore-estetista` | Cessare l'attività di estetista | `cessazione-estetista-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
-| `napoli/comune/scia-acconciatore-estetista` | Aprire l'attività di estetista | `estetista-fittizio` | yes | yes | no | `r3487df` `rc0f612` `rf5a62c` `rf930fc` |
+| `napoli/comune/scia-acconciatore-estetista` | Aprire l'attività di estetista | `estetista-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rf5a62c` `rf930fc` |
 | `napoli/comune/scia-acconciatore-estetista` | Sospendere l'attività di acconciatore | `sospensione-acconciatore-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/scia-acconciatore-estetista` | Sospendere l'attività di estetista | `sospensione-estetista-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/scia-acconciatore-estetista` | Subentrare nell'attività di acconciatore | `subingresso-acconciatore-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
-| `napoli/comune/scia-acconciatore-estetista` | Subentrare nell'attività di estetista | `subingresso-estetista-fittizio` | yes | yes | no | `r3487df` `rc0f612` `rf5a62c` `rf930fc` |
+| `napoli/comune/scia-acconciatore-estetista` | Subentrare nell'attività di estetista | `subingresso-estetista-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rf5a62c` `rf930fc` |
 | `napoli/comune/scia-acconciatore-estetista` | Trasferire la sede dell'attività di acconciatore | `trasferimento-acconciatore-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r88fc60` |
 | `napoli/comune/scia-acconciatore-estetista` | Trasferire la sede dell'attività di estetista | `trasferimento-estetista-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r88fc60` |
 | `napoli/comune/scia-acconciatore-estetista` | Variazioni soggetti in attività di acconciatore | `variazione-soggetti-acconciatore-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |

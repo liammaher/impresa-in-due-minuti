@@ -22,7 +22,7 @@ branch no rehearsal took.
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
 | SUE (building works) | 104 | 104 | 102 | 27 checked, 0 changed |
-| SUAP (businesses) | 278 | 174 | 102 | 5 checked, 0 changed |
+| SUAP (businesses) | 278 | 174 | 104 | 5 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
@@ -32,12 +32,10 @@ By section use (how much of what pratiche show the dictionary fills):
 Rehearsals with no recorded run (written, never confirmed on the portal):
 
 - `dehors-fittizio`
-- `estetista-fittizio`
 - `parere-esonero-fittizio`
 - `pdc-sanatoria-accertamento-fittizio`
 - `ristorante-alcolici-fittizio`
 - `sospensione-srl-fittizia`
-- `subingresso-estetista-fittizio`
 
 SUAP pratiche one or two sections short of fillable (the cheapest gaps):
 
@@ -216,25 +214,27 @@ What a Napoli architect or pratiche agency files again and again, so what has to
 |---|---|---|---|---|---|---|---|
 | Bakery (panificio) | run | run | run | run | run | run | run |
 | Food workshop (pizza al taglio, gelateria) | run | run | run | - | run | - | - |
-| Hairdresser (acconciatore) | run | run | run | run | run | run | run |
-| Beautician (estetista) | fill | fill | run | run | run | run | run |
-| Shop, non-food | run | run | run | run | run | run | run |
-| Shop, food or mixed | run | run | run | run | run | run | run |
-| Shop, food eaten on the spot (protected zones) | run | run | run | - | run | run | run |
-| B&B, affittacamere (extralberghiere) | run | - | run | run | - | - | - |
-| Bar / restaurant, normal zones | run | run | run | run | run | run | - |
-| Bar / restaurant, protected zones (centro storico) | run | run | run | - | run | run | run |
+| Hairdresser (acconciatore) | run | run* | run* | run | run* | run | run* |
+| Beautician (estetista) | run* | run* | run* | run | run* | run | run* |
+| Shop, non-food | run* | run* | run* | run | run* | run | run* |
+| Shop, food or mixed | run* | run* | run* | run | run* | run | run* |
+| Shop, food eaten on the spot (protected zones) | run* | run | run* | - | run* | run | run* |
+| B&B, affittacamere (extralberghiere) | run* | - | run | run | - | - | - |
+| Bar / restaurant, normal zones | run* | run* | run* | run | run* | run | - |
+| Bar / restaurant, protected zones (centro storico) | run* | run | run* | - | run* | run | run |
 
-`run` = run on the portal; `fill` = fillable, never run; `map` = crawled, sections missing from the dictionary; `crawl` = not crawled; `-` = the sector doesn't offer it.
+`run` = run on the portal; `fill` = fillable, never run; `map` = crawled, sections missing from the dictionary; `crawl` = not crawled; `-` = the sector doesn't offer it; `*` = a case of the rules table reaches this pratica's steps file (`bench/test_route.py`).
 
-Of 60 cells: **58 run, 2 fillable but not run, 0 need dictionary work, 0 not crawled yet.**
+Routing (the library's SUAP table): of 757 cases, **73 reach a steps file**, 495 are refused with a reason or need no pratica, 189 have no steps file yet (31 combinations of pratiche, mostly an outside sign, a dehors, music or fire prevention filed with an opening). 40 steps files are reached; the others with a run are listed with their reason in `catalogue/F839/suap-unrouted.yaml`.
+
+Of 60 cells: **60 run, 0 fillable but not run, 0 need dictionary work, 0 not crawled yet.**
 
 Also in the wedge: the dehors (fillable, never run), the outside sign and the alcohol notice as ticks inside an opening (their rehearsals have no recorded run), and the sectors' own notices (food safety, sanitary).
 
 ### What each gap needs
 
-- **2 cells to run**: run it in the pane with made-up people (40-150 s; needs Liam logged in).
+- **0 cells to run**: run it in the pane with made-up people (40-150 s; needs Liam logged in).
 - **0 cells to map**: add the missing sections to the dictionary (draft.py drafts them; a person checks).
 - **0 cells to crawl**: crawl it in the pane on the scratch draft (20-60 s each; needs Liam logged in).
-- **Every cell**: the legal choice of which pratica a case needs (the library's rules table covers shops, bars and restaurants, hairdressers and beauticians and B&Bs; the bakery, the food workshop and moving premises have no entry in it), and a real case run past someone who knows the pratica.
+- **Every cell**: the legal choice of which pratica a case needs (the library's rules table covers the opening, move, enlargement, take-over and closure of shops, bars and restaurants, hairdressers and beauticians, and the opening of a B&B; a suspension and a change of people are refused with a reason, since no read source gives their regime; the bakery, the food workshop and the tattooist have no entry), and a real case run past someone who knows the pratica.
 

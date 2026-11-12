@@ -120,6 +120,9 @@ SHORT = {4: "Bakery (panificio)", 5: "Food workshop (pizza al taglio, gelateria)
          61: "Bar / restaurant, protected zones (centro storico)"}
 
 
+CELL_NAMES = {}  # wedge(): each cell's pratica name, for the routing mark
+
+
 def wedge_rows(wiz):
     """(label, sector index, the operation slug of each WEDGE_OPS column)."""
     rows = []
@@ -132,6 +135,23 @@ def wedge_rows(wiz):
         else:
             rows.append((name, i, [op for op, _ in WEDGE_OPS]))
     return rows
+
+
+@functools.lru_cache(maxsize=None)
+def suap_routing():
+    """The SUAP rules table walked as bench/test_route.py walks it: the cases that reach a steps file, are refused or
+    are not mapped yet, and the crawls of the recipes some case reaches (a recipe with a recorded run that no case
+    reaches is listed with its reason in catalogue/F839/suap-unrouted.yaml)."""
+    cov = route.coverage("suap-napoli", REHEARSALS)
+    idx, reached = route.index("suap-napoli", REHEARSALS), set()
+    for facts, d in route.cases("suap-napoli"):
+        if not (d["refused"] or d["none"]):
+            for via in (None, "procura"):
+                hit = route.find(idx, d, facts, via)
+                if hit:
+                    reached.add(hit[0])
+    crawl = {n: v["crawl"] for n, v in rehearsal_status().items()}
+    return {**cov, "reached": reached, "reached_crawls": {crawl[n] for n in reached if crawl.get(n)}}
 
 
 def wedge(status, ran):
@@ -152,11 +172,14 @@ def wedge(status, ran):
                     blockers.setdefault(m, set()).add(name)
             else:
                 cells[label, col] = "done" if name in ran else "run"
+            CELL_NAMES[label, col] = name
     return wiz, cells, blockers
 
 
 def wedge_text(status, ran):
     wiz, cells, blockers = wedge(status, ran)
+    routing = suap_routing()
+    routed_cells = {name for name in CELL_NAMES.values() if name in routing["reached_crawls"]}
     count = lambda v: sum(1 for x in cells.values() if x == v)
     n = len(cells) - count("none")
     d = WEDGE_COMMON[0]
@@ -174,9 +197,17 @@ def wedge_text(status, ran):
             "|---|" + "---|" * len(WEDGE_OPS)]
     for label_full, _, ops in wedge_rows(wiz):
         label = label_full if len(label_full) < 60 else label_full[:57] + "..."
-        out.append(f"| {label} | " + " | ".join(SYMBOL[cells[label_full, col]] for col in range(len(ops))) + " |")
+        out.append(f"| {label} | " + " | ".join(
+            SYMBOL[cells[label_full, col]] + ("*" if CELL_NAMES.get((label_full, col)) in routed_cells else "")
+            for col in range(len(ops))) + " |")
     out += ["", "`run` = run on the portal; `fill` = fillable, never run; `map` = crawled, sections missing from the "
-            "dictionary; `crawl` = not crawled; `-` = the sector doesn't offer it.", "",
+            "dictionary; `crawl` = not crawled; `-` = the sector doesn't offer it; `*` = a case of the rules table "
+            "reaches this pratica's steps file (`bench/test_route.py`).", "",
+            f"Routing (the library's SUAP table): of {routing['cases']} cases, **{routing['routed']} reach a steps file**, "
+            f"{routing['refused']} are refused with a reason or need no pratica, {sum(n for _, n in routing['unmapped'])} "
+            f"have no steps file yet ({len(routing['unmapped'])} combinations of pratiche, mostly an outside sign, a dehors, "
+            f"music or fire prevention filed with an opening). {len(routing['reached'])} steps files are reached; "
+            "the others with a run are listed with their reason in `catalogue/F839/suap-unrouted.yaml`.", "",
             f"Of {n} cells: **{count('done')} run, {count('run')} fillable but not run, {count('map')} need "
             f"dictionary work, {count('crawl')} not crawled yet.**", "",
             f"Also in the wedge: the dehors ({dehors}), the outside sign and the alcohol notice as ticks "
@@ -186,9 +217,11 @@ def wedge_text(status, ran):
     for key in ("run", "map", "crawl"):
         out.append(f"- **{count(key)} cells to {key}**: "
                    + NEEDS[key] + ".")
-    out += ["- **Every cell**: the legal choice of which pratica a case needs (the library's rules table covers shops, "
-            "bars and restaurants, hairdressers and beauticians and B&Bs; the bakery, the food workshop and "
-            "moving premises have no entry in it), and a real case run past someone who knows the pratica.", ""]
+    out += ["- **Every cell**: the legal choice of which pratica a case needs (the library's rules table covers the opening, "
+            "move, enlargement, take-over and closure of shops, bars and restaurants, hairdressers and beauticians, and "
+            "the opening of a B&B; a suspension and a change of people are refused with a reason, since no read source "
+            "gives their regime; the bakery, the food workshop and the tattooist have no entry), and a real case run "
+            "past someone who knows the pratica.", ""]
     if blockers:
         out += ["Sections that block the most wedge cells (the cheapest way to turn `map` into `fill`):", ""]
         for m, cs in sorted(blockers.items(), key=lambda kv: -len(kv[1]))[:8]:

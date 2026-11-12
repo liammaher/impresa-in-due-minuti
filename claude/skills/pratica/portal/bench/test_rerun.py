@@ -108,6 +108,45 @@ def _():
     tmp.write_text(json.dumps(fixture))
     msg, q = batch(OWN, values=tmp)
     assert msg and "made-up data can't pass" in msg and q is None, msg
+    # It says what to leave out (2026-11-12: a visura camerale's REA stopped a shop's made-up run, and the message had to be read twice).
+    assert "business.rea" in msg and "business.cciaa" in msg and "data_iscrizione_rea" in msg, msg
+
+
+@case("an answers file outside the rehearsal's folder is another case, named so that --record skips it (2026-11-12)")
+def _():
+    # A messy folder's case, answers.json in a scratch folder: by its name alone it was `negozio-fittizio/answers`, the name
+    # --record files under the rehearsal as its own run.
+    other = Path(tempfile.mkdtemp()) / "answers.json"
+    shutil.copy(REH / "negozio-fittizio" / "answers.json", other)
+    msg, q = batch(f"negozio-fittizio:{other}", values=REH / "negozio-fittizio" / "fixture.json")
+    assert msg is None and q, msg
+    assert "negozio-fittizio/answers@elsewhere" in q, q[:200]
+    real = rerun.REHEARSALS
+    tmp = Path(tempfile.mkdtemp())
+    (tmp / "negozio-fittizio").mkdir()
+    (tmp / "negozio-fittizio" / "answers.json").write_text("{}")
+    rerun.REHEARSALS = tmp
+    try:
+        with redirect_stdout(io.StringIO()):
+            rerun.record([{"name": "negozio-fittizio/answers@elsewhere", "result": "filled", "total_seconds": 7.0}], "answers-p6.json", "2026-11-12")
+        assert not (tmp / "negozio-fittizio" / "runs.json").exists(), "an answers file from elsewhere is not the rehearsal's run"
+    finally:
+        rerun.REHEARSALS = real
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+@case("check.js on a sign-in page says to sign in, and that a provider's home page is not a sign-in (2026-11-12)")
+def _():
+    import subprocess
+    msg, q = batch("ristorante-fittizio")
+    check = (batch.out / "check.js").read_text()
+    assert "this page is a sign-in" in check and "sielte" in check and "did not log in" in check, check[-900:]
+    node = shutil.which("node")
+    if node:  # run it as the pane would, on a page of the SPID provider's
+        js = "const location={origin:'https://identity.sieltecloud.it',hostname:'identity.sieltecloud.it'};const localStorage={getItem:()=>null};" \
+             "const crypto=require('crypto').webcrypto;const TextEncoder=globalThis.TextEncoder;(" + check.strip() + ").then(r=>console.log(r))"
+        out = subprocess.run([node, "-e", js], capture_output=True, text=True).stdout
+        assert "go to https://suap.impresainungiorno.gov.it first" in out and "sign-in" in out, out
 
 
 @case("record: a SUAP rehearsal's run is filed under its own answers file, once")

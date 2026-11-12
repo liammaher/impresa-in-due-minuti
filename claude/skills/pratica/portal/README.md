@@ -1261,6 +1261,76 @@ crawled whole at that depth too (minutes each); keep the store. A section whose 
 changed is refused: crawl the pratica again. Export with a download (the person's yes), checked by
 sha256; `CATALOGUE_PRIVATE` is checked as on import.
 
+## Routing the SUAP's run pratiche, and the intake of a business's documents (2026-11-12)
+
+Before: 25 of the 90 SUAP recipes with a recorded run were reached by some case of the library's SUAP table (the other 65 had no
+`rules:`, or were derived without them on purpose: `derive_recipe.py` drops them, since a second recipe for a case one already
+holds makes route.py ambiguous). After: 38 are reached (+ the two beautician recipes, run on the portal on 2026-11-12: `estetista-fittizio` 72.5 s and `subingresso-estetista-fittizio` 75 s, both filled and read back), and each of the other 71 (52, and the 19 recipes #114 added the same day) is named,
+with its reason, in `catalogue/F839/suap-unrouted.yaml`; `bench/test_route.py` holds that list to the facts (a SUAP rehearsal is reached
+or listed, and a listed one that gets reached must leave the list). The numbers are recipes, not pratiche on the portal: 90 recipes
+run on 83 pratiche, as coverage.md counts.
+
+How a derived recipe is made reachable (rules in `library/rules/suap-napoli.yaml`, recipes' `rules:`):
+
+- A rule that names the portal's sector and operation (`portal`) picks the recipe by its wizard (`run.at_portal`); a rule that names
+  none lets every steps file of its procedure through and the recipes' fixed facts (`attivita`, `evento`, and the yes/no ones) tell them
+  apart. Two things were missing and are now in the table: the enlargement of a bar or restaurant names its sector and operation
+  (zone C «Ampliamento di superficie», zones A and B «Variazioni strutturali»), and a food shop's closure is split by consumption on
+  the spot as the other events are (sector «Alimentare o Misto», or «consumo immediato (zone tutelate)»).
+- `main:` in the recipe's `rules:` when the portal files the pratica under the sector's own procedure id: the hairdresser's and
+  beautician's closure are filed as «Cessare l'attività di acconciatore», recipe procedure `scia-acconciatore-estetista`, while the table's
+  main is `cessazione-attivita-commerciale`.
+- The yes/no facts a recipe fixes choose among recipes of one procedure: the food shop's opening, enlargement and take-over fix
+  `consumo_sul_posto: false`, the protected zones' fix `true`. A food shop with consumption in zone C (the table sends it to the same
+  sector as one without) has no recipe: it is not mapped, since no run of it exists.
+
+What stays unrouted, and why (the registry has each recipe's reason):
+
+- **Suspension and change of people** (`evento: sospensione`, `variazione_soggetti`), 7 + 9 recipes, all run on the portal: the table
+  now has both events and refuses them (`sospensione-non-coperta`, `variazione-soggetti-non-coperta`) with what the person does
+  (ask the SUAP, or file it on the portal themselves at «Sospendere l'attività» / «Variazioni soggetti»). L.R. Campania 7/2020 (the PDF
+  of `lr7-allegati`, sha256 checked against the library's, read with pdftotext on 2026-11-12) has for a suspension only the revocation of
+  the title after a year (art. 145 c. 10-11); the Allegato A table, which gives each event's regime, has no text in the PDF (graphics), and
+  no library procedure describes either filing with sources. The Campania form «Comunicazione di cessazione o sospensione temporanea»
+  (`modulo-cessazione`) shows that a suspension is a comunicazione, but not who must file it, when, or what else goes with it, and a rule
+  claims nothing of its own.
+- **Not in the table's activities** and with no library procedure: bakery, food workshop, tattooist or piercer, medium structure, hours'
+  derogation, chair rental, department, temporary shops. Their recipes' procedure ids (`scia-panificio`, ...) name no page of
+  `library/procedures/`.
+- **Refused by the table** with a reason (alcohol, a take-over in zones A and B, a B&B that is not an opening, over 250 m² of sales area).
+- **The enlargement of a bar in zones A and B**: the table adds the acoustic nulla osta there, the recipe's run did not tick it in the
+  «interventi eventuali» screen (the wizard offers it), so the combination it files is not the table's. A run with the tick would route it.
+
+Findings of the end-to-end case (a made-up shop's messy folder: `bench/dossier_suap.py` plus a copy of the visura under another name, a
+stray listino, a photo, a note, a sub-folder; intake, route.py (it routed `negozio-fittizio`), pre-flight (ready after one «ok»), then the run in
+the pane with one file pick, `rerun.py --bundle`): the draft was **filled in 73.6 s, every value read back on a fresh load**, no stop. The portal's
+only warnings were the made-up PEC, address and catasto (every rehearsal gets them). It is not filed in `negozio-fittizio/runs.json`: its answers
+file is the case's, not the rehearsal's. Drift: the shops' and bars' sections were checked unchanged earlier the same day (the paragraph above);
+the beauticians' have no drift record, only these fills.
+
+- A visura camerale carries a REA number and a date of registration; with them the Scheda anagrafica takes the «company in the Registro Imprese»
+  branch and the portal looks the codice fiscale up (a made-up one stops there, `made_up_stops`). The rehearsal's values drop `business.rea`,
+  `cciaa` and `data_iscrizione_rea`: that branch is unproven with made-up data, only with a real company.
+- The dictionary proposes `0` for «Di cui, m² per tutto il resto (non alimentare)» whatever the shop sells; confirmed with «ok» in a non-food
+  shop, the portal's «Non alimentare» box stays unticked. Fixed in code: the seven non-food shop recipes propose the sales area itself
+  (`asks: superficie_non_alimentare_mq: {propose: "{{ask.superficie_vendita_mq}}"}`, held by `test_preflight`), and the intake proposes it too.
+  A **food** shop keeps `0` and `0`: its split between food and the rest isn't known from its total, and the person says it. Open: with a
+  total and two zeros no category box is ticked there either.
+- A made-up run takes no REA: `intake.py scan --made-up` leaves it out; `rerun.py` names the three fields when it refuses (`test_rerun`).
+- An answers file from outside the rehearsal's folder (an intake's) is named `NAME/answers@elsewhere` and `--record` leaves it out; before,
+  it came back as `NAME/answers`, the name recorded under the rehearsal as its own run (`test_rerun`).
+- `check.js` on a sign-in page says so: the person signs in with SPID and waits for the portal's list of drafts. A sign-in that ends on the
+  provider's home page (Sielte's, 2026-11-12) did not log in, and the portal home then sends back to the sign-in.
+- Two chats must not use the portal at once: one login is one session, and a second chat's runs (or its login) end the first's. The pane's
+  storage and its `pvBatchBusy` guard only one tab.
+- Folders: a sub-folder is skipped (the intake reads the files of the folder only), a copy of a document under another name is read twice and
+  the last one wins, a file it can't read (a scan, a photo, a note) is listed as `unread`, and a PDF it can't classify is counted in
+  `non_riconosciuti`.
+
+The SUAP intake (`intake.py scan --table suap-napoli`, intake/README.md) reads a visura camerale, a lease, the Agenzia's visura of the unit,
+a relazione descrittiva dei locali and the deed of a take-over, with the SUE's privacy contract. Its dossiers are made up (`dossier_suap.py`):
+a real visura camerale's layout is not public, and the first real one is the test that counts.
+
 ## A tecnico filing the SUAP's pratica with a procura
 
 A tecnico files for a client business with a procura speciale (a commercialista, a geometra, an agenzia): the same

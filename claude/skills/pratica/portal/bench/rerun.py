@@ -210,6 +210,11 @@ def main():
         label = f"{name}/{Path(answers).stem}" if answers != usual or own else name
         if own:
             label += f"@{Path(own).stem}"
+        # An answers file outside the rehearsal's folder (an intake's, a messy folder's case) is another case, whatever its
+        # name: `answers.json` there is not the rehearsal's own, so its result must not be filed as the rehearsal's run
+        # (2026-11-12: a shop case came back as `negozio-fittizio/answers`, the name --record files under the rehearsal).
+        if not (d / answers).resolve().is_relative_to(d.resolve()):
+            label = f"{name}/{Path(answers).stem}@elsewhere" if "@" not in label else label
         steps_file = d / "portal-steps.generated.yaml"
         if not steps_file.exists():
             steps_file = d / "portal-steps.yaml"
@@ -225,7 +230,9 @@ def main():
             continue
         stops = ready.get("made_up_stops")
         if stops:
-            failed.append(f"{label}: made-up data can't pass {'; '.join(stops)}")
+            failed.append(f"{label}: made-up data can't pass {'; '.join(stops)}"
+                          + (" (a made-up run takes no REA: leave business.rea, business.cciaa and business.data_iscrizione_rea "
+                             "out of its values, or intake.py scan --made-up)" if any("Registro Imprese" in x for x in stops) else ""))
             continue
         try:
             # Made-up files: no slot that takes only signed files (the portal refuses the signature).

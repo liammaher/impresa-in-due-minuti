@@ -1,7 +1,7 @@
 schema_version: 0
 id: suap-napoli
 title: "SUAP di Napoli: quale pratica presentare per un negozio, un bar o ristorante, un acconciatore o un B&B"
-updated: 2026-11-10
+updated: 2026-11-12
 intro: >-
   Da poche risposte sull'attività (che cosa è, che cosa succede, dove si trova) alle pratiche da
   presentare al SUAP di Napoli e al loro regime. Ogni regola rimanda a quanto è verificato nella
@@ -26,6 +26,8 @@ facts:
       ampliamento: "Si ingrandisce la superficie"
       subingresso: "Un'altra impresa la rileva, per cessione o affitto d'azienda"
       cessazione: "Chiude"
+      sospensione: "Si ferma per un periodo, senza chiudere"
+      variazione_soggetti: "Cambia una persona dell'impresa (legale rappresentante, preposto, soci), senza cambiare impresa"
   zona:
     type: choice
     question: "In quale zona del Piano del Comune si trova il locale?"
@@ -92,7 +94,11 @@ rules:
     status: verified
   - id: somministrazione-ampliamento-zona-c
     when: {attivita: [somministrazione], evento: [ampliamento], zona: [c]}
-    then: {role: main, procedure: napoli/comune/scia-somministrazione-alimenti-bevande, regime: scia}
+    then:
+      role: main
+      procedure: napoli/comune/scia-somministrazione-alimenti-bevande
+      regime: scia
+      portal: {settore: "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate", operazione: "Ampliamento di superficie"}
     cites: [{procedure: napoli/comune/scia-somministrazione-alimenti-bevande, source: piano-2026}]
     status: verified
   - id: somministrazione-apertura-zone-tutelate
@@ -115,7 +121,11 @@ rules:
     status: verified
   - id: somministrazione-ampliamento-zone-tutelate
     when: {attivita: [somministrazione], evento: [ampliamento], zona: [a, b], somministrazione_particolare: false}
-    then: {role: main, procedure: napoli/comune/scia-somministrazione-alimenti-bevande, regime: autorizzazione}
+    then:
+      role: main
+      procedure: napoli/comune/scia-somministrazione-alimenti-bevande
+      regime: autorizzazione
+      portal: {settore: "Esercizio di somministrazione di alimenti e bevande in zone tutelate", operazione: "Variazioni strutturali"}
     cites: [{procedure: napoli/comune/scia-somministrazione-alimenti-bevande, source: piano-2026}]
     status: verified
   - id: somministrazione-particolare-zone-tutelate
@@ -294,9 +304,31 @@ rules:
       portal: {settore: "Vicinato - settore merceologico NON alimentare", operazione: "Cessare l'attività"}
     cites: [{procedure: napoli/comune/cessazione-attivita-commerciale, source: lr7-pdf}]
     status: verified
-  - id: vicinato-cessazione-alimentare
-    when: {attivita: [vicinato_alimentare], evento: [cessazione], superficie_vendita_mq: {upto: 250}}
-    then: {role: main, procedure: napoli/comune/cessazione-attivita-commerciale, regime: comunicazione}
+  - id: vicinato-cessazione-alimentare-senza-consumo
+    when: {attivita: [vicinato_alimentare], evento: [cessazione], superficie_vendita_mq: {upto: 250}, consumo_sul_posto: false}
+    then:
+      role: main
+      procedure: napoli/comune/cessazione-attivita-commerciale
+      regime: comunicazione
+      portal: {settore: "Vicinato - settore merceologico Alimentare o Misto", operazione: "Cessare l'attività"}
+    cites: [{procedure: napoli/comune/cessazione-attivita-commerciale, source: lr7-pdf}]
+    status: verified
+  - id: vicinato-cessazione-alimentare-consumo-zona-c
+    when: {attivita: [vicinato_alimentare], evento: [cessazione], superficie_vendita_mq: {upto: 250}, consumo_sul_posto: true, zona: [c]}
+    then:
+      role: main
+      procedure: napoli/comune/cessazione-attivita-commerciale
+      regime: comunicazione
+      portal: {settore: "Vicinato - settore merceologico Alimentare o Misto", operazione: "Cessare l'attività"}
+    cites: [{procedure: napoli/comune/cessazione-attivita-commerciale, source: lr7-pdf}]
+    status: verified
+  - id: vicinato-cessazione-alimentare-consumo-zone-tutelate
+    when: {attivita: [vicinato_alimentare], evento: [cessazione], superficie_vendita_mq: {upto: 250}, consumo_sul_posto: true, zona: [a, b]}
+    then:
+      role: main
+      procedure: napoli/comune/cessazione-attivita-commerciale
+      regime: comunicazione
+      portal: {settore: "Vicinato - settore alimentare consumo immediato (zone tutelate)", operazione: "Cessare l'attività"}
     cites: [{procedure: napoli/comune/cessazione-attivita-commerciale, source: lr7-pdf}]
     status: verified
   - id: vicinato-dehors
@@ -372,6 +404,21 @@ rules:
   - id: bed-and-breakfast-altro
     when: {attivita: [bed_and_breakfast], evento: [trasferimento, ampliamento, subingresso, cessazione]}
     then: {refuse: "Per un B&B la libreria copre solo l'apertura."}
+    status: verified
+
+  # --- Eventi che il portale ha e la libreria non copre ---
+  # Il portale ha per ogni settore «Sospendere l'attività» e «Variazioni soggetti», ma nessuna procedura della
+  # libreria li descrive con fonti: la legge regionale (L.R. 7/2020, letta in locale 2026-11-12) fissa solo che il
+  # titolo di un esercizio commerciale è revocato se l'attività resta sospesa oltre un anno (art. 145, c. 10-11), e
+  # la tabella dei regimi dell'Allegato A, che dice come si comunica una sospensione, non ha testo leggibile nel PDF.
+  # Finché un testo letto non lo dice, la regola rifiuta, con quello che la persona può fare.
+  - id: sospensione-non-coperta
+    when: {evento: [sospensione]}
+    then: {refuse: "La comunicazione di sospensione temporanea non è ancora nella libreria: la legge regionale fissa solo che oltre un anno di sospensione il titolo è revocato, e il regime della comunicazione non è verificato. Va chiesta al SUAP, o presentata tu stesso dal portale, all'operazione «Sospendere l'attività» del tuo settore."}
+    status: verified
+  - id: variazione-soggetti-non-coperta
+    when: {evento: [variazione_soggetti]}
+    then: {refuse: "La comunicazione di una variazione di persone (legale rappresentante, preposto, soci) non è ancora nella libreria: nessuna procedura ne descrive con fonti il regime. Va chiesta al SUAP, o presentata tu stesso dal portale, all'operazione «Variazioni soggetti» del tuo settore."}
     status: verified
 
   # --- Per tutti ---

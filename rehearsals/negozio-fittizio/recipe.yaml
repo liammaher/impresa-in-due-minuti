@@ -26,6 +26,8 @@ groups:
   extras:
     question: "Qualcuna di queste voci vale per il negozio? Spunta tutte quelle che valgono, o nessuna."
 asks:
+  # A non-food shop's sales area is all non-food: the dictionary's «0» left the portal's «Non alimentare» box unticked (2026-11-12).
+  superficie_non_alimentare_mq: {propose: "{{ask.superficie_vendita_mq}}"}
   altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
   descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "negozio {{business.denominazione}}"}
   alcolici: {group: extras, type: yes_no, item: "Venderà bevande alcoliche", why: "La vendita di alcolici comporta la comunicazione alle Dogane: un caso che non preparo ancora."}

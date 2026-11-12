@@ -49,3 +49,9 @@ supports:
   - {when: "{{ask.insegna_esterna|not}}", else: "Un'insegna esterna per ora non la preparo: include in questa la SCIA dell'insegna."}
   - {when: "{{ask.servizi|not}}", else: "Piscina, centro estetico, palestra o negozio non sono ancora gestiti."}
   - {when: "{{ask.colazione|is_nessuna}}", else: "Gli alimenti per gli ospiti non sono ancora gestiti: aggiungono la somministrazione agli ospiti (e, se preparati, la notifica Reg. 852)."}
+
+# Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides (route.py reaches this file by
+# the table's portal sector and operation, and the facts fixed here).
+rules:
+  table: suap-napoli
+  facts: {attivita: bed_and_breakfast, evento: apertura}

@@ -24,6 +24,31 @@ a complete folder (`riepilogo`) can say where every answer comes from.
 With no lease, a visura with one owner makes that owner the client (`proprietario` at 1/1, else
 `comproprietario`). `--client SLUG` names the client when the documents don't.
 
+## The SUAP's documents (`--table suap-napoli`, 2026-11-12)
+
+A business's pratica reads other documents. Same contract: the business's and its people's values go to
+`OUT/private/values.json`, Claude reads `intake.json`, the person confirms the proposals with `accept`.
+
+| Document | Read for |
+|---|---|
+| Visura camerale (Registro delle Imprese) | `business.*` (denominazione, forma giuridica, codice fiscale, partita IVA, REA and CCIAA, PEC, the dates, ATECO, the activity, the registered office); each person with a carica as `<first name>:identity.*`, `residenza.*` and `ruolo.*`; the router's `attivita` from the ATECO code (a proposal: the code proves nothing about the premises) and `altri_soggetti` from how many people have cariche |
+| Lease or comodato of the premises | `locale.*`: address, CAP, catasto, the use, the term's start, `locale.titolo` |
+| Visura catastale of the unit | `locale.catasto_*` and the surface; its identifiers win over the lease's |
+| Relazione descrittiva dei locali | the sales area, consumption on the spot, sign, music, dehors, alcohol, fire prevention (a "no" only from an explicit sentence: «non è prevista alcuna insegna»), and `oggetto` |
+| Deed of sale or rental of a business | `evento: subingresso`, the one event a document can say |
+| Certificato di agibilità, ricevuta pagoPA, identity card | a note with its estremi; the files' slots |
+
+What no document says is asked: the event of a new business (opens, moves, enlarges, closes), the zone of
+the Piano (it is on the Comune's map, not in a folder), the declarations, the diritti. The slug of a person is
+their first name, as in the vault (the visura writes SURNAME NAME).
+
+**The test dossiers are made up** (`bench/dossier_suap.py`): no real visura camerale, commercial lease or
+relazione descrittiva is public. The visura follows the headings of the Camera di Commercio's «visura ordinaria»
+as the maintainer remembers them, one `label: value` per line; a real one may lay its text out otherwise, and
+the first real visura camerale is the test that counts. Not covered yet: a statuto or atto costitutivo (the
+visura carries what the pratica asks), a DIA/SCIA of the previous holder, a planimetria's own dimensions, a
+company's other administrators' documents.
+
 ## Privacy
 
 People's data goes from the files to `OUT/private/values.json` (0600, its folder 0700), the format
@@ -55,7 +80,7 @@ use; a relazione worded otherwise proposes less, never something else.
 
 ## Tests
 
-`bench/test_intake.py` (the pratica venv's Python; no network, vault or browser): the P6 dossier's
+`bench/test_intake.py` (the pratica venv's Python; no network, vault or browser; the SUAP's tests last, on `bench/dossier_suap.py`'s shop and bar: kinds, values against `rehearsals/negozio-fittizio/fixture.json`, no codice fiscale, birth date, surname or address in `intake.json`, the facts with their words, negations, and the path scan, route.py, pre-flight): the P6 dossier's
 kinds (Napoli's annexes too), its values against `rehearsals/cila-fittizia/fixture-p6.json`, nothing personal in
 `intake.json`, both PDF readers alike, the router's facts, the deed's titles, a receipt paid
 elsewhere, a signed .p7m, the owners' cases, and the whole path: scan, accept, route, scan against

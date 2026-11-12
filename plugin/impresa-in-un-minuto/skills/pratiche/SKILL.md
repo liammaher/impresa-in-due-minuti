@@ -336,6 +336,15 @@ relazione, ricevute) and says the words each value comes from:
 sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/intake/intake.py" scan docs --out run/intake --steps "${CLAUDE_SKILL_DIR}/pratiche/<name>.json"
 ```
 
+<!-- suap -->
+For a business's documents (the Camera di Commercio's visura camerale, the lease of the premises, the
+Agenzia's visura of the unit, the relazione descrittiva dei locali, the deed of a take-over) add
+`--table suap-napoli`, before and after the router, with and without `--steps`. It reads the business and
+its titolare or administrators into the private values, and proposes the router's facts (the activity
+from the ATECO code, the sales area, the sign, music, alcohol) each with the words they come from; it never
+proposes the zone of the Piano, the event of a new business, the declarations or the diritti: those you ask.
+<!-- /suap -->
+
 Before step 1 the same without `--steps`. A `notes` line saying the property isn't in the Comune
 di Napoli is the verdict: send it and stop. Of what the intake wrote, read `run/intake/intake.json`
 first: each file's kind (`riconosciuti` the kinds in Italian, `non_riconosciuti` how many files have none),
