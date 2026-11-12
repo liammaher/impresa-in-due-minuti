@@ -1,0 +1,18 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 70.6,
+  "browser": "pane",
+  "note": "Stopped: r16c1p35reg:chk (Alimentare) didn't stay ticked. The portal locks that box in this form (onclick=\"return false\": Non alimentare ticks, Alimentare never does), so a food sector is refused and the case adds a non-food one."
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 102.5,
+  "browser": "pane",
+  "note": "Filled (102 s): Non alimentare 250 to 300 m2, read back on a fresh load."
+ }
+]

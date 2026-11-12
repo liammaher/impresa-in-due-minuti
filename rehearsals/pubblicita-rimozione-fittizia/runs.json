@@ -1,0 +1,18 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 39.8,
+  "browser": "pane",
+  "note": "Stopped: \"messaggio pubblicitario da cessare (specificare)\": switched off. The box is enabled by \"parzialmente\" alone."
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 65.8,
+  "browser": "pane",
+  "note": "Filled (66 s): that box is filled only for a partial cessation."
+ }
+]

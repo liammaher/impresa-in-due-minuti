@@ -39,6 +39,18 @@
 # run's `alerts`) isn't read as a regression. `made_up_stops: true` where the portal refuses to save
 # it (not just flags it): pre-flight lists it in `made_up_stops`, and bench/rerun.py won't send the case.
 #
+# What the portal's runs of 2026-11-12 added to the entry keys (README, "The one-or-two-sections-short pratiche"):
+# `optional: true` on a section the portal's draft may not show (ComUnica's Telemaco user: only under the fourth of the
+# preselected destinatari, which a crawl and its runs did not agree on): the runner skips it and names it in the report.
+# `strict: true` flags every radio and checkbox no field names: the person's declarations go in `theirs` AND `leave`.
+# An entry matches a section whose name STARTS WITH the entry's own (the entry's name is the prefix, never longer than the
+# section's: a laundry's "... ANTIMAFIA E PROFESSIONALI" never matched its "... ANTIMAFIA"), in file order, the first
+# without problems winning; a short non-strict entry before a longer one takes its sections and drops their `theirs`.
+# A box the portal switches off until a choice enables it (a "specificare" box, a locked tick) is filled `when` that choice,
+# and `leave`d otherwise (a run stops on it: "switched off (a choice before it ... switches it on)"). Check an ask's name
+# against the recipes before adding it (`grep -n "^  <ask>:" rehearsals/*/recipe.yaml`): a recipe's ask of the same name merges
+# with the dictionary's and moves the hash of every rehearsal that has it.
+#
 # Roles (answers.json "people"): no prefix and `t:` are the studio's own (the business and its
 # titolare, the architect), `c:` the client (a person, or a company or condominium with
 # business.*: its property and procura are its own), `cr:` the person declaring for a client
@@ -57,6 +69,8 @@ groups:
     question: "Quali prodotti alcolici venderai? Spunta tutte le voci che valgono."
   variazioni:
     question: "Cosa è cambiato? Spunta tutte le voci che valgono."
+  officina:
+    question: "Quali attività svolge l'officina? Spunta tutte le voci che valgono."
   attivita_852:
     question: "Che cosa fa l'attività alimentare? Spunta tutte le voci che valgono."
   allegato_b:
@@ -1389,6 +1403,60 @@ asks:
   # The request for hours outside the Comune's rules (350 characters each, as the portal counts them).
   orario_deroga: {type: text, question: "Quale orario di apertura chiedi in deroga? Scrivi i giorni e le ore (350 caratteri al massimo)"}
   deroga_motivazione: {type: text, question: "Perché chiedi la deroga? La motivazione, in poche righe (350 caratteri al massimo)"}
+  proroga_cause: {type: text, question: "Perché chiedi di prorogare la sospensione? Le cause, in poche righe (350 caratteri al massimo)"}
+  # The advertising (mezzi pubblicitari) and public-land pratiche beyond the sign's SCIA: a change of message,
+  # a new message on a covered scaffold, a renewal, the end of an advertising or of an occupation.
+  messaggio_modifica: {type: text, question: "Come cambia il messaggio pubblicitario? Descrivi la modifica (3000 caratteri al massimo)"}
+  messaggio_testo: {type: text, question: "Il testo del messaggio pubblicitario (1000 caratteri al massimo)"}
+  esposizione_dal: {type: date, question: "Il primo giorno di esposizione del messaggio"}
+  esposizione_al: {type: date, question: "L'ultimo giorno di esposizione del messaggio"}
+  autorizzazione_numero: {type: text, question: "Il numero dell'autorizzazione (solo cifre, 10 al massimo)"}
+  autorizzazione_data: {type: date, question: "La sua data"}
+  mezzo_pubblicitario: {type: text, question: "A quale mezzo pubblicitario si riferisce (ad es. «telo sulla facciata»; 80 caratteri al massimo)"}
+  autorizzazione_pg_numero: {type: text, question: "Il numero di protocollo (PG) dell'autorizzazione del Comune (solo cifre)"}
+  autorizzazione_pg_data: {type: date, question: "La data di quel protocollo"}
+  titolo_precedente_tipo: {type: choice, question: "Il titolo precedente dell'impianto è un'autorizzazione o una SCIA?", options: [autorizzazione, SCIA]}
+  titolo_precedente_numero: {type: text, question: "Il numero di protocollo dell'autorizzazione o della SCIA precedente (20 caratteri al massimo)"}
+  titolo_precedente_data: {type: date, question: "La sua data"}
+  titolo_precedente_comune: {type: text, question: "Il Comune a cui fu richiesta o presentata", propose: "Napoli"}
+  rinnovo_dal: {type: date, question: "Il primo giorno del periodo per cui rinnovi"}
+  rinnovo_al: {type: date, question: "L'ultimo giorno del periodo per cui rinnovi"}
+  ultima_scadenza: {type: date, question: "La data di ultima scadenza dell'autorizzazione o della SCIA precedente"}
+  ponteggi_suolo_pubblico: {type: yes_no, question: "I ponteggi di servizio o le recinzioni di cantiere insistono su suolo pubblico?", propose: "false"}
+  fonica_elettorale: {type: yes_no, question: "La pubblicità fonica è per un comizio o una riunione elettorale?", propose: "false"}
+  fonica_orario: {type: text, question: "In quali ore passa il veicolo (ad es. «dalle 10 alle 12»; 50 caratteri al massimo)"}
+  fonica_luogo: {type: text, question: "In quale via, viale o piazza passa il veicolo (150 caratteri al massimo)"}
+  fonica_giorno: {type: date, question: "Il giorno in cui passa il veicolo"}
+  fonica_sintesi: {type: text, question: "In sintesi, il messaggio che diffonde (300 caratteri al massimo)"}
+  veicolo_tipo: {type: text, question: "Tipo e marca del veicolo (50 caratteri al massimo)"}
+  veicolo_modello: {type: text, question: "Il modello del veicolo"}
+  veicolo_targa: {type: text, question: "La targa del veicolo"}
+  cessazione_titolo_numero: {type: text, question: "Il numero dell'autorizzazione (o del nulla osta tecnico) che cessa (20 caratteri al massimo)"}
+  cessazione_titolo_data: {type: date, question: "La sua data"}
+  cessazione_a_far_data: {type: date, question: "Da quale giorno cessa"}
+  cessazione_parziale: {type: yes_no, question: "Cessa solo in parte?", propose: "false"}
+  cessazione_oggetto: {type: text, question: "Il messaggio pubblicitario che cessa (150 caratteri al massimo)"}
+  cessazione_motivo: {type: text, question: "Perché cessa? Il motivo, in poche parole (150 caratteri al massimo)"}
+  cessazione_dimensioni: {type: text, question: "Le dimensioni dell'occupazione di suolo pubblico che cessa, in metri (ad es. «3 x 2»)"}
+  # Trades beyond the wedge: a garage, a laundry, an agriturismo's end, a cleaning firm's change of people.
+  officina_meccatronica: {type: yes_no, group: officina, item: "Meccatronica"}
+  officina_carrozzeria: {type: yes_no, group: officina, item: "Carrozzeria"}
+  officina_gommista: {type: yes_no, group: officina, item: "Gommista"}
+  officina_superficie_mq: {type: number, question: "La superficie complessiva coperta dell'officina, in m²"}
+  superficie_attivita_mq: {type: number, question: "La superficie dei locali dell'attività, in m²"}
+  superficie_altri_usi: {type: yes_no, question: "Una parte dei locali serve ad altri usi (un magazzino, un ufficio)?", propose: "false"}
+  data_cessazione: {type: date, question: "L'ultimo giorno di attività"}
+  tintolavanderia_responsabile_altro: {type: yes_no, question: "Il responsabile tecnico è un'altra persona, non il titolare?", propose: "false"}
+  responsabile_istituto: {type: text, question: "L'istituto o l'ente presso cui il responsabile tecnico ha ottenuto il corso o il diploma"}
+  responsabile_istituto_sede: {type: text, question: "Dove ha sede quell'istituto (la città)"}
+  responsabile_corso: {type: text, question: "L'oggetto del corso o la materia del diploma"}
+  responsabile_anno: {type: text, question: "L'anno in cui si è concluso (4 cifre)"}
+  responsabile_requisito: {type: choice, question: "Con quale requisito il responsabile tecnico dimostra l'idoneità? corso (corsi di qualificazione di almeno 450 ore in un anno); attestato (di qualifica in materia attinente); diploma (di maturità tecnica o professionale, o superiore, in materie inerenti); inserimento (un periodo presso imprese del settore); riconosciuto (titolo riconosciuto dal Ministero)", options: [corso, attestato, diploma, inserimento, riconosciuto]}
+  cessazione_trasferita: {type: yes_no, question: "L'attività non cessa del tutto: passa a qualcun altro (vendita, affitto d'azienda, donazione, successione, altro)?", propose: "false"}
+  var_altre: {type: yes_no, question: "Cambia anche altro oltre al nome o alla sede legale (quote, legale rappresentante, soci o amministratori)?", propose: "false"}
+  # A medium shop's variation (sector 019): the sales area grows, and a sector may be added with it.
+  variazione_settore: {type: yes_no, question: "Aggiungi un settore merceologico (alimentare o non alimentare) a quelli che già vendi?", propose: "false"}
+  variazione_tabelle: {type: yes_no, question: "La variazione riguarda anche prodotti delle tabelle speciali (tabacchi, farmacia, carburanti), oppure toglie o sostituisce un settore?", propose: "false"}
   # A tattooist's or piercer's forms (sector 11) and the hairdressers' chair or booth rental.
   stato_luoghi_tipo: {type: choice, question: "Con quale atto si attesta lo stato dei locali? edilizia libera (la comunicazione di attività edilizia libera); certificato (di conformità edilizia e agibilità del locale); fine lavori (la dichiarazione di fine lavori di una DIA o di un permesso di costruire); altro (un atto diverso)", options: [edilizia libera, certificato, fine lavori, altro]}
   stato_luoghi_numero: {type: text, question: "Il numero di quell'atto (10 caratteri al massimo)"}
@@ -4579,6 +4647,14 @@ sections:
     theirs: [Elenco Strade piano Zone Tutelate, Piano per la programmazione delle aperture]
     fields: []
 
+  # The advertising message changed on a covered scaffold (mezzi pubblicitari, "comunicazione di cambio
+  # messaggio"): the Comune's authorization it is for, by its PG number and date. Before the
+  # business's cessazione and sospensione below, which share the name and fail on these two boxes.
+  - section: oggetto della comunicazione
+    fields:
+      - {kind: text, label: con n. PG/, value: "{{ask.autorizzazione_pg_numero}}"}
+      - {kind: date, label: del, value: "{{ask.autorizzazione_pg_data|date_it}}"}
+
   # Closing a business (cessazione): which activity, the title it started under, from when;
   # and the Reg. 852/2004 registration it ends.
   - section: Oggetto della comunicazione
@@ -4769,6 +4845,98 @@ sections:
   - section: insegna dell'esercizio
     fields:
       - {kind: text, label: "Insegna (nome dell'esercizio):", value: "{{ask.insegna}}"}
+
+  # Advertising and public land (mezzi pubblicitari, occupazione di suolo pubblico), the forms around the
+  # sign's SCIA, written from the crawls' text (no national schema). The person's statements are
+  # `theirs`; the covered-scaffold forms are mapped without a scaffold on public land (a refusal).
+  - section: Modifica del messaggio pubblicitario
+    fields:
+      - {kind: textarea, label: Descrivere la modifica del messaggio pubblicitario, value: "{{ask.messaggio_modifica}}"}
+  - section: Dichiarazione relativa agli estremi dell'autorizzazione
+    fields:
+      - {kind: text, label: Autorizzazione n., value: "{{ask.autorizzazione_numero}}"}
+      - {kind: date, label: del, value: "{{ask.autorizzazione_data|date_it}}"}
+      - {kind: text, label: Relativa al seguente mezzo pubblicitario, value: "{{ask.mezzo_pubblicitario}}"}
+  # The message and when it is shown (a new message on a scaffold, or its renewal).
+  - section: dichiarazione relativa al messaggio pubblicitario
+    aliases: [Nuovo messaggio pubblicitario, messaggio pubblicitario]
+    fields:
+      - {kind: textarea, label: "il messaggio pubblicitario è il seguente:", value: "{{ask.messaggio_testo}}"}
+      - {kind: date, label: "Da:", value: "{{ask.esposizione_dal|date_it}}"}
+      - {kind: date, label: "A:", value: "{{ask.esposizione_al|date_it}}"}
+  # Renewing an advertising on a scaffold: the period, the authorization (or SCIA) it renews, its last
+  # expiry, and whether the scaffold stands on public land (then a concession: refused).
+  - section: oggetto della segnalazione
+    supports:
+      - {when: "{{ask.ponteggi_suolo_pubblico|not}}", else: "Un ponteggio o una recinzione su suolo pubblico chiede anche gli estremi della concessione: per ora non lo preparo."}
+    leave: [N° concessione suolo pubblico, rilasciata da, con scadenza]
+    fields:
+      - {kind: date, label: per il periodo dal, value: "{{ask.rinnovo_dal|date_it}}"}
+      - {kind: date, label: al, value: "{{ask.rinnovo_al|date_it}}"}
+      - {kind: text, label: "dell'autorizzazione o della precedente SCIA per rinnovo n.", value: "{{ask.titolo_precedente_numero}}"}
+      - {kind: date, label: del, nth: 2, value: "{{ask.titolo_precedente_data|date_it}}"}
+      - {kind: date, label: inserire ultima scadenza, value: "{{ask.ultima_scadenza|date_it}}"}
+      - {kind: radio, label: "Si", when: "{{ask.ponteggi_suolo_pubblico}}"}
+      - {kind: radio, label: "No", when: "{{ask.ponteggi_suolo_pubblico|not}}"}
+  # Renewing a permanent advertising by SCIA: the title held, and that nothing changed (the person's).
+  - section: Estremi del titolo abilitativo precedente
+    fields:
+      - {kind: radio, label: autorizzazione, when: "{{ask.titolo_precedente_tipo|is_autorizzazione}}"}
+      - {kind: radio, label: S.C.I.A., when: "{{ask.titolo_precedente_tipo|is_scia}}"}
+      - {kind: text, label: AUTORIZZAZIONE/SCIA prot. n°, value: "{{ask.titolo_precedente_numero}}"}
+      - {kind: date, label: del, value: "{{ask.titolo_precedente_data|date_it}}"}
+      - {kind: text, label: richiesta / presentata al Comune di, value: "{{ask.titolo_precedente_comune}}"}
+  - section: mancanza variazioni
+    theirs: [che non vi sono state modifiche rispetto al precedente titolo abilitativo]
+    fields: []
+  # Sound advertising (pubblicità fonica) from a vehicle: the ordinary one is mapped (A); the electoral one
+  # (B) has its own boxes and is refused.
+  - section: dichiarazione relativa al tipo di pubblicità
+    strict: true
+    theirs: [A tal fine DICHIARA di essere a conoscenza]
+    leave: [B) pubblicità fonica elettorale, "(solo il giorno della manifestazione", A tal fine DICHIARA di essere a conoscenza]
+    supports:
+      - {when: "{{ask.fonica_elettorale|not}}", else: "La pubblicità fonica elettorale ha altre caselle e per ora non la preparo."}
+    fields:
+      - {kind: radio, label: "A) pubblicità fonica su tutte le vie"}
+      - {kind: text, label: dalle ore/alle ore, value: "{{ask.fonica_orario}}"}
+      - {kind: textarea, label: sintesi del messaggio, value: "{{ask.fonica_sintesi}}"}
+      # The portal requires these two too (the run stopped on them, 2026-11-12): the street and the day.
+      - {kind: textarea, label: in via/viale/piazza, value: "{{ask.fonica_luogo}}"}
+      - {kind: date, label: il/i giorno/i, value: "{{ask.fonica_giorno|date_it}}"}
+      - {kind: text, label: con il veicolo (tipo e marca), value: "{{ask.veicolo_tipo}}"}
+      - {kind: text, label: modello, value: "{{ask.veicolo_modello}}"}
+      - {kind: text, label: targa, value: "{{ask.veicolo_targa}}"}
+  # Ending an advertising or an occupation of public land, wholly or in part.
+  # The "specificare" box and the measures are switched off until "parzialmente" is ticked (the run stopped on them,
+  # 2026-11-12): they are filled only for a partial cessation.
+  - section: cessazione del messaggio pubblicitario
+    leave: [messaggio pubblicitario da cessare]
+    fields:
+      - {kind: text, label: "l'autorizzazione / Nulla Osta tecnico n°/ prot. n°", value: "{{ask.cessazione_titolo_numero}}"}
+      - {kind: date, label: del, value: "{{ask.cessazione_titolo_data|date_it}}"}
+      - {kind: date, label: cesserà a far data dal, value: "{{ask.cessazione_a_far_data|date_it}}"}
+      - {kind: radio, label: integralmente, when: "{{ask.cessazione_parziale|not}}"}
+      - {kind: radio, label: parzialmente, when: "{{ask.cessazione_parziale}}"}
+      - {kind: textarea, label: messaggio pubblicitario da cessare (specificare), value: "{{ask.cessazione_oggetto}}", when: "{{ask.cessazione_parziale}}"}
+      - {kind: textarea, label: "la cessazione avviene per il seguente motivo:", value: "{{ask.cessazione_motivo}}"}
+  - section: cessazione dell'occupazione di suolo pubblico
+    leave: [dimensioni dell'occupazione di suolo pubblico da cessare]
+    fields:
+      - {kind: text, label: "l'autorizzazione n°/ prot. n°", value: "{{ask.cessazione_titolo_numero}}"}
+      - {kind: date, label: del, value: "{{ask.cessazione_titolo_data|date_it}}"}
+      - {kind: date, label: cesserà a far data dal, value: "{{ask.cessazione_a_far_data|date_it}}"}
+      - {kind: radio, label: integralmente, when: "{{ask.cessazione_parziale|not}}"}
+      - {kind: radio, label: parzialmente, when: "{{ask.cessazione_parziale}}"}
+      - {kind: text, label: "dimensioni dell'occupazione di suolo pubblico da cessare (mt X mt)", value: "{{ask.cessazione_dimensioni}}", when: "{{ask.cessazione_parziale}}"}
+      - {kind: textarea, label: "la cessazione avviene per il seguente motivo:", value: "{{ask.cessazione_motivo}}"}
+
+  # A medium shop asking to extend a suspension (sector 019/020, "prorogare l'attivazione dell'attività"):
+  # one box, the reason (350 characters). Written from the crawl; the title it runs under is the
+  # shared "dichiarazione di titolarità" section.
+  - section: dichiarazione di richiesta di proroga della sospensione
+    fields:
+      - {kind: text, label: cause della proroga, value: "{{ask.proroga_cause}}"}
 
   # A tattooist's or piercer's pratiche (sector 11: opening, take-over, move, change of people) and
   # the hairdressers' chair or booth rental. Written from the crawls' text: draft.py has no schema
@@ -5173,6 +5341,39 @@ sections:
       - {kind: text, label: comune, value: "{{ask.sede_precedente_comune}}", when: "{{ask.var_sede_legale}}"}
       - {kind: text, label: C.A.P., value: "{{ask.sede_precedente_cap}}", when: "{{ask.var_sede_legale}}"}
 
+  # A medium shop's variation (sector 019: "ampliare la superficie di vendita", "estendere il settore
+  # merceologico"): the shop-wide entry below with the form's own twists, so it comes first: the
+  # "MA/M"/"ME" boxes, "Vendita esclusivamente mediante apparecchi automatici", and a second choice,
+  # "i settori di vendita e/o tabelle speciali varieranno per:" with four ways (read from the crawl,
+  # whose choices reveal no box). The first way is mapped (a sector added, with its area); adding
+  # special-table products, dropping and swapping a sector are refused. The distribution boxes are the
+  # same as below; the total is a decimal ("300.00") as in the opening's. The portal locks the "Alimentare"
+  # tick of this form (`onclick="return false"`, read on the draft 2026-11-12: Non alimentare ticks, Alimentare never does),
+  # so a food sector can't be added here: refused. "aggiunta di settore" is ticked after "varieranno per" (disabled before).
+  - section: dati sull'entità delle variazioni
+    strict: true
+    leave: [Alimentare, Generi di monopolio, Farmacie, Carburanti, Vendita esclusivamente mediante apparecchi automatici,
+            aggiunta di settori e/o di prodotti appartenenti alle tabelle speciali,
+            eliminazione di settori e/o di prodotti, sostituzione di settore e/o di prodotti]
+    supports:
+      - {when: "{{ask.superficie_alimentare_mq|positive|not}}", else: "In questo modulo il portale tiene bloccata la casella «Alimentare»: il settore alimentare non si può aggiungere da qui."}
+      - {when: "{{ask.solo_distributori|not}}", else: "Una media struttura che vende solo con distributori automatici per ora non la preparo."}
+      - {when: "{{ask.variazione_tabelle|not}}", else: "Aggiungere prodotti delle tabelle speciali, o togliere o sostituire un settore, per ora non lo preparo."}
+    fields:
+      - {kind: checkbox, label: MA/M, when: "{{ask.media_struttura_tipo|is_ma_m}}"}
+      - {kind: checkbox, label: ME, when: "{{ask.media_struttura_tipo|is_me}}"}
+      - {kind: text, label: prot./n., value: "{{ask.titolo_attivita_protocollo}}"}
+      - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
+      - {kind: checkbox, label: la superficie di vendita sarà ampliata}
+      - {kind: text, label: da mq, value: "{{ask.superficie_vendita_prima_mq}}"}
+      - {kind: text, label: a mq, value: "{{ask.superficie_vendita_mq}}"}
+      - {kind: checkbox, label: i settori di vendita e/o tabelle speciali varieranno per, when: "{{ask.variazione_settore}}"}
+      - {kind: checkbox, label: aggiunta di settore merceologico con ampliamento della superficie di vendita, when: "{{ask.variazione_settore}}"}
+      - {kind: checkbox, label: Non alimentare, when: "{{ask.superficie_non_alimentare_mq|positive}}"}
+      - {kind: text, label: superficie di vendita da mq, nth: 2, value: "{{ask.superficie_non_alimentare_prima_mq}}", when: "{{ask.superficie_non_alimentare_mq|positive}}"}
+      - {kind: text, label: a mq, nth: 3, value: "{{ask.superficie_non_alimentare_mq}}", when: "{{ask.superficie_non_alimentare_mq|positive}}"}
+      - {kind: text, label: mq, value: "{{ask.superficie_vendita_mq|decimal}}"}
+
   # A shop's structural change (variazioni strutturali): a bigger sales area in the sectors it
   # already sells (adding, dropping or swapping sectors or special tables is refused by recipes).
   - section: dati sull'entità delle variazioni
@@ -5391,6 +5592,7 @@ sections:
   # A pratica sent with ComUnica (the Registro delle imprese): the Telemaco user that imports it
   # (a user ID, not a password); taking note of the size limits is the person's.
   - section: dichiarazione della user Telemaco
+    optional: true
     theirs: [PER PRESA VISIONE]
     fields:
       - {kind: text, label: user Telemaco, value: "{{ask.telemaco_user}}"}
@@ -5718,6 +5920,157 @@ sections:
       - {kind: text, label: mq, value: "{{ask.superficie_vendita_mq|decimal}}"}
       - {kind: checkbox, label: Generi di monopolio, when: "{{ask.superficie_monopolio_mq|positive}}"}
       - {kind: text, label: superficie di vendita mq, nth: 3, value: "{{ask.superficie_monopolio_mq}}", when: "{{ask.superficie_monopolio_mq|positive}}"}
+
+  # A medium shop (sector 019) that moves without enlarging, or adds a sector without enlarging:
+  # the opening's boxes (sales mode, season, the autonomous-shop rows, the sectors) under the move's
+  # own title line ("già avviata con la SCIA/DIA/autorizzazione prot./n.", its date and the Comune). Both
+  # forms have the same boxes; the radios are mapped as the opening's entry above maps them (the same
+  # nine SI/NO rows). Read from the two crawls' text; "Temporaneo" and the C.C.N./centre rows are
+  # refused or not asked, as there.
+  - section: SPECIFICHE DEL TRASFERIMENTO
+    aliases: [SPECIFICHE DELL'ESERCIZIO IN SEGUITO ALL'AGGIUNTA DEL SETTORE MERCEOLOGICO]
+    leave: [Farmacie, Carburanti]
+    supports:
+      - {when: "{{ask.solo_distributori|not}}", else: "Una media struttura che vende solo con distributori automatici per ora non la preparo."}
+      - {when: "{{ask.media_autonoma}}", else: "Una media struttura organizzata come centro commerciale, parco commerciale o outlet per ora non la preparo."}
+      - {when: "{{ask.in_centro_commerciale|not}}", else: "Una media struttura dentro un centro commerciale per ora non la preparo."}
+      - {when: "{{ask.in_parco_commerciale|not}}", else: "Una media struttura dentro un parco commerciale per ora non la preparo."}
+      - {when: "{{ask.in_factory_outlet|not}}", else: "Una media struttura in un factory outlet per ora non la preparo."}
+      - {when: "{{ask.in_ccn|not}}", else: "Una media struttura in un centro commerciale naturale (C.C.N.) riconosciuto per ora non la preparo."}
+    fields:
+      - {kind: checkbox, label: MA/M, when: "{{ask.media_struttura_tipo|is_ma_m}}"}
+      - {kind: checkbox, label: ME, when: "{{ask.media_struttura_tipo|is_me}}"}
+      - {kind: text, label: già avviata con la SCIA/DIA/autorizzazione prot./n., value: "{{ask.titolo_attivita_protocollo}}"}
+      - {kind: date, label: del, value: "{{ask.titolo_attivita_data|date_it}}"}
+      - {kind: text, label: presentata al Comune di, value: "{{ask.titolo_attivita_comune}}"}
+      - {kind: radio, label: Vendita al dettaglio, when: "{{ask.anche_ingrosso|not}}"}
+      - {kind: text, label: superficie di vendita mq, value: "{{ask.superficie_vendita_mq}}", when: "{{ask.anche_ingrosso|not}}"}
+      - {kind: radio, label: Vendita congiunta al dettaglio e all'ingrosso, when: "{{ask.anche_ingrosso}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 2, value: "{{ask.superficie_vendita_mq}}", when: "{{ask.anche_ingrosso}}"}
+      - {kind: radio, label: Permanente, when: "{{ask.stagionale|not}}"}
+      - {kind: radio, label: Stagionale, when: "{{ask.stagionale}}"}
+      - {kind: text, label: dal (gg/mm), value: "{{ask.stagione_dal}}", when: "{{ask.stagionale}}"}
+      - {kind: text, label: al (gg/mm), value: "{{ask.stagione_al}}", when: "{{ask.stagionale}}"}
+      # Five SI/NO pairs, not the opening's nine: the first ("Esercizio autonomo": SI) opens no rows here (read on the
+      # draft 2026-11-12, 5 NO on the page), and the portal requires it (the run without it stopped on "radio si/no").
+      # The four "collocato in" rows (a centre, a factory outlet, a park, a C.C.N.) are the 2nd to 5th NO.
+      - {kind: radio, label: SI}
+      - {kind: radio, label: "NO", nth: 2, by_label: true}
+      - {kind: radio, label: "NO", nth: 3, by_label: true}
+      - {kind: radio, label: "NO", nth: 4, by_label: true}
+      - {kind: radio, label: "NO", nth: 5, by_label: true}
+      - {kind: checkbox, label: Alimentare, when: "{{ask.superficie_alimentare_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 3, value: "{{ask.superficie_alimentare_mq}}", when: "{{ask.superficie_alimentare_mq|positive}}"}
+      - {kind: checkbox, label: Non alimentare, when: "{{ask.superficie_non_alimentare_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 4, value: "{{ask.superficie_non_alimentare_mq}}", when: "{{ask.superficie_non_alimentare_mq|positive}}"}
+      - {kind: text, label: mq, value: "{{ask.superficie_vendita_mq|decimal}}"}
+      - {kind: checkbox, label: Generi di monopolio, when: "{{ask.superficie_monopolio_mq|positive}}"}
+      - {kind: text, label: superficie di vendita mq, nth: 5, value: "{{ask.superficie_monopolio_mq}}", when: "{{ask.superficie_monopolio_mq|positive}}"}
+  # The medium shop's closing declarations (opening by merger, move, new sector, ...): six statements and a
+  # commitment, all the person's. Strict, so the longer lists of other forms (the stabilimenti's, which
+  # share the name) are not taken for it.
+  - section: Ulteriori dichiarazioni
+    strict: true
+    theirs: [i regolamenti locali di polizia urbana, le disposizioni in materia urbanistica, i requisiti comunali e regionali, le condizioni previste dai commi, la superficie da destinare a parcheggio, di impegnarsi a comunicare ogni variazione]
+    leave: [i regolamenti locali di polizia urbana, le disposizioni in materia urbanistica, i requisiti comunali e regionali, le condizioni previste dai commi, la superficie da destinare a parcheggio, di impegnarsi a comunicare ogni variazione]
+    fields: []
+
+  # Trades outside the wedge, one section each (written from the crawls' text; no national schema): a
+  # garage's work (autoriparazione, sector 010), a dry cleaner's and a self-service laundry's premises
+  # (012, 013; the area is one line, a part for other uses is refused), an agriturismo ending for good,
+  # a cleaning firm's new name or registered office.
+  - section: dati relativi all'attività
+    fields:
+      - {kind: checkbox, label: meccatronica, when: "{{ask.officina_meccatronica}}"}
+      - {kind: checkbox, label: carrozzeria, when: "{{ask.officina_carrozzeria}}"}
+      - {kind: checkbox, label: gommista, when: "{{ask.officina_gommista}}"}
+      - {kind: text, label: mq, value: "{{ask.officina_superficie_mq}}"}
+  - section: dati relativi all'attività
+    leave: [Superficie adibita ad altri usi]
+    supports:
+      - {when: "{{ask.in_centro_commerciale|not}}", else: "Una tintolavanderia dentro un centro commerciale per ora non la preparo."}
+      - {when: "{{ask.superficie_altri_usi|not}}", else: "Una parte dei locali per altri usi per ora non la preparo."}
+    fields:
+      - {kind: checkbox, label: Tintolavanderia}
+      - {kind: radio, label: "No"}
+      - {kind: checkbox, label: Superficie destinata all'attività di tintolavanderia}
+      - {kind: text, label: mq, nth: 1, value: "{{ask.superficie_attivita_mq}}"}
+      - {kind: text, label: mq, nth: 3, value: "{{ask.superficie_attivita_mq}}"}
+      - {kind: radio, label: Permanente, when: "{{ask.stagionale|not}}"}
+      - {kind: radio, label: Stagionale, when: "{{ask.stagionale}}"}
+      - {kind: text, label: dal (gg/mm), value: "{{ask.stagione_dal}}", when: "{{ask.stagionale}}"}
+      - {kind: text, label: al (gg/mm), value: "{{ask.stagione_al}}", when: "{{ask.stagionale}}"}
+  - section: dati relativi all'attività
+    leave: [Superficie adibita ad altri usi]
+    supports:
+      - {when: "{{ask.in_centro_commerciale|not}}", else: "Una lavanderia a gettoni dentro un centro commerciale per ora non la preparo."}
+      - {when: "{{ask.superficie_altri_usi|not}}", else: "Una parte dei locali per altri usi per ora non la preparo."}
+    fields:
+      - {kind: checkbox, label: Lavanderia a gettoni}
+      - {kind: radio, label: "No"}
+      - {kind: checkbox, label: Superficie destinata all'attività di lavanderia a gettoni}
+      - {kind: text, label: mq, nth: 1, value: "{{ask.superficie_attivita_mq}}"}
+      - {kind: text, label: mq, nth: 3, value: "{{ask.superficie_attivita_mq}}"}
+      - {kind: radio, label: Permanente, when: "{{ask.stagionale|not}}"}
+      - {kind: radio, label: Stagionale, when: "{{ask.stagionale}}"}
+      - {kind: text, label: dal (gg/mm), value: "{{ask.stagione_dal}}", when: "{{ask.stagionale}}"}
+      - {kind: text, label: al (gg/mm), value: "{{ask.stagione_al}}", when: "{{ask.stagionale}}"}
+  # A dry cleaner's technical manager ("Solo per le tintolavanderie", L. 84/2006): the titolare is the manager
+  # and holds one of the five requisites. The first three have no box of their own in the crawl; the
+  # work-experience period and the Ministry's recognition are refused (their boxes are unread), and so is a
+  # manager who is someone else (the name and an attached Allegato B). Strict: the laundry's form, which has
+  # only the statement, is not taken for this one. Not yet run on the portal.
+  - section: DICHIARAZIONI SUL POSSESSO DEI REQUISITI ANTIMAFIA E PROFESSIONALI
+    strict: true
+    theirs: [che non sussistono nei propri confronti cause di divieto]
+    leave: [che non sussistono nei propri confronti cause di divieto, che il/la responsabile tecnico/a è, attestato di qualifica, periodo di inserimento, che il proprio titolo professionale è stato riconosciuto, tipo di attività, dal, al, iscrizione Registro Imprese, n. R.E.A., un anno, due anni, tre anni, in data]
+    supports:
+      - {when: "{{ask.tintolavanderia_responsabile_altro|not}}", else: "Se il responsabile tecnico è un'altra persona il modulo chiede il suo nome e un allegato firmato: per ora non lo preparo."}
+      - {value: "{{ask.responsabile_requisito}}", in: [corso, diploma], else: "L'attestato di qualifica con il periodo di pratica, il periodo di inserimento presso imprese del settore e il titolo riconosciuto dal Ministero hanno altre caselle: per ora non li preparo."}
+    fields:
+      - {kind: radio, label: di essere il/la responsabile tecnico/a e di essere in possesso}
+      - {kind: radio, label: frequenza di corsi di qualificazione, when: "{{ask.responsabile_requisito|is_corso}}"}
+      - {kind: text, label: presso l'Istituto, value: "{{ask.responsabile_istituto}}", when: "{{ask.responsabile_requisito|is_corso}}"}
+      - {kind: text, label: con sede in, value: "{{ask.responsabile_istituto_sede}}", when: "{{ask.responsabile_requisito|is_corso}}"}
+      - {kind: text, label: oggetto corso, value: "{{ask.responsabile_corso}}", when: "{{ask.responsabile_requisito|is_corso}}"}
+      - {kind: text, label: anno di conclusione, value: "{{ask.responsabile_anno}}", when: "{{ask.responsabile_requisito|is_corso}}"}
+      - {kind: radio, label: diploma di maturità tecnica, when: "{{ask.responsabile_requisito|is_diploma}}"}
+      - {kind: text, label: presso l'Istituto, value: "{{ask.responsabile_istituto}}", when: "{{ask.responsabile_requisito|is_diploma}}"}
+      - {kind: text, label: con sede in, value: "{{ask.responsabile_istituto_sede}}", when: "{{ask.responsabile_requisito|is_diploma}}"}
+      - {kind: text, label: oggetto corso, value: "{{ask.responsabile_corso}}", when: "{{ask.responsabile_requisito|is_diploma}}"}
+      - {kind: text, label: anno di conclusione, value: "{{ask.responsabile_anno}}", when: "{{ask.responsabile_requisito|is_diploma}}"}
+  # The self-service laundry's version of the same statements (its section is named without "E PROFESSIONALI"): only the antimafia box, which the portal
+  # requires before it saves the section and which is the person's (the run stopped on it, 2026-11-12). Strict, so
+  # the hairdressers' longer lists of statements under the same name (their "Dichiarazioni" entry) don't land here.
+  # After the dry cleaner's entry above, which is strict and fails here.
+  - section: DICHIARAZIONI SUL POSSESSO DEI REQUISITI ANTIMAFIA
+    strict: true
+    theirs: [che non sussistono nei propri confronti cause di divieto]
+    leave: [che non sussistono nei propri confronti cause di divieto]
+    fields: []
+  - section: dichiarazione relativa alla cessazione dell'attività
+    strict: true
+    supports:
+      - {when: "{{ask.cessazione_trasferita|not}}", else: "Se l'attività passa a qualcun altro (vendita, affitto d'azienda, successione, altro) il modulo chiede altri dati: per ora non lo preparo."}
+    leave: [Trasferimento in proprietà o gestione, Denominazione ditta subentrante, Compravendita, Affitto d'azienda, Donazione, Fusione, Fallimento, Reintestazione, Conferimento d'azienda, Altre cause, successione, data di decesso del titolare]
+    fields:
+      - {kind: radio, label: Cessazione definitiva}
+      - {kind: date, label: "Data cessazione attività:", value: "{{ask.data_cessazione|date_it}}"}
+  - section: DICHIARAZIONE RELATIVA ALLA VARIAZIONE DELLA SOCIETÀ E DEI SOGGETTI
+    supports:
+      - {when: "{{ask.var_altre|not}}", else: "Cessione di quote, nuovo legale rappresentante o nuovi soci hanno altre caselle: per ora preparo solo il cambio di nome e di sede legale."}
+    fields:
+      - {kind: checkbox, label: VARIAZIONE DELLA DENOMINAZIONE/RAGIONE SOCIALE, when: "{{ask.var_denominazione}}"}
+      - {kind: date, label: con decorrenza dal, value: "{{ask.var_decorrenza|date_it}}", when: "{{ask.var_denominazione}}"}
+      - {kind: text, label: precedente, value: "{{ask.denominazione_precedente}}", when: "{{ask.var_denominazione}}"}
+      - {kind: text, label: nuova, value: "{{business.denominazione}}", when: "{{ask.var_denominazione}}"}
+      - {kind: checkbox, label: VARIAZIONE DELLA SEDE LEGALE, when: "{{ask.var_sede_legale}}"}
+      - {kind: text, label: da via o..., value: "{{ask.sede_precedente_via}}", when: "{{ask.var_sede_legale}}"}
+      - {kind: text, label: comune, value: "{{ask.sede_precedente_comune}}", when: "{{ask.var_sede_legale}}"}
+      - {kind: text, label: C.A.P., value: "{{ask.sede_precedente_cap}}", when: "{{ask.var_sede_legale}}"}
+      - {kind: text, label: a via o, value: "{{business.sede_legale_indirizzo}} {{business.sede_legale_civico}}", when: "{{ask.var_sede_legale}}"}
+      - {kind: text, label: comune, nth: 2, value: "{{business.sede_legale_comune}}", when: "{{ask.var_sede_legale}}"}
+      - {kind: text, label: C.A.P., nth: 2, value: "{{business.sede_legale_cap}}", when: "{{ask.var_sede_legale}}"}
 
   # A bar or restaurant's outdoor seating (dehors: suolo pubblico annesso a un esercizio di
   # somministrazione). The 852 notifica already filed, the sign's name, the same hours every open

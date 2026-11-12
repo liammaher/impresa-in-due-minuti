@@ -411,6 +411,89 @@ What the real runs found (each fixed in the dictionary):
 - A bundle of more than about 12 runs is split (the pane's storage is near its limit); each bundle costs the person one
   file pick. 34 cells took three picks, and the beautician's fixes three more.
 
+## The one-or-two-sections-short pratiche, and a drift check (2026-11-12)
+
+Fourth round. The 51 SUAP pratiche one or two sections short of fillable were ranked by the pratiche each section unblocks
+(a two-section pratica needs both), the wedge's own companions first. 20 sections were written by hand from the crawls' text
+(no national schema covers them) and **19 pratiche became fillable (155 → 174) and all 19 filled on the portal** (run on the
+portal 83 → 102), in 19 new rehearsals derived from their siblings (`bench/derive_recipe.py`, now also for `suap-common-*`
+crawls and the sectors 3, 10, 12-15, 19, 20, 54). Four bundles of 8 to 11 runs, one file pick each; the runs found what the
+crawls cannot:
+
+- **Medium shops (sector 019): proroga della sospensione** (019 and 020: one 350-character box), **ampliamento**,
+  **estensione del settore**, **trasferimento senza ampliamento**, **variazione del settore**.
+  - The 019 forms have **five SI/NO pairs, not the opening's nine**: the first ("Esercizio autonomo") opens no row here
+    (5 "NO" on the page: the opening's `NO nth 6-9 on_page` failed with "5 fields with this label"), and **the portal
+    requires it** (without it: "radio si/no: il valore è obbligatorio"): `SI`, then the four "collocato in" rows as `NO`
+    2 to 5.
+  - **The "Alimentare" tick of the variation form is locked by the portal** (`onclick="return false"`, read on the draft:
+    "Non alimentare" ticks, "Alimentare" never does, "didn't stay ticked"), so a food sector can't be added there: refused
+    in `supports`. "aggiunta di settore" is disabled until "i settori ... varieranno per" is ticked.
+  - Not tried on the portal: Alimentare in the SPECIFICHE forms (the rehearsals use non-food only).
+- **Advertising and public land** (mezzi pubblicitari: change of message on a sign, on a scaffold, renewal of a scaffold's
+  advertising, renewal of a permanent one by SCIA, sound advertising, rimozione; occupazione di suolo pubblico: cessazione),
+  8 rehearsals for the bar/restaurant sector (the forms are common to every sector).
+  - **A box can be switched off until a choice enables it**: the "specificare" box of a cessazione and the measures of an
+    occupation exist only for "parzialmente" (the stop reads "switched off (a choice before it, which the steps file doesn't
+    make, switches it on)"): filled only for a partial cessation.
+  - **The fonica's "B" boxes are required even for "A"** (the street and the day): the run stopped on "il valore è
+    obbligatorio" for a textarea and a date; both filled.
+  - "n°" boxes of these forms take digits only ("Autorizzazione n." is a `:number`).
+- **Outside the wedge, one section each:** garage (010), dry cleaner (012), self-service laundry (013), agriturismo's
+  cessazione (003), cleaning firm's change of name or seat (014). The dry cleaner's **technical manager** ("Solo per le
+  tintolavanderie": the titolare as manager with a course or a diploma, four text boxes each) is mapped and filled; the
+  attestato (nine boxes, a REA), the work-experience period and the Ministry's recognition are refused (unread).
+  The antimafia box ("che non sussistono nei propri confronti cause di divieto") is the person's, but the portal needs
+  it before it saves the section: it is `theirs`, and in a **strict** entry, or the hairdressers' longer list of statements
+  under the same name lands on it and loses its `theirs` (the lock diff named two existing rehearsals; fixed before commit).
+- **Left unmapped and why:** the 015 hobbyists' tesserino (a private person's declarations, not a business); 010
+  variazioni soggetti (the technical-requisites section opens master lists); the PIN-7 VVF forms and "Rif. Pratica VVF"
+  (activity lists nobody has read); 056 and 054 (the B&B and hotel forms: unread boxes, about ten sections); the
+  stabilimento cluster of sectors 60 and 61 and the AUA and emissioni forms (needs the portal read first).
+
+**Drift check (the first of any SUAP crawl).** `catalogue.py pane --bundle ... --check` on 14
+openings (the wedge's, plus 012, 013, 010 and the 019 ones). The scratch draft must be a **SUAP** one: the old default,
+"PROVA NON INVIARE - catalogo sue", is a SUE draft and every SUAP sector then read "not in the tree" (a first batch lost
+that way, 14 errors that were not drift); the default is now the ops' sportello's and a SUAP batch on the SUE's draft is refused. Result: **the shops (016, 017, 018) and the bars (060, 061) are unchanged and recorded**
+(`drift.json`); nine others differ, but by the procura variant's sections the check lists (`Qualifica e dati del
+procuratore`, the Terzo settore exemption) and by the shortened name of the domicilio elettronico; they are not recorded.
+- **The portal's preselected destinatario is not stable.** The drift check, and then every run, got the **third** of four
+  destinatario radios; the stored crawls and a fresh crawl of 012 and 013 got the **fourth**. The fourth adds "dichiarazione
+  della user Telemaco" (ComUnica); the third doesn't. A run that expects the section stops on "no section ...", at 0.7 s in
+  the results (the runner retried twice: the total is of the last try). The wizard takes the preselected one, so **a crawl
+  and a run can see different sections of the same pratica**. A section like that is `optional: true` in the dictionary: the
+  runner skips it when the draft doesn't show it and names it in the report (`skipped_sections`); a required one still
+  stops the run (`bench/test_inpage.py`). Only the Telemaco entry is optional so far. What decides the preselection is
+  not known; the wizard has no way yet to choose a destinatario (the radios carry no label).
+
+
+**Mechanics this round cost a run each** (all now in code or tests; listed so they aren't found again):
+
+- **An entry's name must be a prefix of the section's name, not longer**: the laundry's entry was named "DICHIARAZIONI SUL POSSESSO
+  DEI REQUISITI ANTIMAFIA E PROFESSIONALI" and its section is "... ANTIMAFIA", so the generic "Dichiarazioni" entry took it and the
+  run stopped on the antimafia box; the dry cleaner's section has the longer name. A short entry that is `strict` and `leave`s
+  its one box must sit after the longer ones (`theirs` alone isn't enough under `strict`: the box goes in `leave` too).
+- **Check an ask's name against the recipes before adding it to the dictionary** (`grep -n "^  <name>:" rehearsals/*/recipe.yaml`): a new
+  `responsabile_tecnico_altro` merged with the hairdressers' recipes' own, and the lock named two existing rehearsals whose hash
+  moved. The lock diff after `regen.py` is the check: only the new rehearsals may be in it.
+- **A bundle carries the steps as they were built**: rebuild it (`rerun.py --bundle`) after every dictionary change, or the
+  rerun is of the old mapping (bundle 3 held the laundry's wrongly named entry).
+- **A stopped run's section is unsaved**: its draft shows the boxes empty. To read what a click does, open the draft's section
+  (`__crawl.sectionOf(draft, section)`; wait outside the page, it takes 20-30 s) and drive the open frame: a checkbox is the real
+  `input` (`click()`), a radio its visible `_clone` (a click on the real radio does nothing); a box the portal locks reads
+  `onclick="return false"` or `readOnly`, a disabled one `disabled` until its checkbox is ticked (crawl.js records `disabled` and
+  `enables`). Remove the earlier iframes first.
+- **A run's `total_seconds` is the last try's**: a run that retried twice on "no section" reads 0.7 s. The `at.section` and `retries`
+  of its result say where it was.
+- **`results.js` names the optional sections a draft didn't show** (`skipped`), so a skipped Telemaco section isn't silent.
+- **Drift digests** (`catalogue.py drift --digests`): a check lists the procura variant's sections (`scelta`), which stored crawls
+  made before the variants don't have, so nine pratiche "differed" for that alone. digest.js now also sends `base`, the digest
+  without the `scelta` sections, and `drift --digests` accepts either (`test_gen.py`).
+- **`catalogue.py pane --bundle` takes the scratch draft by the ops' sportello** (a SUAP batch on the SUE's draft failed every op as
+  "not in the tree"); the draft must exist in Pratiche in bozza (start one with the wizard: a description and CONFERMA).
+- **`bench/derive_recipe.py`** now drops what its template asked for another pratica (`TEMPLATE_ONLY`, and the "no field reads
+  asks.X: drop it" loop), names a title's sector from the wizard when the table has none, and takes `suap-common-*` crawls.
+
 ## What the portal does that bit us
 
 - **Street names without their particles.** The location's street lookup and the Comune's

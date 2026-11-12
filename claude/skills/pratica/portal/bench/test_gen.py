@@ -2071,5 +2071,108 @@ def _():
     assert checked >= 60, checked
 
 
+# --- what the portal taught on 2026-11-12 (README, "The one-or-two-sections-short pratiche, and a drift check") ---
+
+@case("the self-service laundry's antimafia box is the person's, in a strict entry the hairdressers' longer lists don't land on (the run stopped on it, 2026-11-12)")
+def _():
+    sec = section(generated("lavanderia-gettoni-fittizia"), "DICHIARAZIONI SUL POSSESSO DEI REQUISITI ANTIMAFIA")
+    assert any("che non sussistono nei propri confronti cause di divieto" in t for t in sec.get("theirs", [])), sec.get("theirs")
+    # The hairdresser's take-over still names all its statements as the person's (a non-strict entry of the same name took them).
+    acc = section(generated("subingresso-acconciatore-fittizio"), "Dichiarazioni")
+    assert len(acc.get("theirs", [])) >= 8, acc.get("theirs")
+
+
+@case("a section the portal's draft may not show is `optional`: ComUnica's Telemaco user exists only under the fourth of the preselected destinatari, which a crawl and its runs did not agree on (2026-11-12)")
+def _():
+    seen = 0
+    for d in sorted((ROOT / "rehearsals").iterdir()):
+        if not (d / "recipe.yaml").exists() or "sportello: suap" not in (d / "recipe.yaml").read_text(encoding="utf-8"):
+            continue
+        for s in generated(d.name)["sections"]:
+            if s["section"].startswith("dichiarazione della user Telemaco"):
+                assert s.get("optional") is True, (d.name, s)
+                seen += 1
+    assert seen >= 4, seen
+
+
+@case("the medium shop's move and added-sector forms have five SI/NO pairs, not the opening's nine: SI, then the four rows' NO as 2nd to 5th, none `on_page` (read on the draft, 2026-11-12)")
+def _():
+    for name, title in (("trasferimento-media-senza-amp-fittizio", "SPECIFICHE DEL TRASFERIMENTO"),
+                        ("variazione-settore-media-fittizio", "SPECIFICHE DELL'ESERCIZIO IN SEGUITO ALL'AGGIUNTA")):
+        sec = section(generated(name), title)
+        radios = [f for f in sec["fields"] if f["kind"] == "radio" and f["label"].lower() in ("si", "no")]
+        assert [(f["label"].lower(), f.get("nth", 1)) for f in radios] == [("si", 1), ("no", 2), ("no", 3), ("no", 4), ("no", 5)], (name, radios)
+        assert not any(f.get("on_page") for f in radios), (name, radios)
+
+
+@case("the medium shop's variation form refuses a food sector: the portal locks its Alimentare tick (`onclick=\"return false\"`), and ticks \"aggiunta di settore\" only after \"varieranno per\" (2026-11-12)")
+def _():
+    steps = generated("settore-media-fittizio")
+    sec = section(steps, "dati sull'entità delle variazioni")
+    assert not any(f.get("label") == "Alimentare" for f in sec["fields"]), sec
+    labels = [f["label"] for f in sec["fields"]]
+    assert labels.index("i settori di vendita e/o tabelle speciali varieranno per") < labels.index("aggiunta di settore merceologico con ampliamento della superficie di vendita"), labels
+    assert any("Alimentare" in str(c.get("else", "")) for c in steps.get("supports", [])) or any(
+        "Alimentare" in str(c.get("else", "")) for c in sec.get("supports", [])), "no refusal names the locked Alimentare box"
+
+
+@case("a box the portal switches off until a choice enables it is filled only under that choice: a cessazione's \"specificare\" and an occupation's measures exist for \"parzialmente\" alone (2026-11-12)")
+def _():
+    for name, label in (("pubblicita-rimozione-fittizia", "messaggio pubblicitario da cessare"),
+                        ("suolo-pubblico-cessazione-fittizio", "dimensioni dell'occupazione di suolo pubblico da cessare")):
+        sec = section(generated(name), "cessazione")
+        f = field(sec, label)
+        assert "cessazione_parziale" in f["when"], (name, f)
+
+
+@case("sound advertising fills the street and the day too: the portal requires them for the ordinary form as well (the run stopped on both, 2026-11-12)")
+def _():
+    sec = section(generated("pubblicita-fonica-fittizia"), "dichiarazione relativa al tipo di pubblicità")
+    labels = {f["label"] for f in sec["fields"]}
+    assert {"in via/viale/piazza", "il/i giorno/i"} <= labels, labels
+
+
+@case("a derived rehearsal's title names its own sector, never the hairdressers' (the fallback of bench/derive_recipe.py said \"acconciatori, estetisti e tatuatori\" for a medium shop, 2026-11-12)")
+def _():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("derive_recipe", HERE / "derive_recipe.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    assert mod.short_sector("esercizio con superficie totale lorda, comprensiva di servizi e depositi (es. magazzini), fino a 400 mq").startswith("esercizio con superficie")
+    assert "acconciatori" not in mod.short_sector("Autoriparazione")
+    bad = []
+    for d in sorted((ROOT / "rehearsals").iterdir()):
+        r = d / "recipe.yaml"
+        if not r.exists():
+            continue
+        text = r.read_text(encoding="utf-8")
+        crawl = re.search(r"^crawl: (\S+)", text, flags=re.M)
+        title = re.search(r"^title: (.*)$", text, flags=re.M)
+        if crawl and title and "acconciatori, estetisti e tatuatori" in title[1] and not crawl[1].startswith("suap-011"):
+            bad.append((d.name, title[1]))
+    assert not bad, bad
+
+
+@case("a drift check's digest also matches the stored crawl without the sections a scelta adds (the procura variant): nine pratiche \"differed\" on that alone, their crawls older than the variants (2026-11-12)")
+def _():
+    import catalogue
+    n = "suap-016-aprire-l-attivita"
+    full = catalogue.digest(catalogue.stored_fingerprints(n))
+    base = catalogue.digest(catalogue.stored_fingerprints(n, variants=False))
+    assert full != base, "this crawl has no scelta section"
+    assert catalogue.same_digest({"digest": full}, n) == "all"
+    assert catalogue.same_digest({"digest": "0" * 12, "base": base}, n) == "base"
+    assert catalogue.same_digest({"digest": "0" * 12, "base": "1" * 12}, n) is None
+    assert catalogue.same_digest({"digest": "0" * 12}, n) is None  # an export from before `base`
+
+
+@case("a batch's scratch draft is its sportello's: a SUAP batch on the SUE's draft read every sector as \"not in the tree\" (a lost drift check, 2026-11-12)")
+def _():
+    import catalogue
+    assert catalogue.default_draft(["suap-012-aprire-l-attivita", "suap-013-aprire-l-attivita"]).endswith("catalogo suap")
+    assert catalogue.default_draft(["sue-cila"]).endswith("catalogo sue")
+    assert catalogue.default_draft(["suap-012-aprire-l-attivita", "sue-cila"]).endswith("catalogo sue")
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

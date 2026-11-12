@@ -237,6 +237,22 @@ def main():
             stops(fill(browser, base, st, answers), "expected the label Visura camerale")
         case("a file box with another label stops the run", wrong_label)
 
+        def optional_section():
+            # A section the portal's draft may not show (ComUnica's Telemaco user, only when the preselected destinatario
+            # is the Camera di commercio, which differed between a crawl and its runs, 2026-11-12): `optional` skips it
+            # and the report says so; without it the same steps stop on "no section".
+            PORTAL.reset()
+            st = steps(base)
+            st["sections"].append({"section": "Utente assente", "fields": [], "optional": True})
+            r = fill(browser, base, st, answers)
+            assert r["result"] == "filled", r.get("error")
+            assert r.get("skipped_sections") == ["Utente assente"], r.get("skipped_sections")
+            PORTAL.reset()
+            st = steps(base)
+            st["sections"].append({"section": "Utente assente", "fields": []})
+            stops(fill(browser, base, st, answers), "no section Utente assente")
+        case("an optional section the draft doesn't show is skipped and named; a required one stops the run", optional_section)
+
         def moved_id():
             # An id that names another box now (an earlier choice shifted the rows) goes by
             # its label: each file lands in the box its label names, and the report says so.

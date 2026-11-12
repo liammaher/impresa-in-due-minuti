@@ -1,0 +1,21 @@
+{
+ "extras": [],
+ "descrizione": "PROVA NON INVIARE - lavanderia gettoni generato",
+ "oggetto": "Apertura di una lavanderia a gettoni di 45 mq a Napoli, di prova.",
+ "superficie_vendita_mq": "40",
+ "superficie_non_alimentare_mq": "40",
+ "in_centro_commerciale": "false",
+ "diritti_euro": "100",
+ "fatti": [],
+ "stagionale": "false",
+ "solo_distributori": "false",
+ "anche_ingrosso": "false",
+ "superficie_alimentare_mq": "0",
+ "superficie_monopolio_mq": "0",
+ "in_ccn": "false",
+ "in_factory_outlet": "false",
+ "diritti_esente": false,
+ "telemaco_user": "PROVA001",
+ "superficie_attivita_mq": "45",
+ "superficie_altri_usi": "false"
+}

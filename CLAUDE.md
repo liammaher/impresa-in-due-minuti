@@ -109,7 +109,8 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      plain names; `--made-up` only warns, for rehearsals). A stopped run resumes on its draft (`--resume`, `--fix`).
                      Both take a draft's values from one `pvault get` (`--values -`, Touch ID).
                      Where a choice or "+" renumbers ids, fields are found by label
-                     (`label` + `anchor`/`block`/`nth`; `kind: add` presses "+"); the job's other
+                     (`label` + `anchor`/`block`/`nth`; `kind: add` presses "+"; a section only some drafts show, as ComUnica's Telemaco user
+                     under the preselected destinatario, is `optional: true`: skipped and named in the report); the job's other
                      people are roles in answers.json `people`. `crawl.js` maps a draft's
                      sections (`batch`: many pratiche on one scratch draft, each section once
                      by fingerprint), `wizard.js` a comune's whole wizard (`catalogue/<comune>/`);

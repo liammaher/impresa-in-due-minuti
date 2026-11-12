@@ -1,0 +1,42 @@
+# Ampliare la superficie di vendita (esercizio con superficie totale lorda, comprensiva di servizi e depositi (es. magazzini), fino a 400 mq), as gen.py writes its steps file from the batch crawl
+# (catalogue/F839/sections/suap-019-ampliare-la-superficie-di-vendita.json), for the made-up business of this folder's fixture.json.
+# Derived from rehearsals/media-struttura-fittizia (bench/derive_recipe.py): no `rules:` and no `after:`; the attachments and payment screens are not read.
+procedure: napoli/comune/autorizzazione-media-struttura-vendita
+title: "Ampliare la superficie di vendita, media struttura fino a 400 mq, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-019-ampliare-la-superficie-di-vendita
+subject: impresa
+operation: Ampliare la superficie di vendita
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [{leaf: "esercizio con superficie totale lorda, comprensiva di servizi e depositi (es. magazzini), fino a 400 mq", nth: 1}], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Ampliare la superficie di vendita"], confirm: CONFERMA}
+  - {screen: Scelta interventi eventuali, confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
+asks:
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "media struttura fino a 400 mq {{business.denominazione}}"}
+  in_centro_commerciale: {type: yes_no, question: "L'esercizio si trova all'interno di un centro commerciale?", default: "false", why: "Napoli chiede il tipo di centro commerciale: non lo preparo ancora."}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (controlla la voce nel tariffario 2026; 0 se non dovuti)"}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità, altre dichiarazioni, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria, se dovuti, con pagoPA nella schermata di pagamento"
+  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
+  - "Allega quanto chiede la schermata degli allegati dopo aver spuntato le dichiarazioni"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+supports:
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}

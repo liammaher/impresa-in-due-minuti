@@ -397,12 +397,13 @@ def cmd_count(args):
     return out
 
 
-def stored_fingerprints(name, cache=None):
-    """Each section of a stored crawl and its fingerprint."""
+def stored_fingerprints(name, cache=None, variants=True):
+    """Each section of a stored crawl and its fingerprint; `variants=False` leaves out the sections a scelta adds (the
+    procura's: a crawl made before the variants was tried has none, a check lists them)."""
     cache = cache if cache is not None else {}
     out = {}
     for s in json.loads((SECTIONS / f"{name}.json").read_text())["sections"]:
-        if s.get("skipped") or s.get("error"):
+        if s.get("skipped") or s.get("error") or (s.get("scelta") and not variants):
             continue
         if s.get("same_as"):
             out[s["section"]] = s.get("fingerprint") or fingerprint(resolve(s["same_as"], cache)["fields"])
@@ -416,6 +417,25 @@ def digest(fingerprints):
     pane: 27 of these come back through the conversation, not 40 KB of fingerprints."""
     items = sorted(([k, v] for k, v in fingerprints.items()), key=lambda kv: kv[0])
     return hashlib.sha256(json.dumps(items, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()[:12]
+
+
+def same_digest(d, name, cache=None):
+    """How a check's digest agrees with the stored crawl: "all" (every section, a scelta's included), "base" (without the
+    sections a scelta adds: nine pratiche "differed" on 2026-11-12 for the procura variant alone, their crawls older than the
+    variants), or None."""
+    cache = cache if cache is not None else {}
+    if d["digest"] == digest(stored_fingerprints(name, cache)):
+        return "all"
+    if d.get("base") and d["base"] == digest(stored_fingerprints(name, cache, variants=False)):
+        return "base"
+    return None
+
+
+def default_draft(names):
+    """The scratch draft a batch walks on: its sportello's. The SUE's draft has no SUAP sector in its tree, so a SUAP batch on
+    it failed every pratica as "not in the tree" (2026-11-12, a lost drift check). It must exist in Pratiche in bozza."""
+    suap = names and all(n.startswith("suap-") for n in names)
+    return "PROVA NON INVIARE - catalogo " + ("suap" if suap else "sue")
 
 
 def drift_digests(source):
@@ -432,9 +452,10 @@ def drift_digests(source):
         if not (SECTIONS / f"{name}.json").exists():
             out.append(f"{name}: no stored crawl to compare")
             continue
-        if d["digest"] == digest(stored_fingerprints(name, cache)):
+        how = same_digest(d, name, cache)
+        if how:
             drift["pratiche"][name] = {"checked": d["crawled"][:10], "differences": []}
-            out.append(f"{name}: same as the stored crawl")
+            out.append(f"{name}: same as the stored crawl" + (" (its scelte's sections aside)" if how == "base" else ""))
         else:
             again.append(name)
             out.append(f"{name}: differs: print it (window.pvCheckNames, check-print.js) for `drift -`")
@@ -524,7 +545,11 @@ def bundle(out, path, srcs, ops, args):
     names = [o["name"] for o in ops]
     if args.check:
         ops = [{**o, "check": True} for o in ops]
-    opts = {"draft": args.draft, "depth": args.depth, "variants": True, "ops": ops}
+    draft = args.draft or default_draft(names)
+    if names and all(n.startswith("suap-") for n in names) and "catalogo sue" in draft:
+        raise SystemExit("these are SUAP's pratiche but the scratch draft is the SUE's: every sector would read \"not in the tree\"; "
+                         "pass --draft of a SUAP draft (it must exist in Pratiche in bozza)")
+    opts = {"draft": draft, "depth": args.depth, "variants": True, "ops": ops}
     if args.check:
         opts["since"] = datetime.date.today().isoformat()
     stamp = "backup-" + datetime.date.today().strftime("%Y%m%d")
@@ -624,10 +649,10 @@ for (const o of opts.ops) {
   if (!v) { digests[o.name] = "not checked"; continue; }
   if (v.error) { digests[o.name] = "error: " + v.error; continue; }
   if (opts.since && v.crawled < opts.since) { digests[o.name] = "a check from " + v.crawled.slice(0, 10); continue; }
-  const fp = {};
-  for (const s of v.sections) if (!s.skipped && !s.error) fp[s.section] = s.fingerprint;
-  const items = Object.entries(fp).sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
-  digests[o.name] = { digest: (await sha(JSON.stringify(items))).slice(0, 12), crawled: v.crawled };
+  const items = (keep) => { const fp = {}; for (const s of v.sections) if (!s.skipped && !s.error && keep(s)) fp[s.section] = s.fingerprint;
+    return Object.entries(fp).sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)); };
+  // `base`: without the sections a scelta adds (catalogue.py same_digest).
+  digests[o.name] = { digest: (await sha(JSON.stringify(items(() => true)))).slice(0, 12), base: (await sha(JSON.stringify(items((s) => !s.scelta)))).slice(0, 12), crawled: v.crawled };
 }
 const text = JSON.stringify({ digests });
 (await sha(text)) + "\\n" + text
@@ -823,7 +848,7 @@ def main():
     p.add_argument("dir")
     p.add_argument("--bundle", help="also a batch as one file the person picks (with --ops)")
     p.add_argument("--ops", help="--bundle: the batch's ops (catalogue.py ops' JSON)")
-    p.add_argument("--draft", default="PROVA NON INVIARE - catalogo sue", help="--bundle: the scratch draft")
+    p.add_argument("--draft", default=None, help="--bundle: the scratch draft (default: its sportello's, `catalogo suap` or `catalogo sue`)")
     p.add_argument("--depth", type=int, default=3)
     p.add_argument("--fresh", action="store_true", help="--bundle: crawl the ops again, though stored (known sections as same_as)")
     p.add_argument("--forget-known", action="store_true", help="--bundle: --fresh, and read every section again")

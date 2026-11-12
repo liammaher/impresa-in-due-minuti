@@ -16,6 +16,9 @@ portal in the pane (README, "The wedge's cells run on the portal"). What it chan
   (their slots need a filled draft), the SUAP rules table has no event for a suspension or a change of people, and a second
   recipe for a case that one already holds makes route.py ambiguous. Add `rules:` by hand where the table decides a case no
   recipe holds yet;
+- a `suap-common-*` crawl (advertising, public land: no sector index in its name) is taken under the wizard's sector the crawl names, and
+  the template's own asks that mean nothing for another pratica are dropped (TEMPLATE_ONLY); pre-flight's "no field reads asks.X: drop it" drops the
+  ask and its `yours` lines and goes again;
 - the fixture is copied from --fixture (default: the template's own, else the family's: README).
 Then, unless --no-fill, it generates the steps file and runs pre-flight, answering what it asks from the values the other
 rehearsals use (a choice, a date, a file), up to four rounds, and prints what is left for a person: a case's own answers
@@ -39,19 +42,48 @@ sys.dont_write_bytecode = True
 
 WIZARD = json.loads((PORTAL / "catalogue" / "F839" / "suap-wizard.json").read_text())["sectors"]
 SHORT = {4: "panificio", 5: "laboratorio alimentare", 16: "negozio non alimentare", 17: "negozio alimentare o misto",
-         18: "negozio alimentare, zone tutelate", 56: "struttura ricettiva extralberghiera", 60: "bar o ristorante", 61: "bar o ristorante, zone tutelate"}
+         18: "negozio alimentare, zone tutelate", 56: "struttura ricettiva extralberghiera", 60: "bar o ristorante", 61: "bar o ristorante, zone tutelate",
+         3: "agriturismo", 10: "autoriparazione", 12: "tintolavanderia", 13: "lavanderia a gettone", 14: "impresa di pulizie",
+         15: "hobbisti", 19: "media struttura fino a 400 mq", 20: "media struttura oltre 400 mq", 54: "albergo"}
 FIXTURE = {4: "panificio-fittizio", 5: "panificio-fittizio", 11: "negozio-fittizio", 16: "negozio-fittizio", 17: "negozio-fittizio",
-           18: "negozio-fittizio", 56: "affittacamere-fittizio", 60: "pizzeria-fittizia", 61: "ristorante-centro-storico-fittizio"}
+           18: "negozio-fittizio", 56: "affittacamere-fittizio", 60: "pizzeria-fittizia", 61: "ristorante-centro-storico-fittizio",
+           3: "negozio-fittizio", 10: "negozio-fittizio", 12: "negozio-fittizio", 13: "negozio-fittizio", 14: "negozio-fittizio",
+           15: "negozio-fittizio", 19: "negozio-fittizio", 20: "negozio-fittizio", 54: "affittacamere-fittizio"}
+# A "suap-common-*" crawl (advertising, public land, ...) is taken under a sector of the wizard's tree by name, not by index.
+COMMON_SHORT = {"Esercizio di somministrazione di alimenti e bevande in zone NON tutelate": "bar o ristorante"}
+# What a template's own recipe asks and refuses that has nothing to do with another pratica derived from it (the sign's
+# SCIA asks about a vincolo, zone A and a size; the dehors about a covered structure, the centro storico, music): left
+# in, pre-flight asks them of a rimozione or a renewal (2026-11-12, 8 rehearsals derived from them).
+TEMPLATE_ONLY = {"insegna-ristorante-scia-fittizio": ("insegna_vincolo", "insegna_zona_a", "insegna_grande"),
+                 "dehors-fittizio": ("coperto", "centro_storico", "musica", "nuovo_852")}
+
+
+def short_sector(sector):
+    """A short Italian name for the title: the table's, else the wizard's own cut at its first parenthesis or comma (a
+    sector with no entry took the hairdressers' words until 2026-11-12: a medium shop's title said "acconciatori")."""
+    return re.split(r" \(|, ", sector)[0][:40].rstrip()
+
+
+def drop_asks(text, keys):
+    """The recipe's ask lines named, and every `yours`/`supports` line that reads them."""
+    for key in keys:
+        text = re.sub(r"^  %s: \{.*\n" % re.escape(key), "", text, flags=re.M)
+        text = re.sub(r"^  - .*ask\.%s\b.*\n" % re.escape(key), "", text, flags=re.M)
+    return text
 
 
 def derive(new, template, crawl_name, fixture=None):
     crawl = json.loads((PORTAL / "catalogue" / "F839" / "sections" / f"{crawl_name}.json").read_text())
     m = re.search(r"› ([^›]+?) \(sector (.+)\)$", crawl["pratica"])
     op, sector = m.group(1).strip(), m.group(2).strip()
-    idx = int(re.match(r"suap-(\d+)", crawl_name)[1])
-    assert WIZARD[idx]["sector"] == sector, (crawl_name, sector)
-    nth = sum(1 for s in WIZARD[:idx + 1] if s["sector"] == sector)
-    repeated = sum(1 for s in WIZARD if s["sector"] == sector) > 1
+    m_idx = re.match(r"suap-(\d+)", crawl_name)
+    idx = int(m_idx[1]) if m_idx else None
+    if idx is not None:
+        assert WIZARD[idx]["sector"] == sector, (crawl_name, sector)
+        nth = sum(1 for s in WIZARD[:idx + 1] if s["sector"] == sector)
+    else:
+        nth = 1
+    repeated = sum(1 for s in WIZARD if s["sector"] == sector) > 1 and idx is not None
     tree = '{leaf: "%s", nth: %d}' % (sector, nth) if repeated else ('"%s"' % sector if re.search(r"[:,#]", sector) else sector)
     screens = [s["screen"] for s in (crawl.get("screens") or [])]
     lines = (ROOT / "rehearsals" / template / "recipe.yaml").read_text(encoding="utf-8").split("\n")
@@ -75,7 +107,8 @@ def derive(new, template, crawl_name, fixture=None):
         text = text.replace("  - {screen: Scelta del destinatario della pratica", "  - {screen: Scelta interventi eventuali, confirm: CONFERMA}\n  - {screen: Scelta del destinatario della pratica", 1)
     # A short Italian sector name: the wizard's own is long ("Strutture ricettive extralberghiere (affittacamere, bed and ...") and a
     # title cut at 60 characters read as English to bench/test_gen.py's check of what the tecnico reads.
-    text = re.sub(r"^title: .*$", "title: " + json.dumps(f"{op}, {SHORT.get(idx, 'acconciatori, estetisti e tatuatori')}, SUAP Napoli", ensure_ascii=False), text, flags=re.M)
+    text = drop_asks(text, TEMPLATE_ONLY.get(template, ()))
+    text = re.sub(r"^title: .*$", "title: " + json.dumps(f"{op}, {SHORT.get(idx) or COMMON_SHORT.get(sector) or short_sector(sector)}, SUAP Napoli", ensure_ascii=False), text, flags=re.M)
     header = (f"# {op} ({sector}), as gen.py writes its steps file from the batch crawl\n# (catalogue/F839/sections/{crawl_name}.json), for the made-up business of this folder's fixture.json.\n"
               f"# Derived from rehearsals/{template} (bench/derive_recipe.py): no `rules:` and no `after:`; the attachments and payment screens are not read.\n")
     folder = ROOT / "rehearsals" / new
@@ -90,7 +123,7 @@ def derive(new, template, crawl_name, fixture=None):
     answers["descrizione"] = f"PROVA NON INVIARE - {short} generato"
     answers["oggetto"] = f"{op}: pratica di prova con dati inventati."
     (folder / "answers.json").write_text(json.dumps(answers, ensure_ascii=False, indent=1) + "\n")
-    source = fixture or (template if (ROOT / "rehearsals" / template / "fixture.json").exists() else FIXTURE[idx])
+    source = fixture or (template if (ROOT / "rehearsals" / template / "fixture.json").exists() else FIXTURE.get(idx, "pizzeria-fittizia"))
     shutil.copy(ROOT / "rehearsals" / source / "fixture.json", folder / "fixture.json")
     return folder
 
@@ -112,12 +145,22 @@ def fill(folder):
     if gen.returncode or gen.stderr.strip():
         return {"gen": (gen.stderr or gen.stdout)[-400:]}
     values = pool()
-    for _ in range(4):
+    for _ in range(8):
         r = subprocess.run([py, str(PORTAL / "run.py"), "preflight", "--made-up", "--values", str(folder / "fixture.json"), "--steps", str(folder / "portal-steps.generated.yaml"),
                             "--answers", str(folder / "answers.json")], capture_output=True, text=True)
         try:
             d = json.loads(r.stdout)
         except ValueError:
+            # "steps file: no field reads asks.X: drop it": an ask the template had and this pratica doesn't read (a
+            # shop's diritti on a rimozione with none, a bollo on a form with no bollo section): dropped, and again.
+            unused = re.findall(r"no field reads asks\.(\w+)", r.stdout + r.stderr)
+            if unused:
+                recipe = folder / "recipe.yaml"
+                recipe.write_text(drop_asks(recipe.read_text(encoding="utf-8"), unused), encoding="utf-8")
+                gen = subprocess.run([py, str(PORTAL / "gen.py"), str(recipe), "--out", str(folder / "portal-steps.generated.yaml")], capture_output=True, text=True)
+                if gen.returncode or gen.stderr.strip():
+                    return {"gen": (gen.stderr or gen.stdout)[-400:]}
+                continue
             return {"preflight": (r.stdout + r.stderr)[-400:]}
         answers = json.loads((folder / "answers.json").read_text())
         added = False
@@ -131,7 +174,7 @@ def fill(folder):
             return {"ready": d["ready"], "unsupported": d["unsupported"], "questions": [q["key"] for q in d["questions"]], "proposals": [p.get("key") for p in d["proposals"]],
                     "files": [f["for"] for f in d["files"] if not f["exists"]]}
         (folder / "answers.json").write_text(json.dumps(answers, ensure_ascii=False, indent=1) + "\n")
-    return {"ready": False, "note": "still asking after four rounds"}
+    return {"ready": False, "note": "still asking after eight rounds"}
 
 
 def main():
