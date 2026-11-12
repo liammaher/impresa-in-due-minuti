@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """From a folder of a job's documents to the vault values and the answers a pratica needs.
 
-  intake.py scan DOSSIER --out OUT [--steps STEPS] [--client SLUG]
+  intake.py scan DOSSIER --out OUT [--steps STEPS] [--client SLUG] [--table sue-napoli|suap-napoli]
       Reads every file in DOSSIER (a PDF's text with pdftotext when installed, else its own
       reader; a .p7m's content; a scan or an image has none), tells what each is (a visura, a
       lease, a deed, the relazione, the owner's assent, the notifica preliminare, the drawings,
@@ -165,6 +165,12 @@ def cells(text):
 # Its kind, by its own words first (norm()), else by its file name. Order matters: a relazione
 # quotes "notifica preliminare", so the more specific heading wins.
 KINDS = [
+    # The SUAP's documents (2026-11-12): the Camera di Commercio's visura names the Registro delle Imprese or the REA, which
+    # the Agenzia's catastal visura never does, so it goes first.
+    ("visura_camerale", r"estratto dal registro (delle )?imprese|visura (ordinaria|storica) (di|della|dell)|numero rea ?:", r"camerale|visura.?(ditta|impresa|societ|srl)"),
+    ("relazione_locali", r"relazione (tecnica )?descrittiva (dei locali|dell'esercizio|dell'attivita|dei luoghi)", r"descrittiva|relazione.?locali"),
+    ("cessione_azienda", r"(cessione|affitto|conferimento) d'?azienda|cessione di azienda|affitto di ramo d'?azienda", r"cessione|affitto.?azienda"),
+    ("agibilita", r"certificato di agibilita|segnalazione certificata (per l')?agibilita", r"agibil"),
     ("visura", r"visura (attuale|storica)? ?per (immobile|soggetto)|dati identificativi.*dati di classamento", r"visura"),
     ("planimetria", r"planimetria di u\.?\s?i\.?\s?u\.?|catasto dei fabbricati - planimetria", r"planimetri"),
     ("locazione", r"contratto di locazione|denominat[oa] conduttore", r"locazion|affitto"),
@@ -198,6 +204,8 @@ KIND_NAMES = {
     "elaborati": "elaborati grafici", "foto": "documentazione fotografica", "ricevuta_diritti": "ricevuta dei diritti",
     "ricevuta_sanzione": "ricevuta della sanzione", "prospetto_contributo": "prospetto del contributo",
     "ricevuta_contributo": "ricevuta del contributo", "identita": "documento d'identità", "procura": "procura",
+    "visura_camerale": "visura camerale", "relazione_locali": "relazione descrittiva dei locali",
+    "cessione_azienda": "cessione o affitto d'azienda", "agibilita": "certificato di agibilità",
 }
 # The steps file asks that take each kind of file, in the order they're tried.
 SLOTS = {
@@ -669,6 +677,330 @@ def scan(dossier, steps=None, client=None):
     return report, values, proposals
 
 
+# --- the SUAP's documents (2026-11-12) ------------------------------------------------------
+# A business's pratica (suap-napoli) reads the Camera di Commercio's visura (the business, its titolare or
+# administrators), the lease of the premises, the catastal visura of the unit, the relazione descrittiva dei locali
+# (what the router asks: sales area, sign, music, ...) and, for a take-over, the deed of the sale or rental of the
+# business. Same contract as the SUE's path: people's and the business's values go to OUT/private/values.json,
+# Claude reads intake.json (kinds, field ids, notes, proposals with their source), and what the person must
+# decide, sign or declare is never proposed: the zone of the Piano, the event (but a take-over, which a deed says),
+# the declarations, the diritti.
+
+FORME = [(r"impresa individuale|ditta individuale", "ditta_individuale"),
+         (r"societa a responsabilita limitata semplificata|\bs\.?r\.?l\.?s\b", "srls"),
+         (r"societa a responsabilita limitata|\bs\.?r\.?l\b", "srl"), (r"societa in nome collettivo|\bs\.?n\.?c\b", "snc"),
+         (r"societa in accomandita semplice|\bs\.?a\.?s\b", "sas"), (r"societa per azioni|\bs\.?p\.?a\b", "spa"),
+         (r"societa cooperativa", "cooperativa")]
+ROLES = [("titolare", "titolare"), ("rappresentante", "legale_rappresentante"), ("amministratore", "amministratore"),
+         ("socio", "socio"), ("procuratore", "procuratore"), ("preposto", "preposto")]
+
+
+def suap_attivita(ateco):
+    """The router's `attivita` an ATECO 2007 code points to, or None: a proposal, the code proves nothing about the
+    premises or the sector the portal files under."""
+    if re.match(r"47\.(11|2)", ateco):
+        return "vicinato_alimentare"
+    if re.match(r"47\.(1[0-9]|[2-7])", ateco):
+        return "vicinato_non_alimentare"
+    if re.match(r"56\.(1|3)", ateco):
+        return "somministrazione"
+    if ateco.startswith("96.02.01"):
+        return "acconciatore"
+    if ateco.startswith(("96.02.02", "96.02.03")):
+        return "estetista"
+    if ateco.startswith("55.20.51"):
+        return "bed_and_breakfast"
+    return None
+
+
+def labelled(text):
+    """The text's `Label: value` cells in order, the label as norm() reads it."""
+    out = []
+    for c in cells(text):
+        m = re.match(r"([^:]{2,70}):\s*(.*)$", c)
+        if m:
+            out.append((norm(m.group(1)), m.group(2).strip()))
+    return out
+
+
+def read_visura_camerale(text):
+    """(the business's fields, the people with cariche): from the Registro delle Imprese's visura, its labelled lines."""
+    kv, people, biz = labelled(text), [], {}
+    first = lambda *keys: next((v for k, v in kv if any(k.startswith(x) for x in keys) and v), None)
+    if first("denominazione", "ditta"):
+        biz["denominazione"] = title(first("denominazione", "ditta"))
+    forma = norm(first("forma giuridica") or "")
+    biz_forma = next((f for pat, f in FORME if re.search(pat, forma)), None)
+    if biz_forma:
+        biz["forma_giuridica"] = biz_forma
+    cf = first("codice fiscale")
+    if cf and re.fullmatch(r"[A-Za-z0-9]{11,16}", cf.split()[0]):
+        biz["codice_fiscale"] = cf.split()[0].upper()
+    if first("partita iva"):
+        biz["partita_iva"] = re.sub(r"\D", "", first("partita iva"))
+    rea = first("numero rea")
+    m = re.fullmatch(r"([A-Za-z]{2})\s*-?\s*(\d+)", rea or "")
+    if m:
+        biz["rea"], biz["cciaa"] = f"{m.group(1).upper()}-{m.group(2)}", m.group(1).upper()
+    if first("indirizzo pec"):
+        biz["pec"] = first("indirizzo pec").lower()
+    for key, field in (("data iscrizione", "data_iscrizione_rea"), ("data atto di costituzione", "data_costituzione"),
+                       ("data di inizio dell'attivita", "data_inizio_attivita"), ("data di inizio attivita", "data_inizio_attivita")):
+        v = first(key)
+        if v and re.match(r"\d{2}/\d{2}/\d{4}", v):
+            biz[field] = date(v[:10])
+    m = re.search(r"(\d{2}\.\d{2}(?:\.\d{1,2})?)", first("codice ateco", "attivita prevalente") or "")
+    if m:
+        biz["codice_ateco"] = m.group(1)
+    if first("attivita esercitata", "descrizione attivita"):
+        biz["descrizione_attivita"] = first("attivita esercitata", "descrizione attivita")
+    seat = norm(first("indirizzo sede legale", "sede legale") or "")
+    m = re.match(rf"([a-z' ]+?) \(([a-z]{{2}})\) ({STREETS} [a-z' .]+?) (\d+\w*) cap (\d{{5}})", seat)
+    if m:
+        biz["sede_legale_comune"], biz["sede_legale_provincia"] = title(m.group(1)), m.group(2).upper()
+        biz["sede_legale_indirizzo"], biz["sede_legale_civico"], biz["sede_legale_cap"] = title(m.group(3)), m.group(4), m.group(5)
+    # The people: a heading "TITOLARE FIRMATARIO: SURNAME NAME" opens one, the lines after it describe them.
+    person = None
+    for label, value in kv:
+        role = next((r for w, r in ROLES if w in label), None)
+        if role and value and value.upper() == value and re.search(r"[A-Z]{2}", value) and "codice" not in label:
+            person = {"name": value, "roles": [role] + ([r for w, r in ROLES if w in label and r != role])}
+            people.append(person)
+        elif person is not None:
+            if label.startswith("nat") and not person.get("born"):
+                b = re.match(r"([a-z' ]+?) \(([a-z]{2})\) il (\d{2}/\d{2}/\d{4})", norm(value))
+                if b:
+                    person["birth_comune"], person["birth_province"], person["born"] = title(b.group(1)), b.group(2).upper(), date(b.group(3))
+            elif label.startswith("codice fiscale") and "cf" not in person:
+                person["cf"] = value.split()[0].upper()
+            elif label.startswith("residen") or label.startswith("domicilio"):
+                a = re.match(rf"([a-z' ]+?) \(([a-z]{{2}})\) ({STREETS} [a-z' .]+?) (\d+\w*) cap (\d{{5}})", norm(value))
+                if a:
+                    person["residenza"] = {"comune": title(a.group(1)), "provincia": a.group(2).upper(),
+                                           "indirizzo": title(a.group(3)), "civico": a.group(4), "cap": a.group(5)}
+            elif label.startswith("data inizio") and re.match(r"\d{2}/\d{2}/\d{4}", value):
+                person["from"] = date(value[:10])
+    return biz, people
+
+
+def read_lease_commerciale(text):
+    """The premises as a lease for a business uses them: address, CAP, piano, interno, catasto, the use, the term's start."""
+    t, out = norm(text), {}
+    m = re.search(rf"posta in ([a-z' ]+?), ({STREETS} [a-z' .]+?) n\. ?(\w+)", t)
+    if m:
+        out["comune"], out["indirizzo"], out["civico"] = title(m.group(1)), title(m.group(2)), m.group(3)
+    for field, pat in (("interno", r"\binterno (\w+)"), ("cap", r"\bcap (\d{5})")):
+        m = re.search(pat, t)
+        if m:
+            out[field] = m.group(1)
+    m = re.search(r"foglio (\d+),? particella (\d+),? sub(?:alterno|\.)? (\d+)", t)
+    if m:
+        out["catasto_foglio"], out["catasto_particella"], out["catasto_subalterno"] = m.groups()
+    m = re.search(r"categoria ([a-f]/\d+)", t)
+    if m:
+        out["catasto_categoria"] = m.group(1).upper()
+    m = re.search(r"ad uso (negozio|laboratorio|ufficio|magazzino|bar|ristorante|pizzeria|studio|salone)", t)
+    if m:
+        out["destinazione_uso"] = m.group(1)
+    m = re.search(r"superficie (?:commerciale |utile )?di (\d+) ?(?:mq|m2)", t)
+    if m:
+        out["superficie_mq"] = m.group(1)
+    m = re.search(r"dal (\d{2}/\d{2}/\d{4}) al", t)
+    if m:
+        out["data_inizio"] = date(m.group(1))
+    return out
+
+
+def phrase(t, pattern):
+    m = re.search(pattern, t)
+    return m.group(0).strip() if m else None
+
+
+def read_relazione_locali(text):
+    """What the router asks, as the relazione descrittiva dei locali says it: {fact: (value, the document's words)}.
+    A "no" only from an explicit sentence; silence proposes nothing."""
+    t, out = norm(text), {}
+    m = re.search(r"oggetto:? (.+?)(?: premesso|$)", t)
+    if m:
+        orig = re.search(r"OGGETTO:?\s*(.+)", text)
+        out["oggetto"] = ((orig.group(1).strip() if orig else m.group(1)), "oggetto della relazione")
+    m = re.search(r"superficie di vendita\D{0,15}?(\d+)(?:[.,]\d+)? ?(?:mq|m2|metri quadri)", t)
+    if m:
+        out["superficie_vendita_mq"] = (m.group(1), m.group(0))
+    # A yes/no fact: the sentence that names it says "no" if a negation comes before the words ("non è prevista alcuna
+    # insegna né diffusione sonora" is no for both), else yes. A fact no sentence names proposes nothing.
+    sentences = re.split(r"(?<=[.;!?])\s+", t)
+    for fact, yes in (
+            ("consumo_sul_posto", r"consumo (?:sul posto|immediato)"),
+            ("insegna", r"insegna"),
+            ("musica", r"diffusione sonora|impianto audio|musica dal vivo|strumenti musicali"),
+            ("dehors", r"dehors|tavolini all'aperto|tavoli all'aperto|suolo pubblico"),
+            ("alcolici", r"alcolic\w*|bevande alcoliche"),
+            ("prevenzione_incendi", r"prevenzione incendi|\bcpi\b")):
+        for sent in sentences:
+            m = re.search(yes, sent)
+            if m:
+                neg = re.search(r"\b(non|senza|nessun\w*|alcun\w*|ne|ne')\b", sent[:m.start()])
+                negated = neg is not None
+                # Only the few words around it: the sentence may name a person, and Claude reads these.
+                start = max(0, m.start() - 30)
+                if neg:  # the negation is always in the quoted words
+                    start = min(start, neg.start())
+                words = sent[start:m.end()].strip(". ")
+                out[fact] = (not negated, words.split(" ", 1)[1] if start > 0 and not neg and " " in words else words)
+                break
+    m = re.search(r"superficie (?:totale )?lorda[^0-9]{0,60}(\d+) ?(?:mq|m2)", t)
+    if m and "prevenzione_incendi" not in out and int(m.group(1)) > 400:
+        out["prevenzione_incendi"] = (True, m.group(0))
+    return out
+
+
+def read_cessione(text):
+    """Whether the document is a sale or rental of a business or branch (the take-over's deed), by its own words."""
+    t = norm(text)
+    w = phrase(t, r"(?:cessione|affitto|conferimento) d'?azienda|cessione di azienda|affitto di ramo d'?azienda")
+    return w
+
+
+def scan_suap(dossier, steps=None, client=None):
+    """What a business's dossier holds: (report for Claude, private values, proposals). The router's table is suap-napoli."""
+    files = sorted(p for p in Path(dossier).iterdir() if p.is_file() and not p.name.startswith("."))
+    report = {"documents": [], "unread": [], "notes": [], "proposals": [], "filled": [], "riconosciuti": [], "non_riconosciuti": 0}
+    values, proposals, docs = {}, {"facts": {}, "answers": {}, "people": {}}, {}
+
+    def propose(part, key, value, source, words=None):
+        if key in proposals[part]:
+            return
+        proposals[part][key] = value
+        report["proposals"].append({"part": part, "key": key, "value": value, "from": source} | ({"words": words} if words else {}))
+    for p in files:
+        text = text_of(p)
+        kind = kind_of(p, text)
+        report["documents"].append({"file": str(p), "kind": kind, "read": bool(text)})
+        if kind:
+            docs.setdefault(kind, []).append((p, text))
+        if not text:
+            report["unread"].append(p.name)
+        if kind and KIND_NAMES.get(kind, kind) not in report["riconosciuti"]:
+            report["riconosciuti"].append(KIND_NAMES.get(kind, kind))
+        elif not kind:
+            report["non_riconosciuti"] += 1
+
+    # The business and its people: the Camera di Commercio's visura.
+    biz, persons = {}, []
+    for p, text in docs.get("visura_camerale", []):
+        if text:
+            biz, persons = read_visura_camerale(text)
+    for k, v in biz.items():
+        values[f"business.{k}"] = v
+    slugs = {}
+    for person in persons:
+        words = person["name"].split()
+        # The visura writes SURNAME NAME: the slug is the first name, as in the vault, never the surname.
+        slug = slug_of(" ".join(words[1:]) or person["name"])
+        while slug in slugs.values():
+            slug += "-2"
+        slugs[person["name"]] = slug
+        values[f"{slug}:identity.last_name"] = title(words[0]) if words else ""
+        values[f"{slug}:identity.first_name"] = title(" ".join(words[1:]))
+        values[f"{slug}:identity.display_name"] = title(" ".join(words[1:] + words[:1]))
+        for field, key in (("codice_fiscale", "cf"), ("date_of_birth", "born"), ("birth_comune", "birth_comune"), ("birth_province", "birth_province")):
+            if person.get(key):
+                values[f"{slug}:identity.{field}"] = person[key]
+        if person.get("cf") and re.fullmatch(r"[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]", person["cf"]):
+            values[f"{slug}:identity.sex"] = "F" if int(person["cf"][9:11]) > 40 else "M"
+        for k, v in (person.get("residenza") or {}).items():
+            values[f"{slug}:residenza.{k}"] = v
+        values[f"{slug}:ruolo.tipo"] = ",".join(dict.fromkeys(person["roles"]))
+        if person.get("from"):
+            values[f"{slug}:ruolo.data_inizio"] = person["from"]
+    if persons:
+        # Others besides the one who declares: each presents their own antimafia declaration (the recipes' `altri_soggetti`).
+        propose("answers", "altri_soggetti", len(persons) > 1, "visura camerale", "una sola persona con cariche" if len(persons) == 1 else f"{len(persons)} persone con cariche")
+    if biz.get("codice_ateco"):
+        att = suap_attivita(biz["codice_ateco"])
+        if att:
+            propose("facts", "attivita", att, "visura camerale (codice ATECO)", f"ATECO {biz['codice_ateco']}: il codice propone, non prova")
+        else:
+            report["notes"].append({"from": "visura camerale", "note": f"il codice ATECO {biz['codice_ateco']} non è tra le attività "
+                                    "che il router del SUAP conosce: chiedi che attività è"})
+
+    # The premises: the lease, the catastal visura of the unit (its identifiers win).
+    lease = {}
+    for kind in ("locazione", "comodato"):
+        for p, text in docs.get(kind, []):
+            if text:
+                lease = read_lease_commerciale(text)
+                values["locale.titolo"] = "locatario" if kind == "locazione" else "comodatario"
+    unit = {}
+    for p, text in docs.get("visura", []):
+        if text:
+            unit, _, planimetria = read_visura(text)
+            if planimetria:
+                report["notes"].append({"from": "visura catastale", "note": f"planimetria depositata il {planimetria}"})
+    for k, v in {**lease, **unit}.items():
+        if k not in ("scala", "piano"):  # the vault's locale has neither
+            values[f"locale.{k}"] = v
+    if "locale.destinazione_uso" not in values and unit.get("catasto_categoria") == "C/1":
+        values["locale.destinazione_uso"] = "negozio"
+    where = unit.get("comune") or lease.get("comune")
+    if where and norm(where) != "napoli":
+        report["notes"].append({"from": "visura catastale" if unit.get("comune") else "contratto di locazione",
+                                "note": "i locali non sono nel Comune di Napoli: Impresa in un minuto prepara solo pratiche "
+                                        "del Comune di Napoli, quindi questa non la posso preparare"})
+    for p, text in docs.get("agibilita", []):
+        n = re.search(r"n\. ?(\S+) del (\d{2}/\d{2}/\d{4})", norm(text)) if text else None
+        report["notes"].append({"from": "certificato di agibilità", "note": "c'è un certificato di agibilità"
+                                + (f" ({n.group(1)} del {n.group(2)})" if n else "") + ": se la pratica chiede estremi, sono questi"})
+
+    # The activity and the event, only as a document says them.
+    for p, text in docs.get("relazione_locali", []):
+        found = read_relazione_locali(text) if text else {}
+        src = "relazione descrittiva dei locali"
+        for fact in ("superficie_vendita_mq", "consumo_sul_posto", "insegna", "musica", "dehors", "alcolici", "prevenzione_incendi"):
+            if fact in found:
+                propose("facts", fact, found[fact][0], src, found[fact][1])
+        if "oggetto" in found:
+            propose("answers", "oggetto", found["oggetto"][0], src, found["oggetto"][1])
+        if found.get("superficie_vendita_mq") and not values.get("locale.superficie_mq"):
+            report["notes"].append({"from": src, "note": "la superficie di vendita non è la superficie catastale: le due non coincidono"})
+    for p, text in docs.get("cessione_azienda", []):
+        w = read_cessione(text) if text else None
+        if w:
+            propose("facts", "evento", "subingresso", "atto di cessione o affitto d'azienda", w)
+    if "evento" not in proposals["facts"]:
+        report["notes"].append({"from": "dossier", "note": "nessun documento dice che cosa succede all'attività (apre, si sposta, si ingrandisce, "
+                                "chiude): lo chiedo; la zona del Piano non è in nessun documento"})
+
+    # The files, each in the steps file's slot for its kind.
+    asks = (steps or {}).get("asks", {})
+    for kind, slots in {"ricevuta_diritti": ["ricevuta_diritti"], "identita": ["documento_identita_cliente"],
+                        "procura": ["procura_firmata"]}.items():
+        for p, _ in docs.get(kind, []):
+            slot = next((s for s in slots if s in asks and s not in proposals["answers"]), None)
+            if slot:
+                propose("answers", slot, str(p), f"{p.name} ({kind})")
+    for p, text in docs.get("ricevuta_diritti", []):
+        if text:
+            r = read_receipt(text)
+            report["notes"].append({"from": p.name, "note": f"ricevuta di {r['importo'] or '?'} €: i diritti del SUAP si pagano con pagoPA "
+                                    "nella schermata di pagamento, quindi il conto della ricevuta non lo verifico"})
+
+    table = rules.table("suap-napoli")["facts"]
+    for key in list(proposals["facts"]):
+        if rules.fact_value(table[key], proposals["facts"][key]) is None:
+            proposals["facts"].pop(key)
+    if steps is not None:
+        for key in list(proposals["answers"]):
+            v, a = proposals["answers"][key], asks.get(key)
+            if not (a is not None and run.check_answer(a, v) is None):
+                proposals["answers"].pop(key)
+    proposals.pop("people", None)
+    report["proposals"] = [x for x in report["proposals"] if x["key"] in proposals.get(x["part"], {})]
+    report["filled"] = sorted(values)
+    return report, values, proposals
+
+
 def private_dir(out):
     d = out / "private"
     d.mkdir(parents=True, exist_ok=True)
@@ -684,6 +1016,8 @@ def main():
     s.add_argument("--out", type=Path, required=True)
     s.add_argument("--steps", type=Path, help="the routed pratica's steps file: bind answers and file slots to it")
     s.add_argument("--client", help="the client's vault slug, when no lease or sole owner names them")
+    s.add_argument("--table", choices=["sue-napoli", "suap-napoli"], default="sue-napoli",
+                   help="the router's table: a building title's documents (default) or a business's (suap-napoli)")
     a_ = sub.add_parser("accept")
     a_.add_argument("out", type=Path)
     a_.add_argument("--into", type=Path, required=True)
@@ -694,7 +1028,7 @@ def main():
             if not a.dossier.is_dir():
                 raise run.StepError(f"no folder {a.dossier}")
             steps = rules.load(a.steps) if a.steps else None
-            report, values, proposals = scan(a.dossier, steps, a.client)
+            report, values, proposals = (scan_suap if a.table == "suap-napoli" else scan)(a.dossier, steps, a.client)
             a.out.mkdir(parents=True, exist_ok=True)
             vfile = private_dir(a.out) / "values.json"
             fd = os.open(vfile, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)

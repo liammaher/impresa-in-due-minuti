@@ -21,6 +21,7 @@ HERE = Path(__file__).resolve().parent
 sys.path[:0] = [str(HERE.parent), str(HERE)]
 sys.dont_write_bytecode = True
 import dossier  # noqa: E402
+import dossier_suap  # noqa: E402
 import intake  # noqa: E402
 import run  # noqa: E402
 
@@ -303,9 +304,167 @@ def accept_never_replaces():
     assert json.loads(f.read_text())["intervento"] == "restauro"
 
 
+# --- the SUAP's path (2026-11-12): made-up dossiers (dossier_suap.py), a shop and a bar taken over --------------------------
+
+SUAP_SHOP = REPO / "rehearsals" / "negozio-fittizio"
+SHOP_FIXTURE = dict(json.loads((SUAP_SHOP / "fixture.json").read_text())["fields"])
+SHOP_DIR = dossier_suap.write(TMP / "suap-negozio", "negozio")
+BAR_DIR = dossier_suap.write(TMP / "suap-bar", "bar")
+SHOP, SHOP_VALUES, SHOP_PROPOSED = intake.scan_suap(SHOP_DIR)
+BAR, BAR_VALUES, BAR_PROPOSED = intake.scan_suap(BAR_DIR)
+# Everything personal in the two dossiers: Claude must read none of it.
+SECRETS = ("FTTCML88C61F839H", "SMPGLI70S70F839A", "FTTMRC75E02F839F", "55501230639", "09876540633", "81764350633",
+           "1988-03-21", "21/03/1988", "1970-11-30", "30/11/1970", "1975-05-02", "02/05/1975", "Fittizi", "FITTIZI", "Esempio",
+           "ESEMPIO", "Cimarosa", "Toledo", "Foria", "Giordano", "Caracciolo", "pec.example.it", "Caffe del Molo", "CAFFE DEL MOLO")
+
+
+def suap_kinds_and_values():
+    """The documents are told apart (the Camera's visura from the Agenzia's, the commercial lease, the relazione descrittiva);
+    every field read off them is the shop rehearsal's fixture, and what the fixture has that the visura carries is read."""
+    kinds = {Path(d["file"]).name: d["kind"] for d in SHOP["documents"]}
+    assert kinds == {"Visura_camerale.pdf": "visura_camerale", "Visura_catastale_locale.pdf": "visura",
+                     "Contratto_locazione_commerciale.pdf": "locazione", "Relazione_descrittiva_locali.pdf": "relazione_locali",
+                     "Certificato_agibilita.pdf": "agibilita", "Ricevuta_diritti.pdf": "ricevuta_diritti",
+                     "Documento_identita_titolare.pdf": "identita"}, kinds
+    assert {Path(d["file"]).name: d["kind"] for d in BAR["documents"]}["Atto_affitto_azienda.pdf"] == "cessione_azienda"
+    assert SHOP["unread"] == ["Documento_identita_titolare.pdf"]
+    wrong = {k: (v, SHOP_FIXTURE[k]) for k, v in SHOP_VALUES.items() if k in SHOP_FIXTURE and SHOP_FIXTURE[k] != v}
+    assert not wrong, wrong
+    # What the fixture holds that no document of the dossier says (an email, a phone, the day the VAT number opened) is not invented.
+    from_documents = [k for k in SHOP_FIXTURE if k not in ("business.data_apertura", "business.email", "business.telefono")
+                      and not k.endswith((".email", ".phone", ".citizenship"))]
+    missed = [k for k in from_documents if k not in SHOP_VALUES]
+    assert not missed, missed
+    # A company's administrators are people of their own, by first name, each with their role.
+    assert BAR_VALUES["giulia:ruolo.tipo"] == "amministratore" and BAR_VALUES["marco:ruolo.tipo"] == "amministratore,socio"
+    assert BAR_VALUES["business.forma_giuridica"] == "srl" and BAR_VALUES["locale.destinazione_uso"] == "bar"
+
+
+def suap_nothing_personal_for_claude():
+    """intake.json and proposed.json are what Claude reads: kinds, field ids, notes, proposals with their source. No codice
+    fiscale, birth date, surname, address or business name of anyone in the dossiers, and the private file is 0600."""
+    for name, report, proposed in (("shop", SHOP, SHOP_PROPOSED), ("bar", BAR, BAR_PROPOSED)):
+        text = json.dumps(report, ensure_ascii=False) + json.dumps(proposed, ensure_ascii=False)
+        for secret in SECRETS:
+            assert secret not in text, (name, secret)
+    for case, dossier_dir in (("shop", SHOP_DIR), ("bar", BAR_DIR)):
+        out = TMP / f"cli-{case}"
+        p = subprocess.run([PY, "-I", HERE.parent / "intake.py", "scan", dossier_dir, "--out", out, "--table", "suap-napoli"],
+                           capture_output=True, text=True)
+        assert p.returncode == 0, p.stderr
+        for shown in (p.stdout, (out / "intake.json").read_text(), (out / "proposed.json").read_text()):
+            for secret in SECRETS:
+                assert secret not in shown, (case, secret)
+        vfile = out / "private" / "values.json"
+        assert oct(vfile.stat().st_mode & 0o777) == "0o600" and oct(vfile.parent.stat().st_mode & 0o777) == "0o700"
+        assert any(secret in vfile.read_text() for secret in ("FTTCML88C61F839H", "SMPGLI70S70F839A")), "the values are there"
+    assert "carmela:identity.codice_fiscale" in SHOP["filled"]
+
+
+def suap_proposes_only_what_a_document_says():
+    """The router's facts come with their source and words; the event is a take-over only because a deed says so; the zone,
+    the event of a new shop, the declarations and the diritti are never proposed (the person decides, signs, declares)."""
+    facts = {p["key"]: p for p in SHOP["proposals"] if p["part"] == "facts"}
+    assert facts["attivita"]["value"] == "vicinato_non_alimentare" and "ATECO" in facts["attivita"]["words"]
+    assert [facts[k]["value"] for k in ("consumo_sul_posto", "insegna", "musica", "alcolici")] == [False] * 4
+    assert "evento" not in facts and "zona" not in facts and "dehors" not in facts, sorted(facts)
+    assert facts["insegna"]["words"].startswith("non e prevista") and facts["musica"]["words"].startswith("non e prevista")
+    assert any("nessun documento dice che cosa succede" in n["note"] for n in SHOP["notes"]), SHOP["notes"]
+    bar = {p["key"]: p for p in BAR["proposals"] if p["part"] == "facts"}
+    assert bar["evento"]["value"] == "subingresso" and bar["evento"]["from"].startswith("atto di cessione")
+    assert bar["attivita"]["value"] == "somministrazione" and bar["insegna"]["value"] is True and bar["dehors"]["value"] is False
+    assert bar["prevenzione_incendi"]["value"] is False and "non e soggetta" in bar["prevenzione_incendi"]["words"]
+    assert not any("nessun documento dice" in n["note"] for n in BAR["notes"])
+    # Several administrators: the others' antimafia declarations are theirs, so it is asked as "yes", from the visura.
+    answers = {p["key"]: p["value"] for p in BAR["proposals"] if p["part"] == "answers"}
+    assert answers["altri_soggetti"] is True and {p["key"]: p["value"] for p in SHOP["proposals"]}["altri_soggetti"] is False
+    everything = {p["key"] for r in (SHOP, BAR) for p in r["proposals"]}
+    assert not everything & {"zona", "diritti_euro", "diritti_esente", "descrizione", "dichiarazioni", "firma"}, everything
+    # A premises outside Naples is said first, as the SUE's path does.
+    d = TMP / "suap-fuori"
+    d.mkdir()
+    (d / "Contratto_locazione.pdf").write_bytes(dossier.one_page([
+        "CONTRATTO DI LOCAZIONE AD USO DIVERSO DALL'ABITATIVO", "concede in locazione a ROSSI SRL, denominata CONDUTTORE,",
+        "l'unita' immobiliare ad uso negozio posta in Roma, Via Appia n. 5, piano terra, CAP 00100,"]))
+    notes = [n["note"] for n in intake.scan_suap(d)[0]["notes"]]
+    assert any("non sono nel Comune di Napoli" in n for n in notes), notes
+
+
+def suap_negations_read_as_negations():
+    """«non è prevista alcuna insegna né diffusione sonora» is no for both; «non è soggetta a controllo di prevenzione
+    incendi» no; a fact no sentence names proposes nothing; a surface over 400 m² gross proposes the fire prevention."""
+    found = intake.read_relazione_locali(
+        "Non è prevista alcuna insegna né diffusione sonora. L'attività non è soggetta a controllo di prevenzione incendi.")
+    assert found["insegna"][0] is False and found["musica"][0] is False and found["prevenzione_incendi"][0] is False, found
+    found = intake.read_relazione_locali("La superficie lorda complessiva, servizi e depositi compresi, è di 520 mq. "
+                                         "Il locale ha un dehors con tavolini all'aperto su suolo pubblico.")
+    assert found["prevenzione_incendi"][0] is True and found["dehors"][0] is True and "insegna" not in found, found
+    assert intake.read_relazione_locali("La superficie di vendita è di 40 mq.")["superficie_vendita_mq"][0] == "40"
+    # Which activity an ATECO code points to; a code the router has no activity for proposes none.
+    assert [intake.suap_attivita(c) for c in ("47.11.10", "47.62.20", "56.10.11", "56.30.00", "96.02.01", "96.02.02", "55.20.51", "10.71.10")] == [
+        "vicinato_alimentare", "vicinato_non_alimentare", "somministrazione", "somministrazione", "acconciatore", "estetista",
+        "bed_and_breakfast", None]
+    # A visura camerale of a shop is not the Agenzia's visura per immobile, and the other way round.
+    assert intake.kind_of(Path("x.pdf"), "VISURA ORDINARIA - Estratto dal Registro delle Imprese\nNumero REA: NA - 1") == "visura_camerale"
+    assert intake.kind_of(Path("x.pdf"), "Visura attuale per immobile\nSituazione degli atti informatizzati") == "visura"
+
+
+def suap_end_to_end():
+    """The folder of a shop opening, the whole path: scan, accept the router's facts, the tecnico's two answers (the event, the
+    zone), route.py names the pratica, scan against its steps file, accept, pre-flight with the documents' values and a vault
+    that holds nothing of the business: the documents' fields aren't missing, nothing proposed is asked again."""
+    out, work = TMP / "suap-out", TMP / "suap-work"
+    work.mkdir()
+    intake_py, route_py, run_py = HERE.parent / "intake.py", REPO / "claude/skills/pratica/portal/route.py", \
+        REPO / "claude/skills/pratica/portal/run.py"
+
+    def cli(*args):
+        p = subprocess.run([PY, "-I", *map(str, args)], capture_output=True, text=True)
+        assert p.returncode in (0, 3), (args, p.stderr[-800:])
+        return json.loads(p.stdout)
+    cli(intake_py, "scan", SHOP_DIR, "--out", out, "--table", "suap-napoli")
+    cli(intake_py, "accept", out, "--into", work / "facts.json", "--part", "facts")
+    first = cli(route_py, "--table", "suap-napoli", "--answers", work / "facts.json")
+    assert not first["routed"] and {q["key"] for q in first["questions"]} == {"evento", "fatti"}, first["questions"]
+    facts = json.loads((work / "facts.json").read_text())
+    facts.update(evento="apertura", zona="c", fatti=[])  # what the tecnico answers: no document says it
+    (work / "facts.json").write_text(json.dumps(facts))
+    r = cli(route_py, "--table", "suap-napoli", "--answers", work / "facts.json")
+    assert r["routed"] and r["pratica"] == "negozio-fittizio", r
+    (work / "answers.json").write_text(json.dumps(dict(r["answers"], descrizione="PROVA NON INVIARE - intake suap")))
+    cli(intake_py, "scan", SHOP_DIR, "--out", out, "--table", "suap-napoli", "--steps", r["steps"])
+    added = cli(intake_py, "accept", out, "--into", work / "answers.json")["added"]
+    assert {"altri_soggetti", "oggetto", "ricevuta_diritti"} <= set(added), added
+    vault = {}  # nothing of the business in the vault: the documents bring it
+    (work / "vault.json").write_text(json.dumps(vault))
+    rep = cli(run_py, "preflight", "--steps", r["steps"], "--answers", work / "answers.json",
+              "--values", work / "vault.json", "--values", out / "private" / "values.json", "--made-up")
+    assert not rep["unsupported"], rep["unsupported"]
+    carried = ("business.denominazione", "business.codice_fiscale", "business.partita_iva", "business.pec", "business.sede_legale_",
+               "carmela:identity.", "carmela:residenza.", "locale.indirizzo", "locale.catasto_", "locale.titolo")
+    assert not [m for m in rep["missing"] if m["field"].startswith(carried)
+                and m["field"] not in ("carmela:identity.email", "carmela:identity.phone")], [m["field"] for m in rep["missing"]]
+    # What is left to the vault: the contacts no document of the dossier carries.
+    assert {m["field"] for m in rep["missing"]} <= {"carmela:identity.email", "carmela:identity.phone", "business.telefono"}, rep["missing"]
+    asked = {q["key"] for q in rep["questions"] + rep["proposals"]} | {i["key"] for q in rep["questions"] for i in q.get("items", [])}
+    assert not asked & set(json.loads((out / "proposed.json").read_text())["answers"]), asked
+    print(f"  SUAP pre-flight with the documents: {len(rep['questions'])} questions, {len(rep['proposals'])} proposals, "
+          f"{len(rep['missing'])} fields missing: {sorted(m['field'] for m in rep['missing'])[:8]}")
+    # The bar taken over: the deed says it is a take-over, and the relazione's alcohol is refused with its reason, as the table does.
+    cli(intake_py, "scan", BAR_DIR, "--out", TMP / "suap-out-bar", "--table", "suap-napoli")
+    cli(intake_py, "accept", TMP / "suap-out-bar", "--into", work / "bar.json", "--part", "facts")
+    bar = json.loads((work / "bar.json").read_text())
+    bar.update(zona="c")
+    (work / "bar.json").write_text(json.dumps(bar))
+    rb = cli(route_py, "--table", "suap-napoli", "--answers", work / "bar.json")
+    assert not rb["routed"] and "Dogane" in rb["unsupported"][0], rb
+
+
 def main():
     tests = [kinds_and_unread, values_match_fixture, nothing_personal_for_claude, both_readers_agree, router_facts, notes, stato_legittimo_titles,
-             wrong_account_and_signed_files, parsers, end_to_end, napoli_annexes, accept_never_replaces]
+             wrong_account_and_signed_files, parsers, end_to_end, napoli_annexes, accept_never_replaces,
+             suap_kinds_and_values, suap_nothing_personal_for_claude, suap_proposes_only_what_a_document_says,
+             suap_negations_read_as_negations, suap_end_to_end]
     try:
         for t in tests:
             t()
