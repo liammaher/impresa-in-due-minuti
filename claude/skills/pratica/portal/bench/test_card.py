@@ -127,13 +127,13 @@ def main():
             bad.append(f"the CILA's card doesn't carry the library's article: {real.splitlines()[0]!r}")
         if "DPR" in card:
             bad.append("the Prova's card carries an article")
-        if not real.rstrip().endswith("Resta una bozza: non parte nulla finché non la invii."):
+        if not real.rstrip().endswith("Resta una bozza: la controlli tu, e non parte nulla finché non la invii."):
             bad.append("a real job's card doesn't say it stays a draft")
         if "Resta una bozza" in card:
             bad.append("the Prova's card says «Resta una bozza»: it says nothing is sent")
         # What the sportello adds goes next to each step in the closing lines, never in the card.
         det = run.step_details(steps)
-        if set(det) != {"paga i diritti", "paga", "firma la pratica", "invia"} or any(v in real or v in card for v in det.values()):
+        if set(det) != {"controlla l'anteprima della bozza", "paga i diritti", "paga", "firma la pratica", "invia"} or any(v in real or v in card for v in det.values()):
             bad.append(f"step details {det}: missing, or in the card")
     finally:
         os.chdir(here)

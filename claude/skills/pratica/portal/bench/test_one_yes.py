@@ -123,7 +123,9 @@ def complete_folder(tmp):
     quoted = short.split("\n\n")[0] if short.startswith("Dai tuoi documenti:") else ""  # the documents' words: at most 3 lines
     assert quoted.count("– ") <= 3, quoted
     assert short.count("– ") - quoted.count("– ") == len(r["proposals"]) and "«dettagli»" in short and "Scrivi «sì»" in short, short
-    assert "Controllami a campione" in short, "the summary doesn't invite a spot check"
+    assert "chiedimi di una casella qualsiasi" in short, "the summary doesn't invite a spot check"
+    assert (f"file da allegare, già controllati: {run.PICK}." in short) == bool(r.get("pick")), "the files' line doesn't say the page asks for them"
+    assert len(short.splitlines()) <= 22, "the summary is a wall of text"
     # The documents' own words on the answers that decide the pratica, each with its document.
     assert short.startswith("Dai tuoi documenti:\n– Lavori: «manutenzione straordinaria», «non strutturali»"), short[:300]
     assert "– Stato: «lavori sono iniziati in data 19/10/2026» (relazione tecnica)" in short, short[:500]

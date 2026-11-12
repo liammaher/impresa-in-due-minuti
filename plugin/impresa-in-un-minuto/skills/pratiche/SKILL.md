@@ -498,7 +498,9 @@ only Impresa in un minuto proposes; then the rest counted by where it comes from
 their note, the rules), the files, and «dettagli» to see every answer; then the closing lines and
 «Scrivi «sì» e apro il portale». The one message is points 1 and 2 above (the verdict, what you
 understood), without point 3: the card's heading is the pratica, with its article, so it is said once,
-not as a «Propongo» line and then again in the card. At most one line for each document that can't be read or disagrees
+not as a «Propongo» line and then again in the card. Point 2 is one short sentence here (who the client
+is and where the works are, with the document): the works, their state and the title are in
+«Dai tuoi documenti», never said twice. At most one line for each document that can't be read or disagrees
 with an answer (point 4), then pre-flight's `card` ("Cosa succede", three lines: the pratica and why
 it is this one, what you do, and that it stays a draft) **as it is**, a blank line, and `riepilogo`
 **as it is**. The card is generated from the steps file: never shorten it, add to it or word it
@@ -682,7 +684,10 @@ step 3 says how. Never send them a file, never ask them to download or save one,
    fine."
 <!-- /vault -->
 <!-- no-vault -->
-2. Say, in one line: "Sto compilando, non toccare la pagina."
+2. Say, in one line, the compilation and the check after it: "Compilo e poi confronto con i tuoi
+   documenti: non toccare la pagina." With pre-flight's `pick` (the page will ask for the job's files
+   in a box) end it: "…: non toccare la pagina, tranne il riquadro per i file." This line is the only
+   notice of the check: say nothing more until the closing lines (step 5).
 <!-- /no-vault -->
 3. Run each script as **one** JavaScript call on the portal's page, its text exactly as the
    file has it: `run/check.js` first. It returns what to run next, in order (`fetch.js`, then
@@ -698,7 +703,8 @@ step 3 says how. Never send them a file, never ask them to download or save one,
    (`window.pvPicked` says once the file is in).
 4. `run.js` returns at once: call `await __pv.wait(40000)` until `result` is `filled` or
    `stopped`. `waiting` means the page waits for the tecnico (the files to pick in its box, or a
-   code to type): say so once, gently.
+   code to type): say so once, in one line: "Sul portale c'è il riquadro per i file: scegli quelli
+   della cartella del lavoro." (a code: "Scrivi il codice nel riquadro sul portale.").
 <!-- vault -->
 5. Save `JSON.stringify(__pv.last())` to `run/report.json`. Then step 5.
 <!-- /vault -->
@@ -823,8 +829,10 @@ sh "${CLAUDE_SKILL_DIR}/py" "${CLAUDE_SKILL_DIR}/portal/run.py" page --steps "${
 ```
 <!-- /no-vault -->
 
-Write the signed files' paths into `answers.json` first (pre-flight with `--after-declarations`
-says which keys). It opens the draft by its name and attaches those files alone. It carries no
+The closing lines asked them to save the signed files in the job's folder: when they say «ho firmato»,
+find them there (the new `.p7m` files), match each to its slot by its name, and ask in one line only
+for one you can't place or that is missing. Write the signed files' paths into `answers.json` first
+(pre-flight with `--after-declarations` says which keys). It opens the draft by its name and attaches those files alone. It carries no
 other value, so there is **no code** this time: they choose the signed files once in the box on
 the page. Same calls as step 4, from `check.js`, saving the report to `run2/report.json`; then
 `review.py run2` and its `message`, as in step 5.
