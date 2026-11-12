@@ -91,6 +91,13 @@ class Handler(BaseHTTPRequestHandler):
                       + json.dumps(back).encode() + b"), 300)</script>", "text/html")
         elif path == "/login":  # where an expired sign-in lands (the portal's identity provider)
             self.send(b"<!doctype html><title>Accedi</title><p>Entra con SPID", "text/html")
+        elif path == "/errore500":  # the portal's own server error: a bare page, as the real one answered all evening (2026-11-11)
+            body = b"Internal Server Error"
+            self.send_response(500)
+            self.send_header("Content-Type", "text/html")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
         elif path == "/anteprima.pdf":
             self.send(b"%PDF-1.4\nl'anteprima del portale finto\n", "application/pdf")
         elif path == "/state":
@@ -255,6 +262,15 @@ def main():
             assert r["result"] == "stopped" and r["error"].startswith("signed out"), r.get("error")
             assert not r.get("retries"), r.get("retries")
         case("an expired sign-in stops the run saying so, not as the portal staying busy", signed_out)
+
+        def portal_error():
+            # The portal answers a bare "Internal Server Error" page (the session intact): the run says so, not "no document" or a
+            # missing label.
+            PORTAL.reset()
+            st = steps(base)
+            r = fill(browser, base, {**st, "start": base + "/errore500"}, answers)
+            assert r["result"] == "stopped" and r["error"].startswith("the portal answered an error page"), r.get("error")
+        case("a portal error page stops the run saying so, to wait and rerun", portal_error)
 
         def sso_bounce():
             # The fresh load of the draft passes through the sign-in's origin and back: the run

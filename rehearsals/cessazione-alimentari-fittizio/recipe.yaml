@@ -1,0 +1,38 @@
+# Cessare l'attività (Vicinato - settore merceologico Alimentare o Misto), as gen.py writes its steps file from the batch crawl
+# (catalogue/F839/sections/suap-017-cessare-l-attivita.json), for the made-up business of this folder's fixture.json.
+# Derived from rehearsals/cessazione-panificio-fittizio; no `rules:` (the table has no entry for it, or one recipe already holds the case) and no `after:`: the attachments and payment screens are not read.
+procedure: napoli/comune/cessazione-attivita-commerciale
+title: "Cessare l'attività, negozio alimentare o misto, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-017-cessare-l-attivita
+subject: impresa
+operation: Cessare l'attività
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [Vicinato - settore merceologico Alimentare o Misto], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Cessare l'attività"], confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per il negozio alimentare alimentare? Spunta tutte quelle che valgono, o nessuna."
+asks:
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "cessazione {{business.denominazione}}"}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (la riga della tabella 2026 per la cessazione di un negozio alimentare alimentare: controllala)", propose: "0"}
+yours:
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, le regole del Comune (Regolamenti del Comune), tasse comunali, art. 75 DPR 445/2000"
+  - "La cessazione della notifica ai sensi del Reg. 852/2004 per l'ASL si presenta a parte (la casella degli interventi nella procedura guidata non la preparo ancora)"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+supports:
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}

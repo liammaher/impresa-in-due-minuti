@@ -36,7 +36,10 @@ named `NAME:ANSWERS.json` runs with that answers file instead (one pratica, seve
 its own run, `NAME/ANSWERS` in the results). `NAME:ANSWERS.json:VALUES.json` runs that case on
 other values than --values' (an architect born abroad, from a copy of the fixture), so one bundle
 holds both: its result is `NAME/ANSWERS@VALUES`, which --record leaves out of runs.json (the
-repo's fixture wouldn't give that run again). Values that are the rehearsal's own rehearsals/NAME/fixture.json
+repo's fixture wouldn't give that run again). In `NAME:ANSWERS.json:VALUES.json` ANSWERS is relative to the rehearsal's
+folder and VALUES to the repo's root (a wrong path is a FileNotFoundError on the doubled one); in zsh write `"${NAME}:answers.json:..."`,
+since `$NAME:a` is a history modifier and eats the colon. A bundle of more than about 12 runs is too much for the pane's
+storage: split it, each bundle costing one file pick. Values that are the rehearsal's own rehearsals/NAME/fixture.json
 (`NAME:answers.json:rehearsals/NAME/fixture.json`) are its run's, recorded as any.
 Steps files of one procedure (a pratica and its procura variant) may share a batch: the pane keys each by
 its procedure and a hash of what it fills (run.py page_bundle).

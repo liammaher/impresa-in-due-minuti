@@ -22,7 +22,7 @@ branch no rehearsal took.
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
 | SUE (building works) | 104 | 104 | 102 | 27 checked, 0 changed |
-| SUAP (businesses) | 278 | 155 | 51 | 0 checked, 0 changed |
+| SUAP (businesses) | 278 | 155 | 83 | 0 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
@@ -32,11 +32,12 @@ By section use (how much of what pratiche show the dictionary fills):
 Rehearsals with no recorded run (written, never confirmed on the portal):
 
 - `dehors-fittizio`
+- `estetista-fittizio`
 - `parere-esonero-fittizio`
 - `pdc-sanatoria-accertamento-fittizio`
 - `ristorante-alcolici-fittizio`
 - `sospensione-srl-fittizia`
-- `variazione-negozio-fittizio`
+- `subingresso-estetista-fittizio`
 
 SUAP pratiche one or two sections short of fillable (the cheapest gaps):
 
@@ -213,26 +214,26 @@ What a Napoli architect or pratiche agency files again and again, so what has to
 
 | Sector | open | take over | close | suspend | move | change people | change premises |
 |---|---|---|---|---|---|---|---|
-| Bakery (panificio) | run | run | run | fill | run | run | run |
-| Food workshop (pizza al taglio, gelateria) | fill | fill | fill | - | fill | - | - |
-| Hairdresser (acconciatore) | fill | fill | fill | fill | run | fill | run |
-| Beautician (estetista) | fill | fill | fill | fill | run | fill | run |
-| Shop, non-food | run | run | fill | run | run | fill | run |
-| Shop, food or mixed | fill | fill | fill | fill | run | fill | fill |
-| Shop, food eaten on the spot (protected zones) | fill | fill | fill | - | run | fill | fill |
-| B&B, affittacamere (extralberghiere) | run | - | fill | fill | - | - | - |
+| Bakery (panificio) | run | run | run | run | run | run | run |
+| Food workshop (pizza al taglio, gelateria) | run | run | run | - | run | - | - |
+| Hairdresser (acconciatore) | run | run | run | run | run | run | run |
+| Beautician (estetista) | fill | fill | run | run | run | run | run |
+| Shop, non-food | run | run | run | run | run | run | run |
+| Shop, food or mixed | run | run | run | run | run | run | run |
+| Shop, food eaten on the spot (protected zones) | run | run | run | - | run | run | run |
+| B&B, affittacamere (extralberghiere) | run | - | run | run | - | - | - |
 | Bar / restaurant, normal zones | run | run | run | run | run | run | - |
-| Bar / restaurant, protected zones (centro storico) | run | fill | fill | - | run | fill | fill |
+| Bar / restaurant, protected zones (centro storico) | run | run | run | - | run | run | run |
 
 `run` = run on the portal; `fill` = fillable, never run; `map` = crawled, sections missing from the dictionary; `crawl` = not crawled; `-` = the sector doesn't offer it.
 
-Of 60 cells: **26 run, 34 fillable but not run, 0 need dictionary work, 0 not crawled yet.**
+Of 60 cells: **58 run, 2 fillable but not run, 0 need dictionary work, 0 not crawled yet.**
 
 Also in the wedge: the dehors (fillable, never run), the outside sign and the alcohol notice as ticks inside an opening (their rehearsals have no recorded run), and the sectors' own notices (food safety, sanitary).
 
 ### What each gap needs
 
-- **34 cells to run**: run it in the pane with made-up people (40-150 s; needs Liam logged in).
+- **2 cells to run**: run it in the pane with made-up people (40-150 s; needs Liam logged in).
 - **0 cells to map**: add the missing sections to the dictionary (draft.py drafts them; a person checks).
 - **0 cells to crawl**: crawl it in the pane on the scratch draft (20-60 s each; needs Liam logged in).
 - **Every cell**: the legal choice of which pratica a case needs (the library's rules table covers shops, bars and restaurants, hairdressers and beauticians and B&Bs; the bakery, the food workshop and moving premises have no entry in it), and a real case run past someone who knows the pratica.

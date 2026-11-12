@@ -2035,5 +2035,41 @@ def _():
     assert not any(f["kind"] == "date" and f["label"] == "dal" for f in opening["fields"]), opening
 
 
+@case("the beautician's professional requirements are its own form, not the hairdresser's the crawl borrowed: the qualification radio and its three boxes (`on_page`: its crawl lacks them), no abilitazione, other branches refused (2026-11-11)")
+def _():
+    steps = generated("estetista-fittizio")
+    sec = section(steps, "Dichiarazione sul possesso dei requisiti professionali (attività di estetista)")
+    labels = [f["label"] for f in sec["fields"]]
+    assert labels == ["di essere Responsabile tecnico", "di essere in possesso della qualificazione", "rilasciata da", "in data", "con atto n.",
+                      "che il/i Responsabile/i tecnico/i è/sono:"], labels
+    assert next(f for f in sec["fields"] if f["label"] == "di essere in possesso della qualificazione")["kind"] == "radio", sec
+    refusals = " ".join(str(c.get("else", "")) for c in steps.get("supports", []))
+    assert "legge n. 1 del 1990" in refusals and "responsabile tecnico è un'altra persona" in refusals, refusals
+    # The hairdresser's own section keeps its boxes (abilitazione, rilasciata da twice).
+    acc = section(generated("acconciatore-fittizio"), "Dichiarazione sul possesso dei requisiti professionali (attività di acconciatore)")
+    assert any("abilitazione professionale" in f["label"] for f in acc["fields"]), acc
+
+
+@case("the hairdresser's and beautician's \"Dichiarazioni\" name the antimafia statement as the person's: the portal requires its box and the run stopped on it (2026-11-11)")
+def _():
+    for name in ("subingresso-acconciatore-fittizio", "trasferimento-acconciatore-fittizio"):
+        sec = section(generated(name), "Dichiarazioni")
+        assert any("non sussistono nei propri confronti le cause di divieto" in t for t in sec.get("theirs", [])), (name, sec.get("theirs"))
+
+
+@case("a SUAP rehearsal's draft name fits the portal's box: 60 characters at most, \"PROVA NON INVIARE - \" included (2026-11-11: 33 new ones, nine too long)")
+def _():
+    checked = 0
+    for d in sorted((ROOT / "rehearsals").iterdir()):
+        r = d / "recipe.yaml"
+        a = d / "answers.json"
+        if not (r.exists() and a.exists()) or "sportello: suap" not in r.read_text(encoding="utf-8"):
+            continue
+        name = json.loads(a.read_text()).get("descrizione", "")
+        assert len(name) <= 60, (d.name, len(name), name)
+        checked += 1
+    assert checked >= 60, checked
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

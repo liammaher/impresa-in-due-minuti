@@ -1,0 +1,16 @@
+{
+ "extras": [],
+ "variazioni": [
+  "var_denominazione"
+ ],
+ "descrizione": "PROVA NON INVIARE - variazione soggetti ristoran generato",
+ "oggetto": "Variazioni soggetti: pratica di prova con dati inventati.",
+ "var_decorrenza": "2026-11-01",
+ "denominazione_precedente": "Pizzeria Esempio di Gennaro Fittizio",
+ "titolo_attivita_tipo": "SCIA",
+ "attivita_esercitata": "somministrazione di alimenti e bevande (pizzeria)",
+ "titolo_attivita_protocollo": "PG/2026/0777777",
+ "titolo_attivita_data": "2026-03-02",
+ "diritti_euro": "0",
+ "diritti_esente": false
+}
