@@ -104,7 +104,7 @@ def main():
         r = build(Path(t), shown={"second_run": later})
         check("a second compilation: the diritti paid first, its receipt and the procura then attached",
               r["steps"] == ["controlla l'anteprima della bozza", "spunta le dichiarazioni", "paga i diritti",
-                             "firma la procura, la ricevuta del pagamento e gli altri documenti; salva i file firmati nella cartella del lavoro e scrivimi «ho firmato»",
+                             "firma la procura, la ricevuta del pagamento e gli altri documenti (Quadro riepilogativo della documentazione); salva i file firmati nella cartella del lavoro e scrivimi «ho firmato»",
                              "firma la pratica", "invia"], r)
         d = {"controlla l'anteprima della bozza": "la trovi in Pratiche in bozza", "paga i diritti": "solo sul c/c postale 57060964", "firma la pratica": "prima il PDF della pratica, poi la distinta",
              "invia": "il codice pratica compare a video, la ricevuta arriva in PEC"}
@@ -113,7 +113,7 @@ def main():
         check("with a second compilation the list says who acts when (they, Claude, they), the sportello's details next to their step",
               lines[1:] == ["Ora tocca a te:", "1. Controlla l'anteprima della bozza (la trovi in Pratiche in bozza)", "2. Spunta le dichiarazioni",
                             "3. Paga i diritti (solo sul c/c postale 57060964)",
-                            "4. Firma la procura, la ricevuta del pagamento e gli altri documenti; salva i file firmati nella cartella del lavoro e scrivimi «ho firmato»",
+                            "4. Firma la procura, la ricevuta del pagamento e gli altri documenti (Quadro riepilogativo della documentazione); salva i file firmati nella cartella del lavoro e scrivimi «ho firmato»",
                             "Poi io: allego i file firmati con una seconda compilazione e ti avviso.", "Poi di nuovo tu:",
                             "5. Firma la pratica (prima il PDF della pratica, poi la distinta)",
                             "6. Invia (il codice pratica compare a video, la ricevuta arriva in PEC)"], r1)

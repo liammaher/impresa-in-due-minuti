@@ -123,6 +123,7 @@ def complete_folder(tmp):
     quoted = short.split("\n\n")[0] if short.startswith("Dai tuoi documenti:") else ""  # the documents' words: at most 3 lines
     assert quoted.count("– ") <= 3, quoted
     assert short.count("– ") - quoted.count("– ") == len(r["proposals"]) and "«dettagli»" in short and "Scrivi «sì»" in short, short
+    assert "seconda compilazione" in r["card"].splitlines()[-1], f"the card doesn't announce the second compilation: {r['card']}"
     assert "chiedimi di una casella qualsiasi" in short, "the summary doesn't invite a spot check"
     assert (f"file da allegare, già controllati: {run.PICK}." in short) == bool(r.get("pick")), "the files' line doesn't say the page asks for them"
     assert len(short.splitlines()) <= 22, "the summary is a wall of text"

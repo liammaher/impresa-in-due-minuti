@@ -1203,11 +1203,11 @@ asks:
   relazione_tecnica: {type: file, question: "La relazione tecnica (PDF)"}
   documentazione_fotografica: {type: file, question: "Foto dello stato dei locali (PDF)"}
   napoli_allegato_a: {type: yes_no, default: "false", question: "Questa pratica richiede l'Allegato A Programma 100 di Napoli (ogni titolo edilizio, DD 603/2025)?"}
-  napoli_allegato_a_firmato: {type: file, question: "L'Allegato A Programma 100 del committente (lo compila Claude), firmato digitalmente (.p7m)"}
+  napoli_allegato_a_firmato: {type: file, question: "L'Allegato A Programma 100 del committente (il modulo del Comune), firmato digitalmente (.p7m)"}
   modello_dp: {type: yes_no, default: "false", question: "Questa pratica richiede il Modello DP di Napoli (titoli, agibilità, autorizzazioni paesaggistiche: L.R. Campania 59/2018)?"}
-  modello_dp_firmato: {type: file, question: "Il Modello DP (lo compila Claude), firmato digitalmente da te e dal committente (.p7m), con la lettera d'incarico o il contratto"}
+  modello_dp_firmato: {type: file, question: "Il Modello DP (il modulo del Comune), firmato digitalmente da te e dal committente (.p7m), con la lettera d'incarico o il contratto"}
   procura_firmata: {type: file, question: "La procura speciale del portale (Allega documenti, Scarica il documento, dopo aver spuntato le dichiarazioni), firmata a mano dal committente e digitalmente da te (.p7m)"}
-  dsc_firmato: {type: file, question: "Il Quadro riepilogativo della documentazione della pratica (DSC: quello del portale, Scarica il documento dopo aver spuntato le dichiarazioni, o quello che Claude compila per una CILA), completato e firmato digitalmente (.p7m)"}
+  dsc_firmato: {type: file, question: "Il Quadro riepilogativo della documentazione della pratica (DSC: quello del portale, Scarica il documento dopo aver spuntato le dichiarazioni,), completato e firmato digitalmente (.p7m)"}
   ricevuta_diritti: {type: file, question: "La ricevuta dei diritti pagati (prima dell'invio, come li riscuote lo sportello), firmata digitalmente (.p7m)"}
   planimetria_firmata: {type: file, question: "La planimetria quotata dei locali, firmata da chi l'ha disegnata (firma digitale, .p7m, dove il portale accetta solo file firmati)"}
   ricevuta_tariffa_asl: {type: file, question: "La ricevuta della tariffa sanitaria forfettaria ASL per la registrazione ai sensi del Reg. 852, firmata digitalmente (.p7m)"}

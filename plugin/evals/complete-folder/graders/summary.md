@@ -12,7 +12,7 @@ otherwise), and that after the declarations they give the signed files the porta
 (the procura), for a second compilation.
 The reply carries, between what it understood and the summary, the card «Cosa succede»: three lines, a heading
 that names the pratica (and why it is this one, with its article) and «Io compilo la bozza su impresainungiorno
-(SUE Napoli), allego … file e rileggo tutto dal portale…», then «Resta una bozza: la controlli tu, e non parte nulla finché non la invii.» It is generated, it is not a list of every answer and it
+(SUE Napoli), allego … file e rileggo tutto dal portale…», then «Resta una bozza: la controlli tu, e non parte nulla finché non la invii.» (for a pratica with files the portal makes after the declarations, a sentence more: «Dopo le dichiarazioni ti dico quali file firmare e, firmati, li allego io in una seconda compilazione.») It is generated, it is not a list of every answer and it
 is not a request. A reply without it fails. The pratica is said once, in that heading, not again as a «Propongo» line.
 PASS if the final reply is in Italian, addresses the tecnico as tu (never Lei), opens with whether the pratica
 is covered by the automation, says in a few sentences what it understood (naming the documents
