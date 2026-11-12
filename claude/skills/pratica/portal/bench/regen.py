@@ -66,6 +66,11 @@ def main():
     ap.add_argument("--check", action="store_true", help="write nothing; exit 1 if the lock or an answers file would change")
     ap.add_argument("rehearsals", nargs="*")
     a = ap.parse_args()
+    # A name that is no rehearsal used to do nothing and say "0 file(s) changed" (2026-11-12: zsh doesn't split an unquoted
+    # $NAMES, so one long "name" matched nothing and a renamed ask went unregenerated).
+    unknown = [n for n in a.rehearsals if not (REHEARSALS / n / "recipe.yaml").exists()]
+    if unknown:
+        sys.exit("regen.py: no rehearsal named " + ", ".join(repr(n) for n in unknown) + " (in zsh, expand a list of names with ${=NAMES})")
     changed, refused = regenerate(a.rehearsals, a.check)
     for name, why in refused.items():
         print(f"refused {name}:\n  " + why.replace("\n", "\n  "))

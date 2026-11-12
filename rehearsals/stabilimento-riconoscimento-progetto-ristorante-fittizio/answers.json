@@ -1,0 +1,16 @@
+{
+ "extras": [],
+ "descrizione": "PROVA NON INVIARE - stabilimento riconosc progetto",
+ "oggetto": "Richiesta di approvazione progetto per riconoscimento di uno stabilimento A SEDE FISSA (procedura n. 7): pratica di prova con dati inventati.",
+ "diritti_euro": "0",
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "bollo_marche": false,
+ "stab_conferenza": "semplificata",
+ "stab_master_tipo": "registrati",
+ "stab_macroarea": "PROVA macroarea",
+ "stab_aggregazione": "PROVA aggregazione",
+ "stab_linea": "PROVA linea",
+ "stab_codice_univoco": "PROVA-0001",
+ "stab_riconoscimento_reg": "853/2004"
+}

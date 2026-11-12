@@ -1584,6 +1584,14 @@ asks:
   stab_registrazione_numero: {type: text, question: "Il numero di registrazione dello stabilimento (notifica Reg. CE 852/2004)"}
   stab_planimetria: {type: file, question: "La planimetria aggiornata dello stabilimento (PDF o file firmato)"}
   stab_conferenza: {type: choice, question: "Con quale conferenza di servizi chiedi che si svolga il procedimento? (il modulo la chiede sempre) semplificata (decisoria, in forma semplificata e in modalità asincrona); simultanea (decisoria, in forma simultanea e in modalità sincrona)", options: [semplificata, simultanea]}
+  # The master list of the stabilimenti forms (sectors 60 and 61): the three lists (Allevamenti, Registrati, Riconosciuti: the page offers each
+  # "a sede fissa" and "SENZA sede fissa" as downloads) and the line's boxes, which the page has the person copy from the downloaded list.
+  stab_riconoscimento_reg: {type: text, question: "Il regolamento CE ai sensi del quale chiedi il riconoscimento: la frase del modulo finisce con «ai sensi del Reg CE», e qui va il numero (ad es. 853/2004)"}
+  stab_master_tipo: {type: choice, question: "In quale delle tre master list del modulo sta la linea dell'attività? Ciascuna ha due documenti, «a sede fissa» e «SENZA sede fissa»: allevamenti; registrati; riconosciuti", options: [allevamenti, registrati, riconosciuti]}
+  stab_macroarea: {type: text, question: "La macroarea della linea d'attività, copiata tale e quale dalla master list (rev. 11) che il modulo fa scaricare (100 caratteri al massimo)"}
+  stab_aggregazione: {type: text, question: "L'aggregazione della stessa linea, copiata tale e quale dalla master list (100 caratteri al massimo)"}
+  stab_linea: {type: text, question: "La linea d'attività, copiata tale e quale dalla master list (100 caratteri al massimo)"}
+  stab_codice_univoco: {type: text, question: "Il codice univoco della stessa linea, copiato dalla master list (50 caratteri al massimo; non serve per gli allevamenti)"}
   # A short-term rental (locazione breve, CIN) and the variations of a B&B or affittacamere (sector 56).
   locazione_qualita: {type: choice, question: "In che qualità comunichi la locazione? proprietario; locatario (o sublocatario, comodatario ...)", options: [proprietario, locatario]}
   locazione_superficie_mq: {type: number, question: "La superficie totale dell'immobile (superficie utile abitabile), in m²"}
@@ -6372,9 +6380,8 @@ sections:
     leave: [di essere titolare della licenza, che non è stato modificato lo stato dei luoghi, /di essere in regola con il pagamento dei tributi comunali, di essere in regola con il pagamento dei tributi del regolamento del canone unico, che gli interventi non ledono i diritti di terzi, n., tipologia, per la somministrazione di alimenti e bevande, in data, allegata alla concessione n., del]
     fields: []
 
-  # The stabilimenti of Reg. CE 852/2004 (sectors 60 and 61): a change of holder, of the premises, of the project. The
-  # activity lists (the master list's macroarea, aggregazione and linea) of the other forms of this cluster are
-  # unread, so those forms stay refused. The person's statements ("ulteriori dichiarazioni": food safety, the
+  # The stabilimenti of Reg. CE 852/2004 (sectors 60 and 61): a change of holder, of the premises, of the project (round 5);
+  # the three forms that read the master list are below (round 6). The person's statements ("ulteriori dichiarazioni": food safety, the
   # activity lines' rules, antimafia, the duty to report changes, the ASL's fees, the master list's extra sheets)
   # are theirs.
   - section: oggetto della notifica
@@ -6403,6 +6410,87 @@ sections:
       - {kind: checkbox, label: che il procedimento si svolga mediante l'indizione della}
       - {kind: radio, label: conferenza dei servizi decisoria in forma semplificata, when: "{{ask.stab_conferenza|is_semplificata}}"}
       - {kind: radio, label: conferenza dei servizi decisoria in forma simultanea, when: "{{ask.stab_conferenza|is_simultanea}}"}
+  # The three forms that read the master list (the activity lines: macroarea, aggregazione, linea; a "codice univoco" for the
+  # lists of already registered or recognised stabilimenti). The two ticks that point at the master list's columns are the person's.
+  - section: dichiarazione per il riconoscimento dell'impresa
+    leave: [Nella stessa riga della master list corrispondente alla vostra attività]
+    branches: ["{{ask.stab_master_tipo|is_allevamenti}}", "{{ask.stab_master_tipo|is_registrati}}", "{{ask.stab_master_tipo|is_riconosciuti}}"]
+    plus: "The \"+\" under the Codice univoco adds a whole row (Macroarea, Aggregazione, Linee, Codice univoco: all four required) with its own \"+ -\"; read on a draft 2026-11-12, not mapped: the recipes refuse a second line (ask piu_linee)."
+    fields:
+      - {kind: text, label: attività che prevede il riconoscimento ai sensi del Reg CE, value: "{{ask.stab_riconoscimento_reg}}"}
+      - {kind: radio, label: ALLEVAMENTI, when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: radio, label: REGISTRATI, when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: radio, label: RICONOSCIUTI, when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Macroarea, value: "{{ask.stab_macroarea}}", when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: text, label: Aggregazione, value: "{{ask.stab_aggregazione}}", when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: text, label: Linee d'attività, value: "{{ask.stab_linea}}", when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: text, label: Macroarea, value: "{{ask.stab_macroarea}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: text, label: Aggregazione, value: "{{ask.stab_aggregazione}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: text, label: Linee d'attività, value: "{{ask.stab_linea}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: text, label: Codice univoco, value: "{{ask.stab_codice_univoco}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: text, label: Macroarea, value: "{{ask.stab_macroarea}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Aggregazione, value: "{{ask.stab_aggregazione}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Linee d'attività, value: "{{ask.stab_linea}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Codice univoco, value: "{{ask.stab_codice_univoco}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+  - section: dichiarazione per approvazione progetto per rilascio riconoscimento
+    leave: [Nella stessa riga della master list corrispondente alla vostra attività, per i seguenti motivi]
+    branches: ["{{ask.stab_master_tipo|is_allevamenti}}", "{{ask.stab_master_tipo|is_registrati}}", "{{ask.stab_master_tipo|is_riconosciuti}}"]
+    plus: "The \"+\" under the Codice univoco adds a whole row (Macroarea, Aggregazione, Linee, Codice univoco: all four required) with its own \"+ -\"; read on a draft 2026-11-12, not mapped: the recipes refuse a second line (ask piu_linee)."
+    fields:
+      - {kind: text, label: riconoscimento ai sensi del Reg CE, value: "{{ask.stab_riconoscimento_reg}}"}
+      - {kind: radio, label: ALLEVAMENTI, when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: radio, label: REGISTRATI, when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: radio, label: RICONOSCIUTI, when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Macroarea, value: "{{ask.stab_macroarea}}", when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: text, label: Aggregazione, value: "{{ask.stab_aggregazione}}", when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: text, label: Linee d'attività, value: "{{ask.stab_linea}}", when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: checkbox, label: che il procedimento si svolga mediante l'indizione della, when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma semplificata, when: "{{ask.stab_master_tipo|is_allevamenti}} {{ask.stab_conferenza|is_semplificata}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma simultanea, when: "{{ask.stab_master_tipo|is_allevamenti}} {{ask.stab_conferenza|is_simultanea}}"}
+      - {kind: text, label: Macroarea, value: "{{ask.stab_macroarea}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: text, label: Aggregazione, value: "{{ask.stab_aggregazione}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: text, label: Linee d'attività, value: "{{ask.stab_linea}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: text, label: Codice univoco, value: "{{ask.stab_codice_univoco}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: checkbox, label: che il procedimento si svolga mediante l'indizione della, when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma semplificata, when: "{{ask.stab_master_tipo|is_registrati}} {{ask.stab_conferenza|is_semplificata}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma simultanea, when: "{{ask.stab_master_tipo|is_registrati}} {{ask.stab_conferenza|is_simultanea}}"}
+      - {kind: text, label: Macroarea, value: "{{ask.stab_macroarea}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Aggregazione, value: "{{ask.stab_aggregazione}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Linee d'attività, value: "{{ask.stab_linea}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Codice univoco, value: "{{ask.stab_codice_univoco}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: checkbox, label: che il procedimento si svolga mediante l'indizione della, when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma semplificata, when: "{{ask.stab_master_tipo|is_riconosciuti}} {{ask.stab_conferenza|is_semplificata}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma simultanea, when: "{{ask.stab_master_tipo|is_riconosciuti}} {{ask.stab_conferenza|is_simultanea}}"}
+  - section: dichiarazione per approvazione progetto teso all'aggiunzione di linee di attività
+    # The first row of Macroarea / Aggregazione / Linee (and the Codice univoco) is the enabled one; once a list is chosen the page shows a second, switched-off row under the "+", and the crawl's ids ("moved") name that one: found by label (read on the draft, 2026-11-12).
+    leave: [Nella stessa riga della master list corrispondente alla vostra attività, per i seguenti motivi]
+    branches: ["{{ask.stab_master_tipo|is_allevamenti}}", "{{ask.stab_master_tipo|is_registrati}}", "{{ask.stab_master_tipo|is_riconosciuti}}"]
+    plus: "The \"+\" under the Codice univoco adds a whole row (Macroarea, Aggregazione, Linee, Codice univoco: all four required) with its own \"+ -\"; read on a draft 2026-11-12, not mapped: the recipes refuse a second line (ask piu_linee)."
+    fields:
+      - {kind: text, label: già riconosciuto con numero, value: "{{ask.stab_riconoscimento_numero}}"}
+      - {kind: radio, label: ALLEVAMENTI, when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: radio, label: REGISTRATI, when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: radio, label: RICONOSCIUTI, when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Macroarea, by_label: true, value: "{{ask.stab_macroarea}}", when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: text, label: Aggregazione, by_label: true, value: "{{ask.stab_aggregazione}}", when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: text, label: Linee d'attività, by_label: true, value: "{{ask.stab_linea}}", when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: checkbox, label: che il procedimento si svolga mediante l'indizione della, when: "{{ask.stab_master_tipo|is_allevamenti}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma semplificata, when: "{{ask.stab_master_tipo|is_allevamenti}} {{ask.stab_conferenza|is_semplificata}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma simultanea, when: "{{ask.stab_master_tipo|is_allevamenti}} {{ask.stab_conferenza|is_simultanea}}"}
+      - {kind: text, label: Macroarea, by_label: true, value: "{{ask.stab_macroarea}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: text, label: Aggregazione, by_label: true, value: "{{ask.stab_aggregazione}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: text, label: Linee d'attività, by_label: true, value: "{{ask.stab_linea}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: text, label: Codice univoco, by_label: true, value: "{{ask.stab_codice_univoco}}", when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: checkbox, label: che il procedimento si svolga mediante l'indizione della, when: "{{ask.stab_master_tipo|is_registrati}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma semplificata, when: "{{ask.stab_master_tipo|is_registrati}} {{ask.stab_conferenza|is_semplificata}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma simultanea, when: "{{ask.stab_master_tipo|is_registrati}} {{ask.stab_conferenza|is_simultanea}}"}
+      - {kind: text, label: Macroarea, by_label: true, value: "{{ask.stab_macroarea}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Aggregazione, by_label: true, value: "{{ask.stab_aggregazione}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Linee d'attività, by_label: true, value: "{{ask.stab_linea}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: text, label: Codice univoco, by_label: true, value: "{{ask.stab_codice_univoco}}", when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: checkbox, label: che il procedimento si svolga mediante l'indizione della, when: "{{ask.stab_master_tipo|is_riconosciuti}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma semplificata, when: "{{ask.stab_master_tipo|is_riconosciuti}} {{ask.stab_conferenza|is_semplificata}}"}
+      - {kind: radio, label: conferenza dei servizi decisoria in forma simultanea, when: "{{ask.stab_master_tipo|is_riconosciuti}} {{ask.stab_conferenza|is_simultanea}}"}
   - section: ulteriori dichiarazioni
     strict: true
     theirs: [sono state rispettate le disposizioni generali, sono state rispettate le disposizioni specifiche, che non sussistono nei propri confronti le cause di divieto, nel caso lo stabilimento sia a sede fissa, che le attività non possono essere iniziate, rispettare l'obbligo di comunicare ogni successiva modifica, che la presente comunicazione non comprende, che l'eventuale affido di un reparto, degli obblighi previsti dal D.Lgs 194/08, dell'eventualità che per le linee, che eventuali variazioni delle informazioni, che il mancato aggiornamento delle schede, Il sottoscritto dichiara inoltre di essere informato]

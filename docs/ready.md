@@ -7,7 +7,7 @@ The single list of what the plugin ships, written by `claude/skills/pratica/port
 | | |
 |---|---|
 | Plugin version | 0.7.2 (`plugin/impresa-in-un-minuto/.claude-plugin/plugin.json`) |
-| Repo commit | `e9f92c540a3bce81aeb313820f0b2e92e1b457a9` plus uncommitted changes |
+| Repo commit | `ed74ccb0fa24e5ca78d6999f1009427d99d4c6bf` plus uncommitted changes |
 | Generated | 2026-11-12 |
 | Sportelli shipped | SUE (building works), SUAP (businesses), as `plugin/build.yaml` `sportelli` says |
 | Not shipped | none |
@@ -30,9 +30,9 @@ Per pratica on the portal, as coverage.md counts them:
 | Sportello | Mapped | Fillable | Run on the portal |
 |---|---:|---:|---:|
 | SUE (building works) | 104 | 104 | 102 |
-| SUAP (businesses) | 278 | 190 | 120 |
+| SUAP (businesses) | 278 | 196 | 126 |
 
-The plugin carries 237 steps files for 226 pratiche on the portal (a few steps files share one pratica, filled with other choices); 231 of the 237 have a run that filled the draft. The rows below are per steps file.
+The plugin carries 243 steps files for 232 pratiche on the portal (a few steps files share one pratica, filled with other choices); 237 of the 243 have a run that filled the draft. The rows below are per steps file.
 
 ## Pratiche
 
@@ -156,10 +156,16 @@ The plugin carries 237 steps files for 226 pratiche on the portal (a few steps f
 | `napoli/comune/subingresso-attivita-commerciale` | Subentrare nell'esercizio dell'attività | `subingresso-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r2ec47f` |
 | `napoli/comune/subingresso-attivita-commerciale` | Subentrare nell'esercizio dell'attività | `subingresso-ristorante-procura-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r2ec47f` |
 | `napoli/comune/variazione-preposto-somministrazione` | Variazione del preposto in attività di somministrazione e vendita di alimenti e bevande (quando non vi siano anche variazioni societarie) | `preposto-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
+| `napoli/comune/variazioni-attivita` | Richiesta di approvazione del progetto teso all’aggiunzione di linee d’attività in uno stabilimento già riconosciuto (procedura n. 9) | `stabilimento-aggiunzione-linee-ristorante-centro-storico-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r146883` `rad9d56` |
+| `napoli/comune/variazioni-attivita` | Richiesta di approvazione del progetto teso all’aggiunzione di linee d’attività in uno stabilimento già riconosciuto (procedura n. 9) | `stabilimento-aggiunzione-linee-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r146883` `rad9d56` |
 | `napoli/comune/variazioni-attivita` | Variazioni significative allo stato dei luoghi (da utilizzare esclusivamente per stabilimenti A SEDE FISSA per i quali è prevista la presentazione della planimetria) (procedura n. 6) | `stabilimento-luoghi-ristorante-centro-storico-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/variazioni-attivita` | Variazioni significative allo stato dei luoghi (da utilizzare esclusivamente per stabilimenti A SEDE FISSA per i quali è prevista la presentazione della planimetria) (procedura n. 6) | `stabilimento-luoghi-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/variazioni-attivita` | Richiesta di approvazione del progetto relativo alla modifica significativa dello stato dei luoghi in uno stabilimento già riconosciuto (procedura n. 10) | `stabilimento-progetto-ristorante-centro-storico-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rad9d56` |
 | `napoli/comune/variazioni-attivita` | Richiesta di approvazione del progetto relativo alla modifica significativa dello stato dei luoghi in uno stabilimento già riconosciuto (procedura n. 10) | `stabilimento-progetto-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rad9d56` |
+| `napoli/comune/variazioni-attivita` | Richiesta di riconoscimento per una impresa SENZA SEDE FISSA (procedura n. 8) | `stabilimento-riconoscimento-impresa-ristorante-centro-storico-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r146883` `rad9d56` |
+| `napoli/comune/variazioni-attivita` | Richiesta di riconoscimento per una impresa SENZA SEDE FISSA (procedura n. 8) | `stabilimento-riconoscimento-impresa-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r146883` `rad9d56` |
+| `napoli/comune/variazioni-attivita` | Richiesta di approvazione progetto per riconoscimento di uno stabilimento A SEDE FISSA (procedura n. 7) | `stabilimento-riconoscimento-progetto-ristorante-centro-storico-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r146883` `rad9d56` |
+| `napoli/comune/variazioni-attivita` | Richiesta di approvazione progetto per riconoscimento di uno stabilimento A SEDE FISSA (procedura n. 7) | `stabilimento-riconoscimento-progetto-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `r146883` `rad9d56` |
 | `napoli/comune/variazioni-attivita` | Variazione titolarità di uno stabilimento registrato/riconosciuto (procedura n. 2) | `stabilimento-titolarita-ristorante-centro-storico-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/variazioni-attivita` | Variazione titolarità di uno stabilimento registrato/riconosciuto (procedura n. 2) | `stabilimento-titolarita-ristorante-fittizio` | yes | yes | yes | `r3487df` `rc0f612` |
 | `napoli/comune/variazioni-attivita` | Variazioni soggetti | `variazione-negozio-fittizio` | yes | yes | yes | `r3487df` `rc0f612` `rbd1160` `r346ebd` |
@@ -282,9 +288,9 @@ What a steps file turns away, in the words the person reads (Italian), by the id
 
 | Id | Rows | Refusal |
 |---|---:|---|
-| `r3487df` | 130 | Per ora per una ditta individuale o una srl, srls, snc, sas o spa. |
-| `rc0f612` | 125 | Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora. |
-| `rad9d56` | 93 | L'esenzione ONLUS è cessata con il regime ONLUS il 1° gennaio 2026, salvo per un periodo d'imposta iniziato prima di tale data: un'ex ONLUS iscritta al RUNTS è esente come ets. |
+| `r3487df` | 136 | Per ora per una ditta individuale o una srl, srls, snc, sas o spa. |
+| `rc0f612` | 131 | Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora. |
+| `rad9d56` | 99 | L'esenzione ONLUS è cessata con il regime ONLUS il 1° gennaio 2026, salvo per un periodo d'imposta iniziato prima di tale data: un'ex ONLUS iscritta al RUNTS è esente come ets. |
 | `r62ab7e` | 54 | I tecnici del modulo paesaggistico: se l'architetto che presenta la pratica è il suo tecnico, il portale mostra il blocco di un altro tecnico («+») senza nome né codice fiscale, quindi un secondo tecnico non si può indicare. È un difetto del portale: chiedi al SUE. |
 | `r30992c` | 47 | Le tolleranze costruttive dichiarate richiedono almeno un tipo (art. 34-bis o 34-ter c. 4). |
 | `r39bc67` | 47 | Una tolleranza strutturale di minore rilevanza o priva di rilevanza per la pubblica incolumità può essere dichiarata solo una volta decorso il termine del controllo regionale, senza richieste pendenti e senza esito negativo: art. 34-bis c. 3-bis DPR 380/2001. |
@@ -335,6 +341,7 @@ What a steps file turns away, in the words the person reads (Italian), by the id
 | `r4d21ee` | 7 | I lavori sulle strutture iniziati senza la pratica sismica richiedono sempre, in Campania, l'autorizzazione sismica, mai il deposito o una variante (art. 4 c. 1 e L.R. 9/1983): alla domanda sulla pratica sismica si risponde autorizzazione, da presentare al Genio Civile. |
 | `ra2396a` | 7 | Questa è la pratica del negozio non alimentare: un negozio che vende alimenti presenta quella del settore alimentare (con la notifica ai sensi del Reg. 852). |
 | `rdc314f` | 7 | Per ora solo bar o ristorante: le altre voci di attività della notifica non sono gestite. |
+| `r146883` | 6 | Più linee d'attività nella master list: il modulo chiede una riga obbligatoria per ciascuna, per ora ne preparo una sola. |
 | `r113860` | 5 | Per ora solo per un permesso di costruire: il caso della DIA non è ancora stato provato. |
 | `r22854a` | 5 | Variante a un titolo anteriore al 1977 (art. 34-ter): il portale salva la data della variante oppure l'oblazione, non entrambe. È un difetto del portale; chiedi al SUE. |
 | `r2d5cc7` | 5 | Lavori già eseguiti che chiedevano l'autorizzazione paesaggistica: rientrano solo nella sanatoria dell'art. 36-bis c. 4. Se i lavori sono in corso ma le opere paesaggistiche in parte già fatte, l'autorizzazione non si rilascia più (art. 146 c. 4 D.Lgs. 42/2004): chiedi al SUE. |
