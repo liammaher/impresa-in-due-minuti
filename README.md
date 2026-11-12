@@ -53,7 +53,7 @@ lo contengono; accetta. Su Windows installalo da python.org.
 3. Claude risponde con un solo messaggio: se la pratica è coperta, cosa dicono i documenti, quale
    pratica propone, le poche domande. Rispondi una volta.
 4. Accedi con SPID nel browser dell'app e scrivi a Claude «fatto». Claude compila la bozza sul portale
-   (non toccare la pagina finché non ti scrive), poi confronta l'anteprima del portale con i documenti.
+   (non toccare la pagina finché non ti scrive, tranne il riquadro in cui scegli i file), poi confronta l'anteprima del portale con i documenti.
 5. Quando la bozza è pronta, Claude ti scrive in poche righe cosa controllare e cosa resta a te sul
    portale: l'anteprima, le dichiarazioni, la firma, il pagamento e l'invio.
 6. Dopo l'invio, Claude ti dice le prossime scadenze e la pratica che di solito segue.

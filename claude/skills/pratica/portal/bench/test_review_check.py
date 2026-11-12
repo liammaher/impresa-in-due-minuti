@@ -104,23 +104,23 @@ def main():
         r = build(Path(t), shown={"second_run": later})
         check("a second compilation: the diritti paid first, its receipt and the procura then attached",
               r["steps"] == ["controlla l'anteprima della bozza", "spunta le dichiarazioni", "paga i diritti",
-                             "firma la procura, la ricevuta del pagamento e gli altri documenti, poi scrivimi «ho firmato»",
+                             "firma la procura, la ricevuta del pagamento e gli altri documenti; salva i file firmati nella cartella del lavoro e scrivimi «ho firmato»",
                              "firma la pratica", "invia"], r)
-        d = {"paga i diritti": "solo sul c/c postale 57060964", "firma la pratica": "prima il PDF della pratica, poi la distinta",
+        d = {"controlla l'anteprima della bozza": "la trovi in Pratiche in bozza", "paga i diritti": "solo sul c/c postale 57060964", "firma la pratica": "prima il PDF della pratica, poi la distinta",
              "invia": "il codice pratica compare a video, la ricevuta arriva in PEC"}
         r1 = build(Path(t) / "1", shown={"second_run": later, "details": d})
         lines = r1["message"].split("\n")
         check("with a second compilation the list says who acts when (they, Claude, they), the sportello's details next to their step",
-              lines[1:] == ["Ora tocca a te:", "1. Controlla l'anteprima della bozza", "2. Spunta le dichiarazioni",
+              lines[1:] == ["Ora tocca a te:", "1. Controlla l'anteprima della bozza (la trovi in Pratiche in bozza)", "2. Spunta le dichiarazioni",
                             "3. Paga i diritti (solo sul c/c postale 57060964)",
-                            "4. Firma la procura, la ricevuta del pagamento e gli altri documenti, poi scrivimi «ho firmato»",
+                            "4. Firma la procura, la ricevuta del pagamento e gli altri documenti; salva i file firmati nella cartella del lavoro e scrivimi «ho firmato»",
                             "Poi io: allego i file firmati con una seconda compilazione e ti avviso.", "Poi di nuovo tu:",
                             "5. Firma la pratica (prima il PDF della pratica, poi la distinta)",
                             "6. Invia (il codice pratica compare a video, la ricevuta arriva in PEC)"], r1)
         r2 = build(Path(t) / "2", shown={"second_run": later[:1]})
         check("a second compilation with nothing paid first: paying after signing, as on any pratica",
               r2["steps"][-3:] == ["firma la pratica", "paga", "invia"] and "paga" not in r2["steps"][:3]
-              and "firma la procura, poi scrivimi «ho firmato»" in r2["steps"], r2)
+              and "firma la procura; salva i file firmati nella cartella del lavoro e scrivimi «ho firmato»" in r2["steps"], r2)
         r3 = build(Path(t) / "3", report={"reopened": True}, shown={"second_run": later})
         check("the second compilation itself: the signed files attached, then sign and send",
               r3["message"].startswith("✅ CILA: file firmati allegati sul portale in 95 secondi")

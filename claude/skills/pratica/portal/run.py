@@ -1562,27 +1562,31 @@ def evidence_text(values):
     return ("Dai tuoi documenti:\n" + "\n".join(lines) + "\n\n") if lines else ""
 
 
-def summary_text(rows, end=(), evidence=""):
+PICK = "li scegli tu sul portale, una volta sola"  # the files over the pane's limit: the page's own box (`picked`)
+
+
+def summary_text(rows, pick=False, evidence=""):
     """The one message's summary, as a review by exception (GOV.UK's "check answers", kept short so
     it is read, not rubber-stamped): first what only Impresa in un minuto proposes, a line each; then the
-    rest counted by where it comes from; every answer one word away («dettagli»: summary_all)."""
+    rest counted by where it comes from; every answer one word away («dettagli»: summary_all).
+    pick: the files are chosen by the person in the portal's page, which the files' line says."""
     check = [r for r in rows if r["source"] == PROPOSED]
     files = [r for r in rows if r["key"] == "allegati"]
     rest = [r for r in rows if r not in check and r not in files]
     by = {}
     for r in rest:
-        src = "calcolate dalle regole" if r["source"] in AUTOMATIC else r["source"].split(", ")[0] or "già date"
+        src = "regole" if r["source"] in AUTOMATIC else r["source"].split(", ")[0] or "già date"
         by[src] = by.get(src, 0) + 1
     lines = [evidence.rstrip("\n"), ""] if evidence else []
     if check:
         lines.append("Da controllare (le propongo io):")
         lines += [f"– {r['question']} → {r['answer']}" for r in check]
         lines.append("")
-    lines.append(f"Il resto ({len(rest)} risposte) viene da: " + ", ".join(f"{k} {n}" for k, n in sorted(by.items(), key=lambda x: -x[1])) + "."
-                 + (f" I file da allegare sono {files[0]['question'].split('(')[1].rstrip(')')}, già controllati."
-                    if files else "")
-                 + " Per vederle una per una, scrivi «dettagli». Controllami a campione: chiedimi cosa scrivo in una casella qualsiasi.")
-    return "\n".join(lines) + "\n\n" + "\n".join([*end, YES])
+    lines.append(f"Il resto ({len(rest)} risposte): " + ", ".join(f"{k} {n}" for k, n in sorted(by.items(), key=lambda x: -x[1])) + ". "
+                 "Scrivi «dettagli» per leggerle, o chiedimi di una casella qualsiasi.")
+    if files:
+        lines.append(f"{files[0]['question'].split('(')[1].rstrip(')')} file da allegare, già controllati" + (f": {PICK}." if pick else "."))
+    return "\n".join(lines) + "\n\n" + YES
 
 
 def summary_all(rows, made_up=False):
@@ -1616,15 +1620,18 @@ def tu_steps(later):
         rest = [x for x in later if not re.search(r"procura|versament|ricevut|pagament", x, re.I)]
         what += ["gli altri documenti" if what else "i documenti da firmare"] if rest else []
         steps += (["paga i diritti"] if pay_first else []) + [
-            f"firma {' e '.join([', '.join(what[:-1]), what[-1]] if len(what) > 1 else what)}, poi scrivimi «ho firmato»"]
+            f"firma {' e '.join([', '.join(what[:-1]), what[-1]] if len(what) > 1 else what)}; "
+            "salva i file firmati nella cartella del lavoro e scrivimi «ho firmato»"]
     return steps + ["firma la pratica"] + ([] if pay_first and later else ["paga"]) + ["invia"]
 
 
 def step_details(steps):
-    """What the sportello adds to a step, shown next to it in the closing lines (review.py): where the diritti
-    are paid, in which order the files are signed, what comes back after sending. Never in the card."""
+    """What is added to a step, shown next to it in the closing lines (review.py): where the draft is, and what the
+    sportello adds: where the diritti are paid, in which order the files are signed, what comes back after
+    sending. Never in the card."""
     d = (filing_rules(steps) or {}).get("card", {})
-    return {k: v for k, v in {"paga i diritti": d.get("pay"), "paga": d.get("pay"), "firma la pratica": d.get("sign"),
+    return {k: v for k, v in {"controlla l'anteprima della bozza": "la trovi in Pratiche in bozza",
+                              "paga i diritti": d.get("pay"), "paga": d.get("pay"), "firma la pratica": d.get("sign"),
                               "invia": d.get("send")}.items() if v}
 
 
@@ -1691,7 +1698,7 @@ def card(steps, values, report, made_up=False, rows=None, preview_check=True):
     if made_up:
         lines += ["", "Qui non c'è nulla da inviare: finita la prova, cancella la bozza da «Pratiche in bozza»."]
     else:
-        lines += ["", "Resta una bozza: non parte nulla finché non la invii."]
+        lines += ["", "Resta una bozza: la controlli tu, e non parte nulla finché non la invii."]
     return "\n".join(lines)
 
 
@@ -2163,8 +2170,7 @@ def preflight(steps, values, made_up=False, after=False, summarize=True, preview
                            or any(not x["exists"] or x.get("problem") for x in report["files"] if x["path"]))
     # What comes after, in a line, so nothing at the end surprises them (`yours` has it all).
     # The verdict says what stays theirs and the closing lines how, so only what changes the start is said here.
-    end = ["All'inizio della compilazione ti chiederò di scegliere i file del lavoro, una volta sola."] \
-        if report.get("pick") else []
+    end = [f"I file del lavoro {PICK}."] if report.get("pick") else []
     if summarize and not after and not report["questions"]:
         # A complete folder: nothing left to ask but the proposals. The one message shows every
         # answer the compilation will use, the proposals among them, and the tecnico's «sì»
@@ -2177,8 +2183,8 @@ def preflight(steps, values, made_up=False, after=False, summarize=True, preview
             if inner["ready"] and not report["missing"]:
                 rows = summary_rows(given_steps, given, proposed=set(held))
                 # The card ("Cosa succede"), sent before it, already says what stays theirs: the summary keeps
-                # only the line on picking the files.
-                report |= {"riepilogo": summary_text(rows, end[:1] if report.get("pick") else [], evidence_text(given)), "riepilogo_dettagli": summary_all(rows), "riepilogo_id": summary_id(rows), "riepilogo_rows": rows}
+                # only the line on picking the files, which is the files' own line.
+                report |= {"riepilogo": summary_text(rows, bool(report.get("pick")), evidence_text(given)), "riepilogo_dettagli": summary_all(rows), "riepilogo_id": summary_id(rows), "riepilogo_rows": rows}
             else:
                 # The details only the proposals make needed (a proposed second firm's VAT number)
                 # are asked now, with the rest, not after the «ok» in a second message.
