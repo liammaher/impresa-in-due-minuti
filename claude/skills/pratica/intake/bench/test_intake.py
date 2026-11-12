@@ -434,7 +434,7 @@ def suap_end_to_end():
     (work / "answers.json").write_text(json.dumps(dict(r["answers"], descrizione="PROVA NON INVIARE - intake suap")))
     cli(intake_py, "scan", SHOP_DIR, "--out", out, "--table", "suap-napoli", "--steps", r["steps"])
     added = cli(intake_py, "accept", out, "--into", work / "answers.json")["added"]
-    assert {"altri_soggetti", "oggetto", "ricevuta_diritti"} <= set(added), added
+    assert {"altri_soggetti", "oggetto", "ricevuta_diritti", "superficie_non_alimentare_mq"} <= set(added), added
     vault = {}  # nothing of the business in the vault: the documents bring it
     (work / "vault.json").write_text(json.dumps(vault))
     rep = cli(run_py, "preflight", "--steps", r["steps"], "--answers", work / "answers.json",

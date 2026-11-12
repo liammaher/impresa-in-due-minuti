@@ -964,6 +964,10 @@ def scan_suap(dossier, steps=None, client=None):
             propose("answers", "oggetto", found["oggetto"][0], src, found["oggetto"][1])
         if found.get("superficie_vendita_mq") and not values.get("locale.superficie_mq"):
             report["notes"].append({"from": src, "note": "la superficie di vendita non è la superficie catastale: le due non coincidono"})
+    # A non-food shop's whole sales area is the non-food one (the pratica splits it by kind of goods): said with the ATECO code.
+    if proposals["facts"].get("attivita") == "vicinato_non_alimentare" and proposals["facts"].get("superficie_vendita_mq"):
+        propose("answers", "superficie_non_alimentare_mq", proposals["facts"]["superficie_vendita_mq"], "relazione descrittiva dei locali",
+                "tutta la superficie di vendita è non alimentare: l'attività è un negozio non alimentare")
     for p, text in docs.get("cessione_azienda", []):
         w = read_cessione(text) if text else None
         if w:
