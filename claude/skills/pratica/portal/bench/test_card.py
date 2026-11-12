@@ -127,8 +127,11 @@ def main():
             bad.append(f"the CILA's card doesn't carry the library's article: {real.splitlines()[0]!r}")
         if "DPR" in card:
             bad.append("the Prova's card carries an article")
-        if not real.rstrip().endswith("Resta una bozza: la controlli tu, e non parte nulla finché non la invii."):
+        if "Resta una bozza: la controlli tu, e non parte nulla finché non la invii." not in real.splitlines()[-1]:
             bad.append("a real job's card doesn't say it stays a draft")
+        second = bool(run.after_declarations(run.expand(steps, values), values))
+        if ("seconda compilazione" in real.splitlines()[-1]) != second:
+            bad.append("a real job's card must announce the second compilation exactly when the pratica has one")
         if "Resta una bozza" in card:
             bad.append("the Prova's card says «Resta una bozza»: it says nothing is sent")
         # What the sportello adds goes next to each step in the closing lines, never in the card.

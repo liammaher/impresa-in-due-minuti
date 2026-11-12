@@ -387,6 +387,10 @@ diritti), so only the tecnico's word settles it. What the tecnico wrote plainly,
 or their note ("nessun altro adempimento", "il progettista sono io"), answers the question it
 names: write it into `answers.json` under its `key`, and under `fonti` where it comes from
 (`{"fonti": {"<key>": "Tua nota"}}`, or "Tua richiesta"); never one you infer from their words.
+Do it before the first pre-flight, for every question their words answer: what they wrote
+isn't then proposed back to them as «le propongo io», and the summary's «Da controllare» keeps
+only what no word of theirs settles. To find which keys their words answer, run pre-flight
+once and read its `proposals` against the request and the note.
 Write nothing else into `answers.json` but the intake's proposals (they carry their documents
 already) and their replies. Nothing is answered until they confirm it: the one message shows
 every answer with its source, and their «sì» or their reply to the questions confirms them

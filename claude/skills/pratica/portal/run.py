@@ -1562,7 +1562,7 @@ def evidence_text(values):
     return ("Dai tuoi documenti:\n" + "\n".join(lines) + "\n\n") if lines else ""
 
 
-PICK = "li scegli tu sul portale, una volta sola"  # the files over the pane's limit: the page's own box (`picked`)
+PICK = "li scegli tu in un riquadro sulla pagina del portale, una volta sola (sono troppo pesanti perché li passi io)"  # the files over the pane's limit: the page's own box (`picked`)
 
 
 def summary_text(rows, pick=False, evidence=""):
@@ -1618,7 +1618,9 @@ def tu_steps(later):
         what = (["la procura"] if any(re.search(r"procura", x, re.I) for x in later) else []) \
             + (["la ricevuta del pagamento"] if pay_first else [])
         rest = [x for x in later if not re.search(r"procura|versament|ricevut|pagament", x, re.I)]
-        what += ["gli altri documenti" if what else "i documenti da firmare"] if rest else []
+        # The portal's own names for them (the steps file's labels), so nothing is signed unseen.
+        named = ", ".join(dict.fromkeys(rest))
+        what += [f"gli altri documenti ({named})" if what else f"i documenti da firmare ({named})"] if rest else []
         steps += (["paga i diritti"] if pay_first else []) + [
             f"firma {' e '.join([', '.join(what[:-1]), what[-1]] if len(what) > 1 else what)}; "
             "salva i file firmati nella cartella del lavoro e scrivimi «ho firmato»"]
@@ -1663,7 +1665,7 @@ def card_why(steps, values, rows):
     return out
 
 
-def card(steps, values, report, made_up=False, rows=None, preview_check=True):
+def card(steps, values, report, made_up=False, rows=None, preview_check=True, later=None):
     """"Cosa succede", in two lines: the pratica and why it is this one, and what Claude does (then, for a real job,
     that it stays a draft; for a Prova, that nothing is sent). What the tecnico does
     is in the verdict (SKILL.md) and the closing lines (review.py), where each step comes with the sportello's
@@ -1698,7 +1700,14 @@ def card(steps, values, report, made_up=False, rows=None, preview_check=True):
     if made_up:
         lines += ["", "Qui non c'è nulla da inviare: finita la prova, cancella la bozza da «Pratiche in bozza»."]
     else:
-        lines += ["", "Resta una bozza: la controlli tu, e non parte nulla finché non la invii."]
+        if later is None:  # pre-flight passes it: its steps have lost the slots by the time the card is made
+            try:
+                later = after_declarations(steps, values)
+            except (StepError, KeyError):
+                later = []
+        # What the portal makes only after the declarations is a second pass: said now, so it is no surprise at the end.
+        lines += ["", "Resta una bozza: la controlli tu, e non parte nulla finché non la invii."
+                  + (" Dopo le dichiarazioni ti dico quali file firmare e, firmati, li allego io in una seconda compilazione." if later else "")]
     return "\n".join(lines)
 
 
@@ -2191,7 +2200,7 @@ def preflight(steps, values, made_up=False, after=False, summarize=True, preview
                 known = {m["field"] for m in report["missing"]}
                 report["missing"] += [m for m in inner["missing"] if m["field"] not in known]
     if (report["ready"] or "riepilogo_rows" in report) and not after:
-        report["card"] = card(steps, values, report, made_up, report.get("riepilogo_rows"), preview_check=preview_check)
+        report["card"] = card(steps, values, report, made_up, report.get("riepilogo_rows"), preview_check=preview_check, later=later)
     text = message(report, asks, held_need)
     if text:
         report["short"] = message(report, asks, held_need, short=True)
@@ -2313,7 +2322,7 @@ FILING = {
             "yours": [
                 "Napoli chiede sempre due dichiarazioni (DD 603/2025): l'Allegato A Nuovo Programma 100 (il "
                 "titolare su quanto deve al Comune) e il Modello DP (il compenso che ti è stato pagato, L.R. Campania 59/2018). "
-                "Claude le compila. L'Allegato A lo firma il committente, il DP entrambi, digitalmente. Vanno con "
+                "Sono moduli del Comune, da compilare tu. L'Allegato A lo firma il committente, il DP entrambi, digitalmente. Vanno con "
                 "la procura nella seconda compilazione",
                 "Su un edificio esistente gli elaborati comprendono lo Stato Comparativo: attuale e progetto "
                 "sovrapposti, demolizioni in giallo, nuove opere in rosso (verde e blu le opere abbandonate in "
