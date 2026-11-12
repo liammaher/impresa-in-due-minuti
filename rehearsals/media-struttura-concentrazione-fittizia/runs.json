@@ -1,0 +1,17 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 82.9,
+  "browser": "pane",
+  "note": "First run stopped on the accorpamento/concentrazione radio (\"fresh load of the draft: not kept\"): the portal saves \"concentrazione\" whichever is clicked (read on the draft, a manual SALVA too). Filled for concentrazione; accorpamento is refused."
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 65.1,
+  "browser": "pane"
+ }
+]

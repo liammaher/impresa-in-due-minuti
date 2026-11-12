@@ -1,0 +1,17 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 40.2,
+  "browser": "pane",
+  "note": "First run stopped at the planimetria: the slot takes only signed files (.p7m). Marked `accepts`; the person attaches the signed file. Then filled."
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 55.9,
+  "browser": "pane"
+ }
+]

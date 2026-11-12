@@ -2174,5 +2174,54 @@ def _():
     assert catalogue.default_draft(["suap-012-aprire-l-attivita", "sue-cila"]).endswith("catalogo sue")
 
 
+# --- round 5 (2026-11-12): the medium shops' merger and shopping-centre forms, a dehors' renewal, the stabilimenti, short-term rentals ---
+
+@case("a medium shop built by merging shops fills one row per shop, the rest by the row's \"+\" (the merger's forms, 2026-11-12)")
+def _():
+    for name, title in (("ampliamento-concentrazione-media-fittizio", "Dati delll'esercizio a seguito dell'ampliamento"),
+                        ("media-struttura-concentrazione-fittizia", "Dati dell'esercizio")):
+        sec = section(generated(name), title)
+        adds = [f for f in sec["fields"] if f["kind"] == "add"]
+        assert len(adds) == 1 and adds[0]["anchor"] == "Titolare", (name, adds)
+        assert [f["label"] for f in sec["fields"] if f.get("anchor") == "Titolare" and f["kind"] != "add"][:5] == [
+            "Titolare", "Cod. Fisc.", "Indirizzo", "Prot. n. titolo abilitativo", "in data"], name
+
+
+@case("the shopping-centre forms fill the DA table by the 1st and 2nd \"superficie di vendita mq\" and the A table by the 6th and 7th (the tabelle speciali's boxes are counted, left)")
+def _():
+    for name in ("modifica-superficie-centro-commerciale-fittizia", "ripartizione-superficie-media-fittizia"):
+        sec = section(generated(name), "SPECIFICHE RIGUARDANTI LA")
+        nths = sorted(f.get("nth", 1) for f in sec["fields"] if f.get("label") == "superficie di vendita mq")
+        assert nths == [1, 2, 6, 7], (name, nths)
+        assert [f.get("nth", 1) for f in sec["fields"] if f.get("label") == "mq"] == [1, 2], name
+
+
+@case("a dehors' renewal leaves the person's statements (the licence, the plan unchanged, the taxes, third parties) and the boxes they open to them")
+def _():
+    steps = generated("dehors-rinnovo-fittizio")
+    sec = section(steps, "ulteriori dichiarazioni")
+    assert not sec["fields"], sec["fields"]
+    assert len(sec.get("theirs", [])) == 5 and any("licenza" in t for t in sec["theirs"]), sec.get("theirs")
+    assert field(section(steps, "oggetto dell'istanza di rinnovo"), "Il rinnovo")["max"] == 30
+
+
+@case("the stabilimenti's \"ulteriori dichiarazioni\" are the person's whichever of the cluster's forms it comes with (antimafia, food safety, the master list's extra sheets)")
+def _():
+    for name in ("stabilimento-titolarita-ristorante-fittizio", "stabilimento-luoghi-ristorante-fittizio", "stabilimento-progetto-ristorante-fittizio",
+                 "stabilimento-titolarita-ristorante-centro-storico-fittizio", "stabilimento-luoghi-ristorante-centro-storico-fittizio",
+                 "stabilimento-progetto-ristorante-centro-storico-fittizio"):
+        sec = section(generated(name), "ulteriori dichiarazioni")
+        assert not sec["fields"] and any("cause di divieto" in t for t in sec.get("theirs", [])), (name, sec)
+
+
+@case("a short-term rental fills Napoli's ISTAT codes as constants and one room of the table (the crawl shows one row)")
+def _():
+    sec = section(generated("locazione-breve-avvio-fittizia"), "DATI RELATIVI ALL'IMMOBILE")
+    codes = {f["label"]: f["value"] for f in sec["fields"] if f["label"].startswith("Codice ISTAT")}
+    assert codes == {"Codice ISTAT del Comune": "063049", "Codice ISTAT della Provincia": "063", "Codice ISTAT della Regione": "15"}, codes
+    assert [f["label"] for f in sec["fields"] if f["label"] in ("Camera n.", "mq")] == ["Camera n.", "mq"]
+
+
+
 print(f"{sum(results)}/{len(results)} passed")
 sys.exit(0 if all(results) else 1)

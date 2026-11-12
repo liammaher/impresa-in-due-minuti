@@ -1,0 +1,17 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 37.4,
+  "browser": "pane",
+  "note": "First run stopped: \"che il procedimento si svolga mediante l'indizione della\" is required (a conferenza di servizi, semplificata or simultanea). Now always ticked, the choice asked. Then filled."
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 79.9,
+  "browser": "pane"
+ }
+]
