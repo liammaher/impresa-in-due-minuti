@@ -1,6 +1,6 @@
 # Variazioni strutturali (Vicinato - settore alimentare consumo immediato (zone tutelate)), as gen.py writes its steps file from the batch crawl
 # (catalogue/F839/sections/suap-018-variazioni-strutturali.json), for the made-up business of this folder's fixture.json.
-# Derived from rehearsals/ampliamento-negozio-fittizio; no `rules:` (the table has no entry for it, or one recipe already holds the case) and no `after:`: the attachments and payment screens are not read.
+# Derived from rehearsals/ampliamento-negozio-fittizio; no `after:`: the attachments and payment screens are not read.
 procedure: napoli/comune/scia-esercizio-vicinato
 title: "Variazioni strutturali, negozio alimentare, zone tutelate, SUAP Napoli"
 comune: F839
@@ -42,3 +42,9 @@ supports:
   - {when: "{{ask.settori|not}}", else: "Per ora preparo solo un ampliamento della superficie negli stessi settori."}
   - {when: "{{ask.insegna_esterna|not}}", else: "Un'insegna esterna non la preparo ancora."}
   - {when: "{{ask.superficie_alimentare_mq|positive|not}}", else: "Questa è la pratica del negozio alimentare non alimentare."}
+
+# Which pratica a case is: the library's rules table (rules/suap-napoli.yaml) decides (route.py reaches this file by
+# the table's portal sector and operation, and the facts fixed here).
+rules:
+  table: suap-napoli
+  facts: {attivita: vicinato_alimentare, evento: ampliamento, consumo_sul_posto: true}

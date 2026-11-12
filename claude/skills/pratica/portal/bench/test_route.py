@@ -545,13 +545,88 @@ def suap_with_procura():
         assert "procura" in str(e)
 
 
+def suap_wedge_cells_and_their_reasons():
+    """The wedge's cells (2026-11-12): every SUAP rehearsal is reached by some case of the table or is named in
+    catalogue/F839/suap-unrouted.yaml with its reason, and that list says only what is true (a recipe that is
+    reached must leave it). Then the wedge's own cases, one per cell, reach the recipe that files them; a
+    suspension or a change of people is refused with what to do instead."""
+    unrouted = yaml.safe_load((HERE.parent / "catalogue" / "F839" / "suap-unrouted.yaml").read_text())
+    idx, reached = route.index(SUAP, REHEARSALS), set()
+    for facts, d in CASES[SUAP]:
+        if not (d["refused"] or d["none"]):
+            for via in (None, "procura"):
+                hit = route.find(idx, d, facts, via)
+                if hit:
+                    reached.add(hit[0])
+    from gen import load_yaml, resolved
+    suap = {d.name for d in REHEARSALS.iterdir() if (d / "recipe.yaml").exists()
+            and resolved(load_yaml(d / "recipe.yaml")).get("sportello") == "suap"}
+    assert not (set(unrouted) - suap), f"named in suap-unrouted.yaml, not a SUAP rehearsal: {sorted(set(unrouted) - suap)}"
+    assert not (set(unrouted) & reached), f"reached now, take them off suap-unrouted.yaml: {sorted(set(unrouted) & reached)}"
+    assert not (suap - reached - set(unrouted)), f"neither reached nor explained: {sorted(suap - reached - set(unrouted))}"
+    assert all(len(r) > 40 for r in unrouted.values()), "a reason says what the table or the library lacks"
+    cells = {  # what the person says
+        "shop, non-food": {"attivita": "vicinato_non_alimentare", "zona": "c", "superficie_vendita_mq": 40, "fatti": []},
+        "shop, food, no tables": {"attivita": "vicinato_alimentare", "zona": "c", "superficie_vendita_mq": 40,
+                                  "consumo_sul_posto": "no", "fatti": []},
+        "shop, food, eaten on the spot, zone A": {"attivita": "vicinato_alimentare", "zona": "a", "superficie_vendita_mq": 40,
+                                                  "consumo_sul_posto": "si", "fatti": []},
+        "hairdresser": {"attivita": "acconciatore", "fatti": []},
+        "beautician": {"attivita": "estetista", "fatti": []},
+        "bar or restaurant, zone C": {"attivita": "somministrazione", "zona": "c", "fatti": []},
+        "bar or restaurant, zone A": {"attivita": "somministrazione", "zona": "a", "somministrazione_particolare": "no", "fatti": []},
+        "B&B": {"attivita": "bed_and_breakfast", "zona": "c", "fatti": []},
+    }
+    expected = {
+        ("shop, non-food", "apertura"): "negozio-fittizio", ("shop, non-food", "trasferimento"): "trasferimento-negozio-fittizio",
+        ("shop, non-food", "ampliamento"): "ampliamento-negozio-fittizio", ("shop, non-food", "subingresso"): "subingresso-negozio-fittizio",
+        ("shop, non-food", "cessazione"): "cessazione-negozio-fittizio",
+        ("shop, food, no tables", "apertura"): "alimentari-fittizio", ("shop, food, no tables", "trasferimento"): "trasferimento-alimentari-fittizio",
+        ("shop, food, no tables", "ampliamento"): "ampliamento-alimentari-fittizio", ("shop, food, no tables", "subingresso"): "subingresso-alimentari-fittizio",
+        ("shop, food, no tables", "cessazione"): "cessazione-alimentari-fittizio",
+        ("shop, food, eaten on the spot, zone A", "apertura"): "alimentari-centro-storico-fittizio",
+        ("shop, food, eaten on the spot, zone A", "trasferimento"): "trasferimento-alimentari-centro-storico-fittizio",
+        ("shop, food, eaten on the spot, zone A", "ampliamento"): "ampliamento-alimentari-centro-storico-fittizio",
+        ("shop, food, eaten on the spot, zone A", "cessazione"): "cessazione-alimentari-centro-storico-fittizio",
+        ("hairdresser", "apertura"): "acconciatore-fittizio", ("hairdresser", "trasferimento"): "trasferimento-acconciatore-fittizio",
+        ("hairdresser", "ampliamento"): "variazione-strutturale-acconciatore-fittizio", ("hairdresser", "subingresso"): "subingresso-acconciatore-fittizio",
+        ("hairdresser", "cessazione"): "cessazione-acconciatore-fittizio",
+        ("beautician", "apertura"): "estetista-fittizio", ("beautician", "trasferimento"): "trasferimento-estetista-fittizio",
+        ("beautician", "ampliamento"): "variazione-strutturale-estetista-fittizio", ("beautician", "subingresso"): "subingresso-estetista-fittizio",
+        ("beautician", "cessazione"): "cessazione-estetista-fittizio",
+        ("bar or restaurant, zone C", "apertura"): "ristorante-fittizio", ("bar or restaurant, zone C", "trasferimento"): "trasferimento-ristorante-fittizio",
+        ("bar or restaurant, zone C", "ampliamento"): "ampliamento-ristorante-fittizio", ("bar or restaurant, zone C", "subingresso"): "subingresso-ristorante-fittizio",
+        ("bar or restaurant, zone C", "cessazione"): "cessazione-fittizia",
+        ("bar or restaurant, zone A", "apertura"): "ristorante-centro-storico-fittizio",
+        ("bar or restaurant, zone A", "trasferimento"): "trasferimento-ristorante-centro-storico-fittizio",
+        ("bar or restaurant, zone A", "cessazione"): "cessazione-ristorante-centro-storico-fittizio",
+        ("B&B", "apertura"): "affittacamere-fittizio",
+    }
+    for (cell, evento), name in expected.items():
+        r = route.route(SUAP, {**cells[cell], "evento": evento}, REHEARSALS)
+        assert r["pratica"] == name, (cell, evento, name, r.get("pratica"), r.get("unsupported"))
+    # The sector the portal files a food shop's closing under follows the consumption on the spot, as the other events do.
+    r = route.route(SUAP, {**cells["shop, food, no tables"], "consumo_sul_posto": "si", "evento": "cessazione"}, REHEARSALS)
+    assert r["pratica"] == "cessazione-alimentari-fittizio", r  # zone C: the Alimentare o Misto sector
+    # Not routed on purpose, each with what the person does instead.
+    for cell, evento in (("shop, non-food", "sospensione"), ("bar or restaurant, zone C", "variazione_soggetti"),
+                         ("hairdresser", "sospensione"), ("B&B", "variazione_soggetti")):
+        r = route.route(SUAP, {**cells[cell], "evento": evento}, REHEARSALS)
+        assert not r["routed"] and "Va chiesta al SUAP" in r["unsupported"][0] and "portale" in r["unsupported"][0], (cell, evento, r)
+    for cell, evento in (("bar or restaurant, zone A", "subingresso"), ("shop, food, eaten on the spot, zone A", "subingresso"),
+                         ("B&B", "cessazione")):
+        r = route.route(SUAP, {**cells[cell], "evento": evento}, REHEARSALS)
+        assert not r["routed"] and r["unsupported"], (cell, evento, r)
+
+
 def main():
     tests = [every_case_routed_or_refused, every_recipe_reached, answers_carry_into_preflight, as_a_conversation,
              wrong_answers, gated_items_stay_unknown, own_words_kept_only_if_they_agree, missing_answers_file,
              cila_reads_sanatoria_its_way, sanatoria_in_tutela, sanatoria_cambio_uso, sanatoria_zona_a, sanatoria_titoli, cambio_uso_fuori_23ter,
              rehearsal_cases_come_home, asks_as_the_table_asks, refusals_say_why, apart_is_the_persons,
              one_steps_file_per_combination, plugin_layout, landscape_kept_in_force, edilizia_libera_that_digs,
-             follow_ups_routed, follow_ups_as_the_law_reads_them, suap_routed, suap_with_procura, status_gate]
+             follow_ups_routed, follow_ups_as_the_law_reads_them, suap_routed, suap_with_procura, suap_wedge_cells_and_their_reasons,
+             status_gate]
     for t in tests:
         t()
         print(f"ok  {t.__name__}")
