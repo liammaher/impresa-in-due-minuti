@@ -2576,7 +2576,7 @@ def show_code(code, give_up=None):
 # Only these keys of a section and a field reach the page: a new one inpage.js reads goes here
 # too (`last` didn't, 2026-11-04, and the run ticked the first group's radio). fetch.js keeps
 # the same lists, so it builds a section from the published steps file byte for byte.
-PANE_SECTION_KEYS = ("save", "theirs", "go", "step")
+PANE_SECTION_KEYS = ("save", "theirs", "go", "step", "optional")
 PANE_FIELD_KEYS = ("id", "css", "kind", "label", "anchor", "block", "nth", "last", "describe", "if_present")
 
 

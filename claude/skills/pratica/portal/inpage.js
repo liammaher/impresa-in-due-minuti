@@ -939,7 +939,12 @@
     } else if (sec.open !== false) {
       const a = linkTo(sec.section);
       if (a) await openSection(a, sec.section);
-      else if (!isOpen(sec.section)) fail(`no section ${sec.section}`);
+      else if (!isOpen(sec.section)) {
+        // A section the portal's draft may not show (ComUnica's Telemaco user, only when the preselected destinatario is
+        // the Camera di commercio, which differs from one session to the next): `optional` skips it, and says so.
+        if (sec.optional) { (report.skipped_sections = report.skipped_sections || []).push(sec.section); return; }
+        fail(`no section ${sec.section}`);
+      }
     }
     const done = [], attached = {};
     for (let [i, f] of sec.fields.entries()) {

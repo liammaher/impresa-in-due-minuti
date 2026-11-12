@@ -502,7 +502,7 @@ def fill(entry, as_name, c, recipe, name):
     problems, asks_used = [], set()
     sec = Section(c)
     out = {"section": as_name}
-    for k in ("open", "save", "go", "theirs"):
+    for k in ("open", "save", "go", "theirs", "optional"):
         if k in entry:
             out[k] = entry[k]
     fields, filled = [], set()

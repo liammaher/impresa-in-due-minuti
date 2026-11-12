@@ -1,0 +1,18 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 44,
+  "browser": "pane",
+  "note": "Stopped: \"dimensioni dell'occupazione ... (mt X mt)\": switched off, enabled by \"parzialmente\" alone."
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 73.8,
+  "browser": "pane",
+  "note": "Filled (74 s): the measures are filled only for a partial cessation."
+ }
+]

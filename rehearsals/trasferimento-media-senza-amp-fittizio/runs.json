@@ -1,0 +1,18 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 86,
+  "browser": "pane",
+  "note": "Stopped twice before it filled (the record keeps the last): first NO: 5 fields with this label (this form has five SI/NO pairs, not the opening's nine), then radio SI/NO required (without the first pair's SI the portal won't save the section)."
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 77.4,
+  "browser": "pane",
+  "note": "Filled (77 s): SI, then the four rows' NO as 2nd to 5th."
+ }
+]

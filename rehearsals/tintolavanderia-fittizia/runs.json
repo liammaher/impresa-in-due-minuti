@@ -1,0 +1,18 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 0.8,
+  "browser": "pane",
+  "note": "Stopped twice, the record keeps the last: no section dichiarazione della user Telemaco. The run's draft has none: the portal preselected the third of four destinatari (the crawl's the fourth), and only the fourth adds ComUnica's Telemaco user. The 0.8 s is the last of three tries."
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 75.3,
+  "browser": "pane",
+  "note": "Filled (75 s) once the Telemaco section is `optional` (the runner skips it when the draft doesn't show it). The technical manager's course is filled and read back."
+ }
+]

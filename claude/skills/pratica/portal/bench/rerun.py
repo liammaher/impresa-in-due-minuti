@@ -329,7 +329,7 @@ if (!pvAlready) window.pvBatchRun = (async () => {
     done.push({ name, result: r.result, error: r.error || null, at: r.at, sections: r.sections.length,
       verify_seconds: r.verify_seconds ?? null, total_seconds: r.total_seconds, url: r.url,
       moved: r.moved || [], loose: r.loose || [], retries: (r.retries || []).length, ...(gaps.length ? { gaps } : {}),
-      ...(r.alerts ? { alerts: r.alerts } : {}) });
+      ...(r.alerts ? { alerts: r.alerts } : {}), ...((r.skipped_sections || []).length ? { skipped_sections: r.skipped_sections } : {}) });
     sessionStorage.setItem("pv-batch", JSON.stringify(done));
   }
   // Each filled run leaves its frame over the portal: nobody reads it in a batch, and it covers
@@ -351,6 +351,8 @@ JSON.stringify({ done: done.length, of: (window.pvBatch || []).length, running: 
   stopped: done.filter((d) => d.result !== "filled").map((d) => [d.name, d.error, d.at && d.at.section, d.gaps || []]),
   moved: done.filter((d) => (d.moved || []).length).map((d) => [d.name, d.moved]),
   loose: done.filter((d) => (d.loose || []).length).map((d) => [d.name, d.loose]),
+  // `optional` sections the draft didn't show (ComUnica's Telemaco user: the portal's preselected destinatario varies).
+  skipped: done.filter((d) => (d.skipped_sections || []).length).map((d) => [d.name, d.skipped_sections]),
   // The portal's warnings: by text, with how many runs had each (the made-up PEC and address are in all).
   alerts: Object.entries(done.flatMap((d) => [...new Set((d.alerts || []).map((a) => `${a.section}: ${a.text}`))])
     .reduce((n, a) => ({ ...n, [a]: (n[a] || 0) + 1 }), {})) })

@@ -1,0 +1,18 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 51,
+  "browser": "pane",
+  "note": "Stopped three times before it filled (the record keeps the last): the antimafia box is required before the section saves (the generic Dichiarazioni entry's `theirs` doesn't name this wording); then the entry for it was named longer than the section, so it never matched; then no section dichiarazione della user Telemaco (the preselected destinatario, as the tintolavanderia's)."
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 71.5,
+  "browser": "pane",
+  "note": "Filled (71 s): the antimafia box is the person's in a strict entry, the Telemaco section `optional`."
+ }
+]
