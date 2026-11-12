@@ -121,6 +121,13 @@ def derive(new, template, crawl_name, fixture=None):
             break
     short = re.sub(r"-fittizi[oa]$", "", new).replace("-", " ")[:28].rstrip()
     answers["descrizione"] = f"PROVA NON INVIARE - {short} generato"
+    # A draft is found by its name (sectionOf, slotsOf and the person's list in Pratiche in bozza read the newest of a name):
+    # the first 28 characters of two sibling rehearsals' names are often the same (2026-11-12: three pairs of 060/061 twins, and
+    # the recognition forms of this round), so a taken name gets a hash of the full rehearsal name.
+    taken = {json.loads(f.read_text()).get("descrizione") for f in (ROOT / "rehearsals").glob("*/answers*.json") if f.parent.name != new}
+    if answers["descrizione"] in taken:
+        import hashlib
+        answers["descrizione"] = f"PROVA NON INVIARE - {short[:22].rstrip()} {hashlib.sha1(new.encode()).hexdigest()[:6]} generato"
     answers["oggetto"] = f"{op}: pratica di prova con dati inventati."
     (folder / "answers.json").write_text(json.dumps(answers, ensure_ascii=False, indent=1) + "\n")
     source = fixture or (template if (ROOT / "rehearsals" / template / "fixture.json").exists() else FIXTURE.get(idx, "pizzeria-fittizia"))

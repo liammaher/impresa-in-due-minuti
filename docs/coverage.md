@@ -22,12 +22,12 @@ branch no rehearsal took.
 | Sportello | Mapped | Fillable | Run on the portal | Drift-checked |
 |---|---:|---:|---:|---:|
 | SUE (building works) | 104 | 104 | 102 | 27 checked, 0 changed |
-| SUAP (businesses) | 278 | 190 | 120 | 5 checked, 0 changed |
+| SUAP (businesses) | 278 | 196 | 126 | 5 checked, 0 changed |
 
 By section use (how much of what pratiche show the dictionary fills):
 
 - SUE: 104 pratiche, 128 distinct sections, 126 in the dictionary; 2231 of 2231 uses (100%)
-- SUAP: 278 pratiche, 477 distinct sections, 180 in the dictionary; 2746 of 3365 uses (81%)
+- SUAP: 278 pratiche, 477 distinct sections, 183 in the dictionary; 2752 of 3365 uses (81%)
 
 Rehearsals with no recorded run (written, never confirmed on the portal):
 
@@ -39,7 +39,7 @@ Rehearsals with no recorded run (written, never confirmed on the portal):
 
 SUAP pratiche one or two sections short of fillable (the cheapest gaps):
 
-- 26 pratiche; 88 in all are short at least one section.
+- 20 pratiche; 82 in all are short at least one section.
 
 SUE pratiche not yet fillable:
 

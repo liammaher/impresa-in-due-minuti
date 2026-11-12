@@ -2071,6 +2071,21 @@ def _():
     assert checked >= 60, checked
 
 
+@case("no two SUAP rehearsals' cases share a draft name: a draft is read and found by its name, the newest of it (2026-11-12: the twins of sectors 60 and 61 and two recognition forms had one each)")
+def _():
+    seen = {}
+    for d in sorted((ROOT / "rehearsals").iterdir()):
+        r = d / "recipe.yaml"
+        if not r.exists() or "sportello: suap" not in r.read_text(encoding="utf-8"):
+            continue
+        for a in sorted(d.glob("answers*.json")):
+            name = json.loads(a.read_text()).get("descrizione")
+            if name:
+                assert name not in seen, (name, seen[name], f"{d.name}/{a.name}")
+                seen[name] = f"{d.name}/{a.name}"
+    assert len(seen) >= 120, len(seen)
+
+
 # --- what the portal taught on 2026-11-12 (README, "The one-or-two-sections-short pratiche, and a drift check") ---
 
 @case("the self-service laundry's antimafia box is the person's, in a strict entry the hairdressers' longer lists don't land on (the run stopped on it, 2026-11-12)")
@@ -2221,6 +2236,45 @@ def _():
     assert codes == {"Codice ISTAT del Comune": "063049", "Codice ISTAT della Provincia": "063", "Codice ISTAT della Regione": "15"}, codes
     assert [f["label"] for f in sec["fields"] if f["label"] in ("Camera n.", "mq")] == ["Camera n.", "mq"]
 
+
+
+# --- round 6 (2026-11-12): the stabilimento forms that read the master list (sectors 60 and 61) ---
+
+MASTER_LIST = {"060": ("stabilimento-riconoscimento-impresa-ristorante-fittizio", "stabilimento-riconoscimento-progetto-ristorante-fittizio",
+                       "stabilimento-aggiunzione-linee-ristorante-fittizio"),
+               "061": ("stabilimento-riconoscimento-impresa-ristorante-centro-storico-fittizio", "stabilimento-riconoscimento-progetto-ristorante-centro-storico-fittizio",
+                       "stabilimento-aggiunzione-linee-ristorante-centro-storico-fittizio")}
+
+
+@case("the master list's three boxes are typed by the person, one set of boxes a list (ALLEVAMENTI has no codice univoco), in all six forms (read on the portal, 2026-11-12)")
+def _():
+    for names in MASTER_LIST.values():
+        for name in names:
+            sec = section(generated(name), "dichiarazione per ")
+            labels = lambda tipo: [f["label"] for f in sec["fields"] if tipo in f.get("when", "") and f["kind"] == "text"]
+            assert [x for x in labels("is_allevamenti") if x in ("Macroarea", "Aggregazione", "Linee d'attività", "Codice univoco")] == [
+                "Macroarea", "Aggregazione", "Linee d'attività"], name
+            for tipo in ("is_registrati", "is_riconosciuti"):
+                assert [x for x in labels(tipo) if x in ("Macroarea", "Aggregazione", "Linee d'attività", "Codice univoco")] == [
+                    "Macroarea", "Aggregazione", "Linee d'attività", "Codice univoco"], (name, tipo)
+            assert {f["value"] for f in sec["fields"] if f["label"] in ("Macroarea", "Aggregazione", "Linee d'attività")} == {
+                "{{ask.stab_macroarea}}", "{{ask.stab_aggregazione}}", "{{ask.stab_linea}}"}, name
+
+
+@case("the form that adds lines to a recognised stabilimento finds the master-list boxes by label, not by the crawl's moved ids (the second, switched-off row, read on the draft)")
+def _():
+    for name in (MASTER_LIST["060"][2], MASTER_LIST["061"][2]):
+        sec = section(generated(name), "dichiarazione per approvazione progetto teso")
+        boxes = [f for f in sec["fields"] if f["label"] in ("Macroarea", "Aggregazione", "Linee d'attività", "Codice univoco")]
+        assert len(boxes) == 11 and not any("id" in f for f in boxes), (name, [f.get("id") for f in boxes])
+
+
+@case("a second line of the master list is refused in every form that reads it: the \"+\" adds a row whose four boxes are all required")
+def _():
+    for names in MASTER_LIST.values():
+        for name in names:
+            recipe = gen.load_yaml(REH / name / "recipe.yaml")
+            assert "piu_linee" in recipe["asks"] and any("piu_linee" in str(x.get("when", "")) for x in recipe["supports"]), name
 
 
 print(f"{sum(results)}/{len(results)} passed")

@@ -529,7 +529,7 @@ derived from their siblings, over three bundles (8, 10 and 8 runs, one file pick
   `wizard:`, which `si_no:` doesn't reach, so the step carries `answers:` (the rental's Si is refused, the structure's
   legale rappresentante is not offered).
 - **Left unmapped and why:** the stabilimento forms that read the master list (the activity lines: a macroarea, an
-  aggregazione, a linea, a code; for 060 and 061 three forms each) because nobody has read the lists; 056
+  aggregazione, a linea, a code; for 060 and 061 three forms each; mapped in round 6, below); 056
   "Variazioni" (a SCIA for structural changes: its first text box, before "che la struttura ricettiva", is unlabelled and
   unread; a capacity table with rooms by type); 010 "dichiarazioni sul possesso dei requisiti" (a garage's technical
   manager: the options of the "requisiti tecnico professionali" radio are not in the crawl); 010 variazioni soggetti
@@ -539,6 +539,70 @@ derived from their siblings, over three bundles (8, 10 and 8 runs, one file pick
 - **Mechanics that cost a run each:** the steps in a bundle are as built (a reworded ask moves a steps file's hash: rebuild
   the bundle, and the box rejects the old file by its sha256); `regen.py NAME ...` leaves a renamed rehearsal's old lock line
   (delete it by hand); a monitor waiting on `pgrep -f` matches its own shell and never ends: wait on the process id.
+
+## The one-or-two-sections-short pratiche, round 6: the stabilimenti's master list (2026-11-12)
+
+Sixth round: the six stabilimento forms of sectors 60 and 61 that read the master list ("dichiarazione per il riconoscimento
+dell'impresa", "... per approvazione progetto per rilascio riconoscimento", "... per approvazione progetto teso all'aggiunzione di
+linee di attività"). Round 5 left them because nobody had read what the "pickers" offer. **Read on a draft of each form
+(2026-11-12), they are not pickers:**
+
+- **Macroarea, Aggregazione, Linee d'attività** (100 characters each) **and Codice univoco** (50) are plain text boxes. The page says
+  "Individuare nel documento scaricato l'attività svolta ... e copiare nei campi che seguono la descrizione corrispondente a:",
+  and the downloads are *Master List rev 11*, three lists (ALLEVAMENTI, REGISTRATI, RICONOSCIUTI) each "a sede fissa" and "SENZA
+  sede fissa". There is no lookup, no popup and no check of the text against a register: the portal saved made-up text. The person
+  copies the four values from the downloaded list; the vault has nothing to fill them from, so they are asks
+  (`stab_master_tipo`, `stab_macroarea`, `stab_aggregazione`, `stab_linea`, `stab_codice_univoco`). Whether the text is a line of
+  the real list is not checked by the portal and not by us.
+- **The list ticked decides the boxes**: ALLEVAMENTI shows the three boxes, REGISTRATI and RICONOSCIUTI also the Codice univoco. The
+  boxes stay switched off until one of the three is ticked (the stop "Macroarea: switched off (a choice before it ...)").
+- **The "+" adds a whole row** (Macroarea, Aggregazione, Linee, Codice univoco: all four required, "Il valore è obbligatorio") with its own
+  "+ -". A business with several lines needs one row each. Not mapped: `piu_linee` (a yes/no in the recipes' `extras` group) refuses it
+  with the reason, as `altri_soggetti` does.
+- **The sentence "... il riconoscimento ai sensi del Reg CE [____]"** (the recognition and the project for a recognition) ends in a
+  text box: the number of the regulation (`stab_riconoscimento_reg`), not a description. "già riconosciuto con numero" (the added
+  lines' form) is the number the stabilimento already holds.
+- **Found by label in the added-lines form.** Once a list is ticked, the page draws a second row of the three boxes under the "+",
+  switched off; the crawl's `moved` ids named that one and the first run stopped on it. The entry says `by_label: true`, so the
+  first (enabled) row is filled (`bench/test_gen.py`).
+- The two "Nella stessa riga della master list ..." ticks (documents to attach, supplementary sheet) and the slots they open take
+  only signed files (.p7m): the person's, left. The conferenza di servizi of the project forms is filled as in round 5; "per i seguenti
+  motivi" (9999 characters) is left.
+
+**Mechanics this round cost a run or a detour each** (all in code or tests now; listed so they aren't found again):
+
+- **A draft to read is made by a run, not by hand.** The wizard's first screen ignored the pane tools: `type` left the description box
+  empty ("Il valore è obbligatorio"), and a value set by script ended on the portal's own ERRORE page. Write the entry, derive the
+  rehearsal, run it, and read the draft it leaves (`__crawl.sectionOf`, `plusOf`); a stopped run's draft is enough.
+- **The crawl's `moved` can name a second row.** In the added-lines form, ticking a list draws a second, switched-off row of the same
+  three labels under the "+", and the crawl read the first row's boxes as having moved there. A run that stops on "switched off" with the
+  choice made is this: read the open section (click the visible `_clone` radio, list the boxes with their `disabled`), and fill by
+  label (`by_label: true`).
+- **A draft is found, and read, by its name** (the newest of a name): two rehearsals with one `descrizione` read each other's draft.
+  `derive_recipe.py` builds the name from the first 28 characters of the rehearsal's, which twins share, so it now adds a hash of the
+  full name when the name is taken, and `bench/test_gen.py` holds every SUAP case's draft name to be unique (it found four older pairs,
+  the sector 61 twins, renamed with " CS").
+- **`regen.py` with a name that matches no rehearsal** said "0 file(s) changed" and wrote nothing (zsh doesn't split an unquoted
+  `$NAMES`: write `${=NAMES}`). It now refuses with the name it could not find.
+- **`plusOf` marks every box of the row a "+" adds as required** once the portal validates, the master-list tick for the documents
+  included; the single-row runs saved without it, so it is only a requirement of a second row. Unread beyond that.
+
+**Result: 6 pratiche became fillable (190 → 196) and all 6 filled on the portal (run on the portal 120 → 126)**, in six rehearsals
+(`stabilimento-riconoscimento-impresa-*`, `stabilimento-riconoscimento-progetto-*`, `stabilimento-aggiunzione-linee-*`, each for
+sector 60 and, as `-centro-storico-`, for 61), the 060 ones derived from round 5's `stabilimento-progetto-ristorante-fittizio`, the 061 ones from their 060 twins, over three bundles
+(3, 6 and 10 runs, one file pick each; the first stopped one run, below). The pratiche one or two sections short went 26 → 20.
+
+Runs on the portal, 12 in all (`runs.json`), every one filled with nothing moved, loose or skipped:
+
+- the list REGISTRATI in all six rehearsals;
+- ALLEVAMENTI on the 060 project form, the 060 added-lines form and the 060 recognition form;
+- RICONOSCIUTI on the same three 060 forms.
+
+**Not run:** ALLEVAMENTI and RICONOSCIUTI on the 061 forms (the entries and the page are the 060's, the crawls the same, but no
+run), a second line (the "+"), and the optional ticks and slots of the master list (signed files only: the person's). The
+Macroarea, Aggregazione, Linee and Codice univoco are typed from the rehearsal's own made-up text; the portal does not say whether a
+real master-list line is required, and the made-up one saved.
+
 
 ## What the portal does that bit us
 

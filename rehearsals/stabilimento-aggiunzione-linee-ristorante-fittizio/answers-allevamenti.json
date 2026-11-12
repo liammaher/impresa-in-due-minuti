@@ -1,0 +1,15 @@
+{
+ "extras": [],
+ "descrizione": "PROVA NON INVIARE - stab linee allev",
+ "oggetto": "Richiesta di approvazione del progetto teso all’aggiunzione di linee d’attività in uno stabilimento già riconosciuto (procedura n. 9): pratica di prova con dati inventati.",
+ "diritti_euro": "0",
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "bollo_marche": false,
+ "stab_riconoscimento_numero": "IT 99999 CE",
+ "stab_conferenza": "semplificata",
+ "stab_master_tipo": "allevamenti",
+ "stab_macroarea": "PROVA macroarea allevamenti",
+ "stab_aggregazione": "PROVA aggregazione",
+ "stab_linea": "PROVA linea"
+}

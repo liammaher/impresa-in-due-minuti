@@ -1,0 +1,23 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 51.1,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers-riconosciuti.json",
+  "result": "filled",
+  "seconds": 51.2,
+  "browser": "pane"
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers-allevamenti.json",
+  "result": "filled",
+  "seconds": 53.4,
+  "browser": "pane"
+ }
+]
