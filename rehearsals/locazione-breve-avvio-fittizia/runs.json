@@ -1,0 +1,17 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 11.4,
+  "browser": "pane",
+  "note": "Stopped at the wizard's Scelte eventuali: its Si/No question (\"ha già avviato altre attività di locazione\") is required. Answered No in the recipe's wizard step; a Si is refused. Then filled."
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 60.9,
+  "browser": "pane"
+ }
+]

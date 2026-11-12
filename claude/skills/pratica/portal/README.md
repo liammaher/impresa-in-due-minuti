@@ -494,6 +494,52 @@ procuratore`, the Terzo settore exemption) and by the shortened name of the domi
 - **`bench/derive_recipe.py`** now drops what its template asked for another pratica (`TEMPLATE_ONLY`, and the "no field reads
   asks.X: drop it" loop), names a title's sector from the wizard when the table has none, and takes `suap-common-*` crawls.
 
+## The one-or-two-sections-short pratiche, round 5 (2026-11-12)
+
+Fifth round, the same method: the 38 SUAP pratiche one or two sections short of fillable, ranked by what each section
+unblocks. Two aliases on the premises' entry (`ubicazione dell'attività`: "indirizzo dell'esercizio commerciale",
+"indirizzo dell'officina") cut five medium-shop pratiche to one missing section; 18 more sections were written by hand.
+**16 pratiche became fillable (174 → 190) and all 16 filled on the portal** (run on the portal 104 → 120), in 16 rehearsals
+derived from their siblings, over three bundles (8, 10 and 8 runs, one file pick each; the last reran what the first two stopped on, once fixed).
+
+- **Medium shops (019):** the ultratriennale ampliamento (the move's section by an alias: the same boxes), the ampliamento
+  and the opening by merger of shops (one row a shop, the rest by the row's "+": `kind: each`, anchor `Titolare`), the
+  modification and the redistribution of the sales area in a shopping centre (the DA and A tables: the 1st and 2nd
+  "superficie di vendita mq" are the DA, the 6th and 7th the A, the tabelle speciali's three boxes counted and left).
+  - **The portal doesn't keep "accorpamento".** The opening's radios "accorpamento" / "concentrazione" are two inputs
+    of different names; a click on "accorpamento" shows it ticked, and the saved section (a manual SALVA too) comes back
+    with "concentrazione" (read on the draft). The entry fills `concentrazione` and refuses accorpamento in `supports`; the
+    rehearsal is named for the case it runs (`media-struttura-concentrazione-fittizia`). The merger's forms (this one and
+    the enlargement) were run with two shops, one "+".
+- **Dehors: the renewal of a concession of public land** (`dehors-rinnovo-fittizio`, from the common crawl): the
+  concession's number (30 characters), date and the furnishings (3000). Its "ulteriori dichiarazioni" (the licence, the
+  plan unchanged, the taxes, third parties' rights) are the person's, and the boxes they open with them.
+- **Stabilimenti under Reg. CE 852/2004 (sectors 60 and 61): variation of holder, of the premises, of the project**, six
+  rehearsals. One "ulteriori dichiarazioni" entry (strict) names every statement of the cluster as the person's, whichever
+  form it comes with.
+  - **A slot of a section can take only signed files**: the planimetria of the "variazioni significative" took no plain PDF
+    ("il tipo di documento non corrisponde"). The entry says `accepts: "...p7m"` (an in-section file's crawl label has the
+    list in it, not `accepts`), so a rehearsal leaves it to the person, as every signed-only slot.
+  - **The conferenza di servizi is required** in the project's form ("il valore è obbligatorio" for the tick before the
+    two radios): always ticked, the choice asked (semplificata or simultanea), no "nessuna".
+- **Short-term rentals and the variations of the extra-hotel structures (056, 054):** the CIN rental's notice (avvio and
+  variazione) and the structure's variation (the same sections for the hotels' sector). Napoli's ISTAT codes are
+  constants (063049, 063, 15). **Both forms' wizard asks a required Si/No on the "Scelte eventuali" screen** (the rental's
+  "ha già avviato altre attività", the structure's "riguarda il legale rappresentante"): a derived recipe has its own
+  `wizard:`, which `si_no:` doesn't reach, so the step carries `answers:` (the rental's Si is refused, the structure's
+  legale rappresentante is not offered).
+- **Left unmapped and why:** the stabilimento forms that read the master list (the activity lines: a macroarea, an
+  aggregazione, a linea, a code; for 060 and 061 three forms each) because nobody has read the lists; 056
+  "Variazioni" (a SCIA for structural changes: its first text box, before "che la struttura ricettiva", is unlabelled and
+  unread; a capacity table with rooms by type); 010 "dichiarazioni sul possesso dei requisiti" (a garage's technical
+  manager: the options of the "requisiti tecnico professionali" radio are not in the crawl); 010 variazioni soggetti
+  (the master lists); 020 and PIN-7 take-over ("Rif. Pratica VVF" and the person responsible: VVF unread); AUA and emissioni
+  (six forms, the "estremi di autorizzazione" and the three sections nobody has read; outside the wedge); the film-shoot
+  occupation (outside the wedge); the 015 hobbyists (a private person's declarations).
+- **Mechanics that cost a run each:** the steps in a bundle are as built (a reworded ask moves a steps file's hash: rebuild
+  the bundle, and the box rejects the old file by its sha256); `regen.py NAME ...` leaves a renamed rehearsal's old lock line
+  (delete it by hand); a monitor waiting on `pgrep -f` matches its own shell and never ends: wait on the process id.
+
 ## What the portal does that bit us
 
 - **Street names without their particles.** The location's street lookup and the Comune's

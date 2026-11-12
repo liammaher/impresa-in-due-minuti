@@ -1,0 +1,38 @@
+# Variazione titolarità di uno stabilimento registrato/riconosciuto (procedura n. 2) (Esercizio di somministrazione di alimenti e bevande in zone tutelate), as gen.py writes its steps file from the batch crawl
+# (catalogue/F839/sections/suap-061-variazione-titolarita-di-uno-stabilimento-registra.json), for the made-up business of this folder's fixture.json.
+# Derived from rehearsals/variazione-soggetti-ristorante-centro-storico-fittizio (bench/derive_recipe.py): no `rules:` and no `after:`; the attachments and payment screens are not read.
+procedure: napoli/comune/variazioni-attivita
+title: "Variazione titolarità di uno stabilimento registrato/riconosciuto (procedura n. 2), bar o ristorante, zone tutelate, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-061-variazione-titolarita-di-uno-stabilimento-registra
+subject: impresa
+operation: Variazione titolarità di uno stabilimento registrato/riconosciuto (procedura n. 2)
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [Esercizio di somministrazione di alimenti e bevande in zone tutelate], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Variazione titolarità di uno stabilimento registrato/riconosciuto (procedura n. 2)"], confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
+asks:
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "variazione {{business.denominazione}}"}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (colonna VPF del tariffario 2026: verifica la voce; 0 se non dovuti)"}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, altre dichiarazioni, tasse comunali, e quelle dello stabilimento (sicurezza alimentare, antimafia, obblighi di comunicazione, master list)"
+  - "Paga i diritti di segreteria, se dovuti, con pagoPA nella schermata di pagamento"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+supports:
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}

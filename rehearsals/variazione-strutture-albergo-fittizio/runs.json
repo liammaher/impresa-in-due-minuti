@@ -1,0 +1,17 @@
+[
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "stopped",
+  "seconds": 7.9,
+  "browser": "pane",
+  "note": "First run stopped at the wizard's Scelte eventuali (required Si/No on the legale rappresentante). Answered No. Then filled."
+ },
+ {
+  "date": "2026-11-12",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 60.2,
+  "browser": "pane"
+ }
+]
