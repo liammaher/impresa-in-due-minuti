@@ -101,7 +101,9 @@ installalo da python.org.
    confronta l'anteprima del portale con i documenti.
 <!-- /no-vault -->
 5. Quando la bozza è pronta, Claude ti scrive in poche righe cosa controllare e cosa resta a te
-   sul portale: l'anteprima, le dichiarazioni, la firma, il pagamento e l'invio.
+   sul portale: l'anteprima, le dichiarazioni, la firma, il pagamento e l'invio. Gli allegati che il
+   portale crea solo dopo le dichiarazioni (la procura) li firmi tu e li salvi nella cartella del
+   lavoro; scrivi «ho firmato» e Claude li allega con una seconda compilazione.
 6. Dopo l'invio, Claude ti dice le prossime scadenze e la pratica che di solito segue.
 
 ## Dove vanno i dati dei tuoi clienti

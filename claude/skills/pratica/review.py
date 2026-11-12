@@ -292,7 +292,9 @@ def tu_steps(later, reopened=False):
         what = (["la procura"] if any(re.search(r"procura", x, re.I) for x in later) else []) \
             + (["la ricevuta del pagamento"] if pay_first else [])
         rest = [x for x in later if not re.search(r"procura|versament|ricevut|pagament", x, re.I)]
-        what += ["gli altri documenti" if what else "i documenti da firmare"] if rest else []
+        # The portal's own names for them (the steps file's labels), so nothing is signed unseen.
+        named = ", ".join(dict.fromkeys(rest))
+        what += [f"gli altri documenti ({named})" if what else f"i documenti da firmare ({named})"] if rest else []
         steps += (["paga i diritti"] if pay_first else []) + [
             f"firma {' e '.join([', '.join(what[:-1]), what[-1]] if len(what) > 1 else what)}; "
             "salva i file firmati nella cartella del lavoro e scrivimi «ho firmato»"]
