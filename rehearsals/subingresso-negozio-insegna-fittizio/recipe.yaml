@@ -1,0 +1,53 @@
+# Subentrare nell'esercizio dell'attività (Vicinato - settore merceologico NON alimentare), as gen.py writes its steps file from the batch crawl
+# (catalogue/F839/sections/suap-016-subentrare-insegna.json), for the made-up business of this folder's fixture.json.
+# Derived from rehearsals/subingresso-negozio-fittizio (bench/derive_recipe.py): no `rules:` and no `after:`; the attachments and payment screens are not read.
+procedure: napoli/comune/subingresso-attivita-commerciale
+title: "Subentrare nell'esercizio dell'attività, negozio non alimentare, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-016-subentrare-insegna
+subject: impresa
+operation: Subentrare nell'esercizio dell'attività
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [Vicinato - settore merceologico NON alimentare], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Subentrare nell'esercizio dell'attività", "SCIA per installazione insegna di esercizio"], confirm: CONFERMA}
+  - {screen: Scelta interventi eventuali, confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per il negozio? Spunta tutte quelle che valgono, o nessuna."
+asks:
+  insegna_consenso: {group: extras, type: yes_no, item: "L'insegna richiede il consenso di altri (il proprietario dell'edificio o il condominio)", why: "In quel caso il portale chiede i dati e l'assenso del proprietario: non lo preparo ancora."}
+  insegna_vincolo: {group: extras, type: yes_no, item: "L'edificio è sotto tutela paesaggistica o monumentale", why: "In quel caso l'insegna ha bisogno di una propria autorizzazione: non la preparo ancora."}
+  insegna_grande: {group: extras, type: yes_no, item: "Le insegne insieme superano i 5 m²", why: "Sopra i 5 m² è dovuto anche il canone unico: un pagamento a parte, che non preparo ancora."}
+  insegna_zona_a: {group: extras, type: yes_no, item: "L'installazione ricade in zona A del PRG (il centro storico)", why: "In zona A la SCIA dell'insegna ha altre condizioni, che non preparo ancora."}
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "subingresso {{business.denominazione}}"}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro", default: "80", why: "La colonna VCA del tariffario 2026 per un negozio non alimentare (S1)."}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "Spunta tu le dichiarazioni dell'insegna (ulteriori dichiarazioni, mezzi pubblicitari)"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità, altre dichiarazioni, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+supports:
+  - {when: "{{ask.insegna_consenso|not}}", else: "Un'insegna che richiede il consenso del proprietario o del condominio per ora non la preparo."}
+  - {when: "{{ask.insegna_vincolo|not}}", else: "Un'insegna su un edificio tutelato richiede una propria autorizzazione: per ora non la preparo."}
+  - {when: "{{ask.insegna_grande|not}}", else: "Le insegne sopra i 5 m² pagano anche il canone unico: per ora non lo preparo."}
+  - {when: "{{ask.insegna_zona_a|not}}", else: "In zona A del PRG (il centro storico) la SCIA dell'insegna ha altre condizioni, che non preparo ancora."}
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
+  - {when: "{{ask.atto_registrato}}", else: "Un atto ancora in corso di registrazione per ora non lo preparo: in quel caso il portale accetta la sua copia firmata, che spetta a te caricare. Presenta la pratica dopo la registrazione."}
+rules:
+  table: suap-napoli
+  facts: {attivita: vicinato_non_alimentare, evento: subingresso, insegna: "true"}
+  handles: [napoli/comune/insegna-esercizio]

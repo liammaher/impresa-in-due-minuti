@@ -1,0 +1,19 @@
+{
+ "extras": [],
+ "attivita_852": [
+  "ristorazione",
+  "ristorante"
+ ],
+ "descrizione": "PROVA NON INVIARE - ristorante musica generato",
+ "oggetto": "Aprire l'attività: pratica di prova con dati inventati.",
+ "insegna": "Pizzeria Fittizia",
+ "superficie_somministrazione_mq": "35",
+ "in_centro_commerciale": "false",
+ "diritti_euro": "120",
+ "zona": "c",
+ "fatti": [],
+ "stagionale": "false",
+ "diritti_esente": false,
+ "bollo_marche": false,
+ "bollo_esenzione": "no"
+}

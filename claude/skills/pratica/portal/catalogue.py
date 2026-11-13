@@ -152,6 +152,23 @@ def ops_of(args):
         nth[s["sector"]] += 1
     pick = [int(x) for x in args.sectors.split(",")] if args.sectors else range(len(sectors))
     ops = []
+    if args.combo:
+        # Two operations in one pratica (an opening with the dehors' area, a take-over with the sign's SCIA): --combo NAME SECTOR_INDEX MAIN OTHER,
+        # the operations by the start of their leaf label, which must name one (the wizard.js pairs probe took these together,
+        # catalogue/F839/suap-pairs.md). Its crawl is named NAME: the recipe's `crawl:`.
+        for name, idx, *labels in args.combo:
+            s = sectors[int(idx)]
+            if len(labels) < 2:
+                sys.exit(f"--combo {name}: give the sector's index, then its operations, the main one first")
+            found = []
+            for label in labels:
+                hit = [o for o in s["operations"] + w["common"] if o.split("›")[-1].strip().startswith(label)]
+                hit = list(dict.fromkeys(hit))
+                if len(hit) != 1:
+                    sys.exit(f"--combo {name}: {label!r} names {len(hit)} operations of sector {idx}: {[h.split('›')[-1].strip()[:60] for h in hit]}")
+                found.append(hit[0])
+            ops.append({"name": name, "sector": s["sector"], "sector_nth": s["nth"], "path": found[0], "also": found[1:]})
+        return ops
     if args.common:
         # The operations most sectors offer, once each, under the first sector given.
         s = sectors[pick[0]]
@@ -215,6 +232,12 @@ def private_pattern():
     return private
 
 
+def ticked_interventi(screens):
+    """The options of a crawl's «interventi eventuali» screen read as ticked: a base pratica has none."""
+    return [o["label"][:60] for sc in screens or [] if "interventi eventuali" in sc.get("screen", "")
+            for o in sc.get("options", []) if o.get("selected")]
+
+
 def cmd_import(args):
     """Each pratica of an export (localStorage `crawl:op:*`) to sections/<name>.json."""
     private_pattern()  # before anything is read
@@ -232,6 +255,12 @@ def cmd_import(args):
         private = private_pattern()
         if re.search(private, json.dumps(r, ensure_ascii=False), re.I):
             sys.exit(f"{r['name']}: holds the login's name or CF, not imported")
+        ticked = ticked_interventi(r.get("screens"))
+        if ticked:
+            # A tick left on the scratch draft by a batch killed mid-variant: this crawl is "with" it, its base is not the pratica's
+            # (2026-11-13: two dehors crawls with the sign; the 2026-10-28 -interventi crawls of 004, 016, 017 and 056 are such).
+            sys.exit(f"{r['name']}: «interventi eventuali» was crawled with {ticked} ticked (a leftover of an earlier run on the scratch "
+                     "draft): not imported; untick it (wizard.js clears it now) and crawl again")
         depth = r.get("depth") or args.depth or 2
         doc = {"crawled": r["crawled"], "by": f"crawl.js batch, depth {depth}",
                "pratica": f"{sportello(r['name']).upper()}: {r['operation']}"
@@ -433,7 +462,8 @@ def same_digest(d, name, cache=None):
 
 def default_draft(names):
     """The scratch draft a batch walks on: its sportello's. The SUE's draft has no SUAP sector in its tree, so a SUAP batch on
-    it failed every pratica as "not in the tree" (2026-11-12, a lost drift check). It must exist in Pratiche in bozza."""
+    it failed every pratica as "not in the tree" (2026-11-12, a lost drift check). It must exist in Pratiche in bozza: a SUAP one named
+    `catalogo suap` may not (2026-11-13: none did; any "PROVA NON INVIARE - ..." SUAP draft will do, `--draft`)."""
     suap = names and all(n.startswith("suap-") for n in names)
     return "PROVA NON INVIARE - catalogo " + ("suap" if suap else "sue")
 
@@ -550,12 +580,20 @@ def bundle(out, path, srcs, ops, args):
         raise SystemExit("these are SUAP's pratiche but the scratch draft is the SUE's: every sector would read \"not in the tree\"; "
                          "pass --draft of a SUAP draft (it must exist in Pratiche in bozza)")
     opts = {"draft": draft, "depth": args.depth, "variants": True, "ops": ops}
+    if args.interventi:
+        opts["interventi"] = True
+    if args.base_only:
+        # No variants at all: the base pratica of a combination whose ticks' sections are known from other crawls (gen.py `borrowed`).
+        # Every variant of a combination re-reads its sections: 260 and counting for one dehors opening (2026-11-13).
+        opts["variants"] = False
     if args.check:
         opts["since"] = datetime.date.today().isoformat()
     stamp = "backup-" + datetime.date.today().strftime("%Y%m%d")
     # Busy only while a batch runs: one that ended doesn't hold the tab (2026-10-31: a second
     # bundle in the tab was refused).
-    guard = "  if (window.__crawlBusy && !(window.__crawl && (window.__crawl.report() || {}).done)) return \"a batch already runs in this tab\";\n"
+    # Busy only while a batch of this page runs: a `__crawlBusy` left by a page that was reloaded or by a restart by hand (no `__crawl`, or its
+    # report undefined) is stale and made the next bundle refuse (2026-11-13).
+    guard = "  if (window.__crawlBusy && window.__crawl && (window.__crawl.report() || {}).done === false) return \"a batch already runs in this tab\";\n"
     body = (f"  const opts = {json.dumps(opts, ensure_ascii=False)};\n"
             "  localStorage.setItem(\"crawl:batch\", JSON.stringify(opts));\n"
             # --fresh redoes the ops; the sections it has seen come back as same_as (2026-10-31: a
@@ -605,7 +643,7 @@ input.addEventListener("change", async () => {{
     # As rerun.py's results.js: it waits only while the pane shows the page.
     (out / "status.js").write_text("""if (!document.hidden) await new Promise((r) => setTimeout(r, 38000));
 const r = window.__crawl ? await window.__crawl.wait(300) : null;
-JSON.stringify(r ? { done: r.done, done_ops: r.done_ops, of: JSON.parse(localStorage.getItem("crawl:batch")).ops.length,
+JSON.stringify(r ? { done: r.done, done_ops: r.done_ops, skipped: r.skipped, of: JSON.parse(localStorage.getItem("crawl:batch")).ops.length,
   current: r.current, tried: r.tried, errors: r.errors, stopped: r.stopped, error: r.error, storage: r.storage } : "no crawl in this tab")
 """)
     name = "crawl-batch-" + path.stem.removeprefix("pv-") + ".json"
@@ -694,12 +732,45 @@ def sue_pairs():
     return w, out
 
 
+def suap_pairs():
+    """The SUAP's: for each wedge sector, each of its main operations (open, take over, move) with each
+    extra the table adds to it (the PIN 2 fire prevention, the sign's SCIA, the dehors' area, the ASL
+    notification): does the portal take them together in one pratica (wizard.js `pairs`, one sector a pair).
+    Labels are the tree's leaves, from suap-wizard.json (the keys of a sector's tree aren't stored)."""
+    import re
+    w = json.loads((CAT / "suap-wizard.json").read_text())
+    leaf = lambda o: o.split("›")[-1].strip()
+    sectors = {s["sector"]: [leaf(o) for o in s["operations"]] + [leaf(o) for o in w["common"]] for s in w["sectors"]}
+    wanted = [("Esercizio di somministrazione di alimenti e bevande in zone NON tutelate", ("dehors", "pin", "insegna", "asl")),
+              ("Esercizio di somministrazione di alimenti e bevande in zone tutelate", ("dehors", "pin", "insegna", "asl")),
+              ("Vicinato - settore merceologico NON alimentare", ("pin", "insegna")),
+              ("Vicinato - settore merceologico Alimentare o Misto", ("pin", "insegna", "asl")),
+              ("Acconciatore, barbiere, estetista, tatuatore e piercer", ("pin", "insegna"))]
+    wanted += [(n, ("pin", "insegna")) for n in sectors if n.startswith("Strutture ricettive extralberghiere")]
+    pick = {"pin": r"^PIN 2 - ", "insegna": r"^SCIA per installazione insegna di esercizio$",
+            "dehors": r"^Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione",
+            "asl": r"^Notifica ai fini della registrazione - avvio attivit"}
+    main_re = r"^(Aprire l.attività( di (acconciatore|estetista))?|Subentrare nell.(esercizio dell.)?attività( di (acconciatore|estetista))?|Trasferire la sede dell.attività( di (acconciatore|estetista))?)$"
+    out = []
+    for sector, extras in wanted:
+        labels = sectors[sector]
+        mains = [l for l in labels if re.match(main_re, l)]
+        for m in mains:
+            for e in extras:
+                x = [l for l in labels if re.match(pick[e], l)]
+                if len(x) != 1:
+                    continue
+                n = len(out)
+                out.append([{"key": f"s{n}a", "label": m, "sector": sector}, {"key": f"s{n}b", "label": x[0], "sector": sector}])
+    return {"sector": out[0][0]["sector"]}, out
+
+
 def cmd_pairs(args):
     """The pairs probe as one file the person picks in the pane (pick.js), with status.js and
     print.js (the results as text, sha256 first, for `pairs-import -`)."""
     out = Path(args.dir)
     out.mkdir(parents=True, exist_ok=True)
-    w, pairs = sue_pairs()
+    w, pairs = suap_pairs() if args.suap else sue_pairs()
     if args.only:
         pairs = [p for p in pairs if any(k in (p[0]["key"], p[1]["key"]) for k in args.only)]
     src = (HERE / "wizard.js").read_text()
@@ -819,7 +890,7 @@ def main():
     p.add_argument("--common", action="store_true", help="the common operations, under the first sector")
     p.add_argument("--all", action="store_true", help="also the pratiche already crawled")
     p.add_argument("--combo", nargs="+", action="append", metavar="NAME MAIN OTHER",
-                   help="sue: a combination's crawl name, then its operations' labels, the main one first; repeat it for several")
+                   help="sue: a combination's crawl name, then its operations' labels, the main one first; repeat it for several. suap: NAME SECTOR_INDEX MAIN OTHER, the operations by the start of their leaf label")
     p.add_argument("--scelta", action="append", help="--combo: a scelta to try, for every combination (default: the procura)")
     p.add_argument("--combo-scelta", nargs=2, action="append", metavar=("NAME", "LABEL"),
                    help="--combo: one more scelta for that combination alone (a Si/No such as the SCIA's sanatoria)")
@@ -840,6 +911,7 @@ def main():
     p.add_argument("--bundle", required=True, help="the file the person picks in the pane")
     p.add_argument("--draft", default="PROVA NON INVIARE - catalogo sue")
     p.add_argument("--only", action="append", help="only the pairs with this operation key; repeat it")
+    p.add_argument("--suap", action="store_true", help="the SUAP's wedge: each main operation with each extra the table adds (draft: any SUAP scratch draft)")
     p.add_argument("--fresh", action="store_true", help="probe again the pairs stored in the pane")
     p = sub.add_parser("pairs-import")
     p.add_argument("export")
@@ -853,6 +925,8 @@ def main():
     p.add_argument("--fresh", action="store_true", help="--bundle: crawl the ops again, though stored (known sections as same_as)")
     p.add_argument("--forget-known", action="store_true", help="--bundle: --fresh, and read every section again")
     p.add_argument("--check", action="store_true", help="--bundle: a drift check (fingerprints only), redoing checks of other days")
+    p.add_argument("--base-only", action="store_true", help="--bundle: no scelte or interventi variants, only the base pratica")
+    p.add_argument("--interventi", action="store_true", help="--bundle: each «interventi eventuali» tick alone too, as a variant (a combination's)")
     args = ap.parse_args()
     res = globals()["cmd_" + args.cmd.replace("-", "_")](args)
     if isinstance(res, list) and res and isinstance(res[0], str):

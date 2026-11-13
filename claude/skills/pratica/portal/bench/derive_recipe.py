@@ -72,10 +72,15 @@ def drop_asks(text, keys):
     return text
 
 
-def derive(new, template, crawl_name, fixture=None):
+def derive(new, template, crawl_name, fixture=None, ticks=(), facts=None, handles=(), drop=(), also=()):
     crawl = json.loads((PORTAL / "catalogue" / "F839" / "sections" / f"{crawl_name}.json").read_text())
     m = re.search(r"› ([^›]+?) \(sector (.+)\)$", crawl["pratica"])
-    op, sector = m.group(1).strip(), m.group(2).strip()
+    if m:
+        op, sector = m.group(1).strip(), m.group(2).strip()
+    else:
+        # A combination's crawl: "SUAP: 2 operations in one pratica: MAIN + OTHER", its sector the name's index.
+        m = re.match(r"SUAP: \d+ operations in one pratica: (.+?) \+ ", crawl["pratica"])
+        op, sector = m.group(1).strip(), WIZARD[int(re.match(r"suap-(\d+)", crawl_name)[1])]["sector"]
     m_idx = re.match(r"suap-(\d+)", crawl_name)
     idx = int(m_idx[1]) if m_idx else None
     if idx is not None:
@@ -101,16 +106,34 @@ def derive(new, template, crawl_name, fixture=None):
     text = re.sub(r"^crawl: .*$", f"crawl: {crawl_name}", text, flags=re.M)
     text = re.sub(r"^operation: .*$", "operation: " + (json.dumps(op, ensure_ascii=False) if ":" in op else op), text, flags=re.M)
     text = re.sub(r"^(  - \{screen: Scelta settore attività, tree: )\[.*?\](, confirm: CONFERMA\})", lambda k: k[1] + "[" + tree + "]" + k[2], text, flags=re.M)
-    text = re.sub(r"^(  - \{screen: Scelta operazioni, tree: )\[.*\](, confirm: CONFERMA\})", lambda k: k[1] + "[" + json.dumps(op, ensure_ascii=False) + "]" + k[2], text, flags=re.M)
+    # `also`: the other operations selected with it (a combination's crawl, `catalogue.py ops suap --combo`), by their leaf labels.
+    text = re.sub(r"^(  - \{screen: Scelta operazioni, tree: )\[.*\](, confirm: CONFERMA\})", lambda k: k[1] + "[" + ", ".join(json.dumps(x, ensure_ascii=False) for x in (op, *also)) + "]" + k[2], text, flags=re.M)
     text = re.sub(r"^  - \{screen: Scelta interventi eventuali.*\n", "", text, flags=re.M)
     if "scelta interventi eventuali" in screens:
-        text = text.replace("  - {screen: Scelta del destinatario della pratica", "  - {screen: Scelta interventi eventuali, confirm: CONFERMA}\n  - {screen: Scelta del destinatario della pratica", 1)
+        # `ticks`: the interventi's options this pratica ticks, as "label[:nth]" (a label that is the start of another's needs the nth
+        # of its own: the sign's "...insegna esterna" and "...(dove è prevista la SCIA)").
+        leaves = []
+        for t in ticks:
+            label, _, nth_ = t.partition("::")
+            leaves.append('{leaf: "%s", nth: %s}' % (label, nth_ or 1))
+        tree_part = ", tree: [%s]" % ", ".join(leaves) if leaves else ""
+        text = text.replace("  - {screen: Scelta del destinatario della pratica", "  - {screen: Scelta interventi eventuali%s, confirm: CONFERMA}\n  - {screen: Scelta del destinatario della pratica" % tree_part, 1)
+        if leaves:
+            text = re.sub(r"^(wizard:)", "scelte: [%s]\n\\1" % ", ".join(json.dumps(t.partition("::")[0], ensure_ascii=False) for t in ticks), text, count=1, flags=re.M)
+    elif ticks:
+        raise SystemExit(f"{crawl_name} has no interventi screen: nothing to tick")
     # A short Italian sector name: the wizard's own is long ("Strutture ricettive extralberghiere (affittacamere, bed and ...") and a
     # title cut at 60 characters read as English to bench/test_gen.py's check of what the tecnico reads.
-    text = drop_asks(text, TEMPLATE_ONLY.get(template, ()))
+    text = drop_asks(text, tuple(TEMPLATE_ONLY.get(template, ())) + tuple(drop))
     text = re.sub(r"^title: .*$", "title: " + json.dumps(f"{op}, {SHORT.get(idx) or COMMON_SHORT.get(sector) or short_sector(sector)}, SUAP Napoli", ensure_ascii=False), text, flags=re.M)
     header = (f"# {op} ({sector}), as gen.py writes its steps file from the batch crawl\n# (catalogue/F839/sections/{crawl_name}.json), for the made-up business of this folder's fixture.json.\n"
               f"# Derived from rehearsals/{template} (bench/derive_recipe.py): no `rules:` and no `after:`; the attachments and payment screens are not read.\n")
+    if facts:
+        # What the library's SUAP table needs to route a case to this file (the derived recipe has none by default: a second recipe
+        # for a case one already holds makes route.py ambiguous): its fixed facts, and the other pratiche it files with it.
+        text = text.rstrip("\n") + "\nrules:\n  table: suap-napoli\n  facts: {%s}\n" % facts
+        if handles:
+            text += "  handles: [%s]\n" % ", ".join(handles)
     folder = ROOT / "rehearsals" / new
     folder.mkdir(exist_ok=True)
     (folder / "recipe.yaml").write_text(header + text, encoding="utf-8")
@@ -178,7 +201,10 @@ def fill(folder):
             if p.get("key") and p["key"] not in answers and (p.get("key") in values or "value" in p):
                 answers[p["key"]], added = p.get("value", values.get(p["key"])), True
         if not added:
+            # `errors`: an answer the pool gave that the form refuses (a protocol number over 10 characters, 2026-11-13): the pool's first value is
+            # another rehearsal's, so a question still asked with an error needs its own.
             return {"ready": d["ready"], "unsupported": d["unsupported"], "questions": [q["key"] for q in d["questions"]], "proposals": [p.get("key") for p in d["proposals"]],
+                    "errors": [[q["key"], q["error"]] for q in d["questions"] if q.get("error")],
                     "files": [f["for"] for f in d["files"] if not f["exists"]]}
         (folder / "answers.json").write_text(json.dumps(answers, ensure_ascii=False, indent=1) + "\n")
     return {"ready": False, "note": "still asking after eight rounds"}
@@ -191,8 +217,13 @@ def main():
     ap.add_argument("crawl")
     ap.add_argument("--fixture", help="the rehearsal whose fixture.json the new one copies")
     ap.add_argument("--no-fill", action="store_true")
+    ap.add_argument("--tick", action="append", default=[], metavar="LABEL[::NTH]", help="an «interventi eventuali» option to tick (repeat)")
+    ap.add_argument("--drop-ask", action="append", default=[], help="an ask of the template this pratica no longer asks (the music, once its tick is ticked)")
+    ap.add_argument("--also", action="append", default=[], help="another operation selected with the main one (its leaf label); repeat")
+    ap.add_argument("--facts", help="the rules block's fixed facts, as YAML flow: 'attivita: somministrazione, evento: trasferimento'")
+    ap.add_argument("--handles", help="the library procedures it files besides the main one, comma-separated (rules.handles)")
     a = ap.parse_args()
-    folder = derive(a.new, a.template, a.crawl, a.fixture)
+    folder = derive(a.new, a.template, a.crawl, a.fixture, a.tick, a.facts, [h for h in (a.handles or "").split(",") if h], a.drop_ask, a.also)
     print(f"wrote {folder.relative_to(ROOT)}: recipe.yaml, answers.json, fixture.json")
     if not a.no_fill:
         print(json.dumps(fill(folder), ensure_ascii=False))

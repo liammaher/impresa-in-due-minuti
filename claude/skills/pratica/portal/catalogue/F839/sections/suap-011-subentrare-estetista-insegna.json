@@ -1,0 +1,215 @@
+{
+ "crawled": "2026-11-13T12:17:46.223Z",
+ "by": "crawl.js batch, depth 3",
+ "pratica": "SUAP: 2 operations in one pratica: Subentrare nell'attività di estetista + SCIA per installazione insegna di esercizio",
+ "seconds": 24.1,
+ "note": "Every section is one of the operations' own, the same fingerprint: the combination is their union, in this order. A recipe names every operation and extends the main one's.",
+ "also": [
+  "RAD: ALTRE ESIGENZE connesse con l'esercizio dell'attività (Adempimenti SANITARI, mezzi pubblicitari, occupazione di suolo pubblico, ecc...) › Mezzi pubblicitari › Installazione di mezzi pubblicitari (Ente competente: Comune) › SCIA per installazione insegna di esercizio"
+ ],
+ "generated": {
+  "interventi": "Subingresso in esercizio di attività di estetista",
+  "adempimenti": [
+   {
+    "adempimento": "Comunicazione di subingresso in esercizio di attività di estetista",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI"
+   },
+   {
+    "adempimento": "SCIA per installazione insegna di esercizio",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI"
+   }
+  ],
+  "sections": [
+   "Scheda anagrafica",
+   "Oggetto della pratica",
+   "DOMICILIO DIGITALE",
+   "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "ubicazione dell'attività",
+   "Dati catastali",
+   "Dati della impresa a cui si subentra",
+   "dichiarazione relativa al direttore dei lavori",
+   "motivazioni del subingresso",
+   "luogo dell'installazione",
+   "variazione della denominazione",
+   "ulteriori dichiarazioni (mezzi pubblicitari)",
+   "DICHIARAZIONI SUL POSSESSO DEI REQUISITI ANTIMAFIA",
+   "Caratteristiche del manufatto da installare",
+   "dichiarazione relativa all'installazione",
+   "dichiarazione relativa alla redazione del progetto",
+   "Dichiarazione sul possesso dei requisiti professionali (attività di estetista)",
+   "DICHIARAZIONE RELATIVA AI TITOLI ABILITANTI DELL'ATTIVITA' COMMERCIALE",
+   "Altre dichiarazioni",
+   "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "dichiarazione ai sensi dell' art. 75 del d.P.R. n° 445/2000",
+   "Dichiarazione relativa ai diritti di segreteria/istruttori"
+  ]
+ },
+ "screens": [
+  {
+   "screen": "scelta del destinatario della pratica",
+   "options": [
+    {
+     "label": "",
+     "checked": false
+    },
+    {
+     "label": "",
+     "checked": true
+    }
+   ]
+  },
+  {
+   "screen": "scelte eventuali",
+   "options": [
+    {
+     "key": "0",
+     "type": "CHK",
+     "label": "in presenza di soggetti (es. soci) diversi dal dichiarante (Dichiarazioni sul possesso dei requisiti da parte degli altri soci)"
+    },
+    {
+     "key": "1",
+     "type": "CHK",
+     "label": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
+    }
+   ]
+  }
+ ],
+ "sections": [
+  {
+   "section": "Scheda anagrafica",
+   "fingerprint": "4dd844db9cdb76ff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Scheda anagrafica",
+   "seconds": 0
+  },
+  {
+   "section": "Oggetto della pratica",
+   "fingerprint": "b9828eee09a1f50f",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Oggetto della pratica",
+   "seconds": 0.9
+  },
+  {
+   "section": "DOMICILIO DIGITALE",
+   "fingerprint": "5978ae29f079ce08",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO DIGITALE",
+   "seconds": 0.8
+  },
+  {
+   "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "fingerprint": "c282ef61bee9ea4d",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "ubicazione dell'attività",
+   "fingerprint": "1ae79e0eb7308899",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione ubicazione dell'intervento",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dati catastali",
+   "fingerprint": "bd17e4e186aa5dc9",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati catastali",
+   "seconds": 0.9
+  },
+  {
+   "section": "Dati della impresa a cui si subentra",
+   "fingerprint": "0be7a68be22af642",
+   "same_as": "suap-060-subentrare-insegna#dati dell'impresa a cui si subentra",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione relativa al direttore dei lavori",
+   "fingerprint": "9f7b0522fce10de1",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#dichiarazione relativa al direttore dei lavori",
+   "seconds": 0.9
+  },
+  {
+   "section": "motivazioni del subingresso",
+   "fingerprint": "50cef73513a7a88c",
+   "same_as": "suap-060-subentrare-insegna#motivazioni del subingresso",
+   "seconds": 0.8
+  },
+  {
+   "section": "luogo dell'installazione",
+   "fingerprint": "2cdf7be2ed346864",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#luogo dell'installazione",
+   "seconds": 0.8
+  },
+  {
+   "section": "variazione della denominazione",
+   "fingerprint": "5d486483318e66e9",
+   "same_as": "suap-060-subentrare-insegna#variazione della denominazione",
+   "seconds": 0.8
+  },
+  {
+   "section": "ulteriori dichiarazioni (mezzi pubblicitari)",
+   "fingerprint": "6ecaf13447de5189",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#ulteriori dichiarazioni (mezzi pubblicitari)",
+   "seconds": 0.8
+  },
+  {
+   "section": "DICHIARAZIONI SUL POSSESSO DEI REQUISITI ANTIMAFIA",
+   "fingerprint": "ab8abdefa773e8a4",
+   "same_as": "suap-011-subentrare-acconciatore-insegna#DICHIARAZIONI SUL POSSESSO DEI REQUISITI ANTIMAFIA",
+   "seconds": 0.8
+  },
+  {
+   "section": "Caratteristiche del manufatto da installare",
+   "fingerprint": "995629c7e1e2c532",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#Caratteristiche del manufatto da installare",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione relativa all'installazione",
+   "fingerprint": "4709f4b0b08d8ac5",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#dichiarazione relativa all'installazione",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione relativa alla redazione del progetto",
+   "fingerprint": "7b4724c51fa7c089",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#dichiarazione relativa alla redazione del progetto",
+   "seconds": 0.9
+  },
+  {
+   "section": "Dichiarazione sul possesso dei requisiti professionali (attività di estetista)",
+   "fingerprint": "21e6af5c4236e8c8",
+   "same_as": "suap-011-subentrare-acconciatore-insegna#Dichiarazione sul possesso dei requisiti professionali (attività di acconciatore)",
+   "seconds": 0.8
+  },
+  {
+   "section": "DICHIARAZIONE RELATIVA AI TITOLI ABILITANTI DELL'ATTIVITA' COMMERCIALE",
+   "fingerprint": "ba7fdc60e6ecedac",
+   "same_as": "suap-common-occupazione-suolo-pubblico-subingresso-alla-concessione-per#dichiarazione relativa ai titoli abilitanti",
+   "seconds": 0.8
+  },
+  {
+   "section": "Altre dichiarazioni",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione ai sensi dell' art. 75 del d.P.R. n° 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "fingerprint": "52afb47e165ec4c7",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.8
+  }
+ ]
+}

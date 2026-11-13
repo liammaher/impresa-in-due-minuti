@@ -160,8 +160,9 @@
   async function forward(screens) {
     for (let n = 0; n < 8; n++) {
       if (title().includes("compilazione della domanda")) return generated();
-      // The draft keeps earlier choices: the base pratica is the one with none.
-      if (title().includes("scelte eventuali")) {
+      // The draft keeps earlier choices: the base pratica is the one with none. (A tick of «interventi eventuali» left by a batch
+      // killed mid-variant made the next crawls of the scratch draft "with the sign": 2026-11-13, two dehors combinations.)
+      if (title().includes("scelte eventuali") || title().includes("interventi eventuali")) {
         for (const n of tree().filter((x) => x.type === "CHK" && x.selected)) await setSelected(n.key, false);
       }
       for (const q of sins()) await answer(q.key, false);
@@ -340,14 +341,17 @@
     document.body.append(frame);
     await loaded;
     await idle();
-    const toOps = async () => {
-      if (title().includes("scelta operazioni")) return;
+    // A pair may name its own sector (the SUAP's: `a.sector`); the screen stays only if it is that sector's.
+    let curSector = null;
+    const toOps = async (sector = opts.sector) => {
+      if (title().includes("scelta operazioni") && curSector === sector) return;
       await toScreen("scelta settore").catch(async () => { await reopen(true); await toScreen("scelta settore"); });
-      const sec = tree().find((n) => norm(n.label) === norm(opts.sector));
-      if (!sec) throw new Error(`no sector ${opts.sector}`);
+      const sec = tree().find((n) => norm(n.label) === norm(sector));
+      if (!sec) throw new Error(`no sector ${sector}`);
       if (!(await setSelected(sec.key, true))) throw new Error("sector didn't select");
       await go(() => button("Conferma").click());
       if (!title().includes("scelta operazioni")) throw new Error(`expected Scelta operazioni, found ${title()}`);
+      curSector = sector;
     };
     // A node by key, checked by its label (a tree that changed would move keys).
     const find = (o) => {
@@ -364,7 +368,7 @@
       const r = { a: a.label, b: b.label, keys: [a.key, b.key] }, p0 = performance.now();
       report.current = `${a.key}+${b.key}`;
       try {
-        await toOps();
+        await toOps(a.sector || opts.sector);
         await clear();
         const na = find(a), nb = find(b);
         if (!na || !nb) throw new Error(`not in the tree: ${!na ? a.label : b.label}`);
@@ -387,12 +391,12 @@
             }
           }
         }
-        await toScreen("scelta operazioni").catch(async () => { await reopen(true); await toOps(); });
+        await toScreen("scelta operazioni").catch(async () => { await reopen(true); curSector = null; await toOps(a.sector || opts.sector); });
         await clear();
       } catch (e) {
         r.error = String(e.message || e);
         if (!/impresainungiorno/.test(doc().location.host) || /login/i.test(doc().location.pathname)) { report.stopped = "logged out: log in, then pairs() again"; break; }
-        await reopen(true).then(toOps).catch(() => {});
+        curSector = null; await reopen(true).then(() => toOps(a.sector || opts.sector)).catch(() => {});
       }
       r.seconds = +((performance.now() - p0) / 1000).toFixed(1);
       localStorage.setItem(k, JSON.stringify(r));

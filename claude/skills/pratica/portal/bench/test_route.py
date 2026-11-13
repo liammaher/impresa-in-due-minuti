@@ -524,7 +524,13 @@ def suap_routed():
     assert "trasferimento" in r["message"].split("\n")[0] and "SUAP" not in r["message"], r["message"]
     r = route.route(SUAP, {**base, "evento": "apertura", "fatti": ["insegna"]}, REHEARSALS)
     assert r["pratica"] == "ristorante-insegna-fittizio", r
+    # The sign (and the acoustic nulla osta, and the dehors' area) at a move and at a take-over too (2026-11-13, after the pairs probe)
     r = route.route(SUAP, {**base, "evento": "trasferimento", "fatti": ["insegna"]}, REHEARSALS)
+    assert r["pratica"] == "trasferimento-ristorante-insegna-fittizio", r
+    r = route.route(SUAP, {**base, "evento": "subingresso", "fatti": ["insegna"]}, REHEARSALS)
+    assert r["pratica"] == "subingresso-ristorante-insegna-fittizio", r
+    # Fire prevention (PIN 2) is filed with the opening too, but its VV.F. sections are unread: no steps file yet.
+    r = route.route(SUAP, {**base, "evento": "apertura", "fatti": ["insegna", "prevenzione_incendi"]}, REHEARSALS)
     assert not r["routed"] and r["unsupported"][0].startswith("Non ancora prevista"), r
 
 

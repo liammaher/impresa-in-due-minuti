@@ -115,7 +115,8 @@ claude/skills/       vault and pratica skills; pratica keeps one playbook per pr
                      sections (`batch`: many pratiche on one scratch draft, each section once
                      by fingerprint), `wizard.js` a comune's whole wizard (`catalogue/<comune>/`);
                      catalogue.py imports a batch, counts sections and records drift, which
-                     gen.py and pre-flight refuse.
+                     gen.py and pre-flight refuse; a crawl taken with an «interventi eventuali» tick left on the scratch
+                     draft is refused by import and by gen.py (`crawl_ticked` says a recipe is for that flavour).
                      gen.py writes a steps file (a build output: rehearsals/steps.lock holds their hashes,
                      gen.ensure builds a missing one, `make steps` all) from a crawl, `dictionary/fnsuap.yaml` (each
                      section's fields by label, shared by every pratica) and a recipe
@@ -570,7 +571,8 @@ tolerances, `bench/test_rules.py` the rules tables (read from `library/rules/`, 
 the SUE table's every case walked as route.cases() asks the facts, seconds; the
 product of every fact's values, 34.5 million, is the library's validator's), `bench/plan_diff.py` each case's fill plan
 before and after a change, `bench/test_schema_branches.py` schema_branches.py and its table, `bench/test_route.py`
-route.py on every case the SUE table decides (it prints the combinations not mapped yet), `bench/test_rounds.py`
+route.py on every case the SUE table decides (it prints the combinations not mapped yet), `bench/test_combos.py` what the portal taught about
+combined SUAP pratiche (leftover ticks, one bollo, the pairs the wizard takes, a filled run for every derived combination), `bench/test_rounds.py`
 that every rehearsal's pre-flight is ready after one message (a proposal reading another answer of the same
 message comes with it: `assumes`, `cases`, `otherwise`; what a proposal holds back is `if_changed`, asked only
 if it is changed), `bench/test_one_yes.py` that a complete real folder (the P6 dossier, its files

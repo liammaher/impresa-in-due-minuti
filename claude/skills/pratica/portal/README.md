@@ -1187,6 +1187,53 @@ between people: append to it as text, never by loading and dumping the JSON (tha
 lines once). A list of several units' values joined by "/" breaks on a categoria (A/2): run.py's
 `_categorie` reads them whole.
 
+## SUAP combinations: the sign, the acoustic notice and the dehors with an opening, a move or a take-over (2026-11-13)
+
+Of the 189 cases the SUAP rules table decided and no steps file filed (31 combinations of pratiche), the 72 without fire prevention
+are filed now: **73 → 145 of the 262 cases the table decides**, 30 new rehearsals, **all 30 filled on the portal** (runs 126 → 135 by the
+scoreboard's count of recipes; the rest share a pratica). The 117 cases left all add fire prevention (PIN 2): its nine `SCIA VV.F.`,
+asseverazione and documents' sections are unread (`catalogue/F839/suap-pairs.md`).
+
+- **The wizard takes them together.** `catalogue.py pairs DIR --bundle FILE --suap` probed 53 pairs (each main operation with the
+  PIN 2, the sign's SCIA, the dehors' area, the ASL notification): all accepted, each adds its own adempimento. So the table's `also`
+  role is right and the combinations are real pratiche (`suap-pairs.md`).
+- **Where the extra comes from.** A sign (the first «interventi eventuali» option, `nth: 1`) and the acoustic nulla osta are *ticks* of
+  the «interventi eventuali» screen, whose sections the pratica borrows from the crawls taken with the tick (gen.py `borrowed`: a
+  guess until a run). The dehors' area, and the sign at a take-over of a bar, a hairdresser or a shop (no tick for it there), are
+  a *second operation*: a combination crawl (`catalogue.py ops suap --combo NAME SECTOR OP OTHER`, `pane --base-only`), recipes
+  with `operation` listing both in the wizard (`derive_recipe.py --also`).
+- **Deriving them.** `bench/derive_combos.py` holds each combination (template, crawl, ticks, the rules block's `facts` and
+  `handles`) and builds it from its plain sibling with the restaurant's sign asks overlaid; `derive_recipe.py` takes `--tick`,
+  `--facts`, `--handles`, `--drop-ask`, `--also`. `bench/test_route.py` holds the routes.
+- **A tick left on the scratch draft contaminates the next crawls.** A batch killed mid-variant left the sign's option ticked: the
+  next two crawls were "with the sign" (their `generated.adempimenti` and an interventi option `selected` said so). `wizard.js`
+  `forward` now clears the ticks of «interventi eventuali» as it already did the scelte's. The 017 and 056 `-interventi` crawls of
+  2026-10-28 are such crawls: their base holds the sign's SCIA sections (a recipe on them stopped at «direttore dei lavori»);
+  the combinations take the plain crawls (`suap-017-aprire-l-attivita`, `suap-056-aprire-l-attivita`).
+  **In code now:** `catalogue.py import` refuses a crawl whose «interventi eventuali» screen reads an option as ticked, `gen.py`
+  refuses a recipe on one (`crawl_ticked: <why>` for the sign's SCIA flavour, `negozio-insegna-scia-fittizio`), and
+  `bench/test_combos.py` names the four stored crawls that are such (004, 016, 017, 056 `-interventi`) so a fifth is noticed.
+- **A batch that varies everything is slow.** The first dehors crawl, with every scelta and interventi tick as a variant, was at 260
+  sections after ten minutes; the base pratica alone (`--base-only`) takes 35-50 s. The ticks' sections are known.
+- **One bollo.** The dehors' area and the acoustic nulla osta each want the bollo declaration (one fingerprint, two titles); the
+  draft shows one, under the tick's title: gen.py keeps the tick's and drops the base's. In the protected zones the authorization has
+  its bollo already, so the tick adds none there (`scelte_none`, read on a draft).
+- **Entries by crawl.** The sign's «Caratteristiche del manufatto» has two forms in the dictionary; a recipe on the opening's
+  `-interventi` crawl with the sign and the nulla osta both ticked got the other one (the run stopped at «num. progressivo»,
+  1.5 s): on the plain crawl it takes the page's form. A fresh pair of ticks is worth one run before it is routed.
+- **The shop take-over has one interventi tick** (a total surface over a limit), not the sign's.
+- **Import's references.** `catalogue.py import` names the first repo crawl holding a fingerprint: after a crawl was deleted
+  (the contaminated ones), the take-overs' sign sections still named it and gen.py said "isn't in the catalogue": re-point
+  `same_as` to the crawl that holds the section (checked by fingerprint).
+- **Where the numbers come from.** `catalogue/F839/suap-pairs.json` holds the 53 pairs probed (all taken together, none refused);
+  `bench/test_combos.py` holds every two-operation recipe to a probed pair, every `bench/derive_combos.py` combination to its rules
+  block and a filled run, the dehors with the nulla osta to one bollo, and that every reference between crawls resolves.
+- **Pane mechanics.** A `window.__crawlBusy` set by hand to restart a batch stays and makes the next bundle say "a batch already
+  runs": `catalogue.py` bundles now treat a flag with no running `__crawl` as stale (a rerun with stored results finishes at once as
+  "done, 0 crawled": status.js shows `skipped`; `--fresh` redoes them). A SUAP batch needs a SUAP scratch draft that exists:
+  `--draft "PROVA NON INVIARE - ..."`. zsh doesn't split an unquoted `$specs`: build an array for `rerun.py`'s `NAME:answers.json:VALUES`. A run's `total_seconds` counts the runner, not the portal's slow
+  minutes. `CATALOGUE_PRIVATE` can be the name plus the codice fiscale's shape, for the one command.
+
 ## Checking them all: `bench/rerun.py`
 
 After a change to inpage.js, the dictionary or gen.py, rerun the rehearsals in the pane, one

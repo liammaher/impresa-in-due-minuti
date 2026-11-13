@@ -1,0 +1,281 @@
+{
+ "crawled": "2026-11-13T12:27:00.466Z",
+ "by": "crawl.js batch, depth 3",
+ "pratica": "SUAP: 2 operations in one pratica: Aprire l'attività + Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande",
+ "seconds": 34.4,
+ "note": "Every section is one of the operations' own, the same fingerprint: the combination is their union, in this order. A recipe names every operation and extends the main one's.",
+ "also": [
+  "CHK: ALTRE ESIGENZE connesse con l'esercizio dell'attività (Adempimenti SANITARI, mezzi pubblicitari, occupazione di suolo pubblico, ecc...) › Occupazione suolo pubblico › Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande"
+ ],
+ "generated": {
+  "interventi": "Segnalazione Certificata di Inizio Attività per bar, ristoranti e altri esercizi di somministrazione di alimenti e bevande (in zone NON tutelate)",
+  "adempimenti": [
+   {
+    "adempimento": "SCIA per apertura di esercizio di somministrazione di alimenti e bevande",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI"
+   },
+   {
+    "adempimento": "Notifica ai fini della registrazione ai sensi dell'art. 6 del Regolamento CE n. 852/2004",
+    "amministrazione": "ASL Napoli 1 Centro"
+   },
+   {
+    "adempimento": "Autorizzazione all'occupazione di suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI"
+   }
+  ],
+  "sections": [
+   "Scheda anagrafica",
+   "Oggetto della pratica",
+   "DOMICILIO DIGITALE",
+   "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "ubicazione dell'attività",
+   "Dati catastali",
+   "Dati dell'esercizio di somministrazione",
+   "dichiarazioni sul possesso dei requisiti di onorabilità e professionali",
+   "Altre dichiarazioni",
+   "notifica avvio e inizio attività",
+   "tipologia di attività ai sensi dell'art. 6, Reg. CE n. 852/2004",
+   "dichiarazioni ai sensi dell'art. 6, Reg. CE n. 852/2004",
+   "dichiarazione dell'obbligo di notifica ai fini della registrazione  impresa alimentare prevista dall'art.6 del Reg. CE 852/2004",
+   "dichiarazione dell'insegna dell'esercizio",
+   "dichiarazione relativa agli orari ed ai giorni di apertura",
+   "dichiarazione relativa all'occupazione di suolo pubblico per attività di somministrazione alimenti e bevande",
+   "dichiarazione del periodo di effettiva occupazione",
+   "dichiarazione delle misure dell'area richiesta",
+   "dichiarazione relativa all'inquinamento acustico",
+   "dichiarazione di impegno relativa al montaggio della struttura",
+   "dichiarazione di impegno al pagamento della TOSAP/COSAP",
+   "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "dichiarazione ai sensi dell' art. 75 del d.P.R. n° 445/2000",
+   "Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "Dichiarazione relativa all'assolvimento dell'imposta di bollo"
+  ]
+ },
+ "screens": [
+  {
+   "screen": "scelta interventi eventuali",
+   "options": [
+    {
+     "key": "0",
+     "type": "CHK",
+     "label": "presenta la comunicazione di impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed eventi con diffusione di musica o utilizzo di strumenti musicali, se non si superano le soglie della zonizzazione comunale"
+    },
+    {
+     "key": "1",
+     "type": "CHK",
+     "label": "richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale"
+    },
+    {
+     "key": "2",
+     "type": "CHK",
+     "label": "in caso di vendita di alcolici"
+    },
+    {
+     "key": "3",
+     "type": "CHK",
+     "label": "in caso di attività che preveda insegna esterna"
+    },
+    {
+     "key": "3_0",
+     "type": "CHK",
+     "label": "Si presenta contestuale SCIA all'ANAS in quanto proprietario della strada da cui è visibile il mezzo pubblicitario"
+    },
+    {
+     "key": "3_1",
+     "type": "CHK",
+     "label": "Si presenta contestuale SCIA alla PROVINCIA / CITTA' METROPOLITANA in quanto proprietaria della strada da cui è visibile il mezzo pubblicitario"
+    },
+    {
+     "key": "4",
+     "type": "CHK",
+     "label": "in caso di attività che preveda insegna esterna (dove è prevista la SCIA)"
+    }
+   ]
+  },
+  {
+   "screen": "scelta del destinatario della pratica",
+   "options": [
+    {
+     "label": "",
+     "checked": false
+    },
+    {
+     "label": "",
+     "checked": true
+    }
+   ]
+  },
+  {
+   "screen": "scelte eventuali",
+   "options": [
+    {
+     "key": "0",
+     "type": "CHK",
+     "label": "in presenza di soggetti (es. soci) diversi dal dichiarante (Dichiarazioni sul possesso dei requisiti da parte degli altri soci)"
+    },
+    {
+     "key": "1",
+     "type": "CHK",
+     "label": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
+    },
+    {
+     "key": "2",
+     "type": "CHK",
+     "label": "Trattasi di ente del Terzo settore o associazione di volontariato (Art. 1 co.6 Dlgs 32/2021)"
+    }
+   ]
+  }
+ ],
+ "sections": [
+  {
+   "section": "Scheda anagrafica",
+   "fingerprint": "4dd844db9cdb76ff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Scheda anagrafica",
+   "seconds": 0
+  },
+  {
+   "section": "Oggetto della pratica",
+   "fingerprint": "b9828eee09a1f50f",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Oggetto della pratica",
+   "seconds": 0.9
+  },
+  {
+   "section": "DOMICILIO DIGITALE",
+   "fingerprint": "5978ae29f079ce08",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO DIGITALE",
+   "seconds": 0.8
+  },
+  {
+   "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "fingerprint": "c282ef61bee9ea4d",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.9
+  },
+  {
+   "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "ubicazione dell'attività",
+   "fingerprint": "1ae79e0eb7308899",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione ubicazione dell'intervento",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dati catastali",
+   "fingerprint": "bd17e4e186aa5dc9",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati catastali",
+   "seconds": 0.9
+  },
+  {
+   "section": "Dati dell'esercizio di somministrazione",
+   "fingerprint": "cbf04a95051d25d3",
+   "same_as": "suap-060-aprire-l-attivita#Dati dell'esercizio di somministrazione",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazioni sul possesso dei requisiti di onorabilità e professionali",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Altre dichiarazioni",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "notifica avvio e inizio attività",
+   "fingerprint": "a8d63774ff52277d",
+   "same_as": "suap-060-aprire-l-attivita#notifica avvio e inizio attività",
+   "seconds": 0.8
+  },
+  {
+   "section": "tipologia di attività ai sensi dell'art. 6, Reg. CE n. 852/2004",
+   "fingerprint": "d3161a8066ba1f9f",
+   "same_as": "suap-060-aprire-l-attivita#tipologia di attività ai sensi dell'art. 6, Reg. CE n. 852/2004",
+   "seconds": 0.9
+  },
+  {
+   "section": "dichiarazioni ai sensi dell'art. 6, Reg. CE n. 852/2004",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione dell'obbligo di notifica ai fini della registrazione  impresa alimentare prevista dall'art.6 del Reg. CE 852/2004",
+   "fingerprint": "94f9e919eed08517",
+   "same_as": "suap-017-affidare-in-gestione-reparto#dichiarazione dell'obbligo di notifica ai fini della registrazione  impresa alimentare prevista dall'art.6 del Reg. CE 852/2004",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione dell'insegna dell'esercizio",
+   "fingerprint": "91770c2e0f55753b",
+   "same_as": "suap-060-richiedere-l-orario-di-apertura-in-deroga-a-quanto#dichiarazione dell'insegna dell'esercizio",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione relativa agli orari ed ai giorni di apertura",
+   "fingerprint": "33d6e1eee18f0095",
+   "same_as": "suap-common-occupazione-suolo-pubblico-domanda-di-occupazione-suolo-pubb#dichiarazione relativa agli orari ed ai giorni di apertura",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione relativa all'occupazione di suolo pubblico per attività di somministrazione alimenti e bevande",
+   "fingerprint": "15f143d87795fa1d",
+   "same_as": "suap-common-occupazione-suolo-pubblico-domanda-di-occupazione-suolo-pubb#dichiarazione relativa all'occupazione di suolo pubblico per attività di somministrazione alimenti e bevande",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione del periodo di effettiva occupazione",
+   "fingerprint": "d68d344a25139fe6",
+   "same_as": "suap-common-occupazione-suolo-pubblico-domanda-di-occupazione-suolo-pubb#dichiarazione del periodo di effettiva occupazione",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione delle misure dell'area richiesta",
+   "fingerprint": "9ff02038c5c74f6f",
+   "same_as": "suap-common-occupazione-suolo-pubblico-domanda-di-occupazione-suolo-pubb#dichiarazione delle misure dell'area richiesta",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione relativa all'inquinamento acustico",
+   "fingerprint": "dc284eb6e34b1ea6",
+   "same_as": "suap-common-occupazione-suolo-pubblico-domanda-di-occupazione-suolo-pubb#dichiarazione relativa all'inquinamento acustico",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione di impegno relativa al montaggio della struttura",
+   "fingerprint": "3e3ac0cc8223dfd1",
+   "same_as": "suap-common-occupazione-suolo-pubblico-domanda-di-occupazione-suolo-pubb#dichiarazione di impegno relativa al montaggio della struttura",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione di impegno al pagamento della TOSAP/COSAP",
+   "fingerprint": "fbe202440d0784c1",
+   "same_as": "suap-common-occupazione-suolo-pubblico-domanda-di-occupazione-suolo-pubb#dichiarazione di impegno al pagamento della TOSAP/COSAP",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione ai sensi dell' art. 75 del d.P.R. n° 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "fingerprint": "52afb47e165ec4c7",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "fingerprint": "869752d2cea5aef3",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Dichiarazione relativa all'assolvimento dell'imposta di bollo",
+   "seconds": 0.9
+  }
+ ]
+}

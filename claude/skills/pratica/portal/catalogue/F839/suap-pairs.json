@@ -1,0 +1,484 @@
+{
+ "probed": "2026-11-13",
+ "by": "catalogue.py pairs --suap (wizard.js pairs), on a scratch draft, through Conferma to the generated pratica",
+ "note": "All 53 pairs were taken together and accepted, none refused; each extra adds its own adempimento (suap-pairs.md). The sections are not stored: a combination's come from its crawl.",
+ "pairs": [
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Aprire l'attività",
+    "Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Aprire l'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Aprire l'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Aprire l'attività",
+    "Notifica ai fini della registrazione - avvio attività/trasferimento"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "Notifica ai fini della registrazione - avvio attività/trasferimento"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "Notifica ai fini della registrazione - avvio attività/trasferimento"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Aprire l'attività",
+    "Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Aprire l'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Aprire l'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Aprire l'attività",
+    "Notifica ai fini della registrazione - avvio attività/trasferimento"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "Notifica ai fini della registrazione - avvio attività/trasferimento"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Esercizio di somministrazione di alimenti e bevande in zone tutelate",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "Notifica ai fini della registrazione - avvio attività/trasferimento"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico NON alimentare",
+   "operations": [
+    "Aprire l'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico NON alimentare",
+   "operations": [
+    "Aprire l'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico NON alimentare",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico NON alimentare",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico NON alimentare",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico NON alimentare",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico Alimentare o Misto",
+   "operations": [
+    "Aprire l'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico Alimentare o Misto",
+   "operations": [
+    "Aprire l'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico Alimentare o Misto",
+   "operations": [
+    "Aprire l'attività",
+    "Notifica ai fini della registrazione - avvio attività/trasferimento"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico Alimentare o Misto",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico Alimentare o Misto",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico Alimentare o Misto",
+   "operations": [
+    "Subentrare nell'esercizio dell'attività",
+    "Notifica ai fini della registrazione - avvio attività/trasferimento"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico Alimentare o Misto",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico Alimentare o Misto",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Vicinato - settore merceologico Alimentare o Misto",
+   "operations": [
+    "Trasferire la sede dell'attività",
+    "Notifica ai fini della registrazione - avvio attività/trasferimento"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Aprire l'attività di acconciatore",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Aprire l'attività di acconciatore",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Aprire l'attività di estetista",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Aprire l'attività di estetista",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Subentrare nell'attività di acconciatore",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Subentrare nell'attività di acconciatore",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Subentrare nell'attività di estetista",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Subentrare nell'attività di estetista",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Trasferire la sede dell'attività di acconciatore",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Trasferire la sede dell'attività di acconciatore",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Trasferire la sede dell'attività di estetista",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Acconciatore, barbiere, estetista, tatuatore e piercer",
+   "operations": [
+    "Trasferire la sede dell'attività di estetista",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Strutture ricettive extralberghiere (affittacamere, bed and breakfast, case e appartamenti per vacanze, case per ferie, case religiose di ospitalità, ostelli per la gioventù, residenze rurali o country house, rifugi di montagna)",
+   "operations": [
+    "Aprire l'attività",
+    "PIN 2 - Segnalazione Certificata di Inizio Attività"
+   ],
+   "together": true,
+   "accepted": true
+  },
+  {
+   "sector": "Strutture ricettive extralberghiere (affittacamere, bed and breakfast, case e appartamenti per vacanze, case per ferie, case religiose di ospitalità, ostelli per la gioventù, residenze rurali o country house, rifugi di montagna)",
+   "operations": [
+    "Aprire l'attività",
+    "SCIA per installazione insegna di esercizio"
+   ],
+   "together": true,
+   "accepted": true
+  }
+ ]
+}

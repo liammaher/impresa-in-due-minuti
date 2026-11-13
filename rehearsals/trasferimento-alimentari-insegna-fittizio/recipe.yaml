@@ -1,0 +1,61 @@
+# Trasferire la sede dell'attività (Vicinato - settore merceologico Alimentare o Misto), as gen.py writes its steps file from the batch crawl
+# (catalogue/F839/sections/suap-017-trasferire-la-sede-dell-attivita.json), for the made-up business of this folder's fixture.json.
+# Derived from rehearsals/trasferimento-alimentari-fittizio (bench/derive_recipe.py): no `rules:` and no `after:`; the attachments and payment screens are not read.
+procedure: napoli/comune/scia-esercizio-vicinato
+title: "Trasferire la sede dell'attività, negozio alimentare o misto, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-017-trasferire-la-sede-dell-attivita
+subject: impresa
+operation: Trasferire la sede dell'attività
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+scelte: ["in caso di attività che preveda insegna esterna"]
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [Vicinato - settore merceologico Alimentare o Misto], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Trasferire la sede dell'attività"], confirm: CONFERMA}
+  - {screen: Scelta interventi eventuali, tree: [{leaf: "in caso di attività che preveda insegna esterna", nth: 1}], confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per il negozio? Spunta tutte quelle che valgono, o nessuna."
+asks:
+  insegna_consenso: {group: extras, type: yes_no, item: "L'insegna richiede il consenso di altri (il proprietario dell'edificio o il condominio)", why: "In quel caso il portale chiede i dati e l'assenso del proprietario: non lo preparo ancora."}
+  insegna_vincolo: {group: extras, type: yes_no, item: "L'edificio è sotto tutela paesaggistica o monumentale", why: "In quel caso l'insegna ha bisogno di una propria autorizzazione: non la preparo ancora."}
+  insegna_grande: {group: extras, type: yes_no, item: "Le insegne insieme superano i 5 m²", why: "Sopra i 5 m² è dovuto anche il canone unico: un pagamento a parte, che non preparo ancora."}
+  insegna_zona_a: {group: extras, type: yes_no, item: "L'installazione ricade in zona A del PRG (il centro storico)", why: "In zona A la SCIA dell'insegna ha altre condizioni, che non preparo ancora."}
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "trasferimento {{business.denominazione}}"}
+  speciali: {group: extras, type: yes_no, item: "Vende armi, metalli preziosi, prodotti fitosanitari, medicinali o mangimi", why: "Ciascuno aggiunge alla pratica una propria autorizzazione o SCIA: casi che non preparo ancora."}
+  in_centro_commerciale: {type: yes_no, question: "I nuovi locali sono dentro un centro commerciale?", default: "false", why: "Napoli chiede il tipo di centro commerciale: non lo preparo ancora."}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (la colonna VCA della tabella 2026 per un negozio alimentare con la notifica sanitaria: controllala)"}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "Spunta tu le dichiarazioni dell'insegna (ulteriori dichiarazioni, mezzi pubblicitari)"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento, e la tariffa forfettaria ASL"
+  - "Allega quanto chiede la schermata degli allegati dopo aver spuntato le dichiarazioni"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+supports:
+  - {when: "{{ask.insegna_consenso|not}}", else: "Un'insegna che richiede il consenso del proprietario o del condominio per ora non la preparo."}
+  - {when: "{{ask.insegna_vincolo|not}}", else: "Un'insegna su un edificio tutelato richiede una propria autorizzazione: per ora non la preparo."}
+  - {when: "{{ask.insegna_grande|not}}", else: "Le insegne sopra i 5 m² pagano anche il canone unico: per ora non lo preparo."}
+  - {when: "{{ask.insegna_zona_a|not}}", else: "In zona A del PRG (il centro storico) la SCIA dell'insegna ha altre condizioni, che non preparo ancora."}
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
+  - {when: "{{ask.speciali|not}}", else: "Armi, metalli preziosi, prodotti fitosanitari, medicinali o mangimi per ora non li preparo."}
+  - {when: "{{ask.in_centro_commerciale|not}}", else: "Nuovi locali dentro un centro commerciale per ora non li preparo: Napoli chiede il tipo di centro."}
+  - {when: "{{ask.in_factory_outlet|not}}", else: "Un negozio in un factory outlet per ora non lo preparo."}
+  - {when: "{{ask.dettaglio_alimenti}}", else: "È la pratica di un negozio alimentare: deve valere la voce della notifica sul commercio al dettaglio di alimenti."}
+  - {when: "{{ask.ristorazione|not}} {{ask.forno|not}}", else: "Un negozio che serve anche cibo o produce prodotti da forno per ora non lo preparo: queste voci della notifica non sono ancora mappate insieme."}
+rules:
+  table: suap-napoli
+  facts: {attivita: vicinato_alimentare, evento: trasferimento, consumo_sul_posto: false, insegna: "true"}
+  handles: [napoli/asl-napoli-1/registrazione-attivita-alimentare, napoli/comune/insegna-esercizio]

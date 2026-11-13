@@ -11,6 +11,7 @@ title: "SCIA: apertura di un negozio di vicinato non alimentare con la SCIA per 
 comune: F839
 sportello: suap
 crawl: suap-016-aprire-l-attivita-interventi
+crawl_ticked: "the sign's SCIA flavour: that crawl was taken with the «dove è prevista la SCIA» options ticked, and this recipe is for them (run filled 2026-11-11)"
 subject: impresa
 operation: Aprire l'attività
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839

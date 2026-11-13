@@ -1,0 +1,564 @@
+{
+ "crawled": "2026-11-13T12:16:09.934Z",
+ "by": "crawl.js batch, depth 3",
+ "pratica": "SUAP: 2 operations in one pratica: Subentrare nell'esercizio dell'attività + SCIA per installazione insegna di esercizio",
+ "seconds": 45.7,
+ "note": "Every section is one of the operations' own, the same fingerprint: the combination is their union, in this order. A recipe names every operation and extends the main one's.",
+ "also": [
+  "RAD: ALTRE ESIGENZE connesse con l'esercizio dell'attività (Adempimenti SANITARI, mezzi pubblicitari, occupazione di suolo pubblico, ecc...) › Mezzi pubblicitari › Installazione di mezzi pubblicitari (Ente competente: Comune) › SCIA per installazione insegna di esercizio"
+ ],
+ "generated": {
+  "interventi": "Subingresso in esercizio di somministrazione di alimenti e bevande in zone NON tutelate",
+  "adempimenti": [
+   {
+    "adempimento": "Comunicazione di subingresso in esercizio di somministrazione di alimenti e bevande",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI"
+   },
+   {
+    "adempimento": "Aggiornamento della registrazione ai sensi dell'art. 6 del Regolamento (CE) 852/2004",
+    "amministrazione": "ASL Napoli 1 Centro"
+   },
+   {
+    "adempimento": "SCIA per installazione insegna di esercizio",
+    "amministrazione": "UFFICI COMUNE DI NAPOLI"
+   }
+  ],
+  "sections": [
+   "Scheda anagrafica",
+   "Oggetto della pratica",
+   "DOMICILIO DIGITALE",
+   "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "ubicazione dell'attività",
+   "Dati catastali",
+   "normative comunali",
+   "dichiarazione relativa al direttore dei lavori",
+   "dati dell'impresa a cui si subentra",
+   "motivazioni del subingresso",
+   "luogo dell'installazione",
+   "variazione della denominazione",
+   "ulteriori dichiarazioni (mezzi pubblicitari)",
+   "Caratteristiche del manufatto da installare",
+   "dichiarazione relativa all'installazione",
+   "Dichiarazione sul possesso dei requisiti di onorabilità e professionali",
+   "dichiarazione relativa alla redazione del progetto",
+   "DICHIARAZIONE RELATIVA AI TITOLI ABILITANTI DELL'ATTIVITA' COMMERCIALE",
+   "notifica di subingresso ai sensi del Reg. CE n.852/2004",
+   "inizio dell'attività",
+   "dichiarazioni ai sensi dell'art. 6, Reg. CE n. 852/2004",
+   "Altre dichiarazioni",
+   "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "dichiarazione ai sensi dell' art. 75 del d.P.R. n° 445/2000",
+   "Dichiarazione relativa ai diritti di segreteria/istruttori"
+  ]
+ },
+ "screens": [
+  {
+   "screen": "scelta del destinatario della pratica",
+   "options": [
+    {
+     "label": "",
+     "checked": false
+    },
+    {
+     "label": "",
+     "checked": true
+    }
+   ]
+  },
+  {
+   "screen": "scelte eventuali",
+   "options": [
+    {
+     "key": "0",
+     "type": "CHK",
+     "label": "in presenza di soggetti (es. soci) diversi dal dichiarante (Dichiarazioni sul possesso dei requisiti da parte degli altri soci)"
+    },
+    {
+     "key": "1",
+     "type": "CHK",
+     "label": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
+    },
+    {
+     "key": "2",
+     "type": "CHK",
+     "label": "Trattasi di ente del Terzo settore o associazione di volontariato (Art. 1 co.6 Dlgs 32/2021)"
+    }
+   ]
+  }
+ ],
+ "sections": [
+  {
+   "section": "Scheda anagrafica",
+   "fingerprint": "4dd844db9cdb76ff",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Scheda anagrafica",
+   "seconds": 0
+  },
+  {
+   "section": "Oggetto della pratica",
+   "fingerprint": "b9828eee09a1f50f",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#Oggetto della pratica",
+   "seconds": 0.9
+  },
+  {
+   "section": "DOMICILIO DIGITALE",
+   "fingerprint": "5978ae29f079ce08",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO DIGITALE",
+   "seconds": 0.8
+  },
+  {
+   "section": "DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "fingerprint": "c282ef61bee9ea4d",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#DOMICILIO ELETTRONICO (DOMICILIO DIGITALE SPECIALE)",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione di consapevolezza ex artt. 46 e 47 DPR 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "INFORMATIVA SULLA PRIVACY (Art. 13 del Reg. UE n. 2016/679 del 27 aprile 2016)",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "ubicazione dell'attività",
+   "fingerprint": "1ae79e0eb7308899",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione ubicazione dell'intervento",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dati catastali",
+   "fingerprint": "bd17e4e186aa5dc9",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dati catastali",
+   "seconds": 0.8
+  },
+  {
+   "section": "normative comunali",
+   "fingerprint": "0c25f486d179118b",
+   "same_as": "suap-060-subentrare-nell-esercizio-dell-attivita#normative comunali",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione relativa al direttore dei lavori",
+   "fingerprint": "9f7b0522fce10de1",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#dichiarazione relativa al direttore dei lavori",
+   "seconds": 0.9
+  },
+  {
+   "section": "dati dell'impresa a cui si subentra",
+   "fields": [
+    {
+     "id": "r3c1p3reg:txt",
+     "kind": "text",
+     "label": "nell'attività di:",
+     "max": 150
+    },
+    {
+     "id": "r5c1p7reg:txt",
+     "kind": "text",
+     "label": "già avviata con la SCIA/DIA/autorizzazione prot./n",
+     "max": 30
+    },
+    {
+     "id": "r5c2p9reg:calendar_input",
+     "kind": "date",
+     "label": "del"
+    },
+    {
+     "id": "r6c1p12reg:radio:0_clone",
+     "kind": "radio",
+     "label": "Avvio dell'attività contestuale",
+     "group": "r6c1p12reg:radio"
+    },
+    {
+     "id": "r7c1p14reg:radio:1_clone",
+     "kind": "radio",
+     "label": "Avvio dell'attività con decorrenza",
+     "group": "r7c1p14reg:radio"
+    }
+   ],
+   "fingerprint": "0be7a68be22af642",
+   "text": "dati dell'impresa a cui si subentra Il/la sottoscritto/a COMUNICA il subingresso: nell'attività di: già avviata con la SCIA/DIA/autorizzazione prot./n del Avvio dell'attività contestuale Avvio dell'attività con decorrenza",
+   "branches": [
+    {
+     "choice": "Avvio dell'attività contestuale",
+     "id": "r6c1p12reg:radio:0_clone",
+     "kind": "radio"
+    },
+    {
+     "choice": "Avvio dell'attività con decorrenza",
+     "id": "r7c1p14reg:radio:1_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r8c2p17reg:calendar_input",
+       "kind": "date",
+       "label": "dal"
+      }
+     ],
+     "moved": [
+      [
+       "r7c1p14reg:radio:1_clone",
+       "r8c1p15reg:radio:1_clone"
+      ]
+     ]
+    }
+   ],
+   "seconds": 2.4
+  },
+  {
+   "section": "motivazioni del subingresso",
+   "fields": [
+    {
+     "id": "r1c1p1reg:radio:0_clone",
+     "kind": "radio",
+     "label": "Compravendita",
+     "group": "r1c1p1reg:radio"
+    },
+    {
+     "id": "r1c2p2reg:radio:1_clone",
+     "kind": "radio",
+     "label": "Affitto d'azienda",
+     "group": "r1c2p2reg:radio"
+    },
+    {
+     "id": "r2c1p4reg:radio:2_clone",
+     "kind": "radio",
+     "label": "Donazione",
+     "group": "r2c1p4reg:radio"
+    },
+    {
+     "id": "r2c2p5reg:radio:3_clone",
+     "kind": "radio",
+     "label": "Fusione",
+     "group": "r2c2p5reg:radio"
+    },
+    {
+     "id": "r3c1p7reg:radio:4_clone",
+     "kind": "radio",
+     "label": "Fallimento",
+     "group": "r3c1p7reg:radio"
+    },
+    {
+     "id": "r3c2p8reg:radio:5_clone",
+     "kind": "radio",
+     "label": "Successione",
+     "group": "r3c2p8reg:radio"
+    },
+    {
+     "id": "r4c1p10reg:radio:6_clone",
+     "kind": "radio",
+     "label": "Altre cause",
+     "group": "r4c1p10reg:radio"
+    },
+    {
+     "id": "r6c1p14reg:radio:7_clone",
+     "kind": "radio",
+     "label": "con atto di registrazione",
+     "group": "r6c1p14reg:radio"
+    },
+    {
+     "id": "r6c2p16reg:txt",
+     "kind": "text",
+     "label": "n.",
+     "context": "con atto di registrazione",
+     "max": 30,
+     "disabled": true
+    },
+    {
+     "id": "r6c3p18reg:calendar_input",
+     "kind": "date",
+     "label": "del",
+     "disabled": true
+    },
+    {
+     "id": "r7c1p21reg:radio:8_clone",
+     "kind": "radio",
+     "label": "l'atto è in corso di registrazione",
+     "group": "r7c1p21reg:radio"
+    }
+   ],
+   "fingerprint": "50cef73513a7a88c",
+   "text": "motivazioni del subingresso Compravendita Affitto d'azienda Donazione Fusione Fallimento Successione Altre cause n. del con atto di registrazione l'atto è in corso di registrazione dichiarazione del notaio sull'atto in corso di registrazione Tipologie ammesse: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m Allega Max: 9,77 MB N.B. Si rammenta che a norma dell'art. 2556 c.c. i contratti di trasferimento di proprietà o gestione di un'azienda commerciale sono stipulati presso un notaio, in forma di atto pubblico o scrittura privata autenticata e registrata presso l'Agenzia delle Entrate.",
+   "branches": [
+    {
+     "choice": "Compravendita",
+     "id": "r1c1p1reg:radio:0_clone",
+     "kind": "radio"
+    },
+    {
+     "choice": "Affitto d'azienda",
+     "id": "r1c2p2reg:radio:1_clone",
+     "kind": "radio"
+    },
+    {
+     "choice": "Donazione",
+     "id": "r2c1p4reg:radio:2_clone",
+     "kind": "radio"
+    },
+    {
+     "choice": "Fusione",
+     "id": "r2c2p5reg:radio:3_clone",
+     "kind": "radio"
+    },
+    {
+     "choice": "Fallimento",
+     "id": "r3c1p7reg:radio:4_clone",
+     "kind": "radio"
+    },
+    {
+     "choice": "Successione",
+     "id": "r3c2p8reg:radio:5_clone",
+     "kind": "radio"
+    },
+    {
+     "choice": "Altre cause",
+     "id": "r4c1p10reg:radio:6_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r5c2p13reg:txt",
+       "kind": "text",
+       "label": "specificare:",
+       "context": "Altre cause",
+       "max": 100
+      }
+     ],
+     "moved": [
+      [
+       "r4c1p10reg:radio:6_clone",
+       "r5c1p11reg:radio:6_clone"
+      ],
+      [
+       "r6c1p14reg:radio:7_clone",
+       "r7c1p17reg:radio:7_clone"
+      ],
+      [
+       "r6c2p16reg:txt",
+       "r7c2p19reg:txt"
+      ],
+      [
+       "r6c3p18reg:calendar_input",
+       "r7c3p21reg:calendar_input"
+      ],
+      [
+       "r7c1p21reg:radio:8_clone",
+       "r8c1p24reg:radio:8_clone"
+      ]
+     ]
+    },
+    {
+     "choice": "con atto di registrazione",
+     "id": "r6c1p14reg:radio:7_clone",
+     "kind": "radio",
+     "enables": [
+      "r6c2p16reg:txt",
+      "r6c3p18reg:calendar_input"
+     ]
+    },
+    {
+     "choice": "l'atto è in corso di registrazione",
+     "id": "r7c1p21reg:radio:8_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r9c1p24reg:upload1_input",
+       "kind": "file",
+       "label": "Tipologie ammesse: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m Allega Max: 9,77 MB",
+       "context": "dichiarazione del notaio sull'atto in corso di registrazione",
+       "accepts": "Tipologie ammesse: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m"
+      }
+     ],
+     "plus": {
+      "anchor": "Tipologie ammesse: dwf.p7m;svg.p7m;jpg.p7m;pdf.p7m Allega Max: 9,77 MB",
+      "adds": 1,
+      "of": 1
+     }
+    }
+   ],
+   "seconds": 8.8
+  },
+  {
+   "section": "luogo dell'installazione",
+   "fingerprint": "2cdf7be2ed346864",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#luogo dell'installazione",
+   "seconds": 0.8
+  },
+  {
+   "section": "variazione della denominazione",
+   "fields": [
+    {
+     "id": "r3c1p4reg:txt",
+     "kind": "text",
+     "label": "indirizzo nuovo sito web (se diverso dal precedente)",
+     "max": 100
+    }
+   ],
+   "fingerprint": "5d486483318e66e9",
+   "text": "variazione della denominazione In caso di commercio elettronico: indirizzo nuovo sito web (se diverso dal precedente)",
+   "branches": [],
+   "seconds": 0.8
+  },
+  {
+   "section": "ulteriori dichiarazioni (mezzi pubblicitari)",
+   "fingerprint": "6ecaf13447de5189",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#ulteriori dichiarazioni (mezzi pubblicitari)",
+   "seconds": 1
+  },
+  {
+   "section": "Caratteristiche del manufatto da installare",
+   "fingerprint": "995629c7e1e2c532",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#Caratteristiche del manufatto da installare",
+   "seconds": 0.8
+  },
+  {
+   "section": "dichiarazione relativa all'installazione",
+   "fingerprint": "4709f4b0b08d8ac5",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#dichiarazione relativa all'installazione",
+   "seconds": 0.8
+  },
+  {
+   "section": "Dichiarazione sul possesso dei requisiti di onorabilità e professionali",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione relativa alla redazione del progetto",
+   "fingerprint": "7b4724c51fa7c089",
+   "same_as": "suap-common-mezzi-pubblicitari-installazione-di-mezzi-pubblicitari-scia-4#dichiarazione relativa alla redazione del progetto",
+   "seconds": 0.8
+  },
+  {
+   "section": "DICHIARAZIONE RELATIVA AI TITOLI ABILITANTI DELL'ATTIVITA' COMMERCIALE",
+   "fingerprint": "ba7fdc60e6ecedac",
+   "same_as": "suap-common-occupazione-suolo-pubblico-subingresso-alla-concessione-per#dichiarazione relativa ai titoli abilitanti",
+   "seconds": 0.8
+  },
+  {
+   "section": "notifica di subingresso ai sensi del Reg. CE n.852/2004",
+   "fields": [
+    {
+     "id": "r3c1p3reg:txt",
+     "kind": "text",
+     "label": "Cognome e Nome oppure denominazione ditta",
+     "max": 200
+    },
+    {
+     "id": "r5c1p7reg:txt",
+     "kind": "text",
+     "label": "C. F./Partita IVA",
+     "max": 16
+    },
+    {
+     "id": "r7c1p11reg:txt",
+     "kind": "text",
+     "label": "di cui alla notifica/SCIA prot./n.",
+     "max": 40
+    },
+    {
+     "id": "r7c2p13reg:calendar_input",
+     "kind": "date",
+     "label": "del"
+    }
+   ],
+   "fingerprint": "428205ad200da8b9",
+   "text": "notifica di subingresso ai sensi del Reg. CE n.852/2004 Il/la sottoscritto/a notifica di subentrare all'Operatore del Settore Alimentare (O.S.A.) ubicato presso il medesimo indirizzo e denominato: Cognome e Nome oppure denominazione ditta C. F./Partita IVA di cui alla notifica/SCIA prot./n. del",
+   "branches": [],
+   "seconds": 0.8
+  },
+  {
+   "section": "inizio dell'attività",
+   "fields": [
+    {
+     "id": "r1c1p1reg:radio:0_clone",
+     "kind": "radio",
+     "label": "Avvio contestuale alla data di notifica",
+     "group": "r1c1p1reg:radio"
+    },
+    {
+     "id": "r2c1p3reg:radio:1_clone",
+     "kind": "radio",
+     "label": "Avvio con decorrenza",
+     "group": "r2c1p3reg:radio"
+    },
+    {
+     "id": "r3c1p6reg:chk",
+     "kind": "checkbox",
+     "label": "Termine dell'attività"
+    }
+   ],
+   "fingerprint": "901baf4aef9f773d",
+   "text": "inizio dell'attività Avvio contestuale alla data di notifica Avvio con decorrenza Termine dell'attività",
+   "branches": [
+    {
+     "choice": "Avvio contestuale alla data di notifica",
+     "id": "r1c1p1reg:radio:0_clone",
+     "kind": "radio"
+    },
+    {
+     "choice": "Avvio con decorrenza",
+     "id": "r2c1p3reg:radio:1_clone",
+     "kind": "radio",
+     "reveals": [
+      {
+       "id": "r3c2p6reg:calendar_input",
+       "kind": "date",
+       "label": "dal"
+      }
+     ],
+     "moved": [
+      [
+       "r2c1p3reg:radio:1_clone",
+       "r3c1p4reg:radio:1_clone"
+      ],
+      [
+       "r3c1p6reg:chk",
+       "r4c1p9reg:chk"
+      ]
+     ]
+    },
+    {
+     "choice": "Termine dell'attività",
+     "id": "r3c1p6reg:chk",
+     "kind": "checkbox",
+     "reveals": [
+      {
+       "id": "r4c2p9reg:calendar_input",
+       "kind": "date",
+       "label": "in data"
+      }
+     ],
+     "moved": [
+      [
+       "r3c1p6reg:chk",
+       "r4c1p7reg:chk"
+      ]
+     ]
+    }
+   ],
+   "seconds": 3.5
+  },
+  {
+   "section": "dichiarazioni ai sensi dell'art. 6, Reg. CE n. 852/2004",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Altre dichiarazioni",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Dichiarazione in materia di rispetto sulle tasse comunali",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "dichiarazione ai sensi dell' art. 75 del d.P.R. n° 445/2000",
+   "skipped": "the person's declarations"
+  },
+  {
+   "section": "Dichiarazione relativa ai diritti di segreteria/istruttori",
+   "fingerprint": "52afb47e165ec4c7",
+   "same_as": "sue-combo-cila-paesaggistica-ordinaria#dichiarazione relativa ai diritti di segreteria/istruttori",
+   "seconds": 0.8
+  }
+ ]
+}

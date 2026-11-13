@@ -188,5 +188,8 @@
    "seconds": 1.2,
    "scelta": "IL PRESENTATORE DELLA DOMANDA È UN PROFESSIONISTA / ALTRO SOGGETTO MUNITO DI PROCURA SPECIALE"
   }
- ]
+ ],
+ "scelte_none": {
+  "richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale": "read 2026-11-13 on the draft \"PROVA NON INVIARE - ampliamento ristorante centro storico musica generato\" (rehearsals/ampliamento-ristorante-centro-storico-musica-fittizio): the tick adds no «dichiarazione relativa all'imposta di bollo» (the borrowed one stopped the run: \"no section\"); the protected zones' authorization already has its bollo, as suap-061-aprire-l-attivita and suap-061-trasferire-la-sede-dell-attivita record"
+ }
 }
