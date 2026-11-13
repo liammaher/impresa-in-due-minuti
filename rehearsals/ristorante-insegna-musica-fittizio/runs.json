@@ -5,5 +5,12 @@
   "result": "stopped",
   "seconds": 1.5,
   "browser": "pane"
+ },
+ {
+  "date": "2026-11-13",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 100.3,
+  "browser": "pane"
  }
 ]
