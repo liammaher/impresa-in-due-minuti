@@ -201,7 +201,10 @@ def fill(folder):
             if p.get("key") and p["key"] not in answers and (p.get("key") in values or "value" in p):
                 answers[p["key"]], added = p.get("value", values.get(p["key"])), True
         if not added:
+            # `errors`: an answer the pool gave that the form refuses (a protocol number over 10 characters, 2026-11-13): the pool's first value is
+            # another rehearsal's, so a question still asked with an error needs its own.
             return {"ready": d["ready"], "unsupported": d["unsupported"], "questions": [q["key"] for q in d["questions"]], "proposals": [p.get("key") for p in d["proposals"]],
+                    "errors": [[q["key"], q["error"]] for q in d["questions"] if q.get("error")],
                     "files": [f["for"] for f in d["files"] if not f["exists"]]}
         (folder / "answers.json").write_text(json.dumps(answers, ensure_ascii=False, indent=1) + "\n")
     return {"ready": False, "note": "still asking after eight rounds"}

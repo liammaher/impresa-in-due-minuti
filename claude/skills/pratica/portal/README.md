@@ -1210,6 +1210,9 @@ asseverazione and documents' sections are unread (`catalogue/F839/suap-pairs.md`
   `forward` now clears the ticks of «interventi eventuali» as it already did the scelte's. The 017 and 056 `-interventi` crawls of
   2026-10-28 are such crawls: their base holds the sign's SCIA sections (a recipe on them stopped at «direttore dei lavori»);
   the combinations take the plain crawls (`suap-017-aprire-l-attivita`, `suap-056-aprire-l-attivita`).
+  **In code now:** `catalogue.py import` refuses a crawl whose «interventi eventuali» screen reads an option as ticked, `gen.py`
+  refuses a recipe on one (`crawl_ticked: <why>` for the sign's SCIA flavour, `negozio-insegna-scia-fittizio`), and
+  `bench/test_combos.py` names the four stored crawls that are such (004, 016, 017, 056 `-interventi`) so a fifth is noticed.
 - **A batch that varies everything is slow.** The first dehors crawl, with every scelta and interventi tick as a variant, was at 260
   sections after ten minutes; the base pratica alone (`--base-only`) takes 35-50 s. The ticks' sections are known.
 - **One bollo.** The dehors' area and the acoustic nulla osta each want the bollo declaration (one fingerprint, two titles); the
@@ -1222,8 +1225,13 @@ asseverazione and documents' sections are unread (`catalogue/F839/suap-pairs.md`
 - **Import's references.** `catalogue.py import` names the first repo crawl holding a fingerprint: after a crawl was deleted
   (the contaminated ones), the take-overs' sign sections still named it and gen.py said "isn't in the catalogue": re-point
   `same_as` to the crawl that holds the section (checked by fingerprint).
+- **Where the numbers come from.** `catalogue/F839/suap-pairs.json` holds the 53 pairs probed (all taken together, none refused);
+  `bench/test_combos.py` holds every two-operation recipe to a probed pair, every `bench/derive_combos.py` combination to its rules
+  block and a filled run, the dehors with the nulla osta to one bollo, and that every reference between crawls resolves.
 - **Pane mechanics.** A `window.__crawlBusy` set by hand to restart a batch stays and makes the next bundle say "a batch already
-  runs": clear it and `window.__crawl`, and show the box again. A run's `total_seconds` counts the runner, not the portal's slow
+  runs": `catalogue.py` bundles now treat a flag with no running `__crawl` as stale (a rerun with stored results finishes at once as
+  "done, 0 crawled": status.js shows `skipped`; `--fresh` redoes them). A SUAP batch needs a SUAP scratch draft that exists:
+  `--draft "PROVA NON INVIARE - ..."`. zsh doesn't split an unquoted `$specs`: build an array for `rerun.py`'s `NAME:answers.json:VALUES`. A run's `total_seconds` counts the runner, not the portal's slow
   minutes. `CATALOGUE_PRIVATE` can be the name plus the codice fiscale's shape, for the one command.
 
 ## Checking them all: `bench/rerun.py`

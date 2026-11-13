@@ -780,6 +780,14 @@ def generate(recipe, base=HERE):
     changed = json.loads(drift.read_text())["pratiche"].get(recipe["crawl"], {}).get("differences") if drift.exists() else None
     if changed:
         raise GenError(f"the portal changed {recipe['crawl']} since its crawl ({'; '.join(changed)}): crawl it again")
+    # A crawl taken with an «interventi eventuali» option ticked (a leftover tick on the scratch draft) has that option's sections in its
+    # base: a recipe that doesn't tick it stops on a section the page doesn't have (2026-11-13: the food shop's and the B&B's sign, "no
+    # section direttore dei lavori"). `crawl_ticked` says the recipe is meant for the ticked flavour (the sign's SCIA).
+    ticked = [o["label"][:50] for sc in crawl.get("screens") or [] if "interventi eventuali" in sc.get("screen", "")
+              for o in sc.get("options", []) if o.get("selected")]
+    if ticked and not recipe.get("crawl_ticked"):
+        raise GenError(f"{recipe['crawl']} was crawled with {ticked} ticked, so its base is not the pratica's: use the plain crawl "
+                       "(the tick's sections are borrowed from the crawls that tried it), or say `crawl_ticked: <why>` if the recipe is for that flavour")
     dictionary = load_yaml(base / "dictionary" / f"{recipe.get('dictionary', 'fnsuap')}.yaml")
     split_by_yaml(dictionary, recipe)
 

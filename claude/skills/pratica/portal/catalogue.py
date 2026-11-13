@@ -232,6 +232,12 @@ def private_pattern():
     return private
 
 
+def ticked_interventi(screens):
+    """The options of a crawl's «interventi eventuali» screen read as ticked: a base pratica has none."""
+    return [o["label"][:60] for sc in screens or [] if "interventi eventuali" in sc.get("screen", "")
+            for o in sc.get("options", []) if o.get("selected")]
+
+
 def cmd_import(args):
     """Each pratica of an export (localStorage `crawl:op:*`) to sections/<name>.json."""
     private_pattern()  # before anything is read
@@ -249,6 +255,12 @@ def cmd_import(args):
         private = private_pattern()
         if re.search(private, json.dumps(r, ensure_ascii=False), re.I):
             sys.exit(f"{r['name']}: holds the login's name or CF, not imported")
+        ticked = ticked_interventi(r.get("screens"))
+        if ticked:
+            # A tick left on the scratch draft by a batch killed mid-variant: this crawl is "with" it, its base is not the pratica's
+            # (2026-11-13: two dehors crawls with the sign; the 2026-10-28 -interventi crawls of 004, 016, 017 and 056 are such).
+            sys.exit(f"{r['name']}: «interventi eventuali» was crawled with {ticked} ticked (a leftover of an earlier run on the scratch "
+                     "draft): not imported; untick it (wizard.js clears it now) and crawl again")
         depth = r.get("depth") or args.depth or 2
         doc = {"crawled": r["crawled"], "by": f"crawl.js batch, depth {depth}",
                "pratica": f"{sportello(r['name']).upper()}: {r['operation']}"
@@ -450,7 +462,8 @@ def same_digest(d, name, cache=None):
 
 def default_draft(names):
     """The scratch draft a batch walks on: its sportello's. The SUE's draft has no SUAP sector in its tree, so a SUAP batch on
-    it failed every pratica as "not in the tree" (2026-11-12, a lost drift check). It must exist in Pratiche in bozza."""
+    it failed every pratica as "not in the tree" (2026-11-12, a lost drift check). It must exist in Pratiche in bozza: a SUAP one named
+    `catalogo suap` may not (2026-11-13: none did; any "PROVA NON INVIARE - ..." SUAP draft will do, `--draft`)."""
     suap = names and all(n.startswith("suap-") for n in names)
     return "PROVA NON INVIARE - catalogo " + ("suap" if suap else "sue")
 
@@ -578,7 +591,9 @@ def bundle(out, path, srcs, ops, args):
     stamp = "backup-" + datetime.date.today().strftime("%Y%m%d")
     # Busy only while a batch runs: one that ended doesn't hold the tab (2026-10-31: a second
     # bundle in the tab was refused).
-    guard = "  if (window.__crawlBusy && !(window.__crawl && (window.__crawl.report() || {}).done)) return \"a batch already runs in this tab\";\n"
+    # Busy only while a batch of this page runs: a `__crawlBusy` left by a page that was reloaded or by a restart by hand (no `__crawl`, or its
+    # report undefined) is stale and made the next bundle refuse (2026-11-13).
+    guard = "  if (window.__crawlBusy && window.__crawl && (window.__crawl.report() || {}).done === false) return \"a batch already runs in this tab\";\n"
     body = (f"  const opts = {json.dumps(opts, ensure_ascii=False)};\n"
             "  localStorage.setItem(\"crawl:batch\", JSON.stringify(opts));\n"
             # --fresh redoes the ops; the sections it has seen come back as same_as (2026-10-31: a
@@ -628,7 +643,7 @@ input.addEventListener("change", async () => {{
     # As rerun.py's results.js: it waits only while the pane shows the page.
     (out / "status.js").write_text("""if (!document.hidden) await new Promise((r) => setTimeout(r, 38000));
 const r = window.__crawl ? await window.__crawl.wait(300) : null;
-JSON.stringify(r ? { done: r.done, done_ops: r.done_ops, of: JSON.parse(localStorage.getItem("crawl:batch")).ops.length,
+JSON.stringify(r ? { done: r.done, done_ops: r.done_ops, skipped: r.skipped, of: JSON.parse(localStorage.getItem("crawl:batch")).ops.length,
   current: r.current, tried: r.tried, errors: r.errors, stopped: r.stopped, error: r.error, storage: r.storage } : "no crawl in this tab")
 """)
     name = "crawl-batch-" + path.stem.removeprefix("pv-") + ".json"
