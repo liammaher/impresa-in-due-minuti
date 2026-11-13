@@ -694,12 +694,45 @@ def sue_pairs():
     return w, out
 
 
+def suap_pairs():
+    """The SUAP's: for each wedge sector, each of its main operations (open, take over, move) with each
+    extra the table adds to it (the PIN 2 fire prevention, the sign's SCIA, the dehors' area, the ASL
+    notification): does the portal take them together in one pratica (wizard.js `pairs`, one sector a pair).
+    Labels are the tree's leaves, from suap-wizard.json (the keys of a sector's tree aren't stored)."""
+    import re
+    w = json.loads((CAT / "suap-wizard.json").read_text())
+    leaf = lambda o: o.split("›")[-1].strip()
+    sectors = {s["sector"]: [leaf(o) for o in s["operations"]] + [leaf(o) for o in w["common"]] for s in w["sectors"]}
+    wanted = [("Esercizio di somministrazione di alimenti e bevande in zone NON tutelate", ("dehors", "pin", "insegna", "asl")),
+              ("Esercizio di somministrazione di alimenti e bevande in zone tutelate", ("dehors", "pin", "insegna", "asl")),
+              ("Vicinato - settore merceologico NON alimentare", ("pin", "insegna")),
+              ("Vicinato - settore merceologico Alimentare o Misto", ("pin", "insegna", "asl")),
+              ("Acconciatore, barbiere, estetista, tatuatore e piercer", ("pin", "insegna"))]
+    wanted += [(n, ("pin", "insegna")) for n in sectors if n.startswith("Strutture ricettive extralberghiere")]
+    pick = {"pin": r"^PIN 2 - ", "insegna": r"^SCIA per installazione insegna di esercizio$",
+            "dehors": r"^Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione",
+            "asl": r"^Notifica ai fini della registrazione - avvio attivit"}
+    main_re = r"^(Aprire l.attività( di (acconciatore|estetista))?|Subentrare nell.(esercizio dell.)?attività( di (acconciatore|estetista))?|Trasferire la sede dell.attività( di (acconciatore|estetista))?)$"
+    out = []
+    for sector, extras in wanted:
+        labels = sectors[sector]
+        mains = [l for l in labels if re.match(main_re, l)]
+        for m in mains:
+            for e in extras:
+                x = [l for l in labels if re.match(pick[e], l)]
+                if len(x) != 1:
+                    continue
+                n = len(out)
+                out.append([{"key": f"s{n}a", "label": m, "sector": sector}, {"key": f"s{n}b", "label": x[0], "sector": sector}])
+    return {"sector": out[0][0]["sector"]}, out
+
+
 def cmd_pairs(args):
     """The pairs probe as one file the person picks in the pane (pick.js), with status.js and
     print.js (the results as text, sha256 first, for `pairs-import -`)."""
     out = Path(args.dir)
     out.mkdir(parents=True, exist_ok=True)
-    w, pairs = sue_pairs()
+    w, pairs = suap_pairs() if args.suap else sue_pairs()
     if args.only:
         pairs = [p for p in pairs if any(k in (p[0]["key"], p[1]["key"]) for k in args.only)]
     src = (HERE / "wizard.js").read_text()
@@ -840,6 +873,7 @@ def main():
     p.add_argument("--bundle", required=True, help="the file the person picks in the pane")
     p.add_argument("--draft", default="PROVA NON INVIARE - catalogo sue")
     p.add_argument("--only", action="append", help="only the pairs with this operation key; repeat it")
+    p.add_argument("--suap", action="store_true", help="the SUAP's wedge: each main operation with each extra the table adds (draft: any SUAP scratch draft)")
     p.add_argument("--fresh", action="store_true", help="probe again the pairs stored in the pane")
     p = sub.add_parser("pairs-import")
     p.add_argument("export")
