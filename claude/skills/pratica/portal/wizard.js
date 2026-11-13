@@ -160,8 +160,9 @@
   async function forward(screens) {
     for (let n = 0; n < 8; n++) {
       if (title().includes("compilazione della domanda")) return generated();
-      // The draft keeps earlier choices: the base pratica is the one with none.
-      if (title().includes("scelte eventuali")) {
+      // The draft keeps earlier choices: the base pratica is the one with none. (A tick of «interventi eventuali» left by a batch
+      // killed mid-variant made the next crawls of the scratch draft "with the sign": 2026-11-13, two dehors combinations.)
+      if (title().includes("scelte eventuali") || title().includes("interventi eventuali")) {
         for (const n of tree().filter((x) => x.type === "CHK" && x.selected)) await setSelected(n.key, false);
       }
       for (const q of sins()) await answer(q.key, false);

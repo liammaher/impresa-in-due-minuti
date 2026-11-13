@@ -569,6 +569,10 @@ def bundle(out, path, srcs, ops, args):
     opts = {"draft": draft, "depth": args.depth, "variants": True, "ops": ops}
     if args.interventi:
         opts["interventi"] = True
+    if args.base_only:
+        # No variants at all: the base pratica of a combination whose ticks' sections are known from other crawls (gen.py `borrowed`).
+        # Every variant of a combination re-reads its sections: 260 and counting for one dehors opening (2026-11-13).
+        opts["variants"] = False
     if args.check:
         opts["since"] = datetime.date.today().isoformat()
     stamp = "backup-" + datetime.date.today().strftime("%Y%m%d")
@@ -906,6 +910,7 @@ def main():
     p.add_argument("--fresh", action="store_true", help="--bundle: crawl the ops again, though stored (known sections as same_as)")
     p.add_argument("--forget-known", action="store_true", help="--bundle: --fresh, and read every section again")
     p.add_argument("--check", action="store_true", help="--bundle: a drift check (fingerprints only), redoing checks of other days")
+    p.add_argument("--base-only", action="store_true", help="--bundle: no scelte or interventi variants, only the base pratica")
     p.add_argument("--interventi", action="store_true", help="--bundle: each «interventi eventuali» tick alone too, as a variant (a combination's)")
     args = ap.parse_args()
     res = globals()["cmd_" + args.cmd.replace("-", "_")](args)
