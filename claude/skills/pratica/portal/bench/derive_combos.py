@@ -26,14 +26,15 @@ NO = "napoli/comune/nulla-osta-impatto-acustico"
 SIGN = "in caso di attività che preveda insegna esterna"
 NULLA = ("richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed "
          "eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale")
+SIGN_OP = "SCIA per installazione insegna di esercizio"  # the sign as a second operation, where the screen has no tick for it
 DONOR = "ristorante-insegna-fittizio"
 SIGN_ASKS = ("insegna_consenso", "insegna_vincolo", "insegna_grande")
 SIGN_ANSWERS = ("insegna", "insegna_titolo_tipo", "insegna_titolo_altro", "insegna_descrizione", "insegna_larghezza_m", "insegna_altezza_m",
                 "insegna_superficie_mq", "insegna_monofacciale", "insegna_luce", "insegna_testo", "immobile_proprietario")
 
 # name: (template, crawl, ticks, facts, handles)
-def row(tpl, crawl, ticks, facts, handles):
-    return dict(tpl=tpl, crawl=crawl, ticks=ticks, facts=facts, handles=handles)
+def row(tpl, crawl, ticks, facts, handles, also=()):
+    return dict(tpl=tpl, crawl=crawl, ticks=ticks, facts=facts, handles=handles, also=also)
 
 
 S, V = "attivita: somministrazione", "attivita: vicinato_alimentare"
@@ -45,8 +46,8 @@ COMBOS = {
                                                     f'{S}, evento: trasferimento, insegna: "false", musica: "true"', [ASL, NO]),
     "ampliamento-ristorante-musica-fittizio": row("ampliamento-ristorante-fittizio", "suap-060-ampliamento-di-superficie", [NULLA],
                                                   f'{S}, evento: ampliamento, musica: "true"', [NO]),
-    "subingresso-ristorante-insegna-fittizio": row("subingresso-ristorante-fittizio", "suap-060-subentrare-nell-esercizio-dell-attivita", [SIGN],
-                                                   f'{S}, evento: subingresso, insegna: "true"', [INS]),
+    "subingresso-ristorante-insegna-fittizio": row("subingresso-ristorante-fittizio", "suap-060-subentrare-insegna", [],
+                                                   f'{S}, evento: subingresso, insegna: "true"', [INS], [SIGN_OP]),
     # Bars and restaurants in zones A and B (the nulla osta is part of their authorization)
     "ristorante-centro-storico-insegna-fittizio": row("ristorante-centro-storico-fittizio", "suap-061-aprire-l-attivita", [SIGN],
                                                       f'{S}, evento: apertura, somministrazione_particolare: false, insegna: "true"', [NO, ASL, INS]),
@@ -79,17 +80,18 @@ COMBOS = {
                                                        'attivita: acconciatore, evento: trasferimento, insegna: "true"', [INS]),
     "trasferimento-estetista-insegna-fittizio": row("trasferimento-estetista-fittizio", "suap-011-trasferire-la-sede-dell-attivita-di-estetista", [SIGN],
                                                     'attivita: estetista, evento: trasferimento, insegna: "true"', [INS]),
-    "subingresso-acconciatore-insegna-fittizio": row("subingresso-acconciatore-fittizio", "suap-011-subentrare-nell-attivita-di-acconciatore", [SIGN],
-                                                     'attivita: acconciatore, evento: subingresso, insegna: "true"', [INS]),
-    "subingresso-estetista-insegna-fittizio": row("subingresso-estetista-fittizio", "suap-011-subentrare-nell-attivita-di-estetista", [SIGN],
-                                                  'attivita: estetista, evento: subingresso, insegna: "true"', [INS]),
+    "subingresso-acconciatore-insegna-fittizio": row("subingresso-acconciatore-fittizio", "suap-011-subentrare-acconciatore-insegna", [],
+                                                     'attivita: acconciatore, evento: subingresso, insegna: "true"', [INS], [SIGN_OP]),
+    "subingresso-estetista-insegna-fittizio": row("subingresso-estetista-fittizio", "suap-011-subentrare-estetista-insegna", [],
+                                                  'attivita: estetista, evento: subingresso, insegna: "true"', [INS], [SIGN_OP]),
     # Bed and breakfast
     "affittacamere-insegna-fittizio": row("affittacamere-fittizio", "suap-056-aprire-l-attivita-interventi", [SIGN],
                                           'attivita: bed_and_breakfast, evento: apertura, insegna: "true"', [INS]),
 }
 
 
-def overlay(folder, tpl_has_sign, ticks, template, facts):
+def overlay(folder, tpl_has_sign, ticks, template, facts, also=()):
+    ticks = list(ticks) + ([SIGN] if SIGN_OP in also else [])
     """The sign's asks, refusals, `yours` line and answers from the restaurant's, where the template has none; the music's and the
     bollo's where the nulla osta is ticked."""
     donor = (ROOT / "rehearsals" / DONOR / "recipe.yaml").read_text(encoding="utf-8")
@@ -143,8 +145,8 @@ def overlay(folder, tpl_has_sign, ticks, template, facts):
 def build(name):
     c = COMBOS[name]
     tpl_has_sign = "insegna_consenso" in (ROOT / "rehearsals" / c["tpl"] / "recipe.yaml").read_text(encoding="utf-8")
-    folder = dr.derive(name, c["tpl"], c["crawl"], None, [t if t != SIGN else SIGN + "::1" for t in c["ticks"]], c["facts"], c["handles"], ())
-    overlay(folder, tpl_has_sign, c["ticks"], c["tpl"], c["facts"])
+    folder = dr.derive(name, c["tpl"], c["crawl"], None, [t if t != SIGN else SIGN + "::1" for t in c["ticks"]], c["facts"], c["handles"], (), c["also"])
+    overlay(folder, tpl_has_sign, c["ticks"], c["tpl"], c["facts"], c["also"])
     return dr.fill(folder)
 
 

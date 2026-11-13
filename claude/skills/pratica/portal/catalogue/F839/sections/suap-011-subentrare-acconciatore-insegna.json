@@ -124,7 +124,7 @@
   {
    "section": "Dati della impresa a cui si subentra",
    "fingerprint": "0be7a68be22af642",
-   "same_as": "suap-060-subentrare-nell-esercizio-dell-attivita#dati dell'impresa a cui si subentra",
+   "same_as": "suap-060-subentrare-insegna#dati dell'impresa a cui si subentra",
    "seconds": 0.8
   },
   {
@@ -136,7 +136,7 @@
   {
    "section": "motivazioni del subingresso",
    "fingerprint": "50cef73513a7a88c",
-   "same_as": "suap-060-subentrare-nell-esercizio-dell-attivita#motivazioni del subingresso",
+   "same_as": "suap-060-subentrare-insegna#motivazioni del subingresso",
    "seconds": 1
   },
   {
@@ -148,7 +148,7 @@
   {
    "section": "variazione della denominazione",
    "fingerprint": "5d486483318e66e9",
-   "same_as": "suap-060-subentrare-nell-esercizio-dell-attivita#variazione della denominazione",
+   "same_as": "suap-060-subentrare-insegna#variazione della denominazione",
    "seconds": 0.8
   },
   {
