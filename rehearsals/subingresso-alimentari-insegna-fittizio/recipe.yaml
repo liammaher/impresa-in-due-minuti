@@ -1,23 +1,22 @@
 # Subentrare nell'esercizio dell'attività (Vicinato - settore merceologico Alimentare o Misto), as gen.py writes its steps file from the batch crawl
-# (catalogue/F839/sections/suap-017-subentrare-nell-esercizio-dell-attivita.json), for the made-up business of this folder's fixture.json.
+# (catalogue/F839/sections/suap-017-subentrare-insegna.json), for the made-up business of this folder's fixture.json.
 # Derived from rehearsals/subingresso-alimentari-fittizio (bench/derive_recipe.py): no `rules:` and no `after:`; the attachments and payment screens are not read.
 procedure: napoli/comune/subingresso-attivita-commerciale
 title: "Subentrare nell'esercizio dell'attività, negozio alimentare o misto, SUAP Napoli"
 comune: F839
 sportello: suap
-crawl: suap-017-subentrare-nell-esercizio-dell-attivita
+crawl: suap-017-subentrare-insegna
 subject: impresa
 operation: Subentrare nell'esercizio dell'attività
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
-scelte: ["in caso di attività che preveda insegna esterna"]
 wizard:
   - screen: Assegna una descrizione alla pratica
     fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
     confirm: CONFERMA
   - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
   - {screen: Scelta settore attività, tree: [Vicinato - settore merceologico Alimentare o Misto], confirm: CONFERMA}
-  - {screen: Scelta operazioni, tree: ["Subentrare nell'esercizio dell'attività"], confirm: CONFERMA}
-  - {screen: Scelta interventi eventuali, tree: [{leaf: "in caso di attività che preveda insegna esterna", nth: 1}], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Subentrare nell'esercizio dell'attività", "SCIA per installazione insegna di esercizio"], confirm: CONFERMA}
+  - {screen: Scelta interventi eventuali, confirm: CONFERMA}
   - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
   - {screen: Scelte eventuali, confirm: CONFERMA}
 groups:
