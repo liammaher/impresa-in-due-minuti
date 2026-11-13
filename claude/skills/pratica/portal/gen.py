@@ -808,11 +808,20 @@ def generate(recipe, base=HERE):
                     # (the shop's opening with a sign, 2026-11-10): no longer a guess.
                     if not other.stem.startswith(recipe["crawl"]) and sc not in crawl.get("scelte_seen", {}):
                         borrowed.append({"scelta": sc, "from": other.stem, "sections": [s["section"] for s in found]})
-                    crawl["sections"] += [{"section": s["section"], "same_as": f"{other.stem}#{s['section']}", "scelta": sc} for s in found]
+                    crawl["sections"] += [{"section": s["section"], "same_as": f"{other.stem}#{s['section']}", "scelta": sc,
+                                           **({"fingerprint": s["fingerprint"]} if s.get("fingerprint") else {})} for s in found]
                     names += [s["section"] for s in found]
                     break
             else:
                 raise GenError(f"no crawl has tried the scelta {sc!r}")
+        # One bollo on the portal: the dehors' area and the nulla osta each want «la dichiarazione relativa all'imposta di bollo»
+        # (the same boxes under two titles, one fingerprint) and the draft shows it once, under the tick's title (2026-11-13: the
+        # bar's opening with the dehors and the nulla osta stopped on the area's title, "no section").
+        fp = {norm(x["section"]): x.get("fingerprint") for x in crawl["sections"]}
+        tick_titles = {norm(x["section"]) for x in crawl["sections"] if x.get("scelta") in scelte}
+        bollo = [n for n in names if "bollo" in n.lower()]
+        if len(bollo) > 1 and len({fp.get(norm(n)) for n in bollo}) == 1 and fp.get(norm(bollo[0])) and any(norm(n) in tick_titles for n in bollo):
+            names = [n for n in names if n not in bollo or norm(n) in tick_titles]
         added_when = {norm(s["section"]): scelta_when[s["scelta"]] for s in crawl["sections"] if s.get("scelta") in scelta_when}
         if "wizard" not in recipe:
             raise GenError("the catalogue has no pratica for this operation: the recipe needs `wizard`")

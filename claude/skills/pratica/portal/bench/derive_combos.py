@@ -78,8 +78,8 @@ COMBOS = {
                                        f'{V}, evento: apertura, consumo_sul_posto: false, insegna: "true"', [ASL, INS]),
     "trasferimento-alimentari-insegna-fittizio": row("trasferimento-alimentari-fittizio", "suap-017-trasferire-la-sede-dell-attivita", [SIGN],
                                                      f'{V}, evento: trasferimento, consumo_sul_posto: false, insegna: "true"', [ASL, INS]),
-    "subingresso-alimentari-insegna-fittizio": row("subingresso-alimentari-fittizio", "suap-017-subentrare-nell-esercizio-dell-attivita", [SIGN],
-                                                   f'{V}, evento: subingresso, consumo_sul_posto: false, insegna: "true"', [INS]),
+    "subingresso-alimentari-insegna-fittizio": row("subingresso-alimentari-fittizio", "suap-017-subentrare-insegna", [],
+                                                   f'{V}, evento: subingresso, consumo_sul_posto: false, insegna: "true"', [INS], [SIGN_OP]),
     "alimentari-centro-storico-insegna-fittizio": row("alimentari-centro-storico-fittizio", "suap-018-aprire-l-attivita", [SIGN],
                                                       f'{V}, evento: apertura, consumo_sul_posto: true, insegna: "true"', [ASL, INS]),
     "trasferimento-alimentari-centro-storico-insegna-fittizio": row("trasferimento-alimentari-centro-storico-fittizio", "suap-018-trasferire-la-sede-dell-attivita", [SIGN],
@@ -87,8 +87,8 @@ COMBOS = {
     # Non-food shops
     "trasferimento-negozio-insegna-fittizio": row("trasferimento-negozio-fittizio", "suap-016-trasferire-la-sede-dell-attivita", [SIGN],
                                                   'attivita: vicinato_non_alimentare, evento: trasferimento, insegna: "true"', [INS]),
-    "subingresso-negozio-insegna-fittizio": row("subingresso-negozio-fittizio", "suap-016-subentrare-nell-esercizio-dell-attivita", [SIGN],
-                                                'attivita: vicinato_non_alimentare, evento: subingresso, insegna: "true"', [INS]),
+    "subingresso-negozio-insegna-fittizio": row("subingresso-negozio-fittizio", "suap-016-subentrare-insegna", [],
+                                                'attivita: vicinato_non_alimentare, evento: subingresso, insegna: "true"', [INS], [SIGN_OP]),
     # Hairdressers and beauticians
     "acconciatore-insegna-fittizio": row("acconciatore-fittizio", "suap-011-aprire-l-attivita-di-acconciatore-interventi", [SIGN],
                                          'attivita: acconciatore, evento: apertura, insegna: "true"', [INS]),
