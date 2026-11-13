@@ -1,0 +1,57 @@
+# Aprire l'attività (Esercizio di somministrazione di alimenti e bevande in zone NON tutelate), as gen.py writes its steps file from the batch crawl
+# (catalogue/F839/sections/suap-060-aprire-l-attivita-dehors.json), for the made-up business of this folder's fixture.json.
+# Derived from rehearsals/ristorante-fittizio (bench/derive_recipe.py): no `rules:` and no `after:`; the attachments and payment screens are not read.
+procedure: napoli/comune/scia-somministrazione-alimenti-bevande
+title: "Aprire l'attività, bar o ristorante, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-060-aprire-l-attivita-dehors
+subject: impresa
+operation: Aprire l'attività
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [Esercizio di somministrazione di alimenti e bevande in zone NON tutelate], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Aprire l'attività", "Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande"], confirm: CONFERMA}
+  - {screen: Scelta interventi eventuali, confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
+asks:
+  coperto: {group: extras, type: yes_no, item: "Una struttura coperta: tende fisse, pedane o paraventi (tipo C), oppure chiusa su non più di tre lati (tipo D)", why: "I tipi C e D richiedono ulteriori documenti (e nel centro storico non sono ammessi): caso non ancora previsto."}
+  centro_storico: {group: extras, type: yes_no, item: "Si trova nel centro storico (area UNESCO o buffer zone)", why: "Lì sono ammessi solo i tipi A e B, con ombrellone a palo centrale, e può essere coinvolta la Soprintendenza: caso non ancora previsto."}
+  nuovo_852: {group: extras, type: yes_no, item: "La notifica Reg. 852 dell'impresa non è ancora stata presentata", why: "In tal caso va presentato con questa pratica, un caso non ancora previsto."}
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "ristorante {{business.denominazione}}"}
+  alcolici: {group: extras, type: yes_no, item: "Venderà bevande alcoliche, birra e vino compresi", why: "La vendita di alcolici aggiunge a questa pratica la comunicazione alle Dogane: un caso che non preparo ancora."}
+  musica: {group: extras, type: yes_no, item: "Avrà musica o un impianto audio", why: "La musica comporta la documentazione di impatto acustico: un caso che non preparo ancora."}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro", default: "120", why: "La voce del tariffario 2026 per un bar o ristorante con notifica sanitaria fuori dalle zone tutelate."}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
+  - "Fai firmare a un tecnico il progetto del dehors (elaborati grafici e relazione) e allegalo"
+  - "Spunta tu le dichiarazioni e gli impegni: consapevolezza (artt. 46-47), informativa privacy, tasse comunali, il montaggio certificato, il canone"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, requisiti di onorabilità e professionali, altre dichiarazioni, art. 6 Reg. 852/2004, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento, e la tariffa forfettaria ASL"
+  - "Allega, firmate con la tua firma digitale (.p7m): la planimetria quotata dei locali e la ricevuta della tariffa ASL"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+supports:
+  - {when: "{{ask.coperto|not}}", else: "I dehors coperti (tipo C o D) non sono ancora gestiti."}
+  - {when: "{{ask.centro_storico|not}}", else: "Un dehors nel centro storico per ora non lo preparo."}
+  - {when: "{{ask.nuovo_852|not}}", else: "Presentare la notifica Reg. 852 insieme al dehors per ora non lo preparo: presenta prima l'apertura dell'attività."}
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
+  - {when: "{{ask.ristorazione}}", else: "Per ora solo bar o ristorante: le altre voci di attività della notifica non sono gestite."}
+  - {when: "{{ask.forno|not}} {{ask.dettaglio_alimenti|not}}", else: "Un bar o ristorante che produce anche prodotti da forno o gestisce un negozio alimentare per ora non lo preparo: queste voci insieme non sono ancora state mappate."}
+rules:
+  table: suap-napoli
+  facts: {attivita: somministrazione, evento: apertura, dehors: "true", insegna: "false", musica: "false"}
+  handles: [napoli/asl-napoli-1/registrazione-attivita-alimentare, napoli/comune/concessione-suolo-pubblico-dehors]

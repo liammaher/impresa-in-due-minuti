@@ -27,6 +27,11 @@ SIGN = "in caso di attività che preveda insegna esterna"
 NULLA = ("richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed "
          "eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale")
 SIGN_OP = "SCIA per installazione insegna di esercizio"  # the sign as a second operation, where the screen has no tick for it
+DEHORS_OP = "Domanda di occupazione suolo pubblico per area annessa ad esercizio di somministrazione di alimenti e bevande"
+DEH = "napoli/comune/concessione-suolo-pubblico-dehors"
+DEHORS_DONOR = "dehors-fittizio"
+DEHORS_ASKS = ("coperto", "centro_storico", "nuovo_852")
+DEHORS_ANSWERS = ("orario_dalle", "orario_alle", "giorno_chiusura", "dehors_lunghezza_m", "dehors_larghezza_m", "dehors_mq", "area_privata_uso_pubblico")
 DONOR = "ristorante-insegna-fittizio"
 SIGN_ASKS = ("insegna_consenso", "insegna_vincolo", "insegna_grande")
 SIGN_ANSWERS = ("insegna", "insegna_titolo_tipo", "insegna_titolo_altro", "insegna_descrizione", "insegna_larghezza_m", "insegna_altezza_m",
@@ -55,6 +60,19 @@ COMBOS = {
                                                                     f'{S}, evento: trasferimento, somministrazione_particolare: false, insegna: "true"', [NO, ASL, INS]),
     "ampliamento-ristorante-centro-storico-musica-fittizio": row("ampliamento-ristorante-centro-storico-fittizio", "suap-061-variazioni-strutturali", [NULLA],
                                                                  f'{S}, evento: ampliamento, somministrazione_particolare: false', [NO]),
+    # Bars and restaurants with the dehors' area (a second operation: the screen has no tick for it), the sign and the music as ticks
+    "ristorante-dehors-fittizio": row("ristorante-fittizio", "suap-060-aprire-l-attivita-dehors", [],
+                                      f'{S}, evento: apertura, dehors: "true", insegna: "false", musica: "false"', [ASL, DEH], [DEHORS_OP]),
+    "ristorante-dehors-musica-fittizio": row("ristorante-fittizio", "suap-060-aprire-l-attivita-dehors", [NULLA],
+                                             f'{S}, evento: apertura, dehors: "true", insegna: "false", musica: "true"', [ASL, DEH, NO], [DEHORS_OP]),
+    "ristorante-dehors-insegna-fittizio": row("ristorante-fittizio", "suap-060-aprire-l-attivita-dehors", [SIGN],
+                                              f'{S}, evento: apertura, dehors: "true", insegna: "true", musica: "false"', [ASL, DEH, INS], [DEHORS_OP]),
+    "ristorante-dehors-insegna-musica-fittizio": row("ristorante-fittizio", "suap-060-aprire-l-attivita-dehors", [SIGN, NULLA],
+                                                     f'{S}, evento: apertura, dehors: "true", insegna: "true", musica: "true"', [ASL, DEH, INS, NO], [DEHORS_OP]),
+    "ristorante-centro-storico-dehors-fittizio": row("ristorante-centro-storico-fittizio", "suap-061-aprire-l-attivita-dehors", [],
+                                                     f'{S}, evento: apertura, dehors: "true", somministrazione_particolare: false, insegna: "false"', [NO, ASL, DEH], [DEHORS_OP]),
+    "ristorante-centro-storico-dehors-insegna-fittizio": row("ristorante-centro-storico-fittizio", "suap-061-aprire-l-attivita-dehors", [SIGN],
+                                                             f'{S}, evento: apertura, dehors: "true", somministrazione_particolare: false, insegna: "true"', [NO, ASL, DEH, INS], [DEHORS_OP]),
     # Food shops
     "alimentari-insegna-fittizio": row("alimentari-fittizio", "suap-017-aprire-l-attivita-interventi", [SIGN],
                                        f'{V}, evento: apertura, consumo_sul_posto: false, insegna: "true"', [ASL, INS]),
@@ -97,7 +115,7 @@ def overlay(folder, tpl_has_sign, ticks, template, facts, also=()):
     donor = (ROOT / "rehearsals" / DONOR / "recipe.yaml").read_text(encoding="utf-8")
     p = folder / "recipe.yaml"
     s = p.read_text(encoding="utf-8")
-    s = dr.drop_asks(s, ("insegna_esterna",) + (("musica",) if NULLA in ticks else ()))
+    s = dr.drop_asks(s, ("insegna_esterna",) + (("musica",) if NULLA in ticks and DEHORS_OP not in also else ()))
     if SIGN in ticks and not tpl_has_sign:
         asks = [l for l in donor.split("\n") if re.match(r"  (%s):" % "|".join(SIGN_ASKS), l)]
         zone_a = ('  insegna_zona_a: {group: extras, type: yes_no, item: "L\'installazione ricade in zona A del PRG (il centro storico)", '
@@ -114,6 +132,16 @@ def overlay(folder, tpl_has_sign, ticks, template, facts, also=()):
         s = s.replace("\nsupports:\n", "\nsupports:\n  - {when: \"{{ask.insegna_zona_a|not}}\", else: \"In zona A del PRG (il centro storico) la SCIA dell'insegna ha altre condizioni, che non preparo ancora.\"}\n", 1)
     if NULLA in ticks and "bollo_yours" not in s:
         s = s.replace("\nyours:\n", "\nyours:\n  - \"{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}\"\n", 1)
+    if DEHORS_OP in also:
+        dd = (ROOT / "rehearsals" / DEHORS_DONOR / "recipe.yaml").read_text(encoding="utf-8").split("\n")
+        asks = [l for l in dd if re.match(r"  (%s):" % "|".join(DEHORS_ASKS), l)]
+        sup = [l for l in dd if re.match(r"  - \{when: \"\{\{ask\.(%s)\|not\}\}\"" % "|".join(DEHORS_ASKS), l)]
+        yours = [l for l in dd if "progetto del dehors" in l or "il montaggio certificato" in l]
+        s = s.replace("\nasks:\n", "\nasks:\n" + "\n".join(asks) + "\n", 1)
+        s = s.replace("\nsupports:\n", "\nsupports:\n" + "\n".join(sup) + "\n", 1)
+        s = s.replace("\nyours:\n", "\nyours:\n" + "\n".join(yours) + "\n", 1)
+        if "bollo_yours" not in s:
+            s = s.replace("\nyours:\n", "\nyours:\n  - \"{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}\"\n", 1)
     p.write_text(s, encoding="utf-8")
     a = folder / "answers.json"
     d = json.loads(a.read_text())
@@ -125,9 +153,21 @@ def overlay(folder, tpl_has_sign, ticks, template, facts, also=()):
             d[k] = "false"
         d["insegna_zona_a"] = "false"
         d.pop("insegna_esterna", None)
+    if DEHORS_OP in also:
+        dehors = json.loads((ROOT / "rehearsals" / DEHORS_DONOR / "answers.json").read_text())
+        for k in DEHORS_ANSWERS:
+            d.setdefault(k, dehors[k])
+        for k in DEHORS_ASKS:
+            d[k] = "false"
+        d.setdefault("bollo_marche", False)
+        d.setdefault("bollo_esenzione", "no")
+        d.setdefault("diritti_euro", "370")
     if NULLA in ticks:
         d["bollo_marche"], d["bollo_esenzione"] = False, "no"
-        d.pop("musica", None)
+        if DEHORS_OP in also:
+            d["musica"] = "true"  # the dehors' acoustic declaration reads it
+        else:
+            d.pop("musica", None)
     # The zone and the shop's consumption on the spot are facts of the case the table reads from the answers too: the template's, else
     # what the name and the recipe's facts say (the pool of other rehearsals' answers would give the first one found).
     tpl_file = next(f for f in ("answers.json", "answers-p1.json") if (ROOT / "rehearsals" / template / f).exists())

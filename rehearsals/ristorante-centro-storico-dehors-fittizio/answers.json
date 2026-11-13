@@ -1,0 +1,36 @@
+{
+ "extras": [],
+ "attivita_852": [
+  "ristorazione",
+  "ristorante"
+ ],
+ "acustica_impatto_doc": "rehearsals/ristorante-centro-storico-fittizio/files/impatto-acustico.pdf",
+ "descrizione": "PROVA NON INVIARE - ristorante centro storico de generato",
+ "bollo_marche": false,
+ "oggetto": "Aprire l'attività: pratica di prova con dati inventati.",
+ "insegna": "Pizzeria Fittizia",
+ "superficie_somministrazione_mq": "35",
+ "in_centro_commerciale": "false",
+ "diritti_euro": "420",
+ "piano": [
+  "accessibile",
+  "sicurezza",
+  "punteggio"
+ ],
+ "zona": "a",
+ "fatti": [],
+ "stagionale": "false",
+ "diritti_esente": false,
+ "bollo_esenzione": "no",
+ "orario_dalle": "12:00",
+ "orario_alle": "23:30",
+ "giorno_chiusura": "lunedì",
+ "dehors_lunghezza_m": "6",
+ "dehors_larghezza_m": "2",
+ "dehors_mq": "12",
+ "area_privata_uso_pubblico": "false",
+ "coperto": "false",
+ "centro_storico": "false",
+ "nuovo_852": "false",
+ "notifica_852_data": "2026-03-02"
+}
