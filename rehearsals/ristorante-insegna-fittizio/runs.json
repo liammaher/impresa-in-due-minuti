@@ -4,5 +4,12 @@
   "answers": "answers.json",
   "result": "filled",
   "seconds": 96.8
+ },
+ {
+  "date": "2026-11-13",
+  "answers": "answers.json",
+  "result": "filled",
+  "seconds": 155.9,
+  "browser": "pane"
  }
 ]

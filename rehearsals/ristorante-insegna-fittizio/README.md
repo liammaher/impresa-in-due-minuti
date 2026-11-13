@@ -25,6 +25,7 @@ before the declarations, payment, signing and sending.
 | Date | Browser | Case | Result |
 |---|---|---|---|
 | 2026-11-10 |  | `answers.json` | **filled** in 97 s |
+| 2026-11-13 | pane | `answers.json` | **filled** in 156 s |
 
 <!-- /runs -->
 
