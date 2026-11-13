@@ -74,7 +74,7 @@ COMBOS = {
     "ristorante-centro-storico-dehors-insegna-fittizio": row("ristorante-centro-storico-fittizio", "suap-061-aprire-l-attivita-dehors", [SIGN],
                                                              f'{S}, evento: apertura, dehors: "true", somministrazione_particolare: false, insegna: "true"', [NO, ASL, DEH, INS], [DEHORS_OP]),
     # Food shops
-    "alimentari-insegna-fittizio": row("alimentari-fittizio", "suap-017-aprire-l-attivita-interventi", [SIGN],
+    "alimentari-insegna-fittizio": row("alimentari-fittizio", "suap-017-aprire-l-attivita", [SIGN],
                                        f'{V}, evento: apertura, consumo_sul_posto: false, insegna: "true"', [ASL, INS]),
     "trasferimento-alimentari-insegna-fittizio": row("trasferimento-alimentari-fittizio", "suap-017-trasferire-la-sede-dell-attivita", [SIGN],
                                                      f'{V}, evento: trasferimento, consumo_sul_posto: false, insegna: "true"', [ASL, INS]),
@@ -103,7 +103,7 @@ COMBOS = {
     "subingresso-estetista-insegna-fittizio": row("subingresso-estetista-fittizio", "suap-011-subentrare-estetista-insegna", [],
                                                   'attivita: estetista, evento: subingresso, insegna: "true"', [INS], [SIGN_OP]),
     # Bed and breakfast
-    "affittacamere-insegna-fittizio": row("affittacamere-fittizio", "suap-056-aprire-l-attivita-interventi", [SIGN],
+    "affittacamere-insegna-fittizio": row("affittacamere-fittizio", "suap-056-aprire-l-attivita", [SIGN],
                                           'attivita: bed_and_breakfast, evento: apertura, insegna: "true"', [INS]),
 }
 

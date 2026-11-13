@@ -1,11 +1,11 @@
 # Aprire l'attività (Vicinato - settore merceologico Alimentare o Misto), as gen.py writes its steps file from the batch crawl
-# (catalogue/F839/sections/suap-017-aprire-l-attivita-interventi.json), for the made-up business of this folder's fixture.json.
+# (catalogue/F839/sections/suap-017-aprire-l-attivita.json), for the made-up business of this folder's fixture.json.
 # Derived from rehearsals/alimentari-fittizio (bench/derive_recipe.py): no `rules:` and no `after:`; the attachments and payment screens are not read.
 procedure: napoli/comune/scia-esercizio-vicinato
 title: "Aprire l'attività, negozio alimentare o misto, SUAP Napoli"
 comune: F839
 sportello: suap
-crawl: suap-017-aprire-l-attivita-interventi
+crawl: suap-017-aprire-l-attivita
 subject: impresa
 operation: Aprire l'attività
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839

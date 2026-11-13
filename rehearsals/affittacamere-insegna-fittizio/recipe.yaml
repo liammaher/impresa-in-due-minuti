@@ -1,11 +1,11 @@
 # Aprire l'attività (Strutture ricettive extralberghiere (affittacamere, bed and breakfast, case e appartamenti per vacanze, case per ferie, case religiose di ospitalità, ostelli per la gioventù, residenze rurali o country house, rifugi di montagna)), as gen.py writes its steps file from the batch crawl
-# (catalogue/F839/sections/suap-056-aprire-l-attivita-interventi.json), for the made-up business of this folder's fixture.json.
+# (catalogue/F839/sections/suap-056-aprire-l-attivita.json), for the made-up business of this folder's fixture.json.
 # Derived from rehearsals/affittacamere-fittizio (bench/derive_recipe.py): no `rules:` and no `after:`; the attachments and payment screens are not read.
 procedure: napoli/comune/avvio-bed-and-breakfast
 title: "Aprire l'attività, struttura ricettiva extralberghiera, SUAP Napoli"
 comune: F839
 sportello: suap
-crawl: suap-056-aprire-l-attivita-interventi
+crawl: suap-056-aprire-l-attivita
 subject: impresa
 operation: Aprire l'attività
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
