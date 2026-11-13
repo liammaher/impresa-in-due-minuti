@@ -5,7 +5,7 @@ procedure: napoli/comune/scia-somministrazione-alimenti-bevande
 title: "Aprire l'attività, bar o ristorante, SUAP Napoli"
 comune: F839
 sportello: suap
-crawl: suap-060-aprire-l-attivita-interventi
+crawl: suap-060-aprire-l-attivita
 subject: impresa
 operation: Aprire l'attività
 start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
