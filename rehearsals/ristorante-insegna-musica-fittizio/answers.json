@@ -1,0 +1,30 @@
+{
+ "extras": [],
+ "attivita_852": [
+  "ristorazione",
+  "ristorante"
+ ],
+ "descrizione": "PROVA NON INVIARE - ristorante insegna musica generato",
+ "oggetto": "Aprire l'attività: pratica di prova con dati inventati.",
+ "insegna": "Pizzeria Fittizia",
+ "superficie_somministrazione_mq": "35",
+ "in_centro_commerciale": "false",
+ "diritti_euro": "220",
+ "zona": "c",
+ "fatti": [],
+ "stagionale": "false",
+ "insegna_titolo_tipo": "altro",
+ "insegna_titolo_altro": "locatario",
+ "insegna_descrizione": "insegna frontale sopra l'ingresso",
+ "insegna_larghezza_m": "3",
+ "insegna_altezza_m": "0.6",
+ "insegna_superficie_mq": "1.8",
+ "insegna_monofacciale": "true",
+ "insegna_luce": "Opaca",
+ "insegna_testo": "PIZZERIA FITTIZIA",
+ "immobile_proprietario": "Immobiliare Esempio S.r.l.",
+ "diritti_esente": false,
+ "insegna_zona_a": "false",
+ "bollo_marche": false,
+ "bollo_esenzione": "no"
+}

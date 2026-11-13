@@ -1,0 +1,48 @@
+# Ampliamento di superficie (Esercizio di somministrazione di alimenti e bevande in zone NON tutelate), as gen.py writes its steps file from the batch crawl
+# (catalogue/F839/sections/suap-060-ampliamento-di-superficie.json), for the made-up business of this folder's fixture.json.
+# Derived from rehearsals/ampliamento-ristorante-fittizio (bench/derive_recipe.py): no `rules:` and no `after:`; the attachments and payment screens are not read.
+procedure: napoli/comune/scia-somministrazione-alimenti-bevande
+title: "Ampliamento di superficie, bar o ristorante, SUAP Napoli"
+comune: F839
+sportello: suap
+crawl: suap-060-ampliamento-di-superficie
+subject: impresa
+operation: Ampliamento di superficie
+start: https://suap.impresainungiorno.gov.it/fnsuap/cmd/create?comune=F839
+scelte: ["richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale"]
+wizard:
+  - screen: Assegna una descrizione alla pratica
+    fill: {css: 'input[placeholder^="Inserire la descrizione"]', value: "{{ask.descrizione}}"}
+    confirm: CONFERMA
+  - {screen: Controlla l'accesso alla pratica, confirm: CONFERMA}
+  - {screen: Scelta settore attività, tree: [Esercizio di somministrazione di alimenti e bevande in zone NON tutelate], confirm: CONFERMA}
+  - {screen: Scelta operazioni, tree: ["Ampliamento di superficie"], confirm: CONFERMA}
+  - {screen: Scelta interventi eventuali, tree: [{leaf: "richiede il rilascio del Nulla osta impatto acustico, in caso di utilizzo di impianti di diffusione sonora o di manifestazioni ed eventi con diffusione di musica o utilizzo di strumenti musicali, se si superano le soglie della zonizzazione comunale", nth: 1}], confirm: CONFERMA}
+  - {screen: Scelta del destinatario della pratica, confirm: CONFERMA}
+  - {screen: Scelte eventuali, confirm: CONFERMA}
+groups:
+  extras:
+    question: "Qualcuna di queste voci vale per l'attività? Spunta tutte quelle che valgono, o nessuna."
+asks:
+  altri_soggetti: {group: extras, type: yes_no, item: "È una società con altri soci o amministratori oltre a chi dichiara", why: "Ciascuno presenta una propria dichiarazione antimafia firmata (art. 85 D.Lgs. 159/2011), che non preparo ancora."}
+  descrizione: {type: text, question: "Nome della bozza in Pratiche in bozza sul portale", default: "ampliamento {{business.denominazione}}"}
+  lavori_852: {group: extras, type: yes_no, item: "L'ampliamento cambia la cucina o i locali di lavorazione degli alimenti", why: "In quel caso si aggiorna anche la registrazione ai sensi del Reg. 852 (una pratica a parte): non la preparo ancora."}
+  diritti_euro: {type: number, question: "I diritti SUAP in euro (la colonna VCA della tabella 2026 per un bar o ristorante fuori dalle zone tutelate, voce S71: controllala)"}
+  oggetto: {question: "La pratica in una frase (300 caratteri)"}
+yours:
+  - "{{ask.bollo_marche,ask.bollo_esenzione|bollo_yours}}"
+  - "Apri la bozza in Pratiche in bozza ({{ask.descrizione}}) e confrontala con questa pagina"
+  - "Spunta tu le dichiarazioni: consapevolezza (artt. 46-47), informativa privacy, altre dichiarazioni, tasse comunali, art. 75 DPR 445/2000"
+  - "Paga i diritti di segreteria (€ {{ask.diritti_euro}}) con pagoPA nella schermata di pagamento"
+  - "Allega, firmato con la tua firma digitale (.p7m), quanto chiede la schermata degli allegati dopo aver spuntato le dichiarazioni (la planimetria dei locali ampliati)"
+  - "Firma e invia (Firma e invio); conserva la ricevuta"
+supports:
+  - value: "{{business.forma_giuridica}}"
+    in: [ditta_individuale, srl, srls, snc, sas, spa]
+    else: "Per ora per una ditta individuale o una srl, srls, snc, sas o spa."
+  - {when: "{{ask.altri_soggetti|not}}", else: "Gli altri soci o amministratori presentano le proprie dichiarazioni antimafia come allegati firmati (art. 85 D.Lgs. 159/2011): non lo preparo ancora."}
+  - {when: "{{ask.lavori_852|not}}", else: "Un ampliamento che cambia la cucina o i locali di lavorazione aggiorna anche la registrazione ai sensi del Reg. 852, che non preparo ancora."}
+rules:
+  table: suap-napoli
+  facts: {attivita: somministrazione, evento: ampliamento, musica: "true"}
+  handles: [napoli/comune/nulla-osta-impatto-acustico]

@@ -152,6 +152,23 @@ def ops_of(args):
         nth[s["sector"]] += 1
     pick = [int(x) for x in args.sectors.split(",")] if args.sectors else range(len(sectors))
     ops = []
+    if args.combo:
+        # Two operations in one pratica (an opening with the dehors' area, a take-over with the sign's SCIA): --combo NAME SECTOR_INDEX MAIN OTHER,
+        # the operations by the start of their leaf label, which must name one (the wizard.js pairs probe took these together,
+        # catalogue/F839/suap-pairs.md). Its crawl is named NAME: the recipe's `crawl:`.
+        for name, idx, *labels in args.combo:
+            s = sectors[int(idx)]
+            if len(labels) < 2:
+                sys.exit(f"--combo {name}: give the sector's index, then its operations, the main one first")
+            found = []
+            for label in labels:
+                hit = [o for o in s["operations"] + w["common"] if o.split("›")[-1].strip().startswith(label)]
+                hit = list(dict.fromkeys(hit))
+                if len(hit) != 1:
+                    sys.exit(f"--combo {name}: {label!r} names {len(hit)} operations of sector {idx}: {[h.split('›')[-1].strip()[:60] for h in hit]}")
+                found.append(hit[0])
+            ops.append({"name": name, "sector": s["sector"], "sector_nth": s["nth"], "path": found[0], "also": found[1:]})
+        return ops
     if args.common:
         # The operations most sectors offer, once each, under the first sector given.
         s = sectors[pick[0]]
@@ -550,6 +567,8 @@ def bundle(out, path, srcs, ops, args):
         raise SystemExit("these are SUAP's pratiche but the scratch draft is the SUE's: every sector would read \"not in the tree\"; "
                          "pass --draft of a SUAP draft (it must exist in Pratiche in bozza)")
     opts = {"draft": draft, "depth": args.depth, "variants": True, "ops": ops}
+    if args.interventi:
+        opts["interventi"] = True
     if args.check:
         opts["since"] = datetime.date.today().isoformat()
     stamp = "backup-" + datetime.date.today().strftime("%Y%m%d")
@@ -852,7 +871,7 @@ def main():
     p.add_argument("--common", action="store_true", help="the common operations, under the first sector")
     p.add_argument("--all", action="store_true", help="also the pratiche already crawled")
     p.add_argument("--combo", nargs="+", action="append", metavar="NAME MAIN OTHER",
-                   help="sue: a combination's crawl name, then its operations' labels, the main one first; repeat it for several")
+                   help="sue: a combination's crawl name, then its operations' labels, the main one first; repeat it for several. suap: NAME SECTOR_INDEX MAIN OTHER, the operations by the start of their leaf label")
     p.add_argument("--scelta", action="append", help="--combo: a scelta to try, for every combination (default: the procura)")
     p.add_argument("--combo-scelta", nargs=2, action="append", metavar=("NAME", "LABEL"),
                    help="--combo: one more scelta for that combination alone (a Si/No such as the SCIA's sanatoria)")
@@ -887,6 +906,7 @@ def main():
     p.add_argument("--fresh", action="store_true", help="--bundle: crawl the ops again, though stored (known sections as same_as)")
     p.add_argument("--forget-known", action="store_true", help="--bundle: --fresh, and read every section again")
     p.add_argument("--check", action="store_true", help="--bundle: a drift check (fingerprints only), redoing checks of other days")
+    p.add_argument("--interventi", action="store_true", help="--bundle: each «interventi eventuali» tick alone too, as a variant (a combination's)")
     args = ap.parse_args()
     res = globals()["cmd_" + args.cmd.replace("-", "_")](args)
     if isinstance(res, list) and res and isinstance(res[0], str):
